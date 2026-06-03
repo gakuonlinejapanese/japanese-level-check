@@ -57,14 +57,14 @@ const QUESTIONS = [
 const cefrData = {
   'Pre-A1': { jlpt:'Below N5', canDo:['Recognize basic hiragana and katakana','Understand a few common words'], problems:['Cannot hold any conversation in Japanese','Unable to read basic texts'], timeToN4:'Approximately 18–24 months', timeToN2:'Approximately 4–6 years' },
   'A1': { jlpt:'N5', canDo:['Introduce yourself in simple Japanese','Understand basic workplace greetings like おつかれさまです','Read hiragana and katakana'], problems:['Cannot handle real business conversations','Struggles with keigo (polite speech)'], timeToN4:'Approximately 12–18 months', timeToN2:'Approximately 3–5 years' },
-  'A2': { jlpt:'N4', canDo:['Handle simple business interactions','Send basic business emails in Japanese','Apply to some Japanese university programs'], problems:['Business Japanese still very limited','Cannot participate in formal meetings'], timeToN4:'You are at N4! 🎉 Keep consolidating.', timeToN2:'Approximately 1–2 years' },
+  'A2': { jlpt:'N4', canDo:['Handle simple business interactions','Send basic business emails in Japanese','Apply to some Japanese university programs'], problems:['Business Japanese still very limited','Cannot participate in formal meetings'], timeToN4:'You are at N4!  Keep consolidating.', timeToN2:'Approximately 1–2 years' },
   'A2–B1': { jlpt:'N4–N3', canDo:['Communicate in everyday business situations','Understand most basic business emails','Express simple opinions in meetings'], problems:['Formal business writing still needs work','Nuanced business expressions are challenging'], timeToN4:'You are near N4! Keep going.', timeToN2:'Approximately 1–2 years' },
-  'B1': { jlpt:'N3', canDo:['Handle most everyday business situations','Write clear business emails','Understand business meetings on familiar topics'], problems:['Advanced keigo and formal writing challenging','Cannot fully participate in complex negotiations'], timeToN4:'You have surpassed N4! 🎉', timeToN2:'Approximately 6–12 months' },
-  'B1–B2': { jlpt:'N3–N2', canDo:['Communicate fluently in most business situations','Write professional business documents','Participate actively in meetings'], problems:['Highly specialized vocabulary still limited','Native-level nuance in negotiation takes more practice'], timeToN4:'You have surpassed N4! 🎉', timeToN2:'You are near N2! A few more months.' },
-  'B2': { jlpt:'N2', canDo:['Apply to Japanese companies as bilingual candidate','Conduct business meetings in Japanese','Write formal reports and proposals'], problems:['C1-level nuance still requires work','Very formal or legal Japanese can be challenging'], timeToN4:'You have surpassed N4! 🎉', timeToN2:'You are at N2! 🎉 Aim for N1 next.' },
-  'B2–C1': { jlpt:'N2–N1', canDo:['Work professionally in Japanese in most industries','Lead meetings and negotiations in Japanese','Write sophisticated business documents'], problems:['Native-level precision in formal writing needs refinement','Highly specialized fields may still be challenging'], timeToN4:'You have far surpassed N4! 🎉', timeToN2:'You are at or near N2! 🎉 Target N1.' },
-  'C1': { jlpt:'N1', canDo:['Work at the highest level in any Japanese industry','Lead complex negotiations in Japanese','Read and write academic and legal documents'], problems:['Native-like precision takes continuous effort','Staying current with evolving business language'], timeToN4:'You have far surpassed N4! 🎉', timeToN2:'You have surpassed N2! 🎉 You are at N1.' },
-  'C2': { jlpt:'N1+', canDo:['Operate at native-like level in all business contexts','Catch subtle implications in negotiations','Write flawless formal Japanese documents'], problems:['Maintaining and expanding specialized vocabulary','Regional business dialects may occasionally appear'], timeToN4:'You have far surpassed N4! 🎉', timeToN2:'You have surpassed N2! 🎉 Near-native level.' },
+  'B1': { jlpt:'N3', canDo:['Handle most everyday business situations','Write clear business emails','Understand business meetings on familiar topics'], problems:['Advanced keigo and formal writing challenging','Cannot fully participate in complex negotiations'], timeToN4:'You have surpassed N4! ', timeToN2:'Approximately 6–12 months' },
+  'B1–B2': { jlpt:'N3–N2', canDo:['Communicate fluently in most business situations','Write professional business documents','Participate actively in meetings'], problems:['Highly specialized vocabulary still limited','Native-level nuance in negotiation takes more practice'], timeToN4:'You have surpassed N4! ', timeToN2:'You are near N2! A few more months.' },
+  'B2': { jlpt:'N2', canDo:['Apply to Japanese companies as bilingual candidate','Conduct business meetings in Japanese','Write formal reports and proposals'], problems:['C1-level nuance still requires work','Very formal or legal Japanese can be challenging'], timeToN4:'You have surpassed N4! ', timeToN2:'You are at N2!  Aim for N1 next.' },
+  'B2–C1': { jlpt:'N2–N1', canDo:['Work professionally in Japanese in most industries','Lead meetings and negotiations in Japanese','Write sophisticated business documents'], problems:['Native-level precision in formal writing needs refinement','Highly specialized fields may still be challenging'], timeToN4:'You have far surpassed N4! ', timeToN2:'You are at or near N2!  Target N1.' },
+  'C1': { jlpt:'N1', canDo:['Work at the highest level in any Japanese industry','Lead complex negotiations in Japanese','Read and write academic and legal documents'], problems:['Native-like precision takes continuous effort','Staying current with evolving business language'], timeToN4:'You have far surpassed N4! ', timeToN2:'You have surpassed N2!  You are at N1.' },
+  'C2': { jlpt:'N1+', canDo:['Operate at native-like level in all business contexts','Catch subtle implications in negotiations','Write flawless formal Japanese documents'], problems:['Maintaining and expanding specialized vocabulary','Regional business dialects may occasionally appear'], timeToN4:'You have far surpassed N4! ', timeToN2:'You have surpassed N2!  Near-native level.' },
 };
 
 function getResult(score, total) {
@@ -88,7 +88,7 @@ function CTABlock() {
       {ctaStep===0&&(<><p style={{color:'#f1f5f9',fontSize:16,fontWeight:700,marginBottom:16}}>Want to improve your Japanese?</p><div style={{display:'flex',gap:10,justifyContent:'center',flexWrap:'wrap'}}><button onClick={()=>setCtaStep(1)} style={{padding:'12px 24px',background:'linear-gradient(135deg,#22c55e,#16a34a)',color:'#fff',border:'none',borderRadius:12,fontSize:14,fontWeight:700,cursor:'pointer'}}>Yes</button><button onClick={()=>setCtaStep(3)} style={{padding:'12px 20px',background:'rgba(255,255,255,0.08)',color:'#94a3b8',border:'1px solid rgba(255,255,255,0.1)',borderRadius:12,fontSize:13,cursor:'pointer'}}>No, I'm satisfied with my result</button></div></>)}
       {ctaStep===1&&(<><p style={{color:'#f1f5f9',fontSize:16,fontWeight:700,marginBottom:16}}>Need a FREE Japanese Q&A session?</p><button onClick={()=>setCtaStep(2)} style={{padding:'12px 32px',background:'linear-gradient(135deg,#3b82f6,#1d4ed8)',color:'#fff',border:'none',borderRadius:12,fontSize:14,fontWeight:700,cursor:'pointer'}}>Yes</button></>)}
       {ctaStep===2&&(<><p style={{color:'#f1f5f9',fontSize:15,fontWeight:700,marginBottom:16}}>Apply for your FREE Trial Lesson!</p><a href="https://www.seitojapanese.online/" target="_blank" rel="noopener noreferrer" style={{display:'inline-block',padding:'14px 24px',background:'linear-gradient(135deg,#f59e0b,#d97706)',color:'#fff',borderRadius:12,fontSize:14,fontWeight:800,textDecoration:'none'}}>Apply for FIRST Q&A SESSION (FREE TRIAL LESSON) !!!</a></>)}
-      {ctaStep===3&&(<p style={{color:'#64748b',fontSize:14,margin:0}}>Great! Keep up the good work! 🎌</p>)}
+      {ctaStep===3&&(<p style={{color:'#64748b',fontSize:14,margin:0}}>Great! Keep up the good work! </p>)}
     </div>
   );
 }
@@ -122,7 +122,7 @@ export default function BusinessSpeech() {
       <div style={S.page}>
         <div style={S.card}>
           <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:18 }}>
-            <span style={{ color:COLOR, fontWeight:800, fontSize:13 }}>💼 Practical Japanese — Business Speech</span>
+            <span style={{ color:COLOR, fontWeight:800, fontSize:13 }}> Practical Japanese — Business Speech</span>
             <span style={{ color:"#64748b", fontSize:13 }}>{qIndex+1} / {QUESTIONS.length}</span>
           </div>
           <div style={{ height:5, background:"#1e293b", borderRadius:4, marginBottom:22 }}>
@@ -134,7 +134,7 @@ export default function BusinessSpeech() {
           </div>
           <p style={S.qText}>{q.text}</p>
           {q.textEn && <p style={S.qTextEn}>{q.textEn}</p>}
-          <p style={S.hint}>💡 If you don't know the answer, click "No Answer".</p>
+          <p style={S.hint}> If you don't know the answer, click "No Answer".</p>
           <div style={{ display:"flex", flexDirection:"column", gap:10, marginBottom:22 }}>
             {q.options.map((opt, i) => {
               const sel = selected === i;
@@ -169,7 +169,7 @@ export default function BusinessSpeech() {
     <div style={S.page}>
       <div style={S.card}>
         <div style={{ textAlign:"center", marginBottom:28 }}>
-          <div style={{ fontSize:44, marginBottom:10 }}>🔒</div>
+          <div style={{ fontSize:44, marginBottom:10 }}></div>
           <h2 style={{ color:"#f1f5f9", fontSize:21, fontWeight:900, margin:"0 0 8px" }}>Want to know your results?</h2>
           <p style={{ color:"#64748b", fontSize:13, margin:0, lineHeight:1.7 }}>Enter your name and email to unlock your score,<br/>correct answers, and CEFR level.</p>
         </div>
@@ -209,11 +209,11 @@ export default function BusinessSpeech() {
 
           <div style={{ display:"flex", flexDirection:"column", gap:16, marginBottom:24 }}>
             <div style={{ background:"rgba(255,255,255,0.04)", borderRadius:14, padding:"16px 18px", borderLeft:"3px solid #3b82f6" }}>
-              <p style={{ color:"#3b82f6", fontSize:12, fontWeight:700, margin:"0 0 6px", letterSpacing:1 }}>📊 JLPT EQUIVALENT</p>
+              <p style={{ color:"#3b82f6", fontSize:12, fontWeight:700, margin:"0 0 6px", letterSpacing:1 }}> JLPT EQUIVALENT</p>
               <p style={{ color:"#f1f5f9", fontSize:18, fontWeight:800, margin:0 }}>{info.jlpt}</p>
             </div>
             <div style={{ background:"rgba(255,255,255,0.04)", borderRadius:14, padding:"16px 18px", borderLeft:"3px solid #22c55e" }}>
-              <p style={{ color:"#22c55e", fontSize:12, fontWeight:700, margin:"0 0 10px", letterSpacing:1 }}>✅ WHAT YOU CAN DO AT THIS LEVEL</p>
+              <p style={{ color:"#22c55e", fontSize:12, fontWeight:700, margin:"0 0 10px", letterSpacing:1 }}> WHAT YOU CAN DO AT THIS LEVEL</p>
               {info.canDo.map((item,i) => (
                 <div key={i} style={{ display:"flex", gap:8, marginBottom:6, alignItems:"flex-start" }}>
                   <span style={{ color:"#22c55e", fontSize:12, marginTop:2 }}>•</span>
@@ -222,7 +222,7 @@ export default function BusinessSpeech() {
               ))}
             </div>
             <div style={{ background:"rgba(255,255,255,0.04)", borderRadius:14, padding:"16px 18px", borderLeft:"3px solid #ef4444" }}>
-              <p style={{ color:"#ef4444", fontSize:12, fontWeight:700, margin:"0 0 10px", letterSpacing:1 }}>⚠️ CHALLENGES AT THIS LEVEL</p>
+              <p style={{ color:"#ef4444", fontSize:12, fontWeight:700, margin:"0 0 10px", letterSpacing:1 }}>️ CHALLENGES AT THIS LEVEL</p>
               {info.problems.map((item,i) => (
                 <div key={i} style={{ display:"flex", gap:8, marginBottom:6, alignItems:"flex-start" }}>
                   <span style={{ color:"#ef4444", fontSize:12, marginTop:2 }}>•</span>
@@ -252,7 +252,7 @@ export default function BusinessSpeech() {
                   <div style={{ display:"flex", gap:8, marginBottom:8, flexWrap:"wrap" }}>
                     <span style={{ ...S.badge, background:cc+"22", color:cc }}>CEFR {qq.cefr}</span>
                     <span style={{ ...S.badge, background:"#1e293b", color:"#64748b" }}>JLPT {qq.jlpt}</span>
-                    <span style={{ ...S.badge, background:ok?"#22c55e22":"#ef444422", color:ok?"#22c55e":"#ef4444" }}>{ok?"✓ Correct":"✗ Incorrect"}</span>
+                    <span style={{ ...S.badge, background:ok?"#22c55e22":"#ef444422", color:ok?"#22c55e":"#ef4444" }}>{ok?" Correct":" Incorrect"}</span>
                   </div>
                   <p style={{ color:"#e2e8f0", fontSize:14, margin:"0 0 4px", whiteSpace:"pre-line" }}>{qq.text}</p>
                   {qq.textEn && <p style={{ color:"#64748b", fontSize:12, margin:"0 0 10px", fontStyle:"italic" }}>{qq.textEn}</p>}
@@ -260,11 +260,11 @@ export default function BusinessSpeech() {
                     {qq.options.map((opt,oi) => {
                       const isA=oi===qq.answer, isU=oi===ua;
                       const c=isA?"#22c55e":(isU&&!isA)?"#ef4444":"#475569";
-                      return <div key={oi} style={{ display:"flex", gap:8, alignItems:"center" }}><span style={{ fontSize:12, color:c, minWidth:14 }}>{isA?"✓":isU?"✗":"·"}</span><span style={{ fontSize:13, color:c }}>{opt}</span>{isA&&<span style={{ fontSize:11, color:"#22c55e55" }}>← correct</span>}</div>;
+                      return <div key={oi} style={{ display:"flex", gap:8, alignItems:"center" }}><span style={{ fontSize:12, color:c, minWidth:14 }}>{isA?"":isU?"":"·"}</span><span style={{ fontSize:13, color:c }}>{opt}</span>{isA&&<span style={{ fontSize:11, color:"#22c55e55" }}>← correct</span>}</div>;
                     })}
                   </div>
                   <div style={{ background:"rgba(255,255,255,0.04)", borderRadius:8, padding:"10px 12px", borderLeft:`3px solid ${cc}` }}>
-                    <span style={{ color:"#94a3b8", fontSize:12 }}>💡 {qq.explanation}</span>
+                    <span style={{ color:"#94a3b8", fontSize:12 }}> {qq.explanation}</span>
                   </div>
                 </div>
               );
@@ -293,19 +293,19 @@ export default function BusinessSpeech() {
                 )}
                 {ctaStep === 2 && (
                   <>
-                    <p style={{color:'#f1f5f9', fontSize:15, fontWeight:700, marginBottom:16}}>🎉 Apply for your FREE Trial Lesson!</p>
+                    <p style={{color:'#f1f5f9', fontSize:15, fontWeight:700, marginBottom:16}}> Apply for your FREE Trial Lesson!</p>
                     <a href="https://www.seitojapanese.online/" target="_blank" rel="noopener noreferrer" style={{display:'inline-block', padding:'14px 28px', background:'linear-gradient(135deg,#f59e0b,#d97706)', color:'#fff', borderRadius:12, fontSize:14, fontWeight:800, textDecoration:'none', letterSpacing:0.5}}>Apply for FIRST Q&A SESSION (FREE TRIAL LESSON) !!!</a>
                   </>
                 )}
                 {ctaStep === 3 && (
-                  <p style={{color:'#64748b', fontSize:14, margin:0}}>Great! Keep up the good work! 🎌</p>
+                  <p style={{color:'#64748b', fontSize:14, margin:0}}>Great! Keep up the good work! </p>
                 )}
               </div>
             );
           })()}
           <button onClick={restart} style={{ ...S.btn, background:`linear-gradient(135deg,${COLOR},${COLOR}99)`, color:"#fff", cursor:"pointer", marginTop:16 }}>
           <CTABlock />
-          <button onClick={restart} 🔄</button>
+          <button onClick={restart} </button>
         </div>
       </div>
     );

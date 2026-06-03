@@ -73,7 +73,7 @@ function CTABlock() {
       {ctaStep===0&&(<><p style={{color:'#f1f5f9',fontSize:16,fontWeight:700,marginBottom:16}}>Want to improve your Japanese?</p><div style={{display:'flex',gap:10,justifyContent:'center',flexWrap:'wrap'}}><button onClick={()=>setCtaStep(1)} style={{padding:'12px 24px',background:'linear-gradient(135deg,#22c55e,#16a34a)',color:'#fff',border:'none',borderRadius:12,fontSize:14,fontWeight:700,cursor:'pointer'}}>Yes</button><button onClick={()=>setCtaStep(3)} style={{padding:'12px 20px',background:'rgba(255,255,255,0.08)',color:'#94a3b8',border:'1px solid rgba(255,255,255,0.1)',borderRadius:12,fontSize:13,cursor:'pointer'}}>No, I'm satisfied with my result</button></div></>)}
       {ctaStep===1&&(<><p style={{color:'#f1f5f9',fontSize:16,fontWeight:700,marginBottom:16}}>Need a FREE Japanese Q&A session?</p><button onClick={()=>setCtaStep(2)} style={{padding:'12px 32px',background:'linear-gradient(135deg,#3b82f6,#1d4ed8)',color:'#fff',border:'none',borderRadius:12,fontSize:14,fontWeight:700,cursor:'pointer'}}>Yes</button></>)}
       {ctaStep===2&&(<><p style={{color:'#f1f5f9',fontSize:15,fontWeight:700,marginBottom:16}}>Apply for your FREE Trial Lesson!</p><a href="https://www.seitojapanese.online/" target="_blank" rel="noopener noreferrer" style={{display:'inline-block',padding:'14px 24px',background:'linear-gradient(135deg,#f59e0b,#d97706)',color:'#fff',borderRadius:12,fontSize:14,fontWeight:800,textDecoration:'none'}}>Apply for FIRST Q&A SESSION (FREE TRIAL LESSON) !!!</a></>)}
-      {ctaStep===3&&(<p style={{color:'#64748b',fontSize:14,margin:0}}>Great! Keep up the good work! 🎌</p>)}
+      {ctaStep===3&&(<p style={{color:'#64748b',fontSize:14,margin:0}}>Great! Keep up the good work! </p>)}
     </div>
   );
 }
@@ -107,7 +107,7 @@ export default function Reading() {
       <div style={S.page}>
         <div style={S.card}>
           <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:18 }}>
-            <span style={{ color:COLOR, fontWeight:800, fontSize:14 }}>📄 Reading</span>
+            <span style={{ color:COLOR, fontWeight:800, fontSize:14 }}> Reading</span>
             <span style={{ color:"#64748b", fontSize:13 }}>{qIndex+1} / {QUESTIONS.length}</span>
           </div>
           <div style={{ height:5, background:"#1e293b", borderRadius:4, marginBottom:22 }}>
@@ -115,7 +115,7 @@ export default function Reading() {
           </div>
           <div style={{ display:"flex", gap:8, marginBottom:18, flexWrap:"wrap" }}>
             {q.hiragana
-              ? <span style={{ ...S.badge, background:"#f472b622", color:"#f472b6" }}>★ ひらがな問題</span>
+              ? <span style={{ ...S.badge, background:"#f472b622", color:"#f472b6" }}> ひらがな問題</span>
               : <><span style={{ ...S.badge, background:cc+"22", color:cc }}>CEFR {q.cefr}</span>
                  <span style={{ ...S.badge, background:"#1e293b", color:"#64748b" }}>JLPT {q.jlpt}</span></>
             }
@@ -156,7 +156,7 @@ export default function Reading() {
     <div style={S.page}>
       <div style={S.card}>
         <div style={{ textAlign:"center", marginBottom:28 }}>
-          <div style={{ fontSize:44, marginBottom:10 }}>🔒</div>
+          <div style={{ fontSize:44, marginBottom:10 }}></div>
           <h2 style={{ color:"#f1f5f9", fontSize:21, fontWeight:900, margin:"0 0 8px" }}>Want to know your results?</h2>
           <p style={{ color:"#64748b", fontSize:13, margin:0, lineHeight:1.7 }}>
             Enter your name and email to unlock your score,<br/>correct answers, and CEFR level.
@@ -196,9 +196,9 @@ export default function Reading() {
               return (
                 <div key={i} style={{ background:ok?"rgba(34,197,94,0.06)":"rgba(239,68,68,0.06)", border:`1.5px solid ${ok?"#22c55e33":"#ef444433"}`, borderRadius:14, padding:"16px 18px" }}>
                   <div style={{ display:"flex", gap:8, marginBottom:8, flexWrap:"wrap" }}>
-                    {qq.hiragana ? <span style={{ ...S.badge, background:"#f472b622", color:"#f472b6" }}>★ Hiragana</span>
+                    {qq.hiragana ? <span style={{ ...S.badge, background:"#f472b622", color:"#f472b6" }}> Hiragana</span>
                       : <><span style={{ ...S.badge, background:cc+"22", color:cc }}>CEFR {qq.cefr}</span><span style={{ ...S.badge, background:"#1e293b", color:"#64748b" }}>JLPT {qq.jlpt}</span></>}
-                    <span style={{ ...S.badge, background:ok?"#22c55e22":"#ef444422", color:ok?"#22c55e":"#ef4444" }}>{ok?"✓ Correct":"✗ Incorrect"}</span>
+                    <span style={{ ...S.badge, background:ok?"#22c55e22":"#ef444422", color:ok?"#22c55e":"#ef4444" }}>{ok?" Correct":" Incorrect"}</span>
                   </div>
                   <p style={{ color:"#e2e8f0", fontSize:14, margin:"0 0 4px", whiteSpace:"pre-line" }}>{qq.text}</p>
                   {qq.textEn && <p style={{ color:"#64748b", fontSize:12, margin:"0 0 10px", fontStyle:"italic" }}>{qq.textEn}</p>}
@@ -206,11 +206,11 @@ export default function Reading() {
                     {qq.options.map((opt,oi) => {
                       const isA=oi===qq.answer, isU=oi===ua;
                       const c=isA?"#22c55e":(isU&&!isA)?"#ef4444":"#475569";
-                      return <div key={oi} style={{ display:"flex", gap:8, alignItems:"center" }}><span style={{ fontSize:12, color:c, minWidth:14 }}>{isA?"✓":isU?"✗":"·"}</span><span style={{ fontSize:13, color:c }}>{opt}</span>{isA&&<span style={{ fontSize:11, color:"#22c55e55" }}>← correct</span>}</div>;
+                      return <div key={oi} style={{ display:"flex", gap:8, alignItems:"center" }}><span style={{ fontSize:12, color:c, minWidth:14 }}>{isA?"":isU?"":"·"}</span><span style={{ fontSize:13, color:c }}>{opt}</span>{isA&&<span style={{ fontSize:11, color:"#22c55e55" }}>← correct</span>}</div>;
                     })}
                   </div>
                   <div style={{ background:"rgba(255,255,255,0.04)", borderRadius:8, padding:"10px 12px", borderLeft:`3px solid ${cc}` }}>
-                    <span style={{ color:"#94a3b8", fontSize:12 }}>💡 {qq.explanation}</span>
+                    <span style={{ color:"#94a3b8", fontSize:12 }}> {qq.explanation}</span>
                   </div>
                 </div>
               );
@@ -218,7 +218,7 @@ export default function Reading() {
           </div>
           <button onClick={restart} style={{ ...S.btn, background:`linear-gradient(135deg,${COLOR},${COLOR}99)`, color:"#fff", cursor:"pointer", marginTop:16 }}>
           <CTABlock />
-          <button onClick={restart} 🔄</button>
+          <button onClick={restart} </button>
         </div>
       </div>
     );
