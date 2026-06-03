@@ -1,57 +1,142 @@
 import React, { useState } from "react";
-const CP = { A1:"#22c55e", A2:"#3b82f6", B1:"#f59e0b", B2:"#ef4444", C1:"#a855f7", C2:"#ec4899" };
+
+const CP = { A1:"#22c55e", A2:"#3b82f6", B1:"#f59e0b", B2:"#ef4444", C1:"#a855f7" };
 const COLOR = "#f97316";
+
 const QUESTIONS = [
-  { cefr:"A1", jlpt:"N5", text:"「どこに住んでいますか。」", textEn:"Where do you live?", options:["東京に住んでいます。","東京です。","東京へ。","東京から。","No Answer"], answer:0, explanation:"「東京に住んでいます」is the grammatically complete and natural answer. The particle 「に」marks location of residence." },
-  { cefr:"A2", jlpt:"N4", text:"友達に週末の予定を聞かれました。\n最も自然なのは？", textEn:"A friend asks about your plans for the weekend. Which is most natural?", options:["映画を見に行く予定です。","映画を見ました。","映画です。","映画へ。","No Answer"], answer:0, explanation:"「〜予定です」is the natural way to express future plans. 「映画を見ました」is past tense." },
-  { cefr:"B1", jlpt:"N3", text:"友達との会話です。\n「最近どう？」\n最も自然な返答は？", textEn:"A friend asks 'How have you been lately?' Which is most natural?", options:["特に変わりないよ。","日本語です。","本を読みます。","東京へ行く。","No Answer"], answer:0, explanation:"「特に変わりないよ」means 'Not much has changed' — a perfectly natural casual response." },
-  { cefr:"B2", jlpt:"N2", text:"友達が言いました。\n「便利なのはいいけど、その分失うものもあるよね。」\n失うものとは？", textEn:"A friend says: 'Convenience is great, but we lose something in return.' What does 'something' refer to?", options:["お金だけ","必ず物","利便性","人間関係や伝統など抽象的なものを含む","No Answer"], answer:3, explanation:"「その分失うもの」refers to abstract things sacrificed for convenience — like human connection or traditions." },
-  { cefr:"C1", jlpt:"N1", text:"次の発言のニュアンスを選んでください。\n「別に反対しているわけじゃないんだけどね。」", textEn:"Choose the most appropriate nuance: 'It's not that I'm against it or anything.'", options:["完全に賛成","少し反対・懸念がある","興味がない","話を終わらせたい","No Answer"], answer:1, explanation:"「けどね」implies an unspoken 'but...' signaling mild concern — a subtle C1 nuance." },
-  { cefr:"C2", jlpt:"N1+", text:"友達が新しい髪型について言いました。\n「まあ、個性的でいいんじゃない？」\nこの発言として最も可能性が高いものは？", textEn:"A friend says about a new hairstyle: 'Well, it's certainly unique.' What is the most likely meaning?", options:["心から褒めている","興味がない","遠回しに微妙だと思っている可能性がある","髪型が完璧だと思っている","No Answer"], answer:2, explanation:"「まあ」as a hesitation marker with「個性的」often implies the speaker finds it unusual but is being polite." },
+  { cefr:"A1", jlpt:"N5", text:"「ありがとう」の返事は？", textEn:"What is the reply to 'Thank you'?", options:["どういたしまして","すみません","おはよう","さようなら"], answer:0, explanation:"'Dou itashimashite' means 'You're welcome' — the standard reply to 'Arigatou'." },
+  { cefr:"A2", jlpt:"N4", text:"友達に「元気？」と聞かれたら？", textEn:"If a friend asks 'Are you well?'", options:["元気だよ！","いただきます","おやすみ","いってきます"], answer:0, explanation:"'Genki dayo!' means 'I'm fine!' — a natural casual reply." },
+  { cefr:"B1", jlpt:"N3", text:"「やばい」の意味は？", textEn:"What does 'yabai' mean?", options:["Amazing/terrible (slang)","Delicious","Busy","Quiet"], answer:0, explanation:"'Yabai' is versatile slang meaning amazing, terrible, or intense depending on context." },
+  { cefr:"B2", jlpt:"N2", text:"「なんか」の使い方は？", textEn:"How is 'nanka' used?", options:["Like / somehow (filler)","Never","Always","Only"], answer:0, explanation:"'Nanka' is a casual filler similar to 'like' or 'somehow' in English." },
+  { cefr:"C1", jlpt:"N1", text:"「ぶっちゃけ」の意味は？", textEn:"What does 'bucchake' mean?", options:["To be honest / frankly","To give up","To be confused","To hurry"], answer:0, explanation:"'Bucchake' means 'to be frank' or 'honestly speaking' — a very casual expression." },
 ];
-const cefrData = {
-  'Pre-A1':{ jlpt:'Below N5', canDo:['Recognize basic greetings like こんにちは','Understand a few common words'], problems:['Cannot hold any conversation','Unable to understand casual speech'], timeToN4:'Approximately 18–24 months', timeToN2:'Approximately 4–6 years' },
-  'A1':{ jlpt:'N5', canDo:['Exchange basic greetings','Understand simple questions about yourself','Use basic phrases in daily life'], problems:['Cannot sustain casual conversation','Struggles with natural speech speed'], timeToN4:'Approximately 12–18 months', timeToN2:'Approximately 3–5 years' },
-  'A2':{ jlpt:'N4', canDo:['Chat about hobbies and daily life','Understand simple friend conversations','Express basic opinions'], problems:['Cannot handle unexpected topics','Fast speech is difficult'], timeToN4:'You are at N4! Keep consolidating.', timeToN2:'Approximately 1–2 years' },
-  'A2–B1':{ jlpt:'N4–N3', canDo:['Hold conversations on familiar topics','Understand most casual conversations','Express yourself on known topics'], problems:['Subtle nuances still challenging','Casual slang unfamiliar'], timeToN4:'You are near N4! Keep going.', timeToN2:'Approximately 1–2 years' },
-  'B1':{ jlpt:'N3', canDo:['Communicate confidently in daily situations','Understand TV shows and casual talks','Express opinions clearly'], problems:['Very fast speech still challenging','Reading between lines needs work'], timeToN4:'You have surpassed N4!', timeToN2:'Approximately 6–12 months' },
-  'B1–B2':{ jlpt:'N3–N2', canDo:['Communicate fluently on many topics','Understand most informal Japanese','Catch implied meanings'], problems:['Very subtle nuances may be missed','Highly colloquial slang needs exposure'], timeToN4:'You have surpassed N4!', timeToN2:'You are near N2! A few more months.' },
-  'B2':{ jlpt:'N2', canDo:['Use casual Japanese naturally','Catch cultural references and humor','Enjoy anime without subtitles'], problems:['Very subtle implications need attention','Deep cultural nuances take time'], timeToN4:'You have surpassed N4!', timeToN2:'You are at N2! Aim for N1 next.' },
-  'B2–C1':{ jlpt:'N2–N1', canDo:['Express yourself fluently in casual settings','Understand humor and implied meanings','Participate fully in any conversation'], problems:['Native-level subtlety still refining','Regional dialects may cause confusion'], timeToN4:'You have far surpassed N4!', timeToN2:'You are at or near N2! Target N1.' },
-  'C1':{ jlpt:'N1', canDo:['Communicate at near-native level casually','Use colloquial expressions naturally','Appreciate subtle humor'], problems:['Staying current with evolving slang','Very localized dialect expressions'], timeToN4:'You have far surpassed N4!', timeToN2:'You have surpassed N2! You are at N1.' },
-  'C2':{ jlpt:'N1+', canDo:['Operate at native-like level casually','Understand the most subtle expressions','Catch every nuance naturally'], problems:['Awareness of constantly evolving language','Very localized slang may arise'], timeToN4:'You have far surpassed N4!', timeToN2:'You have surpassed N2! Near-native level.' },
-};
-function getResult(score,total){const p=score/total;if(p===1)return{level:"C2",msg:"Near-native casual Japanese! Outstanding."};if(p>=0.83)return{level:"C1",msg:"Advanced casual Japanese. Very natural!"};if(p>=0.67)return{level:"B2",msg:"Upper-intermediate. You sound natural in conversation!"};if(p>=0.5)return{level:"B1",msg:"Intermediate. Building solid conversational skills."};if(p>=0.33)return{level:"A2",msg:"Elementary. Keep practicing everyday expressions."};if(p>0)return{level:"A1",msg:"Beginner. Start with basic daily expressions."};return{level:"Pre-A1",msg:"Just starting — every step counts!"};}
 
-
+function getResult(score, total) {
+  const p = score / total;
+  if (p === 1)   return { level:"C1",    msg:"Outstanding! Near-native casual speech." };
+  if (p >= 0.8)  return { level:"B2",    msg:"Advanced casual Japanese!" };
+  if (p >= 0.6)  return { level:"B1",    msg:"Good grasp of casual expressions." };
+  if (p >= 0.4)  return { level:"A2",    msg:"Keep practicing casual speech." };
+  return               { level:"A1",    msg:"Start with everyday casual phrases." };
+}
 
 function CTABlock() {
   const [ctaStep, setCtaStep] = useState(0);
   return (
-    <div style={{marginTop:24,padding:'20px',background:'rgba(255,255,255,0.04)',borderRadius:16,border:'1px solid rgba(255,255,255,0.08)',textAlign:'center'}}>
-      {ctaStep===0&&(<><p style={{color:'#f1f5f9',fontSize:16,fontWeight:700,marginBottom:16}}>Want to improve your Japanese?</p><div style={{display:'flex',gap:10,justifyContent:'center',flexWrap:'wrap'}}><button onClick={()=>setCtaStep(1)} style={{padding:'12px 24px',background:'linear-gradient(135deg,#22c55e,#16a34a)',color:'#fff',border:'none',borderRadius:12,fontSize:14,fontWeight:700,cursor:'pointer'}}>Yes</button><button onClick={()=>setCtaStep(3)} style={{padding:'12px 20px',background:'rgba(255,255,255,0.08)',color:'#94a3b8',border:'1px solid rgba(255,255,255,0.1)',borderRadius:12,fontSize:13,cursor:'pointer'}}>No, I'm satisfied with my result</button></div></>)}
-      {ctaStep===1&&(<><p style={{color:'#f1f5f9',fontSize:16,fontWeight:700,marginBottom:16}}>Need a FREE Japanese Q&A session?</p><button onClick={()=>setCtaStep(2)} style={{padding:'12px 32px',background:'linear-gradient(135deg,#3b82f6,#1d4ed8)',color:'#fff',border:'none',borderRadius:12,fontSize:14,fontWeight:700,cursor:'pointer'}}>Yes</button></>)}
-      {ctaStep===2&&(<><p style={{color:'#f1f5f9',fontSize:15,fontWeight:700,marginBottom:16}}>Apply for your FREE Trial Lesson!</p><a href="https://www.seitojapanese.online/" target="_blank" rel="noopener noreferrer" style={{display:'inline-block',padding:'14px 24px',background:'linear-gradient(135deg,#f59e0b,#d97706)',color:'#fff',borderRadius:12,fontSize:14,fontWeight:800,textDecoration:'none'}}>Apply for FIRST Q&A SESSION (FREE TRIAL LESSON) !!!</a></>)}
-      {ctaStep===3&&(<p style={{color:'#64748b',fontSize:14,margin:0}}>Great! Keep up the good work! </p>)}
+    <div style={{marginTop:24,padding:"20px",background:"rgba(255,255,255,0.04)",borderRadius:16,border:"1px solid rgba(255,255,255,0.08)",textAlign:"center"}}>
+      {ctaStep===0&&(<><p style={{color:"#f1f5f9",fontSize:16,fontWeight:700,marginBottom:16}}>Want to improve your Japanese?</p><div style={{display:"flex",gap:10,justifyContent:"center",flexWrap:"wrap"}}><button onClick={()=>setCtaStep(1)} style={{padding:"12px 24px",background:"linear-gradient(135deg,#22c55e,#16a34a)",color:"#fff",border:"none",borderRadius:12,fontSize:14,fontWeight:700,cursor:"pointer"}}>Yes</button><button onClick={()=>setCtaStep(3)} style={{padding:"12px 20px",background:"rgba(255,255,255,0.08)",color:"#94a3b8",border:"1px solid rgba(255,255,255,0.1)",borderRadius:12,fontSize:13,cursor:"pointer"}}>No, I am satisfied with my result</button></div></>)}
+      {ctaStep===1&&(<><p style={{color:"#f1f5f9",fontSize:16,fontWeight:700,marginBottom:16}}>Need a FREE Japanese Q&A session?</p><button onClick={()=>setCtaStep(2)} style={{padding:"12px 32px",background:"linear-gradient(135deg,#3b82f6,#1d4ed8)",color:"#fff",border:"none",borderRadius:12,fontSize:14,fontWeight:700,cursor:"pointer"}}>Yes</button></>)}
+      {ctaStep===2&&(<><p style={{color:"#f1f5f9",fontSize:15,fontWeight:700,marginBottom:16}}>Apply for your FREE Trial Lesson!</p><a href="https://www.seitojapanese.online/" target="_blank" rel="noopener noreferrer" style={{display:"inline-block",padding:"14px 24px",background:"linear-gradient(135deg,#f59e0b,#d97706)",color:"#fff",borderRadius:12,fontSize:14,fontWeight:800,textDecoration:"none"}}>Apply for FIRST Q&A SESSION (FREE TRIAL LESSON) !!!</a></>)}
+      {ctaStep===3&&(<p style={{color:"#64748b",fontSize:14,margin:0}}>Great! Keep up the good work!</p>)}
     </div>
   );
 }
 
-export default function CasualSpeech(){
-  const [phase,setPhase]=useState("quiz");
-  const [qIndex,setQIndex]=useState(0);
-  const [selected,setSelected]=useState(null);
-  const [userAnswers,setUserAnswers]=useState([]);
-  const [name,setName]=useState("");
-  const [email,setEmail]=useState("");
-  const q=QUESTIONS[qIndex];
-  const score=userAnswers.filter((a,i)=>a===QUESTIONS[i]?.answer).length;
-  function handleNext(){if(selected===null)return;const updated=[...userAnswers,selected];setUserAnswers(updated);if(qIndex+1<QUESTIONS.length){setQIndex(qIndex+1);setSelected(null);}else setPhase("gate");}
-  function restart(){setPhase("quiz");setQIndex(0);setSelected(null);setUserAnswers([]);setName("");setEmail("");}
-  if(phase==="quiz"&&q){const cc=CP[q.cefr]??COLOR;return(<div style={S.page}><div style={S.card}><div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:18}}><span style={{color:COLOR,fontWeight:800,fontSize:13}}> Practical Japanese — Casual Speech</span><span style={{color:"#64748b",fontSize:13}}>{qIndex+1} / {QUESTIONS.length}</span></div><div style={{height:5,background:"#1e293b",borderRadius:4,marginBottom:22}}><div style={{height:"100%",borderRadius:4,background:`linear-gradient(90deg,${cc},${cc}99)`,width:`${((qIndex+1)/QUESTIONS.length)*100}%`,transition:"width 0.4s"}}/></div><div style={{display:"flex",gap:8,marginBottom:18,flexWrap:"wrap"}}><span style={{...S.badge,background:cc+"22",color:cc}}>CEFR {q.cefr}</span><span style={{...S.badge,background:"#1e293b",color:"#64748b"}}>JLPT {q.jlpt}</span></div><p style={S.qText}>{q.text}</p>{q.textEn&&<p style={S.qTextEn}>{q.textEn}</p>}<p style={S.hint}> If you don't know the answer, click "No Answer".</p><div style={{display:"flex",flexDirection:"column",gap:10,marginBottom:22}}>{q.options.map((opt,i)=>{const sel=selected===i;return(<button key={i} onClick={()=>setSelected(i)} style={{...S.optBtn,background:sel?cc+"22":"rgba(255,255,255,0.04)",border:`1.5px solid ${sel?cc:"rgba(255,255,255,0.08)"}`,color:sel?"#f1f5f9":"#94a3b8",transform:sel?"translateX(4px)":"none"}}><span style={{...S.optLabel,background:sel?cc:"#1e293b",color:sel?"#fff":"#475569"}}>{["A","B","C","D","E"][i]}</span>{opt}</button>);})}</div><button onClick={handleNext} disabled={selected===null} style={{...S.btn,background:selected!==null?`linear-gradient(135deg,${cc},${cc}99)`:"#1e293b",color:selected!==null?"#fff":"#475569",cursor:selected!==null?"pointer":"default"}}>{qIndex+1===QUESTIONS.length?"See Results →":"Next →"}</button></div></div>);}
-  if(phase==="gate")return(<div style={S.page}><div style={S.card}><div style={{textAlign:"center",marginBottom:28}}><div style={{fontSize:44,marginBottom:10}}></div><h2 style={{color:"#f1f5f9",fontSize:21,fontWeight:900,margin:"0 0 8px"}}>Want to know your results?</h2><p style={{color:"#64748b",fontSize:13,margin:0,lineHeight:1.7}}>Enter your name and email to unlock your score,<br/>correct answers, and CEFR level.</p></div><div style={{display:"flex",flexDirection:"column",gap:14,marginBottom:22}}><div><label style={S.label}>Name</label><input value={name} onChange={e=>setName(e.target.value)} placeholder="Your name" style={S.input}/></div><div><label style={S.label}>Email</label><input value={email} onChange={e=>setEmail(e.target.value)} placeholder="your@email.com" type="email" style={S.input}/></div></div><button onClick={()=>{if(name.trim()&&email.trim()){const r=getResult(score,QUESTIONS.length);fetch('https://formspree.io/f/mykvallk',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:name,email:email,section:'Casual Speech',score:score+'/'+QUESTIONS.length,cefr:r.level})}).then(()=>setPhase('result'));}}} style={{...S.btn,background:name.trim()&&email.trim()?`linear-gradient(135deg,${COLOR},${COLOR}99)`:"#1e293b",color:name.trim()&&email.trim()?"#fff":"#475569",cursor:name.trim()&&email.trim()?"pointer":"default"}}>Unlock My Results →</button><p style={{color:"#334155",fontSize:11,textAlign:"center",marginTop:14}}>Demo only — no data is transmitted externally.</p></div></div>);
-  if(phase==="result"){const res=getResult(score,QUESTIONS.length);const rc=CP[res.level]??COLOR;const info=cefrData[res.level]??cefrData['Pre-A1'];return(<div style={S.page}><div style={{...S.card,maxWidth:580}}><div style={{textAlign:"center",marginBottom:26}}><p style={{color:"#64748b",fontSize:13,marginBottom:4}}>{name}'s Results — Casual Speech</p><div style={{fontSize:48,fontWeight:900,background:`linear-gradient(135deg,${COLOR},${rc})`,WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent"}}>{res.level}</div><p style={{color:"#94a3b8",fontSize:14,marginTop:6,marginBottom:14}}>{res.msg}</p><div style={{fontSize:30,fontWeight:900,color:"#f1f5f9"}}>{score} <span style={{color:"#475569",fontSize:16}}>/ {QUESTIONS.length} correct</span></div></div><div style={{display:"flex",flexDirection:"column",gap:16,marginBottom:24}}><div style={{background:"rgba(255,255,255,0.04)",borderRadius:14,padding:"16px 18px",borderLeft:"3px solid #3b82f6"}}><p style={{color:"#3b82f6",fontSize:12,fontWeight:700,margin:"0 0 6px",letterSpacing:1}}> JLPT EQUIVALENT</p><p style={{color:"#f1f5f9",fontSize:18,fontWeight:800,margin:0}}>{info.jlpt}</p></div><div style={{background:"rgba(255,255,255,0.04)",borderRadius:14,padding:"16px 18px",borderLeft:"3px solid #22c55e"}}><p style={{color:"#22c55e",fontSize:12,fontWeight:700,margin:"0 0 10px",letterSpacing:1}}> WHAT YOU CAN DO AT THIS LEVEL</p>{info.canDo.map((item,i)=>(<div key={i} style={{display:"flex",gap:8,marginBottom:6,alignItems:"flex-start"}}><span style={{color:"#22c55e",fontSize:12,marginTop:2}}>•</span><span style={{color:"#cbd5e1",fontSize:13,lineHeight:1.6}}>{item}</span></div>))}</div><div style={{background:"rgba(255,255,255,0.04)",borderRadius:14,padding:"16px 18px",borderLeft:"3px solid #ef4444"}}><p style={{color:"#ef4444",fontSize:12,fontWeight:700,margin:"0 0 10px",letterSpacing:1}}>️ CHALLENGES AT THIS LEVEL</p>{info.problems.map((item,i)=>(<div key={i} style={{display:"flex",gap:8,marginBottom:6,alignItems:"flex-start"}}><span style={{color:"#ef4444",fontSize:12,marginTop:2}}>•</span><span style={{color:"#cbd5e1",fontSize:13,lineHeight:1.6}}>{item}</span></div>))}</div><div style={{background:"rgba(255,255,255,0.04)",borderRadius:14,padding:"16px 18px",borderLeft:"3px solid #f59e0b"}}><p style={{color:"#f59e0b",fontSize:12,fontWeight:700,margin:"0 0 10px",letterSpacing:1}}>⏱️ YOUR STUDY ROADMAP</p><div style={{marginBottom:8}}><p style={{color:"#94a3b8",fontSize:11,margin:"0 0 2px"}}>To reach N4 / A2 (Japanese University entry):</p><p style={{color:"#f1f5f9",fontSize:13,fontWeight:600,margin:0}}>{info.timeToN4}</p></div><div><p style={{color:"#94a3b8",fontSize:11,margin:"0 0 2px"}}>To reach N2 / B2 (Japanese Company entry):</p><p style={{color:"#f1f5f9",fontSize:13,fontWeight:600,margin:0}}>{info.timeToN2}</p></div></div></div><div style={{display:"flex",flexDirection:"column",gap:12,marginBottom:24}}>{QUESTIONS.map((qq,i)=>{const ua=userAnswers[i];const ok=ua===qq.answer;const cc=CP[qq.cefr]??COLOR;return(<div key={i} style={{background:ok?"rgba(34,197,94,0.06)":"rgba(239,68,68,0.06)",border:`1.5px solid ${ok?"#22c55e33":"#ef444433"}`,borderRadius:14,padding:"16px 18px"}}><div style={{display:"flex",gap:8,marginBottom:8,flexWrap:"wrap"}}><span style={{...S.badge,background:cc+"22",color:cc}}>CEFR {qq.cefr}</span><span style={{...S.badge,background:"#1e293b",color:"#64748b"}}>JLPT {qq.jlpt}</span><span style={{...S.badge,background:ok?"#22c55e22":"#ef444422",color:ok?"#22c55e":"#ef4444"}}>{ok?" Correct":" Incorrect"}</span></div><p style={{color:"#e2e8f0",fontSize:14,margin:"0 0 4px",whiteSpace:"pre-line"}}>{qq.text}</p>{qq.textEn&&<p style={{color:"#64748b",fontSize:12,margin:"0 0 10px",fontStyle:"italic"}}>{qq.textEn}</p>}<div style={{display:"flex",flexDirection:"column",gap:4,marginBottom:10}}>{qq.options.map((opt,oi)=>{const isA=oi===qq.answer,isU=oi===ua;const c=isA?"#22c55e":(isU&&!isA)?"#ef4444":"#475569";return<div key={oi} style={{display:"flex",gap:8,alignItems:"center"}}><span style={{fontSize:12,color:c,minWidth:14}}>{isA?"":isU?"":"·"}</span><span style={{fontSize:13,color:c}}>{opt}</span>{isA&&<span style={{fontSize:11,color:"#22c55e55"}}>← correct</span>}</div>;})}</div><div style={{background:"rgba(255,255,255,0.04)",borderRadius:8,padding:"10px 12px",borderLeft:`3px solid ${cc}`}}><span style={{color:"#94a3b8",fontSize:12}}> {qq.explanation}</span></div></div>);})}</div><button onClick={restart} style={{...S.btn,background:`linear-gradient(135deg,${COLOR},${COLOR}99)`,color:"#fff",cursor:"pointer"}}>
-          <CTABlock /></div></div>);}
+export default function CasualSpeech() {
+  const [phase, setPhase] = useState("quiz");
+  const [qIndex, setQIndex] = useState(0);
+  const [selected, setSelected] = useState(null);
+  const [userAnswers, setUserAnswers] = useState([]);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const q = QUESTIONS[qIndex];
+  const score = userAnswers.filter((a,i) => a === QUESTIONS[i]?.answer).length;
+
+  function handleNext() {
+    if (selected === null) return;
+    const updated = [...userAnswers, selected];
+    setUserAnswers(updated);
+    if (qIndex + 1 < QUESTIONS.length) { setQIndex(qIndex+1); setSelected(null); }
+    else setPhase("gate");
+  }
+  function restart() { setPhase("quiz"); setQIndex(0); setSelected(null); setUserAnswers([]); setName(""); setEmail(""); }
+
+  if (phase === "quiz" && q) {
+    const cc = CP[q.cefr] ?? COLOR;
+    return (
+      <div style={S.page}><div style={S.card}>
+        <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:18}}>
+          <span style={{color:COLOR,fontWeight:800,fontSize:14}}>Casual Speech</span>
+          <span style={{color:"#64748b",fontSize:13}}>{qIndex+1} / {QUESTIONS.length}</span>
+        </div>
+        <div style={{height:5,background:"#1e293b",borderRadius:4,marginBottom:22}}>
+          <div style={{height:"100%",borderRadius:4,background:`linear-gradient(90deg,${cc},${cc}99)`,width:`${((qIndex+1)/QUESTIONS.length)*100}%`,transition:"width 0.4s"}} />
+        </div>
+        <p style={S.qText}>{q.text}</p>
+        {q.textEn && <p style={S.qTextEn}>{q.textEn}</p>}
+        <div style={{display:"flex",flexDirection:"column",gap:10,marginBottom:22}}>
+          {q.options.map((opt,i) => {
+            const sel = selected===i;
+            return <button key={i} onClick={()=>setSelected(i)} style={{...S.optBtn,background:sel?cc+"22":"rgba(255,255,255,0.04)",border:`1.5px solid ${sel?cc:"rgba(255,255,255,0.08)"}`,color:sel?"#f1f5f9":"#94a3b8"}}>
+              <span style={{...S.optLabel,background:sel?cc:"#1e293b",color:sel?"#fff":"#475569"}}>{["A","B","C","D"][i]}</span>{opt}
+            </button>;
+          })}
+        </div>
+        <button onClick={handleNext} disabled={selected===null} style={{...S.btn,background:selected!==null?`linear-gradient(135deg,${cc},${cc}99)`:"#1e293b",color:selected!==null?"#fff":"#475569",cursor:selected!==null?"pointer":"default"}}>
+          {qIndex+1===QUESTIONS.length?"See Results →":"Next →"}
+        </button>
+      </div></div>
+    );
+  }
+
+  if (phase === "gate") return (
+    <div style={S.page}><div style={S.card}>
+      <div style={{textAlign:"center",marginBottom:28}}>
+        <h2 style={{color:"#f1f5f9",fontSize:21,fontWeight:900,margin:"0 0 8px"}}>Want to know your results?</h2>
+        <p style={{color:"#64748b",fontSize:13,margin:0}}>Enter your name and email to unlock your score.</p>
+      </div>
+      <div style={{display:"flex",flexDirection:"column",gap:14,marginBottom:22}}>
+        <div><label style={S.label}>Name</label><input value={name} onChange={e=>setName(e.target.value)} placeholder="Your name" style={S.input}/></div>
+        <div><label style={S.label}>Email</label><input value={email} onChange={e=>setEmail(e.target.value)} placeholder="your@email.com" type="email" style={S.input}/></div>
+      </div>
+      <button onClick={()=>{if(name.trim()&&email.trim())setPhase("result");}} style={{...S.btn,background:name.trim()&&email.trim()?`linear-gradient(135deg,${COLOR},${COLOR}99)`:"#1e293b",color:name.trim()&&email.trim()?"#fff":"#475569",cursor:name.trim()&&email.trim()?"pointer":"default"}}>Unlock My Results</button>
+    </div></div>
+  );
+
+  if (phase === "result") {
+    const res = getResult(score, QUESTIONS.length);
+    const rc = CP[res.level] ?? COLOR;
+    return (
+      <div style={S.page}><div style={{...S.card,maxWidth:580}}>
+        <div style={{textAlign:"center",marginBottom:26}}>
+          <p style={{color:"#64748b",fontSize:13,marginBottom:4}}>{name}'s Results - Casual Speech</p>
+          <div style={{fontSize:48,fontWeight:900,background:`linear-gradient(135deg,${COLOR},${rc})`,WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent"}}>{res.level}</div>
+          <p style={{color:"#94a3b8",fontSize:14,marginTop:6,marginBottom:14}}>{res.msg}</p>
+          <div style={{fontSize:30,fontWeight:900,color:"#f1f5f9"}}>{score} <span style={{color:"#475569",fontSize:16}}>/ {QUESTIONS.length} correct</span></div>
+        </div>
+        <div style={{display:"flex",flexDirection:"column",gap:12,marginBottom:24}}>
+          {QUESTIONS.map((qq,i) => {
+            const ua=userAnswers[i]; const ok=ua===qq.answer; const cc=CP[qq.cefr]??COLOR;
+            return <div key={i} style={{background:ok?"rgba(34,197,94,0.06)":"rgba(239,68,68,0.06)",border:`1.5px solid ${ok?"#22c55e33":"#ef444433"}`,borderRadius:14,padding:"16px 18px"}}>
+              <div style={{display:"flex",gap:8,marginBottom:8,flexWrap:"wrap"}}>
+                <span style={{...S.badge,background:cc+"22",color:cc}}>CEFR {qq.cefr}</span>
+                <span style={{...S.badge,background:ok?"#22c55e22":"#ef444422",color:ok?"#22c55e":"#ef4444"}}>{ok?"Correct":"Incorrect"}</span>
+              </div>
+              <p style={{color:"#e2e8f0",fontSize:14,margin:"0 0 4px"}}>{qq.text}</p>
+              {qq.textEn&&<p style={{color:"#64748b",fontSize:12,margin:"0 0 10px",fontStyle:"italic"}}>{qq.textEn}</p>}
+              <div style={{background:"rgba(255,255,255,0.04)",borderRadius:8,padding:"10px 12px",borderLeft:`3px solid ${cc}`}}>
+                <span style={{color:"#94a3b8",fontSize:12}}>{qq.explanation}</span>
+              </div>
+            </div>;
+          })}
+        </div>
+        <CTABlock />
+        <button onClick={restart} style={{...S.btn,background:`linear-gradient(135deg,${COLOR},${COLOR}99)`,color:"#fff",cursor:"pointer",marginTop:16}}>Try Again</button>
+      </div></div>
+    );
+  }
   return null;
 }
-const S={page:{minHeight:"100vh",background:"linear-gradient(160deg,#0a0f1e 0%,#0f172a 60%,#0a0f1e 100%)",fontFamily:"'Noto Sans JP','Hiragino Sans',sans-serif",display:"flex",alignItems:"center",justifyContent:"center",padding:"24px 16px"},card:{width:"100%",maxWidth:520,background:"rgba(255,255,255,0.03)",backdropFilter:"blur(16px)",borderRadius:22,border:"1px solid rgba(255,255,255,0.07)",padding:"28px 24px",boxShadow:"0 24px 64px rgba(0,0,0,0.5)"},badge:{padding:"3px 10px",borderRadius:10,fontSize:11,fontWeight:700},qText:{color:"#e2e8f0",fontSize:17,lineHeight:1.85,marginBottom:6,whiteSpace:"pre-line"},qTextEn:{color:"#64748b",fontSize:13,lineHeight:1.7,marginBottom:8,fontStyle:"italic"},hint:{color:"#475569",fontSize:12,marginBottom:16,fontStyle:"italic"},optBtn:{display:"flex",alignItems:"center",gap:12,padding:"13px 16px",borderRadius:12,textAlign:"left",cursor:"pointer",fontSize:14,transition:"all 0.18s"},optLabel:{minWidth:26,height:26,borderRadius:"50%",display:"flex",alignItems:"center",justifyContent:"center",fontSize:11,fontWeight:800},btn:{width:"100%",padding:"14px",border:"none",borderRadius:13,fontSize:15,fontWeight:800,transition:"all 0.2s"},label:{display:"block",color:"#64748b",fontSize:12,fontWeight:700,marginBottom:6,letterSpacing:1},input:{width:"100%",padding:"13px 16px",background:"rgba(255,255,255,0.05)",border:"1.5px solid rgba(255,255,255,0.1)",borderRadius:12,color:"#f1f5f9",fontSize:15,outline:"none",boxSizing:"border-box"}};
+
+const S = {
+  page:{minHeight:"100vh",background:"linear-gradient(160deg,#0a0f1e 0%,#0f172a 60%,#0a0f1e 100%)",fontFamily:"'Noto Sans JP','Hiragino Sans',sans-serif",display:"flex",alignItems:"center",justifyContent:"center",padding:"24px 16px"},
+  card:{width:"100%",maxWidth:520,background:"rgba(255,255,255,0.03)",backdropFilter:"blur(16px)",borderRadius:22,border:"1px solid rgba(255,255,255,0.07)",padding:"28px 24px",boxShadow:"0 24px 64px rgba(0,0,0,0.5)"},
+  badge:{padding:"3px 10px",borderRadius:10,fontSize:11,fontWeight:700},
+  qText:{color:"#e2e8f0",fontSize:17,lineHeight:1.85,marginBottom:6},
+  qTextEn:{color:"#64748b",fontSize:13,lineHeight:1.7,marginBottom:18,fontStyle:"italic"},
+  optBtn:{display:"flex",alignItems:"center",gap:12,padding:"13px 16px",borderRadius:12,textAlign:"left",cursor:"pointer",fontSize:14,transition:"all 0.18s"},
+  optLabel:{minWidth:26,height:26,borderRadius:"50%",display:"flex",alignItems:"center",justifyContent:"center",fontSize:11,fontWeight:800},
+  btn:{width:"100%",padding:"14px",border:"none",borderRadius:13,fontSize:15,fontWeight:800,transition:"all 0.2s"},
+  label:{display:"block",color:"#64748b",fontSize:12,fontWeight:700,marginBottom:6,letterSpacing:1},
+  input:{width:"100%",padding:"13px 16px",background:"rgba(255,255,255,0.05)",border:"1.5px solid rgba(255,255,255,0.1)",borderRadius:12,color:"#f1f5f9",fontSize:15,outline:"none",boxSizing:"border-box"},
+};
