@@ -217,9 +217,8 @@ export default function Grammar() {
               );
             })}
           </div>
-          <button onClick={restart} style={{ ...S.btn, background:`linear-gradient(135deg,${COLOR},${COLOR}99)`, color:"#fff", cursor:"pointer", marginTop:16 }}>
           <CTABlock />
-          <button onClick={restart} </button>
+          <button onClick={restart} style={{ ...S.btn, background:`linear-gradient(135deg,${COLOR},${COLOR}99)`, color:"#fff", cursor:"pointer", marginTop:16 }}>Try Again</button>
         </div>
       </div>
     );
