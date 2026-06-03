@@ -7,7 +7,7 @@ const QUESTIONS = [
   {
     hiragana: true,
     text: "たなか さん は せんせい です。\nただしい もの は どれですか。",
-    options: ["たなか さん は がくせい です", "たなか さん は いしゃ です", "たなか さん は せんせい です", "たなか さん は りょうり し です"],
+    options: ["たなか さん は がくせい です", "たなか さん は いしゃ です", "たなか さん は せんせい です", "たなか さん は りょうり し です", "Not Able To Answer"],
     answer: 2,
     explanation: "The sentence says 「たなかさんはせんせいです」= 'Mr./Ms. Tanaka is a teacher'. A1 reading simply requires matching the text to the correct statement.",
   },
@@ -15,7 +15,7 @@ const QUESTIONS = [
     cefr:"A1", jlpt:"N5",
     text: "今日は雨です。\n正しいものはどれですか。",
     textEn: "Today it is raining. Which statement is correct?",
-    options: ["晴れている", "雨が降っている", "雪が降っている", "暑い"],
+    options: ["晴れている", "雨が降っている", "雪が降っている", "暑い", "Not Able To Answer"],
     answer: 1,
     explanation: "「今日は雨です」directly states it is raining. A1 reading is about matching text to the correct statement.",
   },
@@ -23,7 +23,7 @@ const QUESTIONS = [
     cefr:"A2", jlpt:"N4",
     text: "この店は安いですが、料理が出るまで時間がかかります。\n正しいものは？",
     textEn: "This restaurant is cheap, but it takes time for the food to come out. Which is correct?",
-    options: ["料理は高い", "料理は早い", "料理に時間がかかる", "店は高い"],
+    options: ["料理は高い", "料理は早い", "料理に時間がかかる", "店は高い", "Not Able To Answer"],
     answer: 2,
     explanation: "The key contrastive conjunction 「〜が (but)」signals that despite being cheap, there is a drawback — the food takes time.",
   },
@@ -31,7 +31,7 @@ const QUESTIONS = [
     cefr:"B1", jlpt:"N3",
     text: "日本では、相手の立場を考えて話すことが大切だとされている。\nわかることは？",
     textEn: "In Japan, it is said to be important to speak while considering the other person's position. What can we understand?",
-    options: ["自分の意見が一番大切", "相手への配慮が重視される", "話す必要はない", "立場は関係ない"],
+    options: ["自分の意見が一番大切", "相手への配慮が重視される", "話す必要はない", "立場は関係ない", "Not Able To Answer"],
     answer: 1,
     explanation: "「〜とされている」indicates a socially recognized value. The sentence highlights that empathy and awareness of others' positions is culturally important.",
   },
@@ -39,7 +39,7 @@ const QUESTIONS = [
     cefr:"B2", jlpt:"N2",
     text: "彼は経験が豊富だが、それを表に出すことはほとんどない。\n正しいものは？",
     textEn: "He has a wealth of experience, but he rarely lets it show. Which is correct?",
-    options: ["経験がない", "経験を自慢する", "経験はあるが控えめ", "経験を活かしていない"],
+    options: ["経験がない", "経験を自慢する", "経験はあるが控えめ", "経験を活かしていない", "Not Able To Answer"],
     answer: 2,
     explanation: "「〜が、〜ない」creates a contrast: rich experience (positive) vs. never showing it (restraint). This describes someone capable yet humble.",
   },
@@ -47,7 +47,7 @@ const QUESTIONS = [
     cefr:"C1", jlpt:"N1",
     text: "この制度は一見便利に思えるが、運用次第では問題を引き起こしかねない。\n筆者の考えは？",
     textEn: "This system may seem convenient at first glance, but depending on how it is operated, problems may not be out of the question. What is the author's view?",
-    options: ["完全に良い制度", "問題しかない", "条件によっては問題が起こる", "必ず失敗する"],
+    options: ["完全に良い制度", "問題しかない", "条件によっては問題が起こる", "必ず失敗する", "Not Able To Answer"],
     answer: 2,
     explanation: "「〜かねない」implies a real possibility of a negative outcome. 「運用次第では」introduces the conditional — it's not guaranteed failure, but a risk.",
   },
@@ -120,7 +120,7 @@ export default function Reading() {
                  <span style={{ ...S.badge, background:"#1e293b", color:"#64748b" }}>JLPT {q.jlpt}</span></>
             }
           </div>
-          <p style={S.qText}>{q.text}</p>
+          <p style={{...S.qText, fontSize:13, color:"#94a3b8", marginBottom:4}}>If you cannot answer, click "Not Able To Answer"</p><p style={S.qText}>{q.text}</p>
           {q.textEn && <p style={S.qTextEn}>{q.textEn}</p>}
           <div style={{ display:"flex", flexDirection:"column", gap:10, marginBottom:22 }}>
             {q.options.map((opt, i) => {

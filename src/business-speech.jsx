@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 const CP = { A1:'#22c55e', A2:'#3b82f6', B1:'#f59e0b', B2:'#ef4444', C1:'#a855f7' };
 const COLOR = '#0ea5e9';
 const QUESTIONS = [
-  { cefr:'A2', jlpt:'N4', text:'取引先との会議に少し遅れそうです。最も適切なのは？', options:['会議に行きません。','会議が嫌です。','少々遅れる見込みです。','会議を忘れました。'], answer:2, explanation:'少々遅れる見込みです is the professional way to say you will be slightly late.' },
-  { cefr:'B1', jlpt:'N3', text:'メールで「ご都合はいかがでしょうか」の意味は？', options:['気分はどうですか','お元気ですか','ご予定はいかがですか','お仕事はどうですか'], answer:2, explanation:'ご都合はいかがでしょうか asks about availability or schedule.' },
-  { cefr:'B1', jlpt:'N3', text:'上司に報告する時、最も丁寧な表現は？', options:['やっておきました','しました','対応いたしました','やりました'], answer:2, explanation:'対応いたしました uses humble form いたす making it most formal.' },
-  { cefr:'B2', jlpt:'N2', text:'「お手数ですが」の意味は？', options:['Sorry to trouble you, but...','Thank you very much','Please wait','I understand'], answer:0, explanation:'お手数ですが means Sorry to trouble you or I know this is inconvenient, but.' },
-  { cefr:'C1', jlpt:'N1', text:'「ご査収ください」の意味は？', options:['Please check and keep this','Please hurry','Please reply','Please delete'], answer:0, explanation:'ご査収ください is formal business Japanese meaning Please receive and check this.' },
+  { cefr:'A2', jlpt:'N4', text:'取引先との会議に少し遅れそうです。最も適切なのは？', options:['会議に行きません。','会議が嫌です。','少々遅れる見込みです。','会議を忘れました。', "Not Able To Answer"], answer:2, explanation:'少々遅れる見込みです is the professional way to say you will be slightly late.' },
+  { cefr:'B1', jlpt:'N3', text:'メールで「ご都合はいかがでしょうか」の意味は？', options:['気分はどうですか','お元気ですか','ご予定はいかがですか','お仕事はどうですか', "Not Able To Answer"], answer:2, explanation:'ご都合はいかがでしょうか asks about availability or schedule.' },
+  { cefr:'B1', jlpt:'N3', text:'上司に報告する時、最も丁寧な表現は？', options:['やっておきました','しました','対応いたしました','やりました', "Not Able To Answer"], answer:2, explanation:'対応いたしました uses humble form いたす making it most formal.' },
+  { cefr:'B2', jlpt:'N2', text:'「お手数ですが」の意味は？', options:['Sorry to trouble you, but...','Thank you very much','Please wait','I understand', "Not Able To Answer"], answer:0, explanation:'お手数ですが means Sorry to trouble you or I know this is inconvenient, but.' },
+  { cefr:'C1', jlpt:'N1', text:'「ご査収ください」の意味は？', options:['Please check and keep this','Please hurry','Please reply','Please delete', "Not Able To Answer"], answer:0, explanation:'ご査収ください is formal business Japanese meaning Please receive and check this.' },
 ];
 function getResult(score, total) {
   const p = score / total;

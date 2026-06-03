@@ -8,7 +8,7 @@ const QUESTIONS = [
     hiragana: true,
     text: "わたし は がくせい （　）。",
     textEn: "I am a student. Which word completes the sentence?",
-    options: ["する", "ます", "です", "ました"],
+    options: ["する", "ます", "です", "ました", "Not Able To Answer"],
     answer: 2,
     explanation: "「です」is the polite copula used to end a sentence, equivalent to 'am/is/are'. 「する」means 'to do', 「ます」needs a verb stem before it, and 「ました」is past tense.",
   },
@@ -16,7 +16,7 @@ const QUESTIONS = [
     cefr:"A1", jlpt:"N5",
     text: "私は毎日日本語を（　）。",
     textEn: "I study Japanese every day. Choose the correct verb form.",
-    options: ["勉強", "勉強する", "勉強して", "勉強した"],
+    options: ["勉強", "勉強する", "勉強して", "勉強した", "Not Able To Answer"],
     answer: 1,
     explanation: "「勉強する」is the plain present form used to state a current habit. 「した」is past tense; 「して」is the te-form and cannot end a sentence alone.",
   },
@@ -24,7 +24,7 @@ const QUESTIONS = [
     cefr:"A2", jlpt:"N4",
     text: "雨が（　）、家にいます。",
     textEn: "If it rains, I'll stay home. Choose the correct conditional form.",
-    options: ["降るなら", "降るしか", "降るだけ", "降るばかり"],
+    options: ["降るなら", "降るしか", "降るだけ", "降るばかり", "Not Able To Answer"],
     answer: 0,
     explanation: "「〜なら」expresses a conditional 'if'. The other options — しか, だけ, ばかり — all indicate restriction or continuity, not a conditional.",
   },
@@ -32,7 +32,7 @@ const QUESTIONS = [
     cefr:"B1", jlpt:"N3",
     text: "日本に来てから、日本語が話せる（　）なりました。",
     textEn: "Since coming to Japan, I have become able to speak Japanese.",
-    options: ["よう", "ように", "みたい", "らしい"],
+    options: ["よう", "ように", "みたい", "らしい", "Not Able To Answer"],
     answer: 1,
     explanation: "「〜ようになる」expresses a change in ability or habit over time. Note that 「ように」(not 「よう」alone) is required before 「なりました」. The other options express appearance or hearsay.",
   },
@@ -40,7 +40,7 @@ const QUESTIONS = [
     cefr:"B2", jlpt:"N2",
     text: "彼は暇な（　）、連絡をくれなかった。",
     textEn: "Even though he was free, he didn't contact me.",
-    options: ["ため", "ので", "から", "くせに"],
+    options: ["ため", "ので", "から", "くせに", "Not Able To Answer"],
     answer: 3,
     explanation: "「〜くせに」is a contrastive conjunction implying blame or complaint. The other three options are neutral causal connectors with no critical tone.",
   },
@@ -48,7 +48,7 @@ const QUESTIONS = [
     cefr:"C1", jlpt:"N1",
     text: "彼の態度は、反省している（　）言い難い。",
     textEn: "It is hard to say that his attitude shows remorse.",
-    options: ["ほど", "ばかり", "とは", "ものの"],
+    options: ["ほど", "ばかり", "とは", "ものの", "Not Able To Answer"],
     answer: 2,
     explanation: "「〜とは言い難い」is an N1 formal written structure meaning 'it is difficult to say that ~'. The blank requires 「とは」to complete this set expression.",
   },
@@ -121,7 +121,7 @@ export default function Grammar() {
                  <span style={{ ...S.badge, background:"#1e293b", color:"#64748b" }}>JLPT {q.jlpt}</span></>
             }
           </div>
-          <p style={S.qText}>{q.text}</p>
+          <p style={{...S.qText, fontSize:13, color:"#94a3b8", marginBottom:4}}>If you cannot answer, click "Not Able To Answer"</p><p style={S.qText}>{q.text}</p>
           {q.textEn && <p style={S.qTextEn}>{q.textEn}</p>}
           <div style={{ display:"flex", flexDirection:"column", gap:10, marginBottom:22 }}>
             {q.options.map((opt, i) => {

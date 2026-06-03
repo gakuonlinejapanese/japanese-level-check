@@ -4,11 +4,11 @@ const CP = { A1:"#22c55e", A2:"#3b82f6", B1:"#f59e0b", B2:"#ef4444", C1:"#a855f7
 const COLOR = "#f97316";
 
 const QUESTIONS = [
-  { cefr:"A1", jlpt:"N5", text:"「ありがとう」の返事は？", textEn:"What is the reply to 'Thank you'?", options:["どういたしまして","すみません","おはよう","さようなら"], answer:0, explanation:"'Dou itashimashite' means 'You're welcome' — the standard reply to 'Arigatou'." },
-  { cefr:"A2", jlpt:"N4", text:"友達に「元気？」と聞かれたら？", textEn:"If a friend asks 'Are you well?'", options:["元気だよ！","いただきます","おやすみ","いってきます"], answer:0, explanation:"'Genki dayo!' means 'I'm fine!' — a natural casual reply." },
-  { cefr:"B1", jlpt:"N3", text:"「やばい」の意味は？", textEn:"What does 'yabai' mean?", options:["Amazing/terrible (slang)","Delicious","Busy","Quiet"], answer:0, explanation:"'Yabai' is versatile slang meaning amazing, terrible, or intense depending on context." },
-  { cefr:"B2", jlpt:"N2", text:"「なんか」の使い方は？", textEn:"How is 'nanka' used?", options:["Like / somehow (filler)","Never","Always","Only"], answer:0, explanation:"'Nanka' is a casual filler similar to 'like' or 'somehow' in English." },
-  { cefr:"C1", jlpt:"N1", text:"「ぶっちゃけ」の意味は？", textEn:"What does 'bucchake' mean?", options:["To be honest / frankly","To give up","To be confused","To hurry"], answer:0, explanation:"'Bucchake' means 'to be frank' or 'honestly speaking' — a very casual expression." },
+  { cefr:"A1", jlpt:"N5", text:"「ありがとう」の返事は？", textEn:"What is the reply to 'Thank you'?", options:["どういたしまして","すみません","おはよう","さようなら", "Not Able To Answer"], answer:0, explanation:"'Dou itashimashite' means 'You're welcome' — the standard reply to 'Arigatou'." },
+  { cefr:"A2", jlpt:"N4", text:"友達に「元気？」と聞かれたら？", textEn:"If a friend asks 'Are you well?'", options:["元気だよ！","いただきます","おやすみ","いってきます", "Not Able To Answer"], answer:0, explanation:"'Genki dayo!' means 'I'm fine!' — a natural casual reply." },
+  { cefr:"B1", jlpt:"N3", text:"「やばい」の意味は？", textEn:"What does 'yabai' mean?", options:["Amazing/terrible (slang)","Delicious","Busy","Quiet", "Not Able To Answer"], answer:0, explanation:"'Yabai' is versatile slang meaning amazing, terrible, or intense depending on context." },
+  { cefr:"B2", jlpt:"N2", text:"「なんか」の使い方は？", textEn:"How is 'nanka' used?", options:["Like / somehow (filler)","Never","Always","Only", "Not Able To Answer"], answer:0, explanation:"'Nanka' is a casual filler similar to 'like' or 'somehow' in English." },
+  { cefr:"C1", jlpt:"N1", text:"「ぶっちゃけ」の意味は？", textEn:"What does 'bucchake' mean?", options:["To be honest / frankly","To give up","To be confused","To hurry", "Not Able To Answer"], answer:0, explanation:"'Bucchake' means 'to be frank' or 'honestly speaking' — a very casual expression." },
 ];
 
 function getResult(score, total) {
@@ -62,7 +62,7 @@ export default function CasualSpeech() {
         <div style={{height:5,background:"#1e293b",borderRadius:4,marginBottom:22}}>
           <div style={{height:"100%",borderRadius:4,background:`linear-gradient(90deg,${cc},${cc}99)`,width:`${((qIndex+1)/QUESTIONS.length)*100}%`,transition:"width 0.4s"}} />
         </div>
-        <p style={S.qText}>{q.text}</p>
+        <p style={{...S.qText, fontSize:13, color:"#94a3b8", marginBottom:4}}>If you cannot answer, click "Not Able To Answer"</p><p style={S.qText}>{q.text}</p>
         {q.textEn && <p style={S.qTextEn}>{q.textEn}</p>}
         <div style={{display:"flex",flexDirection:"column",gap:10,marginBottom:22}}>
           {q.options.map((opt,i) => {

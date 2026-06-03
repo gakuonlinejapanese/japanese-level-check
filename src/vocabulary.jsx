@@ -8,7 +8,7 @@ const QUESTIONS = [
     hiragana: true,
     text: "まいあさ たべる もの は どれですか。",
     textEn: "Which of the following do you eat every morning?",
-    options: ["ほん", "あさごはん", "くるま", "いす"],
+    options: ["ほん", "あさごはん", "くるま", "いす", "Not Able To Answer"],
     answer: 1,
     explanation: "「あさごはん」means 'breakfast' — the meal eaten in the morning. The other options mean book, car, and chair.",
   },
@@ -16,7 +16,7 @@ const QUESTIONS = [
     cefr:"A1", jlpt:"N5",
     text: "日本語の（　）をする。",
     textEn: "To (   ) Japanese.",
-    options: ["べんきょう", "あさごはん", "しごと", "ねむい"],
+    options: ["べんきょう", "あさごはん", "しごと", "ねむい", "Not Able To Answer"],
     answer: 0,
     explanation: "「べんきょう（勉強）」means 'study'. 「べんきょうをする」is the natural expression for studying a subject.",
   },
@@ -24,7 +24,7 @@ const QUESTIONS = [
     cefr:"A2", jlpt:"N4",
     text: "この店は値段が（　）ので、学生に人気です。",
     textEn: "This restaurant is (   ) in price, so it's popular with students.",
-    options: ["低い", "安い", "軽い", "弱い"],
+    options: ["低い", "安い", "軽い", "弱い", "Not Able To Answer"],
     answer: 1,
     explanation: "「安い (yasui)」means cheap/inexpensive and collocates with prices. 「低い (hikui)」describes physical height, not cost.",
   },
@@ -32,7 +32,7 @@ const QUESTIONS = [
     cefr:"B1", jlpt:"N3",
     text: "会議は予定より早く（　）しました。",
     textEn: "The meeting (   ) earlier than scheduled.",
-    options: ["終了", "解決", "完成", "発生"],
+    options: ["終了", "解決", "完成", "発生", "Not Able To Answer"],
     answer: 0,
     explanation: "「終了 (shūryō)」means conclusion/end of an event. 「解決 (kaiketsu)」means solving a problem — a different nuance.",
   },
@@ -40,7 +40,7 @@ const QUESTIONS = [
     cefr:"B2", jlpt:"N2",
     text: "その説明では少し（　）が足りないと思います。",
     textEn: "I think that explanation is lacking a little (   ).",
-    options: ["印象", "詳細", "感情", "経験"],
+    options: ["印象", "詳細", "感情", "経験", "Not Able To Answer"],
     answer: 1,
     explanation: "「詳細 (shōsai)」means detail/specifics. Saying an explanation lacks 'detail' is a natural B2 collocation.",
   },
@@ -48,7 +48,7 @@ const QUESTIONS = [
     cefr:"C1", jlpt:"N1",
     text: "彼の発言は誤解を（　）おそれがある。",
     textEn: "His remarks risk (   ) misunderstanding.",
-    options: ["生む", "作る", "起こす", "発つ"],
+    options: ["生む", "作る", "起こす", "発つ", "Not Able To Answer"],
     answer: 0,
     explanation: "「誤解を生む (gokai wo umu)」is a fixed N1 collocation meaning 'to breed/create misunderstanding'. 「生む」carries a nuance of giving birth to a situation.",
   },
@@ -121,7 +121,7 @@ export default function Vocabulary() {
                  <span style={{ ...S.badge, background:"#1e293b", color:"#64748b" }}>JLPT {q.jlpt}</span></>
             }
           </div>
-          <p style={S.qText}>{q.text}</p>
+          <p style={{...S.qText, fontSize:13, color:"#94a3b8", marginBottom:4}}>If you cannot answer, click "Not Able To Answer"</p><p style={S.qText}>{q.text}</p>
           {q.textEn && <p style={S.qTextEn}>{q.textEn}</p>}
           <div style={{ display:"flex", flexDirection:"column", gap:10, marginBottom:22 }}>
             {q.options.map((opt, i) => {
