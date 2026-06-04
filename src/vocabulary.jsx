@@ -227,7 +227,6 @@ export default function Vocabulary() {
             })}
           </div>
           <CTABlock />
-          <CTABlock />
           <button onClick={restart} style={{ ...S.btn, background:`linear-gradient(135deg,${COLOR},${COLOR}99)`, color:"#fff", cursor:"pointer", marginTop:16 }}>Try Again</button>
         </div>
       </div>
