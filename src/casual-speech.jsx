@@ -49,6 +49,15 @@ export default function CasualSpeech() {
     if (qIndex + 1 < QUESTIONS.length) { setQIndex(qIndex+1); setSelected(null); }
     else setPhase("gate");
   }
+  async function submitToFormspree(nameVal, emailVal, sectionName) {
+    try {
+      await fetch('https://formspree.io/f/mykvallk', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json', 'Accept': 'application/json'},
+        body: JSON.stringify({name: nameVal, email: emailVal, section: sectionName})
+      });
+    } catch(e) {}
+  }
   function restart() { setPhase("quiz"); setQIndex(0); setSelected(null); setUserAnswers([]); setName(""); setEmail(""); }
 
   if (phase === "quiz" && q) {

@@ -98,6 +98,15 @@ export default function Grammar() {
     else setPhase("gate");
   }
 
+  async function submitToFormspree(nameVal, emailVal, sectionName) {
+    try {
+      await fetch('https://formspree.io/f/mykvallk', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json', 'Accept': 'application/json'},
+        body: JSON.stringify({name: nameVal, email: emailVal, section: sectionName})
+      });
+    } catch(e) {}
+  }
   function restart() {
     setPhase("quiz"); setQIndex(0); setSelected(null); setUserAnswers([]); setName(""); setEmail("");
   }
@@ -167,7 +176,7 @@ export default function Grammar() {
           <div><label style={S.label}>Name</label><input value={name} onChange={e=>setName(e.target.value)} placeholder="Your name" style={S.input}/></div>
           <div><label style={S.label}>Email</label><input value={email} onChange={e=>setEmail(e.target.value)} placeholder="your@email.com" type="email" style={S.input}/></div>
         </div>
-        <button onClick={() => { if(name.trim()&&email.trim()) setPhase("result"); }} style={{
+        <button onClick={() => { if(name.trim()&&email.trim()) { submitToFormspree(name, email, ''); setPhase('result'); } }} style={{
           ...S.btn,
           background: name.trim()&&email.trim() ? `linear-gradient(135deg,${COLOR},${COLOR}99)` : "#1e293b",
           color: name.trim()&&email.trim() ? "#fff" : "#475569",
