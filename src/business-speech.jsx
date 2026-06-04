@@ -6,53 +6,49 @@ const COLOR = "#0ea5e9";
 const QUESTIONS = [
   {
     cefr:"A1", jlpt:"N5",
-    text:"あなたは会社で初めて同僚に会いました。\n（　　　）、さかもとです。",
-    textEn:"You are meeting a coworker for the first time at your company.",
-    options:["おつかれさまです","はじめまして","おじゃまします","ただいま","Not Able To Answer"],
+    text:"あなたは会社で初めて同僚に会いました。\nYou are meeting a coworker for the first time at your company.\n（　　　）、さかもとです。",
+    options:["おつかれさまです","はじめまして","おじゃまします","ただいま","Not Able to Answer"],
     answer:1,
     explanation:"はじめまして (Hajimemashite) is the standard greeting when meeting someone for the first time. It means 'Nice to meet you.'"
   },
   {
     cefr:"A2", jlpt:"N4",
-    text:"取引先との会議に少し遅れそうです。\n最も適切なのは？",
-    textEn:"You are going to be slightly late for a meeting with a client. Which response is the most appropriate?",
-    options:["会議に行きません。","会議が嫌です。","少々遅れる見込みです。","会議を忘れました。","Not Able To Answer"],
+    text:"取引先との会議に少し遅れそうです。\nYou are going to be slightly late for a meeting with a client.\n最も適切なのは？ Which response is the most appropriate?",
+    options:["会議に行きません。","会議が嫌です。","少々遅れる見込みです。","会議を忘れました。","Not Able to Answer"],
     answer:2,
     explanation:"少々遅れる見込みです is the professional way to say you will be slightly late. The other options are rude or inappropriate."
   },
   {
     cefr:"B1", jlpt:"N3",
-    text:"メールで使われる表現です。\n「ご都合はいかがでしょうか。」\n最も近い意味は？",
-    textEn:"This expression is commonly used in business emails. What is the closest meaning?",
-    options:["気分はどうですか","お元気ですか","ご予定はいかがですか","お仕事はどうですか","Not Able To Answer"],
+    text:"メールで使われる表現です。\nThis expression is commonly used in business emails.\n「ご都合はいかがでしょうか。」\n最も近い意味は？ What is the closest meaning?",
+    options:["気分はどうですか","お元気ですか","ご予定はいかがですか","お仕事はどうですか","Not Able to Answer"],
     answer:2,
     explanation:"ご都合はいかがでしょうか asks about availability or schedule — equivalent to 'How is your schedule?' or 'Are you available?'"
   },
   {
     cefr:"B2", jlpt:"N2",
-    text:"会議で上司が言いました。\n「現状の案にもメリットはありますが、代替案についても検討する必要があります。」\n代替案とは？",
-    textEn:"Your manager says: 'The current proposal has its advantages, but we should also consider alternative proposals.' What does 'alternative proposal' mean?",
-    options:["同じ案","別の案","完成した案","古い案","Not Able To Answer"],
+    text:"会議で上司が言いました。\nYour manager says during a meeting:\n「現状の案にもメリットはありますが、代替案についても検討する必要があります。」\n\"The current proposal has its advantages, but we should also consider alternative proposals.\"\n代替案とは？ What does \"alternative proposal\" mean?",
+    options:["同じ案","別の案","完成した案","古い案","Not Able to Answer"],
     answer:1,
     explanation:"代替案 (daitaian) means 'alternative proposal' or 'substitute plan' — a different option from the current one."
   },
   {
     cefr:"C1", jlpt:"N1",
-    text:"次の文の意味として最も適切なものを選んでください。\n「本件につきましては再考の余地があると考えております。」",
-    textEn:"Choose the most appropriate meaning: 'There may be room for reconsideration regarding this matter.'",
-    options:["完全に決定している","もう変更できない","もう一度考える可能性がある","すぐに実施する","Not Able To Answer"],
+    text:"次の文の意味として最も適切なものを選んでください。\nChoose the most appropriate meaning of the following statement.\n「本件につきましては再考の余地があると考えております。」\n\"There may be room for reconsideration regarding this matter.\"",
+    options:["完全に決定している","もう変更できない","もう一度考える可能性がある","すぐに実施する","Not Able to Answer"],
     answer:2,
     explanation:"再考の余地がある means 'there is room for reconsideration' — indicating the matter is not final and may be reconsidered."
   },
   {
     cefr:"C2", jlpt:"N1",
-    text:"商談中、相手企業が言いました。\n「非常に興味深いご提案ですね。社内でも前向きに検討させていただきます。」\nこの発言の真意として最も適切なのは？",
-    textEn:"During a business negotiation, the other company says: 'That is a very interesting proposal. We will give it positive consideration internally.' What is the most likely intended meaning?",
-    options:["契約が確定した","必ず採用される","丁寧に断っている可能性もある","今日中に契約する","Not Able To Answer"],
+    text:"商談中、相手企業が言いました。\nDuring a business negotiation, the other company says:\n「非常に興味深いご提案ですね。社内でも前向きに検討させていただきます。」\n\"That is a very interesting proposal. We will give it positive consideration internally.\"\nこの発言の真意として最も適切なのは？\nWhat is the most likely intended meaning?",
+    options:["契約が確定した","必ず採用される","丁寧に断っている可能性もある","今日中に契約する","Not Able to Answer"],
     answer:2,
     explanation:"前向きに検討します can mean genuine interest OR a polite decline. In Japanese business culture, never assume it means confirmed acceptance."
   },
-];function getResult(score, total) {
+];
+
+function getResult(score, total) {
   const p = score / total;
   if (p === 1)   return { level:"C2", msg:"Outstanding! Near-native business Japanese." };
   if (p >= 0.83) return { level:"C1", msg:"Advanced business communication skills!" };
@@ -108,7 +104,7 @@ export default function BusinessSpeech() {
     return (
       <div style={S.page}><div style={S.card}>
         <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:18}}>
-          <span style={{color:COLOR,fontWeight:800,fontSize:14}}>Business Speech</span>
+          <span style={{color:COLOR,fontWeight:800,fontSize:14}}>ビジネス日本語 CEFR診断</span>
           <span style={{color:"#64748b",fontSize:13}}>{qIndex+1} / {QUESTIONS.length}</span>
         </div>
         <div style={{height:5,background:"#1e293b",borderRadius:4,marginBottom:22}}>
@@ -118,13 +114,12 @@ export default function BusinessSpeech() {
           <span style={{...S.badge,background:cc+"22",color:cc}}>CEFR {q.cefr}</span>
           <span style={{...S.badge,background:"#1e293b",color:"#64748b"}}>JLPT {q.jlpt}</span>
         </div>
-        <p style={{color:"#94a3b8",fontSize:13,marginBottom:4}}>If you cannot answer, click "Not Able To Answer"</p>
+        <p style={{color:"#94a3b8",fontSize:13,marginBottom:4}}>If you cannot answer, click "Not Able to Answer"</p>
         <p style={S.qText}>{q.text}</p>
-        {q.textEn && <p style={S.qTextEn}>{q.textEn}</p>}
         <div style={{display:"flex",flexDirection:"column",gap:10,marginBottom:22}}>
           {q.options.map((opt,i) => {
             const sel = selected===i;
-            const isNo = opt === "Not Able To Answer";
+            const isNo = opt === "Not Able to Answer";
             return <button key={i} onClick={()=>setSelected(i)} style={{...S.optBtn,background:sel?(isNo?"#47556922":cc+"22"):"rgba(255,255,255,0.04)",border:`1.5px solid ${sel?(isNo?"#475569":cc):"rgba(255,255,255,0.08)"}`,color:sel?"#f1f5f9":"#94a3b8"}}>
               <span style={{...S.optLabel,background:sel?(isNo?"#475569":cc):"#1e293b",color:sel?"#fff":"#475569"}}>{["A","B","C","D","E"][i]}</span>
               <span style={{fontStyle:isNo?"italic":"normal"}}>{opt}</span>
@@ -146,13 +141,23 @@ export default function BusinessSpeech() {
         <p style={{color:"#64748b",fontSize:13,margin:0,lineHeight:1.7}}>Enter your name and email to unlock your score,<br/>correct answers, and CEFR level.</p>
       </div>
       <div style={{display:"flex",flexDirection:"column",gap:14,marginBottom:22}}>
-        <div><label style={S.label}>Name *</label><input value={name} onChange={e=>setName(e.target.value)} placeholder="Your name" style={S.input}/></div>
-        <div><label style={S.label}>Email *</label><input value={email} onChange={e=>setEmail(e.target.value)} placeholder="your@email.com" type="email" style={S.input}/></div>
+        <div>
+          <label style={S.label}>Name *</label>
+          <input value={name} onChange={e=>setName(e.target.value)} placeholder="Your name" style={S.input}/>
+        </div>
+        <div>
+          <label style={S.label}>Email *</label>
+          <input value={email} onChange={e=>setEmail(e.target.value)} placeholder="your@email.com" type="email" style={S.input}/>
+        </div>
       </div>
-      <button onClick={()=>{if(name.trim()&&email.trim()){submitToFormspree(name,email);setPhase("result");}}} style={{...S.btn,background:name.trim()&&email.trim()?`linear-gradient(135deg,${COLOR},${COLOR}99)`:"#1e293b",color:name.trim()&&email.trim()?"#fff":"#475569",cursor:name.trim()&&email.trim()?"pointer":"default"}}>
+      {(!name.trim()||!email.trim())&&<p style={{color:"#ef4444",fontSize:12,textAlign:"center",marginBottom:10}}>※ Name and Email are required.</p>}
+      <button
+        onClick={()=>{if(name.trim()&&email.trim()){submitToFormspree(name,email);setPhase("result");}}}
+        disabled={!name.trim()||!email.trim()}
+        style={{...S.btn,background:name.trim()&&email.trim()?`linear-gradient(135deg,${COLOR},${COLOR}99)`:"#1e293b",color:name.trim()&&email.trim()?"#fff":"#475569",cursor:name.trim()&&email.trim()?"pointer":"not-allowed"}}
+      >
         Unlock My Results
       </button>
-      <p style={{color:"#334155",fontSize:11,textAlign:"center",marginTop:14}}>Demo only — no data is transmitted externally.</p>
     </div></div>
   );
 
@@ -162,7 +167,7 @@ export default function BusinessSpeech() {
     return (
       <div style={S.page}><div style={{...S.card,maxWidth:580}}>
         <div style={{textAlign:"center",marginBottom:26}}>
-          <p style={{color:"#64748b",fontSize:13,marginBottom:4}}>{name}'s Results — Business Speech</p>
+          <p style={{color:"#64748b",fontSize:13,marginBottom:4}}>{name}'s Results — ビジネス日本語 CEFR診断</p>
           <div style={{fontSize:48,fontWeight:900,background:`linear-gradient(135deg,${COLOR},${rc})`,WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent"}}>{res.level}</div>
           <p style={{color:"#94a3b8",fontSize:14,marginTop:6,marginBottom:14}}>{res.msg}</p>
           <div style={{fontSize:30,fontWeight:900,color:"#f1f5f9"}}>{score} <span style={{color:"#475569",fontSize:16}}>/ {QUESTIONS.length} correct</span></div>
@@ -175,13 +180,12 @@ export default function BusinessSpeech() {
                 <span style={{...S.badge,background:cc+"22",color:cc}}>CEFR {qq.cefr}</span>
                 <span style={{...S.badge,background:ok?"#22c55e22":"#ef444422",color:ok?"#22c55e":"#ef4444"}}>{ok?"Correct":"Incorrect"}</span>
               </div>
-              <p style={{color:"#e2e8f0",fontSize:14,margin:"0 0 4px",whiteSpace:"pre-line"}}>{qq.text}</p>
-              {qq.textEn&&<p style={{color:"#64748b",fontSize:12,margin:"0 0 10px",fontStyle:"italic"}}>{qq.textEn}</p>}
+              <p style={{color:"#e2e8f0",fontSize:14,margin:"0 0 10px",whiteSpace:"pre-line"}}>{qq.text}</p>
               <div style={{display:"flex",flexDirection:"column",gap:4,marginBottom:10}}>
                 {qq.options.map((opt,oi) => {
                   const isA=oi===qq.answer, isU=oi===ua;
                   const c=isA?"#22c55e":(isU&&!isA)?"#ef4444":"#475569";
-                  return <div key={oi} style={{display:"flex",gap:8,alignItems:"center"}}><span style={{fontSize:12,color:c,minWidth:14}}>{isA?"✓":isU?"✗":"·"}</span><span style={{fontSize:13,color:c}}>{opt}</span>{isA&&<span style={{fontSize:11,color:"#22c55e55"}}>← correct</span>}</div>;
+                  return <div key={oi} style={{display:"flex",gap:8,alignItems:"center"}}><span style={{fontSize:12,color:c,minWidth:14}}>{isA?"✓":isU?"✗":"·"}</span><span style={{fontSize:13,color:c}}>{["A","B","C","D","E"][oi]}. {opt}</span>{isA&&<span style={{fontSize:11,color:"#22c55e55"}}>← correct</span>}</div>;
                 })}
               </div>
               <div style={{background:"rgba(255,255,255,0.04)",borderRadius:8,padding:"10px 12px",borderLeft:`3px solid ${cc}`}}>
@@ -202,8 +206,7 @@ const S = {
   page:{minHeight:"100vh",background:"linear-gradient(160deg,#0a0f1e 0%,#0f172a 60%,#0a0f1e 100%)",fontFamily:"'Noto Sans JP','Hiragino Sans',sans-serif",display:"flex",alignItems:"center",justifyContent:"center",padding:"24px 16px"},
   card:{width:"100%",maxWidth:520,background:"rgba(255,255,255,0.03)",backdropFilter:"blur(16px)",borderRadius:22,border:"1px solid rgba(255,255,255,0.07)",padding:"28px 24px",boxShadow:"0 24px 64px rgba(0,0,0,0.5)"},
   badge:{padding:"3px 10px",borderRadius:10,fontSize:11,fontWeight:700},
-  qText:{color:"#e2e8f0",fontSize:17,lineHeight:1.85,marginBottom:6,whiteSpace:"pre-line"},
-  qTextEn:{color:"#64748b",fontSize:13,lineHeight:1.7,marginBottom:18,fontStyle:"italic"},
+  qText:{color:"#e2e8f0",fontSize:16,lineHeight:1.9,marginBottom:16,whiteSpace:"pre-line"},
   optBtn:{display:"flex",alignItems:"center",gap:12,padding:"13px 16px",borderRadius:12,textAlign:"left",cursor:"pointer",fontSize:14,transition:"all 0.18s"},
   optLabel:{minWidth:26,height:26,borderRadius:"50%",display:"flex",alignItems:"center",justifyContent:"center",fontSize:11,fontWeight:800},
   btn:{width:"100%",padding:"14px",border:"none",borderRadius:13,fontSize:15,fontWeight:800,transition:"all 0.2s"},
