@@ -4,6 +4,7 @@ import Grammar from './grammar';
 import Reading from './reading';
 import BusinessSpeech from './business-speech';
 import CasualSpeech from './casual-speech';
+import SelfStudy from './self-study';
 
 const sections = [
   { id:'vocabulary',  icon:'📖', label:'Vocabulary',      sub:'語彙・単語',       color:'#06b6d4' },
@@ -34,17 +35,24 @@ function Home({ onSelect }) {
 
 export default function App() {
   const [current, setCurrent] = useState(null);
+  const goSelfStudy = (section, level) => setCurrent(`self-study|${section}|${level}`);
+  window.__ss = (level) => goSelfStudy(current || 'general', level);
+
   if (!current) return <Home onSelect={setCurrent} />;
+
+  const isSelfStudy = current.startsWith('self-study|');
+
   return (
     <div>
       <button onClick={() => setCurrent(null)} style={{ position:'fixed', top:16, left:16, zIndex:999, background:'rgba(255,255,255,0.07)', border:'1px solid rgba(255,255,255,0.12)', borderRadius:10, color:'#94a3b8', fontSize:13, fontWeight:700, padding:'8px 16px', cursor:'pointer' }}>
         ← Home
       </button>
-      {current === 'vocabulary'  && <Vocabulary />}
-      {current === 'grammar'     && <Grammar />}
-      {current === 'reading'     && <Reading />}
-      {current === 'business'    && <BusinessSpeech />}
-      {current === 'casual'      && <CasualSpeech />}
+      {current === 'vocabulary'  && <Vocabulary onSelfStudy={(level) => goSelfStudy('vocabulary', level)} />}
+      {current === 'grammar'     && <Grammar onSelfStudy={(level) => goSelfStudy('grammar', level)} />}
+      {current === 'reading'     && <Reading onSelfStudy={(level) => goSelfStudy('reading', level)} />}
+      {current === 'business'    && <BusinessSpeech onSelfStudy={(level) => goSelfStudy('business', level)} />}
+      {current === 'casual'      && <CasualSpeech onSelfStudy={(level) => goSelfStudy('casual', level)} />}
+      {isSelfStudy && <SelfStudy cefrLevel={current.split('|')[2]} section={current.split('|')[1]} />}
     </div>
   );
 }
