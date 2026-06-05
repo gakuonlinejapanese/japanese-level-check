@@ -6,42 +6,48 @@ const COLOR = "#0ea5e9";
 const QUESTIONS = [
   {
     cefr:"A1", jlpt:"N5",
-    text:"あなたは会社で初めて同僚に会いました。\nYou are meeting a coworker for the first time at your company.\n（　　　）、さかもとです。",
+    text:"あなたは会社で初めて同僚に会いました。\n（　　　）、さかもとです。",
+    textEn:"You are meeting a coworker for the first time at your company.\n(      ), I'm Sakamoto.",
     options:["おつかれさまです","はじめまして","おじゃまします","ただいま","Not Able to Answer"],
     answer:1,
     explanation:"はじめまして (Hajimemashite) is the standard greeting when meeting someone for the first time. It means 'Nice to meet you.'"
   },
   {
     cefr:"A2", jlpt:"N4",
-    text:"取引先との会議に少し遅れそうです。\nYou are going to be slightly late for a meeting with a client.\n最も適切なのは？ Which response is the most appropriate?",
+    text:"取引先との会議に少し遅れそうです。\n最も適切な言い方はどれですか？",
+    textEn:"You are going to be slightly late for a meeting with a client.\nWhich response is the most appropriate?",
     options:["会議に行きません。","会議が嫌です。","少々遅れる見込みです。","会議を忘れました。","Not Able to Answer"],
     answer:2,
     explanation:"少々遅れる見込みです is the professional way to say you will be slightly late. The other options are rude or inappropriate."
   },
   {
     cefr:"B1", jlpt:"N3",
-    text:"メールで使われる表現です。\nThis expression is commonly used in business emails.\n「ご都合はいかがでしょうか。」\n最も近い意味は？ What is the closest meaning?",
+    text:"メールで使われる表現です。\n「ご都合はいかがでしょうか。」\n最も近い意味はどれですか？",
+    textEn:"This expression is commonly used in business emails.\n\"ご都合はいかがでしょうか。\"\nWhat is the closest meaning?",
     options:["気分はどうですか","お元気ですか","ご予定はいかがですか","お仕事はどうですか","Not Able to Answer"],
     answer:2,
     explanation:"ご都合はいかがでしょうか asks about availability or schedule — equivalent to 'How is your schedule?' or 'Are you available?'"
   },
   {
     cefr:"B2", jlpt:"N2",
-    text:"会議で上司が言いました。\nYour manager says during a meeting:\n「現状の案にもメリットはありますが、代替案についても検討する必要があります。」\n\"The current proposal has its advantages, but we should also consider alternative proposals.\"\n代替案とは？ What does \"alternative proposal\" mean?",
+    text:"会議で上司が言いました。\n「現状の案にもメリットはありますが、代替案についても検討する必要があります。」\n代替案とはどういう意味ですか？",
+    textEn:"Your manager says during a meeting:\n\"The current proposal has its advantages, but we should also consider alternative proposals.\"\nWhat does 代替案 (alternative proposal) mean?",
     options:["同じ案","別の案","完成した案","古い案","Not Able to Answer"],
     answer:1,
     explanation:"代替案 (daitaian) means 'alternative proposal' or 'substitute plan' — a different option from the current one."
   },
   {
     cefr:"C1", jlpt:"N1",
-    text:"次の文の意味として最も適切なものを選んでください。\nChoose the most appropriate meaning of the following statement.\n「本件につきましては再考の余地があると考えております。」\n\"There may be room for reconsideration regarding this matter.\"",
+    text:"次の文の意味として最も適切なものを選んでください。\n「本件につきましては再考の余地があると考えております。」",
+    textEn:"Choose the most appropriate meaning of the following statement.\n\"There may be room for reconsideration regarding this matter.\"",
     options:["完全に決定している","もう変更できない","もう一度考える可能性がある","すぐに実施する","Not Able to Answer"],
     answer:2,
     explanation:"再考の余地がある means 'there is room for reconsideration' — indicating the matter is not final and may be reconsidered."
   },
   {
     cefr:"C2", jlpt:"N1",
-    text:"商談中、相手企業が言いました。\nDuring a business negotiation, the other company says:\n「非常に興味深いご提案ですね。社内でも前向きに検討させていただきます。」\n\"That is a very interesting proposal. We will give it positive consideration internally.\"\nこの発言の真意として最も適切なのは？\nWhat is the most likely intended meaning?",
+    text:"商談中、相手企業が言いました。\n「非常に興味深いご提案ですね。社内でも前向きに検討させていただきます。」\nこの発言の真意として最も適切なのはどれですか？",
+    textEn:"During a business negotiation, the other company says:\n\"That is a very interesting proposal. We will give it positive consideration internally.\"\nWhat is the most likely intended meaning?",
     options:["契約が確定した","必ず採用される","丁寧に断っている可能性もある","今日中に契約する","Not Able to Answer"],
     answer:2,
     explanation:"前向きに検討します can mean genuine interest OR a polite decline. In Japanese business culture, never assume it means confirmed acceptance."
@@ -72,7 +78,7 @@ function CTABlock() {
   const [ctaStep, setCtaStep] = useState(0);
   return (
     <div style={{marginTop:24,padding:"20px",background:"rgba(255,255,255,0.04)",borderRadius:16,border:"1px solid rgba(255,255,255,0.08)",textAlign:"center"}}>
-      {ctaStep===0&&(<><p style={{color:"#f1f5f9",fontSize:16,fontWeight:700,marginBottom:16}}>Want to improve your Japanese?</p><div style={{display:"flex",gap:10,justifyContent:"center",flexWrap:"wrap"}}><button onClick={()=>setCtaStep(1)} style={{padding:"12px 24px",background:"linear-gradient(135deg,#22c55e,#16a34a)",color:"#fff",border:"none",borderRadius:12,fontSize:14,fontWeight:700,cursor:"pointer"}}>Yes</button><button onClick={()=>setCtaStep(3)} style={{padding:"12px 20px",background:"rgba(255,255,255,0.08)",color:"#94a3b8",border:"1px solid rgba(255,255,255,0.1)",borderRadius:12,fontSize:13,cursor:"pointer"}}>No, I am satisfied with my result</button></div></>)}
+      {ctaStep===0&&(<><p style={{color:"#f1f5f9",fontSize:16,fontWeight:700,marginBottom:16}}>Want to improve your Japanese?</p><div style={{display:"flex",gap:10,justifyContent:"center",flexWrap:"wrap"}}><button onClick={()=>setCtaStep(1)} style={{padding:"12px 24px",background:"linear-gradient(135deg,#22c55e,#16a34a)",color:"#fff",border:"none",borderRadius:12,fontSize:14,fontWeight:700,cursor:"pointer"}}>Yes</button><button onClick={()=>setCtaStep(3)} style={{padding:"12px 20px",background:"rgba(255,255,255,0.08)",color:"#94a3b8",border:"1px solid rgba(255,255,255,0.1)",borderRadius:12,fontSize:13,cursor:"pointer"}}>No, I am satisfied with my results</button></div></>)}
       {ctaStep===1&&(<><p style={{color:"#f1f5f9",fontSize:16,fontWeight:700,marginBottom:16}}>Need a FREE Japanese Q&A session?</p><button onClick={()=>setCtaStep(2)} style={{padding:"12px 32px",background:"linear-gradient(135deg,#3b82f6,#1d4ed8)",color:"#fff",border:"none",borderRadius:12,fontSize:14,fontWeight:700,cursor:"pointer"}}>Yes</button></>)}
       {ctaStep===2&&(<><p style={{color:"#f1f5f9",fontSize:15,fontWeight:700,marginBottom:16}}>Apply for your FREE Trial Lesson!</p><a href="https://www.seitojapanese.online/" target="_blank" rel="noopener noreferrer" style={{display:"inline-block",padding:"14px 24px",background:"linear-gradient(135deg,#f59e0b,#d97706)",color:"#fff",borderRadius:12,fontSize:14,fontWeight:800,textDecoration:"none"}}>Apply for FIRST Q&A SESSION (FREE TRIAL LESSON) !!!</a></>)}
       {ctaStep===3&&(<p style={{color:"#64748b",fontSize:14,margin:0}}>Great! Keep up the good work!</p>)}
@@ -116,6 +122,7 @@ export default function BusinessSpeech() {
         </div>
         <p style={{color:"#94a3b8",fontSize:13,marginBottom:4}}>If you cannot answer, click "Not Able to Answer"</p>
         <p style={S.qText}>{q.text}</p>
+        {q.textEn && <p style={S.qTextEn}>{q.textEn}</p>}
         <div style={{display:"flex",flexDirection:"column",gap:10,marginBottom:22}}>
           {q.options.map((opt,i) => {
             const sel = selected===i;
@@ -180,7 +187,8 @@ export default function BusinessSpeech() {
                 <span style={{...S.badge,background:cc+"22",color:cc}}>CEFR {qq.cefr}</span>
                 <span style={{...S.badge,background:ok?"#22c55e22":"#ef444422",color:ok?"#22c55e":"#ef4444"}}>{ok?"Correct":"Incorrect"}</span>
               </div>
-              <p style={{color:"#e2e8f0",fontSize:14,margin:"0 0 10px",whiteSpace:"pre-line"}}>{qq.text}</p>
+              <p style={{color:"#e2e8f0",fontSize:14,margin:"0 0 4px",whiteSpace:"pre-line"}}>{qq.text}</p>
+              {qq.textEn && <p style={{color:"#64748b",fontSize:12,margin:"0 0 10px",fontStyle:"italic",whiteSpace:"pre-line"}}>{qq.textEn}</p>}
               <div style={{display:"flex",flexDirection:"column",gap:4,marginBottom:10}}>
                 {qq.options.map((opt,oi) => {
                   const isA=oi===qq.answer, isU=oi===ua;
@@ -206,7 +214,8 @@ const S = {
   page:{minHeight:"100vh",background:"linear-gradient(160deg,#0a0f1e 0%,#0f172a 60%,#0a0f1e 100%)",fontFamily:"'Noto Sans JP','Hiragino Sans',sans-serif",display:"flex",alignItems:"center",justifyContent:"center",padding:"24px 16px"},
   card:{width:"100%",maxWidth:520,background:"rgba(255,255,255,0.03)",backdropFilter:"blur(16px)",borderRadius:22,border:"1px solid rgba(255,255,255,0.07)",padding:"28px 24px",boxShadow:"0 24px 64px rgba(0,0,0,0.5)"},
   badge:{padding:"3px 10px",borderRadius:10,fontSize:11,fontWeight:700},
-  qText:{color:"#e2e8f0",fontSize:16,lineHeight:1.9,marginBottom:16,whiteSpace:"pre-line"},
+  qText:{color:"#e2e8f0",fontSize:16,lineHeight:1.9,marginBottom:6,whiteSpace:"pre-line"},
+  qTextEn:{color:"#64748b",fontSize:13,lineHeight:1.7,marginBottom:16,fontStyle:"italic",whiteSpace:"pre-line"},
   optBtn:{display:"flex",alignItems:"center",gap:12,padding:"13px 16px",borderRadius:12,textAlign:"left",cursor:"pointer",fontSize:14,transition:"all 0.18s"},
   optLabel:{minWidth:26,height:26,borderRadius:"50%",display:"flex",alignItems:"center",justifyContent:"center",fontSize:11,fontWeight:800},
   btn:{width:"100%",padding:"14px",border:"none",borderRadius:13,fontSize:15,fontWeight:800,transition:"all 0.2s"},
