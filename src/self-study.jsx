@@ -5,6 +5,70 @@ const FORMSPREE_URL = "https://formspree.io/f/mykvallk";
 const STRIPE_KEY = "pk_test_51TewE3IkVvRh9IDDI5tJX0117g2c7sFpHo2JpfREEHIUNvwrFhbQfT4LljhHxozPFdYbC9yNsRDsBIpmhKVnUPSa00KeRK2Eet";
 const PRICE_ID = "price_1Tf74iIkVvRh9IDDoFeg2RoB";
 
+const RESOURCES_BY_LEVEL = {
+  "Pre-A1": [
+    { icon:"📱", name:"Duolingo", type:"App · Free", desc:"Perfect for absolute beginners. Learn hiragana, katakana, and basic phrases through games.", url:"https://www.duolingo.com/course/ja/en/Learn-Japanese" },
+    { icon:"📺", name:"JapanesePod101 (YouTube)", type:"YouTube · Free", desc:"Start with their 'Learning Japanese' playlist for complete beginners. Great audio and visual lessons.", url:"https://www.youtube.com/@JapanesePod101" },
+    { icon:"🌐", name:"JF Japanese e-Learning Minato", type:"Website · Free", desc:"Official Japanese Foundation course from A1 level. Structured and reliable.", url:"https://minato-jf.jp/en/" },
+    { icon:"📱", name:"LingoDeer", type:"App · Free/Paid", desc:"Teaches hiragana and katakana systematically. Much better than Duolingo for grammar basics.", url:"https://www.lingodeer.com/japanese" },
+  ],
+  "A1": [
+    { icon:"📱", name:"Anki (JLPT N5 Deck)", type:"App · Free", desc:"Download the free N5 vocabulary deck. Study 20 cards/day with spaced repetition.", url:"https://apps.ankiweb.net/" },
+    { icon:"📺", name:"Nihongoal (YouTube)", type:"YouTube · Free", desc:"N5 grammar and vocabulary lessons based on Minna no Nihongo textbook. Clear explanations.", url:"https://www.youtube.com/@NihonGoal" },
+    { icon:"🌐", name:"Tae Kim's Grammar Guide", type:"Website · Free", desc:"The best free grammar reference for beginners. Read and practice every section.", url:"https://guidetojapanese.org/learn/" },
+    { icon:"📱", name:"Bunpro (N5 path)", type:"App · Free trial", desc:"SRS grammar study app. Start with the N5 path for systematic grammar learning.", url:"https://bunpro.jp/" },
+  ],
+  "A1–A2": [
+    { icon:"📱", name:"Anki (N5+N4 Deck)", type:"App · Free", desc:"Continue with N4 vocabulary deck. Aim for 1,000+ words before moving to N3.", url:"https://apps.ankiweb.net/" },
+    { icon:"📺", name:"Japanese Ammo with Misa (YouTube)", type:"YouTube · Free", desc:"In-depth grammar explanations from N5 to N3. Perfect for filling grammar gaps.", url:"https://www.youtube.com/@JapaneseAmmowithMisa" },
+    { icon:"🌐", name:"Bunpro (N4 path)", type:"Website · $3/mo", desc:"Work through all N4 grammar points systematically. Takes about 3-4 months.", url:"https://bunpro.jp/" },
+    { icon:"📱", name:"WaniKani (Levels 1-10)", type:"App · Free start", desc:"Best kanji learning app. The first 3 levels are free. Learn 300+ kanji by level 10.", url:"https://www.wanikani.com/" },
+  ],
+  "A2": [
+    { icon:"📱", name:"Anki (JLPT N4 Deck)", type:"App · Free", desc:"Focus on N4 vocabulary. Try to reach 1,500 words total before aiming for N3.", url:"https://apps.ankiweb.net/" },
+    { icon:"📺", name:"Nihongo no Mori (YouTube)", type:"YouTube · Free", desc:"JLPT-focused lessons N4 to N1. Start with their N4 playlist for structured review.", url:"https://www.youtube.com/@nihongonomori" },
+    { icon:"🌐", name:"NHK Web Easy", type:"Website · Free", desc:"Real Japanese news simplified for learners. Perfect for your level. Read 2-3 articles/week.", url:"https://www3.nhk.or.jp/news/easy/" },
+    { icon:"📱", name:"Bunpro (N3 path)", type:"App · $3/mo", desc:"Start N3 grammar after solidifying N4. 170+ grammar points to master.", url:"https://bunpro.jp/" },
+  ],
+  "A2–B1": [
+    { icon:"📱", name:"Anki (JLPT N3 Deck)", type:"App · Free", desc:"Push toward 2,000 vocabulary words. Download the N3 core deck and study daily.", url:"https://apps.ankiweb.net/" },
+    { icon:"📺", name:"Nihongo no Mori N3 (YouTube)", type:"YouTube · Free", desc:"Complete the N3 JLPT playlist. Great for grammar consolidation at this level.", url:"https://www.youtube.com/@nihongonomori" },
+    { icon:"🌐", name:"NHK Web Easy", type:"Website · Free", desc:"Read daily. Try to read without the furigana support to challenge yourself.", url:"https://www3.nhk.or.jp/news/easy/" },
+    { icon:"📱", name:"Migaku", type:"App · Paid", desc:"Immersion-based learning tool. Add Japanese content and get instant dictionary lookups.", url:"https://migaku.com/" },
+  ],
+  "B1": [
+    { icon:"📱", name:"Anki (JLPT N2 Deck)", type:"App · Free", desc:"Target 3,000+ vocabulary words. Download the N2 frequency deck.", url:"https://apps.ankiweb.net/" },
+    { icon:"📺", name:"Nihongo no Mori N2 (YouTube)", type:"YouTube · Free", desc:"Start the N2 playlist. These lessons are taught in Japanese — great immersion.", url:"https://www.youtube.com/@nihongonomori" },
+    { icon:"🌐", name:"Todai Easy Japanese News", type:"App · Free", desc:"Japanese news app for learners. More advanced than NHK Web Easy.", url:"https://todaysjapanese.com/" },
+    { icon:"🌐", name:"Sou Matome N2 (textbook)", type:"Book · ~$20", desc:"The gold standard N2 prep book. Work through grammar, vocabulary, and reading sections.", url:"https://www.amazon.com/s?k=sou+matome+n2" },
+  ],
+  "B1–B2": [
+    { icon:"📱", name:"Anki (N2 Core Deck)", type:"App · Free", desc:"You should know 3,000+ words. Use Anki for the N2 core 6,000 word deck.", url:"https://apps.ankiweb.net/" },
+    { icon:"📺", name:"Comprehensible Japanese (YouTube)", type:"YouTube · Free", desc:"Native-speed input for intermediate learners. Excellent for building listening skills.", url:"https://www.youtube.com/@cijapanese" },
+    { icon:"🌐", name:"NHK News Web (full)", type:"Website · Free", desc:"Graduate from NHK Easy to regular NHK News. Challenge yourself with real journalism.", url:"https://www3.nhk.or.jp/news/" },
+    { icon:"📱", name:"Migaku + Anki", type:"App · Paid", desc:"Watch Japanese dramas/YouTube and turn them into flashcards automatically.", url:"https://migaku.com/" },
+  ],
+  "B2": [
+    { icon:"📱", name:"Anki (N1 Deck)", type:"App · Free", desc:"Push to 5,000+ vocabulary. Study N1 level vocabulary and expressions daily.", url:"https://apps.ankiweb.net/" },
+    { icon:"📺", name:"Comprehensible Japanese Advanced (YouTube)", type:"YouTube · Free", desc:"Native-level content designed for advanced learners. No English used.", url:"https://www.youtube.com/@cijapanese" },
+    { icon:"🌐", name:"Asahi Shimbun Digital", type:"Website · Free articles", desc:"Real Japanese newspaper. Read opinion columns and feature articles.", url:"https://www.asahi.com/" },
+    { icon:"🌐", name:"Kanzen Master N1 (textbook)", type:"Book · ~$25", desc:"The top N1 prep series. Work through grammar, reading, and listening books.", url:"https://www.amazon.com/s?k=kanzen+master+n1" },
+  ],
+  "B2–C1": [
+    { icon:"📺", name:"Regular Japanese YouTube", type:"YouTube · Free", desc:"Watch native Japanese YouTubers without learning support. Try variety shows, vlogs, news.", url:"https://www.youtube.com/results?search_query=japanese+vlog" },
+    { icon:"🌐", name:"Japanese novels (青空文庫)", type:"Website · Free", desc:"Read classic Japanese literature for free. Excellent for vocabulary and cultural depth.", url:"https://www.aozora.gr.jp/" },
+    { icon:"📱", name:"Anki (custom sentences)", type:"App · Free", desc:"At this level, make your own cards from real Japanese content you encounter daily.", url:"https://apps.ankiweb.net/" },
+    { icon:"🌐", name:"italki — Native tutors", type:"Website · Paid", desc:"Practice conversation with native Japanese speakers. Focus on natural expressions.", url:"https://www.italki.com/en/teachers/japanese" },
+  ],
+  "C1": [
+    { icon:"📺", name:"Japanese TV & Podcasts", type:"Various · Free", desc:"Watch regular Japanese TV, dramas, and variety shows without subtitles.", url:"https://www.nhk.or.jp/nhkworld/en/ondemand/" },
+    { icon:"🌐", name:"青空文庫 (Aozora Bunko)", type:"Website · Free", desc:"Read Japanese literature. Aim for modern novels and business books.", url:"https://www.aozora.gr.jp/" },
+    { icon:"🌐", name:"italki — Advanced conversation", type:"Website · Paid", desc:"Debate, discuss complex topics, and refine your professional Japanese.", url:"https://www.italki.com/en/teachers/japanese" },
+    { icon:"📱", name:"GAKU Business Japanese", type:"Live lessons", desc:"Work with a native teacher on keigo, business emails, and presentation Japanese.", url:"https://www.seitojapanese.online/" },
+  ],
+};
+
+
 const INVITE_CODES = ["GAKU2024", "SEITO2024", "JAPANESE01"];
 const usedCodes = {};
 
@@ -71,7 +135,7 @@ function BlurredPlan({ plan, onUnlock }) {
   );
 }
 
-function UnlockScreen({ email, plan }) {
+function UnlockScreen({ email, plan, cefrLevel }) {
   const [mode, setMode] = useState(null); // null | "free" | "pay" | "invite"
   const [inviteCode, setInviteCode] = useState("");
   const [inviteError, setInviteError] = useState("");
@@ -102,11 +166,27 @@ function UnlockScreen({ email, plan }) {
   };
 
   if (unlocked) {
+    const resources = RESOURCES_BY_LEVEL[cefrLevel] || RESOURCES_BY_LEVEL["A2"];
     return (
       <div style={{ ...S.wrap }}>
-        <div style={{ ...S.card }}>
-          <p style={{ color:"#22c55e", fontSize:12, fontWeight:700, letterSpacing:2, marginBottom:8 }}>✅ UNLOCKED</p>
+        <div style={{ ...S.card, marginBottom:16 }}>
+          <p style={{ color:"#22c55e", fontSize:12, fontWeight:700, letterSpacing:2, marginBottom:8 }}>✅ UNLOCKED — YOUR FULL STUDY PLAN</p>
           <div style={{ color:"#f1f5f9", fontSize:14, lineHeight:1.9, whiteSpace:"pre-wrap" }}>{plan}</div>
+        </div>
+        <div style={{ ...S.card }}>
+          <p style={{ color:"#f59e0b", fontSize:12, fontWeight:700, letterSpacing:1, marginBottom:16 }}>📚 RECOMMENDED RESOURCES FOR YOUR LEVEL ({cefrLevel})</p>
+          <div style={{ display:"flex", flexDirection:"column", gap:12 }}>
+            {resources.map((r, i) => (
+              <a key={i} href={r.url} target="_blank" rel="noopener noreferrer" style={{ display:"flex", gap:14, alignItems:"flex-start", padding:"14px 16px", background:"rgba(255,255,255,0.04)", borderRadius:12, border:"1px solid rgba(255,255,255,0.08)", textDecoration:"none", cursor:"pointer" }}>
+                <span style={{ fontSize:24, flexShrink:0 }}>{r.icon}</span>
+                <div>
+                  <p style={{ color:"#f1f5f9", fontSize:14, fontWeight:700, margin:"0 0 2px" }}>{r.name}</p>
+                  <p style={{ color:"#a855f7", fontSize:11, fontWeight:700, margin:"0 0 4px" }}>{r.type}</p>
+                  <p style={{ color:"#94a3b8", fontSize:12, margin:0, lineHeight:1.6 }}>{r.desc}</p>
+                </div>
+              </a>
+            ))}
+          </div>
         </div>
       </div>
     );
@@ -227,7 +307,7 @@ Keep it practical, specific, and encouraging. Use clear headings with emoji. Wri
 
   if (phase === "loading") return <LoadingScreen />;
   if (phase === "result" && !showUnlock) return <BlurredPlan plan={plan} onUnlock={() => setShowUnlock(true)} />;
-  if (phase === "result" && showUnlock) return <UnlockScreen email={form.email} plan={plan} />;
+  if (phase === "result" && showUnlock) return <UnlockScreen email={form.email} plan={plan} cefrLevel={cefrLevel} />;
 
   return (
     <div style={{ ...S.wrap }}>
