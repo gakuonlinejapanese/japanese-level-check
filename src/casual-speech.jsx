@@ -115,6 +115,48 @@ export default function CasualSpeech() {
           <p style={{color:"#94a3b8",fontSize:14,marginTop:6,marginBottom:14}}>{res.msg}</p>
           <div style={{fontSize:30,fontWeight:900,color:"#f1f5f9"}}>{score} <span style={{color:"#475569",fontSize:16}}>/ {QUESTIONS.length} correct</span></div>
         </div>
+        
+        {/* CEFR Info Section */}
+        {(() => {
+            const info = {"Pre-A1":{"jlpt":"Below N5","canDo":["Recognize basic hiragana and katakana characters","Understand a few common words like 'arigatou' or 'sumimasen'","Follow very simple instructions with visual support"],"problems":["Cannot hold even the simplest conversation in Japanese","Unable to read menus, signs, or basic texts","Very limited ability to function independently in Japan"],"timeToN4":"Approximately 18-24 months of consistent daily study","timeToN2":"Approximately 4-6 years of dedicated study"},"A1":{"jlpt":"N5","canDo":["Introduce yourself with name, nationality, and basic personal info","Understand simple anime phrases and children's shows","Read hiragana, katakana, and about 100 kanji","Order food from a picture menu in Japan"],"problems":["Cannot sustain a real conversation beyond greetings","Struggles to understand natural speech speed","Limited vocabulary makes daily tasks in Japan difficult"],"timeToN4":"Approximately 12-18 months of consistent daily study","timeToN2":"Approximately 3-5 years of dedicated study"},"A1-A2":{"jlpt":"N5-N4","canDo":["Handle basic daily interactions like shopping and asking directions","Understand simple conversations on familiar topics","Read short texts with furigana support","Enjoy simple manga and children's anime"],"problems":["Still struggles with fast or natural Japanese speech","Grammar knowledge is limited to basic sentence patterns","Cannot handle unexpected topics in conversation"],"timeToN4":"Approximately 6-12 months of consistent daily study","timeToN2":"Approximately 2-4 years of dedicated study"},"A2":{"jlpt":"N4","canDo":["Have simple conversations about daily life, hobbies, and travel","Apply to some Japanese language university programs","Understand the general meaning of short news articles with a dictionary","Communicate in basic work situations in Japan"],"problems":["Cannot yet work professionally in Japanese","Struggles with keigo (polite business Japanese)","Limited reading ability for authentic Japanese content"],"timeToN4":"You are at N4 level! Focus on consolidating your skills.","timeToN2":"Approximately 1-2 years of focused study"},"A2-B1":{"jlpt":"N4-N3","canDo":["Manage most everyday situations while traveling in Japan","Understand the main points of clear standard speech","Read simple Japanese articles and short stories","Hold conversations on familiar topics with some confidence"],"problems":["Nuanced or abstract topics remain challenging","Business Japanese and formal writing still need development","Listening to fast native speech is still difficult"],"timeToN4":"You are near or at N4 level! Keep going.","timeToN2":"Approximately 1-2 years of focused study"},"B1":{"jlpt":"N3","canDo":["Handle most situations encountered while living in Japan","Understand the main points of standard TV news","Read newspaper articles with occasional dictionary use","Express opinions on familiar topics clearly"],"problems":["Professional and academic Japanese still challenging","Subtle cultural nuances may be missed in conversation","Writing formal documents requires more practice"],"timeToN4":"You have surpassed N4!","timeToN2":"Approximately 6-12 months of focused study"},"B1-B2":{"jlpt":"N3-N2","canDo":["Communicate fluently on a wide range of topics","Understand most Japanese TV shows and movies","Read most news articles and general books","Begin working in Japanese-speaking environments"],"problems":["Highly technical or specialized vocabulary still limited","Academic writing and formal presentations need polish","Some idiomatic expressions may still be unfamiliar"],"timeToN4":"You have surpassed N4!","timeToN2":"You are near N2! A few more months of study."},"B2":{"jlpt":"N2","canDo":["Apply to most Japanese companies as a bilingual candidate","Understand complex texts on a wide range of subjects","Participate in meetings and discussions in Japanese","Watch Japanese news and dramas without subtitles"],"problems":["C1-level nuance and native-like fluency still requires work","Highly specialized fields (law, medicine) may be challenging","Very fast or dialect-heavy speech can be difficult"],"timeToN4":"You have surpassed N4!","timeToN2":"You are at N2 level! Aim for N1 next."},"B2-C1":{"jlpt":"N2-N1","canDo":["Work professionally in Japanese in most industries","Understand almost all spoken and written Japanese","Express yourself fluently and spontaneously","Appreciate cultural nuances and humor in Japanese"],"problems":["Native-level precision in writing still needs refinement","Highly specialized or archaic vocabulary may be unfamiliar","Regional dialects can still cause occasional confusion"],"timeToN4":"You have far surpassed N4!","timeToN2":"You are at or near N2! Target N1."},"C1":{"jlpt":"N1","canDo":["Work at the highest level in Japanese in any industry","Understand dialects, humor, and cultural references","Read academic papers, legal documents, and literature","Pass the Japanese Language Proficiency Test N1"],"problems":["Native-like precision in very formal writing takes continuous effort","Staying updated with new slang and evolving language","Rare dialect or highly archaic expressions may still appear"],"timeToN4":"You have far surpassed N4!","timeToN2":"You have surpassed N2! You are at N1 level."}}[res.level] || {"jlpt":"N/A","canDo":["Keep studying!"],"problems":["Keep going!"],"timeToN4":"Keep studying!","timeToN2":"Keep studying!"};
+            return (
+              <div style={{display:"flex",flexDirection:"column",gap:16,marginBottom:24}}>
+                <div style={{background:"rgba(255,255,255,0.04)",borderRadius:14,padding:"16px 18px",borderLeft:"3px solid #3b82f6"}}>
+                  <p style={{color:"#3b82f6",fontSize:12,fontWeight:700,margin:"0 0 6px",letterSpacing:1}}>📊 JLPT EQUIVALENT</p>
+                  <p style={{color:"#f1f5f9",fontSize:18,fontWeight:800,margin:0}}>{info.jlpt}</p>
+                </div>
+                <div style={{background:"rgba(255,255,255,0.04)",borderRadius:14,padding:"16px 18px",borderLeft:"3px solid #22c55e"}}>
+                  <p style={{color:"#22c55e",fontSize:12,fontWeight:700,margin:"0 0 10px",letterSpacing:1}}>✅ WHAT YOU CAN DO AT THIS LEVEL</p>
+                  {info.canDo.map((item,i) => (
+                    <div key={i} style={{display:"flex",gap:8,marginBottom:6,alignItems:"flex-start"}}>
+                      <span style={{color:"#22c55e",fontSize:12,marginTop:2}}>•</span>
+                      <span style={{color:"#cbd5e1",fontSize:13,lineHeight:1.6}}>{item}</span>
+                    </div>
+                  ))}
+                </div>
+                <div style={{background:"rgba(255,255,255,0.04)",borderRadius:14,padding:"16px 18px",borderLeft:"3px solid #ef4444"}}>
+                  <p style={{color:"#ef4444",fontSize:12,fontWeight:700,margin:"0 0 10px",letterSpacing:1}}>⚠️ CHALLENGES AT THIS LEVEL</p>
+                  {info.problems.map((item,i) => (
+                    <div key={i} style={{display:"flex",gap:8,marginBottom:6,alignItems:"flex-start"}}>
+                      <span style={{color:"#ef4444",fontSize:12,marginTop:2}}>•</span>
+                      <span style={{color:"#cbd5e1",fontSize:13,lineHeight:1.6}}>{item}</span>
+                    </div>
+                  ))}
+                </div>
+                <div style={{background:"rgba(255,255,255,0.04)",borderRadius:14,padding:"16px 18px",borderLeft:"3px solid #f59e0b"}}>
+                  <p style={{color:"#f59e0b",fontSize:12,fontWeight:700,margin:"0 0 10px",letterSpacing:1}}>⏱️ YOUR STUDY ROADMAP</p>
+                  <div style={{marginBottom:8}}>
+                    <p style={{color:"#94a3b8",fontSize:11,margin:"0 0 2px"}}>To reach N4 / A2 (Japanese University entry):</p>
+                    <p style={{color:"#f1f5f9",fontSize:13,fontWeight:600,margin:0}}>{info.timeToN4}</p>
+                  </div>
+                  <div>
+                    <p style={{color:"#94a3b8",fontSize:11,margin:"0 0 2px"}}>To reach N2 / B2 (Japanese Company entry):</p>
+                    <p style={{color:"#f1f5f9",fontSize:13,fontWeight:600,margin:0}}>{info.timeToN2}</p>
+                  </div>
+                </div>
+              </div>
+            );
+          })()}
         <div style={{display:"flex",flexDirection:"column",gap:12,marginBottom:24}}>
           {QUESTIONS.map((qq,i) => {
             const ua=userAnswers[i]; const ok=ua===qq.answer; const cc=CP[qq.cefr]??COLOR;
