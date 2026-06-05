@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Your Personalized Study Plan — GAKU</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: linear-gradient(160deg,#0a0f1e 0%,#0f172a 60%,#0a0f1e 100%); min-height: 100vh; font-family: 'Noto Sans JP', sans-serif; color: #f1f5f9; padding: 40px 16px; }
+    .container { max-width: 560px; margin: 0 auto; }
+    .badge { color: #a855f7; font-size: 11px; font-weight: 700; letter-spacing: 2px; margin-bottom: 6px; }
+    h1 { font-size: 26px; font-weight: 800; margin-bottom: 4px; }
+    .sub { color: #64748b; font-size: 13px; margin-bottom: 28px; }
+    .card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 20px 22px; margin-bottom: 16px; }
+    .card-title { font-size: 12px; font-weight: 700; letter-spacing: 1px; margin-bottom: 12px; }
+    .card p { color: #cbd5e1; font-size: 14px; line-height: 1.8; margin-bottom: 8px; }
+    .card ul { padding-left: 18px; }
+    .card ul li { color: #cbd5e1; font-size: 14px; line-height: 1.9; margin-bottom: 4px; }
+    .row { display: flex; gap: 10px; margin-bottom: 8px; }
+    .label { color: #64748b; font-size: 12px; min-width: 120px; }
+    .value { color: #f1f5f9; font-size: 13px; font-weight: 600; }
+    .unlock-badge { background: rgba(34,197,94,0.1); border: 1px solid rgba(34,197,94,0.3); border-radius: 20px; display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; margin-bottom: 24px; }
+    .unlock-badge span { color: #22c55e; font-size: 12px; font-weight: 700; }
+    .week { background: rgba(168,85,247,0.08); border-left: 3px solid #a855f7; border-radius: 0 10px 10px 0; padding: 12px 16px; margin-bottom: 10px; }
+    .week-title { color: #a855f7; font-size: 12px; font-weight: 700; margin-bottom: 6px; }
+    .week p { color: #cbd5e1; font-size: 13px; line-height: 1.7; margin: 0; }
+    .resource { display: flex; gap: 12px; align-items: flex-start; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.06); }
+    .resource:last-child { border-bottom: none; }
+    .resource-icon { font-size: 22px; }
+    .resource-name { color: #f1f5f9; font-size: 14px; font-weight: 600; margin-bottom: 2px; }
+    .resource-desc { color: #64748b; font-size: 12px; }
+    .milestone { display: flex; gap: 10px; align-items: center; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.06); }
+    .milestone:last-child { border-bottom: none; }
+    .dot { width: 10px; height: 10px; border-radius: 50%; background: #a855f7; flex-shrink: 0; }
+    .milestone-text { color: #cbd5e1; font-size: 13px; }
+    .cta { text-align: center; margin-top: 28px; padding: 24px; background: rgba(168,85,247,0.08); border: 1px solid rgba(168,85,247,0.25); border-radius: 16px; }
+    .cta p { color: #94a3b8; font-size: 13px; margin-bottom: 14px; }
+    .cta a { display: inline-block; background: linear-gradient(135deg,#a855f7,#7c3aed); color: #fff; font-size: 14px; font-weight: 700; padding: 13px 28px; border-radius: 12px; text-decoration: none; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <p class="badge">✅ UNLOCKED — PERSONALIZED STUDY PLAN</p>
+    <h1>Your Japanese Study Plan</h1>
+    <p class="sub">Generated for: Demo Student · Level: A2 (N4)</p>
+
+    <div class="unlock-badge">
+      <span>🔓 Full plan unlocked</span>
+    </div>
+
+    <!-- Profile Summary -->
+    <div class="card">
+      <p class="card-title" style="color:#06b6d4;">📊 YOUR PROFILE</p>
+      <div class="row"><span class="label">Current Level</span><span class="value">A2 / JLPT N4</span></div>
+      <div class="row"><span class="label">Goal</span><span class="value">Get a job in Japan</span></div>
+      <div class="row"><span class="label">Target</span><span class="value">Within 1 year</span></div>
+      <div class="row"><span class="label">Study time</span><span class="value">1–2 hrs/day · 5 days/week</span></div>
+    </div>
+
+    <!-- Level Analysis -->
+    <div class="card">
+      <p class="card-title" style="color:#22c55e;">🎯 CURRENT LEVEL ANALYSIS</p>
+      <p>You are at A2/N4 — a solid foundation! You can handle basic daily conversations and read simple texts. To work professionally in Japan, you need to reach N2 (B2), which is achievable within your timeline with consistent daily study.</p>
+      <p>Your biggest growth areas are business Japanese (keigo), reading speed, and listening comprehension at natural speech speed.</p>
+    </div>
+
+    <!-- Weekly Schedule -->
+    <div class="card">
+      <p class="card-title" style="color:#a855f7;">📅 WEEKLY STUDY SCHEDULE</p>
+      <div class="week">
+        <p class="week-title">Monday & Wednesday — Grammar (45 min)</p>
+        <p>Use Bunpro for JLPT N3 grammar. Focus on 3 new grammar points per session. Review previous week's points for 10 min.</p>
+      </div>
+      <div class="week">
+        <p class="week-title">Tuesday & Thursday — Vocabulary (45 min)</p>
+        <p>Anki with N3 deck: 20 new cards/day. Review all due cards first. Group vocabulary by topic (business, travel, daily life).</p>
+      </div>
+      <div class="week">
+        <p class="week-title">Friday — Reading (60 min)</p>
+        <p>NHK Web Easy: read 2–3 articles. Look up unknown kanji. Shadow read for pronunciation practice.</p>
+      </div>
+      <div class="week">
+        <p class="week-title">Saturday — Listening & Speaking (60 min)</p>
+        <p>Watch 1 episode of a Japanese drama with Japanese subtitles. Note 5 new expressions. Practice shadowing 3 scenes.</p>
+      </div>
+      <div class="week">
+        <p class="week-title">Sunday — Review & Business Japanese (45 min)</p>
+        <p>Review all week's notes. Practice keigo expressions. Study one business scenario (email writing, meeting phrases).</p>
+      </div>
+    </div>
+
+    <!-- Resources -->
+    <div class="card">
+      <p class="card-title" style="color:#f59e0b;">📚 TOP RECOMMENDED RESOURCES</p>
+      <div class="resource">
+        <span class="resource-icon">📱</span>
+        <div>
+          <p class="resource-name">Anki + JLPT N3 Deck</p>
+          <p class="resource-desc">Free · Best for vocabulary retention. Study every day, even just 10 minutes.</p>
+        </div>
+      </div>
+      <div class="resource">
+        <span class="resource-icon">🌐</span>
+        <div>
+          <p class="resource-name">Bunpro</p>
+          <p class="resource-desc">$3/month · SRS-based grammar study. Follow the N3 path strictly.</p>
+        </div>
+      </div>
+      <div class="resource">
+        <span class="resource-icon">📰</span>
+        <div>
+          <p class="resource-name">NHK Web Easy</p>
+          <p class="resource-desc">Free · Real Japanese news simplified for learners. Perfect for N3–N2 level.</p>
+        </div>
+      </div>
+      <div class="resource">
+        <span class="resource-icon">💼</span>
+        <div>
+          <p class="resource-name">GAKU Business Japanese Course</p>
+          <p class="resource-desc">Live lessons · Focus on keigo and workplace Japanese with a native teacher.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Milestones -->
+    <div class="card">
+      <p class="card-title" style="color:#ef4444;">🏆 KEY MILESTONES</p>
+      <div class="milestone"><div class="dot"></div><span class="milestone-text"><strong>Month 1–2:</strong> Complete all N3 grammar on Bunpro. Reach 1,500 vocabulary words.</span></div>
+      <div class="milestone"><div class="dot"></div><span class="milestone-text"><strong>Month 3–4:</strong> Pass a practice N3 test with 70%+ score. Start N2 grammar study.</span></div>
+      <div class="milestone"><div class="dot"></div><span class="milestone-text"><strong>Month 5–6:</strong> Take the JLPT N3 exam. Begin intensive business Japanese practice.</span></div>
+      <div class="milestone"><div class="dot"></div><span class="milestone-text"><strong>Month 7–9:</strong> Complete N2 grammar. Read full Japanese articles without a dictionary.</span></div>
+      <div class="milestone"><div class="dot"></div><span class="milestone-text"><strong>Month 10–12:</strong> Take JLPT N2. Apply for jobs in Japan with confidence. 頑張って！</span></div>
+    </div>
+
+    <!-- Motivational Close -->
+    <div class="card" style="border-color: rgba(168,85,247,0.3); text-align:center;">
+      <p style="font-size:24px; margin-bottom:10px;">🌸</p>
+      <p style="color:#f1f5f9; font-size:15px; font-weight:700; margin-bottom:8px;">You've got this!</p>
+      <p style="color:#94a3b8; font-size:13px; line-height:1.8;">Your goal of working in Japan within 1 year is absolutely achievable at your current level. Stay consistent, enjoy the journey, and remember — every kanji you learn brings you one step closer to your dream. 頑張ってください！</p>
+    </div>
+
+    <div class="cta">
+      <p>Want personalized feedback from a native Japanese teacher?</p>
+      <a href="https://www.seitojapanese.online/" target="_blank">Book a FREE Trial Lesson →</a>
+    </div>
+  </div>
+</body>
+</html>

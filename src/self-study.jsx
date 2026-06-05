@@ -87,15 +87,18 @@ function UnlockScreen({ email, plan }) {
   };
 
   const handlePay = async () => {
-    const stripe = window.Stripe(STRIPE_KEY);
-    const { error } = await stripe.redirectToCheckout({
-      lineItems: [{ price: PRICE_ID, quantity: 1 }],
-      mode: "subscription",
-      successUrl: window.location.origin + "?success=true",
-      cancelUrl: window.location.href,
-      customerEmail: email,
-    });
-    if (error) alert(error.message);
+    try {
+      if (!window.Stripe) { alert("Stripe failed to load. Please refresh."); return; }
+      const stripe = window.Stripe(STRIPE_KEY);
+      const { error } = await stripe.redirectToCheckout({
+        lineItems: [{ price: PRICE_ID, quantity: 1 }],
+        mode: "subscription",
+        successUrl: window.location.origin + "?success=true",
+        cancelUrl: window.location.href,
+        customerEmail: email,
+      });
+      if (error) alert(error.message);
+    } catch(e) { alert("Payment error: " + e.message); }
   };
 
   if (unlocked) {
