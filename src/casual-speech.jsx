@@ -49,6 +49,7 @@ export default function CasualSpeech() {
     if (qIndex + 1 < QUESTIONS.length) { setQIndex(qIndex+1); setSelected(null); }
     else setPhase("gate");
   }
+  // eslint-disable-next-line no-unused-vars
   async function submitToFormspree(nameVal, emailVal, sectionName) {
     try {
       await fetch('https://formspree.io/f/mykvallk', {
