@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 
 const CP = { A1:"#22c55e", A2:"#3b82f6", B1:"#f59e0b", B2:"#ef4444", C1:"#a855f7" };
 const COLOR = "#06b6d4";
@@ -8,7 +8,7 @@ const QUESTIONS = [
     hiragana: true,
     text: "まいあさ たべる もの は どれですか。",
     textEn: "Which of the following do you eat every morning?",
-    options: ["ほん", "あさごはん", "くるま", "いす"],
+    options: ["ほん", "あさごはん", "くるま", "いす", "Not Able To Answer"],
     answer: 1,
     explanation: "「あさごはん」means 'breakfast' — the meal eaten in the morning. The other options mean book, car, and chair.",
   },
@@ -16,7 +16,7 @@ const QUESTIONS = [
     cefr:"A1", jlpt:"N5",
     text: "日本語の（　）をする。",
     textEn: "To (   ) Japanese.",
-    options: ["べんきょう", "あさごはん", "しごと", "ねむい"],
+    options: ["べんきょう", "あさごはん", "しごと", "ねむい", "Not Able To Answer"],
     answer: 0,
     explanation: "「べんきょう（勉強）」means 'study'. 「べんきょうをする」is the natural expression for studying a subject.",
   },
@@ -24,7 +24,7 @@ const QUESTIONS = [
     cefr:"A2", jlpt:"N4",
     text: "この店は値段が（　）ので、学生に人気です。",
     textEn: "This restaurant is (   ) in price, so it's popular with students.",
-    options: ["低い", "安い", "軽い", "弱い"],
+    options: ["低い", "安い", "軽い", "弱い", "Not Able To Answer"],
     answer: 1,
     explanation: "「安い (yasui)」means cheap/inexpensive and collocates with prices. 「低い (hikui)」describes physical height, not cost.",
   },
@@ -32,7 +32,7 @@ const QUESTIONS = [
     cefr:"B1", jlpt:"N3",
     text: "会議は予定より早く（　）しました。",
     textEn: "The meeting (   ) earlier than scheduled.",
-    options: ["終了", "解決", "完成", "発生"],
+    options: ["終了", "解決", "完成", "発生", "Not Able To Answer"],
     answer: 0,
     explanation: "「終了 (shūryō)」means conclusion/end of an event. 「解決 (kaiketsu)」means solving a problem — a different nuance.",
   },
@@ -40,7 +40,7 @@ const QUESTIONS = [
     cefr:"B2", jlpt:"N2",
     text: "その説明では少し（　）が足りないと思います。",
     textEn: "I think that explanation is lacking a little (   ).",
-    options: ["印象", "詳細", "感情", "経験"],
+    options: ["印象", "詳細", "感情", "経験", "Not Able To Answer"],
     answer: 1,
     explanation: "「詳細 (shōsai)」means detail/specifics. Saying an explanation lacks 'detail' is a natural B2 collocation.",
   },
@@ -48,7 +48,7 @@ const QUESTIONS = [
     cefr:"C1", jlpt:"N1",
     text: "彼の発言は誤解を（　）おそれがある。",
     textEn: "His remarks risk (   ) misunderstanding.",
-    options: ["生む", "作る", "起こす", "発つ"],
+    options: ["生む", "作る", "起こす", "発つ", "Not Able To Answer"],
     answer: 0,
     explanation: "「誤解を生む (gokai wo umu)」is a fixed N1 collocation meaning 'to breed/create misunderstanding'. 「生む」carries a nuance of giving birth to a situation.",
   },
@@ -63,6 +63,20 @@ function getResult(score, total) {
   if (p >= 0.33) return { level:"A2",     msg:"Elementary. Build core N4–N3 vocabulary." };
   if (p > 0)     return { level:"A1",     msg:"Beginner. Start with N5 essentials." };
   return               { level:"Pre-A1", msg:"Just starting — every word learned is progress!" };
+}
+
+
+
+function CTABlock() {
+  const [ctaStep, setCtaStep] = useState(0);
+  return (
+    <div style={{marginTop:24,padding:'20px',background:'rgba(255,255,255,0.04)',borderRadius:16,border:'1px solid rgba(255,255,255,0.08)',textAlign:'center'}}>
+      {ctaStep===0&&(<><p style={{color:'#f1f5f9',fontSize:16,fontWeight:700,marginBottom:16}}>Want to improve your Japanese?</p><div style={{display:'flex',gap:10,justifyContent:'center',flexWrap:'wrap'}}><button onClick={()=>setCtaStep(1)} style={{padding:'12px 24px',background:'linear-gradient(135deg,#22c55e,#16a34a)',color:'#fff',border:'none',borderRadius:12,fontSize:14,fontWeight:700,cursor:'pointer'}}>Yes</button><button onClick={()=>setCtaStep(3)} style={{padding:'12px 20px',background:'rgba(255,255,255,0.08)',color:'#94a3b8',border:'1px solid rgba(255,255,255,0.1)',borderRadius:12,fontSize:13,cursor:'pointer'}}>No, I am satisfied with my results</button></div></>)}
+      {ctaStep===1&&(<><p style={{color:'#f1f5f9',fontSize:16,fontWeight:700,marginBottom:16}}>Need a FREE Japanese Q&A session?</p><button onClick={()=>setCtaStep(2)} style={{padding:'12px 32px',background:'linear-gradient(135deg,#3b82f6,#1d4ed8)',color:'#fff',border:'none',borderRadius:12,fontSize:14,fontWeight:700,cursor:'pointer'}}>Yes</button></>)}
+      {ctaStep===2&&(<><p style={{color:'#f1f5f9',fontSize:15,fontWeight:700,marginBottom:16}}>Apply for your FREE Trial Lesson!</p><a href="https://www.seitojapanese.online/" target="_blank" rel="noopener noreferrer" style={{display:'inline-block',padding:'14px 24px',background:'linear-gradient(135deg,#f59e0b,#d97706)',color:'#fff',borderRadius:12,fontSize:14,fontWeight:800,textDecoration:'none'}}>Apply for FIRST Q&A SESSION (FREE TRIAL LESSON) !!!</a></>)}
+      {ctaStep===3&&(<p style={{color:'#64748b',fontSize:14,margin:0}}>Great! Keep up the good work! </p>)}
+    </div>
+  );
 }
 
 export default function Vocabulary() {
@@ -84,6 +98,15 @@ export default function Vocabulary() {
     else setPhase("gate");
   }
 
+  async function submitToFormspree(nameVal, emailVal, sectionName) {
+    try {
+      await fetch('https://formspree.io/f/mykvallk', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json', 'Accept': 'application/json'},
+        body: JSON.stringify({name: nameVal, email: emailVal, section: sectionName})
+      });
+    } catch(e) {}
+  }
   function restart() {
     setPhase("quiz"); setQIndex(0); setSelected(null); setUserAnswers([]); setName(""); setEmail("");
   }
@@ -94,7 +117,7 @@ export default function Vocabulary() {
       <div style={S.page}>
         <div style={S.card}>
           <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:18 }}>
-            <span style={{ color:COLOR, fontWeight:800, fontSize:14 }}>📖 Vocabulary</span>
+            <span style={{ color:COLOR, fontWeight:800, fontSize:14 }}> Vocabulary</span>
             <span style={{ color:"#64748b", fontSize:13 }}>{qIndex+1} / {QUESTIONS.length}</span>
           </div>
           <div style={{ height:5, background:"#1e293b", borderRadius:4, marginBottom:22 }}>
@@ -102,12 +125,12 @@ export default function Vocabulary() {
           </div>
           <div style={{ display:"flex", gap:8, marginBottom:18, flexWrap:"wrap" }}>
             {q.hiragana
-              ? <span style={{ ...S.badge, background:"#f472b622", color:"#f472b6" }}>★ ひらがな問題</span>
+              ? <span style={{ ...S.badge, background:"#f472b622", color:"#f472b6" }}> ひらがな問題</span>
               : <><span style={{ ...S.badge, background:cc+"22", color:cc }}>CEFR {q.cefr}</span>
                  <span style={{ ...S.badge, background:"#1e293b", color:"#64748b" }}>JLPT {q.jlpt}</span></>
             }
           </div>
-          <p style={S.qText}>{q.text}</p>
+          <p style={{...S.qText, fontSize:13, color:"#94a3b8", marginBottom:4}}>If you cannot answer, click "Not Able To Answer"</p><p style={S.qText}>{q.text}</p>
           {q.textEn && <p style={S.qTextEn}>{q.textEn}</p>}
           <div style={{ display:"flex", flexDirection:"column", gap:10, marginBottom:22 }}>
             {q.options.map((opt, i) => {
@@ -143,7 +166,7 @@ export default function Vocabulary() {
     <div style={S.page}>
       <div style={S.card}>
         <div style={{ textAlign:"center", marginBottom:28 }}>
-          <div style={{ fontSize:44, marginBottom:10 }}>🔒</div>
+          <div style={{ fontSize:44, marginBottom:10 }}></div>
           <h2 style={{ color:"#f1f5f9", fontSize:21, fontWeight:900, margin:"0 0 8px" }}>Want to know your results?</h2>
           <p style={{ color:"#64748b", fontSize:13, margin:0, lineHeight:1.7 }}>
             Enter your name and email to unlock your score,<br/>correct answers, and CEFR level.
@@ -153,7 +176,7 @@ export default function Vocabulary() {
           <div><label style={S.label}>Name</label><input value={name} onChange={e=>setName(e.target.value)} placeholder="Your name" style={S.input}/></div>
           <div><label style={S.label}>Email</label><input value={email} onChange={e=>setEmail(e.target.value)} placeholder="your@email.com" type="email" style={S.input}/></div>
         </div>
-        <button onClick={() => { if(name.trim()&&email.trim()) setPhase("result"); }} style={{
+        <button onClick={() => { if(name.trim()&&email.trim()) { submitToFormspree(name, email, ''); setPhase('result'); } }} style={{
           ...S.btn,
           background: name.trim()&&email.trim() ? `linear-gradient(135deg,${COLOR},${COLOR}99)` : "#1e293b",
           color: name.trim()&&email.trim() ? "#fff" : "#475569",
@@ -183,9 +206,9 @@ export default function Vocabulary() {
               return (
                 <div key={i} style={{ background:ok?"rgba(34,197,94,0.06)":"rgba(239,68,68,0.06)", border:`1.5px solid ${ok?"#22c55e33":"#ef444433"}`, borderRadius:14, padding:"16px 18px" }}>
                   <div style={{ display:"flex", gap:8, marginBottom:8, flexWrap:"wrap" }}>
-                    {qq.hiragana ? <span style={{ ...S.badge, background:"#f472b622", color:"#f472b6" }}>★ Hiragana</span>
+                    {qq.hiragana ? <span style={{ ...S.badge, background:"#f472b622", color:"#f472b6" }}> Hiragana</span>
                       : <><span style={{ ...S.badge, background:cc+"22", color:cc }}>CEFR {qq.cefr}</span><span style={{ ...S.badge, background:"#1e293b", color:"#64748b" }}>JLPT {qq.jlpt}</span></>}
-                    <span style={{ ...S.badge, background:ok?"#22c55e22":"#ef444422", color:ok?"#22c55e":"#ef4444" }}>{ok?"✓ Correct":"✗ Incorrect"}</span>
+                    <span style={{ ...S.badge, background:ok?"#22c55e22":"#ef444422", color:ok?"#22c55e":"#ef4444" }}>{ok?" Correct":" Incorrect"}</span>
                   </div>
                   <p style={{ color:"#e2e8f0", fontSize:14, margin:"0 0 4px" }}>{qq.text}</p>
                   {qq.textEn && <p style={{ color:"#64748b", fontSize:12, margin:"0 0 10px", fontStyle:"italic" }}>{qq.textEn}</p>}
@@ -193,17 +216,18 @@ export default function Vocabulary() {
                     {qq.options.map((opt,oi) => {
                       const isA=oi===qq.answer, isU=oi===ua;
                       const c=isA?"#22c55e":(isU&&!isA)?"#ef4444":"#475569";
-                      return <div key={oi} style={{ display:"flex", gap:8, alignItems:"center" }}><span style={{ fontSize:12, color:c, minWidth:14 }}>{isA?"✓":isU?"✗":"·"}</span><span style={{ fontSize:13, color:c }}>{opt}</span>{isA&&<span style={{ fontSize:11, color:"#22c55e55" }}>← correct</span>}</div>;
+                      return <div key={oi} style={{ display:"flex", gap:8, alignItems:"center" }}><span style={{ fontSize:12, color:c, minWidth:14 }}>{isA?"":isU?"":"·"}</span><span style={{ fontSize:13, color:c }}>{opt}</span>{isA&&<span style={{ fontSize:11, color:"#22c55e55" }}>← correct</span>}</div>;
                     })}
                   </div>
                   <div style={{ background:"rgba(255,255,255,0.04)", borderRadius:8, padding:"10px 12px", borderLeft:`3px solid ${cc}` }}>
-                    <span style={{ color:"#94a3b8", fontSize:12 }}>💡 {qq.explanation}</span>
+                    <span style={{ color:"#94a3b8", fontSize:12 }}> {qq.explanation}</span>
                   </div>
                 </div>
               );
             })}
           </div>
-          <button onClick={restart} style={{ ...S.btn, background:`linear-gradient(135deg,${COLOR},${COLOR}99)`, color:"#fff", cursor:"pointer" }}>Try Again 🔄</button>
+          <CTABlock key="cta-vocab" />
+          <button onClick={restart} style={{ ...S.btn, background:`linear-gradient(135deg,${COLOR},${COLOR}99)`, color:"#fff", cursor:"pointer", marginTop:16 }}>Try Again</button>
         </div>
       </div>
     );
