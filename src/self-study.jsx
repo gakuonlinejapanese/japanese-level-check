@@ -126,7 +126,7 @@ function BlurredPlan({ plan, onUnlock }) {
             <p style={{ color:"#f1f5f9", fontSize:16, fontWeight:700, textAlign:"center", margin:0 }}>Would you like to unlock your full study plan?</p>
             <div style={{ display:"flex", gap:10 }}>
               <button onClick={onUnlock} style={{ ...S.btn, width:"auto", padding:"12px 28px", background:`linear-gradient(135deg,${COLOR},#7c3aed)`, color:"#fff", marginTop:0 }}>Yes</button>
-              <button onClick={() => {}} style={{ ...S.btn, width:"auto", padding:"12px 20px", background:"rgba(255,255,255,0.06)", color:"#94a3b8", border:"1px solid rgba(255,255,255,0.1)", marginTop:0 }}>No thank you</button>
+              <button onClick={() => window.location.href="/"} style={{ ...S.btn, width:"auto", padding:"12px 20px", background:"rgba(255,255,255,0.06)", color:"#94a3b8", border:"1px solid rgba(255,255,255,0.1)", marginTop:0 }}>No thank you</button>
             </div>
           </div>
         </div>
@@ -177,14 +177,19 @@ function UnlockScreen({ email, plan, cefrLevel }) {
           <p style={{ color:"#f59e0b", fontSize:12, fontWeight:700, letterSpacing:1, marginBottom:16 }}>📚 RECOMMENDED RESOURCES FOR YOUR LEVEL ({cefrLevel})</p>
           <div style={{ display:"flex", flexDirection:"column", gap:12 }}>
             {resources.map((r, i) => (
-              <a key={i} href={r.url} target="_blank" rel="noopener noreferrer" style={{ display:"flex", gap:14, alignItems:"flex-start", padding:"14px 16px", background:"rgba(255,255,255,0.04)", borderRadius:12, border:"1px solid rgba(255,255,255,0.08)", textDecoration:"none", cursor:"pointer" }}>
-                <span style={{ fontSize:24, flexShrink:0 }}>{r.icon}</span>
-                <div>
-                  <p style={{ color:"#f1f5f9", fontSize:14, fontWeight:700, margin:"0 0 2px" }}>{r.name}</p>
-                  <p style={{ color:"#a855f7", fontSize:11, fontWeight:700, margin:"0 0 4px" }}>{r.type}</p>
-                  <p style={{ color:"#94a3b8", fontSize:12, margin:0, lineHeight:1.6 }}>{r.desc}</p>
+              <div key={i} style={{ display:"flex", flexDirection:"column", gap:10, padding:"14px 16px", background:"rgba(255,255,255,0.04)", borderRadius:12, border:"1px solid rgba(255,255,255,0.08)" }}>
+                <div style={{ display:"flex", gap:14, alignItems:"flex-start" }}>
+                  <span style={{ fontSize:24, flexShrink:0 }}>{r.icon}</span>
+                  <div style={{ flex:1 }}>
+                    <p style={{ color:"#f1f5f9", fontSize:14, fontWeight:700, margin:"0 0 2px" }}>{r.name}</p>
+                    <p style={{ color:"#a855f7", fontSize:11, fontWeight:700, margin:"0 0 4px" }}>{r.type}</p>
+                    <p style={{ color:"#94a3b8", fontSize:12, margin:0, lineHeight:1.6 }}>{r.desc}</p>
+                  </div>
                 </div>
-              </a>
+                <a href={r.url} target="_blank" rel="noopener noreferrer" style={{ display:"block", textAlign:"center", padding:"10px", background:"linear-gradient(135deg,#a855f7,#7c3aed)", color:"#fff", borderRadius:8, fontSize:13, fontWeight:700, textDecoration:"none" }}>
+                  → Open {r.name}
+                </a>
+              </div>
             ))}
           </div>
         </div>
