@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 const COLOR = "#a855f7";
 const FORMSPREE_URL = "https://formspree.io/f/mykvallk";
 const STRIPE_KEY = "pk_test_51TewE3IkVvRh9IDDI5tJX0117g2c7sFpHo2JpfREEHIUNvwrFhbQfT4LljhHxozPFdYbC9yNsRDsBIpmhKVnUPSa00KeRK2Eet";
-const PRICE_ID = "price_1Tf74iIkVvRh9IDDoFeg2RoB";
+const PRICE_ID = "price_1Tf6tyIkVvRh9IDDL3OERN3z";
 
 const RESOURCES_BY_LEVEL = {
   "Pre-A1": [
