@@ -180,7 +180,7 @@ export default function StudyDashboard({ planData }) {
   const [loading, setLoading] = useState(true);
   const [todos, setTodos] = useState({});
   const [showHelp, setShowHelp] = useState(false);
-  const [savedPlanId, setSavedPlanId] = useState(null);
+
 
   // planData = { name, email, cefrLevel, plan, resources }
 
@@ -195,6 +195,7 @@ export default function StudyDashboard({ planData }) {
     return () => listener.subscription.unsubscribe();
   }, []);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (user && planData) savePlanAndTodos();
   }, [user]);
@@ -227,7 +228,6 @@ export default function StudyDashboard({ planData }) {
       form_data: planData.formData,
     }).select().single();
     if (plan) {
-      setSavedPlanId(plan.id);
       const parsed = parseTodos(planData.plan);
       const items = [];
       DAYS.forEach(day => {
