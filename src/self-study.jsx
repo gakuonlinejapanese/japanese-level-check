@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import StudyDashboard from "./study-dashboard";
 
 const COLOR = "#a855f7";
 const FORMSPREE_URL = "https://formspree.io/f/mykvallk";
@@ -135,7 +136,7 @@ function BlurredPlan({ plan, onUnlock }) {
   );
 }
 
-function UnlockScreen({ email, plan, cefrLevel }) {
+function UnlockScreen({ email, plan, cefrLevel, name, resources: initialResources, formData }) {
   const [mode, setMode] = useState(null); // null | "free" | "pay" | "invite"
   const [inviteCode, setInviteCode] = useState("");
   const [inviteError, setInviteError] = useState("");
@@ -166,36 +167,20 @@ function UnlockScreen({ email, plan, cefrLevel }) {
   };
 
   if (unlocked) {
-    const resources = RESOURCES_BY_LEVEL[cefrLevel] || RESOURCES_BY_LEVEL["A2"];
+    const resources = initialResources || RESOURCES_BY_LEVEL[cefrLevel] || RESOURCES_BY_LEVEL["A2"];
     return (
-      <div style={{ ...S.wrap }}>
-        <div style={{ ...S.card, marginBottom:16 }}>
-          <p style={{ color:"#22c55e", fontSize:12, fontWeight:700, letterSpacing:2, marginBottom:8 }}>✅ UNLOCKED — YOUR FULL STUDY PLAN</p>
-          <div style={{ color:"#f1f5f9", fontSize:14, lineHeight:1.9, whiteSpace:"pre-wrap" }}>{plan}</div>
-        </div>
-        <div style={{ ...S.card }}>
-          <p style={{ color:"#f59e0b", fontSize:12, fontWeight:700, letterSpacing:1, marginBottom:16 }}>📚 RECOMMENDED RESOURCES FOR YOUR LEVEL ({cefrLevel})</p>
-          <div style={{ display:"flex", flexDirection:"column", gap:12 }}>
-            {resources.map((r, i) => (
-              <div key={i} style={{ display:"flex", flexDirection:"column", gap:10, padding:"14px 16px", background:"rgba(255,255,255,0.04)", borderRadius:12, border:"1px solid rgba(255,255,255,0.08)" }}>
-                <div style={{ display:"flex", gap:14, alignItems:"flex-start" }}>
-                  <span style={{ fontSize:24, flexShrink:0 }}>{r.icon}</span>
-                  <div style={{ flex:1 }}>
-                    <p style={{ color:"#f1f5f9", fontSize:14, fontWeight:700, margin:"0 0 2px" }}>{r.name}</p>
-                    <p style={{ color:"#a855f7", fontSize:11, fontWeight:700, margin:"0 0 4px" }}>{r.type}</p>
-                    <p style={{ color:"#94a3b8", fontSize:12, margin:0, lineHeight:1.6 }}>{r.desc}</p>
-                  </div>
-                </div>
-                <a href={r.url} target="_blank" rel="noopener noreferrer" style={{ display:"block", textAlign:"center", padding:"10px", background:"linear-gradient(135deg,#a855f7,#7c3aed)", color:"#fff", borderRadius:8, fontSize:13, fontWeight:700, textDecoration:"none" }}>
-                  → Open {r.name}
-                </a>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
+      <StudyDashboard planData={{
+        name: name || email,
+        email,
+        cefrLevel,
+        plan,
+        resources,
+        formData,
+      }} />
     );
   }
+
+
 
   return (
     <div style={{ ...S.wrap }}>
@@ -312,7 +297,7 @@ Keep it practical, specific, and encouraging. Use clear headings with emoji. Wri
 
   if (phase === "loading") return <LoadingScreen />;
   if (phase === "result" && !showUnlock) return <BlurredPlan plan={plan} onUnlock={() => setShowUnlock(true)} />;
-  if (phase === "result" && showUnlock) return <UnlockScreen email={form.email} plan={plan} cefrLevel={cefrLevel} />;
+  if (phase === "result" && showUnlock) return <UnlockScreen email={form.email} name={form.name} plan={plan} cefrLevel={cefrLevel} resources={RESOURCES_BY_LEVEL[cefrLevel] || RESOURCES_BY_LEVEL["A2"]} formData={form} />;
 
   return (
     <div style={{ ...S.wrap }}>
