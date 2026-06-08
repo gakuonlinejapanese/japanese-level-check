@@ -3,146 +3,552 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Your Personalized Study Plan — GAKU</title>
+  <title>Your Japanese Study Plan – GAKU</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700&family=DM+Sans:wght@400;500;600;700&family=Space+Mono:wght@700&display=swap" rel="stylesheet" />
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { background: linear-gradient(160deg,#0a0f1e 0%,#0f172a 60%,#0a0f1e 100%); min-height: 100vh; font-family: 'Noto Sans JP', sans-serif; color: #f1f5f9; padding: 40px 16px; }
-    .container { max-width: 560px; margin: 0 auto; }
-    .badge { color: #a855f7; font-size: 11px; font-weight: 700; letter-spacing: 2px; margin-bottom: 6px; }
-    h1 { font-size: 26px; font-weight: 800; margin-bottom: 4px; }
-    .sub { color: #64748b; font-size: 13px; margin-bottom: 28px; }
-    .card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 20px 22px; margin-bottom: 16px; }
-    .card-title { font-size: 12px; font-weight: 700; letter-spacing: 1px; margin-bottom: 12px; }
-    .card p { color: #cbd5e1; font-size: 14px; line-height: 1.8; margin-bottom: 8px; }
-    .card ul { padding-left: 18px; }
-    .card ul li { color: #cbd5e1; font-size: 14px; line-height: 1.9; margin-bottom: 4px; }
-    .row { display: flex; gap: 10px; margin-bottom: 8px; }
-    .label { color: #64748b; font-size: 12px; min-width: 120px; }
-    .value { color: #f1f5f9; font-size: 13px; font-weight: 600; }
-    .unlock-badge { background: rgba(34,197,94,0.1); border: 1px solid rgba(34,197,94,0.3); border-radius: 20px; display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; margin-bottom: 24px; }
-    .unlock-badge span { color: #22c55e; font-size: 12px; font-weight: 700; }
-    .week { background: rgba(168,85,247,0.08); border-left: 3px solid #a855f7; border-radius: 0 10px 10px 0; padding: 12px 16px; margin-bottom: 10px; }
-    .week-title { color: #a855f7; font-size: 12px; font-weight: 700; margin-bottom: 6px; }
-    .week p { color: #cbd5e1; font-size: 13px; line-height: 1.7; margin: 0; }
-    .resource { display: flex; gap: 12px; align-items: flex-start; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.06); }
-    .resource:last-child { border-bottom: none; }
-    .resource-icon { font-size: 22px; }
-    .resource-name { color: #f1f5f9; font-size: 14px; font-weight: 600; margin-bottom: 2px; }
-    .resource-desc { color: #64748b; font-size: 12px; }
-    .milestone { display: flex; gap: 10px; align-items: center; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.06); }
-    .milestone:last-child { border-bottom: none; }
-    .dot { width: 10px; height: 10px; border-radius: 50%; background: #a855f7; flex-shrink: 0; }
-    .milestone-text { color: #cbd5e1; font-size: 13px; }
-    .cta { text-align: center; margin-top: 28px; padding: 24px; background: rgba(168,85,247,0.08); border: 1px solid rgba(168,85,247,0.25); border-radius: 16px; }
-    .cta p { color: #94a3b8; font-size: 13px; margin-bottom: 14px; }
-    .cta a { display: inline-block; background: linear-gradient(135deg,#a855f7,#7c3aed); color: #fff; font-size: 14px; font-weight: 700; padding: 13px 28px; border-radius: 12px; text-decoration: none; }
+    :root {
+      --red: #E8382F;
+      --dark: #1a1a2e;
+      --gold: #f5a623;
+      --green: #27ae60;
+      --gray: #6b7280;
+      --border: #e5e7eb;
+      --light: #f8f6f0;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--light); color: var(--dark); }
+
+    /* AUTH SCREEN */
+    #auth-screen {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--dark);
+      padding: 20px;
+    }
+    .auth-box {
+      background: white;
+      border-radius: 20px;
+      padding: 48px 40px;
+      max-width: 420px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+    }
+    .auth-logo { font-family: 'Space Mono', monospace; font-size: 28px; color: var(--red); letter-spacing: 4px; margin-bottom: 8px; }
+    .auth-box h2 { font-family: 'Noto Serif JP', serif; font-size: 22px; margin-bottom: 6px; }
+    .auth-box p { color: var(--gray); font-size: 14px; margin-bottom: 28px; }
+    .auth-tabs { display: flex; border: 2px solid var(--border); border-radius: 10px; overflow: hidden; margin-bottom: 24px; }
+    .auth-tab { flex: 1; padding: 10px; background: white; border: none; cursor: pointer; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 600; color: var(--gray); transition: all 0.15s; }
+    .auth-tab.active { background: var(--dark); color: white; }
+    .auth-field { margin-bottom: 14px; text-align: left; }
+    .auth-field label { display: block; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--gray); margin-bottom: 6px; }
+    .auth-field input { width: 100%; padding: 12px 14px; border: 2px solid var(--border); border-radius: 10px; font-size: 14px; font-family: 'DM Sans', sans-serif; transition: border-color 0.2s; }
+    .auth-field input:focus { outline: none; border-color: var(--red); }
+    .auth-btn { width: 100%; padding: 14px; background: var(--red); color: white; border: none; border-radius: 10px; font-size: 15px; font-weight: 700; cursor: pointer; margin-top: 6px; transition: all 0.15s; }
+    .auth-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 14px rgba(232,56,47,0.35); }
+    .auth-error { color: var(--red); font-size: 13px; margin-top: 10px; }
+
+    /* MAIN PLAN SCREEN */
+    #plan-screen { display: none; }
+    .top-bar { background: var(--dark); padding: 0 24px; height: 60px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
+    .top-bar-logo { font-family: 'Space Mono', monospace; color: white; font-size: 18px; letter-spacing: 3px; }
+    .top-bar-logo span { color: var(--red); }
+    .top-bar-user { color: rgba(255,255,255,0.6); font-size: 13px; display: flex; align-items: center; gap: 12px; }
+    .logout-btn { background: none; border: 1px solid rgba(255,255,255,0.2); color: rgba(255,255,255,0.6); padding: 5px 12px; border-radius: 6px; cursor: pointer; font-size: 12px; font-family: 'DM Sans', sans-serif; transition: all 0.15s; }
+    .logout-btn:hover { border-color: white; color: white; }
+
+    .plan-body { max-width: 800px; margin: 0 auto; padding: 40px 20px 80px; }
+
+    .plan-hero { text-align: center; margin-bottom: 40px; }
+    .plan-hero h1 { font-family: 'Noto Serif JP', serif; font-size: 32px; margin-bottom: 8px; }
+    .plan-hero p { color: var(--gray); font-size: 15px; }
+    .level-badge { display: inline-block; background: var(--red); color: white; font-size: 12px; font-weight: 700; padding: 5px 14px; border-radius: 20px; margin-bottom: 14px; letter-spacing: 0.08em; }
+
+    /* WEEKLY SCHEDULE / TODO */
+    .section-title { font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gray); margin-bottom: 16px; display: flex; align-items: center; justify-content: space-between; }
+    .section { margin-bottom: 36px; }
+
+    .week-days { display: flex; flex-direction: column; gap: 12px; }
+    .day-card { background: white; border: 2px solid var(--border); border-radius: 14px; overflow: hidden; transition: border-color 0.15s; }
+    .day-card.today { border-color: var(--red); }
+    .day-header { padding: 14px 18px 10px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; }
+    .day-name-badge { font-weight: 700; font-size: 14px; display: flex; align-items: center; gap: 10px; }
+    .today-chip { background: var(--red); color: white; font-size: 10px; padding: 2px 8px; border-radius: 10px; letter-spacing: 0.08em; }
+    .day-progress-text { font-size: 12px; color: var(--gray); }
+    .day-tasks { padding: 0 18px 14px; display: none; flex-direction: column; gap: 6px; }
+    .day-card.open .day-tasks { display: flex; }
+    .day-toggle-icon { transition: transform 0.2s; }
+    .day-card.open .day-toggle-icon { transform: rotate(180deg); }
+    .day-progress-bar-wrap { height: 3px; background: var(--border); }
+    .day-progress-bar { height: 100%; background: var(--green); transition: width 0.4s; }
+
+    .task-item { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--border); }
+    .task-item:last-child { border-bottom: none; }
+    .task-check { width: 20px; height: 20px; border: 2px solid var(--border); border-radius: 5px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all 0.15s; }
+    .task-check.done { background: var(--green); border-color: var(--green); color: white; font-size: 12px; }
+    .task-text { flex: 1; font-size: 14px; color: var(--dark); transition: all 0.15s; }
+    .task-text.done { text-decoration: line-through; color: var(--gray); }
+    .task-time { font-size: 12px; color: var(--gray); background: var(--light); padding: 3px 8px; border-radius: 6px; flex-shrink: 0; }
+
+    /* HELP BUTTON */
+    .help-fab { position: fixed; bottom: 28px; right: 24px; background: var(--gold); color: #333; border: none; border-radius: 50%; width: 60px; height: 60px; font-size: 24px; cursor: pointer; box-shadow: 0 6px 20px rgba(245,166,35,0.5); transition: all 0.2s; z-index: 200; display: flex; align-items: center; justify-content: center; }
+    .help-fab:hover { transform: scale(1.08); }
+
+    /* HELP MODAL */
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 300; display: flex; align-items: flex-end; justify-content: center; backdrop-filter: blur(3px); }
+    .modal-overlay.hidden { display: none; }
+    .help-modal { background: white; border-radius: 24px 24px 0 0; padding: 36px 28px 48px; width: 100%; max-width: 540px; animation: slideUp 0.25s ease; }
+    @keyframes slideUp { from { transform: translateY(60px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    .modal-handle { width: 40px; height: 4px; background: var(--border); border-radius: 2px; margin: 0 auto 24px; }
+    .help-modal h3 { font-family: 'Noto Serif JP', serif; font-size: 20px; margin-bottom: 8px; }
+    .help-modal p { color: var(--gray); font-size: 14px; margin-bottom: 20px; }
+
+    .mood-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px; }
+    .mood-btn { padding: 14px 10px; border: 2px solid var(--border); border-radius: 12px; background: white; cursor: pointer; font-size: 13px; text-align: center; transition: all 0.15s; font-family: 'DM Sans', sans-serif; }
+    .mood-btn .mood-emoji { font-size: 24px; display: block; margin-bottom: 6px; }
+    .mood-btn.selected { border-color: var(--red); background: #fff5f5; color: var(--red); font-weight: 600; }
+
+    .time-options { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
+    .time-chip { padding: 9px 16px; border: 2px solid var(--border); border-radius: 20px; background: white; cursor: pointer; font-size: 13px; font-weight: 600; transition: all 0.15s; font-family: 'DM Sans', sans-serif; }
+    .time-chip.selected { border-color: var(--dark); background: var(--dark); color: white; }
+
+    .help-generate-btn { width: 100%; padding: 15px; background: var(--red); color: white; border: none; border-radius: 12px; font-size: 15px; font-weight: 700; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all 0.15s; }
+    .help-generate-btn:hover { transform: translateY(-1px); }
+
+    .help-result { background: var(--light); border-radius: 12px; padding: 18px; margin-top: 16px; font-size: 14px; line-height: 1.7; color: var(--dark); display: none; }
+    .help-result.show { display: block; }
+
+    /* PROGRESS OVERVIEW */
+    .progress-card { background: var(--dark); border-radius: 16px; padding: 26px 28px; color: white; margin-bottom: 32px; }
+    .progress-card h3 { font-size: 12px; letter-spacing: 0.14em; color: rgba(255,255,255,0.4); text-transform: uppercase; margin-bottom: 16px; }
+    .progress-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    .progress-stat span { font-size: 11px; color: rgba(255,255,255,0.4); display: block; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; }
+    .progress-stat strong { font-size: 26px; font-family: 'Space Mono', monospace; color: white; }
+    .progress-stat .unit { font-size: 13px; color: rgba(255,255,255,0.5); }
   </style>
 </head>
 <body>
-  <div class="container">
-    <p class="badge">✅ UNLOCKED — PERSONALIZED STUDY PLAN</p>
-    <h1>Your Japanese Study Plan</h1>
-    <p class="sub">Generated for: Demo Student · Level: A2 (N4)</p>
 
-    <div class="unlock-badge">
-      <span>🔓 Full plan unlocked</span>
+<!-- AUTH SCREEN -->
+<div id="auth-screen">
+  <div class="auth-box">
+    <div class="auth-logo">GAKU</div>
+    <h2>Your Study Plan</h2>
+    <p>Sign in to access your personalized plan</p>
+
+    <div class="auth-tabs">
+      <button class="auth-tab active" onclick="switchTab('login')">Log In</button>
+      <button class="auth-tab" onclick="switchTab('signup')">Sign Up</button>
     </div>
 
-    <!-- Profile Summary -->
-    <div class="card">
-      <p class="card-title" style="color:#06b6d4;">📊 YOUR PROFILE</p>
-      <div class="row"><span class="label">Current Level</span><span class="value">A2 / JLPT N4</span></div>
-      <div class="row"><span class="label">Goal</span><span class="value">Get a job in Japan</span></div>
-      <div class="row"><span class="label">Target</span><span class="value">Within 1 year</span></div>
-      <div class="row"><span class="label">Study time</span><span class="value">1–2 hrs/day · 5 days/week</span></div>
+    <div id="login-form">
+      <div class="auth-field"><label>Email</label><input type="email" id="login-email" placeholder="you@example.com" /></div>
+      <div class="auth-field"><label>Password</label><input type="password" id="login-pw" placeholder="••••••••" /></div>
+      <button class="auth-btn" onclick="handleLogin()">Log In →</button>
     </div>
 
-    <!-- Level Analysis -->
-    <div class="card">
-      <p class="card-title" style="color:#22c55e;">🎯 CURRENT LEVEL ANALYSIS</p>
-      <p>You are at A2/N4 — a solid foundation! You can handle basic daily conversations and read simple texts. To work professionally in Japan, you need to reach N2 (B2), which is achievable within your timeline with consistent daily study.</p>
-      <p>Your biggest growth areas are business Japanese (keigo), reading speed, and listening comprehension at natural speech speed.</p>
+    <div id="signup-form" style="display:none">
+      <div class="auth-field"><label>Your Name</label><input type="text" id="signup-name" placeholder="e.g. Maria" /></div>
+      <div class="auth-field"><label>Email</label><input type="email" id="signup-email" placeholder="you@example.com" /></div>
+      <div class="auth-field"><label>Password</label><input type="password" id="signup-pw" placeholder="Min. 8 characters" /></div>
+      <button class="auth-btn" onclick="handleSignup()">Create Account →</button>
     </div>
 
-    <!-- Weekly Schedule -->
-    <div class="card">
-      <p class="card-title" style="color:#a855f7;">📅 WEEKLY STUDY SCHEDULE</p>
-      <div class="week">
-        <p class="week-title">Monday & Wednesday — Grammar (45 min)</p>
-        <p>Use Bunpro for JLPT N3 grammar. Focus on 3 new grammar points per session. Review previous week's points for 10 min.</p>
-      </div>
-      <div class="week">
-        <p class="week-title">Tuesday & Thursday — Vocabulary (45 min)</p>
-        <p>Anki with N3 deck: 20 new cards/day. Review all due cards first. Group vocabulary by topic (business, travel, daily life).</p>
-      </div>
-      <div class="week">
-        <p class="week-title">Friday — Reading (60 min)</p>
-        <p>NHK Web Easy: read 2–3 articles. Look up unknown kanji. Shadow read for pronunciation practice.</p>
-      </div>
-      <div class="week">
-        <p class="week-title">Saturday — Listening & Speaking (60 min)</p>
-        <p>Watch 1 episode of a Japanese drama with Japanese subtitles. Note 5 new expressions. Practice shadowing 3 scenes.</p>
-      </div>
-      <div class="week">
-        <p class="week-title">Sunday — Review & Business Japanese (45 min)</p>
-        <p>Review all week's notes. Practice keigo expressions. Study one business scenario (email writing, meeting phrases).</p>
-      </div>
-    </div>
+    <p class="auth-error" id="auth-error"></p>
+  </div>
+</div>
 
-    <!-- Resources -->
-    <div class="card">
-      <p class="card-title" style="color:#f59e0b;">📚 TOP RECOMMENDED RESOURCES</p>
-      <div class="resource">
-        <span class="resource-icon">📱</span>
-        <div>
-          <p class="resource-name">Anki + JLPT N3 Deck</p>
-          <p class="resource-desc">Free · Best for vocabulary retention. Study every day, even just 10 minutes.</p>
-        </div>
-      </div>
-      <div class="resource">
-        <span class="resource-icon">🌐</span>
-        <div>
-          <p class="resource-name">Bunpro</p>
-          <p class="resource-desc">$3/month · SRS-based grammar study. Follow the N3 path strictly.</p>
-        </div>
-      </div>
-      <div class="resource">
-        <span class="resource-icon">📰</span>
-        <div>
-          <p class="resource-name">NHK Web Easy</p>
-          <p class="resource-desc">Free · Real Japanese news simplified for learners. Perfect for N3–N2 level.</p>
-        </div>
-      </div>
-      <div class="resource">
-        <span class="resource-icon">💼</span>
-        <div>
-          <p class="resource-name">GAKU Business Japanese Course</p>
-          <p class="resource-desc">Live lessons · Focus on keigo and workplace Japanese with a native teacher.</p>
-        </div>
-      </div>
-    </div>
-
-    <!-- Milestones -->
-    <div class="card">
-      <p class="card-title" style="color:#ef4444;">🏆 KEY MILESTONES</p>
-      <div class="milestone"><div class="dot"></div><span class="milestone-text"><strong>Month 1–2:</strong> Complete all N3 grammar on Bunpro. Reach 1,500 vocabulary words.</span></div>
-      <div class="milestone"><div class="dot"></div><span class="milestone-text"><strong>Month 3–4:</strong> Pass a practice N3 test with 70%+ score. Start N2 grammar study.</span></div>
-      <div class="milestone"><div class="dot"></div><span class="milestone-text"><strong>Month 5–6:</strong> Take the JLPT N3 exam. Begin intensive business Japanese practice.</span></div>
-      <div class="milestone"><div class="dot"></div><span class="milestone-text"><strong>Month 7–9:</strong> Complete N2 grammar. Read full Japanese articles without a dictionary.</span></div>
-      <div class="milestone"><div class="dot"></div><span class="milestone-text"><strong>Month 10–12:</strong> Take JLPT N2. Apply for jobs in Japan with confidence. 頑張って！</span></div>
-    </div>
-
-    <!-- Motivational Close -->
-    <div class="card" style="border-color: rgba(168,85,247,0.3); text-align:center;">
-      <p style="font-size:24px; margin-bottom:10px;">🌸</p>
-      <p style="color:#f1f5f9; font-size:15px; font-weight:700; margin-bottom:8px;">You've got this!</p>
-      <p style="color:#94a3b8; font-size:13px; line-height:1.8;">Your goal of working in Japan within 1 year is absolutely achievable at your current level. Stay consistent, enjoy the journey, and remember — every kanji you learn brings you one step closer to your dream. 頑張ってください！</p>
-    </div>
-
-    <div class="cta">
-      <p>Want personalized feedback from a native Japanese teacher?</p>
-      <a href="https://www.seitojapanese.online/" target="_blank">Book a FREE Trial Lesson →</a>
+<!-- PLAN SCREEN -->
+<div id="plan-screen">
+  <div class="top-bar">
+    <div class="top-bar-logo">GAKU<span>AI</span></div>
+    <div class="top-bar-user">
+      <span id="user-display"></span>
+      <button class="logout-btn" onclick="handleLogout()">Log out</button>
     </div>
   </div>
+
+  <div class="plan-body">
+    <!-- Hero -->
+    <div class="plan-hero">
+      <div class="level-badge" id="plan-level-badge">JLPT N4 · A2</div>
+      <h1 id="plan-title">Your Japanese Study Plan</h1>
+      <p id="plan-subtitle">Personalized for your goal · Updated weekly</p>
+    </div>
+
+    <!-- Progress overview -->
+    <div class="section">
+      <div class="section-title">📊 THIS WEEK'S PROGRESS</div>
+      <div class="progress-card">
+        <h3>WEEKLY OVERVIEW</h3>
+        <div class="progress-stats">
+          <div class="progress-stat">
+            <span>Tasks Done</span>
+            <strong id="tasks-done-count">0</strong>
+            <span class="unit">tasks</span>
+          </div>
+          <div class="progress-stat">
+            <span>Study Days</span>
+            <strong id="study-days-count">0</strong>
+            <span class="unit">/ 5</span>
+          </div>
+          <div class="progress-stat">
+            <span>Streak</span>
+            <strong id="streak-count">0</strong>
+            <span class="unit">days 🔥</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Weekly Schedule To-Do -->
+    <div class="section">
+      <div class="section-title">📅 WEEKLY SCHEDULE <span style="color:var(--gray);font-weight:400;text-transform:none;letter-spacing:0">Check off tasks as you complete them</span></div>
+      <div class="week-days" id="week-days-container"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Help FAB -->
+<button class="help-fab" onclick="openHelp()" title="Get help with today's study">🆘</button>
+
+<!-- Help Modal -->
+<div class="modal-overlay hidden" id="help-overlay" onclick="closeHelpIfOutside(event)">
+  <div class="help-modal">
+    <div class="modal-handle"></div>
+    <h3>🆘 Help — Adjust Today's Study</h3>
+    <p>How are you feeling today? I'll adjust your study plan to match.</p>
+
+    <div class="mood-grid">
+      <button class="mood-btn" onclick="selectMood('energetic')"><span class="mood-emoji">⚡</span>Energetic</button>
+      <button class="mood-btn" onclick="selectMood('normal')"><span class="mood-emoji">😊</span>Normal</button>
+      <button class="mood-btn" onclick="selectMood('tired')"><span class="mood-emoji">😴</span>Tired</button>
+      <button class="mood-btn" onclick="selectMood('focused')"><span class="mood-emoji">🎯</span>Focused</button>
+      <button class="mood-btn" onclick="selectMood('fun')"><span class="mood-emoji">🎮</span>Fun mode</button>
+      <button class="mood-btn" onclick="selectMood('review')"><span class="mood-emoji">🔄</span>Review only</button>
+    </div>
+
+    <p>How much time do you have?</p>
+    <div class="time-options">
+      <button class="time-chip" onclick="selectTime('15')">15 min</button>
+      <button class="time-chip" onclick="selectTime('30')">30 min</button>
+      <button class="time-chip" onclick="selectTime('45')">45 min</button>
+      <button class="time-chip" onclick="selectTime('60')">1 hour</button>
+      <button class="time-chip" onclick="selectTime('90')">90 min</button>
+    </div>
+
+    <button class="help-generate-btn" onclick="generateHelpPlan()">✨ Generate My Plan for Today</button>
+    <div class="help-result" id="help-result"></div>
+  </div>
+</div>
+
+<script>
+// ================================================================
+// AUTH — Simple localStorage-based auth
+// (Replace with Firebase/Supabase for production)
+// ================================================================
+
+const USERS_KEY = 'gaku_users';
+const SESSION_KEY = 'gaku_session';
+
+function getUsers() {
+  return JSON.parse(localStorage.getItem(USERS_KEY) || '{}');
+}
+
+function saveUsers(users) {
+  localStorage.setItem(USERS_KEY, JSON.stringify(users));
+}
+
+function switchTab(tab) {
+  document.querySelectorAll('.auth-tab').forEach((t, i) => {
+    t.classList.toggle('active', (tab === 'login' && i === 0) || (tab === 'signup' && i === 1));
+  });
+  document.getElementById('login-form').style.display = tab === 'login' ? 'block' : 'none';
+  document.getElementById('signup-form').style.display = tab === 'signup' ? 'block' : 'none';
+  document.getElementById('auth-error').textContent = '';
+}
+
+function handleSignup() {
+  const name = document.getElementById('signup-name').value.trim();
+  const email = document.getElementById('signup-email').value.trim().toLowerCase();
+  const pw = document.getElementById('signup-pw').value;
+  const err = document.getElementById('auth-error');
+
+  if (!name || !email || !pw) { err.textContent = 'Please fill in all fields.'; return; }
+  if (pw.length < 8) { err.textContent = 'Password must be at least 8 characters.'; return; }
+
+  const users = getUsers();
+  if (users[email]) { err.textContent = 'An account with this email already exists.'; return; }
+
+  users[email] = { name, email, pw, createdAt: Date.now(), tasks: {} };
+  saveUsers(users);
+  startSession(email, name);
+}
+
+function handleLogin() {
+  const email = document.getElementById('login-email').value.trim().toLowerCase();
+  const pw = document.getElementById('login-pw').value;
+  const err = document.getElementById('auth-error');
+
+  const users = getUsers();
+  const user = users[email];
+  if (!user) { err.textContent = 'No account found with this email.'; return; }
+  if (user.pw !== pw) { err.textContent = 'Incorrect password.'; return; }
+
+  startSession(email, user.name);
+}
+
+function startSession(email, name) {
+  localStorage.setItem(SESSION_KEY, JSON.stringify({ email, name }));
+  showPlanScreen(name, email);
+}
+
+function handleLogout() {
+  localStorage.removeItem(SESSION_KEY);
+  document.getElementById('plan-screen').style.display = 'none';
+  document.getElementById('auth-screen').style.display = 'flex';
+}
+
+// Auto-login check
+window.addEventListener('DOMContentLoaded', () => {
+  const session = JSON.parse(localStorage.getItem(SESSION_KEY) || 'null');
+  if (session) {
+    showPlanScreen(session.name, session.email);
+  }
+});
+
+// ================================================================
+// PLAN SCREEN
+// ================================================================
+
+const WEEKLY_TASKS = {
+  Monday:    [
+    { text: 'Anki Vocabulary Review', time: '20 min' },
+    { text: 'Bunpro Grammar – 2 new points', time: '30 min' },
+    { text: 'NHK Web Easy – 1 article', time: '20 min' },
+  ],
+  Tuesday:   [
+    { text: 'Shadowing practice', time: '20 min' },
+    { text: 'Anki Vocabulary Review', time: '20 min' },
+    { text: 'Writing practice – short journal entry', time: '25 min' },
+  ],
+  Wednesday: [
+    { text: 'Bunpro Grammar Review', time: '25 min' },
+    { text: 'JLPT Practice Questions', time: '30 min' },
+    { text: 'Listening – JapanesePod101', time: '20 min' },
+  ],
+  Thursday:  [
+    { text: 'Anki Vocabulary Review', time: '20 min' },
+    { text: 'Reading – Tadoku graded reader', time: '30 min' },
+    { text: 'Marugoto speaking practice', time: '20 min' },
+  ],
+  Friday:    [
+    { text: 'Bunpro – Grammar sprint', time: '30 min' },
+    { text: 'Anki Vocabulary Review', time: '20 min' },
+    { text: 'NHK Web Easy – 2 articles', time: '25 min' },
+  ],
+  Saturday:  [
+    { text: 'Full JLPT mock section', time: '45 min' },
+    { text: 'Review mistakes from the week', time: '20 min' },
+    { text: 'Watch Japanese TV / YouTube', time: '30 min' },
+  ],
+  Sunday:    [
+    { text: 'Anki light review (known cards only)', time: '15 min' },
+    { text: 'Free study – your choice!', time: '30 min' },
+  ],
+};
+
+const DAYS = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+
+function getTodayName() {
+  return ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][new Date().getDay()];
+}
+
+function getTaskKey(email, day, index) {
+  return `${email}:${day}:${index}`;
+}
+
+function getTaskState(email) {
+  const users = getUsers();
+  return (users[email] && users[email].tasks) || {};
+}
+
+function saveTaskState(email, tasks) {
+  const users = getUsers();
+  if (users[email]) {
+    users[email].tasks = tasks;
+    saveUsers(users);
+  }
+}
+
+function showPlanScreen(name, email) {
+  document.getElementById('auth-screen').style.display = 'none';
+  document.getElementById('plan-screen').style.display = 'block';
+  document.getElementById('user-display').textContent = `👤 ${name}`;
+  document.getElementById('plan-title').textContent = `${name}'s Japanese Study Plan`;
+  document.getElementById('plan-subtitle').textContent = `Personalized for ${name}'s goal · Updated weekly`;
+
+  renderWeekDays(email);
+  updateProgressStats(email);
+}
+
+function renderWeekDays(email) {
+  const container = document.getElementById('week-days-container');
+  const today = getTodayName();
+  const taskState = getTaskState(email);
+
+  container.innerHTML = '';
+  DAYS.forEach(day => {
+    const tasks = WEEKLY_TASKS[day];
+    const isToday = day === today;
+    const doneCount = tasks.filter((_, i) => taskState[getTaskKey(email, day, i)]).length;
+    const pct = Math.round((doneCount / tasks.length) * 100);
+
+    const card = document.createElement('div');
+    card.className = `day-card${isToday ? ' today open' : ''}`;
+    card.innerHTML = `
+      <div class="day-progress-bar-wrap"><div class="day-progress-bar" style="width:${pct}%"></div></div>
+      <div class="day-header" onclick="toggleDay(this)">
+        <div class="day-name-badge">
+          ${day}
+          ${isToday ? '<span class="today-chip">TODAY</span>' : ''}
+        </div>
+        <div style="display:flex;align-items:center;gap:10px">
+          <span class="day-progress-text">${doneCount}/${tasks.length} done</span>
+          <span class="day-toggle-icon">▾</span>
+        </div>
+      </div>
+      <div class="day-tasks">
+        ${tasks.map((t, i) => {
+          const done = !!taskState[getTaskKey(email, day, i)];
+          return `
+            <div class="task-item">
+              <div class="task-check ${done ? 'done' : ''}" onclick="toggleTask('${email}','${day}',${i},this)">
+                ${done ? '✓' : ''}
+              </div>
+              <span class="task-text ${done ? 'done' : ''}">${t.text}</span>
+              <span class="task-time">${t.time}</span>
+            </div>`;
+        }).join('')}
+      </div>
+    `;
+    container.appendChild(card);
+  });
+}
+
+function toggleDay(header) {
+  header.parentElement.classList.toggle('open');
+}
+
+function toggleTask(email, day, index, el) {
+  const taskState = getTaskState(email);
+  const key = getTaskKey(email, day, index);
+  taskState[key] = !taskState[key];
+  saveTaskState(email, taskState);
+
+  const done = taskState[key];
+  el.className = `task-check ${done ? 'done' : ''}`;
+  el.textContent = done ? '✓' : '';
+  const textEl = el.nextElementSibling;
+  textEl.className = `task-text ${done ? 'done' : ''}`;
+
+  // Update progress bar
+  renderWeekDays(email);
+  updateProgressStats(email);
+}
+
+function updateProgressStats(email) {
+  const taskState = getTaskState(email);
+  let totalDone = 0;
+  let studyDays = 0;
+  DAYS.forEach(day => {
+    const tasks = WEEKLY_TASKS[day];
+    const doneCount = tasks.filter((_, i) => taskState[getTaskKey(email, day, i)]).length;
+    totalDone += doneCount;
+    if (doneCount > 0) studyDays++;
+  });
+  document.getElementById('tasks-done-count').textContent = totalDone;
+  document.getElementById('study-days-count').textContent = studyDays;
+  document.getElementById('streak-count').textContent = studyDays;
+}
+
+// ================================================================
+// HELP MODAL
+// ================================================================
+let selectedMood = null;
+let selectedTime = null;
+
+function openHelp() { document.getElementById('help-overlay').classList.remove('hidden'); }
+function closeHelpIfOutside(e) { if (e.target === document.getElementById('help-overlay')) closeHelp(); }
+function closeHelp() { document.getElementById('help-overlay').classList.add('hidden'); }
+
+function selectMood(mood) {
+  selectedMood = mood;
+  document.querySelectorAll('.mood-btn').forEach(b => b.classList.remove('selected'));
+  event.currentTarget.classList.add('selected');
+}
+
+function selectTime(t) {
+  selectedTime = t;
+  document.querySelectorAll('.time-chip').forEach(c => c.classList.remove('selected'));
+  event.currentTarget.classList.add('selected');
+}
+
+const HELP_PLANS = {
+  energetic: {
+    15: "⚡ Quick power session!\n• Anki: 20 new cards (10 min)\n• Bunpro: 1 new grammar point (5 min)",
+    30: "⚡ High-energy session!\n• Anki: 25 new cards (15 min)\n• Bunpro: 2 new grammar points (10 min)\n• Shadow a short audio clip (5 min)",
+    45: "⚡ Power study!\n• Anki: 30 new cards (15 min)\n• Bunpro: 3 grammar points (15 min)\n• NHK Web Easy article (10 min)\n• Write 3 sentences in Japanese (5 min)",
+    60: "⚡ Full power session!\n• Anki: 30 new cards (15 min)\n• Bunpro: 3 grammar points (15 min)\n• NHK Web Easy: 2 articles (15 min)\n• Shadowing practice (10 min)\n• Write a short journal entry (5 min)",
+    90: "⚡ Maximum study mode!\n• Anki: 40 new cards (20 min)\n• Bunpro: 4 grammar points (20 min)\n• NHK Web Easy: 2 articles (20 min)\n• JLPT practice section (20 min)\n• Shadowing + speaking (10 min)",
+  },
+  tired: {
+    15: "😴 Easy 15 min plan:\n• Anki review only – no new cards (10 min)\n• Watch 1 short Japanese YouTube video (5 min)",
+    30: "😴 Gentle session:\n• Anki review only (15 min)\n• Listen to JapanesePod101 podcast passively (15 min)",
+    45: "😴 Low effort, still progress:\n• Anki review (15 min)\n• Read 1 Tadoku easy story (15 min)\n• Watch Japanese anime with subtitles (15 min)",
+    60: "😴 Rest + input session:\n• Anki review only (15 min)\n• Tadoku graded reader (20 min)\n• Japanese TV / Netflix (25 min)",
+    90: "😴 Immersion rest day:\n• Anki review (15 min)\n• Tadoku reading (20 min)\n• Japanese podcast or drama (55 min)",
+  },
+  fun: {
+    15: "🎮 Fun 15 min!\n• Japanese game or app – try Duolingo Japanese stories (15 min)",
+    30: "🎮 Game mode!\n• Japanese video game or app (20 min)\n• Anki with fun images deck (10 min)",
+    60: "🎮 Fun learning session!\n• Anime + active listening – note new words (30 min)\n• Play a Japanese mobile game (20 min)\n• Anki with your new words (10 min)",
+    90: "🎮 Chill study day!\n• Anime binge with Japanese subtitles (45 min)\n• Note vocab from anime (15 min)\n• Anki review (15 min)\n• Japanese Twitter / Instagram browsing (15 min)",
+  },
+  review: {
+    30: "🔄 Review session:\n• Anki – due cards only (15 min)\n• Bunpro – review wrong answers (15 min)",
+    60: "🔄 Full review session:\n• Anki – due cards (20 min)\n• Bunpro – review all mistakes (20 min)\n• Redo 1 JLPT practice section you struggled with (20 min)",
+  },
+  focused: {
+    45: "🎯 Deep focus:\n• Bunpro: 4 new grammar points (20 min)\n• NHK Web Easy: 1 article + full comprehension (20 min)\n• Write a paragraph using new grammar (5 min)",
+    60: "🎯 Focus mode:\n• Bunpro: 4 grammar points (25 min)\n• JLPT listening section (20 min)\n• Writing practice (15 min)",
+    90: "🎯 Power focus:\n• Bunpro: 5 grammar points (25 min)\n• Full JLPT mock section (30 min)\n• NHK Web Easy: 2 articles (20 min)\n• Review + write (15 min)",
+  },
+  normal: {
+    30: "😊 Normal 30 min:\n• Anki: 15 new cards (10 min)\n• Bunpro: 1–2 grammar points (15 min)\n• NHK Web Easy headlines scan (5 min)",
+    60: "😊 Regular session:\n• Anki: 20 new cards (15 min)\n• Bunpro: 2 grammar points (20 min)\n• NHK Web Easy article (15 min)\n• Shadowing (10 min)",
+    90: "😊 Full normal session:\n• Anki: 25 new cards (20 min)\n• Bunpro: 3 grammar points (20 min)\n• NHK Web Easy (15 min)\n• JLPT practice (20 min)\n• Writing (15 min)",
+  },
+};
+
+function generateHelpPlan() {
+  const mood = selectedMood || 'normal';
+  const time = selectedTime || '30';
+  const plans = HELP_PLANS[mood] || HELP_PLANS.normal;
+
+  // Find closest time
+  const times = Object.keys(plans).map(Number);
+  const closest = times.reduce((a, b) => Math.abs(b - Number(time)) < Math.abs(a - Number(time)) ? b : a);
+  const plan = plans[closest] || plans[times[0]];
+
+  const resultEl = document.getElementById('help-result');
+  resultEl.style.display = 'block';
+  resultEl.className = 'help-result show';
+  resultEl.innerHTML = `<strong>✨ Your plan for today (${time} min):</strong><br/><pre style="font-family:'DM Sans',sans-serif;white-space:pre-wrap;margin-top:10px;font-size:14px;line-height:1.8">${plan}</pre>`;
+}
+</script>
+
 </body>
 </html>
