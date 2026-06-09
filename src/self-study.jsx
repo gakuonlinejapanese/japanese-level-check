@@ -219,9 +219,6 @@ function UnlockScreen({ email, plan, cefrLevel, name, resources: initialResource
                     <button onClick={handlePay} style={{ ...S.btn, background:"linear-gradient(135deg,#10b981,#059669)", color:"#fff", marginTop:0, width:"100%", padding:"9px" }}>Get Started →</button>
                   </div>
                 </div>
-                <div style={{ display:"none" }}>
-              
-              <button onClick={handlePay} style={{ ...S.btn, background:`linear-gradient(135deg,${COLOR},#7c3aed)`, color:"#fff", marginTop:0 }}>Pay now</button>
             </div>
           </>
         )}
@@ -281,9 +278,6 @@ function UnlockScreen({ email, plan, cefrLevel, name, resources: initialResource
                     <button onClick={handlePay} style={{ ...S.btn, background:"linear-gradient(135deg,#10b981,#059669)", color:"#fff", marginTop:0, width:"100%", padding:"9px" }}>Get Started →</button>
                   </div>
                 </div>
-                <div style={{ display:"none" }}>
-              
-              <button onClick={handlePay} style={{ ...S.btn, background:`linear-gradient(135deg,${COLOR},#7c3aed)`, color:"#fff", marginTop:0 }}>Pay now</button>
             </div>
           </>
         )}
