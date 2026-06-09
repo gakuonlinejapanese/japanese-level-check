@@ -191,8 +191,36 @@ function UnlockScreen({ email, plan, cefrLevel, name, resources: initialResource
             <button onClick={() => setMode("free")} style={{ ...S.btn, background:`linear-gradient(135deg,#22c55e,#16a34a)`, color:"#fff" }}>Yes, use for FREE</button>
             <div style={{ textAlign:"center", margin:"16px 0", color:"#475569", fontSize:12 }}>or</div>
             <div style={{ background:"rgba(255,255,255,0.04)", borderRadius:14, padding:"20px", textAlign:"center", border:"1px solid rgba(168,85,247,0.3)" }}>
-              <p style={{ color:"#f1f5f9", fontSize:14, fontWeight:700, margin:"0 0 4px" }}>$10 / month</p>
-              <p style={{ color:"#94a3b8", fontSize:12, margin:"0 0 14px" }}>Full access · Cancel anytime</p>
+              <p style={{ color:"#f1f5f9", fontSize:15, fontWeight:700, margin:"0 0 14px" }}>Choose your plan</p>
+                <div style={{ display:"flex", flexDirection:"column", gap:10 }}>
+                  <div style={{ border:"2px solid #7c3aed", borderRadius:12, padding:"14px 16px" }}>
+                    <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center" }}>
+                      <span style={{ color:"#f1f5f9", fontWeight:700 }}>Monthly</span>
+                      <span style={{ color:"#f1f5f9", fontWeight:800 }}>$14.99/mo</span>
+                    </div>
+                    <p style={{ color:"#94a3b8", fontSize:11, margin:"6px 0 8px" }}>Can cancel within 3 days</p>
+                    <button onClick={handlePay} style={{ ...S.btn, background:"linear-gradient(135deg,#7c3aed,#6d28d9)", color:"#fff", marginTop:0, width:"100%", padding:"9px" }}>Get Started →</button>
+                  </div>
+                  <div style={{ border:"2px solid #f59e0b", borderRadius:12, padding:"14px 16px", position:"relative" }}>
+                    <span style={{ position:"absolute", top:-9, left:"50%", transform:"translateX(-50%)", background:"#f59e0b", color:"#333", fontSize:10, fontWeight:700, padding:"2px 8px", borderRadius:20 }}>POPULAR</span>
+                    <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center" }}>
+                      <span style={{ color:"#f1f5f9", fontWeight:700 }}>3 Month Plan</span>
+                      <span style={{ color:"#f1f5f9", fontWeight:800 }}>$39</span>
+                    </div>
+                    <p style={{ color:"#94a3b8", fontSize:11, margin:"6px 0 8px" }}>$13/mo · Save 13% · Can cancel within 3 days</p>
+                    <button onClick={handlePay} style={{ ...S.btn, background:"linear-gradient(135deg,#f59e0b,#d97706)", color:"#fff", marginTop:0, width:"100%", padding:"9px" }}>Get Started →</button>
+                  </div>
+                  <div style={{ border:"2px solid #10b981", borderRadius:12, padding:"14px 16px" }}>
+                    <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center" }}>
+                      <span style={{ color:"#f1f5f9", fontWeight:700 }}>12 Month Plan</span>
+                      <span style={{ color:"#f1f5f9", fontWeight:800 }}>$129</span>
+                    </div>
+                    <p style={{ color:"#94a3b8", fontSize:11, margin:"6px 0 8px" }}>$10.75/mo · Save 28% · Can cancel within 3 days</p>
+                    <button onClick={handlePay} style={{ ...S.btn, background:"linear-gradient(135deg,#10b981,#059669)", color:"#fff", marginTop:0, width:"100%", padding:"9px" }}>Get Started →</button>
+                  </div>
+                </div>
+                <div style={{ display:"none" }}>
+              
               <button onClick={handlePay} style={{ ...S.btn, background:`linear-gradient(135deg,${COLOR},#7c3aed)`, color:"#fff", marginTop:0 }}>Pay now</button>
             </div>
           </>
@@ -225,8 +253,36 @@ function UnlockScreen({ email, plan, cefrLevel, name, resources: initialResource
               Take a free trial lesson
             </a>
             <div style={{ background:"rgba(255,255,255,0.04)", borderRadius:14, padding:"20px", textAlign:"center", border:"1px solid rgba(168,85,247,0.3)" }}>
-              <p style={{ color:"#f1f5f9", fontSize:14, fontWeight:700, margin:"0 0 4px" }}>$10 / month</p>
-              <p style={{ color:"#94a3b8", fontSize:12, margin:"0 0 14px" }}>Full access · Cancel anytime</p>
+              <p style={{ color:"#f1f5f9", fontSize:15, fontWeight:700, margin:"0 0 14px" }}>Choose your plan</p>
+                <div style={{ display:"flex", flexDirection:"column", gap:10 }}>
+                  <div style={{ border:"2px solid #7c3aed", borderRadius:12, padding:"14px 16px" }}>
+                    <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center" }}>
+                      <span style={{ color:"#f1f5f9", fontWeight:700 }}>Monthly</span>
+                      <span style={{ color:"#f1f5f9", fontWeight:800 }}>$14.99/mo</span>
+                    </div>
+                    <p style={{ color:"#94a3b8", fontSize:11, margin:"6px 0 8px" }}>Can cancel within 3 days</p>
+                    <button onClick={handlePay} style={{ ...S.btn, background:"linear-gradient(135deg,#7c3aed,#6d28d9)", color:"#fff", marginTop:0, width:"100%", padding:"9px" }}>Get Started →</button>
+                  </div>
+                  <div style={{ border:"2px solid #f59e0b", borderRadius:12, padding:"14px 16px", position:"relative" }}>
+                    <span style={{ position:"absolute", top:-9, left:"50%", transform:"translateX(-50%)", background:"#f59e0b", color:"#333", fontSize:10, fontWeight:700, padding:"2px 8px", borderRadius:20 }}>POPULAR</span>
+                    <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center" }}>
+                      <span style={{ color:"#f1f5f9", fontWeight:700 }}>3 Month Plan</span>
+                      <span style={{ color:"#f1f5f9", fontWeight:800 }}>$39</span>
+                    </div>
+                    <p style={{ color:"#94a3b8", fontSize:11, margin:"6px 0 8px" }}>$13/mo · Save 13% · Can cancel within 3 days</p>
+                    <button onClick={handlePay} style={{ ...S.btn, background:"linear-gradient(135deg,#f59e0b,#d97706)", color:"#fff", marginTop:0, width:"100%", padding:"9px" }}>Get Started →</button>
+                  </div>
+                  <div style={{ border:"2px solid #10b981", borderRadius:12, padding:"14px 16px" }}>
+                    <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center" }}>
+                      <span style={{ color:"#f1f5f9", fontWeight:700 }}>12 Month Plan</span>
+                      <span style={{ color:"#f1f5f9", fontWeight:800 }}>$129</span>
+                    </div>
+                    <p style={{ color:"#94a3b8", fontSize:11, margin:"6px 0 8px" }}>$10.75/mo · Save 28% · Can cancel within 3 days</p>
+                    <button onClick={handlePay} style={{ ...S.btn, background:"linear-gradient(135deg,#10b981,#059669)", color:"#fff", marginTop:0, width:"100%", padding:"9px" }}>Get Started →</button>
+                  </div>
+                </div>
+                <div style={{ display:"none" }}>
+              
               <button onClick={handlePay} style={{ ...S.btn, background:`linear-gradient(135deg,${COLOR},#7c3aed)`, color:"#fff", marginTop:0 }}>Pay now</button>
             </div>
           </>
