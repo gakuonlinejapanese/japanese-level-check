@@ -550,5 +550,111 @@ function generateHelpPlan() {
 }
 </script>
 
+
+<!-- UNLOCK SECTION -->
+<div id="unlock-section" style="max-width:700px;margin:40px auto;padding:0 20px 60px;font-family:'DM Sans',sans-serif">
+  <div style="text-align:center;background:linear-gradient(135deg,#fff5f5,#fffbf0);border-radius:20px;padding:44px 32px;border:1px solid #fde8e8">
+    <div style="font-size:40px;margin-bottom:12px">🔒</div>
+    <h3 style="font-family:'Noto Serif JP',serif;font-size:24px;color:#1a1a2e;margin:0 0 10px">Want to unlock your full study plan?</h3>
+    <p style="color:#6b7280;font-size:15px;margin:0 0 24px;line-height:1.6">Get complete weekly schedules, AI materials, To-Do lists and more.</p>
+    <button onclick="document.getElementById('unlock-modal').style.display='flex'" style="display:block;width:100%;max-width:320px;margin:0 auto 12px;padding:16px;background:#E8382F;color:white;border:none;border-radius:12px;font-size:16px;font-weight:700;cursor:pointer;box-shadow:0 4px 14px rgba(232,56,47,0.35);font-family:inherit">🔓 Would you like to unlock?</button>
+    <button onclick="document.getElementById('free-modal').style.display='flex'" style="display:block;width:100%;max-width:320px;margin:0 auto;padding:13px;background:white;color:#1a1a2e;border:2px solid #1a1a2e;border-radius:12px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit">Want to use it for FREE?</button>
+  </div>
+</div>
+
+<!-- UNLOCK MODAL -->
+<div id="unlock-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.65);z-index:3000;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(4px)">
+  <div style="background:white;border-radius:20px;padding:40px 32px;max-width:860px;width:100%;max-height:90vh;overflow-y:auto;position:relative">
+    <button onclick="document.getElementById('unlock-modal').style.display='none'" style="position:absolute;top:16px;right:18px;background:none;border:none;font-size:22px;cursor:pointer;color:#6b7280">✕</button>
+    <div style="text-align:center;margin-bottom:28px">
+      <h2 style="font-family:'Noto Serif JP',serif;font-size:26px;color:#1a1a2e;margin:0 0 8px">Choose Your Plan</h2>
+      <p style="color:#6b7280;font-size:15px;margin:0">Get full access to your personalized GAKU Self-Study System</p>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px">
+      <!-- Monthly -->
+      <div style="border:2px solid #e5e7eb;border-radius:16px;padding:24px 18px;text-align:center">
+        <div style="font-weight:700;font-size:13px;color:#6b7280;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px">Monthly</div>
+        <div style="font-family:monospace;font-size:30px;font-weight:700;color:#1a1a2e">$14.99 <span style="font-size:13px;color:#6b7280;font-family:sans-serif">/month</span></div>
+        <ul style="list-style:none;padding:0;margin:12px 0 16px;font-size:12px;color:#555;text-align:left">
+          <li style="padding:3px 0">✓ Complete Study Plan</li><li style="padding:3px 0">✓ To-Do List</li><li style="padding:3px 0">✓ Study History</li><li style="padding:3px 0">✓ Help Button</li><li style="padding:3px 0">✓ AI Material Generation</li><li style="padding:3px 0">✓ AI Review Questions</li><li style="padding:3px 0">✓ Goal Achievement Roadmap</li>
+        </ul>
+        <a href="https://buy.stripe.com/YOUR_MONTHLY" target="_blank" style="display:block;padding:11px;background:#1a1a2e;color:white;border-radius:10px;font-weight:700;font-size:13px;text-decoration:none">Get Started →</a>
+      </div>
+      <!-- 3 Month -->
+      <div style="border:2px solid #E8382F;border-radius:16px;padding:24px 18px;text-align:center;background:#fff5f5;position:relative">
+        <span style="position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:#E8382F;color:white;font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px">POPULAR</span>
+        <div style="font-weight:700;font-size:13px;color:#6b7280;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px">3 Month Plan</div>
+        <div style="font-family:monospace;font-size:30px;font-weight:700;color:#1a1a2e">$39 <span style="font-size:13px;color:#6b7280;font-family:sans-serif">($13/mo)</span></div>
+        <div style="font-size:12px;color:#27ae60;font-weight:600;margin:4px 0 12px">🎉 Save 13%</div>
+        <ul style="list-style:none;padding:0;margin:12px 0 16px;font-size:12px;color:#555;text-align:left">
+          <li style="padding:3px 0">✓ Everything in Monthly</li><li style="padding:3px 0">✓ 3 months of access</li><li style="padding:3px 0">✓ Priority support</li>
+        </ul>
+        <a href="https://buy.stripe.com/YOUR_3MONTH" target="_blank" style="display:block;padding:11px;background:#E8382F;color:white;border-radius:10px;font-weight:700;font-size:13px;text-decoration:none">Get Started →</a>
+      </div>
+      <!-- 12 Month -->
+      <div style="border:2px solid #e5e7eb;border-radius:16px;padding:24px 18px;text-align:center;position:relative">
+        <span style="position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:#f5a623;color:#333;font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px">BEST VALUE</span>
+        <div style="font-weight:700;font-size:13px;color:#6b7280;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px">12 Month Plan</div>
+        <div style="font-family:monospace;font-size:30px;font-weight:700;color:#1a1a2e">$129 <span style="font-size:13px;color:#6b7280;font-family:sans-serif">($10.75/mo)</span></div>
+        <div style="font-size:12px;color:#27ae60;font-weight:600;margin:4px 0 12px">🎉 Save 28%</div>
+        <ul style="list-style:none;padding:0;margin:12px 0 16px;font-size:12px;color:#555;text-align:left">
+          <li style="padding:3px 0">✓ Everything in Monthly</li><li style="padding:3px 0">✓ 12 months of access</li><li style="padding:3px 0">✓ Priority support</li>
+        </ul>
+        <a href="https://buy.stripe.com/YOUR_12MONTH" target="_blank" style="display:block;padding:11px;background:#1a1a2e;color:white;border-radius:10px;font-weight:700;font-size:13px;text-decoration:none">Get Started →</a>
+      </div>
+    </div>
+    <div style="text-align:center;border-top:1px solid #e5e7eb;padding-top:16px">
+      <p style="color:#6b7280;font-size:14px;margin:0 0 10px">Not sure yet?</p>
+      <a href="https://www.seitojapanese.online/" style="display:inline-block;padding:11px 22px;background:white;color:#E8382F;border:2px solid #E8382F;border-radius:10px;font-weight:700;font-size:14px;text-decoration:none">Book a FREE Trial Lesson →</a>
+    </div>
+  </div>
+</div>
+
+<!-- FREE MODAL -->
+<div id="free-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.65);z-index:3000;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(4px)">
+  <div style="background:white;border-radius:20px;padding:40px 32px;max-width:460px;width:100%;text-align:center;position:relative">
+    <button onclick="document.getElementById('free-modal').style.display='none'" style="position:absolute;top:16px;right:18px;background:none;border:none;font-size:22px;cursor:pointer;color:#6b7280">✕</button>
+    <div style="font-size:48px;margin-bottom:14px">🎓</div>
+    <h2 style="font-family:'Noto Serif JP',serif;font-size:24px;color:#1a1a2e;margin:0 0 10px">Are you a GAKU student?</h2>
+    <p style="color:#6b7280;font-size:15px;margin:0 0 24px">GAKU lesson students get <strong>free access</strong>!</p>
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <button onclick="document.getElementById('free-modal').style.display='none';document.getElementById('code-modal').style.display='flex'" style="padding:15px;background:#27ae60;color:white;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit">Yes, I'm a GAKU student →</button>
+      <button onclick="document.getElementById('free-modal').style.display='none';document.getElementById('unlock-modal').style.display='flex'" style="padding:13px;background:white;color:#1a1a2e;border:2px solid #e5e7eb;border-radius:10px;font-size:15px;cursor:pointer;font-family:inherit">No, show me the plans</button>
+    </div>
+  </div>
+</div>
+
+<!-- CODE MODAL -->
+<div id="code-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.65);z-index:3000;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(4px)">
+  <div style="background:white;border-radius:20px;padding:40px 32px;max-width:400px;width:100%;text-align:center;position:relative">
+    <button onclick="document.getElementById('code-modal').style.display='none'" style="position:absolute;top:16px;right:18px;background:none;border:none;font-size:22px;cursor:pointer;color:#6b7280">✕</button>
+    <div style="font-size:44px;margin-bottom:14px">🔑</div>
+    <h2 style="font-family:'Noto Serif JP',serif;font-size:22px;color:#1a1a2e;margin:0 0 8px">Enter Your Invitation Code</h2>
+    <p style="color:#6b7280;font-size:14px;margin:0 0 20px">Your teacher will give you a personalized code.</p>
+    <input id="invite-code-input" type="text" placeholder="e.g. GAKU-XXXX" style="width:100%;padding:14px 16px;border:2px solid #e5e7eb;border-radius:10px;font-size:18px;text-align:center;font-family:monospace;text-transform:uppercase;box-sizing:border-box;margin-bottom:10px">
+    <p id="code-error-msg" style="color:#E8382F;font-size:13px;margin:0 0 10px;display:none">⚠️ Invalid code. Please check and try again.</p>
+    <div id="code-success-msg" style="display:none;background:#f0fdf4;color:#27ae60;padding:14px;border-radius:10px;font-weight:700;margin-bottom:10px">✅ Code verified! Welcome to GAKU!</div>
+    <button onclick="checkInviteCode()" style="width:100%;padding:14px;background:#1a1a2e;color:white;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit">Unlock My Plan →</button>
+  </div>
+</div>
+
+<script>
+const VALID_CODES = {
+  // 'GAKU-XXXX': 'student@email.com'  ← 生徒コードをここに追加
+};
+function checkInviteCode() {
+  const code = document.getElementById('invite-code-input').value.toUpperCase().trim();
+  const errEl = document.getElementById('code-error-msg');
+  const okEl = document.getElementById('code-success-msg');
+  if (VALID_CODES[code] !== undefined) {
+    errEl.style.display = 'none';
+    okEl.style.display = 'block';
+  } else {
+    errEl.style.display = 'block';
+    okEl.style.display = 'none';
+  }
+}
+</script>
+
 </body>
 </html>
