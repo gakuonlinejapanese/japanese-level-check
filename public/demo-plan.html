@@ -1,6 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<script>
+(function() {
+  var params = new URLSearchParams(window.location.search);
+  var session = localStorage.getItem('gaku_unlocked');
+  if (params.get('unlocked') !== 'true' && session !== 'true') {
+    window.location.href = '/';
+  }
+  if (params.get('unlocked') === 'true') {
+    localStorage.setItem('gaku_unlocked', 'true');
+  }
+})();
+</script>
+
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Your Japanese Study Plan – GAKU</title>
