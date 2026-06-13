@@ -5,6 +5,7 @@ import Reading from './reading';
 import BusinessSpeech from './business-speech';
 import CasualSpeech from './casual-speech';
 import SelfStudy from './self-study';
+import GakuApp from './GakuApp';
 
 const sections = [
   { id:'vocabulary',  icon:'📖', label:'Vocabulary',      sub:'語彙・単語',       color:'#06b6d4' },
@@ -45,9 +46,11 @@ function BrandFooter() {
 }
 
 export default function App() {
-  const [current, setCurrent] = useState(null);
+  const [current, setCurrent] = useState(window.location.pathname === '/app' ? 'gaku-app' : null);
   const goSelfStudy = (section, level) => setCurrent(`self-study|${section}|${level}`);
   window.__ss = (level) => goSelfStudy(current || 'general', level);
+
+  if (current === 'gaku-app') return <div><GakuApp onBack={() => setCurrent(null)} /><BrandFooter /></div>;
 
   if (!current) return <><Home onSelect={setCurrent} /><BrandFooter /></>;
 

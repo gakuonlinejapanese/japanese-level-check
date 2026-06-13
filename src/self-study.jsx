@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import StudyDashboard from "./study-dashboard";
+import GakuApp from "./GakuApp";
 
 const COLOR = "#a855f7";
 const FORMSPREE_URL = "https://formspree.io/f/mykvallk";
@@ -167,17 +167,8 @@ function UnlockScreen({ email, plan, cefrLevel, name, resources: initialResource
   };
 
   if (unlocked) {
-    const resources = initialResources || RESOURCES_BY_LEVEL[cefrLevel] || RESOURCES_BY_LEVEL["A2"];
-    return (
-      <StudyDashboard planData={{
-        name: name || email,
-        email,
-        cefrLevel,
-        plan,
-        resources,
-        formData,
-      }} />
-    );
+    const CEFR_TO_JLPT = { "Pre-A1":"Beginner","A1":"Beginner","A1–A2":"N5","A2":"N5","A2–B1":"N4","B1":"N3","B1–B2":"N3","B2":"N2","B2–C1":"N1","C1":"N1" };
+    return <GakuApp initialJlpt={CEFR_TO_JLPT[cefrLevel] || ""} />;
   }
 
 
