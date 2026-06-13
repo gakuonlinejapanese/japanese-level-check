@@ -37,7 +37,7 @@ function BrandFooter() {
   return (
     <a href="https://www.seitojapanese.online/" target="_blank" rel="noopener noreferrer" style={{ position:'fixed', bottom:10, left:10, zIndex:999, display:'flex', flexDirection:'column', alignItems:'flex-start', gap:4, opacity:0.85, textDecoration:'none' }}>
       <img src="/gaku-logo.png" alt="GAKU logo" style={{ width:32, height:32, borderRadius:'50%' }} />
-      <span style={{ color:'#94a3b8', fontSize:9, lineHeight:1.3, fontFamily:"'Noto Sans JP',sans-serif", maxWidth:160 }}>
+      <span style={{ color:'#94a3b8', fontSize:9, lineHeight:1.3, fontFamily:"'Noto Sans JP',sans-serif", maxWidth:280 }}>
         Presented by Seito Sakamoto, an Online Japanese Tutor GAKU, a master's degree in teaching international languages.
       </span>
     </a>
