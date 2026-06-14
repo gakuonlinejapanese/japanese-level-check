@@ -18,6 +18,137 @@ const S = {
   label: { display:"block", color:"#64748b", fontSize:11, fontWeight:700, marginBottom:5, letterSpacing:1 },
 };
 
+// ─── LANGUAGES ─────────────────────────────────────────────────────────────────
+const LANGUAGES = [
+  "English","Japanese","Spanish","French","Portuguese","German","Italian",
+  "Chinese (Simplified)","Chinese (Traditional)","Korean","Arabic","Hindi",
+  "Thai","Vietnamese","Indonesian","Malay","Turkish","Russian","Polish",
+  "Dutch","Swedish","Norwegian","Danish","Finnish",
+];
+
+// ─── UI TRANSLATIONS ────────────────────────────────────────────────────────────
+const UI_STRINGS = {
+  English: {
+    weeklyProgress:"Weekly Progress", schedule:"📅 Schedule", vocabulary:"📚 Vocabulary",
+    resources:"🔗 Resources", writing:"✍️ Writing", milestones:"🏆 Milestones",
+    help:"🆘 Help", editProfile:"✏️ Edit Profile", studyPlan:"'s Study Plan",
+    goal:"🎯", timeline:"📅", level:"📊", lang:"🌐",
+    findWords:"Find Words", findWordsPlaceholder:"e.g. food, travel, business, emotions...",
+    vocabBuilderTitle:"📚 VOCABULARY BUILDER",
+    vocabBuilderDesc:"Enter a topic and AI will find vocabulary matched to your level",
+    saved:"✓ Saved", save:"+ Save", mySavedWords:"✅ MY SAVED WORDS",
+    hint1Btn:"Hint 1: Romaji", hint2Btn:"Hint 2: Translation",
+    flashcardsTab:"🃏 Flashcards", practiceTab:"📝 Practice", savedTab:"📖 Saved Words",
+    categoryLabel:"Vocabulary Category", newCategory:"New category name...", addCategory:"Add",
+    writingTitle:"✍️ WRITING PRACTICE (CLT)", nextPrompt:"Next prompt →", getAIFeedback:"Get AI feedback ✨",
+    helpMenu:"What do you need?", customLesson:"✨ Customized lesson for today",
+    howToUse:"❓ How to use this app", moodLabel:"MOOD", timeLabel:"AVAILABLE TIME",
+    energyLabel:"ENERGY LEVEL", differentToday:"🎲 Today I want to do something different",
+    whatToday:"WHAT DO YOU WANT TO DO TODAY?", getPlane:"Get today's plan ✨",
+    backToMenu:"Back to menu", howFeeling:"How are you feeling today?",
+    backBtn:"← Back", searchingWeb:"🔍 Searching for resources...",
+    webResultsTitle:"📡 WEB RESOURCES FOUND",
+    yourName:"YOUR NAME *", email:"EMAIL *", country:"COUNTRY *",
+    nativeLang:"YOUR NATIVE LANGUAGE? (What language do you prefer to communicate in?)",
+    finalGoal:"FINAL GOAL *", whenGoal:"WHEN DO YOU WANT TO ACHIEVE IT? *",
+    jlptLevel:"CURRENT JLPT LEVEL *", studyTime:"STUDY TIME PER DAY *",
+    daysPerWeek:"DAYS PER WEEK *", whatStudy:"WHAT DO YOU WANT TO STUDY? * (select all that apply)",
+    buildPlan:"Build My Study Plan →", saveChanges:"Save Changes →",
+    editProfile2:"Edit Your Profile", learningProfile:"Your Learning Profile",
+    scheduleTitle:"📅 YOUR WEEKLY STUDY SCHEDULE", restDay:"Rest day 🌸",
+    resourcesTitle:"🔗 YOUR RESOURCES", noResources:"No resources. Please reset and select study skills.",
+    roadmapTitle:"🏆 YOUR GOAL ROADMAP",
+    imageGameTitle:"🖼 IMAGE WORD GAME", imageGameDesc:"Look at the clue and choose the correct Japanese word!",
+    sentenceGameTitle:"📝 SENTENCE QUIZ", sentenceGameDesc:"Choose the correct word to complete the sentence.",
+    correct:"✅ Correct!", wrong:"❌ Wrong! Correct answer:", nextCard:"Next →",
+    score:"Score", correct2:"correct", of:"of",
+    sortPracticeTitle:"🔀 WORD ORDER PRACTICE",
+    sortPracticeDesc:"Rearrange the words to form a correct Japanese sentence.",
+    checkAnswer:"Check Answer", resetSentence:"Reset",
+  },
+  Japanese: {
+    weeklyProgress:"週間の進捗", schedule:"📅 スケジュール", vocabulary:"📚 単語",
+    resources:"🔗 リソース", writing:"✍️ ライティング", milestones:"🏆 マイルストーン",
+    help:"🆘 ヘルプ", editProfile:"✏️ プロフィール編集", studyPlan:"さんの学習プラン",
+    goal:"🎯", timeline:"📅", level:"📊", lang:"🌐",
+    findWords:"単語を探す", findWordsPlaceholder:"例: 食べ物, 旅行, 仕事...",
+    vocabBuilderTitle:"📚 単語ビルダー",
+    vocabBuilderDesc:"トピックを入力すると、あなたのレベルに合わせた単語を検索します",
+    saved:"✓ 保存済み", save:"+ 保存", mySavedWords:"✅ 保存した単語",
+    hint1Btn:"ヒント1: ローマ字", hint2Btn:"ヒント2: 翻訳",
+    flashcardsTab:"🃏 フラッシュカード", practiceTab:"📝 練習", savedTab:"📖 保存した単語",
+    categoryLabel:"単語カテゴリー", newCategory:"カテゴリー名を入力...", addCategory:"追加",
+    writingTitle:"✍️ ライティング練習 (CLT)", nextPrompt:"次のお題 →", getAIFeedback:"AIフィードバックを取得 ✨",
+    helpMenu:"何が必要ですか？", customLesson:"✨ 今日のカスタムレッスン",
+    howToUse:"❓ アプリの使い方", moodLabel:"気分", timeLabel:"利用可能な時間",
+    energyLabel:"エネルギーレベル", differentToday:"🎲 今日は違うことをしたい",
+    whatToday:"今日何をしたいですか？", getPlane:"今日のプランを取得 ✨",
+    backToMenu:"メニューに戻る", howFeeling:"今日の調子はどうですか？",
+    backBtn:"← 戻る", searchingWeb:"🔍 リソースを検索中...",
+    webResultsTitle:"📡 見つかったウェブリソース",
+    yourName:"お名前 *", email:"メール *", country:"国 *",
+    nativeLang:"母国語は何ですか？（どの言語でコミュニケーションをとりたいですか？）",
+    finalGoal:"最終目標 *", whenGoal:"いつまでに達成したいですか？ *",
+    jlptLevel:"現在のJLPTレベル *", studyTime:"1日の勉強時間 *",
+    daysPerWeek:"週に何日？ *", whatStudy:"何を勉強したいですか？ * (すべて選択)",
+    buildPlan:"学習プランを作成 →", saveChanges:"変更を保存 →",
+    editProfile2:"プロフィールを編集", learningProfile:"学習プロフィール",
+    scheduleTitle:"📅 週間学習スケジュール", restDay:"休息日 🌸",
+    resourcesTitle:"🔗 あなたのリソース", noResources:"リソースがありません。スキルを選択してください。",
+    roadmapTitle:"🏆 目標ロードマップ",
+    imageGameTitle:"🖼 画像単語ゲーム", imageGameDesc:"ヒントを見て正しい日本語の単語を選んでください！",
+    sentenceGameTitle:"📝 文章クイズ", sentenceGameDesc:"文章を完成させる正しい単語を選んでください。",
+    correct:"✅ 正解！", wrong:"❌ 不正解！ 正解:", nextCard:"次へ →",
+    score:"スコア", correct2:"正解", of:"のうち",
+    sortPracticeTitle:"🔀 語順練習",
+    sortPracticeDesc:"単語を並べ替えて正しい日本語の文章を作りましょう。",
+    checkAnswer:"答え合わせ", resetSentence:"リセット",
+  },
+  Spanish: {
+    weeklyProgress:"Progreso semanal", schedule:"📅 Horario", vocabulary:"📚 Vocabulario",
+    resources:"🔗 Recursos", writing:"✍️ Escritura", milestones:"🏆 Hitos",
+    help:"🆘 Ayuda", editProfile:"✏️ Editar perfil", studyPlan:"'s Plan de estudio",
+    goal:"🎯", timeline:"📅", level:"📊", lang:"🌐",
+    findWords:"Buscar palabras", findWordsPlaceholder:"ej. comida, viaje, negocios...",
+    vocabBuilderTitle:"📚 CONSTRUCTOR DE VOCABULARIO",
+    vocabBuilderDesc:"Ingresa un tema y la IA encontrará vocabulario adaptado a tu nivel",
+    saved:"✓ Guardado", save:"+ Guardar", mySavedWords:"✅ MIS PALABRAS GUARDADAS",
+    hint1Btn:"Pista 1: Romaji", hint2Btn:"Pista 2: Traducción",
+    flashcardsTab:"🃏 Tarjetas", practiceTab:"📝 Práctica", savedTab:"📖 Palabras guardadas",
+    categoryLabel:"Categoría de vocabulario", newCategory:"Nombre de categoría...", addCategory:"Agregar",
+    writingTitle:"✍️ PRÁCTICA DE ESCRITURA (CLT)", nextPrompt:"Siguiente tema →", getAIFeedback:"Obtener feedback de IA ✨",
+    helpMenu:"¿Qué necesitas?", customLesson:"✨ Lección personalizada de hoy",
+    howToUse:"❓ Cómo usar esta app", moodLabel:"ESTADO DE ÁNIMO", timeLabel:"TIEMPO DISPONIBLE",
+    energyLabel:"NIVEL DE ENERGÍA", differentToday:"🎲 Hoy quiero hacer algo diferente",
+    whatToday:"¿QUÉ QUIERES HACER HOY?", getPlane:"Obtener plan de hoy ✨",
+    backToMenu:"Volver al menú", howFeeling:"¿Cómo te sientes hoy?",
+    backBtn:"← Atrás", searchingWeb:"🔍 Buscando recursos...",
+    webResultsTitle:"📡 RECURSOS WEB ENCONTRADOS",
+    yourName:"TU NOMBRE *", email:"CORREO *", country:"PAÍS *",
+    nativeLang:"¿CUÁL ES TU IDIOMA NATIVO? (¿En qué idioma prefieres comunicarte?)",
+    finalGoal:"OBJETIVO FINAL *", whenGoal:"¿CUÁNDO QUIERES LOGRARLO? *",
+    jlptLevel:"NIVEL JLPT ACTUAL *", studyTime:"TIEMPO DE ESTUDIO POR DÍA *",
+    daysPerWeek:"DÍAS POR SEMANA *", whatStudy:"¿QUÉ QUIERES ESTUDIAR? * (selecciona todo lo que aplique)",
+    buildPlan:"Crear mi plan de estudio →", saveChanges:"Guardar cambios →",
+    editProfile2:"Editar tu perfil", learningProfile:"Tu perfil de aprendizaje",
+    scheduleTitle:"📅 TU HORARIO DE ESTUDIO SEMANAL", restDay:"Día de descanso 🌸",
+    resourcesTitle:"🔗 TUS RECURSOS", noResources:"Sin recursos. Selecciona habilidades de estudio.",
+    roadmapTitle:"🏆 TU HOJA DE RUTA",
+    imageGameTitle:"🖼 JUEGO DE PALABRAS CON IMÁGENES", imageGameDesc:"¡Mira la pista y elige la palabra japonesa correcta!",
+    sentenceGameTitle:"📝 QUIZ DE ORACIONES", sentenceGameDesc:"Elige la palabra correcta para completar la oración.",
+    correct:"✅ ¡Correcto!", wrong:"❌ ¡Incorrecto! Respuesta correcta:", nextCard:"Siguiente →",
+    score:"Puntuación", correct2:"correctas", of:"de",
+    sortPracticeTitle:"🔀 PRÁCTICA DE ORDEN DE PALABRAS",
+    sortPracticeDesc:"Reorganiza las palabras para formar una oración correcta en japonés.",
+    checkAnswer:"Verificar respuesta", resetSentence:"Reiniciar",
+  },
+};
+
+function T(lang, key) {
+  if (UI_STRINGS[lang] && UI_STRINGS[lang][key]) return UI_STRINGS[lang][key];
+  return UI_STRINGS["English"][key] || key;
+}
+
 // ─── CLT RESOURCES ─────────────────────────────────────────────────────────────
 const RESOURCES = {
   pronunciation: [
@@ -61,33 +192,409 @@ const WRITING_TOPICS = {
   education: ["あなたが日本語を勉強している理由を書いてください。", "効果的な外国語学習方法について書いてください。", "学校での一番の思い出を書いてください。", "オンライン学習と対面学習の違いについて書いてください。"],
 };
 
-// ─── AI Vocabulary Builder ──────────────────────────────────────────────────────
-function VocabBuilder({ form }) {
-  const [search, setSearch] = useState("");
-  const [words, setWords] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [saved, setSaved] = useState([]);
+// ─── FLASHCARD / IMAGE GAME ─────────────────────────────────────────────────────
+function FlashcardGame({ words, lang }) {
+  const [idx, setIdx] = useState(0);
+  const [phase, setPhase] = useState("question"); // question | result
+  const [selected, setSelected] = useState(null);
+  const [score, setScore] = useState(0);
+  const [gameWords, setGameWords] = useState(() => words.slice(0, Math.min(words.length, 8)));
 
-  const findWords = async () => {
-    if (!search.trim()) return;
+  useEffect(() => { setGameWords(words.slice(0, Math.min(words.length, 8))); setIdx(0); setScore(0); setPhase("question"); setSelected(null); }, [words]);
+
+  if (!gameWords || gameWords.length < 2) return (
+    <div style={{ ...S.card, textAlign:"center", padding:24 }}>
+      <p style={{ color:"#64748b" }}>Search for vocabulary to start flashcard games!</p>
+    </div>
+  );
+
+  const current = gameWords[idx];
+  if (!current) return null;
+
+  // Generate 4 choices (1 correct + 3 random)
+  const otherWords = gameWords.filter((_,i) => i !== idx);
+  const shuffled = [...otherWords].sort(() => Math.random() - 0.5).slice(0, 3);
+  const choices = [current, ...shuffled].sort(() => Math.random() - 0.5);
+
+  const handleAnswer = (choice) => {
+    setSelected(choice);
+    if (choice.word === current.word) setScore(s => s + 1);
+    setPhase("result");
+  };
+
+  const next = () => {
+    if (idx + 1 >= gameWords.length) { setIdx(0); setPhase("done"); return; }
+    setIdx(i => i + 1);
+    setPhase("question");
+    setSelected(null);
+  };
+
+  if (phase === "done") return (
+    <div style={{ ...S.card, textAlign:"center" }}>
+      <p style={{ fontSize:40, marginBottom:12 }}>🎉</p>
+      <p style={{ color:"#f1f5f9", fontSize:16, fontWeight:700, marginBottom:8 }}>
+        {T(lang,"score")}: {score} {T(lang,"correct2")} {T(lang,"of")} {gameWords.length}
+      </p>
+      <button onClick={() => { setIdx(0); setScore(0); setPhase("question"); setSelected(null); }} style={{ ...S.btn, background:`linear-gradient(135deg,${C.teal},#0891b2)`, color:"#fff", marginTop:12 }}>
+        Try Again 🔄
+      </button>
+    </div>
+  );
+
+  return (
+    <div>
+      <div style={{ ...S.card, marginBottom:12 }}>
+        <div style={{ display:"flex", justifyContent:"space-between", marginBottom:12 }}>
+          <p style={{ color:C.teal, fontSize:12, fontWeight:700, margin:0 }}>{T(lang,"imageGameTitle")}</p>
+          <p style={{ color:"#64748b", fontSize:12, margin:0 }}>{idx+1}/{gameWords.length} · {T(lang,"score")}: {score}</p>
+        </div>
+        <p style={{ color:"#64748b", fontSize:12, marginBottom:14 }}>{T(lang,"imageGameDesc")}</p>
+        {/* Visual clue */}
+        <div style={{ background:"rgba(6,182,212,0.06)", borderRadius:12, padding:"16px", marginBottom:14, textAlign:"center" }}>
+          <p style={{ color:"#94a3b8", fontSize:11, fontWeight:700, marginBottom:8 }}>🖼 VISUAL CLUE</p>
+          <p style={{ color:"#cbd5e1", fontSize:13, lineHeight:1.7 }}>{current.image}</p>
+          <p style={{ color:"#64748b", fontSize:12, marginTop:8, fontStyle:"italic" }}>{current.meaning}</p>
+        </div>
+        {/* Choices */}
+        <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:8 }}>
+          {choices.map((ch, i) => {
+            const isCorrect = ch.word === current.word;
+            const isSelected = selected && ch.word === selected.word;
+            let bg = "rgba(255,255,255,0.04)", border = C.border, color = "#cbd5e1";
+            if (phase === "result") {
+              if (isCorrect) { bg = "rgba(34,197,94,0.1)"; border = C.green; color = C.green; }
+              else if (isSelected) { bg = "rgba(239,68,68,0.1)"; border = C.red; color = C.red; }
+            }
+            return (
+              <button key={i} onClick={() => phase === "question" && handleAnswer(ch)}
+                style={{ padding:"12px", borderRadius:10, border:`1.5px solid ${border}`, background:bg, color, fontSize:15, fontWeight:700, cursor:"pointer" }}>
+                {ch.word}<br/><span style={{ fontSize:11, fontWeight:400 }}>{ch.reading}</span>
+              </button>
+            );
+          })}
+        </div>
+        {phase === "result" && (
+          <div style={{ marginTop:12 }}>
+            <p style={{ color: selected?.word === current.word ? C.green : C.red, fontSize:13, fontWeight:700, textAlign:"center", marginBottom:8 }}>
+              {selected?.word === current.word ? T(lang,"correct") : `${T(lang,"wrong")} ${current.word} (${current.reading})`}
+            </p>
+            <p style={{ color:"#64748b", fontSize:12, textAlign:"center", marginBottom:10 }}>{current.example}</p>
+            <button onClick={next} style={{ ...S.btn, width:"100%", background:`linear-gradient(135deg,${C.teal},#0891b2)`, color:"#fff" }}>
+              {T(lang,"nextCard")}
+            </button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// ─── SENTENCE PRACTICE ──────────────────────────────────────────────────────────
+function SentencePractice({ words, lang }) {
+  const [idx, setIdx] = useState(0);
+  const [selected, setSelected] = useState(null);
+  const [phase, setPhase] = useState("question");
+  const [score, setScore] = useState(0);
+  const [sentences, setSentences] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (words.length >= 2) generateSentences();
+  }, [words]);
+
+  const generateSentences = async () => {
     setLoading(true);
     try {
       const res = await fetch("https://api.anthropic.com/v1/messages", {
         method:"POST", headers:{"Content-Type":"application/json"},
-        body: JSON.stringify({ model:"claude-sonnet-4-20250514", max_tokens:800,
-          messages:[{ role:"user", content:`You are a Japanese vocabulary teacher using CLT. The student is level ${form.jlpt}, goal: ${form.goal}.
+        body: JSON.stringify({ model:"claude-sonnet-4-6", max_tokens:1000,
+          messages:[{ role:"user", content:`Create 5 fill-in-the-blank multiple choice questions using these Japanese words: ${words.map(w=>w.word).join(", ")}.
+
+For each question:
+- Write a natural Japanese sentence with one blank (_____)
+- Provide the English translation
+- Give 4 choices (1 correct + 3 plausible wrong answers from the word list or similar words)
+- Mark the correct answer index (0-3)
+
+Respond ONLY in JSON, no backticks:
+[{"sentence":"日本語の文___","translation":"English translation with blank context","choices":["word1","word2","word3","word4"],"answer":0}]` }]
+        })
+      });
+      const d = await res.json();
+      const text = d.content?.map(c=>c.text||"").join("") || "[]";
+      const parsed = JSON.parse(text.replace(/```json|```/g,"").trim());
+      setSentences(parsed);
+    } catch { setSentences([]); }
+    setLoading(false);
+  };
+
+  if (loading) return <div style={{ ...S.card, textAlign:"center", padding:32 }}><p style={{ color:C.teal }}>Generating practice sentences... ⏳</p></div>;
+  if (!sentences.length) return <div style={{ ...S.card, textAlign:"center", padding:32 }}><p style={{ color:"#64748b" }}>No sentences yet. Search for vocabulary first!</p></div>;
+
+  const current = sentences[idx];
+  if (!current) return null;
+
+  const handleAnswer = (i) => {
+    setSelected(i);
+    if (i === current.answer) setScore(s => s + 1);
+    setPhase("result");
+  };
+
+  const next = () => {
+    if (idx + 1 >= sentences.length) { setPhase("done"); return; }
+    setIdx(i => i + 1);
+    setPhase("question");
+    setSelected(null);
+  };
+
+  if (phase === "done") return (
+    <div style={{ ...S.card, textAlign:"center" }}>
+      <p style={{ fontSize:40, marginBottom:12 }}>🎉</p>
+      <p style={{ color:"#f1f5f9", fontSize:16, fontWeight:700 }}>{T(lang,"score")}: {score}/{sentences.length}</p>
+      <button onClick={() => { setIdx(0); setScore(0); setPhase("question"); setSelected(null); }} style={{ ...S.btn, background:`linear-gradient(135deg,${C.teal},#0891b2)`, color:"#fff", marginTop:12 }}>Try Again 🔄</button>
+    </div>
+  );
+
+  return (
+    <div style={{ ...S.card }}>
+      <div style={{ display:"flex", justifyContent:"space-between", marginBottom:12 }}>
+        <p style={{ color:C.teal, fontSize:12, fontWeight:700, margin:0 }}>{T(lang,"sentenceGameTitle")}</p>
+        <p style={{ color:"#64748b", fontSize:12, margin:0 }}>{idx+1}/{sentences.length}</p>
+      </div>
+      <div style={{ background:"rgba(6,182,212,0.06)", borderRadius:10, padding:"14px", marginBottom:14 }}>
+        <p style={{ color:"#f1f5f9", fontSize:16, fontWeight:700, marginBottom:6 }}>{current.sentence}</p>
+        <p style={{ color:"#64748b", fontSize:12, fontStyle:"italic" }}>{current.translation}</p>
+      </div>
+      <div style={{ display:"flex", flexDirection:"column", gap:8, marginBottom:12 }}>
+        {(current.choices||[]).map((ch, i) => {
+          let bg = C.card, border = C.border, color = "#cbd5e1";
+          if (phase === "result") {
+            if (i === current.answer) { bg = "rgba(34,197,94,0.1)"; border = C.green; color = C.green; }
+            else if (i === selected) { bg = "rgba(239,68,68,0.1)"; border = C.red; color = C.red; }
+          }
+          return (
+            <button key={i} onClick={() => phase === "question" && handleAnswer(i)}
+              style={{ padding:"12px 16px", borderRadius:10, border:`1.5px solid ${border}`, background:bg, color, fontSize:14, textAlign:"left", cursor:"pointer" }}>
+              {String.fromCharCode(65+i)}. {ch}
+            </button>
+          );
+        })}
+      </div>
+      {phase === "result" && (
+        <button onClick={next} style={{ ...S.btn, width:"100%", background:`linear-gradient(135deg,${C.teal},#0891b2)`, color:"#fff" }}>
+          {T(lang,"nextCard")}
+        </button>
+      )}
+    </div>
+  );
+}
+
+// ─── WORD ORDER PRACTICE ───────────────────────────────────────────────────────
+function WordOrderPractice({ words, lang }) {
+  const [exercises, setExercises] = useState([]);
+  const [idx, setIdx] = useState(0);
+  const [arranged, setArranged] = useState([]);
+  const [available, setAvailable] = useState([]);
+  const [phase, setPhase] = useState("question"); // question | result
+  const [isCorrect, setIsCorrect] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (words.length >= 1) generateExercises();
+  }, [words]);
+
+  const generateExercises = async () => {
+    setLoading(true);
+    try {
+      const res = await fetch("https://api.anthropic.com/v1/messages", {
+        method:"POST", headers:{"Content-Type":"application/json"},
+        body: JSON.stringify({ model:"claude-sonnet-4-6", max_tokens:800,
+          messages:[{ role:"user", content:`Create 4 word-order exercises using these Japanese vocabulary words: ${words.map(w=>w.word).join(", ")}.
+
+For each exercise, create a Japanese sentence that uses one of these words. Split it into individual word/particle pieces.
+
+Respond ONLY in JSON, no backticks:
+[{"answer":"完全な日本語の文章","parts":["日本語","の","単語","を","並べて"],"translation":"English meaning"}]
+
+Important: the "parts" array is the shuffled version of the sentence components.` }]
+        })
+      });
+      const d = await res.json();
+      const text = d.content?.map(c=>c.text||"").join("") || "[]";
+      const parsed = JSON.parse(text.replace(/```json|```/g,"").trim());
+      const exs = parsed.map(e => ({ ...e, shuffled: [...e.parts].sort(() => Math.random()-0.5) }));
+      setExercises(exs);
+      if (exs[0]) setAvailable([...exs[0].shuffled]);
+    } catch { setExercises([]); }
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    if (exercises[idx]) {
+      setAvailable([...exercises[idx].shuffled]);
+      setArranged([]);
+      setPhase("question");
+    }
+  }, [idx, exercises]);
+
+  if (loading) return <div style={{ ...S.card, textAlign:"center", padding:32 }}><p style={{ color:C.teal }}>Generating exercises... ⏳</p></div>;
+  if (!exercises.length) return <div style={{ ...S.card, textAlign:"center", padding:32 }}><p style={{ color:"#64748b" }}>Search for vocabulary first!</p></div>;
+
+  const current = exercises[idx];
+  if (!current) return null;
+
+  const addWord = (word, i) => {
+    setArranged(a => [...a, word]);
+    setAvailable(av => av.filter((_,j) => j !== i));
+  };
+
+  const removeWord = (i) => {
+    const word = arranged[i];
+    setArranged(a => a.filter((_,j) => j !== i));
+    setAvailable(av => [...av, word]);
+  };
+
+  const checkAnswer = () => {
+    const studentAnswer = arranged.join("");
+    const correct = arranged.join("") === current.answer || arranged.join(" ") === current.answer;
+    setIsCorrect(correct);
+    setPhase("result");
+  };
+
+  const reset = () => {
+    setAvailable([...current.shuffled]);
+    setArranged([]);
+    setPhase("question");
+  };
+
+  const next = () => {
+    if (idx + 1 < exercises.length) { setIdx(i => i+1); }
+    else { setIdx(0); }
+    setPhase("question");
+  };
+
+  return (
+    <div style={{ ...S.card }}>
+      <p style={{ color:C.amber, fontSize:12, fontWeight:700, letterSpacing:1, marginBottom:4 }}>{T(lang,"sortPracticeTitle")}</p>
+      <p style={{ color:"#64748b", fontSize:12, marginBottom:14 }}>{T(lang,"sortPracticeDesc")}</p>
+      <p style={{ color:"#64748b", fontSize:11, fontStyle:"italic", marginBottom:10 }}>Translation: {current.translation}</p>
+
+      {/* Answer area */}
+      <div style={{ minHeight:52, background:"rgba(255,255,255,0.03)", border:`1.5px dashed ${phase==="result"?(isCorrect?C.green:C.red):C.border}`, borderRadius:10, padding:"10px", marginBottom:12, display:"flex", flexWrap:"wrap", gap:8, alignItems:"center" }}>
+        {arranged.length === 0 && <p style={{ color:"#334155", fontSize:12 }}>Tap words below to arrange them here...</p>}
+        {arranged.map((word, i) => (
+          <button key={i} onClick={() => phase==="question" && removeWord(i)}
+            style={{ padding:"6px 12px", borderRadius:8, background:`rgba(168,85,247,0.15)`, border:`1px solid ${C.purpleLight}`, color:C.purpleLight, fontSize:14, cursor:"pointer" }}>
+            {word}
+          </button>
+        ))}
+      </div>
+
+      {/* Available words */}
+      <div style={{ display:"flex", flexWrap:"wrap", gap:8, marginBottom:14 }}>
+        {available.map((word, i) => (
+          <button key={i} onClick={() => phase==="question" && addWord(word, i)}
+            style={{ padding:"6px 12px", borderRadius:8, background:C.card, border:`1px solid ${C.border}`, color:"#cbd5e1", fontSize:14, cursor:"pointer" }}>
+            {word}
+          </button>
+        ))}
+      </div>
+
+      {phase === "result" && (
+        <div style={{ background:isCorrect?"rgba(34,197,94,0.08)":"rgba(239,68,68,0.08)", borderRadius:10, padding:"12px", marginBottom:12 }}>
+          <p style={{ color:isCorrect?C.green:C.red, fontSize:13, fontWeight:700, margin:"0 0 4px" }}>
+            {isCorrect ? T(lang,"correct") : T(lang,"wrong")}
+          </p>
+          {!isCorrect && <p style={{ color:"#cbd5e1", fontSize:13, margin:0 }}>✅ {current.answer}</p>}
+        </div>
+      )}
+
+      <div style={{ display:"flex", gap:8 }}>
+        {phase === "question" ? (
+          <>
+            <button onClick={checkAnswer} disabled={!arranged.length} style={{ ...S.btn, flex:1, background:arranged.length?`linear-gradient(135deg,${C.teal},#0891b2)`:"#1e293b", color:arranged.length?"#fff":"#475569" }}>
+              {T(lang,"checkAnswer")}
+            </button>
+            <button onClick={reset} style={{ ...S.btn, background:C.card, color:"#94a3b8", border:`1px solid ${C.border}` }}>
+              {T(lang,"resetSentence")}
+            </button>
+          </>
+        ) : (
+          <button onClick={next} style={{ ...S.btn, width:"100%", background:`linear-gradient(135deg,${C.teal},#0891b2)`, color:"#fff" }}>
+            {T(lang,"nextCard")}
+          </button>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// ─── VOCABULARY BUILDER ─────────────────────────────────────────────────────────
+function VocabBuilder({ form }) {
+  const lang = form.preferredLang || "English";
+  const [search, setSearch] = useState("");
+  const [words, setWords] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [activeTab, setActiveTab] = useState("practice"); // practice | flashcards | saved
+  // Per-word hint state
+  const [hints, setHints] = useState({}); // { idx: 0|1|2 }
+  // Category-based saved words
+  const [categories, setCategories] = useState(() => {
+    try { const s = localStorage.getItem("gaku_vocab_categories"); return s ? JSON.parse(s) : { "General": [] }; } catch { return { "General": [] }; }
+  });
+  const [activeCategory, setActiveCategory] = useState("General");
+  const [newCatName, setNewCatName] = useState("");
+
+  const saveCategories = (cats) => {
+    setCategories(cats);
+    try { localStorage.setItem("gaku_vocab_categories", JSON.stringify(cats)); } catch {}
+  };
+
+  const addCategory = () => {
+    const name = newCatName.trim();
+    if (!name || categories[name]) return;
+    saveCategories({ ...categories, [name]: [] });
+    setActiveCategory(name);
+    setNewCatName("");
+  };
+
+  const saveWordToCategory = (w) => {
+    const cat = categories[activeCategory] || [];
+    if (cat.find(x => x.word === w.word)) return;
+    saveCategories({ ...categories, [activeCategory]: [...cat, w] });
+  };
+
+  const removeFromCategory = (cat, word) => {
+    saveCategories({ ...categories, [cat]: (categories[cat] || []).filter(w => w.word !== word) });
+  };
+
+  const isWordSaved = (w) => Object.values(categories).some(arr => arr.find(x => x.word === w.word));
+
+  const findWords = async () => {
+    if (!search.trim()) return;
+    setLoading(true);
+    setHints({});
+    try {
+      // Use kokugo.jitenon.jp approach: generate words without level restriction but appropriate for study
+      const res = await fetch("https://api.anthropic.com/v1/messages", {
+        method:"POST", headers:{"Content-Type":"application/json"},
+        body: JSON.stringify({ model:"claude-sonnet-4-6", max_tokens:1200,
+          messages:[{ role:"user", content:`You are a Japanese vocabulary teacher. The student's goal: ${form.goal}.
 They want to learn words related to: "${search}"
 
-Generate 5 vocabulary words perfect for their level. For each word, provide:
-- The Japanese word (kanji/kana)
-- Reading (hiragana)
-- English meaning
-- A natural example sentence in Japanese (with English translation)
-- A vivid image description they can visualize (1 sentence, start with "Imagine:")
-- CLT usage tip (how to use this word in real conversation)
+Generate 6 Japanese vocabulary words for this topic. Include a wide range of words (not limited to JLPT level).
+For each word provide:
+- The Japanese word (kanji/kana as commonly written)
+- Reading (hiragana/katakana)
+- Romaji (romanization)
+- Meaning in ${lang}
+- A natural example sentence in Japanese (with furigana hints in parentheses for kanji)
+- Example sentence translation in ${lang}
+- A vivid visual image description (1 sentence, start with "Imagine:")
+- CLT tip in ${lang}: how to use this word in real conversation
 
-Respond ONLY in this JSON format (no markdown, no backticks):
-[{"word":"","reading":"","meaning":"","example":"","example_en":"","image":"","tip":""}]` }]
+Respond ONLY in this JSON (no markdown, no backticks):
+[{"word":"","reading":"","romaji":"","meaning":"","example":"","example_translation":"","image":"","tip":""}]` }]
         })
       });
       const d = await res.json();
@@ -98,63 +605,139 @@ Respond ONLY in this JSON format (no markdown, no backticks):
     setLoading(false);
   };
 
-  const saveWord = (w) => setSaved(prev => prev.find(x=>x.word===w.word) ? prev : [...prev, w]);
+  const toggleHint = (idx, level) => {
+    setHints(h => ({ ...h, [idx]: h[idx] === level ? 0 : level }));
+  };
+
+  const allSavedWords = Object.values(categories).flat();
 
   return (
     <div>
+      {/* Search */}
       <div style={{ ...S.card, marginBottom:16 }}>
-        <p style={{ color:C.teal, fontSize:12, fontWeight:700, letterSpacing:1, marginBottom:4 }}>📚 VOCABULARY BUILDER</p>
-        <p style={{ color:"#64748b", fontSize:12, marginBottom:14 }}>Enter a topic and AI will find vocabulary matched to your level ({form.jlpt}) with visual associations</p>
+        <p style={{ color:C.teal, fontSize:12, fontWeight:700, letterSpacing:1, marginBottom:4 }}>{T(lang,"vocabBuilderTitle")}</p>
+        <p style={{ color:"#64748b", fontSize:12, marginBottom:14 }}>{T(lang,"vocabBuilderDesc")}</p>
         <div style={{ display:"flex", gap:8 }}>
-          <input value={search} onChange={e=>setSearch(e.target.value)} onKeyDown={e=>e.key==="Enter"&&findWords()} placeholder="e.g. food, travel, business, emotions..." style={{ ...S.input, flex:1 }} />
-          <button onClick={findWords} disabled={!search.trim()||loading} style={{ ...S.btn, background:search.trim()?`linear-gradient(135deg,${C.teal},#0891b2)`:"#1e293b", color:search.trim()?"#fff":"#475569", whiteSpace:"nowrap", padding:"12px 18px" }}>
-            {loading?"...":"Find Words"}
+          <input value={search} onChange={e=>setSearch(e.target.value)} onKeyDown={e=>e.key==="Enter"&&findWords()}
+            placeholder={T(lang,"findWordsPlaceholder")} style={{ ...S.input, flex:1 }} />
+          <button onClick={findWords} disabled={!search.trim()||loading}
+            style={{ ...S.btn, background:search.trim()?`linear-gradient(135deg,${C.teal},#0891b2)`:"#1e293b", color:search.trim()?"#fff":"#475569", whiteSpace:"nowrap", padding:"12px 18px" }}>
+            {loading?"...":T(lang,"findWords")}
           </button>
         </div>
       </div>
 
-      {words.length > 0 && (
-        <div style={{ display:"flex", flexDirection:"column", gap:12, marginBottom:16 }}>
-          {words.map((w,i) => (
-            <div key={i} style={{ ...S.card, borderLeft:`3px solid ${C.teal}` }}>
-              <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", marginBottom:8 }}>
-                <div>
-                  <p style={{ color:"#f1f5f9", fontSize:20, fontWeight:900, margin:"0 0 2px" }}>{w.word}</p>
-                  <p style={{ color:C.teal, fontSize:13, margin:"0 0 2px" }}>{w.reading}</p>
-                  <p style={{ color:"#94a3b8", fontSize:13, margin:0 }}>{w.meaning}</p>
-                </div>
-                <button onClick={()=>saveWord(w)} style={{ padding:"6px 12px", borderRadius:8, border:`1px solid ${saved.find(x=>x.word===w.word)?C.green:C.border}`, background:saved.find(x=>x.word===w.word)?"rgba(34,197,94,0.1)":C.card, color:saved.find(x=>x.word===w.word)?C.green:"#64748b", fontSize:11, fontWeight:700, cursor:"pointer" }}>
-                  {saved.find(x=>x.word===w.word)?"✓ Saved":"+ Save"}
-                </button>
-              </div>
-              <div style={{ background:"rgba(6,182,212,0.06)", borderRadius:10, padding:"10px 12px", marginBottom:8 }}>
-                <p style={{ color:"#f1f5f9", fontSize:13, margin:"0 0 2px" }}>{w.example}</p>
-                <p style={{ color:"#64748b", fontSize:12, margin:0, fontStyle:"italic" }}>{w.example_en}</p>
-              </div>
-              <div style={{ background:"rgba(168,85,247,0.06)", borderRadius:10, padding:"10px 12px", marginBottom:8 }}>
-                <p style={{ color:C.purpleLight, fontSize:11, fontWeight:700, margin:"0 0 4px" }}>🖼 VISUAL ASSOCIATION</p>
-                <p style={{ color:"#cbd5e1", fontSize:12, margin:0, lineHeight:1.6 }}>{w.image}</p>
-              </div>
-              <div style={{ background:"rgba(34,197,94,0.06)", borderRadius:10, padding:"10px 12px" }}>
-                <p style={{ color:C.green, fontSize:11, fontWeight:700, margin:"0 0 4px" }}>💬 CLT TIP</p>
-                <p style={{ color:"#cbd5e1", fontSize:12, margin:0 }}>{w.tip}</p>
-              </div>
-            </div>
+      {/* Category selector */}
+      <div style={{ ...S.card, marginBottom:16 }}>
+        <p style={{ color:C.green, fontSize:12, fontWeight:700, marginBottom:10 }}>{T(lang,"categoryLabel")}</p>
+        <div style={{ display:"flex", flexWrap:"wrap", gap:8, marginBottom:12 }}>
+          {Object.keys(categories).map(cat => (
+            <button key={cat} onClick={() => setActiveCategory(cat)}
+              style={{ padding:"6px 14px", borderRadius:20, border:`1.5px solid ${activeCategory===cat?C.green:C.border}`, background:activeCategory===cat?"rgba(34,197,94,0.12)":C.card, color:activeCategory===cat?C.green:"#64748b", fontSize:12, fontWeight:600, cursor:"pointer" }}>
+              {cat} ({(categories[cat]||[]).length})
+            </button>
           ))}
+        </div>
+        <div style={{ display:"flex", gap:8 }}>
+          <input value={newCatName} onChange={e=>setNewCatName(e.target.value)} onKeyDown={e=>e.key==="Enter"&&addCategory()}
+            placeholder={T(lang,"newCategory")} style={{ ...S.input, flex:1, fontSize:12, padding:"8px 12px" }} />
+          <button onClick={addCategory} disabled={!newCatName.trim()} style={{ ...S.btn, padding:"8px 14px", background:newCatName.trim()?`linear-gradient(135deg,${C.green},#16a34a)`:"#1e293b", color:newCatName.trim()?"#fff":"#475569", fontSize:12 }}>
+            {T(lang,"addCategory")}
+          </button>
+        </div>
+      </div>
+
+      {/* Tabs */}
+      <div style={{ display:"flex", gap:8, marginBottom:14 }}>
+        {[["practice",T(lang,"practiceTab")],["flashcards",T(lang,"flashcardsTab")],["saved",T(lang,"savedTab")]].map(([id,label]) => (
+          <button key={id} onClick={()=>setActiveTab(id)} style={{ padding:"8px 14px", borderRadius:20, border:`1.5px solid ${activeTab===id?C.teal:C.border}`, background:activeTab===id?"rgba(6,182,212,0.12)":C.card, color:activeTab===id?C.teal:"#64748b", fontSize:12, fontWeight:700, cursor:"pointer" }}>
+            {label}
+          </button>
+        ))}
+      </div>
+
+      {/* Practice Tab */}
+      {activeTab === "practice" && (
+        <div>
+          {words.length > 0 && (
+            <div style={{ display:"flex", flexDirection:"column", gap:12, marginBottom:16 }}>
+              {words.map((w, i) => (
+                <div key={i} style={{ ...S.card, borderLeft:`3px solid ${C.teal}` }}>
+                  <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", marginBottom:8 }}>
+                    <div>
+                      <p style={{ color:"#f1f5f9", fontSize:20, fontWeight:900, margin:"0 0 2px" }}>{w.word}</p>
+                      <p style={{ color:C.teal, fontSize:13, margin:"0 0 2px" }}>{w.reading}</p>
+                      {hints[i] >= 1 && <p style={{ color:"#94a3b8", fontSize:12, margin:"0 0 2px" }}>Romaji: {w.romaji}</p>}
+                      {hints[i] >= 2 && <p style={{ color:C.purpleLight, fontSize:13, fontWeight:600, margin:"0 0 2px" }}>{w.meaning}</p>}
+                    </div>
+                    <button onClick={()=>saveWordToCategory(w)}
+                      style={{ padding:"6px 12px", borderRadius:8, border:`1px solid ${isWordSaved(w)?C.green:C.border}`, background:isWordSaved(w)?"rgba(34,197,94,0.1)":C.card, color:isWordSaved(w)?C.green:"#64748b", fontSize:11, fontWeight:700, cursor:"pointer" }}>
+                      {isWordSaved(w)?T(lang,"saved"):T(lang,"save")}
+                    </button>
+                  </div>
+                  {/* Original Japanese sentence always shown */}
+                  <div style={{ background:"rgba(6,182,212,0.06)", borderRadius:10, padding:"10px 12px", marginBottom:8 }}>
+                    <p style={{ color:"#f1f5f9", fontSize:13, margin:"0 0 2px" }}>{w.example}</p>
+                    {hints[i] >= 2 && <p style={{ color:"#64748b", fontSize:12, margin:0, fontStyle:"italic" }}>{w.example_translation}</p>}
+                  </div>
+                  <div style={{ background:"rgba(168,85,247,0.06)", borderRadius:10, padding:"10px 12px", marginBottom:8 }}>
+                    <p style={{ color:C.purpleLight, fontSize:11, fontWeight:700, margin:"0 0 4px" }}>🖼 VISUAL ASSOCIATION</p>
+                    <p style={{ color:"#cbd5e1", fontSize:12, margin:0, lineHeight:1.6 }}>{w.image}</p>
+                  </div>
+                  <div style={{ background:"rgba(34,197,94,0.06)", borderRadius:10, padding:"10px 12px", marginBottom:10 }}>
+                    <p style={{ color:C.green, fontSize:11, fontWeight:700, margin:"0 0 4px" }}>💬 CLT TIP</p>
+                    <p style={{ color:"#cbd5e1", fontSize:12, margin:0 }}>{w.tip}</p>
+                  </div>
+                  {/* Hint buttons */}
+                  <div style={{ display:"flex", gap:8 }}>
+                    <button onClick={()=>toggleHint(i,1)} style={{ padding:"6px 12px", borderRadius:8, border:`1px solid ${hints[i]>=1?C.amber:C.border}`, background:hints[i]>=1?"rgba(245,158,11,0.1)":C.card, color:hints[i]>=1?C.amber:"#64748b", fontSize:11, cursor:"pointer" }}>
+                      {T(lang,"hint1Btn")}
+                    </button>
+                    <button onClick={()=>toggleHint(i,2)} style={{ padding:"6px 12px", borderRadius:8, border:`1px solid ${hints[i]>=2?C.purpleLight:C.border}`, background:hints[i]>=2?"rgba(168,85,247,0.1)":C.card, color:hints[i]>=2?C.purpleLight:"#64748b", fontSize:11, cursor:"pointer" }}>
+                      {T(lang,"hint2Btn")}
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+          {/* Word Order Practice */}
+          {words.length > 0 && (
+            <div style={{ marginTop:16 }}>
+              <WordOrderPractice words={words} lang={lang} />
+            </div>
+          )}
         </div>
       )}
 
-      {saved.length > 0 && (
-        <div style={{ ...S.card }}>
-          <p style={{ color:C.green, fontSize:12, fontWeight:700, letterSpacing:1, marginBottom:12 }}>✅ MY SAVED WORDS ({saved.length})</p>
-          <div style={{ display:"flex", flexWrap:"wrap", gap:8 }}>
-            {saved.map((w,i) => (
-              <div key={i} style={{ background:"rgba(34,197,94,0.08)", border:`1px solid rgba(34,197,94,0.2)`, borderRadius:10, padding:"8px 12px" }}>
-                <p style={{ color:"#f1f5f9", fontSize:14, fontWeight:700, margin:"0 0 2px" }}>{w.word}</p>
-                <p style={{ color:"#64748b", fontSize:11, margin:0 }}>{w.reading} · {w.meaning}</p>
+      {/* Flashcards Tab */}
+      {activeTab === "flashcards" && (
+        <div>
+          <FlashcardGame words={words.length > 0 ? words : allSavedWords} lang={lang} />
+          {words.length > 0 && <div style={{ marginTop:16 }}><SentencePractice words={words} lang={lang} /></div>}
+        </div>
+      )}
+
+      {/* Saved Words Tab */}
+      {activeTab === "saved" && (
+        <div>
+          {Object.entries(categories).map(([cat, catWords]) => (
+            catWords.length > 0 && (
+              <div key={cat} style={{ ...S.card, marginBottom:12 }}>
+                <p style={{ color:C.green, fontSize:12, fontWeight:700, letterSpacing:1, marginBottom:12 }}>📂 {cat.toUpperCase()} ({catWords.length})</p>
+                <div style={{ display:"flex", flexWrap:"wrap", gap:8 }}>
+                  {catWords.map((w, i) => (
+                    <div key={i} style={{ background:"rgba(34,197,94,0.08)", border:`1px solid rgba(34,197,94,0.2)`, borderRadius:10, padding:"8px 12px", position:"relative" }}>
+                      <p style={{ color:"#f1f5f9", fontSize:14, fontWeight:700, margin:"0 0 2px" }}>{w.word}</p>
+                      <p style={{ color:"#64748b", fontSize:11, margin:0 }}>{w.reading} · {w.meaning}</p>
+                      <button onClick={()=>removeFromCategory(cat, w.word)} style={{ position:"absolute", top:4, right:4, background:"none", border:"none", color:"#64748b", cursor:"pointer", fontSize:12 }}>×</button>
+                    </div>
+                  ))}
+                </div>
               </div>
-            ))}
-          </div>
+            )
+          ))}
+          {allSavedWords.length === 0 && <p style={{ color:"#64748b", textAlign:"center", padding:24 }}>No saved words yet. Search and save vocabulary!</p>}
         </div>
       )}
     </div>
@@ -169,7 +752,6 @@ function buildSchedule(form) {
   const days = daysMap[form.daysPerWeek] || 5;
   const skills = form.skills || [];
 
-  // Build blocks from selected skills only
   const allBlocks = [
     { skill:"conversation", mins:Math.round(mins*0.3), note:"Role-play or shadowing — CLT core" },
     { skill:"listening",    mins:Math.round(mins*0.2), note:"NHK World or JapanesePod101" },
@@ -180,9 +762,7 @@ function buildSchedule(form) {
     { skill:"pronunciation",mins:Math.round(mins*0.1), note:"Anki audio cards — shadow 20 words" },
   ].filter(b => skills.includes(b.skill));
 
-  if (allBlocks.length === 0) {
-    allBlocks.push({ skill:"conversation", mins:30, note:"Role-play or shadowing" });
-  }
+  if (allBlocks.length === 0) allBlocks.push({ skill:"conversation", mins:30, note:"Role-play or shadowing" });
 
   const WEEKDAYS = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
   const schedule = {};
@@ -214,51 +794,73 @@ function buildMilestones(form) {
 
 // ─── HELP MODAL ────────────────────────────────────────────────────────────────
 function HelpModal({ onClose, form }) {
-  const [view, setView] = useState("menu"); // menu | lesson | howto
+  const lang = form.preferredLang || "English";
+  const [view, setView] = useState("menu");
   const [mood, setMood] = useState(""); const [time, setTime] = useState(""); const [energy, setEnergy] = useState("");
   const [wantSomethingDifferent, setWantSomethingDifferent] = useState(false);
   const [differentRequest, setDifferentRequest] = useState("");
   const [result, setResult] = useState(""); const [loading, setLoading] = useState(false);
+  const [webResults, setWebResults] = useState([]);
 
   const getHelp = async () => {
     setLoading(true);
+    setWebResults([]);
     try {
       const extra = wantSomethingDifferent && differentRequest.trim()
-        ? `\nIMPORTANT: Today the student specifically wants to do something different: "${differentRequest}". Build today's suggestion around THIS request, adapted to their level (${form.jlpt}) using CLT principles.`
-        : `\nFocus on skills the student selected: ${(form.skills||[]).join(", ")}.`;
+        ? `\nThe student specifically wants: "${differentRequest}". Provide 2-3 specific websites/YouTube videos/apps that match this request AND their Japanese level (${form.jlpt}). Include direct URLs.`
+        : `\nFocus on skills: ${(form.skills||[]).join(", ")}.`;
+
       const res = await fetch("https://api.anthropic.com/v1/messages", {
         method:"POST", headers:{"Content-Type":"application/json"},
-        body: JSON.stringify({ model:"claude-sonnet-4-20250514", max_tokens:500,
+        body: JSON.stringify({ model:"claude-sonnet-4-6", max_tokens:700,
           messages:[{ role:"user", content:`You are a warm Japanese language coach using CLT.
-Student: ${form.name}, Level: ${form.jlpt}, Goal: ${form.goal}
+Student: ${form.name}, Level: ${form.jlpt}, Goal: ${form.goal}, Language: ${lang}
 Today: Mood: ${mood}, Time: ${time} min, Energy: ${energy}${extra}
-Give a specific, encouraging suggestion for TODAY ONLY using CLT principles.
-One concrete activity with a specific resource. Emojis. Under 120 words. English.` }]
+
+${wantSomethingDifferent ? `Since they want to do something different today, provide a specific activity recommendation with 2-3 real web resources (websites, YouTube channels, or apps) with their actual URLs. Format web resources as JSON at the end of your response like this:
+RESOURCES_JSON:[{"name":"Resource Name","url":"https://...","desc":"Brief description in ${lang}"}]` : "Give a specific, encouraging suggestion for TODAY ONLY. One concrete activity with a specific resource. Emojis."}
+
+Write your response in ${lang}. Under 150 words (before the JSON).` }]
         })
       });
       const d = await res.json();
-      setResult(d.content?.map(c=>c.text||"").join("") || "Take it easy today! Review 5 words and watch one Japanese video. 🌸");
+      const fullText = d.content?.map(c=>c.text||"").join("") || "";
+      
+      // Extract web resources if present
+      const jsonMatch = fullText.match(/RESOURCES_JSON:(\[.*?\])/s);
+      if (jsonMatch) {
+        try {
+          const resources = JSON.parse(jsonMatch[1]);
+          setWebResults(resources);
+        } catch {}
+      }
+      const cleanText = fullText.replace(/RESOURCES_JSON:\[.*?\]/s, "").trim();
+      setResult(cleanText || "Take it easy today! Review 5 words and watch one Japanese video. 🌸");
     } catch { setResult("Even 10 minutes counts! Review your saved vocabulary and practice one sentence aloud. 頑張って！🎌"); }
     setLoading(false);
   };
 
-  const resetAll = () => { setView("menu"); setResult(""); setMood(""); setTime(""); setEnergy(""); setWantSomethingDifferent(false); setDifferentRequest(""); };
+  const resetAll = () => { setView("menu"); setResult(""); setMood(""); setTime(""); setEnergy(""); setWantSomethingDifferent(false); setDifferentRequest(""); setWebResults([]); };
+
+  const moodOptions = lang === "Japanese" 
+    ? [["motivated and energetic","😤 やる気満々・エネルギッシュ"],["okay, normal day","😐 普通の日"],["tired and low energy","😴 疲れている・元気ない"],["stressed or anxious","😰 ストレス・不安"],["happy and relaxed","😊 幸せ・リラックス"]]
+    : [["motivated and energetic","😤 Motivated & energetic"],["okay, normal day","😐 Okay, normal day"],["tired and low energy","😴 Tired & low energy"],["stressed or anxious","😰 Stressed or anxious"],["happy and relaxed","😊 Happy & relaxed"]];
 
   return (
     <div style={{ position:"fixed", inset:0, background:"rgba(0,0,0,0.75)", display:"flex", alignItems:"center", justifyContent:"center", zIndex:1000, padding:16 }}>
       <div style={{ ...S.card, width:"100%", maxWidth:420, position:"relative", maxHeight:"85vh", overflowY:"auto" }}>
         <button onClick={onClose} style={{ position:"absolute", top:14, right:14, background:"none", border:"none", color:"#64748b", fontSize:20, cursor:"pointer" }}>×</button>
-        <p style={{ color:C.amber, fontSize:12, fontWeight:700, letterSpacing:1, marginBottom:4 }}>🆘 HELP</p>
+        <p style={{ color:C.amber, fontSize:12, fontWeight:700, letterSpacing:1, marginBottom:4 }}>🆘 {T(lang,"help").replace("🆘 ","")}</p>
 
         {view === "menu" && (
           <>
-            <h3 style={{ color:"#f1f5f9", fontSize:17, fontWeight:800, margin:"0 0 18px" }}>What do you need?</h3>
+            <h3 style={{ color:"#f1f5f9", fontSize:17, fontWeight:800, margin:"0 0 18px" }}>{T(lang,"helpMenu")}</h3>
             <div style={{ display:"flex", flexDirection:"column", gap:10 }}>
               <button onClick={()=>setView("lesson")} style={{ ...S.btn, width:"100%", textAlign:"left", background:`linear-gradient(135deg,${C.amber},#d97706)`, color:"#fff" }}>
-                ✨ Customized lesson for today
+                {T(lang,"customLesson")}
               </button>
               <button onClick={()=>setView("howto")} style={{ ...S.btn, width:"100%", textAlign:"left", background:C.card, color:"#94a3b8", border:`1px solid ${C.border}` }}>
-                ❓ How to use this app
+                {T(lang,"howToUse")}
               </button>
             </div>
           </>
@@ -266,62 +868,58 @@ One concrete activity with a specific resource. Emojis. Under 120 words. English
 
         {view === "howto" && (
           <>
-            <button onClick={()=>setView("menu")} style={{ background:"none", border:"none", color:"#64748b", fontSize:12, cursor:"pointer", marginBottom:10, padding:0 }}>← Back</button>
+            <button onClick={()=>setView("menu")} style={{ background:"none", border:"none", color:"#64748b", fontSize:12, cursor:"pointer", marginBottom:10, padding:0 }}>{T(lang,"backBtn")}</button>
             <h3 style={{ color:"#f1f5f9", fontSize:17, fontWeight:800, margin:"0 0 14px" }}>How to use GAKU Self-Study</h3>
             <div style={{ display:"flex", flexDirection:"column", gap:12, fontSize:13, color:"#cbd5e1", lineHeight:1.7 }}>
-              <div><strong style={{ color:C.purpleLight }}>📅 Schedule</strong> — Your weekly study tasks, built from your selected skills. Tap a task to check it off.</div>
-              <div><strong style={{ color:C.teal }}>📚 Vocabulary</strong> — Type any topic and AI generates 5 level-matched words with examples, visual associations, and usage tips. Save the ones you want to remember.</div>
-              <div><strong style={{ color:C.amber }}>🔗 Resources</strong> — Curated links matched to the skills you selected.</div>
-              <div><strong style={{ color:C.amber }}>✍️ Writing</strong> — Pick a topic, write 300–800 characters in Japanese, and get instant AI feedback.</div>
-              <div><strong style={{ color:C.red }}>🏆 Milestones</strong> — Your roadmap toward your goal. Tap each one as you achieve it.</div>
-              <div><strong style={{ color:C.amber }}>🆘 Help</strong> — Get a suggestion for today, or ask for something different.</div>
-              <div><strong style={{ color:"#94a3b8" }}>✏️ Edit Profile</strong> — Change just the parts you want (level, goals, study time, etc). Your other answers stay as they are.</div>
+              <div><strong style={{ color:C.purpleLight }}>📅 {T(lang,"schedule")}</strong> — Your weekly study tasks. Tap to check off.</div>
+              <div><strong style={{ color:C.teal }}>📚 {T(lang,"vocabulary")}</strong> — Type any topic and AI generates vocabulary with visual associations, hints, flashcard games, and sentence practice. Organize words into custom categories.</div>
+              <div><strong style={{ color:C.amber }}>🔗 {T(lang,"resources")}</strong> — Curated links for your selected skills.</div>
+              <div><strong style={{ color:C.amber }}>✍️ {T(lang,"writing")}</strong> — Writing practice shown only for your selected study topics.</div>
+              <div><strong style={{ color:C.red }}>🏆 {T(lang,"milestones")}</strong> — Your goal roadmap. Tap each milestone as you achieve it.</div>
+              <div><strong style={{ color:C.amber }}>🆘 {T(lang,"help")}</strong> — Get today's plan or find resources for something different you want to do.</div>
             </div>
           </>
         )}
 
         {view === "lesson" && !result && (
           <>
-            <button onClick={()=>setView("menu")} style={{ background:"none", border:"none", color:"#64748b", fontSize:12, cursor:"pointer", marginBottom:10, padding:0 }}>← Back</button>
-            <h3 style={{ color:"#f1f5f9", fontSize:17, fontWeight:800, margin:"0 0 18px" }}>How are you feeling today?</h3>
-            <label style={S.label}>MOOD</label>
+            <button onClick={()=>setView("menu")} style={{ background:"none", border:"none", color:"#64748b", fontSize:12, cursor:"pointer", marginBottom:10, padding:0 }}>{T(lang,"backBtn")}</button>
+            <h3 style={{ color:"#f1f5f9", fontSize:17, fontWeight:800, margin:"0 0 18px" }}>{T(lang,"howFeeling")}</h3>
+            <label style={S.label}>{T(lang,"moodLabel")}</label>
             <select value={mood} onChange={e=>setMood(e.target.value)} style={{ ...S.select, marginBottom:10 }}>
               <option value="">Select...</option>
-              <option value="motivated and energetic">😤 Motivated & energetic</option>
-              <option value="okay, normal day">😐 Okay, normal day</option>
-              <option value="tired and low energy">😴 Tired & low energy</option>
-              <option value="stressed or anxious">😰 Stressed or anxious</option>
-              <option value="happy and relaxed">😊 Happy & relaxed</option>
+              {moodOptions.map(([v,l]) => <option key={v} value={v}>{l}</option>)}
             </select>
-            <label style={S.label}>AVAILABLE TIME</label>
+            <label style={S.label}>{T(lang,"timeLabel")}</label>
             <select value={time} onChange={e=>setTime(e.target.value)} style={{ ...S.select, marginBottom:10 }}>
               <option value="">Select...</option>
-              <option value="10">10 minutes</option><option value="20">20 minutes</option>
-              <option value="30">30 minutes</option><option value="60">1 hour</option><option value="90">1.5 hours+</option>
+              <option value="10">10 min</option><option value="20">20 min</option>
+              <option value="30">30 min</option><option value="60">1 hour</option><option value="90">1.5 hours+</option>
             </select>
-            <label style={S.label}>ENERGY LEVEL</label>
+            <label style={S.label}>{T(lang,"energyLabel")}</label>
             <select value={energy} onChange={e=>setEnergy(e.target.value)} style={{ ...S.select, marginBottom:14 }}>
               <option value="">Select...</option>
-              <option value="high - ready to challenge">🔥 High — ready to challenge</option>
-              <option value="medium - normal study">⚡ Medium — normal study</option>
-              <option value="low - light review only">🌙 Low — light review only</option>
+              <option value="high - ready to challenge">🔥 High</option>
+              <option value="medium - normal study">⚡ Medium</option>
+              <option value="low - light review only">🌙 Low</option>
             </select>
 
             <div onClick={()=>setWantSomethingDifferent(v=>!v)} style={{ display:"flex", alignItems:"center", gap:10, padding:"10px 12px", borderRadius:10, background:wantSomethingDifferent?"rgba(168,85,247,0.08)":C.card, border:`1px solid ${wantSomethingDifferent?C.purpleLight:C.border}`, marginBottom:wantSomethingDifferent?10:14, cursor:"pointer" }}>
               <div style={{ width:18, height:18, borderRadius:5, border:`2px solid ${wantSomethingDifferent?C.purpleLight:C.border}`, background:wantSomethingDifferent?C.purpleLight:"transparent", display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0 }}>
                 {wantSomethingDifferent && <span style={{ color:"#fff", fontSize:10, fontWeight:900 }}>✓</span>}
               </div>
-              <p style={{ color:"#cbd5e1", fontSize:13, margin:0 }}>🎲 Today I want to do something different</p>
+              <p style={{ color:"#cbd5e1", fontSize:13, margin:0 }}>{T(lang,"differentToday")}</p>
             </div>
             {wantSomethingDifferent && (
               <div style={{ marginBottom:14 }}>
-                <label style={S.label}>WHAT DO YOU WANT TO DO TODAY?</label>
+                <label style={S.label}>{T(lang,"whatToday")}</label>
                 <input value={differentRequest} onChange={e=>setDifferentRequest(e.target.value)} placeholder="e.g. watch an anime clip and learn new words" style={S.input}/>
               </div>
             )}
 
-            <button onClick={getHelp} disabled={!mood||!time||!energy||loading||(wantSomethingDifferent&&!differentRequest.trim())} style={{ ...S.btn, width:"100%", background:(mood&&time&&energy&&(!wantSomethingDifferent||differentRequest.trim()))?`linear-gradient(135deg,${C.amber},#d97706)`:"#1e293b", color:(mood&&time&&energy&&(!wantSomethingDifferent||differentRequest.trim()))?"#fff":"#475569" }}>
-              {loading?"Generating...":"Get today's plan ✨"}
+            <button onClick={getHelp} disabled={!mood||!time||!energy||loading||(wantSomethingDifferent&&!differentRequest.trim())}
+              style={{ ...S.btn, width:"100%", background:(mood&&time&&energy&&(!wantSomethingDifferent||differentRequest.trim()))?`linear-gradient(135deg,${C.amber},#d97706)`:"#1e293b", color:(mood&&time&&energy&&(!wantSomethingDifferent||differentRequest.trim()))?"#fff":"#475569" }}>
+              {loading?T(lang,"searchingWeb"):T(lang,"getPlane")}
             </button>
           </>
         )}
@@ -331,7 +929,21 @@ One concrete activity with a specific resource. Emojis. Under 120 words. English
             <div style={{ background:"rgba(245,158,11,0.08)", borderLeft:`3px solid ${C.amber}`, borderRadius:8, padding:"14px 16px", marginBottom:14 }}>
               <p style={{ color:"#f1f5f9", fontSize:13, lineHeight:1.8, margin:0 }}>{result}</p>
             </div>
-            <button onClick={resetAll} style={{ ...S.btn, width:"100%", background:C.card, color:"#94a3b8", border:`1px solid ${C.border}` }}>Back to menu</button>
+            {webResults.length > 0 && (
+              <div style={{ marginBottom:14 }}>
+                <p style={{ color:C.teal, fontSize:12, fontWeight:700, marginBottom:10 }}>{T(lang,"webResultsTitle")}</p>
+                {webResults.map((r, i) => (
+                  <div key={i} style={{ ...S.card, marginBottom:8 }}>
+                    <p style={{ color:"#f1f5f9", fontSize:13, fontWeight:700, margin:"0 0 4px" }}>{r.name}</p>
+                    <p style={{ color:"#94a3b8", fontSize:12, margin:"0 0 8px" }}>{r.desc}</p>
+                    <a href={r.url} target="_blank" rel="noopener noreferrer" style={{ display:"block", textAlign:"center", padding:"8px", background:`linear-gradient(135deg,${C.teal},#0891b2)`, color:"#fff", borderRadius:8, fontSize:12, fontWeight:700, textDecoration:"none" }}>
+                      → Open {r.name}
+                    </a>
+                  </div>
+                ))}
+              </div>
+            )}
+            <button onClick={resetAll} style={{ ...S.btn, width:"100%", background:C.card, color:"#94a3b8", border:`1px solid ${C.border}` }}>{T(lang,"backToMenu")}</button>
           </>
         )}
       </div>
@@ -340,13 +952,15 @@ One concrete activity with a specific resource. Emojis. Under 120 words. English
 }
 
 // ─── WRITING PROMPT ────────────────────────────────────────────────────────────
-function WritingPrompt({ jlpt }) {
+function WritingPrompt({ jlpt, skills, lang }) {
   const [topic, setTopic] = useState("culture");
   const [promptIdx, setPromptIdx] = useState(0);
   const [text, setText] = useState("");
   const [feedback, setFeedback] = useState("");
   const [loading, setLoading] = useState(false);
 
+  // Only show writing-related topics based on selected skills
+  const availableTopics = Object.keys(WRITING_TOPICS);
   const prompt = WRITING_TOPICS[topic][promptIdx];
   const charCount = text.length;
 
@@ -356,15 +970,15 @@ function WritingPrompt({ jlpt }) {
     try {
       const res = await fetch("https://api.anthropic.com/v1/messages", {
         method:"POST", headers:{"Content-Type":"application/json"},
-        body: JSON.stringify({ model:"claude-sonnet-4-20250514", max_tokens:400,
+        body: JSON.stringify({ model:"claude-sonnet-4-6", max_tokens:400,
           messages:[{ role:"user", content:`You are a Japanese language teacher using CLT. Student level: ${jlpt}.
 Prompt: "${prompt}"
 Student's response: "${text}"
-Give feedback:
+Give feedback in ${lang}:
 1. 👍 What they did well
 2. 💡 One concrete improvement
 3. 🌟 One new expression to use next time
-Warm, under 100 words, English.` }]
+Warm, under 100 words.` }]
         })
       });
       const d = await res.json();
@@ -375,9 +989,9 @@ Warm, under 100 words, English.` }]
 
   return (
     <div style={{ ...S.card, marginBottom:16 }}>
-      <p style={{ color:C.amber, fontSize:12, fontWeight:700, letterSpacing:1, marginBottom:12 }}>✍️ WRITING PRACTICE (CLT)</p>
+      <p style={{ color:C.amber, fontSize:12, fontWeight:700, letterSpacing:1, marginBottom:12 }}>{T(lang,"writingTitle")}</p>
       <div style={{ display:"flex", gap:8, marginBottom:14, flexWrap:"wrap" }}>
-        {Object.keys(WRITING_TOPICS).map(t => (
+        {availableTopics.map(t => (
           <button key={t} onClick={()=>{setTopic(t);setPromptIdx(0);setText("");setFeedback("");}} style={{ padding:"6px 14px", borderRadius:20, border:`1.5px solid ${topic===t?C.amber:C.border}`, background:topic===t?"rgba(245,158,11,0.12)":C.card, color:topic===t?C.amber:"#64748b", fontSize:12, fontWeight:600, cursor:"pointer" }}>
             {t==="culture"?"🌸 文化":t==="work"?"💼 仕事":"📚 教育"}
           </button>
@@ -391,12 +1005,12 @@ Warm, under 100 words, English.` }]
       <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:10 }}>
         <p style={{ color:charCount<300?"#64748b":charCount>800?C.red:C.green, fontSize:12, margin:0 }}>{charCount}/300〜800文字</p>
         <button onClick={()=>{setPromptIdx(p=>(p+1)%WRITING_TOPICS[topic].length);setText("");setFeedback("");}} style={{ padding:"5px 12px", borderRadius:8, background:C.card, border:`1px solid ${C.border}`, color:"#94a3b8", fontSize:11, cursor:"pointer" }}>
-          Next prompt →
+          {T(lang,"nextPrompt")}
         </button>
       </div>
       {!feedback ? (
         <button onClick={getFeedback} disabled={text.length<50||loading} style={{ ...S.btn, width:"100%", background:text.length>=50?`linear-gradient(135deg,${C.amber},#d97706)`:"#1e293b", color:text.length>=50?"#fff":"#475569" }}>
-          {loading?"Getting feedback...":"Get AI feedback ✨"}
+          {loading?"Getting feedback...":T(lang,"getAIFeedback")}
         </button>
       ) : (
         <div style={{ background:"rgba(34,197,94,0.06)", borderLeft:`3px solid ${C.green}`, borderRadius:8, padding:"12px 14px" }}>
@@ -407,13 +1021,6 @@ Warm, under 100 words, English.` }]
     </div>
   );
 }
-
-// ─── LANGUAGES for translation ─────────────────────────────────────────────────
-const LANGUAGES = [
-  "English","Spanish","French","Portuguese","German","Italian","Chinese (Simplified)",
-  "Chinese (Traditional)","Korean","Arabic","Hindi","Thai","Vietnamese","Indonesian","Malay",
-  "Turkish","Russian","Polish","Dutch","Swedish","Norwegian","Danish","Finnish",
-];
 
 // ─── FORM ───────────────────────────────────────────────────────────────────────
 function FormScreen({ onSubmit, onBack, initialJlpt, initialForm }) {
@@ -435,6 +1042,7 @@ function FormScreen({ onSubmit, onBack, initialJlpt, initialForm }) {
     };
   });
   const [err, setErr] = useState("");
+  const lang = form.preferredLang || "English";
   const set = (k,v) => setForm(f=>({...f,[k]:v}));
   const toggleSkill = (s) => setForm(f=>({ ...f, skills: f.skills.includes(s) ? f.skills.filter(x=>x!==s) : [...f.skills, s] }));
   const isOther = form.goal === "Other";
@@ -443,27 +1051,26 @@ function FormScreen({ onSubmit, onBack, initialJlpt, initialForm }) {
   return (
     <div style={{ ...S.page, display:"flex", alignItems:"flex-start", justifyContent:"center", padding:"40px 16px 60px" }}>
       <div style={{ width:"100%", maxWidth:520 }}>
-        {onBack && <button onClick={onBack} style={{ background:"none", border:"none", color:"#64748b", fontSize:13, cursor:"pointer", marginBottom:16, padding:0 }}>← Back</button>}
+        {onBack && <button onClick={onBack} style={{ background:"none", border:"none", color:"#64748b", fontSize:13, cursor:"pointer", marginBottom:16, padding:0 }}>{T(lang,"backBtn")}</button>}
         <p style={{ color:C.purpleLight, fontSize:11, fontWeight:700, letterSpacing:2, marginBottom:4 }}>GAKU SELF-STUDY APP</p>
-        <h1 style={{ fontSize:24, fontWeight:900, margin:"0 0 4px" }}>{initialForm ? "Edit Your Profile" : "Your Learning Profile"}</h1>
+        <h1 style={{ fontSize:24, fontWeight:900, margin:"0 0 4px" }}>{initialForm ? T(lang,"editProfile2") : T(lang,"learningProfile")}</h1>
         <p style={{ color:"#64748b", fontSize:13, marginBottom:24 }}>{initialForm ? "Update only what you'd like to change — your other answers are kept." : "Tell us about yourself to build your personalized CLT study plan"}</p>
 
         <div style={{ display:"flex", flexDirection:"column", gap:14 }}>
-          <div><label style={S.label}>YOUR NAME *</label><input value={form.name} onChange={e=>set("name",e.target.value)} placeholder="e.g. Tanaka Yuki" style={S.input}/></div>
-          <div><label style={S.label}>EMAIL *</label><input value={form.email} onChange={e=>set("email",e.target.value)} placeholder="your@email.com" type="email" style={S.input}/></div>
-          <div><label style={S.label}>COUNTRY *</label><input value={form.country} onChange={e=>set("country",e.target.value)} placeholder="e.g. USA, Brazil, France..." style={S.input}/></div>
+          <div><label style={S.label}>{T(lang,"yourName")}</label><input value={form.name} onChange={e=>set("name",e.target.value)} placeholder="e.g. Tanaka Yuki" style={S.input}/></div>
+          <div><label style={S.label}>{T(lang,"email")}</label><input value={form.email} onChange={e=>set("email",e.target.value)} placeholder="your@email.com" type="email" style={S.input}/></div>
+          <div><label style={S.label}>{T(lang,"country")}</label><input value={form.country} onChange={e=>set("country",e.target.value)} placeholder="e.g. USA, Brazil, France..." style={S.input}/></div>
 
-          {/* ① Preferred Language */}
+          {/* ① Native Language - renamed, Japanese added */}
           <div>
-            <label style={S.label}>PREFERRED LANGUAGE</label>
+            <label style={S.label}>{T(lang,"nativeLang")}</label>
             <select value={form.preferredLang} onChange={e=>set("preferredLang",e.target.value)} style={S.select}>
               {LANGUAGES.map(l => <option key={l}>{l}</option>)}
             </select>
           </div>
 
-          {/* ② Final Goal with Other option */}
           <div>
-            <label style={S.label}>FINAL GOAL *</label>
+            <label style={S.label}>{T(lang,"finalGoal")}</label>
             <select value={form.goal} onChange={e=>set("goal",e.target.value)} style={S.select}>
               <option value="">Select your goal</option>
               <option>Pass JLPT N5</option><option>Pass JLPT N4</option><option>Pass JLPT N3</option>
@@ -481,7 +1088,7 @@ function FormScreen({ onSubmit, onBack, initialJlpt, initialForm }) {
           </div>
 
           <div>
-            <label style={S.label}>WHEN DO YOU WANT TO ACHIEVE IT? *</label>
+            <label style={S.label}>{T(lang,"whenGoal")}</label>
             <select value={form.timeline} onChange={e=>set("timeline",e.target.value)} style={S.select}>
               <option value="">Select timeline</option>
               <option>Less than 6 months</option><option>Within 1 year</option>
@@ -489,13 +1096,11 @@ function FormScreen({ onSubmit, onBack, initialJlpt, initialForm }) {
             </select>
           </div>
 
-          {/* ③ JLPT with auto-fill note */}
           <div>
             <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:5 }}>
-              <label style={{ ...S.label, marginBottom:0 }}>CURRENT JLPT LEVEL *</label>
+              <label style={{ ...S.label, marginBottom:0 }}>{T(lang,"jlptLevel")}</label>
               {initialJlpt && <span style={{ color:"#64748b", fontSize:10 }}>Auto-filled from your test</span>}
             </div>
-            {initialJlpt && <p style={{ color:"#64748b", fontSize:11, marginBottom:6 }}>If you want to change your level, please select below.</p>}
             <select value={form.jlpt} onChange={e=>set("jlpt",e.target.value)} style={S.select}>
               <option value="">Select level</option>
               <option>Beginner</option><option>N5</option><option>N4</option>
@@ -504,7 +1109,7 @@ function FormScreen({ onSubmit, onBack, initialJlpt, initialForm }) {
           </div>
 
           <div>
-            <label style={S.label}>STUDY TIME PER DAY *</label>
+            <label style={S.label}>{T(lang,"studyTime")}</label>
             <select value={form.hoursPerDay} onChange={e=>set("hoursPerDay",e.target.value)} style={S.select}>
               <option value="">Select hours</option>
               <option>Less than 1 hour</option><option>1–2 hours</option>
@@ -512,7 +1117,7 @@ function FormScreen({ onSubmit, onBack, initialJlpt, initialForm }) {
             </select>
           </div>
           <div>
-            <label style={S.label}>DAYS PER WEEK *</label>
+            <label style={S.label}>{T(lang,"daysPerWeek")}</label>
             <select value={form.daysPerWeek} onChange={e=>set("daysPerWeek",e.target.value)} style={S.select}>
               <option value="">Select days</option>
               <option>1–2 days</option><option>3–4 days</option>
@@ -520,9 +1125,8 @@ function FormScreen({ onSubmit, onBack, initialJlpt, initialForm }) {
             </select>
           </div>
 
-          {/* ⑤ Skills without Writing (Writing is in its own tab) */}
           <div>
-            <label style={S.label}>WHAT DO YOU WANT TO STUDY? * (select all that apply)</label>
+            <label style={S.label}>{T(lang,"whatStudy")}</label>
             <div style={{ display:"flex", flexWrap:"wrap", gap:8 }}>
               {Object.entries(SKILL_LABELS).map(([k,v]) => (
                 <button key={k} onClick={()=>toggleSkill(k)} style={{ padding:"8px 14px", borderRadius:20, border:`1.5px solid ${form.skills.includes(k)?C.purpleLight:C.border}`, background:form.skills.includes(k)?"rgba(168,85,247,0.15)":C.card, color:form.skills.includes(k)?C.purpleLight:"#94a3b8", fontSize:12, fontWeight:600, cursor:"pointer" }}>
@@ -536,7 +1140,7 @@ function FormScreen({ onSubmit, onBack, initialJlpt, initialForm }) {
 
         {err && <p style={{ color:C.red, fontSize:12, margin:"12px 0 0", textAlign:"center" }}>{err}</p>}
         <button onClick={()=>{ if(!valid){setErr("Please fill in all required fields (*) and select at least one skill.");return;} onSubmit({ ...form, goal: isOther ? form.customGoal : form.goal }); }} style={{ ...S.btn, width:"100%", marginTop:20, background:valid?`linear-gradient(135deg,${C.purple},#9333ea)`:"#1e293b", color:valid?"#fff":"#475569" }}>
-          {initialForm ? "Save Changes →" : "Build My Study Plan →"}
+          {initialForm ? T(lang,"saveChanges") : T(lang,"buildPlan")}
         </button>
       </div>
     </div>
@@ -545,6 +1149,7 @@ function FormScreen({ onSubmit, onBack, initialJlpt, initialForm }) {
 
 // ─── DASHBOARD ──────────────────────────────────────────────────────────────────
 function Dashboard({ form, onEdit }) {
+  const lang = form.preferredLang || "English";
   const [schedule, setSchedule] = useState(() => buildSchedule(form));
   const [milestones] = useState(() => buildMilestones(form));
   const [msDone, setMsDone] = useState([]);
@@ -559,13 +1164,16 @@ function Dashboard({ form, onEdit }) {
   const doneTasks = Object.values(schedule).flat().filter(t=>t.done&&!t.rest).length;
   const progress = totalTasks ? Math.round(doneTasks/totalTasks*100) : 0;
   const selectedResources = (form.skills||[]).flatMap(s => (RESOURCES[s]||[]).map(r=>({...r,skill:s})));
+  const skills = form.skills || [];
 
+  // Determine which tabs to show based on selected skills
   const TABS = [
-    { id:"schedule", label:"📅 Schedule" },
-    { id:"vocabulary", label:"📚 Vocabulary" },
-    { id:"resources", label:"🔗 Resources" },
-    { id:"writing", label:"✍️ Writing" },
-    { id:"milestones", label:"🏆 Milestones" },
+    { id:"schedule", label:T(lang,"schedule") },
+    { id:"vocabulary", label:T(lang,"vocabulary") },
+    { id:"resources", label:T(lang,"resources") },
+    // Writing tab only shown if user selected writing-adjacent skills
+    ...(skills.some(s=>["reading","conversation","grammar","jlpt"].includes(s)) ? [{ id:"writing", label:T(lang,"writing") }] : []),
+    { id:"milestones", label:T(lang,"milestones") },
   ];
 
   return (
@@ -575,28 +1183,28 @@ function Dashboard({ form, onEdit }) {
       <div style={{ background:"rgba(10,15,30,0.95)", borderBottom:`1px solid ${C.border}`, padding:"14px 20px", position:"sticky", top:0, zIndex:100, display:"flex", justifyContent:"space-between", alignItems:"center" }}>
         <div>
           <p style={{ color:C.purpleLight, fontSize:10, fontWeight:700, letterSpacing:2, margin:0 }}>GAKU SELF-STUDY</p>
-          <p style={{ color:"#f1f5f9", fontSize:14, fontWeight:800, margin:0 }}>{form.name}'s Study Plan</p>
+          <p style={{ color:"#f1f5f9", fontSize:14, fontWeight:800, margin:0 }}>{form.name}{T(lang,"studyPlan")}</p>
         </div>
         <div style={{ display:"flex", gap:8 }}>
-          <button onClick={()=>setShowHelp(true)} style={{ ...S.btn, padding:"8px 14px", background:`linear-gradient(135deg,${C.amber},#d97706)`, color:"#fff", fontSize:12 }}>🆘 Help</button>
-          <button onClick={onEdit} style={{ ...S.btn, padding:"8px 14px", background:C.card, color:"#94a3b8", border:`1px solid ${C.border}`, fontSize:12 }}>✏️ Edit Profile</button>
+          <button onClick={()=>setShowHelp(true)} style={{ ...S.btn, padding:"8px 14px", background:`linear-gradient(135deg,${C.amber},#d97706)`, color:"#fff", fontSize:12 }}>{T(lang,"help")}</button>
+          <button onClick={onEdit} style={{ ...S.btn, padding:"8px 14px", background:C.card, color:"#94a3b8", border:`1px solid ${C.border}`, fontSize:12 }}>{T(lang,"editProfile")}</button>
         </div>
       </div>
 
       <div style={{ maxWidth:600, margin:"0 auto", padding:"20px 16px" }}>
         <div style={{ ...S.card, marginBottom:16 }}>
           <div style={{ display:"flex", justifyContent:"space-between", marginBottom:8 }}>
-            <p style={{ color:"#f1f5f9", fontSize:13, fontWeight:700, margin:0 }}>Weekly Progress</p>
+            <p style={{ color:"#f1f5f9", fontSize:13, fontWeight:700, margin:0 }}>{T(lang,"weeklyProgress")}</p>
             <p style={{ color:C.purpleLight, fontSize:13, fontWeight:800, margin:0 }}>{doneTasks}/{totalTasks} · {progress}%</p>
           </div>
           <div style={{ background:C.border, borderRadius:99, height:8 }}>
             <div style={{ width:`${progress}%`, height:"100%", background:`linear-gradient(90deg,${C.purple},${C.purpleLight})`, borderRadius:99, transition:"width 0.4s" }} />
           </div>
           <div style={{ display:"flex", gap:12, marginTop:10, flexWrap:"wrap" }}>
-            <p style={{ color:"#64748b", fontSize:11, margin:0 }}>🎯 {form.goal}</p>
-            <p style={{ color:"#64748b", fontSize:11, margin:0 }}>📅 {form.timeline}</p>
-            <p style={{ color:"#64748b", fontSize:11, margin:0 }}>📊 {form.jlpt}</p>
-            <p style={{ color:"#64748b", fontSize:11, margin:0 }}>🌐 {form.preferredLang}</p>
+            <p style={{ color:"#64748b", fontSize:11, margin:0 }}>{T(lang,"goal")} {form.goal}</p>
+            <p style={{ color:"#64748b", fontSize:11, margin:0 }}>{T(lang,"timeline")} {form.timeline}</p>
+            <p style={{ color:"#64748b", fontSize:11, margin:0 }}>{T(lang,"level")} {form.jlpt}</p>
+            <p style={{ color:"#64748b", fontSize:11, margin:0 }}>{T(lang,"lang")} {form.preferredLang}</p>
           </div>
         </div>
 
@@ -610,12 +1218,12 @@ function Dashboard({ form, onEdit }) {
 
         {tab==="schedule" && (
           <div style={{ ...S.card }}>
-            <p style={{ color:C.purpleLight, fontSize:12, fontWeight:700, letterSpacing:1, marginBottom:16 }}>📅 YOUR WEEKLY STUDY SCHEDULE</p>
+            <p style={{ color:C.purpleLight, fontSize:12, fontWeight:700, letterSpacing:1, marginBottom:16 }}>{T(lang,"scheduleTitle")}</p>
             {Object.entries(schedule).map(([day, tasks]) => (
               <div key={day} style={{ marginBottom:16 }}>
                 <p style={{ color:"#94a3b8", fontSize:11, fontWeight:700, letterSpacing:1, borderBottom:`1px solid ${C.border}`, paddingBottom:6, marginBottom:8 }}>{day.toUpperCase()}</p>
                 {tasks.map((task, idx) => task.rest ? (
-                  <p key={idx} style={{ color:"#334155", fontSize:13, fontStyle:"italic" }}>Rest day 🌸</p>
+                  <p key={idx} style={{ color:"#334155", fontSize:13, fontStyle:"italic" }}>{T(lang,"restDay")}</p>
                 ) : (
                   <div key={idx} onClick={()=>toggleTask(day,idx)} style={{ display:"flex", gap:10, padding:"10px 12px", borderRadius:10, background:task.done?"rgba(34,197,94,0.06)":C.card, border:`1px solid ${task.done?"rgba(34,197,94,0.2)":C.border}`, marginBottom:6, cursor:"pointer", alignItems:"flex-start" }}>
                     <div style={{ width:20, height:20, borderRadius:6, border:`2px solid ${task.done?C.green:C.border}`, background:task.done?C.green:"transparent", display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0, marginTop:1 }}>
@@ -629,14 +1237,13 @@ function Dashboard({ form, onEdit }) {
           </div>
         )}
 
-        {/* ④ Vocabulary Builder tab */}
         {tab==="vocabulary" && <VocabBuilder form={form} />}
 
         {tab==="resources" && (
           <div style={{ ...S.card }}>
-            <p style={{ color:C.amber, fontSize:12, fontWeight:700, letterSpacing:1, marginBottom:4 }}>🔗 YOUR RESOURCES</p>
-            <p style={{ color:"#64748b", fontSize:12, marginBottom:16 }}>Curated for level {form.jlpt}, skills: {(form.skills||[]).join(", ")}</p>
-            {selectedResources.length === 0 && <p style={{ color:"#64748b", fontSize:13 }}>No resources. Please reset and select study skills.</p>}
+            <p style={{ color:C.amber, fontSize:12, fontWeight:700, letterSpacing:1, marginBottom:4 }}>{T(lang,"resourcesTitle")}</p>
+            <p style={{ color:"#64748b", fontSize:12, marginBottom:16 }}>Level {form.jlpt} · {(form.skills||[]).join(", ")}</p>
+            {selectedResources.length === 0 && <p style={{ color:"#64748b", fontSize:13 }}>{T(lang,"noResources")}</p>}
             <div style={{ display:"flex", flexDirection:"column", gap:12 }}>
               {selectedResources.map((r,i) => (
                 <div key={i} style={{ background:"rgba(255,255,255,0.03)", borderRadius:12, border:`1px solid ${C.border}`, padding:"14px 16px" }}>
@@ -655,12 +1262,13 @@ function Dashboard({ form, onEdit }) {
           </div>
         )}
 
-        {tab==="writing" && <WritingPrompt jlpt={form.jlpt} />}
+        {/* Writing: only visible if tab is "writing" (tab only appears for relevant skills) */}
+        {tab==="writing" && <WritingPrompt jlpt={form.jlpt} skills={form.skills} lang={lang} />}
 
         {tab==="milestones" && (
           <div style={{ ...S.card }}>
-            <p style={{ color:C.red, fontSize:12, fontWeight:700, letterSpacing:1, marginBottom:16 }}>🏆 YOUR GOAL ROADMAP</p>
-            <p style={{ color:"#64748b", fontSize:13, marginBottom:16 }}>Level: {form.jlpt} → Goal: {form.goal}</p>
+            <p style={{ color:C.red, fontSize:12, fontWeight:700, letterSpacing:1, marginBottom:16 }}>{T(lang,"roadmapTitle")}</p>
+            <p style={{ color:"#64748b", fontSize:13, marginBottom:16 }}>Level: {form.jlpt} → {T(lang,"goal")} {form.goal}</p>
             {milestones.map((m,i) => (
               <div key={i} onClick={()=>setMsDone(p=>p.includes(i)?p.filter(x=>x!==i):[...p,i])} style={{ display:"flex", gap:12, padding:"12px 14px", borderRadius:12, background:msDone.includes(i)?"rgba(34,197,94,0.06)":C.card, border:`1px solid ${msDone.includes(i)?"rgba(34,197,94,0.2)":C.border}`, marginBottom:8, cursor:"pointer", alignItems:"flex-start" }}>
                 <div style={{ width:24, height:24, borderRadius:8, border:`2px solid ${msDone.includes(i)?C.green:C.border}`, background:msDone.includes(i)?C.green:"transparent", display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0 }}>
@@ -672,7 +1280,7 @@ function Dashboard({ form, onEdit }) {
             <div style={{ marginTop:20, padding:"16px", background:"rgba(168,85,247,0.06)", borderRadius:12, textAlign:"center", border:`1px solid rgba(168,85,247,0.2)` }}>
               <p style={{ fontSize:20, margin:"0 0 8px" }}>🌸</p>
               <p style={{ color:"#f1f5f9", fontSize:13, fontWeight:700, margin:"0 0 6px" }}>You've got this!</p>
-              <p style={{ color:"#64748b", fontSize:12, lineHeight:1.7, margin:0 }}>Every conversation, every sentence, every word brings you closer. CLT is about real communication — and you're already doing it. 頑張ってください！</p>
+              <p style={{ color:"#64748b", fontSize:12, lineHeight:1.7, margin:0 }}>Every conversation, every sentence, every word brings you closer. 頑張ってください！</p>
             </div>
             <a href="https://www.seitojapanese.online/" target="_blank" rel="noopener noreferrer" style={{ display:"block", textAlign:"center", padding:"13px", background:`linear-gradient(135deg,${C.amber},#d97706)`, color:"#fff", borderRadius:10, fontSize:14, fontWeight:700, textDecoration:"none", marginTop:16 }}>
               Book a FREE Trial Lesson with GAKU →
@@ -696,4 +1304,3 @@ export default function GakuApp({ onBack, initialJlpt }) {
   if (editing) return <FormScreen onSubmit={handleSubmit} onBack={()=>setEditing(false)} initialForm={form} />;
   return <Dashboard form={form} onEdit={()=>setEditing(true)} />;
 }
-
