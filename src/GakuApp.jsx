@@ -575,33 +575,41 @@ function VocabBuilder({ form }) {
     setLoading(true);
     setHints({});
     try {
-      // Use kokugo.jitenon.jp approach: generate words without level restriction but appropriate for study
       const res = await fetch("https://api.anthropic.com/v1/messages", {
         method:"POST", headers:{"Content-Type":"application/json"},
-        body: JSON.stringify({ model:"claude-sonnet-4-6", max_tokens:1200,
-          messages:[{ role:"user", content:`You are a Japanese vocabulary teacher. The student's goal: ${form.goal}.
-They want to learn words related to: "${search}"
+        body: JSON.stringify({ model:"claude-sonnet-4-6", max_tokens:1500,
+          messages:[{ role:"user", content:`You are a Japanese vocabulary dictionary and teacher.
 
-Generate 6 Japanese vocabulary words for this topic. Include a wide range of words (not limited to JLPT level).
-For each word provide:
-- The Japanese word (kanji/kana as commonly written)
-- Reading (hiragana/katakana)
-- Romaji (romanization)
-- Meaning in ${lang}
-- A natural example sentence in Japanese (with furigana hints in parentheses for kanji)
-- Example sentence translation in ${lang}
-- A vivid visual image description (1 sentence, start with "Imagine:")
-- CLT tip in ${lang}: how to use this word in real conversation
+The student wants to learn Japanese words related to: "${search}"
+Their language for explanations: ${lang}
 
-Respond ONLY in this JSON (no markdown, no backticks):
-[{"word":"","reading":"","romaji":"","meaning":"","example":"","example_translation":"","image":"","tip":""}]` }]
+IMPORTANT: Always generate exactly 6 words. Even if the topic seems unusual, find the most relevant Japanese words.
+Use a comprehensive Japanese dictionary approach (like kokugo.jitenon.jp) - include all types of words: nouns, verbs, adjectives, expressions.
+Do NOT restrict by JLPT level. Include the most natural and useful words for this topic.
+
+For each of the 6 words provide:
+- word: the Japanese word (kanji+kana as naturally written)
+- reading: hiragana/katakana reading
+- romaji: romaji romanization
+- meaning: meaning in ${lang} (clear, natural translation)
+- example: a natural Japanese sentence using this word
+- example_translation: translation of the example in ${lang}
+- image: one vivid visual scene to remember this word (start with "Imagine:" in ${lang})
+- tip: how to use this word in real conversation (in ${lang})
+
+Respond ONLY with a JSON array, no markdown fences, no extra text:
+[{"word":"叩く","reading":"たたく","romaji":"tataku","meaning":"to hit, to knock, to tap","example":"ドアを叩いてから入ってください。","example_translation":"Please knock on the door before entering.","image":"Imagine someone knocking firmly on a wooden door.","tip":"Use たたく when describing hitting or knocking on surfaces."}]` }]
         })
       });
       const d = await res.json();
       const text = d.content?.map(c=>c.text||"").join("") || "[]";
-      const parsed = JSON.parse(text.replace(/```json|```/g,"").trim());
-      setWords(parsed);
-    } catch { setWords([]); }
+      const clean = text.replace(/```json|```/g,"").trim();
+      const parsed = JSON.parse(clean);
+      setWords(Array.isArray(parsed) ? parsed : []);
+    } catch(e) {
+      console.error("vocab error", e);
+      setWords([]);
+    }
     setLoading(false);
   };
 
@@ -806,37 +814,61 @@ function HelpModal({ onClose, form }) {
     setLoading(true);
     setWebResults([]);
     try {
-      const extra = wantSomethingDifferent && differentRequest.trim()
-        ? `\nThe student specifically wants: "${differentRequest}". Provide 2-3 specific websites/YouTube videos/apps that match this request AND their Japanese level (${form.jlpt}). Include direct URLs.`
-        : `\nFocus on skills: ${(form.skills||[]).join(", ")}.`;
+      const isCustom = wantSomethingDifferent && differentRequest.trim();
+
+      const prompt = isCustom
+        ? `You are a Japanese learning resource expert with web search knowledge.
+Student: ${form.name}, Level: ${form.jlpt}, Goal: ${form.goal}, Language: ${lang}
+Today mood: ${mood}, Available time: ${time} min, Energy: ${energy}
+
+The student wants to do something specific today: "${differentRequest}"
+
+Your job:
+1. Understand exactly what they want (anime, news, manga, music, drama, games, etc.)
+2. Give a SHORT encouraging message (2-3 sentences max) in ${lang} about why this is great for learning Japanese
+3. Then provide EXACTLY 3 real, specific resources that match their request:
+   - For ANIME requests: specific anime titles on Crunchyroll/Netflix with Japanese audio, or YouTube channels like "JapanesePod101 anime" 
+   - For NEWS requests: NHK Web Easy (https://www3.nhk.or.jp/news/easy/), NHK World (https://www3.nhk.or.jp/nhkworld/), TBS NEWS DIG
+   - For MUSIC requests: specific Japanese artists on Spotify/YouTube, Uta-Net lyrics site
+   - For MANGA requests: specific manga titles, BookWalker, or free manga sites
+   - For DRAMA requests: specific J-drama on Netflix/Viki, or GYAO
+   - For GAMES requests: specific Japanese games, or language learning games like Duolingo/Todai
+   - Always include the REAL URL for each resource
+
+Format EXACTLY like this (write message first, then the JSON):
+[your short message in ${lang} here]
+RESOURCES_JSON:[{"name":"Exact Resource Name","url":"https://real-url.com","desc":"Why this matches their request, in ${lang}"}]`
+        : `You are a warm Japanese language coach.
+Student: ${form.name}, Level: ${form.jlpt}, Skills: ${(form.skills||[]).join(", ")}, Language: ${lang}
+Today: Mood: ${mood}, Time: ${time} min, Energy: ${energy}
+
+Give ONE specific, actionable study suggestion for today based on their mood and energy.
+Match the activity to their energy: low energy = light review, high energy = active practice.
+Mention ONE specific resource from their skill set.
+Write in ${lang}. 2-3 sentences max. Use 1-2 emojis. Be warm and specific, not generic.
+Do NOT say "Even 10 minutes counts" - give a real specific suggestion.`;
 
       const res = await fetch("https://api.anthropic.com/v1/messages", {
         method:"POST", headers:{"Content-Type":"application/json"},
-        body: JSON.stringify({ model:"claude-sonnet-4-6", max_tokens:700,
-          messages:[{ role:"user", content:`You are a warm Japanese language coach using CLT.
-Student: ${form.name}, Level: ${form.jlpt}, Goal: ${form.goal}, Language: ${lang}
-Today: Mood: ${mood}, Time: ${time} min, Energy: ${energy}${extra}
-
-${wantSomethingDifferent ? `Since they want to do something different today, provide a specific activity recommendation with 2-3 real web resources (websites, YouTube channels, or apps) with their actual URLs. Format web resources as JSON at the end of your response like this:
-RESOURCES_JSON:[{"name":"Resource Name","url":"https://...","desc":"Brief description in ${lang}"}]` : "Give a specific, encouraging suggestion for TODAY ONLY. One concrete activity with a specific resource. Emojis."}
-
-Write your response in ${lang}. Under 150 words (before the JSON).` }]
+        body: JSON.stringify({ model:"claude-sonnet-4-6", max_tokens:600,
+          messages:[{ role:"user", content: prompt }]
         })
       });
       const d = await res.json();
       const fullText = d.content?.map(c=>c.text||"").join("") || "";
-      
-      // Extract web resources if present
-      const jsonMatch = fullText.match(/RESOURCES_JSON:(\[.*?\])/s);
+
+      const jsonMatch = fullText.match(/RESOURCES_JSON:(\[[\s\S]*?\])/);
       if (jsonMatch) {
         try {
           const resources = JSON.parse(jsonMatch[1]);
           setWebResults(resources);
         } catch {}
       }
-      const cleanText = fullText.replace(/RESOURCES_JSON:\[.*?\]/s, "").trim();
-      setResult(cleanText || "Take it easy today! Review 5 words and watch one Japanese video. 🌸");
-    } catch { setResult("Even 10 minutes counts! Review your saved vocabulary and practice one sentence aloud. 頑張って！🎌"); }
+      const cleanText = fullText.replace(/RESOURCES_JSON:[\s\S]*$/, "").trim();
+      setResult(cleanText || (lang === "Japanese" ? "今日も頑張りましょう！🌸" : "Let's study together today! 🌸"));
+    } catch {
+      setResult(lang === "Japanese" ? "今日も頑張りましょう！保存した単語を5つ復習してみてください。🌸" : "Let's go! Review 5 saved words and use each one in a sentence. 頑張って！🎌");
+    }
     setLoading(false);
   };
 
@@ -951,7 +983,145 @@ Write your response in ${lang}. Under 150 words (before the JSON).` }]
   );
 }
 
-// ─── WRITING PROMPT ────────────────────────────────────────────────────────────
+// ─── SKILL-BASED PRACTICE ─────────────────────────────────────────────────────
+function SkillPractice({ jlpt, skills, lang }) {
+  const [activeSkill, setActiveSkill] = useState(null);
+  const [prompt, setPrompt] = useState("");
+  const [text, setText] = useState("");
+  const [feedback, setFeedback] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [loadingPrompt, setLoadingPrompt] = useState(false);
+
+  // Skill-to-practice mapping
+  const SKILL_PRACTICE = {
+    conversation: { label:"💬 Conversation", color:"#06b6d4", desc:"Role-play & speaking practice", type:"conversation" },
+    grammar: { label:"📝 Grammar", color:"#a855f7", desc:"Grammar exercises & pattern drills", type:"grammar" },
+    reading: { label:"📖 Reading", color:"#22c55e", desc:"Reading comprehension tasks", type:"reading" },
+    jlpt: { label:"🎯 JLPT Prep", color:"#ef4444", desc:"JLPT-style practice questions", type:"jlpt" },
+    listening: { label:"👂 Listening", color:"#f59e0b", desc:"Listening comprehension & shadowing tasks", type:"listening" },
+  };
+
+  const practiceSkills = skills.filter(s => SKILL_PRACTICE[s]);
+  const current = activeSkill ? SKILL_PRACTICE[activeSkill] : null;
+
+  const generatePrompt = async (skill) => {
+    setActiveSkill(skill);
+    setPrompt("");
+    setText("");
+    setFeedback("");
+    setLoadingPrompt(true);
+    try {
+      const skillInfo = SKILL_PRACTICE[skill];
+      const res = await fetch("https://api.anthropic.com/v1/messages", {
+        method:"POST", headers:{"Content-Type":"application/json"},
+        body: JSON.stringify({ model:"claude-sonnet-4-6", max_tokens:300,
+          messages:[{ role:"user", content:`Create ONE practice task for a Japanese learner.
+Student level: ${jlpt}
+Skill focus: ${skill} (${skillInfo.desc})
+Response language for instructions: ${lang}
+
+Task types by skill:
+- conversation: A role-play scenario or speaking prompt (e.g. "You are at a Japanese restaurant. Order food and ask about ingredients.")
+- grammar: A grammar pattern to practice with 2-3 fill-in-the-blank sentences (e.g. "Practice ～ている: Fill in: 今、本を＿＿＿。")
+- reading: A short Japanese text (4-6 sentences, level-appropriate) followed by 2 comprehension questions
+- jlpt: 2-3 JLPT-style questions (vocabulary or grammar) with blanks to fill in
+- listening: A shadowing script (4-5 natural Japanese sentences to read aloud and practice pitch accent) with pronunciation notes
+
+Write the task prompt in ${lang}, but include Japanese text where needed.
+Keep it practical, level-appropriate for ${jlpt}, and under 120 words total.` }]
+        })
+      });
+      const d = await res.json();
+      setPrompt(d.content?.map(c=>c.text||"").join("") || "Practice task generated!");
+    } catch { setPrompt("Try this: Write 3 sentences in Japanese about your daily routine."); }
+    setLoadingPrompt(false);
+  };
+
+  const getFeedback = async () => {
+    if (!text.trim()) return;
+    setLoading(true);
+    try {
+      const res = await fetch("https://api.anthropic.com/v1/messages", {
+        method:"POST", headers:{"Content-Type":"application/json"},
+        body: JSON.stringify({ model:"claude-sonnet-4-6", max_tokens:400,
+          messages:[{ role:"user", content:`You are a Japanese teacher. Student level: ${jlpt}. Skill: ${activeSkill}.
+Task: "${prompt}"
+Student's response: "${text}"
+
+Give feedback in ${lang}:
+1. ✅ What was correct
+2. 💡 One key improvement
+3. 🌟 A natural Japanese expression to level up
+
+Keep it warm and specific. Under 100 words.` }]
+        })
+      });
+      const d = await res.json();
+      setFeedback(d.content?.map(c=>c.text||"").join("") || "Great effort! 頑張って！🌸");
+    } catch { setFeedback("Great effort! Keep practicing. 頑張って！🌸"); }
+    setLoading(false);
+  };
+
+  if (practiceSkills.length === 0) return null;
+
+  return (
+    <div style={{ marginTop:16 }}>
+      <div style={{ ...S.card, marginBottom:12 }}>
+        <p style={{ color:"#94a3b8", fontSize:12, fontWeight:700, letterSpacing:1, marginBottom:12 }}>✍️ SKILL PRACTICE — choose a skill to get a custom exercise</p>
+        <div style={{ display:"flex", flexWrap:"wrap", gap:8 }}>
+          {practiceSkills.map(s => {
+            const info = SKILL_PRACTICE[s];
+            return (
+              <button key={s} onClick={() => generatePrompt(s)}
+                style={{ padding:"8px 16px", borderRadius:20, border:`1.5px solid ${activeSkill===s?info.color:C.border}`, background:activeSkill===s?`rgba(${info.color},0.1)`:"rgba(255,255,255,0.04)", color:activeSkill===s?info.color:"#64748b", fontSize:12, fontWeight:700, cursor:"pointer" }}>
+                {info.label}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      {loadingPrompt && (
+        <div style={{ ...S.card, textAlign:"center", padding:24 }}>
+          <p style={{ color:C.teal }}>Generating your practice task... ⏳</p>
+        </div>
+      )}
+
+      {!loadingPrompt && prompt && current && (
+        <div style={{ ...S.card }}>
+          <p style={{ color:current.color, fontSize:12, fontWeight:700, letterSpacing:1, marginBottom:4 }}>{current.label} PRACTICE</p>
+          <div style={{ background:`rgba(255,255,255,0.03)`, borderLeft:`3px solid ${current.color}`, borderRadius:8, padding:"12px 14px", marginBottom:12 }}>
+            <p style={{ color:"#f1f5f9", fontSize:14, lineHeight:1.8, margin:0, whiteSpace:"pre-wrap" }}>{prompt}</p>
+          </div>
+          <textarea value={text} onChange={e=>setText(e.target.value)}
+            placeholder="Write your answer here... / ここに答えを書いてください..."
+            rows={4} style={{ ...S.input, resize:"vertical", fontFamily:"inherit", lineHeight:1.8, marginBottom:8 }} />
+          <div style={{ display:"flex", justifyContent:"space-between", marginBottom:10 }}>
+            <button onClick={()=>generatePrompt(activeSkill)} style={{ padding:"5px 12px", borderRadius:8, background:C.card, border:`1px solid ${C.border}`, color:"#94a3b8", fontSize:11, cursor:"pointer" }}>
+              🔄 New task
+            </button>
+            <p style={{ color:"#64748b", fontSize:11, margin:0, alignSelf:"center" }}>{text.length} chars</p>
+          </div>
+          {!feedback ? (
+            <button onClick={getFeedback} disabled={!text.trim()||loading}
+              style={{ ...S.btn, width:"100%", background:text.trim()?`linear-gradient(135deg,${current.color},${current.color}99)`:"#1e293b", color:text.trim()?"#fff":"#475569" }}>
+              {loading?"Getting feedback...":"Get AI Feedback ✨"}
+            </button>
+          ) : (
+            <div style={{ background:"rgba(34,197,94,0.06)", borderLeft:`3px solid ${C.green}`, borderRadius:8, padding:"12px 14px" }}>
+              <p style={{ color:"#f1f5f9", fontSize:13, lineHeight:1.8, margin:0, whiteSpace:"pre-wrap" }}>{feedback}</p>
+              <button onClick={()=>{ setFeedback(""); setText(""); }} style={{ marginTop:10, padding:"6px 14px", borderRadius:8, background:C.card, border:`1px solid ${C.border}`, color:"#64748b", fontSize:11, cursor:"pointer" }}>
+                Try again
+              </button>
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ─── WRITING PROMPT (kept for legacy) ────────────────────────────────────────────────────────────
 function WritingPrompt({ jlpt, skills, lang }) {
   const [topic, setTopic] = useState("culture");
   const [promptIdx, setPromptIdx] = useState(0);
@@ -959,7 +1129,6 @@ function WritingPrompt({ jlpt, skills, lang }) {
   const [feedback, setFeedback] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // Only show writing-related topics based on selected skills
   const availableTopics = Object.keys(WRITING_TOPICS);
   const prompt = WRITING_TOPICS[topic][promptIdx];
   const charCount = text.length;
@@ -1171,8 +1340,6 @@ function Dashboard({ form, onEdit }) {
     { id:"schedule", label:T(lang,"schedule") },
     { id:"vocabulary", label:T(lang,"vocabulary") },
     { id:"resources", label:T(lang,"resources") },
-    // Writing tab only shown if user selected writing-adjacent skills
-    ...(skills.some(s=>["reading","conversation","grammar","jlpt"].includes(s)) ? [{ id:"writing", label:T(lang,"writing") }] : []),
     { id:"milestones", label:T(lang,"milestones") },
   ];
 
@@ -1263,7 +1430,9 @@ function Dashboard({ form, onEdit }) {
         )}
 
         {/* Writing: only visible if tab is "writing" (tab only appears for relevant skills) */}
-        {tab==="writing" && <WritingPrompt jlpt={form.jlpt} skills={form.skills} lang={lang} />}
+        {tab==="vocabulary" && skills.some(s=>["reading","conversation","grammar","jlpt","listening"].includes(s)) && (
+          <SkillPractice jlpt={form.jlpt} skills={skills} lang={lang} />
+        )}
 
         {tab==="milestones" && (
           <div style={{ ...S.card }}>
