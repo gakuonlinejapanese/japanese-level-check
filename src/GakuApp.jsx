@@ -305,7 +305,7 @@ function SentencePractice({ words, lang }) {
   const generateSentences = async () => {
     setLoading(true);
     try {
-      const res = await fetch("https://api.anthropic.com/v1/messages", {
+      const res = await fetch("/api/claude", {
         method:"POST", headers:{"Content-Type":"application/json"},
         body: JSON.stringify({ model:"claude-sonnet-4-6", max_tokens:1000,
           messages:[{ role:"user", content:`Create 5 fill-in-the-blank multiple choice questions using these Japanese words: ${words.map(w=>w.word).join(", ")}.
@@ -406,7 +406,7 @@ function WordOrderPractice({ words, lang }) {
   const generateExercises = async () => {
     setLoading(true);
     try {
-      const res = await fetch("https://api.anthropic.com/v1/messages", {
+      const res = await fetch("/api/claude", {
         method:"POST", headers:{"Content-Type":"application/json"},
         body: JSON.stringify({ model:"claude-sonnet-4-6", max_tokens:800,
           messages:[{ role:"user", content:`Create 4 word-order exercises using these Japanese vocabulary words: ${words.map(w=>w.word).join(", ")}.
@@ -575,7 +575,7 @@ function VocabBuilder({ form }) {
     setLoading(true);
     setHints({});
     try {
-      const res = await fetch("https://api.anthropic.com/v1/messages", {
+      const res = await fetch("/api/claude", {
         method:"POST", headers:{"Content-Type":"application/json"},
         body: JSON.stringify({ model:"claude-sonnet-4-6", max_tokens:1500,
           messages:[{ role:"user", content:`You are a Japanese vocabulary dictionary and teacher.
@@ -848,7 +848,7 @@ Mention ONE specific resource from their skill set.
 Write in ${lang}. 2-3 sentences max. Use 1-2 emojis. Be warm and specific, not generic.
 Do NOT say "Even 10 minutes counts" - give a real specific suggestion.`;
 
-      const res = await fetch("https://api.anthropic.com/v1/messages", {
+      const res = await fetch("/api/claude", {
         method:"POST", headers:{"Content-Type":"application/json"},
         body: JSON.stringify({ model:"claude-sonnet-4-6", max_tokens:600,
           messages:[{ role:"user", content: prompt }]
@@ -1012,7 +1012,7 @@ function SkillPractice({ jlpt, skills, lang }) {
     setLoadingPrompt(true);
     try {
       const skillInfo = SKILL_PRACTICE[skill];
-      const res = await fetch("https://api.anthropic.com/v1/messages", {
+      const res = await fetch("/api/claude", {
         method:"POST", headers:{"Content-Type":"application/json"},
         body: JSON.stringify({ model:"claude-sonnet-4-6", max_tokens:300,
           messages:[{ role:"user", content:`Create ONE practice task for a Japanese learner.
@@ -1041,7 +1041,7 @@ Keep it practical, level-appropriate for ${jlpt}, and under 120 words total.` }]
     if (!text.trim()) return;
     setLoading(true);
     try {
-      const res = await fetch("https://api.anthropic.com/v1/messages", {
+      const res = await fetch("/api/claude", {
         method:"POST", headers:{"Content-Type":"application/json"},
         body: JSON.stringify({ model:"claude-sonnet-4-6", max_tokens:400,
           messages:[{ role:"user", content:`You are a Japanese teacher. Student level: ${jlpt}. Skill: ${activeSkill}.
@@ -1137,7 +1137,7 @@ function WritingPrompt({ jlpt, skills, lang }) {
     if (text.length < 50) return;
     setLoading(true);
     try {
-      const res = await fetch("https://api.anthropic.com/v1/messages", {
+      const res = await fetch("/api/claude", {
         method:"POST", headers:{"Content-Type":"application/json"},
         body: JSON.stringify({ model:"claude-sonnet-4-6", max_tokens:400,
           messages:[{ role:"user", content:`You are a Japanese language teacher using CLT. Student level: ${jlpt}.
