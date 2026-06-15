@@ -5,6 +5,7 @@ import Reading from './reading';
 import BusinessSpeech from './business-speech';
 import CasualSpeech from './casual-speech';
 import SelfStudy from './self-study';
+import GakuApp from './GakuApp';
 
 const sections = [
   { id:'vocabulary',  icon:'📖', label:'Vocabulary',      sub:'語彙・単語',       color:'#06b6d4' },
@@ -33,12 +34,25 @@ function Home({ onSelect }) {
   );
 }
 
+function BrandFooter() {
+  return (
+    <a href="https://www.seitojapanese.online/" target="_blank" rel="noopener noreferrer" style={{ position:'fixed', bottom:10, left:10, zIndex:999, display:'flex', flexDirection:'column', alignItems:'flex-start', gap:4, opacity:0.85, textDecoration:'none' }}>
+      <img src="/gaku-logo.png" alt="GAKU logo" style={{ width:32, height:32, borderRadius:'50%' }} />
+      <span style={{ color:'#94a3b8', fontSize:9, lineHeight:1.3, fontFamily:"'Noto Sans JP',sans-serif", maxWidth:280 }}>
+        Presented by Seito Sakamoto, an Online Japanese Tutor GAKU, a master's degree in teaching international languages.
+      </span>
+    </a>
+  );
+}
+
 export default function App() {
-  const [current, setCurrent] = useState(null);
+  const [current, setCurrent] = useState(window.location.pathname === '/app' ? 'gaku-app' : null);
   const goSelfStudy = (section, level) => setCurrent(`self-study|${section}|${level}`);
   window.__ss = (level) => goSelfStudy(current || 'general', level);
 
-  if (!current) return <Home onSelect={setCurrent} />;
+  if (current === 'gaku-app') return <div><GakuApp onBack={() => setCurrent(null)} /><BrandFooter /></div>;
+
+  if (!current) return <><Home onSelect={setCurrent} /><BrandFooter /></>;
 
   const isSelfStudy = current.startsWith('self-study|');
 
@@ -53,6 +67,7 @@ export default function App() {
       {current === 'business'    && <BusinessSpeech onSelfStudy={(level) => goSelfStudy('business', level)} />}
       {current === 'casual'      && <CasualSpeech onSelfStudy={(level) => goSelfStudy('casual', level)} />}
       {isSelfStudy && <SelfStudy cefrLevel={current.split('|')[2]} section={current.split('|')[1]} />}
+      <BrandFooter />
     </div>
   );
 }

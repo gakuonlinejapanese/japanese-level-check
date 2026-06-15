@@ -138,7 +138,7 @@ export default function Vocabulary({ onSelfStudy }) {
                  <span style={{ ...S.badge, background:"#1e293b", color:"#64748b" }}>JLPT {q.jlpt}</span></>
             }
           </div>
-          <p style={{...S.qText, fontSize:13, color:"#94a3b8", marginBottom:4}}>If you cannot answer, click "Not Able To Answer"</p><p style={S.qText}>{q.text}</p>
+          <p style={{...S.qText, fontSize:15, color:"#94a3b8", marginBottom:4}}>If you cannot answer, click "Not Able To Answer"</p><p style={S.qText}>{q.text}</p>
           {q.textEn && <p style={S.qTextEn}>{q.textEn}</p>}
           <div style={{ display:"flex", flexDirection:"column", gap:10, marginBottom:22 }}>
             {q.options.map((opt, i) => {
@@ -262,7 +262,7 @@ export default function Vocabulary({ onSelfStudy }) {
                     <span style={{ ...S.badge, background:ok?"#22c55e22":"#ef444422", color:ok?"#22c55e":"#ef4444" }}>{ok?" Correct":" Incorrect"}</span>
                   </div>
                   <p style={{ color:"#e2e8f0", fontSize:14, margin:"0 0 4px" }}>{qq.text}</p>
-                  {qq.textEn && <p style={{ color:"#64748b", fontSize:12, margin:"0 0 10px", fontStyle:"italic" }}>{qq.textEn}</p>}
+                  {qq.textEn && <p style={{ color:"#94a3b8", fontSize:14, margin:"0 0 10px", fontStyle:"italic" }}>{qq.textEn}</p>}
                   <div style={{ display:"flex", flexDirection:"column", gap:4, marginBottom:10 }}>
                     {qq.options.map((opt,oi) => {
                       const isA=oi===qq.answer, isU=oi===ua;
@@ -290,9 +290,9 @@ const S = {
   page:{ minHeight:"100vh", background:"linear-gradient(160deg,#0a0f1e 0%,#0f172a 60%,#0a0f1e 100%)", fontFamily:"'Noto Sans JP','Hiragino Sans',sans-serif", display:"flex", alignItems:"center", justifyContent:"center", padding:"24px 16px" },
   card:{ width:"100%", maxWidth:520, background:"rgba(255,255,255,0.03)", backdropFilter:"blur(16px)", borderRadius:22, border:"1px solid rgba(255,255,255,0.07)", padding:"28px 24px", boxShadow:"0 24px 64px rgba(0,0,0,0.5)" },
   badge:{ padding:"3px 10px", borderRadius:10, fontSize:11, fontWeight:700 },
-  qText:{ color:"#e2e8f0", fontSize:17, lineHeight:1.85, marginBottom:6, whiteSpace:"pre-line" },
-  qTextEn:{ color:"#64748b", fontSize:13, lineHeight:1.7, marginBottom:18, fontStyle:"italic" },
-  optBtn:{ display:"flex", alignItems:"center", gap:12, padding:"13px 16px", borderRadius:12, textAlign:"left", cursor:"pointer", fontSize:14, transition:"all 0.18s" },
+  qText:{ color:"#f8fafc", fontSize:19, lineHeight:1.9, marginBottom:6, whiteSpace:"pre-line" },
+  qTextEn:{ color:"#94a3b8", fontSize:18, lineHeight:1.75, marginBottom:18, fontStyle:"italic" },
+  optBtn:{ display:"flex", alignItems:"center", gap:12, padding:"13px 16px", borderRadius:12, textAlign:"left", cursor:"pointer", fontSize:18, transition:"all 0.18s" },
   optLabel:{ minWidth:26, height:26, borderRadius:"50%", display:"flex", alignItems:"center", justifyContent:"center", fontSize:11, fontWeight:800 },
   btn:{ width:"100%", padding:"14px", border:"none", borderRadius:13, fontSize:15, fontWeight:800, transition:"all 0.2s" },
   label:{ display:"block", color:"#64748b", fontSize:12, fontWeight:700, marginBottom:6, letterSpacing:1 },
