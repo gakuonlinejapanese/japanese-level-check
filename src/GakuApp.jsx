@@ -1,1 +1,1 @@
-404: Not Found
+Failed to fetch gakuonlinejapanese/japanese-level-check@b6c4b23 from GitHub.
