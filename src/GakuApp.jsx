@@ -298,6 +298,7 @@ function LibraryView({ onBack, onSelectFolder, onCreateCard }) {
   const [data, setData] = useState(loadVocabData);
   const [newFolderName, setNewFolderName] = useState("");
   const [showNewFolder, setShowNewFolder] = useState(false);
+  const [confirmDelete, setConfirmDelete] = useState(null); // folder name to delete
 
   const refresh = () => setData(loadVocabData());
 
@@ -312,7 +313,7 @@ function LibraryView({ onBack, onSelectFolder, onCreateCard }) {
   const deleteFolder = (name) => {
     if (name === "Your Vocabulary") return;
     const updated = { ...data, folders: data.folders.filter(f=>f.name!==name), cards: data.cards.filter(c=>c.folder!==name) };
-    saveVocabData(updated); setData(updated);
+    saveVocabData(updated); setData(updated); setConfirmDelete(null);
   };
 
   return (
@@ -349,7 +350,7 @@ function LibraryView({ onBack, onSelectFolder, onCreateCard }) {
               </div>
               <div style={{ display:"flex", alignItems:"center", gap:8 }}>
                 {f.name !== "Your Vocabulary" && (
-                  <button onClick={e=>{e.stopPropagation();deleteFolder(f.name);}} style={{ padding:"4px 8px", borderRadius:6, background:"rgba(239,68,68,0.1)", border:`1px solid rgba(239,68,68,0.2)`, color:"#ef4444", fontSize:11, cursor:"pointer" }}>🗑</button>
+                  <button onClick={e=>{e.stopPropagation();setConfirmDelete(f.name);}} style={{ padding:"4px 10px", borderRadius:6, background:"rgba(239,68,68,0.1)", border:`1px solid rgba(239,68,68,0.2)`, color:"#ef4444", fontSize:11, cursor:"pointer", fontWeight:600 }}>🗑 削除</button>
                 )}
                 <span style={{ color:"#475569", fontSize:16 }}>→</span>
               </div>
@@ -357,6 +358,22 @@ function LibraryView({ onBack, onSelectFolder, onCreateCard }) {
           );
         })}
       </div>
+
+      {/* ── DELETE CONFIRM MODAL ── */}
+      {confirmDelete && (
+        <div style={{ position:"fixed", inset:0, background:"rgba(0,0,0,0.7)", display:"flex", alignItems:"center", justifyContent:"center", zIndex:1000 }}>
+          <div style={{ ...S.card, maxWidth:320, width:"90%", textAlign:"center" }}>
+            <p style={{ fontSize:28, margin:"0 0 10px" }}>🗑</p>
+            <p style={{ color:"#f1f5f9", fontSize:15, fontWeight:700, margin:"0 0 6px" }}>フォルダを削除しますか？</p>
+            <p style={{ color:"#94a3b8", fontSize:13, margin:"0 0 6px" }}>「{confirmDelete}」</p>
+            <p style={{ color:C.red, fontSize:12, margin:"0 0 18px" }}>このフォルダ内の単語もすべて削除されます。</p>
+            <div style={{ display:"flex", gap:10 }}>
+              <button onClick={()=>setConfirmDelete(null)} style={{ flex:1, ...S.btn, background:C.card, border:`1px solid ${C.border}`, color:"#94a3b8", fontSize:13 }}>キャンセル</button>
+              <button onClick={()=>deleteFolder(confirmDelete)} style={{ flex:1, ...S.btn, background:"rgba(239,68,68,0.15)", border:`1px solid rgba(239,68,68,0.4)`, color:C.red, fontSize:13, fontWeight:700 }}>削除する</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -416,7 +433,7 @@ function WordSearchScreen({ form, onBack, onSelectWord }) {
     if (!search.trim()) return;
     setLoading(true); setError(""); setResults([]);
     try {
-      const res = await fetch("https://api.anthropic.com/v1/messages", {
+      const res = await fetch("/api/claude", {
         method:"POST", headers:{"Content-Type":"application/json"},
         body: JSON.stringify({ model:"claude-sonnet-4-20250514", max_tokens:1200,
           messages:[{ role:"user", content:`You are an expert Japanese dictionary and language teacher. The student's native/preferred language is ${form.preferredLang || "English"}, JLPT level: ${form.jlpt || "N5"}.
@@ -526,26 +543,50 @@ function VocabBuilder({ form }) {
   const [search, setSearch] = useState("");
   const [words, setWords] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [findError, setFindError] = useState("");
 
   const findWords = async () => {
     if (!search.trim()) return;
     setLoading(true);
+    setFindError("");
+    setWords([]);
     try {
-      const res = await fetch("https://api.anthropic.com/v1/messages", {
+      const res = await fetch("/api/claude", {
         method:"POST", headers:{"Content-Type":"application/json"},
-        body: JSON.stringify({ model:"claude-sonnet-4-20250514", max_tokens:900,
-          messages:[{ role:"user", content:`You are a Japanese vocabulary teacher using CLT. The student is level ${form.jlpt}, goal: ${form.displayGoal||form.goal}.
-They want to learn words related to: "${search}"
-Generate 5 vocabulary words perfect for their level.
-Respond ONLY in valid JSON (no markdown, no backticks):
-[{"word":"","reading":"","jlpt":"","partOfSpeech":"","meaning":"","example":"","example_translated":"","tip":"","imageQuery":"","imageDesc":"","meaningNative":""}]` }]
+        body: JSON.stringify({ model:"claude-sonnet-4-20250514", max_tokens:1200,
+          messages:[{ role:"user", content:`You are a Japanese dictionary and vocabulary expert. Generate authentic Japanese dictionary words related to the topic: "${search}"
+
+Return exactly 8 words as a JSON array. These should be real Japanese dictionary words (like those found in kokugo.jitenon.jp), covering a natural range of common to intermediate vocabulary. Do NOT filter by JLPT level.
+
+For each word provide:
+- word: the Japanese word in kanji/kana
+- reading: hiragana reading
+- jlpt: JLPT level if known (N5/N4/N3/N2/N1), or ""
+- partOfSpeech: part of speech in English
+- meaning: clear English meaning
+- meaningNative: Japanese definition (kokugo dictionary style, simple Japanese)
+- example: natural example sentence in Japanese
+- example_translated: English translation of example
+- tip: one practical tip for using this word in conversation
+- imageQuery: 2-3 word English image search query
+- imageDesc: brief English image description
+
+Respond ONLY with a valid JSON array. No markdown, no backticks, no explanation.` }]
         })
       });
       const d = await res.json();
+      if (d.error) { console.error("API error:", d.error); setWords([]); setLoading(false); return; }
       const text = d.content?.map(c=>c.text||"").join("") || "[]";
-      const parsed = JSON.parse(text.replace(/```json|```/g,"").trim());
-      setWords(Array.isArray(parsed)?parsed:[]);
-    } catch { setWords([]); }
+      const clean = text.replace(/\`\`\`json\s*/g,"").replace(/\`\`\`\s*/g,"").trim();
+      try {
+        const parsed = JSON.parse(clean);
+        setWords(Array.isArray(parsed)?parsed:[]);
+      } catch {
+        const match = clean.match(/\[[\s\S]*\]/);
+        if (match) { try { setWords(JSON.parse(match[0])); } catch { setWords([]); } }
+        else { setWords([]); }
+      }
+    } catch(e) { console.error("findWords error:", e); setWords([]); setFindError("検索に失敗しました。もう一度お試しください。"); }
     setLoading(false);
   };
 
@@ -581,16 +622,24 @@ Respond ONLY in valid JSON (no markdown, no backticks):
       {/* ── VOCABULARY BUILDER (quick find) ── */}
       <div style={{ ...S.card, marginBottom:16 }}>
         <p style={{ color:C.teal, fontSize:12, fontWeight:700, letterSpacing:1, marginBottom:4 }}>📚 VOCABULARY BUILDER</p>
-        <p style={{ color:"#64748b", fontSize:12, marginBottom:14 }}>Enter any topic and AI will suggest vocabulary at your level ({form.jlpt})</p>
+        <p style={{ color:"#64748b", fontSize:12, marginBottom:14 }}>トピックを入力すると、日本語辞書から関連単語を表示します（English or 日本語OK）</p>
         <div style={{ display:"flex", gap:8 }}>
           <input value={search} onChange={e=>setSearch(e.target.value)} onKeyDown={e=>e.key==="Enter"&&findWords()} placeholder="e.g. food, travel, emotions..." style={{ ...S.input, flex:1 }} />
           <button onClick={findWords} disabled={!search.trim()||loading} style={{ ...S.btn, background:search.trim()?`linear-gradient(135deg,${C.teal},#0891b2)`:"#1e293b", color:search.trim()?"#fff":"#475569", whiteSpace:"nowrap", padding:"12px 18px" }}>
             {loading?"...":"Find Words"}
           </button>
         </div>
+        {findError && <p style={{ color:C.red, fontSize:12, marginTop:8 }}>{findError}</p>}
       </div>
 
-      {words.length > 0 && (
+      {loading && (
+        <div style={{ textAlign:"center", padding:"24px 0" }}>
+          <p style={{ color:C.teal, fontSize:24, margin:"0 0 8px" }}>🔍</p>
+          <p style={{ color:"#64748b", fontSize:13 }}>日本語辞書を検索中...</p>
+        </div>
+      )}
+
+      {!loading && words.length > 0 && (
         <div style={{ display:"flex", flexDirection:"column", gap:10, marginBottom:16 }}>
           {words.map((w,i) => (
             <div key={i} style={{ ...S.card, borderLeft:`3px solid ${C.teal}`, cursor:"pointer" }} onClick={()=>{setSelectedWord(w);setVocabView("wordDetail");}}>
@@ -631,7 +680,7 @@ function PracticeSet({ form }) {
   const generate = async () => {
     setLoading(true); setError(""); setItems([]); setRevealed({});
     try {
-      const res = await fetch("https://api.anthropic.com/v1/messages", {
+      const res = await fetch("/api/claude", {
         method:"POST", headers:{"Content-Type":"application/json"},
         body: JSON.stringify({ model:"claude-sonnet-4-20250514", max_tokens:1200,
           messages:[{ role:"user", content:`You are a Japanese teacher using CLT (Communicative Language Teaching). The student is level ${form.jlpt}, goal: ${form.displayGoal||form.goal}.
@@ -760,7 +809,7 @@ function HelpModal({ onClose, form }) {
   const getHelp = async () => {
     setLoading(true);
     try {
-      const res = await fetch("https://api.anthropic.com/v1/messages", {
+      const res = await fetch("/api/claude", {
         method:"POST", headers:{"Content-Type":"application/json"},
         body: JSON.stringify({ model:"claude-sonnet-4-20250514", max_tokens:500,
           messages:[{ role:"user", content:`You are a warm Japanese language coach using CLT.
@@ -896,7 +945,7 @@ function WritingPrompt({ jlpt }) {
     if (text.length < 50) return;
     setLoading(true);
     try {
-      const res = await fetch("https://api.anthropic.com/v1/messages", {
+      const res = await fetch("/api/claude", {
         method:"POST", headers:{"Content-Type":"application/json"},
         body: JSON.stringify({ model:"claude-sonnet-4-20250514", max_tokens:400,
           messages:[{ role:"user", content:`You are a Japanese language teacher using CLT. Student level: ${jlpt}.
