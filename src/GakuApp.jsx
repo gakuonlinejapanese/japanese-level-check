@@ -344,7 +344,10 @@ function FlashcardView({ cards, onBack }) {
         ) : (
           <>
             <p style={{ color:"#f1f5f9", fontSize:20, fontWeight:700, margin:"0 0 8px", lineHeight:1.5 }}>{card.meaning}</p>
-            <p style={{ color:"#64748b", fontSize:13, lineHeight:1.7, maxWidth:280 }}>{card.example}</p>
+            {card.meaningNative && <p style={{ color:"#64748b", fontSize:13, margin:"0 0 8px" }}>{card.meaningNative}</p>}
+            <p style={{ color:"#94a3b8", fontSize:13, lineHeight:1.7, maxWidth:280, margin:"0 0 10px" }}>{card.example}</p>
+            {card.example_translated && <p style={{ color:"#475569", fontSize:12, fontStyle:"italic", maxWidth:280, margin:"0 0 10px" }}>{card.example_translated}</p>}
+            <button onClick={e=>{e.stopPropagation();speakJapanese(card.example);}} style={{ background:"rgba(245,158,11,0.1)", border:"1px solid rgba(245,158,11,0.3)", borderRadius:8, color:C.amber, fontSize:13, padding:"5px 14px", cursor:"pointer" }}>🔊 例文を聞く</button>
           </>
         )}
       </div>
