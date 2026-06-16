@@ -1257,7 +1257,6 @@ function Dashboard({ form, onEdit }) {
     { id:"practice", label:"🎯 Practice Set" },
     { id:"vocabulary", label:"📚 Vocabulary" },
     { id:"resources", label:"🔗 Resources" },
-    { id:"writing", label:"✍️ Writing" },
     { id:"milestones", label:"🏆 Milestones" },
   ];
 
@@ -1351,7 +1350,7 @@ function Dashboard({ form, onEdit }) {
           </div>
         )}
 
-        {tab==="writing" && <WritingPrompt jlpt={form.jlpt} />}
+
 
         {tab==="milestones" && (
           <div style={{ ...S.card }}>
