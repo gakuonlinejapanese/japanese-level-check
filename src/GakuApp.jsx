@@ -100,15 +100,24 @@ function WordDetailCard({ card, onSave, onBack, form, prefLang }) {
     setImgIndex(nextIndex);
     try {
       const query = card.imageQuery || card.word;
-      const page = Math.floor(nextIndex / 10);
-      const indexInPage = nextIndex % 10;
-      const res = await fetch(`/api/image-search?q=${encodeURIComponent(query)}&page=${page}`);
+      const offset = nextIndex - 1;
+      const url = `https://commons.wikimedia.org/w/api.php?action=query&generator=search&gsrnamespace=6&gsrsearch=${encodeURIComponent(query)}&gsrlimit=1&gsroffset=${offset}&prop=imageinfo&iiprop=url&iiurlwidth=400&format=json&origin=*`;
+      const res = await fetch(url);
       const data = await res.json();
-      if (data.images && data.images.length > 0) {
-        setImgSrc(data.images[indexInPage % data.images.length]);
+      const pages = Object.values(data?.query?.pages || {});
+      const thumbUrl = pages[0]?.imageinfo?.[0]?.thumburl;
+      if (thumbUrl) {
+        setImgSrc(thumbUrl);
         setImgError(false);
       } else {
-        setImgError(true);
+        // Fallback: try with Japanese word directly
+        const url2 = `https://commons.wikimedia.org/w/api.php?action=query&generator=search&gsrnamespace=6&gsrsearch=${encodeURIComponent(card.word)}&gsrlimit=1&gsroffset=${offset}&prop=imageinfo&iiprop=url&iiurlwidth=400&format=json&origin=*`;
+        const res2 = await fetch(url2);
+        const data2 = await res2.json();
+        const pages2 = Object.values(data2?.query?.pages || {});
+        const thumb2 = pages2[0]?.imageinfo?.[0]?.thumburl;
+        if (thumb2) { setImgSrc(thumb2); setImgError(false); }
+        else { setImgError(true); }
       }
     } catch {
       setImgError(true);
