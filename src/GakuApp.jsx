@@ -50,6 +50,36 @@ const RESOURCES = {
   ],
 };
 
+// Level-based recommended resources
+const LEVEL_RESOURCES = {
+  "Beginner": [
+    { name:"Japanese with Shun", desc:"初級向けYouTubeチャンネル。聞き取り練習に最適。", url:"https://www.youtube.com/channel/UCu6sZrHyl4hSS2PvlUo2XZA", free:true, level:"初級 (N5〜N4)", skills:{ vocab:4, grammar:2, reading:0, speaking:3, listening:5 } },
+    { name:"Marugoto Web", desc:"国際交流基金の初中級コース。コミュニカティブな学習法。", url:"https://marugotoweb.jp/ja/", free:true, level:"初中級 (N4〜N3)", skills:{ vocab:4, grammar:4, reading:3, speaking:5, listening:5 } },
+  ],
+  "N5": [
+    { name:"Japanese with Shun", desc:"初級向けYouTubeチャンネル。聞き取り練習に最適。", url:"https://www.youtube.com/channel/UCu6sZrHyl4hSS2PvlUo2XZA", free:true, level:"初級 (N5〜N4)", skills:{ vocab:4, grammar:2, reading:0, speaking:3, listening:5 } },
+    { name:"Marugoto Web", desc:"国際交流基金の初中級コース。コミュニカティブな学習法。", url:"https://marugotoweb.jp/ja/", free:true, level:"初中級 (N4〜N3)", skills:{ vocab:4, grammar:4, reading:3, speaking:5, listening:5 } },
+    { name:"Onomappu", desc:"日常会話・スラング・文化を楽しく学べるYouTubeチャンネル。", url:"https://www.youtube.com/@Onomappu", free:true, level:"初中級 (N4〜N3)", skills:{ vocab:5, grammar:3, reading:0, speaking:4, listening:5 } },
+  ],
+  "N4": [
+    { name:"Marugoto Web", desc:"国際交流基金の初中級コース。コミュニカティブな学習法。", url:"https://marugotoweb.jp/ja/", free:true, level:"初中級 (N4〜N3)", skills:{ vocab:4, grammar:4, reading:3, speaking:5, listening:5 } },
+    { name:"Onomappu", desc:"日常会話・スラング・文化を楽しく学べるYouTubeチャンネル。", url:"https://www.youtube.com/@Onomappu", free:true, level:"初中級 (N4〜N3)", skills:{ vocab:5, grammar:3, reading:0, speaking:4, listening:5 } },
+    { name:"Nihongo con Teppei", desc:"中級者向けポッドキャスト。ナチュラルスピードの日本語が聞ける。", url:"https://nihongoconteppei.com", free:true, level:"中級 (N3〜N2)", skills:{ vocab:5, grammar:2, reading:0, speaking:3, listening:5 } },
+  ],
+  "N3": [
+    { name:"Nihongo con Teppei", desc:"中級者向けポッドキャスト。ナチュラルスピードの日本語が聞ける。", url:"https://nihongoconteppei.com", free:true, level:"中級 (N3〜N2)", skills:{ vocab:5, grammar:2, reading:0, speaking:3, listening:5 } },
+    { name:"YUYU Japanese Podcast", desc:"中級者向けYouTubeポッドキャスト。自然な日本語表現が学べる。", url:"https://www.youtube.com/@yuyunihongopodcast", free:true, level:"中級 (N3〜N2)", skills:{ vocab:5, grammar:2, reading:0, speaking:3, listening:5 } },
+    { name:"Sambon Juku", desc:"中上級向け文法・語彙・JLPT対策チャンネル。", url:"https://www.youtube.com/@SambonJuku", free:true, level:"中上級 (N2〜N1)", skills:{ vocab:5, grammar:5, reading:3, speaking:3, listening:4 } },
+  ],
+  "N2": [
+    { name:"Sambon Juku", desc:"中上級向け文法・語彙・JLPT対策チャンネル。", url:"https://www.youtube.com/@SambonJuku", free:true, level:"中上級 (N2〜N1)", skills:{ vocab:5, grammar:5, reading:3, speaking:3, listening:4 } },
+    { name:"YUYU Japanese Podcast", desc:"中級者向けYouTubeポッドキャスト。自然な日本語表現が学べる。", url:"https://www.youtube.com/@yuyunihongopodcast", free:true, level:"中級 (N3〜N2)", skills:{ vocab:5, grammar:2, reading:0, speaking:3, listening:5 } },
+  ],
+  "N1": [
+    { name:"Sambon Juku", desc:"中上級向け文法・語彙・JLPT対策チャンネル。", url:"https://www.youtube.com/@SambonJuku", free:true, level:"中上級 (N2〜N1)", skills:{ vocab:5, grammar:5, reading:3, speaking:3, listening:4 } },
+  ],
+};
+
 const SKILL_LABELS = {
   pronunciation:"🔊 Pronunciation", listening:"👂 Listening", conversation:"💬 Conversation",
   jlpt:"🎯 JLPT Prep", reading:"📖 Reading", kanji:"🈳 Kanji", grammar:"📝 Grammar",
@@ -1328,6 +1358,39 @@ function Dashboard({ form, onEdit }) {
         {tab==="vocabulary" && <VocabBuilder form={form} />}
 
         {tab==="resources" && (
+          <div>
+            {/* ── レベル別おすすめリソース ── */}
+            {(LEVEL_RESOURCES[form.jlpt] || []).length > 0 && (
+              <div style={{ ...S.card, marginBottom:16, borderLeft:`3px solid ${C.teal}` }}>
+                <p style={{ color:C.teal, fontSize:12, fontWeight:700, letterSpacing:1, marginBottom:4 }}>⭐ あなたのレベルにおすすめ</p>
+                <p style={{ color:"#64748b", fontSize:12, marginBottom:14 }}>レベル {form.jlpt} 向けに厳選したリソース</p>
+                <div style={{ display:"flex", flexDirection:"column", gap:12 }}>
+                  {(LEVEL_RESOURCES[form.jlpt] || []).map((r,i) => (
+                    <div key={i} style={{ background:"rgba(6,182,212,0.04)", borderRadius:12, border:`1px solid rgba(6,182,212,0.15)`, padding:"14px 16px" }}>
+                      <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", marginBottom:6 }}>
+                        <p style={{ color:"#f1f5f9", fontSize:14, fontWeight:700, margin:0 }}>{r.name}</p>
+                        <span style={{ color:C.teal, fontSize:10, fontWeight:700, background:"rgba(6,182,212,0.1)", padding:"2px 8px", borderRadius:99, whiteSpace:"nowrap", marginLeft:8 }}>{r.level}</span>
+                      </div>
+                      <p style={{ color:"#94a3b8", fontSize:12, margin:"0 0 10px", lineHeight:1.6 }}>{r.desc}</p>
+                      {/* 適性スター表示 */}
+                      <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:"3px 12px", marginBottom:10 }}>
+                        {[["語彙",r.skills.vocab],["文法",r.skills.grammar],["読解",r.skills.reading],["スピーキング",r.skills.speaking],["リスニング",r.skills.listening]].map(([label,val])=>(
+                          <div key={label} style={{ display:"flex", alignItems:"center", gap:4 }}>
+                            <span style={{ color:"#64748b", fontSize:10, minWidth:60 }}>{label}</span>
+                            <span style={{ fontSize:10, letterSpacing:1 }}>{"★".repeat(val)}{"☆".repeat(5-val)}</span>
+                          </div>
+                        ))}
+                      </div>
+                      <a href={r.url} target="_blank" rel="noopener noreferrer" style={{ display:"block", textAlign:"center", padding:"9px", background:`linear-gradient(135deg,${C.teal},#0891b2)`, color:"#fff", borderRadius:8, fontSize:12, fontWeight:700, textDecoration:"none" }}>
+                        → {r.name} を開く
+                      </a>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* ── スキル別リソース ── */}
           <div style={{ ...S.card }}>
             <p style={{ color:C.amber, fontSize:12, fontWeight:700, letterSpacing:1, marginBottom:4 }}>🔗 YOUR RESOURCES</p>
             <p style={{ color:"#64748b", fontSize:12, marginBottom:16 }}>Curated for level {form.jlpt}, skills: {(form.skills||[]).join(", ")}</p>
@@ -1347,6 +1410,7 @@ function Dashboard({ form, onEdit }) {
                 </div>
               ))}
             </div>
+          </div>
           </div>
         )}
 
