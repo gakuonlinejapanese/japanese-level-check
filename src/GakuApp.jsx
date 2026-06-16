@@ -650,25 +650,29 @@ function VocabBuilder({ form }) {
     try {
       const res = await fetch("/api/claude", {
         method:"POST", headers:{"Content-Type":"application/json"},
-        body: JSON.stringify({ model:"claude-sonnet-4-20250514", max_tokens:1200,
-          messages:[{ role:"user", content:`You are a Japanese dictionary and vocabulary expert. Generate authentic Japanese dictionary words related to the topic: "${search}"
+        body: JSON.stringify({ model:"claude-sonnet-4-20250514", max_tokens:1500,
+          messages:[
+            { role:"system", content:`You are a multilingual Japanese dictionary expert. You MUST write the "meaning", "example_translated", and "tip" fields EXCLUSIVELY in ${form.preferredLang || "English"}. Never use English for these fields unless the student native language IS English.` },
+            { role:"user", content:`Generate 8 authentic Japanese dictionary words related to the topic: "${search}"
 
-Return exactly 8 words as a JSON array. These should be real Japanese dictionary words (like those found in kokugo.jitenon.jp), covering a natural range of common to intermediate vocabulary. Do NOT filter by JLPT level.
+The student native language is: ${form.preferredLang || "English"}
+ALL translations must be in ${form.preferredLang || "English"} — NOT in English unless that is the native language.
 
-For each word provide:
-- word: the Japanese word in kanji/kana
+Return a JSON array of exactly 8 objects with these keys:
+- word: Japanese word in kanji/kana
 - reading: hiragana reading
-- jlpt: JLPT level if known (N5/N4/N3/N2/N1), or ""
+- jlpt: JLPT level (N5/N4/N3/N2/N1) or ""
 - partOfSpeech: part of speech in English
-- meaning: clear English meaning
-- meaningNative: Japanese definition in simple Japanese (REQUIRED - always provide this, e.g. 「目の周りの部分」「食べ物を料理すること」)
-- example: natural example sentence in Japanese
-- example_translated: English translation of example
-- tip: one practical tip for using this word in conversation
-- imageQuery: 2-3 word English image search query
+- meaning: translation in ${form.preferredLang || "English"}
+- meaningNative: simple Japanese definition (e.g. 「食べ物を料理すること」)
+- example: natural Japanese example sentence
+- example_translated: translation of example in ${form.preferredLang || "English"}
+- tip: usage tip in ${form.preferredLang || "English"}
+- imageQuery: 2-3 English words for image search
 - imageDesc: brief English image description
 
-Respond ONLY with a valid JSON array. No markdown, no backticks, no explanation.` }]
+Output ONLY a raw JSON array. No markdown, no backticks, no explanation.` }
+          ]
         })
       });
       const d = await res.json();
