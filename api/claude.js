@@ -12,13 +12,17 @@ export default async function handler(req, res) {
     const { messages, max_tokens } = req.body;
     const userMessage = messages?.[messages.length - 1]?.content || "";
 
+    // Try Gemini API with x-goog-api-key header (works for both key types)
     const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent`,
       {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "x-goog-api-key": apiKey,
+        },
         body: JSON.stringify({
-          contents: [{ parts: [{ text: userMessage }] }],
+          contents: [{ role: "user", parts: [{ text: userMessage }] }],
           generationConfig: { maxOutputTokens: max_tokens || 1200 }
         }),
       }
@@ -26,11 +30,10 @@ export default async function handler(req, res) {
 
     const data = await response.json();
     if (!response.ok) {
-      return res.status(response.status).json({ error: data.error?.message || "Gemini API error" });
+      return res.status(response.status).json({ error: data.error?.message || "Gemini API error", raw: data });
     }
 
     const text = data.candidates?.[0]?.content?.parts?.[0]?.text || "";
-    // Return in Claude-compatible format
     return res.status(200).json({ content: [{ type: "text", text }] });
 
   } catch (error) {
