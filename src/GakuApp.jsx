@@ -162,32 +162,21 @@ function WordDetailCard({ card, onSave, onBack, form, prefLang }) {
         <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:10 }}>
           <p style={{ color:"#64748b", fontSize:11, fontWeight:700, letterSpacing:1, margin:0 }}>🖼 IMAGE ASSOCIATION</p>
           <a
-            href={`https://www.google.com/search?tbm=isch&q=${encodeURIComponent(card.word + " " + (card.imageQuery || ""))}`}
+            href={`https://www.bing.com/images/search?q=${encodeURIComponent(card.word + " " + (card.imageQuery || ""))}&FORM=IRSBH0`}
             target="_blank" rel="noopener noreferrer"
             style={{ fontSize:11, color:C.teal, textDecoration:"none", fontWeight:700, background:"rgba(6,182,212,0.1)", padding:"3px 10px", borderRadius:8, border:`1px solid rgba(6,182,212,0.2)` }}
           >
-            🔍 Google画像で見る
+            🔍 Bing画像で検索
           </a>
         </div>
-        {!imgError ? (
-          <img
-            src={`https://source.unsplash.com/400x220/?${imgQuery}`}
-            alt={card.word}
-            onError={()=>setImgError(true)}
-            style={{ width:"100%", borderRadius:10, objectFit:"cover", height:180, display:"block" }}
+        <div style={{ width:"100%", height:240, borderRadius:10, overflow:"hidden", position:"relative", background:"#0f172a" }}>
+          <iframe
+            src={`https://www.bing.com/images/search?q=${encodeURIComponent(card.word + " " + (card.imageQuery || ""))}&FORM=IRSBH0`}
+            style={{ width:"100%", height:"100%", border:"none", borderRadius:10 }}
+            title={`${card.word} images`}
+            sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
           />
-        ) : (
-          <a
-            href={`https://www.google.com/search?tbm=isch&q=${encodeURIComponent(card.word + " " + (card.imageQuery || ""))}`}
-            target="_blank" rel="noopener noreferrer"
-            style={{ textDecoration:"none" }}
-          >
-            <div style={{ width:"100%", height:130, borderRadius:10, background:"rgba(6,182,212,0.06)", display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", border:`1px dashed rgba(6,182,212,0.3)`, cursor:"pointer" }}>
-              <span style={{ color:C.teal, fontSize:28, marginBottom:8 }}>🔍</span>
-              <span style={{ color:C.teal, fontSize:13, fontWeight:700 }}>Google画像で「{card.word}」を検索</span>
-            </div>
-          </a>
-        )}
+        </div>
         {card.imageDesc && <p style={{ color:"#94a3b8", fontSize:12, margin:"8px 0 0", lineHeight:1.6 }}>{card.imageDesc}</p>}
       </div>
 
@@ -479,7 +468,7 @@ Generate up to 5 relevant Japanese vocabulary entries. For each entry provide:
 - jlpt: JLPT level (N5, N4, N3, N2, N1, or "Native" for very advanced)
 - partOfSpeech: part of speech in English (Noun, Verb, Adjective, Adverb, etc.)
 - meaning: meaning in ${form.preferredLang || "English"} (clear, natural translation)
-- meaningNative: Japanese definition/explanation (like a Japanese dictionary — in Japanese)
+- meaningNative: Japanese definition/explanation in simple Japanese (REQUIRED - always provide, e.g.「目の周りの部分」)
 - example: natural example sentence in Japanese using this word
 - example_translated: translation of example sentence in ${form.preferredLang || "English"}
 - tip: one CLT tip for using this word in real conversation
@@ -595,7 +584,7 @@ For each word provide:
 - jlpt: JLPT level if known (N5/N4/N3/N2/N1), or ""
 - partOfSpeech: part of speech in English
 - meaning: clear English meaning
-- meaningNative: Japanese definition (kokugo dictionary style, simple Japanese)
+- meaningNative: Japanese definition in simple Japanese (REQUIRED - always provide this, e.g. 「目の周りの部分」「食べ物を料理すること」)
 - example: natural example sentence in Japanese
 - example_translated: English translation of example
 - tip: one practical tip for using this word in conversation
@@ -717,7 +706,7 @@ Respond ONLY with a valid JSON array. No markdown, no backticks, no explanation.
                   📖 Weblio辞書
                 </a>
                 <a
-                  href={`https://www.google.com/search?tbm=isch&q=${encodeURIComponent(w.word + " " + (w.imageQuery || ""))}`}
+                  href={`https://www.bing.com/images/search?q=${encodeURIComponent(w.word + " " + (w.imageQuery || ""))}&FORM=IRSBH0`}
                   target="_blank" rel="noopener noreferrer"
                   onClick={e=>e.stopPropagation()}
                   style={{ flex:1, display:"flex", alignItems:"center", justifyContent:"center", gap:4, padding:"7px 10px", borderRadius:8, background:"rgba(6,182,212,0.08)", border:`1px solid rgba(6,182,212,0.2)`, color:C.teal, fontSize:11, fontWeight:700, textDecoration:"none", whiteSpace:"nowrap" }}
@@ -1357,4 +1346,3 @@ export default function GakuApp({ onBack, initialJlpt }) {
   if (!form || editing) return <FormScreen onSubmit={handleSubmit} onBack={onBack} onCancel={form ? handleCancelEdit : undefined} initialJlpt={initialJlpt} initialForm={form || undefined} />;
   return <Dashboard form={form} onEdit={handleEdit} />;
 }
-// force redeploy Tue Jun 16 03:15:47 UTC 2026
