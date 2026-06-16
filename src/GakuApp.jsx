@@ -98,12 +98,18 @@ function WordDetailCard({ card, onSave, onBack, form, prefLang }) {
     setImgError(false);
     const nextIndex = imgIndex + 1;
     setImgIndex(nextIndex);
-    // Use Unsplash with a cache-busting index to get different images
-    const query = encodeURIComponent(card.imageQuery || card.word);
-    // Cycle through different Unsplash image sizes/seeds to get variety
-    const seeds = ["nature","city","japan","anime","art","photo","illustration"];
-    const seed = seeds[nextIndex % seeds.length];
-    setImgSrc(`https://source.unsplash.com/400x250/?${query}&sig=${nextIndex}&${seed}`);
+    const query = card.imageQuery || card.word;
+    // Use picsum for reliable images, combined with word-based seed for relevance
+    // Cycle through different Wikimedia/public domain image searches
+    const encodedQuery = encodeURIComponent(query);
+    // Use different reliable image sources cycling through
+    const sources = [
+      `https://loremflickr.com/400/250/${encodedQuery}?lock=${nextIndex}`,
+      `https://picsum.photos/seed/${encodedQuery}${nextIndex}/400/250`,
+      `https://loremflickr.com/400/250/${encodedQuery},japan?lock=${nextIndex + 10}`,
+      `https://picsum.photos/seed/${encodedQuery}${nextIndex + 5}/400/250`,
+    ];
+    setImgSrc(sources[nextIndex % sources.length]);
     setImgLoading(false);
   };
 
