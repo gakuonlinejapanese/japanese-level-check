@@ -89,6 +89,23 @@ function WordDetailCard({ card, onSave, onBack, form, prefLang }) {
   const [saveMode, setSaveMode] = useState(""); // "addFolder"|"newFolder"|"yourVocab"
   const [toast, setToast] = useState("");
   const [imgError, setImgError] = useState(false);
+  const [imgIndex, setImgIndex] = useState(0);
+  const [imgSrc, setImgSrc] = useState("");
+  const [imgLoading, setImgLoading] = useState(false);
+
+  const searchImage = async () => {
+    setImgLoading(true);
+    setImgError(false);
+    const nextIndex = imgIndex + 1;
+    setImgIndex(nextIndex);
+    // Use Unsplash with a cache-busting index to get different images
+    const query = encodeURIComponent(card.imageQuery || card.word);
+    // Cycle through different Unsplash image sizes/seeds to get variety
+    const seeds = ["nature","city","japan","anime","art","photo","illustration"];
+    const seed = seeds[nextIndex % seeds.length];
+    setImgSrc(`https://source.unsplash.com/400x250/?${query}&sig=${nextIndex}&${seed}`);
+    setImgLoading(false);
+  };
 
   const showToast = (msg) => { setToast(msg); setTimeout(()=>setToast(""),2200); };
 
@@ -161,22 +178,31 @@ function WordDetailCard({ card, onSave, onBack, form, prefLang }) {
       <div style={{ ...S.card, marginBottom:12 }}>
         <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:10 }}>
           <p style={{ color:"#64748b", fontSize:11, fontWeight:700, letterSpacing:1, margin:0 }}>🖼 IMAGE ASSOCIATION</p>
-          <a
-            href={`https://www.bing.com/images/search?q=${encodeURIComponent(card.word + " " + (card.imageQuery || ""))}&FORM=IRSBH0`}
-            target="_blank" rel="noopener noreferrer"
-            style={{ fontSize:11, color:C.teal, textDecoration:"none", fontWeight:700, background:"rgba(6,182,212,0.1)", padding:"3px 10px", borderRadius:8, border:`1px solid rgba(6,182,212,0.2)` }}
+          <button
+            onClick={searchImage}
+            disabled={imgLoading}
+            style={{ fontSize:11, color:C.teal, fontWeight:700, background:"rgba(6,182,212,0.1)", padding:"5px 12px", borderRadius:8, border:`1px solid rgba(6,182,212,0.2)`, cursor:"pointer" }}
           >
-            🔍 Bing画像で検索
-          </a>
+            {imgLoading ? "..." : "🔍 SEARCH"}
+          </button>
         </div>
-        <div style={{ width:"100%", height:240, borderRadius:10, overflow:"hidden", position:"relative", background:"#0f172a" }}>
-          <iframe
-            src={`https://www.bing.com/images/search?q=${encodeURIComponent(card.word + " " + (card.imageQuery || ""))}&FORM=IRSBH0`}
-            style={{ width:"100%", height:"100%", border:"none", borderRadius:10 }}
-            title={`${card.word} images`}
-            sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
+        {imgSrc && !imgError ? (
+          <img
+            src={imgSrc}
+            alt={card.word}
+            onError={()=>setImgError(true)}
+            style={{ width:"100%", borderRadius:10, objectFit:"cover", height:200, display:"block" }}
           />
-        </div>
+        ) : (
+          <div
+            onClick={searchImage}
+            style={{ width:"100%", height:160, borderRadius:10, background:"rgba(6,182,212,0.06)", display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", border:`1px dashed rgba(6,182,212,0.3)`, cursor:"pointer" }}
+          >
+            <span style={{ color:C.teal, fontSize:32, marginBottom:8 }}>🔍</span>
+            <span style={{ color:C.teal, fontSize:13, fontWeight:700 }}>「{card.word}」の画像を検索</span>
+            <span style={{ color:"#475569", fontSize:11, marginTop:4 }}>SEARCHボタンを押してください</span>
+          </div>
+        )}
         {card.imageDesc && <p style={{ color:"#94a3b8", fontSize:12, margin:"8px 0 0", lineHeight:1.6 }}>{card.imageDesc}</p>}
       </div>
 
@@ -1100,7 +1126,7 @@ function FormScreen({ onSubmit, onBack, onCancel, initialJlpt, initialForm }) {
 
           {/* ① Preferred Language */}
           <div>
-            <label style={S.label}>PREFERRED LANGUAGE</label>
+            <label style={S.label}>YOUR NATIVE LANGUAGE</label>
             <select value={form.preferredLang} onChange={e=>set("preferredLang",e.target.value)} style={S.select}>
               {LANGUAGES.map(l => <option key={l}>{l}</option>)}
             </select>
