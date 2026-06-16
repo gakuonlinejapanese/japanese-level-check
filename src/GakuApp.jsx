@@ -98,18 +98,21 @@ function WordDetailCard({ card, onSave, onBack, form, prefLang }) {
     setImgError(false);
     const nextIndex = imgIndex + 1;
     setImgIndex(nextIndex);
-    const query = card.imageQuery || card.word;
-    // Use picsum for reliable images, combined with word-based seed for relevance
-    // Cycle through different Wikimedia/public domain image searches
-    const encodedQuery = encodeURIComponent(query);
-    // Use different reliable image sources cycling through
-    const sources = [
-      `https://loremflickr.com/400/250/${encodedQuery}?lock=${nextIndex}`,
-      `https://picsum.photos/seed/${encodedQuery}${nextIndex}/400/250`,
-      `https://loremflickr.com/400/250/${encodedQuery},japan?lock=${nextIndex + 10}`,
-      `https://picsum.photos/seed/${encodedQuery}${nextIndex + 5}/400/250`,
-    ];
-    setImgSrc(sources[nextIndex % sources.length]);
+    try {
+      const query = card.imageQuery || card.word;
+      const page = Math.floor(nextIndex / 10);
+      const indexInPage = nextIndex % 10;
+      const res = await fetch(`/api/image-search?q=${encodeURIComponent(query)}&page=${page}`);
+      const data = await res.json();
+      if (data.images && data.images.length > 0) {
+        setImgSrc(data.images[indexInPage % data.images.length]);
+        setImgError(false);
+      } else {
+        setImgError(true);
+      }
+    } catch {
+      setImgError(true);
+    }
     setImgLoading(false);
   };
 
