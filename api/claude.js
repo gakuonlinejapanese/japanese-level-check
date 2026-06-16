@@ -20,7 +20,7 @@ export default async function handler(req, res) {
         "X-Title": "Gaku Japanese Learning App",
       },
       body: JSON.stringify({
-        model: "deepseek/deepseek-chat-v3-0324:free",
+        model: "google/gemma-3-27b-it:free",
         messages: messages,
         max_tokens: max_tokens || 1200,
       }),
