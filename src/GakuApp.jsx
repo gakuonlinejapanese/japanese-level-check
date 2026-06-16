@@ -1357,3 +1357,4 @@ export default function GakuApp({ onBack, initialJlpt }) {
   if (!form || editing) return <FormScreen onSubmit={handleSubmit} onBack={onBack} onCancel={form ? handleCancelEdit : undefined} initialJlpt={initialJlpt} initialForm={form || undefined} />;
   return <Dashboard form={form} onEdit={handleEdit} />;
 }
+// force redeploy Tue Jun 16 03:15:47 UTC 2026
