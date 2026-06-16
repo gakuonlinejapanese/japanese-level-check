@@ -157,18 +157,9 @@ function WordDetailCard({ card, onSave, onBack, form, prefLang }) {
         <p style={{ color:"#64748b", fontSize:13, margin:0, fontStyle:"italic" }}>{card.example_translated}</p>
       </div>
 
-      {/* ── IMAGE ASSOCIATION ── */}
+      {/* ── IMAGE ── */}
       <div style={{ ...S.card, marginBottom:12 }}>
-        <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:10 }}>
-          <p style={{ color:"#64748b", fontSize:11, fontWeight:700, letterSpacing:1, margin:0 }}>🖼 IMAGE ASSOCIATION</p>
-          <a
-            href={`https://www.google.com/search?tbm=isch&q=${encodeURIComponent(card.word + " " + (card.imageQuery || ""))}`}
-            target="_blank" rel="noopener noreferrer"
-            style={{ fontSize:11, color:C.teal, textDecoration:"none", fontWeight:700, background:"rgba(6,182,212,0.1)", padding:"3px 10px", borderRadius:8, border:`1px solid rgba(6,182,212,0.2)` }}
-          >
-            🔍 Google画像で見る
-          </a>
-        </div>
+        <p style={{ color:"#64748b", fontSize:11, fontWeight:700, letterSpacing:1, margin:"0 0 10px" }}>🖼 IMAGE ASSOCIATION</p>
         {!imgError ? (
           <img
             src={`https://source.unsplash.com/400x220/?${imgQuery}`}
@@ -177,34 +168,12 @@ function WordDetailCard({ card, onSave, onBack, form, prefLang }) {
             style={{ width:"100%", borderRadius:10, objectFit:"cover", height:180, display:"block" }}
           />
         ) : (
-          <a
-            href={`https://www.google.com/search?tbm=isch&q=${encodeURIComponent(card.word + " " + (card.imageQuery || ""))}`}
-            target="_blank" rel="noopener noreferrer"
-            style={{ textDecoration:"none" }}
-          >
-            <div style={{ width:"100%", height:130, borderRadius:10, background:"rgba(6,182,212,0.06)", display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", border:`1px dashed rgba(6,182,212,0.3)`, cursor:"pointer" }}>
-              <span style={{ color:C.teal, fontSize:28, marginBottom:8 }}>🔍</span>
-              <span style={{ color:C.teal, fontSize:13, fontWeight:700 }}>Google画像で「{card.word}」を検索</span>
-            </div>
-          </a>
+          <div style={{ width:"100%", height:130, borderRadius:10, background:"rgba(255,255,255,0.04)", display:"flex", alignItems:"center", justifyContent:"center", border:`1px dashed ${C.border}` }}>
+            <span style={{ color:"#475569", fontSize:13 }}>🌸 {card.word}</span>
+          </div>
         )}
         {card.imageDesc && <p style={{ color:"#94a3b8", fontSize:12, margin:"8px 0 0", lineHeight:1.6 }}>{card.imageDesc}</p>}
       </div>
-
-      {/* ── WEBLIO DICTIONARY LINK ── */}
-      <a
-        href={`https://www.weblio.jp/content/${encodeURIComponent(card.word)}`}
-        target="_blank" rel="noopener noreferrer"
-        style={{ textDecoration:"none", display:"block", marginBottom:12 }}
-      >
-        <div style={{ ...S.card, display:"flex", alignItems:"center", justifyContent:"space-between", padding:"13px 16px", borderLeft:`3px solid #e85d04` }}>
-          <div>
-            <p style={{ color:"#f1f5f9", fontSize:13, fontWeight:700, margin:"0 0 2px" }}>📖 Weblio辞書で「{card.word}」を調べる</p>
-            <p style={{ color:"#64748b", fontSize:11, margin:0 }}>日本語辞書・英和辞典・例文を確認</p>
-          </div>
-          <span style={{ color:"#e85d04", fontSize:18 }}>→</span>
-        </div>
-      </a>
 
       {/* ── CLT TIP ── */}
       {card.tip && (
@@ -671,66 +640,25 @@ Respond ONLY with a valid JSON array. No markdown, no backticks, no explanation.
       )}
 
       {!loading && words.length > 0 && (
-        <div style={{ display:"flex", flexDirection:"column", gap:12, marginBottom:16 }}>
+        <div style={{ display:"flex", flexDirection:"column", gap:10, marginBottom:16 }}>
           {words.map((w,i) => (
-            <div key={i} style={{ ...S.card, borderLeft:`3px solid ${C.teal}` }}>
-              {/* ── Word Header ── */}
-              <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", marginBottom:8 }}>
-                <div style={{ flex:1, cursor:"pointer" }} onClick={()=>{setSelectedWord(w);setVocabView("wordDetail");}}>
+            <div key={i} style={{ ...S.card, borderLeft:`3px solid ${C.teal}`, cursor:"pointer" }} onClick={()=>{setSelectedWord(w);setVocabView("wordDetail");}}>
+              <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start" }}>
+                <div style={{ flex:1 }}>
                   <div style={{ display:"flex", alignItems:"baseline", gap:8, marginBottom:4 }}>
-                    <p style={{ color:"#f1f5f9", fontSize:22, fontWeight:900, margin:0 }}>{w.word}</p>
-                    <p style={{ color:C.teal, fontSize:14, margin:0 }}>{w.reading}</p>
+                    <p style={{ color:"#f1f5f9", fontSize:20, fontWeight:900, margin:0 }}>{w.word}</p>
+                    <p style={{ color:C.teal, fontSize:13, margin:0 }}>{w.reading}</p>
                     {w.jlpt && <span style={{ background:"rgba(168,85,247,0.2)", color:C.purpleLight, fontSize:10, fontWeight:700, padding:"1px 7px", borderRadius:99 }}>{w.jlpt}</span>}
-                    {w.partOfSpeech && <span style={{ background:"rgba(6,182,212,0.12)", color:C.teal, fontSize:10, fontWeight:600, padding:"1px 7px", borderRadius:99 }}>{w.partOfSpeech}</span>}
                   </div>
-                  <p style={{ color:"#94a3b8", fontSize:13, margin:0 }}>{w.meaning}</p>
-                </div>
-                {/* 単語音声ボタン */}
-                <button onClick={e=>{e.stopPropagation();speakJapanese(w.word);}} title="単語を発音" style={{ width:40, height:40, borderRadius:10, background:"rgba(6,182,212,0.1)", border:`1px solid rgba(6,182,212,0.2)`, color:C.teal, fontSize:18, cursor:"pointer", flexShrink:0, marginLeft:8, display:"flex", alignItems:"center", justifyContent:"center" }}>🔊</button>
-              </div>
-
-              {/* ── Japanese Definition ── */}
-              {w.meaningNative && (
-                <p style={{ color:"#64748b", fontSize:12, lineHeight:1.7, margin:"0 0 8px", borderLeft:`2px solid ${C.border}`, paddingLeft:8 }}>{w.meaningNative}</p>
-              )}
-
-              {/* ── Example Sentence with audio ── */}
-              <div style={{ background:"rgba(6,182,212,0.06)", borderRadius:8, padding:"8px 10px", marginBottom:10 }}>
-                <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", gap:8 }}>
-                  <div style={{ flex:1 }}>
-                    <p style={{ color:"#f1f5f9", fontSize:12, margin:"0 0 3px", lineHeight:1.8 }}>{w.example}</p>
+                  <p style={{ color:"#94a3b8", fontSize:13, margin:"0 0 8px" }}>{w.meaning}</p>
+                  <div style={{ background:"rgba(6,182,212,0.06)", borderRadius:8, padding:"8px 10px" }}>
+                    <p style={{ color:"#f1f5f9", fontSize:12, margin:"0 0 2px" }}>{w.example}</p>
                     <p style={{ color:"#64748b", fontSize:11, margin:0, fontStyle:"italic" }}>{w.example_translated}</p>
                   </div>
-                  {/* 例文音声ボタン */}
-                  <button onClick={e=>{e.stopPropagation();speakJapanese(w.example);}} title="例文を発音" style={{ width:34, height:34, borderRadius:8, background:"rgba(245,158,11,0.1)", border:`1px solid rgba(245,158,11,0.25)`, color:C.amber, fontSize:15, cursor:"pointer", flexShrink:0, display:"flex", alignItems:"center", justifyContent:"center" }}>🔊</button>
                 </div>
+                <button onClick={e=>{e.stopPropagation();speakJapanese(w.word);}} style={{ width:36, height:36, borderRadius:10, background:"rgba(6,182,212,0.1)", border:`1px solid rgba(6,182,212,0.2)`, color:C.teal, fontSize:16, cursor:"pointer", flexShrink:0, marginLeft:8, display:"flex", alignItems:"center", justifyContent:"center" }}>🔊</button>
               </div>
-
-              {/* ── Action Row: Weblio / Google Image / Detail ── */}
-              <div style={{ display:"flex", gap:6, flexWrap:"wrap" }}>
-                <a
-                  href={`https://www.weblio.jp/content/${encodeURIComponent(w.word)}`}
-                  target="_blank" rel="noopener noreferrer"
-                  onClick={e=>e.stopPropagation()}
-                  style={{ flex:1, display:"flex", alignItems:"center", justifyContent:"center", gap:4, padding:"7px 10px", borderRadius:8, background:"rgba(232,93,4,0.1)", border:"1px solid rgba(232,93,4,0.25)", color:"#e85d04", fontSize:11, fontWeight:700, textDecoration:"none", whiteSpace:"nowrap" }}
-                >
-                  📖 Weblio辞書
-                </a>
-                <a
-                  href={`https://www.google.com/search?tbm=isch&q=${encodeURIComponent(w.word + " " + (w.imageQuery || ""))}`}
-                  target="_blank" rel="noopener noreferrer"
-                  onClick={e=>e.stopPropagation()}
-                  style={{ flex:1, display:"flex", alignItems:"center", justifyContent:"center", gap:4, padding:"7px 10px", borderRadius:8, background:"rgba(6,182,212,0.08)", border:`1px solid rgba(6,182,212,0.2)`, color:C.teal, fontSize:11, fontWeight:700, textDecoration:"none", whiteSpace:"nowrap" }}
-                >
-                  🖼 Google画像
-                </a>
-                <button
-                  onClick={()=>{setSelectedWord(w);setVocabView("wordDetail");}}
-                  style={{ flex:1, display:"flex", alignItems:"center", justifyContent:"center", gap:4, padding:"7px 10px", borderRadius:8, background:"rgba(168,85,247,0.1)", border:"1px solid rgba(168,85,247,0.25)", color:C.purpleLight, fontSize:11, fontWeight:700, cursor:"pointer", whiteSpace:"nowrap" }}
-                >
-                  🃏 詳細カード
-                </button>
-              </div>
+              <p style={{ color:"#475569", fontSize:11, margin:"8px 0 0", textAlign:"right" }}>Tap for full card →</p>
             </div>
           ))}
         </div>
