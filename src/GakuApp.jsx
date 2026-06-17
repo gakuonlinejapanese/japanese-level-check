@@ -85,6 +85,665 @@ const SKILL_LABELS = {
   jlpt:"🎯 JLPT Prep", reading:"📖 Reading", kanji:"🈳 Kanji", grammar:"📝 Grammar",
 };
 
+// ─── UI TRANSLATIONS ────────────────────────────────────────────────────────────
+// Static translations for all major UI strings across all 6 tabs + form
+const UI_TRANSLATIONS = {
+  "English": {
+    // Header / common
+    gakuSelfStudy: "GAKU SELF-STUDY",
+    studyPlan: "Study Plan",
+    help: "🆘 Help",
+    editProfile: "✏️ Edit Profile",
+    weeklyProgress: "Weekly Progress",
+    // Tab labels
+    tabSchedule: "📅 Schedule",
+    tabPractice: "🎯 Practice Set",
+    tabVocabulary: "📚 Vocabulary",
+    tabResources: "🔗 Resources",
+    tabMilestones: "🏆 Milestones",
+    // Schedule tab
+    yourWeeklySchedule: "📅 YOUR WEEKLY STUDY SCHEDULE",
+    restDay: "Rest day 🌸",
+    monday: "MONDAY", tuesday: "TUESDAY", wednesday: "WEDNESDAY",
+    thursday: "THURSDAY", friday: "FRIDAY", saturday: "SATURDAY", sunday: "SUNDAY",
+    // Schedule task snippets
+    vocabReview: "Vocabulary review — Anki or saved words (10 min)",
+    speakAloud: "Speak aloud: summarize today's content in Japanese (5 min)",
+    taskConversation: "Role-play or shadowing — CLT core",
+    taskListening: "NHK World or JapanesePod101",
+    taskReading: "Tadoku graded reader or NHK Web Easy",
+    taskGrammar: "Imabi + write 3 example sentences",
+    taskKanji: "Nihonten AI — 5 new kanji with context",
+    taskJlpt: "Japanese Test 4 You — one practice section",
+    taskPronunciation: "Anki audio cards — shadow 20 words",
+    // Resources tab
+    recommendedForLevel: "⭐ Recommended for Your Level",
+    curatedFor: "Curated for level",
+    yourResources: "🔗 YOUR RESOURCES",
+    curatedForLevel: "Curated for level",
+    skills: "skills:",
+    openResource: "Open",
+    noResources: "No resources. Please edit your profile and select study skills.",
+    free: "FREE", paid: "PAID",
+    // Resource skill star labels
+    vocab: "Vocab", grammar: "Grammar", reading: "Reading", speaking: "Speaking", listening: "Listening",
+    // Milestones tab
+    yourGoalRoadmap: "🏆 YOUR GOAL ROADMAP",
+    levelToGoal: "Level",
+    goal: "Goal",
+    youveGotThis: "You've got this!",
+    motivationText: "Every conversation, every sentence, every word brings you closer. CLT is about real communication — and you're already doing it. 頑張ってください！",
+    bookLesson: "Book a FREE Trial Lesson with GAKU →",
+    // Help modal
+    helpTitle: "🆘 HELP",
+    whatWouldYouLike: "What would you like?",
+    customizedLesson: "📋 Customized lesson for today",
+    howToUse: "❓ How to use this app",
+    back: "← Back",
+    howAreYouFeeling: "How are you feeling today?",
+    mood: "MOOD", moodPlaceholder: "Select...",
+    moodMotivated: "😤 Motivated & energetic",
+    moodOkay: "😐 Okay, normal day",
+    moodTired: "😴 Tired & low energy",
+    moodStressed: "😰 Stressed or anxious",
+    moodHappy: "😊 Happy & relaxed",
+    availableTime: "AVAILABLE TIME",
+    energyLevel: "ENERGY LEVEL",
+    energyHigh: "🔥 High — ready to challenge",
+    energyMedium: "⚡ Medium — normal study",
+    energyLow: "🌙 Low — light review only",
+    wantsDifferent: "I want to do something different today",
+    differentPlaceholder: "Tell us what you'd like to do today...",
+    getTodaysPlan: "Get today's plan ✨",
+    generating: "Generating...",
+    tryAgain: "Try again",
+    select: "Select...",
+    tenMin: "10 minutes", twentyMin: "20 minutes", thirtyMin: "30 minutes",
+    oneHour: "1 hour", oneHalfHour: "1.5 hours+",
+    // Form labels
+    formTitle: "Your Learning Profile",
+    formEditTitle: "Edit Your Learning Profile",
+    formSubtitle: "Tell us about yourself to build your personalized CLT study plan",
+    formEditSubtitle: "Update any details below — your existing answers are kept until you change them.",
+    backToMyPlan: "← Back to my plan",
+    yourName: "YOUR NAME *",
+    namePlaceholder: "e.g. Tanaka Yuki",
+    email: "EMAIL *",
+    emailPlaceholder: "your@email.com",
+    country: "COUNTRY *",
+    countryPlaceholder: "e.g. USA, Brazil, France...",
+    yourNativeLanguage: "YOUR NATIVE LANGUAGE",
+    finalGoal: "FINAL GOAL *",
+    selectGoal: "Select your goal",
+    goalN5: "Pass JLPT N5", goalN4: "Pass JLPT N4", goalN3: "Pass JLPT N3",
+    goalN2: "Pass JLPT N2", goalN1: "Pass JLPT N1",
+    goalJob: "Get a job in Japan", goalTravel: "Travel to Japan",
+    goalStudyAbroad: "Study abroad in Japan", goalConversation: "Daily conversation",
+    goalOther: "Other",
+    whatDoYouWantToStudy: "WHAT DO YOU WANT TO STUDY?",
+    customGoalPlaceholder: "Tell us what you'd like to study or achieve...",
+    whenAchieve: "WHEN DO YOU WANT TO ACHIEVE IT? *",
+    selectTimeline: "Select timeline",
+    lessThan6: "Less than 6 months", within1: "Within 1 year",
+    twoThreeYears: "2–3 years", over3: "Over 3 years",
+    currentJlpt: "CURRENT JLPT LEVEL *",
+    autoFilled: "Auto-filled from your test",
+    changeLevel: "If you want to change your level, please select below.",
+    selectLevel: "Select level",
+    beginner: "Beginner",
+    studyTimePerDay: "STUDY TIME PER DAY *",
+    selectHours: "Select hours",
+    lessThan1h: "Less than 1 hour", oneTwo: "1–2 hours",
+    twoThree: "2–3 hours", threePlus: "3+ hours",
+    daysPerWeek: "DAYS PER WEEK *",
+    selectDays: "Select days",
+    oneTwoDays: "1–2 days", threeFourDays: "3–4 days",
+    fiveSixDays: "5–6 days", everyDay: "Every day",
+    whatStudySkills: "WHAT DO YOU WANT TO STUDY? * (select all that apply)",
+    writingNote: "✍️ Writing practice is available in the Writing tab for all users",
+    saveChanges: "Save Changes →",
+    buildPlan: "Build My Study Plan →",
+    fillRequired: "Please fill in all required fields (*) and select at least one skill.",
+    // Skill labels
+    skillPronunciation: "🔊 Pronunciation", skillListening: "👂 Listening",
+    skillConversation: "💬 Conversation", skillJlpt: "🎯 JLPT Prep",
+    skillReading: "📖 Reading", skillKanji: "🈳 Kanji", skillGrammar: "📝 Grammar",
+    // How to use
+    howToTitle: "How to use this app",
+    howToSchedule: "Your weekly study plan, broken into daily tasks. Tap a task to mark it done and track your weekly progress.",
+    howToPractice: "AI-generated exercises based only on the skills you chose in your profile (e.g. listening, grammar, kanji). Tap 'Show answer' to check yourself.",
+    howToVocab: "Search any topic to get level-appropriate words with example sentences, a visual association, and a CLT usage tip. Save words you want to remember.",
+    howToResources: "Free (and some paid) tools matched to your selected skills — open them directly from here.",
+    howToMilestones: "Your roadmap toward your goal. Tap each milestone as you complete it.",
+    howToEditProfile: "Update your goals, level, schedule, or skills any time — your existing answers are kept so you only change what's needed.",
+    howToHelp: "Get a personalized plan for today based on your mood, time and energy — or come back here anytime for this guide.",
+  },
+
+  "French": {
+    gakuSelfStudy: "GAKU AUTO-APPRENTISSAGE",
+    studyPlan: "Plan d'étude",
+    help: "🆘 Aide",
+    editProfile: "✏️ Modifier le profil",
+    weeklyProgress: "Progression hebdomadaire",
+    tabSchedule: "📅 Planning",
+    tabPractice: "🎯 Exercices",
+    tabVocabulary: "📚 Vocabulaire",
+    tabResources: "🔗 Ressources",
+    tabMilestones: "🏆 Objectifs",
+    yourWeeklySchedule: "📅 VOTRE PLANNING D'ÉTUDE HEBDOMADAIRE",
+    restDay: "Jour de repos 🌸",
+    monday: "LUNDI", tuesday: "MARDI", wednesday: "MERCREDI",
+    thursday: "JEUDI", friday: "VENDREDI", saturday: "SAMEDI", sunday: "DIMANCHE",
+    vocabReview: "Révision de vocabulaire — Anki ou mots sauvegardés (10 min)",
+    speakAloud: "À voix haute : résumer le contenu du jour en japonais (5 min)",
+    taskConversation: "Jeu de rôle ou shadowing — base CLT",
+    taskListening: "NHK World ou JapanesePod101",
+    taskReading: "Lecteur gradué Tadoku ou NHK Web Easy",
+    taskGrammar: "Imabi + écrire 3 phrases d'exemple",
+    taskKanji: "Nihonten AI — 5 nouveaux kanji en contexte",
+    taskJlpt: "Japanese Test 4 You — une section de pratique",
+    taskPronunciation: "Cartes audio Anki — shadow 20 mots",
+    recommendedForLevel: "⭐ Recommandé pour votre niveau",
+    curatedFor: "Sélectionné pour le niveau",
+    yourResources: "🔗 VOS RESSOURCES",
+    curatedForLevel: "Sélectionné pour le niveau",
+    skills: "compétences :",
+    openResource: "Ouvrir",
+    noResources: "Aucune ressource. Veuillez modifier votre profil et sélectionner des compétences.",
+    free: "GRATUIT", paid: "PAYANT",
+    vocab: "Vocab", grammar: "Grammaire", reading: "Lecture", speaking: "Expression orale", listening: "Écoute",
+    yourGoalRoadmap: "🏆 VOTRE FEUILLE DE ROUTE",
+    levelToGoal: "Niveau",
+    goal: "Objectif",
+    youveGotThis: "Vous pouvez le faire !",
+    motivationText: "Chaque conversation, chaque phrase, chaque mot vous rapproche du but. La méthode CLT, c'est la vraie communication — et vous le faites déjà. 頑張ってください！",
+    bookLesson: "Réservez une leçon d'essai GRATUITE avec GAKU →",
+    helpTitle: "🆘 AIDE",
+    whatWouldYouLike: "Que souhaitez-vous ?",
+    customizedLesson: "📋 Leçon personnalisée pour aujourd'hui",
+    howToUse: "❓ Comment utiliser cette application",
+    back: "← Retour",
+    howAreYouFeeling: "Comment vous sentez-vous aujourd'hui ?",
+    mood: "HUMEUR", moodPlaceholder: "Sélectionner...",
+    moodMotivated: "😤 Motivé(e) et énergique",
+    moodOkay: "😐 Bien, journée normale",
+    moodTired: "😴 Fatigué(e) et peu d'énergie",
+    moodStressed: "😰 Stressé(e) ou anxieux(se)",
+    moodHappy: "😊 Heureux(se) et détendu(e)",
+    availableTime: "TEMPS DISPONIBLE",
+    energyLevel: "NIVEAU D'ÉNERGIE",
+    energyHigh: "🔥 Élevé — prêt(e) à se dépasser",
+    energyMedium: "⚡ Moyen — étude normale",
+    energyLow: "🌙 Faible — révision légère seulement",
+    wantsDifferent: "Je veux faire quelque chose de différent aujourd'hui",
+    differentPlaceholder: "Dites-nous ce que vous souhaitez faire aujourd'hui...",
+    getTodaysPlan: "Obtenir le plan du jour ✨",
+    generating: "Génération en cours...",
+    tryAgain: "Réessayer",
+    select: "Sélectionner...",
+    tenMin: "10 minutes", twentyMin: "20 minutes", thirtyMin: "30 minutes",
+    oneHour: "1 heure", oneHalfHour: "1h30+",
+    formTitle: "Votre profil d'apprentissage",
+    formEditTitle: "Modifier votre profil d'apprentissage",
+    formSubtitle: "Parlez-nous de vous pour créer votre plan d'étude CLT personnalisé",
+    formEditSubtitle: "Mettez à jour les informations ci-dessous — vos réponses existantes sont conservées jusqu'à ce que vous les modifiiez.",
+    backToMyPlan: "← Retour à mon plan",
+    yourName: "VOTRE NOM *",
+    namePlaceholder: "ex. Tanaka Yuki",
+    email: "EMAIL *",
+    emailPlaceholder: "votre@email.com",
+    country: "PAYS *",
+    countryPlaceholder: "ex. France, Belgique, Canada...",
+    yourNativeLanguage: "VOTRE LANGUE MATERNELLE",
+    finalGoal: "OBJECTIF FINAL *",
+    selectGoal: "Sélectionnez votre objectif",
+    goalN5: "Réussir le JLPT N5", goalN4: "Réussir le JLPT N4", goalN3: "Réussir le JLPT N3",
+    goalN2: "Réussir le JLPT N2", goalN1: "Réussir le JLPT N1",
+    goalJob: "Trouver un emploi au Japon", goalTravel: "Voyager au Japon",
+    goalStudyAbroad: "Étudier au Japon", goalConversation: "Conversation quotidienne",
+    goalOther: "Autre",
+    whatDoYouWantToStudy: "QUE SOUHAITEZ-VOUS ÉTUDIER ?",
+    customGoalPlaceholder: "Dites-nous ce que vous souhaitez étudier ou accomplir...",
+    whenAchieve: "QUAND SOUHAITEZ-VOUS Y PARVENIR ? *",
+    selectTimeline: "Sélectionner une période",
+    lessThan6: "Moins de 6 mois", within1: "Dans 1 an",
+    twoThreeYears: "2–3 ans", over3: "Plus de 3 ans",
+    currentJlpt: "NIVEAU JLPT ACTUEL *",
+    autoFilled: "Rempli automatiquement depuis votre test",
+    changeLevel: "Si vous souhaitez changer votre niveau, veuillez sélectionner ci-dessous.",
+    selectLevel: "Sélectionner le niveau",
+    beginner: "Débutant",
+    studyTimePerDay: "TEMPS D'ÉTUDE PAR JOUR *",
+    selectHours: "Sélectionner les heures",
+    lessThan1h: "Moins d'1 heure", oneTwo: "1–2 heures",
+    twoThree: "2–3 heures", threePlus: "3+ heures",
+    daysPerWeek: "JOURS PAR SEMAINE *",
+    selectDays: "Sélectionner les jours",
+    oneTwoDays: "1–2 jours", threeFourDays: "3–4 jours",
+    fiveSixDays: "5–6 jours", everyDay: "Tous les jours",
+    whatStudySkills: "QUE SOUHAITEZ-VOUS ÉTUDIER ? * (sélectionnez tout ce qui s'applique)",
+    writingNote: "✍️ La pratique de l'écriture est disponible dans l'onglet Écriture pour tous les utilisateurs",
+    saveChanges: "Enregistrer les modifications →",
+    buildPlan: "Construire mon plan d'étude →",
+    fillRequired: "Veuillez remplir tous les champs obligatoires (*) et sélectionner au moins une compétence.",
+    skillPronunciation: "🔊 Prononciation", skillListening: "👂 Écoute",
+    skillConversation: "💬 Conversation", skillJlpt: "🎯 Préparation JLPT",
+    skillReading: "📖 Lecture", skillKanji: "🈳 Kanji", skillGrammar: "📝 Grammaire",
+    howToTitle: "Comment utiliser cette application",
+    howToSchedule: "Votre plan d'étude hebdomadaire, divisé en tâches quotidiennes. Appuyez sur une tâche pour la marquer comme faite.",
+    howToPractice: "Exercices générés par l'IA basés sur les compétences choisies dans votre profil. Appuyez sur 'Voir la réponse' pour vous corriger.",
+    howToVocab: "Recherchez n'importe quel sujet pour obtenir des mots adaptés à votre niveau avec des phrases d'exemple. Sauvegardez les mots à retenir.",
+    howToResources: "Outils gratuits (et certains payants) correspondant à vos compétences sélectionnées.",
+    howToMilestones: "Votre feuille de route vers votre objectif. Cochez chaque étape franchie.",
+    howToEditProfile: "Mettez à jour vos objectifs, niveau, planning ou compétences à tout moment.",
+    howToHelp: "Obtenez un plan personnalisé pour aujourd'hui selon votre humeur, votre temps et votre énergie.",
+  },
+
+  "Spanish": {
+    gakuSelfStudy: "GAKU AUTOAPRENDIZAJE",
+    studyPlan: "Plan de estudio",
+    help: "🆘 Ayuda",
+    editProfile: "✏️ Editar perfil",
+    weeklyProgress: "Progreso semanal",
+    tabSchedule: "📅 Horario",
+    tabPractice: "🎯 Ejercicios",
+    tabVocabulary: "📚 Vocabulario",
+    tabResources: "🔗 Recursos",
+    tabMilestones: "🏆 Metas",
+    yourWeeklySchedule: "📅 TU HORARIO DE ESTUDIO SEMANAL",
+    restDay: "Día de descanso 🌸",
+    monday: "LUNES", tuesday: "MARTES", wednesday: "MIÉRCOLES",
+    thursday: "JUEVES", friday: "VIERNES", saturday: "SÁBADO", sunday: "DOMINGO",
+    vocabReview: "Repaso de vocabulario — Anki o palabras guardadas (10 min)",
+    speakAloud: "En voz alta: resume el contenido de hoy en japonés (5 min)",
+    taskConversation: "Juego de rol o shadowing — base CLT",
+    taskListening: "NHK World o JapanesePod101",
+    taskReading: "Lector graduado Tadoku o NHK Web Easy",
+    taskGrammar: "Imabi + escribir 3 frases de ejemplo",
+    taskKanji: "Nihonten AI — 5 nuevos kanji en contexto",
+    taskJlpt: "Japanese Test 4 You — una sección de práctica",
+    taskPronunciation: "Tarjetas de audio Anki — shadowing 20 palabras",
+    recommendedForLevel: "⭐ Recomendado para tu nivel",
+    curatedFor: "Seleccionado para el nivel",
+    yourResources: "🔗 TUS RECURSOS",
+    curatedForLevel: "Seleccionado para el nivel",
+    skills: "habilidades:",
+    openResource: "Abrir",
+    noResources: "No hay recursos. Edita tu perfil y selecciona habilidades de estudio.",
+    free: "GRATIS", paid: "PAGO",
+    vocab: "Vocab", grammar: "Gramática", reading: "Lectura", speaking: "Expresión oral", listening: "Escucha",
+    yourGoalRoadmap: "🏆 TU HOJA DE RUTA",
+    levelToGoal: "Nivel",
+    goal: "Meta",
+    youveGotThis: "¡Tú puedes!",
+    motivationText: "Cada conversación, cada frase, cada palabra te acerca más. CLT es sobre comunicación real — y ya lo estás haciendo. 頑張ってください！",
+    bookLesson: "Reserva una lección de prueba GRATIS con GAKU →",
+    helpTitle: "🆘 AYUDA",
+    whatWouldYouLike: "¿Qué te gustaría?",
+    customizedLesson: "📋 Lección personalizada para hoy",
+    howToUse: "❓ Cómo usar esta aplicación",
+    back: "← Atrás",
+    howAreYouFeeling: "¿Cómo te sientes hoy?",
+    mood: "ESTADO DE ÁNIMO", moodPlaceholder: "Seleccionar...",
+    moodMotivated: "😤 Motivado/a y con energía",
+    moodOkay: "😐 Bien, día normal",
+    moodTired: "😴 Cansado/a y con poca energía",
+    moodStressed: "😰 Estresado/a o ansioso/a",
+    moodHappy: "😊 Feliz y relajado/a",
+    availableTime: "TIEMPO DISPONIBLE",
+    energyLevel: "NIVEL DE ENERGÍA",
+    energyHigh: "🔥 Alto — listo/a para desafiarse",
+    energyMedium: "⚡ Medio — estudio normal",
+    energyLow: "🌙 Bajo — solo repaso ligero",
+    wantsDifferent: "Quiero hacer algo diferente hoy",
+    differentPlaceholder: "Cuéntanos qué te gustaría hacer hoy...",
+    getTodaysPlan: "Obtener el plan de hoy ✨",
+    generating: "Generando...",
+    tryAgain: "Intentar de nuevo",
+    select: "Seleccionar...",
+    tenMin: "10 minutos", twentyMin: "20 minutos", thirtyMin: "30 minutos",
+    oneHour: "1 hora", oneHalfHour: "1,5 horas+",
+    formTitle: "Tu perfil de aprendizaje",
+    formEditTitle: "Editar tu perfil de aprendizaje",
+    formSubtitle: "Cuéntanos sobre ti para crear tu plan de estudio CLT personalizado",
+    formEditSubtitle: "Actualiza los detalles a continuación — tus respuestas existentes se conservan hasta que las cambies.",
+    backToMyPlan: "← Volver a mi plan",
+    yourName: "TU NOMBRE *",
+    namePlaceholder: "ej. Tanaka Yuki",
+    email: "EMAIL *",
+    emailPlaceholder: "tu@email.com",
+    country: "PAÍS *",
+    countryPlaceholder: "ej. España, México, Argentina...",
+    yourNativeLanguage: "TU IDIOMA NATIVO",
+    finalGoal: "OBJETIVO FINAL *",
+    selectGoal: "Selecciona tu objetivo",
+    goalN5: "Aprobar el JLPT N5", goalN4: "Aprobar el JLPT N4", goalN3: "Aprobar el JLPT N3",
+    goalN2: "Aprobar el JLPT N2", goalN1: "Aprobar el JLPT N1",
+    goalJob: "Conseguir trabajo en Japón", goalTravel: "Viajar a Japón",
+    goalStudyAbroad: "Estudiar en Japón", goalConversation: "Conversación diaria",
+    goalOther: "Otro",
+    whatDoYouWantToStudy: "¿QUÉ QUIERES ESTUDIAR?",
+    customGoalPlaceholder: "Cuéntanos qué te gustaría estudiar o lograr...",
+    whenAchieve: "¿CUÁNDO QUIERES LOGRARLO? *",
+    selectTimeline: "Seleccionar período",
+    lessThan6: "Menos de 6 meses", within1: "En 1 año",
+    twoThreeYears: "2–3 años", over3: "Más de 3 años",
+    currentJlpt: "NIVEL JLPT ACTUAL *",
+    autoFilled: "Completado automáticamente desde tu prueba",
+    changeLevel: "Si deseas cambiar tu nivel, selecciona a continuación.",
+    selectLevel: "Seleccionar nivel",
+    beginner: "Principiante",
+    studyTimePerDay: "TIEMPO DE ESTUDIO POR DÍA *",
+    selectHours: "Seleccionar horas",
+    lessThan1h: "Menos de 1 hora", oneTwo: "1–2 horas",
+    twoThree: "2–3 horas", threePlus: "3+ horas",
+    daysPerWeek: "DÍAS POR SEMANA *",
+    selectDays: "Seleccionar días",
+    oneTwoDays: "1–2 días", threeFourDays: "3–4 días",
+    fiveSixDays: "5–6 días", everyDay: "Todos los días",
+    whatStudySkills: "¿QUÉ QUIERES ESTUDIAR? * (selecciona todo lo que aplique)",
+    writingNote: "✍️ La práctica de escritura está disponible en la pestaña Escritura para todos los usuarios",
+    saveChanges: "Guardar cambios →",
+    buildPlan: "Construir mi plan de estudio →",
+    fillRequired: "Por favor completa todos los campos obligatorios (*) y selecciona al menos una habilidad.",
+    skillPronunciation: "🔊 Pronunciación", skillListening: "👂 Escucha",
+    skillConversation: "💬 Conversación", skillJlpt: "🎯 Preparación JLPT",
+    skillReading: "📖 Lectura", skillKanji: "🈳 Kanji", skillGrammar: "📝 Gramática",
+    howToTitle: "Cómo usar esta aplicación",
+    howToSchedule: "Tu plan de estudio semanal, dividido en tareas diarias. Toca una tarea para marcarla como completada.",
+    howToPractice: "Ejercicios generados por IA basados en las habilidades que elegiste. Toca 'Ver respuesta' para comprobar.",
+    howToVocab: "Busca cualquier tema para obtener palabras apropiadas para tu nivel con frases de ejemplo. Guarda las palabras que quieras recordar.",
+    howToResources: "Herramientas gratuitas (y algunas de pago) que coinciden con tus habilidades seleccionadas.",
+    howToMilestones: "Tu hoja de ruta hacia tu objetivo. Toca cada hito cuando lo completes.",
+    howToEditProfile: "Actualiza tus objetivos, nivel, horario o habilidades en cualquier momento.",
+    howToHelp: "Obtén un plan personalizado para hoy según tu estado de ánimo, tiempo y energía.",
+  },
+
+  "Portuguese": {
+    gakuSelfStudy: "GAKU AUTO-ESTUDO",
+    studyPlan: "Plano de estudo",
+    help: "🆘 Ajuda",
+    editProfile: "✏️ Editar perfil",
+    weeklyProgress: "Progresso semanal",
+    tabSchedule: "📅 Agenda",
+    tabPractice: "🎯 Exercícios",
+    tabVocabulary: "📚 Vocabulário",
+    tabResources: "🔗 Recursos",
+    tabMilestones: "🏆 Metas",
+    yourWeeklySchedule: "📅 SUA AGENDA DE ESTUDOS SEMANAL",
+    restDay: "Dia de descanso 🌸",
+    monday: "SEGUNDA", tuesday: "TERÇA", wednesday: "QUARTA",
+    thursday: "QUINTA", friday: "SEXTA", saturday: "SÁBADO", sunday: "DOMINGO",
+    vocabReview: "Revisão de vocabulário — Anki ou palavras salvas (10 min)",
+    speakAloud: "Em voz alta: resume o conteúdo de hoje em japonês (5 min)",
+    taskConversation: "Role-play ou shadowing — base CLT",
+    taskListening: "NHK World ou JapanesePod101",
+    taskReading: "Leitor graduado Tadoku ou NHK Web Easy",
+    taskGrammar: "Imabi + escrever 3 frases de exemplo",
+    taskKanji: "Nihonten AI — 5 novos kanji em contexto",
+    taskJlpt: "Japanese Test 4 You — uma seção de prática",
+    taskPronunciation: "Cartões de áudio Anki — shadowing 20 palavras",
+    recommendedForLevel: "⭐ Recomendado para o seu nível",
+    curatedFor: "Selecionado para o nível",
+    yourResources: "🔗 SEUS RECURSOS",
+    curatedForLevel: "Selecionado para o nível",
+    skills: "habilidades:",
+    openResource: "Abrir",
+    noResources: "Sem recursos. Edite seu perfil e selecione habilidades de estudo.",
+    free: "GRÁTIS", paid: "PAGO",
+    vocab: "Vocab", grammar: "Gramática", reading: "Leitura", speaking: "Expressão oral", listening: "Escuta",
+    yourGoalRoadmap: "🏆 SEU ROTEIRO DE METAS",
+    levelToGoal: "Nível",
+    goal: "Meta",
+    youveGotThis: "Você consegue!",
+    motivationText: "Cada conversa, cada frase, cada palavra te aproxima mais. CLT é sobre comunicação real — e você já está fazendo isso. 頑張ってください！",
+    bookLesson: "Reserve uma aula experimental GRÁTIS com GAKU →",
+    helpTitle: "🆘 AJUDA",
+    whatWouldYouLike: "O que você gostaria?",
+    customizedLesson: "📋 Aula personalizada para hoje",
+    howToUse: "❓ Como usar este aplicativo",
+    back: "← Voltar",
+    howAreYouFeeling: "Como você está se sentindo hoje?",
+    mood: "HUMOR", moodPlaceholder: "Selecionar...",
+    moodMotivated: "😤 Motivado/a e com energia",
+    moodOkay: "😐 Bem, dia normal",
+    moodTired: "😴 Cansado/a e com pouca energia",
+    moodStressed: "😰 Estressado/a ou ansioso/a",
+    moodHappy: "😊 Feliz e relaxado/a",
+    availableTime: "TEMPO DISPONÍVEL",
+    energyLevel: "NÍVEL DE ENERGIA",
+    energyHigh: "🔥 Alto — pronto/a para se desafiar",
+    energyMedium: "⚡ Médio — estudo normal",
+    energyLow: "🌙 Baixo — apenas revisão leve",
+    wantsDifferent: "Quero fazer algo diferente hoje",
+    differentPlaceholder: "Conta-nos o que você gostaria de fazer hoje...",
+    getTodaysPlan: "Obter o plano de hoje ✨",
+    generating: "Gerando...",
+    tryAgain: "Tentar novamente",
+    select: "Selecionar...",
+    tenMin: "10 minutos", twentyMin: "20 minutos", thirtyMin: "30 minutos",
+    oneHour: "1 hora", oneHalfHour: "1,5 horas+",
+    formTitle: "Seu perfil de aprendizagem",
+    formEditTitle: "Editar seu perfil de aprendizagem",
+    formSubtitle: "Conte-nos sobre você para criar seu plano de estudo CLT personalizado",
+    formEditSubtitle: "Atualize os detalhes abaixo — suas respostas existentes são mantidas até que você as altere.",
+    backToMyPlan: "← Voltar ao meu plano",
+    yourName: "SEU NOME *",
+    namePlaceholder: "ex. Tanaka Yuki",
+    email: "EMAIL *",
+    emailPlaceholder: "seu@email.com",
+    country: "PAÍS *",
+    countryPlaceholder: "ex. Brasil, Portugal...",
+    yourNativeLanguage: "SUA LÍNGUA NATIVA",
+    finalGoal: "OBJETIVO FINAL *",
+    selectGoal: "Selecione seu objetivo",
+    goalN5: "Passar no JLPT N5", goalN4: "Passar no JLPT N4", goalN3: "Passar no JLPT N3",
+    goalN2: "Passar no JLPT N2", goalN1: "Passar no JLPT N1",
+    goalJob: "Conseguir emprego no Japão", goalTravel: "Viajar ao Japão",
+    goalStudyAbroad: "Estudar no Japão", goalConversation: "Conversação diária",
+    goalOther: "Outro",
+    whatDoYouWantToStudy: "O QUE VOCÊ QUER ESTUDAR?",
+    customGoalPlaceholder: "Conta-nos o que você gostaria de estudar ou alcançar...",
+    whenAchieve: "QUANDO VOCÊ QUER ALCANÇAR ISSO? *",
+    selectTimeline: "Selecionar período",
+    lessThan6: "Menos de 6 meses", within1: "Em 1 ano",
+    twoThreeYears: "2–3 anos", over3: "Mais de 3 anos",
+    currentJlpt: "NÍVEL JLPT ATUAL *",
+    autoFilled: "Preenchido automaticamente do seu teste",
+    changeLevel: "Se quiser mudar seu nível, selecione abaixo.",
+    selectLevel: "Selecionar nível",
+    beginner: "Iniciante",
+    studyTimePerDay: "TEMPO DE ESTUDO POR DIA *",
+    selectHours: "Selecionar horas",
+    lessThan1h: "Menos de 1 hora", oneTwo: "1–2 horas",
+    twoThree: "2–3 horas", threePlus: "3+ horas",
+    daysPerWeek: "DIAS POR SEMANA *",
+    selectDays: "Selecionar dias",
+    oneTwoDays: "1–2 dias", threeFourDays: "3–4 dias",
+    fiveSixDays: "5–6 dias", everyDay: "Todos os dias",
+    whatStudySkills: "O QUE VOCÊ QUER ESTUDAR? * (selecione tudo que se aplica)",
+    writingNote: "✍️ A prática de escrita está disponível na aba Escrita para todos os usuários",
+    saveChanges: "Salvar alterações →",
+    buildPlan: "Construir meu plano de estudo →",
+    fillRequired: "Preencha todos os campos obrigatórios (*) e selecione pelo menos uma habilidade.",
+    skillPronunciation: "🔊 Pronúncia", skillListening: "👂 Escuta",
+    skillConversation: "💬 Conversação", skillJlpt: "🎯 Preparação JLPT",
+    skillReading: "📖 Leitura", skillKanji: "🈳 Kanji", skillGrammar: "📝 Gramática",
+    howToTitle: "Como usar este aplicativo",
+    howToSchedule: "Seu plano de estudo semanal, dividido em tarefas diárias.",
+    howToPractice: "Exercícios gerados por IA baseados nas habilidades escolhidas. Toque em 'Ver resposta' para conferir.",
+    howToVocab: "Pesquise qualquer tema para obter palavras adequadas ao seu nível com frases de exemplo.",
+    howToResources: "Ferramentas gratuitas (e algumas pagas) que correspondem às suas habilidades selecionadas.",
+    howToMilestones: "Seu roteiro para seu objetivo. Toque em cada marco quando o completar.",
+    howToEditProfile: "Atualize seus objetivos, nível, agenda ou habilidades a qualquer momento.",
+    howToHelp: "Obtenha um plano personalizado para hoje com base no seu humor, tempo e energia.",
+  },
+
+  "German": {
+    gakuSelfStudy: "GAKU SELBSTSTUDIUM",
+    studyPlan: "Lernplan",
+    help: "🆘 Hilfe",
+    editProfile: "✏️ Profil bearbeiten",
+    weeklyProgress: "Wöchentlicher Fortschritt",
+    tabSchedule: "📅 Zeitplan",
+    tabPractice: "🎯 Übungen",
+    tabVocabulary: "📚 Vokabular",
+    tabResources: "🔗 Ressourcen",
+    tabMilestones: "🏆 Meilensteine",
+    yourWeeklySchedule: "📅 IHR WÖCHENTLICHER LERNPLAN",
+    restDay: "Ruhetag 🌸",
+    monday: "MONTAG", tuesday: "DIENSTAG", wednesday: "MITTWOCH",
+    thursday: "DONNERSTAG", friday: "FREITAG", saturday: "SAMSTAG", sunday: "SONNTAG",
+    vocabReview: "Vokabelwiederholung — Anki oder gespeicherte Wörter (10 Min.)",
+    speakAloud: "Laut sprechen: heutigen Inhalt auf Japanisch zusammenfassen (5 Min.)",
+    taskConversation: "Rollenspiel oder Shadowing — CLT-Kern",
+    taskListening: "NHK World oder JapanesePod101",
+    taskReading: "Tadoku Stufenlese oder NHK Web Easy",
+    taskGrammar: "Imabi + 3 Beispielsätze schreiben",
+    taskKanji: "Nihonten AI — 5 neue Kanji im Kontext",
+    taskJlpt: "Japanese Test 4 You — ein Übungsabschnitt",
+    taskPronunciation: "Anki-Audiokarten — 20 Wörter shadowen",
+    recommendedForLevel: "⭐ Empfohlen für Ihr Niveau",
+    curatedFor: "Ausgewählt für Niveau",
+    yourResources: "🔗 IHRE RESSOURCEN",
+    curatedForLevel: "Ausgewählt für Niveau",
+    skills: "Fähigkeiten:",
+    openResource: "Öffnen",
+    noResources: "Keine Ressourcen. Bitte bearbeiten Sie Ihr Profil und wählen Sie Lernfähigkeiten.",
+    free: "KOSTENLOS", paid: "KOSTENPFLICHTIG",
+    vocab: "Vokabel", grammar: "Grammatik", reading: "Lesen", speaking: "Sprechen", listening: "Hören",
+    yourGoalRoadmap: "🏆 IHR ZIEL-FAHRPLAN",
+    levelToGoal: "Niveau",
+    goal: "Ziel",
+    youveGotThis: "Sie schaffen das!",
+    motivationText: "Jedes Gespräch, jeder Satz, jedes Wort bringt Sie näher. CLT geht um echte Kommunikation — und Sie machen es bereits. 頑張ってください！",
+    bookLesson: "Kostenlosen Probeunterricht mit GAKU buchen →",
+    helpTitle: "🆘 HILFE",
+    whatWouldYouLike: "Was möchten Sie?",
+    customizedLesson: "📋 Personalisierte Lektion für heute",
+    howToUse: "❓ Wie man diese App benutzt",
+    back: "← Zurück",
+    howAreYouFeeling: "Wie fühlen Sie sich heute?",
+    mood: "STIMMUNG", moodPlaceholder: "Auswählen...",
+    moodMotivated: "😤 Motiviert & energiegeladen",
+    moodOkay: "😐 Gut, normaler Tag",
+    moodTired: "😴 Müde & wenig Energie",
+    moodStressed: "😰 Gestresst oder ängstlich",
+    moodHappy: "😊 Glücklich & entspannt",
+    availableTime: "VERFÜGBARE ZEIT",
+    energyLevel: "ENERGIENIVEAU",
+    energyHigh: "🔥 Hoch — bereit für Herausforderungen",
+    energyMedium: "⚡ Mittel — normales Lernen",
+    energyLow: "🌙 Niedrig — nur leichte Wiederholung",
+    wantsDifferent: "Ich möchte heute etwas anderes machen",
+    differentPlaceholder: "Erzählen Sie uns, was Sie heute tun möchten...",
+    getTodaysPlan: "Heutigen Plan erhalten ✨",
+    generating: "Generiere...",
+    tryAgain: "Erneut versuchen",
+    select: "Auswählen...",
+    tenMin: "10 Minuten", twentyMin: "20 Minuten", thirtyMin: "30 Minuten",
+    oneHour: "1 Stunde", oneHalfHour: "1,5 Stunden+",
+    formTitle: "Ihr Lernprofil",
+    formEditTitle: "Ihr Lernprofil bearbeiten",
+    formSubtitle: "Erzählen Sie uns von sich, um Ihren personalisierten CLT-Lernplan zu erstellen",
+    formEditSubtitle: "Aktualisieren Sie die Angaben unten — Ihre vorhandenen Antworten bleiben erhalten, bis Sie sie ändern.",
+    backToMyPlan: "← Zurück zu meinem Plan",
+    yourName: "IHR NAME *",
+    namePlaceholder: "z.B. Tanaka Yuki",
+    email: "E-MAIL *",
+    emailPlaceholder: "ihre@email.com",
+    country: "LAND *",
+    countryPlaceholder: "z.B. Deutschland, Österreich, Schweiz...",
+    yourNativeLanguage: "IHRE MUTTERSPRACHE",
+    finalGoal: "ENDZIEL *",
+    selectGoal: "Wählen Sie Ihr Ziel",
+    goalN5: "JLPT N5 bestehen", goalN4: "JLPT N4 bestehen", goalN3: "JLPT N3 bestehen",
+    goalN2: "JLPT N2 bestehen", goalN1: "JLPT N1 bestehen",
+    goalJob: "Arbeit in Japan finden", goalTravel: "Japan bereisen",
+    goalStudyAbroad: "In Japan studieren", goalConversation: "Alltagsgespräch",
+    goalOther: "Sonstiges",
+    whatDoYouWantToStudy: "WAS MÖCHTEN SIE LERNEN?",
+    customGoalPlaceholder: "Erzählen Sie uns, was Sie lernen oder erreichen möchten...",
+    whenAchieve: "WANN MÖCHTEN SIE ES ERREICHEN? *",
+    selectTimeline: "Zeitraum wählen",
+    lessThan6: "Weniger als 6 Monate", within1: "Innerhalb 1 Jahr",
+    twoThreeYears: "2–3 Jahre", over3: "Über 3 Jahre",
+    currentJlpt: "AKTUELLES JLPT-NIVEAU *",
+    autoFilled: "Automatisch aus Ihrem Test ausgefüllt",
+    changeLevel: "Wenn Sie Ihr Niveau ändern möchten, wählen Sie bitte unten aus.",
+    selectLevel: "Niveau wählen",
+    beginner: "Anfänger",
+    studyTimePerDay: "LERNZEIT PRO TAG *",
+    selectHours: "Stunden wählen",
+    lessThan1h: "Weniger als 1 Stunde", oneTwo: "1–2 Stunden",
+    twoThree: "2–3 Stunden", threePlus: "3+ Stunden",
+    daysPerWeek: "TAGE PRO WOCHE *",
+    selectDays: "Tage wählen",
+    oneTwoDays: "1–2 Tage", threeFourDays: "3–4 Tage",
+    fiveSixDays: "5–6 Tage", everyDay: "Jeden Tag",
+    whatStudySkills: "WAS MÖCHTEN SIE LERNEN? * (alles Zutreffende auswählen)",
+    writingNote: "✍️ Schreibübungen sind im Schreib-Tab für alle Nutzer verfügbar",
+    saveChanges: "Änderungen speichern →",
+    buildPlan: "Meinen Lernplan erstellen →",
+    fillRequired: "Bitte füllen Sie alle Pflichtfelder (*) aus und wählen Sie mindestens eine Fähigkeit.",
+    skillPronunciation: "🔊 Aussprache", skillListening: "👂 Hören",
+    skillConversation: "💬 Konversation", skillJlpt: "🎯 JLPT-Vorbereitung",
+    skillReading: "📖 Lesen", skillKanji: "🈳 Kanji", skillGrammar: "📝 Grammatik",
+    howToTitle: "Wie man diese App benutzt",
+    howToSchedule: "Ihr wöchentlicher Lernplan, aufgeteilt in tägliche Aufgaben.",
+    howToPractice: "KI-generierte Übungen basierend auf den in Ihrem Profil gewählten Fähigkeiten.",
+    howToVocab: "Suchen Sie nach beliebigen Themen, um niveaugerechte Wörter mit Beispielsätzen zu erhalten.",
+    howToResources: "Kostenlose (und einige kostenpflichtige) Tools, die Ihren ausgewählten Fähigkeiten entsprechen.",
+    howToMilestones: "Ihr Fahrplan zu Ihrem Ziel. Markieren Sie jeden Meilenstein, wenn Sie ihn erreichen.",
+    howToEditProfile: "Aktualisieren Sie Ihre Ziele, Ihr Niveau, Ihren Zeitplan oder Ihre Fähigkeiten jederzeit.",
+    howToHelp: "Erhalten Sie einen personalisierten Plan für heute basierend auf Ihrer Stimmung, Zeit und Energie.",
+  },
+};
+
+// Get translation for current language, fall back to English
+function getT(lang) {
+  return UI_TRANSLATIONS[lang] || UI_TRANSLATIONS["English"];
+}
+
+// For languages not in our static dict, we cache AI translations
+const AI_TRANS_CACHE = {};
+
+// Hook: returns T object, triggers AI fetch for unknown languages
+function useUITranslations(lang) {
+  const [aiT, setAiT] = useState(null);
+  const staticT = UI_TRANSLATIONS[lang];
+
+  useEffect(() => {
+    if (staticT || !lang || lang === "English") { setAiT(null); return; }
+    if (AI_TRANS_CACHE[lang]) { setAiT(AI_TRANS_CACHE[lang]); return; }
+    // Fetch AI translation for all keys
+    const baseKeys = UI_TRANSLATIONS["English"];
+    const keyList = Object.keys(baseKeys).map(k => `${k}: ${baseKeys[k]}`).join("\n");
+    fetch("/api/claude", {
+      method:"POST", headers:{"Content-Type":"application/json"},
+      body: JSON.stringify({
+        model:"claude-sonnet-4-20250514", max_tokens:4000,
+        messages:[{ role:"user", content:
+          `Translate ONLY the VALUES (not keys) in the following list into ${lang}. Keep emojis, asterisks (*), arrows (→ ←), Japanese text (頑張ってください！), and punctuation exactly as-is. Return ONLY valid JSON object with same keys. No markdown, no explanation.\n\n${keyList}`
+        }]
+      })
+    })
+    .then(r=>r.json())
+    .then(d => {
+      const text = d.content?.map(c=>c.text||"").join("") || "{}";
+      try {
+        const clean = text.replace(/```json|```/g,"").trim();
+        const parsed = JSON.parse(clean);
+        AI_TRANS_CACHE[lang] = parsed;
+        setAiT(parsed);
+      } catch { setAiT(UI_TRANSLATIONS["English"]); }
+    })
+    .catch(() => setAiT(UI_TRANSLATIONS["English"]));
+  }, [lang, staticT]);
+
+  return staticT || aiT || UI_TRANSLATIONS["English"];
+}
+
 const WRITING_TOPICS = {
   culture: ["日本のお祭りについて書いてください。", "あなたの国の文化と日本の文化の違いを書いてください。", "日本の食文化について、好きなものを紹介してください。", "日本の伝統工芸について書いてください。"],
   work: ["あなたの仕事や勉強について紹介してください。", "将来の仕事の夢について書いてください。", "日本で働くことについてどう思いますか？", "仕事でのコミュニケーションの重要性について書いてください。"],
@@ -890,26 +1549,44 @@ Respond ONLY in this JSON format (no markdown, no backticks):
 }
 
 // ─── Schedule builder ────────────────────────────────────────────────────────────
-function buildSchedule(form) {
+// Skill note keys mapped to T keys
+const SKILL_NOTE_KEY = {
+  conversation: "taskConversation",
+  listening:    "taskListening",
+  reading:      "taskReading",
+  grammar:      "taskGrammar",
+  kanji:        "taskKanji",
+  jlpt:         "taskJlpt",
+  pronunciation:"taskPronunciation",
+};
+
+// Skill label T-keys
+const SKILL_LABEL_KEY = {
+  pronunciation:"skillPronunciation", listening:"skillListening",
+  conversation:"skillConversation", jlpt:"skillJlpt",
+  reading:"skillReading", kanji:"skillKanji", grammar:"skillGrammar",
+};
+
+function buildSchedule(form, T) {
+  const t = T || UI_TRANSLATIONS["English"];
   const hoursMap = { "Less than 1 hour":45, "1–2 hours":90, "2–3 hours":150, "3+ hours":180 };
-  const daysMap = { "1–2 days":2, "3–4 days":4, "5–6 days":5, "Every day":7 };
+  const daysMap  = { "1–2 days":2, "3–4 days":4, "5–6 days":5, "Every day":7 };
   const mins = hoursMap[form.hoursPerDay] || 60;
   const days = daysMap[form.daysPerWeek] || 5;
   const skills = form.skills || [];
 
-  // Build blocks from selected skills only
   const allBlocks = [
-    { skill:"conversation", mins:Math.round(mins*0.3), note:"Role-play or shadowing — CLT core" },
-    { skill:"listening",    mins:Math.round(mins*0.2), note:"NHK World or JapanesePod101" },
-    { skill:"reading",      mins:Math.round(mins*0.15), note:"Tadoku graded reader or NHK Web Easy" },
-    { skill:"grammar",      mins:Math.round(mins*0.15), note:"Imabi + write 3 example sentences" },
-    { skill:"kanji",        mins:Math.round(mins*0.1), note:"Nihonten AI — 5 new kanji with context" },
-    { skill:"jlpt",         mins:Math.round(mins*0.2), note:"Japanese Test 4 You — one practice section" },
-    { skill:"pronunciation",mins:Math.round(mins*0.1), note:"Anki audio cards — shadow 20 words" },
+    { skill:"conversation", mins:Math.round(mins*0.3) },
+    { skill:"listening",    mins:Math.round(mins*0.2) },
+    { skill:"reading",      mins:Math.round(mins*0.15) },
+    { skill:"grammar",      mins:Math.round(mins*0.15) },
+    { skill:"kanji",        mins:Math.round(mins*0.1) },
+    { skill:"jlpt",         mins:Math.round(mins*0.2) },
+    { skill:"pronunciation",mins:Math.round(mins*0.1) },
   ].filter(b => skills.includes(b.skill));
 
   if (allBlocks.length === 0) {
-    allBlocks.push({ skill:"conversation", mins:30, note:"Role-play or shadowing" });
+    allBlocks.push({ skill:"conversation", mins:30 });
   }
 
   const WEEKDAYS = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
@@ -917,31 +1594,63 @@ function buildSchedule(form) {
   const activeDays = WEEKDAYS.slice(0, days);
   activeDays.forEach((day, i) => {
     const focus = allBlocks[i % allBlocks.length];
+    const skillLabel = t[SKILL_LABEL_KEY[focus.skill]] || SKILL_LABELS[focus.skill] || focus.skill;
+    const note = t[SKILL_NOTE_KEY[focus.skill]] || "";
     schedule[day] = [
-      { task:`${SKILL_LABELS[focus.skill] || focus.skill}: ${focus.note} (${focus.mins} min)`, done:false },
-      { task:`Vocabulary review — Anki or saved words (10 min)`, done:false },
-      i % 2 === 0 ? { task:`Speak aloud: summarize today's content in Japanese (5 min)`, done:false } : null,
+      { task:`${skillLabel}: ${note} (${focus.mins} min)`, done:false },
+      { task: t.vocabReview || "Vocabulary review — Anki or saved words (10 min)", done:false },
+      i % 2 === 0 ? { task: t.speakAloud || "Speak aloud: summarize today's content in Japanese (5 min)", done:false } : null,
     ].filter(Boolean);
   });
-  WEEKDAYS.slice(days).forEach(day => { schedule[day] = [{ task:"Rest day 🌸", done:false, rest:true }]; });
+  WEEKDAYS.slice(days).forEach(day => {
+    schedule[day] = [{ task: t.restDay || "Rest day 🌸", done:false, rest:true }];
+  });
   return schedule;
 }
 
+// Milestone text keys (for AI translation lookup)
+const MILESTONE_EN = {
+  "Beginner": ["Learn hiragana + katakana (Week 1–2)", "Master 300 vocabulary words (Month 1)", "Hold a 2-minute self-introduction in Japanese (Month 2)", "Pass JLPT N5 practice test at 70% (Month 3)"],
+  "N5": ["Complete N4 grammar on Imabi (Month 1–2)", "Reach 800 vocabulary words (Month 2)", "Hold a 5-minute conversation on daily topics (Month 3)", "Pass JLPT N4 practice test at 70% (Month 4–5)"],
+  "N4": ["Complete N3 grammar (Month 1–3)", "Reach 1,500 vocabulary words (Month 2)", "Read NHK Web Easy daily without dictionary (Month 3)", "Pass JLPT N3 practice test at 70% (Month 4–6)"],
+  "N3": ["Complete N2 grammar (Month 1–3)", "Reach 3,000 vocabulary words (Month 3)", "Read regular NHK News (Month 4)", "Pass JLPT N2 practice test at 70% (Month 5–8)"],
+  "N2": ["Complete N1 grammar (Month 1–3)", "Reach 6,000 vocabulary words (Month 4)", "Read academic/business Japanese texts (Month 5)", "Pass JLPT N1 practice test at 60% (Month 6–10)"],
+  "N1": ["Master business keigo patterns (Month 1–2)", "Write formal Japanese essays 800+ characters (Month 2)", "Participate in native-speed discussions (Month 3)", "Achieve professional fluency certification (Month 6+)"],
+};
+
 function buildMilestones(form) {
-  const goalMap = {
-    "Beginner": ["Learn hiragana + katakana (Week 1–2)", "Master 300 vocabulary words (Month 1)", "Hold a 2-minute self-introduction in Japanese (Month 2)", "Pass JLPT N5 practice test at 70% (Month 3)"],
-    "N5": ["Complete N4 grammar on Imabi (Month 1–2)", "Reach 800 vocabulary words (Month 2)", "Hold a 5-minute conversation on daily topics (Month 3)", "Pass JLPT N4 practice test at 70% (Month 4–5)"],
-    "N4": ["Complete N3 grammar (Month 1–3)", "Reach 1,500 vocabulary words (Month 2)", "Read NHK Web Easy daily without dictionary (Month 3)", "Pass JLPT N3 practice test at 70% (Month 4–6)"],
-    "N3": ["Complete N2 grammar (Month 1–3)", "Reach 3,000 vocabulary words (Month 3)", "Read regular NHK News (Month 4)", "Pass JLPT N2 practice test at 70% (Month 5–8)"],
-    "N2": ["Complete N1 grammar (Month 1–3)", "Reach 6,000 vocabulary words (Month 4)", "Read academic/business Japanese texts (Month 5)", "Pass JLPT N1 practice test at 60% (Month 6–10)"],
-    "N1": ["Master business keigo patterns (Month 1–2)", "Write formal Japanese essays 800+ characters (Month 2)", "Participate in native-speed discussions (Month 3)", "Achieve professional fluency certification (Month 6+)"],
-  };
   const key = (form.jlpt||"").replace("Beginner (no JLPT)","Beginner").replace(" (no JLPT)","");
-  return goalMap[key] || goalMap["Beginner"];
+  return MILESTONE_EN[key] || MILESTONE_EN["Beginner"];
+}
+
+// Cache for AI-translated milestone text
+const MILESTONE_TRANS_CACHE = {};
+
+async function translateMilestonesAI(milestones, lang) {
+  const cacheKey = `${lang}:${milestones.join("|")}`;
+  if (MILESTONE_TRANS_CACHE[cacheKey]) return MILESTONE_TRANS_CACHE[cacheKey];
+  try {
+    const res = await fetch("/api/claude", {
+      method:"POST", headers:{"Content-Type":"application/json"},
+      body: JSON.stringify({
+        model:"claude-sonnet-4-20250514", max_tokens:800,
+        messages:[{ role:"user", content:
+          `Translate these Japanese learning milestone descriptions into ${lang}. Keep month/week references exact. Return ONLY a JSON array of strings, no markdown.\n\n${JSON.stringify(milestones)}`
+        }]
+      })
+    });
+    const d = await res.json();
+    const text = d.content?.map(c=>c.text||"").join("") || "[]";
+    const clean = text.replace(/```json|```/g,"").trim();
+    const parsed = JSON.parse(clean);
+    MILESTONE_TRANS_CACHE[cacheKey] = parsed;
+    return parsed;
+  } catch { return milestones; }
 }
 
 // ─── HELP MODAL ────────────────────────────────────────────────────────────────
 function HelpModal({ onClose, form }) {
+  const T = useUITranslations(form?.preferredLang || "English");
   const [view, setView] = useState("menu"); // menu | lesson | howto
   const [mood, setMood] = useState(""); const [time, setTime] = useState(""); const [energy, setEnergy] = useState("");
   const [wantsDifferent, setWantsDifferent] = useState(false);
@@ -974,17 +1683,17 @@ One concrete activity with a specific resource. Emojis. Under 120 words. English
     <div style={{ position:"fixed", inset:0, background:"rgba(0,0,0,0.75)", display:"flex", alignItems:"center", justifyContent:"center", zIndex:1000, padding:16 }}>
       <div style={{ ...S.card, width:"100%", maxWidth:420, position:"relative", maxHeight:"85vh", overflowY:"auto" }}>
         <button onClick={onClose} style={{ position:"absolute", top:14, right:14, background:"none", border:"none", color:"#64748b", fontSize:20, cursor:"pointer" }}>×</button>
-        <p style={{ color:C.amber, fontSize:12, fontWeight:700, letterSpacing:1, marginBottom:4 }}>🆘 HELP</p>
+        <p style={{ color:C.amber, fontSize:12, fontWeight:700, letterSpacing:1, marginBottom:4 }}>{T.helpTitle}</p>
 
         {view==="menu" && (
           <>
-            <h3 style={{ color:"#f1f5f9", fontSize:17, fontWeight:800, margin:"0 0 18px" }}>What would you like?</h3>
+            <h3 style={{ color:"#f1f5f9", fontSize:17, fontWeight:800, margin:"0 0 18px" }}>{T.whatWouldYouLike}</h3>
             <button onClick={()=>setView("lesson")} style={{ ...S.btn, width:"100%", textAlign:"left", background:`linear-gradient(135deg,${C.amber},#d97706)`, color:"#fff", marginBottom:10 }}>
-              📋 Customized lesson for today
+              {T.customizedLesson}
               <div style={{ fontWeight:400, fontSize:11, marginTop:4, opacity:0.9 }}>今日のカスタマイズレッスン</div>
             </button>
             <button onClick={()=>setView("howto")} style={{ ...S.btn, width:"100%", textAlign:"left", background:C.card, color:"#f1f5f9", border:`1px solid ${C.border}` }}>
-              ❓ How to use this app
+              {T.howToUse}
               <div style={{ fontWeight:400, fontSize:11, marginTop:4, color:"#64748b" }}>使い方</div>
             </button>
           </>
@@ -992,45 +1701,45 @@ One concrete activity with a specific resource. Emojis. Under 120 words. English
 
         {view==="lesson" && (
           <>
-            <button onClick={reset} style={{ background:"none", border:"none", color:"#64748b", fontSize:12, cursor:"pointer", padding:0, marginBottom:10 }}>← Back</button>
-            <h3 style={{ color:"#f1f5f9", fontSize:17, fontWeight:800, margin:"0 0 18px" }}>How are you feeling today?</h3>
+            <button onClick={reset} style={{ background:"none", border:"none", color:"#64748b", fontSize:12, cursor:"pointer", padding:0, marginBottom:10 }}>{T.back}</button>
+            <h3 style={{ color:"#f1f5f9", fontSize:17, fontWeight:800, margin:"0 0 18px" }}>{T.howAreYouFeeling}</h3>
             {!result ? (
               <>
-                <label style={S.label}>MOOD</label>
+                <label style={S.label}>{T.mood}</label>
                 <select value={mood} onChange={e=>setMood(e.target.value)} style={{ ...S.select, marginBottom:10 }}>
-                  <option value="">Select...</option>
-                  <option value="motivated and energetic">😤 Motivated & energetic</option>
-                  <option value="okay, normal day">😐 Okay, normal day</option>
-                  <option value="tired and low energy">😴 Tired & low energy</option>
-                  <option value="stressed or anxious">😰 Stressed or anxious</option>
-                  <option value="happy and relaxed">😊 Happy & relaxed</option>
+                  <option value="">{T.moodPlaceholder}</option>
+                  <option value="motivated and energetic">{T.moodMotivated}</option>
+                  <option value="okay, normal day">{T.moodOkay}</option>
+                  <option value="tired and low energy">{T.moodTired}</option>
+                  <option value="stressed or anxious">{T.moodStressed}</option>
+                  <option value="happy and relaxed">{T.moodHappy}</option>
                 </select>
-                <label style={S.label}>AVAILABLE TIME</label>
+                <label style={S.label}>{T.availableTime}</label>
                 <select value={time} onChange={e=>setTime(e.target.value)} style={{ ...S.select, marginBottom:10 }}>
-                  <option value="">Select...</option>
-                  <option value="10">10 minutes</option><option value="20">20 minutes</option>
-                  <option value="30">30 minutes</option><option value="60">1 hour</option><option value="90">1.5 hours+</option>
+                  <option value="">{T.select}</option>
+                  <option value="10">{T.tenMin}</option><option value="20">{T.twentyMin}</option>
+                  <option value="30">{T.thirtyMin}</option><option value="60">{T.oneHour}</option><option value="90">{T.oneHalfHour}</option>
                 </select>
-                <label style={S.label}>ENERGY LEVEL</label>
+                <label style={S.label}>{T.energyLevel}</label>
                 <select value={energy} onChange={e=>setEnergy(e.target.value)} style={{ ...S.select, marginBottom:14 }}>
-                  <option value="">Select...</option>
-                  <option value="high - ready to challenge">🔥 High — ready to challenge</option>
-                  <option value="medium - normal study">⚡ Medium — normal study</option>
-                  <option value="low - light review only">🌙 Low — light review only</option>
+                  <option value="">{T.select}</option>
+                  <option value="high - ready to challenge">{T.energyHigh}</option>
+                  <option value="medium - normal study">{T.energyMedium}</option>
+                  <option value="low - light review only">{T.energyLow}</option>
                 </select>
 
                 <div style={{ background:"rgba(168,85,247,0.06)", border:`1px solid rgba(168,85,247,0.2)`, borderRadius:10, padding:"10px 12px", marginBottom:14 }}>
                   <label style={{ display:"flex", alignItems:"center", gap:8, cursor:"pointer", marginBottom: wantsDifferent ? 8 : 0 }}>
                     <input type="checkbox" checked={wantsDifferent} onChange={e=>setWantsDifferent(e.target.checked)} />
-                    <span style={{ color:"#f1f5f9", fontSize:13, fontWeight:600 }}>今日は何か違うことをしたい (I want to do something different today)</span>
+                    <span style={{ color:"#f1f5f9", fontSize:13, fontWeight:600 }}>{T.wantsDifferent}</span>
                   </label>
                   {wantsDifferent && (
-                    <textarea value={differentText} onChange={e=>setDifferentText(e.target.value)} placeholder="今日実際にやりたいことを書いてください... (Tell us what you'd like to do today...)" rows={3} style={{ ...S.input, resize:"vertical", fontFamily:"inherit", lineHeight:1.7 }} />
+                    <textarea value={differentText} onChange={e=>setDifferentText(e.target.value)} placeholder={T.differentPlaceholder} rows={3} style={{ ...S.input, resize:"vertical", fontFamily:"inherit", lineHeight:1.7 }} />
                   )}
                 </div>
 
                 <button onClick={getHelp} disabled={!mood||!time||!energy||loading} style={{ ...S.btn, width:"100%", background:mood&&time&&energy?`linear-gradient(135deg,${C.amber},#d97706)`:"#1e293b", color:mood&&time&&energy?"#fff":"#475569" }}>
-                  {loading?"Generating...":"Get today's plan ✨"}
+                  {loading ? T.generating : T.getTodaysPlan}
                 </button>
               </>
             ) : (
@@ -1038,7 +1747,7 @@ One concrete activity with a specific resource. Emojis. Under 120 words. English
                 <div style={{ background:"rgba(245,158,11,0.08)", borderLeft:`3px solid ${C.amber}`, borderRadius:8, padding:"14px 16px", marginBottom:14 }}>
                   <p style={{ color:"#f1f5f9", fontSize:13, lineHeight:1.8, margin:0 }}>{result}</p>
                 </div>
-                <button onClick={()=>setResult("")} style={{ ...S.btn, width:"100%", background:C.card, color:"#94a3b8", border:`1px solid ${C.border}` }}>Try again</button>
+                <button onClick={()=>setResult("")} style={{ ...S.btn, width:"100%", background:C.card, color:"#94a3b8", border:`1px solid ${C.border}` }}>{T.tryAgain}</button>
               </>
             )}
           </>
@@ -1046,18 +1755,17 @@ One concrete activity with a specific resource. Emojis. Under 120 words. English
 
         {view==="howto" && (
           <>
-            <button onClick={reset} style={{ background:"none", border:"none", color:"#64748b", fontSize:12, cursor:"pointer", padding:0, marginBottom:10 }}>← Back</button>
-            <h3 style={{ color:"#f1f5f9", fontSize:17, fontWeight:800, margin:"0 0 14px" }}>How to use this app</h3>
+            <button onClick={reset} style={{ background:"none", border:"none", color:"#64748b", fontSize:12, cursor:"pointer", padding:0, marginBottom:10 }}>{T.back}</button>
+            <h3 style={{ color:"#f1f5f9", fontSize:17, fontWeight:800, margin:"0 0 14px" }}>{T.howToTitle}</h3>
             <div style={{ display:"flex", flexDirection:"column", gap:10 }}>
               {[
-                ["📅 Schedule", "Your weekly study plan, broken into daily tasks. Tap a task to mark it done and track your weekly progress."],
-                ["🎯 Practice Set", "AI-generated exercises based only on the skills you chose in your profile (e.g. listening, grammar, kanji). Tap 'Show answer' to check yourself."],
-                ["📚 Vocabulary", "Search any topic to get level-appropriate words with example sentences, a visual association, and a CLT usage tip. Save words you want to remember."],
-                ["🔗 Resources", "Free (and some paid) tools matched to your selected skills — open them directly from here."],
-                ["✍️ Writing", "Pick a topic, write 300–800 characters in Japanese, and get AI feedback on what you did well and how to improve."],
-                ["🏆 Milestones", "Your roadmap toward your goal. Tap each milestone as you complete it."],
-                ["✏️ Edit Profile", "Update your goals, level, schedule, or skills any time — your existing answers are kept so you only change what's needed."],
-                ["🆘 Help", "Get a personalized plan for today based on your mood, time and energy — or come back here anytime for this guide."],
+                [T.tabSchedule,   T.howToSchedule],
+                [T.tabPractice,   T.howToPractice],
+                [T.tabVocabulary, T.howToVocab],
+                [T.tabResources,  T.howToResources],
+                [T.tabMilestones, T.howToMilestones],
+                [T.editProfile,   T.howToEditProfile],
+                [T.help,          T.howToHelp],
               ].map(([title, desc], i) => (
                 <div key={i} style={{ ...S.card }}>
                   <p style={{ color:"#f1f5f9", fontSize:13, fontWeight:700, margin:"0 0 4px" }}>{title}</p>
@@ -1159,6 +1867,7 @@ function FormScreen({ onSubmit, onBack, onCancel, initialJlpt, initialForm }) {
   const [err, setErr] = useState("");
   const set = (k,v) => setForm(f=>({...f,[k]:v}));
   const toggleSkill = (s) => setForm(f=>({ ...f, skills: f.skills.includes(s) ? f.skills.filter(x=>x!==s) : [...f.skills, s] }));
+  const T = useUITranslations(form.preferredLang);
   const isOther = form.goal === "Other";
   const valid = form.name && form.email && form.country && form.goal && (isOther ? form.customGoal.trim() : true) && form.timeline && form.jlpt && form.hoursPerDay && form.daysPerWeek && form.skills.length > 0;
 
@@ -1166,103 +1875,115 @@ function FormScreen({ onSubmit, onBack, onCancel, initialJlpt, initialForm }) {
     <div style={{ ...S.page, display:"flex", alignItems:"flex-start", justifyContent:"center", padding:"40px 16px 60px" }}>
       <div style={{ width:"100%", maxWidth:520 }}>
         {initialForm && onCancel ? (
-          <button onClick={onCancel} style={{ background:"none", border:"none", color:"#64748b", fontSize:13, cursor:"pointer", marginBottom:16, padding:0 }}>← Back to my plan</button>
+          <button onClick={onCancel} style={{ background:"none", border:"none", color:"#64748b", fontSize:13, cursor:"pointer", marginBottom:16, padding:0 }}>{T.backToMyPlan}</button>
         ) : (
-          onBack && <button onClick={onBack} style={{ background:"none", border:"none", color:"#64748b", fontSize:13, cursor:"pointer", marginBottom:16, padding:0 }}>← Back</button>
+          onBack && <button onClick={onBack} style={{ background:"none", border:"none", color:"#64748b", fontSize:13, cursor:"pointer", marginBottom:16, padding:0 }}>{T.back}</button>
         )}
         <p style={{ color:C.purpleLight, fontSize:11, fontWeight:700, letterSpacing:2, marginBottom:4 }}>GAKU SELF-STUDY APP</p>
-        <h1 style={{ fontSize:24, fontWeight:900, margin:"0 0 4px" }}>{initialForm ? "Edit Your Learning Profile" : "Your Learning Profile"}</h1>
-        <p style={{ color:"#64748b", fontSize:13, marginBottom:24 }}>{initialForm ? "Update any details below — your existing answers are kept until you change them." : "Tell us about yourself to build your personalized CLT study plan"}</p>
+        <h1 style={{ fontSize:24, fontWeight:900, margin:"0 0 4px" }}>{initialForm ? T.formEditTitle : T.formTitle}</h1>
+        <p style={{ color:"#64748b", fontSize:13, marginBottom:24 }}>{initialForm ? T.formEditSubtitle : T.formSubtitle}</p>
 
         <div style={{ display:"flex", flexDirection:"column", gap:14 }}>
-          <div><label style={S.label}>YOUR NAME *</label><input value={form.name} onChange={e=>set("name",e.target.value)} placeholder="e.g. Tanaka Yuki" style={S.input}/></div>
-          <div><label style={S.label}>EMAIL *</label><input value={form.email} onChange={e=>set("email",e.target.value)} placeholder="your@email.com" type="email" style={S.input}/></div>
-          <div><label style={S.label}>COUNTRY *</label><input value={form.country} onChange={e=>set("country",e.target.value)} placeholder="e.g. USA, Brazil, France..." style={S.input}/></div>
+          <div><label style={S.label}>{T.yourName}</label><input value={form.name} onChange={e=>set("name",e.target.value)} placeholder={T.namePlaceholder} style={S.input}/></div>
+          <div><label style={S.label}>{T.email}</label><input value={form.email} onChange={e=>set("email",e.target.value)} placeholder={T.emailPlaceholder} type="email" style={S.input}/></div>
+          <div><label style={S.label}>{T.country}</label><input value={form.country} onChange={e=>set("country",e.target.value)} placeholder={T.countryPlaceholder} style={S.input}/></div>
 
-          {/* ① Preferred Language */}
+          {/* Native Language — changing this instantly switches all UI */}
           <div>
-            <label style={S.label}>YOUR NATIVE LANGUAGE</label>
+            <label style={S.label}>{T.yourNativeLanguage}</label>
             <select value={form.preferredLang} onChange={e=>set("preferredLang",e.target.value)} style={S.select}>
               {LANGUAGES.map(l => <option key={l}>{l}</option>)}
             </select>
           </div>
 
-          {/* ② Final Goal with Other option */}
+          {/* Final Goal */}
           <div>
-            <label style={S.label}>FINAL GOAL *</label>
+            <label style={S.label}>{T.finalGoal}</label>
             <select value={form.goal} onChange={e=>set("goal",e.target.value)} style={S.select}>
-              <option value="">Select your goal</option>
-              <option>Pass JLPT N5</option><option>Pass JLPT N4</option><option>Pass JLPT N3</option>
-              <option>Pass JLPT N2</option><option>Pass JLPT N1</option>
-              <option>Get a job in Japan</option><option>Travel to Japan</option>
-              <option>Study abroad in Japan</option><option>Daily conversation</option>
-              <option>Other</option>
+              <option value="">{T.selectGoal}</option>
+              <option value="Pass JLPT N5">{T.goalN5}</option>
+              <option value="Pass JLPT N4">{T.goalN4}</option>
+              <option value="Pass JLPT N3">{T.goalN3}</option>
+              <option value="Pass JLPT N2">{T.goalN2}</option>
+              <option value="Pass JLPT N1">{T.goalN1}</option>
+              <option value="Get a job in Japan">{T.goalJob}</option>
+              <option value="Travel to Japan">{T.goalTravel}</option>
+              <option value="Study abroad in Japan">{T.goalStudyAbroad}</option>
+              <option value="Daily conversation">{T.goalConversation}</option>
+              <option value="Other">{T.goalOther}</option>
             </select>
             {isOther && (
               <div style={{ marginTop:8 }}>
-                <label style={{ ...S.label, marginBottom:4 }}>WHAT DO YOU WANT TO STUDY?</label>
-                <input value={form.customGoal} onChange={e=>set("customGoal",e.target.value)} placeholder="Tell us what you'd like to study or achieve..." style={S.input}/>
+                <label style={{ ...S.label, marginBottom:4 }}>{T.whatDoYouWantToStudy}</label>
+                <input value={form.customGoal} onChange={e=>set("customGoal",e.target.value)} placeholder={T.customGoalPlaceholder} style={S.input}/>
               </div>
             )}
           </div>
 
           <div>
-            <label style={S.label}>WHEN DO YOU WANT TO ACHIEVE IT? *</label>
+            <label style={S.label}>{T.whenAchieve}</label>
             <select value={form.timeline} onChange={e=>set("timeline",e.target.value)} style={S.select}>
-              <option value="">Select timeline</option>
-              <option>Less than 6 months</option><option>Within 1 year</option>
-              <option>2–3 years</option><option>Over 3 years</option>
+              <option value="">{T.selectTimeline}</option>
+              <option value="Less than 6 months">{T.lessThan6}</option>
+              <option value="Within 1 year">{T.within1}</option>
+              <option value="2-3 years">{T.twoThreeYears}</option>
+              <option value="Over 3 years">{T.over3}</option>
             </select>
           </div>
 
-          {/* ③ JLPT with auto-fill note */}
+          {/* JLPT Level */}
           <div>
             <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:5 }}>
-              <label style={{ ...S.label, marginBottom:0 }}>CURRENT JLPT LEVEL *</label>
-              {initialJlpt && <span style={{ color:"#64748b", fontSize:10 }}>Auto-filled from your test</span>}
+              <label style={{ ...S.label, marginBottom:0 }}>{T.currentJlpt}</label>
+              {initialJlpt && <span style={{ color:"#64748b", fontSize:10 }}>{T.autoFilled}</span>}
             </div>
-            {initialJlpt && <p style={{ color:"#64748b", fontSize:11, marginBottom:6 }}>If you want to change your level, please select below.</p>}
+            {initialJlpt && <p style={{ color:"#64748b", fontSize:11, marginBottom:6 }}>{T.changeLevel}</p>}
             <select value={form.jlpt} onChange={e=>set("jlpt",e.target.value)} style={S.select}>
-              <option value="">Select level</option>
-              <option>Beginner</option><option>N5</option><option>N4</option>
-              <option>N3</option><option>N2</option><option>N1</option>
+              <option value="">{T.selectLevel}</option>
+              <option value="Beginner">{T.beginner}</option>
+              <option value="N5">N5</option><option value="N4">N4</option>
+              <option value="N3">N3</option><option value="N2">N2</option><option value="N1">N1</option>
             </select>
           </div>
 
           <div>
-            <label style={S.label}>STUDY TIME PER DAY *</label>
+            <label style={S.label}>{T.studyTimePerDay}</label>
             <select value={form.hoursPerDay} onChange={e=>set("hoursPerDay",e.target.value)} style={S.select}>
-              <option value="">Select hours</option>
-              <option>Less than 1 hour</option><option>1–2 hours</option>
-              <option>2–3 hours</option><option>3+ hours</option>
+              <option value="">{T.selectHours}</option>
+              <option value="Less than 1 hour">{T.lessThan1h}</option>
+              <option value="1-2 hours">{T.oneTwo}</option>
+              <option value="2-3 hours">{T.twoThree}</option>
+              <option value="3+ hours">{T.threePlus}</option>
             </select>
           </div>
           <div>
-            <label style={S.label}>DAYS PER WEEK *</label>
+            <label style={S.label}>{T.daysPerWeek}</label>
             <select value={form.daysPerWeek} onChange={e=>set("daysPerWeek",e.target.value)} style={S.select}>
-              <option value="">Select days</option>
-              <option>1–2 days</option><option>3–4 days</option>
-              <option>5–6 days</option><option>Every day</option>
+              <option value="">{T.selectDays}</option>
+              <option value="1-2 days">{T.oneTwoDays}</option>
+              <option value="3-4 days">{T.threeFourDays}</option>
+              <option value="5-6 days">{T.fiveSixDays}</option>
+              <option value="Every day">{T.everyDay}</option>
             </select>
           </div>
 
-          {/* ⑤ Skills without Writing (Writing is in its own tab) */}
+          {/* Skills */}
           <div>
-            <label style={S.label}>WHAT DO YOU WANT TO STUDY? * (select all that apply)</label>
+            <label style={S.label}>{T.whatStudySkills}</label>
             <div style={{ display:"flex", flexWrap:"wrap", gap:8 }}>
-              {Object.entries(SKILL_LABELS).map(([k,v]) => (
+              {Object.keys(SKILL_LABELS).map(k => (
                 <button key={k} onClick={()=>toggleSkill(k)} style={{ padding:"8px 14px", borderRadius:20, border:`1.5px solid ${form.skills.includes(k)?C.purpleLight:C.border}`, background:form.skills.includes(k)?"rgba(168,85,247,0.15)":C.card, color:form.skills.includes(k)?C.purpleLight:"#94a3b8", fontSize:12, fontWeight:600, cursor:"pointer" }}>
-                  {v}
+                  {T[SKILL_LABEL_KEY[k]] || SKILL_LABELS[k]}
                 </button>
               ))}
             </div>
-            <p style={{ color:"#475569", fontSize:11, marginTop:6 }}>✍️ Writing practice is available in the Writing tab for all users</p>
+            <p style={{ color:"#475569", fontSize:11, marginTop:6 }}>{T.writingNote}</p>
           </div>
         </div>
 
         {err && <p style={{ color:C.red, fontSize:12, margin:"12px 0 0", textAlign:"center" }}>{err}</p>}
-        <button onClick={()=>{ if(!valid){setErr("Please fill in all required fields (*) and select at least one skill.");return;} onSubmit({ ...form, displayGoal: isOther ? form.customGoal : form.goal }); }} style={{ ...S.btn, width:"100%", marginTop:20, background:valid?`linear-gradient(135deg,${C.purple},#9333ea)`:"#1e293b", color:valid?"#fff":"#475569" }}>
-          {initialForm ? "Save Changes →" : "Build My Study Plan →"}
+        <button onClick={()=>{ if(!valid){setErr(T.fillRequired);return;} onSubmit({ ...form, displayGoal: isOther ? form.customGoal : form.goal }); }} style={{ ...S.btn, width:"100%", marginTop:20, background:valid?`linear-gradient(135deg,${C.purple},#9333ea)`:"#1e293b", color:valid?"#fff":"#475569" }}>
+          {initialForm ? T.saveChanges : T.buildPlan}
         </button>
       </div>
     </div>
@@ -1271,11 +1992,34 @@ function FormScreen({ onSubmit, onBack, onCancel, initialJlpt, initialForm }) {
 
 // ─── DASHBOARD ──────────────────────────────────────────────────────────────────
 function Dashboard({ form, onEdit }) {
-  const [schedule, setSchedule] = useState(() => buildSchedule(form));
-  const [milestones] = useState(() => buildMilestones(form));
+  const T = useUITranslations(form?.preferredLang || "English");
+  const [schedule, setSchedule] = useState(() => buildSchedule(form, getT(form?.preferredLang || "English")));
+  const [milestones, setMilestones] = useState(() => buildMilestones(form));
   const [msDone, setMsDone] = useState([]);
   const [showHelp, setShowHelp] = useState(false);
   const [tab, setTab] = useState("schedule");
+
+  // Re-build schedule & translate milestones when T loads (for non-static languages)
+  useEffect(() => {
+    setSchedule(buildSchedule(form, T));
+  }, [T, form]);
+
+  useEffect(() => {
+    const lang = form?.preferredLang || "English";
+    if (lang === "English" || UI_TRANSLATIONS[lang]) {
+      // For static languages, we don't translate milestone text via AI (keep English for simplicity,
+      // or add static translations below if needed — milestones are rebuilt with T for non-static langs)
+      if (!UI_TRANSLATIONS[lang]) {
+        const base = buildMilestones(form);
+        translateMilestonesAI(base, lang).then(setMilestones);
+      } else {
+        setMilestones(buildMilestones(form));
+      }
+    } else {
+      const base = buildMilestones(form);
+      translateMilestonesAI(base, lang).then(setMilestones);
+    }
+  }, [form]);
 
   const toggleTask = useCallback((day, idx) => {
     setSchedule(prev => ({ ...prev, [day]: prev[day].map((t,i) => i===idx ? {...t,done:!t.done} : t) }));
@@ -1286,12 +2030,15 @@ function Dashboard({ form, onEdit }) {
   const progress = totalTasks ? Math.round(doneTasks/totalTasks*100) : 0;
   const selectedResources = (form.skills||[]).flatMap(s => (RESOURCES[s]||[]).map(r=>({...r,skill:s})));
 
+  const DAY_KEYS = ["monday","tuesday","wednesday","thursday","friday","saturday","sunday"];
+  const WEEKDAY_EN = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
+
   const TABS = [
-    { id:"schedule", label:"📅 Schedule" },
-    { id:"practice", label:"🎯 Practice Set" },
-    { id:"vocabulary", label:"📚 Vocabulary" },
-    { id:"resources", label:"🔗 Resources" },
-    { id:"milestones", label:"🏆 Milestones" },
+    { id:"schedule",   label: T.tabSchedule },
+    { id:"practice",   label: T.tabPractice },
+    { id:"vocabulary", label: T.tabVocabulary },
+    { id:"resources",  label: T.tabResources },
+    { id:"milestones", label: T.tabMilestones },
   ];
 
   return (
@@ -1300,19 +2047,19 @@ function Dashboard({ form, onEdit }) {
 
       <div style={{ background:"rgba(10,15,30,0.95)", borderBottom:`1px solid ${C.border}`, padding:"14px 20px", position:"sticky", top:0, zIndex:100, display:"flex", justifyContent:"space-between", alignItems:"center" }}>
         <div>
-          <p style={{ color:C.purpleLight, fontSize:10, fontWeight:700, letterSpacing:2, margin:0 }}>GAKU SELF-STUDY</p>
-          <p style={{ color:"#f1f5f9", fontSize:14, fontWeight:800, margin:0 }}>{form.name}'s Study Plan</p>
+          <p style={{ color:C.purpleLight, fontSize:10, fontWeight:700, letterSpacing:2, margin:0 }}>{T.gakuSelfStudy}</p>
+          <p style={{ color:"#f1f5f9", fontSize:14, fontWeight:800, margin:0 }}>{form.name}'s {T.studyPlan}</p>
         </div>
         <div style={{ display:"flex", gap:8 }}>
-          <button onClick={()=>setShowHelp(true)} style={{ ...S.btn, padding:"8px 14px", background:`linear-gradient(135deg,${C.amber},#d97706)`, color:"#fff", fontSize:12 }}>🆘 Help</button>
-          <button onClick={onEdit} style={{ ...S.btn, padding:"8px 14px", background:C.card, color:"#94a3b8", border:`1px solid ${C.border}`, fontSize:12 }}>✏️ Edit Profile</button>
+          <button onClick={()=>setShowHelp(true)} style={{ ...S.btn, padding:"8px 14px", background:`linear-gradient(135deg,${C.amber},#d97706)`, color:"#fff", fontSize:12 }}>{T.help}</button>
+          <button onClick={onEdit} style={{ ...S.btn, padding:"8px 14px", background:C.card, color:"#94a3b8", border:`1px solid ${C.border}`, fontSize:12 }}>{T.editProfile}</button>
         </div>
       </div>
 
       <div style={{ maxWidth:600, margin:"0 auto", padding:"20px 16px" }}>
         <div style={{ ...S.card, marginBottom:16 }}>
           <div style={{ display:"flex", justifyContent:"space-between", marginBottom:8 }}>
-            <p style={{ color:"#f1f5f9", fontSize:13, fontWeight:700, margin:0 }}>Weekly Progress</p>
+            <p style={{ color:"#f1f5f9", fontSize:13, fontWeight:700, margin:0 }}>{T.weeklyProgress}</p>
             <p style={{ color:C.purpleLight, fontSize:13, fontWeight:800, margin:0 }}>{doneTasks}/{totalTasks} · {progress}%</p>
           </div>
           <div style={{ background:C.border, borderRadius:99, height:8 }}>
@@ -1336,38 +2083,39 @@ function Dashboard({ form, onEdit }) {
 
         {tab==="schedule" && (
           <div style={{ ...S.card }}>
-            <p style={{ color:C.purpleLight, fontSize:12, fontWeight:700, letterSpacing:1, marginBottom:16 }}>📅 YOUR WEEKLY STUDY SCHEDULE</p>
-            {Object.entries(schedule).map(([day, tasks]) => (
-              <div key={day} style={{ marginBottom:16 }}>
-                <p style={{ color:"#94a3b8", fontSize:11, fontWeight:700, letterSpacing:1, borderBottom:`1px solid ${C.border}`, paddingBottom:6, marginBottom:8 }}>{day.toUpperCase()}</p>
-                {tasks.map((task, idx) => task.rest ? (
-                  <p key={idx} style={{ color:"#334155", fontSize:13, fontStyle:"italic" }}>Rest day 🌸</p>
-                ) : (
-                  <div key={idx} onClick={()=>toggleTask(day,idx)} style={{ display:"flex", gap:10, padding:"10px 12px", borderRadius:10, background:task.done?"rgba(34,197,94,0.06)":C.card, border:`1px solid ${task.done?"rgba(34,197,94,0.2)":C.border}`, marginBottom:6, cursor:"pointer", alignItems:"flex-start" }}>
-                    <div style={{ width:20, height:20, borderRadius:6, border:`2px solid ${task.done?C.green:C.border}`, background:task.done?C.green:"transparent", display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0, marginTop:1 }}>
-                      {task.done && <span style={{ color:"#fff", fontSize:11, fontWeight:900 }}>✓</span>}
+            <p style={{ color:C.purpleLight, fontSize:12, fontWeight:700, letterSpacing:1, marginBottom:16 }}>{T.yourWeeklySchedule}</p>
+            {WEEKDAY_EN.map((day, di) => {
+              const tasks = schedule[day] || [];
+              const dayLabel = T[DAY_KEYS[di]] || day.toUpperCase();
+              return (
+                <div key={day} style={{ marginBottom:16 }}>
+                  <p style={{ color:"#94a3b8", fontSize:11, fontWeight:700, letterSpacing:1, borderBottom:`1px solid ${C.border}`, paddingBottom:6, marginBottom:8 }}>{dayLabel}</p>
+                  {tasks.map((task, idx) => task.rest ? (
+                    <p key={idx} style={{ color:"#334155", fontSize:13, fontStyle:"italic" }}>{T.restDay}</p>
+                  ) : (
+                    <div key={idx} onClick={()=>toggleTask(day,idx)} style={{ display:"flex", gap:10, padding:"10px 12px", borderRadius:10, background:task.done?"rgba(34,197,94,0.06)":C.card, border:`1px solid ${task.done?"rgba(34,197,94,0.2)":C.border}`, marginBottom:6, cursor:"pointer", alignItems:"flex-start" }}>
+                      <div style={{ width:20, height:20, borderRadius:6, border:`2px solid ${task.done?C.green:C.border}`, background:task.done?C.green:"transparent", display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0, marginTop:1 }}>
+                        {task.done && <span style={{ color:"#fff", fontSize:11, fontWeight:900 }}>✓</span>}
+                      </div>
+                      <p style={{ color:task.done?"#64748b":"#cbd5e1", fontSize:13, margin:0, lineHeight:1.6, textDecoration:task.done?"line-through":"none" }}>{task.task}</p>
                     </div>
-                    <p style={{ color:task.done?"#64748b":"#cbd5e1", fontSize:13, margin:0, lineHeight:1.6, textDecoration:task.done?"line-through":"none" }}>{task.task}</p>
-                  </div>
-                ))}
-              </div>
-            ))}
+                  ))}
+                </div>
+              );
+            })}
           </div>
         )}
 
-        {/* 🎯 Practice Set tab — built around selected skills only */}
         {tab==="practice" && <PracticeSet form={form} />}
 
-        {/* ④ Vocabulary Builder tab */}
         {tab==="vocabulary" && <VocabBuilder form={form} />}
 
         {tab==="resources" && (
           <div>
-            {/* ── レベル別おすすめリソース ── */}
             {(LEVEL_RESOURCES[form.jlpt] || []).length > 0 && (
               <div style={{ ...S.card, marginBottom:16, borderLeft:`3px solid ${C.teal}` }}>
-                <p style={{ color:C.teal, fontSize:12, fontWeight:700, letterSpacing:1, marginBottom:4 }}>⭐ あなたのレベルにおすすめ</p>
-                <p style={{ color:"#64748b", fontSize:12, marginBottom:14 }}>レベル {form.jlpt} 向けに厳選したリソース</p>
+                <p style={{ color:C.teal, fontSize:12, fontWeight:700, letterSpacing:1, marginBottom:4 }}>{T.recommendedForLevel}</p>
+                <p style={{ color:"#64748b", fontSize:12, marginBottom:14 }}>{T.curatedFor} {form.jlpt}</p>
                 <div style={{ display:"flex", flexDirection:"column", gap:12 }}>
                   {(LEVEL_RESOURCES[form.jlpt] || []).map((r,i) => (
                     <div key={i} style={{ background:"rgba(6,182,212,0.04)", borderRadius:12, border:`1px solid rgba(6,182,212,0.15)`, padding:"14px 16px" }}>
@@ -1376,9 +2124,8 @@ function Dashboard({ form, onEdit }) {
                         <span style={{ color:C.teal, fontSize:10, fontWeight:700, background:"rgba(6,182,212,0.1)", padding:"2px 8px", borderRadius:99, whiteSpace:"nowrap", marginLeft:8 }}>{r.level}</span>
                       </div>
                       <p style={{ color:"#94a3b8", fontSize:12, margin:"0 0 10px", lineHeight:1.6 }}>{r.desc}</p>
-                      {/* 適性スター表示 */}
                       <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:"3px 12px", marginBottom:10 }}>
-                        {[["語彙",r.skills.vocab],["文法",r.skills.grammar],["読解",r.skills.reading],["スピーキング",r.skills.speaking],["リスニング",r.skills.listening]].map(([label,val])=>(
+                        {[[T.vocab,r.skills.vocab],[T.grammar,r.skills.grammar],[T.reading,r.skills.reading],[T.speaking,r.skills.speaking],[T.listening,r.skills.listening]].map(([label,val])=>(
                           <div key={label} style={{ display:"flex", alignItems:"center", gap:4 }}>
                             <span style={{ color:"#64748b", fontSize:10, minWidth:60 }}>{label}</span>
                             <span style={{ fontSize:10, letterSpacing:1 }}>{"★".repeat(val)}{"☆".repeat(5-val)}</span>
@@ -1386,7 +2133,7 @@ function Dashboard({ form, onEdit }) {
                         ))}
                       </div>
                       <a href={r.url} target="_blank" rel="noopener noreferrer" style={{ display:"block", textAlign:"center", padding:"9px", background:`linear-gradient(135deg,${C.teal},#0891b2)`, color:"#fff", borderRadius:8, fontSize:12, fontWeight:700, textDecoration:"none" }}>
-                        → {r.name} を開く
+                        → {T.openResource} {r.name}
                       </a>
                     </div>
                   ))}
@@ -1394,36 +2141,33 @@ function Dashboard({ form, onEdit }) {
               </div>
             )}
 
-            {/* ── スキル別リソース ── */}
-          <div style={{ ...S.card }}>
-            <p style={{ color:C.amber, fontSize:12, fontWeight:700, letterSpacing:1, marginBottom:4 }}>🔗 YOUR RESOURCES</p>
-            <p style={{ color:"#64748b", fontSize:12, marginBottom:16 }}>Curated for level {form.jlpt}, skills: {(form.skills||[]).join(", ")}</p>
-            {selectedResources.length === 0 && <p style={{ color:"#64748b", fontSize:13 }}>No resources. Please reset and select study skills.</p>}
-            <div style={{ display:"flex", flexDirection:"column", gap:12 }}>
-              {selectedResources.map((r,i) => (
-                <div key={i} style={{ background:"rgba(255,255,255,0.03)", borderRadius:12, border:`1px solid ${C.border}`, padding:"14px 16px" }}>
-                  <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", marginBottom:4 }}>
-                    <p style={{ color:"#f1f5f9", fontSize:14, fontWeight:700, margin:0 }}>{r.name}</p>
-                    <span style={{ color:r.free?C.green:C.amber, fontSize:10, fontWeight:700, background:r.free?"rgba(34,197,94,0.1)":"rgba(245,158,11,0.1)", padding:"2px 8px", borderRadius:99 }}>{r.free?"FREE":"PAID"}</span>
+            <div style={{ ...S.card }}>
+              <p style={{ color:C.amber, fontSize:12, fontWeight:700, letterSpacing:1, marginBottom:4 }}>{T.yourResources}</p>
+              <p style={{ color:"#64748b", fontSize:12, marginBottom:16 }}>{T.curatedForLevel} {form.jlpt}, {T.skills} {(form.skills||[]).map(s=>T[SKILL_LABEL_KEY[s]]||SKILL_LABELS[s]).join(", ")}</p>
+              {selectedResources.length === 0 && <p style={{ color:"#64748b", fontSize:13 }}>{T.noResources}</p>}
+              <div style={{ display:"flex", flexDirection:"column", gap:12 }}>
+                {selectedResources.map((r,i) => (
+                  <div key={i} style={{ background:"rgba(255,255,255,0.03)", borderRadius:12, border:`1px solid ${C.border}`, padding:"14px 16px" }}>
+                    <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", marginBottom:4 }}>
+                      <p style={{ color:"#f1f5f9", fontSize:14, fontWeight:700, margin:0 }}>{r.name}</p>
+                      <span style={{ color:r.free?C.green:C.amber, fontSize:10, fontWeight:700, background:r.free?"rgba(34,197,94,0.1)":"rgba(245,158,11,0.1)", padding:"2px 8px", borderRadius:99 }}>{r.free ? T.free : T.paid}</span>
+                    </div>
+                    <p style={{ color:C.purpleLight, fontSize:11, fontWeight:700, margin:"0 0 4px" }}>{T[SKILL_LABEL_KEY[r.skill]]||SKILL_LABELS[r.skill]}</p>
+                    <p style={{ color:"#94a3b8", fontSize:12, margin:"0 0 10px", lineHeight:1.6 }}>{r.desc}</p>
+                    <a href={r.url} target="_blank" rel="noopener noreferrer" style={{ display:"block", textAlign:"center", padding:"9px", background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff", borderRadius:8, fontSize:12, fontWeight:700, textDecoration:"none" }}>
+                      → {T.openResource} {r.name}
+                    </a>
                   </div>
-                  <p style={{ color:C.purpleLight, fontSize:11, fontWeight:700, margin:"0 0 4px" }}>{SKILL_LABELS[r.skill]}</p>
-                  <p style={{ color:"#94a3b8", fontSize:12, margin:"0 0 10px", lineHeight:1.6 }}>{r.desc}</p>
-                  <a href={r.url} target="_blank" rel="noopener noreferrer" style={{ display:"block", textAlign:"center", padding:"9px", background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff", borderRadius:8, fontSize:12, fontWeight:700, textDecoration:"none" }}>
-                    → Open {r.name}
-                  </a>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
-          </div>
           </div>
         )}
 
-
-
         {tab==="milestones" && (
           <div style={{ ...S.card }}>
-            <p style={{ color:C.red, fontSize:12, fontWeight:700, letterSpacing:1, marginBottom:16 }}>🏆 YOUR GOAL ROADMAP</p>
-            <p style={{ color:"#64748b", fontSize:13, marginBottom:16 }}>Level: {form.jlpt} → Goal: {form.displayGoal||form.goal}</p>
+            <p style={{ color:C.red, fontSize:12, fontWeight:700, letterSpacing:1, marginBottom:16 }}>{T.yourGoalRoadmap}</p>
+            <p style={{ color:"#64748b", fontSize:13, marginBottom:16 }}>{T.levelToGoal}: {form.jlpt} → {T.goal}: {form.displayGoal||form.goal}</p>
             {milestones.map((m,i) => (
               <div key={i} onClick={()=>setMsDone(p=>p.includes(i)?p.filter(x=>x!==i):[...p,i])} style={{ display:"flex", gap:12, padding:"12px 14px", borderRadius:12, background:msDone.includes(i)?"rgba(34,197,94,0.06)":C.card, border:`1px solid ${msDone.includes(i)?"rgba(34,197,94,0.2)":C.border}`, marginBottom:8, cursor:"pointer", alignItems:"flex-start" }}>
                 <div style={{ width:24, height:24, borderRadius:8, border:`2px solid ${msDone.includes(i)?C.green:C.border}`, background:msDone.includes(i)?C.green:"transparent", display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0 }}>
@@ -1434,11 +2178,11 @@ function Dashboard({ form, onEdit }) {
             ))}
             <div style={{ marginTop:20, padding:"16px", background:"rgba(168,85,247,0.06)", borderRadius:12, textAlign:"center", border:`1px solid rgba(168,85,247,0.2)` }}>
               <p style={{ fontSize:20, margin:"0 0 8px" }}>🌸</p>
-              <p style={{ color:"#f1f5f9", fontSize:13, fontWeight:700, margin:"0 0 6px" }}>You've got this!</p>
-              <p style={{ color:"#64748b", fontSize:12, lineHeight:1.7, margin:0 }}>Every conversation, every sentence, every word brings you closer. CLT is about real communication — and you're already doing it. 頑張ってください！</p>
+              <p style={{ color:"#f1f5f9", fontSize:13, fontWeight:700, margin:"0 0 6px" }}>{T.youveGotThis}</p>
+              <p style={{ color:"#64748b", fontSize:12, lineHeight:1.7, margin:0 }}>{T.motivationText}</p>
             </div>
             <a href="https://www.seitojapanese.online/" target="_blank" rel="noopener noreferrer" style={{ display:"block", textAlign:"center", padding:"13px", background:`linear-gradient(135deg,${C.amber},#d97706)`, color:"#fff", borderRadius:10, fontSize:14, fontWeight:700, textDecoration:"none", marginTop:16 }}>
-              Book a FREE Trial Lesson with GAKU →
+              {T.bookLesson}
             </a>
           </div>
         )}
