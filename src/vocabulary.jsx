@@ -241,6 +241,7 @@ export default function Vocabulary({ onSelfStudy }) {
                 </div>
               </div>
             );
+          <CTABlock key="cta-vocab" />
           })()}
           <div style={{ display:"flex", flexDirection:"column", gap:12, marginBottom:24 }}>
             {QUESTIONS.map((qq, i) => {
@@ -269,8 +270,7 @@ export default function Vocabulary({ onSelfStudy }) {
               );
             })}
           </div>
-          <CTABlock key="cta-vocab" />
-          <button onClick={restart} style={{ ...S.btn, background:`linear-gradient(135deg,${COLOR},${COLOR}99)`, color:"#fff", cursor:"pointer", marginTop:16 }}>Try Again</button>
+<button onClick={restart} style={{ ...S.btn, background:`linear-gradient(135deg,${COLOR},${COLOR}99)`, color:"#fff", cursor:"pointer", marginTop:16 }}>Try Again</button>
         </div>
       </div>
     );
