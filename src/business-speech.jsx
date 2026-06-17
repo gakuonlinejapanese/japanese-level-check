@@ -220,8 +220,8 @@ export default function BusinessSpeech({ onSelfStudy }) {
                 </div>
               </div>
             );
-          <CTABlock />
           })()}
+          <CTABlock />
         <div style={{display:"flex",flexDirection:"column",gap:12,marginBottom:24}}>
           {QUESTIONS.map((qq,i) => {
             const ua=userAnswers[i]; const ok=ua===qq.answer; const cc=CP[qq.cefr]??COLOR;

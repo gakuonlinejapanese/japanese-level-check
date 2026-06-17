@@ -241,8 +241,8 @@ export default function Vocabulary({ onSelfStudy }) {
                 </div>
               </div>
             );
-          <CTABlock key="cta-vocab" />
           })()}
+          <CTABlock key="cta-vocab" />
           <div style={{ display:"flex", flexDirection:"column", gap:12, marginBottom:24 }}>
             {QUESTIONS.map((qq, i) => {
               const ua = userAnswers[i]; const ok = ua === qq.answer;
