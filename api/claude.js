@@ -22,7 +22,7 @@ export default async function handler(req, res) {
       body: JSON.stringify({
         model: "llama-3.3-70b-versatile",
         messages: groqMessages,
-        max_tokens: max_tokens || 1200,
+        max_tokens: Math.min(max_tokens || 1200, 8000),
         temperature: 0.3,
       }),
     });

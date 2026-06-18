@@ -708,40 +708,65 @@ function getT(lang) {
 // For languages not in our static dict, we cache AI translations
 const AI_TRANS_CACHE = {};
 
-// Hook: returns T object, triggers AI fetch for unknown languages
+// Split translation keys into two batches to stay within token limits
+function splitKeys(obj) {
+  const keys = Object.keys(obj);
+  const mid = Math.ceil(keys.length / 2);
+  const a = {}, b = {};
+  keys.slice(0, mid).forEach(k => { a[k] = obj[k]; });
+  keys.slice(mid).forEach(k => { b[k] = obj[k]; });
+  return [a, b];
+}
+
+async function fetchTranslationBatch(keyValueObj, lang) {
+  const keyList = Object.keys(keyValueObj).map(k => `${k}: ${keyValueObj[k]}`).join("\n");
+  const res = await fetch("/api/claude", {
+    method:"POST", headers:{"Content-Type":"application/json"},
+    body: JSON.stringify({
+      model:"claude-sonnet-4-20250514", max_tokens:6000,
+      messages:[{ role:"user", content:
+        `Translate ONLY the VALUES (not keys) into ${lang}. Keep emojis, asterisks (*), arrows (→ ←), Japanese text (頑張ってください！), and punctuation exactly as-is. Return ONLY a valid JSON object with the same keys — no markdown, no explanation, no extra text.\n\n${keyList}`
+      }]
+    })
+  });
+  const d = await res.json();
+  const text = d.content?.map(c=>c.text||"").join("") || "{}";
+  const clean = text.replace(/```json|```/g,"").trim();
+  return JSON.parse(clean);
+}
+
+// Hook: shows English immediately while AI translation loads for unknown languages
 function useUITranslations(lang) {
   const [aiT, setAiT] = useState(null);
+  const [transLoading, setTransLoading] = useState(false);
   const staticT = UI_TRANSLATIONS[lang];
 
   useEffect(() => {
-    if (staticT || !lang || lang === "English") { setAiT(null); return; }
+    if (staticT || !lang || lang === "English") { setAiT(null); setTransLoading(false); return; }
     if (AI_TRANS_CACHE[lang]) { setAiT(AI_TRANS_CACHE[lang]); return; }
-    // Fetch AI translation for all keys
+    setTransLoading(true);
     const baseKeys = UI_TRANSLATIONS["English"];
-    const keyList = Object.keys(baseKeys).map(k => `${k}: ${baseKeys[k]}`).join("\n");
-    fetch("/api/claude", {
-      method:"POST", headers:{"Content-Type":"application/json"},
-      body: JSON.stringify({
-        model:"claude-sonnet-4-20250514", max_tokens:4000,
-        messages:[{ role:"user", content:
-          `Translate ONLY the VALUES (not keys) in the following list into ${lang}. Keep emojis, asterisks (*), arrows (→ ←), Japanese text (頑張ってください！), and punctuation exactly as-is. Return ONLY valid JSON object with same keys. No markdown, no explanation.\n\n${keyList}`
-        }]
-      })
+    const [batchA, batchB] = splitKeys(baseKeys);
+    Promise.all([
+      fetchTranslationBatch(batchA, lang),
+      fetchTranslationBatch(batchB, lang),
+    ])
+    .then(([resA, resB]) => {
+      const merged = { ...resA, ...resB };
+      if (Object.keys(merged).length > 10) {
+        AI_TRANS_CACHE[lang] = merged;
+        setAiT(merged);
+      } else {
+        setAiT(UI_TRANSLATIONS["English"]);
+      }
     })
-    .then(r=>r.json())
-    .then(d => {
-      const text = d.content?.map(c=>c.text||"").join("") || "{}";
-      try {
-        const clean = text.replace(/```json|```/g,"").trim();
-        const parsed = JSON.parse(clean);
-        AI_TRANS_CACHE[lang] = parsed;
-        setAiT(parsed);
-      } catch { setAiT(UI_TRANSLATIONS["English"]); }
-    })
-    .catch(() => setAiT(UI_TRANSLATIONS["English"]));
+    .catch(() => setAiT(UI_TRANSLATIONS["English"]))
+    .finally(() => setTransLoading(false));
   }, [lang, staticT]);
 
-  return staticT || aiT || UI_TRANSLATIONS["English"];
+  // Always return something immediately — English while AI translation is loading
+  const result = staticT || aiT || UI_TRANSLATIONS["English"];
+  return { ...result, _loading: transLoading && !staticT && !aiT };
 }
 
 const WRITING_TOPICS = {
@@ -1301,7 +1326,7 @@ function VocabBuilder({ form }) {
   const [loading, setLoading] = useState(false);
   const [findError, setFindError] = useState("");
 
-  const findWords = async () => {
+  const findWords = async (retryCount = 0) => {
     if (!search.trim()) return;
     setLoading(true);
     setFindError("");
@@ -1312,37 +1337,35 @@ function VocabBuilder({ form }) {
         body: JSON.stringify({ model:"claude-sonnet-4-20250514", max_tokens:1500,
           messages:[
             { role:"system", content:`You are a multilingual Japanese dictionary expert. You MUST write the "meaning", "example_translated", and "tip" fields EXCLUSIVELY in ${form.preferredLang || "English"}. Never use English for these fields unless the student native language IS English.` },
-            { role:"user", content:`Generate 8 authentic Japanese dictionary words related to the topic: "${search}"
-
-The student native language is: ${form.preferredLang || "English"}
-ALL translations must be in ${form.preferredLang || "English"} — NOT in English unless that is the native language.
-
-Return a JSON array of exactly 8 objects with these keys:
-- word: Japanese word in kanji/kana
-- reading: hiragana reading
-- jlpt: JLPT level (N5/N4/N3/N2/N1) or ""
-- partOfSpeech: part of speech in English
-- meaning: translation in ${form.preferredLang || "English"}
-- meaningNative: simple Japanese definition (e.g. 「食べ物を料理すること」)
-- example: natural Japanese example sentence
-- example_translated: translation of example in ${form.preferredLang || "English"}
-- tip: usage tip in ${form.preferredLang || "English"}
-- imageQuery: 2-3 English words for image search
-- imageDesc: brief English image description
-
-Output ONLY a raw JSON array. No markdown, no backticks, no explanation.` }
+            { role:"user", content:`Generate 8 authentic Japanese dictionary words related to the topic: "${search}"\n\nThe student native language is: ${form.preferredLang || "English"}\nALL translations must be in ${form.preferredLang || "English"} — NOT in English unless that is the native language.\n\nReturn a JSON array of exactly 8 objects with these keys:\n- word: Japanese word in kanji/kana\n- reading: hiragana reading\n- jlpt: JLPT level (N5/N4/N3/N2/N1) or ""\n- partOfSpeech: part of speech in English\n- meaning: translation in ${form.preferredLang || "English"}\n- meaningNative: simple Japanese definition (e.g. 「食べ物を料理すること」)\n- example: natural Japanese example sentence\n- example_translated: translation of example in ${form.preferredLang || "English"}\n- tip: usage tip in ${form.preferredLang || "English"}\n- imageQuery: 2-3 English words for image search\n- imageDesc: brief English image description\n\nOutput ONLY a raw JSON array. No markdown, no backticks, no explanation.` }
           ]
         })
       });
+      if (res.status === 429 || res.status === 503) {
+        if (retryCount < 2) {
+          const delay = (retryCount + 1) * 3000;
+          setFindError(`⏳ Rate limit reached. Retrying in ${delay/1000}s...`);
+          setLoading(false);
+          setTimeout(() => findWords(retryCount + 1), delay);
+          return;
+        }
+      }
       const d = await res.json();
-      if (d.error) { console.error("API error:", d.error); setWords([]); setLoading(false); return; }
+      if (d.error) {
+        if (d.error.includes && (d.error.includes("rate") || d.error.includes("limit"))) {
+          setFindError("⏳ Too many requests. Please wait 30 seconds and try again.");
+        } else {
+          setFindError("検索に失敗しました。もう一度お試しください。");
+        }
+        setWords([]); setLoading(false); return;
+      }
       const text = d.content?.map(c=>c.text||"").join("") || "[]";
-      const clean = text.replace(/\`\`\`json\s*/g,"").replace(/\`\`\`\s*/g,"").trim();
+      const clean = text.replace(/```json\s*/g,"").replace(/```\s*/g,"").trim();
       try {
         const parsed = JSON.parse(clean);
         setWords(Array.isArray(parsed)?parsed:[]);
       } catch {
-        const match = clean.match(/\[[\s\S]*\]/);
+        const match = clean.match(/[\s\S]*/);
         if (match) { try { setWords(JSON.parse(match[0])); } catch { setWords([]); } }
         else { setWords([]); }
       }
@@ -1389,7 +1412,14 @@ Output ONLY a raw JSON array. No markdown, no backticks, no explanation.` }
             {loading?"...":"Find Words"}
           </button>
         </div>
-        {findError && <p style={{ color:C.red, fontSize:12, marginTop:8 }}>{findError}</p>}
+        {findError && (
+          <div style={{ display:"flex", alignItems:"center", gap:8, marginTop:8 }}>
+            <p style={{ color:C.red, fontSize:12, margin:0, flex:1 }}>{findError}</p>
+            {!findError.includes("⏳ Rate") && (
+              <button onClick={()=>findWords(0)} style={{ ...S.btn, padding:"6px 12px", fontSize:11, background:`linear-gradient(135deg,${C.teal},#0891b2)`, color:"#fff" }}>Retry</button>
+            )}
+          </div>
+        )}
       </div>
 
       {loading && (
@@ -1874,6 +1904,11 @@ function FormScreen({ onSubmit, onBack, onCancel, initialJlpt, initialForm }) {
   return (
     <div style={{ ...S.page, display:"flex", alignItems:"flex-start", justifyContent:"center", padding:"40px 16px 60px" }}>
       <div style={{ width:"100%", maxWidth:520 }}>
+        {T._loading && (
+          <div style={{ background:"rgba(168,85,247,0.1)", border:`1px solid rgba(168,85,247,0.3)`, borderRadius:10, padding:"10px 16px", marginBottom:16, textAlign:"center" }}>
+            <p style={{ color:C.purpleLight, fontSize:12, fontWeight:700, margin:0 }}>🌐 Translating into {form.preferredLang}...</p>
+          </div>
+        )}
         {initialForm && onCancel ? (
           <button onClick={onCancel} style={{ background:"none", border:"none", color:"#64748b", fontSize:13, cursor:"pointer", marginBottom:16, padding:0 }}>{T.backToMyPlan}</button>
         ) : (
@@ -2032,6 +2067,7 @@ function Dashboard({ form, onEdit }) {
 
   const DAY_KEYS = ["monday","tuesday","wednesday","thursday","friday","saturday","sunday"];
   const WEEKDAY_EN = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
+  const isTranslating = T._loading;
 
   const TABS = [
     { id:"schedule",   label: T.tabSchedule },
@@ -2056,6 +2092,13 @@ function Dashboard({ form, onEdit }) {
         </div>
       </div>
 
+      {isTranslating && (
+        <div style={{ background:"rgba(168,85,247,0.15)", borderBottom:`1px solid rgba(168,85,247,0.3)`, padding:"8px 20px", textAlign:"center" }}>
+          <p style={{ color:C.purpleLight, fontSize:12, fontWeight:700, margin:0 }}>
+            🌐 Translating UI into {form.preferredLang}...
+          </p>
+        </div>
+      )}
       <div style={{ maxWidth:600, margin:"0 auto", padding:"20px 16px" }}>
         <div style={{ ...S.card, marginBottom:16 }}>
           <div style={{ display:"flex", justifyContent:"space-between", marginBottom:8 }}>
