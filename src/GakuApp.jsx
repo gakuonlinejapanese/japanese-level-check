@@ -3579,15 +3579,19 @@ function PracticeSet({ form }) {
     try {
       const res = await fetch("/api/claude", {
         method:"POST", headers:{"Content-Type":"application/json"},
-        body: JSON.stringify({ model:"claude-sonnet-4-20250514", max_tokens:1200,
+        body: JSON.stringify({ model:"claude-sonnet-4-20250514", max_tokens:1600,
           messages:[{ role:"user", content:`You are a Japanese teacher using CLT (Communicative Language Teaching). The student is level ${form.jlpt}, goal: ${form.displayGoal||form.goal}.
 The student selected ONLY these study skills: ${skillLabels || "general practice"}.
 Create a "Practice Set" of 6 short exercises focused ONLY on these selected skills (do NOT include writing/composition exercises unless "Writing" is one of the selected skills).
 For each exercise, include:
 - skill: which skill it targets (must be one of: ${skills.join(", ")})
 - type: a short label, e.g. "Listening cloze", "Conversation role-play", "Kanji recall", "Grammar pattern", "Reading comprehension", "JLPT-style question", "Pronunciation drill"
-- prompt: the exercise text in Japanese (with English hint in parentheses if helpful)
-- answer: the model answer or correct response
+- prompt: the FULL exercise text in Japanese, with an English hint in parentheses if helpful. The prompt MUST be fully self-contained and answerable on its own — a student must be able to read ONLY this field and attempt the question without seeing the answer.
+  - If type is "JLPT-style question" or any multiple-choice question: the prompt MUST include the full question/sentence AND all answer choices (e.g. A/B/C/D, or ①②③④) written out directly inside the prompt text itself. NEVER write a prompt like "(Choose the correct answer)" without the actual options listed — that is incomplete and unusable.
+  - If type is "Reading comprehension": the prompt MUST include the actual short passage/text to read (2-4 sentences in Japanese) followed by the question, not just an instruction like "(What is the main idea of the text?)" with no text given.
+  - If type is "Kanji recall": the prompt MUST include the actual kanji character(s) being asked about, not just an instruction.
+  - If type is "Listening cloze" or "Grammar pattern": the prompt MUST include the actual sentence with a blank (e.g. ___) to fill in.
+- answer: the model answer or correct response (just the answer itself, e.g. "B" or the filled-in word — the full question must NOT be repeated here, it already lives in prompt)
 - tip: a one-sentence CLT tip for using this in real communication
 
 Respond ONLY in this JSON format (no markdown, no backticks):
