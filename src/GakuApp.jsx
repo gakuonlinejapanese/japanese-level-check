@@ -3755,21 +3755,32 @@ function HelpModal({ onClose, form }) {
 
   const getHelp = async () => {
     setLoading(true);
+    const lang = form?.preferredLang || "English";
     try {
       const res = await fetch("/api/claude", {
         method:"POST", headers:{"Content-Type":"application/json"},
         body: JSON.stringify({ model:"claude-sonnet-4-20250514", max_tokens:500,
-          messages:[{ role:"user", content:`You are a warm Japanese language coach using CLT.
+          messages:[{ role:"user", content:`You are a warm Japanese language coach using CLT (Communicative Language Teaching).
 Student: ${form.name}, Level: ${form.jlpt}, Goal: ${form.displayGoal||form.goal}, Skills: ${(form.skills||[]).join(", ")}
 Today: Mood: ${mood}, Time: ${time} min, Energy: ${energy}
-${wantsDifferent && differentText.trim() ? `IMPORTANT: Today the student specifically wants to do something different from their usual routine. What they want to do today: "${differentText.trim()}". Build today's suggestion AROUND this request, while still keeping it CLT-based and appropriate for their level.` : `Focus on skills the student selected: ${(form.skills||[]).join(", ")}.`}
+${wantsDifferent && differentText.trim() ? `IMPORTANT: Today the student specifically requested what they want to study/do, in their own words: "${differentText.trim()}". Treat this as the primary brief — build today's entire suggestion AROUND this specific request (use it to choose the topic, the resource, and the activity), while still applying CLT principles and keeping it appropriate for their JLPT level. Do not ignore or generalize away from what they asked for.` : `Focus on skills the student selected: ${(form.skills||[]).join(", ")}.`}
 Give a specific, encouraging suggestion for TODAY ONLY using CLT principles.
-One concrete activity with a specific resource. Emojis. Under 120 words. English.` }]
+One concrete activity with a specific resource (a real site, podcast, app, or material — e.g. NHK Easy News, Nihongo con Teppei, a specific grammar point, etc). Break down roughly how to spend the ${time||"available"} minutes (e.g. a short breakdown of minutes per step). Emojis okay.
+Under 150 words.
+CRITICAL: Write your ENTIRE response in ${lang}. Every word, including labels and resource descriptions, must be in ${lang} — do not use English unless ${lang} is English.` }]
         })
       });
       const d = await res.json();
-      setResult(d.content?.map(c=>c.text||"").join("") || "Take it easy today! Review 5 words and watch one Japanese video. 🌸");
-    } catch { setResult("Even 10 minutes counts! Review your saved vocabulary and practice one sentence aloud. 頑張って！🎌"); }
+      const fallback = lang === "Japanese"
+        ? "今日は無理をしないでくださいね！単語を5つ復習して、日本語の動画を1本見てみましょう。🌸"
+        : "Take it easy today! Review 5 words and watch one Japanese video. 🌸";
+      setResult(d.content?.map(c=>c.text||"").join("") || fallback);
+    } catch {
+      const lang2 = form?.preferredLang || "English";
+      setResult(lang2 === "Japanese"
+        ? "10分でも十分です！保存した単語を復習して、声に出して一文練習してみましょう。頑張って！🎌"
+        : "Even 10 minutes counts! Review your saved vocabulary and practice one sentence aloud. 頑張って！🎌");
+    }
     setLoading(false);
   };
 
