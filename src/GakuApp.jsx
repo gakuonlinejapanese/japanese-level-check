@@ -53,30 +53,30 @@ const RESOURCES = {
 // Level-based recommended resources
 const LEVEL_RESOURCES = {
   "Beginner": [
-    { name:"Japanese with Shun", desc:"初級向けYouTubeチャンネル。聞き取り練習に最適。", url:"https://www.youtube.com/channel/UCu6sZrHyl4hSS2PvlUo2XZA", free:true, level:"初級 (N5〜N4)", skills:{ vocab:4, grammar:2, reading:0, speaking:3, listening:5 } },
-    { name:"Marugoto Web", desc:"国際交流基金の初中級コース。コミュニカティブな学習法。", url:"https://marugotoweb.jp/ja/", free:true, level:"初中級 (N4〜N3)", skills:{ vocab:4, grammar:4, reading:3, speaking:5, listening:5 } },
+    { name:"Japanese with Shun", descKey:"resShunDesc", url:"https://www.youtube.com/channel/UCu6sZrHyl4hSS2PvlUo2XZA", free:true, levelKey:"resLevelN5N4", skills:{ vocab:4, grammar:2, reading:0, speaking:3, listening:5 } },
+    { name:"Marugoto Web", descKey:"resMarugotoDesc", url:"https://marugotoweb.jp/ja/", free:true, levelKey:"resLevelN4N3", skills:{ vocab:4, grammar:4, reading:3, speaking:5, listening:5 } },
   ],
   "N5": [
-    { name:"Japanese with Shun", desc:"初級向けYouTubeチャンネル。聞き取り練習に最適。", url:"https://www.youtube.com/channel/UCu6sZrHyl4hSS2PvlUo2XZA", free:true, level:"初級 (N5〜N4)", skills:{ vocab:4, grammar:2, reading:0, speaking:3, listening:5 } },
-    { name:"Marugoto Web", desc:"国際交流基金の初中級コース。コミュニカティブな学習法。", url:"https://marugotoweb.jp/ja/", free:true, level:"初中級 (N4〜N3)", skills:{ vocab:4, grammar:4, reading:3, speaking:5, listening:5 } },
-    { name:"Onomappu", desc:"日常会話・スラング・文化を楽しく学べるYouTubeチャンネル。", url:"https://www.youtube.com/@Onomappu", free:true, level:"初中級 (N4〜N3)", skills:{ vocab:5, grammar:3, reading:0, speaking:4, listening:5 } },
+    { name:"Japanese with Shun", descKey:"resShunDesc", url:"https://www.youtube.com/channel/UCu6sZrHyl4hSS2PvlUo2XZA", free:true, levelKey:"resLevelN5N4", skills:{ vocab:4, grammar:2, reading:0, speaking:3, listening:5 } },
+    { name:"Marugoto Web", descKey:"resMarugotoDesc", url:"https://marugotoweb.jp/ja/", free:true, levelKey:"resLevelN4N3", skills:{ vocab:4, grammar:4, reading:3, speaking:5, listening:5 } },
+    { name:"Onomappu", descKey:"resOnomappuDesc", url:"https://www.youtube.com/@Onomappu", free:true, levelKey:"resLevelN4N3", skills:{ vocab:5, grammar:3, reading:0, speaking:4, listening:5 } },
   ],
   "N4": [
-    { name:"Marugoto Web", desc:"国際交流基金の初中級コース。コミュニカティブな学習法。", url:"https://marugotoweb.jp/ja/", free:true, level:"初中級 (N4〜N3)", skills:{ vocab:4, grammar:4, reading:3, speaking:5, listening:5 } },
-    { name:"Onomappu", desc:"日常会話・スラング・文化を楽しく学べるYouTubeチャンネル。", url:"https://www.youtube.com/@Onomappu", free:true, level:"初中級 (N4〜N3)", skills:{ vocab:5, grammar:3, reading:0, speaking:4, listening:5 } },
-    { name:"Nihongo con Teppei", desc:"中級者向けポッドキャスト。ナチュラルスピードの日本語が聞ける。", url:"https://nihongoconteppei.com", free:true, level:"中級 (N3〜N2)", skills:{ vocab:5, grammar:2, reading:0, speaking:3, listening:5 } },
+    { name:"Marugoto Web", descKey:"resMarugotoDesc", url:"https://marugotoweb.jp/ja/", free:true, levelKey:"resLevelN4N3", skills:{ vocab:4, grammar:4, reading:3, speaking:5, listening:5 } },
+    { name:"Onomappu", descKey:"resOnomappuDesc", url:"https://www.youtube.com/@Onomappu", free:true, levelKey:"resLevelN4N3", skills:{ vocab:5, grammar:3, reading:0, speaking:4, listening:5 } },
+    { name:"Nihongo con Teppei", descKey:"resTeppeiDesc", url:"https://nihongoconteppei.com", free:true, levelKey:"resLevelN3N2", skills:{ vocab:5, grammar:2, reading:0, speaking:3, listening:5 } },
   ],
   "N3": [
-    { name:"Nihongo con Teppei", desc:"中級者向けポッドキャスト。ナチュラルスピードの日本語が聞ける。", url:"https://nihongoconteppei.com", free:true, level:"中級 (N3〜N2)", skills:{ vocab:5, grammar:2, reading:0, speaking:3, listening:5 } },
-    { name:"YUYU Japanese Podcast", desc:"中級者向けYouTubeポッドキャスト。自然な日本語表現が学べる。", url:"https://www.youtube.com/@yuyunihongopodcast", free:true, level:"中級 (N3〜N2)", skills:{ vocab:5, grammar:2, reading:0, speaking:3, listening:5 } },
-    { name:"Sambon Juku", desc:"中上級向け文法・語彙・JLPT対策チャンネル。", url:"https://www.youtube.com/@SambonJuku", free:true, level:"中上級 (N2〜N1)", skills:{ vocab:5, grammar:5, reading:3, speaking:3, listening:4 } },
+    { name:"Nihongo con Teppei", descKey:"resTeppeiDesc", url:"https://nihongoconteppei.com", free:true, levelKey:"resLevelN3N2", skills:{ vocab:5, grammar:2, reading:0, speaking:3, listening:5 } },
+    { name:"YUYU Japanese Podcast", descKey:"resYuyuDesc", url:"https://www.youtube.com/@yuyunihongopodcast", free:true, levelKey:"resLevelN3N2", skills:{ vocab:5, grammar:2, reading:0, speaking:3, listening:5 } },
+    { name:"Sambon Juku", descKey:"resSambonDesc", url:"https://www.youtube.com/@SambonJuku", free:true, levelKey:"resLevelN2N1", skills:{ vocab:5, grammar:5, reading:3, speaking:3, listening:4 } },
   ],
   "N2": [
-    { name:"Sambon Juku", desc:"中上級向け文法・語彙・JLPT対策チャンネル。", url:"https://www.youtube.com/@SambonJuku", free:true, level:"中上級 (N2〜N1)", skills:{ vocab:5, grammar:5, reading:3, speaking:3, listening:4 } },
-    { name:"YUYU Japanese Podcast", desc:"中級者向けYouTubeポッドキャスト。自然な日本語表現が学べる。", url:"https://www.youtube.com/@yuyunihongopodcast", free:true, level:"中級 (N3〜N2)", skills:{ vocab:5, grammar:2, reading:0, speaking:3, listening:5 } },
+    { name:"Sambon Juku", descKey:"resSambonDesc", url:"https://www.youtube.com/@SambonJuku", free:true, levelKey:"resLevelN2N1", skills:{ vocab:5, grammar:5, reading:3, speaking:3, listening:4 } },
+    { name:"YUYU Japanese Podcast", descKey:"resYuyuDesc", url:"https://www.youtube.com/@yuyunihongopodcast", free:true, levelKey:"resLevelN3N2", skills:{ vocab:5, grammar:2, reading:0, speaking:3, listening:5 } },
   ],
   "N1": [
-    { name:"Sambon Juku", desc:"中上級向け文法・語彙・JLPT対策チャンネル。", url:"https://www.youtube.com/@SambonJuku", free:true, level:"中上級 (N2〜N1)", skills:{ vocab:5, grammar:5, reading:3, speaking:3, listening:4 } },
+    { name:"Sambon Juku", descKey:"resSambonDesc", url:"https://www.youtube.com/@SambonJuku", free:true, levelKey:"resLevelN2N1", skills:{ vocab:5, grammar:5, reading:3, speaking:3, listening:4 } },
   ],
 };
 
@@ -195,7 +195,7 @@ const UI_TRANSLATIONS = {
     selectHours: "Select hours",
     lessThan1h: "Less than 1 hour", oneTwo: "1–2 hours",
     twoThree: "2–3 hours", threePlus: "3+ hours",
-    daysPerWeek: "DAYS PER WEEK *",
+    daysPerWeek: "HOW MANY DAYS A WEEK DO YOU WANT TO STUDY? *",
     selectDays: "Select days",
     oneTwoDays: "1–2 days", threeFourDays: "3–4 days",
     fiveSixDays: "5–6 days", everyDay: "Every day",
@@ -217,7 +217,35 @@ const UI_TRANSLATIONS = {
     howToMilestones: "Your roadmap toward your goal. Tap each milestone as you complete it.",
     howToEditProfile: "Update your goals, level, schedule, or skills any time — your existing answers are kept so you only change what's needed.",
     howToHelp: "Get a personalized plan for today based on your mood, time and energy — or come back here anytime for this guide.",
-  },
+      vocabBuilderTitle: "📚 VOCABULARY BUILDER",
+    vocabBuilderDesc: "Enter a topic to see related words from the Japanese dictionary (English or 日本語 OK)",
+    vocabSearchPlaceholder: "e.g. food, travel, emotions...",
+    findWordsBtn: "Find Words",
+    libraryLabel: "📚 Library",
+    yourVocabSaved: "Your Vocabulary",
+    savedSuffix: "saved",
+    wordCardsLabel: "🃏 Word Cards",
+    searchCreateCards: "Search & create cards",
+    flashcardsLabel: "🎴 Flashcards",
+    reviewSavedWords: "Review saved words",
+    searchingDictionary: "Searching Japanese dictionary...",
+    speakWord: "Pronounce word",
+    speakExample: "Pronounce example",
+    weblioDict: "📖 Weblio Dictionary",
+    googleImages: "🖼 Google Images",
+    detailCard: "🃏 Detail Card",
+    retryBtn: "Retry",
+    resShunDesc: "Beginner-friendly YouTube channel. Great for listening practice.",
+    resMarugotoDesc: "Japan Foundation's beginner-intermediate course. Communicative learning method.",
+    resOnomappuDesc: "YouTube channel for everyday conversation, slang, and culture, made fun.",
+    resTeppeiDesc: "Intermediate-level podcast. Listen to natural-paced Japanese.",
+    resYuyuDesc: "Intermediate-level YouTube podcast. Learn natural Japanese expressions.",
+    resSambonDesc: "Upper-intermediate channel for grammar, vocabulary, and JLPT prep.",
+    resLevelN5N4: "Beginner (N5–N4)",
+    resLevelN4N3: "Beginner-Int. (N4–N3)",
+    resLevelN3N2: "Intermediate (N3–N2)",
+    resLevelN2N1: "Upper-Int. (N2–N1)",
+},
 
   "French": {
     gakuSelfStudy: "GAKU AUTO-APPRENTISSAGE",
@@ -317,7 +345,7 @@ const UI_TRANSLATIONS = {
     selectHours: "Sélectionner les heures",
     lessThan1h: "Moins d'1 heure", oneTwo: "1–2 heures",
     twoThree: "2–3 heures", threePlus: "3+ heures",
-    daysPerWeek: "JOURS PAR SEMAINE *",
+    daysPerWeek: "COMBIEN DE JOURS PAR SEMAINE VOULEZ-VOUS ÉTUDIER ? *",
     selectDays: "Sélectionner les jours",
     oneTwoDays: "1–2 jours", threeFourDays: "3–4 jours",
     fiveSixDays: "5–6 jours", everyDay: "Tous les jours",
@@ -337,7 +365,35 @@ const UI_TRANSLATIONS = {
     howToMilestones: "Votre feuille de route vers votre objectif. Cochez chaque étape franchie.",
     howToEditProfile: "Mettez à jour vos objectifs, niveau, planning ou compétences à tout moment.",
     howToHelp: "Obtenez un plan personnalisé pour aujourd'hui selon votre humeur, votre temps et votre énergie.",
-  },
+      vocabBuilderTitle: "📚 CRÉATEUR DE VOCABULAIRE",
+    vocabBuilderDesc: "Entrez un sujet pour voir les mots associés du dictionnaire japonais (English ou 日本語 OK)",
+    vocabSearchPlaceholder: "ex. nourriture, voyage, émotions...",
+    findWordsBtn: "Trouver des mots",
+    libraryLabel: "📚 Bibliothèque",
+    yourVocabSaved: "Votre vocabulaire",
+    savedSuffix: "enregistrés",
+    wordCardsLabel: "🃏 Cartes de mots",
+    searchCreateCards: "Rechercher et créer des cartes",
+    flashcardsLabel: "🎴 Cartes mémo",
+    reviewSavedWords: "Réviser les mots enregistrés",
+    searchingDictionary: "Recherche dans le dictionnaire japonais...",
+    speakWord: "Prononcer le mot",
+    speakExample: "Prononcer l'exemple",
+    weblioDict: "📖 Dictionnaire Weblio",
+    googleImages: "🖼 Images Google",
+    detailCard: "🃏 Carte détaillée",
+    retryBtn: "Réessayer",
+    resShunDesc: "Chaîne YouTube pour débutants. Idéale pour la pratique de l'écoute.",
+    resMarugotoDesc: "Cours débutant-intermédiaire de la Japan Foundation. Méthode communicative.",
+    resOnomappuDesc: "Chaîne YouTube ludique sur la conversation quotidienne, l'argot et la culture.",
+    resTeppeiDesc: "Podcast de niveau intermédiaire. Écoutez un japonais au rythme naturel.",
+    resYuyuDesc: "Podcast YouTube de niveau intermédiaire. Apprenez des expressions naturelles.",
+    resSambonDesc: "Chaîne de niveau intermédiaire avancé pour la grammaire, le vocabulaire et le JLPT.",
+    resLevelN5N4: "Débutant (N5–N4)",
+    resLevelN4N3: "Déb.-Inter. (N4–N3)",
+    resLevelN3N2: "Intermédiaire (N3–N2)",
+    resLevelN2N1: "Inter. avancé (N2–N1)",
+},
 
   "Spanish": {
     gakuSelfStudy: "GAKU AUTOAPRENDIZAJE",
@@ -437,7 +493,7 @@ const UI_TRANSLATIONS = {
     selectHours: "Seleccionar horas",
     lessThan1h: "Menos de 1 hora", oneTwo: "1–2 horas",
     twoThree: "2–3 horas", threePlus: "3+ horas",
-    daysPerWeek: "DÍAS POR SEMANA *",
+    daysPerWeek: "¿CUÁNTOS DÍAS A LA SEMANA QUIERES ESTUDIAR? *",
     selectDays: "Seleccionar días",
     oneTwoDays: "1–2 días", threeFourDays: "3–4 días",
     fiveSixDays: "5–6 días", everyDay: "Todos los días",
@@ -457,7 +513,35 @@ const UI_TRANSLATIONS = {
     howToMilestones: "Tu hoja de ruta hacia tu objetivo. Toca cada hito cuando lo completes.",
     howToEditProfile: "Actualiza tus objetivos, nivel, horario o habilidades en cualquier momento.",
     howToHelp: "Obtén un plan personalizado para hoy según tu estado de ánimo, tiempo y energía.",
-  },
+      vocabBuilderTitle: "📚 CONSTRUCTOR DE VOCABULARIO",
+    vocabBuilderDesc: "Introduce un tema para ver palabras relacionadas del diccionario japonés (English o 日本語 OK)",
+    vocabSearchPlaceholder: "ej. comida, viajes, emociones...",
+    findWordsBtn: "Buscar palabras",
+    libraryLabel: "📚 Biblioteca",
+    yourVocabSaved: "Tu vocabulario",
+    savedSuffix: "guardadas",
+    wordCardsLabel: "🃏 Tarjetas de palabras",
+    searchCreateCards: "Buscar y crear tarjetas",
+    flashcardsLabel: "🎴 Tarjetas didácticas",
+    reviewSavedWords: "Repasar palabras guardadas",
+    searchingDictionary: "Buscando en el diccionario japonés...",
+    speakWord: "Pronunciar palabra",
+    speakExample: "Pronunciar ejemplo",
+    weblioDict: "📖 Diccionario Weblio",
+    googleImages: "🖼 Imágenes de Google",
+    detailCard: "🃏 Tarjeta detallada",
+    retryBtn: "Reintentar",
+    resShunDesc: "Canal de YouTube para principiantes. Ideal para practicar la escucha.",
+    resMarugotoDesc: "Curso básico-intermedio de la Japan Foundation. Método comunicativo.",
+    resOnomappuDesc: "Canal de YouTube divertido sobre conversación diaria, jerga y cultura.",
+    resTeppeiDesc: "Podcast de nivel intermedio. Escucha japonés a ritmo natural.",
+    resYuyuDesc: "Podcast de YouTube de nivel intermedio. Aprende expresiones naturales.",
+    resSambonDesc: "Canal intermedio-avanzado de gramática, vocabulario y preparación JLPT.",
+    resLevelN5N4: "Principiante (N5–N4)",
+    resLevelN4N3: "Princ.-Inter. (N4–N3)",
+    resLevelN3N2: "Intermedio (N3–N2)",
+    resLevelN2N1: "Inter. avanzado (N2–N1)",
+},
 
   "Portuguese": {
     gakuSelfStudy: "GAKU AUTO-ESTUDO",
@@ -557,7 +641,7 @@ const UI_TRANSLATIONS = {
     selectHours: "Selecionar horas",
     lessThan1h: "Menos de 1 hora", oneTwo: "1–2 horas",
     twoThree: "2–3 horas", threePlus: "3+ horas",
-    daysPerWeek: "DIAS POR SEMANA *",
+    daysPerWeek: "QUANTOS DIAS POR SEMANA VOCÊ QUER ESTUDAR? *",
     selectDays: "Selecionar dias",
     oneTwoDays: "1–2 dias", threeFourDays: "3–4 dias",
     fiveSixDays: "5–6 dias", everyDay: "Todos os dias",
@@ -577,7 +661,35 @@ const UI_TRANSLATIONS = {
     howToMilestones: "Seu roteiro para seu objetivo. Toque em cada marco quando o completar.",
     howToEditProfile: "Atualize seus objetivos, nível, agenda ou habilidades a qualquer momento.",
     howToHelp: "Obtenha um plano personalizado para hoje com base no seu humor, tempo e energia.",
-  },
+      vocabBuilderTitle: "📚 CONSTRUTOR DE VOCABULÁRIO",
+    vocabBuilderDesc: "Digite um tópico para ver palavras relacionadas do dicionário japonês (English ou 日本語 OK)",
+    vocabSearchPlaceholder: "ex. comida, viagem, emoções...",
+    findWordsBtn: "Buscar palavras",
+    libraryLabel: "📚 Biblioteca",
+    yourVocabSaved: "Seu vocabulário",
+    savedSuffix: "salvas",
+    wordCardsLabel: "🃏 Cartões de palavras",
+    searchCreateCards: "Buscar e criar cartões",
+    flashcardsLabel: "🎴 Flashcards",
+    reviewSavedWords: "Revisar palavras salvas",
+    searchingDictionary: "Pesquisando no dicionário japonês...",
+    speakWord: "Pronunciar palavra",
+    speakExample: "Pronunciar exemplo",
+    weblioDict: "📖 Dicionário Weblio",
+    googleImages: "🖼 Imagens do Google",
+    detailCard: "🃏 Cartão detalhado",
+    retryBtn: "Tentar novamente",
+    resShunDesc: "Canal do YouTube para iniciantes. Ótimo para praticar audição.",
+    resMarugotoDesc: "Curso básico-intermediário da Japan Foundation. Método comunicativo.",
+    resOnomappuDesc: "Canal divertido sobre conversação cotidiana, gírias e cultura.",
+    resTeppeiDesc: "Podcast de nível intermediário. Ouça japonês em ritmo natural.",
+    resYuyuDesc: "Podcast do YouTube de nível intermediário. Aprenda expressões naturais.",
+    resSambonDesc: "Canal intermediário-avançado de gramática, vocabulário e preparação JLPT.",
+    resLevelN5N4: "Iniciante (N5–N4)",
+    resLevelN4N3: "Inic.-Inter. (N4–N3)",
+    resLevelN3N2: "Intermediário (N3–N2)",
+    resLevelN2N1: "Inter. avançado (N2–N1)",
+},
 
   "German": {
     gakuSelfStudy: "GAKU SELBSTSTUDIUM",
@@ -677,7 +789,7 @@ const UI_TRANSLATIONS = {
     selectHours: "Stunden wählen",
     lessThan1h: "Weniger als 1 Stunde", oneTwo: "1–2 Stunden",
     twoThree: "2–3 Stunden", threePlus: "3+ Stunden",
-    daysPerWeek: "TAGE PRO WOCHE *",
+    daysPerWeek: "WIE VIELE TAGE PRO WOCHE MÖCHTEST DU LERNEN? *",
     selectDays: "Tage wählen",
     oneTwoDays: "1–2 Tage", threeFourDays: "3–4 Tage",
     fiveSixDays: "5–6 Tage", everyDay: "Jeden Tag",
@@ -697,7 +809,35 @@ const UI_TRANSLATIONS = {
     howToMilestones: "Ihr Fahrplan zu Ihrem Ziel. Markieren Sie jeden Meilenstein, wenn Sie ihn erreichen.",
     howToEditProfile: "Aktualisieren Sie Ihre Ziele, Ihr Niveau, Ihren Zeitplan oder Ihre Fähigkeiten jederzeit.",
     howToHelp: "Erhalten Sie einen personalisierten Plan für heute basierend auf Ihrer Stimmung, Zeit und Energie.",
-  },
+      vocabBuilderTitle: "📚 VOKABELTRAINER",
+    vocabBuilderDesc: "Geben Sie ein Thema ein, um verwandte Wörter aus dem japanischen Wörterbuch zu sehen (English oder 日本語 OK)",
+    vocabSearchPlaceholder: "z. B. Essen, Reisen, Emotionen...",
+    findWordsBtn: "Wörter finden",
+    libraryLabel: "📚 Bibliothek",
+    yourVocabSaved: "Dein Vokabular",
+    savedSuffix: "gespeichert",
+    wordCardsLabel: "🃏 Wortkarten",
+    searchCreateCards: "Karten suchen & erstellen",
+    flashcardsLabel: "🎴 Karteikarten",
+    reviewSavedWords: "Gespeicherte Wörter wiederholen",
+    searchingDictionary: "Japanisches Wörterbuch wird durchsucht...",
+    speakWord: "Wort aussprechen",
+    speakExample: "Beispiel aussprechen",
+    weblioDict: "📖 Weblio-Wörterbuch",
+    googleImages: "🖼 Google-Bilder",
+    detailCard: "🃏 Detailkarte",
+    retryBtn: "Erneut versuchen",
+    resShunDesc: "YouTube-Kanal für Anfänger. Ideal zum Hörverständnis üben.",
+    resMarugotoDesc: "Anfänger-Mittelstufe-Kurs der Japan Foundation. Kommunikative Methode.",
+    resOnomappuDesc: "Unterhaltsamer YouTube-Kanal über Alltagsgespräche, Slang und Kultur.",
+    resTeppeiDesc: "Podcast für Mittelstufe. Höre Japanisch im natürlichen Tempo.",
+    resYuyuDesc: "YouTube-Podcast für Mittelstufe. Lerne natürliche Ausdrücke.",
+    resSambonDesc: "Kanal für obere Mittelstufe zu Grammatik, Wortschatz und JLPT-Vorbereitung.",
+    resLevelN5N4: "Anfänger (N5–N4)",
+    resLevelN4N3: "Anf.-Mittel (N4–N3)",
+    resLevelN3N2: "Mittelstufe (N3–N2)",
+    resLevelN2N1: "Obere Mittelst. (N2–N1)",
+},
 
   "Italian": {
     gakuSelfStudy: "GAKU AUTO-APPRENDIMENTO",
@@ -797,7 +937,7 @@ const UI_TRANSLATIONS = {
     selectHours: "Seleziona ore",
     lessThan1h: "Meno di 1 ora", oneTwo: "1–2 ore",
     twoThree: "2–3 ore", threePlus: "3+ ore",
-    daysPerWeek: "GIORNI A SETTIMANA *",
+    daysPerWeek: "QUANTI GIORNI A SETTIMANA VUOI STUDIARE? *",
     selectDays: "Seleziona giorni",
     oneTwoDays: "1–2 giorni", threeFourDays: "3–4 giorni",
     fiveSixDays: "5–6 giorni", everyDay: "Ogni giorno",
@@ -817,7 +957,35 @@ const UI_TRANSLATIONS = {
     howToMilestones: "La tua roadmap verso il tuo obiettivo. Tocca ogni pietra miliare quando la completi.",
     howToEditProfile: "Aggiorna i tuoi obiettivi, livello, programma o abilità in qualsiasi momento.",
     howToHelp: "Ottieni un piano personalizzato per oggi basato sul tuo umore, tempo ed energia.",
-  },
+      vocabBuilderTitle: "📚 COSTRUTTORE DI VOCABOLARIO",
+    vocabBuilderDesc: "Inserisci un argomento per vedere le parole correlate dal dizionario giapponese (English o 日本語 OK)",
+    vocabSearchPlaceholder: "es. cibo, viaggi, emozioni...",
+    findWordsBtn: "Trova parole",
+    libraryLabel: "📚 Libreria",
+    yourVocabSaved: "Il tuo vocabolario",
+    savedSuffix: "salvate",
+    wordCardsLabel: "🃏 Schede di parole",
+    searchCreateCards: "Cerca e crea schede",
+    flashcardsLabel: "🎴 Flashcard",
+    reviewSavedWords: "Rivedi le parole salvate",
+    searchingDictionary: "Ricerca nel dizionario giapponese...",
+    speakWord: "Pronuncia la parola",
+    speakExample: "Pronuncia l'esempio",
+    weblioDict: "📖 Dizionario Weblio",
+    googleImages: "🖼 Immagini Google",
+    detailCard: "🃏 Scheda dettagliata",
+    retryBtn: "Riprova",
+    resShunDesc: "Canale YouTube per principianti. Ottimo per la pratica di ascolto.",
+    resMarugotoDesc: "Corso base-intermedio della Japan Foundation. Metodo comunicativo.",
+    resOnomappuDesc: "Canale YouTube divertente su conversazione quotidiana, slang e cultura.",
+    resTeppeiDesc: "Podcast di livello intermedio. Ascolta giapponese a ritmo naturale.",
+    resYuyuDesc: "Podcast YouTube di livello intermedio. Impara espressioni naturali.",
+    resSambonDesc: "Canale intermedio-avanzato per grammatica, vocabolario e preparazione JLPT.",
+    resLevelN5N4: "Principiante (N5–N4)",
+    resLevelN4N3: "Prin.-Interm. (N4–N3)",
+    resLevelN3N2: "Intermedio (N3–N2)",
+    resLevelN2N1: "Interm. avanzato (N2–N1)",
+},
 
   "Chinese (Simplified)": {
     gakuSelfStudy: "GAKU 自学",
@@ -917,7 +1085,7 @@ const UI_TRANSLATIONS = {
     selectHours: "选择小时数",
     lessThan1h: "不到1小时", oneTwo: "1-2小时",
     twoThree: "2-3小时", threePlus: "3小时以上",
-    daysPerWeek: "每周天数 *",
+    daysPerWeek: "你想每周学习几天？ *",
     selectDays: "选择天数",
     oneTwoDays: "1-2天", threeFourDays: "3-4天",
     fiveSixDays: "5-6天", everyDay: "每天",
@@ -937,7 +1105,35 @@ const UI_TRANSLATIONS = {
     howToMilestones: "你实现目标的路线图。完成每个里程碑时点击它。",
     howToEditProfile: "随时更新你的目标、级别、日程或技能。",
     howToHelp: "根据你今天的心情、时间和精力获取个性化计划。",
-  },
+      vocabBuilderTitle: "📚 词汇构建器",
+    vocabBuilderDesc: "输入一个主题，查看日语词典中的相关单词（English 或 日本語 均可）",
+    vocabSearchPlaceholder: "例如：食物、旅行、情感...",
+    findWordsBtn: "查找单词",
+    libraryLabel: "📚 词库",
+    yourVocabSaved: "你的词汇",
+    savedSuffix: "已保存",
+    wordCardsLabel: "🃏 单词卡",
+    searchCreateCards: "搜索并创建卡片",
+    flashcardsLabel: "🎴 闪卡",
+    reviewSavedWords: "复习已保存的单词",
+    searchingDictionary: "正在搜索日语词典...",
+    speakWord: "发音单词",
+    speakExample: "发音例句",
+    weblioDict: "📖 Weblio词典",
+    googleImages: "🖼 谷歌图片",
+    detailCard: "🃏 详情卡",
+    retryBtn: "重试",
+    resShunDesc: "适合初学者的YouTube频道，非常适合练习听力。",
+    resMarugotoDesc: "国际交流基金会的初中级课程，采用交际式学习法。",
+    resOnomappuDesc: "轻松有趣的YouTube频道，学习日常会话、俚语和文化。",
+    resTeppeiDesc: "中级水平播客，可以听到自然语速的日语。",
+    resYuyuDesc: "中级水平YouTube播客，学习自然的日语表达。",
+    resSambonDesc: "中高级频道，专注语法、词汇和JLPT备考。",
+    resLevelN5N4: "初级 (N5–N4)",
+    resLevelN4N3: "初中级 (N4–N3)",
+    resLevelN3N2: "中级 (N3–N2)",
+    resLevelN2N1: "中高级 (N2–N1)",
+},
 
   "Chinese (Traditional)": {
     gakuSelfStudy: "GAKU 自學",
@@ -1037,7 +1233,7 @@ const UI_TRANSLATIONS = {
     selectHours: "選擇小時數",
     lessThan1h: "不到1小時", oneTwo: "1-2小時",
     twoThree: "2-3小時", threePlus: "3小時以上",
-    daysPerWeek: "每週天數 *",
+    daysPerWeek: "你想每週學習幾天？ *",
     selectDays: "選擇天數",
     oneTwoDays: "1-2天", threeFourDays: "3-4天",
     fiveSixDays: "5-6天", everyDay: "每天",
@@ -1057,7 +1253,35 @@ const UI_TRANSLATIONS = {
     howToMilestones: "你實現目標的路線圖。完成每個里程碑時點擊它。",
     howToEditProfile: "隨時更新你的目標、級別、日程或技能。",
     howToHelp: "根據你今天的心情、時間和精力獲取個性化計劃。",
-  },
+      vocabBuilderTitle: "📚 詞彙建構器",
+    vocabBuilderDesc: "輸入一個主題，查看日語詞典中的相關單字（English 或 日本語 均可）",
+    vocabSearchPlaceholder: "例如：食物、旅行、情感...",
+    findWordsBtn: "查找單字",
+    libraryLabel: "📚 詞庫",
+    yourVocabSaved: "你的詞彙",
+    savedSuffix: "已儲存",
+    wordCardsLabel: "🃏 單字卡",
+    searchCreateCards: "搜尋並建立卡片",
+    flashcardsLabel: "🎴 閃卡",
+    reviewSavedWords: "複習已儲存的單字",
+    searchingDictionary: "正在搜尋日語詞典...",
+    speakWord: "發音單字",
+    speakExample: "發音例句",
+    weblioDict: "📖 Weblio詞典",
+    googleImages: "🖼 Google圖片",
+    detailCard: "🃏 詳情卡",
+    retryBtn: "重試",
+    resShunDesc: "適合初學者的YouTube頻道，非常適合練習聽力。",
+    resMarugotoDesc: "國際交流基金會的初中級課程，採用交際式學習法。",
+    resOnomappuDesc: "輕鬆有趣的YouTube頻道，學習日常會話、俚語和文化。",
+    resTeppeiDesc: "中級水平播客，可以聽到自然語速的日語。",
+    resYuyuDesc: "中級水平YouTube播客，學習自然的日語表達。",
+    resSambonDesc: "中高級頻道，專注語法、詞彙和JLPT備考。",
+    resLevelN5N4: "初級 (N5–N4)",
+    resLevelN4N3: "初中級 (N4–N3)",
+    resLevelN3N2: "中級 (N3–N2)",
+    resLevelN2N1: "中高級 (N2–N1)",
+},
 
   "Korean": {
     gakuSelfStudy: "GAKU 자기 학습",
@@ -1157,7 +1381,7 @@ const UI_TRANSLATIONS = {
     selectHours: "시간 선택",
     lessThan1h: "1시간 미만", oneTwo: "1~2시간",
     twoThree: "2~3시간", threePlus: "3시간+",
-    daysPerWeek: "주당 일수 *",
+    daysPerWeek: "일주일에 며칠 공부하고 싶으세요? *",
     selectDays: "일수 선택",
     oneTwoDays: "1~2일", threeFourDays: "3~4일",
     fiveSixDays: "5~6일", everyDay: "매일",
@@ -1177,7 +1401,35 @@ const UI_TRANSLATIONS = {
     howToMilestones: "목표를 향한 로드맵. 각 마일스톤을 완료할 때 눌러주세요.",
     howToEditProfile: "목표, 레벨, 일정 또는 스킬을 언제든지 업데이트하세요.",
     howToHelp: "오늘의 기분, 시간, 에너지를 기반으로 개인화된 계획을 받으세요.",
-  },
+      vocabBuilderTitle: "📚 어휘 빌더",
+    vocabBuilderDesc: "주제를 입력하면 일본어 사전에서 관련 단어를 확인할 수 있습니다 (English 또는 日本語 가능)",
+    vocabSearchPlaceholder: "예: 음식, 여행, 감정...",
+    findWordsBtn: "단어 찾기",
+    libraryLabel: "📚 라이브러리",
+    yourVocabSaved: "내 어휘",
+    savedSuffix: "저장됨",
+    wordCardsLabel: "🃏 단어 카드",
+    searchCreateCards: "카드 검색 및 생성",
+    flashcardsLabel: "🎴 플래시카드",
+    reviewSavedWords: "저장된 단어 복습",
+    searchingDictionary: "일본어 사전 검색 중...",
+    speakWord: "단어 발음 듣기",
+    speakExample: "예문 발음 듣기",
+    weblioDict: "📖 Weblio 사전",
+    googleImages: "🖼 구글 이미지",
+    detailCard: "🃏 상세 카드",
+    retryBtn: "다시 시도",
+    resShunDesc: "초보자를 위한 유튜브 채널. 듣기 연습에 좋습니다.",
+    resMarugotoDesc: "일본국제교류기금의 초중급 과정. 의사소통 중심 학습법.",
+    resOnomappuDesc: "일상 회화, 속어, 문화를 재미있게 배우는 유튜브 채널.",
+    resTeppeiDesc: "중급 수준 팟캐스트. 자연스러운 속도의 일본어를 들을 수 있습니다.",
+    resYuyuDesc: "중급 수준 유튜브 팟캐스트. 자연스러운 일본어 표현을 배웁니다.",
+    resSambonDesc: "문법, 어휘, JLPT 대비를 위한 중상급 채널.",
+    resLevelN5N4: "초급 (N5–N4)",
+    resLevelN4N3: "초중급 (N4–N3)",
+    resLevelN3N2: "중급 (N3–N2)",
+    resLevelN2N1: "중상급 (N2–N1)",
+},
 
   "Thai": {
     gakuSelfStudy: "GAKU การเรียนรู้ด้วยตนเอง",
@@ -1277,7 +1529,7 @@ const UI_TRANSLATIONS = {
     selectHours: "เลือกชั่วโมง",
     lessThan1h: "น้อยกว่า 1 ชั่วโมง", oneTwo: "1–2 ชั่วโมง",
     twoThree: "2–3 ชั่วโมง", threePlus: "3+ ชั่วโมง",
-    daysPerWeek: "วันต่อสัปดาห์ *",
+    daysPerWeek: "คุณต้องการเรียนกี่วันต่อสัปดาห์? *",
     selectDays: "เลือกวัน",
     oneTwoDays: "1–2 วัน", threeFourDays: "3–4 วัน",
     fiveSixDays: "5–6 วัน", everyDay: "ทุกวัน",
@@ -1297,7 +1549,35 @@ const UI_TRANSLATIONS = {
     howToMilestones: "แผนที่เส้นทางสู่เป้าหมายของคุณ แตะแต่ละหมุดเมื่อทำสำเร็จ",
     howToEditProfile: "อัปเดตเป้าหมาย ระดับ ตาราง หรือทักษะได้ตลอดเวลา",
     howToHelp: "รับแผนส่วนตัวสำหรับวันนี้ตามอารมณ์ เวลา และพลังงานของคุณ",
-  },
+      vocabBuilderTitle: "📚 ตัวสร้างคำศัพท์",
+    vocabBuilderDesc: "ป้อนหัวข้อเพื่อดูคำที่เกี่ยวข้องจากพจนานุกรมภาษาญี่ปุ่น (English หรือ 日本語 ได้)",
+    vocabSearchPlaceholder: "เช่น อาหาร การเดินทาง อารมณ์...",
+    findWordsBtn: "ค้นหาคำศัพท์",
+    libraryLabel: "📚 คลังคำศัพท์",
+    yourVocabSaved: "คำศัพท์ของคุณ",
+    savedSuffix: "บันทึกแล้ว",
+    wordCardsLabel: "🃏 การ์ดคำศัพท์",
+    searchCreateCards: "ค้นหาและสร้างการ์ด",
+    flashcardsLabel: "🎴 แฟลชการ์ด",
+    reviewSavedWords: "ทบทวนคำที่บันทึกไว้",
+    searchingDictionary: "กำลังค้นหาพจนานุกรมภาษาญี่ปุ่น...",
+    speakWord: "ออกเสียงคำ",
+    speakExample: "ออกเสียงตัวอย่าง",
+    weblioDict: "📖 พจนานุกรม Weblio",
+    googleImages: "🖼 รูปภาพ Google",
+    detailCard: "🃏 การ์ดรายละเอียด",
+    retryBtn: "ลองอีกครั้ง",
+    resShunDesc: "ช่อง YouTube สำหรับผู้เริ่มต้น เหมาะสำหรับฝึกการฟัง",
+    resMarugotoDesc: "หลักสูตรระดับต้น-กลางจาก Japan Foundation วิธีการเรียนรู้แบบสื่อสาร",
+    resOnomappuDesc: "ช่อง YouTube สนุกๆ เกี่ยวกับบทสนทนาประจำวัน คำสแลง และวัฒนธรรม",
+    resTeppeiDesc: "พอดแคสต์ระดับกลาง ฟังภาษาญี่ปุ่นด้วยความเร็วธรรมชาติ",
+    resYuyuDesc: "พอดแคสต์ YouTube ระดับกลาง เรียนรู้สำนวนภาษาญี่ปุ่นที่เป็นธรรมชาติ",
+    resSambonDesc: "ช่องระดับกลางขั้นสูงสำหรับไวยากรณ์ คำศัพท์ และเตรียมสอบ JLPT",
+    resLevelN5N4: "ต้น (N5–N4)",
+    resLevelN4N3: "ต้น-กลาง (N4–N3)",
+    resLevelN3N2: "กลาง (N3–N2)",
+    resLevelN2N1: "กลางขั้นสูง (N2–N1)",
+},
 
   "Malay": {
     gakuSelfStudy: "GAKU BELAJAR SENDIRI",
@@ -1397,7 +1677,7 @@ const UI_TRANSLATIONS = {
     selectHours: "Pilih jam",
     lessThan1h: "Kurang dari 1 jam", oneTwo: "1–2 jam",
     twoThree: "2–3 jam", threePlus: "3+ jam",
-    daysPerWeek: "HARI SEMINGGU *",
+    daysPerWeek: "BERAPA HARI SEMINGGU ANDA INGIN BELAJAR? *",
     selectDays: "Pilih hari",
     oneTwoDays: "1–2 hari", threeFourDays: "3–4 hari",
     fiveSixDays: "5–6 hari", everyDay: "Setiap hari",
@@ -1417,7 +1697,35 @@ const UI_TRANSLATIONS = {
     howToMilestones: "Peta jalan anda menuju matlamat. Ketik setiap pencapaian apabila selesai.",
     howToEditProfile: "Kemaskini matlamat, tahap, jadual atau kemahiran bila-bila masa.",
     howToHelp: "Dapatkan pelan peribadi untuk hari ini berdasarkan mood, masa dan tenaga anda.",
-  },
+      vocabBuilderTitle: "📚 PEMBINA KOSA KATA",
+    vocabBuilderDesc: "Masukkan topik untuk melihat perkataan berkaitan dari kamus Jepun (English atau 日本語 OK)",
+    vocabSearchPlaceholder: "cth. makanan, perjalanan, emosi...",
+    findWordsBtn: "Cari perkataan",
+    libraryLabel: "📚 Perpustakaan",
+    yourVocabSaved: "Kosa kata anda",
+    savedSuffix: "disimpan",
+    wordCardsLabel: "🃏 Kad perkataan",
+    searchCreateCards: "Cari & cipta kad",
+    flashcardsLabel: "🎴 Kad imbas",
+    reviewSavedWords: "Semak perkataan tersimpan",
+    searchingDictionary: "Mencari dalam kamus Jepun...",
+    speakWord: "Sebut perkataan",
+    speakExample: "Sebut contoh",
+    weblioDict: "📖 Kamus Weblio",
+    googleImages: "🖼 Imej Google",
+    detailCard: "🃏 Kad terperinci",
+    retryBtn: "Cuba lagi",
+    resShunDesc: "Saluran YouTube mesra pemula. Sesuai untuk latihan mendengar.",
+    resMarugotoDesc: "Kursus pemula-pertengahan oleh Japan Foundation. Kaedah pembelajaran komunikatif.",
+    resOnomappuDesc: "Saluran YouTube menyeronokkan tentang perbualan harian, slang dan budaya.",
+    resTeppeiDesc: "Podcast tahap pertengahan. Dengar bahasa Jepun pada kelajuan semula jadi.",
+    resYuyuDesc: "Podcast YouTube tahap pertengahan. Pelajari ungkapan semula jadi.",
+    resSambonDesc: "Saluran pertengahan atasan untuk tatabahasa, kosa kata dan persediaan JLPT.",
+    resLevelN5N4: "Pemula (N5–N4)",
+    resLevelN4N3: "Pemula-Pert. (N4–N3)",
+    resLevelN3N2: "Pertengahan (N3–N2)",
+    resLevelN2N1: "Pert. Atasan (N2–N1)",
+},
 
   "Indonesian": {
     gakuSelfStudy: "GAKU BELAJAR MANDIRI",
@@ -1517,7 +1825,7 @@ const UI_TRANSLATIONS = {
     selectHours: "Pilih jam",
     lessThan1h: "Kurang dari 1 jam", oneTwo: "1–2 jam",
     twoThree: "2–3 jam", threePlus: "3+ jam",
-    daysPerWeek: "HARI PER MINGGU *",
+    daysPerWeek: "BERAPA HARI DALAM SEMINGGU ANDA INGIN BELAJAR? *",
     selectDays: "Pilih hari",
     oneTwoDays: "1–2 hari", threeFourDays: "3–4 hari",
     fiveSixDays: "5–6 hari", everyDay: "Setiap hari",
@@ -1537,7 +1845,35 @@ const UI_TRANSLATIONS = {
     howToMilestones: "Peta jalan Anda menuju tujuan. Ketuk setiap pencapaian saat Anda menyelesaikannya.",
     howToEditProfile: "Perbarui tujuan, level, jadwal, atau keterampilan kapan saja.",
     howToHelp: "Dapatkan rencana yang dipersonalisasi untuk hari ini berdasarkan suasana hati, waktu, dan energi Anda.",
-  },
+      vocabBuilderTitle: "📚 PEMBANGUN KOSAKATA",
+    vocabBuilderDesc: "Masukkan topik untuk melihat kata terkait dari kamus Jepang (English atau 日本語 OK)",
+    vocabSearchPlaceholder: "misalnya makanan, perjalanan, emosi...",
+    findWordsBtn: "Cari kata",
+    libraryLabel: "📚 Pustaka",
+    yourVocabSaved: "Kosakata Anda",
+    savedSuffix: "tersimpan",
+    wordCardsLabel: "🃏 Kartu kata",
+    searchCreateCards: "Cari & buat kartu",
+    flashcardsLabel: "🎴 Kartu hafalan",
+    reviewSavedWords: "Tinjau kata tersimpan",
+    searchingDictionary: "Mencari dalam kamus Jepang...",
+    speakWord: "Ucapkan kata",
+    speakExample: "Ucapkan contoh",
+    weblioDict: "📖 Kamus Weblio",
+    googleImages: "🖼 Gambar Google",
+    detailCard: "🃏 Kartu detail",
+    retryBtn: "Coba lagi",
+    resShunDesc: "Saluran YouTube ramah pemula. Bagus untuk latihan mendengarkan.",
+    resMarugotoDesc: "Kursus pemula-menengah dari Japan Foundation. Metode pembelajaran komunikatif.",
+    resOnomappuDesc: "Saluran YouTube seru tentang percakapan sehari-hari, slang, dan budaya.",
+    resTeppeiDesc: "Podcast tingkat menengah. Dengarkan bahasa Jepang dengan kecepatan alami.",
+    resYuyuDesc: "Podcast YouTube tingkat menengah. Pelajari ungkapan alami.",
+    resSambonDesc: "Saluran menengah atas untuk tata bahasa, kosakata, dan persiapan JLPT.",
+    resLevelN5N4: "Pemula (N5–N4)",
+    resLevelN4N3: "Pemula-Men. (N4–N3)",
+    resLevelN3N2: "Menengah (N3–N2)",
+    resLevelN2N1: "Men. Atas (N2–N1)",
+},
 
   "Vietnamese": {
     gakuSelfStudy: "GAKU TỰ HỌC",
@@ -1637,7 +1973,7 @@ const UI_TRANSLATIONS = {
     selectHours: "Chọn giờ",
     lessThan1h: "Dưới 1 giờ", oneTwo: "1–2 giờ",
     twoThree: "2–3 giờ", threePlus: "3+ giờ",
-    daysPerWeek: "NGÀY MỖI TUẦN *",
+    daysPerWeek: "BẠN MUỐN HỌC MẤY NGÀY MỖI TUẦN? *",
     selectDays: "Chọn ngày",
     oneTwoDays: "1–2 ngày", threeFourDays: "3–4 ngày",
     fiveSixDays: "5–6 ngày", everyDay: "Mỗi ngày",
@@ -1657,7 +1993,35 @@ const UI_TRANSLATIONS = {
     howToMilestones: "Lộ trình hướng tới mục tiêu của bạn. Nhấn từng cột mốc khi hoàn thành.",
     howToEditProfile: "Cập nhật mục tiêu, cấp độ, lịch học hoặc kỹ năng bất kỳ lúc nào.",
     howToHelp: "Nhận kế hoạch cá nhân hóa cho hôm nay dựa trên tâm trạng, thời gian và năng lượng của bạn.",
-  },
+      vocabBuilderTitle: "📚 TRÌNH XÂY DỰNG TỪ VỰNG",
+    vocabBuilderDesc: "Nhập một chủ đề để xem các từ liên quan từ từ điển tiếng Nhật (English hoặc 日本語 đều được)",
+    vocabSearchPlaceholder: "vd. thức ăn, du lịch, cảm xúc...",
+    findWordsBtn: "Tìm từ",
+    libraryLabel: "📚 Thư viện",
+    yourVocabSaved: "Từ vựng của bạn",
+    savedSuffix: "đã lưu",
+    wordCardsLabel: "🃏 Thẻ từ",
+    searchCreateCards: "Tìm kiếm & tạo thẻ",
+    flashcardsLabel: "🎴 Thẻ ghi nhớ",
+    reviewSavedWords: "Ôn lại từ đã lưu",
+    searchingDictionary: "Đang tìm trong từ điển tiếng Nhật...",
+    speakWord: "Phát âm từ",
+    speakExample: "Phát âm ví dụ",
+    weblioDict: "📖 Từ điển Weblio",
+    googleImages: "🖼 Hình ảnh Google",
+    detailCard: "🃏 Thẻ chi tiết",
+    retryBtn: "Thử lại",
+    resShunDesc: "Kênh YouTube thân thiện cho người mới bắt đầu. Tuyệt vời để luyện nghe.",
+    resMarugotoDesc: "Khóa học sơ-trung cấp của Japan Foundation. Phương pháp giao tiếp.",
+    resOnomappuDesc: "Kênh YouTube thú vị về hội thoại hàng ngày, tiếng lóng và văn hóa.",
+    resTeppeiDesc: "Podcast trình độ trung cấp. Nghe tiếng Nhật với tốc độ tự nhiên.",
+    resYuyuDesc: "Podcast YouTube trình độ trung cấp. Học các cách diễn đạt tự nhiên.",
+    resSambonDesc: "Kênh trung-cao cấp về ngữ pháp, từ vựng và luyện thi JLPT.",
+    resLevelN5N4: "Sơ cấp (N5–N4)",
+    resLevelN4N3: "Sơ-Trung (N4–N3)",
+    resLevelN3N2: "Trung cấp (N3–N2)",
+    resLevelN2N1: "Trung-Cao (N2–N1)",
+},
 
   "Hindi": {
     gakuSelfStudy: "GAKU स्व-अध्ययन",
@@ -1757,7 +2121,7 @@ const UI_TRANSLATIONS = {
     selectHours: "घंटे चुनें",
     lessThan1h: "1 घंटे से कम", oneTwo: "1–2 घंटे",
     twoThree: "2–3 घंटे", threePlus: "3+ घंटे",
-    daysPerWeek: "प्रति सप्ताह दिन *",
+    daysPerWeek: "आप सप्ताह में कितने दिन पढ़ना चाहते हैं? *",
     selectDays: "दिन चुनें",
     oneTwoDays: "1–2 दिन", threeFourDays: "3–4 दिन",
     fiveSixDays: "5–6 दिन", everyDay: "हर दिन",
@@ -1777,7 +2141,35 @@ const UI_TRANSLATIONS = {
     howToMilestones: "आपके लक्ष्य की ओर रोडमैप। पूरा होने पर प्रत्येक मील का पत्थर टैप करें।",
     howToEditProfile: "कभी भी अपने लक्ष्य, स्तर, समय-सारणी या कौशल अपडेट करें।",
     howToHelp: "आज अपने मूड, समय और ऊर्जा के आधार पर व्यक्तिगत योजना प्राप्त करें।",
-  },
+      vocabBuilderTitle: "📚 शब्दावली निर्माता",
+    vocabBuilderDesc: "जापानी शब्दकोश से संबंधित शब्द देखने के लिए एक विषय दर्ज करें (English या 日本語 ठीक है)",
+    vocabSearchPlaceholder: "जैसे भोजन, यात्रा, भावनाएं...",
+    findWordsBtn: "शब्द खोजें",
+    libraryLabel: "📚 लाइब्रेरी",
+    yourVocabSaved: "आपकी शब्दावली",
+    savedSuffix: "सहेजे गए",
+    wordCardsLabel: "🃏 शब्द कार्ड",
+    searchCreateCards: "कार्ड खोजें और बनाएं",
+    flashcardsLabel: "🎴 फ्लैशकार्ड",
+    reviewSavedWords: "सहेजे गए शब्दों की समीक्षा करें",
+    searchingDictionary: "जापानी शब्दकोश खोज रहे हैं...",
+    speakWord: "शब्द का उच्चारण करें",
+    speakExample: "उदाहरण का उच्चारण करें",
+    weblioDict: "📖 Weblio शब्दकोश",
+    googleImages: "🖼 Google छवियां",
+    detailCard: "🃏 विवरण कार्ड",
+    retryBtn: "फिर से कोशिश करें",
+    resShunDesc: "शुरुआती लोगों के लिए YouTube चैनल। सुनने के अभ्यास के लिए बेहतरीन।",
+    resMarugotoDesc: "Japan Foundation का प्रारंभिक-मध्यवर्ती कोर्स। संवादात्मक शिक्षण विधि।",
+    resOnomappuDesc: "रोज़मर्रा की बातचीत, स्लैंग और संस्कृति के बारे में मज़ेदार YouTube चैनल।",
+    resTeppeiDesc: "मध्यवर्ती स्तर का पॉडकास्ट। स्वाभाविक गति की जापानी सुनें।",
+    resYuyuDesc: "मध्यवर्ती स्तर का YouTube पॉडकास्ट। स्वाभाविक जापानी अभिव्यक्तियाँ सीखें।",
+    resSambonDesc: "व्याकरण, शब्दावली और JLPT तैयारी के लिए उच्च-मध्यवर्ती चैनल।",
+    resLevelN5N4: "प्रारंभिक (N5–N4)",
+    resLevelN4N3: "प्रारं.-मध्य (N4–N3)",
+    resLevelN3N2: "मध्यवर्ती (N3–N2)",
+    resLevelN2N1: "उच्च-मध्य (N2–N1)",
+},
 
   "Japanese": {
     gakuSelfStudy: "GAKU 自習",
@@ -1877,7 +2269,7 @@ const UI_TRANSLATIONS = {
     selectHours: "時間を選択",
     lessThan1h: "1時間未満", oneTwo: "1〜2時間",
     twoThree: "2〜3時間", threePlus: "3時間以上",
-    daysPerWeek: "週の日数 *",
+    daysPerWeek: "週、何日学習しますか？ *",
     selectDays: "日数を選択",
     oneTwoDays: "週1〜2日", threeFourDays: "週3〜4日",
     fiveSixDays: "週5〜6日", everyDay: "毎日",
@@ -1897,7 +2289,35 @@ const UI_TRANSLATIONS = {
     howToMilestones: "目標へのロードマップです。達成するたびに各マイルストーンをタップしてください。",
     howToEditProfile: "目標、レベル、スケジュール、スキルはいつでも更新できます。",
     howToHelp: "今日の気分、時間、エネルギーに基づいてパーソナライズされたプランを取得できます。",
-  },
+      vocabBuilderTitle: "📚 単語ビルダー",
+    vocabBuilderDesc: "トピックを入力すると、日本語辞書から関連単語を表示します（English or 日本語OK）",
+    vocabSearchPlaceholder: "例：食べ物、旅行、感情...",
+    findWordsBtn: "単語を検索",
+    libraryLabel: "📚 ライブラリ",
+    yourVocabSaved: "あなたの単語帳",
+    savedSuffix: "件保存済み",
+    wordCardsLabel: "🃏 単語カード",
+    searchCreateCards: "検索してカード作成",
+    flashcardsLabel: "🎴 フラッシュカード",
+    reviewSavedWords: "保存した単語を復習",
+    searchingDictionary: "日本語辞書を検索中...",
+    speakWord: "単語を発音",
+    speakExample: "例文を発音",
+    weblioDict: "📖 Weblio辞書",
+    googleImages: "🖼 Google画像",
+    detailCard: "🃏 詳細カード",
+    retryBtn: "再試行",
+    resShunDesc: "初級向けYouTubeチャンネル。聞き取り練習に最適。",
+    resMarugotoDesc: "国際交流基金の初中級コース。コミュニカティブな学習法。",
+    resOnomappuDesc: "日常会話・スラング・文化を楽しく学べるYouTubeチャンネル。",
+    resTeppeiDesc: "中級者向けポッドキャスト。ナチュラルスピードの日本語が聞ける。",
+    resYuyuDesc: "中級者向けYouTubeポッドキャスト。自然な日本語表現が学べる。",
+    resSambonDesc: "中上級向け文法・語彙・JLPT対策チャンネル。",
+    resLevelN5N4: "初級 (N5〜N4)",
+    resLevelN4N3: "初中級 (N4〜N3)",
+    resLevelN3N2: "中級 (N3〜N2)",
+    resLevelN2N1: "中上級 (N2〜N1)",
+},
 
   "Turkish": {
     gakuSelfStudy: "GAKU KENDİ KENDİNE ÇALIŞMA",
@@ -1997,7 +2417,7 @@ const UI_TRANSLATIONS = {
     selectHours: "Saat seç",
     lessThan1h: "1 saatten az", oneTwo: "1–2 saat",
     twoThree: "2–3 saat", threePlus: "3+ saat",
-    daysPerWeek: "HAFTADA GÜN *",
+    daysPerWeek: "HAFTADA KAÇ GÜN ÇALIŞMAK İSTİYORSUNUZ? *",
     selectDays: "Gün seç",
     oneTwoDays: "1–2 gün", threeFourDays: "3–4 gün",
     fiveSixDays: "5–6 gün", everyDay: "Her gün",
@@ -2017,7 +2437,35 @@ const UI_TRANSLATIONS = {
     howToMilestones: "Hedefinize giden yol haritanız. Her kilometre taşını tamamladığınızda dokunun.",
     howToEditProfile: "Hedeflerinizi, seviyenizi, programınızı veya becerilerinizi istediğiniz zaman güncelleyin.",
     howToHelp: "Bugünkü ruh haliniz, zamanınız ve enerjinize göre kişiselleştirilmiş bir plan alın.",
-  },
+      vocabBuilderTitle: "📚 KELİME OLUŞTURUCU",
+    vocabBuilderDesc: "Japonca sözlükten ilgili kelimeleri görmek için bir konu girin (English veya 日本語 olabilir)",
+    vocabSearchPlaceholder: "örn. yemek, seyahat, duygular...",
+    findWordsBtn: "Kelime bul",
+    libraryLabel: "📚 Kütüphane",
+    yourVocabSaved: "Kelime hazineniz",
+    savedSuffix: "kaydedildi",
+    wordCardsLabel: "🃏 Kelime kartları",
+    searchCreateCards: "Kart ara ve oluştur",
+    flashcardsLabel: "🎴 Bilgi kartları",
+    reviewSavedWords: "Kaydedilen kelimeleri gözden geçir",
+    searchingDictionary: "Japonca sözlükte aranıyor...",
+    speakWord: "Kelimeyi telaffuz et",
+    speakExample: "Örneği telaffuz et",
+    weblioDict: "📖 Weblio Sözlük",
+    googleImages: "🖼 Google Görseller",
+    detailCard: "🃏 Detay kartı",
+    retryBtn: "Tekrar dene",
+    resShunDesc: "Başlangıç seviyesi için YouTube kanalı. Dinleme pratiği için harika.",
+    resMarugotoDesc: "Japan Foundation'ın başlangıç-orta seviye kursu. İletişimsel öğrenme yöntemi.",
+    resOnomappuDesc: "Günlük konuşma, argo ve kültür hakkında eğlenceli YouTube kanalı.",
+    resTeppeiDesc: "Orta seviye podcast. Doğal hızda Japonca dinleyin.",
+    resYuyuDesc: "Orta seviye YouTube podcast'i. Doğal ifadeler öğrenin.",
+    resSambonDesc: "Dilbilgisi, kelime bilgisi ve JLPT hazırlığı için üst-orta seviye kanal.",
+    resLevelN5N4: "Başlangıç (N5–N4)",
+    resLevelN4N3: "Başl.-Orta (N4–N3)",
+    resLevelN3N2: "Orta (N3–N2)",
+    resLevelN2N1: "Üst-Orta (N2–N1)",
+},
 
   "Nepali": {
     gakuSelfStudy: "GAKU स्व-अध्ययन",
@@ -2117,7 +2565,7 @@ const UI_TRANSLATIONS = {
     selectHours: "घण्टा छनोट गर्नुहोस्",
     lessThan1h: "१ घण्टा भन्दा कम", oneTwo: "१–२ घण्टा",
     twoThree: "२–३ घण्टा", threePlus: "३+ घण्टा",
-    daysPerWeek: "हप्तामा दिनहरू *",
+    daysPerWeek: "तपाईं हप्तामा कति दिन अध्ययन गर्न चाहनुहुन्छ? *",
     selectDays: "दिनहरू छनोट गर्नुहोस्",
     oneTwoDays: "१–२ दिन", threeFourDays: "३–४ दिन",
     fiveSixDays: "५–६ दिन", everyDay: "हरेक दिन",
@@ -2137,7 +2585,35 @@ const UI_TRANSLATIONS = {
     howToMilestones: "तपाईंको लक्ष्यतर्फको रोडम्याप। पूरा गर्दा हरेक माइलस्टोन ट्याप गर्नुहोस्।",
     howToEditProfile: "आफ्नो लक्ष्य, स्तर, तालिका वा सीपहरू जुनसुकै बेला अपडेट गर्नुहोस्।",
     howToHelp: "आजको मनोदशा, समय र ऊर्जाको आधारमा व्यक्तिगत योजना प्राप्त गर्नुहोस्।",
-  },
+      vocabBuilderTitle: "📚 शब्दावली निर्माता",
+    vocabBuilderDesc: "जापानी शब्दकोशबाट सम्बन्धित शब्दहरू हेर्न एउटा विषय प्रविष्ट गर्नुहोस् (English वा 日本語 ठीक छ)",
+    vocabSearchPlaceholder: "जस्तै खाना, यात्रा, भावनाहरू...",
+    findWordsBtn: "शब्दहरू खोज्नुहोस्",
+    libraryLabel: "📚 पुस्तकालय",
+    yourVocabSaved: "तपाईंको शब्दावली",
+    savedSuffix: "सेभ गरिएको",
+    wordCardsLabel: "🃏 शब्द कार्डहरू",
+    searchCreateCards: "कार्डहरू खोज्नुहोस् र बनाउनुहोस्",
+    flashcardsLabel: "🎴 फ्ल्यासकार्डहरू",
+    reviewSavedWords: "सेभ गरिएका शब्दहरू समीक्षा गर्नुहोस्",
+    searchingDictionary: "जापानी शब्दकोश खोजिँदै...",
+    speakWord: "शब्द उच्चारण गर्नुहोस्",
+    speakExample: "उदाहरण उच्चारण गर्नुहोस्",
+    weblioDict: "📖 Weblio शब्दकोश",
+    googleImages: "🖼 Google छविहरू",
+    detailCard: "🃏 विवरण कार्ड",
+    retryBtn: "फेरि प्रयास गर्नुहोस्",
+    resShunDesc: "सुरुवाती-अनुकूल YouTube च्यानल। सुनाइ अभ्यासको लागि उत्तम।",
+    resMarugotoDesc: "Japan Foundation को सुरुवाती-मध्यवर्ती कोर्स। सञ्चारात्मक सिकाइ विधि।",
+    resOnomappuDesc: "दैनिक कुराकानी, स्ल्याङ्ग र संस्कृतिको बारेमा रमाइलो YouTube च्यानल।",
+    resTeppeiDesc: "मध्यवर्ती स्तरको पडकास्ट। स्वाभाविक गतिको जापानी सुन्नुहोस्।",
+    resYuyuDesc: "मध्यवर्ती स्तरको YouTube पडकास्ट। स्वाभाविक जापानी अभिव्यक्तिहरू सिक्नुहोस्।",
+    resSambonDesc: "व्याकरण, शब्दावली र JLPT तयारीको लागि माथिल्लो-मध्यवर्ती च्यानल।",
+    resLevelN5N4: "सुरुवाती (N5–N4)",
+    resLevelN4N3: "सुरु.-मध्य (N4–N3)",
+    resLevelN3N2: "मध्यवर्ती (N3–N2)",
+    resLevelN2N1: "माथि.-मध्य (N2–N1)",
+},
 
   "Filipino": {
     gakuSelfStudy: "GAKU SELF-STUDY",
@@ -2237,7 +2713,7 @@ const UI_TRANSLATIONS = {
     selectHours: "Piliin ang oras",
     lessThan1h: "Mas mababa sa 1 oras", oneTwo: "1–2 oras",
     twoThree: "2–3 oras", threePlus: "3+ oras",
-    daysPerWeek: "MGA ARAW KADA LINGGO *",
+    daysPerWeek: "ISANG LINGGO ILANG ARAW MO GUSTONG MAG-ARAL? *",
     selectDays: "Piliin ang mga araw",
     oneTwoDays: "1–2 araw", threeFourDays: "3–4 araw",
     fiveSixDays: "5–6 araw", everyDay: "Araw-araw",
@@ -2257,7 +2733,35 @@ const UI_TRANSLATIONS = {
     howToMilestones: "Ang iyong roadmap patungo sa iyong layunin. I-tap ang bawat milestone kapag natapos mo na.",
     howToEditProfile: "I-update ang iyong mga layunin, antas, iskedyul, o kasanayan anumang oras.",
     howToHelp: "Kumuha ng personalized na plano para ngayon batay sa iyong mood, oras, at enerhiya.",
-  },
+      vocabBuilderTitle: "📚 VOCABULARY BUILDER",
+    vocabBuilderDesc: "Maglagay ng paksa upang makita ang mga kaugnay na salita mula sa diksyunaryong Japanese (English o 日本語 OK)",
+    vocabSearchPlaceholder: "hal. pagkain, paglalakbay, damdamin...",
+    findWordsBtn: "Maghanap ng mga salita",
+    libraryLabel: "📚 Library",
+    yourVocabSaved: "Ang iyong bokabularyo",
+    savedSuffix: "naka-save",
+    wordCardsLabel: "🃏 Word Cards",
+    searchCreateCards: "Maghanap at gumawa ng mga card",
+    flashcardsLabel: "🎴 Flashcards",
+    reviewSavedWords: "Repasuhin ang mga naka-save na salita",
+    searchingDictionary: "Hinahanap sa diksyunaryong Japanese...",
+    speakWord: "Bigkasin ang salita",
+    speakExample: "Bigkasin ang halimbawa",
+    weblioDict: "📖 Weblio Dictionary",
+    googleImages: "🖼 Google Images",
+    detailCard: "🃏 Detalyadong card",
+    retryBtn: "Subukan muli",
+    resShunDesc: "Beginner-friendly YouTube channel. Mahusay para sa pagsasanay sa pakikinig.",
+    resMarugotoDesc: "Beginner-intermediate course ng Japan Foundation. Communicative na paraan ng pag-aaral.",
+    resOnomappuDesc: "Masayang YouTube channel tungkol sa pang-araw-araw na usapan, slang, at kultura.",
+    resTeppeiDesc: "Intermediate-level na podcast. Pakinggan ang Japanese sa natural na bilis.",
+    resYuyuDesc: "Intermediate-level na YouTube podcast. Matuto ng natural na mga ekspresyon.",
+    resSambonDesc: "Upper-intermediate channel para sa gramatika, bokabularyo, at JLPT prep.",
+    resLevelN5N4: "Beginner (N5–N4)",
+    resLevelN4N3: "Beg.-Inter. (N4–N3)",
+    resLevelN3N2: "Intermediate (N3–N2)",
+    resLevelN2N1: "Upper-Inter. (N2–N1)",
+},
 
 };
 
@@ -2875,6 +3379,7 @@ Respond ONLY in valid JSON array format (no markdown, no backticks, no preamble)
 
 // ─── MAIN VOCAB BUILDER ────────────────────────────────────────────────────────
 function VocabBuilder({ form }) {
+  const T = useUITranslations(form?.preferredLang || "English");
   // vocabView: "main" | "library" | "folderDetail" | "wordSearch" | "wordDetail" | "flashcard"
   const [vocabView, setVocabView] = useState("main");
   const [selectedWord, setSelectedWord] = useState(null);
@@ -2950,34 +3455,34 @@ function VocabBuilder({ form }) {
       {/* ── TOP ACTION BAR ── */}
       <div style={{ display:"flex", gap:8, marginBottom:16, flexWrap:"wrap" }}>
         <button onClick={()=>setVocabView("library")} style={{ flex:1, ...S.btn, background:C.card, border:`1.5px solid ${C.border}`, color:"#f1f5f9", textAlign:"left", padding:"12px 14px" }}>
-          <p style={{ margin:0, fontSize:13, fontWeight:700 }}>📚 Library</p>
-          <p style={{ margin:"2px 0 0", fontSize:11, color:"#64748b" }}>Your Vocabulary · {totalSaved} saved</p>
+          <p style={{ margin:0, fontSize:13, fontWeight:700 }}>{T.libraryLabel}</p>
+          <p style={{ margin:"2px 0 0", fontSize:11, color:"#64748b" }}>{T.yourVocabSaved} · {totalSaved} {T.savedSuffix}</p>
         </button>
         <button onClick={()=>setVocabView("wordSearch")} style={{ flex:1, ...S.btn, background:`linear-gradient(135deg,rgba(168,85,247,0.2),rgba(124,58,237,0.15))`, border:`1.5px solid rgba(168,85,247,0.3)`, color:"#f1f5f9", textAlign:"left", padding:"12px 14px" }}>
-          <p style={{ margin:0, fontSize:13, fontWeight:700 }}>🃏 Word Cards</p>
-          <p style={{ margin:"2px 0 0", fontSize:11, color:C.purpleLight }}>Search & create cards</p>
+          <p style={{ margin:0, fontSize:13, fontWeight:700 }}>{T.wordCardsLabel}</p>
+          <p style={{ margin:"2px 0 0", fontSize:11, color:C.purpleLight }}>{T.searchCreateCards}</p>
         </button>
         <button onClick={()=>setVocabView("flashcard")} style={{ flex:1, ...S.btn, background:`linear-gradient(135deg,rgba(34,197,94,0.15),rgba(22,163,74,0.1))`, border:`1.5px solid rgba(34,197,94,0.3)`, color:"#f1f5f9", textAlign:"left", padding:"12px 14px" }}>
-          <p style={{ margin:0, fontSize:13, fontWeight:700 }}>🎴 Flashcards</p>
-          <p style={{ margin:"2px 0 0", fontSize:11, color:C.green }}>Review saved words</p>
+          <p style={{ margin:0, fontSize:13, fontWeight:700 }}>{T.flashcardsLabel}</p>
+          <p style={{ margin:"2px 0 0", fontSize:11, color:C.green }}>{T.reviewSavedWords}</p>
         </button>
       </div>
 
       {/* ── VOCABULARY BUILDER (quick find) ── */}
       <div style={{ ...S.card, marginBottom:16 }}>
-        <p style={{ color:C.teal, fontSize:12, fontWeight:700, letterSpacing:1, marginBottom:4 }}>📚 VOCABULARY BUILDER</p>
-        <p style={{ color:"#64748b", fontSize:12, marginBottom:14 }}>トピックを入力すると、日本語辞書から関連単語を表示します（English or 日本語OK）</p>
+        <p style={{ color:C.teal, fontSize:12, fontWeight:700, letterSpacing:1, marginBottom:4 }}>{T.vocabBuilderTitle}</p>
+        <p style={{ color:"#64748b", fontSize:12, marginBottom:14 }}>{T.vocabBuilderDesc}</p>
         <div style={{ display:"flex", gap:8 }}>
-          <input value={search} onChange={e=>setSearch(e.target.value)} onKeyDown={e=>e.key==="Enter"&&findWords()} placeholder="e.g. food, travel, emotions..." style={{ ...S.input, flex:1 }} />
+          <input value={search} onChange={e=>setSearch(e.target.value)} onKeyDown={e=>e.key==="Enter"&&findWords()} placeholder={T.vocabSearchPlaceholder} style={{ ...S.input, flex:1 }} />
           <button onClick={findWords} disabled={!search.trim()||loading} style={{ ...S.btn, background:search.trim()?`linear-gradient(135deg,${C.teal},#0891b2)`:"#1e293b", color:search.trim()?"#fff":"#475569", whiteSpace:"nowrap", padding:"12px 18px" }}>
-            {loading?"...":"Find Words"}
+            {loading?"...":T.findWordsBtn}
           </button>
         </div>
         {findError && (
           <div style={{ display:"flex", alignItems:"center", gap:8, marginTop:8 }}>
             <p style={{ color:C.red, fontSize:12, margin:0, flex:1 }}>{findError}</p>
             {!findError.includes("⏳ Rate") && (
-              <button onClick={()=>findWords(0)} style={{ ...S.btn, padding:"6px 12px", fontSize:11, background:`linear-gradient(135deg,${C.teal},#0891b2)`, color:"#fff" }}>Retry</button>
+              <button onClick={()=>findWords(0)} style={{ ...S.btn, padding:"6px 12px", fontSize:11, background:`linear-gradient(135deg,${C.teal},#0891b2)`, color:"#fff" }}>{T.retryBtn}</button>
             )}
           </div>
         )}
@@ -2986,7 +3491,7 @@ function VocabBuilder({ form }) {
       {loading && (
         <div style={{ textAlign:"center", padding:"24px 0" }}>
           <p style={{ color:C.teal, fontSize:24, margin:"0 0 8px" }}>🔍</p>
-          <p style={{ color:"#64748b", fontSize:13 }}>日本語辞書を検索中...</p>
+          <p style={{ color:"#64748b", fontSize:13 }}>{T.searchingDictionary}</p>
         </div>
       )}
 
@@ -3006,7 +3511,7 @@ function VocabBuilder({ form }) {
                   <p style={{ color:"#94a3b8", fontSize:13, margin:0 }}>{w.meaning}</p>
                 </div>
                 {/* 単語音声ボタン */}
-                <button onClick={e=>{e.stopPropagation();speakJapanese(w.word);}} title="単語を発音" style={{ width:40, height:40, borderRadius:10, background:"rgba(6,182,212,0.1)", border:`1px solid rgba(6,182,212,0.2)`, color:C.teal, fontSize:18, cursor:"pointer", flexShrink:0, marginLeft:8, display:"flex", alignItems:"center", justifyContent:"center" }}>🔊</button>
+                <button onClick={e=>{e.stopPropagation();speakJapanese(w.word);}} title={T.speakWord} style={{ width:40, height:40, borderRadius:10, background:"rgba(6,182,212,0.1)", border:`1px solid rgba(6,182,212,0.2)`, color:C.teal, fontSize:18, cursor:"pointer", flexShrink:0, marginLeft:8, display:"flex", alignItems:"center", justifyContent:"center" }}>🔊</button>
               </div>
 
               {/* ── Japanese Definition ── */}
@@ -3022,7 +3527,7 @@ function VocabBuilder({ form }) {
                     <p style={{ color:"#64748b", fontSize:11, margin:0, fontStyle:"italic" }}>{w.example_translated}</p>
                   </div>
                   {/* 例文音声ボタン */}
-                  <button onClick={e=>{e.stopPropagation();speakJapanese(w.example);}} title="例文を発音" style={{ width:34, height:34, borderRadius:8, background:"rgba(245,158,11,0.1)", border:`1px solid rgba(245,158,11,0.25)`, color:C.amber, fontSize:15, cursor:"pointer", flexShrink:0, display:"flex", alignItems:"center", justifyContent:"center" }}>🔊</button>
+                  <button onClick={e=>{e.stopPropagation();speakJapanese(w.example);}} title={T.speakExample} style={{ width:34, height:34, borderRadius:8, background:"rgba(245,158,11,0.1)", border:`1px solid rgba(245,158,11,0.25)`, color:C.amber, fontSize:15, cursor:"pointer", flexShrink:0, display:"flex", alignItems:"center", justifyContent:"center" }}>🔊</button>
                 </div>
               </div>
 
@@ -3034,7 +3539,7 @@ function VocabBuilder({ form }) {
                   onClick={e=>e.stopPropagation()}
                   style={{ flex:1, display:"flex", alignItems:"center", justifyContent:"center", gap:4, padding:"7px 10px", borderRadius:8, background:"rgba(232,93,4,0.1)", border:"1px solid rgba(232,93,4,0.25)", color:"#e85d04", fontSize:11, fontWeight:700, textDecoration:"none", whiteSpace:"nowrap" }}
                 >
-                  📖 Weblio辞書
+                  {T.weblioDict}
                 </a>
                 <a
                   href={`https://www.bing.com/images/search?q=${encodeURIComponent(w.word + " " + (w.imageQuery || ""))}&FORM=IRSBH0`}
@@ -3042,13 +3547,13 @@ function VocabBuilder({ form }) {
                   onClick={e=>e.stopPropagation()}
                   style={{ flex:1, display:"flex", alignItems:"center", justifyContent:"center", gap:4, padding:"7px 10px", borderRadius:8, background:"rgba(6,182,212,0.08)", border:`1px solid rgba(6,182,212,0.2)`, color:C.teal, fontSize:11, fontWeight:700, textDecoration:"none", whiteSpace:"nowrap" }}
                 >
-                  🖼 Google画像
+                  {T.googleImages}
                 </a>
                 <button
                   onClick={()=>{setSelectedWord(w);setVocabView("wordDetail");}}
                   style={{ flex:1, display:"flex", alignItems:"center", justifyContent:"center", gap:4, padding:"7px 10px", borderRadius:8, background:"rgba(168,85,247,0.1)", border:"1px solid rgba(168,85,247,0.25)", color:C.purpleLight, fontSize:11, fontWeight:700, cursor:"pointer", whiteSpace:"nowrap" }}
                 >
-                  🃏 詳細カード
+                  {T.detailCard}
                 </button>
               </div>
             </div>
@@ -3726,9 +4231,9 @@ function Dashboard({ form, onEdit }) {
                     <div key={i} style={{ background:"rgba(6,182,212,0.04)", borderRadius:12, border:`1px solid rgba(6,182,212,0.15)`, padding:"14px 16px" }}>
                       <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", marginBottom:6 }}>
                         <p style={{ color:"#f1f5f9", fontSize:14, fontWeight:700, margin:0 }}>{r.name}</p>
-                        <span style={{ color:C.teal, fontSize:10, fontWeight:700, background:"rgba(6,182,212,0.1)", padding:"2px 8px", borderRadius:99, whiteSpace:"nowrap", marginLeft:8 }}>{r.level}</span>
+                        <span style={{ color:C.teal, fontSize:10, fontWeight:700, background:"rgba(6,182,212,0.1)", padding:"2px 8px", borderRadius:99, whiteSpace:"nowrap", marginLeft:8 }}>{T[r.levelKey]}</span>
                       </div>
-                      <p style={{ color:"#94a3b8", fontSize:12, margin:"0 0 10px", lineHeight:1.6 }}>{r.desc}</p>
+                      <p style={{ color:"#94a3b8", fontSize:12, margin:"0 0 10px", lineHeight:1.6 }}>{T[r.descKey]}</p>
                       <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:"3px 12px", marginBottom:10 }}>
                         {[[T.vocab,r.skills.vocab],[T.grammar,r.skills.grammar],[T.reading,r.skills.reading],[T.speaking,r.skills.speaking],[T.listening,r.skills.listening]].map(([label,val])=>(
                           <div key={label} style={{ display:"flex", alignItems:"center", gap:4 }}>
