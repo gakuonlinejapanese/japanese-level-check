@@ -3580,17 +3580,28 @@ function PracticeSet({ form }) {
       const res = await fetch("/api/claude", {
         method:"POST", headers:{"Content-Type":"application/json"},
         body: JSON.stringify({ model:"claude-sonnet-4-20250514", max_tokens:1600,
-          messages:[{ role:"user", content:`You are a Japanese teacher using CLT (Communicative Language Teaching). The student is level ${form.jlpt}, goal: ${form.displayGoal||form.goal}.
+          messages:[{ role:"user", content:`You are a Japanese teacher using CLT (Communicative Language Teaching). The student's JLPT level is ${form.jlpt}, goal: ${form.displayGoal||form.goal}.
 The student selected ONLY these study skills: ${skillLabels || "general practice"}.
 Create a "Practice Set" of 6 short exercises focused ONLY on these selected skills (do NOT include writing/composition exercises unless "Writing" is one of the selected skills).
+
+STRICT LEVEL CALIBRATION — this is critical, do not skip it:
+Every exercise (vocabulary, kanji, grammar points, sentence complexity, reading passage difficulty) MUST match what a ${form.jlpt} student has actually studied — never above that level, never trivially below it.
+- Beginner (no JLPT): only hiragana/katakana, a handful of basic kanji (日,本,人,etc.), and the simplest sentence patterns (です/ます, basic particles は/が/を/に).
+- N5: N5 grammar and kanji only (~100 kanji, basic particles, plain/polite forms, simple て-form).
+- N4: N5+N4 grammar and kanji only (~300 kanji, past/potential/conditional forms, te-form requests).
+- N3: N5–N3 grammar and kanji only (~650 kanji, passive/causative, more complex conjunctions, intermediate reading passages).
+- N2: N5–N2 grammar and kanji only (~1000 kanji, keigo basics, more abstract/formal vocabulary).
+- N1: full range up to N1 (~2000 kanji, advanced/nuanced grammar, formal and literary register).
+Before writing each exercise, internally check: "would a real ${form.jlpt} student recognize every kanji and grammar point here?" If not, simplify it. Do not use kanji or grammar from a level higher than ${form.jlpt}.
+
 For each exercise, include:
 - skill: which skill it targets (must be one of: ${skills.join(", ")})
 - type: a short label, e.g. "Listening cloze", "Conversation role-play", "Kanji recall", "Grammar pattern", "Reading comprehension", "JLPT-style question", "Pronunciation drill"
 - prompt: the FULL exercise text in Japanese, with an English hint in parentheses if helpful. The prompt MUST be fully self-contained and answerable on its own — a student must be able to read ONLY this field and attempt the question without seeing the answer.
   - If type is "JLPT-style question" or any multiple-choice question: the prompt MUST include the full question/sentence AND all answer choices (e.g. A/B/C/D, or ①②③④) written out directly inside the prompt text itself. NEVER write a prompt like "(Choose the correct answer)" without the actual options listed — that is incomplete and unusable.
-  - If type is "Reading comprehension": the prompt MUST include the actual short passage/text to read (2-4 sentences in Japanese) followed by the question, not just an instruction like "(What is the main idea of the text?)" with no text given.
-  - If type is "Kanji recall": the prompt MUST include the actual kanji character(s) being asked about, not just an instruction.
-  - If type is "Listening cloze" or "Grammar pattern": the prompt MUST include the actual sentence with a blank (e.g. ___) to fill in.
+  - If type is "Reading comprehension": the prompt MUST include the actual short passage/text to read (2-4 sentences in Japanese, at ${form.jlpt} difficulty) followed by the question, not just an instruction like "(What is the main idea of the text?)" with no text given.
+  - If type is "Kanji recall": the prompt MUST include the actual kanji character(s) being asked about, chosen ONLY from kanji a ${form.jlpt} student would have studied.
+  - If type is "Listening cloze" or "Grammar pattern": the prompt MUST include the actual sentence with a blank (e.g. ___) to fill in, using only ${form.jlpt}-appropriate grammar.
 - answer: the model answer or correct response (just the answer itself, e.g. "B" or the filled-in word — the full question must NOT be repeated here, it already lives in prompt)
 - tip: a one-sentence CLT tip for using this in real communication
 
