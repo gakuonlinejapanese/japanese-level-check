@@ -3739,7 +3739,8 @@ function getWeekInfo(form) {
 const AI_SCHEDULE_CACHE = {};
 
 async function buildAIWeeklySchedule(form, weekNum, totalWeeks) {
-  const cacheKey = `${form.email || form.name}_w${weekNum}_${form.jlpt}_${(form.skills||[]).join("")}`;
+  const lang = form.preferredLang || "English";
+  const cacheKey = `${form.email || form.name}_w${weekNum}_${form.jlpt}_${(form.skills||[]).join("")}_${lang}`;
   // Check localStorage first
   try {
     const stored = localStorage.getItem(`gaku_sched_${cacheKey}`);
@@ -3758,8 +3759,10 @@ async function buildAIWeeklySchedule(form, weekNum, totalWeeks) {
   const activeDays = WEEKDAYS.slice(0, studyDays);
   const restDays = WEEKDAYS.slice(studyDays);
 
-  const prompt = `You are an expert Japanese language teacher using CLT (Communicative Language Teaching) methodology.
+  const langInstruction = lang !== "English" ? `\nIMPORTANT: Write ALL task descriptions and the weekTheme in ${lang}. Do NOT use English for any text content.\n` : "";
 
+  const prompt = `You are an expert Japanese language teacher using CLT (Communicative Language Teaching) methodology.
+${langInstruction}
 Student profile:
 - Name: ${form.name}
 - Current JLPT level: ${form.jlpt}
@@ -3777,7 +3780,7 @@ Create a SPECIFIC weekly study schedule for Week ${weekNum}. For each study day,
 1. Are specifically calibrated for ${form.jlpt} level students at week ${weekNum}/${totalWeeks}
 2. Include REAL, specific resources (e.g. specific NHK Easy News articles topic, specific grammar point like て-form conditionals, specific Anki deck, specific Nihongo con Teppei episode topic, etc.)
 3. Progress logically from previous weeks (early weeks = fundamentals, later weeks = advanced application)
-4. Total time per day must not exceed ${minsPerDay} minutes
+4. Total time per day must not exceed ${minsPerDay} minutes${lang !== "English" ? `\n5. All task text MUST be written in ${lang}` : ""}
 
 Return ONLY a valid JSON object with this exact structure (no markdown, no explanation):
 {
@@ -4227,7 +4230,7 @@ function Dashboard({ form, onEdit }) {
       // Clear cache for this week
       const hoursMap = { "Less than 1 hour": 45, "1–2 hours": 90, "2–3 hours": 150, "3+ hours": 180 };
       const daysMap  = { "1–2 days": 2, "3–4 days": 4, "5–6 days": 5, "Every day": 7 };
-      const cacheKey = `${form.email || form.name}_w${currentWeek}_${form.jlpt}_${(form.skills||[]).join("")}`;
+      const cacheKey = `${form.email || form.name}_w${currentWeek}_${form.jlpt}_${(form.skills||[]).join("")}_${form.preferredLang || "English"}`;
       try { localStorage.removeItem(`gaku_sched_${cacheKey}`); } catch {}
       delete AI_SCHEDULE_CACHE[cacheKey];
     }
@@ -4258,17 +4261,11 @@ function Dashboard({ form, onEdit }) {
 
   useEffect(() => {
     const lang = form?.preferredLang || "English";
-    if (lang === "English" || UI_TRANSLATIONS[lang]) {
-      // For static languages, we don't translate milestone text via AI (keep English for simplicity,
-      // or add static translations below if needed — milestones are rebuilt with T for non-static langs)
-      if (!UI_TRANSLATIONS[lang]) {
-        const base = buildMilestones(form);
-        translateMilestonesAI(base, lang).then(setMilestones);
-      } else {
-        setMilestones(buildMilestones(form));
-      }
+    const base = buildMilestones(form);
+    if (lang === "English") {
+      setMilestones(base);
     } else {
-      const base = buildMilestones(form);
+      // Always translate milestone text via AI for any non-English language
       translateMilestonesAI(base, lang).then(setMilestones);
     }
   }, [form]);
