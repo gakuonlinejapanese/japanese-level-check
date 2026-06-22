@@ -3719,6 +3719,97 @@ function buildSchedule(form, T) {
   return schedule;
 }
 
+// ─── AI Weekly Schedule Generator ────────────────────────────────────────────────
+function getWeekInfo(form) {
+  const timelineWeeksMap = {
+    "Less than 6 months": 24,
+    "6 months – 1 year": 48,
+    "1–2 years": 96,
+    "2+ years": 144,
+  };
+  const totalWeeks = timelineWeeksMap[form.timeline] || 24;
+  const startDate = form.planStartDate ? new Date(form.planStartDate) : new Date();
+  const now = new Date();
+  const msPerWeek = 7 * 24 * 60 * 60 * 1000;
+  const elapsed = Math.floor((now - startDate) / msPerWeek);
+  const currentWeek = Math.min(Math.max(elapsed + 1, 1), totalWeeks);
+  return { currentWeek, totalWeeks };
+}
+
+const AI_SCHEDULE_CACHE = {};
+
+async function buildAIWeeklySchedule(form, weekNum, totalWeeks) {
+  const cacheKey = `${form.email || form.name}_w${weekNum}_${form.jlpt}_${(form.skills||[]).join("")}`;
+  // Check localStorage first
+  try {
+    const stored = localStorage.getItem(`gaku_sched_${cacheKey}`);
+    if (stored) return JSON.parse(stored);
+  } catch {}
+  if (AI_SCHEDULE_CACHE[cacheKey]) return AI_SCHEDULE_CACHE[cacheKey];
+
+  const hoursMap = { "Less than 1 hour": 45, "1–2 hours": 90, "2–3 hours": 150, "3+ hours": 180 };
+  const daysMap  = { "1–2 days": 2, "3–4 days": 4, "5–6 days": 5, "Every day": 7 };
+  const minsPerDay = hoursMap[form.hoursPerDay] || 60;
+  const studyDays = daysMap[form.daysPerWeek] || 5;
+  const weeksLeft = totalWeeks - weekNum;
+  const progressPct = Math.round((weekNum / totalWeeks) * 100);
+
+  const WEEKDAYS = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
+  const activeDays = WEEKDAYS.slice(0, studyDays);
+  const restDays = WEEKDAYS.slice(studyDays);
+
+  const prompt = `You are an expert Japanese language teacher using CLT (Communicative Language Teaching) methodology.
+
+Student profile:
+- Name: ${form.name}
+- Current JLPT level: ${form.jlpt}
+- Final goal: ${form.displayGoal || form.goal}
+- Timeline: ${form.timeline} (${totalWeeks} weeks total)
+- Current week: Week ${weekNum} of ${totalWeeks} (${progressPct}% through the plan, ${weeksLeft} weeks remaining)
+- Study time per day: ${minsPerDay} minutes
+- Study days per week: ${studyDays} days (${activeDays.join(", ")})
+- Skills to focus on: ${(form.skills||[]).join(", ")}
+
+Working backwards from the goal:
+- Week ${weekNum} of ${totalWeeks}: ${progressPct < 25 ? "Foundation building phase — establish core habits and basics" : progressPct < 50 ? "Development phase — expanding knowledge and skills" : progressPct < 75 ? "Consolidation phase — deepening understanding and fluency" : "Mastery phase — polishing, testing, and refining"}
+
+Create a SPECIFIC weekly study schedule for Week ${weekNum}. For each study day, provide 2-3 concrete tasks that:
+1. Are specifically calibrated for ${form.jlpt} level students at week ${weekNum}/${totalWeeks}
+2. Include REAL, specific resources (e.g. specific NHK Easy News articles topic, specific grammar point like て-form conditionals, specific Anki deck, specific Nihongo con Teppei episode topic, etc.)
+3. Progress logically from previous weeks (early weeks = fundamentals, later weeks = advanced application)
+4. Total time per day must not exceed ${minsPerDay} minutes
+
+Return ONLY a valid JSON object with this exact structure (no markdown, no explanation):
+{
+  "weekTheme": "One sentence describing this week's main focus",
+  "schedule": {
+    ${activeDays.map(d => `"${d}": [{"task": "specific task description (X min)", "done": false}]`).join(",\n    ")},
+    ${restDays.map(d => `"${d}": [{"task": "Rest day 🌸", "done": false, "rest": true}]`).join(",\n    ")}
+  }
+}`;
+
+  try {
+    const res = await fetch("/api/claude", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        model: "claude-sonnet-4-20250514",
+        max_tokens: 1200,
+        messages: [{ role: "user", content: prompt }]
+      })
+    });
+    const d = await res.json();
+    const text = (d.content || []).map(c => c.text || "").join("");
+    const clean = text.replace(/```json|```/g, "").trim();
+    const parsed = JSON.parse(clean);
+    AI_SCHEDULE_CACHE[cacheKey] = parsed;
+    try { localStorage.setItem(`gaku_sched_${cacheKey}`, JSON.stringify(parsed)); } catch {}
+    return parsed;
+  } catch (e) {
+    return null;
+  }
+}
+
 // Milestone text keys (for AI translation lookup)
 const MILESTONE_EN = {
   "Beginner": ["Learn hiragana + katakana (Week 1–2)", "Master 300 vocabulary words (Month 1)", "Hold a 2-minute self-introduction in Japanese (Month 2)", "Pass JLPT N5 practice test at 70% (Month 3)"],
@@ -4126,11 +4217,44 @@ function Dashboard({ form, onEdit }) {
   const [msDone, setMsDone] = useState([]);
   const [showHelp, setShowHelp] = useState(false);
   const [tab, setTab] = useState("schedule");
+  const [weekTheme, setWeekTheme] = useState("");
+  const [aiScheduleLoading, setAiScheduleLoading] = useState(false);
+  const { currentWeek, totalWeeks } = getWeekInfo(form);
+
+  const loadAISchedule = useCallback(async (forceRegen = false) => {
+    setAiScheduleLoading(true);
+    if (forceRegen) {
+      // Clear cache for this week
+      const hoursMap = { "Less than 1 hour": 45, "1–2 hours": 90, "2–3 hours": 150, "3+ hours": 180 };
+      const daysMap  = { "1–2 days": 2, "3–4 days": 4, "5–6 days": 5, "Every day": 7 };
+      const cacheKey = `${form.email || form.name}_w${currentWeek}_${form.jlpt}_${(form.skills||[]).join("")}`;
+      try { localStorage.removeItem(`gaku_sched_${cacheKey}`); } catch {}
+      delete AI_SCHEDULE_CACHE[cacheKey];
+    }
+    const result = await buildAIWeeklySchedule(form, currentWeek, totalWeeks);
+    if (result && result.schedule) {
+      // Merge done state from current schedule
+      const merged = {};
+      const WEEKDAYS = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
+      WEEKDAYS.forEach(day => {
+        merged[day] = (result.schedule[day] || [{ task: T.restDay || "Rest day 🌸", done: false, rest: true }]);
+      });
+      setSchedule(merged);
+      setWeekTheme(result.weekTheme || "");
+    }
+    setAiScheduleLoading(false);
+  }, [form, currentWeek, totalWeeks, T]);
 
   // Re-build schedule & translate milestones when T loads (for non-static languages)
   useEffect(() => {
+    loadAISchedule(false);
+  }, [form]);
+
+  // Fallback: also rebuild static schedule while AI loads
+  useEffect(() => {
+    if (!aiScheduleLoading) return;
     setSchedule(buildSchedule(form, T));
-  }, [T, form]);
+  }, [T]);
 
   useEffect(() => {
     const lang = form?.preferredLang || "English";
@@ -4218,27 +4342,61 @@ function Dashboard({ form, onEdit }) {
         </div>
 
         {tab==="schedule" && (
-          <div style={{ ...S.card }}>
-            <p style={{ color:C.purpleLight, fontSize:12, fontWeight:700, letterSpacing:1, marginBottom:16 }}>{T.yourWeeklySchedule}</p>
-            {WEEKDAY_EN.map((day, di) => {
-              const tasks = schedule[day] || [];
-              const dayLabel = T[DAY_KEYS[di]] || day.toUpperCase();
-              return (
-                <div key={day} style={{ marginBottom:16 }}>
-                  <p style={{ color:"#94a3b8", fontSize:11, fontWeight:700, letterSpacing:1, borderBottom:`1px solid ${C.border}`, paddingBottom:6, marginBottom:8 }}>{dayLabel}</p>
-                  {tasks.map((task, idx) => task.rest ? (
-                    <p key={idx} style={{ color:"#334155", fontSize:13, fontStyle:"italic" }}>{T.restDay}</p>
-                  ) : (
-                    <div key={idx} onClick={()=>toggleTask(day,idx)} style={{ display:"flex", gap:10, padding:"10px 12px", borderRadius:10, background:task.done?"rgba(34,197,94,0.06)":C.card, border:`1px solid ${task.done?"rgba(34,197,94,0.2)":C.border}`, marginBottom:6, cursor:"pointer", alignItems:"flex-start" }}>
-                      <div style={{ width:20, height:20, borderRadius:6, border:`2px solid ${task.done?C.green:C.border}`, background:task.done?C.green:"transparent", display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0, marginTop:1 }}>
-                        {task.done && <span style={{ color:"#fff", fontSize:11, fontWeight:900 }}>✓</span>}
-                      </div>
-                      <p style={{ color:task.done?"#64748b":"#cbd5e1", fontSize:13, margin:0, lineHeight:1.6, textDecoration:task.done?"line-through":"none" }}>{task.task}</p>
-                    </div>
-                  ))}
+          <div>
+            {/* Week progress banner */}
+            <div style={{ ...S.card, marginBottom:12, background:"linear-gradient(135deg,rgba(139,92,246,0.12),rgba(6,182,212,0.08))", border:`1px solid rgba(139,92,246,0.25)` }}>
+              <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:8 }}>
+                <div>
+                  <p style={{ color:C.purpleLight, fontSize:11, fontWeight:700, letterSpacing:1, margin:0 }}>📅 WEEK {currentWeek} / {totalWeeks}</p>
+                  <p style={{ color:"#64748b", fontSize:11, margin:"2px 0 0" }}>{totalWeeks - currentWeek} weeks remaining · {Math.round((currentWeek/totalWeeks)*100)}% complete</p>
                 </div>
-              );
-            })}
+                <button
+                  onClick={() => loadAISchedule(true)}
+                  disabled={aiScheduleLoading}
+                  style={{ ...S.btn, padding:"7px 12px", background:aiScheduleLoading?"rgba(139,92,246,0.1)":`linear-gradient(135deg,${C.purple},#9333ea)`, color:aiScheduleLoading?"#64748b":"#fff", border:`1px solid rgba(139,92,246,0.3)`, fontSize:11, cursor:aiScheduleLoading?"not-allowed":"pointer" }}>
+                  {aiScheduleLoading ? "⏳ Generating..." : "🔄 Refresh"}
+                </button>
+              </div>
+              {/* Progress bar */}
+              <div style={{ height:4, background:"rgba(255,255,255,0.06)", borderRadius:99, overflow:"hidden" }}>
+                <div style={{ height:"100%", width:`${Math.round((currentWeek/totalWeeks)*100)}%`, background:`linear-gradient(90deg,${C.purple},${C.teal})`, borderRadius:99, transition:"width 0.6s ease" }} />
+              </div>
+              {weekTheme && !aiScheduleLoading && (
+                <p style={{ color:"#94a3b8", fontSize:12, margin:"10px 0 0", fontStyle:"italic", lineHeight:1.5 }}>🎯 {weekTheme}</p>
+              )}
+            </div>
+
+            <div style={{ ...S.card }}>
+              <p style={{ color:C.purpleLight, fontSize:12, fontWeight:700, letterSpacing:1, marginBottom:16 }}>
+                {aiScheduleLoading ? "✨ AI is building your Week " + currentWeek + " schedule..." : T.yourWeeklySchedule}
+              </p>
+              {aiScheduleLoading ? (
+                <div style={{ textAlign:"center", padding:"32px 0" }}>
+                  <div style={{ fontSize:32, marginBottom:12 }}>🤖</div>
+                  <p style={{ color:"#64748b", fontSize:13 }}>Personalizing your Week {currentWeek} plan based on your goal and progress...</p>
+                </div>
+              ) : (
+                WEEKDAY_EN.map((day, di) => {
+                  const tasks = schedule[day] || [];
+                  const dayLabel = T[DAY_KEYS[di]] || day.toUpperCase();
+                  return (
+                    <div key={day} style={{ marginBottom:16 }}>
+                      <p style={{ color:"#94a3b8", fontSize:11, fontWeight:700, letterSpacing:1, borderBottom:`1px solid ${C.border}`, paddingBottom:6, marginBottom:8 }}>{dayLabel}</p>
+                      {tasks.map((task, idx) => task.rest ? (
+                        <p key={idx} style={{ color:"#334155", fontSize:13, fontStyle:"italic" }}>{T.restDay || "Rest day 🌸"}</p>
+                      ) : (
+                        <div key={idx} onClick={()=>toggleTask(day,idx)} style={{ display:"flex", gap:10, padding:"10px 12px", borderRadius:10, background:task.done?"rgba(34,197,94,0.06)":C.card, border:`1px solid ${task.done?"rgba(34,197,94,0.2)":C.border}`, marginBottom:6, cursor:"pointer", alignItems:"flex-start" }}>
+                          <div style={{ width:20, height:20, borderRadius:6, border:`2px solid ${task.done?C.green:C.border}`, background:task.done?C.green:"transparent", display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0, marginTop:1 }}>
+                            {task.done && <span style={{ color:"#fff", fontSize:11, fontWeight:900 }}>✓</span>}
+                          </div>
+                          <p style={{ color:task.done?"#64748b":"#cbd5e1", fontSize:13, margin:0, lineHeight:1.6, textDecoration:task.done?"line-through":"none" }}>{task.task}</p>
+                        </div>
+                      ))}
+                    </div>
+                  );
+                })
+              )}
+            </div>
           </div>
         )}
 
@@ -4334,7 +4492,14 @@ export default function GakuApp({ onBack, initialJlpt }) {
   useEffect(() => {
     try { const saved = localStorage.getItem("gaku_form"); if(saved) setForm(JSON.parse(saved)); } catch {}
   }, []);
-  const handleSubmit = (f) => { setForm(f); setEditing(false); try { localStorage.setItem("gaku_form", JSON.stringify(f)); } catch {} };
+  const handleSubmit = (f) => {
+    // Preserve planStartDate from existing form (only set it once, on first save)
+    const startDate = (form && form.planStartDate) ? form.planStartDate : new Date().toISOString();
+    const saved = { ...f, planStartDate: startDate };
+    setForm(saved);
+    setEditing(false);
+    try { localStorage.setItem("gaku_form", JSON.stringify(saved)); } catch {}
+  };
   const handleEdit = () => setEditing(true);
   const handleCancelEdit = () => setEditing(false);
   if (!form || editing) return <FormScreen onSubmit={handleSubmit} onBack={onBack} onCancel={form ? handleCancelEdit : undefined} initialJlpt={initialJlpt} initialForm={form || undefined} />;
