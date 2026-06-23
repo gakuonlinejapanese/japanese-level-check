@@ -4248,6 +4248,32 @@ function Dashboard({ form, onEdit }) {
     setAiScheduleLoading(false);
   }, [form, currentWeek, totalWeeks, T]);
 
+  // ── GAKU Extension: listen for words sent from Chrome extension ───────────────────────
+  useEffect(() => {
+    const handleExtMessage = (e) => {
+      if (e.source !== window) return;
+      if (!e.data || e.data.type !== "GAKU_ADD_WORD") return;
+      const { word, reading, meaning, partOfSpeech, jlpt, example, example_translated, tip } = e.data.payload || {};
+      if (!word) return;
+      const data = loadVocabData();
+      const newCard = {
+        word, reading: reading || "", jlpt: jlpt || "",
+        partOfSpeech: partOfSpeech || "", meaning: meaning || "",
+        meaningNative: "", example: example || "", example_translated: example_translated || "",
+        tip: tip || "", imageQuery: word, imageDesc: "",
+        folder: "GAKU Extension", addedAt: Date.now()
+      };
+      if (!data.cards.find(c => c.word === word && c.folder === "GAKU Extension")) {
+        if (!data.folders.includes("GAKU Extension")) data.folders.push("GAKU Extension");
+        data.cards.push(newCard);
+        saveVocabData(data);
+      }
+      setTab("vocabulary");
+    };
+    window.addEventListener("message", handleExtMessage);
+    return () => window.removeEventListener("message", handleExtMessage);
+  }, []);
+
   // Re-build schedule & translate milestones when T loads (for non-static languages)
   useEffect(() => {
     loadAISchedule(false);
