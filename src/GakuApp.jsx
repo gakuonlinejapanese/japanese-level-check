@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo, useRef } from "react";
 
 const C = {
   bg: "linear-gradient(160deg,#0a0f1e 0%,#0f172a 60%,#0a0f1e 100%)",
@@ -2844,8 +2844,27 @@ const WRITING_TOPICS = {
 function loadVocabData() {
   try { return JSON.parse(localStorage.getItem("gaku_vocab") || "null") || { folders:[], cards:[] }; } catch { return { folders:[], cards:[] }; }
 }
+// Trim card to essential fields only before saving (reduces localStorage size)
+function trimCard(card) {
+  return {
+    id: card.id, word: card.word, reading: card.reading || "",
+    jlpt: card.jlpt || "", partOfSpeech: card.partOfSpeech || "",
+    meaning: card.meaning || "", example: card.example || "",
+    folder: card.folder || "Your Vocabulary", savedAt: card.savedAt || new Date().toISOString(),
+    addedAt: card.addedAt || Date.now(),
+  };
+}
 function saveVocabData(data) {
-  try { localStorage.setItem("gaku_vocab", JSON.stringify(data)); } catch {}
+  try {
+    const lean = { folders: data.folders, cards: data.cards.map(trimCard) };
+    localStorage.setItem("gaku_vocab", JSON.stringify(lean));
+  } catch(e) {
+    // If quota exceeded, remove oldest 20 cards and retry
+    try {
+      const trimmed = { folders: data.folders, cards: data.cards.slice(-80).map(trimCard) };
+      localStorage.setItem("gaku_vocab", JSON.stringify(trimmed));
+    } catch {}
+  }
 }
 
 // ─── SPEAK helper ──────────────────────────────────────────────────────────────
