@@ -134,6 +134,11 @@ const UI_TRANSLATIONS = {
     youveGotThis: "You've got this!",
     motivationText: "Every conversation, every sentence, every word brings you closer. CLT is about real communication — and you're already doing it. 頑張ってください！",
     bookLesson: "Book a FREE Trial Lesson with GAKU →",
+    weeksRemaining: "weeks remaining",
+    percentComplete: "% complete",
+    refresh: "🔄 Refresh",
+    aiBuilding: "✨ AI is building your schedule...",
+    personalizing: "Personalizing your plan based on your goal and progress...",
     // Help modal
     helpTitle: "🆘 HELP",
     whatWouldYouLike: "What would you like?",
@@ -286,6 +291,11 @@ const UI_TRANSLATIONS = {
     youveGotThis: "Vous pouvez le faire !",
     motivationText: "Chaque conversation, chaque phrase, chaque mot vous rapproche du but. La méthode CLT, c'est la vraie communication — et vous le faites déjà. 頑張ってください！",
     bookLesson: "Réservez une leçon d'essai GRATUITE avec GAKU →",
+    weeksRemaining: "semaines restantes",
+    percentComplete: "% terminé",
+    refresh: "🔄 Actualiser",
+    aiBuilding: "✨ L'IA prépare votre planning...",
+    personalizing: "Personnalisation de votre plan selon vos objectifs et progrès...",
     helpTitle: "🆘 AIDE",
     whatWouldYouLike: "Que souhaitez-vous ?",
     customizedLesson: "📋 Leçon personnalisée pour aujourd'hui",
@@ -434,6 +444,11 @@ const UI_TRANSLATIONS = {
     youveGotThis: "¡Tú puedes!",
     motivationText: "Cada conversación, cada frase, cada palabra te acerca más. CLT es sobre comunicación real — y ya lo estás haciendo. 頑張ってください！",
     bookLesson: "Reserva una lección de prueba GRATIS con GAKU →",
+    weeksRemaining: "semanas restantes",
+    percentComplete: "% completado",
+    refresh: "🔄 Actualizar",
+    aiBuilding: "✨ La IA está construyendo tu horario...",
+    personalizing: "Personalizando tu plan según tu objetivo y progreso...",
     helpTitle: "🆘 AYUDA",
     whatWouldYouLike: "¿Qué te gustaría?",
     customizedLesson: "📋 Lección personalizada para hoy",
@@ -582,6 +597,11 @@ const UI_TRANSLATIONS = {
     youveGotThis: "Você consegue!",
     motivationText: "Cada conversa, cada frase, cada palavra te aproxima mais. CLT é sobre comunicação real — e você já está fazendo isso. 頑張ってください！",
     bookLesson: "Reserve uma aula experimental GRÁTIS com GAKU →",
+    weeksRemaining: "semanas restantes",
+    percentComplete: "% concluído",
+    refresh: "🔄 Atualizar",
+    aiBuilding: "✨ A IA está construindo sua programação...",
+    personalizing: "Personalizando seu plano com base no seu objetivo e progresso...",
     helpTitle: "🆘 AJUDA",
     whatWouldYouLike: "O que você gostaria?",
     customizedLesson: "📋 Aula personalizada para hoje",
@@ -730,6 +750,11 @@ const UI_TRANSLATIONS = {
     youveGotThis: "Sie schaffen das!",
     motivationText: "Jedes Gespräch, jeder Satz, jedes Wort bringt Sie näher. CLT geht um echte Kommunikation — und Sie machen es bereits. 頑張ってください！",
     bookLesson: "Kostenlosen Probeunterricht mit GAKU buchen →",
+    weeksRemaining: "Wochen verbleibend",
+    percentComplete: "% abgeschlossen",
+    refresh: "🔄 Aktualisieren",
+    aiBuilding: "✨ KI erstellt Ihren Zeitplan...",
+    personalizing: "Plan wird basierend auf Ihrem Ziel und Fortschritt personalisiert...",
     helpTitle: "🆘 HILFE",
     whatWouldYouLike: "Was möchten Sie?",
     customizedLesson: "📋 Personalisierte Lektion für heute",
@@ -878,6 +903,11 @@ const UI_TRANSLATIONS = {
     youveGotThis: "Ce la fai!",
     motivationText: "Ogni conversazione, ogni frase, ogni parola ti avvicina. CLT riguarda la comunicazione reale — e lo stai già facendo. 頑張ってください！",
     bookLesson: "Prenota una lezione di prova GRATUITA con GAKU →",
+    weeksRemaining: "settimane rimanenti",
+    percentComplete: "% completato",
+    refresh: "🔄 Aggiorna",
+    aiBuilding: "✨ L'IA sta costruendo il tuo programma...",
+    personalizing: "Personalizzando il tuo piano in base al tuo obiettivo e ai progressi...",
     helpTitle: "🆘 AIUTO",
     whatWouldYouLike: "Cosa vorresti?",
     customizedLesson: "📋 Lezione personalizzata per oggi",
@@ -1026,6 +1056,11 @@ const UI_TRANSLATIONS = {
     youveGotThis: "你可以的！",
     motivationText: "每一次对话、每一个句子、每一个词都让你离目标更近。CLT 关注真实交流 — 你已经在做了。頑張ってください！",
     bookLesson: "与GAKU预约免费试课 →",
+    weeksRemaining: "周剩余",
+    percentComplete: "% 完成",
+    refresh: "🔄 刷新",
+    aiBuilding: "✨ AI正在生成你的日程...",
+    personalizing: "根据你的目标和进度个性化你的计划...",
     helpTitle: "🆘 帮助",
     whatWouldYouLike: "你想要什么？",
     customizedLesson: "📋 今天的个性化课程",
@@ -1174,6 +1209,11 @@ const UI_TRANSLATIONS = {
     youveGotThis: "你可以的！",
     motivationText: "每一次對話、每一個句子、每一個詞都讓你離目標更近。CLT 關注真實交流 — 你已經在做了。頑張ってください！",
     bookLesson: "與GAKU預約免費試課 →",
+    weeksRemaining: "週剩餘",
+    percentComplete: "% 完成",
+    refresh: "🔄 重新整理",
+    aiBuilding: "✨ AI正在生成你的日程...",
+    personalizing: "根據你的目標和進度個性化你的計劃...",
     helpTitle: "🆘 幫助",
     whatWouldYouLike: "你想要什麼？",
     customizedLesson: "📋 今天的個性化課程",
@@ -1322,6 +1362,11 @@ const UI_TRANSLATIONS = {
     youveGotThis: "할 수 있어요!",
     motivationText: "모든 대화, 모든 문장, 모든 단어가 당신을 더 가깝게 만들어요. CLT는 실제 의사소통에 관한 것 — 이미 하고 있어요. 頑張ってください！",
     bookLesson: "GAKU와 무료 체험 레슨 예약 →",
+    weeksRemaining: "주 남음",
+    percentComplete: "% 완료",
+    refresh: "🔄 새로고침",
+    aiBuilding: "✨ AI가 일정을 만들고 있어요...",
+    personalizing: "목표와 진도에 맞게 계획을 맞춤 설정 중...",
     helpTitle: "🆘 도움말",
     whatWouldYouLike: "무엇을 원하세요?",
     customizedLesson: "📋 오늘의 맞춤 레슨",
@@ -1470,6 +1515,11 @@ const UI_TRANSLATIONS = {
     youveGotThis: "คุณทำได้!",
     motivationText: "ทุกบทสนทนา ทุกประโยค ทุกคำ พาคุณเข้าใกล้เป้าหมาย CLT คือการสื่อสารจริง — และคุณกำลังทำมันอยู่แล้ว 頑張ってください！",
     bookLesson: "จองบทเรียนทดลองฟรีกับ GAKU →",
+    weeksRemaining: "สัปดาห์คงเหลือ",
+    percentComplete: "% สำเร็จ",
+    refresh: "🔄 รีเฟรช",
+    aiBuilding: "✨ AI กำลังสร้างตารางเรียนของคุณ...",
+    personalizing: "กำลังปรับแผนตามเป้าหมายและความคืบหน้าของคุณ...",
     helpTitle: "🆘 ช่วยเหลือ",
     whatWouldYouLike: "คุณต้องการอะไร?",
     customizedLesson: "📋 บทเรียนที่ปรับแต่งสำหรับวันนี้",
@@ -1618,6 +1668,11 @@ const UI_TRANSLATIONS = {
     youveGotThis: "Anda boleh buat!",
     motivationText: "Setiap perbualan, setiap ayat, setiap perkataan membawa anda lebih dekat. CLT adalah tentang komunikasi nyata — dan anda sudah melakukannya. 頑張ってください！",
     bookLesson: "Tempah Pelajaran Percubaan PERCUMA dengan GAKU →",
+    weeksRemaining: "minggu berbaki",
+    percentComplete: "% selesai",
+    refresh: "🔄 Muat Semula",
+    aiBuilding: "✨ AI sedang membina jadual anda...",
+    personalizing: "Memperibadikan pelan anda berdasarkan matlamat dan kemajuan anda...",
     helpTitle: "🆘 BANTUAN",
     whatWouldYouLike: "Apa yang anda mahukan?",
     customizedLesson: "📋 Pelajaran tersuai untuk hari ini",
@@ -1766,6 +1821,11 @@ const UI_TRANSLATIONS = {
     youveGotThis: "Kamu bisa!",
     motivationText: "Setiap percakapan, setiap kalimat, setiap kata membawamu lebih dekat. CLT adalah tentang komunikasi nyata — dan kamu sudah melakukannya. 頑張ってください！",
     bookLesson: "Pesan Pelajaran Percobaan GRATIS dengan GAKU →",
+    weeksRemaining: "minggu tersisa",
+    percentComplete: "% selesai",
+    refresh: "🔄 Perbarui",
+    aiBuilding: "✨ AI sedang membuat jadwal Anda...",
+    personalizing: "Menyesuaikan rencana Anda berdasarkan tujuan dan kemajuan Anda...",
     helpTitle: "🆘 BANTUAN",
     whatWouldYouLike: "Apa yang Anda inginkan?",
     customizedLesson: "📋 Pelajaran yang disesuaikan untuk hari ini",
@@ -1914,6 +1974,11 @@ const UI_TRANSLATIONS = {
     youveGotThis: "Bạn làm được!",
     motivationText: "Mỗi cuộc trò chuyện, mỗi câu, mỗi từ đưa bạn đến gần hơn. CLT là về giao tiếp thực — và bạn đang làm điều đó rồi. 頑張ってください！",
     bookLesson: "Đặt Buổi Học Thử MIỄN PHÍ với GAKU →",
+    weeksRemaining: "tuần còn lại",
+    percentComplete: "% hoàn thành",
+    refresh: "🔄 Làm mới",
+    aiBuilding: "✨ AI đang xây dựng lịch học của bạn...",
+    personalizing: "Cá nhân hóa kế hoạch theo mục tiêu và tiến độ của bạn...",
     helpTitle: "🆘 TRỢ GIÚP",
     whatWouldYouLike: "Bạn muốn gì?",
     customizedLesson: "📋 Bài học tùy chỉnh cho hôm nay",
@@ -2062,6 +2127,11 @@ const UI_TRANSLATIONS = {
     youveGotThis: "आप यह कर सकते हैं!",
     motivationText: "हर बातचीत, हर वाक्य, हर शब्द आपको करीब लाता है। CLT वास्तविक संचार के बारे में है — और आप पहले से ही कर रहे हैं। 頑張ってください！",
     bookLesson: "GAKU के साथ मुफ़्त ट्रायल लेसन बुक करें →",
+    weeksRemaining: "सप्ताह शेष",
+    percentComplete: "% पूर्ण",
+    refresh: "🔄 रीफ्रेश",
+    aiBuilding: "✨ AI आपका शेड्यूल बना रहा है...",
+    personalizing: "आपके लक्ष्य और प्रगति के आधार पर आपकी योजना को व्यक्तिगत बनाया जा रहा है...",
     helpTitle: "🆘 सहायता",
     whatWouldYouLike: "आप क्या चाहते हैं?",
     customizedLesson: "📋 आज के लिए अनुकूलित पाठ",
@@ -2210,6 +2280,11 @@ const UI_TRANSLATIONS = {
     youveGotThis: "あなたならできる！",
     motivationText: "すべての会話、すべての文、すべての単語があなたを目標に近づけます。CLTは実際のコミュニケーションについてのもの — あなたはもうそれをしています。頑張ってください！",
     bookLesson: "GAKUで無料体験レッスンを予約 →",
+    weeksRemaining: "週間残り",
+    percentComplete: "% 完了",
+    refresh: "🔄 更新",
+    aiBuilding: "✨ AIがスケジュールを作成中...",
+    personalizing: "目標と進捗に基づいてプランをカスタマイズ中...",
     helpTitle: "🆘 ヘルプ",
     whatWouldYouLike: "何をしますか？",
     customizedLesson: "📋 今日のカスタムレッスン",
@@ -2358,6 +2433,11 @@ const UI_TRANSLATIONS = {
     youveGotThis: "Bunu başarabilirsin!",
     motivationText: "Her konuşma, her cümle, her kelime seni hedefe yaklaştırır. CLT gerçek iletişimle ilgilidir — ve sen bunu zaten yapıyorsun. 頑張ってください！",
     bookLesson: "GAKU ile ÜCRETSİZ deneme dersi ayırtın →",
+    weeksRemaining: "hafta kaldı",
+    percentComplete: "% tamamlandı",
+    refresh: "🔄 Yenile",
+    aiBuilding: "✨ AI programınızı oluşturuyor...",
+    personalizing: "Plan, hedefinize ve ilerlemenize göre kişiselleştiriliyor...",
     helpTitle: "🆘 YARDIM",
     whatWouldYouLike: "Ne yapmak istersiniz?",
     customizedLesson: "📋 Bugün için özelleştirilmiş ders",
@@ -2506,6 +2586,11 @@ const UI_TRANSLATIONS = {
     youveGotThis: "तपाईंले यो गर्न सक्नुहुन्छ!",
     motivationText: "हरेक कुराकानी, हरेक वाक्य, हरेक शब्दले तपाईंलाई नजिक ल्याउँछ। CLT वास्तविक सञ्चारको बारेमा हो — र तपाईं पहिले नै यो गर्दै हुनुहुन्छ। 頑張ってください！",
     bookLesson: "GAKU सँग नि:शुल्क ट्रायल पाठ बुक गर्नुहोस् →",
+    weeksRemaining: "हप्ता बाँकी",
+    percentComplete: "% पूर्ण",
+    refresh: "🔄 रिफ्रेस",
+    aiBuilding: "✨ AI तपाईंको तालिका बनाउँदैछ...",
+    personalizing: "तपाईंको लक्ष्य र प्रगतिको आधारमा योजना व्यक्तिगत गर्दैछ...",
     helpTitle: "🆘 मद्दत",
     whatWouldYouLike: "तपाईं के चाहनुहुन्छ?",
     customizedLesson: "📋 आजको लागि अनुकूलित पाठ",
@@ -2654,6 +2739,11 @@ const UI_TRANSLATIONS = {
     youveGotThis: "Kaya mo 'to!",
     motivationText: "Bawat usapan, bawat pangungusap, bawat salita ay nagdadala sa iyo nang mas malapit. Ang CLT ay tungkol sa tunay na komunikasyon — at ginagawa mo na ito. 頑張ってください！",
     bookLesson: "Mag-book ng LIBRENG trial lesson kasama ang GAKU →",
+    weeksRemaining: "linggo na natitira",
+    percentComplete: "% kumpleto",
+    refresh: "🔄 I-refresh",
+    aiBuilding: "✨ Gumagawa ang AI ng iyong iskedyul...",
+    personalizing: "Ina-adjust ang iyong plano batay sa iyong layunin at pag-unlad...",
     helpTitle: "🆘 TULONG",
     whatWouldYouLike: "Ano ang gusto mong gawin?",
     customizedLesson: "📋 Customized na aralin para ngayon",
@@ -4390,13 +4480,13 @@ function Dashboard({ form, onEdit }) {
               <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:8 }}>
                 <div>
                   <p style={{ color:C.purpleLight, fontSize:11, fontWeight:700, letterSpacing:1, margin:0 }}>📅 WEEK {currentWeek} / {totalWeeks}</p>
-                  <p style={{ color:"#64748b", fontSize:11, margin:"2px 0 0" }}>{totalWeeks - currentWeek} weeks remaining · {Math.round((currentWeek/totalWeeks)*100)}% complete</p>
+                  <p style={{ color:"#64748b", fontSize:11, margin:"2px 0 0" }}>{totalWeeks - currentWeek} {T.weeksRemaining} · {Math.round((currentWeek/totalWeeks)*100)}{T.percentComplete}</p>
                 </div>
                 <button
                   onClick={() => loadAISchedule(true)}
                   disabled={aiScheduleLoading}
                   style={{ ...S.btn, padding:"7px 12px", background:aiScheduleLoading?"rgba(139,92,246,0.1)":`linear-gradient(135deg,${C.purple},#9333ea)`, color:aiScheduleLoading?"#64748b":"#fff", border:`1px solid rgba(139,92,246,0.3)`, fontSize:11, cursor:aiScheduleLoading?"not-allowed":"pointer" }}>
-                  {aiScheduleLoading ? "⏳ Generating..." : "🔄 Refresh"}
+                  {aiScheduleLoading ? "⏳ " + (T.generating || "Generating...") : T.refresh}
                 </button>
               </div>
               {/* Progress bar */}
@@ -4410,12 +4500,12 @@ function Dashboard({ form, onEdit }) {
 
             <div style={{ ...S.card }}>
               <p style={{ color:C.purpleLight, fontSize:12, fontWeight:700, letterSpacing:1, marginBottom:16 }}>
-                {aiScheduleLoading ? "✨ AI is building your Week " + currentWeek + " schedule..." : T.yourWeeklySchedule}
+                {aiScheduleLoading ? T.aiBuilding : T.yourWeeklySchedule}
               </p>
               {aiScheduleLoading ? (
                 <div style={{ textAlign:"center", padding:"32px 0" }}>
                   <div style={{ fontSize:32, marginBottom:12 }}>🤖</div>
-                  <p style={{ color:"#64748b", fontSize:13 }}>Personalizing your Week {currentWeek} plan based on your goal and progress...</p>
+                  <p style={{ color:"#64748b", fontSize:13 }}>{T.personalizing}</p>
                 </div>
               ) : (
                 WEEKDAY_EN.map((day, di) => {
