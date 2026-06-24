@@ -2957,32 +2957,6 @@ function saveVocabData(data) {
   }
 }
 
-// GAKU Reader extension word injection
-window.addEventListener("message", (e) => {
-  if (e.data && e.data.type === "GAKU_ADD_WORD" && e.data.payload) {
-    const p = e.data.payload;
-    const newWord = {
-      id: Date.now(),
-      word: p.word || "",
-      reading: p.reading || "",
-      meaning: p.meaning || "",
-      jlpt: p.jlpt || "",
-      partOfSpeech: p.partOfSpeech || "",
-      example: p.example || "",
-      example_translated: p.example_translated || "",
-      tip: p.tip || "",
-      folder: "Default",
-      addedAt: new Date().toISOString()
-    };
-    const current = loadVocabData();
-    const folders = current.folders || [];
-    const cards = Array.isArray(current.cards) ? current.cards : [];
-    if (!cards.find(c => c.word === newWord.word)) {
-      const updated = { folders, cards: [newWord, ...cards] };
-      saveVocabData(updated);
-    }
-  }
-});
 
 // ─── SPEAK helper ──────────────────────────────────────────────────────────────
 function speakJapanese(text) {
