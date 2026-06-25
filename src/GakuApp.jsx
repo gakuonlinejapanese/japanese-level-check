@@ -4379,7 +4379,7 @@ function Dashboard({ form, onEdit }) {
         folder: "GAKU Extension", addedAt: Date.now()
       };
       if (!data.cards.find(c => c.word === word && c.folder === "GAKU Extension")) {
-        if (!data.folders.includes("GAKU Extension")) data.folders.push("GAKU Extension");
+        if (!data.folders.find(f=>f==="GAKU Extension"||(f&&f.name==="GAKU Extension"))) data.folders.push({ name: "GAKU Extension", createdAt: new Date().toISOString() });
         data.cards.push(newCard);
         saveVocabData(data);
       }
