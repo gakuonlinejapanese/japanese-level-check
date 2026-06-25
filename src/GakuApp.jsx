@@ -3257,6 +3257,11 @@ function LibraryView({ onBack, onSelectFolder, onCreateCard }) {
   const [confirmDelete, setConfirmDelete] = useState(null); // folder name to delete
 
   const refresh = () => setData(loadVocabData());
+  useEffect(() => {
+    const handler = () => setData(loadVocabData());
+    window.addEventListener("gaku_vocab_updated", handler);
+    return () => window.removeEventListener("gaku_vocab_updated", handler);
+  }, []);
 
   const allFolders = [{ name:"Your Vocabulary" }, ...data.folders];
 
@@ -4379,6 +4384,7 @@ function Dashboard({ form, onEdit }) {
         saveVocabData(data);
       }
       setTab("vocabulary");
+      window.dispatchEvent(new CustomEvent("gaku_vocab_updated"));
     };
     window.addEventListener("message", handleExtMessage);
     return () => window.removeEventListener("message", handleExtMessage);
