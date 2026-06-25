@@ -4363,7 +4363,7 @@ function Dashboard({ form, onEdit }) {
         partOfSpeech: partOfSpeech || "", meaning: meaning || "",
         meaningNative: "", example: example || "", example_translated: example_translated || "",
         tip: tip || "", imageQuery: word, imageDesc: "",
-        folder: "GAKU Extension", addedAt: Date.now()
+        folder: e.data.payload.folder || "GAKU Extension", addedAt: Date.now()
       };
       if (!data.cards.find(c => c.word === word && c.folder === "GAKU Extension")) {
         if (!data.folders.find(f=>f==="GAKU Extension"||(f&&f.name==="GAKU Extension"))) data.folders.push({ name: "GAKU Extension", createdAt: new Date().toISOString() });
