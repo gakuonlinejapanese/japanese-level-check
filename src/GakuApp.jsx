@@ -3077,7 +3077,8 @@ function WordDetailCard({ card, onSave, onBack, form, prefLang }) {
           <p style={{ color:C.amber, fontSize:11, fontWeight:700, letterSpacing:1, margin:0 }}>✏️ EXAMPLE SENTENCE</p>
           <button onClick={()=>speakJapanese(card.example)} style={{ background:`rgba(245,158,11,0.1)`, border:`1px solid rgba(245,158,11,0.3)`, borderRadius:8, color:C.amber, fontSize:14, padding:"3px 10px", cursor:"pointer" }}>🔊</button>
         </div>
-        <p style={{ color:"#f1f5f9", fontSize:14, lineHeight:1.9, margin:"0 0 6px" }}>{card.example}</p>
+        <p style={{ color:"#f1f5f9", fontSize:14, lineHeight:1.9, margin:"0 0 4px" }}>{card.example}</p>
+        {card.reading_example && <p style={{ color:"#67e8f9", fontSize:12, margin:"0 0 4px", fontStyle:"italic" }}>{card.reading_example}</p>}
         <p style={{ color:"#64748b", fontSize:13, margin:0, fontStyle:"italic" }}>{card.example_translated}</p>
       </div>
 
@@ -3113,20 +3114,6 @@ function WordDetailCard({ card, onSave, onBack, form, prefLang }) {
         {card.imageDesc && <p style={{ color:"#94a3b8", fontSize:12, margin:"8px 0 0", lineHeight:1.6 }}>{card.imageDesc}</p>}
       </div>
 
-      {/* ── WEBLIO DICTIONARY LINK ── */}
-      <a
-        href={`https://www.weblio.jp/content/${encodeURIComponent(card.word)}`}
-        target="_blank" rel="noopener noreferrer"
-        style={{ textDecoration:"none", display:"block", marginBottom:12 }}
-      >
-        <div style={{ ...S.card, display:"flex", alignItems:"center", justifyContent:"space-between", padding:"13px 16px", borderLeft:`3px solid #e85d04` }}>
-          <div>
-            <p style={{ color:"#f1f5f9", fontSize:13, fontWeight:700, margin:"0 0 2px" }}>📖 Weblio辞書で「{card.word}」を調べる</p>
-            <p style={{ color:"#64748b", fontSize:11, margin:0 }}>日本語辞書・英和辞典・例文を確認</p>
-          </div>
-          <span style={{ color:"#e85d04", fontSize:18 }}>→</span>
-        </div>
-      </a>
 
       {/* ── CLT TIP ── */}
       {card.tip && (
