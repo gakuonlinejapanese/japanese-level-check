@@ -2988,8 +2988,9 @@ function speakJapanese(text) {
 }
 
 // ─── WORD DETAIL CARD ──────────────────────────────────────────────────────────
-function WordDetailCard({ card, onSave, onBack, form, prefLang }) {
+function WordDetailCard({ card: cardProp, onSave, onBack, form, prefLang }) {
   const T = useUITranslations(prefLang || form?.preferredLang || "English");
+  const [card, setCard] = useState(cardProp);
   const [saveModal, setSaveModal] = useState(false);
   const [newFolderName, setNewFolderName] = useState("");
   const [selectedFolder, setSelectedFolder] = useState("");
@@ -2999,6 +3000,51 @@ function WordDetailCard({ card, onSave, onBack, form, prefLang }) {
   const [imgIndex, setImgIndex] = useState(0);
   const [imgSrc, setImgSrc] = useState("");
   const [imgLoading, setImgLoading] = useState(false);
+  const [filling, setFilling] = useState(false);
+
+  // Auto-fill empty meaning/example via AI when card opens
+  useEffect(() => {
+    const needsFill = !card.meaning || !card.example;
+    if (!needsFill || filling) return;
+    const lang = prefLang || form?.preferredLang || "English";
+    setFilling(true);
+    (async () => {
+      try {
+        const res = await fetch("/api/claude", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            max_tokens: 600,
+            messages: [
+              { role: "system", content: `You are a Japanese dictionary. Respond ONLY with a raw JSON object, no markdown, no backticks.` },
+              { role: "user", content: `Fill in the missing fields for this Japanese word: "${card.word}" (reading: "${card.reading || card.word}").\nReturn a JSON object with these fields:\n- meaning: translation in ${lang}\n- meaningNative: simple Japanese definition (e.g.「食べ物を料理すること」)\n- example: natural Japanese example sentence\n- reading_example: romaji reading of the example sentence\n- example_translated: translation of example in ${lang}\n- tip: usage tip in ${lang}\nOnly output the JSON object.` }
+            ]
+          })
+        });
+        const data = await res.json();
+        const text = data?.content?.[0]?.text || "";
+        const clean = text.replace(/```json|```/g, "").trim();
+        const parsed = JSON.parse(clean);
+        setCard(prev => ({
+          ...prev,
+          meaning: prev.meaning || parsed.meaning || "",
+          meaningNative: prev.meaningNative || parsed.meaningNative || "",
+          example: prev.example || parsed.example || "",
+          reading_example: prev.reading_example || parsed.reading_example || "",
+          example_translated: prev.example_translated || parsed.example_translated || "",
+          tip: prev.tip || parsed.tip || "",
+        }));
+        // Also persist updated data to localStorage if this card is already saved
+        const vocabData = loadVocabData();
+        const idx = vocabData.cards.findIndex(c => c.word === cardProp.word && c.folder === cardProp.folder);
+        if (idx !== -1) {
+          vocabData.cards[idx] = { ...vocabData.cards[idx], ...parsed };
+          saveVocabData(vocabData);
+        }
+      } catch(e) { /* silently fail */ }
+      setFilling(false);
+    })();
+  }, []);
 
   const searchImage = async () => {
     setImgLoading(true);
@@ -3083,7 +3129,10 @@ function WordDetailCard({ card, onSave, onBack, form, prefLang }) {
       {/* ── DEFINITION ── */}
       <div style={{ ...S.card, marginBottom:12 }}>
         <p style={{ color:C.purpleLight, fontSize:11, fontWeight:700, letterSpacing:1, margin:"0 0 8px" }}>📖 DEFINITION</p>
-        <p style={{ color:"#f1f5f9", fontSize:14, lineHeight:1.8, margin:0 }}>{card.meaning}</p>
+        {filling && !card.meaning
+          ? <p style={{ color:"#475569", fontSize:13, fontStyle:"italic" }}>✨ AI generating...</p>
+          : <p style={{ color:"#f1f5f9", fontSize:14, lineHeight:1.8, margin:0 }}>{card.meaning}</p>
+        }
         {card.meaningNative && (
           <p style={{ color:"#64748b", fontSize:13, lineHeight:1.7, margin:"8px 0 0", borderTop:`1px solid ${C.border}`, paddingTop:8 }}>{card.meaningNative}</p>
         )}
@@ -3095,9 +3144,14 @@ function WordDetailCard({ card, onSave, onBack, form, prefLang }) {
           <p style={{ color:C.amber, fontSize:11, fontWeight:700, letterSpacing:1, margin:0 }}>✏️ EXAMPLE SENTENCE</p>
           <button onClick={()=>speakJapanese(card.example)} style={{ background:`rgba(245,158,11,0.1)`, border:`1px solid rgba(245,158,11,0.3)`, borderRadius:8, color:C.amber, fontSize:14, padding:"3px 10px", cursor:"pointer" }}>🔊</button>
         </div>
-        <p style={{ color:"#f1f5f9", fontSize:14, lineHeight:1.9, margin:"0 0 4px" }}>{card.example}</p>
-        {card.reading_example && <p style={{ color:"#67e8f9", fontSize:12, margin:"0 0 4px", fontStyle:"italic" }}>{card.reading_example}</p>}
-        {card.example_translated && <p style={{ color:"#64748b", fontSize:13, margin:0, fontStyle:"italic" }}>{card.example_translated}</p>}
+        {filling && !card.example
+          ? <p style={{ color:"#475569", fontSize:13, fontStyle:"italic" }}>✨ AI generating...</p>
+          : <>
+              <p style={{ color:"#f1f5f9", fontSize:14, lineHeight:1.9, margin:"0 0 4px" }}>{card.example}</p>
+              {card.reading_example && <p style={{ color:"#67e8f9", fontSize:12, margin:"0 0 4px", fontStyle:"italic" }}>{card.reading_example}</p>}
+              {card.example_translated && <p style={{ color:"#64748b", fontSize:13, margin:0, fontStyle:"italic" }}>{card.example_translated}</p>}
+            </>
+        }
       </div>
 
       {/* ── IMAGE ASSOCIATION ── */}
