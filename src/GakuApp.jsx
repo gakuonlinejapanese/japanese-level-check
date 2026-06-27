@@ -3053,25 +3053,22 @@ function WordDetailCard({ card: cardProp, onSave, onBack, form, prefLang }) {
     setImgIndex(nextIndex);
     try {
       const query = card.imageQuery || card.word;
+      // Google画像をCORSフリーのimages.google.com検索URLで取得
+      // Wikimediaから1枚ずつ取得（offsetで次の画像へ）
       const offset = nextIndex - 1;
-      const url = `https://commons.wikimedia.org/w/api.php?action=query&generator=search&gsrnamespace=6&gsrsearch=${encodeURIComponent(query)}&gsrlimit=1&gsroffset=${offset}&prop=imageinfo&iiprop=url&iiurlwidth=400&format=json&origin=*`;
-      const res = await fetch(url);
-      const data = await res.json();
-      const pages = Object.values(data?.query?.pages || {});
-      const thumbUrl = pages[0]?.imageinfo?.[0]?.thumburl;
-      if (thumbUrl) {
-        setImgSrc(thumbUrl);
-        setImgError(false);
-      } else {
-        // Fallback: try with Japanese word directly
-        const url2 = `https://commons.wikimedia.org/w/api.php?action=query&generator=search&gsrnamespace=6&gsrsearch=${encodeURIComponent(card.word)}&gsrlimit=1&gsroffset=${offset}&prop=imageinfo&iiprop=url&iiurlwidth=400&format=json&origin=*`;
-        const res2 = await fetch(url2);
-        const data2 = await res2.json();
-        const pages2 = Object.values(data2?.query?.pages || {});
-        const thumb2 = pages2[0]?.imageinfo?.[0]?.thumburl;
-        if (thumb2) { setImgSrc(thumb2); setImgError(false); }
-        else { setImgError(true); }
+      const searches = [
+        `https://commons.wikimedia.org/w/api.php?action=query&generator=search&gsrnamespace=6&gsrsearch=${encodeURIComponent(query)}&gsrlimit=1&gsroffset=${offset}&prop=imageinfo&iiprop=url&iiurlwidth=400&format=json&origin=*`,
+        `https://commons.wikimedia.org/w/api.php?action=query&generator=search&gsrnamespace=6&gsrsearch=${encodeURIComponent(card.word)}&gsrlimit=1&gsroffset=${offset}&prop=imageinfo&iiprop=url&iiurlwidth=400&format=json&origin=*`
+      ];
+      let found = false;
+      for (const url of searches) {
+        const res = await fetch(url);
+        const data = await res.json();
+        const pages = Object.values(data?.query?.pages || {});
+        const thumb = pages.find(p => p?.imageinfo?.[0]?.thumburl && !/svg/i.test(p.imageinfo[0].thumburl))?.imageinfo?.[0]?.thumburl;
+        if (thumb) { setImgSrc(thumb); setImgError(false); found = true; break; }
       }
+      if (!found) { setImgError(true); }
     } catch {
       setImgError(true);
     }
@@ -3144,12 +3141,15 @@ function WordDetailCard({ card: cardProp, onSave, onBack, form, prefLang }) {
           <p style={{ color:C.amber, fontSize:11, fontWeight:700, letterSpacing:1, margin:0 }}>✏️ EXAMPLE SENTENCE</p>
           <button onClick={()=>speakJapanese(card.example)} style={{ background:`rgba(245,158,11,0.1)`, border:`1px solid rgba(245,158,11,0.3)`, borderRadius:8, color:C.amber, fontSize:14, padding:"3px 10px", cursor:"pointer" }}>🔊</button>
         </div>
-        {filling && !card.example
+        {filling && (!card.example || !card.example_translated)
           ? <p style={{ color:"#475569", fontSize:13, fontStyle:"italic" }}>✨ AI generating...</p>
           : <>
               <p style={{ color:"#f1f5f9", fontSize:14, lineHeight:1.9, margin:"0 0 4px" }}>{card.example}</p>
               {card.reading_example && <p style={{ color:"#67e8f9", fontSize:12, margin:"0 0 4px", fontStyle:"italic" }}>{card.reading_example}</p>}
-              {card.example_translated && <p style={{ color:"#64748b", fontSize:13, margin:0, fontStyle:"italic" }}>{card.example_translated}</p>}
+              {card.example_translated
+                ? <p style={{ color:"#64748b", fontSize:13, margin:0, fontStyle:"italic" }}>{card.example_translated}</p>
+                : <p style={{ color:"#334155", fontSize:12, margin:0, fontStyle:"italic" }}>⏳ translating...</p>
+              }
             </>
         }
       </div>
@@ -3171,22 +3171,35 @@ function WordDetailCard({ card: cardProp, onSave, onBack, form, prefLang }) {
                 style={{ fontSize:11, color:"#22c55e", fontWeight:700, background:"rgba(34,197,94,0.1)", padding:"5px 10px", borderRadius:8, border:"1px solid rgba(34,197,94,0.3)", cursor:"pointer" }}
               >💾 保存</button>
             )}
+            {imgSrc && !imgError && (
+              <button
+                onClick={searchImage}
+                disabled={imgLoading}
+                style={{ fontSize:11, color:C.amber, fontWeight:700, background:"rgba(245,158,11,0.1)", padding:"5px 10px", borderRadius:8, border:"1px solid rgba(245,158,11,0.3)", cursor:"pointer" }}
+              >次の画像 →</button>
+            )}
             <button
               onClick={searchImage}
               disabled={imgLoading}
               style={{ fontSize:11, color:C.teal, fontWeight:700, background:"rgba(6,182,212,0.1)", padding:"5px 12px", borderRadius:8, border:`1px solid rgba(6,182,212,0.2)`, cursor:"pointer" }}
-            >
-              {imgLoading ? "..." : "🔍 SEARCH"}
-            </button>
+            >{imgLoading ? "..." : imgSrc ? "🔍" : "🔍 SEARCH"}</button>
           </div>
         </div>
         {imgSrc && !imgError ? (
-          <img
-            src={imgSrc}
-            alt={card.word}
-            onError={()=>setImgError(true)}
-            style={{ width:"100%", borderRadius:10, objectFit:"cover", height:200, display:"block" }}
-          />
+          <div>
+            <img
+              src={imgSrc}
+              alt={card.word}
+              onError={()=>setImgError(true)}
+              style={{ width:"100%", borderRadius:10, objectFit:"cover", maxHeight:220, display:"block" }}
+            />
+            <p style={{ color:"#475569", fontSize:10, margin:"4px 0 0", textAlign:"center" }}>{imgIndex}枚目 · 「次の画像」で別の画像を表示 · 「💾 保存」で単語カードに保存</p>
+          </div>
+        ) : card.imageUrl ? (
+          <div>
+            <img src={card.imageUrl} alt={card.word} style={{ width:"100%", borderRadius:10, objectFit:"cover", maxHeight:220, display:"block" }} />
+            <p style={{ color:"#22c55e", fontSize:10, margin:"4px 0 0", textAlign:"center" }}>✓ 保存済み</p>
+          </div>
         ) : (
           <div
             onClick={searchImage}
@@ -3194,11 +3207,8 @@ function WordDetailCard({ card: cardProp, onSave, onBack, form, prefLang }) {
           >
             <span style={{ color:C.teal, fontSize:32, marginBottom:8 }}>🔍</span>
             <span style={{ color:C.teal, fontSize:13, fontWeight:700 }}>「{card.word}」の画像を検索</span>
-            <span style={{ color:"#475569", fontSize:11, marginTop:4 }}>SEARCHボタンを押してください</span>
+            <span style={{ color:"#475569", fontSize:11, marginTop:4 }}>タップして画像を検索</span>
           </div>
-        )}
-        {card.imageUrl && !imgSrc && (
-          <img src={card.imageUrl} alt={card.word} style={{ width:"100%", borderRadius:10, objectFit:"cover", height:200, display:"block" }} onError={()=>{}} />
         )}
         {card.imageDesc && <p style={{ color:"#94a3b8", fontSize:12, margin:"8px 0 0", lineHeight:1.6 }}>{card.imageDesc}</p>}
       </div>
