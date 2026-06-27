@@ -3004,7 +3004,7 @@ function WordDetailCard({ card: cardProp, onSave, onBack, form, prefLang }) {
 
   // Auto-fill empty meaning/example via AI when card opens
   useEffect(() => {
-    const needsFill = !card.meaning || !card.example;
+    const needsFill = !card.meaning || !card.example || !card.example_translated;
     if (!needsFill || filling) return;
     const lang = prefLang || form?.preferredLang || "English";
     setFilling(true);
@@ -3158,13 +3158,27 @@ function WordDetailCard({ card: cardProp, onSave, onBack, form, prefLang }) {
       <div style={{ ...S.card, marginBottom:12 }}>
         <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:10 }}>
           <p style={{ color:"#64748b", fontSize:11, fontWeight:700, letterSpacing:1, margin:0 }}>🖼 IMAGE ASSOCIATION</p>
-          <button
-            onClick={searchImage}
-            disabled={imgLoading}
-            style={{ fontSize:11, color:C.teal, fontWeight:700, background:"rgba(6,182,212,0.1)", padding:"5px 12px", borderRadius:8, border:`1px solid rgba(6,182,212,0.2)`, cursor:"pointer" }}
-          >
-            {imgLoading ? "..." : "🔍 SEARCH"}
-          </button>
+          <div style={{ display:"flex", gap:6 }}>
+            {imgSrc && !imgError && (
+              <button
+                onClick={()=>{
+                  const data = loadVocabData();
+                  const idx = data.cards.findIndex(c=>c.word===card.word);
+                  if(idx!==-1){ data.cards[idx].imageUrl=imgSrc; saveVocabData(data); }
+                  setCard(prev=>({...prev, imageUrl:imgSrc}));
+                  showToast("✓ 画像を保存しました");
+                }}
+                style={{ fontSize:11, color:"#22c55e", fontWeight:700, background:"rgba(34,197,94,0.1)", padding:"5px 10px", borderRadius:8, border:"1px solid rgba(34,197,94,0.3)", cursor:"pointer" }}
+              >💾 保存</button>
+            )}
+            <button
+              onClick={searchImage}
+              disabled={imgLoading}
+              style={{ fontSize:11, color:C.teal, fontWeight:700, background:"rgba(6,182,212,0.1)", padding:"5px 12px", borderRadius:8, border:`1px solid rgba(6,182,212,0.2)`, cursor:"pointer" }}
+            >
+              {imgLoading ? "..." : "🔍 SEARCH"}
+            </button>
+          </div>
         </div>
         {imgSrc && !imgError ? (
           <img
@@ -3182,6 +3196,9 @@ function WordDetailCard({ card: cardProp, onSave, onBack, form, prefLang }) {
             <span style={{ color:C.teal, fontSize:13, fontWeight:700 }}>「{card.word}」の画像を検索</span>
             <span style={{ color:"#475569", fontSize:11, marginTop:4 }}>SEARCHボタンを押してください</span>
           </div>
+        )}
+        {card.imageUrl && !imgSrc && (
+          <img src={card.imageUrl} alt={card.word} style={{ width:"100%", borderRadius:10, objectFit:"cover", height:200, display:"block" }} onError={()=>{}} />
         )}
         {card.imageDesc && <p style={{ color:"#94a3b8", fontSize:12, margin:"8px 0 0", lineHeight:1.6 }}>{card.imageDesc}</p>}
       </div>
