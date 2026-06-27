@@ -3285,20 +3285,21 @@ function FlashcardView({ cards, onBack }) {
       <div onClick={()=>setFlipped(f=>!f)} style={{ ...S.card, minHeight:220, display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", cursor:"pointer", textAlign:"center", borderLeft:`4px solid ${C.teal}`, marginBottom:16 }}>
         {!flipped ? (
           <>
-            <p style={{ color:"#f1f5f9", fontSize:40, fontWeight:900, margin:"0 0 4px", letterSpacing:2 }}>{card.word}</p>
-            {card.reading && <p style={{ color:C.teal, fontSize:15, margin:"0 0 2px" }}>{card.reading}</p>}
-            {card.reading_example && <p style={{ color:"#475569", fontSize:12, fontStyle:"italic", margin:"0 0 10px" }}>{card.reading_example.split(" ")[0]}</p>}
-            {card.meaning && <p style={{ color:"#64748b", fontSize:12, margin:"0 0 12px" }}>{card.meaning}</p>}
-            <p style={{ color:"#334155", fontSize:11 }}>Tap to reveal</p>
+            <p style={{ color:"#f1f5f9", fontSize:44, fontWeight:900, margin:"0 0 6px", letterSpacing:2 }}>{card.word}</p>
+            {card.reading && <p style={{ color:C.teal, fontSize:16, margin:"0 0 2px", fontWeight:600 }}>{card.reading}</p>}
+            {card.meaning && <p style={{ color:"#64748b", fontSize:11, margin:"0 0 14px" }}>{card.meaning}</p>}
+            <p style={{ color:"#334155", fontSize:11 }}>タップして確認</p>
           </>
         ) : (
           <>
-            <p style={{ color:"#f1f5f9", fontSize:18, fontWeight:700, margin:"0 0 4px", lineHeight:1.5 }}>{card.meaning}</p>
-            {card.meaningNative && <p style={{ color:"#64748b", fontSize:12, margin:"0 0 8px" }}>{card.meaningNative}</p>}
-            <p style={{ color:"#94a3b8", fontSize:13, lineHeight:1.7, maxWidth:280, margin:"0 0 4px" }}>{card.example}</p>
-            {card.reading_example && <p style={{ color:"#67e8f9", fontSize:11, fontStyle:"italic", maxWidth:280, margin:"0 0 4px" }}>{card.reading_example}</p>}
-            {card.example_translated && <p style={{ color:"#475569", fontSize:12, fontStyle:"italic", maxWidth:280, margin:"0 0 10px" }}>{card.example_translated}</p>}
-            <button onClick={e=>{e.stopPropagation();speakJapanese(card.example);}} style={{ background:"rgba(245,158,11,0.1)", border:"1px solid rgba(245,158,11,0.3)", borderRadius:8, color:C.amber, fontSize:13, padding:"5px 14px", cursor:"pointer" }}>🔊 例文を聞く</button>
+            <p style={{ color:"#f1f5f9", fontSize:20, fontWeight:800, margin:"0 0 2px" }}>{card.word}</p>
+            {card.reading && <p style={{ color:C.teal, fontSize:13, margin:"0 0 2px" }}>{card.reading}</p>}
+            {card.meaning && <p style={{ color:"#94a3b8", fontSize:12, margin:"0 0 10px" }}>{card.meaning}</p>}
+            {card.meaningNative && <p style={{ color:"#475569", fontSize:11, margin:"0 0 8px", fontStyle:"italic" }}>{card.meaningNative}</p>}
+            {card.example && <p style={{ color:"#cbd5e1", fontSize:13, lineHeight:1.7, maxWidth:280, margin:"0 0 2px" }}>{card.example}</p>}
+            {card.reading_example && <p style={{ color:"#67e8f9", fontSize:11, fontStyle:"italic", maxWidth:280, margin:"0 0 2px" }}>{card.reading_example}</p>}
+            {card.example_translated && <p style={{ color:"#64748b", fontSize:11, fontStyle:"italic", maxWidth:280, margin:"0 0 10px" }}>{card.example_translated}</p>}
+            <button onClick={e=>{e.stopPropagation();speakJapanese(card.example);}} style={{ background:"rgba(245,158,11,0.1)", border:"1px solid rgba(245,158,11,0.3)", borderRadius:8, color:C.amber, fontSize:12, padding:"4px 12px", cursor:"pointer" }}>🔊 例文を聞く</button>
           </>
         )}
       </div>
