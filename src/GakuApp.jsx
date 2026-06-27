@@ -3010,14 +3010,19 @@ function WordDetailCard({ card: cardProp, onSave, onBack, form, prefLang }) {
     setFilling(true);
     (async () => {
       try {
+        // If example already exists but translation is missing, use a dedicated translation prompt
+        const hasExample = card.example && card.example.trim();
+        const userPrompt = hasExample && !card.example_translated
+          ? `For the Japanese word "${card.word}" (reading: "${card.reading || card.word}"), fill in the missing fields.\nThe example sentence already exists: "${card.example}"\nReturn a JSON object with these fields:\n- meaning: ${card.meaning ? `"${card.meaning}"` : `translation in ${lang}`}\n- meaningNative: ${card.meaningNative ? `"${card.meaningNative}"` : "simple Japanese definition"}\n- example: "${card.example}"\n- reading_example: romaji reading of the above example sentence\n- example_translated: translation of the above example sentence into ${lang} (REQUIRED - must not be empty)\n- tip: usage tip in ${lang}\nOnly output the JSON object, no markdown, no backticks.`
+          : `Fill in the missing fields for this Japanese word: "${card.word}" (reading: "${card.reading || card.word}").\nReturn a JSON object with these fields:\n- meaning: translation in ${lang}\n- meaningNative: simple Japanese definition (e.g.「食べ物を料理すること」)\n- example: natural Japanese example sentence\n- reading_example: romaji reading of the example sentence\n- example_translated: translation of example in ${lang} (REQUIRED - must not be empty)\n- tip: usage tip in ${lang}\nOnly output the JSON object.`;
         const res = await fetch("/api/claude", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             max_tokens: 600,
             messages: [
-              { role: "system", content: `You are a Japanese dictionary. Respond ONLY with a raw JSON object, no markdown, no backticks.` },
-              { role: "user", content: `Fill in the missing fields for this Japanese word: "${card.word}" (reading: "${card.reading || card.word}").\nReturn a JSON object with these fields:\n- meaning: translation in ${lang}\n- meaningNative: simple Japanese definition (e.g.「食べ物を料理すること」)\n- example: natural Japanese example sentence\n- reading_example: romaji reading of the example sentence\n- example_translated: translation of example in ${lang}\n- tip: usage tip in ${lang}\nOnly output the JSON object.` }
+              { role: "system", content: `You are a Japanese dictionary. Respond ONLY with a raw JSON object, no markdown, no backticks. The example_translated field is mandatory and must always contain a translation.` },
+              { role: "user", content: userPrompt }
             ]
           })
         });
@@ -3031,7 +3036,7 @@ function WordDetailCard({ card: cardProp, onSave, onBack, form, prefLang }) {
           meaningNative: prev.meaningNative || parsed.meaningNative || "",
           example: prev.example || parsed.example || "",
           reading_example: prev.reading_example || parsed.reading_example || "",
-          example_translated: prev.example_translated || parsed.example_translated || "",
+          example_translated: parsed.example_translated || prev.example_translated || "",
           tip: prev.tip || parsed.tip || "",
         }));
         // Also persist updated data to localStorage if this card is already saved
@@ -3255,20 +3260,20 @@ function WordDetailCard({ card: cardProp, onSave, onBack, form, prefLang }) {
 
             {saveMode === "addFolder" && (() => {
               const data = loadVocabData();
-              const folders = [{ name: T.yourVocabSaved || "Your Vocabulary" }, ...data.folders];
+              const folders = [{ key: "Your Vocabulary", label: T.yourVocabSaved || "Your Vocabulary" }, ...data.folders.map(f=>({ key: f.name, label: f.name }))];
               return (
                 <>
                   <button onClick={()=>setSaveMode("")} style={{ background:"none", border:"none", color:"#64748b", fontSize:13, cursor:"pointer", padding:0, marginBottom:14 }}>{T.saveBack || "← Back"}</button>
                   <p style={{ color:"#f1f5f9", fontSize:15, fontWeight:800, margin:"0 0 14px" }}>{T.saveChooseFolder || "Choose a folder"}</p>
                   {folders.map(f => (
-                    <button key={f.name} onClick={()=>setSelectedFolder(f.name)} style={{ display:"flex", alignItems:"center", justifyContent:"space-between", width:"100%", padding:"13px 16px", borderRadius:12, background:selectedFolder===f.name?"rgba(168,85,247,0.15)":C.card, border:`1.5px solid ${selectedFolder===f.name?C.purpleLight:C.border}`, color:"#f1f5f9", textAlign:"left", cursor:"pointer", marginBottom:8 }}>
-                      <span style={{ fontSize:14, fontWeight:selectedFolder===f.name?700:400 }}>📁 {f.name}</span>
-                      {selectedFolder===f.name && <span style={{ color:C.purpleLight, fontSize:16 }}>✓</span>}
+                    <button key={f.key} onClick={()=>setSelectedFolder(f.key)} style={{ display:"flex", alignItems:"center", justifyContent:"space-between", width:"100%", padding:"13px 16px", borderRadius:12, background:selectedFolder===f.key?"rgba(168,85,247,0.15)":C.card, border:`1.5px solid ${selectedFolder===f.key?C.purpleLight:C.border}`, color:"#f1f5f9", textAlign:"left", cursor:"pointer", marginBottom:8 }}>
+                      <span style={{ fontSize:14, fontWeight:selectedFolder===f.key?700:400 }}>📁 {f.label}</span>
+                      {selectedFolder===f.key && <span style={{ color:C.purpleLight, fontSize:16 }}>✓</span>}
                     </button>
                   ))}
                   {folders.length === 1 && <p style={{ color:"#475569", fontSize:12, textAlign:"center", margin:"8px 0" }}>{T.saveNoFolders || "No custom folders yet — create one first!"}</p>}
                   <button onClick={()=>{ if(selectedFolder) doSave(selectedFolder); }} disabled={!selectedFolder} style={{ ...S.btn, width:"100%", marginTop:8, background:selectedFolder?`linear-gradient(135deg,${C.purple},#9333ea)`:"#1e293b", color:selectedFolder?"#fff":"#475569" }}>
-                    {T.saveTo || "Save to"} "{selectedFolder || "..."}"
+                    {T.saveTo || "Save to"} "{folders.find(f=>f.key===selectedFolder)?.label || "..."}"
                   </button>
                 </>
               );
