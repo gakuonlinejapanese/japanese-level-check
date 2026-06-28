@@ -3004,17 +3004,18 @@ function WordDetailCard({ card: cardProp, onSave, onBack, form, prefLang }) {
 
   // Auto-fill empty meaning/example via AI when card opens
   useEffect(() => {
-    const needsFill = !card.meaning || !card.example || !card.example_translated;
-    if (!needsFill || filling) return;
+    setFilling(false);
+    const needsFill = !cardProp.meaning || !cardProp.example || !cardProp.example_translated;
+    if (!needsFill) return;
     const lang = prefLang || form?.preferredLang || "English";
     setFilling(true);
     (async () => {
       try {
         // If example already exists but translation is missing, use a dedicated translation prompt
-        const hasExample = card.example && card.example.trim();
-        const userPrompt = hasExample && !card.example_translated
-          ? `For the Japanese word "${card.word}" (reading: "${card.reading || card.word}"), fill in the missing fields.\nThe example sentence already exists: "${card.example}"\nReturn a JSON object with these fields:\n- meaning: ${card.meaning ? `"${card.meaning}"` : `translation in ${lang}`}\n- meaningNative: ${card.meaningNative ? `"${card.meaningNative}"` : "simple Japanese definition"}\n- example: "${card.example}"\n- reading_example: romaji reading of the above example sentence\n- example_translated: translation of the above example sentence into ${lang} (REQUIRED - must not be empty)\n- tip: usage tip in ${lang}\nOnly output the JSON object, no markdown, no backticks.`
-          : `Fill in the missing fields for this Japanese word: "${card.word}" (reading: "${card.reading || card.word}").\nReturn a JSON object with these fields:\n- meaning: translation in ${lang}\n- meaningNative: simple Japanese definition (e.g.「食べ物を料理すること」)\n- example: natural Japanese example sentence\n- reading_example: romaji reading of the example sentence\n- example_translated: translation of example in ${lang} (REQUIRED - must not be empty)\n- tip: usage tip in ${lang}\nOnly output the JSON object.`;
+        const hasExample = cardProp.example && cardProp.example.trim();
+        const userPrompt = hasExample && !cardProp.example_translated
+          ? `For the Japanese word "${cardProp.word}" (reading: "${cardProp.reading || cardProp.word}"), fill in the missing fields.\nThe example sentence already exists: "${cardProp.example}"\nReturn a JSON object with these fields:\n- meaning: ${cardProp.meaning ? `"${cardProp.meaning}"` : `translation in ${lang}`}\n- meaningNative: ${cardProp.meaningNative ? `"${cardProp.meaningNative}"` : "simple Japanese definition"}\n- example: "${cardProp.example}"\n- reading_example: romaji reading of the above example sentence\n- example_translated: translation of the above example sentence into ${lang} (REQUIRED - must not be empty)\n- tip: usage tip in ${lang}\nOnly output the JSON object, no markdown, no backticks.`
+          : `Fill in the missing fields for this Japanese word: "${cardProp.word}" (reading: "${cardProp.reading || cardProp.word}").\nReturn a JSON object with these fields:\n- meaning: translation in ${lang}\n- meaningNative: simple Japanese definition (e.g.「食べ物を料理すること」)\n- example: natural Japanese example sentence\n- reading_example: romaji reading of the example sentence\n- example_translated: translation of example in ${lang} (REQUIRED - must not be empty)\n- tip: usage tip in ${lang}\nOnly output the JSON object.`;
         const res = await fetch("/api/claude", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -3049,7 +3050,7 @@ function WordDetailCard({ card: cardProp, onSave, onBack, form, prefLang }) {
       } catch(e) { /* silently fail */ }
       setFilling(false);
     })();
-  }, []);
+  }, [cardProp.word]);
 
   const searchImage = async () => {
     setImgLoading(true);
