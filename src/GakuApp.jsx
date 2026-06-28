@@ -22,31 +22,64 @@ const S = {
 const RESOURCES = {
   pronunciation: [
     { name:"Anki (Japanese Decks)", desc:"Build phonetic recognition with audio flashcards. CLT: hear and repeat.", url:"https://ankiweb.net/shared/decks?search=japanese", free:true },
+    { name:"Japanese Ammo with Misa", desc:"Practical example sentences and pronunciation drills. CLT-focused.", url:"https://www.youtube.com/@JapaneseAmmowithMisa", free:true },
+    { name:"Onomappu", desc:"Japanese-only explanations. Comprehensible Input — CLT compatibility very high.", url:"https://www.youtube.com/@Onomappu", free:true },
   ],
   listening: [
     { name:"NHK World Lesson", desc:"Authentic NHK audio lessons. CLT input at natural pace.", url:"https://www3.nhk.or.jp/nhkworld/lesson/en/lessons/", free:true },
-    { name:"Erin ga Chosen", desc:"Drama-based listening. Real conversational Japanese in context.", url:"https://www.erin.jpf.go.jp/en/lesson/09/advanced/", free:true },
+    { name:"Erin's Challenge", desc:"Drama-based listening with real-life scenarios and role-play. CLT compatibility extremely high.", url:"https://www.erin.jpf.go.jp/en/lesson/09/advanced/", free:true },
     { name:"JapanesePod101 (YouTube)", desc:"Structured listening practice. Watch and shadow for CLT output.", url:"https://www.youtube.com/watch?v=B_55oW65H4M", free:true },
+    { name:"Nihongo con Teppei", desc:"Daily natural conversation podcast. Recommended by Japanese teachers worldwide.", url:"https://nihongoconteppei.com", free:true },
+    { name:"YUYU Japanese Podcast", desc:"Natural speed, authentic materials. CLT-compatible listening at N3-N2.", url:"https://www.youtube.com/@yuyunihongopodcast", free:true },
+    { name:"Japanese with Shun", desc:"Super clear Japanese. Comprehensible Input — N5-N4 level.", url:"https://www.youtube.com/channel/UCu6sZrHyl4hSS2PvlUo2XZA", free:true },
+    { name:"Onomappu", desc:"Japanese-only podcast. Comprehensible Input, CLT compatibility very high. N4-N3.", url:"https://www.youtube.com/@Onomappu", free:true },
+    { name:"Sambon Juku", desc:"Natural Japanese, real conversation expressions. N2-N1 level.", url:"https://www.youtube.com/@SambonJuku", free:true },
+    { name:"Miku Real Japanese", desc:"Native-level conversation, real-life Japanese. High CLT compatibility.", url:"https://www.youtube.com/@mikunihongo", free:true },
+    { name:"Akane Japanese Class", desc:"Natural conversation, Japanese culture, practical expressions. N4-N3.", url:"https://www.youtube.com/@Akane-JapaneseClass", free:true },
+    { name:"Easy Japanese NHK", desc:"Real-world scenario setting, role-play. Very close to CLT research.", url:"https://www.nhk.or.jp/lesson/en/", free:true },
+    { name:"Hilokal", desc:"Audio rooms and group conversation for real practice. CLT compatibility very high.", url:"https://hilokal.com", free:true },
   ],
   conversation: [
     { name:"NHK Japan — Learn Japanese", desc:"CLT-based conversational Japanese. Real-life scenario practice.", url:"https://www3.nhk.or.jp/nhkworld/en/learnjapanese/", free:true },
-    { name:"Erin ga Chosen", desc:"Interactive drama-based conversation. Respond to real situations.", url:"https://www.erin.jpf.go.jp/en/lesson/09/advanced/", free:true },
-    { name:"Marugoto Online", desc:"Japan Foundation's task-based communicative course. A1–B1.", url:"https://a1.marugotoweb.jp/en/", free:true },
+    { name:"Erin's Challenge", desc:"Interactive drama with real situations and role-play. CLT compatibility extremely high.", url:"https://www.erin.jpf.go.jp/en/lesson/09/advanced/", free:true },
+    { name:"MARUGOTO Plus", desc:"Japan Foundation's CEFR-based task-centered course. A1-B1. Represents CLT itself.", url:"https://a1.marugotoweb.jp/en/", free:true },
+    { name:"IRODORI Japanese Online Course", desc:"One of the most CLT-aligned materials in current Japanese education. Life scenarios, role-play, task-based.", url:"https://www.irodori.jpf.go.jp/", free:true },
+    { name:"HelloTalk", desc:"Real interaction with Japanese speakers. CLT level ★★★★★", url:"https://www.hellotalk.com/", free:true },
+    { name:"Tandem", desc:"Language exchange. Real communication practice. CLT level ★★★★★", url:"https://www.tandem.net/", free:true },
+    { name:"Hilokal", desc:"Audio rooms, group conversation, real practice. CLT compatibility very high.", url:"https://hilokal.com", free:true },
     { name:"JapanesePod101 (YouTube)", desc:"Conversational drills and cultural context. Shadow and repeat.", url:"https://www.youtube.com/watch?v=B_55oW65H4M", free:true },
+    { name:"Japanese Ammo with Misa", desc:"Practical example sentences, conversation-focused. CLT-aligned.", url:"https://www.youtube.com/@JapaneseAmmowithMisa", free:true },
+    { name:"Miku Real Japanese", desc:"Native-to-native conversation, real daily Japanese. High CLT compatibility.", url:"https://www.youtube.com/@mikunihongo", free:true },
+    { name:"Let's Learn Japanese from Small Talk", desc:"Native-to-native conversation, authentic communication.", url:"https://www.youtube.com/@LetsLearnJapanese", free:true },
   ],
   jlpt: [
-    { name:"Japanese Test 4 You", desc:"Full JLPT mock tests N5–N1. Track weak areas with analytics.", url:"https://japanesetest4you.com/", free:true },
+    { name:"Japanese Test 4 You — Vocabulary", desc:"JLPT vocabulary practice N5-N1. Test your word knowledge.", url:"https://japanesetest4you.com/jlpt-n5-vocabulary/", free:true },
+    { name:"Japanese Test 4 You — Reading", desc:"JLPT reading comprehension N5-N1. Graded passages with questions.", url:"https://japanesetest4you.com/jlpt-n5-reading/", free:true },
+    { name:"Japanese Test 4 You — Listening", desc:"JLPT listening practice N5-N1. Audio-based questions.", url:"https://japanesetest4you.com/jlpt-n5-listening/", free:true },
+    { name:"Nihongo no Mori", desc:"Grammar-rich JLPT prep with natural conversation examples. N2-N1.", url:"https://www.youtube.com/@nihongonomori", free:true },
+    { name:"Sambon Juku", desc:"JLPT N2-N1 grammar and vocabulary in natural context.", url:"https://www.youtube.com/@SambonJuku", free:true },
   ],
   reading: [
     { name:"Tadoku (Free Readers)", desc:"Graded reading from Level 0–4. CLT: read then discuss.", url:"https://tadoku.org/japanese/book-search/?level=&series=&kw=&order=register_desc", free:true },
-    { name:"NHK Web Easy", desc:"Real Japanese news simplified. Perfect A2–B1 reading input.", url:"https://news.web.nhk/news/easy/", free:true },
+    { name:"NHK Web Easy", desc:"Real Japanese news simplified. Perfect A2-B1 reading input. Authentic materials.", url:"https://news.web.nhk/news/easy/", free:true },
     { name:"FluencyDrop Stories", desc:"Authentic short stories with audio. Build reading fluency.", url:"https://fluencydrop.com/stories/japanese", free:true },
+    { name:"IRODORI Japanese Online Course", desc:"Reading tasks based on daily life in Japan. CLT task-based.", url:"https://www.irodori.jpf.go.jp/", free:true },
+    { name:"Japonin Teacher's Blog", desc:"Conversation-centered teaching materials with free audio. Reading + comprehension.", url:"https://japonin.com/", free:true },
+    { name:"LingQ", desc:"Authentic materials — read and listen simultaneously. Build reading fluency.", url:"https://www.lingq.com/en/learn/ja/", free:false },
+    { name:"NHK News Web (advanced)", desc:"Full-speed NHK news for N2-N1 readers. Authentic materials.", url:"https://www3.nhk.or.jp/news/", free:true },
   ],
   kanji: [
     { name:"Nihonten AI (Bilingual Kanji)", desc:"AI-powered personalized kanji with bilingual translation context.", url:"https://nihonten.ai/", free:false },
+    { name:"IRODORI Japanese Online Course", desc:"Kanji introduced in real-life context. Task-based CLT approach.", url:"https://www.irodori.jpf.go.jp/", free:true },
+    { name:"Nihongo no Mori", desc:"Systematic kanji instruction with vocabulary and usage examples. N2-N1.", url:"https://www.youtube.com/@nihongonomori", free:true },
   ],
   grammar: [
     { name:"Imabi", desc:"The most comprehensive free Japanese grammar reference online.", url:"https://imabi.org/", free:true },
+    { name:"MARUGOTO Plus", desc:"Grammar taught through real communicative tasks. CEFR-based CLT.", url:"https://a1.marugotoweb.jp/en/", free:true },
+    { name:"IRODORI Japanese Online Course", desc:"Grammar in daily-life task contexts. Closest to CLT in current Japanese education.", url:"https://www.irodori.jpf.go.jp/", free:true },
+    { name:"Sambon Juku", desc:"Grammar in natural Japanese conversation. N2-N1 level.", url:"https://www.youtube.com/@SambonJuku", free:true },
+    { name:"Nihongo no Mori", desc:"Structured grammar lessons with example sentences and JLPT focus.", url:"https://www.youtube.com/@nihongonomori", free:true },
+    { name:"Japonin Teacher's Blog", desc:"Conversation-centered grammar materials with audio.", url:"https://japonin.com/", free:true },
   ],
 };
 
@@ -3302,8 +3335,9 @@ function WordDetailCard({ card: cardProp, onSave, onBack, form, prefLang }) {
 }
 
 // ─── FLASHCARD VIEW ────────────────────────────────────────────────────────────
-function FlashcardView({ cards, onBack }) {
-  const [allData] = useState(() => loadVocabData());
+function FlashcardView({ onBack }) {
+  const [allData, setAllData] = useState(() => loadVocabData());
+  const cards = allData.cards || [];
   const allFolders = [{ name:"すべて" }, { name:"Your Vocabulary" }, ...allData.folders];
   const [selectedFolder, setSelectedFolder] = useState("すべて");
   const filteredCards = selectedFolder === "すべて" ? cards : cards.filter(c => c.folder === selectedFolder);
@@ -3690,7 +3724,7 @@ function VocabBuilder({ form }) {
   if (vocabView === "folderDetail") return <FolderDetailView folderName={selectedFolder} onBack={()=>setVocabView("library")} onViewCard={w=>{setSelectedWord(w);setVocabView("wordDetail");}} />;
   if (vocabView === "wordSearch") return <WordSearchScreen form={form} onBack={()=>setVocabView("main")} onSelectWord={w=>{setSelectedWord(w);setVocabView("wordDetail");}} />;
   if (vocabView === "wordDetail") return <WordDetailCard card={selectedWord} form={form} onBack={()=>setVocabView(selectedFolder?"wordSearch":"wordSearch")} onSave={refreshVocab} prefLang={form.preferredLang} />;
-  if (vocabView === "flashcard") return <FlashcardView cards={vocabData.cards} onBack={()=>setVocabView("main")} />;
+  if (vocabView === "flashcard") return <FlashcardView onBack={()=>setVocabView("main")} />;
 
   // ── MAIN VIEW ──
   return (
@@ -3808,6 +3842,35 @@ function VocabBuilder({ form }) {
 }
 
 // ─── PRACTICE SET (built from selected skills only) ─────────────────────────────
+// JLPT links by level and section
+const JLPT_LINKS = {
+  "N5": {
+    vocab:    "https://japanesetest4you.com/jlpt-n5-vocabulary/",
+    reading:  "https://japanesetest4you.com/jlpt-n5-reading/",
+    listening:"https://japanesetest4you.com/jlpt-n5-listening/",
+  },
+  "N4": {
+    vocab:    "https://japanesetest4you.com/jlpt-n4-vocabulary/",
+    reading:  "https://japanesetest4you.com/jlpt-n4-reading/",
+    listening:"https://japanesetest4you.com/jlpt-n4-listening/",
+  },
+  "N3": {
+    vocab:    "https://japanesetest4you.com/jlpt-n3-vocabulary/",
+    reading:  "https://japanesetest4you.com/jlpt-n3-reading/",
+    listening:"https://japanesetest4you.com/jlpt-n3-listening/",
+  },
+  "N2": {
+    vocab:    "https://japanesetest4you.com/jlpt-n2-vocabulary/",
+    reading:  "https://japanesetest4you.com/jlpt-n2-reading/",
+    listening:"https://japanesetest4you.com/jlpt-n2-listening/",
+  },
+  "N1": {
+    vocab:    "https://japanesetest4you.com/jlpt-n1-vocabulary/",
+    reading:  "https://japanesetest4you.com/jlpt-n1-reading/",
+    listening:"https://japanesetest4you.com/jlpt-n1-listening/",
+  },
+};
+
 function PracticeSet({ form }) {
   const [items, setItems] = useState([]);
   const [revealed, setRevealed] = useState({});
@@ -3817,14 +3880,19 @@ function PracticeSet({ form }) {
 
   const skills = form.skills || [];
   const skillLabels = skills.map(s => SKILL_LABELS[s] || s).join(", ");
+  const jlptLinks = JLPT_LINKS[form.jlpt] || null;
 
   // Gather resources for selected skills
   const selectedResources = skills.flatMap(s => (RESOURCES[s] || []).map(r => ({ ...r, skill: s })));
   const levelResources = LEVEL_RESOURCES[form.jlpt] || [];
-  const allResources = [...selectedResources, ...levelResources];
+  // Deduplicate by URL
+  const seen = new Set();
+  const allResources = [...selectedResources, ...levelResources].filter(r => {
+    if (seen.has(r.url)) return false; seen.add(r.url); return true;
+  });
 
   const resourceContext = allResources.length > 0
-    ? allResources.map(r => `- [${r.skill || "general"}] ${r.name}: ${r.desc || ""} (${r.url})`).join("\n")
+    ? allResources.map(r => `- [${r.skill || "general"}] ${r.name}: ${r.desc || ""} → ${r.url}`).join("\n")
     : "No specific resources found.";
 
   const questionCount = skills.length >= 4 ? 20 : skills.length >= 2 ? 15 : 10;
@@ -3834,41 +3902,42 @@ function PracticeSet({ form }) {
     try {
       const res = await fetch("/api/claude", {
         method:"POST", headers:{"Content-Type":"application/json"},
-        body: JSON.stringify({ model:"claude-sonnet-4-20250514", max_tokens:3200,
+        body: JSON.stringify({ model:"claude-sonnet-4-20250514", max_tokens:4000,
           messages:[{ role:"user", content:`You are a Japanese teacher using CLT (Communicative Language Teaching). The student's JLPT level is ${form.jlpt}, goal: ${form.displayGoal||form.goal}.
 The student selected ONLY these study skills: ${skillLabels || "general practice"}.
 
-RESOURCES the student is using (reference these when creating exercises — cite the resource name in the tip field when relevant):
+RESOURCES the student is using (you MUST cite the resource URL in the "source_url" field for every exercise):
 ${resourceContext}
 
-Create EXACTLY ${questionCount} practice exercises focused on the selected skills above. Distribute exercises proportionally across the selected skills. Include a variety of activity types for each skill:
-- 🔊 Pronunciation: minimal pair drills, pitch accent awareness, shadowing prompts, phoneme discrimination
-- 👂 Listening: cloze listening (fill the blank from audio context), dictation-style, comprehension question from a described audio scenario
-- 💬 Conversation: role-play scenarios, response prompting, dialogue completion, social phrase matching
-- 🎯 JLPT Prep: JLPT-style 4-choice questions (must include all 4 choices in prompt), grammar pattern matching, vocabulary in context
-- 📖 Reading: short passage (2-5 sentences) + comprehension question, true/false, main idea
-- 🈳 Kanji: reading recognition, writing prompt, radical hint, kanji in context sentence
-- 📝 Grammar: fill-in-the-blank, error correction, sentence transformation, particle choice
+Create EXACTLY ${questionCount} practice exercises. PRIORITY: favor Speaking and Writing OUTPUT activities. Reading should lead to output (e.g. read a passage then write a sentence using the same grammar, or say the answer aloud). Distribute across selected skills.
 
-STRICT LEVEL CALIBRATION — CRITICAL:
-Every exercise MUST match ${form.jlpt} level exactly — never above, never below.
-- Beginner: hiragana/katakana only, basic kanji (日本人etc.), です/ます, は/が/を/に
-- N5: ~100 kanji, basic particles, plain/polite, simple て-form
-- N4: ~300 kanji, past/potential/conditional, te-form requests
-- N3: ~650 kanji, passive/causative, complex conjunctions, intermediate reading
-- N2: ~1000 kanji, keigo basics, abstract/formal vocabulary
-- N1: ~2000 kanji, advanced/nuanced grammar, formal and literary register
-Before writing each exercise, check: "would a real ${form.jlpt} student recognize every kanji and grammar point here?"
+Activity types per skill:
+- 🔊 Pronunciation (pronunciation): Shadowing prompt — give a sentence to read aloud; minimal pair drill — two words that sound similar, ask the difference; pitch accent awareness
+- 👂 Listening (listening): Cloze — describe an audio scenario in [brackets] then give a sentence with ___ to fill in; comprehension from described scenario; dictation-style prompt
+- 💬 Conversation (conversation): Role-play scenario — describe a situation, ask student to respond in Japanese; dialogue completion — give 2 lines, student writes line 3; social phrase production
+- 🎯 JLPT Prep (jlpt): 4-choice grammar/vocabulary question — ALWAYS include all 4 options labeled ①②③④ in the prompt text itself
+- 📖 Reading (reading): Give a short Japanese passage (2-5 sentences at ${form.jlpt} level), then ask student to answer a question OR write a sentence using a grammar point from the passage
+- 🈳 Kanji (kanji): CRITICAL — you MUST include the actual kanji character(s) in the prompt. Examples: "「学」の読み方は？", "次の文で「電車」はどういう意味？", "「___」に漢字を入れてください（でんしゃ）". NEVER write "What is the meaning of the kanji:" without the actual kanji following immediately.
+- 📝 Grammar (grammar): Fill-in-the-blank with a specific grammar point; error correction; sentence transformation using a given pattern; particle choice ①②③④
 
-For each exercise:
+STRICT LEVEL CALIBRATION:
+- Beginner: hiragana/katakana only, basic kanji (日本人etc.), です/ます
+- N5: ~100 kanji, basic particles, plain/polite, て-form
+- N4: ~300 kanji, past/potential/conditional
+- N3: ~650 kanji, passive/causative, complex conjunctions
+- N2: ~1000 kanji, keigo basics, abstract vocabulary
+- N1: ~2000 kanji, advanced/nuanced grammar
+
+For each exercise return these fields:
 - skill: one of ${skills.join(", ")}
-- type: specific activity type label (e.g. "JLPT-style question", "Kanji recall", "Listening cloze", "Role-play", "Reading comprehension", "Grammar fill-in", "Pronunciation drill", "Conversation prompt")
-- prompt: FULL self-contained exercise text. For multiple-choice: include ALL choices (A/B/C/D or ①②③④) inside the prompt. For reading: include the passage. For listening cloze: describe the audio scenario in brackets then give the sentence with ___. Never write a prompt that only says "choose the answer" without the actual content.
-- answer: the correct answer only (do not repeat the question)
-- tip: one-sentence CLT tip. If a resource is relevant, mention it by name (e.g. "Practice more with NHK Web Easy")
+- type: specific label (e.g. "Shadowing prompt", "Role-play", "Kanji reading", "Grammar fill-in", "JLPT 4-choice", "Reading + output")
+- prompt: COMPLETE self-contained question. Kanji exercises MUST have the kanji. Multiple-choice MUST have all options ①②③④. Reading MUST include the passage. NEVER leave the content implicit.
+- answer: correct answer only
+- tip: one practical CLT tip referencing a resource by name
+- source_url: the URL of the resource this exercise is based on (pick the most relevant one from the list above)
 
 Respond ONLY with a valid JSON array, no markdown, no backticks:
-[{"skill":"","type":"","prompt":"","answer":"","tip":""}]` }]
+[{"skill":"","type":"","prompt":"","answer":"","tip":"","source_url":""}]` }]
         })
       });
       const d = await res.json();
@@ -3906,6 +3975,26 @@ Respond ONLY with a valid JSON array, no markdown, no backticks:
         {error && <p style={{ color:C.red, fontSize:12, marginTop:10 }}>{error}</p>}
       </div>
 
+      {/* JLPT quick links — shown if jlpt is a selected skill */}
+      {skills.includes("jlpt") && jlptLinks && (
+        <div style={{ ...S.card, marginBottom:16, borderLeft:`3px solid #a78bfa` }}>
+          <p style={{ color:"#a78bfa", fontSize:11, fontWeight:700, letterSpacing:1, margin:"0 0 10px" }}>🎯 TODAY'S JLPT PRACTICE — {form.jlpt}</p>
+          <p style={{ color:"#64748b", fontSize:11, margin:"0 0 8px" }}>本日はこのページから始めましょう：</p>
+          <div style={{ display:"flex", flexDirection:"column", gap:6 }}>
+            {[
+              { label:"📝 語彙（Vocabulary）", url: jlptLinks.vocab },
+              { label:"📖 読解（Reading）",    url: jlptLinks.reading },
+              { label:"👂 聴解（Listening）",  url: jlptLinks.listening },
+            ].map(({ label, url }) => (
+              <a key={url} href={url} target="_blank" rel="noopener noreferrer"
+                style={{ display:"block", padding:"8px 12px", borderRadius:8, background:"rgba(139,92,246,0.08)", border:"1px solid rgba(139,92,246,0.25)", color:"#c4b5fd", fontSize:12, fontWeight:600, textDecoration:"none" }}>
+                {label} →
+              </a>
+            ))}
+          </div>
+        </div>
+      )}
+
       {items.length > 0 && (
         <>
           {/* Skill filter tabs */}
@@ -3935,7 +4024,13 @@ Respond ONLY with a valid JSON array, no markdown, no backticks:
                     <div style={{ background:"rgba(34,197,94,0.06)", borderRadius:10, padding:"10px 12px" }}>
                       <p style={{ color:C.green, fontSize:11, fontWeight:700, margin:"0 0 4px" }}>✅ ANSWER</p>
                       <p style={{ color:"#f1f5f9", fontSize:13, margin:"0 0 6px" }}>{it.answer}</p>
-                      {it.tip && <p style={{ color:"#94a3b8", fontSize:12, margin:0, fontStyle:"italic" }}>💬 {it.tip}</p>}
+                      {it.tip && <p style={{ color:"#94a3b8", fontSize:12, margin:"0 0 6px", fontStyle:"italic" }}>💬 {it.tip}</p>}
+                      {it.source_url && (
+                        <a href={it.source_url} target="_blank" rel="noopener noreferrer"
+                          style={{ display:"inline-block", color:C.teal, fontSize:11, textDecoration:"none", background:"rgba(6,182,212,0.08)", border:"1px solid rgba(6,182,212,0.2)", padding:"3px 10px", borderRadius:6, fontWeight:600 }}>
+                          🔗 {it.source_url.replace(/https?:\/\/(www\.)?/,"").split("/")[0]}
+                        </a>
+                      )}
                     </div>
                   ) : (
                     <button onClick={()=>setRevealed(r=>({...r,[globalIdx]:true}))} style={{ padding:"6px 14px", borderRadius:8, background:C.card, border:`1px solid ${C.border}`, color:"#94a3b8", fontSize:11, cursor:"pointer" }}>
