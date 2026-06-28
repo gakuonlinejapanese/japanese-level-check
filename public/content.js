@@ -36,7 +36,7 @@ function show(word,cx,cy){
   popup=document.createElement("div");
   popup.id="gaku-sv";
   const vw=window.innerWidth;
-  Object.assign(popup.style,{position:"fixed",zIndex:"2147483647",left:Math.min(cx+8,vw-344)+"px",top:Math.max(cy+8,10)+"px",width:"328px",background:"linear-gradient(135deg,#0f172a,#1e1b4b)",border:"1.5px solid rgba(139,92,246,0.5)",borderRadius:"14px",boxShadow:"0 12px 40px rgba(0,0,0,0.7)",fontFamily:"'Segoe UI',system-ui,sans-serif",fontSize:"13px",color:"#e2e8f0",overflow:"hidden",cursor:"default"});
+  Object.assign(popup.style,{position:"fixed",zIndex:"2147483647",left:Math.min(cx+8,vw-344)+"px",top:Math.max(cy+8,10)+"px",width:"328px",background:"linear-gradient(135deg,#0f172a,#1e1b4b)",border:"1.5px solid rgba(139,92,246,0.5)",borderRadius:"14px",boxShadow:"0 12px 40px rgba(0,0,0,0.7)",fontFamily:"'Segoe UI',system-ui,sans-serif",fontSize:"13px",color:"#e2e8f0",overflow:"visible",cursor:"default"});
   const css=document.createElement("style");
   css.textContent="#gaku-sv .gb{padding:6px 10px;border-radius:8px;border:1px solid rgba(139,92,246,0.35);background:rgba(139,92,246,0.12);color:#a78bfa;cursor:pointer;font-size:11px;font-weight:700;}#gaku-sv .gb:hover{background:rgba(139,92,246,0.28);}";
   popup.prepend(css);
@@ -108,18 +108,23 @@ function show(word,cx,cy){
 
   // SAVE + folder
   document.getElementById("gs").onclick=async()=>{
-    R.innerHTML="<span style='color:#a78bfa;font-size:12px;'>...</span>";
-    let c=cache;if(!c)c=cache=await groq(word);
-    const p=c?{...c}:{word,reading:"",jlpt:"",partOfSpeech:"",meaning:"",example:"",reading_example:"",example_translated:"",tip:""};
+    let c=cache;
     let folders=[];
     try{const gv=localStorage.getItem("gaku_vocab");if(gv){const d=JSON.parse(gv);folders=(d.folders||[]).map(f=>typeof f==="string"?f:f.name).filter(Boolean);}}catch(e){}
-    // Build folder UI with DOM API (not innerHTML) to ensure event listeners work
+    // Build folder UI immediately (don't wait for groq)
     R.innerHTML="";
     const titleEl=document.createElement("div");
     titleEl.style.cssText="font-size:12px;color:#a78bfa;font-weight:700;margin-bottom:8px;";
     titleEl.textContent="📂 "+lbl("chooseFolder");
     R.appendChild(titleEl);
-    function doSave(folder){const payload={...p,folder};try{chrome.runtime.sendMessage({type:"GAKU_INJECT_WORD",payload});}catch(e){}window.postMessage({type:"GAKU_ADD_WORD",payload},"*");R.innerHTML=`<div style="text-align:center;padding:8px 0;"><div style="color:#22c55e;font-size:18px;">✓</div><div style="color:#22c55e;font-size:13px;font-weight:700;">${lbl("saved")}</div><div style="color:#f1f5f9;font-size:13px;margin-top:4px;">${p.word}</div><div style="color:#64748b;font-size:11px;margin-top:2px;">→ ${folder}</div></div>`;}
+    async function doSave(folder){
+      if(!c)c=cache=await groq(word);
+      const p=c?{...c}:{word,reading:"",jlpt:"",partOfSpeech:"",meaning:"",example:"",reading_example:"",example_translated:"",tip:""};
+      const payload={...p,folder};
+      try{chrome.runtime.sendMessage({type:"GAKU_INJECT_WORD",payload});}catch(e){}
+      window.postMessage({type:"GAKU_ADD_WORD",payload},"*");
+      R.innerHTML=`<div style="text-align:center;padding:8px 0;"><div style="color:#22c55e;font-size:18px;">✓</div><div style="color:#22c55e;font-size:13px;font-weight:700;">${lbl("saved")}</div><div style="color:#f1f5f9;font-size:13px;margin-top:4px;">${word}</div><div style="color:#64748b;font-size:11px;margin-top:2px;">→ ${folder}</div></div>`;
+    }
     folders.forEach(f=>{
       const btn=document.createElement("button");
       btn.style.cssText="display:block;width:100%;margin-bottom:6px;padding:8px 12px;border-radius:8px;border:1px solid rgba(139,92,246,0.4);background:rgba(139,92,246,0.1);color:#e2e8f0;cursor:pointer;font-size:12px;text-align:left;";
@@ -135,7 +140,7 @@ function show(word,cx,cy){
     const newFolderRow=document.createElement("div");
     newFolderRow.style.cssText="display:flex;gap:6px;margin-bottom:6px;";
     const input=document.createElement("input");
-    input.id="gaku-nf";input.placeholder=lbl("newFolder");
+    input.placeholder=lbl("newFolder");
     input.style.cssText="flex:1;padding:6px 10px;border-radius:8px;border:1px solid rgba(139,92,246,0.3);background:#1e293b;color:#f1f5f9;font-size:12px;outline:none;";
     const addBtn=document.createElement("button");
     addBtn.style.cssText="padding:6px 10px;border-radius:8px;border:none;background:#a78bfa;color:#fff;cursor:pointer;font-size:12px;font-weight:700;";
