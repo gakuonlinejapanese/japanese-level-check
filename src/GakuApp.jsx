@@ -3303,7 +3303,7 @@ function WordDetailCard({ card: cardProp, onSave, onBack, form, prefLang }) {
 
 // ─── FLASHCARD VIEW ────────────────────────────────────────────────────────────
 function FlashcardView({ cards, onBack }) {
-  const allData = loadVocabData();
+  const [allData] = useState(() => loadVocabData());
   const allFolders = [{ name:"すべて" }, { name:"Your Vocabulary" }, ...allData.folders];
   const [selectedFolder, setSelectedFolder] = useState("すべて");
   const filteredCards = selectedFolder === "すべて" ? cards : cards.filter(c => c.folder === selectedFolder);
@@ -3813,90 +3813,140 @@ function PracticeSet({ form }) {
   const [revealed, setRevealed] = useState({});
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [activeSkillFilter, setActiveSkillFilter] = useState("all");
 
   const skills = form.skills || [];
   const skillLabels = skills.map(s => SKILL_LABELS[s] || s).join(", ");
 
+  // Gather resources for selected skills
+  const selectedResources = skills.flatMap(s => (RESOURCES[s] || []).map(r => ({ ...r, skill: s })));
+  const levelResources = LEVEL_RESOURCES[form.jlpt] || [];
+  const allResources = [...selectedResources, ...levelResources];
+
+  const resourceContext = allResources.length > 0
+    ? allResources.map(r => `- [${r.skill || "general"}] ${r.name}: ${r.desc || ""} (${r.url})`).join("\n")
+    : "No specific resources found.";
+
+  const questionCount = skills.length >= 4 ? 20 : skills.length >= 2 ? 15 : 10;
+
   const generate = async () => {
-    setLoading(true); setError(""); setItems([]); setRevealed({});
+    setLoading(true); setError(""); setItems([]); setRevealed({}); setActiveSkillFilter("all");
     try {
       const res = await fetch("/api/claude", {
         method:"POST", headers:{"Content-Type":"application/json"},
-        body: JSON.stringify({ model:"claude-sonnet-4-20250514", max_tokens:1600,
+        body: JSON.stringify({ model:"claude-sonnet-4-20250514", max_tokens:3200,
           messages:[{ role:"user", content:`You are a Japanese teacher using CLT (Communicative Language Teaching). The student's JLPT level is ${form.jlpt}, goal: ${form.displayGoal||form.goal}.
 The student selected ONLY these study skills: ${skillLabels || "general practice"}.
-Create a "Practice Set" of 6 short exercises focused ONLY on these selected skills (do NOT include writing/composition exercises unless "Writing" is one of the selected skills).
 
-STRICT LEVEL CALIBRATION — this is critical, do not skip it:
-Every exercise (vocabulary, kanji, grammar points, sentence complexity, reading passage difficulty) MUST match what a ${form.jlpt} student has actually studied — never above that level, never trivially below it.
-- Beginner (no JLPT): only hiragana/katakana, a handful of basic kanji (日,本,人,etc.), and the simplest sentence patterns (です/ます, basic particles は/が/を/に).
-- N5: N5 grammar and kanji only (~100 kanji, basic particles, plain/polite forms, simple て-form).
-- N4: N5+N4 grammar and kanji only (~300 kanji, past/potential/conditional forms, te-form requests).
-- N3: N5–N3 grammar and kanji only (~650 kanji, passive/causative, more complex conjunctions, intermediate reading passages).
-- N2: N5–N2 grammar and kanji only (~1000 kanji, keigo basics, more abstract/formal vocabulary).
-- N1: full range up to N1 (~2000 kanji, advanced/nuanced grammar, formal and literary register).
-Before writing each exercise, internally check: "would a real ${form.jlpt} student recognize every kanji and grammar point here?" If not, simplify it. Do not use kanji or grammar from a level higher than ${form.jlpt}.
+RESOURCES the student is using (reference these when creating exercises — cite the resource name in the tip field when relevant):
+${resourceContext}
 
-For each exercise, include:
-- skill: which skill it targets (must be one of: ${skills.join(", ")})
-- type: a short label, e.g. "Listening cloze", "Conversation role-play", "Kanji recall", "Grammar pattern", "Reading comprehension", "JLPT-style question", "Pronunciation drill"
-- prompt: the FULL exercise text in Japanese, with an English hint in parentheses if helpful. The prompt MUST be fully self-contained and answerable on its own — a student must be able to read ONLY this field and attempt the question without seeing the answer.
-  - If type is "JLPT-style question" or any multiple-choice question: the prompt MUST include the full question/sentence AND all answer choices (e.g. A/B/C/D, or ①②③④) written out directly inside the prompt text itself. NEVER write a prompt like "(Choose the correct answer)" without the actual options listed — that is incomplete and unusable.
-  - If type is "Reading comprehension": the prompt MUST include the actual short passage/text to read (2-4 sentences in Japanese, at ${form.jlpt} difficulty) followed by the question, not just an instruction like "(What is the main idea of the text?)" with no text given.
-  - If type is "Kanji recall": the prompt MUST include the actual kanji character(s) being asked about, chosen ONLY from kanji a ${form.jlpt} student would have studied.
-  - If type is "Listening cloze" or "Grammar pattern": the prompt MUST include the actual sentence with a blank (e.g. ___) to fill in, using only ${form.jlpt}-appropriate grammar.
-- answer: the model answer or correct response (just the answer itself, e.g. "B" or the filled-in word — the full question must NOT be repeated here, it already lives in prompt)
-- tip: a one-sentence CLT tip for using this in real communication
+Create EXACTLY ${questionCount} practice exercises focused on the selected skills above. Distribute exercises proportionally across the selected skills. Include a variety of activity types for each skill:
+- 🔊 Pronunciation: minimal pair drills, pitch accent awareness, shadowing prompts, phoneme discrimination
+- 👂 Listening: cloze listening (fill the blank from audio context), dictation-style, comprehension question from a described audio scenario
+- 💬 Conversation: role-play scenarios, response prompting, dialogue completion, social phrase matching
+- 🎯 JLPT Prep: JLPT-style 4-choice questions (must include all 4 choices in prompt), grammar pattern matching, vocabulary in context
+- 📖 Reading: short passage (2-5 sentences) + comprehension question, true/false, main idea
+- 🈳 Kanji: reading recognition, writing prompt, radical hint, kanji in context sentence
+- 📝 Grammar: fill-in-the-blank, error correction, sentence transformation, particle choice
 
-Respond ONLY in this JSON format (no markdown, no backticks):
+STRICT LEVEL CALIBRATION — CRITICAL:
+Every exercise MUST match ${form.jlpt} level exactly — never above, never below.
+- Beginner: hiragana/katakana only, basic kanji (日本人etc.), です/ます, は/が/を/に
+- N5: ~100 kanji, basic particles, plain/polite, simple て-form
+- N4: ~300 kanji, past/potential/conditional, te-form requests
+- N3: ~650 kanji, passive/causative, complex conjunctions, intermediate reading
+- N2: ~1000 kanji, keigo basics, abstract/formal vocabulary
+- N1: ~2000 kanji, advanced/nuanced grammar, formal and literary register
+Before writing each exercise, check: "would a real ${form.jlpt} student recognize every kanji and grammar point here?"
+
+For each exercise:
+- skill: one of ${skills.join(", ")}
+- type: specific activity type label (e.g. "JLPT-style question", "Kanji recall", "Listening cloze", "Role-play", "Reading comprehension", "Grammar fill-in", "Pronunciation drill", "Conversation prompt")
+- prompt: FULL self-contained exercise text. For multiple-choice: include ALL choices (A/B/C/D or ①②③④) inside the prompt. For reading: include the passage. For listening cloze: describe the audio scenario in brackets then give the sentence with ___. Never write a prompt that only says "choose the answer" without the actual content.
+- answer: the correct answer only (do not repeat the question)
+- tip: one-sentence CLT tip. If a resource is relevant, mention it by name (e.g. "Practice more with NHK Web Easy")
+
+Respond ONLY with a valid JSON array, no markdown, no backticks:
 [{"skill":"","type":"","prompt":"","answer":"","tip":""}]` }]
         })
       });
       const d = await res.json();
       const text = d.content?.map(c=>c.text||"").join("") || "[]";
       const parsed = JSON.parse(text.replace(/```json|```/g,"").trim());
-      setItems(parsed);
+      setItems(Array.isArray(parsed) ? parsed : []);
     } catch { setError("Could not generate a practice set right now. Please try again."); }
     setLoading(false);
   };
+
+  const skillColors = {
+    pronunciation:"#f59e0b", listening:"#06b6d4", conversation:"#22c55e",
+    jlpt:"#a78bfa", reading:"#fb923c", kanji:"#e879f9", grammar:"#60a5fa"
+  };
+
+  const filteredItems = activeSkillFilter === "all" ? items : items.filter(it => it.skill === activeSkillFilter);
+  const skillsInResult = [...new Set(items.map(it => it.skill))];
 
   return (
     <div>
       <div style={{ ...S.card, marginBottom:16 }}>
         <p style={{ color:C.purpleLight, fontSize:12, fontWeight:700, letterSpacing:1, marginBottom:4 }}>🎯 PRACTICE SET</p>
-        <p style={{ color:"#64748b", fontSize:12, marginBottom:14, lineHeight:1.7 }}>
+        <p style={{ color:"#64748b", fontSize:12, marginBottom:8, lineHeight:1.7 }}>
           Generated from what you selected in <strong style={{ color:"#94a3b8" }}>"WHAT DO YOU WANT TO STUDY?"</strong>:{" "}
           {skills.length ? skills.map(s => SKILL_LABELS[s] || s).join(" · ") : "No skills selected — edit your profile to choose skills."}
         </p>
+        {skills.length > 0 && (
+          <p style={{ color:"#475569", fontSize:11, marginBottom:12 }}>
+            📚 {questionCount} exercises · {allResources.length} resources referenced
+          </p>
+        )}
         <button onClick={generate} disabled={loading || skills.length===0} style={{ ...S.btn, width:"100%", background:skills.length?`linear-gradient(135deg,${C.purple},#9333ea)`:"#1e293b", color:skills.length?"#fff":"#475569" }}>
-          {loading ? "Building your practice set...":"Generate Practice Set ✨"}
+          {loading ? `Building ${questionCount} exercises...`:"Generate Practice Set ✨"}
         </button>
         {error && <p style={{ color:C.red, fontSize:12, marginTop:10 }}>{error}</p>}
       </div>
 
       {items.length > 0 && (
-        <div style={{ display:"flex", flexDirection:"column", gap:12 }}>
-          {items.map((it,i) => (
-            <div key={i} style={{ ...S.card, borderLeft:`3px solid ${C.purpleLight}` }}>
-              <div style={{ display:"flex", justifyContent:"space-between", marginBottom:6 }}>
-                <span style={{ color:C.purpleLight, fontSize:11, fontWeight:700 }}>{SKILL_LABELS[it.skill] || it.skill}</span>
-                <span style={{ color:"#64748b", fontSize:11 }}>{it.type}</span>
-              </div>
-              <p style={{ color:"#f1f5f9", fontSize:14, lineHeight:1.8, margin:"0 0 10px" }}>{it.prompt}</p>
-              {revealed[i] ? (
-                <div style={{ background:"rgba(34,197,94,0.06)", borderRadius:10, padding:"10px 12px" }}>
-                  <p style={{ color:C.green, fontSize:11, fontWeight:700, margin:"0 0 4px" }}>✅ ANSWER</p>
-                  <p style={{ color:"#f1f5f9", fontSize:13, margin:"0 0 6px" }}>{it.answer}</p>
-                  {it.tip && <p style={{ color:"#94a3b8", fontSize:12, margin:0, fontStyle:"italic" }}>💬 {it.tip}</p>}
+        <>
+          {/* Skill filter tabs */}
+          <div style={{ display:"flex", gap:6, flexWrap:"wrap", marginBottom:12 }}>
+            <button onClick={()=>setActiveSkillFilter("all")} style={{ padding:"4px 10px", borderRadius:20, fontSize:11, fontWeight:700, cursor:"pointer", border:`1px solid ${activeSkillFilter==="all"?C.purpleLight:C.border}`, background:activeSkillFilter==="all"?"rgba(168,85,247,0.15)":C.card, color:activeSkillFilter==="all"?C.purpleLight:"#64748b" }}>
+              すべて ({items.length})
+            </button>
+            {skillsInResult.map(s => (
+              <button key={s} onClick={()=>setActiveSkillFilter(s)} style={{ padding:"4px 10px", borderRadius:20, fontSize:11, fontWeight:700, cursor:"pointer", border:`1px solid ${activeSkillFilter===s?(skillColors[s]||C.purpleLight):C.border}`, background:activeSkillFilter===s?`rgba(0,0,0,0.15)`:C.card, color:activeSkillFilter===s?(skillColors[s]||C.purpleLight):"#64748b" }}>
+                {SKILL_LABELS[s]||s} ({items.filter(it=>it.skill===s).length})
+              </button>
+            ))}
+          </div>
+
+          <div style={{ display:"flex", flexDirection:"column", gap:12 }}>
+            {filteredItems.map((it,i) => {
+              const color = skillColors[it.skill] || C.purpleLight;
+              const globalIdx = items.indexOf(it);
+              return (
+                <div key={i} style={{ ...S.card, borderLeft:`3px solid ${color}` }}>
+                  <div style={{ display:"flex", justifyContent:"space-between", marginBottom:6 }}>
+                    <span style={{ color, fontSize:11, fontWeight:700 }}>{SKILL_LABELS[it.skill] || it.skill}</span>
+                    <span style={{ color:"#64748b", fontSize:11 }}>{it.type}</span>
+                  </div>
+                  <p style={{ color:"#f1f5f9", fontSize:14, lineHeight:1.8, margin:"0 0 10px", whiteSpace:"pre-wrap" }}>{it.prompt}</p>
+                  {revealed[globalIdx] ? (
+                    <div style={{ background:"rgba(34,197,94,0.06)", borderRadius:10, padding:"10px 12px" }}>
+                      <p style={{ color:C.green, fontSize:11, fontWeight:700, margin:"0 0 4px" }}>✅ ANSWER</p>
+                      <p style={{ color:"#f1f5f9", fontSize:13, margin:"0 0 6px" }}>{it.answer}</p>
+                      {it.tip && <p style={{ color:"#94a3b8", fontSize:12, margin:0, fontStyle:"italic" }}>💬 {it.tip}</p>}
+                    </div>
+                  ) : (
+                    <button onClick={()=>setRevealed(r=>({...r,[globalIdx]:true}))} style={{ padding:"6px 14px", borderRadius:8, background:C.card, border:`1px solid ${C.border}`, color:"#94a3b8", fontSize:11, cursor:"pointer" }}>
+                      Show answer
+                    </button>
+                  )}
                 </div>
-              ) : (
-                <button onClick={()=>setRevealed(r=>({...r,[i]:true}))} style={{ padding:"6px 14px", borderRadius:8, background:C.card, border:`1px solid ${C.border}`, color:"#94a3b8", fontSize:11, cursor:"pointer" }}>
-                  Show answer
-                </button>
-              )}
-            </div>
-          ))}
-        </div>
+              );
+            })}
+          </div>
+        </>
       )}
     </div>
   );
