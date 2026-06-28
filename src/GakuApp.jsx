@@ -3147,14 +3147,14 @@ function WordDetailCard({ card: cardProp, onSave, onBack, form, prefLang }) {
           <p style={{ color:C.amber, fontSize:11, fontWeight:700, letterSpacing:1, margin:0 }}>✏️ EXAMPLE SENTENCE</p>
           <button onClick={()=>speakJapanese(card.example)} style={{ background:`rgba(245,158,11,0.1)`, border:`1px solid rgba(245,158,11,0.3)`, borderRadius:8, color:C.amber, fontSize:14, padding:"3px 10px", cursor:"pointer" }}>🔊</button>
         </div>
-        {filling && (!card.example || !card.example_translated)
+        {filling
           ? <p style={{ color:"#475569", fontSize:13, fontStyle:"italic" }}>✨ AI generating...</p>
           : <>
               <p style={{ color:"#f1f5f9", fontSize:14, lineHeight:1.9, margin:"0 0 4px" }}>{card.example}</p>
               {card.reading_example && <p style={{ color:"#67e8f9", fontSize:12, margin:"0 0 4px", fontStyle:"italic" }}>{card.reading_example}</p>}
               {card.example_translated
                 ? <p style={{ color:"#64748b", fontSize:13, margin:0, fontStyle:"italic" }}>{card.example_translated}</p>
-                : <p style={{ color:"#334155", fontSize:12, margin:0, fontStyle:"italic" }}>⏳ translating...</p>
+                : null
               }
             </>
         }
