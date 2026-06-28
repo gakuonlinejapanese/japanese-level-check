@@ -3340,15 +3340,59 @@ function WordDetailCard({ card: cardProp, onSave, onBack, form, prefLang }) {
 // ─── FLASHCARD VIEW ────────────────────────────────────────────────────────────
 function FlashcardView({ onBack }) {
   const [allData, setAllData] = useState(() => loadVocabData());
-  const cards = allData.cards || [];
-  const allFolders = [{ name:"すべて" }, { name:"Your Vocabulary" }, ...allData.folders];
   const [selectedFolder, setSelectedFolder] = useState("すべて");
-  const filteredCards = selectedFolder === "すべて" ? cards : cards.filter(c => c.folder === selectedFolder);
   const [idx, setIdx] = useState(0);
   const [flipped, setFlipped] = useState(false);
+  const [showHint, setShowHint] = useState(false);
+  const [fillingCard, setFillingCard] = useState(false);
+
+  const cards = allData.cards || [];
+  const folderObjs = allData.folders || [];
+  const allFolders = [{ name:"すべて" }, { name:"Your Vocabulary" }, ...folderObjs];
+  const filteredCards = selectedFolder === "すべて" ? cards : cards.filter(c => c.folder === selectedFolder);
+  const displayCards = filteredCards;
+  const card = displayCards[idx] || null;
 
   // Reset idx when folder changes
   const handleFolderChange = (f) => { setSelectedFolder(f); setIdx(0); setFlipped(false); setShowHint(false); };
+
+  // Auto-fill reading_example and example_translated for current card if missing
+  useEffect(() => {
+    if (!card) return;
+    if (card.reading_example && card.example_translated) return;
+    if (!card.example) return;
+    setFillingCard(true);
+    (async () => {
+      try {
+        const res = await fetch("/api/claude", {
+          method:"POST", headers:{"Content-Type":"application/json"},
+          body: JSON.stringify({ max_tokens:300, messages:[
+            { role:"system", content:"You are a Japanese dictionary. Respond ONLY with raw JSON, no markdown, no backticks." },
+            { role:"user", content:`For the Japanese example sentence: "${card.example}"
+Return JSON with:
+- reading_example: full romaji reading of this sentence
+- example_translated: natural English translation of this sentence
+Only output the JSON object.` }
+          ]})
+        });
+        const d = await res.json();
+        const t = d?.content?.[0]?.text || "";
+        const parsed = JSON.parse(t.replace(/```json|```/g,"").trim());
+        if (parsed.reading_example || parsed.example_translated) {
+          setAllData(prev => {
+            const updated = { ...prev, cards: prev.cards.map(c =>
+              c.word === card.word && c.folder === card.folder
+                ? { ...c, reading_example: c.reading_example || parsed.reading_example || "", example_translated: c.example_translated || parsed.example_translated || "" }
+                : c
+            )};
+            try { localStorage.setItem("gaku_vocab", JSON.stringify(updated)); } catch {}
+            return updated;
+          });
+        }
+      } catch {}
+      setFillingCard(false);
+    })();
+  }, [card?.word, card?.folder]);
 
   if (!cards.length) return (
     <div>
@@ -3359,10 +3403,6 @@ function FlashcardView({ onBack }) {
       </div>
     </div>
   );
-
-  const displayCards = filteredCards.length ? filteredCards : [];
-  const card = displayCards[idx] || null;
-  const [showHint, setShowHint] = useState(false);
 
   return (
     <div>
@@ -3398,8 +3438,12 @@ function FlashcardView({ onBack }) {
                 {card.meaning && <p style={{ color:"#94a3b8", fontSize:12, margin:"0 0 10px" }}>{card.meaning}</p>}
                 {card.meaningNative && <p style={{ color:"#475569", fontSize:11, margin:"0 0 8px", fontStyle:"italic" }}>{card.meaningNative}</p>}
                 {card.example && <p style={{ color:"#cbd5e1", fontSize:13, lineHeight:1.7, maxWidth:280, margin:"0 0 2px" }}>{card.example}</p>}
-                {card.reading_example && <p style={{ color:"#67e8f9", fontSize:11, fontStyle:"italic", maxWidth:280, margin:"0 0 2px" }}>{card.reading_example}</p>}
-                {card.example_translated && <p style={{ color:"#64748b", fontSize:11, fontStyle:"italic", maxWidth:280, margin:"0 0 10px" }}>{card.example_translated}</p>}
+                {card.reading_example
+                  ? <p style={{ color:"#67e8f9", fontSize:11, fontStyle:"italic", maxWidth:280, margin:"0 0 2px" }}>{card.reading_example}</p>
+                  : fillingCard ? <p style={{ color:"#475569", fontSize:11, margin:"0 0 2px" }}>✨ ローマ字生成中...</p> : null}
+                {card.example_translated
+                  ? <p style={{ color:"#64748b", fontSize:11, fontStyle:"italic", maxWidth:280, margin:"0 0 10px" }}>{card.example_translated}</p>
+                  : fillingCard ? <p style={{ color:"#475569", fontSize:11, margin:"0 0 10px" }}>✨ 翻訳生成中...</p> : null}
                 <button onClick={e=>{e.stopPropagation();speakJapanese(card.example);}} style={{ background:"rgba(245,158,11,0.1)", border:"1px solid rgba(245,158,11,0.3)", borderRadius:8, color:C.amber, fontSize:12, padding:"4px 12px", cursor:"pointer" }}>🔊 例文を聞く</button>
               </>
             )}

@@ -171,3 +171,16 @@ document.addEventListener("mouseup",e=>{
 });
 
 function addFurigana(){}
+
+// Sync folders from GakuApp localStorage when on the GAKU app page
+(function syncFoldersFromGakuApp(){
+  try{
+    const gv=localStorage.getItem("gaku_vocab");
+    if(!gv)return;
+    const d=JSON.parse(gv);
+    const fs=["Your Vocabulary",...(d.folders||[]).map(f=>typeof f==="string"?f:(f&&f.name)||"").filter(Boolean)];
+    const unique=[...new Set(fs)];
+    chrome.storage.local.set({gaku_folders:unique});
+    chrome.storage.sync.set({gaku_folders:unique});
+  }catch{}
+})();
