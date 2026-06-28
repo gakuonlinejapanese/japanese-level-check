@@ -3047,7 +3047,7 @@ function WordDetailCard({ card: cardProp, onSave, onBack, form, prefLang }) {
 
   // Auto-fill empty meaning/example via AI when card opens
   useEffect(() => {
-    const needsFill = !cardProp.meaning || !cardProp.example || !cardProp.example_translated;
+    const needsFill = !cardProp.meaning || !cardProp.example || !cardProp.example_translated || !cardProp.reading_example;
     if (!needsFill) { setFilling(false); return; }
     const lang = prefLang || form?.preferredLang || "English";
     setFilling(true);
@@ -3348,7 +3348,7 @@ function FlashcardView({ onBack }) {
   const [flipped, setFlipped] = useState(false);
 
   // Reset idx when folder changes
-  const handleFolderChange = (f) => { setSelectedFolder(f); setIdx(0); setFlipped(false); };
+  const handleFolderChange = (f) => { setSelectedFolder(f); setIdx(0); setFlipped(false); setShowHint(false); };
 
   if (!cards.length) return (
     <div>
@@ -3362,6 +3362,7 @@ function FlashcardView({ onBack }) {
 
   const displayCards = filteredCards.length ? filteredCards : [];
   const card = displayCards[idx] || null;
+  const [showHint, setShowHint] = useState(false);
 
   return (
     <div>
@@ -3385,8 +3386,9 @@ function FlashcardView({ onBack }) {
             {!flipped ? (
               <>
                 <p style={{ color:"#f1f5f9", fontSize:44, fontWeight:900, margin:"0 0 6px", letterSpacing:2 }}>{card.word}</p>
-                {card.reading && <p style={{ color:C.teal, fontSize:20, margin:"0 0 4px", fontWeight:700 }}>{card.reading}</p>}
-                {card.meaning && <p style={{ color:"#94a3b8", fontSize:12, margin:"0 0 14px" }}>{card.meaning}</p>}
+                {showHint && card.reading && <p style={{ color:C.teal, fontSize:20, margin:"0 0 2px", fontWeight:700 }}>{card.reading}</p>}
+                {showHint && card.reading && <p style={{ color:"#67e8f9", fontSize:13, margin:"0 0 6px", fontStyle:"italic" }}>{card.reading.split("").map(c=>{const hMap={"あ":"a","い":"i","う":"u","え":"e","お":"o","か":"ka","き":"ki","く":"ku","け":"ke","こ":"ko","さ":"sa","し":"shi","す":"su","せ":"se","そ":"so","た":"ta","ち":"chi","つ":"tsu","て":"te","と":"to","な":"na","に":"ni","ぬ":"nu","ね":"ne","の":"no","は":"ha","ひ":"hi","ふ":"fu","へ":"he","ほ":"ho","ま":"ma","み":"mi","む":"mu","め":"me","も":"mo","や":"ya","ゆ":"yu","よ":"yo","ら":"ra","り":"ri","る":"ru","れ":"re","ろ":"ro","わ":"wa","を":"wo","ん":"n","が":"ga","ぎ":"gi","ぐ":"gu","げ":"ge","ご":"go","ざ":"za","じ":"ji","ず":"zu","ぜ":"ze","ぞ":"zo","だ":"da","ぢ":"di","づ":"du","で":"de","ど":"do","ば":"ba","び":"bi","ぶ":"bu","べ":"be","ぼ":"bo","ぱ":"pa","ぴ":"pi","ぷ":"pu","ぺ":"pe","ぽ":"po","きゃ":"kya","きゅ":"kyu","きょ":"kyo","しゃ":"sha","しゅ":"shu","しょ":"sho","ちゃ":"cha","ちゅ":"chu","ちょ":"cho","にゃ":"nya","にゅ":"nyu","にょ":"nyo","ひゃ":"hya","ひゅ":"hyu","ひょ":"hyo","みゃ":"mya","みゅ":"myu","みょ":"myo","りゃ":"rya","りゅ":"ryu","りょ":"ryo","ぎゃ":"gya","ぎゅ":"gyu","ぎょ":"gyo","じゃ":"ja","じゅ":"ju","じょ":"jo","びゃ":"bya","びゅ":"byu","びょ":"byo","ぴゃ":"pya","ぴゅ":"pyu","ぴょ":"pyo","っ":"(t)","ー":"-","、":""," ":"","　":""};return hMap[c]||c;}).join("")}</p>}
+                {card.meaning && <p style={{ color:"#94a3b8", fontSize:12, margin:"0 0 10px" }}>{card.meaning}</p>}
                 <p style={{ color:"#334155", fontSize:11 }}>タップして確認</p>
               </>
             ) : (
@@ -3402,10 +3404,11 @@ function FlashcardView({ onBack }) {
               </>
             )}
           </div>
-          <div style={{ display:"flex", gap:10 }}>
+          <div style={{ display:"flex", gap:10, marginBottom:8 }}>
             <button onClick={()=>speakJapanese(card.word)} style={{ flex:1, ...S.btn, background:"rgba(6,182,212,0.1)", border:`1px solid rgba(6,182,212,0.3)`, color:C.teal }}>🔊 Listen</button>
-            <button onClick={()=>{ setFlipped(false); setIdx(i=>(i-1+displayCards.length)%displayCards.length); }} style={{ ...S.btn, padding:"13px 18px", background:C.card, border:`1px solid ${C.border}`, color:"#94a3b8" }}>←</button>
-            <button onClick={()=>{ setFlipped(false); setIdx(i=>(i+1)%displayCards.length); }} style={{ ...S.btn, padding:"13px 18px", background:C.card, border:`1px solid ${C.border}`, color:"#94a3b8" }}>→</button>
+            <button onClick={e=>{e.stopPropagation();setShowHint(h=>!h);}} style={{ ...S.btn, padding:"13px 18px", background:showHint?"rgba(251,191,36,0.15)":C.card, border:`1px solid ${showHint?"rgba(251,191,36,0.5)":C.border}`, color:showHint?C.amber:"#94a3b8" }}>💡 Hint</button>
+            <button onClick={()=>{ setFlipped(false); setShowHint(false); setIdx(i=>(i-1+displayCards.length)%displayCards.length); }} style={{ ...S.btn, padding:"13px 18px", background:C.card, border:`1px solid ${C.border}`, color:"#94a3b8" }}>←</button>
+            <button onClick={()=>{ setFlipped(false); setShowHint(false); setIdx(i=>(i+1)%displayCards.length); }} style={{ ...S.btn, padding:"13px 18px", background:C.card, border:`1px solid ${C.border}`, color:"#94a3b8" }}>→</button>
           </div>
         </>
       )}

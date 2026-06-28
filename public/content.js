@@ -7,7 +7,10 @@ function lbl(k){const lc=L==="Japanese"?"ja":L==="Korean"?"ko":(L.includes("Chin
 
 async function jishoReading(word){
   try{
-    const res=await fetch(`https://jisho.org/api/v1/search/words?keyword=${encodeURIComponent(word)}`);
+    const controller=new AbortController();
+    const timer=setTimeout(()=>controller.abort(),3000);
+    const res=await fetch(`https://jisho.org/api/v1/search/words?keyword=${encodeURIComponent(word)}`,{signal:controller.signal});
+    clearTimeout(timer);
     const d=await res.json();
     const entry=d?.data?.[0];
     if(!entry)return null;
