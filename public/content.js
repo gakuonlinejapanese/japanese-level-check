@@ -122,9 +122,14 @@ function show(word,cx,cy){
   // SAVE + folder
   document.getElementById("gs").onclick=()=>{
     let c=cache;
-    // Read folders from chrome.storage.local (synced by GakuApp)
-    chrome.storage.local.get(["gaku_folders"],(result)=>{
-      const allFolders=result.gaku_folders||["Your Vocabulary"];
+    // Read folders from chrome.storage.local + sync (synced by GakuApp)
+    chrome.storage.local.get(["gaku_folders"],(localResult)=>{
+      chrome.storage.sync.get(["gaku_folders"],(syncResult)=>{
+      const localFolders=localResult.gaku_folders||[];
+      const syncFolders=syncResult.gaku_folders||[];
+      // Merge both sources, deduplicate, Your Vocabulary always first
+      const merged=[...new Set(["Your Vocabulary",...localFolders,...syncFolders])];
+      const allFolders=merged;
       R.innerHTML="";
       const titleEl=document.createElement("div");
       titleEl.style.cssText="font-size:12px;color:#a78bfa;font-weight:700;margin-bottom:8px;";
@@ -151,7 +156,7 @@ function show(word,cx,cy){
       const newFolderRow=document.createElement("div");
       newFolderRow.style.cssText="display:flex;gap:6px;margin-bottom:6px;";
       const input=document.createElement("input");
-      input.placeholder="Write a folder name";
+      input.placeholder="Write a new folder name";
       input.style.cssText="flex:1;padding:6px 10px;border-radius:8px;border:1px solid rgba(139,92,246,0.3);background:#1e293b;color:#f1f5f9;font-size:12px;outline:none;";
       const addBtn=document.createElement("button");
       addBtn.style.cssText="padding:6px 10px;border-radius:8px;border:none;background:#a78bfa;color:#fff;cursor:pointer;font-size:12px;font-weight:700;";
@@ -166,7 +171,8 @@ function show(word,cx,cy){
       cancelBtn.textContent=lbl("cancel");
       cancelBtn.addEventListener("click",()=>{R.innerHTML='<span style="color:#64748b;font-size:12px;">⬆ Select an action above</span>';});
       R.appendChild(cancelBtn);
-    });
+      });// end sync.get
+    });// end local.get
   };
 }
 

@@ -2998,11 +2998,14 @@ function saveVocabData(data) {
   try {
     const lean = { folders: data.folders, cards: data.cards.map(trimCard) };
     localStorage.setItem("gaku_vocab", JSON.stringify(lean));
-    // Sync folder names to chrome.storage.local for GAKU Reader extension
+    // Sync folder names to chrome.storage for GAKU Reader extension
     try {
-      const folderNames = ["Your Vocabulary", ...data.folders.map(f => f.name).filter(Boolean)];
+      const folderNames = ["Your Vocabulary", ...data.folders.map(f => typeof f === "string" ? f : f.name).filter(Boolean)];
       if (window.chrome?.storage?.local) {
         window.chrome.storage.local.set({ gaku_folders: folderNames });
+      }
+      if (window.chrome?.storage?.sync) {
+        window.chrome.storage.sync.set({ gaku_folders: folderNames });
       }
     } catch {}
   } catch(e) {
@@ -3872,12 +3875,6 @@ const JLPT_LINKS = {
 };
 
 function PracticeSet({ form }) {
-  const [items, setItems] = useState([]);
-  const [revealed, setRevealed] = useState({});
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-  const [activeSkillFilter, setActiveSkillFilter] = useState("all");
-
   const skills = form.skills || [];
   const skillLabels = skills.map(s => SKILL_LABELS[s] || s).join(", ");
   const jlptLinks = JLPT_LINKS[form.jlpt] || null;
@@ -3885,7 +3882,6 @@ function PracticeSet({ form }) {
   // Gather resources for selected skills
   const selectedResources = skills.flatMap(s => (RESOURCES[s] || []).map(r => ({ ...r, skill: s })));
   const levelResources = LEVEL_RESOURCES[form.jlpt] || [];
-  // Deduplicate by URL
   const seen = new Set();
   const allResources = [...selectedResources, ...levelResources].filter(r => {
     if (seen.has(r.url)) return false; seen.add(r.url); return true;
@@ -3897,44 +3893,62 @@ function PracticeSet({ form }) {
 
   const questionCount = skills.length >= 4 ? 20 : skills.length >= 2 ? 15 : 10;
 
+  // 24-hour cache key
+  const cacheKey = `gaku_practice_${form.jlpt}_${skills.sort().join("_")}_${Math.floor(Date.now()/86400000)}`;
+
+  const [items, setItems] = useState(() => {
+    try { const c = localStorage.getItem(cacheKey); return c ? JSON.parse(c) : []; } catch { return []; }
+  });
+  const [revealed, setRevealed] = useState({});
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [activeSkillFilter, setActiveSkillFilter] = useState("all");
+
   const generate = async () => {
     setLoading(true); setError(""); setItems([]); setRevealed({}); setActiveSkillFilter("all");
     try {
       const res = await fetch("/api/claude", {
         method:"POST", headers:{"Content-Type":"application/json"},
-        body: JSON.stringify({ model:"claude-sonnet-4-20250514", max_tokens:4000,
+        body: JSON.stringify({ model:"claude-sonnet-4-20250514", max_tokens:4500,
           messages:[{ role:"user", content:`You are a Japanese teacher using CLT (Communicative Language Teaching). The student's JLPT level is ${form.jlpt}, goal: ${form.displayGoal||form.goal}.
 The student selected ONLY these study skills: ${skillLabels || "general practice"}.
 
-RESOURCES the student is using (you MUST cite the resource URL in the "source_url" field for every exercise):
+RESOURCES (cite the URL in source_url for every exercise — you may quote sentences directly from these resources):
 ${resourceContext}
 
-Create EXACTLY ${questionCount} practice exercises. PRIORITY: favor Speaking and Writing OUTPUT activities. Reading should lead to output (e.g. read a passage then write a sentence using the same grammar, or say the answer aloud). Distribute across selected skills.
+Create EXACTLY ${questionCount} practice exercises. RULES:
+1. JAPANESE FIRST: Every prompt MUST contain Japanese text (sentences, words, or passages). English may appear only as instructions or labels AFTER the Japanese content. NEVER write a prompt that is English-only with no Japanese.
+2. COMPLETE CONTENT: Fill-in-the-blank prompts MUST include the full sentence with ___ for the blank. Example: 「私は毎日学校___（に/で/を/が）行きます。」NEVER write just an English instruction like "Fill in the blank" without the actual Japanese sentence.
+3. READING: Always include the actual Japanese passage (2-5 sentences), then the question.
+4. KANJI: Always include the actual kanji character(s). Example: 「友達」の読み方は？ or 次の文を読んで答えてください：「彼は毎日電車で会社に行きます。」「電車」の読み方は？
+5. JLPT: 4-choice questions with ①②③④ options written in Japanese. Example: 「（　）の中に正しい言葉を入れてください。①に ②で ③を ④が」
+6. CONVERSATION: Give the situation in English, then provide Japanese dialogue context, ask student to respond in Japanese.
+7. GRAMMAR fill-in: Must have a Japanese sentence with ___ plus 4 options labeled ①②③④ in Japanese.
+8. OUTPUT PRIORITY: favor Speaking/Writing output — shadowing, role-play, sentence construction, dialogue completion.
 
 Activity types per skill:
-- 🔊 Pronunciation (pronunciation): Shadowing prompt — give a sentence to read aloud; minimal pair drill — two words that sound similar, ask the difference; pitch accent awareness
-- 👂 Listening (listening): Cloze — describe an audio scenario in [brackets] then give a sentence with ___ to fill in; comprehension from described scenario; dictation-style prompt
-- 💬 Conversation (conversation): Role-play scenario — describe a situation, ask student to respond in Japanese; dialogue completion — give 2 lines, student writes line 3; social phrase production
-- 🎯 JLPT Prep (jlpt): 4-choice grammar/vocabulary question — ALWAYS include all 4 options labeled ①②③④ in the prompt text itself
-- 📖 Reading (reading): Give a short Japanese passage (2-5 sentences at ${form.jlpt} level), then ask student to answer a question OR write a sentence using a grammar point from the passage
-- 🈳 Kanji (kanji): CRITICAL — you MUST include the actual kanji character(s) in the prompt. Examples: "「学」の読み方は？", "次の文で「電車」はどういう意味？", "「___」に漢字を入れてください（でんしゃ）". NEVER write "What is the meaning of the kanji:" without the actual kanji following immediately.
-- 📝 Grammar (grammar): Fill-in-the-blank with a specific grammar point; error correction; sentence transformation using a given pattern; particle choice ①②③④
+- pronunciation: 「＿＿」を声に出して読んでください (give full Japanese sentence to shadow); or minimal pairs in Japanese
+- listening: [場面：＿＿] 「＿＿___＿＿」の___に何が入りますか？
+- conversation: Situation in English, then Japanese dialogue starter, student responds in Japanese
+- jlpt: Full Japanese 4-choice question with ①②③④ — all in Japanese
+- reading: Japanese passage (2-5 sentences) + Japanese question + "Write a sentence using [grammar point]"
+- kanji: Full Japanese sentence containing the kanji + question about reading or meaning
+- grammar: Full Japanese sentence with ___ + ①②③④ choices in Japanese
 
-STRICT LEVEL CALIBRATION:
-- Beginner: hiragana/katakana only, basic kanji (日本人etc.), です/ます
-- N5: ~100 kanji, basic particles, plain/polite, て-form
-- N4: ~300 kanji, past/potential/conditional
-- N3: ~650 kanji, passive/causative, complex conjunctions
-- N2: ~1000 kanji, keigo basics, abstract vocabulary
-- N1: ~2000 kanji, advanced/nuanced grammar
+LEVEL: ${form.jlpt}
+- N5: ~100 kanji, です/ます, は/が/を/に, simple て-form
+- N4: ~300 kanji, potential/conditional, て-form requests  
+- N3: ~650 kanji, passive/causative, ので/から/ように
+- N2: ~1000 kanji, keigo basics, ～にともなって/～に対して
+- N1: ~2000 kanji, literary/formal register
 
-For each exercise return these fields:
+Return fields for each exercise:
 - skill: one of ${skills.join(", ")}
-- type: specific label (e.g. "Shadowing prompt", "Role-play", "Kanji reading", "Grammar fill-in", "JLPT 4-choice", "Reading + output")
-- prompt: COMPLETE self-contained question. Kanji exercises MUST have the kanji. Multiple-choice MUST have all options ①②③④. Reading MUST include the passage. NEVER leave the content implicit.
-- answer: correct answer only
-- tip: one practical CLT tip referencing a resource by name
-- source_url: the URL of the resource this exercise is based on (pick the most relevant one from the list above)
+- type: specific label in English (e.g. "Shadowing", "Role-play", "Kanji reading", "Grammar fill-in", "JLPT 4-choice", "Reading + output")
+- prompt: MUST start with or prominently feature Japanese text. Complete and self-contained.
+- answer: correct answer (in Japanese when applicable)
+- tip: one CLT tip mentioning a resource name
+- source_url: most relevant resource URL from the list above
 
 Respond ONLY with a valid JSON array, no markdown, no backticks:
 [{"skill":"","type":"","prompt":"","answer":"","tip":"","source_url":""}]` }]
@@ -3943,7 +3957,10 @@ Respond ONLY with a valid JSON array, no markdown, no backticks:
       const d = await res.json();
       const text = d.content?.map(c=>c.text||"").join("") || "[]";
       const parsed = JSON.parse(text.replace(/```json|```/g,"").trim());
-      setItems(Array.isArray(parsed) ? parsed : []);
+      if (Array.isArray(parsed) && parsed.length) {
+        setItems(parsed);
+        try { localStorage.setItem(cacheKey, JSON.stringify(parsed)); } catch {}
+      }
     } catch { setError("Could not generate a practice set right now. Please try again."); }
     setLoading(false);
   };
@@ -3969,9 +3986,11 @@ Respond ONLY with a valid JSON array, no markdown, no backticks:
             📚 {questionCount} exercises · {allResources.length} resources referenced
           </p>
         )}
-        <button onClick={generate} disabled={loading || skills.length===0} style={{ ...S.btn, width:"100%", background:skills.length?`linear-gradient(135deg,${C.purple},#9333ea)`:"#1e293b", color:skills.length?"#fff":"#475569" }}>
-          {loading ? `Building ${questionCount} exercises...`:"Generate Practice Set ✨"}
-        </button>
+        <div style={{ display:"flex", gap:8 }}>
+          <button onClick={generate} disabled={loading || skills.length===0} style={{ ...S.btn, flex:1, background:skills.length?`linear-gradient(135deg,${C.purple},#9333ea)`:"#1e293b", color:skills.length?"#fff":"#475569" }}>
+            {loading ? `Building ${questionCount} exercises...`:(items.length?"🔄 Regenerate":"Generate Practice Set ✨")}
+          </button>
+        </div>
         {error && <p style={{ color:C.red, fontSize:12, marginTop:10 }}>{error}</p>}
       </div>
 
@@ -4638,12 +4657,15 @@ function Dashboard({ form, onEdit }) {
 
   // ── GAKU Extension: listen for words sent from Chrome extension ───────────────────────
   useEffect(() => {
-    // Sync current folders to chrome.storage.local for GAKU Reader extension
+    // Sync current folders to chrome.storage for GAKU Reader extension
     try {
       const vocabInit = loadVocabData();
-      const folderNames = ["Your Vocabulary", ...vocabInit.folders.map(f => f.name).filter(Boolean)];
+      const folderNames = ["Your Vocabulary", ...vocabInit.folders.map(f => typeof f === "string" ? f : f.name).filter(Boolean)];
       if (window.chrome?.storage?.local) {
         window.chrome.storage.local.set({ gaku_folders: folderNames });
+      }
+      if (window.chrome?.storage?.sync) {
+        window.chrome.storage.sync.set({ gaku_folders: folderNames });
       }
     } catch {}
 
