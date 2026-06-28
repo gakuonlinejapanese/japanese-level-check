@@ -130,7 +130,7 @@ function show(word,cx,cy){
         btn.addEventListener("click",()=>doSave(f));
         R.appendChild(btn);
       });
-      // Default vocabulary button
+      // Default vocabulary button - now shows as a selectable folder option
       const defaultBtn=document.createElement("button");
       defaultBtn.style.cssText="display:block;width:100%;margin-bottom:8px;padding:8px 12px;border-radius:8px;border:1px solid rgba(6,182,212,0.4);background:rgba(6,182,212,0.1);color:#67e8f9;cursor:pointer;font-size:12px;text-align:left;";
       defaultBtn.textContent="📚 "+lbl("addToVocab");
@@ -140,7 +140,7 @@ function show(word,cx,cy){
       const newFolderRow=document.createElement("div");
       newFolderRow.style.cssText="display:flex;gap:6px;margin-bottom:6px;";
       const input=document.createElement("input");
-      input.placeholder=lbl("newFolder");
+      input.placeholder="Write a folder name";
       input.style.cssText="flex:1;padding:6px 10px;border-radius:8px;border:1px solid rgba(139,92,246,0.3);background:#1e293b;color:#f1f5f9;font-size:12px;outline:none;";
       const addBtn=document.createElement("button");
       addBtn.style.cssText="padding:6px 10px;border-radius:8px;border:none;background:#a78bfa;color:#fff;cursor:pointer;font-size:12px;font-weight:700;";
