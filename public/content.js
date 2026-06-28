@@ -36,12 +36,25 @@ function show(word,cx,cy){
   popup=document.createElement("div");
   popup.id="gaku-sv";
   const vw=window.innerWidth;
-  Object.assign(popup.style,{position:"fixed",zIndex:"2147483647",left:Math.min(cx+8,vw-344)+"px",top:Math.max(cy+8,10)+"px",width:"328px",background:"linear-gradient(135deg,#0f172a,#1e1b4b)",border:"1.5px solid rgba(139,92,246,0.5)",borderRadius:"14px",boxShadow:"0 12px 40px rgba(0,0,0,0.7)",fontFamily:"'Segoe UI',system-ui,sans-serif",fontSize:"13px",color:"#e2e8f0",overflow:"hidden"});
+  Object.assign(popup.style,{position:"fixed",zIndex:"2147483647",left:Math.min(cx+8,vw-344)+"px",top:Math.max(cy+8,10)+"px",width:"328px",background:"linear-gradient(135deg,#0f172a,#1e1b4b)",border:"1.5px solid rgba(139,92,246,0.5)",borderRadius:"14px",boxShadow:"0 12px 40px rgba(0,0,0,0.7)",fontFamily:"'Segoe UI',system-ui,sans-serif",fontSize:"13px",color:"#e2e8f0",overflow:"hidden",cursor:"default"});
   const css=document.createElement("style");
   css.textContent="#gaku-sv .gb{padding:6px 10px;border-radius:8px;border:1px solid rgba(139,92,246,0.35);background:rgba(139,92,246,0.12);color:#a78bfa;cursor:pointer;font-size:11px;font-weight:700;}#gaku-sv .gb:hover{background:rgba(139,92,246,0.28);}";
   popup.prepend(css);
-  popup.innerHTML+=`<div style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:rgba(139,92,246,0.18);border-bottom:1px solid rgba(139,92,246,0.25);"><span style="font-weight:800;font-size:13px;color:#a78bfa;">🌸 GAKU Reader</span><button id="gc" style="background:none;border:none;color:#64748b;font-size:17px;cursor:pointer;">&times;</button></div><div style="padding:10px 14px 6px;font-size:18px;font-weight:700;color:#f1f5f9;border-bottom:1px solid rgba(255,255,255,0.07);">${word}</div><div style="display:flex;gap:6px;padding:10px 14px;border-bottom:1px solid rgba(255,255,255,0.07);flex-wrap:wrap;"><button class="gb" id="gt">🌐 ${lbl("translate")}</button><button class="gb" id="gp">🔊 ${lbl("pronounce")}</button><button class="gb" id="gi">🖼 ${lbl("image")}</button><button class="gb" id="gs">＋ ${lbl("save")}</button></div><div id="gr" style="padding:10px 14px;min-height:44px;max-height:300px;overflow-y:auto;line-height:1.65;font-size:13px;"><span style="color:#64748b;font-size:12px;">⬆ Select an action above</span></div>`;
+  popup.innerHTML+=`<div id="gaku-header" style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:rgba(139,92,246,0.18);border-bottom:1px solid rgba(139,92,246,0.25);"><span style="font-weight:800;font-size:13px;color:#a78bfa;">🌸 GAKU Reader</span><button id="gc" style="background:none;border:none;color:#64748b;font-size:17px;cursor:pointer;">&times;</button></div><div style="padding:10px 14px 6px;font-size:18px;font-weight:700;color:#f1f5f9;border-bottom:1px solid rgba(255,255,255,0.07);">${word}</div><div style="display:flex;gap:6px;padding:10px 14px;border-bottom:1px solid rgba(255,255,255,0.07);flex-wrap:wrap;"><button class="gb" id="gt">🌐 ${lbl("translate")}</button><button class="gb" id="gp">🔊 ${lbl("pronounce")}</button><button class="gb" id="gi">🖼 ${lbl("image")}</button><button class="gb" id="gs">＋ ${lbl("save")}</button></div><div id="gr" style="padding:10px 14px;min-height:44px;max-height:300px;overflow-y:auto;line-height:1.65;font-size:13px;"><span style="color:#64748b;font-size:12px;">⬆ Select an action above</span></div>`;
   document.body.appendChild(popup);
+  // ── Drag to move ──
+  const header=popup.querySelector("#gaku-header");
+  if(header){
+    header.style.cursor="grab";
+    let dx=0,dy=0,dragging=false;
+    header.addEventListener("mousedown",e=>{
+      if(e.target.id==="gc")return;
+      dragging=true;dx=e.clientX-popup.offsetLeft;dy=e.clientY-popup.offsetTop;
+      header.style.cursor="grabbing";e.preventDefault();
+    });
+    document.addEventListener("mousemove",e=>{if(!dragging)return;popup.style.left=(e.clientX-dx)+"px";popup.style.top=(e.clientY-dy)+"px";});
+    document.addEventListener("mouseup",()=>{dragging=false;header.style.cursor="grab";});
+  }
   const R=document.getElementById("gr");
   document.getElementById("gc").onclick=rm;
   let cache=null;
@@ -100,13 +113,42 @@ function show(word,cx,cy){
     const p=c?{...c}:{word,reading:"",jlpt:"",partOfSpeech:"",meaning:"",example:"",reading_example:"",example_translated:"",tip:""};
     let folders=[];
     try{const gv=localStorage.getItem("gaku_vocab");if(gv){const d=JSON.parse(gv);folders=(d.folders||[]).map(f=>typeof f==="string"?f:f.name).filter(Boolean);}}catch(e){}
-    const fo=folders.map(f=>`<button class="gaku-fb" data-f="${f}" style="display:block;width:100%;margin-bottom:6px;padding:8px 12px;border-radius:8px;border:1px solid rgba(139,92,246,0.4);background:rgba(139,92,246,0.1);color:#e2e8f0;cursor:pointer;font-size:12px;text-align:left;">📁 ${f}</button>`).join("");
-    R.innerHTML=`<div style="font-size:12px;color:#a78bfa;font-weight:700;margin-bottom:8px;">📂 ${lbl("chooseFolder")}</div>${fo}<button class="gaku-fb" data-f="Your Vocabulary" style="display:block;width:100%;margin-bottom:8px;padding:8px 12px;border-radius:8px;border:1px solid rgba(6,182,212,0.4);background:rgba(6,182,212,0.1);color:#67e8f9;cursor:pointer;font-size:12px;text-align:left;">📚 ${lbl("addToVocab")}</button><div style="display:flex;gap:6px;margin-bottom:6px;"><input id="gaku-nf" placeholder="${lbl("newFolder")}" style="flex:1;padding:6px 10px;border-radius:8px;border:1px solid rgba(139,92,246,0.3);background:#1e293b;color:#f1f5f9;font-size:12px;outline:none;"/><button id="gaku-nfb" style="padding:6px 10px;border-radius:8px;border:none;background:#a78bfa;color:#fff;cursor:pointer;font-size:12px;font-weight:700;">+</button></div><button id="gaku-cancel" style="width:100%;padding:5px;border:none;border-radius:8px;background:rgba(255,255,255,0.05);color:#64748b;cursor:pointer;font-size:11px;">${lbl("cancel")}</button>`;
+    // Build folder UI with DOM API (not innerHTML) to ensure event listeners work
+    R.innerHTML="";
+    const titleEl=document.createElement("div");
+    titleEl.style.cssText="font-size:12px;color:#a78bfa;font-weight:700;margin-bottom:8px;";
+    titleEl.textContent="📂 "+lbl("chooseFolder");
+    R.appendChild(titleEl);
     function doSave(folder){const payload={...p,folder};try{chrome.runtime.sendMessage({type:"GAKU_INJECT_WORD",payload});}catch(e){}window.postMessage({type:"GAKU_ADD_WORD",payload},"*");R.innerHTML=`<div style="text-align:center;padding:8px 0;"><div style="color:#22c55e;font-size:18px;">✓</div><div style="color:#22c55e;font-size:13px;font-weight:700;">${lbl("saved")}</div><div style="color:#f1f5f9;font-size:13px;margin-top:4px;">${p.word}</div><div style="color:#64748b;font-size:11px;margin-top:2px;">→ ${folder}</div></div>`;}
-    R.querySelectorAll(".gaku-fb").forEach(btn=>btn.addEventListener("click",()=>doSave(btn.getAttribute("data-f"))));
-    document.getElementById("gaku-nfb").addEventListener("click",()=>{const v=document.getElementById("gaku-nf").value.trim();if(v)doSave(v);});
-    document.getElementById("gaku-nf").addEventListener("keydown",(e)=>{if(e.key==="Enter"){const v=e.target.value.trim();if(v)doSave(v);}});
-    document.getElementById("gaku-cancel").addEventListener("click",()=>{R.innerHTML='<span style="color:#64748b;font-size:12px;">⬆ Select an action above</span>';});
+    folders.forEach(f=>{
+      const btn=document.createElement("button");
+      btn.style.cssText="display:block;width:100%;margin-bottom:6px;padding:8px 12px;border-radius:8px;border:1px solid rgba(139,92,246,0.4);background:rgba(139,92,246,0.1);color:#e2e8f0;cursor:pointer;font-size:12px;text-align:left;";
+      btn.textContent="📁 "+f;
+      btn.addEventListener("click",()=>doSave(f));
+      R.appendChild(btn);
+    });
+    const defaultBtn=document.createElement("button");
+    defaultBtn.style.cssText="display:block;width:100%;margin-bottom:8px;padding:8px 12px;border-radius:8px;border:1px solid rgba(6,182,212,0.4);background:rgba(6,182,212,0.1);color:#67e8f9;cursor:pointer;font-size:12px;text-align:left;";
+    defaultBtn.textContent="📚 "+lbl("addToVocab");
+    defaultBtn.addEventListener("click",()=>doSave("Your Vocabulary"));
+    R.appendChild(defaultBtn);
+    const newFolderRow=document.createElement("div");
+    newFolderRow.style.cssText="display:flex;gap:6px;margin-bottom:6px;";
+    const input=document.createElement("input");
+    input.id="gaku-nf";input.placeholder=lbl("newFolder");
+    input.style.cssText="flex:1;padding:6px 10px;border-radius:8px;border:1px solid rgba(139,92,246,0.3);background:#1e293b;color:#f1f5f9;font-size:12px;outline:none;";
+    const addBtn=document.createElement("button");
+    addBtn.style.cssText="padding:6px 10px;border-radius:8px;border:none;background:#a78bfa;color:#fff;cursor:pointer;font-size:12px;font-weight:700;";
+    addBtn.textContent="+";
+    addBtn.addEventListener("click",()=>{const v=input.value.trim();if(v)doSave(v);});
+    input.addEventListener("keydown",(e)=>{if(e.key==="Enter"){const v=e.target.value.trim();if(v)doSave(v);}});
+    newFolderRow.appendChild(input);newFolderRow.appendChild(addBtn);
+    R.appendChild(newFolderRow);
+    const cancelBtn=document.createElement("button");
+    cancelBtn.style.cssText="width:100%;padding:5px;border:none;border-radius:8px;background:rgba(255,255,255,0.05);color:#64748b;cursor:pointer;font-size:11px;";
+    cancelBtn.textContent=lbl("cancel");
+    cancelBtn.addEventListener("click",()=>{R.innerHTML='<span style="color:#64748b;font-size:12px;">⬆ Select an action above</span>';});
+    R.appendChild(cancelBtn);
   };
 }
 
