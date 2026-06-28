@@ -3011,14 +3011,12 @@ function WordDetailCard({ card: cardProp, onSave, onBack, form, prefLang }) {
 
   // Auto-fill empty meaning/example via AI when card opens
   useEffect(() => {
-    setFilling(false);
     const needsFill = !cardProp.meaning || !cardProp.example || !cardProp.example_translated;
-    if (!needsFill) return;
+    if (!needsFill) { setFilling(false); return; }
     const lang = prefLang || form?.preferredLang || "English";
     setFilling(true);
     (async () => {
       try {
-        // If example already exists but translation is missing, use a dedicated translation prompt
         const hasExample = cardProp.example && cardProp.example.trim();
         const userPrompt = hasExample && !cardProp.example_translated
           ? `For the Japanese word "${cardProp.word}" (reading: "${cardProp.reading || cardProp.word}"), fill in the missing fields.\nThe example sentence already exists: "${cardProp.example}"\nReturn a JSON object with these fields:\n- meaning: ${cardProp.meaning ? `"${cardProp.meaning}"` : `translation in ${lang}`}\n- meaningNative: ${cardProp.meaningNative ? `"${cardProp.meaningNative}"` : "simple Japanese definition"}\n- example: "${cardProp.example}"\n- reading_example: romaji reading of the above example sentence\n- example_translated: translation of the above example sentence into ${lang} (REQUIRED - must not be empty)\n- tip: usage tip in ${lang}\nOnly output the JSON object, no markdown, no backticks.`
@@ -3047,14 +3045,13 @@ function WordDetailCard({ card: cardProp, onSave, onBack, form, prefLang }) {
           example_translated: parsed.example_translated || prev.example_translated || "",
           tip: prev.tip || parsed.tip || "",
         }));
-        // Also persist updated data to localStorage if this card is already saved
         const vocabData = loadVocabData();
         const idx = vocabData.cards.findIndex(c => c.word === cardProp.word && c.folder === cardProp.folder);
         if (idx !== -1) {
           vocabData.cards[idx] = { ...vocabData.cards[idx], ...parsed };
           saveVocabData(vocabData);
         }
-      } catch(e) { /* silently fail */ }
+      } catch(e) { console.error("GAKU fill error:", e); }
       setFilling(false);
     })();
   }, [cardProp.word]);
