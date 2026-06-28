@@ -20,8 +20,7 @@ async function groq(word){
 let imgIndex=0,imgWord="",imgCache=[];
 
 async function searchImage(word,offset){
-  const query=word;
-  const url=`https://commons.wikimedia.org/w/api.php?action=query&generator=search&gsrnamespace=6&gsrsearch=${encodeURIComponent(query)}&gsrlimit=3&gsroffset=${offset}&prop=imageinfo&iiprop=url&iiurlwidth=400&format=json&origin=*`;
+  const url=`https://commons.wikimedia.org/w/api.php?action=query&generator=search&gsrnamespace=6&gsrsearch=${encodeURIComponent(word)}&gsrlimit=3&gsroffset=${offset}&prop=imageinfo&iiprop=url&iiurlwidth=400&format=json&origin=*`;
   try{
     const res=await fetch(url);
     const data=await res.json();
@@ -81,7 +80,6 @@ function show(word,cx,cy){
 
   async function showImgAt(R,idx,word){
     if(idx>=imgCache.length){
-      // load more
       R.innerHTML=`<span style="color:#a78bfa;font-size:12px;">⏳ ${lbl("imgLoading")}</span>`;
       const more=await searchImage(word,imgCache.length);
       if(!more.length){R.innerHTML=`<span style="color:#fbbf24;font-size:12px;">⚠ ${lbl("imgNone")}</span>`;return;}
@@ -91,7 +89,6 @@ function show(word,cx,cy){
     R.innerHTML=`<div><img id="gaku-img" src="${src}" style="width:100%;border-radius:10px;object-fit:cover;max-height:200px;display:block;" /><p style="color:#475569;font-size:10px;margin:4px 0 6px;text-align:center;">${idx+1}枚目</p><div style="display:flex;gap:6px;"><button id="gaku-img-save" style="flex:1;padding:6px;border-radius:8px;border:1px solid rgba(34,197,94,0.4);background:rgba(34,197,94,0.1);color:#22c55e;cursor:pointer;font-size:11px;font-weight:700;">${lbl("imgSave")}</button><button id="gaku-img-next" style="flex:1;padding:6px;border-radius:8px;border:1px solid rgba(245,158,11,0.4);background:rgba(245,158,11,0.1);color:#fbbf24;cursor:pointer;font-size:11px;font-weight:700;">${lbl("imgNext")}</button></div></div>`;
     document.getElementById("gaku-img-next").onclick=()=>{imgIndex++;showImgAt(R,imgIndex,word);};
     document.getElementById("gaku-img-save").onclick=()=>{
-      // Save imageUrl to GAKU vocab
       try{
         const gv=localStorage.getItem("gaku_vocab");
         if(gv){
@@ -107,53 +104,58 @@ function show(word,cx,cy){
   }
 
   // SAVE + folder
-  document.getElementById("gs").onclick=async()=>{
+  document.getElementById("gs").onclick=()=>{
     let c=cache;
-    let folders=[];
-    try{const gv=localStorage.getItem("gaku_vocab");if(gv){const d=JSON.parse(gv);folders=(d.folders||[]).map(f=>typeof f==="string"?f:f.name).filter(Boolean);}}catch(e){}
-    // Build folder UI immediately (don't wait for groq)
-    R.innerHTML="";
-    const titleEl=document.createElement("div");
-    titleEl.style.cssText="font-size:12px;color:#a78bfa;font-weight:700;margin-bottom:8px;";
-    titleEl.textContent="📂 "+lbl("chooseFolder");
-    R.appendChild(titleEl);
-    async function doSave(folder){
-      if(!c)c=cache=await groq(word);
-      const p=c?{...c}:{word,reading:"",jlpt:"",partOfSpeech:"",meaning:"",example:"",reading_example:"",example_translated:"",tip:""};
-      const payload={...p,folder};
-      try{chrome.runtime.sendMessage({type:"GAKU_INJECT_WORD",payload});}catch(e){}
-      window.postMessage({type:"GAKU_ADD_WORD",payload},"*");
-      R.innerHTML=`<div style="text-align:center;padding:8px 0;"><div style="color:#22c55e;font-size:18px;">✓</div><div style="color:#22c55e;font-size:13px;font-weight:700;">${lbl("saved")}</div><div style="color:#f1f5f9;font-size:13px;margin-top:4px;">${word}</div><div style="color:#64748b;font-size:11px;margin-top:2px;">→ ${folder}</div></div>`;
-    }
-    folders.forEach(f=>{
-      const btn=document.createElement("button");
-      btn.style.cssText="display:block;width:100%;margin-bottom:6px;padding:8px 12px;border-radius:8px;border:1px solid rgba(139,92,246,0.4);background:rgba(139,92,246,0.1);color:#e2e8f0;cursor:pointer;font-size:12px;text-align:left;";
-      btn.textContent="📁 "+f;
-      btn.addEventListener("click",()=>doSave(f));
-      R.appendChild(btn);
+    // Read folders from chrome.storage.local (synced by GakuApp)
+    chrome.storage.local.get(["gaku_folders"],(result)=>{
+      const folders=(result.gaku_folders||[]).filter(f=>f && f!=="Your Vocabulary");
+      R.innerHTML="";
+      const titleEl=document.createElement("div");
+      titleEl.style.cssText="font-size:12px;color:#a78bfa;font-weight:700;margin-bottom:8px;";
+      titleEl.textContent="📂 "+lbl("chooseFolder");
+      R.appendChild(titleEl);
+      async function doSave(folder){
+        if(!c)c=cache=await groq(word);
+        const p=c?{...c}:{word,reading:"",jlpt:"",partOfSpeech:"",meaning:"",example:"",reading_example:"",example_translated:"",tip:""};
+        const payload={...p,folder};
+        try{chrome.runtime.sendMessage({type:"GAKU_INJECT_WORD",payload});}catch(e){}
+        window.postMessage({type:"GAKU_ADD_WORD",payload},"*");
+        R.innerHTML=`<div style="text-align:center;padding:8px 0;"><div style="color:#22c55e;font-size:18px;">✓</div><div style="color:#22c55e;font-size:13px;font-weight:700;">${lbl("saved")}</div><div style="color:#f1f5f9;font-size:13px;margin-top:4px;">${word}</div><div style="color:#64748b;font-size:11px;margin-top:2px;">→ ${folder}</div></div>`;
+      }
+      // Existing folders
+      folders.forEach(f=>{
+        const btn=document.createElement("button");
+        btn.style.cssText="display:block;width:100%;margin-bottom:6px;padding:8px 12px;border-radius:8px;border:1px solid rgba(139,92,246,0.4);background:rgba(139,92,246,0.1);color:#e2e8f0;cursor:pointer;font-size:12px;text-align:left;";
+        btn.textContent="📁 "+f;
+        btn.addEventListener("click",()=>doSave(f));
+        R.appendChild(btn);
+      });
+      // Default vocabulary button
+      const defaultBtn=document.createElement("button");
+      defaultBtn.style.cssText="display:block;width:100%;margin-bottom:8px;padding:8px 12px;border-radius:8px;border:1px solid rgba(6,182,212,0.4);background:rgba(6,182,212,0.1);color:#67e8f9;cursor:pointer;font-size:12px;text-align:left;";
+      defaultBtn.textContent="📚 "+lbl("addToVocab");
+      defaultBtn.addEventListener("click",()=>doSave("Your Vocabulary"));
+      R.appendChild(defaultBtn);
+      // New folder input
+      const newFolderRow=document.createElement("div");
+      newFolderRow.style.cssText="display:flex;gap:6px;margin-bottom:6px;";
+      const input=document.createElement("input");
+      input.placeholder=lbl("newFolder");
+      input.style.cssText="flex:1;padding:6px 10px;border-radius:8px;border:1px solid rgba(139,92,246,0.3);background:#1e293b;color:#f1f5f9;font-size:12px;outline:none;";
+      const addBtn=document.createElement("button");
+      addBtn.style.cssText="padding:6px 10px;border-radius:8px;border:none;background:#a78bfa;color:#fff;cursor:pointer;font-size:12px;font-weight:700;";
+      addBtn.textContent="+";
+      addBtn.addEventListener("click",()=>{const v=input.value.trim();if(v)doSave(v);});
+      input.addEventListener("keydown",(e)=>{if(e.key==="Enter"){const v=e.target.value.trim();if(v)doSave(v);}});
+      newFolderRow.appendChild(input);newFolderRow.appendChild(addBtn);
+      R.appendChild(newFolderRow);
+      // Cancel
+      const cancelBtn=document.createElement("button");
+      cancelBtn.style.cssText="width:100%;padding:5px;border:none;border-radius:8px;background:rgba(255,255,255,0.05);color:#64748b;cursor:pointer;font-size:11px;";
+      cancelBtn.textContent=lbl("cancel");
+      cancelBtn.addEventListener("click",()=>{R.innerHTML='<span style="color:#64748b;font-size:12px;">⬆ Select an action above</span>';});
+      R.appendChild(cancelBtn);
     });
-    const defaultBtn=document.createElement("button");
-    defaultBtn.style.cssText="display:block;width:100%;margin-bottom:8px;padding:8px 12px;border-radius:8px;border:1px solid rgba(6,182,212,0.4);background:rgba(6,182,212,0.1);color:#67e8f9;cursor:pointer;font-size:12px;text-align:left;";
-    defaultBtn.textContent="📚 "+lbl("addToVocab");
-    defaultBtn.addEventListener("click",()=>doSave("Your Vocabulary"));
-    R.appendChild(defaultBtn);
-    const newFolderRow=document.createElement("div");
-    newFolderRow.style.cssText="display:flex;gap:6px;margin-bottom:6px;";
-    const input=document.createElement("input");
-    input.placeholder=lbl("newFolder");
-    input.style.cssText="flex:1;padding:6px 10px;border-radius:8px;border:1px solid rgba(139,92,246,0.3);background:#1e293b;color:#f1f5f9;font-size:12px;outline:none;";
-    const addBtn=document.createElement("button");
-    addBtn.style.cssText="padding:6px 10px;border-radius:8px;border:none;background:#a78bfa;color:#fff;cursor:pointer;font-size:12px;font-weight:700;";
-    addBtn.textContent="+";
-    addBtn.addEventListener("click",()=>{const v=input.value.trim();if(v)doSave(v);});
-    input.addEventListener("keydown",(e)=>{if(e.key==="Enter"){const v=e.target.value.trim();if(v)doSave(v);}});
-    newFolderRow.appendChild(input);newFolderRow.appendChild(addBtn);
-    R.appendChild(newFolderRow);
-    const cancelBtn=document.createElement("button");
-    cancelBtn.style.cssText="width:100%;padding:5px;border:none;border-radius:8px;background:rgba(255,255,255,0.05);color:#64748b;cursor:pointer;font-size:11px;";
-    cancelBtn.textContent=lbl("cancel");
-    cancelBtn.addEventListener("click",()=>{R.innerHTML='<span style="color:#64748b;font-size:12px;">⬆ Select an action above</span>';});
-    R.appendChild(cancelBtn);
   };
 }
 
