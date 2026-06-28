@@ -2965,6 +2965,13 @@ function saveVocabData(data) {
   try {
     const lean = { folders: data.folders, cards: data.cards.map(trimCard) };
     localStorage.setItem("gaku_vocab", JSON.stringify(lean));
+    // Sync folder names to chrome.storage.local for GAKU Reader extension
+    try {
+      const folderNames = ["Your Vocabulary", ...data.folders.map(f => f.name).filter(Boolean)];
+      if (window.chrome?.storage?.local) {
+        window.chrome.storage.local.set({ gaku_folders: folderNames });
+      }
+    } catch {}
   } catch(e) {
     // If quota exceeded, remove oldest 20 cards and retry
     try {
@@ -4462,21 +4469,31 @@ function Dashboard({ form, onEdit }) {
 
   // ── GAKU Extension: listen for words sent from Chrome extension ───────────────────────
   useEffect(() => {
+    // Sync current folders to chrome.storage.local for GAKU Reader extension
+    try {
+      const vocabInit = loadVocabData();
+      const folderNames = ["Your Vocabulary", ...vocabInit.folders.map(f => f.name).filter(Boolean)];
+      if (window.chrome?.storage?.local) {
+        window.chrome.storage.local.set({ gaku_folders: folderNames });
+      }
+    } catch {}
+
     const handleExtMessage = (e) => {
       if (e.source !== window) return;
       if (!e.data || e.data.type !== "GAKU_ADD_WORD") return;
       const { word, reading, meaning, partOfSpeech, jlpt, example, example_translated, tip } = e.data.payload || {};
       if (!word) return;
       const data = loadVocabData();
+      const folder = e.data.payload.folder || "GAKU Extension";
       const newCard = {
         word, reading: reading || "", jlpt: jlpt || "",
         partOfSpeech: partOfSpeech || "", meaning: meaning || "",
         meaningNative: "", example: example || "", example_translated: example_translated || "",
         tip: tip || "", imageQuery: word, imageDesc: "",
-        folder: e.data.payload.folder || "GAKU Extension", addedAt: Date.now()
+        folder, addedAt: Date.now()
       };
-      if (!data.cards.find(c => c.word === word && c.folder === "GAKU Extension")) {
-        if (!data.folders.find(f=>f==="GAKU Extension"||(f&&f.name==="GAKU Extension"))) data.folders.push({ name: "GAKU Extension", createdAt: new Date().toISOString() });
+      if (!data.cards.find(c => c.word === word && c.folder === folder)) {
+        if (folder !== "Your Vocabulary" && !data.folders.find(f=>f===folder||(f&&f.name===folder))) data.folders.push({ name: folder, createdAt: new Date().toISOString() });
         data.cards.push(newCard);
         saveVocabData(data);
       }
