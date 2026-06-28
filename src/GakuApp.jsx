@@ -3303,8 +3303,16 @@ function WordDetailCard({ card: cardProp, onSave, onBack, form, prefLang }) {
 
 // ─── FLASHCARD VIEW ────────────────────────────────────────────────────────────
 function FlashcardView({ cards, onBack }) {
+  const allData = loadVocabData();
+  const allFolders = [{ name:"すべて" }, { name:"Your Vocabulary" }, ...allData.folders];
+  const [selectedFolder, setSelectedFolder] = useState("すべて");
+  const filteredCards = selectedFolder === "すべて" ? cards : cards.filter(c => c.folder === selectedFolder);
   const [idx, setIdx] = useState(0);
   const [flipped, setFlipped] = useState(false);
+
+  // Reset idx when folder changes
+  const handleFolderChange = (f) => { setSelectedFolder(f); setIdx(0); setFlipped(false); };
+
   if (!cards.length) return (
     <div>
       <button onClick={onBack} style={{ background:"none", border:"none", color:"#64748b", fontSize:13, cursor:"pointer", padding:0, marginBottom:14 }}>← Back</button>
@@ -3314,37 +3322,56 @@ function FlashcardView({ cards, onBack }) {
       </div>
     </div>
   );
-  const card = cards[idx];
+
+  const displayCards = filteredCards.length ? filteredCards : [];
+  const card = displayCards[idx] || null;
+
   return (
     <div>
       <button onClick={onBack} style={{ background:"none", border:"none", color:"#64748b", fontSize:13, cursor:"pointer", padding:0, marginBottom:14 }}>← Back</button>
-      <p style={{ color:"#64748b", fontSize:12, textAlign:"center", margin:"0 0 16px" }}>{idx+1} / {cards.length}</p>
-      <div onClick={()=>setFlipped(f=>!f)} style={{ ...S.card, minHeight:220, display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", cursor:"pointer", textAlign:"center", borderLeft:`4px solid ${C.teal}`, marginBottom:16 }}>
-        {!flipped ? (
-          <>
-            <p style={{ color:"#f1f5f9", fontSize:44, fontWeight:900, margin:"0 0 6px", letterSpacing:2 }}>{card.word}</p>
-            {card.reading && <p style={{ color:C.teal, fontSize:16, margin:"0 0 2px", fontWeight:600 }}>{card.reading}</p>}
-            {card.meaning && <p style={{ color:"#64748b", fontSize:11, margin:"0 0 14px" }}>{card.meaning}</p>}
-            <p style={{ color:"#334155", fontSize:11 }}>タップして確認</p>
-          </>
-        ) : (
-          <>
-            <p style={{ color:"#f1f5f9", fontSize:20, fontWeight:800, margin:"0 0 2px" }}>{card.word}</p>
-            {card.reading && <p style={{ color:C.teal, fontSize:13, margin:"0 0 2px" }}>{card.reading}</p>}
-            {card.meaning && <p style={{ color:"#94a3b8", fontSize:12, margin:"0 0 10px" }}>{card.meaning}</p>}
-            {card.meaningNative && <p style={{ color:"#475569", fontSize:11, margin:"0 0 8px", fontStyle:"italic" }}>{card.meaningNative}</p>}
-            {card.example && <p style={{ color:"#cbd5e1", fontSize:13, lineHeight:1.7, maxWidth:280, margin:"0 0 2px" }}>{card.example}</p>}
-            {card.reading_example && <p style={{ color:"#67e8f9", fontSize:11, fontStyle:"italic", maxWidth:280, margin:"0 0 2px" }}>{card.reading_example}</p>}
-            {card.example_translated && <p style={{ color:"#64748b", fontSize:11, fontStyle:"italic", maxWidth:280, margin:"0 0 10px" }}>{card.example_translated}</p>}
-            <button onClick={e=>{e.stopPropagation();speakJapanese(card.example);}} style={{ background:"rgba(245,158,11,0.1)", border:"1px solid rgba(245,158,11,0.3)", borderRadius:8, color:C.amber, fontSize:12, padding:"4px 12px", cursor:"pointer" }}>🔊 例文を聞く</button>
-          </>
-        )}
+      {/* Folder selector */}
+      <div style={{ display:"flex", gap:6, flexWrap:"wrap", marginBottom:12 }}>
+        {allFolders.map(f => (
+          <button key={f.name} onClick={()=>handleFolderChange(f.name)} style={{ padding:"5px 12px", borderRadius:20, fontSize:11, fontWeight:700, cursor:"pointer", border:`1px solid ${selectedFolder===f.name ? C.teal : C.border}`, background: selectedFolder===f.name ? `rgba(6,182,212,0.15)` : C.card, color: selectedFolder===f.name ? C.teal : "#64748b" }}>
+            {f.name==="すべて" ? "📚 すべて" : f.name==="Your Vocabulary" ? "📚 Your Vocabulary" : "📁 "+f.name}
+          </button>
+        ))}
       </div>
-      <div style={{ display:"flex", gap:10 }}>
-        <button onClick={()=>speakJapanese(card.word)} style={{ flex:1, ...S.btn, background:"rgba(6,182,212,0.1)", border:`1px solid rgba(6,182,212,0.3)`, color:C.teal }}>🔊 Listen</button>
-        <button onClick={()=>{ setFlipped(false); setIdx(i=>(i-1+cards.length)%cards.length); }} style={{ ...S.btn, padding:"13px 18px", background:C.card, border:`1px solid ${C.border}`, color:"#94a3b8" }}>←</button>
-        <button onClick={()=>{ setFlipped(false); setIdx(i=>(i+1)%cards.length); }} style={{ ...S.btn, padding:"13px 18px", background:C.card, border:`1px solid ${C.border}`, color:"#94a3b8" }}>→</button>
-      </div>
+      {!card ? (
+        <div style={{ ...S.card, textAlign:"center", padding:"40px 20px" }}>
+          <p style={{ color:"#94a3b8", fontSize:14 }}>このフォルダに単語がありません</p>
+        </div>
+      ) : (
+        <>
+          <p style={{ color:"#64748b", fontSize:12, textAlign:"center", margin:"0 0 16px" }}>{idx+1} / {displayCards.length}</p>
+          <div onClick={()=>setFlipped(f=>!f)} style={{ ...S.card, minHeight:220, display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", cursor:"pointer", textAlign:"center", borderLeft:`4px solid ${C.teal}`, marginBottom:16 }}>
+            {!flipped ? (
+              <>
+                <p style={{ color:"#f1f5f9", fontSize:44, fontWeight:900, margin:"0 0 6px", letterSpacing:2 }}>{card.word}</p>
+                {card.reading && <p style={{ color:C.teal, fontSize:20, margin:"0 0 4px", fontWeight:700 }}>{card.reading}</p>}
+                {card.meaning && <p style={{ color:"#94a3b8", fontSize:12, margin:"0 0 14px" }}>{card.meaning}</p>}
+                <p style={{ color:"#334155", fontSize:11 }}>タップして確認</p>
+              </>
+            ) : (
+              <>
+                <p style={{ color:"#f1f5f9", fontSize:28, fontWeight:900, margin:"0 0 4px", letterSpacing:1 }}>{card.word}</p>
+                {card.reading && <p style={{ color:C.teal, fontSize:18, margin:"0 0 4px", fontWeight:700 }}>{card.reading}</p>}
+                {card.meaning && <p style={{ color:"#94a3b8", fontSize:12, margin:"0 0 10px" }}>{card.meaning}</p>}
+                {card.meaningNative && <p style={{ color:"#475569", fontSize:11, margin:"0 0 8px", fontStyle:"italic" }}>{card.meaningNative}</p>}
+                {card.example && <p style={{ color:"#cbd5e1", fontSize:13, lineHeight:1.7, maxWidth:280, margin:"0 0 2px" }}>{card.example}</p>}
+                {card.reading_example && <p style={{ color:"#67e8f9", fontSize:11, fontStyle:"italic", maxWidth:280, margin:"0 0 2px" }}>{card.reading_example}</p>}
+                {card.example_translated && <p style={{ color:"#64748b", fontSize:11, fontStyle:"italic", maxWidth:280, margin:"0 0 10px" }}>{card.example_translated}</p>}
+                <button onClick={e=>{e.stopPropagation();speakJapanese(card.example);}} style={{ background:"rgba(245,158,11,0.1)", border:"1px solid rgba(245,158,11,0.3)", borderRadius:8, color:C.amber, fontSize:12, padding:"4px 12px", cursor:"pointer" }}>🔊 例文を聞く</button>
+              </>
+            )}
+          </div>
+          <div style={{ display:"flex", gap:10 }}>
+            <button onClick={()=>speakJapanese(card.word)} style={{ flex:1, ...S.btn, background:"rgba(6,182,212,0.1)", border:`1px solid rgba(6,182,212,0.3)`, color:C.teal }}>🔊 Listen</button>
+            <button onClick={()=>{ setFlipped(false); setIdx(i=>(i-1+displayCards.length)%displayCards.length); }} style={{ ...S.btn, padding:"13px 18px", background:C.card, border:`1px solid ${C.border}`, color:"#94a3b8" }}>←</button>
+            <button onClick={()=>{ setFlipped(false); setIdx(i=>(i+1)%displayCards.length); }} style={{ ...S.btn, padding:"13px 18px", background:C.card, border:`1px solid ${C.border}`, color:"#94a3b8" }}>→</button>
+          </div>
+        </>
+      )}
     </div>
   );
 }
