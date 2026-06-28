@@ -3921,7 +3921,7 @@ ${resourceContext}
 
 Create EXACTLY ${questionCount} practice exercises. RULES:
 1. JAPANESE FIRST: Every prompt MUST contain Japanese text (sentences, words, or passages). English may appear only as instructions or labels AFTER the Japanese content. NEVER write a prompt that is English-only with no Japanese.
-2. COMPLETE CONTENT: Fill-in-the-blank prompts MUST include the full sentence with ___ for the blank. Example: 「私は毎日学校___（に/で/を/が）行きます。」NEVER write just an English instruction like "Fill in the blank" without the actual Japanese sentence.
+2. COMPLETE CONTENT: Fill-in-the-blank prompts MUST include the full Japanese sentence with ___ for the blank AND the 4 choices in parentheses immediately after the blank, like: 「私は毎日学校___（①に ②で ③を ④が）行きます。」The choices must ALWAYS be inside the same prompt sentence. NEVER write a prompt that only has choices without the actual Japanese sentence containing the blank.
 3. READING: Always include the actual Japanese passage (2-5 sentences), then the question.
 4. KANJI: Always include the actual kanji character(s). Example: 「友達」の読み方は？ or 次の文を読んで答えてください：「彼は毎日電車で会社に行きます。」「電車」の読み方は？
 5. JLPT: 4-choice questions with ①②③④ options written in Japanese. Example: 「（　）の中に正しい言葉を入れてください。①に ②で ③を ④が」

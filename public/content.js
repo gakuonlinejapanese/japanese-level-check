@@ -5,34 +5,15 @@ document.addEventListener("mousedown",e=>{if(popup&&!popup.contains(e.target))rm
 chrome.storage.sync.get(["popupLang","groqApiKey","annotationEnabled"],r=>{L=r.popupLang||"English";if(r.annotationEnabled!==false)addFurigana();});
 function lbl(k){const lc=L==="Japanese"?"ja":L==="Korean"?"ko":(L.includes("Chinese"))?"zh":"en";const M={translate:{ja:"翻訳",ko:"번역",zh:"翻译",en:"Translate"},pronounce:{ja:"発音",ko:"발음",zh:"发音",en:"Pronounce"},image:{ja:"画像",ko:"이미지",zh:"图片",en:"Image"},save:{ja:"単語帳＋",ko:"단어장＋",zh:"生词本＋",en:"Save＋"},looking:{ja:"検索中...",ko:"검색 중...",zh:"查询中...",en:"Looking up..."},spoken:{ja:"読み上げ完了",ko:"발음 완료",zh:"已朗读",en:"Spoken"},saved:{ja:"保存しました！",ko:"저장됨！",zh:"已保存！",en:"Saved!"},noKey:{ja:"APIキーを設定してください",ko:"API 키를 설정해주세요",zh:"请设置API密钥",en:"Please set your Groq API key"},failed:{ja:"取得失敗",ko:"조회 실패",zh:"查询失败",en:"Lookup failed. Try Weblio:"},imgLoading:{ja:"画像を検索中...",ko:"이미지 검색 중...",zh:"搜索图片中...",en:"Searching images..."},imgNext:{ja:"次の画像 →",ko:"다음 이미지 →",zh:"下一张 →",en:"Next image →"},imgSave:{ja:"💾 保存",ko:"💾 저장",zh:"💾 保存",en:"💾 Save"},imgNone:{ja:"画像が見つかりませんでした",ko:"이미지를 찾을 수 없습니다",zh:"未找到图片",en:"No images found"},chooseFolder:{ja:"フォルダを選択",ko:"폴더 선택",zh:"选择文件夹",en:"Choose folder"},addToVocab:{ja:"単語帳に追加",ko:"단어장에 추가",zh:"添加到词汇表",en:"Add to Vocabulary"},newFolder:{ja:"新フォルダ名",ko:"새 폴더 이름",zh:"新文件夹名称",en:"New folder name"},cancel:{ja:"キャンセル",ko:"취소",zh:"取消",en:"Cancel"}};return M[k]?.[lc]||M[k]?.en||k;}
 
-async function jishoReading(word){
-  try{
-    const controller=new AbortController();
-    const timer=setTimeout(()=>controller.abort(),3000);
-    const res=await fetch(`https://jisho.org/api/v1/search/words?keyword=${encodeURIComponent(word)}`,{signal:controller.signal});
-    clearTimeout(timer);
-    const d=await res.json();
-    const entry=d?.data?.[0];
-    if(!entry)return null;
-    const jp=entry.japanese?.[0];
-    return jp?.reading||null;
-  }catch{return null;}
-}
-
 async function groq(word){
   const r=await new Promise(res=>chrome.storage.sync.get(["groqApiKey","popupLang"],res));
   const key=r.groqApiKey||"";const lang=r.popupLang||"English";
   if(!key)return null;
-  // Fetch accurate reading from Jisho first
-  const jishoRead=await jishoReading(word);
   try{
-    const res=await fetch("https://api.groq.com/openai/v1/chat/completions",{method:"POST",headers:{"Content-Type":"application/json","Authorization":"Bearer "+key},body:JSON.stringify({model:"llama-3.3-70b-versatile",max_tokens:400,messages:[{role:"system",content:`You are a Japanese dictionary. Respond ONLY with raw JSON, no markdown, no backticks.`},{role:"user",content:`Look up the Japanese word: "${word}"${jishoRead?`\nThe correct hiragana reading is: "${jishoRead}" — use this EXACTLY as the "reading" field, do NOT change it.`:""}\nReturn JSON with: word, reading (hiragana — use the provided reading exactly if given), jlpt (N5-N1 or ""), partOfSpeech, meaning (in ${lang}), meaningNative (Japanese definition), example (Japanese sentence), reading_example (romaji of example), example_translated (translation of example in ${lang}), tip (usage tip in ${lang}), imageQuery (2-3 English words for image search)`}]})});
+    const res=await fetch("https://api.groq.com/openai/v1/chat/completions",{method:"POST",headers:{"Content-Type":"application/json","Authorization":"Bearer "+key},body:JSON.stringify({model:"llama-3.3-70b-versatile",max_tokens:400,messages:[{role:"system",content:`You are a Japanese dictionary. Respond ONLY with raw JSON, no markdown, no backticks.`},{role:"user",content:`Look up the Japanese word: "${word}". Return JSON with these exact fields: word, reading (correct hiragana reading), jlpt (N5/N4/N3/N2/N1 or ""), partOfSpeech, meaning (translation in ${lang}), meaningNative (simple Japanese definition), example (natural Japanese example sentence), reading_example (romaji reading of the example sentence), example_translated (translation of example in ${lang}), tip (short usage tip in ${lang}), imageQuery (2-3 English words for image search)`}]})});
     const d=await res.json();
     const t=d.choices?.[0]?.message?.content||"";
-    const parsed=JSON.parse(t.replace(/```json|```/g,"").trim());
-    // Always enforce jisho reading if available
-    if(jishoRead)parsed.reading=jishoRead;
-    return parsed;
+    return JSON.parse(t.replace(/```json|```/g,"").trim());
   }catch{return null;}
 }
 
