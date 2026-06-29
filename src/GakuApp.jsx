@@ -2927,7 +2927,7 @@ async function fetchTranslationBatch(keyValueObj, lang) {
   const res = await fetch("/api/claude", {
     method:"POST", headers:{"Content-Type":"application/json"},
     body: JSON.stringify({
-      model:"claude-sonnet-4-20250514", max_tokens:6000,
+       max_tokens:6000,
       messages:[{ role:"user", content:
         `Translate ONLY the VALUES (not keys) into ${lang}. Keep emojis, asterisks (*), arrows (→ ←), Japanese text (頑張ってください！), and punctuation exactly as-is. Return ONLY a valid JSON object with the same keys — no markdown, no explanation, no extra text.\n\n${keyList}`
       }]
@@ -3719,7 +3719,7 @@ function VocabBuilder({ form }) {
     try {
       const res = await fetch("/api/claude", {
         method:"POST", headers:{"Content-Type":"application/json"},
-        body: JSON.stringify({ model:"claude-sonnet-4-20250514", max_tokens:1500,
+        body: JSON.stringify({  max_tokens:1500,
           messages:[
             { role:"system", content:`You are a multilingual Japanese dictionary expert. You MUST write the "meaning", "example_translated", and "tip" fields EXCLUSIVELY in ${form.preferredLang || "English"}. Never use English for these fields unless the student native language IS English.` },
             { role:"user", content:`Generate 8 authentic Japanese dictionary words related to the topic: "${search}"\n\nThe student native language is: ${form.preferredLang || "English"}\nALL translations must be in ${form.preferredLang || "English"} — NOT in English unless that is the native language.\n\nReturn a JSON array of exactly 8 objects with these keys:\n- word: Japanese word in kanji/kana\n- reading: hiragana reading\n- jlpt: JLPT level (N5/N4/N3/N2/N1) or ""\n- partOfSpeech: part of speech in English\n- meaning: translation in ${form.preferredLang || "English"}\n- meaningNative: simple Japanese definition (e.g. 「食べ物を料理すること」)\n- example: natural Japanese example sentence\n- example_translated: translation of example in ${form.preferredLang || "English"}\n- tip: usage tip in ${form.preferredLang || "English"}\n- imageQuery: 2-3 English words for image search\n- imageDesc: brief English image description\n\nOutput ONLY a raw JSON array. No markdown, no backticks, no explanation.` }
@@ -3948,7 +3948,7 @@ function PracticeSet({ form }) {
     try {
       const res = await fetch("/api/claude", {
         method:"POST", headers:{"Content-Type":"application/json"},
-        body: JSON.stringify({ model:"claude-sonnet-4-20250514", max_tokens:4500,
+        body: JSON.stringify({  max_tokens:4500,
           messages:[{ role:"user", content:`You are a Japanese teacher using CLT (Communicative Language Teaching). The student's JLPT level is ${form.jlpt}, goal: ${form.displayGoal||form.goal}.
 The student selected ONLY these study skills: ${skillLabels || "general practice"}.
 
@@ -4284,7 +4284,7 @@ async function translateMilestonesAI(milestones, lang) {
     const res = await fetch("/api/claude", {
       method:"POST", headers:{"Content-Type":"application/json"},
       body: JSON.stringify({
-        model:"claude-sonnet-4-20250514", max_tokens:800,
+         max_tokens:800,
         messages:[{ role:"user", content:
           `Translate these Japanese learning milestone descriptions into ${lang}. Keep month/week references exact. Return ONLY a JSON array of strings, no markdown.\n\n${JSON.stringify(milestones)}`
         }]
@@ -4314,7 +4314,7 @@ function HelpModal({ onClose, form }) {
     try {
       const res = await fetch("/api/claude", {
         method:"POST", headers:{"Content-Type":"application/json"},
-        body: JSON.stringify({ model:"claude-sonnet-4-20250514", max_tokens:500,
+        body: JSON.stringify({  max_tokens:500,
           messages:[{ role:"user", content:`You are a warm Japanese language coach using CLT (Communicative Language Teaching).
 Student: ${form.name}, Level: ${form.jlpt}, Goal: ${form.displayGoal||form.goal}, Skills: ${(form.skills||[]).join(", ")}
 Today: Mood: ${mood}, Time: ${time} min, Energy: ${energy}
@@ -4459,7 +4459,7 @@ function WritingPrompt({ jlpt }) {
     try {
       const res = await fetch("/api/claude", {
         method:"POST", headers:{"Content-Type":"application/json"},
-        body: JSON.stringify({ model:"claude-sonnet-4-20250514", max_tokens:400,
+        body: JSON.stringify({  max_tokens:400,
           messages:[{ role:"user", content:`You are a Japanese language teacher using CLT. Student level: ${jlpt}.
 Prompt: "${prompt}"
 Student's response: "${text}"
