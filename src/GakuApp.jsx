@@ -2998,16 +2998,8 @@ function saveVocabData(data) {
   try {
     const lean = { folders: data.folders, cards: data.cards.map(trimCard) };
     localStorage.setItem("gaku_vocab", JSON.stringify(lean));
-    // Sync folder names to chrome.storage for GAKU Reader extension
-    try {
-      const folderNames = ["Your Vocabulary", ...data.folders.map(f => typeof f === "string" ? f : f.name).filter(Boolean)];
-      if (window.chrome?.storage?.local) {
-        window.chrome.storage.local.set({ gaku_folders: folderNames });
-      }
-      if (window.chrome?.storage?.sync) {
-        window.chrome.storage.sync.set({ gaku_folders: folderNames });
-      }
-    } catch {}
+    // Notify GAKU Reader extension content.js to re-sync folders
+    try { window.postMessage({ type: "GAKU_FOLDERS_UPDATED" }, "*"); } catch {}
   } catch(e) {
     // If quota exceeded, remove oldest 20 cards and retry
     try {
@@ -4704,17 +4696,7 @@ function Dashboard({ form, onEdit }) {
 
   // ── GAKU Extension: listen for words sent from Chrome extension ───────────────────────
   useEffect(() => {
-    // Sync current folders to chrome.storage for GAKU Reader extension
-    try {
-      const vocabInit = loadVocabData();
-      const folderNames = ["Your Vocabulary", ...vocabInit.folders.map(f => typeof f === "string" ? f : f.name).filter(Boolean)];
-      if (window.chrome?.storage?.local) {
-        window.chrome.storage.local.set({ gaku_folders: folderNames });
-      }
-      if (window.chrome?.storage?.sync) {
-        window.chrome.storage.sync.set({ gaku_folders: folderNames });
-      }
-    } catch {}
+
 
     const handleExtMessage = (e) => {
       if (e.source !== window) return;
