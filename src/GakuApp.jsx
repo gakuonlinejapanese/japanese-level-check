@@ -4980,6 +4980,7 @@ function Dashboard({ form, onEdit }) {
 export default function GakuApp({ onBack, initialJlpt }) {
   const [form, setForm] = useState(null);
   const [editing, setEditing] = useState(false);
+  const [showPaywall, setShowPaywall] = useState(false);
   useEffect(() => {
     try { const saved = localStorage.getItem("gaku_form"); if(saved) setForm(JSON.parse(saved)); } catch {}
   }, []);
@@ -4990,9 +4991,34 @@ export default function GakuApp({ onBack, initialJlpt }) {
     setForm(saved);
     setEditing(false);
     try { localStorage.setItem("gaku_form", JSON.stringify(saved)); } catch {}
+    setTimeout(() => setShowPaywall(true), 3000);
   };
   const handleEdit = () => setEditing(true);
   const handleCancelEdit = () => setEditing(false);
   if (!form || editing) return <FormScreen onSubmit={handleSubmit} onBack={onBack} onCancel={form ? handleCancelEdit : undefined} initialJlpt={initialJlpt} initialForm={form || undefined} />;
-  return <Dashboard form={form} onEdit={handleEdit} />;
+  return (
+    <div style={{ position:"relative" }}>
+      <Dashboard form={form} onEdit={handleEdit} />
+      {showPaywall && (
+        <div style={{ position:"fixed", inset:0, zIndex:9999, display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", background:"rgba(10,15,30,0.85)", backdropFilter:"blur(12px)" }}>
+          <div style={{ background:"linear-gradient(135deg,#1e1b4b,#0f172a)", border:"1.5px solid rgba(139,92,246,0.4)", borderRadius:20, padding:"36px 32px", maxWidth:420, width:"90%", textAlign:"center", boxShadow:"0 8px 40px rgba(139,92,246,0.25)" }}>
+            <p style={{ fontSize:28, margin:"0 0 6px" }}>🎌</p>
+            <h2 style={{ color:"#f1f5f9", fontSize:20, fontWeight:900, margin:"0 0 8px" }}>Your Study Plan is Ready!</h2>
+            <p style={{ color:"#94a3b8", fontSize:13, margin:"0 0 24px", lineHeight:1.6 }}>Unlock your personalized weekly schedule, practice sets, and vocabulary tools.</p>
+            <a href="https://dashboard.stripe.com/acct_1TewE3IkVvRh9IDD/settings/business-details" target="_blank" rel="noopener noreferrer" style={{ display:"block", width:"100%", padding:"14px 0", background:"linear-gradient(135deg,#7c3aed,#a855f7)", border:"none", borderRadius:12, color:"#fff", fontSize:15, fontWeight:800, cursor:"pointer", textDecoration:"none", marginBottom:12, boxSizing:"border-box" }}>
+              💳 Choose Your Plan →
+            </a>
+            <div style={{ marginBottom:12 }}>
+              <p style={{ color:"#64748b", fontSize:11, margin:"0 0 6px" }}>GAKUの生徒の方は招待コードを入力</p>
+              <div style={{ display:"flex", gap:8 }}>
+                <input id="invite-code-input" placeholder="招待コードを入力..." style={{ flex:1, padding:"10px 12px", background:"#0f172a", border:"1.5px solid rgba(255,255,255,0.1)", borderRadius:8, color:"#f1f5f9", fontSize:13, outline:"none" }} />
+                <button onClick={()=>{ const code=document.getElementById("invite-code-input").value.trim(); if(code==="GAKU2025"||code==="GAKU"){setShowPaywall(false);}else{alert("Invalid code. Please try again.");}}} style={{ padding:"10px 16px", background:"rgba(6,182,212,0.15)", border:"1.5px solid rgba(6,182,212,0.4)", borderRadius:8, color:"#67e8f9", fontSize:13, fontWeight:700, cursor:"pointer" }}>確認</button>
+              </div>
+            </div>
+            <button onClick={()=>setShowPaywall(false)} style={{ background:"none", border:"none", color:"#475569", fontSize:11, cursor:"pointer" }}>後で確認する</button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
 }
