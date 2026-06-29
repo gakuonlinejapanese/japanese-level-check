@@ -5006,15 +5006,15 @@ export default function GakuApp({ onBack, initialJlpt }) {
             <h2 style={{ color:"#f1f5f9", fontSize:20, fontWeight:900, margin:"0 0 8px" }}>Your Study Plan is Ready!</h2>
             <p style={{ color:"#94a3b8", fontSize:13, margin:"0 0 24px", lineHeight:1.6 }}>Unlock your personalized weekly schedule, practice sets, and vocabulary tools.</p>
             <div style={{ display:"flex", flexDirection:"column", gap:10, marginBottom:12 }}>
-              <a href="https://buy.stripe.com/MONTHLY_LINK" target="_blank" rel="noopener noreferrer" style={{ display:"block", padding:"13px 16px", background:"linear-gradient(135deg,rgba(124,58,237,0.2),rgba(168,85,247,0.1))", border:"1.5px solid rgba(139,92,246,0.5)", borderRadius:12, color:"#f1f5f9", fontSize:13, fontWeight:700, cursor:"pointer", textDecoration:"none", textAlign:"left" }}>
+              <a href="https://buy.stripe.com/6oU7sL7qWg7C7wV1OqbMQ00" target="_blank" rel="noopener noreferrer" style={{ display:"block", padding:"13px 16px", background:"linear-gradient(135deg,rgba(124,58,237,0.2),rgba(168,85,247,0.1))", border:"1.5px solid rgba(139,92,246,0.5)", borderRadius:12, color:"#f1f5f9", fontSize:13, fontWeight:700, cursor:"pointer", textDecoration:"none", textAlign:"left" }}>
                 <span style={{ color:"#a855f7", fontSize:11, fontWeight:800, display:"block", marginBottom:2 }}>MONTHLY</span>
                 💳 $14.99 / month
               </a>
-              <a href="https://buy.stripe.com/3MONTH_LINK" target="_blank" rel="noopener noreferrer" style={{ display:"block", padding:"13px 16px", background:"linear-gradient(135deg,rgba(6,182,212,0.2),rgba(6,182,212,0.1))", border:"1.5px solid rgba(6,182,212,0.5)", borderRadius:12, color:"#f1f5f9", fontSize:13, fontWeight:700, cursor:"pointer", textDecoration:"none", textAlign:"left" }}>
+              <a href="https://buy.stripe.com/28E28r9z46x2dVj0KmbMQ02" target="_blank" rel="noopener noreferrer" style={{ display:"block", padding:"13px 16px", background:"linear-gradient(135deg,rgba(6,182,212,0.2),rgba(6,182,212,0.1))", border:"1.5px solid rgba(6,182,212,0.5)", borderRadius:12, color:"#f1f5f9", fontSize:13, fontWeight:700, cursor:"pointer", textDecoration:"none", textAlign:"left" }}>
                 <span style={{ color:"#06b6d4", fontSize:11, fontWeight:800, display:"block", marginBottom:2 }}>3 MONTHS · Save 5%</span>
                 💳 $42.70 <span style={{ color:"#64748b", fontSize:11, fontWeight:400 }}>($14.23/mo)</span>
               </a>
-              <a href="https://buy.stripe.com/6MONTH_LINK" target="_blank" rel="noopener noreferrer" style={{ display:"block", padding:"13px 16px", background:"linear-gradient(135deg,rgba(34,197,94,0.2),rgba(34,197,94,0.1))", border:"1.5px solid rgba(34,197,94,0.5)", borderRadius:12, color:"#f1f5f9", fontSize:13, fontWeight:700, cursor:"pointer", textDecoration:"none", textAlign:"left" }}>
+              <a href="https://buy.stripe.com/28E5kD8v07B6bNbct4bMQ03" target="_blank" rel="noopener noreferrer" style={{ display:"block", padding:"13px 16px", background:"linear-gradient(135deg,rgba(34,197,94,0.2),rgba(34,197,94,0.1))", border:"1.5px solid rgba(34,197,94,0.5)", borderRadius:12, color:"#f1f5f9", fontSize:13, fontWeight:700, cursor:"pointer", textDecoration:"none", textAlign:"left" }}>
                 <span style={{ color:"#22c55e", fontSize:11, fontWeight:800, display:"block", marginBottom:2 }}>6 MONTHS · Save 10% ⭐ Best Value</span>
                 💳 $80.95 <span style={{ color:"#64748b", fontSize:11, fontWeight:400 }}>($13.49/mo)</span>
               </a>
