@@ -3599,7 +3599,7 @@ function WordSearchScreen({ form, onBack, onSelectWord }) {
     try {
       const res = await fetch("/api/claude", {
         method:"POST", headers:{"Content-Type":"application/json"},
-        body: JSON.stringify({ model:"claude-sonnet-4-20250514", max_tokens:1200,
+        body: JSON.stringify({ max_tokens:1200,
           messages:[{ role:"user", content:`You are an expert Japanese dictionary and language teacher. The student's native/preferred language is ${form.preferredLang || "English"}, JLPT level: ${form.jlpt || "N5"}.
 
 The student searched for: "${search}"
