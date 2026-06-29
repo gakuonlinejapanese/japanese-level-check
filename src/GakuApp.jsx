@@ -2927,7 +2927,7 @@ async function fetchTranslationBatch(keyValueObj, lang) {
   const res = await fetch("/api/claude", {
     method:"POST", headers:{"Content-Type":"application/json"},
     body: JSON.stringify({
-       max_tokens:6000,
+      model:"claude-sonnet-4-20250514", max_tokens:6000,
       messages:[{ role:"user", content:
         `Translate ONLY the VALUES (not keys) into ${lang}. Keep emojis, asterisks (*), arrows (→ ←), Japanese text (頑張ってください！), and punctuation exactly as-is. Return ONLY a valid JSON object with the same keys — no markdown, no explanation, no extra text.\n\n${keyList}`
       }]
@@ -2998,8 +2998,16 @@ function saveVocabData(data) {
   try {
     const lean = { folders: data.folders, cards: data.cards.map(trimCard) };
     localStorage.setItem("gaku_vocab", JSON.stringify(lean));
-    // Notify GAKU Reader extension content.js to re-sync folders
-    try { window.postMessage({ type: "GAKU_FOLDERS_UPDATED" }, "*"); } catch {}
+    // Sync folder names to chrome.storage for GAKU Reader extension
+    try {
+      const folderNames = ["Your Vocabulary", ...data.folders.map(f => typeof f === "string" ? f : f.name).filter(Boolean)];
+      if (window.chrome?.storage?.local) {
+        window.chrome.storage.local.set({ gaku_folders: folderNames });
+      }
+      if (window.chrome?.storage?.sync) {
+        window.chrome.storage.sync.set({ gaku_folders: folderNames });
+      }
+    } catch {}
   } catch(e) {
     // If quota exceeded, remove oldest 20 cards and retry
     try {
@@ -3599,7 +3607,7 @@ function WordSearchScreen({ form, onBack, onSelectWord }) {
     try {
       const res = await fetch("/api/claude", {
         method:"POST", headers:{"Content-Type":"application/json"},
-        body: JSON.stringify({ max_tokens:1200,
+        body: JSON.stringify({ model:"claude-sonnet-4-20250514", max_tokens:1200,
           messages:[{ role:"user", content:`You are an expert Japanese dictionary and language teacher. The student's native/preferred language is ${form.preferredLang || "English"}, JLPT level: ${form.jlpt || "N5"}.
 
 The student searched for: "${search}"
@@ -3719,7 +3727,7 @@ function VocabBuilder({ form }) {
     try {
       const res = await fetch("/api/claude", {
         method:"POST", headers:{"Content-Type":"application/json"},
-        body: JSON.stringify({  max_tokens:1500,
+        body: JSON.stringify({ model:"claude-sonnet-4-20250514", max_tokens:1500,
           messages:[
             { role:"system", content:`You are a multilingual Japanese dictionary expert. You MUST write the "meaning", "example_translated", and "tip" fields EXCLUSIVELY in ${form.preferredLang || "English"}. Never use English for these fields unless the student native language IS English.` },
             { role:"user", content:`Generate 8 authentic Japanese dictionary words related to the topic: "${search}"\n\nThe student native language is: ${form.preferredLang || "English"}\nALL translations must be in ${form.preferredLang || "English"} — NOT in English unless that is the native language.\n\nReturn a JSON array of exactly 8 objects with these keys:\n- word: Japanese word in kanji/kana\n- reading: hiragana reading\n- jlpt: JLPT level (N5/N4/N3/N2/N1) or ""\n- partOfSpeech: part of speech in English\n- meaning: translation in ${form.preferredLang || "English"}\n- meaningNative: simple Japanese definition (e.g. 「食べ物を料理すること」)\n- example: natural Japanese example sentence\n- example_translated: translation of example in ${form.preferredLang || "English"}\n- tip: usage tip in ${form.preferredLang || "English"}\n- imageQuery: 2-3 English words for image search\n- imageDesc: brief English image description\n\nOutput ONLY a raw JSON array. No markdown, no backticks, no explanation.` }
@@ -3948,7 +3956,7 @@ function PracticeSet({ form }) {
     try {
       const res = await fetch("/api/claude", {
         method:"POST", headers:{"Content-Type":"application/json"},
-        body: JSON.stringify({  max_tokens:4500,
+        body: JSON.stringify({ model:"claude-sonnet-4-20250514", max_tokens:4500,
           messages:[{ role:"user", content:`You are a Japanese teacher using CLT (Communicative Language Teaching). The student's JLPT level is ${form.jlpt}, goal: ${form.displayGoal||form.goal}.
 The student selected ONLY these study skills: ${skillLabels || "general practice"}.
 
@@ -4284,7 +4292,7 @@ async function translateMilestonesAI(milestones, lang) {
     const res = await fetch("/api/claude", {
       method:"POST", headers:{"Content-Type":"application/json"},
       body: JSON.stringify({
-         max_tokens:800,
+        model:"claude-sonnet-4-20250514", max_tokens:800,
         messages:[{ role:"user", content:
           `Translate these Japanese learning milestone descriptions into ${lang}. Keep month/week references exact. Return ONLY a JSON array of strings, no markdown.\n\n${JSON.stringify(milestones)}`
         }]
@@ -4314,7 +4322,7 @@ function HelpModal({ onClose, form }) {
     try {
       const res = await fetch("/api/claude", {
         method:"POST", headers:{"Content-Type":"application/json"},
-        body: JSON.stringify({  max_tokens:500,
+        body: JSON.stringify({ model:"claude-sonnet-4-20250514", max_tokens:500,
           messages:[{ role:"user", content:`You are a warm Japanese language coach using CLT (Communicative Language Teaching).
 Student: ${form.name}, Level: ${form.jlpt}, Goal: ${form.displayGoal||form.goal}, Skills: ${(form.skills||[]).join(", ")}
 Today: Mood: ${mood}, Time: ${time} min, Energy: ${energy}
@@ -4459,7 +4467,7 @@ function WritingPrompt({ jlpt }) {
     try {
       const res = await fetch("/api/claude", {
         method:"POST", headers:{"Content-Type":"application/json"},
-        body: JSON.stringify({  max_tokens:400,
+        body: JSON.stringify({ model:"claude-sonnet-4-20250514", max_tokens:400,
           messages:[{ role:"user", content:`You are a Japanese language teacher using CLT. Student level: ${jlpt}.
 Prompt: "${prompt}"
 Student's response: "${text}"
@@ -4696,7 +4704,17 @@ function Dashboard({ form, onEdit }) {
 
   // ── GAKU Extension: listen for words sent from Chrome extension ───────────────────────
   useEffect(() => {
-
+    // Sync current folders to chrome.storage for GAKU Reader extension
+    try {
+      const vocabInit = loadVocabData();
+      const folderNames = ["Your Vocabulary", ...vocabInit.folders.map(f => typeof f === "string" ? f : f.name).filter(Boolean)];
+      if (window.chrome?.storage?.local) {
+        window.chrome.storage.local.set({ gaku_folders: folderNames });
+      }
+      if (window.chrome?.storage?.sync) {
+        window.chrome.storage.sync.set({ gaku_folders: folderNames });
+      }
+    } catch {}
 
     const handleExtMessage = (e) => {
       if (e.source !== window) return;
