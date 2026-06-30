@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useMemo, useRef } from "react";
+import { supabase, getDeviceId, getDeviceLabel } from "./supabaseClient";
 
 const C = {
   bg: "linear-gradient(160deg,#0a0f1e 0%,#0f172a 60%,#0a0f1e 100%)",
@@ -280,6 +281,18 @@ const UI_TRANSLATIONS = {
     threeMonthsSave5_1hr: "3 MONTHS · Save 5% · 1hr/mo",
     sixMonthsSave5_30min: "6 MONTHS · Save 5% · 30min/mo ⭐",
     sixMonthsSave10_1hr: "6 MONTHS · Save 10% · 1hr/mo ⭐ Best Value",
+    // Account / login / device approval
+    loginTitle: "Log In",
+    signupTitle: "Create Your Account",
+    emailPlaceholder: "Email",
+    passwordPlaceholder: "Password",
+    invitationCodeOptional: "GAKU invite code (optional)",
+    loginButton: "Log In",
+    signupButton: "Sign Up",
+    needAccount: "Need an account? Sign up",
+    haveAccount: "Already have an account? Log in",
+    deviceApprovalTitle: "New Device Detected",
+    deviceApprovalDesc: "We've sent an approval email to you and to GAKU. Once both approve, this device will be unlocked — please check your inbox.",
     findWordsBtn: "Find Words",
     libraryLabel: "📚 Library",
     yourVocabSaved: "Your Vocabulary",
@@ -2933,6 +2946,7 @@ function getT(lang) {
 
 // For languages not in our static dict, we cache AI translations
 const AI_TRANS_CACHE = {};
+const AI_TRANS_PENDING = {}; // dedupe concurrent fetches for the same language
 
 // Split translation keys into two batches to stay within token limits
 function splitKeys(obj) {
@@ -2944,7 +2958,7 @@ function splitKeys(obj) {
   return [a, b];
 }
 
-async function fetchTranslationBatch(keyValueObj, lang) {
+async function fetchTranslationBatch(keyValueObj, lang, attempt = 0) {
   const keyList = Object.keys(keyValueObj).map(k => `${k}: ${keyValueObj[k]}`).join("\n");
   const res = await fetch("/api/claude", {
     method:"POST", headers:{"Content-Type":"application/json"},
@@ -2956,9 +2970,39 @@ async function fetchTranslationBatch(keyValueObj, lang) {
     })
   });
   const d = await res.json();
+  // Retry once on rate-limit errors instead of silently falling back to English
+  if (d.error && attempt < 2) {
+    await new Promise(r => setTimeout(r, 800 * (attempt + 1)));
+    return fetchTranslationBatch(keyValueObj, lang, attempt + 1);
+  }
   const text = d.content?.map(c=>c.text||"").join("") || "{}";
   const clean = text.replace(/```json|```/g,"").trim();
   return JSON.parse(clean);
+}
+
+// Fetches (and caches) the full translation set for a language exactly once,
+// even if many components call useUITranslations(lang) at the same time.
+function getOrFetchTranslations(lang) {
+  if (AI_TRANS_CACHE[lang]) return Promise.resolve(AI_TRANS_CACHE[lang]);
+  if (AI_TRANS_PENDING[lang]) return AI_TRANS_PENDING[lang];
+  const baseKeys = UI_TRANSLATIONS["English"];
+  const [batchA, batchB] = splitKeys(baseKeys);
+  const p = Promise.all([
+    fetchTranslationBatch(batchA, lang),
+    fetchTranslationBatch(batchB, lang),
+  ])
+    .then(([resA, resB]) => {
+      const merged = { ...resA, ...resB };
+      if (Object.keys(merged).length > 10) {
+        AI_TRANS_CACHE[lang] = merged;
+        return merged;
+      }
+      return UI_TRANSLATIONS["English"];
+    })
+    .catch(() => UI_TRANSLATIONS["English"])
+    .finally(() => { delete AI_TRANS_PENDING[lang]; });
+  AI_TRANS_PENDING[lang] = p;
+  return p;
 }
 
 // Hook: shows English immediately while AI translation loads for unknown languages
@@ -2970,24 +3014,12 @@ function useUITranslations(lang) {
   useEffect(() => {
     if (staticT || !lang || lang === "English") { setAiT(null); setTransLoading(false); return; }
     if (AI_TRANS_CACHE[lang]) { setAiT(AI_TRANS_CACHE[lang]); return; }
+    let cancelled = false;
     setTransLoading(true);
-    const baseKeys = UI_TRANSLATIONS["English"];
-    const [batchA, batchB] = splitKeys(baseKeys);
-    Promise.all([
-      fetchTranslationBatch(batchA, lang),
-      fetchTranslationBatch(batchB, lang),
-    ])
-    .then(([resA, resB]) => {
-      const merged = { ...resA, ...resB };
-      if (Object.keys(merged).length > 10) {
-        AI_TRANS_CACHE[lang] = merged;
-        setAiT(merged);
-      } else {
-        setAiT(UI_TRANSLATIONS["English"]);
-      }
-    })
-    .catch(() => setAiT(UI_TRANSLATIONS["English"]))
-    .finally(() => setTransLoading(false));
+    getOrFetchTranslations(lang).then(merged => {
+      if (!cancelled) { setAiT(merged); setTransLoading(false); }
+    });
+    return () => { cancelled = true; };
   }, [lang, staticT]);
 
   // Always return something immediately — English while AI translation is loading
@@ -4999,11 +5031,105 @@ function Dashboard({ form, onEdit }) {
 }
 
 // ─── ROOT ────────────────────────────────────────────────────────────────────────
+// ─── ACCOUNT: login / signup with optional GAKU invite code ──────────────────
+function AuthScreen({ onAuthed, T, prefillEmail, initialMode }) {
+  const [mode, setMode] = useState(initialMode || "login"); // login | signup
+  const [email, setEmail] = useState(prefillEmail || "");
+  const [password, setPassword] = useState("");
+  const [inviteCode, setInviteCode] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [err, setErr] = useState("");
+
+  if (!supabase) {
+    return <p style={{ color:"#f87171", fontSize:13 }}>Account features are not configured yet.</p>;
+  }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setErr(""); setBusy(true);
+    try {
+      if (mode === "signup") {
+        if (inviteCode.trim()) {
+          const vRes = await fetch("/api/validate-invite", {
+            method: "POST", headers: { "Content-Type":"application/json" },
+            body: JSON.stringify({ code: inviteCode.trim(), email }),
+          });
+          const vData = await vRes.json();
+          if (!vRes.ok) throw new Error(vData.error || "Invalid invite code.");
+        }
+        const { data, error } = await supabase.auth.signUp({ email, password });
+        if (error) throw error;
+        const userId = data?.user?.id;
+        if (userId && inviteCode.trim()) {
+          await fetch("/api/redeem-invite", {
+            method: "POST", headers: { "Content-Type":"application/json" },
+            body: JSON.stringify({ code: inviteCode.trim(), userId }),
+          });
+        }
+        if (userId) {
+          await supabase.from("profiles").upsert({ id: userId, email, is_gaku_student: !!inviteCode.trim() });
+        }
+      } else {
+        const { error } = await supabase.auth.signInWithPassword({ email, password });
+        if (error) throw error;
+      }
+      onAuthed();
+    } catch (e2) {
+      setErr(e2.message || "Something went wrong.");
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  return (
+    <div style={{ minHeight:"100vh", background:"linear-gradient(160deg,#0a0f1e 0%,#0f172a 60%,#0a0f1e 100%)", display:"flex", alignItems:"center", justifyContent:"center", padding:24 }}>
+      <form onSubmit={handleSubmit} style={{ width:"100%", maxWidth:380, background:"rgba(255,255,255,0.03)", border:"1.5px solid rgba(255,255,255,0.1)", borderRadius:20, padding:28 }}>
+        <h2 style={{ color:"#f1f5f9", fontSize:20, fontWeight:900, margin:"0 0 18px", textAlign:"center" }}>
+          {mode === "login" ? (T?.loginTitle || "Log In") : (T?.signupTitle || "Create Your Account")}
+        </h2>
+        <input type="email" required placeholder={T?.emailPlaceholder || "Email"} value={email} onChange={e=>setEmail(e.target.value)}
+          style={{ width:"100%", boxSizing:"border-box", padding:"11px 14px", marginBottom:10, background:"#0f172a", border:"1.5px solid rgba(255,255,255,0.1)", borderRadius:10, color:"#f1f5f9", fontSize:14 }} />
+        <input type="password" required minLength={6} placeholder={T?.passwordPlaceholder || "Password"} value={password} onChange={e=>setPassword(e.target.value)}
+          style={{ width:"100%", boxSizing:"border-box", padding:"11px 14px", marginBottom:10, background:"#0f172a", border:"1.5px solid rgba(255,255,255,0.1)", borderRadius:10, color:"#f1f5f9", fontSize:14 }} />
+        {mode === "signup" && (
+          <input placeholder={T?.invitationCodeOptional || "GAKU invite code (optional)"} value={inviteCode} onChange={e=>setInviteCode(e.target.value)}
+            style={{ width:"100%", boxSizing:"border-box", padding:"11px 14px", marginBottom:10, background:"#0f172a", border:"1.5px solid rgba(255,255,255,0.1)", borderRadius:10, color:"#f1f5f9", fontSize:14 }} />
+        )}
+        {err && <p style={{ color:"#f87171", fontSize:12, margin:"0 0 10px" }}>{err}</p>}
+        <button type="submit" disabled={busy} style={{ width:"100%", padding:"12px", background:"linear-gradient(135deg,#7c3aed,#a855f7)", border:"none", borderRadius:10, color:"#fff", fontSize:14, fontWeight:800, cursor:"pointer", opacity:busy?0.6:1 }}>
+          {busy ? "…" : (mode === "login" ? (T?.loginButton || "Log In") : (T?.signupButton || "Sign Up"))}
+        </button>
+        <button type="button" onClick={()=>{setMode(m=>m==="login"?"signup":"login"); setErr("");}} style={{ display:"block", width:"100%", marginTop:14, background:"none", border:"none", color:"#94a3b8", fontSize:12, cursor:"pointer" }}>
+          {mode === "login" ? (T?.needAccount || "Need an account? Sign up") : (T?.haveAccount || "Already have an account? Log in")}
+        </button>
+      </form>
+    </div>
+  );
+}
+
+// ─── ACCOUNT: blocks the dashboard while a new device awaits dual approval ────
+function DeviceApprovalGate({ T }) {
+  return (
+    <div style={{ minHeight:"100vh", background:"linear-gradient(160deg,#0a0f1e 0%,#0f172a 60%,#0a0f1e 100%)", display:"flex", alignItems:"center", justifyContent:"center", padding:24, textAlign:"center" }}>
+      <div style={{ maxWidth:380 }}>
+        <p style={{ fontSize:36, margin:"0 0 12px" }}>📩</p>
+        <h2 style={{ color:"#f1f5f9", fontSize:18, fontWeight:900, margin:"0 0 10px" }}>{T?.deviceApprovalTitle || "New Device Detected"}</h2>
+        <p style={{ color:"#94a3b8", fontSize:13, lineHeight:1.6 }}>{T?.deviceApprovalDesc || "We've sent an approval email to you and to GAKU. Once both approve, this device will be unlocked — please check your inbox."}</p>
+      </div>
+    </div>
+  );
+}
+
+
 export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail }) {
+  const [authUser, setAuthUser] = useState(null);
+  const [authChecked, setAuthChecked] = useState(!supabase);
+  const [showAuthScreen, setShowAuthScreen] = useState(false);
+  const [authInitialMode, setAuthInitialMode] = useState("login");
+  const [deviceStatus, setDeviceStatus] = useState(null); // null | 'checking' | 'approved' | 'pending'
   const [form, setForm] = useState(null);
   const [editing, setEditing] = useState(false);
   const [showPaywall, setShowPaywall] = useState(false);
-  const [showInviteInput, setShowInviteInput] = useState(false);
   // If the user arrived here from the diagnostic test result page (with name/email/jlpt
   // in the URL), always land on the Edit Profile form first — even if a profile is
   // already saved locally — so the freshly diagnosed name/email/JLPT level get applied.
@@ -5041,6 +5167,32 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
   useEffect(() => {
     try { const saved = localStorage.getItem("gaku_form"); if(saved) setForm(JSON.parse(saved)); } catch {}
   }, []);
+  // Track the logged-in Supabase account (separate from the localStorage profile above).
+  useEffect(() => {
+    if (!supabase) return;
+    supabase.auth.getSession().then(({ data }) => {
+      setAuthUser(data?.session?.user || null);
+      setAuthChecked(true);
+    });
+    const { data: sub } = supabase.auth.onAuthStateChange((_event, session) => {
+      setAuthUser(session?.user || null);
+      setShowAuthScreen(false);
+    });
+    return () => sub?.subscription?.unsubscribe();
+  }, []);
+  // Once logged in, verify this device against known devices for the account —
+  // triggers the dual-approval email flow for unrecognized devices.
+  useEffect(() => {
+    if (!authUser) { setDeviceStatus(null); return; }
+    setDeviceStatus("checking");
+    fetch("/api/device-check", {
+      method: "POST", headers: { "Content-Type":"application/json" },
+      body: JSON.stringify({ userId: authUser.id, email: authUser.email, deviceId: getDeviceId(), deviceLabel: getDeviceLabel() }),
+    })
+      .then(r => r.json())
+      .then(d => setDeviceStatus(d.status || "pending"))
+      .catch(() => setDeviceStatus("pending"));
+  }, [authUser]);
   const handleSubmit = (f) => {
     // Preserve planStartDate from existing form (only set it once, on first save)
     const startDate = (form && form.planStartDate) ? form.planStartDate : new Date().toISOString();
@@ -5071,6 +5223,8 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
     ? { ...form, name: initialName || form.name, email: initialEmail || form.email, jlpt: initialJlpt || form.jlpt }
     : prefilledForm;
   const T = useUITranslations(form?.preferredLang || "English");
+  if (showAuthScreen) return <AuthScreen onAuthed={()=>setShowAuthScreen(false)} T={T} prefillEmail={form?.email} initialMode={authInitialMode} />;
+  if (authUser && deviceStatus === "pending") return <DeviceApprovalGate T={T} />;
   if (!form || editing || forceForm) return <FormScreen onSubmit={handleSubmit} onBack={onBack} onCancel={form ? handleCancelEdit : undefined} initialJlpt={initialJlpt} initialForm={formForEdit} />;
   return (
     <div style={{ position:"relative" }} onClickCapture={handleDashboardInteraction}>
@@ -5115,18 +5269,12 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
                 💳 $185.95 <span style={{ color:"#64748b", fontSize:10, fontWeight:400 }}>($30.99/mo)</span>
               </a>
             </div>
-            <button onClick={()=>setShowInviteInput(s=>!s)} style={{ display:"block", width:"100%", padding:"11px 14px", background:"linear-gradient(135deg,rgba(34,197,94,0.15),rgba(34,197,94,0.05))", border:"1.5px solid rgba(34,197,94,0.45)", borderRadius:10, color:"#4ade80", fontSize:12, fontWeight:800, cursor:"pointer", textAlign:"center", marginBottom:12 }}>
+            <button onClick={()=>{ setAuthInitialMode("signup"); setShowAuthScreen(true); }} style={{ display:"block", width:"100%", padding:"11px 14px", background:"linear-gradient(135deg,rgba(34,197,94,0.15),rgba(34,197,94,0.05))", border:"1.5px solid rgba(34,197,94,0.45)", borderRadius:10, color:"#4ade80", fontSize:12, fontWeight:800, cursor:"pointer", textAlign:"center", marginBottom:8 }}>
               🎓 {T.freePlanGakuStudent}
             </button>
-            {showInviteInput && (
-              <div style={{ marginBottom:14 }}>
-                <p style={{ color:"#64748b", fontSize:11, margin:"0 0 6px" }}>{T.invitationCodeLabel}</p>
-                <div style={{ display:"flex", gap:8 }}>
-                  <input id="invite-code-input" placeholder={T.inviteCodePlaceholder} style={{ flex:1, padding:"10px 12px", background:"#0f172a", border:"1.5px solid rgba(255,255,255,0.1)", borderRadius:8, color:"#f1f5f9", fontSize:13, outline:"none" }} />
-                  <button onClick={()=>{ const code=document.getElementById("invite-code-input").value.trim(); if(code==="GAKU2025"||code==="GAKU"){setShowPaywall(false);}else{alert(T.invalidCode);}}} style={{ padding:"10px 16px", background:"rgba(6,182,212,0.15)", border:"1.5px solid rgba(6,182,212,0.4)", borderRadius:8, color:"#67e8f9", fontSize:13, fontWeight:700, cursor:"pointer" }}>{T.confirmCode}</button>
-                </div>
-              </div>
-            )}
+            <button onClick={()=>{ setAuthInitialMode("login"); setShowAuthScreen(true); }} style={{ display:"block", width:"100%", background:"none", border:"none", color:"#64748b", fontSize:11, cursor:"pointer", marginBottom:14 }}>
+              {T.haveAccount || "Already have an account? Log in"}
+            </button>
             <div style={{ marginBottom:14, textAlign:"center" }}>
               <p style={{ color:"#64748b", fontSize:11, margin:"0 0 8px" }}>{T.wantToJoinGaku}</p>
               <a href="https://www.seitojapanese.online/" target="_blank" rel="noopener noreferrer" style={{ display:"inline-block", padding:"9px 28px", background:"linear-gradient(135deg,#22c55e,#16a34a)", color:"#fff", borderRadius:10, fontSize:13, fontWeight:800, textDecoration:"none" }}>{T.yes}</a>
