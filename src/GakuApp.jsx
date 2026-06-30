@@ -4995,7 +4995,7 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
   // in the URL), always land on the Edit Profile form first — even if a profile is
   // already saved locally — so the freshly diagnosed name/email/JLPT level get applied.
   const [forceForm, setForceForm] = useState(!!(initialName || initialEmail));
-  // Counts taps/clicks inside the dashboard. After every 10 interactions, show the
+  // Counts taps/clicks inside the dashboard. After 21 interactions, show the
   // payment screen so students who haven't unlocked yet see the value of the app.
   const [interactionCount, setInteractionCount] = useState(() => {
     try { return parseInt(localStorage.getItem("gaku_interaction_count") || "0", 10) || 0; } catch { return 0; }
@@ -5016,7 +5016,7 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
     setInteractionCount(c => {
       const next = c + 1;
       try { localStorage.setItem("gaku_interaction_count", String(next)); } catch {}
-      if (next >= 10) {
+      if (next >= 21) {
         setShowPaywall(true);
         markEmailPaywalled(form?.email);
         try { localStorage.setItem("gaku_interaction_count", "0"); } catch {}
@@ -5036,7 +5036,7 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
     setEditing(false);
     setForceForm(false);
     try { localStorage.setItem("gaku_form", JSON.stringify(saved)); } catch {}
-    // If this email already used up its 10 free interactions before, go straight
+    // If this email already used up their free interactions before, go straight
     // to the payment screen instead of letting them browse the dashboard again.
     if (getPaywalledEmails().includes(saved.email)) {
       setShowPaywall(true);
