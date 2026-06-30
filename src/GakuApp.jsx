@@ -258,13 +258,15 @@ const UI_TRANSLATIONS = {
       vocabBuilderTitle: "📚 VOCABULARY BUILDER",
     vocabBuilderDesc: "Enter a topic to see related words from the Japanese dictionary (English or 日本語 OK)",
     vocabSearchPlaceholder: "e.g. food, travel, emotions...",
-    // Paywall — invite code section
-    notGakuStudentPrefix: "🎁 If you're not a GAKU student",
-    bookFreeTrialLink: "Book a FREE Trial Lesson →",
-    gakuStudentEnterCode: "GAKU students, please enter your invite code",
+    // Paywall — free plan / invite code / join GAKU section
+    freePlanGakuStudent: "FREE Plan (Only GAKU students)",
+    invitationCodeLabel: "INVITATION CODE",
     inviteCodePlaceholder: "Enter invite code...",
     confirmCode: "Confirm",
     invalidCode: "Invalid code. Please try again.",
+    wantToJoinGaku: "Want to join GAKU?",
+    yes: "Yes",
+    checkLater: "Check again later",
     findWordsBtn: "Find Words",
     libraryLabel: "📚 Library",
     yourVocabSaved: "Your Vocabulary",
@@ -4988,6 +4990,7 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
   const [form, setForm] = useState(null);
   const [editing, setEditing] = useState(false);
   const [showPaywall, setShowPaywall] = useState(false);
+  const [showInviteInput, setShowInviteInput] = useState(false);
   // If the user arrived here from the diagnostic test result page (with name/email/jlpt
   // in the URL), always land on the Edit Profile form first — even if a profile is
   // already saved locally — so the freshly diagnosed name/email/JLPT level get applied.
@@ -4997,12 +5000,25 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
   const [interactionCount, setInteractionCount] = useState(() => {
     try { return parseInt(localStorage.getItem("gaku_interaction_count") || "0", 10) || 0; } catch { return 0; }
   });
+  // Remembers which emails have already used up their 10 free interactions, so if they
+  // re-enter their profile with the same email, they're sent straight to the payment screen.
+  const getPaywalledEmails = () => {
+    try { return JSON.parse(localStorage.getItem("gaku_paywalled_emails") || "[]"); } catch { return []; }
+  };
+  const markEmailPaywalled = (email) => {
+    if (!email) return;
+    try {
+      const list = getPaywalledEmails();
+      if (!list.includes(email)) { list.push(email); localStorage.setItem("gaku_paywalled_emails", JSON.stringify(list)); }
+    } catch {}
+  };
   const handleDashboardInteraction = () => {
     setInteractionCount(c => {
       const next = c + 1;
       try { localStorage.setItem("gaku_interaction_count", String(next)); } catch {}
       if (next >= 10) {
         setShowPaywall(true);
+        markEmailPaywalled(form?.email);
         try { localStorage.setItem("gaku_interaction_count", "0"); } catch {}
         return 0;
       }
@@ -5020,7 +5036,11 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
     setEditing(false);
     setForceForm(false);
     try { localStorage.setItem("gaku_form", JSON.stringify(saved)); } catch {}
-    setTimeout(() => setShowPaywall(true), 3000);
+    // If this email already used up its 10 free interactions before, go straight
+    // to the payment screen instead of letting them browse the dashboard again.
+    if (getPaywalledEmails().includes(saved.email)) {
+      setShowPaywall(true);
+    }
   };
   const handleEdit = () => setEditing(true);
   const handleCancelEdit = () => { setEditing(false); setForceForm(false); };
@@ -5082,18 +5102,23 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
                 💳 $185.95 <span style={{ color:"#64748b", fontSize:10, fontWeight:400 }}>($30.99/mo)</span>
               </a>
             </div>
-            <p style={{ color:"#64748b", fontSize:11, margin:"0 0 12px", textAlign:"center" }}>
-              {T.notGakuStudentPrefix}{" "}
-              <a href="https://seitojapanese.online" target="_blank" rel="noopener noreferrer" style={{ color:"#a855f7", textDecoration:"none" }}>{T.bookFreeTrialLink}</a>
-            </p>
-            <div style={{ marginBottom:12 }}>
-              <p style={{ color:"#64748b", fontSize:11, margin:"0 0 6px" }}>{T.gakuStudentEnterCode}</p>
-              <div style={{ display:"flex", gap:8 }}>
-                <input id="invite-code-input" placeholder={T.inviteCodePlaceholder} style={{ flex:1, padding:"10px 12px", background:"#0f172a", border:"1.5px solid rgba(255,255,255,0.1)", borderRadius:8, color:"#f1f5f9", fontSize:13, outline:"none" }} />
-                <button onClick={()=>{ const code=document.getElementById("invite-code-input").value.trim(); if(code==="GAKU2025"||code==="GAKU"){setShowPaywall(false);}else{alert(T.invalidCode);}}} style={{ padding:"10px 16px", background:"rgba(6,182,212,0.15)", border:"1.5px solid rgba(6,182,212,0.4)", borderRadius:8, color:"#67e8f9", fontSize:13, fontWeight:700, cursor:"pointer" }}>{T.confirmCode}</button>
+            <button onClick={()=>setShowInviteInput(s=>!s)} style={{ display:"block", width:"100%", padding:"11px 14px", background:"linear-gradient(135deg,rgba(34,197,94,0.15),rgba(34,197,94,0.05))", border:"1.5px solid rgba(34,197,94,0.45)", borderRadius:10, color:"#4ade80", fontSize:12, fontWeight:800, cursor:"pointer", textAlign:"center", marginBottom:12 }}>
+              🎓 {T.freePlanGakuStudent}
+            </button>
+            {showInviteInput && (
+              <div style={{ marginBottom:14 }}>
+                <p style={{ color:"#64748b", fontSize:11, margin:"0 0 6px" }}>{T.invitationCodeLabel}</p>
+                <div style={{ display:"flex", gap:8 }}>
+                  <input id="invite-code-input" placeholder={T.inviteCodePlaceholder} style={{ flex:1, padding:"10px 12px", background:"#0f172a", border:"1.5px solid rgba(255,255,255,0.1)", borderRadius:8, color:"#f1f5f9", fontSize:13, outline:"none" }} />
+                  <button onClick={()=>{ const code=document.getElementById("invite-code-input").value.trim(); if(code==="GAKU2025"||code==="GAKU"){setShowPaywall(false);}else{alert(T.invalidCode);}}} style={{ padding:"10px 16px", background:"rgba(6,182,212,0.15)", border:"1.5px solid rgba(6,182,212,0.4)", borderRadius:8, color:"#67e8f9", fontSize:13, fontWeight:700, cursor:"pointer" }}>{T.confirmCode}</button>
+                </div>
               </div>
+            )}
+            <div style={{ marginBottom:14, textAlign:"center" }}>
+              <p style={{ color:"#64748b", fontSize:11, margin:"0 0 8px" }}>{T.wantToJoinGaku}</p>
+              <a href="https://www.seitojapanese.online/" target="_blank" rel="noopener noreferrer" style={{ display:"inline-block", padding:"9px 28px", background:"linear-gradient(135deg,#22c55e,#16a34a)", color:"#fff", borderRadius:10, fontSize:13, fontWeight:800, textDecoration:"none" }}>{T.yes}</a>
             </div>
-            <button onClick={()=>setShowPaywall(false)} style={{ background:"none", border:"none", color:"#475569", fontSize:11, cursor:"pointer" }}>後で確認する</button>
+            <button onClick={()=>setShowPaywall(false)} style={{ background:"none", border:"none", color:"#475569", fontSize:11, cursor:"pointer" }}>{T.checkLater}</button>
           </div>
         </div>
       )}
