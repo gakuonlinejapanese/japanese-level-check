@@ -66,12 +66,12 @@ function getResult(score, total) {
 
 
 
-function CTABlock() {
+function CTABlock({ name, email, level }) {
   const [ctaStep, setCtaStep] = useState(0);
   return (
     <div style={{marginTop:24,padding:'20px',background:'rgba(255,255,255,0.04)',borderRadius:16,border:'1px solid rgba(255,255,255,0.08)',textAlign:'center'}}>
       {ctaStep===0&&(<><p style={{color:'#f1f5f9',fontSize:16,fontWeight:700,marginBottom:16}}>Want to improve your Japanese?</p><div style={{display:'flex',gap:10,justifyContent:'center',flexWrap:'wrap'}}><button onClick={()=>setCtaStep(1)} style={{padding:'12px 24px',background:'linear-gradient(135deg,#22c55e,#16a34a)',color:'#fff',border:'none',borderRadius:12,fontSize:14,fontWeight:700,cursor:'pointer'}}>Yes</button><button onClick={()=>setCtaStep(4)} style={{padding:'12px 20px',background:'rgba(255,255,255,0.08)',color:'#94a3b8',border:'1px solid rgba(255,255,255,0.1)',borderRadius:12,fontSize:13,cursor:'pointer'}}>No, I'm satisfied with my result</button></div></>)}
-      {ctaStep===1&&(<><p style={{color:'#f1f5f9',fontSize:15,fontWeight:700,marginBottom:16}}>Apply for your FREE Trial Lesson!</p><div style={{display:'flex',flexDirection:'column',gap:12,alignItems:'center'}}><a href='https://www.seitojapanese.online/' target='_blank' rel='noopener noreferrer' style={{display:'inline-block',padding:'14px 24px',background:'linear-gradient(135deg,#f59e0b,#d97706)',color:'#fff',borderRadius:12,fontSize:14,fontWeight:800,textDecoration:'none'}}>Apply for FIRST Q&A SESSION (FREE TRIAL LESSON) !!!</a><a href={`https://japanese-level-check.vercel.app/app?name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}&jlpt=${encodeURIComponent(res.level)}`} target='_blank' rel='noopener noreferrer' style={{display:'inline-block',padding:'14px 24px',background:'linear-gradient(135deg,#a855f7,#7c3aed)',color:'#fff',borderRadius:12,fontSize:14,fontWeight:800,textDecoration:'none'}}>✨ Get your Self Japanese study Plan!!</a></div></>)}
+      {ctaStep===1&&(<><p style={{color:'#f1f5f9',fontSize:15,fontWeight:700,marginBottom:16}}>Apply for your FREE Trial Lesson!</p><div style={{display:'flex',flexDirection:'column',gap:12,alignItems:'center'}}><a href='https://www.seitojapanese.online/' target='_blank' rel='noopener noreferrer' style={{display:'inline-block',padding:'14px 24px',background:'linear-gradient(135deg,#f59e0b,#d97706)',color:'#fff',borderRadius:12,fontSize:14,fontWeight:800,textDecoration:'none'}}>Apply for FIRST Q&A SESSION (FREE TRIAL LESSON) !!!</a><a href={`https://japanese-level-check.vercel.app/app?name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}&jlpt=${encodeURIComponent(level)}`} target='_blank' rel='noopener noreferrer' style={{display:'inline-block',padding:'14px 24px',background:'linear-gradient(135deg,#a855f7,#7c3aed)',color:'#fff',borderRadius:12,fontSize:14,fontWeight:800,textDecoration:'none'}}>✨ Get your Self Japanese study Plan!!</a></div></>)}
       {ctaStep===2&&(<><p style={{color:'#f1f5f9',fontSize:15,fontWeight:700,marginBottom:16}}>Apply for your FREE Trial Lesson!</p><a href="https://www.seitojapanese.online/" target="_blank" rel="noopener noreferrer" style={{display:'inline-block',padding:'14px 24px',background:'linear-gradient(135deg,#f59e0b,#d97706)',color:'#fff',borderRadius:12,fontSize:14,fontWeight:800,textDecoration:'none'}}>Apply for FIRST Q&A SESSION (FREE TRIAL LESSON) !!!</a></>)}
       {ctaStep===4&&(<><p style={{color:'#64748b',fontSize:14,marginBottom:12}}>Great! Keep up the good work!</p>{window.__ss&&<button onClick={()=>window.__ss('')} style={{padding:'12px 20px',background:'linear-gradient(135deg,#a855f7,#7c3aed)',color:'#fff',border:'none',borderRadius:12,fontSize:13,fontWeight:700,cursor:'pointer'}}>Get a personalized self-study set</button>}</>)}
     </div>
@@ -241,7 +241,7 @@ export default function Reading({ onSelfStudy }) {
               </div>
             );
           })()}
-          <CTABlock />
+          <CTABlock  name={name} email={email} level={res.level} />
           <div style={{ display:"flex", flexDirection:"column", gap:12, marginBottom:24 }}>
             {QUESTIONS.map((qq, i) => {
               const ua = userAnswers[i]; const ok = ua === qq.answer;
