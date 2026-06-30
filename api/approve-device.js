@@ -12,7 +12,7 @@ export default async function handler(req, res) {
     const { token, role } = req.query || {};
     if (!token || !["student", "admin"].includes(role)) {
       res.setHeader("Content-Type", "text/html");
-      return res.status(400).send(page("リンクが正しくありません。"));
+      return res.status(400).send(page("Invalid link. Please check your email and try again."));
     }
 
     const supabase = getAdminClient();
@@ -23,11 +23,11 @@ export default async function handler(req, res) {
       .maybeSingle();
 
     res.setHeader("Content-Type", "text/html");
-    if (error || !reqRow) return res.status(404).send(page("リクエストが見つかりませんでした。リンクの有効期限が切れている可能性があります。"));
-    if (reqRow.status !== "pending") return res.status(200).send(page("このリクエストはすでに処理済みです。"));
+    if (error || !reqRow) return res.status(404).send(page("Request not found. This link may have expired."));
+    if (reqRow.status !== "pending") return res.status(200).send(page("This request has already been processed."));
     if (new Date(reqRow.expires_at) < new Date()) {
       await supabase.from("device_approval_requests").update({ status: "expired" }).eq("id", reqRow.id);
-      return res.status(410).send(page("このリンクの有効期限が切れています。もう一度ログインしてやり直してください。"));
+      return res.status(410).send(page("This link has expired. Please log in again to request a new one."));
     }
 
     const field = role === "student" ? "student_approved" : "admin_approved";
@@ -43,12 +43,12 @@ export default async function handler(req, res) {
       await supabase.from("device_sessions").upsert({
         user_id: reqRow.user_id, device_id: reqRow.device_id, device_label: reqRow.device_label, approved: true, last_seen: new Date().toISOString(),
       }, { onConflict: "user_id,device_id" });
-      return res.status(200).send(page("承認が完了しました！この端末でGAKUを利用できるようになりました。"));
+      return res.status(200).send(page("✅ Device approved! You can now use GAKU on this device."));
     }
 
-    return res.status(200).send(page("承認を受け付けました。もう一方の承認（生徒またはSeito先生）が完了次第、この端末が有効になります。"));
+    return res.status(200).send(page("✅ Your approval has been recorded. Once the other party approves (student or Seito), this device will be unlocked."));
   } catch (e) {
     res.setHeader("Content-Type", "text/html");
-    return res.status(500).send(page("エラーが発生しました。"));
+    return res.status(500).send(page("Something went wrong. Please try again."));
   }
 }

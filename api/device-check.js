@@ -60,22 +60,22 @@ export default async function handler(req, res) {
     const adminLink = `${base}/api/approve-device?token=${created.approval_token}&role=admin`;
 
     const studentHtml = `
-      <p>こんにちは,</p>
-      <p>あなたのGAKUアカウントに、新しい端末（${deviceLabel || "不明な端末"}）からログインがありました。</p>
-      <p>これがあなた自身による操作であれば、下のリンクをクリックして許可してください。Seito先生の承認と合わせて両方が完了すると、その端末でも利用できるようになります。</p>
-      <p><a href="${studentLink}">この端末を許可する →</a></p>
-      <p>身に覚えがない場合は、このメールを無視し、パスワードの変更をおすすめします。</p>
+      <p>Hi,</p>
+      <p>A new device (<strong>${deviceLabel || "Unknown device"}</strong>) just logged into your GAKU account.</p>
+      <p>If this was you, please click the link below to approve it. Access will be granted once both you and Seito approve.</p>
+      <p><a href="${studentLink}" style="color:#a855f7">Approve this device →</a></p>
+      <p>If you did not do this, ignore this email and consider changing your password.</p>
     `;
     const adminHtml = `
-      <p>Seitoさん,</p>
-      <p>生徒（${email || userId}）のGAKUアカウントに、新しい端末（${deviceLabel || "不明な端末"}）からのログインがありました。</p>
-      <p>問題なければ下のリンクで承認してください。生徒本人の承認と合わせて両方完了すると有効になります。</p>
-      <p><a href="${adminLink}">この端末を承認する →</a></p>
+      <p>Hi Seito,</p>
+      <p>Student <strong>${email || userId}</strong> has logged in from a new device: <strong>${deviceLabel || "Unknown device"}</strong>.</p>
+      <p>Please click below to approve. Access is granted only after both you and the student approve.</p>
+      <p><a href="${adminLink}" style="color:#a855f7">Approve this device →</a></p>
     `;
 
     await Promise.all([
-      sendEmail({ to: email, subject: "【GAKU】新しい端末からのログインを確認してください", html: studentHtml }),
-      sendEmail({ to: ADMIN_EMAIL, subject: "【GAKU】生徒の新しい端末ログインの承認依頼", html: adminHtml }),
+      sendEmail({ to: email, subject: "[GAKU] New device login — please approve", html: studentHtml }),
+      sendEmail({ to: ADMIN_EMAIL, subject: "[GAKU] Student new device login — approval needed", html: adminHtml }),
     ]);
 
     return res.status(200).json({ status: "pending" });
