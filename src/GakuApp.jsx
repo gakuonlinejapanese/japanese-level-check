@@ -267,6 +267,19 @@ const UI_TRANSLATIONS = {
     wantToJoinGaku: "Want to join GAKU?",
     yes: "Yes",
     checkLater: "Check again later",
+    // Paywall — main plan content
+    studyPlanReadyTitle: "Your Study Plan is Ready!",
+    studyPlanReadyDesc: "Unlock your personalized weekly schedule, practice sets, and vocabulary tools.",
+    appOnlyLabel: "📱 APP ONLY",
+    monthlyLabel: "MONTHLY",
+    perMonth: "/ month",
+    threeMonthsSave5: "3 MONTHS · Save 5%",
+    sixMonthsSave10: "6 MONTHS · Save 10% ⭐",
+    appLessonsLabel: "🎓 APP + LESSONS · 50% off lessons",
+    threeMonthsSave5_30min: "3 MONTHS · Save 5% · 30min/mo",
+    threeMonthsSave5_1hr: "3 MONTHS · Save 5% · 1hr/mo",
+    sixMonthsSave5_30min: "6 MONTHS · Save 5% · 30min/mo ⭐",
+    sixMonthsSave10_1hr: "6 MONTHS · Save 10% · 1hr/mo ⭐ Best Value",
     findWordsBtn: "Find Words",
     libraryLabel: "📚 Library",
     yourVocabSaved: "Your Vocabulary",
@@ -5066,39 +5079,39 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
         <div style={{ position:"fixed", inset:0, zIndex:9999, display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", background:"rgba(10,15,30,0.85)", backdropFilter:"blur(12px)" }}>
           <div style={{ background:"linear-gradient(135deg,#1e1b4b,#0f172a)", border:"1.5px solid rgba(139,92,246,0.4)", borderRadius:20, padding:"36px 32px", maxWidth:420, width:"90%", textAlign:"center", boxShadow:"0 8px 40px rgba(139,92,246,0.25)" }}>
             <p style={{ fontSize:28, margin:"0 0 6px" }}>🎌</p>
-            <h2 style={{ color:"#f1f5f9", fontSize:20, fontWeight:900, margin:"0 0 8px" }}>Your Study Plan is Ready!</h2>
-            <p style={{ color:"#94a3b8", fontSize:13, margin:"0 0 24px", lineHeight:1.6 }}>Unlock your personalized weekly schedule, practice sets, and vocabulary tools.</p>
-            <p style={{ color:"#a855f7", fontSize:10, fontWeight:800, margin:"0 0 6px", textAlign:"left", letterSpacing:1 }}>📱 APP ONLY</p>
+            <h2 style={{ color:"#f1f5f9", fontSize:20, fontWeight:900, margin:"0 0 8px" }}>{T.studyPlanReadyTitle}</h2>
+            <p style={{ color:"#94a3b8", fontSize:13, margin:"0 0 24px", lineHeight:1.6 }}>{T.studyPlanReadyDesc}</p>
+            <p style={{ color:"#a855f7", fontSize:10, fontWeight:800, margin:"0 0 6px", textAlign:"left", letterSpacing:1 }}>{T.appOnlyLabel}</p>
             <div style={{ display:"flex", flexDirection:"column", gap:8, marginBottom:14 }}>
               <a href="https://buy.stripe.com/6oU7sL7qWg7C7wV1OqbMQ00" target="_blank" rel="noopener noreferrer" style={{ display:"block", padding:"11px 14px", background:"linear-gradient(135deg,rgba(124,58,237,0.2),rgba(168,85,247,0.1))", border:"1.5px solid rgba(139,92,246,0.5)", borderRadius:10, color:"#f1f5f9", fontSize:12, fontWeight:700, cursor:"pointer", textDecoration:"none", textAlign:"left" }}>
-                <span style={{ color:"#a855f7", fontSize:10, fontWeight:800, display:"block", marginBottom:1 }}>MONTHLY</span>
-                💳 $14.99 / month
+                <span style={{ color:"#a855f7", fontSize:10, fontWeight:800, display:"block", marginBottom:1 }}>{T.monthlyLabel}</span>
+                💳 $14.99 {T.perMonth}
               </a>
               <a href="https://buy.stripe.com/28E28r9z46x2dVj0KmbMQ02" target="_blank" rel="noopener noreferrer" style={{ display:"block", padding:"11px 14px", background:"linear-gradient(135deg,rgba(6,182,212,0.2),rgba(6,182,212,0.1))", border:"1.5px solid rgba(6,182,212,0.5)", borderRadius:10, color:"#f1f5f9", fontSize:12, fontWeight:700, cursor:"pointer", textDecoration:"none", textAlign:"left" }}>
-                <span style={{ color:"#06b6d4", fontSize:10, fontWeight:800, display:"block", marginBottom:1 }}>3 MONTHS · Save 5%</span>
+                <span style={{ color:"#06b6d4", fontSize:10, fontWeight:800, display:"block", marginBottom:1 }}>{T.threeMonthsSave5}</span>
                 💳 $42.70 <span style={{ color:"#64748b", fontSize:10, fontWeight:400 }}>($14.23/mo)</span>
               </a>
               <a href="https://buy.stripe.com/28E5kD8v07B6bNbct4bMQ03" target="_blank" rel="noopener noreferrer" style={{ display:"block", padding:"11px 14px", background:"linear-gradient(135deg,rgba(34,197,94,0.2),rgba(34,197,94,0.1))", border:"1.5px solid rgba(34,197,94,0.5)", borderRadius:10, color:"#f1f5f9", fontSize:12, fontWeight:700, cursor:"pointer", textDecoration:"none", textAlign:"left" }}>
-                <span style={{ color:"#22c55e", fontSize:10, fontWeight:800, display:"block", marginBottom:1 }}>6 MONTHS · Save 10% ⭐</span>
+                <span style={{ color:"#22c55e", fontSize:10, fontWeight:800, display:"block", marginBottom:1 }}>{T.sixMonthsSave10}</span>
                 💳 $80.95 <span style={{ color:"#64748b", fontSize:10, fontWeight:400 }}>($13.49/mo)</span>
               </a>
             </div>
-            <p style={{ color:"#f59e0b", fontSize:10, fontWeight:800, margin:"0 0 6px", textAlign:"left", letterSpacing:1 }}>🎓 APP + LESSONS · 50% off lessons</p>
+            <p style={{ color:"#f59e0b", fontSize:10, fontWeight:800, margin:"0 0 6px", textAlign:"left", letterSpacing:1 }}>{T.appLessonsLabel}</p>
             <div style={{ display:"flex", flexDirection:"column", gap:8, marginBottom:12 }}>
               <a href="https://buy.stripe.com/7sYcN53aGf3y9F3ct4bMQ06" target="_blank" rel="noopener noreferrer" style={{ display:"block", padding:"11px 14px", background:"linear-gradient(135deg,rgba(245,158,11,0.15),rgba(245,158,11,0.05))", border:"1.5px solid rgba(245,158,11,0.4)", borderRadius:10, color:"#f1f5f9", fontSize:12, fontWeight:700, cursor:"pointer", textDecoration:"none", textAlign:"left" }}>
-                <span style={{ color:"#f59e0b", fontSize:10, fontWeight:800, display:"block", marginBottom:1 }}>3 MONTHS · Save 5% · 30min/mo</span>
+                <span style={{ color:"#f59e0b", fontSize:10, fontWeight:800, display:"block", marginBottom:1 }}>{T.threeMonthsSave5_30min}</span>
                 💳 $68.95 <span style={{ color:"#64748b", fontSize:10, fontWeight:400 }}>($22.98/mo)</span>
               </a>
               <a href="https://buy.stripe.com/6oU8wP6mS6x23gF8cObMQ07" target="_blank" rel="noopener noreferrer" style={{ display:"block", padding:"11px 14px", background:"linear-gradient(135deg,rgba(245,158,11,0.15),rgba(245,158,11,0.05))", border:"1.5px solid rgba(245,158,11,0.4)", borderRadius:10, color:"#f1f5f9", fontSize:12, fontWeight:700, cursor:"pointer", textDecoration:"none", textAlign:"left" }}>
-                <span style={{ color:"#f59e0b", fontSize:10, fontWeight:800, display:"block", marginBottom:1 }}>3 MONTHS · Save 5% · 1hr/mo</span>
+                <span style={{ color:"#f59e0b", fontSize:10, fontWeight:800, display:"block", marginBottom:1 }}>{T.threeMonthsSave5_1hr}</span>
                 💳 $95.20 <span style={{ color:"#64748b", fontSize:10, fontWeight:400 }}>($31.73/mo)</span>
               </a>
               <a href="https://buy.stripe.com/dRm3cvaD8f3y18x0KmbMQ04" target="_blank" rel="noopener noreferrer" style={{ display:"block", padding:"11px 14px", background:"linear-gradient(135deg,rgba(251,191,36,0.2),rgba(251,191,36,0.08))", border:"1.5px solid rgba(251,191,36,0.5)", borderRadius:10, color:"#f1f5f9", fontSize:12, fontWeight:700, cursor:"pointer", textDecoration:"none", textAlign:"left" }}>
-                <span style={{ color:"#fbbf24", fontSize:10, fontWeight:800, display:"block", marginBottom:1 }}>6 MONTHS · Save 5% · 30min/mo ⭐</span>
+                <span style={{ color:"#fbbf24", fontSize:10, fontWeight:800, display:"block", marginBottom:1 }}>{T.sixMonthsSave5_30min}</span>
                 💳 $133.45 <span style={{ color:"#64748b", fontSize:10, fontWeight:400 }}>($22.24/mo)</span>
               </a>
               <a href="https://buy.stripe.com/9B628rcLg7B6eZn0KmbMQ05" target="_blank" rel="noopener noreferrer" style={{ display:"block", padding:"11px 14px", background:"linear-gradient(135deg,rgba(251,191,36,0.2),rgba(251,191,36,0.08))", border:"1.5px solid rgba(251,191,36,0.5)", borderRadius:10, color:"#f1f5f9", fontSize:12, fontWeight:700, cursor:"pointer", textDecoration:"none", textAlign:"left" }}>
-                <span style={{ color:"#fbbf24", fontSize:10, fontWeight:800, display:"block", marginBottom:1 }}>6 MONTHS · Save 10% · 1hr/mo ⭐ Best Value</span>
+                <span style={{ color:"#fbbf24", fontSize:10, fontWeight:800, display:"block", marginBottom:1 }}>{T.sixMonthsSave10_1hr}</span>
                 💳 $185.95 <span style={{ color:"#64748b", fontSize:10, fontWeight:400 }}>($30.99/mo)</span>
               </a>
             </div>
