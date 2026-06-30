@@ -258,6 +258,13 @@ const UI_TRANSLATIONS = {
       vocabBuilderTitle: "📚 VOCABULARY BUILDER",
     vocabBuilderDesc: "Enter a topic to see related words from the Japanese dictionary (English or 日本語 OK)",
     vocabSearchPlaceholder: "e.g. food, travel, emotions...",
+    // Paywall — invite code section
+    notGakuStudentPrefix: "🎁 If you're not a GAKU student",
+    bookFreeTrialLink: "Book a FREE Trial Lesson →",
+    gakuStudentEnterCode: "GAKU students, please enter your invite code",
+    inviteCodePlaceholder: "Enter invite code...",
+    confirmCode: "Confirm",
+    invalidCode: "Invalid code. Please try again.",
     findWordsBtn: "Find Words",
     libraryLabel: "📚 Library",
     yourVocabSaved: "Your Vocabulary",
@@ -4985,6 +4992,23 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
   // in the URL), always land on the Edit Profile form first — even if a profile is
   // already saved locally — so the freshly diagnosed name/email/JLPT level get applied.
   const [forceForm, setForceForm] = useState(!!(initialName || initialEmail));
+  // Counts taps/clicks inside the dashboard. After every 10 interactions, show the
+  // payment screen so students who haven't unlocked yet see the value of the app.
+  const [interactionCount, setInteractionCount] = useState(() => {
+    try { return parseInt(localStorage.getItem("gaku_interaction_count") || "0", 10) || 0; } catch { return 0; }
+  });
+  const handleDashboardInteraction = () => {
+    setInteractionCount(c => {
+      const next = c + 1;
+      try { localStorage.setItem("gaku_interaction_count", String(next)); } catch {}
+      if (next >= 10) {
+        setShowPaywall(true);
+        try { localStorage.setItem("gaku_interaction_count", "0"); } catch {}
+        return 0;
+      }
+      return next;
+    });
+  };
   useEffect(() => {
     try { const saved = localStorage.getItem("gaku_form"); if(saved) setForm(JSON.parse(saved)); } catch {}
   }, []);
@@ -5013,9 +5037,10 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
   const formForEdit = form
     ? { ...form, name: initialName || form.name, email: initialEmail || form.email, jlpt: initialJlpt || form.jlpt }
     : prefilledForm;
+  const T = useUITranslations(form?.preferredLang || "English");
   if (!form || editing || forceForm) return <FormScreen onSubmit={handleSubmit} onBack={onBack} onCancel={form ? handleCancelEdit : undefined} initialJlpt={initialJlpt} initialForm={formForEdit} />;
   return (
-    <div style={{ position:"relative" }}>
+    <div style={{ position:"relative" }} onClickCapture={handleDashboardInteraction}>
       <Dashboard form={form} onEdit={handleEdit} />
       {showPaywall && (
         <div style={{ position:"fixed", inset:0, zIndex:9999, display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", background:"rgba(10,15,30,0.85)", backdropFilter:"blur(12px)" }}>
@@ -5058,14 +5083,14 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
               </a>
             </div>
             <p style={{ color:"#64748b", fontSize:11, margin:"0 0 12px", textAlign:"center" }}>
-              🎁 GAKUの生徒でない方は
-              <a href="https://seitojapanese.online" target="_blank" rel="noopener noreferrer" style={{ color:"#a855f7", textDecoration:"none" }}>無料体験レッスンを予約 →</a>
+              {T.notGakuStudentPrefix}{" "}
+              <a href="https://seitojapanese.online" target="_blank" rel="noopener noreferrer" style={{ color:"#a855f7", textDecoration:"none" }}>{T.bookFreeTrialLink}</a>
             </p>
             <div style={{ marginBottom:12 }}>
-              <p style={{ color:"#64748b", fontSize:11, margin:"0 0 6px" }}>GAKUの生徒の方は招待コードを入力</p>
+              <p style={{ color:"#64748b", fontSize:11, margin:"0 0 6px" }}>{T.gakuStudentEnterCode}</p>
               <div style={{ display:"flex", gap:8 }}>
-                <input id="invite-code-input" placeholder="招待コードを入力..." style={{ flex:1, padding:"10px 12px", background:"#0f172a", border:"1.5px solid rgba(255,255,255,0.1)", borderRadius:8, color:"#f1f5f9", fontSize:13, outline:"none" }} />
-                <button onClick={()=>{ const code=document.getElementById("invite-code-input").value.trim(); if(code==="GAKU2025"||code==="GAKU"){setShowPaywall(false);}else{alert("Invalid code. Please try again.");}}} style={{ padding:"10px 16px", background:"rgba(6,182,212,0.15)", border:"1.5px solid rgba(6,182,212,0.4)", borderRadius:8, color:"#67e8f9", fontSize:13, fontWeight:700, cursor:"pointer" }}>確認</button>
+                <input id="invite-code-input" placeholder={T.inviteCodePlaceholder} style={{ flex:1, padding:"10px 12px", background:"#0f172a", border:"1.5px solid rgba(255,255,255,0.1)", borderRadius:8, color:"#f1f5f9", fontSize:13, outline:"none" }} />
+                <button onClick={()=>{ const code=document.getElementById("invite-code-input").value.trim(); if(code==="GAKU2025"||code==="GAKU"){setShowPaywall(false);}else{alert(T.invalidCode);}}} style={{ padding:"10px 16px", background:"rgba(6,182,212,0.15)", border:"1.5px solid rgba(6,182,212,0.4)", borderRadius:8, color:"#67e8f9", fontSize:13, fontWeight:700, cursor:"pointer" }}>{T.confirmCode}</button>
               </div>
             </div>
             <button onClick={()=>setShowPaywall(false)} style={{ background:"none", border:"none", color:"#475569", fontSize:11, cursor:"pointer" }}>後で確認する</button>
