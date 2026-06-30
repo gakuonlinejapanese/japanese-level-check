@@ -4981,6 +4981,10 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
   const [form, setForm] = useState(null);
   const [editing, setEditing] = useState(false);
   const [showPaywall, setShowPaywall] = useState(false);
+  // If the user arrived here from the diagnostic test result page (with name/email/jlpt
+  // in the URL), always land on the Edit Profile form first — even if a profile is
+  // already saved locally — so the freshly diagnosed name/email/JLPT level get applied.
+  const [forceForm, setForceForm] = useState(!!(initialName || initialEmail));
   useEffect(() => {
     try { const saved = localStorage.getItem("gaku_form"); if(saved) setForm(JSON.parse(saved)); } catch {}
   }, []);
@@ -4990,11 +4994,12 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
     const saved = { ...f, planStartDate: startDate };
     setForm(saved);
     setEditing(false);
+    setForceForm(false);
     try { localStorage.setItem("gaku_form", JSON.stringify(saved)); } catch {}
     setTimeout(() => setShowPaywall(true), 3000);
   };
   const handleEdit = () => setEditing(true);
-  const handleCancelEdit = () => setEditing(false);
+  const handleCancelEdit = () => { setEditing(false); setForceForm(false); };
   const prefilledForm = (initialName || initialEmail) ? {
     name: initialName || '',
     email: initialEmail || '',
@@ -5003,7 +5008,12 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
     jlpt: initialJlpt || '',
     hoursPerDay: '', daysPerWeek: '', skills: []
   } : undefined;
-  if (!form || editing) return <FormScreen onSubmit={handleSubmit} onBack={onBack} onCancel={form ? handleCancelEdit : undefined} initialJlpt={initialJlpt} initialForm={form || prefilledForm} />;
+  // When forced by URL params and a profile already exists, merge the existing saved
+  // answers with the freshly-diagnosed name/email/JLPT level (URL values take priority).
+  const formForEdit = form
+    ? { ...form, name: initialName || form.name, email: initialEmail || form.email, jlpt: initialJlpt || form.jlpt }
+    : prefilledForm;
+  if (!form || editing || forceForm) return <FormScreen onSubmit={handleSubmit} onBack={onBack} onCancel={form ? handleCancelEdit : undefined} initialJlpt={initialJlpt} initialForm={formForEdit} />;
   return (
     <div style={{ position:"relative" }}>
       <Dashboard form={form} onEdit={handleEdit} />
