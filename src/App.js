@@ -50,7 +50,12 @@ export default function App() {
   const goSelfStudy = (section, level) => setCurrent(`self-study|${section}|${level}`);
   window.__ss = (level) => goSelfStudy(current || 'general', level);
 
-  if (current === 'gaku-app') return <div><GakuApp onBack={() => setCurrent(null)} /><BrandFooter /></div>;
+  const params = new URLSearchParams(window.location.search);
+  const urlName  = params.get('name')  || '';
+  const urlEmail = params.get('email') || '';
+  const urlJlpt  = params.get('jlpt')  || '';
+
+  if (current === 'gaku-app') return <div><GakuApp onBack={() => setCurrent(null)} initialName={urlName} initialEmail={urlEmail} initialJlpt={urlJlpt} /><BrandFooter /></div>;
 
   if (!current) return <><Home onSelect={setCurrent} /><BrandFooter /></>;
 

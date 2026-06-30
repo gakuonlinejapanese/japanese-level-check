@@ -4977,7 +4977,7 @@ function Dashboard({ form, onEdit }) {
 }
 
 // ─── ROOT ────────────────────────────────────────────────────────────────────────
-export default function GakuApp({ onBack, initialJlpt }) {
+export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail }) {
   const [form, setForm] = useState(null);
   const [editing, setEditing] = useState(false);
   const [showPaywall, setShowPaywall] = useState(false);
@@ -4995,7 +4995,15 @@ export default function GakuApp({ onBack, initialJlpt }) {
   };
   const handleEdit = () => setEditing(true);
   const handleCancelEdit = () => setEditing(false);
-  if (!form || editing) return <FormScreen onSubmit={handleSubmit} onBack={onBack} onCancel={form ? handleCancelEdit : undefined} initialJlpt={initialJlpt} initialForm={form || undefined} />;
+  const prefilledForm = (initialName || initialEmail) ? {
+    name: initialName || '',
+    email: initialEmail || '',
+    country: '', preferredLang: 'English',
+    goal: '', customGoal: '', timeline: '',
+    jlpt: initialJlpt || '',
+    hoursPerDay: '', daysPerWeek: '', skills: []
+  } : undefined;
+  if (!form || editing) return <FormScreen onSubmit={handleSubmit} onBack={onBack} onCancel={form ? handleCancelEdit : undefined} initialJlpt={initialJlpt} initialForm={form || prefilledForm} />;
   return (
     <div style={{ position:"relative" }}>
       <Dashboard form={form} onEdit={handleEdit} />
