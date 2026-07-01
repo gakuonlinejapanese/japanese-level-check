@@ -5349,8 +5349,19 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
     try { window.dispatchEvent(new Event("gaku_vocab_updated")); } catch {}
     if (!authUser) { setDeviceStatus(null); setIsGakuStudent(false); return; }
     setDeviceStatus("checking");
-    supabase.from("profiles").select("is_gaku_student").eq("id", authUser.id).maybeSingle()
-      .then(({ data }) => setIsGakuStudent(!!data?.is_gaku_student))
+    fetch("/api/check-gaku-student", {
+      method: "POST", headers: { "Content-Type":"application/json" },
+      body: JSON.stringify({ userId: authUser.id }),
+    })
+      .then(r => r.json())
+      .then(d => {
+        const confirmed = !!d?.isGakuStudent;
+        setIsGakuStudent(confirmed);
+        // Self-heal: if the paywall was already showing (e.g. from an earlier
+        // trial session, before this account was confirmed as a GAKU student),
+        // dismiss it now that we know for sure.
+        if (confirmed) setShowPaywall(false);
+      })
       .catch(() => setIsGakuStudent(false));
     fetch("/api/device-check", {
       method: "POST", headers: { "Content-Type":"application/json" },
