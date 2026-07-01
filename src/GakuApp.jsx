@@ -5267,12 +5267,16 @@ function DeviceApprovalGate({ T }) {
 }
 
 
-export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail }) {
+export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail, skipTrialPaywall }) {
   const [authUser, setAuthUser] = useState(null);
   const [authChecked, setAuthChecked] = useState(!supabase);
   const [showAuthScreen, setShowAuthScreen] = useState(false);
   const [authInitialMode, setAuthInitialMode] = useState("login");
   const [deviceStatus, setDeviceStatus] = useState(null); // null | 'checking' | 'approved' | 'pending'
+  // True once we've confirmed (via the profiles table) that the logged-in
+  // account redeemed a GAKU invite code. These students should never hit the
+  // trial interaction paywall.
+  const [isGakuStudent, setIsGakuStudent] = useState(false);
   const [form, setForm] = useState(null);
   const [editing, setEditing] = useState(false);
   const [showPaywall, setShowPaywall] = useState(false);
@@ -5298,6 +5302,9 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
     } catch {}
   };
   const handleDashboardInteraction = () => {
+    // Verified GAKU students (logged in + redeemed an invite code, or arrived
+    // here already invite-verified via self-study.jsx) get unlimited use.
+    if (skipTrialPaywall || (authUser && isGakuStudent)) return;
     setInteractionCount(c => {
       const next = c + 1;
       try { localStorage.setItem(scopedKey("gaku_interaction_count"), String(next)); } catch {}
@@ -5340,8 +5347,11 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
     try { const saved = localStorage.getItem(scopedKey("gaku_form")); setForm(saved ? JSON.parse(saved) : null); } catch { setForm(null); }
     try { setInteractionCount(parseInt(localStorage.getItem(scopedKey("gaku_interaction_count")) || "0", 10) || 0); } catch { setInteractionCount(0); }
     try { window.dispatchEvent(new Event("gaku_vocab_updated")); } catch {}
-    if (!authUser) { setDeviceStatus(null); return; }
+    if (!authUser) { setDeviceStatus(null); setIsGakuStudent(false); return; }
     setDeviceStatus("checking");
+    supabase.from("profiles").select("is_gaku_student").eq("id", authUser.id).maybeSingle()
+      .then(({ data }) => setIsGakuStudent(!!data?.is_gaku_student))
+      .catch(() => setIsGakuStudent(false));
     fetch("/api/device-check", {
       method: "POST", headers: { "Content-Type":"application/json" },
       body: JSON.stringify({ userId: authUser.id, email: authUser.email, deviceId: getDeviceId(), deviceLabel: getDeviceLabel() }),
@@ -5360,7 +5370,7 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
     try { localStorage.setItem(scopedKey("gaku_form"), JSON.stringify(saved)); } catch {}
     // If this email already used up their free interactions before, go straight
     // to the payment screen instead of letting them browse the dashboard again.
-    if (getPaywalledEmails().includes(saved.email)) {
+    if (!skipTrialPaywall && !(authUser && isGakuStudent) && getPaywalledEmails().includes(saved.email)) {
       setShowPaywall(true);
     }
   };
