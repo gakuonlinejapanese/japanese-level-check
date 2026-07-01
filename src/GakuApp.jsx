@@ -5175,9 +5175,13 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
       return next;
     });
   };
-  useEffect(() => {
-    try { const saved = localStorage.getItem(scopedKey("gaku_form")); if(saved) setForm(JSON.parse(saved)); } catch {}
-  }, []);
+  // NOTE: the initial (unscoped) form load used to happen here on mount, but that
+  // raced with Supabase's async getSession() — this component could paint once
+  // with ACTIVE_USER_ID still null (reading shared/legacy data) before the auth
+  // effect below corrected it. Removed; the effect below (keyed on authUser) now
+  // loads the correctly-scoped form once auth state is known, and we don't render
+  // the dashboard/form/vocab UI at all until authChecked is true (see the early
+  // return further down).
   // Track the logged-in Supabase account (separate from the localStorage profile above).
   useEffect(() => {
     if (!supabase) return;
@@ -5241,6 +5245,24 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
     ? { ...form, name: initialName || form.name, email: initialEmail || form.email, jlpt: initialJlpt || form.jlpt }
     : prefilledForm;
   const T = useUITranslations(form?.preferredLang || "English");
+  // Block all rendering until we know for sure whether someone is logged in (and
+  // who). This closes the race condition where the dashboard/vocab UI could mount
+  // for a moment with ACTIVE_USER_ID still null (before Supabase's async
+  // getSession() resolves), reading unscoped/shared data instead of the correct
+  // per-student data.
+  if (!authChecked) {
+    return (
+      <div style={{ minHeight:"60vh", display:"flex", alignItems:"center", justifyContent:"center", color:"#94a3b8", fontSize:13 }}>
+        {T.loading || "Loading..."}
+      </div>
+    );
+  }
+  // Set synchronously (not only via the effect below) so that any child
+  // component reading scoped storage during THIS render pass — e.g. a vocab
+  // list calling loadVocabData() in its own useState initializer — always sees
+  // the correct account, with no one-frame window where it could still read
+  // the previous user's (or nobody's) data.
+  ACTIVE_USER_ID = authUser?.id || null;
   if (showAuthScreen) return <AuthScreen onAuthed={()=>setShowAuthScreen(false)} T={T} prefillEmail={form?.email} initialMode={authInitialMode} />;
   if (authUser && deviceStatus === "pending") return <DeviceApprovalGate T={T} />;
   if (!form || editing || forceForm) return <FormScreen onSubmit={handleSubmit} onBack={onBack} onCancel={form ? handleCancelEdit : undefined} initialJlpt={initialJlpt} initialForm={formForEdit} />;
