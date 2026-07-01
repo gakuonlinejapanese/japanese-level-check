@@ -5213,7 +5213,14 @@ function AuthScreen({ onAuthed, T, prefillEmail, initialMode }) {
           });
         }
         if (userId) {
-          await supabase.from("profiles").upsert({ id: userId, email, is_gaku_student: !!inviteCode.trim() });
+          const pRes = await fetch("/api/create-profile", {
+            method: "POST", headers: { "Content-Type":"application/json" },
+            body: JSON.stringify({ userId, email, isGakuStudent: !!inviteCode.trim() }),
+          });
+          if (!pRes.ok) {
+            const pData = await pRes.json().catch(() => ({}));
+            throw new Error(pData.error || "Failed to save your profile.");
+          }
         }
       } else {
         const { error } = await supabase.auth.signInWithPassword({ email, password });

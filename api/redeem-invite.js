@@ -24,8 +24,9 @@ export default async function handler(req, res) {
       .eq("id", invite.id);
     if (updateErr) return res.status(500).json({ error: updateErr.message });
 
-    // Mark the student's profile as a verified GAKU student (unlocks the FREE plan)
-    await supabase.from("profiles").update({ is_gaku_student: true }).eq("id", userId);
+    // Mark the student's profile as a verified GAKU student (unlocks the FREE plan).
+    // upsert (not update) so this works even if no profile row exists yet.
+    await supabase.from("profiles").upsert({ id: userId, is_gaku_student: true });
 
     return res.status(200).json({ ok: true });
   } catch (e) {
