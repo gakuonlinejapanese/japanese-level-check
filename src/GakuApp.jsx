@@ -3956,6 +3956,152 @@ function VocabBuilder({ form }) {
   );
 }
 
+// ─── Shared exercise rendering (used by PracticeSet and ContentAnalyzer) ─────────
+const SKILL_COLORS = {
+  pronunciation:"#f59e0b", listening:"#06b6d4", conversation:"#22c55e",
+  jlpt:"#a78bfa", reading:"#fb923c", kanji:"#e879f9", grammar:"#60a5fa"
+};
+
+function ExerciseCard({ item, revealed, onReveal }) {
+  const color = SKILL_COLORS[item.skill] || C.purpleLight;
+  return (
+    <div style={{ ...S.card, borderLeft:`3px solid ${color}` }}>
+      <div style={{ display:"flex", justifyContent:"space-between", marginBottom:6 }}>
+        <span style={{ color, fontSize:11, fontWeight:700 }}>{SKILL_LABELS[item.skill] || item.skill}</span>
+        <span style={{ color:"#64748b", fontSize:11 }}>{item.type}</span>
+      </div>
+      <p style={{ color:"#f1f5f9", fontSize:14, lineHeight:1.8, margin:"0 0 10px", whiteSpace:"pre-wrap" }}>{item.prompt}</p>
+      {revealed ? (
+        <div style={{ background:"rgba(34,197,94,0.06)", borderRadius:10, padding:"10px 12px" }}>
+          <p style={{ color:C.green, fontSize:11, fontWeight:700, margin:"0 0 4px" }}>✅ ANSWER</p>
+          <p style={{ color:"#f1f5f9", fontSize:13, margin:"0 0 6px" }}>{item.answer}</p>
+          {item.tip && <p style={{ color:"#94a3b8", fontSize:12, margin:"0 0 6px", fontStyle:"italic" }}>💬 {item.tip}</p>}
+          {item.source_url && (
+            <a href={item.source_url} target="_blank" rel="noopener noreferrer"
+              style={{ display:"inline-block", color:C.teal, fontSize:11, textDecoration:"none", background:"rgba(6,182,212,0.08)", border:"1px solid rgba(6,182,212,0.2)", padding:"3px 10px", borderRadius:6, fontWeight:600 }}>
+              🔗 {item.source_url.replace(/https?:\/\/(www\.)?/,"").split("/")[0]}
+            </a>
+          )}
+        </div>
+      ) : (
+        <button onClick={onReveal} style={{ padding:"6px 14px", borderRadius:8, background:C.card, border:`1px solid ${C.border}`, color:"#94a3b8", fontSize:11, cursor:"pointer" }}>
+          Show answer
+        </button>
+      )}
+    </div>
+  );
+}
+
+// ─── CONTENT ANALYZER (GAKU Extension-style: paste text, get 10–20 leveled activities) ──
+function ContentAnalyzer({ form }) {
+  const [source, setSource] = useState("");
+  const [items, setItems] = useState([]);
+  const [revealed, setRevealed] = useState({});
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [activeSkillFilter, setActiveSkillFilter] = useState("all");
+
+  const analyze = async () => {
+    const trimmed = source.trim();
+    if (!trimmed) { setError("Paste some Japanese text (or a video's subtitles/description) first."); return; }
+    setLoading(true); setError(""); setItems([]); setRevealed({}); setActiveSkillFilter("all");
+    try {
+      const res = await fetch("/api/claude", {
+        method:"POST", headers:{"Content-Type":"application/json"},
+        body: JSON.stringify({ model:"claude-sonnet-4-20250514", max_tokens:4500,
+          messages:[{ role:"user", content:`You are a Japanese teacher using CLT (Communicative Language Teaching). The student's JLPT level is ${form.jlpt}.
+
+The student just encountered this piece of Japanese content (could be a sentence, an article, video subtitles/dialogue, or a social media caption). Analyze it and build practice activities directly FROM it — reuse its actual words, kanji, and sentences rather than generic examples.
+
+CONTENT TO ANALYZE:
+"""
+${trimmed.slice(0, 6000)}
+"""
+
+Create between 10 and 20 practice activities (choose a count that fits the amount of content — don't pad with repetition if the content is short). RULES:
+1. Every activity must be grounded in the actual content above — quote or adapt real words/sentences from it, don't invent unrelated material.
+2. JAPANESE FIRST: every prompt must contain real Japanese text from (or directly derived from) the content.
+3. Scale difficulty to ${form.jlpt}:
+   - N5: ask about basic kanji readings, simple vocabulary meaning, and simple comprehension ("元気？と聞かれたら何と返しますか？" style)
+   - N4: basic grammar points used in the text, simple comprehension questions
+   - N3: sentence meaning, grammar function of specific phrases, paraphrase
+   - N2: nuance, formal/casual register differences, more complex grammar
+   - N1: literary/formal nuance, implied meaning, stylistic questions
+4. Mix activity types: kanji readings from the text, vocabulary meaning, "what does this sentence mean?", grammar point explanation, fill-in-the-blank using a real sentence from the content with the target word blanked out and 4 choices ①②③④, and a short output task (e.g. "summarize this in one Japanese sentence" or "how would you respond to this?").
+5. For fill-in-the-blank, ALWAYS include the full original Japanese sentence with ___ for the blank AND the ①②③④ choices in the same prompt.
+
+Return fields for each activity:
+- skill: one of vocabulary, kanji, grammar, reading, listening, conversation
+- type: short English label (e.g. "Kanji reading", "Meaning check", "Fill-in-the-blank", "Comprehension", "Output task")
+- prompt: self-contained, must feature real Japanese text from the content
+- answer: correct answer (in Japanese when applicable)
+- tip: one short CLT-style tip
+
+Respond ONLY with a valid JSON array, no markdown, no backticks:
+[{"skill":"","type":"","prompt":"","answer":"","tip":""}]` }]
+        })
+      });
+      const d = await res.json();
+      const text = d.content?.map(c=>c.text||"").join("") || "[]";
+      const parsed = JSON.parse(text.replace(/```json|```/g,"").trim());
+      if (Array.isArray(parsed) && parsed.length) {
+        setItems(parsed);
+      } else {
+        setError("Couldn't generate activities from that content. Try pasting more text.");
+      }
+    } catch { setError("Could not analyze this content right now. Please try again."); }
+    setLoading(false);
+  };
+
+  const filteredItems = activeSkillFilter === "all" ? items : items.filter(it => it.skill === activeSkillFilter);
+  const skillsInResult = [...new Set(items.map(it => it.skill))];
+
+  return (
+    <div>
+      <div style={{ ...S.card, marginBottom:16 }}>
+        <p style={{ color:C.teal, fontSize:12, fontWeight:700, letterSpacing:1, marginBottom:4 }}>✨ CREATE FROM CONTENT</p>
+        <p style={{ color:"#64748b", fontSize:12, marginBottom:12, lineHeight:1.7 }}>
+          Paste Japanese text you're reading or watching — an article, video subtitles/description, a caption, a message — and GAKU will build {form.jlpt}-level activities from it, just like GAKU Reader does on the web.
+        </p>
+        <textarea
+          value={source}
+          onChange={e=>setSource(e.target.value)}
+          placeholder="日本語のテキストをここに貼り付けてください... (paste Japanese text, subtitles, or a caption here)"
+          rows={6}
+          style={{ width:"100%", boxSizing:"border-box", background:"rgba(255,255,255,0.03)", border:`1px solid ${C.border}`, borderRadius:10, color:"#f1f5f9", fontSize:13, padding:"10px 12px", marginBottom:12, resize:"vertical", fontFamily:"inherit" }}
+        />
+        <button onClick={analyze} disabled={loading} style={{ ...S.btn, width:"100%", background:loading?"rgba(6,182,212,0.15)":`linear-gradient(135deg,${C.teal},#0891b2)`, color:loading?"#64748b":"#fff" }}>
+          {loading ? "⏳ Analyzing content..." : (items.length ? "🔄 Analyze again" : "Analyze & Generate Activities ✨")}
+        </button>
+        {error && <p style={{ color:C.red, fontSize:12, marginTop:10 }}>{error}</p>}
+      </div>
+
+      {items.length > 0 && (
+        <>
+          <div style={{ display:"flex", gap:6, flexWrap:"wrap", marginBottom:12 }}>
+            <button onClick={()=>setActiveSkillFilter("all")} style={{ padding:"4px 10px", borderRadius:20, fontSize:11, fontWeight:700, cursor:"pointer", border:`1px solid ${activeSkillFilter==="all"?C.purpleLight:C.border}`, background:activeSkillFilter==="all"?"rgba(168,85,247,0.15)":C.card, color:activeSkillFilter==="all"?C.purpleLight:"#64748b" }}>
+              すべて ({items.length})
+            </button>
+            {skillsInResult.map(s => (
+              <button key={s} onClick={()=>setActiveSkillFilter(s)} style={{ padding:"4px 10px", borderRadius:20, fontSize:11, fontWeight:700, cursor:"pointer", border:`1px solid ${activeSkillFilter===s?(SKILL_COLORS[s]||C.purpleLight):C.border}`, background:activeSkillFilter===s?"rgba(0,0,0,0.15)":C.card, color:activeSkillFilter===s?(SKILL_COLORS[s]||C.purpleLight):"#64748b" }}>
+                {SKILL_LABELS[s]||s} ({items.filter(it=>it.skill===s).length})
+              </button>
+            ))}
+          </div>
+          <div style={{ display:"flex", flexDirection:"column", gap:12 }}>
+            {filteredItems.map((it,i) => {
+              const globalIdx = items.indexOf(it);
+              return (
+                <ExerciseCard key={i} item={it} revealed={!!revealed[globalIdx]} onReveal={()=>setRevealed(r=>({...r,[globalIdx]:true}))} />
+              );
+            })}
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
+
 // ─── PRACTICE SET (built from selected skills only) ─────────────────────────────
 // JLPT links by level and section
 const JLPT_LINKS = {
@@ -4077,11 +4223,6 @@ Respond ONLY with a valid JSON array, no markdown, no backticks:
     setLoading(false);
   };
 
-  const skillColors = {
-    pronunciation:"#f59e0b", listening:"#06b6d4", conversation:"#22c55e",
-    jlpt:"#a78bfa", reading:"#fb923c", kanji:"#e879f9", grammar:"#60a5fa"
-  };
-
   const filteredItems = activeSkillFilter === "all" ? items : items.filter(it => it.skill === activeSkillFilter);
   const skillsInResult = [...new Set(items.map(it => it.skill))];
 
@@ -4134,7 +4275,7 @@ Respond ONLY with a valid JSON array, no markdown, no backticks:
               すべて ({items.length})
             </button>
             {skillsInResult.map(s => (
-              <button key={s} onClick={()=>setActiveSkillFilter(s)} style={{ padding:"4px 10px", borderRadius:20, fontSize:11, fontWeight:700, cursor:"pointer", border:`1px solid ${activeSkillFilter===s?(skillColors[s]||C.purpleLight):C.border}`, background:activeSkillFilter===s?`rgba(0,0,0,0.15)`:C.card, color:activeSkillFilter===s?(skillColors[s]||C.purpleLight):"#64748b" }}>
+              <button key={s} onClick={()=>setActiveSkillFilter(s)} style={{ padding:"4px 10px", borderRadius:20, fontSize:11, fontWeight:700, cursor:"pointer", border:`1px solid ${activeSkillFilter===s?(SKILL_COLORS[s]||C.purpleLight):C.border}`, background:activeSkillFilter===s?`rgba(0,0,0,0.15)`:C.card, color:activeSkillFilter===s?(SKILL_COLORS[s]||C.purpleLight):"#64748b" }}>
                 {SKILL_LABELS[s]||s} ({items.filter(it=>it.skill===s).length})
               </button>
             ))}
@@ -4142,33 +4283,9 @@ Respond ONLY with a valid JSON array, no markdown, no backticks:
 
           <div style={{ display:"flex", flexDirection:"column", gap:12 }}>
             {filteredItems.map((it,i) => {
-              const color = skillColors[it.skill] || C.purpleLight;
               const globalIdx = items.indexOf(it);
               return (
-                <div key={i} style={{ ...S.card, borderLeft:`3px solid ${color}` }}>
-                  <div style={{ display:"flex", justifyContent:"space-between", marginBottom:6 }}>
-                    <span style={{ color, fontSize:11, fontWeight:700 }}>{SKILL_LABELS[it.skill] || it.skill}</span>
-                    <span style={{ color:"#64748b", fontSize:11 }}>{it.type}</span>
-                  </div>
-                  <p style={{ color:"#f1f5f9", fontSize:14, lineHeight:1.8, margin:"0 0 10px", whiteSpace:"pre-wrap" }}>{it.prompt}</p>
-                  {revealed[globalIdx] ? (
-                    <div style={{ background:"rgba(34,197,94,0.06)", borderRadius:10, padding:"10px 12px" }}>
-                      <p style={{ color:C.green, fontSize:11, fontWeight:700, margin:"0 0 4px" }}>✅ ANSWER</p>
-                      <p style={{ color:"#f1f5f9", fontSize:13, margin:"0 0 6px" }}>{it.answer}</p>
-                      {it.tip && <p style={{ color:"#94a3b8", fontSize:12, margin:"0 0 6px", fontStyle:"italic" }}>💬 {it.tip}</p>}
-                      {it.source_url && (
-                        <a href={it.source_url} target="_blank" rel="noopener noreferrer"
-                          style={{ display:"inline-block", color:C.teal, fontSize:11, textDecoration:"none", background:"rgba(6,182,212,0.08)", border:"1px solid rgba(6,182,212,0.2)", padding:"3px 10px", borderRadius:6, fontWeight:600 }}>
-                          🔗 {it.source_url.replace(/https?:\/\/(www\.)?/,"").split("/")[0]}
-                        </a>
-                      )}
-                    </div>
-                  ) : (
-                    <button onClick={()=>setRevealed(r=>({...r,[globalIdx]:true}))} style={{ padding:"6px 14px", borderRadius:8, background:C.card, border:`1px solid ${C.border}`, color:"#94a3b8", fontSize:11, cursor:"pointer" }}>
-                      Show answer
-                    </button>
-                  )}
-                </div>
+                <ExerciseCard key={i} item={it} revealed={!!revealed[globalIdx]} onReveal={()=>setRevealed(r=>({...r,[globalIdx]:true}))} />
               );
             })}
           </div>
@@ -4739,6 +4856,7 @@ function Dashboard({ form, onEdit }) {
   const [msDone, setMsDone] = useState([]);
   const [showHelp, setShowHelp] = useState(false);
   const [tab, setTab] = useState("schedule");
+  const [resourceSubTab, setResourceSubTab] = useState("links");
   const [weekTheme, setWeekTheme] = useState("");
   const [aiScheduleLoading, setAiScheduleLoading] = useState(false);
   const { currentWeek, totalWeeks } = getWeekInfo(form);
@@ -4844,10 +4962,14 @@ function Dashboard({ form, onEdit }) {
 
   const TABS = [
     { id:"schedule",   label: T.tabSchedule },
-    { id:"practice",   label: T.tabPractice },
     { id:"vocabulary", label: T.tabVocabulary },
     { id:"resources",  label: T.tabResources },
     { id:"milestones", label: T.tabMilestones },
+  ];
+  const RESOURCE_SUBTABS = [
+    { id:"links",    label: "🔗 " + (T.tabResources || "Resources") },
+    { id:"practice", label: T.tabPractice },
+    { id:"content",  label: "✨ From Content" },
   ];
 
   return (
@@ -4956,12 +5078,23 @@ function Dashboard({ form, onEdit }) {
           </div>
         )}
 
-        {tab==="practice" && <PracticeSet form={form} />}
-
         {tab==="vocabulary" && <VocabBuilder form={form} />}
 
         {tab==="resources" && (
           <div>
+            <div style={{ display:"flex", gap:6, marginBottom:16, overflowX:"auto", paddingBottom:4 }}>
+              {RESOURCE_SUBTABS.map(st => (
+                <button key={st.id} onClick={()=>setResourceSubTab(st.id)} style={{ padding:"7px 12px", borderRadius:20, border:`1.5px solid ${resourceSubTab===st.id?C.teal:C.border}`, background:resourceSubTab===st.id?"rgba(6,182,212,0.12)":C.card, color:resourceSubTab===st.id?C.teal:"#64748b", fontSize:11, fontWeight:700, cursor:"pointer", whiteSpace:"nowrap" }}>
+                  {st.label}
+                </button>
+              ))}
+            </div>
+
+            {resourceSubTab==="practice" && <PracticeSet form={form} />}
+            {resourceSubTab==="content" && <ContentAnalyzer form={form} />}
+
+            {resourceSubTab==="links" && (
+            <div>
             {(LEVEL_RESOURCES[form.jlpt] || []).length > 0 && (
               <div style={{ ...S.card, marginBottom:16, borderLeft:`3px solid ${C.teal}` }}>
                 <p style={{ color:C.teal, fontSize:12, fontWeight:700, letterSpacing:1, marginBottom:4 }}>{T.recommendedForLevel}</p>
@@ -5011,6 +5144,8 @@ function Dashboard({ form, onEdit }) {
                 ))}
               </div>
             </div>
+            </div>
+            )}
           </div>
         )}
 
