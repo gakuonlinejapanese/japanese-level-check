@@ -3034,9 +3034,20 @@ const WRITING_TOPICS = {
   education: ["あなたが日本語を勉強している理由を書いてください。", "効果的な外国語学習方法について書いてください。", "学校での一番の思い出を書いてください。", "オンライン学習と対面学習の違いについて書いてください。"],
 };
 
+// ─── PER-STUDENT STORAGE SCOPING ──────────────────────────────────────────────
+// When a student is logged in (Supabase auth), their study data (profile form,
+// vocabulary, interaction count) is kept separate per account so multiple
+// students sharing the same browser/device don't see each other's data.
+// Falls back to the unscoped legacy key when no one is logged in (e.g. the
+// free quiz-only flow before signup).
+let ACTIVE_USER_ID = null;
+function scopedKey(base) {
+  return ACTIVE_USER_ID ? `${base}_${ACTIVE_USER_ID}` : base;
+}
+
 // ─── VOCAB STORAGE (localStorage) ─────────────────────────────────────────────
 function loadVocabData() {
-  try { return JSON.parse(localStorage.getItem("gaku_vocab") || "null") || { folders:[], cards:[] }; } catch { return { folders:[], cards:[] }; }
+  try { return JSON.parse(localStorage.getItem(scopedKey("gaku_vocab")) || "null") || { folders:[], cards:[] }; } catch { return { folders:[], cards:[] }; }
 }
 // Trim card to essential fields only before saving (reduces localStorage size)
 function trimCard(card) {
@@ -3051,7 +3062,7 @@ function trimCard(card) {
 function saveVocabData(data) {
   try {
     const lean = { folders: data.folders, cards: data.cards.map(trimCard) };
-    localStorage.setItem("gaku_vocab", JSON.stringify(lean));
+    localStorage.setItem(scopedKey("gaku_vocab"), JSON.stringify(lean));
     // Sync folder names to chrome.storage for GAKU Reader extension
     try {
       const folderNames = ["Your Vocabulary", ...data.folders.map(f => typeof f === "string" ? f : f.name).filter(Boolean)];
@@ -3066,7 +3077,7 @@ function saveVocabData(data) {
     // If quota exceeded, remove oldest 20 cards and retry
     try {
       const trimmed = { folders: data.folders, cards: data.cards.slice(-80).map(trimCard) };
-      localStorage.setItem("gaku_vocab", JSON.stringify(trimmed));
+      localStorage.setItem(scopedKey("gaku_vocab"), JSON.stringify(trimmed));
     } catch {}
   }
 }
@@ -5137,7 +5148,7 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
   // Counts taps/clicks inside the dashboard. After 21 interactions, show the
   // payment screen so students who haven't unlocked yet see the value of the app.
   const [interactionCount, setInteractionCount] = useState(() => {
-    try { return parseInt(localStorage.getItem("gaku_interaction_count") || "0", 10) || 0; } catch { return 0; }
+    try { return parseInt(localStorage.getItem(scopedKey("gaku_interaction_count")) || "0", 10) || 0; } catch { return 0; }
   });
   // Remembers which emails have already used up their 10 free interactions, so if they
   // re-enter their profile with the same email, they're sent straight to the payment screen.
@@ -5154,18 +5165,18 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
   const handleDashboardInteraction = () => {
     setInteractionCount(c => {
       const next = c + 1;
-      try { localStorage.setItem("gaku_interaction_count", String(next)); } catch {}
+      try { localStorage.setItem(scopedKey("gaku_interaction_count"), String(next)); } catch {}
       if (next >= 21) {
         setShowPaywall(true);
         markEmailPaywalled(form?.email);
-        try { localStorage.setItem("gaku_interaction_count", "0"); } catch {}
+        try { localStorage.setItem(scopedKey("gaku_interaction_count"), "0"); } catch {}
         return 0;
       }
       return next;
     });
   };
   useEffect(() => {
-    try { const saved = localStorage.getItem("gaku_form"); if(saved) setForm(JSON.parse(saved)); } catch {}
+    try { const saved = localStorage.getItem(scopedKey("gaku_form")); if(saved) setForm(JSON.parse(saved)); } catch {}
   }, []);
   // Track the logged-in Supabase account (separate from the localStorage profile above).
   useEffect(() => {
@@ -5183,6 +5194,13 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
   // Once logged in, verify this device against known devices for the account —
   // triggers the dual-approval email flow for unrecognized devices.
   useEffect(() => {
+    // Keep the module-level storage scope in sync with whoever is logged in,
+    // then reload this student's own profile/vocab/interaction data (falls
+    // back to the unscoped legacy keys when logged out).
+    ACTIVE_USER_ID = authUser?.id || null;
+    try { const saved = localStorage.getItem(scopedKey("gaku_form")); setForm(saved ? JSON.parse(saved) : null); } catch { setForm(null); }
+    try { setInteractionCount(parseInt(localStorage.getItem(scopedKey("gaku_interaction_count")) || "0", 10) || 0); } catch { setInteractionCount(0); }
+    try { window.dispatchEvent(new Event("gaku_vocab_updated")); } catch {}
     if (!authUser) { setDeviceStatus(null); return; }
     setDeviceStatus("checking");
     fetch("/api/device-check", {
@@ -5200,7 +5218,7 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
     setForm(saved);
     setEditing(false);
     setForceForm(false);
-    try { localStorage.setItem("gaku_form", JSON.stringify(saved)); } catch {}
+    try { localStorage.setItem(scopedKey("gaku_form"), JSON.stringify(saved)); } catch {}
     // If this email already used up their free interactions before, go straight
     // to the payment screen instead of letting them browse the dashboard again.
     if (getPaywalledEmails().includes(saved.email)) {
