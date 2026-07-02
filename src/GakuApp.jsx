@@ -5432,6 +5432,10 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
   return (
     <div style={{ position:"relative" }} onClickCapture={handleDashboardInteraction}>
       <Dashboard form={form} onEdit={handleEdit} />
+      {/* TEMP DEBUG — remove after confirming the counter works */}
+      <div style={{ position:"fixed", bottom:12, right:12, zIndex:99999, background:"rgba(0,0,0,0.75)", color:"#4ade80", fontSize:11, fontFamily:"monospace", padding:"4px 8px", borderRadius:6 }}>
+        count: {interactionCount}/21 {skipTrialPaywall ? "(skip)" : ""} {authUser && isGakuStudent ? "(gaku)" : ""}
+      </div>
       {showPaywall && (
         <div style={{ position:"fixed", inset:0, zIndex:9999, display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", background:"rgba(10,15,30,0.85)", backdropFilter:"blur(12px)" }}>
           <div style={{ background:"linear-gradient(135deg,#1e1b4b,#0f172a)", border:"1.5px solid rgba(139,92,246,0.4)", borderRadius:20, padding:"36px 32px", maxWidth:420, width:"90%", textAlign:"center", boxShadow:"0 8px 40px rgba(139,92,246,0.25)" }}>
