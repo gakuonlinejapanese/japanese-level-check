@@ -3956,6 +3956,194 @@ function VocabBuilder({ form }) {
   );
 }
 
+// ─── SUBTITLE VOCAB BUILDER (Migaku-style: student pastes subtitles THEY already
+// have access to — we never fetch/scrape captions ourselves — then selects a
+// word/phrase to look up and save. The full pasted transcript is never written to
+// localStorage or any server; only the short word/phrase the student explicitly
+// selects gets saved, exactly like a normal Vocabulary Builder card). ──────────
+function parseSubtitleText(raw) {
+  const rawLines = (raw || "").split(/\r?\n/);
+  const timeRe = /\d{1,2}:\d{2}:\d{2}[,.]\d{3}\s*-->\s*\d{1,2}:\d{2}:\d{2}[,.]\d{3}/;
+  const idxRe = /^\d+$/;
+  const cues = [];
+  let buffer = [];
+  for (const line of rawLines) {
+    const trimmed = line.trim();
+    if (!trimmed) {
+      if (buffer.length) { cues.push(buffer.join(" ")); buffer = []; }
+      continue;
+    }
+    if (idxRe.test(trimmed) || timeRe.test(trimmed)) continue;
+    buffer.push(trimmed);
+  }
+  if (buffer.length) cues.push(buffer.join(" "));
+  const deduped = [];
+  for (const c of cues) { if (deduped[deduped.length - 1] !== c) deduped.push(c); }
+  return deduped.filter(Boolean);
+}
+
+function SubtitleVocabBuilder({ form }) {
+  const T = useUITranslations(form?.preferredLang || "English");
+  const lang = form?.preferredLang || "English";
+  const [raw, setRaw] = useState("");
+  const [sourceTitle, setSourceTitle] = useState("");
+  const [lines, setLines] = useState(null); // null = not loaded yet
+  const [selection, setSelection] = useState(null); // { text, contextLine }
+  const [lookupLoading, setLookupLoading] = useState(false);
+  const [lookupError, setLookupError] = useState("");
+  const [sessionSaved, setSessionSaved] = useState([]);
+  const [toast, setToast] = useState("");
+  const containerRef = useRef(null);
+
+  const showToast = (msg) => { setToast(msg); setTimeout(() => setToast(""), 2200); };
+
+  const handleLoad = () => {
+    const parsed = parseSubtitleText(raw);
+    setLines(parsed);
+    setSelection(null);
+  };
+
+  const handleReset = () => {
+    setLines(null); setRaw(""); setSelection(null); setLookupError("");
+  };
+
+  const handleMouseUp = (contextLine) => {
+    const sel = window.getSelection ? window.getSelection() : null;
+    const text = sel ? sel.toString().trim() : "";
+    if (!text || text.length > 40) { return; }
+    setSelection({ text, contextLine });
+    setLookupError("");
+  };
+
+  const lookupAndSave = async () => {
+    if (!selection) return;
+    setLookupLoading(true); setLookupError("");
+    try {
+      const res = await fetch("/api/claude", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          max_tokens: 700,
+          messages: [
+            { role: "system", content: `You are a multilingual Japanese dictionary expert. You MUST write the "meaning", "example_translated", and "tip" fields EXCLUSIVELY in ${lang}. Never use English for these fields unless the student's native language IS English. Respond ONLY with a raw JSON object, no markdown, no backticks.` },
+            { role: "user", content: `A student watching a Japanese video selected this text from the subtitles: "${selection.text}"\nThe full subtitle line it came from (for context only): "${selection.contextLine}"\n\nDecide whether the selection is a single dictionary word or a multi-word phrase/expression, then return a JSON object with these exact keys:\n- word: the selection in its natural dictionary/citation form (kanji/kana). If it's an inflected verb/adjective, convert to dictionary form. If it's a phrase, keep it as a natural chunk.\n- reading: hiragana reading of "word"\n- jlpt: JLPT level (N5/N4/N3/N2/N1) or "" if unclear\n- partOfSpeech: part of speech in English, or "phrase" / "expression" for multi-word selections\n- meaning: translation in ${lang}\n- meaningNative: simple Japanese definition\n- example: "${selection.contextLine}"\n- example_translated: translation of that exact line into ${lang}\n- tip: a short usage note in ${lang}, mentioning it was picked up from a video's subtitles\n- imageQuery: 2-3 English words suitable for an image search\nOutput ONLY the JSON object.` }
+          ]
+        })
+      });
+      const data = await res.json();
+      const text = data?.content?.[0]?.text || data?.content?.map(c => c.text || "").join("") || "";
+      const clean = text.replace(/```json|```/g, "").trim();
+      const parsed = JSON.parse(clean);
+      const folder = sourceTitle.trim() || (T.subtitlesDefaultFolder || "Subtitles");
+      const card = {
+        word: parsed.word || selection.text,
+        reading: parsed.reading || "",
+        jlpt: parsed.jlpt || "",
+        partOfSpeech: parsed.partOfSpeech || "",
+        meaning: parsed.meaning || "",
+        meaningNative: parsed.meaningNative || "",
+        example: parsed.example || selection.contextLine,
+        example_translated: parsed.example_translated || "",
+        tip: parsed.tip || "",
+        imageQuery: parsed.imageQuery || parsed.word || selection.text,
+        imageDesc: "",
+        folder, addedAt: Date.now(), id: Date.now(), savedAt: new Date().toISOString(),
+      };
+      const vocabData = loadVocabData();
+      if (folder !== "Your Vocabulary" && !vocabData.folders.find(f => (typeof f === "string" ? f : f.name) === folder)) {
+        vocabData.folders.push({ name: folder, createdAt: new Date().toISOString() });
+      }
+      if (!vocabData.cards.find(c => c.word === card.word && c.folder === folder)) {
+        vocabData.cards.push(card);
+        saveVocabData(vocabData);
+        window.dispatchEvent(new CustomEvent("gaku_vocab_updated"));
+      }
+      setSessionSaved(prev => [card, ...prev]);
+      showToast(`✓ "${card.word}" ${T.subtitlesSavedTo || "saved to"} "${folder}"`);
+      setSelection(null);
+      try { window.getSelection()?.removeAllRanges(); } catch {}
+    } catch (e) {
+      console.error("subtitle lookup error:", e);
+      setLookupError(T.subtitlesLookupError || "Lookup failed. Please try again.");
+    }
+    setLookupLoading(false);
+  };
+
+  // ── STEP 1: paste screen ──
+  if (!lines) {
+    return (
+      <div>
+        <div style={{ ...S.card, marginBottom:16 }}>
+          <p style={{ color:C.purpleLight, fontSize:12, fontWeight:700, letterSpacing:1, marginBottom:6 }}>🎬 {T.subtitlesTitle || "Subtitles → Vocabulary"}</p>
+          <p style={{ color:"#64748b", fontSize:12, lineHeight:1.7, marginBottom:14 }}>
+            {T.subtitlesDesc || "Paste subtitles or a transcript from a video you're already watching (e.g. YouTube's own \"Show transcript\" panel). Double-click a word or drag to select a phrase, then look it up and save it straight to your Vocabulary Builder — just like Migaku."}
+          </p>
+          <label style={S.label}>{T.subtitlesSourceLabel || "Video title / source (optional — used as the folder name)"}</label>
+          <input value={sourceTitle} onChange={e => setSourceTitle(e.target.value)} placeholder={T.subtitlesSourcePlaceholder || "e.g. NHK news 7/2"} style={{ ...S.input, marginBottom:12 }} />
+          <label style={S.label}>{T.subtitlesPasteLabel || "Paste subtitles / transcript here"}</label>
+          <textarea value={raw} onChange={e => setRaw(e.target.value)} rows={10}
+            placeholder={T.subtitlesPastePlaceholder || "Paste plain text or an .srt file's contents — timestamps and cue numbers are removed automatically."}
+            style={{ ...S.input, resize:"vertical", fontFamily:"inherit", lineHeight:1.7, marginBottom:14 }} />
+          <button onClick={handleLoad} disabled={!raw.trim()} style={{ ...S.btn, width:"100%", background: raw.trim() ? `linear-gradient(135deg,${C.purple},#9333ea)` : "#1e293b", color: raw.trim() ? "#fff" : "#475569" }}>
+            {T.subtitlesLoadBtn || "Load transcript"}
+          </button>
+        </div>
+        <p style={{ color:"#475569", fontSize:11, lineHeight:1.6 }}>
+          {T.subtitlesCopyrightNote || "🔒 Nothing you paste here is stored — the full text stays only in this browser tab. Only the specific words/phrases you choose to save are added to your Vocabulary Builder."}
+        </p>
+      </div>
+    );
+  }
+
+  // ── STEP 2: interactive transcript ──
+  return (
+    <div style={{ position:"relative" }}>
+      {toast && (
+        <div style={{ position:"fixed", top:70, left:"50%", transform:"translateX(-50%)", background:C.green, color:"#fff", padding:"9px 18px", borderRadius:99, fontSize:12, fontWeight:700, zIndex:9999, boxShadow:"0 4px 16px rgba(34,197,94,0.4)" }}>
+          {toast}
+        </div>
+      )}
+      <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:12 }}>
+        <p style={{ color:C.purpleLight, fontSize:12, fontWeight:700, letterSpacing:1, margin:0 }}>
+          🎬 {sourceTitle.trim() || (T.subtitlesDefaultFolder || "Subtitles")}
+        </p>
+        <button onClick={handleReset} style={{ ...S.btn, padding:"6px 12px", fontSize:11, background:C.card, border:`1px solid ${C.border}`, color:"#94a3b8" }}>
+          {T.subtitlesLoadNew || "↺ Load a different transcript"}
+        </button>
+      </div>
+
+      {sessionSaved.length > 0 && (
+        <p style={{ color:"#64748b", fontSize:11, marginBottom:10 }}>
+          {T.subtitlesSavedCount || "Saved this session:"} {sessionSaved.map(c => c.word).join("、")}
+        </p>
+      )}
+
+      <div ref={containerRef} style={{ ...S.card, marginBottom: selection ? 90 : 20 }}>
+        {lines.map((line, i) => (
+          <p key={i} onMouseUp={() => handleMouseUp(line)}
+            style={{ color:"#e2e8f0", fontSize:15, lineHeight:2.1, margin:"0 0 6px", cursor:"text", userSelect:"text" }}>
+            {line}
+          </p>
+        ))}
+      </div>
+
+      {selection && (
+        <div style={{ position:"fixed", left:"50%", bottom:16, transform:"translateX(-50%)", width:"92%", maxWidth:560, background:"linear-gradient(135deg,#1e1b4b,#0f172a)", border:`1.5px solid ${C.purpleLight}`, borderRadius:14, padding:"14px 16px", boxShadow:"0 8px 30px rgba(0,0,0,0.5)", zIndex:9998 }}>
+          <p style={{ color:"#f1f5f9", fontSize:13, margin:"0 0 4px" }}>「<b>{selection.text}</b>」</p>
+          {lookupError && <p style={{ color:C.red, fontSize:11, margin:"0 0 8px" }}>{lookupError}</p>}
+          <div style={{ display:"flex", gap:8 }}>
+            <button onClick={() => setSelection(null)} style={{ ...S.btn, flex:1, padding:"9px 12px", fontSize:12, background:C.card, border:`1px solid ${C.border}`, color:"#94a3b8" }}>
+              {T.cancel || "Cancel"}
+            </button>
+            <button onClick={lookupAndSave} disabled={lookupLoading} style={{ ...S.btn, flex:2, padding:"9px 12px", fontSize:12, background:lookupLoading?"rgba(139,92,246,0.15)":`linear-gradient(135deg,${C.purple},#9333ea)`, color:lookupLoading?"#64748b":"#fff" }}>
+              {lookupLoading ? "⏳ …" : (T.subtitlesLookupSaveBtn || "🔍 Look up & save")}
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 // ─── Shared exercise rendering (used by PracticeSet and ContentAnalyzer) ─────────
 const SKILL_COLORS = {
   pronunciation:"#f59e0b", listening:"#06b6d4", conversation:"#22c55e",
@@ -4963,6 +5151,7 @@ function Dashboard({ form, onEdit }) {
   const TABS = [
     { id:"schedule",   label: T.tabSchedule },
     { id:"vocabulary", label: T.tabVocabulary },
+    { id:"subtitles",  label: T.tabSubtitles || "🎬 字幕帳" },
     { id:"resources",  label: T.tabResources },
     { id:"milestones", label: T.tabMilestones },
   ];
@@ -5079,6 +5268,8 @@ function Dashboard({ form, onEdit }) {
         )}
 
         {tab==="vocabulary" && <VocabBuilder form={form} />}
+
+        {tab==="subtitles" && <SubtitleVocabBuilder form={form} />}
 
         {tab==="resources" && (
           <div>
