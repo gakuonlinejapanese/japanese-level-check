@@ -3956,7 +3956,7 @@ function VocabBuilder({ form }) {
   );
 }
 
-// ─── SUBTITLE VOCAB BUILDER (Migaku-style: student pastes subtitles THEY already
+// ─── SUBTITLE VOCAB BUILDER (student pastes subtitles THEY already
 // have access to — we never fetch/scrape captions ourselves — then selects a
 // word/phrase to look up and save. The full pasted transcript is never written to
 // localStorage or any server; only the short word/phrase the student explicitly
@@ -4007,10 +4007,22 @@ function SubtitleVocabBuilder({ form }) {
     setLines(null); setRaw(""); setSelection(null); setLookupError("");
   };
 
-  const handleMouseUp = (contextLine) => {
+  const handleMouseUp = () => {
     const sel = window.getSelection ? window.getSelection() : null;
     const text = sel ? sel.toString().trim() : "";
-    if (!text || text.length > 40) { return; }
+    if (!text) return;
+    if (text.length > 60) {
+      setSelection(null);
+      setLookupError(T.subtitlesTooLong || "That selection is too long — please select a shorter word or phrase (under ~60 characters).");
+      return;
+    }
+    let contextLine = text;
+    try {
+      let node = sel.anchorNode;
+      while (node && node.nodeType !== 1) node = node.parentNode;
+      const p = node && node.closest ? node.closest("p[data-subtitle-line]") : null;
+      if (p) contextLine = p.textContent;
+    } catch {}
     setSelection({ text, contextLine });
     setLookupError("");
   };
@@ -4075,7 +4087,7 @@ function SubtitleVocabBuilder({ form }) {
         <div style={{ ...S.card, marginBottom:16 }}>
           <p style={{ color:C.purpleLight, fontSize:12, fontWeight:700, letterSpacing:1, marginBottom:6 }}>🎬 {T.subtitlesTitle || "Subtitles → Vocabulary"}</p>
           <p style={{ color:"#64748b", fontSize:12, lineHeight:1.7, marginBottom:14 }}>
-            {T.subtitlesDesc || "Paste subtitles or a transcript from a video you're already watching (e.g. YouTube's own \"Show transcript\" panel). Double-click a word or drag to select a phrase, then look it up and save it straight to your Vocabulary Builder — just like Migaku."}
+            {T.subtitlesDesc || "Paste subtitles or a transcript from a video you're already watching (e.g. YouTube's own \"Show transcript\" panel). Double-click a word or drag to select a phrase, then look it up and save it straight to your Vocabulary Builder."}
           </p>
           <label style={S.label}>{T.subtitlesSourceLabel || "Video title / source (optional — used as the folder name)"}</label>
           <input value={sourceTitle} onChange={e => setSourceTitle(e.target.value)} placeholder={T.subtitlesSourcePlaceholder || "e.g. NHK news 7/2"} style={{ ...S.input, marginBottom:12 }} />
@@ -4117,9 +4129,15 @@ function SubtitleVocabBuilder({ form }) {
         </p>
       )}
 
-      <div ref={containerRef} style={{ ...S.card, marginBottom: selection ? 90 : 20 }}>
+      {lookupError && !selection && (
+        <div style={{ background:"rgba(239,68,68,0.1)", border:`1px solid rgba(239,68,68,0.3)`, borderRadius:10, padding:"9px 14px", marginBottom:12 }}>
+          <p style={{ color:C.red, fontSize:12, margin:0 }}>{lookupError}</p>
+        </div>
+      )}
+
+      <div ref={containerRef} onMouseUp={handleMouseUp} style={{ ...S.card, marginBottom: selection ? 90 : 20 }}>
         {lines.map((line, i) => (
-          <p key={i} onMouseUp={() => handleMouseUp(line)}
+          <p key={i} data-subtitle-line
             style={{ color:"#e2e8f0", fontSize:15, lineHeight:2.1, margin:"0 0 6px", cursor:"text", userSelect:"text" }}>
             {line}
           </p>
