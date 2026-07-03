@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useMemo, useRef } from "react";
+import { supabase, getDeviceId, getDeviceLabel } from "./supabaseClient";
 
 const C = {
   bg: "linear-gradient(160deg,#0a0f1e 0%,#0f172a 60%,#0a0f1e 100%)",
@@ -258,6 +259,40 @@ const UI_TRANSLATIONS = {
       vocabBuilderTitle: "📚 VOCABULARY BUILDER",
     vocabBuilderDesc: "Enter a topic to see related words from the Japanese dictionary (English or 日本語 OK)",
     vocabSearchPlaceholder: "e.g. food, travel, emotions...",
+    // Paywall — free plan / invite code / join GAKU section
+    freePlanGakuStudent: "FREE Plan (Only GAKU students)",
+    invitationCodeLabel: "INVITATION CODE",
+    inviteCodePlaceholder: "Enter invite code...",
+    confirmCode: "Confirm",
+    invalidCode: "Invalid code. Please try again.",
+    wantToJoinGaku: "Want to join GAKU?",
+    yes: "Yes",
+    checkLater: "Check again later",
+    // Paywall — main plan content
+    studyPlanReadyTitle: "Your Study Plan is Ready!",
+    studyPlanReadyDesc: "Unlock your personalized weekly schedule, practice sets, and vocabulary tools.",
+    appOnlyLabel: "📱 APP ONLY",
+    monthlyLabel: "MONTHLY",
+    perMonth: "/ month",
+    threeMonthsSave5: "3 MONTHS · Save 5%",
+    sixMonthsSave10: "6 MONTHS · Save 10% ⭐",
+    appLessonsLabel: "🎓 APP + LESSONS · 50% off lessons",
+    threeMonthsSave5_30min: "3 MONTHS · Save 5% · 30min/mo",
+    threeMonthsSave5_1hr: "3 MONTHS · Save 5% · 1hr/mo",
+    sixMonthsSave5_30min: "6 MONTHS · Save 5% · 30min/mo ⭐",
+    sixMonthsSave10_1hr: "6 MONTHS · Save 10% · 1hr/mo ⭐ Best Value",
+    // Account / login / device approval
+    loginTitle: "Log In",
+    signupTitle: "Create Your Account",
+    emailPlaceholder: "Email",
+    passwordPlaceholder: "Password",
+    invitationCodeOptional: "GAKU invite code (optional)",
+    loginButton: "Log In",
+    signupButton: "Sign Up",
+    needAccount: "Need an account? Sign up",
+    haveAccount: "Already have an account? Log in",
+    deviceApprovalTitle: "New Device Detected",
+    deviceApprovalDesc: "We've sent an approval email to you and to GAKU. Once both approve, this device will be unlocked — please check your inbox.",
     findWordsBtn: "Find Words",
     libraryLabel: "📚 Library",
     yourVocabSaved: "Your Vocabulary",
@@ -2911,6 +2946,7 @@ function getT(lang) {
 
 // For languages not in our static dict, we cache AI translations
 const AI_TRANS_CACHE = {};
+const AI_TRANS_PENDING = {}; // dedupe concurrent fetches for the same language
 
 // Split translation keys into two batches to stay within token limits
 function splitKeys(obj) {
@@ -2922,7 +2958,7 @@ function splitKeys(obj) {
   return [a, b];
 }
 
-async function fetchTranslationBatch(keyValueObj, lang) {
+async function fetchTranslationBatch(keyValueObj, lang, attempt = 0) {
   const keyList = Object.keys(keyValueObj).map(k => `${k}: ${keyValueObj[k]}`).join("\n");
   const res = await fetch("/api/claude", {
     method:"POST", headers:{"Content-Type":"application/json"},
@@ -2934,9 +2970,39 @@ async function fetchTranslationBatch(keyValueObj, lang) {
     })
   });
   const d = await res.json();
+  // Retry once on rate-limit errors instead of silently falling back to English
+  if (d.error && attempt < 2) {
+    await new Promise(r => setTimeout(r, 800 * (attempt + 1)));
+    return fetchTranslationBatch(keyValueObj, lang, attempt + 1);
+  }
   const text = d.content?.map(c=>c.text||"").join("") || "{}";
   const clean = text.replace(/```json|```/g,"").trim();
   return JSON.parse(clean);
+}
+
+// Fetches (and caches) the full translation set for a language exactly once,
+// even if many components call useUITranslations(lang) at the same time.
+function getOrFetchTranslations(lang) {
+  if (AI_TRANS_CACHE[lang]) return Promise.resolve(AI_TRANS_CACHE[lang]);
+  if (AI_TRANS_PENDING[lang]) return AI_TRANS_PENDING[lang];
+  const baseKeys = UI_TRANSLATIONS["English"];
+  const [batchA, batchB] = splitKeys(baseKeys);
+  const p = Promise.all([
+    fetchTranslationBatch(batchA, lang),
+    fetchTranslationBatch(batchB, lang),
+  ])
+    .then(([resA, resB]) => {
+      const merged = { ...resA, ...resB };
+      if (Object.keys(merged).length > 10) {
+        AI_TRANS_CACHE[lang] = merged;
+        return merged;
+      }
+      return UI_TRANSLATIONS["English"];
+    })
+    .catch(() => UI_TRANSLATIONS["English"])
+    .finally(() => { delete AI_TRANS_PENDING[lang]; });
+  AI_TRANS_PENDING[lang] = p;
+  return p;
 }
 
 // Hook: shows English immediately while AI translation loads for unknown languages
@@ -2948,24 +3014,12 @@ function useUITranslations(lang) {
   useEffect(() => {
     if (staticT || !lang || lang === "English") { setAiT(null); setTransLoading(false); return; }
     if (AI_TRANS_CACHE[lang]) { setAiT(AI_TRANS_CACHE[lang]); return; }
+    let cancelled = false;
     setTransLoading(true);
-    const baseKeys = UI_TRANSLATIONS["English"];
-    const [batchA, batchB] = splitKeys(baseKeys);
-    Promise.all([
-      fetchTranslationBatch(batchA, lang),
-      fetchTranslationBatch(batchB, lang),
-    ])
-    .then(([resA, resB]) => {
-      const merged = { ...resA, ...resB };
-      if (Object.keys(merged).length > 10) {
-        AI_TRANS_CACHE[lang] = merged;
-        setAiT(merged);
-      } else {
-        setAiT(UI_TRANSLATIONS["English"]);
-      }
-    })
-    .catch(() => setAiT(UI_TRANSLATIONS["English"]))
-    .finally(() => setTransLoading(false));
+    getOrFetchTranslations(lang).then(merged => {
+      if (!cancelled) { setAiT(merged); setTransLoading(false); }
+    });
+    return () => { cancelled = true; };
   }, [lang, staticT]);
 
   // Always return something immediately — English while AI translation is loading
@@ -2980,9 +3034,20 @@ const WRITING_TOPICS = {
   education: ["あなたが日本語を勉強している理由を書いてください。", "効果的な外国語学習方法について書いてください。", "学校での一番の思い出を書いてください。", "オンライン学習と対面学習の違いについて書いてください。"],
 };
 
+// ─── PER-STUDENT STORAGE SCOPING ──────────────────────────────────────────────
+// When a student is logged in (Supabase auth), their study data (profile form,
+// vocabulary, interaction count) is kept separate per account so multiple
+// students sharing the same browser/device don't see each other's data.
+// Falls back to the unscoped legacy key when no one is logged in (e.g. the
+// free quiz-only flow before signup).
+let ACTIVE_USER_ID = null;
+function scopedKey(base) {
+  return ACTIVE_USER_ID ? `${base}_${ACTIVE_USER_ID}` : base;
+}
+
 // ─── VOCAB STORAGE (localStorage) ─────────────────────────────────────────────
 function loadVocabData() {
-  try { return JSON.parse(localStorage.getItem("gaku_vocab") || "null") || { folders:[], cards:[] }; } catch { return { folders:[], cards:[] }; }
+  try { return JSON.parse(localStorage.getItem(scopedKey("gaku_vocab")) || "null") || { folders:[], cards:[] }; } catch { return { folders:[], cards:[] }; }
 }
 // Trim card to essential fields only before saving (reduces localStorage size)
 function trimCard(card) {
@@ -2997,7 +3062,7 @@ function trimCard(card) {
 function saveVocabData(data) {
   try {
     const lean = { folders: data.folders, cards: data.cards.map(trimCard) };
-    localStorage.setItem("gaku_vocab", JSON.stringify(lean));
+    localStorage.setItem(scopedKey("gaku_vocab"), JSON.stringify(lean));
     // Sync folder names to chrome.storage for GAKU Reader extension
     try {
       const folderNames = ["Your Vocabulary", ...data.folders.map(f => typeof f === "string" ? f : f.name).filter(Boolean)];
@@ -3012,7 +3077,7 @@ function saveVocabData(data) {
     // If quota exceeded, remove oldest 20 cards and retry
     try {
       const trimmed = { folders: data.folders, cards: data.cards.slice(-80).map(trimCard) };
-      localStorage.setItem("gaku_vocab", JSON.stringify(trimmed));
+      localStorage.setItem(scopedKey("gaku_vocab"), JSON.stringify(trimmed));
     } catch {}
   }
 }
@@ -3891,6 +3956,358 @@ function VocabBuilder({ form }) {
   );
 }
 
+// ─── SUBTITLE VOCAB BUILDER (student pastes subtitles THEY already
+// have access to — we never fetch/scrape captions ourselves — then selects a
+// word/phrase to look up and save. The full pasted transcript is never written to
+// localStorage or any server; only the short word/phrase the student explicitly
+// selects gets saved, exactly like a normal Vocabulary Builder card). ──────────
+function parseSubtitleText(raw) {
+  const rawLines = (raw || "").split(/\r?\n/);
+  const timeRe = /\d{1,2}:\d{2}:\d{2}[,.]\d{3}\s*-->\s*\d{1,2}:\d{2}:\d{2}[,.]\d{3}/;
+  const idxRe = /^\d+$/;
+  const cues = [];
+  let buffer = [];
+  for (const line of rawLines) {
+    const trimmed = line.trim();
+    if (!trimmed) {
+      if (buffer.length) { cues.push(buffer.join(" ")); buffer = []; }
+      continue;
+    }
+    if (idxRe.test(trimmed) || timeRe.test(trimmed)) continue;
+    buffer.push(trimmed);
+  }
+  if (buffer.length) cues.push(buffer.join(" "));
+  const deduped = [];
+  for (const c of cues) { if (deduped[deduped.length - 1] !== c) deduped.push(c); }
+  return deduped.filter(Boolean);
+}
+
+function SubtitleVocabBuilder({ form }) {
+  const T = useUITranslations(form?.preferredLang || "English");
+  const lang = form?.preferredLang || "English";
+  const [raw, setRaw] = useState("");
+  const [sourceTitle, setSourceTitle] = useState("");
+  const [lines, setLines] = useState(null); // null = not loaded yet
+  const [selection, setSelection] = useState(null); // { text, contextLine }
+  const [lookupLoading, setLookupLoading] = useState(false);
+  const [lookupError, setLookupError] = useState("");
+  const [sessionSaved, setSessionSaved] = useState([]);
+  const [toast, setToast] = useState("");
+  const containerRef = useRef(null);
+
+  const showToast = (msg) => { setToast(msg); setTimeout(() => setToast(""), 2200); };
+
+  const handleLoad = () => {
+    const parsed = parseSubtitleText(raw);
+    setLines(parsed);
+    setSelection(null);
+  };
+
+  const handleReset = () => {
+    setLines(null); setRaw(""); setSelection(null); setLookupError("");
+  };
+
+  const handleMouseUp = () => {
+    const sel = window.getSelection ? window.getSelection() : null;
+    const text = sel ? sel.toString().trim() : "";
+    if (!text) return;
+    if (text.length > 60) {
+      setSelection(null);
+      setLookupError(T.subtitlesTooLong || "That selection is too long — please select a shorter word or phrase (under ~60 characters).");
+      return;
+    }
+    let contextLine = text;
+    try {
+      let node = sel.anchorNode;
+      while (node && node.nodeType !== 1) node = node.parentNode;
+      const p = node && node.closest ? node.closest("p[data-subtitle-line]") : null;
+      if (p) contextLine = p.textContent;
+    } catch {}
+    setSelection({ text, contextLine });
+    setLookupError("");
+  };
+
+  const lookupAndSave = async () => {
+    if (!selection) return;
+    setLookupLoading(true); setLookupError("");
+    try {
+      const res = await fetch("/api/claude", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          max_tokens: 700,
+          messages: [
+            { role: "system", content: `You are a multilingual Japanese dictionary expert. You MUST write the "meaning", "example_translated", and "tip" fields EXCLUSIVELY in ${lang}. Never use English for these fields unless the student's native language IS English. Respond ONLY with a raw JSON object, no markdown, no backticks.` },
+            { role: "user", content: `A student watching a Japanese video selected this text from the subtitles: "${selection.text}"\nThe full subtitle line it came from (for context only): "${selection.contextLine}"\n\nDecide whether the selection is a single dictionary word or a multi-word phrase/expression, then return a JSON object with these exact keys:\n- word: the selection in its natural dictionary/citation form (kanji/kana). If it's an inflected verb/adjective, convert to dictionary form. If it's a phrase, keep it as a natural chunk.\n- reading: hiragana reading of "word"\n- jlpt: JLPT level (N5/N4/N3/N2/N1) or "" if unclear\n- partOfSpeech: part of speech in English, or "phrase" / "expression" for multi-word selections\n- meaning: translation in ${lang}\n- meaningNative: simple Japanese definition\n- example: "${selection.contextLine}"\n- example_translated: translation of that exact line into ${lang}\n- tip: a short usage note in ${lang}, mentioning it was picked up from a video's subtitles\n- imageQuery: 2-3 English words suitable for an image search\nOutput ONLY the JSON object.` }
+          ]
+        })
+      });
+      const data = await res.json();
+      const text = data?.content?.[0]?.text || data?.content?.map(c => c.text || "").join("") || "";
+      const clean = text.replace(/```json|```/g, "").trim();
+      const parsed = JSON.parse(clean);
+      const folder = sourceTitle.trim() || (T.subtitlesDefaultFolder || "Subtitles");
+      const card = {
+        word: parsed.word || selection.text,
+        reading: parsed.reading || "",
+        jlpt: parsed.jlpt || "",
+        partOfSpeech: parsed.partOfSpeech || "",
+        meaning: parsed.meaning || "",
+        meaningNative: parsed.meaningNative || "",
+        example: parsed.example || selection.contextLine,
+        example_translated: parsed.example_translated || "",
+        tip: parsed.tip || "",
+        imageQuery: parsed.imageQuery || parsed.word || selection.text,
+        imageDesc: "",
+        folder, addedAt: Date.now(), id: Date.now(), savedAt: new Date().toISOString(),
+      };
+      const vocabData = loadVocabData();
+      if (folder !== "Your Vocabulary" && !vocabData.folders.find(f => (typeof f === "string" ? f : f.name) === folder)) {
+        vocabData.folders.push({ name: folder, createdAt: new Date().toISOString() });
+      }
+      if (!vocabData.cards.find(c => c.word === card.word && c.folder === folder)) {
+        vocabData.cards.push(card);
+        saveVocabData(vocabData);
+        window.dispatchEvent(new CustomEvent("gaku_vocab_updated"));
+      }
+      setSessionSaved(prev => [card, ...prev]);
+      showToast(`✓ "${card.word}" ${T.subtitlesSavedTo || "saved to"} "${folder}"`);
+      setSelection(null);
+      try { window.getSelection()?.removeAllRanges(); } catch {}
+    } catch (e) {
+      console.error("subtitle lookup error:", e);
+      setLookupError(T.subtitlesLookupError || "Lookup failed. Please try again.");
+    }
+    setLookupLoading(false);
+  };
+
+  // ── STEP 1: paste screen ──
+  if (!lines) {
+    return (
+      <div>
+        <div style={{ ...S.card, marginBottom:16 }}>
+          <p style={{ color:C.purpleLight, fontSize:12, fontWeight:700, letterSpacing:1, marginBottom:6 }}>🎬 {T.subtitlesTitle || "Subtitles → Vocabulary"}</p>
+          <p style={{ color:"#64748b", fontSize:12, lineHeight:1.7, marginBottom:14 }}>
+            {T.subtitlesDesc || "Paste subtitles or a transcript from a video you're already watching (e.g. YouTube's own \"Show transcript\" panel). Double-click a word or drag to select a phrase, then look it up and save it straight to your Vocabulary Builder."}
+          </p>
+          <label style={S.label}>{T.subtitlesSourceLabel || "Video title / source (optional — used as the folder name)"}</label>
+          <input value={sourceTitle} onChange={e => setSourceTitle(e.target.value)} placeholder={T.subtitlesSourcePlaceholder || "e.g. NHK news 7/2"} style={{ ...S.input, marginBottom:12 }} />
+          <label style={S.label}>{T.subtitlesPasteLabel || "Paste subtitles / transcript here"}</label>
+          <textarea value={raw} onChange={e => setRaw(e.target.value)} rows={10}
+            placeholder={T.subtitlesPastePlaceholder || "Paste plain text or an .srt file's contents — timestamps and cue numbers are removed automatically."}
+            style={{ ...S.input, resize:"vertical", fontFamily:"inherit", lineHeight:1.7, marginBottom:14 }} />
+          <button onClick={handleLoad} disabled={!raw.trim()} style={{ ...S.btn, width:"100%", background: raw.trim() ? `linear-gradient(135deg,${C.purple},#9333ea)` : "#1e293b", color: raw.trim() ? "#fff" : "#475569" }}>
+            {T.subtitlesLoadBtn || "Load transcript"}
+          </button>
+        </div>
+        <p style={{ color:"#475569", fontSize:11, lineHeight:1.6 }}>
+          {T.subtitlesCopyrightNote || "🔒 Nothing you paste here is stored — the full text stays only in this browser tab. Only the specific words/phrases you choose to save are added to your Vocabulary Builder."}
+        </p>
+      </div>
+    );
+  }
+
+  // ── STEP 2: interactive transcript ──
+  return (
+    <div style={{ position:"relative" }}>
+      {toast && (
+        <div style={{ position:"fixed", top:70, left:"50%", transform:"translateX(-50%)", background:C.green, color:"#fff", padding:"9px 18px", borderRadius:99, fontSize:12, fontWeight:700, zIndex:9999, boxShadow:"0 4px 16px rgba(34,197,94,0.4)" }}>
+          {toast}
+        </div>
+      )}
+      <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:12 }}>
+        <p style={{ color:C.purpleLight, fontSize:12, fontWeight:700, letterSpacing:1, margin:0 }}>
+          🎬 {sourceTitle.trim() || (T.subtitlesDefaultFolder || "Subtitles")}
+        </p>
+        <button onClick={handleReset} style={{ ...S.btn, padding:"6px 12px", fontSize:11, background:C.card, border:`1px solid ${C.border}`, color:"#94a3b8" }}>
+          {T.subtitlesLoadNew || "↺ Load a different transcript"}
+        </button>
+      </div>
+
+      {sessionSaved.length > 0 && (
+        <p style={{ color:"#64748b", fontSize:11, marginBottom:10 }}>
+          {T.subtitlesSavedCount || "Saved this session:"} {sessionSaved.map(c => c.word).join("、")}
+        </p>
+      )}
+
+      {lookupError && !selection && (
+        <div style={{ background:"rgba(239,68,68,0.1)", border:`1px solid rgba(239,68,68,0.3)`, borderRadius:10, padding:"9px 14px", marginBottom:12 }}>
+          <p style={{ color:C.red, fontSize:12, margin:0 }}>{lookupError}</p>
+        </div>
+      )}
+
+      <div ref={containerRef} onMouseUp={handleMouseUp} style={{ ...S.card, marginBottom: selection ? 90 : 20 }}>
+        {lines.map((line, i) => (
+          <p key={i} data-subtitle-line
+            style={{ color:"#e2e8f0", fontSize:15, lineHeight:2.1, margin:"0 0 6px", cursor:"text", userSelect:"text" }}>
+            {line}
+          </p>
+        ))}
+      </div>
+
+      {selection && (
+        <div style={{ position:"fixed", left:"50%", bottom:16, transform:"translateX(-50%)", width:"92%", maxWidth:560, background:"linear-gradient(135deg,#1e1b4b,#0f172a)", border:`1.5px solid ${C.purpleLight}`, borderRadius:14, padding:"14px 16px", boxShadow:"0 8px 30px rgba(0,0,0,0.5)", zIndex:9998 }}>
+          <p style={{ color:"#f1f5f9", fontSize:13, margin:"0 0 4px" }}>「<b>{selection.text}</b>」</p>
+          {lookupError && <p style={{ color:C.red, fontSize:11, margin:"0 0 8px" }}>{lookupError}</p>}
+          <div style={{ display:"flex", gap:8 }}>
+            <button onClick={() => setSelection(null)} style={{ ...S.btn, flex:1, padding:"9px 12px", fontSize:12, background:C.card, border:`1px solid ${C.border}`, color:"#94a3b8" }}>
+              {T.cancel || "Cancel"}
+            </button>
+            <button onClick={lookupAndSave} disabled={lookupLoading} style={{ ...S.btn, flex:2, padding:"9px 12px", fontSize:12, background:lookupLoading?"rgba(139,92,246,0.15)":`linear-gradient(135deg,${C.purple},#9333ea)`, color:lookupLoading?"#64748b":"#fff" }}>
+              {lookupLoading ? "⏳ …" : (T.subtitlesLookupSaveBtn || "🔍 Look up & save")}
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ─── Shared exercise rendering (used by PracticeSet and ContentAnalyzer) ─────────
+const SKILL_COLORS = {
+  pronunciation:"#f59e0b", listening:"#06b6d4", conversation:"#22c55e",
+  jlpt:"#a78bfa", reading:"#fb923c", kanji:"#e879f9", grammar:"#60a5fa"
+};
+
+function ExerciseCard({ item, revealed, onReveal }) {
+  const color = SKILL_COLORS[item.skill] || C.purpleLight;
+  return (
+    <div style={{ ...S.card, borderLeft:`3px solid ${color}` }}>
+      <div style={{ display:"flex", justifyContent:"space-between", marginBottom:6 }}>
+        <span style={{ color, fontSize:11, fontWeight:700 }}>{SKILL_LABELS[item.skill] || item.skill}</span>
+        <span style={{ color:"#64748b", fontSize:11 }}>{item.type}</span>
+      </div>
+      <p style={{ color:"#f1f5f9", fontSize:14, lineHeight:1.8, margin:"0 0 10px", whiteSpace:"pre-wrap" }}>{item.prompt}</p>
+      {revealed ? (
+        <div style={{ background:"rgba(34,197,94,0.06)", borderRadius:10, padding:"10px 12px" }}>
+          <p style={{ color:C.green, fontSize:11, fontWeight:700, margin:"0 0 4px" }}>✅ ANSWER</p>
+          <p style={{ color:"#f1f5f9", fontSize:13, margin:"0 0 6px" }}>{item.answer}</p>
+          {item.tip && <p style={{ color:"#94a3b8", fontSize:12, margin:"0 0 6px", fontStyle:"italic" }}>💬 {item.tip}</p>}
+          {item.source_url && (
+            <a href={item.source_url} target="_blank" rel="noopener noreferrer"
+              style={{ display:"inline-block", color:C.teal, fontSize:11, textDecoration:"none", background:"rgba(6,182,212,0.08)", border:"1px solid rgba(6,182,212,0.2)", padding:"3px 10px", borderRadius:6, fontWeight:600 }}>
+              🔗 {item.source_url.replace(/https?:\/\/(www\.)?/,"").split("/")[0]}
+            </a>
+          )}
+        </div>
+      ) : (
+        <button onClick={onReveal} style={{ padding:"6px 14px", borderRadius:8, background:C.card, border:`1px solid ${C.border}`, color:"#94a3b8", fontSize:11, cursor:"pointer" }}>
+          Show answer
+        </button>
+      )}
+    </div>
+  );
+}
+
+// ─── CONTENT ANALYZER (GAKU Extension-style: paste text, get 10–20 leveled activities) ──
+function ContentAnalyzer({ form }) {
+  const [source, setSource] = useState("");
+  const [items, setItems] = useState([]);
+  const [revealed, setRevealed] = useState({});
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [activeSkillFilter, setActiveSkillFilter] = useState("all");
+
+  const analyze = async () => {
+    const trimmed = source.trim();
+    if (!trimmed) { setError("Paste some Japanese text (or a video's subtitles/description) first."); return; }
+    setLoading(true); setError(""); setItems([]); setRevealed({}); setActiveSkillFilter("all");
+    try {
+      const res = await fetch("/api/claude", {
+        method:"POST", headers:{"Content-Type":"application/json"},
+        body: JSON.stringify({ model:"claude-sonnet-4-20250514", max_tokens:4500,
+          messages:[{ role:"user", content:`You are a Japanese teacher using CLT (Communicative Language Teaching). The student's JLPT level is ${form.jlpt}.
+
+The student just encountered this piece of Japanese content (could be a sentence, an article, video subtitles/dialogue, or a social media caption). Analyze it and build practice activities directly FROM it — reuse its actual words, kanji, and sentences rather than generic examples.
+
+CONTENT TO ANALYZE:
+"""
+${trimmed.slice(0, 6000)}
+"""
+
+Create between 10 and 20 practice activities (choose a count that fits the amount of content — don't pad with repetition if the content is short). RULES:
+1. Every activity must be grounded in the actual content above — quote or adapt real words/sentences from it, don't invent unrelated material.
+2. JAPANESE FIRST: every prompt must contain real Japanese text from (or directly derived from) the content.
+3. Scale difficulty to ${form.jlpt}:
+   - N5: ask about basic kanji readings, simple vocabulary meaning, and simple comprehension ("元気？と聞かれたら何と返しますか？" style)
+   - N4: basic grammar points used in the text, simple comprehension questions
+   - N3: sentence meaning, grammar function of specific phrases, paraphrase
+   - N2: nuance, formal/casual register differences, more complex grammar
+   - N1: literary/formal nuance, implied meaning, stylistic questions
+4. Mix activity types: kanji readings from the text, vocabulary meaning, "what does this sentence mean?", grammar point explanation, fill-in-the-blank using a real sentence from the content with the target word blanked out and 4 choices ①②③④, and a short output task (e.g. "summarize this in one Japanese sentence" or "how would you respond to this?").
+5. For fill-in-the-blank, ALWAYS include the full original Japanese sentence with ___ for the blank AND the ①②③④ choices in the same prompt.
+
+Return fields for each activity:
+- skill: one of vocabulary, kanji, grammar, reading, listening, conversation
+- type: short English label (e.g. "Kanji reading", "Meaning check", "Fill-in-the-blank", "Comprehension", "Output task")
+- prompt: self-contained, must feature real Japanese text from the content
+- answer: correct answer (in Japanese when applicable)
+- tip: one short CLT-style tip
+
+Respond ONLY with a valid JSON array, no markdown, no backticks:
+[{"skill":"","type":"","prompt":"","answer":"","tip":""}]` }]
+        })
+      });
+      const d = await res.json();
+      const text = d.content?.map(c=>c.text||"").join("") || "[]";
+      const parsed = JSON.parse(text.replace(/```json|```/g,"").trim());
+      if (Array.isArray(parsed) && parsed.length) {
+        setItems(parsed);
+      } else {
+        setError("Couldn't generate activities from that content. Try pasting more text.");
+      }
+    } catch { setError("Could not analyze this content right now. Please try again."); }
+    setLoading(false);
+  };
+
+  const filteredItems = activeSkillFilter === "all" ? items : items.filter(it => it.skill === activeSkillFilter);
+  const skillsInResult = [...new Set(items.map(it => it.skill))];
+
+  return (
+    <div>
+      <div style={{ ...S.card, marginBottom:16 }}>
+        <p style={{ color:C.teal, fontSize:12, fontWeight:700, letterSpacing:1, marginBottom:4 }}>✨ CREATE FROM CONTENT</p>
+        <p style={{ color:"#64748b", fontSize:12, marginBottom:12, lineHeight:1.7 }}>
+          Paste Japanese text you're reading or watching — an article, video subtitles/description, a caption, a message — and GAKU will build {form.jlpt}-level activities from it, just like GAKU Reader does on the web.
+        </p>
+        <textarea
+          value={source}
+          onChange={e=>setSource(e.target.value)}
+          placeholder="日本語のテキストをここに貼り付けてください... (paste Japanese text, subtitles, or a caption here)"
+          rows={6}
+          style={{ width:"100%", boxSizing:"border-box", background:"rgba(255,255,255,0.03)", border:`1px solid ${C.border}`, borderRadius:10, color:"#f1f5f9", fontSize:13, padding:"10px 12px", marginBottom:12, resize:"vertical", fontFamily:"inherit" }}
+        />
+        <button onClick={analyze} disabled={loading} style={{ ...S.btn, width:"100%", background:loading?"rgba(6,182,212,0.15)":`linear-gradient(135deg,${C.teal},#0891b2)`, color:loading?"#64748b":"#fff" }}>
+          {loading ? "⏳ Analyzing content..." : (items.length ? "🔄 Analyze again" : "Analyze & Generate Activities ✨")}
+        </button>
+        {error && <p style={{ color:C.red, fontSize:12, marginTop:10 }}>{error}</p>}
+      </div>
+
+      {items.length > 0 && (
+        <>
+          <div style={{ display:"flex", gap:6, flexWrap:"wrap", marginBottom:12 }}>
+            <button onClick={()=>setActiveSkillFilter("all")} style={{ padding:"4px 10px", borderRadius:20, fontSize:11, fontWeight:700, cursor:"pointer", border:`1px solid ${activeSkillFilter==="all"?C.purpleLight:C.border}`, background:activeSkillFilter==="all"?"rgba(168,85,247,0.15)":C.card, color:activeSkillFilter==="all"?C.purpleLight:"#64748b" }}>
+              すべて ({items.length})
+            </button>
+            {skillsInResult.map(s => (
+              <button key={s} onClick={()=>setActiveSkillFilter(s)} style={{ padding:"4px 10px", borderRadius:20, fontSize:11, fontWeight:700, cursor:"pointer", border:`1px solid ${activeSkillFilter===s?(SKILL_COLORS[s]||C.purpleLight):C.border}`, background:activeSkillFilter===s?"rgba(0,0,0,0.15)":C.card, color:activeSkillFilter===s?(SKILL_COLORS[s]||C.purpleLight):"#64748b" }}>
+                {SKILL_LABELS[s]||s} ({items.filter(it=>it.skill===s).length})
+              </button>
+            ))}
+          </div>
+          <div style={{ display:"flex", flexDirection:"column", gap:12 }}>
+            {filteredItems.map((it,i) => {
+              const globalIdx = items.indexOf(it);
+              return (
+                <ExerciseCard key={i} item={it} revealed={!!revealed[globalIdx]} onReveal={()=>setRevealed(r=>({...r,[globalIdx]:true}))} />
+              );
+            })}
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
+
 // ─── PRACTICE SET (built from selected skills only) ─────────────────────────────
 // JLPT links by level and section
 const JLPT_LINKS = {
@@ -4012,11 +4429,6 @@ Respond ONLY with a valid JSON array, no markdown, no backticks:
     setLoading(false);
   };
 
-  const skillColors = {
-    pronunciation:"#f59e0b", listening:"#06b6d4", conversation:"#22c55e",
-    jlpt:"#a78bfa", reading:"#fb923c", kanji:"#e879f9", grammar:"#60a5fa"
-  };
-
   const filteredItems = activeSkillFilter === "all" ? items : items.filter(it => it.skill === activeSkillFilter);
   const skillsInResult = [...new Set(items.map(it => it.skill))];
 
@@ -4069,7 +4481,7 @@ Respond ONLY with a valid JSON array, no markdown, no backticks:
               すべて ({items.length})
             </button>
             {skillsInResult.map(s => (
-              <button key={s} onClick={()=>setActiveSkillFilter(s)} style={{ padding:"4px 10px", borderRadius:20, fontSize:11, fontWeight:700, cursor:"pointer", border:`1px solid ${activeSkillFilter===s?(skillColors[s]||C.purpleLight):C.border}`, background:activeSkillFilter===s?`rgba(0,0,0,0.15)`:C.card, color:activeSkillFilter===s?(skillColors[s]||C.purpleLight):"#64748b" }}>
+              <button key={s} onClick={()=>setActiveSkillFilter(s)} style={{ padding:"4px 10px", borderRadius:20, fontSize:11, fontWeight:700, cursor:"pointer", border:`1px solid ${activeSkillFilter===s?(SKILL_COLORS[s]||C.purpleLight):C.border}`, background:activeSkillFilter===s?`rgba(0,0,0,0.15)`:C.card, color:activeSkillFilter===s?(SKILL_COLORS[s]||C.purpleLight):"#64748b" }}>
                 {SKILL_LABELS[s]||s} ({items.filter(it=>it.skill===s).length})
               </button>
             ))}
@@ -4077,33 +4489,9 @@ Respond ONLY with a valid JSON array, no markdown, no backticks:
 
           <div style={{ display:"flex", flexDirection:"column", gap:12 }}>
             {filteredItems.map((it,i) => {
-              const color = skillColors[it.skill] || C.purpleLight;
               const globalIdx = items.indexOf(it);
               return (
-                <div key={i} style={{ ...S.card, borderLeft:`3px solid ${color}` }}>
-                  <div style={{ display:"flex", justifyContent:"space-between", marginBottom:6 }}>
-                    <span style={{ color, fontSize:11, fontWeight:700 }}>{SKILL_LABELS[it.skill] || it.skill}</span>
-                    <span style={{ color:"#64748b", fontSize:11 }}>{it.type}</span>
-                  </div>
-                  <p style={{ color:"#f1f5f9", fontSize:14, lineHeight:1.8, margin:"0 0 10px", whiteSpace:"pre-wrap" }}>{it.prompt}</p>
-                  {revealed[globalIdx] ? (
-                    <div style={{ background:"rgba(34,197,94,0.06)", borderRadius:10, padding:"10px 12px" }}>
-                      <p style={{ color:C.green, fontSize:11, fontWeight:700, margin:"0 0 4px" }}>✅ ANSWER</p>
-                      <p style={{ color:"#f1f5f9", fontSize:13, margin:"0 0 6px" }}>{it.answer}</p>
-                      {it.tip && <p style={{ color:"#94a3b8", fontSize:12, margin:"0 0 6px", fontStyle:"italic" }}>💬 {it.tip}</p>}
-                      {it.source_url && (
-                        <a href={it.source_url} target="_blank" rel="noopener noreferrer"
-                          style={{ display:"inline-block", color:C.teal, fontSize:11, textDecoration:"none", background:"rgba(6,182,212,0.08)", border:"1px solid rgba(6,182,212,0.2)", padding:"3px 10px", borderRadius:6, fontWeight:600 }}>
-                          🔗 {it.source_url.replace(/https?:\/\/(www\.)?/,"").split("/")[0]}
-                        </a>
-                      )}
-                    </div>
-                  ) : (
-                    <button onClick={()=>setRevealed(r=>({...r,[globalIdx]:true}))} style={{ padding:"6px 14px", borderRadius:8, background:C.card, border:`1px solid ${C.border}`, color:"#94a3b8", fontSize:11, cursor:"pointer" }}>
-                      Show answer
-                    </button>
-                  )}
-                </div>
+                <ExerciseCard key={i} item={it} revealed={!!revealed[globalIdx]} onReveal={()=>setRevealed(r=>({...r,[globalIdx]:true}))} />
               );
             })}
           </div>
@@ -4674,6 +5062,7 @@ function Dashboard({ form, onEdit }) {
   const [msDone, setMsDone] = useState([]);
   const [showHelp, setShowHelp] = useState(false);
   const [tab, setTab] = useState("schedule");
+  const [resourceSubTab, setResourceSubTab] = useState("links");
   const [weekTheme, setWeekTheme] = useState("");
   const [aiScheduleLoading, setAiScheduleLoading] = useState(false);
   const { currentWeek, totalWeeks } = getWeekInfo(form);
@@ -4779,10 +5168,15 @@ function Dashboard({ form, onEdit }) {
 
   const TABS = [
     { id:"schedule",   label: T.tabSchedule },
-    { id:"practice",   label: T.tabPractice },
     { id:"vocabulary", label: T.tabVocabulary },
+    { id:"subtitles",  label: T.tabSubtitles || "🎬 字幕帳" },
     { id:"resources",  label: T.tabResources },
     { id:"milestones", label: T.tabMilestones },
+  ];
+  const RESOURCE_SUBTABS = [
+    { id:"links",    label: "🔗 " + (T.tabResources || "Resources") },
+    { id:"practice", label: T.tabPractice },
+    { id:"content",  label: "✨ From Content" },
   ];
 
   return (
@@ -4891,12 +5285,25 @@ function Dashboard({ form, onEdit }) {
           </div>
         )}
 
-        {tab==="practice" && <PracticeSet form={form} />}
-
         {tab==="vocabulary" && <VocabBuilder form={form} />}
+
+        {tab==="subtitles" && <SubtitleVocabBuilder form={form} />}
 
         {tab==="resources" && (
           <div>
+            <div style={{ display:"flex", gap:6, marginBottom:16, overflowX:"auto", paddingBottom:4 }}>
+              {RESOURCE_SUBTABS.map(st => (
+                <button key={st.id} onClick={()=>setResourceSubTab(st.id)} style={{ padding:"7px 12px", borderRadius:20, border:`1.5px solid ${resourceSubTab===st.id?C.teal:C.border}`, background:resourceSubTab===st.id?"rgba(6,182,212,0.12)":C.card, color:resourceSubTab===st.id?C.teal:"#64748b", fontSize:11, fontWeight:700, cursor:"pointer", whiteSpace:"nowrap" }}>
+                  {st.label}
+                </button>
+              ))}
+            </div>
+
+            {resourceSubTab==="practice" && <PracticeSet form={form} />}
+            {resourceSubTab==="content" && <ContentAnalyzer form={form} />}
+
+            {resourceSubTab==="links" && (
+            <div>
             {(LEVEL_RESOURCES[form.jlpt] || []).length > 0 && (
               <div style={{ ...S.card, marginBottom:16, borderLeft:`3px solid ${C.teal}` }}>
                 <p style={{ color:C.teal, fontSize:12, fontWeight:700, letterSpacing:1, marginBottom:4 }}>{T.recommendedForLevel}</p>
@@ -4946,6 +5353,8 @@ function Dashboard({ form, onEdit }) {
                 ))}
               </div>
             </div>
+            </div>
+            )}
           </div>
         )}
 
@@ -4977,24 +5386,223 @@ function Dashboard({ form, onEdit }) {
 }
 
 // ─── ROOT ────────────────────────────────────────────────────────────────────────
-export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail }) {
+// ─── ACCOUNT: login / signup with optional GAKU invite code ──────────────────
+function AuthScreen({ onAuthed, T, prefillEmail, initialMode }) {
+  const [mode, setMode] = useState(initialMode || "login"); // login | signup
+  const [email, setEmail] = useState(prefillEmail || "");
+  const [password, setPassword] = useState("");
+  const [inviteCode, setInviteCode] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [err, setErr] = useState("");
+
+  if (!supabase) {
+    return <p style={{ color:"#f87171", fontSize:13 }}>Account features are not configured yet.</p>;
+  }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setErr(""); setBusy(true);
+    try {
+      if (mode === "signup") {
+        if (inviteCode.trim()) {
+          const vRes = await fetch("/api/validate-invite", {
+            method: "POST", headers: { "Content-Type":"application/json" },
+            body: JSON.stringify({ code: inviteCode.trim(), email }),
+          });
+          const vData = await vRes.json();
+          if (!vRes.ok) throw new Error(vData.error || "Invalid invite code.");
+        }
+        const { data, error } = await supabase.auth.signUp({ email, password });
+        if (error) throw error;
+        const userId = data?.user?.id;
+        if (userId && inviteCode.trim()) {
+          await fetch("/api/redeem-invite", {
+            method: "POST", headers: { "Content-Type":"application/json" },
+            body: JSON.stringify({ code: inviteCode.trim(), userId }),
+          });
+        }
+        if (userId) {
+          const pRes = await fetch("/api/create-profile", {
+            method: "POST", headers: { "Content-Type":"application/json" },
+            body: JSON.stringify({ userId, email, isGakuStudent: !!inviteCode.trim() }),
+          });
+          if (!pRes.ok) {
+            const pData = await pRes.json().catch(() => ({}));
+            throw new Error(pData.error || "Failed to save your profile.");
+          }
+        }
+      } else {
+        const { error } = await supabase.auth.signInWithPassword({ email, password });
+        if (error) throw error;
+      }
+      onAuthed();
+    } catch (e2) {
+      setErr(e2.message || "Something went wrong.");
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  return (
+    <div style={{ minHeight:"100vh", background:"linear-gradient(160deg,#0a0f1e 0%,#0f172a 60%,#0a0f1e 100%)", display:"flex", alignItems:"center", justifyContent:"center", padding:24 }}>
+      <form onSubmit={handleSubmit} style={{ width:"100%", maxWidth:380, background:"rgba(255,255,255,0.03)", border:"1.5px solid rgba(255,255,255,0.1)", borderRadius:20, padding:28 }}>
+        <h2 style={{ color:"#f1f5f9", fontSize:20, fontWeight:900, margin:"0 0 18px", textAlign:"center" }}>
+          {mode === "login" ? (T?.loginTitle || "Log In") : (T?.signupTitle || "Create Your Account")}
+        </h2>
+        <input type="email" required placeholder={T?.emailPlaceholder || "Email"} value={email} onChange={e=>setEmail(e.target.value)}
+          style={{ width:"100%", boxSizing:"border-box", padding:"11px 14px", marginBottom:10, background:"#0f172a", border:"1.5px solid rgba(255,255,255,0.1)", borderRadius:10, color:"#f1f5f9", fontSize:14 }} />
+        <input type="password" required minLength={6} placeholder={T?.passwordPlaceholder || "Password"} value={password} onChange={e=>setPassword(e.target.value)}
+          style={{ width:"100%", boxSizing:"border-box", padding:"11px 14px", marginBottom:10, background:"#0f172a", border:"1.5px solid rgba(255,255,255,0.1)", borderRadius:10, color:"#f1f5f9", fontSize:14 }} />
+        {mode === "signup" && (
+          <input placeholder={T?.invitationCodeOptional || "GAKU invite code (optional)"} value={inviteCode} onChange={e=>setInviteCode(e.target.value)}
+            style={{ width:"100%", boxSizing:"border-box", padding:"11px 14px", marginBottom:10, background:"#0f172a", border:"1.5px solid rgba(255,255,255,0.1)", borderRadius:10, color:"#f1f5f9", fontSize:14 }} />
+        )}
+        {err && <p style={{ color:"#f87171", fontSize:12, margin:"0 0 10px" }}>{err}</p>}
+        <button type="submit" disabled={busy} style={{ width:"100%", padding:"12px", background:"linear-gradient(135deg,#7c3aed,#a855f7)", border:"none", borderRadius:10, color:"#fff", fontSize:14, fontWeight:800, cursor:"pointer", opacity:busy?0.6:1 }}>
+          {busy ? "…" : (mode === "login" ? (T?.loginButton || "Log In") : (T?.signupButton || "Sign Up"))}
+        </button>
+        <button type="button" onClick={()=>{setMode(m=>m==="login"?"signup":"login"); setErr("");}} style={{ display:"block", width:"100%", marginTop:14, background:"none", border:"none", color:"#94a3b8", fontSize:12, cursor:"pointer" }}>
+          {mode === "login" ? (T?.needAccount || "Need an account? Sign up") : (T?.haveAccount || "Already have an account? Log in")}
+        </button>
+      </form>
+    </div>
+  );
+}
+
+// ─── ACCOUNT: blocks the dashboard while a new device awaits dual approval ────
+function DeviceApprovalGate({ T }) {
+  return (
+    <div style={{ minHeight:"100vh", background:"linear-gradient(160deg,#0a0f1e 0%,#0f172a 60%,#0a0f1e 100%)", display:"flex", alignItems:"center", justifyContent:"center", padding:24, textAlign:"center" }}>
+      <div style={{ maxWidth:380 }}>
+        <p style={{ fontSize:36, margin:"0 0 12px" }}>📩</p>
+        <h2 style={{ color:"#f1f5f9", fontSize:18, fontWeight:900, margin:"0 0 10px" }}>{T?.deviceApprovalTitle || "New Device Detected"}</h2>
+        <p style={{ color:"#94a3b8", fontSize:13, lineHeight:1.6 }}>{T?.deviceApprovalDesc || "We've sent an approval email to you and to GAKU. Once both approve, this device will be unlocked — please check your inbox."}</p>
+      </div>
+    </div>
+  );
+}
+
+
+export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail, skipTrialPaywall }) {
+  const [authUser, setAuthUser] = useState(null);
+  const [authChecked, setAuthChecked] = useState(!supabase);
+  const [showAuthScreen, setShowAuthScreen] = useState(false);
+  const [authInitialMode, setAuthInitialMode] = useState("login");
+  const [deviceStatus, setDeviceStatus] = useState(null); // null | 'checking' | 'approved' | 'pending'
+  // True once we've confirmed (via the profiles table) that the logged-in
+  // account redeemed a GAKU invite code. These students should never hit the
+  // trial interaction paywall.
+  const [isGakuStudent, setIsGakuStudent] = useState(false);
   const [form, setForm] = useState(null);
   const [editing, setEditing] = useState(false);
   const [showPaywall, setShowPaywall] = useState(false);
+  // If the user arrived here from the diagnostic test result page (with name/email/jlpt
+  // in the URL), always land on the Edit Profile form first — even if a profile is
+  // already saved locally — so the freshly diagnosed name/email/JLPT level get applied.
+  const [forceForm, setForceForm] = useState(!!(initialName || initialEmail));
+  // Counts taps/clicks inside the dashboard. After 21 interactions, show the
+  // payment screen so students who haven't unlocked yet see the value of the app.
+  const [interactionCount, setInteractionCount] = useState(() => {
+    try { return parseInt(localStorage.getItem(scopedKey("gaku_interaction_count")) || "0", 10) || 0; } catch { return 0; }
+  });
+  // Remembers which emails have already used up their 10 free interactions, so if they
+  // re-enter their profile with the same email, they're sent straight to the payment screen.
+  const getPaywalledEmails = () => {
+    try { return JSON.parse(localStorage.getItem("gaku_paywalled_emails") || "[]"); } catch { return []; }
+  };
+  const markEmailPaywalled = (email) => {
+    if (!email) return;
+    try {
+      const list = getPaywalledEmails();
+      if (!list.includes(email)) { list.push(email); localStorage.setItem("gaku_paywalled_emails", JSON.stringify(list)); }
+    } catch {}
+  };
+  const handleDashboardInteraction = () => {
+    // Verified GAKU students (logged in + redeemed an invite code, or arrived
+    // here already invite-verified via self-study.jsx) get unlimited use.
+    if (skipTrialPaywall || (authUser && isGakuStudent)) return;
+    setInteractionCount(c => {
+      const next = c + 1;
+      try { localStorage.setItem(scopedKey("gaku_interaction_count"), String(next)); } catch {}
+      if (next >= 21) {
+        setShowPaywall(true);
+        markEmailPaywalled(form?.email);
+        try { localStorage.setItem(scopedKey("gaku_interaction_count"), "0"); } catch {}
+        return 0;
+      }
+      return next;
+    });
+  };
+  // NOTE: the initial (unscoped) form load used to happen here on mount, but that
+  // raced with Supabase's async getSession() — this component could paint once
+  // with ACTIVE_USER_ID still null (reading shared/legacy data) before the auth
+  // effect below corrected it. Removed; the effect below (keyed on authUser) now
+  // loads the correctly-scoped form once auth state is known, and we don't render
+  // the dashboard/form/vocab UI at all until authChecked is true (see the early
+  // return further down).
+  // Track the logged-in Supabase account (separate from the localStorage profile above).
   useEffect(() => {
-    try { const saved = localStorage.getItem("gaku_form"); if(saved) setForm(JSON.parse(saved)); } catch {}
+    if (!supabase) return;
+    supabase.auth.getSession().then(({ data }) => {
+      setAuthUser(data?.session?.user || null);
+      setAuthChecked(true);
+    });
+    const { data: sub } = supabase.auth.onAuthStateChange((_event, session) => {
+      setAuthUser(session?.user || null);
+      setShowAuthScreen(false);
+    });
+    return () => sub?.subscription?.unsubscribe();
   }, []);
+  // Once logged in, verify this device against known devices for the account —
+  // triggers the dual-approval email flow for unrecognized devices.
+  useEffect(() => {
+    // Keep the module-level storage scope in sync with whoever is logged in,
+    // then reload this student's own profile/vocab/interaction data (falls
+    // back to the unscoped legacy keys when logged out).
+    ACTIVE_USER_ID = authUser?.id || null;
+    try { const saved = localStorage.getItem(scopedKey("gaku_form")); setForm(saved ? JSON.parse(saved) : null); } catch { setForm(null); }
+    try { setInteractionCount(parseInt(localStorage.getItem(scopedKey("gaku_interaction_count")) || "0", 10) || 0); } catch { setInteractionCount(0); }
+    try { window.dispatchEvent(new Event("gaku_vocab_updated")); } catch {}
+    if (!authUser) { setDeviceStatus(null); setIsGakuStudent(false); return; }
+    setDeviceStatus("checking");
+    fetch("/api/check-gaku-student", {
+      method: "POST", headers: { "Content-Type":"application/json" },
+      body: JSON.stringify({ userId: authUser.id }),
+    })
+      .then(r => r.json())
+      .then(d => {
+        const confirmed = !!d?.isGakuStudent;
+        setIsGakuStudent(confirmed);
+        // Self-heal: if the paywall was already showing (e.g. from an earlier
+        // trial session, before this account was confirmed as a GAKU student),
+        // dismiss it now that we know for sure.
+        if (confirmed) setShowPaywall(false);
+      })
+      .catch(() => setIsGakuStudent(false));
+    fetch("/api/device-check", {
+      method: "POST", headers: { "Content-Type":"application/json" },
+      body: JSON.stringify({ userId: authUser.id, email: authUser.email, deviceId: getDeviceId(), deviceLabel: getDeviceLabel() }),
+    })
+      .then(r => r.json())
+      .then(d => setDeviceStatus(d.status || "pending"))
+      .catch(() => setDeviceStatus("pending"));
+  }, [authUser]);
   const handleSubmit = (f) => {
     // Preserve planStartDate from existing form (only set it once, on first save)
     const startDate = (form && form.planStartDate) ? form.planStartDate : new Date().toISOString();
     const saved = { ...f, planStartDate: startDate };
     setForm(saved);
     setEditing(false);
-    try { localStorage.setItem("gaku_form", JSON.stringify(saved)); } catch {}
-    setTimeout(() => setShowPaywall(true), 3000);
+    setForceForm(false);
+    try { localStorage.setItem(scopedKey("gaku_form"), JSON.stringify(saved)); } catch {}
+    // If this email already used up their free interactions before, go straight
+    // to the payment screen instead of letting them browse the dashboard again.
+    if (!skipTrialPaywall && !(authUser && isGakuStudent) && getPaywalledEmails().includes(saved.email)) {
+      setShowPaywall(true);
+    }
   };
   const handleEdit = () => setEditing(true);
-  const handleCancelEdit = () => setEditing(false);
+  const handleCancelEdit = () => { setEditing(false); setForceForm(false); };
   const prefilledForm = (initialName || initialEmail) ? {
     name: initialName || '',
     email: initialEmail || '',
@@ -5003,62 +5611,91 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
     jlpt: initialJlpt || '',
     hoursPerDay: '', daysPerWeek: '', skills: []
   } : undefined;
-  if (!form || editing) return <FormScreen onSubmit={handleSubmit} onBack={onBack} onCancel={form ? handleCancelEdit : undefined} initialJlpt={initialJlpt} initialForm={form || prefilledForm} />;
+  // When forced by URL params and a profile already exists, merge the existing saved
+  // answers with the freshly-diagnosed name/email/JLPT level (URL values take priority).
+  const formForEdit = form
+    ? { ...form, name: initialName || form.name, email: initialEmail || form.email, jlpt: initialJlpt || form.jlpt }
+    : prefilledForm;
+  const T = useUITranslations(form?.preferredLang || "English");
+  // Block all rendering until we know for sure whether someone is logged in (and
+  // who). This closes the race condition where the dashboard/vocab UI could mount
+  // for a moment with ACTIVE_USER_ID still null (before Supabase's async
+  // getSession() resolves), reading unscoped/shared data instead of the correct
+  // per-student data.
+  if (!authChecked) {
+    return (
+      <div style={{ minHeight:"60vh", display:"flex", alignItems:"center", justifyContent:"center", color:"#94a3b8", fontSize:13 }}>
+        {T.loading || "Loading..."}
+      </div>
+    );
+  }
+  // Set synchronously (not only via the effect below) so that any child
+  // component reading scoped storage during THIS render pass — e.g. a vocab
+  // list calling loadVocabData() in its own useState initializer — always sees
+  // the correct account, with no one-frame window where it could still read
+  // the previous user's (or nobody's) data.
+  ACTIVE_USER_ID = authUser?.id || null;
+  if (showAuthScreen) return <AuthScreen onAuthed={()=>setShowAuthScreen(false)} T={T} prefillEmail={form?.email} initialMode={authInitialMode} />;
+  if (authUser && deviceStatus === "pending") return <DeviceApprovalGate T={T} />;
+  if (!form || editing || forceForm) return <FormScreen onSubmit={handleSubmit} onBack={onBack} onCancel={form ? handleCancelEdit : undefined} initialJlpt={initialJlpt} initialForm={formForEdit} />;
   return (
-    <div style={{ position:"relative" }}>
+    <div style={{ position:"relative" }} onClickCapture={handleDashboardInteraction}>
       <Dashboard form={form} onEdit={handleEdit} />
+      {/* TEMP DEBUG — remove after confirming the counter works */}
+      <div style={{ position:"fixed", bottom:12, right:12, zIndex:99999, background:"rgba(0,0,0,0.75)", color:"#4ade80", fontSize:11, fontFamily:"monospace", padding:"4px 8px", borderRadius:6 }}>
+        count: {interactionCount}/21 {skipTrialPaywall ? "(skip)" : ""} {authUser && isGakuStudent ? "(gaku)" : ""}
+      </div>
       {showPaywall && (
         <div style={{ position:"fixed", inset:0, zIndex:9999, display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", background:"rgba(10,15,30,0.85)", backdropFilter:"blur(12px)" }}>
           <div style={{ background:"linear-gradient(135deg,#1e1b4b,#0f172a)", border:"1.5px solid rgba(139,92,246,0.4)", borderRadius:20, padding:"36px 32px", maxWidth:420, width:"90%", textAlign:"center", boxShadow:"0 8px 40px rgba(139,92,246,0.25)" }}>
             <p style={{ fontSize:28, margin:"0 0 6px" }}>🎌</p>
-            <h2 style={{ color:"#f1f5f9", fontSize:20, fontWeight:900, margin:"0 0 8px" }}>Your Study Plan is Ready!</h2>
-            <p style={{ color:"#94a3b8", fontSize:13, margin:"0 0 24px", lineHeight:1.6 }}>Unlock your personalized weekly schedule, practice sets, and vocabulary tools.</p>
-            <p style={{ color:"#a855f7", fontSize:10, fontWeight:800, margin:"0 0 6px", textAlign:"left", letterSpacing:1 }}>📱 APP ONLY</p>
+            <h2 style={{ color:"#f1f5f9", fontSize:20, fontWeight:900, margin:"0 0 8px" }}>{T.studyPlanReadyTitle}</h2>
+            <p style={{ color:"#94a3b8", fontSize:13, margin:"0 0 24px", lineHeight:1.6 }}>{T.studyPlanReadyDesc}</p>
+            <p style={{ color:"#a855f7", fontSize:10, fontWeight:800, margin:"0 0 6px", textAlign:"left", letterSpacing:1 }}>{T.appOnlyLabel}</p>
             <div style={{ display:"flex", flexDirection:"column", gap:8, marginBottom:14 }}>
               <a href="https://buy.stripe.com/6oU7sL7qWg7C7wV1OqbMQ00" target="_blank" rel="noopener noreferrer" style={{ display:"block", padding:"11px 14px", background:"linear-gradient(135deg,rgba(124,58,237,0.2),rgba(168,85,247,0.1))", border:"1.5px solid rgba(139,92,246,0.5)", borderRadius:10, color:"#f1f5f9", fontSize:12, fontWeight:700, cursor:"pointer", textDecoration:"none", textAlign:"left" }}>
-                <span style={{ color:"#a855f7", fontSize:10, fontWeight:800, display:"block", marginBottom:1 }}>MONTHLY</span>
-                💳 $14.99 / month
+                <span style={{ color:"#a855f7", fontSize:10, fontWeight:800, display:"block", marginBottom:1 }}>{T.monthlyLabel}</span>
+                💳 $14.99 {T.perMonth}
               </a>
               <a href="https://buy.stripe.com/28E28r9z46x2dVj0KmbMQ02" target="_blank" rel="noopener noreferrer" style={{ display:"block", padding:"11px 14px", background:"linear-gradient(135deg,rgba(6,182,212,0.2),rgba(6,182,212,0.1))", border:"1.5px solid rgba(6,182,212,0.5)", borderRadius:10, color:"#f1f5f9", fontSize:12, fontWeight:700, cursor:"pointer", textDecoration:"none", textAlign:"left" }}>
-                <span style={{ color:"#06b6d4", fontSize:10, fontWeight:800, display:"block", marginBottom:1 }}>3 MONTHS · Save 5%</span>
+                <span style={{ color:"#06b6d4", fontSize:10, fontWeight:800, display:"block", marginBottom:1 }}>{T.threeMonthsSave5}</span>
                 💳 $42.70 <span style={{ color:"#64748b", fontSize:10, fontWeight:400 }}>($14.23/mo)</span>
               </a>
               <a href="https://buy.stripe.com/28E5kD8v07B6bNbct4bMQ03" target="_blank" rel="noopener noreferrer" style={{ display:"block", padding:"11px 14px", background:"linear-gradient(135deg,rgba(34,197,94,0.2),rgba(34,197,94,0.1))", border:"1.5px solid rgba(34,197,94,0.5)", borderRadius:10, color:"#f1f5f9", fontSize:12, fontWeight:700, cursor:"pointer", textDecoration:"none", textAlign:"left" }}>
-                <span style={{ color:"#22c55e", fontSize:10, fontWeight:800, display:"block", marginBottom:1 }}>6 MONTHS · Save 10% ⭐</span>
+                <span style={{ color:"#22c55e", fontSize:10, fontWeight:800, display:"block", marginBottom:1 }}>{T.sixMonthsSave10}</span>
                 💳 $80.95 <span style={{ color:"#64748b", fontSize:10, fontWeight:400 }}>($13.49/mo)</span>
               </a>
             </div>
-            <p style={{ color:"#f59e0b", fontSize:10, fontWeight:800, margin:"0 0 6px", textAlign:"left", letterSpacing:1 }}>🎓 APP + LESSONS · 50% off lessons</p>
+            <p style={{ color:"#f59e0b", fontSize:10, fontWeight:800, margin:"0 0 6px", textAlign:"left", letterSpacing:1 }}>{T.appLessonsLabel}</p>
             <div style={{ display:"flex", flexDirection:"column", gap:8, marginBottom:12 }}>
               <a href="https://buy.stripe.com/7sYcN53aGf3y9F3ct4bMQ06" target="_blank" rel="noopener noreferrer" style={{ display:"block", padding:"11px 14px", background:"linear-gradient(135deg,rgba(245,158,11,0.15),rgba(245,158,11,0.05))", border:"1.5px solid rgba(245,158,11,0.4)", borderRadius:10, color:"#f1f5f9", fontSize:12, fontWeight:700, cursor:"pointer", textDecoration:"none", textAlign:"left" }}>
-                <span style={{ color:"#f59e0b", fontSize:10, fontWeight:800, display:"block", marginBottom:1 }}>3 MONTHS · Save 5% · 30min/mo</span>
+                <span style={{ color:"#f59e0b", fontSize:10, fontWeight:800, display:"block", marginBottom:1 }}>{T.threeMonthsSave5_30min}</span>
                 💳 $68.95 <span style={{ color:"#64748b", fontSize:10, fontWeight:400 }}>($22.98/mo)</span>
               </a>
               <a href="https://buy.stripe.com/6oU8wP6mS6x23gF8cObMQ07" target="_blank" rel="noopener noreferrer" style={{ display:"block", padding:"11px 14px", background:"linear-gradient(135deg,rgba(245,158,11,0.15),rgba(245,158,11,0.05))", border:"1.5px solid rgba(245,158,11,0.4)", borderRadius:10, color:"#f1f5f9", fontSize:12, fontWeight:700, cursor:"pointer", textDecoration:"none", textAlign:"left" }}>
-                <span style={{ color:"#f59e0b", fontSize:10, fontWeight:800, display:"block", marginBottom:1 }}>3 MONTHS · Save 5% · 1hr/mo</span>
+                <span style={{ color:"#f59e0b", fontSize:10, fontWeight:800, display:"block", marginBottom:1 }}>{T.threeMonthsSave5_1hr}</span>
                 💳 $95.20 <span style={{ color:"#64748b", fontSize:10, fontWeight:400 }}>($31.73/mo)</span>
               </a>
               <a href="https://buy.stripe.com/dRm3cvaD8f3y18x0KmbMQ04" target="_blank" rel="noopener noreferrer" style={{ display:"block", padding:"11px 14px", background:"linear-gradient(135deg,rgba(251,191,36,0.2),rgba(251,191,36,0.08))", border:"1.5px solid rgba(251,191,36,0.5)", borderRadius:10, color:"#f1f5f9", fontSize:12, fontWeight:700, cursor:"pointer", textDecoration:"none", textAlign:"left" }}>
-                <span style={{ color:"#fbbf24", fontSize:10, fontWeight:800, display:"block", marginBottom:1 }}>6 MONTHS · Save 5% · 30min/mo ⭐</span>
+                <span style={{ color:"#fbbf24", fontSize:10, fontWeight:800, display:"block", marginBottom:1 }}>{T.sixMonthsSave5_30min}</span>
                 💳 $133.45 <span style={{ color:"#64748b", fontSize:10, fontWeight:400 }}>($22.24/mo)</span>
               </a>
               <a href="https://buy.stripe.com/9B628rcLg7B6eZn0KmbMQ05" target="_blank" rel="noopener noreferrer" style={{ display:"block", padding:"11px 14px", background:"linear-gradient(135deg,rgba(251,191,36,0.2),rgba(251,191,36,0.08))", border:"1.5px solid rgba(251,191,36,0.5)", borderRadius:10, color:"#f1f5f9", fontSize:12, fontWeight:700, cursor:"pointer", textDecoration:"none", textAlign:"left" }}>
-                <span style={{ color:"#fbbf24", fontSize:10, fontWeight:800, display:"block", marginBottom:1 }}>6 MONTHS · Save 10% · 1hr/mo ⭐ Best Value</span>
+                <span style={{ color:"#fbbf24", fontSize:10, fontWeight:800, display:"block", marginBottom:1 }}>{T.sixMonthsSave10_1hr}</span>
                 💳 $185.95 <span style={{ color:"#64748b", fontSize:10, fontWeight:400 }}>($30.99/mo)</span>
               </a>
             </div>
-            <p style={{ color:"#64748b", fontSize:11, margin:"0 0 12px", textAlign:"center" }}>
-              🎁 GAKUの生徒でない方は
-              <a href="https://seitojapanese.online" target="_blank" rel="noopener noreferrer" style={{ color:"#a855f7", textDecoration:"none" }}>無料体験レッスンを予約 →</a>
-            </p>
-            <div style={{ marginBottom:12 }}>
-              <p style={{ color:"#64748b", fontSize:11, margin:"0 0 6px" }}>GAKUの生徒の方は招待コードを入力</p>
-              <div style={{ display:"flex", gap:8 }}>
-                <input id="invite-code-input" placeholder="招待コードを入力..." style={{ flex:1, padding:"10px 12px", background:"#0f172a", border:"1.5px solid rgba(255,255,255,0.1)", borderRadius:8, color:"#f1f5f9", fontSize:13, outline:"none" }} />
-                <button onClick={()=>{ const code=document.getElementById("invite-code-input").value.trim(); if(code==="GAKU2025"||code==="GAKU"){setShowPaywall(false);}else{alert("Invalid code. Please try again.");}}} style={{ padding:"10px 16px", background:"rgba(6,182,212,0.15)", border:"1.5px solid rgba(6,182,212,0.4)", borderRadius:8, color:"#67e8f9", fontSize:13, fontWeight:700, cursor:"pointer" }}>確認</button>
-              </div>
+            <button onClick={()=>{ setAuthInitialMode("signup"); setShowAuthScreen(true); }} style={{ display:"block", width:"100%", padding:"11px 14px", background:"linear-gradient(135deg,rgba(34,197,94,0.15),rgba(34,197,94,0.05))", border:"1.5px solid rgba(34,197,94,0.45)", borderRadius:10, color:"#4ade80", fontSize:12, fontWeight:800, cursor:"pointer", textAlign:"center", marginBottom:8 }}>
+              🎓 {T.freePlanGakuStudent}
+            </button>
+            <button onClick={()=>{ setAuthInitialMode("login"); setShowAuthScreen(true); }} style={{ display:"block", width:"100%", background:"none", border:"none", color:"#64748b", fontSize:11, cursor:"pointer", marginBottom:14 }}>
+              {T.haveAccount || "Already have an account? Log in"}
+            </button>
+            <div style={{ marginBottom:14, textAlign:"center" }}>
+              <p style={{ color:"#64748b", fontSize:11, margin:"0 0 8px" }}>{T.wantToJoinGaku}</p>
+              <a href="https://www.seitojapanese.online/" target="_blank" rel="noopener noreferrer" style={{ display:"inline-block", padding:"9px 28px", background:"linear-gradient(135deg,#22c55e,#16a34a)", color:"#fff", borderRadius:10, fontSize:13, fontWeight:800, textDecoration:"none" }}>{T.yes}</a>
             </div>
-            <button onClick={()=>setShowPaywall(false)} style={{ background:"none", border:"none", color:"#475569", fontSize:11, cursor:"pointer" }}>後で確認する</button>
+            <button onClick={()=>setShowPaywall(false)} style={{ background:"none", border:"none", color:"#475569", fontSize:11, cursor:"pointer" }}>{T.checkLater}</button>
           </div>
         </div>
       )}

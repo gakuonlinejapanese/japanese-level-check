@@ -70,9 +70,6 @@ const RESOURCES_BY_LEVEL = {
 };
 
 
-const INVITE_CODES = ["GAKU2024", "SEITO2024", "JAPANESE01"];
-const usedCodes = {};
-
 const S = {
   wrap: { minHeight:"100vh", background:"linear-gradient(160deg,#0a0f1e 0%,#0f172a 60%,#0a0f1e 100%)", display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", fontFamily:"'Noto Sans JP',sans-serif", padding:"80px 16px 40px" },
   card: { background:"rgba(255,255,255,0.04)", border:"1px solid rgba(255,255,255,0.1)", borderRadius:20, padding:"32px 28px", width:"100%", maxWidth:520 },
@@ -140,86 +137,64 @@ function UnlockScreen({ email, plan, cefrLevel, name, resources: initialResource
   const [mode, setMode] = useState(null); // null | "free" | "pay" | "invite"
   const [inviteCode, setInviteCode] = useState("");
   const [inviteError, setInviteError] = useState("");
-  const [isStudent, setIsStudent] = useState(null);
   const [unlocked, setUnlocked] = useState(false);
+  const [inviteBusy, setInviteBusy] = useState(false);
+  // Only true when they actually redeemed a valid invite code — passed down so
+  // GakuApp's own 21-interaction trial counter is skipped for real GAKU students.
+  const [inviteVerified, setInviteVerified] = useState(false);
 
-  const handleInvite = () => {
+  const handleInvite = async () => {
     const code = inviteCode.trim().toUpperCase();
-    if (!INVITE_CODES.includes(code)) { setInviteError("Invalid code. Please try again."); return; }
-    if (usedCodes[code] && usedCodes[code] !== email) { setInviteError("This code has already been used."); return; }
-    usedCodes[code] = email;
-    setUnlocked(true);
-  };
-
-  const handlePay = async () => {
+    if (!code) { setInviteError("Please enter your invite code."); return; }
+    setInviteError("");
+    setInviteBusy(true);
     try {
-      if (!window.Stripe) { alert("Stripe failed to load. Please refresh."); return; }
-      const stripe = window.Stripe(STRIPE_KEY);
-      const { error } = await stripe.redirectToCheckout({
-        lineItems: [{ price: PRICE_ID, quantity: 1 }],
-        mode: "subscription",
-        successUrl: window.location.origin + "?success=true",
-        cancelUrl: window.location.href,
-        customerEmail: email,
+      const res = await fetch("/api/validate-invite", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ code, email }),
       });
-      if (error) alert(error.message);
-    } catch(e) { alert("Payment error: " + e.message); }
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok || !data?.ok) {
+        setInviteError(data?.error || "Invalid code. Please try again.");
+        return;
+      }
+      setInviteVerified(true);
+      setUnlocked(true);
+    } catch (e) {
+      setInviteError("Something went wrong. Please try again.");
+    } finally {
+      setInviteBusy(false);
+    }
   };
 
   if (unlocked) {
     const CEFR_TO_JLPT = { "Pre-A1":"Beginner","A1":"Beginner","A1–A2":"N5","A2":"N5","A2–B1":"N4","B1":"N3","B1–B2":"N3","B2":"N2","B2–C1":"N1","C1":"N1" };
-    return <GakuApp initialJlpt={CEFR_TO_JLPT[cefrLevel] || ""} />;
+    // Invite-verified students bypass GakuApp's built-in trial paywall entirely.
+    // Everyone else lands in GakuApp normally, where its own 21-interaction
+    // counter + paywall (payment plans + "Free — GAKU student" fallback) applies.
+    return <GakuApp initialJlpt={CEFR_TO_JLPT[cefrLevel] || ""} skipTrialPaywall={inviteVerified} />;
   }
-
-
 
   return (
     <div style={{ ...S.wrap }}>
       <div style={{ ...S.card }}>
-        {!mode && (
+        {mode === null && (
           <>
-            <p style={{ color:COLOR, fontSize:16, fontWeight:700, marginBottom:20, textAlign:"center" }}>Want to use it for FREE?</p>
-            <button onClick={() => setMode("free")} style={{ ...S.btn, background:`linear-gradient(135deg,#22c55e,#16a34a)`, color:"#fff" }}>Yes, use for FREE</button>
-            <div style={{ textAlign:"center", margin:"16px 0", color:"#475569", fontSize:12 }}>or</div>
-            <div style={{ background:"rgba(255,255,255,0.04)", borderRadius:14, padding:"20px", textAlign:"center", border:"1px solid rgba(168,85,247,0.3)" }}>
-              <p style={{ color:"#f1f5f9", fontSize:14, fontWeight:700, margin:"0 0 4px" }}>$10 / month</p>
-              <p style={{ color:"#94a3b8", fontSize:12, margin:"0 0 14px" }}>Full access · Cancel anytime</p>
-              <button onClick={handlePay} style={{ ...S.btn, background:`linear-gradient(135deg,${COLOR},#7c3aed)`, color:"#fff", marginTop:0 }}>Pay now</button>
-            </div>
+            <p style={{ color:COLOR, fontSize:16, fontWeight:700, marginBottom:20, textAlign:"center" }}>Do you have a GAKU invite code?</p>
+            <button onClick={() => setMode("invite")} style={{ ...S.btn, background:`linear-gradient(135deg,#22c55e,#16a34a)`, color:"#fff" }}>Yes, I have an invite code</button>
+            <button onClick={() => setUnlocked(true)} style={{ ...S.btn, background:"rgba(255,255,255,0.06)", color:"#94a3b8", border:"1px solid rgba(255,255,255,0.1)" }}>No, I don't</button>
           </>
         )}
 
-        {mode === "free" && isStudent === null && (
-          <>
-            <p style={{ color:"#f1f5f9", fontSize:15, fontWeight:700, marginBottom:20, textAlign:"center" }}>Are you a student at GAKU?</p>
-            <div style={{ display:"flex", gap:10 }}>
-              <button onClick={() => setIsStudent(true)} style={{ ...S.btn, background:`linear-gradient(135deg,#3b82f6,#1d4ed8)`, color:"#fff" }}>Yes</button>
-              <button onClick={() => setIsStudent(false)} style={{ ...S.btn, background:"rgba(255,255,255,0.06)", color:"#94a3b8", border:"1px solid rgba(255,255,255,0.1)" }}>No</button>
-            </div>
-          </>
-        )}
-
-        {mode === "free" && isStudent === true && (
+        {mode === "invite" && (
           <>
             <p style={{ color:"#f1f5f9", fontSize:15, fontWeight:700, marginBottom:6 }}>Enter your invitation code</p>
             <p style={{ color:"#64748b", fontSize:12, marginBottom:16 }}>Your personal code from GAKU</p>
-            <input value={inviteCode} onChange={e => { setInviteCode(e.target.value); setInviteError(""); }} placeholder="e.g. GAKU2024" style={{ ...S.input, marginBottom:8 }} />
+            <input value={inviteCode} onChange={e => { setInviteCode(e.target.value); setInviteError(""); }} placeholder="e.g. GAKU-7F3K9Q" style={{ ...S.input, marginBottom:8 }} />
             {inviteError && <p style={{ color:"#ef4444", fontSize:12, marginBottom:8 }}>{inviteError}</p>}
-            <button onClick={handleInvite} style={{ ...S.btn, background:`linear-gradient(135deg,${COLOR},#7c3aed)`, color:"#fff" }}>Unlock</button>
-          </>
-        )}
-
-        {mode === "free" && isStudent === false && (
-          <>
-            <p style={{ color:"#f1f5f9", fontSize:15, fontWeight:700, marginBottom:16, textAlign:"center" }}>Choose an option</p>
-            <a href="https://www.seitojapanese.online/" target="_blank" rel="noopener noreferrer" style={{ display:"block", ...S.btn, background:`linear-gradient(135deg,#f59e0b,#d97706)`, color:"#fff", textDecoration:"none", textAlign:"center", marginBottom:10 }}>
-              Take a free trial lesson
-            </a>
-            <div style={{ background:"rgba(255,255,255,0.04)", borderRadius:14, padding:"20px", textAlign:"center", border:"1px solid rgba(168,85,247,0.3)" }}>
-              <p style={{ color:"#f1f5f9", fontSize:14, fontWeight:700, margin:"0 0 4px" }}>$10 / month</p>
-              <p style={{ color:"#94a3b8", fontSize:12, margin:"0 0 14px" }}>Full access · Cancel anytime</p>
-              <button onClick={handlePay} style={{ ...S.btn, background:`linear-gradient(135deg,${COLOR},#7c3aed)`, color:"#fff", marginTop:0 }}>Pay now</button>
-            </div>
+            <button onClick={handleInvite} disabled={inviteBusy} style={{ ...S.btn, background:`linear-gradient(135deg,${COLOR},#7c3aed)`, color:"#fff", opacity: inviteBusy ? 0.7 : 1, cursor: inviteBusy ? "default" : "pointer" }}>{inviteBusy ? "Checking..." : "Unlock"}</button>
+            <button onClick={() => { setMode(null); setInviteError(""); }} style={{ ...S.btn, background:"none", border:"none", color:"#64748b", fontSize:12 }}>Back</button>
           </>
         )}
       </div>
