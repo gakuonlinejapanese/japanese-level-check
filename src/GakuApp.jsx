@@ -4086,7 +4086,7 @@ function SubtitleVocabBuilder({ form }) {
       <div>
         <div style={{ ...S.card, marginBottom:16 }}>
           <p style={{ color:C.purpleLight, fontSize:12, fontWeight:700, letterSpacing:1, marginBottom:6 }}>🎬 {T.subtitlesTitle || "Subtitles → Vocabulary"}</p>
-          <p style={{ color:"#64748b", fontSize:12, lineHeight:1.7, marginBottom:14 }}>
+          <p style={{ color:"#39ff14", fontSize:12, lineHeight:1.7, marginBottom:14 }}>
             {T.subtitlesDesc || "Paste subtitles or a transcript from a video you're already watching (e.g. YouTube's own \"Show transcript\" panel). Double-click a word or drag to select a phrase, then look it up and save it straight to your Vocabulary Builder."}
           </p>
           <label style={S.label}>{T.subtitlesSourceLabel || "Video title / source (optional — used as the folder name)"}</label>
@@ -4884,7 +4884,7 @@ Warm, under 100 words, English.` }]
       </div>
       <div style={{ background:"rgba(245,158,11,0.06)", borderLeft:`3px solid ${C.amber}`, borderRadius:8, padding:"12px 14px", marginBottom:12 }}>
         <p style={{ color:"#f1f5f9", fontSize:14, margin:"0 0 4px", fontWeight:600 }}>{prompt}</p>
-        <p style={{ color:"#64748b", fontSize:11, margin:0 }}>300〜800文字 · Communicative writing practice</p>
+        <p style={{ color:"#39ff14", fontSize:11, margin:0 }}>300〜800文字 · Communicative writing practice</p>
       </div>
       <textarea value={text} onChange={e=>setText(e.target.value)} placeholder="ここに書いてください..." rows={5} style={{ ...S.input, resize:"vertical", fontFamily:"inherit", lineHeight:1.8, marginBottom:8 }} />
       <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:10 }}>
@@ -5211,10 +5211,10 @@ function Dashboard({ form, onEdit }) {
             <div style={{ width:`${progress}%`, height:"100%", background:`linear-gradient(90deg,${C.purple},${C.purpleLight})`, borderRadius:99, transition:"width 0.4s" }} />
           </div>
           <div style={{ display:"flex", gap:12, marginTop:10, flexWrap:"wrap" }}>
-            <p style={{ color:"#64748b", fontSize:11, margin:0 }}>🎯 {form.displayGoal||form.goal}</p>
-            <p style={{ color:"#64748b", fontSize:11, margin:0 }}>📅 {form.timeline}</p>
-            <p style={{ color:"#64748b", fontSize:11, margin:0 }}>📊 {form.jlpt}</p>
-            <p style={{ color:"#64748b", fontSize:11, margin:0 }}>🌐 {form.preferredLang}</p>
+            <p style={{ color:"#39ff14", fontSize:11, margin:0 }}>🎯 {form.displayGoal||form.goal}</p>
+            <p style={{ color:"#39ff14", fontSize:11, margin:0 }}>📅 {form.timeline}</p>
+            <p style={{ color:"#39ff14", fontSize:11, margin:0 }}>📊 {form.jlpt}</p>
+            <p style={{ color:"#39ff14", fontSize:11, margin:0 }}>🌐 {form.preferredLang}</p>
           </div>
         </div>
 
