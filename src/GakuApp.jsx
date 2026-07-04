@@ -3710,11 +3710,11 @@ Respond ONLY in valid JSON array format (no markdown, no backticks, no preamble)
 
   return (
     <div>
-      <button onClick={onBack} style={{ background:"none", border:"none", color:"#64748b", fontSize:13, cursor:"pointer", padding:0, marginBottom:14 }}>← Back</button>
+      <button onClick={onBack} style={{ background:"none", border:"none", color:"#ffffff", fontSize:13, cursor:"pointer", padding:0, marginBottom:14 }}>← Back</button>
 
       <div style={{ ...S.card, marginBottom:16 }}>
         <p style={{ color:C.teal, fontSize:12, fontWeight:700, letterSpacing:1, marginBottom:4 }}>🔍 WORD SEARCH</p>
-        <p style={{ color:"#64748b", fontSize:12, marginBottom:12 }}>
+        <p style={{ color:"#ffffff", fontSize:12, marginBottom:12 }}>
           Search any Japanese word, kanji, or topic — N5 to N1 & native level
         </p>
         <div style={{ display:"flex", gap:8 }}>
@@ -3726,7 +3726,7 @@ Respond ONLY in valid JSON array format (no markdown, no backticks, no preamble)
             style={{ ...S.input, flex:1 }}
             autoFocus
           />
-          <button onClick={searchWord} disabled={!search.trim()||loading} style={{ ...S.btn, background:search.trim()?`linear-gradient(135deg,${C.teal},#0891b2)`:"#1e293b", color:search.trim()?"#fff":"#475569", whiteSpace:"nowrap", padding:"12px 18px" }}>
+          <button onClick={searchWord} disabled={!search.trim()||loading} style={{ ...S.btn, background:search.trim()?`linear-gradient(135deg,${C.teal},#0891b2)`:"#1e293b", color:search.trim()?"#fff":"#ffffff", whiteSpace:"nowrap", padding:"12px 18px" }}>
             {loading ? "..." : "Search"}
           </button>
         </div>
@@ -3865,10 +3865,10 @@ function VocabBuilder({ form }) {
       {/* ── VOCABULARY BUILDER (quick find) ── */}
       <div style={{ ...S.card, marginBottom:16 }}>
         <p style={{ color:C.teal, fontSize:12, fontWeight:700, letterSpacing:1, marginBottom:4 }}>{T.vocabBuilderTitle}</p>
-        <p style={{ color:"#64748b", fontSize:12, marginBottom:14 }}>{T.vocabBuilderDesc}</p>
+        <p style={{ color:"#ffffff", fontSize:12, marginBottom:14 }}>{T.vocabBuilderDesc}</p>
         <div style={{ display:"flex", gap:8 }}>
           <input value={search} onChange={e=>setSearch(e.target.value)} onKeyDown={e=>e.key==="Enter"&&findWords()} placeholder={T.vocabSearchPlaceholder} style={{ ...S.input, flex:1 }} />
-          <button onClick={findWords} disabled={!search.trim()||loading} style={{ ...S.btn, background:search.trim()?`linear-gradient(135deg,${C.teal},#0891b2)`:"#1e293b", color:search.trim()?"#fff":"#475569", whiteSpace:"nowrap", padding:"12px 18px" }}>
+          <button onClick={findWords} disabled={!search.trim()||loading} style={{ ...S.btn, background:search.trim()?`linear-gradient(135deg,${C.teal},#0891b2)`:"#1e293b", color:search.trim()?"#fff":"#ffffff", whiteSpace:"nowrap", padding:"12px 18px" }}>
             {loading?"...":T.findWordsBtn}
           </button>
         </div>
@@ -4091,13 +4091,13 @@ function SubtitleVocabBuilder({ form }) {
           <p style={{ color:"#39ff14", fontSize:12, lineHeight:1.7, marginBottom:14 }}>
             {T.subtitlesDesc || "Paste subtitles or a transcript from a video you're already watching (e.g. YouTube's own \"Show transcript\" panel). Double-click a word or drag to select a phrase, then look it up and save it straight to your Vocabulary Builder."}
           </p>
-          <label style={S.label}>{T.subtitlesSourceLabel || "Video title / source (optional — used as the folder name)"}</label>
+          <label style={{ ...S.label, color:"#ffffff" }}>{T.subtitlesSourceLabel || "Video title / source (optional — used as the folder name)"}</label>
           <input value={sourceTitle} onChange={e => setSourceTitle(e.target.value)} placeholder={T.subtitlesSourcePlaceholder || "e.g. NHK news 7/2"} style={{ ...S.input, marginBottom:12 }} />
-          <label style={S.label}>{T.subtitlesPasteLabel || "Paste subtitles / transcript here"}</label>
+          <label style={{ ...S.label, color:"#ffffff" }}>{T.subtitlesPasteLabel || "Paste subtitles / transcript here"}</label>
           <textarea value={raw} onChange={e => setRaw(e.target.value)} rows={10}
             placeholder={T.subtitlesPastePlaceholder || "Paste plain text or an .srt file's contents — timestamps and cue numbers are removed automatically."}
             style={{ ...S.input, resize:"vertical", fontFamily:"inherit", lineHeight:1.7, marginBottom:14 }} />
-          <button onClick={handleLoad} disabled={!raw.trim()} style={{ ...S.btn, width:"100%", background: raw.trim() ? `linear-gradient(135deg,${C.purple},#9333ea)` : "#1e293b", color: raw.trim() ? "#fff" : "#475569" }}>
+          <button onClick={handleLoad} disabled={!raw.trim()} style={{ ...S.btn, width:"100%", background: raw.trim() ? `linear-gradient(135deg,${C.purple},#9333ea)` : "#1e293b", color: raw.trim() ? "#fff" : "#ffffff" }}>
             {T.subtitlesLoadBtn || "Load transcript"}
           </button>
         </div>
@@ -5345,7 +5345,7 @@ function Dashboard({ form, onEdit }) {
             {(LEVEL_RESOURCES[form.jlpt] || []).length > 0 && (
               <div style={{ ...S.card, marginBottom:16, borderLeft:`3px solid ${C.teal}` }}>
                 <p style={{ color:C.teal, fontSize:12, fontWeight:700, letterSpacing:1, marginBottom:4 }}>{T.recommendedForLevel}</p>
-                <p style={{ color:"#64748b", fontSize:12, marginBottom:14 }}>{T.curatedFor} {form.jlpt}</p>
+                <p style={{ color:"#ffffff", fontSize:12, marginBottom:14 }}>{T.curatedFor} {form.jlpt}</p>
                 <div style={{ display:"flex", flexDirection:"column", gap:12 }}>
                   {(LEVEL_RESOURCES[form.jlpt] || []).map((r,i) => (
                     <div key={i} style={{ background:"rgba(6,182,212,0.04)", borderRadius:12, border:`1px solid rgba(6,182,212,0.15)`, padding:"14px 16px" }}>
@@ -5357,7 +5357,7 @@ function Dashboard({ form, onEdit }) {
                       <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:"3px 12px", marginBottom:10 }}>
                         {[[T.vocab,r.skills.vocab],[T.grammar,r.skills.grammar],[T.reading,r.skills.reading],[T.speaking,r.skills.speaking],[T.listening,r.skills.listening]].map(([label,val])=>(
                           <div key={label} style={{ display:"flex", alignItems:"center", gap:4 }}>
-                            <span style={{ color:"#64748b", fontSize:10, minWidth:60 }}>{label}</span>
+                            <span style={{ color:"#ffffff", fontSize:10, minWidth:60 }}>{label}</span>
                             <span style={{ fontSize:10, letterSpacing:1 }}>{"★".repeat(val)}{"☆".repeat(5-val)}</span>
                           </div>
                         ))}
@@ -5373,7 +5373,7 @@ function Dashboard({ form, onEdit }) {
 
             <div style={{ ...S.card }}>
               <p style={{ color:C.amber, fontSize:12, fontWeight:700, letterSpacing:1, marginBottom:4 }}>{T.yourResources}</p>
-              <p style={{ color:"#64748b", fontSize:12, marginBottom:16 }}>{T.curatedForLevel} {form.jlpt}, {T.skills} {(form.skills||[]).map(s=>T[SKILL_LABEL_KEY[s]]||SKILL_LABELS[s]).join(", ")}</p>
+              <p style={{ color:"#ffffff", fontSize:12, marginBottom:16 }}>{T.curatedForLevel} {form.jlpt}, {T.skills} {(form.skills||[]).map(s=>T[SKILL_LABEL_KEY[s]]||SKILL_LABELS[s]).join(", ")}</p>
               {selectedResources.length === 0 && <p style={{ color:"#64748b", fontSize:13 }}>{T.noResources}</p>}
               <div style={{ display:"flex", flexDirection:"column", gap:12 }}>
                 {selectedResources.map((r,i) => (
@@ -5399,7 +5399,7 @@ function Dashboard({ form, onEdit }) {
         {tab==="milestones" && (
           <div style={{ ...S.card }}>
             <p style={{ color:C.red, fontSize:12, fontWeight:700, letterSpacing:1, marginBottom:16 }}>{T.yourGoalRoadmap}</p>
-            <p style={{ color:"#64748b", fontSize:13, marginBottom:16 }}>{T.levelToGoal}: {form.jlpt} → {T.goal}: {form.displayGoal||form.goal}</p>
+            <p style={{ color:"#ffffff", fontSize:13, marginBottom:16 }}>{T.levelToGoal}: {form.jlpt} → {T.goal}: {form.displayGoal||form.goal}</p>
             {milestones.map((m,i) => (
               <div key={i} onClick={()=>setMsDone(p=>p.includes(i)?p.filter(x=>x!==i):[...p,i])} style={{ display:"flex", gap:12, padding:"12px 14px", borderRadius:12, background:msDone.includes(i)?"rgba(34,197,94,0.06)":C.card, border:`1px solid ${msDone.includes(i)?"rgba(34,197,94,0.2)":C.border}`, marginBottom:8, cursor:"pointer", alignItems:"flex-start" }}>
                 <div style={{ width:24, height:24, borderRadius:8, border:`2px solid ${msDone.includes(i)?C.green:C.border}`, background:msDone.includes(i)?C.green:"transparent", display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0 }}>
