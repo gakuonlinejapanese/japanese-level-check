@@ -171,6 +171,8 @@ const UI_TRANSLATIONS = {
     weeksRemaining: "weeks remaining",
     percentComplete: "% complete",
     refresh: "🔄 Refresh",
+    furiganaBtn: "ふりがな",
+    romajiBtn: "Romaji",
     aiBuilding: "✨ AI is building your schedule...",
     personalizing: "Personalizing your plan based on your goal and progress...",
     // Help modal
@@ -4168,15 +4170,48 @@ const SKILL_COLORS = {
   jlpt:"#a78bfa", reading:"#fb923c", kanji:"#e879f9", grammar:"#60a5fa"
 };
 
-function ExerciseCard({ item, revealed, onReveal }) {
+function ExerciseCard({ item, revealed, onReveal, T }) {
   const color = SKILL_COLORS[item.skill] || C.purpleLight;
+  const [furigana, setFurigana] = useState("");
+  const [romaji, setRomaji] = useState("");
+  const [loadingType, setLoadingType] = useState(null);
+
+  const fetchReading = async (mode) => {
+    setLoadingType(mode);
+    try {
+      const instruction = mode === "furigana"
+        ? `Add furigana in parentheses after every kanji word in this Japanese text. Return ONLY the text with furigana added, no explanation:\n\n${item.prompt}`
+        : `Convert this Japanese text to romaji (Hepburn romanization). Return ONLY the romaji text, no explanation:\n\n${item.prompt}`;
+      const res = await fetch("/api/claude", {
+        method:"POST", headers:{"Content-Type":"application/json"},
+        body: JSON.stringify({ model:"claude-sonnet-4-20250514", max_tokens:500,
+          messages:[{ role:"user", content: instruction }]
+        })
+      });
+      const d = await res.json();
+      const text = d.content?.map(c=>c.text||"").join("").trim() || "";
+      if (mode === "furigana") setFurigana(text); else setRomaji(text);
+    } catch {}
+    setLoadingType(null);
+  };
+
   return (
     <div style={{ ...S.card, borderLeft:`3px solid ${color}` }}>
       <div style={{ display:"flex", justifyContent:"space-between", marginBottom:6 }}>
         <span style={{ color, fontSize:11, fontWeight:700 }}>{SKILL_LABELS[item.skill] || item.skill}</span>
         <span style={{ color:"#64748b", fontSize:11 }}>{item.type}</span>
       </div>
-      <p style={{ color:"#f1f5f9", fontSize:14, lineHeight:1.8, margin:"0 0 10px", whiteSpace:"pre-wrap" }}>{item.prompt}</p>
+      <p style={{ color:"#f1f5f9", fontSize:14, lineHeight:1.8, margin:"0 0 6px", whiteSpace:"pre-wrap" }}>{item.prompt}</p>
+      <div style={{ display:"flex", gap:6, marginBottom:8 }}>
+        <button onClick={()=>fetchReading("furigana")} disabled={loadingType!==null} style={{ fontSize:11, color:"#67e8f9", fontWeight:700, background:"rgba(103,232,249,0.1)", padding:"4px 10px", borderRadius:8, border:"1px solid rgba(103,232,249,0.3)", cursor:"pointer" }}>
+          {loadingType==="furigana" ? "⏳" : (T?.furiganaBtn || "ふりがな")}
+        </button>
+        <button onClick={()=>fetchReading("romaji")} disabled={loadingType!==null} style={{ fontSize:11, color:"#c4b5fd", fontWeight:700, background:"rgba(196,181,253,0.1)", padding:"4px 10px", borderRadius:8, border:"1px solid rgba(196,181,253,0.3)", cursor:"pointer" }}>
+          {loadingType==="romaji" ? "⏳" : (T?.romajiBtn || "Romaji")}
+        </button>
+      </div>
+      {furigana && <p style={{ color:"#67e8f9", fontSize:12, margin:"0 0 4px", fontStyle:"italic", whiteSpace:"pre-wrap" }}>{furigana}</p>}
+      {romaji && <p style={{ color:"#c4b5fd", fontSize:12, margin:"0 0 8px", fontStyle:"italic", whiteSpace:"pre-wrap" }}>{romaji}</p>}
       {revealed ? (
         <div style={{ background:"rgba(34,197,94,0.06)", borderRadius:10, padding:"10px 12px" }}>
           <p style={{ color:C.green, fontSize:11, fontWeight:700, margin:"0 0 4px" }}>✅ ANSWER</p>
@@ -4298,7 +4333,7 @@ Respond ONLY with a valid JSON array, no markdown, no backticks:
             {filteredItems.map((it,i) => {
               const globalIdx = items.indexOf(it);
               return (
-                <ExerciseCard key={i} item={it} revealed={!!revealed[globalIdx]} onReveal={()=>setRevealed(r=>({...r,[globalIdx]:true}))} />
+                <ExerciseCard key={i} item={it} revealed={!!revealed[globalIdx]} onReveal={()=>setRevealed(r=>({...r,[globalIdx]:true}))} T={T} />
               );
             })}
           </div>
@@ -4491,7 +4526,7 @@ Respond ONLY with a valid JSON array, no markdown, no backticks:
             {filteredItems.map((it,i) => {
               const globalIdx = items.indexOf(it);
               return (
-                <ExerciseCard key={i} item={it} revealed={!!revealed[globalIdx]} onReveal={()=>setRevealed(r=>({...r,[globalIdx]:true}))} />
+                <ExerciseCard key={i} item={it} revealed={!!revealed[globalIdx]} onReveal={()=>setRevealed(r=>({...r,[globalIdx]:true}))} T={T} />
               );
             })}
           </div>
