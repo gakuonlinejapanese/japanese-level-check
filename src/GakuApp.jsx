@@ -4235,6 +4235,7 @@ function ExerciseCard({ item, revealed, onReveal, T }) {
 
 // ─── CONTENT ANALYZER (GAKU Extension-style: paste text, get 10–20 leveled activities) ──
 function ContentAnalyzer({ form }) {
+  const T = useUITranslations(form?.preferredLang || "English");
   const [source, setSource] = useState("");
   const [items, setItems] = useState([]);
   const [revealed, setRevealed] = useState({});
