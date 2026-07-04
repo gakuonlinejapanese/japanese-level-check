@@ -4447,6 +4447,7 @@ Return fields for each exercise:
 - skill: one of ${skills.join(", ")}
 - type: specific label in English (e.g. "Shadowing", "Role-play", "Kanji reading", "Grammar fill-in", "JLPT 4-choice", "Reading + output")
 - prompt: MUST start with or prominently feature Japanese text. Complete and self-contained.
+- IMPORTANT: Do NOT include furigana or kanji readings in parentheses anywhere in the prompt text. Write kanji as-is without any reading hints; the app has a separate furigana button for that.
 - answer: correct answer (in Japanese when applicable)
 - tip: one CLT tip mentioning a resource name
 - source_url: most relevant resource URL from the list above
