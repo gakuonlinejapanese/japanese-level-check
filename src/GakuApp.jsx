@@ -4375,6 +4375,7 @@ const JLPT_LINKS = {
 };
 
 function PracticeSet({ form }) {
+  const T = useUITranslations(form?.preferredLang || "English");
   const skills = form.skills || [];
   const skillLabels = skills.map(s => SKILL_LABELS[s] || s).join(", ");
   const jlptLinks = JLPT_LINKS[form.jlpt] || null;
