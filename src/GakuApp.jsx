@@ -3850,7 +3850,7 @@ function VocabBuilder({ form }) {
       <div style={{ display:"flex", gap:8, marginBottom:16, flexWrap:"wrap" }}>
         <button onClick={()=>setVocabView("library")} style={{ flex:1, ...S.btn, background:C.card, border:`1.5px solid ${C.border}`, color:"#f1f5f9", textAlign:"left", padding:"12px 14px" }}>
           <p style={{ margin:0, fontSize:13, fontWeight:700 }}>{T.libraryLabel}</p>
-          <p style={{ margin:"2px 0 0", fontSize:11, color:"#64748b" }}>{T.yourVocabSaved} · {totalSaved} {T.savedSuffix}</p>
+          <p style={{ margin:"2px 0 0", fontSize:11, color:"#ffffff" }}>{T.yourVocabSaved} · {totalSaved} {T.savedSuffix}</p>
         </button>
         <button onClick={()=>setVocabView("wordSearch")} style={{ flex:1, ...S.btn, background:`linear-gradient(135deg,rgba(168,85,247,0.2),rgba(124,58,237,0.15))`, border:`1.5px solid rgba(168,85,247,0.3)`, color:"#f1f5f9", textAlign:"left", padding:"12px 14px" }}>
           <p style={{ margin:0, fontSize:13, fontWeight:700 }}>{T.wordCardsLabel}</p>
@@ -4199,7 +4199,7 @@ function ExerciseCard({ item, revealed, onReveal, T }) {
     <div style={{ ...S.card, borderLeft:`3px solid ${color}` }}>
       <div style={{ display:"flex", justifyContent:"space-between", marginBottom:6 }}>
         <span style={{ color, fontSize:11, fontWeight:700 }}>{SKILL_LABELS[item.skill] || item.skill}</span>
-        <span style={{ color:"#64748b", fontSize:11 }}>{item.type}</span>
+        <span style={{ color:"#ffffff", fontSize:11 }}>{item.type}</span>
       </div>
       <p style={{ color:"#f1f5f9", fontSize:14, lineHeight:1.8, margin:"0 0 6px", whiteSpace:"pre-wrap" }}>{item.prompt}</p>
       <div style={{ display:"flex", gap:6, marginBottom:8 }}>
@@ -4302,7 +4302,7 @@ Respond ONLY with a valid JSON array, no markdown, no backticks:
     <div>
       <div style={{ ...S.card, marginBottom:16 }}>
         <p style={{ color:C.teal, fontSize:12, fontWeight:700, letterSpacing:1, marginBottom:4 }}>✨ CREATE FROM CONTENT</p>
-        <p style={{ color:"#64748b", fontSize:12, marginBottom:12, lineHeight:1.7 }}>
+        <p style={{ color:"#ffffff", fontSize:12, marginBottom:12, lineHeight:1.7 }}>
           Paste Japanese text you're reading or watching — an article, video subtitles/description, a caption, a message — and GAKU will build {form.jlpt}-level activities from it, just like GAKU Reader does on the web.
         </p>
         <textarea
@@ -4474,12 +4474,12 @@ Respond ONLY with a valid JSON array, no markdown, no backticks:
     <div>
       <div style={{ ...S.card, marginBottom:16 }}>
         <p style={{ color:C.purpleLight, fontSize:12, fontWeight:700, letterSpacing:1, marginBottom:4 }}>🎯 PRACTICE SET</p>
-        <p style={{ color:"#64748b", fontSize:12, marginBottom:8, lineHeight:1.7 }}>
-          Generated from what you selected in <strong style={{ color:"#94a3b8" }}>"WHAT DO YOU WANT TO STUDY?"</strong>:{" "}
+        <p style={{ color:"#ffffff", fontSize:12, marginBottom:8, lineHeight:1.7 }}>
+          Generated from what you selected in <strong style={{ color:"#ffffff" }}>"WHAT DO YOU WANT TO STUDY?"</strong>:{" "}
           {skills.length ? skills.map(s => SKILL_LABELS[s] || s).join(" · ") : "No skills selected — edit your profile to choose skills."}
         </p>
         {skills.length > 0 && (
-          <p style={{ color:"#475569", fontSize:11, marginBottom:12 }}>
+          <p style={{ color:"#ffffff", fontSize:11, marginBottom:12 }}>
             📚 {questionCount} exercises · {allResources.length} resources referenced
           </p>
         )}
@@ -5271,7 +5271,7 @@ function Dashboard({ form, onEdit }) {
               <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:8 }}>
                 <div>
                   <p style={{ color:C.purpleLight, fontSize:11, fontWeight:700, letterSpacing:1, margin:0 }}>📅 WEEK {currentWeek} / {totalWeeks}</p>
-                  <p style={{ color:"#64748b", fontSize:11, margin:"2px 0 0" }}>{totalWeeks - currentWeek} {T.weeksRemaining} · {Math.round((currentWeek/totalWeeks)*100)}{T.percentComplete}</p>
+                  <p style={{ color:"#ffffff", fontSize:11, margin:"2px 0 0" }}>{totalWeeks - currentWeek} {T.weeksRemaining} · {Math.round((currentWeek/totalWeeks)*100)}{T.percentComplete}</p>
                 </div>
                 <button
                   onClick={() => loadAISchedule(true)}
@@ -5383,7 +5383,7 @@ function Dashboard({ form, onEdit }) {
                       <span style={{ color:r.free?C.green:C.amber, fontSize:10, fontWeight:700, background:r.free?"rgba(34,197,94,0.1)":"rgba(245,158,11,0.1)", padding:"2px 8px", borderRadius:99 }}>{r.free ? T.free : T.paid}</span>
                     </div>
                     <p style={{ color:C.purpleLight, fontSize:11, fontWeight:700, margin:"0 0 4px" }}>{T[SKILL_LABEL_KEY[r.skill]]||SKILL_LABELS[r.skill]}</p>
-                    <p style={{ color:"#94a3b8", fontSize:12, margin:"0 0 10px", lineHeight:1.6 }}>{r.desc}</p>
+                    <p style={{ color:"#ffffff", fontSize:12, margin:"0 0 10px", lineHeight:1.6 }}>{r.desc}</p>
                     <a href={r.url} target="_blank" rel="noopener noreferrer" style={{ display:"block", textAlign:"center", padding:"9px", background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff", borderRadius:8, fontSize:12, fontWeight:700, textDecoration:"none" }}>
                       → {T.openResource} {r.name}
                     </a>
