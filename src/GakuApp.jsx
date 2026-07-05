@@ -4736,7 +4736,7 @@ function ContentAnalyzer({ form }) {
     try {
       const res = await fetch("/api/claude", {
         method:"POST", headers:{"Content-Type":"application/json"},
-        body: JSON.stringify({ model:"claude-sonnet-4-20250514", max_tokens:4500,
+        body: JSON.stringify({ model:"claude-sonnet-4-20250514", max_tokens:4500, provider:"fast",
           messages:[{ role:"user", content:`You are a Japanese teacher using CLT (Communicative Language Teaching). The student's JLPT level is ${form.jlpt}.
 
 The student just encountered this piece of Japanese content (could be a sentence, an article, video subtitles/dialogue, or a social media caption). Analyze it and build practice activities directly FROM it — reuse its actual words, kanji, and sentences rather than generic examples.
@@ -4973,6 +4973,7 @@ Return ONLY a valid JSON object with this exact structure (no markdown, no expla
       body: JSON.stringify({
         model: "claude-sonnet-4-20250514",
         max_tokens: 1200,
+        provider: "fast",
         messages: [{ role: "user", content: prompt }]
       })
     });
@@ -5043,7 +5044,7 @@ function HelpModal({ onClose, form }) {
     try {
       const res = await fetch("/api/claude", {
         method:"POST", headers:{"Content-Type":"application/json"},
-        body: JSON.stringify({ model:"claude-sonnet-4-20250514", max_tokens:500,
+        body: JSON.stringify({ model:"claude-sonnet-4-20250514", max_tokens:500, provider:"fast",
           messages:[{ role:"user", content:`You are a warm Japanese language coach using CLT (Communicative Language Teaching).
 Student: ${form.name}, Level: ${form.jlpt}, Goal: ${form.displayGoal||form.goal}, Skills: ${(form.skills||[]).join(", ")}
 Today: Mood: ${mood}, Time: ${time} min, Energy: ${energy}
@@ -5188,7 +5189,7 @@ function WritingPrompt({ jlpt }) {
     try {
       const res = await fetch("/api/claude", {
         method:"POST", headers:{"Content-Type":"application/json"},
-        body: JSON.stringify({ model:"claude-sonnet-4-20250514", max_tokens:400,
+        body: JSON.stringify({ model:"claude-sonnet-4-20250514", max_tokens:400, provider:"fast",
           messages:[{ role:"user", content:`You are a Japanese language teacher using CLT. Student level: ${jlpt}.
 Prompt: "${prompt}"
 Student's response: "${text}"

@@ -1,9 +1,86 @@
+async function callDeepInfra(deepInfraKey, commonBody) {
+  if (!deepInfraKey) return null;
+
+  const body = JSON.stringify({
+    model: "meta-llama/Llama-3.3-70B-Instruct-Turbo",
+    ...commonBody,
+  });
+
+  // Retry a couple of times on transient 429s from DeepInfra before giving up.
+  const maxAttempts = 3;
+  for (let attempt = 0; attempt < maxAttempts; attempt++) {
+    try {
+      const response = await fetch("https://api.deepinfra.com/v1/openai/chat/completions", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${deepInfraKey}`,
+        },
+        body,
+      });
+
+      if (response.status === 429) {
+        if (attempt < maxAttempts - 1) {
+          await new Promise(r => setTimeout(r, 400 * (attempt + 1)));
+          continue;
+        }
+        return null; // exhausted retries
+      }
+
+      const data = await response.json();
+      if (response.ok) {
+        return data.choices?.[0]?.message?.content || "";
+      }
+      return null; // non-retryable error
+    } catch (e) {
+      return null; // network error
+    }
+  }
+  return null;
+}
+
+async function callGroq(groqKeys, commonBody) {
+  if (!groqKeys.length) return { text: null, lastError: "No Groq keys configured" };
+
+  const body = JSON.stringify({
+    model: "llama-3.3-70b-versatile",
+    ...commonBody,
+  });
+
+  let lastError = null;
+  for (let i = 0; i < groqKeys.length; i++) {
+    const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${groqKeys[i]}`,
+      },
+      body,
+    });
+
+    const data = await response.json();
+
+    if (response.status === 429) {
+      lastError = data.error?.message || "Rate limit exceeded";
+      continue; // try next key
+    }
+
+    if (!response.ok) {
+      return { text: null, lastError: data.error?.message || "Groq API error", status: response.status };
+    }
+
+    return { text: data.choices?.[0]?.message?.content || "" };
+  }
+
+  return { text: null, lastError: `All Groq keys rate limited. ${lastError}` };
+}
+
 export default async function handler(req, res) {
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
   }
   try {
-    const { messages, max_tokens } = req.body;
+    const { messages, max_tokens, provider } = req.body;
     const systemMessage = messages?.find(m => m.role === "system");
     const userMessages = messages?.filter(m => m.role !== "system") || [];
 
@@ -17,51 +94,7 @@ export default async function handler(req, res) {
       temperature: 0.3,
     };
 
-    // --- Primary provider: DeepInfra (OpenAI-compatible) ---
     const deepInfraKey = process.env.DEEPINFRA_API_KEY;
-
-    if (deepInfraKey) {
-      const deepInfraBody = JSON.stringify({
-        model: "meta-llama/Llama-3.3-70B-Instruct-Turbo",
-        ...commonBody,
-      });
-
-      // Retry a couple of times on transient 429s from DeepInfra before
-      // giving up and falling back to Groq.
-      const maxAttempts = 3;
-      for (let attempt = 0; attempt < maxAttempts; attempt++) {
-        try {
-          const response = await fetch("https://api.deepinfra.com/v1/openai/chat/completions", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              "Authorization": `Bearer ${deepInfraKey}`,
-            },
-            body: deepInfraBody,
-          });
-
-          if (response.status === 429) {
-            if (attempt < maxAttempts - 1) {
-              await new Promise(r => setTimeout(r, 400 * (attempt + 1)));
-              continue;
-            }
-            break; // exhausted retries, fall through to Groq fallback
-          }
-
-          const data = await response.json();
-
-          if (response.ok) {
-            const text = data.choices?.[0]?.message?.content || "";
-            return res.status(200).json({ content: [{ type: "text", text }] });
-          }
-          break; // non-retryable error from DeepInfra, fall through to Groq fallback
-        } catch (e) {
-          break; // network error calling DeepInfra, fall through to Groq fallback
-        }
-      }
-    }
-
-    // --- Fallback provider: Groq (multi-key rotation) ---
     const groqKeys = [
       process.env.GROQ_API_KEY,
       process.env.GROQ_API_KEY_2,
@@ -70,44 +103,32 @@ export default async function handler(req, res) {
       process.env.GROQ_API_KEY_5,
     ].filter(Boolean);
 
-    if (groqKeys.length === 0) {
-      return res.status(500).json({ error: "No API keys configured (DeepInfra failed and no Groq fallback available)" });
+    // provider === "fast": prioritize Groq (speed) for important, user-facing
+    // experiences, falling back to DeepInfra if Groq is unavailable.
+    //
+    // default (no provider specified): prioritize DeepInfra (cost) for short,
+    // high-volume lookups, falling back to Groq if DeepInfra fails.
+    if (provider === "fast") {
+      const groqResult = await callGroq(groqKeys, commonBody);
+      if (groqResult.text !== null) {
+        return res.status(200).json({ content: [{ type: "text", text: groqResult.text }] });
+      }
+      const text = await callDeepInfra(deepInfraKey, commonBody);
+      if (text !== null) {
+        return res.status(200).json({ content: [{ type: "text", text }] });
+      }
+      return res.status(groqResult.status || 429).json({ error: groqResult.lastError || "Both providers failed" });
     }
 
-    const groqBody = JSON.stringify({
-      model: "llama-3.3-70b-versatile",
-      ...commonBody,
-    });
-
-    let lastError = null;
-    for (let i = 0; i < groqKeys.length; i++) {
-      const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${groqKeys[i]}`,
-        },
-        body: groqBody,
-      });
-
-      const data = await response.json();
-
-      if (response.status === 429) {
-        // Rate limited on this key — try next key
-        lastError = data.error?.message || "Rate limit exceeded";
-        continue;
-      }
-
-      if (!response.ok) {
-        return res.status(response.status).json({ error: data.error?.message || "Groq API error" });
-      }
-
-      const text = data.choices?.[0]?.message?.content || "";
+    const text = await callDeepInfra(deepInfraKey, commonBody);
+    if (text !== null) {
       return res.status(200).json({ content: [{ type: "text", text }] });
     }
-
-    // All keys exhausted
-    return res.status(429).json({ error: `All API keys rate limited. ${lastError}` });
+    const groqResult = await callGroq(groqKeys, commonBody);
+    if (groqResult.text !== null) {
+      return res.status(200).json({ content: [{ type: "text", text: groqResult.text }] });
+    }
+    return res.status(groqResult.status || 429).json({ error: groqResult.lastError || "Both providers failed" });
 
   } catch (error) {
     return res.status(500).json({ error: "Failed to call API", details: error.message });
