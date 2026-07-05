@@ -4950,10 +4950,11 @@ const SKILL_COLORS = {
   jlpt:"#a78bfa", reading:"#fb923c", kanji:"#e879f9", grammar:"#60a5fa"
 };
 
-function ExerciseCard({ item, revealed, onReveal, T }) {
+function ExerciseCard({ item, revealed, onReveal, T, lang }) {
   const color = SKILL_COLORS[item.skill] || C.purpleLight;
   const [furigana, setFurigana] = useState("");
   const [romaji, setRomaji] = useState("");
+  const [translation, setTranslation] = useState("");
   const [loadingType, setLoadingType] = useState(null);
   const [recording, setRecording] = useState(false);
   const [transcript, setTranscript] = useState("");
@@ -4988,7 +4989,9 @@ function ExerciseCard({ item, revealed, onReveal, T }) {
     try {
       const instruction = mode === "furigana"
         ? `Add furigana in parentheses after every kanji word in this Japanese text. Return ONLY the text with furigana added, no explanation:\n\n${item.prompt}`
-        : `Convert this Japanese text to romaji (Hepburn romanization). Return ONLY the romaji text, no explanation:\n\n${item.prompt}`;
+        : mode === "romaji"
+        ? `Convert this Japanese text to romaji (Hepburn romanization). Return ONLY the romaji text, no explanation:\n\n${item.prompt}`
+        : `Translate this Japanese text into ${lang || "English"}. Return ONLY the translation, no explanation:\n\n${item.prompt}`;
       const res = await fetch("/api/claude", {
         method:"POST", headers:{"Content-Type":"application/json"},
         body: JSON.stringify({ model:"claude-sonnet-4-20250514", max_tokens:500,
@@ -4997,7 +5000,9 @@ function ExerciseCard({ item, revealed, onReveal, T }) {
       });
       const d = await res.json();
       const text = d.content?.map(c=>c.text||"").join("").trim() || "";
-      if (mode === "furigana") setFurigana(text); else setRomaji(text);
+      if (mode === "furigana") setFurigana(text);
+      else if (mode === "romaji") setRomaji(text);
+      else setTranslation(text);
     } catch {}
     setLoadingType(null);
   };
@@ -5039,9 +5044,13 @@ function ExerciseCard({ item, revealed, onReveal, T }) {
         <button onClick={()=>fetchReading("romaji")} disabled={loadingType!==null} style={{ fontSize:11, color:"#c4b5fd", fontWeight:700, background:"rgba(196,181,253,0.1)", padding:"4px 10px", borderRadius:8, border:"1px solid rgba(196,181,253,0.3)", cursor:"pointer" }}>
           {loadingType==="romaji" ? "⏳" : (T?.romajiBtn || "Romaji")}
         </button>
+        <button onClick={()=>fetchReading("translate")} disabled={loadingType!==null} style={{ fontSize:11, color:"#fbbf24", fontWeight:700, background:"rgba(251,191,36,0.1)", padding:"4px 10px", borderRadius:8, border:"1px solid rgba(251,191,36,0.3)", cursor:"pointer" }}>
+          {loadingType==="translate" ? "⏳" : (T?.translateBtn || "Translate")}
+        </button>
       </div>
       {furigana && <p style={{ color:"#67e8f9", fontSize:12, margin:"0 0 4px", fontStyle:"italic", whiteSpace:"pre-wrap" }}>{furigana}</p>}
-      {romaji && <p style={{ color:"#c4b5fd", fontSize:12, margin:"0 0 8px", fontStyle:"italic", whiteSpace:"pre-wrap" }}>{romaji}</p>}
+      {romaji && <p style={{ color:"#c4b5fd", fontSize:12, margin:"0 0 4px", fontStyle:"italic", whiteSpace:"pre-wrap" }}>{romaji}</p>}
+      {translation && <p style={{ color:"#fbbf24", fontSize:12, margin:"0 0 8px", fontStyle:"italic", whiteSpace:"pre-wrap" }}>{translation}</p>}
       {revealed ? (
         <div style={{ background:"rgba(34,197,94,0.06)", borderRadius:10, padding:"10px 12px" }}>
           <p style={{ color:C.green, fontSize:11, fontWeight:700, margin:"0 0 4px" }}>✅ ANSWER</p>
@@ -5184,7 +5193,7 @@ Respond ONLY with a valid JSON array, no markdown, no backticks:
             {filteredItems.map((it,i) => {
               const globalIdx = items.indexOf(it);
               return (
-                <ExerciseCard key={i} item={it} revealed={!!revealed[globalIdx]} onReveal={()=>setRevealed(r=>({...r,[globalIdx]:true}))} T={T} />
+                <ExerciseCard key={i} item={it} revealed={!!revealed[globalIdx]} onReveal={()=>setRevealed(r=>({...r,[globalIdx]:true}))} T={T} lang={form?.preferredLang || "English"} />
               );
             })}
           </div>
