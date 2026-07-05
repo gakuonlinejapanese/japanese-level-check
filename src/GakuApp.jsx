@@ -22,9 +22,9 @@ const S = {
 // ─── CLT RESOURCES ─────────────────────────────────────────────────────────────
 const RESOURCES = {
   pronunciation: [
-    { name:"Anki (Japanese Decks)", desc:"Build phonetic recognition with audio flashcards. CLT: hear and repeat.", url:"https://ankiweb.net/shared/decks?search=japanese", free:true },
-    { name:"Japanese Ammo with Misa", desc:"Practical example sentences and pronunciation drills. CLT-focused.", url:"https://www.youtube.com/@JapaneseAmmowithMisa", free:true },
-    { name:"Onomappu", desc:"Japanese-only explanations. Comprehensible Input — CLT compatibility very high.", url:"https://www.youtube.com/@Onomappu", free:true },
+    { name:"Anki (Japanese Decks)", desc:"Build phonetic recognition with audio flashcards. CLT: hear and repeat.", descKey:"resAnkiPronDesc", url:"https://ankiweb.net/shared/decks?search=japanese", free:true },
+    { name:"Japanese Ammo with Misa", desc:"Practical example sentences and pronunciation drills. CLT-focused.", descKey:"resMisaPronDesc", url:"https://www.youtube.com/@JapaneseAmmowithMisa", free:true },
+    { name:"Onomappu", desc:"Japanese-only explanations. Comprehensible Input — CLT compatibility very high.", descKey:"resOnomappuPronDesc", url:"https://www.youtube.com/@Onomappu", free:true },
   ],
   listening: [
     { name:"NHK World Lesson", desc:"Authentic NHK audio lessons. CLT input at natural pace.", url:"https://www3.nhk.or.jp/nhkworld/lesson/en/lessons/", free:true },
@@ -135,6 +135,7 @@ const UI_TRANSLATIONS = {
     tabVocabulary: "📚 Vocabulary",
     tabResources: "🔗 Resources",
     tabMilestones: "🏆 Milestones",
+    tabSubtitles: "🎬 Subtitles",
     // Schedule tab
     yourWeeklySchedule: "📅 YOUR WEEKLY STUDY SCHEDULE",
     restDay: "Rest day 🌸",
@@ -335,6 +336,9 @@ const UI_TRANSLATIONS = {
     subtitlesTooLong: "That selection is too long — please select a shorter word or phrase (under ~60 characters).",
     subtitlesSavedTo: "saved to",
     subtitlesLookupError: "Lookup failed. Please try again.",
+    resAnkiPronDesc: "Build phonetic recognition with audio flashcards. CLT: hear and repeat.",
+    resMisaPronDesc: "Practical example sentences and pronunciation drills. CLT-focused.",
+    resOnomappuPronDesc: "Japanese-only explanations. Comprehensible Input — CLT compatibility very high.",
     // Save Word modal
     saveWord: "Save Word",
     saveTitle: "Save",
@@ -364,6 +368,7 @@ const UI_TRANSLATIONS = {
     tabVocabulary: "📚 Vocabulaire",
     tabResources: "🔗 Ressources",
     tabMilestones: "🏆 Objectifs",
+    tabSubtitles: "🎬 Sous-titres",
     yourWeeklySchedule: "📅 VOTRE PLANNING D'ÉTUDE HEBDOMADAIRE",
     restDay: "Jour de repos 🌸",
     monday: "LUNDI", tuesday: "MARDI", wednesday: "MERCREDI",
@@ -519,6 +524,9 @@ const UI_TRANSLATIONS = {
     subtitlesTooLong: "Cette sélection est trop longue — veuillez choisir un mot ou une phrase plus courte (moins de ~60 caractères).",
     subtitlesSavedTo: "enregistré dans",
     subtitlesLookupError: "Échec de la recherche. Veuillez réessayer.",
+    resAnkiPronDesc: "Développez la reconnaissance phonétique avec des cartes audio. CLT : écouter et répéter.",
+    resMisaPronDesc: "Phrases d'exemple pratiques et exercices de prononciation. Axé sur la CLT.",
+    resOnomappuPronDesc: "Explications entièrement en japonais. Input compréhensible — compatibilité CLT très élevée.",
 },
 
   "Spanish": {
@@ -532,6 +540,7 @@ const UI_TRANSLATIONS = {
     tabVocabulary: "📚 Vocabulario",
     tabResources: "🔗 Recursos",
     tabMilestones: "🏆 Metas",
+    tabSubtitles: "🎬 Subtítulos",
     yourWeeklySchedule: "📅 TU HORARIO DE ESTUDIO SEMANAL",
     restDay: "Día de descanso 🌸",
     monday: "LUNES", tuesday: "MARTES", wednesday: "MIÉRCOLES",
@@ -687,6 +696,9 @@ const UI_TRANSLATIONS = {
     subtitlesTooLong: "Esa selección es demasiado larga — elige una palabra o frase más corta (menos de ~60 caracteres).",
     subtitlesSavedTo: "guardado en",
     subtitlesLookupError: "Error en la búsqueda. Inténtalo de nuevo.",
+    resAnkiPronDesc: "Desarrolla el reconocimiento fonético con tarjetas de audio. CLT: escuchar y repetir.",
+    resMisaPronDesc: "Frases de ejemplo prácticas y ejercicios de pronunciación. Enfocado en CLT.",
+    resOnomappuPronDesc: "Explicaciones solo en japonés. Input comprensible — compatibilidad CLT muy alta.",
 },
 
   "Portuguese": {
@@ -700,6 +712,7 @@ const UI_TRANSLATIONS = {
     tabVocabulary: "📚 Vocabulário",
     tabResources: "🔗 Recursos",
     tabMilestones: "🏆 Metas",
+    tabSubtitles: "🎬 Legendas",
     yourWeeklySchedule: "📅 SUA AGENDA DE ESTUDOS SEMANAL",
     restDay: "Dia de descanso 🌸",
     monday: "SEGUNDA", tuesday: "TERÇA", wednesday: "QUARTA",
@@ -855,6 +868,9 @@ const UI_TRANSLATIONS = {
     subtitlesTooLong: "Essa seleção é muito longa — escolha uma palavra ou frase mais curta (menos de ~60 caracteres).",
     subtitlesSavedTo: "salvo em",
     subtitlesLookupError: "Falha na pesquisa. Tente novamente.",
+    resAnkiPronDesc: "Desenvolva o reconhecimento fonético com flashcards de áudio. CLT: ouvir e repetir.",
+    resMisaPronDesc: "Frases de exemplo práticas e exercícios de pronúncia. Focado em CLT.",
+    resOnomappuPronDesc: "Explicações somente em japonês. Input compreensível — compatibilidade CLT muito alta.",
 },
 
   "German": {
@@ -868,6 +884,7 @@ const UI_TRANSLATIONS = {
     tabVocabulary: "📚 Vokabular",
     tabResources: "🔗 Ressourcen",
     tabMilestones: "🏆 Meilensteine",
+    tabSubtitles: "🎬 Untertitel",
     yourWeeklySchedule: "📅 IHR WÖCHENTLICHER LERNPLAN",
     restDay: "Ruhetag 🌸",
     monday: "MONTAG", tuesday: "DIENSTAG", wednesday: "MITTWOCH",
@@ -1023,6 +1040,9 @@ const UI_TRANSLATIONS = {
     subtitlesTooLong: "Diese Auswahl ist zu lang — bitte wähle ein kürzeres Wort oder eine kürzere Phrase (unter ~60 Zeichen).",
     subtitlesSavedTo: "gespeichert in",
     subtitlesLookupError: "Nachschlagen fehlgeschlagen. Bitte versuche es erneut.",
+    resAnkiPronDesc: "Baue phonetische Erkennung mit Audio-Karteikarten auf. CLT: hören und wiederholen.",
+    resMisaPronDesc: "Praktische Beispielsätze und Ausspracheübungen. CLT-fokussiert.",
+    resOnomappuPronDesc: "Erklärungen nur auf Japanisch. Comprehensible Input — sehr hohe CLT-Kompatibilität.",
 },
 
   "Italian": {
@@ -1036,6 +1056,7 @@ const UI_TRANSLATIONS = {
     tabVocabulary: "📚 Vocabolario",
     tabResources: "🔗 Risorse",
     tabMilestones: "🏆 Obiettivi",
+    tabSubtitles: "🎬 Sottotitoli",
     yourWeeklySchedule: "📅 IL TUO PROGRAMMA DI STUDIO SETTIMANALE",
     restDay: "Giorno di riposo 🌸",
     monday: "LUNEDÌ", tuesday: "MARTEDÌ", wednesday: "MERCOLEDÌ",
@@ -1191,6 +1212,9 @@ const UI_TRANSLATIONS = {
     subtitlesTooLong: "Questa selezione è troppo lunga — scegli una parola o frase più breve (meno di ~60 caratteri).",
     subtitlesSavedTo: "salvato in",
     subtitlesLookupError: "Ricerca non riuscita. Riprova.",
+    resAnkiPronDesc: "Sviluppa il riconoscimento fonetico con flashcard audio. CLT: ascolta e ripeti.",
+    resMisaPronDesc: "Frasi di esempio pratiche ed esercizi di pronuncia. Focalizzato sulla CLT.",
+    resOnomappuPronDesc: "Spiegazioni solo in giapponese. Input comprensibile — compatibilità CLT molto alta.",
 },
 
   "Chinese (Simplified)": {
@@ -1204,6 +1228,7 @@ const UI_TRANSLATIONS = {
     tabVocabulary: "📚 词汇",
     tabResources: "🔗 资源",
     tabMilestones: "🏆 里程碑",
+    tabSubtitles: "🎬 字幕",
     yourWeeklySchedule: "📅 你的每周学习日程",
     restDay: "休息日 🌸",
     monday: "周一", tuesday: "周二", wednesday: "周三",
@@ -1359,6 +1384,9 @@ const UI_TRANSLATIONS = {
     subtitlesTooLong: "所选内容太长——请选择更短的单词或短语（60个字符以内）。",
     subtitlesSavedTo: "已保存到",
     subtitlesLookupError: "查询失败，请重试。",
+    resAnkiPronDesc: "通过音频卡片建立语音辨识能力。CLT：听并跟读。",
+    resMisaPronDesc: "实用例句和发音练习。专注于CLT。",
+    resOnomappuPronDesc: "全日语讲解。可理解输入——CLT兼容性非常高。",
 },
 
   "Chinese (Traditional)": {
@@ -1372,6 +1400,7 @@ const UI_TRANSLATIONS = {
     tabVocabulary: "📚 詞彙",
     tabResources: "🔗 資源",
     tabMilestones: "🏆 里程碑",
+    tabSubtitles: "🎬 字幕",
     yourWeeklySchedule: "📅 你的每週學習日程",
     restDay: "休息日 🌸",
     monday: "週一", tuesday: "週二", wednesday: "週三",
@@ -1527,6 +1556,9 @@ const UI_TRANSLATIONS = {
     subtitlesTooLong: "所選內容太長——請選擇較短的單詞或片語（60個字元以內）。",
     subtitlesSavedTo: "已儲存到",
     subtitlesLookupError: "查詢失敗，請再試一次。",
+    resAnkiPronDesc: "透過音訊卡片建立語音辨識能力。CLT：聆聽並跟讀。",
+    resMisaPronDesc: "實用例句和發音練習。專注於CLT。",
+    resOnomappuPronDesc: "全日語講解。可理解輸入——CLT相容性非常高。",
 },
 
   "Korean": {
@@ -1540,6 +1572,7 @@ const UI_TRANSLATIONS = {
     tabVocabulary: "📚 어휘",
     tabResources: "🔗 자료",
     tabMilestones: "🏆 목표",
+    tabSubtitles: "🎬 자막",
     yourWeeklySchedule: "📅 나의 주간 학습 일정",
     restDay: "휴식일 🌸",
     monday: "월요일", tuesday: "화요일", wednesday: "수요일",
@@ -1695,6 +1728,9 @@ const UI_TRANSLATIONS = {
     subtitlesTooLong: "선택한 내용이 너무 깁니다 — 더 짧은 단어나 구문을 선택하세요 (약 60자 이내).",
     subtitlesSavedTo: "저장됨:",
     subtitlesLookupError: "검색에 실패했습니다. 다시 시도해 주세요.",
+    resAnkiPronDesc: "오디오 플래시카드로 발음 인식력을 기르세요. CLT: 듣고 따라 말하기.",
+    resMisaPronDesc: "실용적인 예문과 발음 연습. CLT 중심.",
+    resOnomappuPronDesc: "일본어로만 설명. 이해 가능한 입력 — CLT 호환성 매우 높음.",
 },
 
   "Thai": {
@@ -1708,6 +1744,7 @@ const UI_TRANSLATIONS = {
     tabVocabulary: "📚 คำศัพท์",
     tabResources: "🔗 แหล่งเรียนรู้",
     tabMilestones: "🏆 เป้าหมาย",
+    tabSubtitles: "🎬 คำบรรยาย",
     yourWeeklySchedule: "📅 ตารางเรียนรายสัปดาห์ของคุณ",
     restDay: "วันพัก 🌸",
     monday: "จันทร์", tuesday: "อังคาร", wednesday: "พุธ",
@@ -1863,6 +1900,9 @@ const UI_TRANSLATIONS = {
     subtitlesTooLong: "ส่วนที่เลือกยาวเกินไป — โปรดเลือกคำหรือวลีที่สั้นกว่านี้ (ไม่เกิน ~60 ตัวอักษร)",
     subtitlesSavedTo: "บันทึกลงใน",
     subtitlesLookupError: "การค้นหาล้มเหลว โปรดลองอีกครั้ง",
+    resAnkiPronDesc: "สร้างการจดจำเสียงด้วยแฟลชการ์ดเสียง CLT: ฟังและพูดตาม",
+    resMisaPronDesc: "ประโยคตัวอย่างที่ใช้งานได้จริงและแบบฝึกออกเสียง เน้น CLT",
+    resOnomappuPronDesc: "อธิบายเป็นภาษาญี่ปุ่นล้วน Comprehensible Input — ความเข้ากันได้กับ CLT สูงมาก",
 },
 
   "Malay": {
@@ -1876,6 +1916,7 @@ const UI_TRANSLATIONS = {
     tabVocabulary: "📚 Kosa Kata",
     tabResources: "🔗 Sumber",
     tabMilestones: "🏆 Pencapaian",
+    tabSubtitles: "🎬 Sari Kata",
     yourWeeklySchedule: "📅 JADUAL BELAJAR MINGGUAN ANDA",
     restDay: "Hari rehat 🌸",
     monday: "ISNIN", tuesday: "SELASA", wednesday: "RABU",
@@ -2031,6 +2072,9 @@ const UI_TRANSLATIONS = {
     subtitlesTooLong: "Pilihan itu terlalu panjang — sila pilih perkataan atau frasa yang lebih pendek (bawah ~60 aksara).",
     subtitlesSavedTo: "disimpan ke",
     subtitlesLookupError: "Carian gagal. Sila cuba lagi.",
+    resAnkiPronDesc: "Bina pengecaman fonetik dengan kad imbas audio. CLT: dengar dan ulang.",
+    resMisaPronDesc: "Ayat contoh praktikal dan latihan sebutan. Berfokuskan CLT.",
+    resOnomappuPronDesc: "Penerangan dalam bahasa Jepun sahaja. Input Boleh Difahami — keserasian CLT sangat tinggi.",
 },
 
   "Indonesian": {
@@ -2044,6 +2088,7 @@ const UI_TRANSLATIONS = {
     tabVocabulary: "📚 Kosakata",
     tabResources: "🔗 Sumber",
     tabMilestones: "🏆 Pencapaian",
+    tabSubtitles: "🎬 Subtitle",
     yourWeeklySchedule: "📅 JADWAL BELAJAR MINGGUAN ANDA",
     restDay: "Hari istirahat 🌸",
     monday: "SENIN", tuesday: "SELASA", wednesday: "RABU",
@@ -2199,6 +2244,9 @@ const UI_TRANSLATIONS = {
     subtitlesTooLong: "Pilihan itu terlalu panjang — silakan pilih kata atau frasa yang lebih pendek (di bawah ~60 karakter).",
     subtitlesSavedTo: "disimpan ke",
     subtitlesLookupError: "Pencarian gagal. Silakan coba lagi.",
+    resAnkiPronDesc: "Bangun pengenalan fonetik dengan flashcard audio. CLT: dengarkan dan ulangi.",
+    resMisaPronDesc: "Kalimat contoh praktis dan latihan pengucapan. Berfokus pada CLT.",
+    resOnomappuPronDesc: "Penjelasan hanya dalam bahasa Jepang. Input yang Dapat Dipahami — kompatibilitas CLT sangat tinggi.",
 },
 
   "Vietnamese": {
@@ -2212,6 +2260,7 @@ const UI_TRANSLATIONS = {
     tabVocabulary: "📚 Từ vựng",
     tabResources: "🔗 Tài liệu",
     tabMilestones: "🏆 Mục tiêu",
+    tabSubtitles: "🎬 Phụ đề",
     yourWeeklySchedule: "📅 LỊCH HỌC HÀNG TUẦN CỦA BẠN",
     restDay: "Ngày nghỉ 🌸",
     monday: "THỨ HAI", tuesday: "THỨ BA", wednesday: "THỨ TƯ",
@@ -2367,6 +2416,9 @@ const UI_TRANSLATIONS = {
     subtitlesTooLong: "Lựa chọn này quá dài — vui lòng chọn từ hoặc cụm từ ngắn hơn (dưới ~60 ký tự).",
     subtitlesSavedTo: "đã lưu vào",
     subtitlesLookupError: "Tra cứu thất bại. Vui lòng thử lại.",
+    resAnkiPronDesc: "Xây dựng khả năng nhận diện ngữ âm bằng thẻ ghi nhớ có âm thanh. CLT: nghe và lặp lại.",
+    resMisaPronDesc: "Câu ví dụ thực tế và bài luyện phát âm. Tập trung vào CLT.",
+    resOnomappuPronDesc: "Giải thích hoàn toàn bằng tiếng Nhật. Đầu vào dễ hiểu — độ tương thích CLT rất cao.",
 },
 
   "Hindi": {
@@ -2380,6 +2432,7 @@ const UI_TRANSLATIONS = {
     tabVocabulary: "📚 शब्दावली",
     tabResources: "🔗 संसाधन",
     tabMilestones: "🏆 लक्ष्य",
+    tabSubtitles: "🎬 सबटाइटल",
     yourWeeklySchedule: "📅 आपकी साप्ताहिक अध्ययन समय-सारणी",
     restDay: "आराम का दिन 🌸",
     monday: "सोमवार", tuesday: "मंगलवार", wednesday: "बुधवार",
@@ -2535,6 +2588,9 @@ const UI_TRANSLATIONS = {
     subtitlesTooLong: "यह चयन बहुत लंबा है — कृपया एक छोटा शब्द या वाक्यांश चुनें (~60 अक्षरों से कम)।",
     subtitlesSavedTo: "में सहेजा गया",
     subtitlesLookupError: "खोज विफल रही। कृपया पुनः प्रयास करें।",
+    resAnkiPronDesc: "ऑडियो फ्लैशकार्ड से ध्वन्यात्मक पहचान विकसित करें। CLT: सुनें और दोहराएं।",
+    resMisaPronDesc: "व्यावहारिक उदाहरण वाक्य और उच्चारण अभ्यास। CLT-केंद्रित।",
+    resOnomappuPronDesc: "केवल जापानी में स्पष्टीकरण। समझने योग्य इनपुट — CLT अनुकूलता बहुत अधिक।",
 },
 
   "Japanese": {
@@ -2548,6 +2604,7 @@ const UI_TRANSLATIONS = {
     tabVocabulary: "📚 単語帳",
     tabResources: "🔗 リソース",
     tabMilestones: "🏆 目標",
+    tabSubtitles: "🎬 字幕帳",
     yourWeeklySchedule: "📅 あなたの週間学習スケジュール",
     restDay: "休息日 🌸",
     monday: "月曜日", tuesday: "火曜日", wednesday: "水曜日",
@@ -2703,6 +2760,9 @@ const UI_TRANSLATIONS = {
     subtitlesTooLong: "選択範囲が長すぎます — もっと短い単語やフレーズを選んでください（約60文字以内）。",
     subtitlesSavedTo: "保存先：",
     subtitlesLookupError: "検索に失敗しました。もう一度お試しください。",
+    resAnkiPronDesc: "音声フラッシュカードで音の聞き分け力を鍛えます。CLT：聞いて繰り返す。",
+    resMisaPronDesc: "実用的な例文と発音練習。CLT重視。",
+    resOnomappuPronDesc: "日本語のみでの解説。理解可能なインプット — CLT適合性が非常に高い。",
 },
 
   "Turkish": {
@@ -2716,6 +2776,7 @@ const UI_TRANSLATIONS = {
     tabVocabulary: "📚 Kelime Bilgisi",
     tabResources: "🔗 Kaynaklar",
     tabMilestones: "🏆 Hedefler",
+    tabSubtitles: "🎬 Altyazı",
     yourWeeklySchedule: "📅 HAFTALIK ÇALIŞMA PROGRAMINIZ",
     restDay: "Dinlenme günü 🌸",
     monday: "PAZARTESİ", tuesday: "SALI", wednesday: "ÇARŞAMBA",
@@ -2871,6 +2932,9 @@ const UI_TRANSLATIONS = {
     subtitlesTooLong: "Bu seçim çok uzun — lütfen daha kısa bir kelime veya ifade seçin (~60 karakterden az).",
     subtitlesSavedTo: "şuraya kaydedildi:",
     subtitlesLookupError: "Arama başarısız oldu. Lütfen tekrar deneyin.",
+    resAnkiPronDesc: "Sesli kartlarla fonetik tanımayı geliştirin. CLT: dinle ve tekrar et.",
+    resMisaPronDesc: "Pratik örnek cümleler ve telaffuz alıştırmaları. CLT odaklı.",
+    resOnomappuPronDesc: "Yalnızca Japonca açıklamalar. Anlaşılabilir Girdi — CLT uyumluluğu çok yüksek.",
 },
 
   "Nepali": {
@@ -2884,6 +2948,7 @@ const UI_TRANSLATIONS = {
     tabVocabulary: "📚 शब्दावली",
     tabResources: "🔗 स्रोतहरू",
     tabMilestones: "🏆 लक्ष्यहरू",
+    tabSubtitles: "🎬 सबटाइटल",
     yourWeeklySchedule: "📅 तपाईंको साप्ताहिक अध्ययन तालिका",
     restDay: "विश्राम दिन 🌸",
     monday: "सोमबार", tuesday: "मंगलबार", wednesday: "बुधबार",
@@ -3039,6 +3104,9 @@ const UI_TRANSLATIONS = {
     subtitlesTooLong: "यो छनोट धेरै लामो छ — कृपया छोटो शब्द वा वाक्यांश छनोट गर्नुहोस् (~६० अक्षरभन्दा कम)।",
     subtitlesSavedTo: "मा सुरक्षित गरियो",
     subtitlesLookupError: "खोजी असफल भयो। कृपया फेरि प्रयास गर्नुहोस्।",
+    resAnkiPronDesc: "अडियो फ्ल्यासकार्डको साथ ध्वन्यात्मक पहिचान विकास गर्नुहोस्। CLT: सुन्नुहोस् र दोहोर्याउनुहोस्।",
+    resMisaPronDesc: "व्यावहारिक उदाहरण वाक्यहरू र उच्चारण अभ्यास। CLT-केन्द्रित।",
+    resOnomappuPronDesc: "केवल जापानी भाषामा व्याख्या। बुझ्न सकिने इनपुट — CLT अनुकूलता धेरै उच्च।",
 },
 
   "Filipino": {
@@ -3052,6 +3120,7 @@ const UI_TRANSLATIONS = {
     tabVocabulary: "📚 Bokabularyo",
     tabResources: "🔗 Mga Resources",
     tabMilestones: "🏆 Mga Layunin",
+    tabSubtitles: "🎬 Subtitle",
     yourWeeklySchedule: "📅 ANG IYONG LINGGUHANG ISKEDYUL NG PAG-AARAL",
     restDay: "Araw ng pahinga 🌸",
     monday: "LUNES", tuesday: "MARTES", wednesday: "MIYERKULES",
@@ -3207,6 +3276,9 @@ const UI_TRANSLATIONS = {
     subtitlesTooLong: "Masyadong mahaba ang napiling bahagi — mangyaring pumili ng mas maikling salita o parirala (mas mababa sa ~60 characters).",
     subtitlesSavedTo: "na-save sa",
     subtitlesLookupError: "Nabigo ang paghahanap. Pakisubukang muli.",
+    resAnkiPronDesc: "Bumuo ng phonetic recognition gamit ang audio flashcards. CLT: makinig at ulitin.",
+    resMisaPronDesc: "Praktikal na halimbawang pangungusap at ehersisyo sa pagbigkas. Nakatuon sa CLT.",
+    resOnomappuPronDesc: "Paliwanag sa Hapon lamang. Comprehensible Input — napakataas ng CLT compatibility.",
 },
 
 };
@@ -5653,7 +5725,7 @@ function Dashboard({ form, onEdit }) {
                       <span style={{ color:r.free?C.green:C.amber, fontSize:10, fontWeight:700, background:r.free?"rgba(34,197,94,0.1)":"rgba(245,158,11,0.1)", padding:"2px 8px", borderRadius:99 }}>{r.free ? T.free : T.paid}</span>
                     </div>
                     <p style={{ color:C.purpleLight, fontSize:11, fontWeight:700, margin:"0 0 4px" }}>{T[SKILL_LABEL_KEY[r.skill]]||SKILL_LABELS[r.skill]}</p>
-                    <p style={{ color:"#ffffff", fontSize:12, margin:"0 0 10px", lineHeight:1.6 }}>{r.desc}</p>
+                    <p style={{ color:"#ffffff", fontSize:12, margin:"0 0 10px", lineHeight:1.6 }}>{(r.descKey && T[r.descKey]) || r.desc}</p>
                     <a href={r.url} target="_blank" rel="noopener noreferrer" style={{ display:"block", textAlign:"center", padding:"9px", background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff", borderRadius:8, fontSize:12, fontWeight:700, textDecoration:"none" }}>
                       → {T.openResource} {r.name}
                     </a>
