@@ -7,8 +7,47 @@ export default async function handler(req, res) {
     const systemMessage = messages?.find(m => m.role === "system");
     const userMessages = messages?.filter(m => m.role !== "system") || [];
 
-    // Collect all available API keys (GROQ_API_KEY, GROQ_API_KEY_2, GROQ_API_KEY_3, ...)
-    const apiKeys = [
+    const chatMessages = systemMessage
+      ? [{ role: "system", content: systemMessage.content }, ...userMessages]
+      : userMessages;
+
+    const commonBody = {
+      messages: chatMessages,
+      max_tokens: Math.min(max_tokens || 1200, 8000),
+      temperature: 0.3,
+    };
+
+    // --- Primary provider: DeepInfra (OpenAI-compatible) ---
+    const deepInfraKey = process.env.DEEPINFRA_API_KEY;
+
+    if (deepInfraKey) {
+      try {
+        const response = await fetch("https://api.deepinfra.com/v1/openai/chat/completions", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${deepInfraKey}`,
+          },
+          body: JSON.stringify({
+            model: "meta-llama/Llama-3.3-70B-Instruct",
+            ...commonBody,
+          }),
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          const text = data.choices?.[0]?.message?.content || "";
+          return res.status(200).json({ content: [{ type: "text", text }] });
+        }
+        // Non-OK from DeepInfra: fall through to Groq fallback below
+      } catch (e) {
+        // Network error calling DeepInfra: fall through to Groq fallback below
+      }
+    }
+
+    // --- Fallback provider: Groq (multi-key rotation) ---
+    const groqKeys = [
       process.env.GROQ_API_KEY,
       process.env.GROQ_API_KEY_2,
       process.env.GROQ_API_KEY_3,
@@ -16,31 +55,24 @@ export default async function handler(req, res) {
       process.env.GROQ_API_KEY_5,
     ].filter(Boolean);
 
-    if (apiKeys.length === 0) {
-      return res.status(500).json({ error: "API key not configured" });
+    if (groqKeys.length === 0) {
+      return res.status(500).json({ error: "No API keys configured (DeepInfra failed and no Groq fallback available)" });
     }
 
-    const groqMessages = systemMessage
-      ? [{ role: "system", content: systemMessage.content }, ...userMessages]
-      : userMessages;
-
-    const body = JSON.stringify({
+    const groqBody = JSON.stringify({
       model: "llama-3.3-70b-versatile",
-      messages: groqMessages,
-      max_tokens: Math.min(max_tokens || 1200, 8000),
-      temperature: 0.3,
+      ...commonBody,
     });
 
-    // Try each key in order; on 429 move to the next key
     let lastError = null;
-    for (let i = 0; i < apiKeys.length; i++) {
+    for (let i = 0; i < groqKeys.length; i++) {
       const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${apiKeys[i]}`,
+          "Authorization": `Bearer ${groqKeys[i]}`,
         },
-        body,
+        body: groqBody,
       });
 
       const data = await response.json();
