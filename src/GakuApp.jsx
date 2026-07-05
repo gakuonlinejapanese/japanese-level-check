@@ -344,6 +344,7 @@ const UI_TRANSLATIONS = {
     convRevealBtn: "Show model answer",
     convModelAnswer: "Model answer",
     convAltResponses: "Other ways to say it",
+    translateBtn: "Translate",
     subtitlesTitle: "Subtitles → Vocabulary",
     subtitlesDesc: "Paste subtitles or a transcript from a video you're already watching (e.g. YouTube's own \"Show transcript\" panel). Double-click a word or drag to select a phrase, then look it up and save it straight to your Vocabulary Builder.",
     subtitlesSourceLabel: "Video title / source (optional — used as the folder name)",
@@ -555,6 +556,7 @@ const UI_TRANSLATIONS = {
     convRevealBtn: "Afficher la réponse modèle",
     convModelAnswer: "Réponse modèle",
     convAltResponses: "Autres façons de le dire",
+    translateBtn: "Traduire",
     subtitlesTitle: "Sous-titres → Vocabulaire",
     subtitlesDesc: "Collez des sous-titres ou une transcription d'une vidéo que vous regardez (par ex. le panneau \"Afficher la transcription\" de YouTube). Double-cliquez sur un mot ou faites glisser pour sélectionner une phrase, puis recherchez-la et enregistrez-la directement dans votre Générateur de vocabulaire.",
     subtitlesSourceLabel: "Titre / source de la vidéo (facultatif — utilisé comme nom de dossier)",
@@ -750,6 +752,7 @@ const UI_TRANSLATIONS = {
     convRevealBtn: "Mostrar respuesta modelo",
     convModelAnswer: "Respuesta modelo",
     convAltResponses: "Otras formas de decirlo",
+    translateBtn: "Traducir",
     subtitlesTitle: "Subtítulos → Vocabulario",
     subtitlesDesc: "Pega subtítulos o una transcripción de un video que ya estás viendo (por ejemplo, el panel \"Mostrar transcripción\" de YouTube). Haz doble clic en una palabra o arrastra para seleccionar una frase, luego búscala y guárdala directamente en tu Generador de vocabulario.",
     subtitlesSourceLabel: "Título / fuente del video (opcional — se usa como nombre de la carpeta)",
@@ -945,6 +948,7 @@ const UI_TRANSLATIONS = {
     convRevealBtn: "Mostrar resposta modelo",
     convModelAnswer: "Resposta modelo",
     convAltResponses: "Outras formas de dizer isso",
+    translateBtn: "Traduzir",
     subtitlesTitle: "Legendas → Vocabulário",
     subtitlesDesc: "Cole legendas ou uma transcrição de um vídeo que você já está assistindo (por exemplo, o painel \"Mostrar transcrição\" do YouTube). Clique duas vezes em uma palavra ou arraste para selecionar uma frase, depois pesquise e salve diretamente no seu Criador de Vocabulário.",
     subtitlesSourceLabel: "Título / fonte do vídeo (opcional — usado como nome da pasta)",
@@ -1140,6 +1144,7 @@ const UI_TRANSLATIONS = {
     convRevealBtn: "Musterantwort anzeigen",
     convModelAnswer: "Musterantwort",
     convAltResponses: "Andere Möglichkeiten, es zu sagen",
+    translateBtn: "Übersetzen",
     subtitlesTitle: "Untertitel → Vokabular",
     subtitlesDesc: "Füge Untertitel oder ein Transkript eines Videos ein, das du bereits ansiehst (z. B. YouTubes eigenes \"Transkript anzeigen\"-Feld). Doppelklicke auf ein Wort oder ziehe, um eine Phrase auszuwählen, schlage sie dann nach und speichere sie direkt in deinem Vokabel-Builder.",
     subtitlesSourceLabel: "Videotitel / Quelle (optional — wird als Ordnername verwendet)",
@@ -1335,6 +1340,7 @@ const UI_TRANSLATIONS = {
     convRevealBtn: "Mostra risposta modello",
     convModelAnswer: "Risposta modello",
     convAltResponses: "Altri modi per dirlo",
+    translateBtn: "Traduci",
     subtitlesTitle: "Sottotitoli → Vocabolario",
     subtitlesDesc: "Incolla sottotitoli o una trascrizione di un video che stai già guardando (ad es. il pannello \"Mostra trascrizione\" di YouTube). Fai doppio clic su una parola o trascina per selezionare una frase, poi cercala e salvala direttamente nel tuo Costruttore di vocabolario.",
     subtitlesSourceLabel: "Titolo / fonte del video (facoltativo — usato come nome della cartella)",
@@ -1530,6 +1536,7 @@ const UI_TRANSLATIONS = {
     convRevealBtn: "显示参考答案",
     convModelAnswer: "参考答案",
     convAltResponses: "其他说法",
+    translateBtn: "翻译",
     subtitlesTitle: "字幕 → 词汇",
     subtitlesDesc: "粘贴你正在观看的视频的字幕或文字记录（例如YouTube自带的“显示字幕稿”面板）。双击一个词或拖动选择一个短语，然后查询并直接保存到你的词汇构建器。",
     subtitlesSourceLabel: "视频标题/来源（可选——用作文件夹名称）",
@@ -1725,6 +1732,7 @@ const UI_TRANSLATIONS = {
     convRevealBtn: "顯示參考答案",
     convModelAnswer: "參考答案",
     convAltResponses: "其他說法",
+    translateBtn: "翻譯",
     subtitlesTitle: "字幕 → 詞彙",
     subtitlesDesc: "貼上你正在觀看的影片的字幕或逐字稿（例如YouTube自帶的「顯示逐字稿」面板）。雙擊一個詞或拖曳選取一個片語，然後查詢並直接儲存到你的詞彙建構器。",
     subtitlesSourceLabel: "影片標題/來源（可選——用作資料夾名稱）",
@@ -1920,6 +1928,7 @@ const UI_TRANSLATIONS = {
     convRevealBtn: "모범 답안 보기",
     convModelAnswer: "모범 답안",
     convAltResponses: "다른 말하는 방법",
+    translateBtn: "번역",
     subtitlesTitle: "자막 → 단어",
     subtitlesDesc: "이미 보고 있는 영상의 자막이나 스크립트를 붙여넣으세요 (예: YouTube 자체의 \"스크립트 표시\" 패널). 단어를 더블클릭하거나 드래그하여 구문을 선택한 다음 검색하여 단어장에 바로 저장하세요.",
     subtitlesSourceLabel: "영상 제목/출처 (선택 사항 — 폴더 이름으로 사용됨)",
@@ -2115,6 +2124,7 @@ const UI_TRANSLATIONS = {
     convRevealBtn: "แสดงคำตอบตัวอย่าง",
     convModelAnswer: "คำตอบตัวอย่าง",
     convAltResponses: "วิธีพูดอื่นๆ",
+    translateBtn: "แปล",
     subtitlesTitle: "คำบรรยาย → คำศัพท์",
     subtitlesDesc: "วางคำบรรยายหรือบทถอดความจากวิดีโอที่คุณกำลังดูอยู่ (เช่น แผง \"Show transcript\" ของ YouTube เอง) ดับเบิลคลิกที่คำหรือลากเพื่อเลือกวลี จากนั้นค้นหาและบันทึกลงในตัวสร้างคำศัพท์ของคุณโดยตรง",
     subtitlesSourceLabel: "ชื่อ/แหล่งที่มาของวิดีโอ (ไม่บังคับ — ใช้เป็นชื่อโฟลเดอร์)",
@@ -2310,6 +2320,7 @@ const UI_TRANSLATIONS = {
     convRevealBtn: "Tunjuk jawapan model",
     convModelAnswer: "Jawapan model",
     convAltResponses: "Cara lain untuk mengatakannya",
+    translateBtn: "Terjemah",
     subtitlesTitle: "Sari Kata → Kosa Kata",
     subtitlesDesc: "Tampal sari kata atau transkrip daripada video yang sedang anda tonton (cth. panel \"Show transcript\" YouTube sendiri). Dwiklik satu perkataan atau seret untuk memilih frasa, kemudian cari dan simpan terus ke Pembina Kosa Kata anda.",
     subtitlesSourceLabel: "Tajuk / sumber video (pilihan — digunakan sebagai nama folder)",
@@ -2505,6 +2516,7 @@ const UI_TRANSLATIONS = {
     convRevealBtn: "Tampilkan jawaban model",
     convModelAnswer: "Jawaban model",
     convAltResponses: "Cara lain untuk mengatakannya",
+    translateBtn: "Terjemahkan",
     subtitlesTitle: "Subtitle → Kosakata",
     subtitlesDesc: "Tempel subtitle atau transkrip dari video yang sedang Anda tonton (mis. panel \"Show transcript\" bawaan YouTube). Klik dua kali pada sebuah kata atau seret untuk memilih frasa, lalu cari dan simpan langsung ke Pembangun Kosakata Anda.",
     subtitlesSourceLabel: "Judul / sumber video (opsional — digunakan sebagai nama folder)",
@@ -2700,6 +2712,7 @@ const UI_TRANSLATIONS = {
     convRevealBtn: "Hiển thị câu trả lời mẫu",
     convModelAnswer: "Câu trả lời mẫu",
     convAltResponses: "Các cách nói khác",
+    translateBtn: "Dịch",
     subtitlesTitle: "Phụ đề → Từ vựng",
     subtitlesDesc: "Dán phụ đề hoặc bản ghi lời thoại từ video bạn đang xem (ví dụ: bảng \"Show transcript\" có sẵn của YouTube). Nhấp đúp vào một từ hoặc kéo để chọn cụm từ, sau đó tra cứu và lưu trực tiếp vào Trình xây dựng từ vựng của bạn.",
     subtitlesSourceLabel: "Tiêu đề / nguồn video (tùy chọn — dùng làm tên thư mục)",
@@ -2895,6 +2908,7 @@ const UI_TRANSLATIONS = {
     convRevealBtn: "मॉडल उत्तर दिखाएं",
     convModelAnswer: "मॉडल उत्तर",
     convAltResponses: "इसे कहने के अन्य तरीके",
+    translateBtn: "अनुवाद करें",
     subtitlesTitle: "सबटाइटल → शब्दावली",
     subtitlesDesc: "आप जो वीडियो पहले से देख रहे हैं उसके सबटाइटल या ट्रांसक्रिप्ट पेस्ट करें (जैसे YouTube का अपना \"Show transcript\" पैनल)। किसी शब्द पर डबल-क्लिक करें या वाक्यांश चुनने के लिए खींचें, फिर उसे खोजें और सीधे अपने वोकैबुलरी बिल्डर में सहेजें।",
     subtitlesSourceLabel: "वीडियो शीर्षक / स्रोत (वैकल्पिक — फ़ोल्डर नाम के रूप में उपयोग किया जाता है)",
@@ -3090,6 +3104,7 @@ const UI_TRANSLATIONS = {
     convRevealBtn: "模範回答を見る",
     convModelAnswer: "模範回答",
     convAltResponses: "他の言い方",
+    translateBtn: "翻訳",
     subtitlesTitle: "字幕→単語帳",
     subtitlesDesc: "すでに視聴している動画の字幕やトランスクリプトを貼り付けてください（例：YouTube自体の「トランスクリプトを表示」パネル）。単語をダブルクリックするか、ドラッグしてフレーズを選択し、調べてそのまま単語ビルダーに保存できます。",
     subtitlesSourceLabel: "動画タイトル／出典（任意 — フォルダ名として使用されます）",
@@ -3285,6 +3300,7 @@ const UI_TRANSLATIONS = {
     convRevealBtn: "Model cevabı göster",
     convModelAnswer: "Model cevap",
     convAltResponses: "Söylemenin diğer yolları",
+    translateBtn: "Çevir",
     subtitlesTitle: "Altyazı → Kelime Bilgisi",
     subtitlesDesc: "Zaten izlemekte olduğunuz bir videonun altyazılarını veya metnini yapıştırın (ör. YouTube'un kendi \"Transkripti göster\" panosu). Bir kelimeye çift tıklayın veya bir ifadeyi seçmek için sürükleyin, ardından arayın ve doğrudan Kelime Oluşturucunuza kaydedin.",
     subtitlesSourceLabel: "Video başlığı / kaynağı (isteğe bağlı — klasör adı olarak kullanılır)",
@@ -3480,6 +3496,7 @@ const UI_TRANSLATIONS = {
     convRevealBtn: "मॉडल जवाफ देखाउनुहोस्",
     convModelAnswer: "मॉडल जवाफ",
     convAltResponses: "भन्ने अन्य तरिकाहरू",
+    translateBtn: "अनुवाद गर्नुहोस्",
     subtitlesTitle: "सबटाइटल → शब्दावली",
     subtitlesDesc: "तपाईंले पहिले नै हेरिरहनुभएको भिडियोको सबटाइटल वा ट्रान्सक्रिप्ट टाँस्नुहोस् (जस्तै YouTube को आफ्नै \"Show transcript\" प्यानल)। कुनै शब्दमा डबल-क्लिक गर्नुहोस् वा वाक्यांश छनोट गर्न तान्नुहोस्, त्यसपछि यसलाई खोज्नुहोस् र सिधै आफ्नो शब्दावली निर्माता मा सुरक्षित गर्नुहोस्।",
     subtitlesSourceLabel: "भिडियो शीर्षक / स्रोत (वैकल्पिक — फोल्डर नामको रूपमा प्रयोग हुन्छ)",
@@ -3675,6 +3692,7 @@ const UI_TRANSLATIONS = {
     convRevealBtn: "Ipakita ang huwarang sagot",
     convModelAnswer: "Huwarang sagot",
     convAltResponses: "Ibang paraan ng pagsasabi",
+    translateBtn: "Isalin",
     subtitlesTitle: "Subtitle → Bokabularyo",
     subtitlesDesc: "I-paste ang subtitle o transcript mula sa video na pinapanood mo na (hal. ang sariling \"Show transcript\" panel ng YouTube). I-double-click ang isang salita o i-drag para pumili ng parirala, pagkatapos ay hanapin ito at i-save nang direkta sa iyong Vocabulary Builder.",
     subtitlesSourceLabel: "Pamagat / pinagmulan ng video (opsyonal — ginagamit bilang pangalan ng folder)",
@@ -5177,7 +5195,56 @@ Respond ONLY with a valid JSON array, no markdown, no backticks:
 }
 
 // ─── Conversation Predictor (YouTube/video dialogue → "predict the next line") ──────
-function ConversationTurnCard({ turn, T }) {
+function JLineTools({ text, lang, T }) {
+  const [furigana, setFurigana] = useState("");
+  const [romaji, setRomaji] = useState("");
+  const [translation, setTranslation] = useState("");
+  const [loadingType, setLoadingType] = useState(null);
+
+  const fetchVariant = async (mode) => {
+    setLoadingType(mode);
+    try {
+      const instruction = mode === "furigana"
+        ? `Add furigana in parentheses after every kanji word in this Japanese text. Return ONLY the text with furigana added, no explanation:\n\n${text}`
+        : mode === "romaji"
+        ? `Convert this Japanese text to romaji (Hepburn romanization). Return ONLY the romaji text, no explanation:\n\n${text}`
+        : `Translate this Japanese text into ${lang || "English"}. Return ONLY the translation, no explanation:\n\n${text}`;
+      const res = await fetch("/api/claude", {
+        method:"POST", headers:{"Content-Type":"application/json"},
+        body: JSON.stringify({ model:"claude-sonnet-4-20250514", max_tokens:500,
+          messages:[{ role:"user", content: instruction }]
+        })
+      });
+      const d = await res.json();
+      const out = d.content?.map(c=>c.text||"").join("").trim() || "";
+      if (mode === "furigana") setFurigana(out);
+      else if (mode === "romaji") setRomaji(out);
+      else setTranslation(out);
+    } catch {}
+    setLoadingType(null);
+  };
+
+  return (
+    <div style={{ marginTop:6, marginBottom:6 }}>
+      <div style={{ display:"flex", gap:6, marginBottom:6 }}>
+        <button onClick={()=>fetchVariant("furigana")} disabled={loadingType!==null} style={{ fontSize:11, color:"#67e8f9", fontWeight:700, background:"rgba(103,232,249,0.1)", padding:"4px 10px", borderRadius:8, border:"1px solid rgba(103,232,249,0.3)", cursor:"pointer" }}>
+          {loadingType==="furigana" ? "⏳" : (T?.furiganaBtn || "ふりがな")}
+        </button>
+        <button onClick={()=>fetchVariant("romaji")} disabled={loadingType!==null} style={{ fontSize:11, color:"#c4b5fd", fontWeight:700, background:"rgba(196,181,253,0.1)", padding:"4px 10px", borderRadius:8, border:"1px solid rgba(196,181,253,0.3)", cursor:"pointer" }}>
+          {loadingType==="romaji" ? "⏳" : (T?.romajiBtn || "Romaji")}
+        </button>
+        <button onClick={()=>fetchVariant("translate")} disabled={loadingType!==null} style={{ fontSize:11, color:"#fbbf24", fontWeight:700, background:"rgba(251,191,36,0.1)", padding:"4px 10px", borderRadius:8, border:"1px solid rgba(251,191,36,0.3)", cursor:"pointer" }}>
+          {loadingType==="translate" ? "⏳" : (T?.translateBtn || "Translate")}
+        </button>
+      </div>
+      {furigana && <p style={{ color:"#67e8f9", fontSize:12, margin:"0 0 4px", fontStyle:"italic", whiteSpace:"pre-wrap" }}>{furigana}</p>}
+      {romaji && <p style={{ color:"#c4b5fd", fontSize:12, margin:"0 0 4px", fontStyle:"italic", whiteSpace:"pre-wrap" }}>{romaji}</p>}
+      {translation && <p style={{ color:"#fbbf24", fontSize:12, margin:"0 0 4px", fontStyle:"italic", whiteSpace:"pre-wrap" }}>{translation}</p>}
+    </div>
+  );
+}
+
+function ConversationTurnCard({ turn, T, lang }) {
   const [revealed, setRevealed] = useState(false);
   const [recording, setRecording] = useState(false);
   const [transcript, setTranscript] = useState("");
@@ -5209,11 +5276,12 @@ function ConversationTurnCard({ turn, T }) {
         <p style={{ color:"#f1f5f9", fontSize:14, lineHeight:1.8, margin:0, flex:1 }}>{turn.speakerALine}</p>
       </div>
       <button onClick={()=>speakJapanese(stripForSpeech(turn.speakerALine))}
-        style={{ display:"flex", alignItems:"center", gap:6, marginBottom:12, padding:"6px 12px", borderRadius:8, background:"rgba(6,182,212,0.12)", border:`1px solid rgba(6,182,212,0.3)`, color:C.teal, fontSize:12, fontWeight:700, cursor:"pointer" }}>
+        style={{ display:"flex", alignItems:"center", gap:6, marginBottom:8, padding:"6px 12px", borderRadius:8, background:"rgba(6,182,212,0.12)", border:`1px solid rgba(6,182,212,0.3)`, color:C.teal, fontSize:12, fontWeight:700, cursor:"pointer" }}>
         🔊 {T?.listenAudio || "Listen"}
       </button>
+      <JLineTools text={turn.speakerALine} lang={lang} T={T} />
 
-      <p style={{ color:C.purpleLight, fontSize:12, fontWeight:700, margin:"0 0 8px" }}>
+      <p style={{ color:C.purpleLight, fontSize:12, fontWeight:700, margin:"6px 0 8px" }}>
         {T?.convYourTurn || "How would you respond?"}
       </p>
       <button onClick={toggleRecording}
@@ -5233,9 +5301,10 @@ function ConversationTurnCard({ turn, T }) {
           <div style={{ background:"rgba(34,197,94,0.06)", borderRadius:10, padding:"10px 12px" }}>
             <p style={{ color:C.green, fontSize:11, fontWeight:700, margin:"0 0 4px" }}>✅ {T?.convModelAnswer || "Model answer"}</p>
             <p style={{ color:"#f1f5f9", fontSize:13, margin:"0 0 8px" }}>{turn.speakerBLine}</p>
+            <JLineTools text={turn.speakerBLine} lang={lang} T={T} />
             {Array.isArray(turn.altResponses) && turn.altResponses.length > 0 && (
               <>
-                <p style={{ color:"#94a3b8", fontSize:11, fontWeight:700, margin:"0 0 4px" }}>{T?.convAltResponses || "Other ways to say it"}</p>
+                <p style={{ color:"#94a3b8", fontSize:11, fontWeight:700, margin:"8px 0 4px" }}>{T?.convAltResponses || "Other ways to say it"}</p>
                 {turn.altResponses.map((alt, i) => (
                   <p key={i} style={{ color:"#cbd5e1", fontSize:12, margin:"0 0 3px" }}>
                     <span style={{ color:C.amber, fontWeight:700 }}>{alt.style ? `[${alt.style}] ` : ""}</span>{alt.text}
@@ -5344,7 +5413,7 @@ Respond ONLY with a valid JSON array, no markdown, no backticks:
         </button>
       </div>
       <div style={{ display:"flex", flexDirection:"column", gap:12 }}>
-        {turns.map((turn, i) => <ConversationTurnCard key={i} turn={turn} T={T} />)}
+        {turns.map((turn, i) => <ConversationTurnCard key={i} turn={turn} T={T} lang={form?.preferredLang || "English"} />)}
       </div>
     </div>
   );
