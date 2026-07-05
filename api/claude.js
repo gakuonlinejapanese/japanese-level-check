@@ -29,7 +29,7 @@ export default async function handler(req, res) {
             "Authorization": `Bearer ${deepInfraKey}`,
           },
           body: JSON.stringify({
-            model: "meta-llama/Llama-3.3-70B-Instruct",
+            model: "meta-llama/Llama-3.3-70B-Instruct-Turbo",
             ...commonBody,
           }),
         });
