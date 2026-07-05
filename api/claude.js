@@ -21,28 +21,43 @@ export default async function handler(req, res) {
     const deepInfraKey = process.env.DEEPINFRA_API_KEY;
 
     if (deepInfraKey) {
-      try {
-        const response = await fetch("https://api.deepinfra.com/v1/openai/chat/completions", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${deepInfraKey}`,
-          },
-          body: JSON.stringify({
-            model: "meta-llama/Llama-3.3-70B-Instruct-Turbo",
-            ...commonBody,
-          }),
-        });
+      const deepInfraBody = JSON.stringify({
+        model: "meta-llama/Llama-3.3-70B-Instruct-Turbo",
+        ...commonBody,
+      });
 
-        const data = await response.json();
+      // Retry a couple of times on transient 429s from DeepInfra before
+      // giving up and falling back to Groq.
+      const maxAttempts = 3;
+      for (let attempt = 0; attempt < maxAttempts; attempt++) {
+        try {
+          const response = await fetch("https://api.deepinfra.com/v1/openai/chat/completions", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": `Bearer ${deepInfraKey}`,
+            },
+            body: deepInfraBody,
+          });
 
-        if (response.ok) {
-          const text = data.choices?.[0]?.message?.content || "";
-          return res.status(200).json({ content: [{ type: "text", text }] });
+          if (response.status === 429) {
+            if (attempt < maxAttempts - 1) {
+              await new Promise(r => setTimeout(r, 400 * (attempt + 1)));
+              continue;
+            }
+            break; // exhausted retries, fall through to Groq fallback
+          }
+
+          const data = await response.json();
+
+          if (response.ok) {
+            const text = data.choices?.[0]?.message?.content || "";
+            return res.status(200).json({ content: [{ type: "text", text }] });
+          }
+          break; // non-retryable error from DeepInfra, fall through to Groq fallback
+        } catch (e) {
+          break; // network error calling DeepInfra, fall through to Groq fallback
         }
-        // Non-OK from DeepInfra: fall through to Groq fallback below
-      } catch (e) {
-        // Network error calling DeepInfra: fall through to Groq fallback below
       }
     }
 
