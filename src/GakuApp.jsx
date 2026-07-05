@@ -131,7 +131,7 @@ const UI_TRANSLATIONS = {
     weeklyProgress: "Weekly Progress",
     // Tab labels
     tabSchedule: "📅 Schedule",
-    tabPractice: "🎯 Practice Set",
+    tabPractice: "✨ From Content",
     tabVocabulary: "📚 Vocabulary",
     tabResources: "🔗 Resources",
     tabMilestones: "🏆 Milestones",
@@ -253,7 +253,7 @@ const UI_TRANSLATIONS = {
     // How to use
     howToTitle: "How to use this app",
     howToSchedule: "Your weekly study plan, broken into daily tasks. Tap a task to mark it done and track your weekly progress.",
-    howToPractice: "AI-generated exercises based only on the skills you chose in your profile (e.g. listening, grammar, kanji). Tap 'Show answer' to check yourself.",
+    howToPractice: "AI-generated exercises built from Japanese text you paste (articles, subtitles, captions) — covers vocabulary, kanji, grammar, reading, listening, conversation, and pronunciation. Tap 'Show answer' to check yourself.",
     howToVocab: "Search any topic to get level-appropriate words with example sentences, a visual association, and a CLT usage tip. Save words you want to remember.",
     howToResources: "Free (and some paid) tools matched to your selected skills — open them directly from here.",
     howToMilestones: "Your roadmap toward your goal. Tap each milestone as you complete it.",
@@ -365,7 +365,7 @@ const UI_TRANSLATIONS = {
     editProfile: "✏️ Modifier le profil",
     weeklyProgress: "Progression hebdomadaire",
     tabSchedule: "📅 Planning",
-    tabPractice: "🎯 Exercices",
+    tabPractice: "✨ À partir du contenu",
     tabVocabulary: "📚 Vocabulaire",
     tabResources: "🔗 Ressources",
     tabMilestones: "🏆 Objectifs",
@@ -476,7 +476,7 @@ const UI_TRANSLATIONS = {
     skillReading: "📖 Lecture", skillKanji: "🈳 Kanji", skillGrammar: "📝 Grammaire",
     howToTitle: "Comment utiliser cette application",
     howToSchedule: "Votre plan d'étude hebdomadaire, divisé en tâches quotidiennes. Appuyez sur une tâche pour la marquer comme faite.",
-    howToPractice: "Exercices générés par l'IA basés sur les compétences choisies dans votre profil. Appuyez sur 'Voir la réponse' pour vous corriger.",
+    howToPractice: "Exercices générés par l'IA à partir du texte japonais que vous collez (articles, sous-titres, légendes) — vocabulaire, kanji, grammaire, lecture, écoute, conversation et prononciation. Appuyez sur « Voir la réponse » pour vous corriger.",
     howToVocab: "Recherchez n'importe quel sujet pour obtenir des mots adaptés à votre niveau avec des phrases d'exemple. Sauvegardez les mots à retenir.",
     howToResources: "Outils gratuits (et certains payants) correspondant à vos compétences sélectionnées.",
     howToMilestones: "Votre feuille de route vers votre objectif. Cochez chaque étape franchie.",
@@ -538,7 +538,7 @@ const UI_TRANSLATIONS = {
     editProfile: "✏️ Editar perfil",
     weeklyProgress: "Progreso semanal",
     tabSchedule: "📅 Horario",
-    tabPractice: "🎯 Ejercicios",
+    tabPractice: "✨ Desde el contenido",
     tabVocabulary: "📚 Vocabulario",
     tabResources: "🔗 Recursos",
     tabMilestones: "🏆 Metas",
@@ -649,7 +649,7 @@ const UI_TRANSLATIONS = {
     skillReading: "📖 Lectura", skillKanji: "🈳 Kanji", skillGrammar: "📝 Gramática",
     howToTitle: "Cómo usar esta aplicación",
     howToSchedule: "Tu plan de estudio semanal, dividido en tareas diarias. Toca una tarea para marcarla como completada.",
-    howToPractice: "Ejercicios generados por IA basados en las habilidades que elegiste. Toca 'Ver respuesta' para comprobar.",
+    howToPractice: "Ejercicios generados por IA a partir del texto japonés que pegas (artículos, subtítulos, leyendas) — vocabulario, kanji, gramática, lectura, escucha, conversación y pronunciación. Toca 'Ver respuesta' para comprobar.",
     howToVocab: "Busca cualquier tema para obtener palabras apropiadas para tu nivel con frases de ejemplo. Guarda las palabras que quieras recordar.",
     howToResources: "Herramientas gratuitas (y algunas de pago) que coinciden con tus habilidades seleccionadas.",
     howToMilestones: "Tu hoja de ruta hacia tu objetivo. Toca cada hito cuando lo completes.",
@@ -711,7 +711,7 @@ const UI_TRANSLATIONS = {
     editProfile: "✏️ Editar perfil",
     weeklyProgress: "Progresso semanal",
     tabSchedule: "📅 Agenda",
-    tabPractice: "🎯 Exercícios",
+    tabPractice: "✨ A partir do conteúdo",
     tabVocabulary: "📚 Vocabulário",
     tabResources: "🔗 Recursos",
     tabMilestones: "🏆 Metas",
@@ -822,7 +822,7 @@ const UI_TRANSLATIONS = {
     skillReading: "📖 Leitura", skillKanji: "🈳 Kanji", skillGrammar: "📝 Gramática",
     howToTitle: "Como usar este aplicativo",
     howToSchedule: "Seu plano de estudo semanal, dividido em tarefas diárias.",
-    howToPractice: "Exercícios gerados por IA baseados nas habilidades escolhidas. Toque em 'Ver resposta' para conferir.",
+    howToPractice: "Exercícios gerados por IA a partir do texto japonês que você cola (artigos, legendas, descrições) — vocabulário, kanji, gramática, leitura, escuta, conversação e pronúncia. Toque em 'Ver resposta' para conferir.",
     howToVocab: "Pesquise qualquer tema para obter palavras adequadas ao seu nível com frases de exemplo.",
     howToResources: "Ferramentas gratuitas (e algumas pagas) que correspondem às suas habilidades selecionadas.",
     howToMilestones: "Seu roteiro para seu objetivo. Toque em cada marco quando o completar.",
@@ -884,7 +884,7 @@ const UI_TRANSLATIONS = {
     editProfile: "✏️ Profil bearbeiten",
     weeklyProgress: "Wöchentlicher Fortschritt",
     tabSchedule: "📅 Zeitplan",
-    tabPractice: "🎯 Übungen",
+    tabPractice: "✨ Aus Inhalt",
     tabVocabulary: "📚 Vokabular",
     tabResources: "🔗 Ressourcen",
     tabMilestones: "🏆 Meilensteine",
@@ -995,7 +995,7 @@ const UI_TRANSLATIONS = {
     skillReading: "📖 Lesen", skillKanji: "🈳 Kanji", skillGrammar: "📝 Grammatik",
     howToTitle: "Wie man diese App benutzt",
     howToSchedule: "Ihr wöchentlicher Lernplan, aufgeteilt in tägliche Aufgaben.",
-    howToPractice: "KI-generierte Übungen basierend auf den in Ihrem Profil gewählten Fähigkeiten.",
+    howToPractice: "KI-generierte Übungen aus dem japanischen Text, den Sie einfügen (Artikel, Untertitel, Bildunterschriften) — Wortschatz, Kanji, Grammatik, Lesen, Hören, Konversation und Aussprache. Tippen Sie auf 'Antwort anzeigen', um sich selbst zu überprüfen.",
     howToVocab: "Suchen Sie nach beliebigen Themen, um niveaugerechte Wörter mit Beispielsätzen zu erhalten.",
     howToResources: "Kostenlose (und einige kostenpflichtige) Tools, die Ihren ausgewählten Fähigkeiten entsprechen.",
     howToMilestones: "Ihr Fahrplan zu Ihrem Ziel. Markieren Sie jeden Meilenstein, wenn Sie ihn erreichen.",
@@ -1057,7 +1057,7 @@ const UI_TRANSLATIONS = {
     editProfile: "✏️ Modifica profilo",
     weeklyProgress: "Progressi settimanali",
     tabSchedule: "📅 Programma",
-    tabPractice: "🎯 Esercizi",
+    tabPractice: "✨ Dal contenuto",
     tabVocabulary: "📚 Vocabolario",
     tabResources: "🔗 Risorse",
     tabMilestones: "🏆 Obiettivi",
@@ -1168,7 +1168,7 @@ const UI_TRANSLATIONS = {
     skillReading: "📖 Lettura", skillKanji: "🈳 Kanji", skillGrammar: "📝 Grammatica",
     howToTitle: "Come usare questa app",
     howToSchedule: "Il tuo piano di studio settimanale, suddiviso in attività giornaliere. Tocca un'attività per contrassegnarla come completata.",
-    howToPractice: "Esercizi generati dall'IA basati sulle abilità scelte nel tuo profilo. Tocca 'Mostra risposta' per verificare.",
+    howToPractice: "Esercizi generati dall'IA a partire dal testo giapponese che incolli (articoli, sottotitoli, didascalie) — vocabolario, kanji, grammatica, lettura, ascolto, conversazione e pronuncia. Tocca 'Mostra risposta' per verificare.",
     howToVocab: "Cerca qualsiasi argomento per ottenere parole appropriate al tuo livello con frasi di esempio. Salva le parole da ricordare.",
     howToResources: "Strumenti gratuiti (e alcuni a pagamento) corrispondenti alle tue abilità selezionate.",
     howToMilestones: "La tua roadmap verso il tuo obiettivo. Tocca ogni pietra miliare quando la completi.",
@@ -1230,7 +1230,7 @@ const UI_TRANSLATIONS = {
     editProfile: "✏️ 编辑资料",
     weeklyProgress: "每周进度",
     tabSchedule: "📅 日程",
-    tabPractice: "🎯 练习",
+    tabPractice: "✨ 来自内容",
     tabVocabulary: "📚 词汇",
     tabResources: "🔗 资源",
     tabMilestones: "🏆 里程碑",
@@ -1341,7 +1341,7 @@ const UI_TRANSLATIONS = {
     skillReading: "📖 阅读", skillKanji: "🈳 汉字", skillGrammar: "📝 语法",
     howToTitle: "如何使用此应用",
     howToSchedule: "你的每周学习计划，分为每日任务。点击任务以标记完成并跟踪每周进度。",
-    howToPractice: "基于你在资料中选择技能的AI生成练习。点击「显示答案」自我检查。",
+    howToPractice: "根据你粘贴的日语文本（文章、字幕、说明）由AI生成的练习——涵盖词汇、汉字、语法、阅读、听力、会话和发音。点击「显示答案」自我检查。",
     howToVocab: "搜索任何话题，获取适合你级别的单词、例句和CLT使用技巧。保存你想记住的单词。",
     howToResources: "与你选择技能匹配的免费（和部分付费）工具，可直接从这里打开。",
     howToMilestones: "你实现目标的路线图。完成每个里程碑时点击它。",
@@ -1403,7 +1403,7 @@ const UI_TRANSLATIONS = {
     editProfile: "✏️ 編輯資料",
     weeklyProgress: "每週進度",
     tabSchedule: "📅 日程",
-    tabPractice: "🎯 練習",
+    tabPractice: "✨ 來自內容",
     tabVocabulary: "📚 詞彙",
     tabResources: "🔗 資源",
     tabMilestones: "🏆 里程碑",
@@ -1514,7 +1514,7 @@ const UI_TRANSLATIONS = {
     skillReading: "📖 閱讀", skillKanji: "🈳 漢字", skillGrammar: "📝 語法",
     howToTitle: "如何使用此應用",
     howToSchedule: "你的每週學習計劃，分為每日任務。點擊任務以標記完成並跟踪每週進度。",
-    howToPractice: "基於你在資料中選擇技能的AI生成練習。點擊「顯示答案」自我檢查。",
+    howToPractice: "根據你貼上的日語文本（文章、字幕、說明）由AI生成的練習——涵蓋詞彙、漢字、文法、閱讀、聽力、會話和發音。點擊「顯示答案」自我檢查。",
     howToVocab: "搜索任何話題，獲取適合你級別的單字、例句和CLT使用技巧。儲存你想記住的單字。",
     howToResources: "與你選擇技能匹配的免費（和部分付費）工具，可直接從這裡打開。",
     howToMilestones: "你實現目標的路線圖。完成每個里程碑時點擊它。",
@@ -1576,7 +1576,7 @@ const UI_TRANSLATIONS = {
     editProfile: "✏️ 프로필 편집",
     weeklyProgress: "주간 진도",
     tabSchedule: "📅 일정",
-    tabPractice: "🎯 연습",
+    tabPractice: "✨ 콘텐츠에서",
     tabVocabulary: "📚 어휘",
     tabResources: "🔗 자료",
     tabMilestones: "🏆 목표",
@@ -1687,7 +1687,7 @@ const UI_TRANSLATIONS = {
     skillReading: "📖 독해", skillKanji: "🈳 한자", skillGrammar: "📝 문법",
     howToTitle: "이 앱 사용 방법",
     howToSchedule: "주간 학습 계획, 일별 과제로 나뉩니다. 과제를 눌러 완료 표시하고 주간 진도를 추적하세요.",
-    howToPractice: "프로필에서 선택한 스킬을 기반으로 AI가 생성한 연습문제. '답 보기'를 눌러 확인하세요.",
+    howToPractice: "붙여넣은 일본어 텍스트(기사, 자막, 캡션)를 기반으로 AI가 생성한 연습문제 — 어휘, 한자, 문법, 독해, 듣기, 회화, 발음을 다룹니다. '답 보기'를 눌러 확인하세요.",
     howToVocab: "어떤 주제든 검색하여 레벨에 맞는 단어와 예문을 확인하세요. 기억하고 싶은 단어를 저장하세요.",
     howToResources: "선택한 스킬과 일치하는 무료(및 일부 유료) 도구 — 여기서 바로 열어보세요.",
     howToMilestones: "목표를 향한 로드맵. 각 마일스톤을 완료할 때 눌러주세요.",
@@ -1749,7 +1749,7 @@ const UI_TRANSLATIONS = {
     editProfile: "✏️ แก้ไขโปรไฟล์",
     weeklyProgress: "ความคืบหน้ารายสัปดาห์",
     tabSchedule: "📅 ตารางเรียน",
-    tabPractice: "🎯 แบบฝึกหัด",
+    tabPractice: "✨ จากเนื้อหา",
     tabVocabulary: "📚 คำศัพท์",
     tabResources: "🔗 แหล่งเรียนรู้",
     tabMilestones: "🏆 เป้าหมาย",
@@ -1860,7 +1860,7 @@ const UI_TRANSLATIONS = {
     skillReading: "📖 การอ่าน", skillKanji: "🈳 คันจิ", skillGrammar: "📝 ไวยากรณ์",
     howToTitle: "วิธีใช้แอปนี้",
     howToSchedule: "แผนการเรียนรายสัปดาห์ แบ่งเป็นงานรายวัน แตะงานเพื่อทำเครื่องหมายว่าเสร็จแล้วและติดตามความคืบหน้า",
-    howToPractice: "แบบฝึกหัดที่สร้างโดย AI ตามทักษะที่คุณเลือกในโปรไฟล์ แตะ 'ดูคำตอบ' เพื่อตรวจสอบ",
+    howToPractice: "แบบฝึกหัดที่สร้างโดย AI จากข้อความภาษาญี่ปุ่นที่คุณวาง (บทความ คำบรรยาย แคปชั่น) — ครอบคลุมคำศัพท์ คันจิ ไวยากรณ์ การอ่าน การฟัง การสนทนา และการออกเสียง แตะ 'ดูคำตอบ' เพื่อตรวจสอบ",
     howToVocab: "ค้นหาหัวข้อใดก็ได้เพื่อรับคำศัพท์ที่เหมาะกับระดับพร้อมประโยคตัวอย่าง บันทึกคำที่ต้องการจำ",
     howToResources: "เครื่องมือฟรี (และบางส่วนเสียเงิน) ที่ตรงกับทักษะที่คุณเลือก",
     howToMilestones: "แผนที่เส้นทางสู่เป้าหมายของคุณ แตะแต่ละหมุดเมื่อทำสำเร็จ",
@@ -1922,7 +1922,7 @@ const UI_TRANSLATIONS = {
     editProfile: "✏️ Edit profil",
     weeklyProgress: "Kemajuan mingguan",
     tabSchedule: "📅 Jadual",
-    tabPractice: "🎯 Latihan",
+    tabPractice: "✨ Dari Kandungan",
     tabVocabulary: "📚 Kosa Kata",
     tabResources: "🔗 Sumber",
     tabMilestones: "🏆 Pencapaian",
@@ -2033,7 +2033,7 @@ const UI_TRANSLATIONS = {
     skillReading: "📖 Membaca", skillKanji: "🈳 Kanji", skillGrammar: "📝 Tatabahasa",
     howToTitle: "Cara menggunakan apl ini",
     howToSchedule: "Pelan belajar mingguan anda, dibahagikan kepada tugasan harian. Ketik tugasan untuk tandai selesai.",
-    howToPractice: "Latihan yang dijana AI berdasarkan kemahiran yang anda pilih. Ketik 'Tunjuk jawapan' untuk semak.",
+    howToPractice: "Latihan yang dijana AI daripada teks Jepun yang anda tampal (artikel, sari kata, kapsyen) — merangkumi kosa kata, kanji, tatabahasa, bacaan, pendengaran, perbualan dan sebutan. Ketik 'Tunjuk jawapan' untuk semak.",
     howToVocab: "Cari mana-mana topik untuk mendapatkan perkataan yang sesuai dengan tahap anda. Simpan perkataan yang ingin diingat.",
     howToResources: "Alat percuma (dan beberapa berbayar) yang sepadan dengan kemahiran terpilih anda.",
     howToMilestones: "Peta jalan anda menuju matlamat. Ketik setiap pencapaian apabila selesai.",
@@ -2095,7 +2095,7 @@ const UI_TRANSLATIONS = {
     editProfile: "✏️ Edit profil",
     weeklyProgress: "Kemajuan mingguan",
     tabSchedule: "📅 Jadwal",
-    tabPractice: "🎯 Latihan",
+    tabPractice: "✨ Dari Konten",
     tabVocabulary: "📚 Kosakata",
     tabResources: "🔗 Sumber",
     tabMilestones: "🏆 Pencapaian",
@@ -2206,7 +2206,7 @@ const UI_TRANSLATIONS = {
     skillReading: "📖 Membaca", skillKanji: "🈳 Kanji", skillGrammar: "📝 Tata Bahasa",
     howToTitle: "Cara menggunakan aplikasi ini",
     howToSchedule: "Rencana belajar mingguan Anda, dibagi menjadi tugas harian. Ketuk tugas untuk menandainya selesai.",
-    howToPractice: "Latihan yang dihasilkan AI berdasarkan keterampilan yang Anda pilih. Ketuk 'Tampilkan jawaban' untuk memeriksa.",
+    howToPractice: "Latihan yang dihasilkan AI dari teks Jepang yang Anda tempel (artikel, subtitle, keterangan) — mencakup kosakata, kanji, tata bahasa, membaca, mendengarkan, percakapan, dan pengucapan. Ketuk 'Tampilkan jawaban' untuk memeriksa.",
     howToVocab: "Cari topik apa saja untuk mendapatkan kata-kata sesuai level Anda dengan kalimat contoh. Simpan kata yang ingin diingat.",
     howToResources: "Alat gratis (dan beberapa berbayar) yang sesuai dengan keterampilan pilihan Anda.",
     howToMilestones: "Peta jalan Anda menuju tujuan. Ketuk setiap pencapaian saat Anda menyelesaikannya.",
@@ -2268,7 +2268,7 @@ const UI_TRANSLATIONS = {
     editProfile: "✏️ Chỉnh sửa hồ sơ",
     weeklyProgress: "Tiến độ hàng tuần",
     tabSchedule: "📅 Lịch học",
-    tabPractice: "🎯 Bài tập",
+    tabPractice: "✨ Từ nội dung",
     tabVocabulary: "📚 Từ vựng",
     tabResources: "🔗 Tài liệu",
     tabMilestones: "🏆 Mục tiêu",
@@ -2379,7 +2379,7 @@ const UI_TRANSLATIONS = {
     skillReading: "📖 Đọc hiểu", skillKanji: "🈳 Kanji", skillGrammar: "📝 Ngữ pháp",
     howToTitle: "Cách sử dụng ứng dụng này",
     howToSchedule: "Kế hoạch học hàng tuần của bạn, chia thành các nhiệm vụ hàng ngày. Nhấn nhiệm vụ để đánh dấu hoàn thành.",
-    howToPractice: "Bài tập do AI tạo dựa trên các kỹ năng bạn chọn. Nhấn 'Hiện đáp án' để kiểm tra.",
+    howToPractice: "Bài tập do AI tạo từ văn bản tiếng Nhật bạn dán vào (bài viết, phụ đề, chú thích) — bao gồm từ vựng, kanji, ngữ pháp, đọc hiểu, nghe, hội thoại và phát âm. Nhấn 'Hiện đáp án' để kiểm tra.",
     howToVocab: "Tìm kiếm bất kỳ chủ đề nào để nhận từ vựng phù hợp với cấp độ cùng câu ví dụ. Lưu từ muốn ghi nhớ.",
     howToResources: "Công cụ miễn phí (và một số có phí) phù hợp với kỹ năng bạn chọn.",
     howToMilestones: "Lộ trình hướng tới mục tiêu của bạn. Nhấn từng cột mốc khi hoàn thành.",
@@ -2441,7 +2441,7 @@ const UI_TRANSLATIONS = {
     editProfile: "✏️ प्रोफ़ाइल संपादित करें",
     weeklyProgress: "साप्ताहिक प्रगति",
     tabSchedule: "📅 समय-सारणी",
-    tabPractice: "🎯 अभ्यास",
+    tabPractice: "✨ सामग्री से",
     tabVocabulary: "📚 शब्दावली",
     tabResources: "🔗 संसाधन",
     tabMilestones: "🏆 लक्ष्य",
@@ -2552,7 +2552,7 @@ const UI_TRANSLATIONS = {
     skillReading: "📖 पठन", skillKanji: "🈳 Kanji", skillGrammar: "📝 व्याकरण",
     howToTitle: "इस ऐप का उपयोग कैसे करें",
     howToSchedule: "आपकी साप्ताहिक अध्ययन योजना, दैनिक कार्यों में विभाजित। साप्ताहिक प्रगति ट्रैक करने के लिए कार्य टैप करें।",
-    howToPractice: "आपकी प्रोफ़ाइल में चुने गए कौशल के आधार पर AI-जनित अभ्यास। जांचने के लिए 'उत्तर दिखाएं' टैप करें।",
+    howToPractice: "आपके द्वारा पेस्ट किए गए जापानी टेक्स्ट (लेख, सबटाइटल, कैप्शन) से AI-जनित अभ्यास — शब्दावली, कांजी, व्याकरण, पठन, श्रवण, बातचीत और उच्चारण को कवर करता है। जांचने के लिए 'उत्तर दिखाएं' टैप करें।",
     howToVocab: "किसी भी विषय के लिए खोजें और उदाहरण वाक्यों के साथ स्तर-उपयुक्त शब्द पाएं।",
     howToResources: "आपके चुने हुए कौशल से मेल खाने वाले मुफ़्त (और कुछ सशुल्क) टूल।",
     howToMilestones: "आपके लक्ष्य की ओर रोडमैप। पूरा होने पर प्रत्येक मील का पत्थर टैप करें।",
@@ -2614,7 +2614,7 @@ const UI_TRANSLATIONS = {
     editProfile: "✏️ プロフィール編集",
     weeklyProgress: "週間進捗",
     tabSchedule: "📅 スケジュール",
-    tabPractice: "🎯 練習問題",
+    tabPractice: "✨ コンテンツから",
     tabVocabulary: "📚 単語帳",
     tabResources: "🔗 リソース",
     tabMilestones: "🏆 目標",
@@ -2725,7 +2725,7 @@ const UI_TRANSLATIONS = {
     skillReading: "📖 読解", skillKanji: "🈳 漢字", skillGrammar: "📝 文法",
     howToTitle: "このアプリの使い方",
     howToSchedule: "週間学習プランを日々のタスクに分割しています。タスクをタップして完了をマークし、週間進捗を追跡します。",
-    howToPractice: "プロフィールで選んだスキルに基づいたAI生成の練習問題です。「答えを見る」をタップして確認できます。",
+    howToPractice: "貼り付けた日本語テキスト（記事・字幕・キャプション）から生成されるAI練習問題です。語彙・漢字・文法・読解・リスニング・会話・発音をカバーします。「答えを見る」をタップして確認できます。",
     howToVocab: "任意のトピックを検索すると、あなたのレベルに合った単語と例文が表示されます。覚えたい単語を保存できます。",
     howToResources: "選択したスキルに合った無料（一部有料）のツールを直接ここから開けます。",
     howToMilestones: "目標へのロードマップです。達成するたびに各マイルストーンをタップしてください。",
@@ -2787,7 +2787,7 @@ const UI_TRANSLATIONS = {
     editProfile: "✏️ Profili düzenle",
     weeklyProgress: "Haftalık ilerleme",
     tabSchedule: "📅 Program",
-    tabPractice: "🎯 Alıştırma",
+    tabPractice: "✨ İçerikten",
     tabVocabulary: "📚 Kelime Bilgisi",
     tabResources: "🔗 Kaynaklar",
     tabMilestones: "🏆 Hedefler",
@@ -2898,7 +2898,7 @@ const UI_TRANSLATIONS = {
     skillReading: "📖 Okuma", skillKanji: "🈳 Kanji", skillGrammar: "📝 Dil Bilgisi",
     howToTitle: "Bu uygulama nasıl kullanılır",
     howToSchedule: "Günlük görevlere bölünmüş haftalık çalışma planınız. Tamamlandı olarak işaretlemek için bir göreve dokunun.",
-    howToPractice: "Profilinizde seçtiğiniz becerilere dayalı AI tarafından oluşturulan alıştırmalar. Kontrol etmek için 'Cevabı göster'e dokunun.",
+    howToPractice: "Yapıştırdığınız Japonca metinden (makale, altyazı, açıklama) AI tarafından oluşturulan alıştırmalar — kelime, kanji, dilbilgisi, okuma, dinleme, konuşma ve telaffuzu kapsar. Kontrol etmek için 'Cevabı göster'e dokunun.",
     howToVocab: "Seviyenize uygun kelimeleri örnek cümlelerle almak için herhangi bir konu arayın. Hatırlamak istediğiniz kelimeleri kaydedin.",
     howToResources: "Seçtiğiniz becerilerle eşleşen ücretsiz (ve bazı ücretli) araçlar, doğrudan buradan açılır.",
     howToMilestones: "Hedefinize giden yol haritanız. Her kilometre taşını tamamladığınızda dokunun.",
@@ -2960,7 +2960,7 @@ const UI_TRANSLATIONS = {
     editProfile: "✏️ प्रोफाइल सम्पादन गर्नुहोस्",
     weeklyProgress: "साप्ताहिक प्रगति",
     tabSchedule: "📅 तालिका",
-    tabPractice: "🎯 अभ्यास",
+    tabPractice: "✨ सामग्रीबाट",
     tabVocabulary: "📚 शब्दावली",
     tabResources: "🔗 स्रोतहरू",
     tabMilestones: "🏆 लक्ष्यहरू",
@@ -3071,7 +3071,7 @@ const UI_TRANSLATIONS = {
     skillReading: "📖 पठन", skillKanji: "🈳 कान्जी", skillGrammar: "📝 व्याकरण",
     howToTitle: "यो एप कसरी प्रयोग गर्ने",
     howToSchedule: "तपाईंको साप्ताहिक अध्ययन योजना, दैनिक कार्यहरूमा विभाजित। साप्ताहिक प्रगति ट्र्याक गर्न कार्यलाई ट्याप गर्नुहोस्।",
-    howToPractice: "तपाईंको प्रोफाइलमा चयन गरिएका सीपहरूमा आधारित AI-उत्पन्न अभ्यास। जाँच गर्न 'जवाफ देखाउनुहोस्' ट्याप गर्नुहोस्।",
+    howToPractice: "तपाईंले टाँस्नुभएको जापानी पाठ (लेख, उपशीर्षक, क्याप्शन) बाट AI-उत्पन्न अभ्यास — शब्दावली, कांजी, व्याकरण, पठन, सुनाइ, कुराकानी र उच्चारण समेट्छ। जाँच गर्न 'जवाफ देखाउनुहोस्' ट्याप गर्नुहोस्।",
     howToVocab: "तपाईंको स्तरमा उपयुक्त शब्दहरू उदाहरण वाक्यहरूसहित प्राप्त गर्न कुनै पनि विषय खोज्नुहोस्। सम्झन चाहेका शब्दहरू सेभ गर्नुहोस्।",
     howToResources: "तपाईंले चयन गरेका सीपहरूसँग मेल खाने नि:शुल्क (र केही भुक्तानी गरिएका) उपकरणहरू, सिधै यहाँबाट खोल्नुहोस्।",
     howToMilestones: "तपाईंको लक्ष्यतर्फको रोडम्याप। पूरा गर्दा हरेक माइलस्टोन ट्याप गर्नुहोस्।",
@@ -3133,7 +3133,7 @@ const UI_TRANSLATIONS = {
     editProfile: "✏️ I-edit ang profile",
     weeklyProgress: "Lingguhang progreso",
     tabSchedule: "📅 Iskedyul",
-    tabPractice: "🎯 Pagsasanay",
+    tabPractice: "✨ Mula sa Nilalaman",
     tabVocabulary: "📚 Bokabularyo",
     tabResources: "🔗 Mga Resources",
     tabMilestones: "🏆 Mga Layunin",
@@ -3244,7 +3244,7 @@ const UI_TRANSLATIONS = {
     skillReading: "📖 Pagbasa", skillKanji: "🈳 Kanji", skillGrammar: "📝 Gramatika",
     howToTitle: "Paano gamitin ang app na ito",
     howToSchedule: "Ang iyong lingguhang study plan, nahahati sa araw-araw na gawain. I-tap ang gawain upang markahan itong tapos na.",
-    howToPractice: "Mga pagsasanay na ginawa ng AI batay sa mga kasanayang pinili mo sa iyong profile. I-tap ang 'Ipakita ang sagot' upang suriin.",
+    howToPractice: "Mga pagsasanay na ginawa ng AI mula sa Japanese text na iyong idinikit (artikulo, subtitle, caption) — sinasaklaw ang bokabularyo, kanji, gramatika, pagbasa, pakikinig, pag-uusap, at pagbigkas. I-tap ang 'Ipakita ang sagot' upang suriin.",
     howToVocab: "Maghanap ng anumang paksa upang makakuha ng mga salitang angkop sa iyong antas na may mga halimbawang pangungusap. I-save ang mga salitang gusto mong tandaan.",
     howToResources: "Libreng (at ilang bayad) na mga tool na tumutugma sa iyong mga piniling kasanayan, direktang bukas dito.",
     howToMilestones: "Ang iyong roadmap patungo sa iyong layunin. I-tap ang bawat milestone kapag natapos mo na.",
@@ -4564,7 +4564,7 @@ function ExerciseCard({ item, revealed, onReveal, T }) {
       <div style={{ display:"flex", alignItems:"flex-start", gap:8, margin:"0 0 6px" }}>
         <p style={{ color:"#f1f5f9", fontSize:14, lineHeight:1.8, margin:0, whiteSpace:"pre-wrap", flex:1 }}>{item.prompt}</p>
       </div>
-      {item.skill === "listening" && (
+      {(item.skill === "listening" || item.skill === "pronunciation") && (
         <button onClick={()=>speakJapanese(item.prompt)}
           style={{ display:"flex", alignItems:"center", gap:6, marginBottom:8, padding:"6px 12px", borderRadius:8, background:"rgba(6,182,212,0.12)", border:`1px solid rgba(6,182,212,0.3)`, color:C.teal, fontSize:12, fontWeight:700, cursor:"pointer" }}>
           🔊 {T?.listenAudio || "Listen"}
@@ -4637,12 +4637,22 @@ Create between 10 and 20 practice activities (choose a count that fits the amoun
    - N3: sentence meaning, grammar function of specific phrases, paraphrase
    - N2: nuance, formal/casual register differences, more complex grammar
    - N1: literary/formal nuance, implied meaning, stylistic questions
-4. Mix activity types: kanji readings from the text, vocabulary meaning, "what does this sentence mean?", grammar point explanation, fill-in-the-blank using a real sentence from the content with the target word blanked out and 4 choices ①②③④, and a short output task (e.g. "summarize this in one Japanese sentence" or "how would you respond to this?").
+4. Mix activity types across ALL of these skills, every one grounded in the actual content — never invent a generic unrelated example:
+   - vocabulary: meaning check for a real word from the content
+   - kanji: reading of real kanji from the content
+   - grammar: grammar point explanation using a real sentence from the content
+   - reading: "what does this sentence/passage mean?" comprehension using real text from the content
+   - listening: take a real sentence from the content and turn it into a listening-comprehension fill-in-the-blank, e.g. [場面：(context from the content)]「(real sentence with one word/phrase blanked)」の___に何が入りますか？ with ①②③④ choices. This is meant to be played aloud (the app adds a 🔊 button automatically) — the student listens, not just reads, so keep it phrased as something natural to hear.
+   - pronunciation: pick a real sentence (or short phrase) from the content and ask the student to shadow it aloud, e.g. 「(real sentence)」を声に出して読んでください（シャドーイング）. This also gets an automatic 🔊 button so the student can hear the model pronunciation before repeating it.
+   - conversation: turn a real dialogue moment from the content into a role-play — give the situation in English, quote the real Japanese line that prompts a response, and ask the student to respond in Japanese.
+   - fill-in-the-blank (can be tagged grammar, reading, or listening as fits): use a real sentence from the content with the target word blanked out and 4 choices ①②③④.
+   - one short output task (e.g. "summarize this in one Japanese sentence" or "how would you respond to this?"), tagged conversation or reading as fits.
+   Aim for a natural spread across these skills rather than clustering on just one or two — but only generate a skill if the content actually gives you real material for it (e.g. skip conversation if there's no dialogue in the content).
 5. For fill-in-the-blank, ALWAYS include the full original Japanese sentence with ___ for the blank AND the ①②③④ choices in the same prompt. The blank must sit exactly where the blanked word/particle belongs — never place it next to a particle or word that's already written elsewhere in the sentence, since that makes every choice wrong or duplicated (e.g. don't blank "＿＿＿に" if "に" already follows the blank). Before finalizing, mentally insert each choice into the blank and confirm exactly one produces a natural sentence matching your "answer" field.
 
 Return fields for each activity:
-- skill: one of vocabulary, kanji, grammar, reading, listening, conversation
-- type: short English label (e.g. "Kanji reading", "Meaning check", "Fill-in-the-blank", "Comprehension", "Output task")
+- skill: one of vocabulary, kanji, grammar, reading, listening, conversation, pronunciation
+- type: short English label (e.g. "Kanji reading", "Meaning check", "Fill-in-the-blank", "Comprehension", "Shadowing", "Role-play", "Output task")
 - prompt: self-contained, must feature real Japanese text from the content
 - answer: correct answer (in Japanese when applicable)
 - tip: one short CLT-style tip
@@ -4698,203 +4708,6 @@ Respond ONLY with a valid JSON array, no markdown, no backticks:
               </button>
             ))}
           </div>
-          <div style={{ display:"flex", flexDirection:"column", gap:12 }}>
-            {filteredItems.map((it,i) => {
-              const globalIdx = items.indexOf(it);
-              return (
-                <ExerciseCard key={i} item={it} revealed={!!revealed[globalIdx]} onReveal={()=>setRevealed(r=>({...r,[globalIdx]:true}))} T={T} />
-              );
-            })}
-          </div>
-        </>
-      )}
-    </div>
-  );
-}
-
-// ─── PRACTICE SET (built from selected skills only) ─────────────────────────────
-// JLPT links by level and section
-const JLPT_LINKS = {
-  "N5": {
-    vocab:    "https://japanesetest4you.com/jlpt-n5-vocabulary/",
-    reading:  "https://japanesetest4you.com/jlpt-n5-reading/",
-    listening:"https://japanesetest4you.com/jlpt-n5-listening/",
-  },
-  "N4": {
-    vocab:    "https://japanesetest4you.com/jlpt-n4-vocabulary/",
-    reading:  "https://japanesetest4you.com/jlpt-n4-reading/",
-    listening:"https://japanesetest4you.com/jlpt-n4-listening/",
-  },
-  "N3": {
-    vocab:    "https://japanesetest4you.com/jlpt-n3-vocabulary/",
-    reading:  "https://japanesetest4you.com/jlpt-n3-reading/",
-    listening:"https://japanesetest4you.com/jlpt-n3-listening/",
-  },
-  "N2": {
-    vocab:    "https://japanesetest4you.com/jlpt-n2-vocabulary/",
-    reading:  "https://japanesetest4you.com/jlpt-n2-reading/",
-    listening:"https://japanesetest4you.com/jlpt-n2-listening/",
-  },
-  "N1": {
-    vocab:    "https://japanesetest4you.com/jlpt-n1-vocabulary/",
-    reading:  "https://japanesetest4you.com/jlpt-n1-reading/",
-    listening:"https://japanesetest4you.com/jlpt-n1-listening/",
-  },
-};
-
-function PracticeSet({ form }) {
-  const T = useUITranslations(form?.preferredLang || "English");
-  const skills = form.skills || [];
-  const skillLabels = skills.map(s => SKILL_LABELS[s] || s).join(", ");
-  const jlptLinks = JLPT_LINKS[form.jlpt] || null;
-
-  // Gather resources for selected skills
-  const selectedResources = skills.flatMap(s => (RESOURCES[s] || []).map(r => ({ ...r, skill: s })));
-  const levelResources = LEVEL_RESOURCES[form.jlpt] || [];
-  const seen = new Set();
-  const allResources = [...selectedResources, ...levelResources].filter(r => {
-    if (seen.has(r.url)) return false; seen.add(r.url); return true;
-  });
-
-  const resourceContext = allResources.length > 0
-    ? allResources.map(r => `- [${r.skill || "general"}] ${r.name}: ${r.desc || ""} → ${r.url}`).join("\n")
-    : "No specific resources found.";
-
-  const questionCount = skills.length >= 4 ? 20 : skills.length >= 2 ? 15 : 10;
-
-  // 24-hour cache key
-  const cacheKey = `gaku_practice_${form.jlpt}_${skills.sort().join("_")}_${Math.floor(Date.now()/86400000)}`;
-
-  const [items, setItems] = useState(() => {
-    try { const c = localStorage.getItem(cacheKey); return c ? JSON.parse(c) : []; } catch { return []; }
-  });
-  const [revealed, setRevealed] = useState({});
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-  const [activeSkillFilter, setActiveSkillFilter] = useState("all");
-
-  const generate = async () => {
-    setLoading(true); setError(""); setItems([]); setRevealed({}); setActiveSkillFilter("all");
-    try {
-      const res = await fetch("/api/claude", {
-        method:"POST", headers:{"Content-Type":"application/json"},
-        body: JSON.stringify({ model:"claude-sonnet-4-20250514", max_tokens:4500,
-          messages:[{ role:"user", content:`You are a Japanese teacher using CLT (Communicative Language Teaching). The student's JLPT level is ${form.jlpt}, goal: ${form.displayGoal||form.goal}.
-The student selected ONLY these study skills: ${skillLabels || "general practice"}.
-
-RESOURCES (cite the URL in source_url for every exercise — you may quote sentences directly from these resources):
-${resourceContext}
-
-Create EXACTLY ${questionCount} practice exercises. RULES:
-1. JAPANESE FIRST: Every prompt MUST contain Japanese text (sentences, words, or passages). English may appear only as instructions or labels AFTER the Japanese content. NEVER write a prompt that is English-only with no Japanese.
-2. COMPLETE CONTENT: Fill-in-the-blank prompts MUST include the full Japanese sentence with ___ for the blank AND the 4 choices in parentheses immediately after the blank, like: 「私は毎日学校___（①に ②で ③を ④が）行きます。」The choices must ALWAYS be inside the same prompt sentence. NEVER write a prompt that only has choices without the actual Japanese sentence containing the blank. NEVER place the blank directly next to a particle that is already written elsewhere in the sentence (e.g. do NOT write "＿＿＿＿に学校に行きます" with particle choices ①に②で③を④が — that duplicates "に" and makes every choice wrong except one that creates "にに"). The blank must sit exactly where the missing word/particle belongs, with nothing else filling that grammatical role in the sentence.
-3. READING: Always include the actual Japanese passage (2-5 sentences), then the question.
-4. KANJI: Always include the actual kanji character(s). Example: 「友達」の読み方は？ or 次の文を読んで答えてください：「彼は毎日電車で会社に行きます。」「電車」の読み方は？
-5. JLPT: 4-choice questions with ①②③④ options written in Japanese. The blank must be a single grammatical slot with exactly one correct choice among the four. GOOD example: 「私は毎日学校＿＿＿行きます。①に　②で　③を　④が」 (blank directly followed by 行きます, particle choices fit there). BAD example (do NOT do this): 「私は毎日＿＿＿に学校に行きます。①に　②で　③を　④が」 (blank is followed by a redundant "に" already in the sentence, so no particle choice is correct).
-6. CONVERSATION: Give the situation in English, then provide Japanese dialogue context, ask student to respond in Japanese.
-7. GRAMMAR fill-in: Must have a Japanese sentence with ___ plus 4 options labeled ①②③④ in Japanese, following the same single-correct-slot rule as JLPT above (no duplicate particles around the blank).
-8. OUTPUT PRIORITY: favor Speaking/Writing output — shadowing, role-play, sentence construction, dialogue completion.
-9. SELF-CHECK before output: for every fill-in-the-blank exercise, mentally insert each of the 4 choices into the blank and confirm exactly one produces a natural, grammatically correct Japanese sentence, and that this one matches the "answer" field. Discard and rewrite any exercise that fails this check.
-10. GROUND IN RESOURCES: when a resource above contains real Japanese sentences relevant to the skill/level, prefer reusing or lightly adapting those actual sentences over inventing new ones from scratch — this keeps practice tied to material the student can actually go study further.
-
-Activity types per skill:
-- pronunciation: 「＿＿」を声に出して読んでください (give full Japanese sentence to shadow); or minimal pairs in Japanese
-- listening: [場面：＿＿] 「＿＿___＿＿」の___に何が入りますか？
-- conversation: Situation in English, then Japanese dialogue starter, student responds in Japanese
-- jlpt: Full Japanese 4-choice question with ①②③④ — all in Japanese
-- reading: Japanese passage (2-5 sentences) + Japanese question + "Write a sentence using [grammar point]"
-- kanji: Full Japanese sentence containing the kanji + question about reading or meaning
-- grammar: Full Japanese sentence with ___ + ①②③④ choices in Japanese
-
-LEVEL: ${form.jlpt}
-- N5: ~100 kanji, です/ます, は/が/を/に, simple て-form
-- N4: ~300 kanji, potential/conditional, て-form requests  
-- N3: ~650 kanji, passive/causative, ので/から/ように
-- N2: ~1000 kanji, keigo basics, ～にともなって/～に対して
-- N1: ~2000 kanji, literary/formal register
-
-Return fields for each exercise:
-- skill: one of ${skills.join(", ")}
-- type: specific label in English (e.g. "Shadowing", "Role-play", "Kanji reading", "Grammar fill-in", "JLPT 4-choice", "Reading + output")
-- prompt: MUST start with or prominently feature Japanese text. Complete and self-contained.
-- IMPORTANT: Do NOT include furigana or kanji readings in parentheses anywhere in the prompt text. Write kanji as-is without any reading hints; the app has a separate furigana button for that.
-- answer: correct answer (in Japanese when applicable)
-- tip: one CLT tip mentioning a resource name
-- source_url: most relevant resource URL from the list above
-
-Respond ONLY with a valid JSON array, no markdown, no backticks:
-[{"skill":"","type":"","prompt":"","answer":"","tip":"","source_url":""}]` }]
-        })
-      });
-      const d = await res.json();
-      const text = d.content?.map(c=>c.text||"").join("") || "[]";
-      const parsed = JSON.parse(text.replace(/```json|```/g,"").trim());
-      if (Array.isArray(parsed) && parsed.length) {
-        setItems(parsed);
-        try { localStorage.setItem(cacheKey, JSON.stringify(parsed)); } catch {}
-      }
-    } catch { setError("Could not generate a practice set right now. Please try again."); }
-    setLoading(false);
-  };
-
-  const filteredItems = activeSkillFilter === "all" ? items : items.filter(it => it.skill === activeSkillFilter);
-  const skillsInResult = [...new Set(items.map(it => it.skill))];
-
-  return (
-    <div>
-      <div style={{ ...S.card, marginBottom:16 }}>
-        <p style={{ color:C.purpleLight, fontSize:12, fontWeight:700, letterSpacing:1, marginBottom:4 }}>🎯 PRACTICE SET</p>
-        <p style={{ color:"#ffffff", fontSize:12, marginBottom:8, lineHeight:1.7 }}>
-          Generated from what you selected in <strong style={{ color:"#ffffff" }}>"WHAT DO YOU WANT TO STUDY?"</strong>:{" "}
-          {skills.length ? skills.map(s => SKILL_LABELS[s] || s).join(" · ") : "No skills selected — edit your profile to choose skills."}
-        </p>
-        {skills.length > 0 && (
-          <p style={{ color:"#ffffff", fontSize:11, marginBottom:12 }}>
-            📚 {questionCount} exercises · {allResources.length} resources referenced
-          </p>
-        )}
-        <div style={{ display:"flex", gap:8 }}>
-          <button onClick={generate} disabled={loading || skills.length===0} style={{ ...S.btn, flex:1, background:skills.length?`linear-gradient(135deg,${C.purple},#9333ea)`:"#1e293b", color:skills.length?"#fff":"#475569" }}>
-            {loading ? `Building ${questionCount} exercises...`:(items.length?"🔄 Regenerate":"Generate Practice Set ✨")}
-          </button>
-        </div>
-        {error && <p style={{ color:C.red, fontSize:12, marginTop:10 }}>{error}</p>}
-      </div>
-
-      {/* JLPT quick links — shown if jlpt is a selected skill */}
-      {skills.includes("jlpt") && jlptLinks && (
-        <div style={{ ...S.card, marginBottom:16, borderLeft:`3px solid #a78bfa` }}>
-          <p style={{ color:"#a78bfa", fontSize:11, fontWeight:700, letterSpacing:1, margin:"0 0 10px" }}>🎯 TODAY'S JLPT PRACTICE — {form.jlpt}</p>
-          <p style={{ color:"#64748b", fontSize:11, margin:"0 0 8px" }}>本日はこのページから始めましょう：</p>
-          <div style={{ display:"flex", flexDirection:"column", gap:6 }}>
-            {[
-              { label:"📝 語彙（Vocabulary）", url: jlptLinks.vocab },
-              { label:"📖 読解（Reading）",    url: jlptLinks.reading },
-              { label:"👂 聴解（Listening）",  url: jlptLinks.listening },
-            ].map(({ label, url }) => (
-              <a key={url} href={url} target="_blank" rel="noopener noreferrer"
-                style={{ display:"block", padding:"8px 12px", borderRadius:8, background:"rgba(139,92,246,0.08)", border:"1px solid rgba(139,92,246,0.25)", color:"#c4b5fd", fontSize:12, fontWeight:600, textDecoration:"none" }}>
-                {label} →
-              </a>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {items.length > 0 && (
-        <>
-          {/* Skill filter tabs */}
-          <div style={{ display:"flex", gap:6, flexWrap:"wrap", marginBottom:12 }}>
-            <button onClick={()=>setActiveSkillFilter("all")} style={{ padding:"4px 10px", borderRadius:20, fontSize:11, fontWeight:700, cursor:"pointer", border:`1px solid ${activeSkillFilter==="all"?C.purpleLight:C.border}`, background:activeSkillFilter==="all"?"rgba(168,85,247,0.15)":C.card, color:activeSkillFilter==="all"?C.purpleLight:"#64748b" }}>
-              すべて ({items.length})
-            </button>
-            {skillsInResult.map(s => (
-              <button key={s} onClick={()=>setActiveSkillFilter(s)} style={{ padding:"4px 10px", borderRadius:20, fontSize:11, fontWeight:700, cursor:"pointer", border:`1px solid ${activeSkillFilter===s?(SKILL_COLORS[s]||C.purpleLight):C.border}`, background:activeSkillFilter===s?`rgba(0,0,0,0.15)`:C.card, color:activeSkillFilter===s?(SKILL_COLORS[s]||C.purpleLight):"#64748b" }}>
-                {SKILL_LABELS[s]||s} ({items.filter(it=>it.skill===s).length})
-              </button>
-            ))}
-          </div>
-
           <div style={{ display:"flex", flexDirection:"column", gap:12 }}>
             {filteredItems.map((it,i) => {
               const globalIdx = items.indexOf(it);
@@ -5613,7 +5426,6 @@ function Dashboard({ form, onEdit }) {
   ];
   const RESOURCE_SUBTABS = [
     { id:"links",    label: "🔗 " + (T.tabResources || "Resources") },
-    { id:"practice", label: T.tabPractice },
     { id:"content",  label: "✨ From Content" },
   ];
 
@@ -5737,7 +5549,6 @@ function Dashboard({ form, onEdit }) {
               ))}
             </div>
 
-            {resourceSubTab==="practice" && <PracticeSet form={form} />}
             {resourceSubTab==="content" && <ContentAnalyzer form={form} />}
 
             {resourceSubTab==="links" && (
