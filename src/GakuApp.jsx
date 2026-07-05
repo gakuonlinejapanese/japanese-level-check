@@ -306,6 +306,7 @@ const UI_TRANSLATIONS = {
     reviewSavedWords: "Review saved words",
     searchingDictionary: "Searching Japanese dictionary...",
     speakWord: "Pronounce word",
+    listenAudio: "Listen",
     speakExample: "Pronounce example",
     weblioDict: "📖 Weblio Dictionary",
     googleImages: "🖼 Google Images",
@@ -494,6 +495,7 @@ const UI_TRANSLATIONS = {
     reviewSavedWords: "Réviser les mots enregistrés",
     searchingDictionary: "Recherche dans le dictionnaire japonais...",
     speakWord: "Prononcer le mot",
+    listenAudio: "Écouter",
     speakExample: "Prononcer l'exemple",
     weblioDict: "📖 Dictionnaire Weblio",
     googleImages: "🖼 Images Google",
@@ -666,6 +668,7 @@ const UI_TRANSLATIONS = {
     reviewSavedWords: "Repasar palabras guardadas",
     searchingDictionary: "Buscando en el diccionario japonés...",
     speakWord: "Pronunciar palabra",
+    listenAudio: "Escuchar",
     speakExample: "Pronunciar ejemplo",
     weblioDict: "📖 Diccionario Weblio",
     googleImages: "🖼 Imágenes de Google",
@@ -838,6 +841,7 @@ const UI_TRANSLATIONS = {
     reviewSavedWords: "Revisar palavras salvas",
     searchingDictionary: "Pesquisando no dicionário japonês...",
     speakWord: "Pronunciar palavra",
+    listenAudio: "Ouvir",
     speakExample: "Pronunciar exemplo",
     weblioDict: "📖 Dicionário Weblio",
     googleImages: "🖼 Imagens do Google",
@@ -1010,6 +1014,7 @@ const UI_TRANSLATIONS = {
     reviewSavedWords: "Gespeicherte Wörter wiederholen",
     searchingDictionary: "Japanisches Wörterbuch wird durchsucht...",
     speakWord: "Wort aussprechen",
+    listenAudio: "Hören",
     speakExample: "Beispiel aussprechen",
     weblioDict: "📖 Weblio-Wörterbuch",
     googleImages: "🖼 Google-Bilder",
@@ -1182,6 +1187,7 @@ const UI_TRANSLATIONS = {
     reviewSavedWords: "Rivedi le parole salvate",
     searchingDictionary: "Ricerca nel dizionario giapponese...",
     speakWord: "Pronuncia la parola",
+    listenAudio: "Ascolta",
     speakExample: "Pronuncia l'esempio",
     weblioDict: "📖 Dizionario Weblio",
     googleImages: "🖼 Immagini Google",
@@ -1354,6 +1360,7 @@ const UI_TRANSLATIONS = {
     reviewSavedWords: "复习已保存的单词",
     searchingDictionary: "正在搜索日语词典...",
     speakWord: "发音单词",
+    listenAudio: "听",
     speakExample: "发音例句",
     weblioDict: "📖 Weblio词典",
     googleImages: "🖼 谷歌图片",
@@ -1526,6 +1533,7 @@ const UI_TRANSLATIONS = {
     reviewSavedWords: "複習已儲存的單字",
     searchingDictionary: "正在搜尋日語詞典...",
     speakWord: "發音單字",
+    listenAudio: "聽",
     speakExample: "發音例句",
     weblioDict: "📖 Weblio詞典",
     googleImages: "🖼 Google圖片",
@@ -1698,6 +1706,7 @@ const UI_TRANSLATIONS = {
     reviewSavedWords: "저장된 단어 복습",
     searchingDictionary: "일본어 사전 검색 중...",
     speakWord: "단어 발음 듣기",
+    listenAudio: "듣기",
     speakExample: "예문 발음 듣기",
     weblioDict: "📖 Weblio 사전",
     googleImages: "🖼 구글 이미지",
@@ -1870,6 +1879,7 @@ const UI_TRANSLATIONS = {
     reviewSavedWords: "ทบทวนคำที่บันทึกไว้",
     searchingDictionary: "กำลังค้นหาพจนานุกรมภาษาญี่ปุ่น...",
     speakWord: "ออกเสียงคำ",
+    listenAudio: "ฟัง",
     speakExample: "ออกเสียงตัวอย่าง",
     weblioDict: "📖 พจนานุกรม Weblio",
     googleImages: "🖼 รูปภาพ Google",
@@ -2042,6 +2052,7 @@ const UI_TRANSLATIONS = {
     reviewSavedWords: "Semak perkataan tersimpan",
     searchingDictionary: "Mencari dalam kamus Jepun...",
     speakWord: "Sebut perkataan",
+    listenAudio: "Dengar",
     speakExample: "Sebut contoh",
     weblioDict: "📖 Kamus Weblio",
     googleImages: "🖼 Imej Google",
@@ -2214,6 +2225,7 @@ const UI_TRANSLATIONS = {
     reviewSavedWords: "Tinjau kata tersimpan",
     searchingDictionary: "Mencari dalam kamus Jepang...",
     speakWord: "Ucapkan kata",
+    listenAudio: "Dengarkan",
     speakExample: "Ucapkan contoh",
     weblioDict: "📖 Kamus Weblio",
     googleImages: "🖼 Gambar Google",
@@ -2386,6 +2398,7 @@ const UI_TRANSLATIONS = {
     reviewSavedWords: "Ôn lại từ đã lưu",
     searchingDictionary: "Đang tìm trong từ điển tiếng Nhật...",
     speakWord: "Phát âm từ",
+    listenAudio: "Nghe",
     speakExample: "Phát âm ví dụ",
     weblioDict: "📖 Từ điển Weblio",
     googleImages: "🖼 Hình ảnh Google",
@@ -2558,6 +2571,7 @@ const UI_TRANSLATIONS = {
     reviewSavedWords: "सहेजे गए शब्दों की समीक्षा करें",
     searchingDictionary: "जापानी शब्दकोश खोज रहे हैं...",
     speakWord: "शब्द का उच्चारण करें",
+    listenAudio: "सुनें",
     speakExample: "उदाहरण का उच्चारण करें",
     weblioDict: "📖 Weblio शब्दकोश",
     googleImages: "🖼 Google छवियां",
@@ -2730,6 +2744,7 @@ const UI_TRANSLATIONS = {
     reviewSavedWords: "保存した単語を復習",
     searchingDictionary: "日本語辞書を検索中...",
     speakWord: "単語を発音",
+    listenAudio: "聞く",
     speakExample: "例文を発音",
     weblioDict: "📖 Weblio辞書",
     googleImages: "🖼 Google画像",
@@ -2902,6 +2917,7 @@ const UI_TRANSLATIONS = {
     reviewSavedWords: "Kaydedilen kelimeleri gözden geçir",
     searchingDictionary: "Japonca sözlükte aranıyor...",
     speakWord: "Kelimeyi telaffuz et",
+    listenAudio: "Dinle",
     speakExample: "Örneği telaffuz et",
     weblioDict: "📖 Weblio Sözlük",
     googleImages: "🖼 Google Görseller",
@@ -3074,6 +3090,7 @@ const UI_TRANSLATIONS = {
     reviewSavedWords: "सेभ गरिएका शब्दहरू समीक्षा गर्नुहोस्",
     searchingDictionary: "जापानी शब्दकोश खोजिँदै...",
     speakWord: "शब्द उच्चारण गर्नुहोस्",
+    listenAudio: "सुन्नुहोस्",
     speakExample: "उदाहरण उच्चारण गर्नुहोस्",
     weblioDict: "📖 Weblio शब्दकोश",
     googleImages: "🖼 Google छविहरू",
@@ -3246,6 +3263,7 @@ const UI_TRANSLATIONS = {
     reviewSavedWords: "Repasuhin ang mga naka-save na salita",
     searchingDictionary: "Hinahanap sa diksyunaryong Japanese...",
     speakWord: "Bigkasin ang salita",
+    listenAudio: "Makinig",
     speakExample: "Bigkasin ang halimbawa",
     weblioDict: "📖 Weblio Dictionary",
     googleImages: "🖼 Google Images",
@@ -4545,13 +4563,13 @@ function ExerciseCard({ item, revealed, onReveal, T }) {
       </div>
       <div style={{ display:"flex", alignItems:"flex-start", gap:8, margin:"0 0 6px" }}>
         <p style={{ color:"#f1f5f9", fontSize:14, lineHeight:1.8, margin:0, whiteSpace:"pre-wrap", flex:1 }}>{item.prompt}</p>
-        {item.skill === "listening" && (
-          <button onClick={()=>speakJapanese(item.prompt)} title={T?.speakWord || "Listen"}
-            style={{ width:34, height:34, borderRadius:8, background:"rgba(6,182,212,0.12)", border:`1px solid rgba(6,182,212,0.3)`, color:C.teal, fontSize:16, cursor:"pointer", flexShrink:0, display:"flex", alignItems:"center", justifyContent:"center" }}>
-            🔊
-          </button>
-        )}
       </div>
+      {item.skill === "listening" && (
+        <button onClick={()=>speakJapanese(item.prompt)}
+          style={{ display:"flex", alignItems:"center", gap:6, marginBottom:8, padding:"6px 12px", borderRadius:8, background:"rgba(6,182,212,0.12)", border:`1px solid rgba(6,182,212,0.3)`, color:C.teal, fontSize:12, fontWeight:700, cursor:"pointer" }}>
+          🔊 {T?.listenAudio || "Listen"}
+        </button>
+      )}
       <div style={{ display:"flex", gap:6, marginBottom:8 }}>
         <button onClick={()=>fetchReading("furigana")} disabled={loadingType!==null} style={{ fontSize:11, color:"#67e8f9", fontWeight:700, background:"rgba(103,232,249,0.1)", padding:"4px 10px", borderRadius:8, border:"1px solid rgba(103,232,249,0.3)", cursor:"pointer" }}>
           {loadingType==="furigana" ? "⏳" : (T?.furiganaBtn || "ふりがな")}
@@ -4620,7 +4638,7 @@ Create between 10 and 20 practice activities (choose a count that fits the amoun
    - N2: nuance, formal/casual register differences, more complex grammar
    - N1: literary/formal nuance, implied meaning, stylistic questions
 4. Mix activity types: kanji readings from the text, vocabulary meaning, "what does this sentence mean?", grammar point explanation, fill-in-the-blank using a real sentence from the content with the target word blanked out and 4 choices ①②③④, and a short output task (e.g. "summarize this in one Japanese sentence" or "how would you respond to this?").
-5. For fill-in-the-blank, ALWAYS include the full original Japanese sentence with ___ for the blank AND the ①②③④ choices in the same prompt.
+5. For fill-in-the-blank, ALWAYS include the full original Japanese sentence with ___ for the blank AND the ①②③④ choices in the same prompt. The blank must sit exactly where the blanked word/particle belongs — never place it next to a particle or word that's already written elsewhere in the sentence, since that makes every choice wrong or duplicated (e.g. don't blank "＿＿＿に" if "に" already follows the blank). Before finalizing, mentally insert each choice into the blank and confirm exactly one produces a natural sentence matching your "answer" field.
 
 Return fields for each activity:
 - skill: one of vocabulary, kanji, grammar, reading, listening, conversation
@@ -4769,13 +4787,15 @@ ${resourceContext}
 
 Create EXACTLY ${questionCount} practice exercises. RULES:
 1. JAPANESE FIRST: Every prompt MUST contain Japanese text (sentences, words, or passages). English may appear only as instructions or labels AFTER the Japanese content. NEVER write a prompt that is English-only with no Japanese.
-2. COMPLETE CONTENT: Fill-in-the-blank prompts MUST include the full Japanese sentence with ___ for the blank AND the 4 choices in parentheses immediately after the blank, like: 「私は毎日学校___（①に ②で ③を ④が）行きます。」The choices must ALWAYS be inside the same prompt sentence. NEVER write a prompt that only has choices without the actual Japanese sentence containing the blank.
+2. COMPLETE CONTENT: Fill-in-the-blank prompts MUST include the full Japanese sentence with ___ for the blank AND the 4 choices in parentheses immediately after the blank, like: 「私は毎日学校___（①に ②で ③を ④が）行きます。」The choices must ALWAYS be inside the same prompt sentence. NEVER write a prompt that only has choices without the actual Japanese sentence containing the blank. NEVER place the blank directly next to a particle that is already written elsewhere in the sentence (e.g. do NOT write "＿＿＿＿に学校に行きます" with particle choices ①に②で③を④が — that duplicates "に" and makes every choice wrong except one that creates "にに"). The blank must sit exactly where the missing word/particle belongs, with nothing else filling that grammatical role in the sentence.
 3. READING: Always include the actual Japanese passage (2-5 sentences), then the question.
 4. KANJI: Always include the actual kanji character(s). Example: 「友達」の読み方は？ or 次の文を読んで答えてください：「彼は毎日電車で会社に行きます。」「電車」の読み方は？
-5. JLPT: 4-choice questions with ①②③④ options written in Japanese. Example: 「（　）の中に正しい言葉を入れてください。①に ②で ③を ④が」
+5. JLPT: 4-choice questions with ①②③④ options written in Japanese. The blank must be a single grammatical slot with exactly one correct choice among the four. GOOD example: 「私は毎日学校＿＿＿行きます。①に　②で　③を　④が」 (blank directly followed by 行きます, particle choices fit there). BAD example (do NOT do this): 「私は毎日＿＿＿に学校に行きます。①に　②で　③を　④が」 (blank is followed by a redundant "に" already in the sentence, so no particle choice is correct).
 6. CONVERSATION: Give the situation in English, then provide Japanese dialogue context, ask student to respond in Japanese.
-7. GRAMMAR fill-in: Must have a Japanese sentence with ___ plus 4 options labeled ①②③④ in Japanese.
+7. GRAMMAR fill-in: Must have a Japanese sentence with ___ plus 4 options labeled ①②③④ in Japanese, following the same single-correct-slot rule as JLPT above (no duplicate particles around the blank).
 8. OUTPUT PRIORITY: favor Speaking/Writing output — shadowing, role-play, sentence construction, dialogue completion.
+9. SELF-CHECK before output: for every fill-in-the-blank exercise, mentally insert each of the 4 choices into the blank and confirm exactly one produces a natural, grammatically correct Japanese sentence, and that this one matches the "answer" field. Discard and rewrite any exercise that fails this check.
+10. GROUND IN RESOURCES: when a resource above contains real Japanese sentences relevant to the skill/level, prefer reusing or lightly adapting those actual sentences over inventing new ones from scratch — this keeps practice tied to material the student can actually go study further.
 
 Activity types per skill:
 - pronunciation: 「＿＿」を声に出して読んでください (give full Japanese sentence to shadow); or minimal pairs in Japanese
