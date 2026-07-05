@@ -4225,7 +4225,7 @@ function ExerciseCard({ item, revealed, onReveal, T }) {
           )}
         </div>
       ) : (
-        <button onClick={onReveal} style={{ padding:"6px 14px", borderRadius:8, background:C.card, border:`1px solid ${C.border}`, color:"#94a3b8", fontSize:11, cursor:"pointer" }}>
+        <button onClick={onReveal} style={{ padding:"6px 14px", borderRadius:8, background:C.card, border:`1px solid ${C.border}`, color:"#ff1a1a", fontSize:11, cursor:"pointer" }}>
           Show answer
         </button>
       )}
