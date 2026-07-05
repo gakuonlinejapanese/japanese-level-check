@@ -334,6 +334,16 @@ const UI_TRANSLATIONS = {
     contentErrEmpty: "Paste some Japanese text (or a video's subtitles/description) first.",
     contentErrNoAct: "Couldn't generate activities from that content. Try pasting more text.",
     contentErrGeneric: "Could not analyze this content right now. Please try again.",
+    convTitle: "Conversation Practice",
+    convDesc: "Paste a video's subtitles or transcript (e.g. YouTube's own \"Show transcript\" panel). GAKU will find real conversational exchanges and let you predict — and speak — the next line before revealing the model answer.",
+    convPasteLabel: "Paste subtitles / transcript here",
+    convGenerating: "Building conversation practice...",
+    convGenerateBtn: "Build Conversation Practice",
+    convNoTurns: "Couldn't find a conversation in that content. Try pasting a transcript with more dialogue.",
+    convYourTurn: "How would you respond?",
+    convRevealBtn: "Show model answer",
+    convModelAnswer: "Model answer",
+    convAltResponses: "Other ways to say it",
     subtitlesTitle: "Subtitles → Vocabulary",
     subtitlesDesc: "Paste subtitles or a transcript from a video you're already watching (e.g. YouTube's own \"Show transcript\" panel). Double-click a word or drag to select a phrase, then look it up and save it straight to your Vocabulary Builder.",
     subtitlesSourceLabel: "Video title / source (optional — used as the folder name)",
@@ -535,6 +545,16 @@ const UI_TRANSLATIONS = {
     contentErrEmpty: "Collez d'abord du texte japonais (ou les sous-titres/la description d'une vidéo).",
     contentErrNoAct: "Impossible de générer des activités à partir de ce contenu. Essayez de coller plus de texte.",
     contentErrGeneric: "Impossible d'analyser ce contenu pour le moment. Veuillez réessayer.",
+    convTitle: "Pratique de conversation",
+    convDesc: "Collez les sous-titres ou la transcription d'une vidéo (par ex. le panneau « Afficher la transcription » de YouTube). GAKU trouvera de vrais échanges conversationnels et vous laissera prédire — et dire à voix haute — la réplique suivante avant de révéler la réponse modèle.",
+    convPasteLabel: "Collez les sous-titres / la transcription ici",
+    convGenerating: "Création de la pratique de conversation...",
+    convGenerateBtn: "Créer la pratique de conversation",
+    convNoTurns: "Impossible de trouver une conversation dans ce contenu. Essayez de coller une transcription avec plus de dialogue.",
+    convYourTurn: "Comment répondriez-vous ?",
+    convRevealBtn: "Afficher la réponse modèle",
+    convModelAnswer: "Réponse modèle",
+    convAltResponses: "Autres façons de le dire",
     subtitlesTitle: "Sous-titres → Vocabulaire",
     subtitlesDesc: "Collez des sous-titres ou une transcription d'une vidéo que vous regardez (par ex. le panneau \"Afficher la transcription\" de YouTube). Double-cliquez sur un mot ou faites glisser pour sélectionner une phrase, puis recherchez-la et enregistrez-la directement dans votre Générateur de vocabulaire.",
     subtitlesSourceLabel: "Titre / source de la vidéo (facultatif — utilisé comme nom de dossier)",
@@ -720,6 +740,16 @@ const UI_TRANSLATIONS = {
     contentErrEmpty: "Pega primero algo de texto en japonés (o los subtítulos/la descripción de un video).",
     contentErrNoAct: "No se pudieron generar actividades a partir de ese contenido. Intenta pegar más texto.",
     contentErrGeneric: "No se pudo analizar este contenido en este momento. Inténtalo de nuevo.",
+    convTitle: "Práctica de conversación",
+    convDesc: "Pega los subtítulos o la transcripción de un video (por ejemplo, el panel «Mostrar transcripción» de YouTube). GAKU encontrará intercambios conversacionales reales y te dejará predecir —y decir en voz alta— la siguiente línea antes de revelar la respuesta modelo.",
+    convPasteLabel: "Pega aquí los subtítulos / la transcripción",
+    convGenerating: "Creando práctica de conversación...",
+    convGenerateBtn: "Crear práctica de conversación",
+    convNoTurns: "No se encontró una conversación en ese contenido. Intenta pegar una transcripción con más diálogo.",
+    convYourTurn: "¿Cómo responderías?",
+    convRevealBtn: "Mostrar respuesta modelo",
+    convModelAnswer: "Respuesta modelo",
+    convAltResponses: "Otras formas de decirlo",
     subtitlesTitle: "Subtítulos → Vocabulario",
     subtitlesDesc: "Pega subtítulos o una transcripción de un video que ya estás viendo (por ejemplo, el panel \"Mostrar transcripción\" de YouTube). Haz doble clic en una palabra o arrastra para seleccionar una frase, luego búscala y guárdala directamente en tu Generador de vocabulario.",
     subtitlesSourceLabel: "Título / fuente del video (opcional — se usa como nombre de la carpeta)",
@@ -905,6 +935,16 @@ const UI_TRANSLATIONS = {
     contentErrEmpty: "Cole primeiro algum texto em japonês (ou as legendas/descrição de um vídeo).",
     contentErrNoAct: "Não foi possível gerar atividades a partir desse conteúdo. Tente colar mais texto.",
     contentErrGeneric: "Não foi possível analisar este conteúdo agora. Tente novamente.",
+    convTitle: "Prática de conversação",
+    convDesc: "Cole as legendas ou a transcrição de um vídeo (por exemplo, o painel «Mostrar transcrição» do YouTube). O GAKU encontrará trocas conversacionais reais e permitirá que você preveja —e diga em voz alta— a próxima fala antes de revelar a resposta modelo.",
+    convPasteLabel: "Cole as legendas / transcrição aqui",
+    convGenerating: "Criando prática de conversação...",
+    convGenerateBtn: "Criar Prática de Conversação",
+    convNoTurns: "Não foi possível encontrar uma conversa nesse conteúdo. Tente colar uma transcrição com mais diálogo.",
+    convYourTurn: "Como você responderia?",
+    convRevealBtn: "Mostrar resposta modelo",
+    convModelAnswer: "Resposta modelo",
+    convAltResponses: "Outras formas de dizer isso",
     subtitlesTitle: "Legendas → Vocabulário",
     subtitlesDesc: "Cole legendas ou uma transcrição de um vídeo que você já está assistindo (por exemplo, o painel \"Mostrar transcrição\" do YouTube). Clique duas vezes em uma palavra ou arraste para selecionar uma frase, depois pesquise e salve diretamente no seu Criador de Vocabulário.",
     subtitlesSourceLabel: "Título / fonte do vídeo (opcional — usado como nome da pasta)",
@@ -1090,6 +1130,16 @@ const UI_TRANSLATIONS = {
     contentErrEmpty: "Füge zuerst japanischen Text ein (oder die Untertitel/Beschreibung eines Videos).",
     contentErrNoAct: "Aus diesem Inhalt konnten keine Übungen erstellt werden. Versuche, mehr Text einzufügen.",
     contentErrGeneric: "Dieser Inhalt konnte gerade nicht analysiert werden. Bitte versuche es erneut.",
+    convTitle: "Gesprächspraxis",
+    convDesc: "Füge die Untertitel oder das Transkript eines Videos ein (z. B. das „Transkript anzeigen“-Panel von YouTube). GAKU findet echte Gesprächswechsel und lässt dich die nächste Zeile vorhersagen — und laut sagen — bevor die Musterantwort angezeigt wird.",
+    convPasteLabel: "Füge hier Untertitel / Transkript ein",
+    convGenerating: "Gesprächspraxis wird erstellt...",
+    convGenerateBtn: "Gesprächspraxis erstellen",
+    convNoTurns: "In diesem Inhalt wurde kein Gespräch gefunden. Versuche ein Transkript mit mehr Dialog einzufügen.",
+    convYourTurn: "Wie würdest du antworten?",
+    convRevealBtn: "Musterantwort anzeigen",
+    convModelAnswer: "Musterantwort",
+    convAltResponses: "Andere Möglichkeiten, es zu sagen",
     subtitlesTitle: "Untertitel → Vokabular",
     subtitlesDesc: "Füge Untertitel oder ein Transkript eines Videos ein, das du bereits ansiehst (z. B. YouTubes eigenes \"Transkript anzeigen\"-Feld). Doppelklicke auf ein Wort oder ziehe, um eine Phrase auszuwählen, schlage sie dann nach und speichere sie direkt in deinem Vokabel-Builder.",
     subtitlesSourceLabel: "Videotitel / Quelle (optional — wird als Ordnername verwendet)",
@@ -1275,6 +1325,16 @@ const UI_TRANSLATIONS = {
     contentErrEmpty: "Incolla prima del testo giapponese (o i sottotitoli/la descrizione di un video).",
     contentErrNoAct: "Impossibile generare attività da questo contenuto. Prova a incollare più testo.",
     contentErrGeneric: "Impossibile analizzare questo contenuto al momento. Riprova.",
+    convTitle: "Pratica di conversazione",
+    convDesc: "Incolla i sottotitoli o la trascrizione di un video (ad es. il pannello «Mostra trascrizione» di YouTube). GAKU troverà scambi conversazionali reali e ti farà prevedere — e dire ad alta voce — la battuta successiva prima di rivelare la risposta modello.",
+    convPasteLabel: "Incolla qui i sottotitoli / la trascrizione",
+    convGenerating: "Creazione della pratica di conversazione...",
+    convGenerateBtn: "Crea Pratica di Conversazione",
+    convNoTurns: "Impossibile trovare una conversazione in questo contenuto. Prova a incollare una trascrizione con più dialogo.",
+    convYourTurn: "Come risponderesti?",
+    convRevealBtn: "Mostra risposta modello",
+    convModelAnswer: "Risposta modello",
+    convAltResponses: "Altri modi per dirlo",
     subtitlesTitle: "Sottotitoli → Vocabolario",
     subtitlesDesc: "Incolla sottotitoli o una trascrizione di un video che stai già guardando (ad es. il pannello \"Mostra trascrizione\" di YouTube). Fai doppio clic su una parola o trascina per selezionare una frase, poi cercala e salvala direttamente nel tuo Costruttore di vocabolario.",
     subtitlesSourceLabel: "Titolo / fonte del video (facoltativo — usato come nome della cartella)",
@@ -1460,6 +1520,16 @@ const UI_TRANSLATIONS = {
     contentErrEmpty: "请先粘贴一些日语文本（或视频的字幕/简介）。",
     contentErrNoAct: "无法从该内容生成练习，请尝试粘贴更多文本。",
     contentErrGeneric: "目前无法分析此内容，请重试。",
+    convTitle: "对话练习",
+    convDesc: "粘贴视频的字幕或逐字稿（例如 YouTube 自带的“显示逐字稿”面板）。GAKU 会找出真实的对话交换，让你先预测并说出下一句话，然后再揭晓参考答案。",
+    convPasteLabel: "在此粘贴字幕/逐字稿",
+    convGenerating: "正在生成对话练习...",
+    convGenerateBtn: "生成对话练习",
+    convNoTurns: "未能在该内容中找到对话。请尝试粘贴包含更多对话的逐字稿。",
+    convYourTurn: "你会怎么回答？",
+    convRevealBtn: "显示参考答案",
+    convModelAnswer: "参考答案",
+    convAltResponses: "其他说法",
     subtitlesTitle: "字幕 → 词汇",
     subtitlesDesc: "粘贴你正在观看的视频的字幕或文字记录（例如YouTube自带的“显示字幕稿”面板）。双击一个词或拖动选择一个短语，然后查询并直接保存到你的词汇构建器。",
     subtitlesSourceLabel: "视频标题/来源（可选——用作文件夹名称）",
@@ -1645,6 +1715,16 @@ const UI_TRANSLATIONS = {
     contentErrEmpty: "請先貼上一些日語文本（或影片的字幕/簡介）。",
     contentErrNoAct: "無法從該內容產生練習，請嘗試貼上更多文本。",
     contentErrGeneric: "目前無法分析此內容，請再試一次。",
+    convTitle: "對話練習",
+    convDesc: "貼上影片的字幕或逐字稿（例如 YouTube 自帶的「顯示逐字稿」面板）。GAKU 會找出真實的對話交換，讓你先預測並說出下一句話，然後再揭曉參考答案。",
+    convPasteLabel: "在此貼上字幕/逐字稿",
+    convGenerating: "正在產生對話練習...",
+    convGenerateBtn: "產生對話練習",
+    convNoTurns: "未能在該內容中找到對話。請嘗試貼上包含更多對話的逐字稿。",
+    convYourTurn: "你會怎麼回答？",
+    convRevealBtn: "顯示參考答案",
+    convModelAnswer: "參考答案",
+    convAltResponses: "其他說法",
     subtitlesTitle: "字幕 → 詞彙",
     subtitlesDesc: "貼上你正在觀看的影片的字幕或逐字稿（例如YouTube自帶的「顯示逐字稿」面板）。雙擊一個詞或拖曳選取一個片語，然後查詢並直接儲存到你的詞彙建構器。",
     subtitlesSourceLabel: "影片標題/來源（可選——用作資料夾名稱）",
@@ -1830,6 +1910,16 @@ const UI_TRANSLATIONS = {
     contentErrEmpty: "먼저 일본어 텍스트(또는 영상의 자막/설명)를 붙여넣어 주세요.",
     contentErrNoAct: "이 콘텐츠로는 활동을 생성할 수 없습니다. 더 많은 텍스트를 붙여넣어 보세요.",
     contentErrGeneric: "지금은 이 콘텐츠를 분석할 수 없습니다. 다시 시도해 주세요.",
+    convTitle: "회화 연습",
+    convDesc: "영상의 자막이나 대본을 붙여넣으세요(예: YouTube의 “대본 보기” 패널). GAKU가 실제 대화 교환을 찾아내어, 모범 답안을 보여주기 전에 다음 줄을 예측하고 직접 말해볼 수 있게 해줍니다.",
+    convPasteLabel: "여기에 자막/대본을 붙여넣으세요",
+    convGenerating: "회화 연습 만들는 중...",
+    convGenerateBtn: "회화 연습 만들기",
+    convNoTurns: "이 콘텐츠에서 대화를 찾을 수 없었습니다. 대화가 더 많은 대본을 붙여넣어 보세요.",
+    convYourTurn: "어떻게 대답하시겠습니까?",
+    convRevealBtn: "모범 답안 보기",
+    convModelAnswer: "모범 답안",
+    convAltResponses: "다른 말하는 방법",
     subtitlesTitle: "자막 → 단어",
     subtitlesDesc: "이미 보고 있는 영상의 자막이나 스크립트를 붙여넣으세요 (예: YouTube 자체의 \"스크립트 표시\" 패널). 단어를 더블클릭하거나 드래그하여 구문을 선택한 다음 검색하여 단어장에 바로 저장하세요.",
     subtitlesSourceLabel: "영상 제목/출처 (선택 사항 — 폴더 이름으로 사용됨)",
@@ -2015,6 +2105,16 @@ const UI_TRANSLATIONS = {
     contentErrEmpty: "กรุณาวางข้อความภาษาญี่ปุ่น (หรือคำบรรยาย/คำอธิบายวิดีโอ) ก่อน",
     contentErrNoAct: "ไม่สามารถสร้างกิจกรรมจากเนื้อหานี้ได้ ลองวางข้อความเพิ่มเติม",
     contentErrGeneric: "ไม่สามารถวิเคราะห์เนื้อหานี้ได้ในขณะนี้ กรุณาลองอีกครั้ง",
+    convTitle: "ฝึกบทสนทนา",
+    convDesc: "วางคำบรรยายหรือบทสนทนาของวิดีโอ (เช่น แผง “แสดงบทสนทนา” ของ YouTube) GAKU จะค้นหาบทสนทนาจริง และให้คุณคาดเดา — และพูดออกมา — ประโยคถัดไป ก่อนเฉลยคำตอบตัวอย่าง",
+    convPasteLabel: "วางคำบรรยาย/บทสนทนาที่นี่",
+    convGenerating: "กำลังสร้างการฝึกบทสนทนา...",
+    convGenerateBtn: "สร้างการฝึกบทสนทนา",
+    convNoTurns: "ไม่พบบทสนทนาในเนื้อหานี้ ลองวางบทสนทนาที่มีบทสนทนามากขึ้น",
+    convYourTurn: "คุณจะตอบอย่างไร?",
+    convRevealBtn: "แสดงคำตอบตัวอย่าง",
+    convModelAnswer: "คำตอบตัวอย่าง",
+    convAltResponses: "วิธีพูดอื่นๆ",
     subtitlesTitle: "คำบรรยาย → คำศัพท์",
     subtitlesDesc: "วางคำบรรยายหรือบทถอดความจากวิดีโอที่คุณกำลังดูอยู่ (เช่น แผง \"Show transcript\" ของ YouTube เอง) ดับเบิลคลิกที่คำหรือลากเพื่อเลือกวลี จากนั้นค้นหาและบันทึกลงในตัวสร้างคำศัพท์ของคุณโดยตรง",
     subtitlesSourceLabel: "ชื่อ/แหล่งที่มาของวิดีโอ (ไม่บังคับ — ใช้เป็นชื่อโฟลเดอร์)",
@@ -2200,6 +2300,16 @@ const UI_TRANSLATIONS = {
     contentErrEmpty: "Tampal dahulu beberapa teks Jepun (atau sari kata/penerangan video).",
     contentErrNoAct: "Tidak dapat menjana aktiviti daripada kandungan itu. Cuba tampal lebih banyak teks.",
     contentErrGeneric: "Tidak dapat menganalisis kandungan ini sekarang. Sila cuba lagi.",
+    convTitle: "Latihan Perbualan",
+    convDesc: "Tampal sari kata atau transkrip video (cth. panel “Tunjuk transkrip” milik YouTube). GAKU akan mencari pertukaran perbualan sebenar dan membenarkan anda meramal — serta menyebut — baris seterusnya sebelum mendedahkan jawapan model.",
+    convPasteLabel: "Tampal sari kata / transkrip di sini",
+    convGenerating: "Membina latihan perbualan...",
+    convGenerateBtn: "Bina Latihan Perbualan",
+    convNoTurns: "Tidak dapat menjumpai perbualan dalam kandungan itu. Cuba tampal transkrip dengan lebih banyak dialog.",
+    convYourTurn: "Bagaimana anda akan menjawab?",
+    convRevealBtn: "Tunjuk jawapan model",
+    convModelAnswer: "Jawapan model",
+    convAltResponses: "Cara lain untuk mengatakannya",
     subtitlesTitle: "Sari Kata → Kosa Kata",
     subtitlesDesc: "Tampal sari kata atau transkrip daripada video yang sedang anda tonton (cth. panel \"Show transcript\" YouTube sendiri). Dwiklik satu perkataan atau seret untuk memilih frasa, kemudian cari dan simpan terus ke Pembina Kosa Kata anda.",
     subtitlesSourceLabel: "Tajuk / sumber video (pilihan — digunakan sebagai nama folder)",
@@ -2385,6 +2495,16 @@ const UI_TRANSLATIONS = {
     contentErrEmpty: "Tempel dulu teks bahasa Jepang (atau subtitle/deskripsi video).",
     contentErrNoAct: "Tidak dapat membuat aktivitas dari konten tersebut. Coba tempel lebih banyak teks.",
     contentErrGeneric: "Tidak dapat menganalisis konten ini sekarang. Silakan coba lagi.",
+    convTitle: "Latihan Percakapan",
+    convDesc: "Tempel subtitle atau transkrip video (mis. panel “Tampilkan transkrip” milik YouTube). GAKU akan menemukan pertukaran percakapan nyata dan membiarkan Anda memprediksi — serta mengucapkan — baris berikutnya sebelum mengungkap jawaban model.",
+    convPasteLabel: "Tempel subtitle / transkrip di sini",
+    convGenerating: "Membangun latihan percakapan...",
+    convGenerateBtn: "Buat Latihan Percakapan",
+    convNoTurns: "Tidak dapat menemukan percakapan dalam konten tersebut. Coba tempel transkrip dengan lebih banyak dialog.",
+    convYourTurn: "Bagaimana Anda akan menjawab?",
+    convRevealBtn: "Tampilkan jawaban model",
+    convModelAnswer: "Jawaban model",
+    convAltResponses: "Cara lain untuk mengatakannya",
     subtitlesTitle: "Subtitle → Kosakata",
     subtitlesDesc: "Tempel subtitle atau transkrip dari video yang sedang Anda tonton (mis. panel \"Show transcript\" bawaan YouTube). Klik dua kali pada sebuah kata atau seret untuk memilih frasa, lalu cari dan simpan langsung ke Pembangun Kosakata Anda.",
     subtitlesSourceLabel: "Judul / sumber video (opsional — digunakan sebagai nama folder)",
@@ -2570,6 +2690,16 @@ const UI_TRANSLATIONS = {
     contentErrEmpty: "Vui lòng dán văn bản tiếng Nhật (hoặc phụ đề/mô tả video) trước.",
     contentErrNoAct: "Không thể tạo hoạt động từ nội dung đó. Hãy thử dán thêm văn bản.",
     contentErrGeneric: "Hiện không thể phân tích nội dung này. Vui lòng thử lại.",
+    convTitle: "Luyện Tập Hội Thoại",
+    convDesc: "Dán phụ đề hoặc bản ghi của video (ví dụ: bảng “Hiển thị bản ghi” của YouTube). GAKU sẽ tìm các đoạn hội thoại thực và cho bạn dự đoán — và nói ra — câu tiếp theo trước khi hiển thị câu trả lời mẫu.",
+    convPasteLabel: "Dán phụ đề / bản ghi vào đây",
+    convGenerating: "Đang xây dựng bài luyện hội thoại...",
+    convGenerateBtn: "Tạo Bài Luyện Hội Thoại",
+    convNoTurns: "Không tìm thấy hội thoại trong nội dung đó. Hãy thử dán bản ghi có nhiều hội thoại hơn.",
+    convYourTurn: "Bạn sẽ trả lời như thế nào?",
+    convRevealBtn: "Hiển thị câu trả lời mẫu",
+    convModelAnswer: "Câu trả lời mẫu",
+    convAltResponses: "Các cách nói khác",
     subtitlesTitle: "Phụ đề → Từ vựng",
     subtitlesDesc: "Dán phụ đề hoặc bản ghi lời thoại từ video bạn đang xem (ví dụ: bảng \"Show transcript\" có sẵn của YouTube). Nhấp đúp vào một từ hoặc kéo để chọn cụm từ, sau đó tra cứu và lưu trực tiếp vào Trình xây dựng từ vựng của bạn.",
     subtitlesSourceLabel: "Tiêu đề / nguồn video (tùy chọn — dùng làm tên thư mục)",
@@ -2755,6 +2885,16 @@ const UI_TRANSLATIONS = {
     contentErrEmpty: "पहले कुछ जापानी टेक्स्ट (या वीडियो के सबटाइटल/विवरण) पेस्ट करें।",
     contentErrNoAct: "उस सामग्री से गतिविधियां नहीं बनाई जा सकीं। अधिक टेक्स्ट पेस्ट करने का प्रयास करें।",
     contentErrGeneric: "अभी इस सामग्री का विश्लेषण नहीं हो सका। कृपया पुनः प्रयास करें।",
+    convTitle: "वार्तालाप अभ्यास",
+    convDesc: "वीडियो के सबटाइटल या ट्रांसक्रिप्ट पेस्ट करें (जैसे YouTube का अपना “ट्रांसक्रिप्ट दिखाएं” पैनल)। GAKU वास्तविक वार्तालाप आदान-प्रदान ढूंढेगा और मॉडल उत्तर दिखाने से पहले आपको अगली पंक्ति का अनुमान लगाने — और बोलकर कहने — देगा।",
+    convPasteLabel: "यहाँ सबटाइटल / ट्रांसक्रिप्ट पेस्ट करें",
+    convGenerating: "वार्तालाप अभ्यास बन रहा है...",
+    convGenerateBtn: "वार्तालाप अभ्यास बनाएं",
+    convNoTurns: "उस सामग्री में कोई वार्तालाप नहीं मिला। अधिक संवाद वाला ट्रांसक्रिप्ट पेस्ट करने का प्रयास करें।",
+    convYourTurn: "आप कैसे जवाब देंगे?",
+    convRevealBtn: "मॉडल उत्तर दिखाएं",
+    convModelAnswer: "मॉडल उत्तर",
+    convAltResponses: "इसे कहने के अन्य तरीके",
     subtitlesTitle: "सबटाइटल → शब्दावली",
     subtitlesDesc: "आप जो वीडियो पहले से देख रहे हैं उसके सबटाइटल या ट्रांसक्रिप्ट पेस्ट करें (जैसे YouTube का अपना \"Show transcript\" पैनल)। किसी शब्द पर डबल-क्लिक करें या वाक्यांश चुनने के लिए खींचें, फिर उसे खोजें और सीधे अपने वोकैबुलरी बिल्डर में सहेजें।",
     subtitlesSourceLabel: "वीडियो शीर्षक / स्रोत (वैकल्पिक — फ़ोल्डर नाम के रूप में उपयोग किया जाता है)",
@@ -2940,6 +3080,16 @@ const UI_TRANSLATIONS = {
     contentErrEmpty: "先に日本語のテキスト（または動画の字幕・概要欄）を貼り付けてください。",
     contentErrNoAct: "この内容から練習問題を作成できませんでした。もっと長いテキストを貼り付けてみてください。",
     contentErrGeneric: "現在この内容を分析できませんでした。もう一度お試しください。",
+    convTitle: "会話プラクティス",
+    convDesc: "動画の字幕やトランスクリプトを貼り付けてください（例：YouTubeの「トランスクリプトを表示」パネル）。GAKUが実際の会話のやり取りを見つけ、模範回答を見る前に次のセリフを予想して——声に出して——もらえます。",
+    convPasteLabel: "ここに字幕・トランスクリプトを貼り付けてください",
+    convGenerating: "会話プラクティスを作成中...",
+    convGenerateBtn: "会話プラクティスを作成",
+    convNoTurns: "この内容から会話を見つけられませんでした。会話がもっと含まれるトランスクリプトを貼り付けてみてください。",
+    convYourTurn: "あなたならどう答えますか？",
+    convRevealBtn: "模範回答を見る",
+    convModelAnswer: "模範回答",
+    convAltResponses: "他の言い方",
     subtitlesTitle: "字幕→単語帳",
     subtitlesDesc: "すでに視聴している動画の字幕やトランスクリプトを貼り付けてください（例：YouTube自体の「トランスクリプトを表示」パネル）。単語をダブルクリックするか、ドラッグしてフレーズを選択し、調べてそのまま単語ビルダーに保存できます。",
     subtitlesSourceLabel: "動画タイトル／出典（任意 — フォルダ名として使用されます）",
@@ -3125,6 +3275,16 @@ const UI_TRANSLATIONS = {
     contentErrEmpty: "Önce biraz Japonca metin (veya bir videonun altyazısı/açıklaması) yapıştırın.",
     contentErrNoAct: "Bu içerikten etkinlik oluşturulamadı. Daha fazla metin yapıştırmayı deneyin.",
     contentErrGeneric: "Bu içerik şu anda analiz edilemedi. Lütfen tekrar deneyin.",
+    convTitle: "Konuşma Alıştırması",
+    convDesc: "Bir videonun altyazılarını veya dökümünü yapıştırın (örn. YouTube'un kendi “Dökümü göster” panelinden). GAKU gerçek konuşma alışverişlerini bulacak ve model cevabı göstermeden önce bir sonraki repliği tahmin etmenizi — ve söylemenizi — sağlayacak.",
+    convPasteLabel: "Buraya altyazı/döküm yapıştırın",
+    convGenerating: "Konuşma alıştırması oluşturuluyor...",
+    convGenerateBtn: "Konuşma Alıştırması Oluştur",
+    convNoTurns: "Bu içerikte bir konuşma bulunamadı. Daha fazla diyalog içeren bir döküm yapıştırmayı deneyin.",
+    convYourTurn: "Nasıl cevap verirdiniz?",
+    convRevealBtn: "Model cevabı göster",
+    convModelAnswer: "Model cevap",
+    convAltResponses: "Söylemenin diğer yolları",
     subtitlesTitle: "Altyazı → Kelime Bilgisi",
     subtitlesDesc: "Zaten izlemekte olduğunuz bir videonun altyazılarını veya metnini yapıştırın (ör. YouTube'un kendi \"Transkripti göster\" panosu). Bir kelimeye çift tıklayın veya bir ifadeyi seçmek için sürükleyin, ardından arayın ve doğrudan Kelime Oluşturucunuza kaydedin.",
     subtitlesSourceLabel: "Video başlığı / kaynağı (isteğe bağlı — klasör adı olarak kullanılır)",
@@ -3310,6 +3470,16 @@ const UI_TRANSLATIONS = {
     contentErrEmpty: "पहिले केही जापानी पाठ (वा भिडियोको सबटाइटल/विवरण) टाँस्नुहोस्।",
     contentErrNoAct: "त्यो सामग्रीबाट गतिविधिहरू बनाउन सकिएन। थप पाठ टाँस्ने प्रयास गर्नुहोस्।",
     contentErrGeneric: "अहिले यो सामग्री विश्लेषण गर्न सकिएन। कृपया फेरि प्रयास गर्नुहोस्।",
+    convTitle: "कुराकानी अभ्यास",
+    convDesc: "भिडियोको सबटाइटल वा ट्रान्सक्रिप्ट टाँस्नुहोस् (जसरी YouTube को आनेको “ट्रान्सक्रिप्ट देखाउनुहोस्” प्यानल)। GAKU ले वास्तविक कुराकानी आदानप्रदान भेट्टाएर मॉडल जवा॥ देखाउन uअगाडि तपाईंलाई अर्को लाइनको अनुमान गर्न — र बोल्न — दिनेछ।",
+    convPasteLabel: "यहाँ सबटाइटल/ट्रान्सक्रिप्ट टाँस्नुहोस्",
+    convGenerating: "कुराकानी अभ्यास बनाउदै...",
+    convGenerateBtn: "कुराकानी अभ्यास बनाउनुहोस्",
+    convNoTurns: "त्यो सामग्रीमा कुनै कुराकानी भेटिएन। थप कुराकानी भएको ट्रान्सक्रिप्ट टाँस्ने प्रयास गर्नुहोस्।",
+    convYourTurn: "तपाईंले कसरी जवाफ दिनुहुन्छ?",
+    convRevealBtn: "मॉडल जवाफ देखाउनुहोस्",
+    convModelAnswer: "मॉडल जवाफ",
+    convAltResponses: "भन्ने अन्य तरिकाहरू",
     subtitlesTitle: "सबटाइटल → शब्दावली",
     subtitlesDesc: "तपाईंले पहिले नै हेरिरहनुभएको भिडियोको सबटाइटल वा ट्रान्सक्रिप्ट टाँस्नुहोस् (जस्तै YouTube को आफ्नै \"Show transcript\" प्यानल)। कुनै शब्दमा डबल-क्लिक गर्नुहोस् वा वाक्यांश छनोट गर्न तान्नुहोस्, त्यसपछि यसलाई खोज्नुहोस् र सिधै आफ्नो शब्दावली निर्माता मा सुरक्षित गर्नुहोस्।",
     subtitlesSourceLabel: "भिडियो शीर्षक / स्रोत (वैकल्पिक — फोल्डर नामको रूपमा प्रयोग हुन्छ)",
@@ -3495,6 +3665,16 @@ const UI_TRANSLATIONS = {
     contentErrEmpty: "Mag-paste muna ng tekstong Hapon (o subtitle/paglalarawan ng video).",
     contentErrNoAct: "Hindi makagawa ng mga gawain mula sa nilalamang iyon. Subukang mag-paste ng mas maraming teksto.",
     contentErrGeneric: "Hindi masuri ang nilalamang ito sa ngayon. Pakisubukang muli.",
+    convTitle: "Pagsasanay sa Pakikipag-usap",
+    convDesc: "I-paste ang subtitle o transcript ng isang video (hal. ang “Ipakita ang transcript” panel ng YouTube). Hahanapin ng GAKU ang tunay na pag-uusap at hahayaan kang hulaan — at sabihin nang malakas — ang susunod na linya bago ipakita ang huwarang sagot.",
+    convPasteLabel: "I-paste dito ang subtitle / transcript",
+    convGenerating: "Ginagawa ang pagsasanay sa pakikipag-usap...",
+    convGenerateBtn: "Gumawa ng Pagsasanay sa Pakikipag-usap",
+    convNoTurns: "Walang natagpuang pag-uusap sa nilalamang iyon. Subukang mag-paste ng transcript na may mas maraming diyalogo.",
+    convYourTurn: "Paano ka sasagot?",
+    convRevealBtn: "Ipakita ang huwarang sagot",
+    convModelAnswer: "Huwarang sagot",
+    convAltResponses: "Ibang paraan ng pagsasabi",
     subtitlesTitle: "Subtitle → Bokabularyo",
     subtitlesDesc: "I-paste ang subtitle o transcript mula sa video na pinapanood mo na (hal. ang sariling \"Show transcript\" panel ng YouTube). I-double-click ang isang salita o i-drag para pumili ng parirala, pagkatapos ay hanapin ito at i-save nang direkta sa iyong Vocabulary Builder.",
     subtitlesSourceLabel: "Pamagat / pinagmulan ng video (opsyonal — ginagamit bilang pangalan ng folder)",
@@ -4996,6 +5176,180 @@ Respond ONLY with a valid JSON array, no markdown, no backticks:
   );
 }
 
+// ─── Conversation Predictor (YouTube/video dialogue → "predict the next line") ──────
+function ConversationTurnCard({ turn, T }) {
+  const [revealed, setRevealed] = useState(false);
+  const [recording, setRecording] = useState(false);
+  const [transcript, setTranscript] = useState("");
+  const [recogSupported, setRecogSupported] = useState(true);
+  const recognitionRef = useRef(null);
+
+  const toggleRecording = () => {
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SR) { setRecogSupported(false); return; }
+    if (recording) { recognitionRef.current?.stop(); return; }
+    const recognition = new SR();
+    recognition.lang = "ja-JP";
+    recognition.interimResults = true;
+    recognition.continuous = false;
+    recognition.onresult = (e) => setTranscript(Array.from(e.results).map(r => r[0].transcript).join(""));
+    recognition.onend = () => setRecording(false);
+    recognition.onerror = () => setRecording(false);
+    recognitionRef.current = recognition;
+    setTranscript(""); setRecording(true); recognition.start();
+  };
+
+  return (
+    <div style={{ ...S.card, borderLeft:`3px solid ${C.purpleLight}` }}>
+      {turn.situation && (
+        <p style={{ color:"#94a3b8", fontSize:11, fontStyle:"italic", margin:"0 0 8px" }}>💭 {turn.situation}</p>
+      )}
+      <div style={{ display:"flex", alignItems:"flex-start", gap:8, marginBottom:10 }}>
+        <span style={{ color:C.teal, fontSize:11, fontWeight:700, flexShrink:0 }}>A:</span>
+        <p style={{ color:"#f1f5f9", fontSize:14, lineHeight:1.8, margin:0, flex:1 }}>{turn.speakerALine}</p>
+      </div>
+      <button onClick={()=>speakJapanese(stripForSpeech(turn.speakerALine))}
+        style={{ display:"flex", alignItems:"center", gap:6, marginBottom:12, padding:"6px 12px", borderRadius:8, background:"rgba(6,182,212,0.12)", border:`1px solid rgba(6,182,212,0.3)`, color:C.teal, fontSize:12, fontWeight:700, cursor:"pointer" }}>
+        🔊 {T?.listenAudio || "Listen"}
+      </button>
+
+      <p style={{ color:C.purpleLight, fontSize:12, fontWeight:700, margin:"0 0 8px" }}>
+        {T?.convYourTurn || "How would you respond?"}
+      </p>
+      <button onClick={toggleRecording}
+        style={{ display:"flex", alignItems:"center", gap:6, padding:"6px 12px", borderRadius:8, background:recording?"rgba(239,68,68,0.15)":"rgba(168,85,247,0.12)", border:`1px solid ${recording?"rgba(239,68,68,0.4)":"rgba(168,85,247,0.3)"}`, color:recording?"#f87171":C.purpleLight, fontSize:12, fontWeight:700, cursor:"pointer" }}>
+        {recording ? `⏺ ${T?.recordingInProgress || "Recording..."}` : `🎤 ${T?.recordVoice || "Record"}`}
+      </button>
+      {!recogSupported && <p style={{ color:C.red, fontSize:11, marginTop:6 }}>Voice input isn't supported in this browser — try Chrome.</p>}
+      {transcript && (
+        <div style={{ background:"rgba(168,85,247,0.06)", borderRadius:8, padding:"8px 10px", marginTop:8 }}>
+          <p style={{ color:C.purpleLight, fontSize:11, fontWeight:700, margin:"0 0 3px" }}>{T?.yourSpokenAnswer || "Your spoken answer:"}</p>
+          <p style={{ color:"#f1f5f9", fontSize:13, margin:0 }}>{transcript}</p>
+        </div>
+      )}
+
+      <div style={{ marginTop:12 }}>
+        {revealed ? (
+          <div style={{ background:"rgba(34,197,94,0.06)", borderRadius:10, padding:"10px 12px" }}>
+            <p style={{ color:C.green, fontSize:11, fontWeight:700, margin:"0 0 4px" }}>✅ {T?.convModelAnswer || "Model answer"}</p>
+            <p style={{ color:"#f1f5f9", fontSize:13, margin:"0 0 8px" }}>{turn.speakerBLine}</p>
+            {Array.isArray(turn.altResponses) && turn.altResponses.length > 0 && (
+              <>
+                <p style={{ color:"#94a3b8", fontSize:11, fontWeight:700, margin:"0 0 4px" }}>{T?.convAltResponses || "Other ways to say it"}</p>
+                {turn.altResponses.map((alt, i) => (
+                  <p key={i} style={{ color:"#cbd5e1", fontSize:12, margin:"0 0 3px" }}>
+                    <span style={{ color:C.amber, fontWeight:700 }}>{alt.style ? `[${alt.style}] ` : ""}</span>{alt.text}
+                  </p>
+                ))}
+              </>
+            )}
+            {turn.tip && <p style={{ color:"#94a3b8", fontSize:12, margin:"8px 0 0", fontStyle:"italic" }}>💬 {turn.tip}</p>}
+          </div>
+        ) : (
+          <button onClick={()=>setRevealed(true)} style={{ padding:"6px 14px", borderRadius:8, background:C.card, border:`1px solid ${C.border}`, color:"#ff1a1a", fontSize:11, cursor:"pointer" }}>
+            {T?.convRevealBtn || "Show model answer"}
+          </button>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function ConversationPredictor({ form }) {
+  const T = useUITranslations(form?.preferredLang || "English");
+  const [raw, setRaw] = useState("");
+  const [sourceTitle, setSourceTitle] = useState("");
+  const [turns, setTurns] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const generate = async () => {
+    const parsedLines = parseSubtitleText(raw);
+    const cleanText = parsedLines.join("\n");
+    if (!cleanText.trim()) { setError(T.contentErrEmpty || "Paste some Japanese text (or a video's subtitles/description) first."); return; }
+    setLoading(true); setError(""); setTurns(null);
+    try {
+      const res = await fetch("/api/claude", {
+        method:"POST", headers:{"Content-Type":"application/json"},
+        body: JSON.stringify({ model:"claude-sonnet-4-20250514", max_tokens:4000, provider:"fast",
+          messages:[{ role:"user", content:`You are a Japanese teacher using CLT (Communicative Language Teaching). The student's JLPT level is ${form.jlpt}.
+
+Below is a real transcript/subtitles from a video the student is watching. Find natural back-and-forth conversational exchanges in it (two speakers, or a speaker and an implied listener) and turn each one into a "predict the next line" speaking practice item.
+
+TRANSCRIPT:
+"""
+${cleanText.slice(0, 6000)}
+"""
+
+RULES:
+1. Only use REAL lines quoted or lightly adapted from the transcript above — never invent unrelated dialogue.
+2. Find between 5 and 12 exchanges (fewer if the transcript is short — don't pad).
+3. For each exchange:
+   - situation: one short sentence in ${form.preferredLang || "English"} describing the context (who's talking, where, why)
+   - speakerALine: the real line that prompts a response (in Japanese)
+   - speakerBLine: the real/actual response that follows it in the transcript (in Japanese) — this is the "model answer"
+   - altResponses: an array of 2-3 alternate natural ways to respond to speakerALine, each as {"style":"casual"|"polite"|"native-like","text":"..."}, showing register variation
+   - tip: one short CLT-style tip in ${form.preferredLang || "English"} about the response (nuance, politeness level, or when to use it)
+4. Scale vocabulary/grammar complexity awareness to ${form.jlpt} in the tip, but always keep speakerALine/speakerBLine as the REAL transcript text.
+
+Respond ONLY with a valid JSON array, no markdown, no backticks:
+[{"situation":"","speakerALine":"","speakerBLine":"","altResponses":[{"style":"","text":""}],"tip":""}]` }]
+        })
+      });
+      const d = await res.json();
+      const text = d.content?.map(c=>c.text||"").join("") || "[]";
+      const parsed = JSON.parse(text.replace(/```json|```/g,"").trim());
+      if (Array.isArray(parsed) && parsed.length) {
+        setTurns(parsed);
+      } else {
+        setError(T.convNoTurns || "Couldn't find a conversation in that content. Try pasting a transcript with more dialogue.");
+      }
+    } catch { setError(T.contentErrGeneric || "Could not analyze this content right now. Please try again."); }
+    setLoading(false);
+  };
+
+  const handleReset = () => { setTurns(null); setRaw(""); setError(""); };
+
+  if (!turns) {
+    return (
+      <div>
+        <div style={{ ...S.card, marginBottom:16 }}>
+          <p style={{ color:C.purpleLight, fontSize:12, fontWeight:700, letterSpacing:1, marginBottom:6 }}>🎙️ {T.convTitle || "Conversation Practice"}</p>
+          <p style={{ color:"#39ff14", fontSize:12, lineHeight:1.7, marginBottom:14 }}>
+            {T.convDesc || "Paste a video's subtitles or transcript (e.g. YouTube's own \"Show transcript\" panel). GAKU will find real conversational exchanges and let you predict — and speak — the next line before revealing the model answer."}
+          </p>
+          <label style={{ ...S.label, color:"#ffffff" }}>{T.subtitlesSourceLabel || "Video title / source (optional)"}</label>
+          <input value={sourceTitle} onChange={e=>setSourceTitle(e.target.value)} placeholder={T.subtitlesSourcePlaceholder || "e.g. NHK news 7/2"} style={{ ...S.input, marginBottom:12 }} />
+          <label style={{ ...S.label, color:"#ffffff" }}>{T.convPasteLabel || "Paste subtitles / transcript here"}</label>
+          <textarea value={raw} onChange={e=>setRaw(e.target.value)} rows={10}
+            placeholder={T.subtitlesPastePlaceholder || "Paste plain text or an .srt file's contents — timestamps and cue numbers are removed automatically."}
+            style={{ ...S.input, resize:"vertical", fontFamily:"inherit", lineHeight:1.7, marginBottom:14 }} />
+          <button onClick={generate} disabled={loading || !raw.trim()} style={{ ...S.btn, width:"100%", background:(loading||!raw.trim())?"rgba(168,85,247,0.15)":`linear-gradient(135deg,${C.purple},#9333ea)`, color:(loading||!raw.trim())?"#64748b":"#fff" }}>
+            {loading ? `⏳ ${T.convGenerating || "Building conversation practice..."}` : (T.convGenerateBtn || "Build Conversation Practice")} {!loading && "✨"}
+          </button>
+          {error && <p style={{ color:C.red, fontSize:12, marginTop:10 }}>{error}</p>}
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div>
+      <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:12 }}>
+        <p style={{ color:C.purpleLight, fontSize:12, fontWeight:700, letterSpacing:1, margin:0 }}>
+          🎙️ {sourceTitle.trim() || (T.convTitle || "Conversation Practice")}
+        </p>
+        <button onClick={handleReset} style={{ ...S.btn, padding:"6px 12px", fontSize:11, background:C.card, border:`1px solid ${C.border}`, color:"#94a3b8" }}>
+          {T.subtitlesLoadNew || "↺ Load a different transcript"}
+        </button>
+      </div>
+      <div style={{ display:"flex", flexDirection:"column", gap:12 }}>
+        {turns.map((turn, i) => <ConversationTurnCard key={i} turn={turn} T={T} />)}
+      </div>
+    </div>
+  );
+}
+
 // ─── Schedule builder ────────────────────────────────────────────────────────────
 // Skill note keys mapped to T keys
 const SKILL_NOTE_KEY = {
@@ -5702,6 +6056,7 @@ function Dashboard({ form, onEdit }) {
   const RESOURCE_SUBTABS = [
     { id:"links",    label: "🔗 " + (T.tabResources || "Resources") },
     { id:"content",  label: "✨ From Content" },
+    { id:"conversation", label: "🎙️ " + (T.convTitle || "Conversation") },
   ];
 
   return (
@@ -5825,6 +6180,8 @@ function Dashboard({ form, onEdit }) {
             </div>
 
             {resourceSubTab==="content" && <ContentAnalyzer form={form} />}
+
+            {resourceSubTab==="conversation" && <ConversationPredictor form={form} />}
 
             {resourceSubTab==="links" && (
             <div>
