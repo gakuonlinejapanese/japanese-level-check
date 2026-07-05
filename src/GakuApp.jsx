@@ -4543,7 +4543,15 @@ function ExerciseCard({ item, revealed, onReveal, T }) {
         <span style={{ color, fontSize:11, fontWeight:700 }}>{SKILL_LABELS[item.skill] || item.skill}</span>
         <span style={{ color:"#ffffff", fontSize:11 }}>{item.type}</span>
       </div>
-      <p style={{ color:"#f1f5f9", fontSize:14, lineHeight:1.8, margin:"0 0 6px", whiteSpace:"pre-wrap" }}>{item.prompt}</p>
+      <div style={{ display:"flex", alignItems:"flex-start", gap:8, margin:"0 0 6px" }}>
+        <p style={{ color:"#f1f5f9", fontSize:14, lineHeight:1.8, margin:0, whiteSpace:"pre-wrap", flex:1 }}>{item.prompt}</p>
+        {item.skill === "listening" && (
+          <button onClick={()=>speakJapanese(item.prompt)} title={T?.speakWord || "Listen"}
+            style={{ width:34, height:34, borderRadius:8, background:"rgba(6,182,212,0.12)", border:`1px solid rgba(6,182,212,0.3)`, color:C.teal, fontSize:16, cursor:"pointer", flexShrink:0, display:"flex", alignItems:"center", justifyContent:"center" }}>
+            🔊
+          </button>
+        )}
+      </div>
       <div style={{ display:"flex", gap:6, marginBottom:8 }}>
         <button onClick={()=>fetchReading("furigana")} disabled={loadingType!==null} style={{ fontSize:11, color:"#67e8f9", fontWeight:700, background:"rgba(103,232,249,0.1)", padding:"4px 10px", borderRadius:8, border:"1px solid rgba(103,232,249,0.3)", cursor:"pointer" }}>
           {loadingType==="furigana" ? "⏳" : (T?.furiganaBtn || "ふりがな")}
@@ -5295,6 +5303,36 @@ const LANGUAGES = [
   "Japanese","Turkish","Nepali","Filipino",
 ];
 
+// Native-script display names for the 🌐 language badge (shown regardless of UI language)
+const NATIVE_LANG_NAMES = {
+  "English":"English","Spanish":"Español","French":"Français","German":"Deutsch",
+  "Chinese (Simplified)":"简体中文","Chinese (Traditional)":"繁體中文","Italian":"Italiano",
+  "Korean":"한국어","Thai":"ไทย","Malay":"Bahasa Melayu","Indonesian":"Bahasa Indonesia",
+  "Vietnamese":"Tiếng Việt","Hindi":"हिन्दी","Japanese":"日本語","Turkish":"Türkçe",
+  "Nepali":"नेपाली","Filipino":"Filipino",
+};
+
+// Maps the raw English values stored in form.goal / form.timeline to their T-object key,
+// so the stored value can always be re-translated into the student's chosen UI language.
+const GOAL_KEY_MAP = {
+  "Pass JLPT N5":"goalN5", "Pass JLPT N4":"goalN4", "Pass JLPT N3":"goalN3",
+  "Pass JLPT N2":"goalN2", "Pass JLPT N1":"goalN1", "Get a job in Japan":"goalJob",
+  "Travel to Japan":"goalTravel", "Study abroad in Japan":"goalStudyAbroad",
+  "Daily conversation":"goalConversation", "Other":"goalOther",
+};
+const TIMELINE_KEY_MAP = {
+  "Less than 6 months":"lessThan6", "Within 1 year":"within1",
+  "2-3 years":"twoThreeYears", "Over 3 years":"over3",
+};
+function translateGoal(rawGoal, displayGoal, T) {
+  // "Other" goals store free text in displayGoal — never look that up in the map.
+  if (rawGoal === "Other") return displayGoal || rawGoal;
+  return T[GOAL_KEY_MAP[rawGoal]] || displayGoal || rawGoal;
+}
+function translateTimeline(rawTimeline, T) {
+  return T[TIMELINE_KEY_MAP[rawTimeline]] || rawTimeline;
+}
+
 // ─── FORM ───────────────────────────────────────────────────────────────────────
 function FormScreen({ onSubmit, onBack, onCancel, initialJlpt, initialForm }) {
   const [form, setForm] = useState(() => initialForm || {
@@ -5591,10 +5629,10 @@ function Dashboard({ form, onEdit }) {
             <div style={{ width:`${progress}%`, height:"100%", background:`linear-gradient(90deg,${C.purple},${C.purpleLight})`, borderRadius:99, transition:"width 0.4s" }} />
           </div>
           <div style={{ display:"flex", gap:12, marginTop:10, flexWrap:"wrap" }}>
-            <p style={{ color:"#39ff14", fontSize:11, margin:0 }}>🎯 {form.displayGoal||form.goal}</p>
-            <p style={{ color:"#39ff14", fontSize:11, margin:0 }}>📅 {form.timeline}</p>
+            <p style={{ color:"#39ff14", fontSize:11, margin:0 }}>🎯 {translateGoal(form.goal, form.displayGoal, T)}</p>
+            <p style={{ color:"#39ff14", fontSize:11, margin:0 }}>📅 {translateTimeline(form.timeline, T)}</p>
             <p style={{ color:"#39ff14", fontSize:11, margin:0 }}>📊 {form.jlpt}</p>
-            <p style={{ color:"#39ff14", fontSize:11, margin:0 }}>🌐 {form.preferredLang}</p>
+            <p style={{ color:"#39ff14", fontSize:11, margin:0 }}>🌐 {NATIVE_LANG_NAMES[form.preferredLang] || form.preferredLang}</p>
           </div>
         </div>
 
