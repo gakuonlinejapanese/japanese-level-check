@@ -307,6 +307,9 @@ const UI_TRANSLATIONS = {
     searchingDictionary: "Searching Japanese dictionary...",
     speakWord: "Pronounce word",
     listenAudio: "Listen",
+    recordVoice: "Record",
+    recordingInProgress: "Recording...",
+    yourSpokenAnswer: "Your spoken answer:",
     speakExample: "Pronounce example",
     weblioDict: "📖 Weblio Dictionary",
     googleImages: "🖼 Google Images",
@@ -496,6 +499,9 @@ const UI_TRANSLATIONS = {
     searchingDictionary: "Recherche dans le dictionnaire japonais...",
     speakWord: "Prononcer le mot",
     listenAudio: "Écouter",
+    recordVoice: "Enregistrer",
+    recordingInProgress: "Enregistrement...",
+    yourSpokenAnswer: "Votre réponse orale :",
     speakExample: "Prononcer l'exemple",
     weblioDict: "📖 Dictionnaire Weblio",
     googleImages: "🖼 Images Google",
@@ -669,6 +675,9 @@ const UI_TRANSLATIONS = {
     searchingDictionary: "Buscando en el diccionario japonés...",
     speakWord: "Pronunciar palabra",
     listenAudio: "Escuchar",
+    recordVoice: "Grabar",
+    recordingInProgress: "Grabando...",
+    yourSpokenAnswer: "Tu respuesta hablada:",
     speakExample: "Pronunciar ejemplo",
     weblioDict: "📖 Diccionario Weblio",
     googleImages: "🖼 Imágenes de Google",
@@ -842,6 +851,9 @@ const UI_TRANSLATIONS = {
     searchingDictionary: "Pesquisando no dicionário japonês...",
     speakWord: "Pronunciar palavra",
     listenAudio: "Ouvir",
+    recordVoice: "Gravar",
+    recordingInProgress: "Gravando...",
+    yourSpokenAnswer: "Sua resposta falada:",
     speakExample: "Pronunciar exemplo",
     weblioDict: "📖 Dicionário Weblio",
     googleImages: "🖼 Imagens do Google",
@@ -1015,6 +1027,9 @@ const UI_TRANSLATIONS = {
     searchingDictionary: "Japanisches Wörterbuch wird durchsucht...",
     speakWord: "Wort aussprechen",
     listenAudio: "Hören",
+    recordVoice: "Aufnehmen",
+    recordingInProgress: "Aufnahme läuft...",
+    yourSpokenAnswer: "Ihre gesprochene Antwort:",
     speakExample: "Beispiel aussprechen",
     weblioDict: "📖 Weblio-Wörterbuch",
     googleImages: "🖼 Google-Bilder",
@@ -1188,6 +1203,9 @@ const UI_TRANSLATIONS = {
     searchingDictionary: "Ricerca nel dizionario giapponese...",
     speakWord: "Pronuncia la parola",
     listenAudio: "Ascolta",
+    recordVoice: "Registra",
+    recordingInProgress: "Registrazione...",
+    yourSpokenAnswer: "La tua risposta parlata:",
     speakExample: "Pronuncia l'esempio",
     weblioDict: "📖 Dizionario Weblio",
     googleImages: "🖼 Immagini Google",
@@ -1361,6 +1379,9 @@ const UI_TRANSLATIONS = {
     searchingDictionary: "正在搜索日语词典...",
     speakWord: "发音单词",
     listenAudio: "听",
+    recordVoice: "录音",
+    recordingInProgress: "录音中...",
+    yourSpokenAnswer: "你的口头回答：",
     speakExample: "发音例句",
     weblioDict: "📖 Weblio词典",
     googleImages: "🖼 谷歌图片",
@@ -1534,6 +1555,9 @@ const UI_TRANSLATIONS = {
     searchingDictionary: "正在搜尋日語詞典...",
     speakWord: "發音單字",
     listenAudio: "聽",
+    recordVoice: "錄音",
+    recordingInProgress: "錄音中...",
+    yourSpokenAnswer: "你的口頭回答：",
     speakExample: "發音例句",
     weblioDict: "📖 Weblio詞典",
     googleImages: "🖼 Google圖片",
@@ -1707,6 +1731,9 @@ const UI_TRANSLATIONS = {
     searchingDictionary: "일본어 사전 검색 중...",
     speakWord: "단어 발음 듣기",
     listenAudio: "듣기",
+    recordVoice: "녹음",
+    recordingInProgress: "녹음 중...",
+    yourSpokenAnswer: "말한 답변:",
     speakExample: "예문 발음 듣기",
     weblioDict: "📖 Weblio 사전",
     googleImages: "🖼 구글 이미지",
@@ -1880,6 +1907,9 @@ const UI_TRANSLATIONS = {
     searchingDictionary: "กำลังค้นหาพจนานุกรมภาษาญี่ปุ่น...",
     speakWord: "ออกเสียงคำ",
     listenAudio: "ฟัง",
+    recordVoice: "บันทึกเสียง",
+    recordingInProgress: "กำลังบันทึก...",
+    yourSpokenAnswer: "คำตอบที่พูดของคุณ:",
     speakExample: "ออกเสียงตัวอย่าง",
     weblioDict: "📖 พจนานุกรม Weblio",
     googleImages: "🖼 รูปภาพ Google",
@@ -2053,6 +2083,9 @@ const UI_TRANSLATIONS = {
     searchingDictionary: "Mencari dalam kamus Jepun...",
     speakWord: "Sebut perkataan",
     listenAudio: "Dengar",
+    recordVoice: "Rakam",
+    recordingInProgress: "Merakam...",
+    yourSpokenAnswer: "Jawapan lisan anda:",
     speakExample: "Sebut contoh",
     weblioDict: "📖 Kamus Weblio",
     googleImages: "🖼 Imej Google",
@@ -2226,6 +2259,9 @@ const UI_TRANSLATIONS = {
     searchingDictionary: "Mencari dalam kamus Jepang...",
     speakWord: "Ucapkan kata",
     listenAudio: "Dengarkan",
+    recordVoice: "Rekam",
+    recordingInProgress: "Merekam...",
+    yourSpokenAnswer: "Jawaban lisan Anda:",
     speakExample: "Ucapkan contoh",
     weblioDict: "📖 Kamus Weblio",
     googleImages: "🖼 Gambar Google",
@@ -2399,6 +2435,9 @@ const UI_TRANSLATIONS = {
     searchingDictionary: "Đang tìm trong từ điển tiếng Nhật...",
     speakWord: "Phát âm từ",
     listenAudio: "Nghe",
+    recordVoice: "Ghi âm",
+    recordingInProgress: "Đang ghi âm...",
+    yourSpokenAnswer: "Câu trả lời nói của bạn:",
     speakExample: "Phát âm ví dụ",
     weblioDict: "📖 Từ điển Weblio",
     googleImages: "🖼 Hình ảnh Google",
@@ -2572,6 +2611,9 @@ const UI_TRANSLATIONS = {
     searchingDictionary: "जापानी शब्दकोश खोज रहे हैं...",
     speakWord: "शब्द का उच्चारण करें",
     listenAudio: "सुनें",
+    recordVoice: "रिकॉर्ड करें",
+    recordingInProgress: "रिकॉर्डिंग हो रही है...",
+    yourSpokenAnswer: "आपका बोला गया उत्तर:",
     speakExample: "उदाहरण का उच्चारण करें",
     weblioDict: "📖 Weblio शब्दकोश",
     googleImages: "🖼 Google छवियां",
@@ -2745,6 +2787,9 @@ const UI_TRANSLATIONS = {
     searchingDictionary: "日本語辞書を検索中...",
     speakWord: "単語を発音",
     listenAudio: "聞く",
+    recordVoice: "録音",
+    recordingInProgress: "録音中...",
+    yourSpokenAnswer: "あなたの発話：",
     speakExample: "例文を発音",
     weblioDict: "📖 Weblio辞書",
     googleImages: "🖼 Google画像",
@@ -2918,6 +2963,9 @@ const UI_TRANSLATIONS = {
     searchingDictionary: "Japonca sözlükte aranıyor...",
     speakWord: "Kelimeyi telaffuz et",
     listenAudio: "Dinle",
+    recordVoice: "Kaydet",
+    recordingInProgress: "Kaydediliyor...",
+    yourSpokenAnswer: "Sözlü cevabınız:",
     speakExample: "Örneği telaffuz et",
     weblioDict: "📖 Weblio Sözlük",
     googleImages: "🖼 Google Görseller",
@@ -3091,6 +3139,9 @@ const UI_TRANSLATIONS = {
     searchingDictionary: "जापानी शब्दकोश खोजिँदै...",
     speakWord: "शब्द उच्चारण गर्नुहोस्",
     listenAudio: "सुन्नुहोस्",
+    recordVoice: "रेकर्ड गर्नुहोस्",
+    recordingInProgress: "रेकर्डिङ हुँदैछ...",
+    yourSpokenAnswer: "तपाईंको बोलिएको जवाफ:",
     speakExample: "उदाहरण उच्चारण गर्नुहोस्",
     weblioDict: "📖 Weblio शब्दकोश",
     googleImages: "🖼 Google छविहरू",
@@ -3264,6 +3315,9 @@ const UI_TRANSLATIONS = {
     searchingDictionary: "Hinahanap sa diksyunaryong Japanese...",
     speakWord: "Bigkasin ang salita",
     listenAudio: "Makinig",
+    recordVoice: "I-record",
+    recordingInProgress: "Nire-record...",
+    yourSpokenAnswer: "Ang iyong sinabing sagot:",
     speakExample: "Bigkasin ang halimbawa",
     weblioDict: "📖 Weblio Dictionary",
     googleImages: "🖼 Google Images",
@@ -3455,6 +3509,12 @@ function speakJapanese(text) {
   const jpVoice = voices.find(v => v.lang === "ja-JP" || v.lang === "ja_JP");
   if (jpVoice) u.voice = jpVoice;
   window.speechSynthesis.speak(u);
+}
+
+// Strips parenthetical instructional labels (e.g. "（シャドーイング）", "(Shadowing)") from an
+// exercise prompt before it's read aloud — those are UI labels, not content to pronounce.
+function stripForSpeech(text) {
+  return (text || "").replace(/[（(][^）)]*[）)]/g, "").trim();
 }
 
 // ─── WORD DETAIL CARD ──────────────────────────────────────────────────────────
@@ -4535,6 +4595,33 @@ function ExerciseCard({ item, revealed, onReveal, T }) {
   const [furigana, setFurigana] = useState("");
   const [romaji, setRomaji] = useState("");
   const [loadingType, setLoadingType] = useState(null);
+  const [recording, setRecording] = useState(false);
+  const [transcript, setTranscript] = useState("");
+  const [recogSupported, setRecogSupported] = useState(true);
+  const recognitionRef = useRef(null);
+
+  const toggleRecording = () => {
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SR) { setRecogSupported(false); return; }
+    if (recording) {
+      recognitionRef.current?.stop();
+      return;
+    }
+    const recognition = new SR();
+    recognition.lang = "ja-JP";
+    recognition.interimResults = true;
+    recognition.continuous = false;
+    recognition.onresult = (e) => {
+      const text = Array.from(e.results).map(r => r[0].transcript).join("");
+      setTranscript(text);
+    };
+    recognition.onend = () => setRecording(false);
+    recognition.onerror = () => setRecording(false);
+    recognitionRef.current = recognition;
+    setTranscript("");
+    setRecording(true);
+    recognition.start();
+  };
 
   const fetchReading = async (mode) => {
     setLoadingType(mode);
@@ -4565,10 +4652,25 @@ function ExerciseCard({ item, revealed, onReveal, T }) {
         <p style={{ color:"#f1f5f9", fontSize:14, lineHeight:1.8, margin:0, whiteSpace:"pre-wrap", flex:1 }}>{item.prompt}</p>
       </div>
       {(item.skill === "listening" || item.skill === "pronunciation") && (
-        <button onClick={()=>speakJapanese(item.prompt)}
+        <button onClick={()=>speakJapanese(stripForSpeech(item.prompt))}
           style={{ display:"flex", alignItems:"center", gap:6, marginBottom:8, padding:"6px 12px", borderRadius:8, background:"rgba(6,182,212,0.12)", border:`1px solid rgba(6,182,212,0.3)`, color:C.teal, fontSize:12, fontWeight:700, cursor:"pointer" }}>
           🔊 {T?.listenAudio || "Listen"}
         </button>
+      )}
+      {(item.skill === "pronunciation" || item.skill === "conversation") && (
+        <div style={{ marginBottom:8 }}>
+          <button onClick={toggleRecording}
+            style={{ display:"flex", alignItems:"center", gap:6, padding:"6px 12px", borderRadius:8, background:recording?"rgba(239,68,68,0.15)":"rgba(168,85,247,0.12)", border:`1px solid ${recording?"rgba(239,68,68,0.4)":"rgba(168,85,247,0.3)"}`, color:recording?"#f87171":C.purpleLight, fontSize:12, fontWeight:700, cursor:"pointer" }}>
+            {recording ? `⏺ ${T?.recordingInProgress || "Recording..."}` : `🎤 ${T?.recordVoice || "Record"}`}
+          </button>
+          {!recogSupported && <p style={{ color:C.red, fontSize:11, marginTop:6 }}>Voice input isn't supported in this browser — try Chrome.</p>}
+          {transcript && (
+            <div style={{ background:"rgba(168,85,247,0.06)", borderRadius:8, padding:"8px 10px", marginTop:6 }}>
+              <p style={{ color:C.purpleLight, fontSize:11, fontWeight:700, margin:"0 0 3px" }}>{T?.yourSpokenAnswer || "Your spoken answer:"}</p>
+              <p style={{ color:"#f1f5f9", fontSize:13, margin:0 }}>{transcript}</p>
+            </div>
+          )}
+        </div>
       )}
       <div style={{ display:"flex", gap:6, marginBottom:8 }}>
         <button onClick={()=>fetchReading("furigana")} disabled={loadingType!==null} style={{ fontSize:11, color:"#67e8f9", fontWeight:700, background:"rgba(103,232,249,0.1)", padding:"4px 10px", borderRadius:8, border:"1px solid rgba(103,232,249,0.3)", cursor:"pointer" }}>
@@ -4611,6 +4713,22 @@ function ContentAnalyzer({ form }) {
   const [error, setError] = useState("");
   const [activeSkillFilter, setActiveSkillFilter] = useState("all");
 
+  // Only build activities for the skills the student picked in "WHAT DO YOU WANT TO STUDY?".
+  // Falls back to all skills if the student hasn't selected any yet.
+  const ALL_SKILLS = ["pronunciation","listening","conversation","jlpt","reading","kanji","grammar"];
+  const allowedSkills = (form.skills && form.skills.length) ? form.skills.filter(s => ALL_SKILLS.includes(s)) : ALL_SKILLS;
+
+  const SKILL_DESC = {
+    pronunciation: "pronunciation: pick a real sentence (or short phrase) from the content and ask the student to shadow it aloud, e.g. 「(real sentence)」を声に出して読んでください. Do NOT append a parenthetical label like「（シャドーイング）」to the Japanese prompt text — the app already shows \"Shadowing\" as a separate label. This gets an automatic 🔊 button so the student can hear the model pronunciation before repeating it, and a 🎤 button to record and check their own voice.",
+    listening: "listening: take a real sentence from the content and turn it into a listening-comprehension fill-in-the-blank, e.g. [場面：(context from the content)]「(real sentence with one word/phrase blanked)」の___に何が入りますか？ with ①②③④ choices. This is meant to be played aloud (the app adds a 🔊 button automatically) — the student listens, not just reads, so keep it phrased as something natural to hear.",
+    conversation: "conversation: turn a real dialogue moment from the content into a role-play — give the situation in English, quote the real Japanese line that prompts a response, and ask the student to respond in Japanese aloud (the app gives a 🎤 button to record their spoken response).",
+    jlpt: "jlpt: JLPT-style vocabulary/grammar check using a real word or phrase from the content — meaning check (\"「◯◯」は何を意味しますか？\") or a 4-choice ①②③④ question grounded in the content.",
+    reading: "reading: \"what does this sentence/passage mean?\" comprehension using real text from the content, or a fill-in-the-blank with ①②③④ choices using a real sentence.",
+    kanji: "kanji: reading of real kanji from the content (\"「◯◯」は何と読みますか？\").",
+    grammar: "grammar: grammar point explanation or fill-in-the-blank with ①②③④ choices, using a real sentence from the content.",
+  };
+  const skillInstructions = allowedSkills.map(s => `   - ${SKILL_DESC[s]}`).join("\n");
+
   const analyze = async () => {
     const trimmed = source.trim();
     if (!trimmed) { setError("Paste some Japanese text (or a video's subtitles/description) first."); return; }
@@ -4628,6 +4746,8 @@ CONTENT TO ANALYZE:
 ${trimmed.slice(0, 6000)}
 """
 
+The student has ONLY selected these study skills in their profile: ${allowedSkills.join(", ")}. You MUST ONLY generate activities tagged with one of these exact skill values — NEVER produce an activity for any other skill, even if the content would suit it well.
+
 Create between 10 and 20 practice activities (choose a count that fits the amount of content — don't pad with repetition if the content is short). RULES:
 1. Every activity must be grounded in the actual content above — quote or adapt real words/sentences from it, don't invent unrelated material.
 2. JAPANESE FIRST: every prompt must contain real Japanese text from (or directly derived from) the content.
@@ -4637,21 +4757,13 @@ Create between 10 and 20 practice activities (choose a count that fits the amoun
    - N3: sentence meaning, grammar function of specific phrases, paraphrase
    - N2: nuance, formal/casual register differences, more complex grammar
    - N1: literary/formal nuance, implied meaning, stylistic questions
-4. Mix activity types across ALL of these skills, every one grounded in the actual content — never invent a generic unrelated example:
-   - vocabulary: meaning check for a real word from the content
-   - kanji: reading of real kanji from the content
-   - grammar: grammar point explanation using a real sentence from the content
-   - reading: "what does this sentence/passage mean?" comprehension using real text from the content
-   - listening: take a real sentence from the content and turn it into a listening-comprehension fill-in-the-blank, e.g. [場面：(context from the content)]「(real sentence with one word/phrase blanked)」の___に何が入りますか？ with ①②③④ choices. This is meant to be played aloud (the app adds a 🔊 button automatically) — the student listens, not just reads, so keep it phrased as something natural to hear.
-   - pronunciation: pick a real sentence (or short phrase) from the content and ask the student to shadow it aloud, e.g. 「(real sentence)」を声に出して読んでください（シャドーイング）. This also gets an automatic 🔊 button so the student can hear the model pronunciation before repeating it.
-   - conversation: turn a real dialogue moment from the content into a role-play — give the situation in English, quote the real Japanese line that prompts a response, and ask the student to respond in Japanese.
-   - fill-in-the-blank (can be tagged grammar, reading, or listening as fits): use a real sentence from the content with the target word blanked out and 4 choices ①②③④.
-   - one short output task (e.g. "summarize this in one Japanese sentence" or "how would you respond to this?"), tagged conversation or reading as fits.
-   Aim for a natural spread across these skills rather than clustering on just one or two — but only generate a skill if the content actually gives you real material for it (e.g. skip conversation if there's no dialogue in the content).
+4. Activity types for each selected skill:
+${skillInstructions}
+   Aim for a natural spread across the selected skills rather than clustering on just one — but only generate a skill if the content actually gives you real material for it (e.g. skip conversation if there's no dialogue in the content).
 5. For fill-in-the-blank, ALWAYS include the full original Japanese sentence with ___ for the blank AND the ①②③④ choices in the same prompt. The blank must sit exactly where the blanked word/particle belongs — never place it next to a particle or word that's already written elsewhere in the sentence, since that makes every choice wrong or duplicated (e.g. don't blank "＿＿＿に" if "に" already follows the blank). Before finalizing, mentally insert each choice into the blank and confirm exactly one produces a natural sentence matching your "answer" field.
 
 Return fields for each activity:
-- skill: one of vocabulary, kanji, grammar, reading, listening, conversation, pronunciation
+- skill: one of ${allowedSkills.join(", ")}
 - type: short English label (e.g. "Kanji reading", "Meaning check", "Fill-in-the-blank", "Comprehension", "Shadowing", "Role-play", "Output task")
 - prompt: self-contained, must feature real Japanese text from the content
 - answer: correct answer (in Japanese when applicable)
