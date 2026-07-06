@@ -6133,7 +6133,7 @@ function Dashboard({ form, onEdit }) {
   ];
   const RESOURCE_SUBTABS = [
     { id:"links",    label: "🔗 " + (T.tabResources || "Resources") },
-    { id:"content",  label: "✨ From Content" },
+    { id:"content",  label: T.tabPractice || "✨ From Content" },
     { id:"conversation", label: "🎙️ " + (T.convTitle || "Conversation") },
   ];
 
