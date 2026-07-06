@@ -3858,6 +3858,46 @@ function saveVocabData(data) {
   }
 }
 
+// ─── TEACHER-ASSIGNED VOCAB SYNC ───────────────────────────────────────────────
+// Seito can push a word directly into a student's account (via the admin-only
+// api/admin-assign-word endpoint — no student password needed). This pulls any
+// pending words for the logged-in student from the `assigned_vocab` table,
+// merges them into their local vocab, then removes the synced rows so they're
+// not re-delivered next time.
+async function syncAssignedVocab(userId) {
+  if (!supabase || !userId) return;
+  try {
+    const { data: rows, error } = await supabase
+      .from("assigned_vocab")
+      .select("*")
+      .eq("student_id", userId);
+    if (error || !rows || !rows.length) return;
+
+    const vocabData = loadVocabData();
+    let changed = false;
+    for (const row of rows) {
+      const folder = row.folder || "Your Vocabulary";
+      if (folder !== "Your Vocabulary" && !vocabData.folders.find(f => (typeof f === "string" ? f : f.name) === folder)) {
+        vocabData.folders.push({ name: folder, createdAt: new Date().toISOString() });
+      }
+      if (!vocabData.cards.find(c => c.word === row.word && c.folder === folder)) {
+        vocabData.cards.push({
+          id: row.id, word: row.word, reading: row.reading || "",
+          jlpt: row.jlpt || "", partOfSpeech: row.part_of_speech || "",
+          meaning: row.meaning || "", example: row.example || "",
+          folder, savedAt: new Date().toISOString(), addedAt: Date.now(),
+        });
+        changed = true;
+      }
+    }
+    if (changed) {
+      saveVocabData(vocabData);
+      try { window.dispatchEvent(new Event("gaku_vocab_updated")); } catch {}
+    }
+    // Remove delivered rows so they aren't merged again on next login.
+    await supabase.from("assigned_vocab").delete().eq("student_id", userId);
+  } catch {}
+}
 
 // ─── SPEAK helper ──────────────────────────────────────────────────────────────
 function speakJapanese(text) {
@@ -6568,6 +6608,7 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
     try { setInteractionCount(parseInt(localStorage.getItem(scopedKey("gaku_interaction_count")) || "0", 10) || 0); } catch { setInteractionCount(0); }
     try { window.dispatchEvent(new Event("gaku_vocab_updated")); } catch {}
     if (!authUser) { setDeviceStatus(null); setIsGakuStudent(false); return; }
+    syncAssignedVocab(authUser.id);
     setDeviceStatus("checking");
     fetch("/api/check-gaku-student", {
       method: "POST", headers: { "Content-Type":"application/json" },

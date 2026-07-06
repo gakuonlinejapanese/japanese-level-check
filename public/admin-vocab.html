@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>GAKU — 単語を送る</title>
+<meta name="robots" content="noindex, nofollow" />
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; min-height: 100vh; font-family: 'Hiragino Sans', 'Noto Sans JP', sans-serif;
+    background: linear-gradient(160deg,#0a0f1e 0%,#0f172a 60%,#0a0f1e 100%);
+    color: #f1f5f9; display: flex; justify-content: center; padding: 32px 16px;
+  }
+  .card {
+    width: 100%; max-width: 480px; background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 24px;
+  }
+  h1 { font-size: 18px; margin: 0 0 4px; }
+  p.sub { color: #94a3b8; font-size: 13px; margin: 0 0 20px; }
+  label { display: block; color: #64748b; font-size: 11px; font-weight: 700; margin: 14px 0 5px; letter-spacing: 0.5px; }
+  input, select, textarea {
+    width: 100%; padding: 11px 12px; background: #0f172a; border: 1.5px solid rgba(255,255,255,0.08);
+    border-radius: 10px; color: #f1f5f9; font-size: 14px; outline: none; font-family: inherit;
+  }
+  textarea { resize: vertical; min-height: 50px; }
+  button {
+    width: 100%; margin-top: 20px; padding: 13px 20px; border: none; border-radius: 10px;
+    font-size: 14px; font-weight: 700; cursor: pointer; color: #fff;
+    background: linear-gradient(135deg,#06b6d4,#0891b2);
+  }
+  button:disabled { opacity: 0.5; cursor: not-allowed; }
+  .msg { margin-top: 14px; font-size: 13px; padding: 10px 12px; border-radius: 8px; }
+  .msg.ok { background: rgba(34,197,94,0.12); color: #4ade80; border: 1px solid rgba(34,197,94,0.3); }
+  .msg.err { background: rgba(239,68,68,0.12); color: #f87171; border: 1px solid rgba(239,68,68,0.3); }
+  .row2 { display: flex; gap: 10px; }
+  .row2 > div { flex: 1; }
+</style>
+</head>
+<body>
+  <div class="card">
+    <h1>📚 GAKU — 生徒の単語帳に単語を送る</h1>
+    <p class="sub">生徒のメールアドレスを指定して、単語を直接その生徒の単語帳に追加します(パスワード不要)。</p>
+
+    <label>管理者パスワード (ADMIN_SECRET)</label>
+    <input id="secret" type="password" placeholder="管理者パスワード" />
+
+    <label>生徒のメールアドレス *</label>
+    <input id="studentEmail" type="email" placeholder="student@example.com" />
+
+    <label>単語 *</label>
+    <input id="word" placeholder="例: 頑張る" />
+
+    <div class="row2">
+      <div>
+        <label>読み方</label>
+        <input id="reading" placeholder="がんばる" />
+      </div>
+      <div>
+        <label>JLPT</label>
+        <select id="jlpt">
+          <option value="">-</option>
+          <option>N5</option><option>N4</option><option>N3</option><option>N2</option><option>N1</option>
+        </select>
+      </div>
+    </div>
+
+    <label>品詞</label>
+    <input id="partOfSpeech" placeholder="例: verb" />
+
+    <label>意味</label>
+    <input id="meaning" placeholder="例: to try hard, to do one's best" />
+
+    <label>例文</label>
+    <textarea id="example" placeholder="例: 明日のテスト、頑張ってね。"></textarea>
+
+    <label>フォルダ名(任意・空欄可)</label>
+    <input id="folder" placeholder="Your Vocabulary" />
+
+    <button id="submitBtn" onclick="sendWord()">生徒に送る ✨</button>
+    <div id="result"></div>
+  </div>
+
+<script>
+async function sendWord() {
+  const btn = document.getElementById('submitBtn');
+  const resultEl = document.getElementById('result');
+  resultEl.innerHTML = '';
+
+  const secret = document.getElementById('secret').value.trim();
+  const studentEmail = document.getElementById('studentEmail').value.trim();
+  const word = document.getElementById('word').value.trim();
+  const reading = document.getElementById('reading').value.trim();
+  const jlpt = document.getElementById('jlpt').value;
+  const partOfSpeech = document.getElementById('partOfSpeech').value.trim();
+  const meaning = document.getElementById('meaning').value.trim();
+  const example = document.getElementById('example').value.trim();
+  const folder = document.getElementById('folder').value.trim();
+
+  if (!secret || !studentEmail || !word) {
+    resultEl.innerHTML = '<div class="msg err">管理者パスワード、メールアドレス、単語は必須です。</div>';
+    return;
+  }
+
+  btn.disabled = true; btn.textContent = '送信中...';
+  try {
+    const res = await fetch('/api/admin-assign-word', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ secret, studentEmail, word, reading, jlpt, partOfSpeech, meaning, example, folder })
+    });
+    const data = await res.json();
+    if (res.ok) {
+      resultEl.innerHTML = '<div class="msg ok">✅ 「' + word + '」を ' + studentEmail + ' さんに送りました。次回ログイン時に単語帳に反映されます。</div>';
+      ['word','reading','partOfSpeech','meaning','example'].forEach(id => document.getElementById(id).value = '');
+      document.getElementById('jlpt').value = '';
+    } else {
+      resultEl.innerHTML = '<div class="msg err">❌ ' + (data.error || '送信に失敗しました。') + '</div>';
+    }
+  } catch (e) {
+    resultEl.innerHTML = '<div class="msg err">❌ 通信エラーが発生しました。</div>';
+  }
+  btn.disabled = false; btn.textContent = '生徒に送る ✨';
+}
+</script>
+</body>
+</html>
