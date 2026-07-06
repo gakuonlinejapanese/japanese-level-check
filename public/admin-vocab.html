@@ -49,7 +49,11 @@
     <input id="studentEmail" type="email" placeholder="student@example.com" />
 
     <label>単語 *</label>
-    <input id="word" placeholder="例: 頑張る" />
+    <div style="display:flex; gap:8px;">
+      <input id="word" placeholder="例: 頑張る" style="flex:1;" />
+      <button type="button" id="lookupBtn" onclick="lookupWord()" style="width:auto; margin-top:0; white-space:nowrap; background:linear-gradient(135deg,#8b5cf6,#7c3aed);">🔍 調べる</button>
+    </div>
+    <div id="lookupMsg" style="font-size:12px; color:#64748b; margin-top:6px;"></div>
 
     <div class="row2">
       <div>
@@ -82,6 +86,41 @@
   </div>
 
 <script>
+async function lookupWord() {
+  const btn = document.getElementById('lookupBtn');
+  const msgEl = document.getElementById('lookupMsg');
+  const word = document.getElementById('word').value.trim();
+  if (!word) { msgEl.textContent = '先に単語を入力してください。'; msgEl.style.color = '#f87171'; return; }
+
+  btn.disabled = true; btn.textContent = '調べ中...';
+  msgEl.textContent = ''; msgEl.style.color = '#64748b';
+  try {
+    const res = await fetch('/api/claude', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        provider: 'fast',
+        max_tokens: 500,
+        messages: [{ role: 'user', content:
+          `You are an expert Japanese dictionary. For the Japanese word/phrase "${word}", provide: reading (hiragana), jlpt (N5/N4/N3/N2/N1/Native), partOfSpeech (in English), meaning (in English), example (a natural Japanese example sentence using this word).\n\nRespond ONLY in valid JSON (no markdown, no backticks): {"reading":"","jlpt":"","partOfSpeech":"","meaning":"","example":""}` }]
+      })
+    });
+    const data = await res.json();
+    const text = (data.content?.map(c => c.text || '').join('') || '{}').replace(/```json|```/g, '').trim();
+    const parsed = JSON.parse(text);
+    document.getElementById('reading').value = parsed.reading || '';
+    document.getElementById('jlpt').value = parsed.jlpt || '';
+    document.getElementById('partOfSpeech').value = parsed.partOfSpeech || '';
+    document.getElementById('meaning').value = parsed.meaning || '';
+    document.getElementById('example').value = parsed.example || '';
+    msgEl.textContent = '✅ 自動入力しました。内容を確認してください。';
+    msgEl.style.color = '#4ade80';
+  } catch (e) {
+    msgEl.textContent = '調べられませんでした。手動で入力してください。';
+    msgEl.style.color = '#f87171';
+  }
+  btn.disabled = false; btn.textContent = '🔍 調べる';
+}
+
 async function sendWord() {
   const btn = document.getElementById('submitBtn');
   const resultEl = document.getElementById('result');
