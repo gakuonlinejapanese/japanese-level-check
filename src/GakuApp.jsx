@@ -6455,6 +6455,42 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
   const [form, setForm] = useState(null);
   const [editing, setEditing] = useState(false);
   const [showPaywall, setShowPaywall] = useState(false);
+  const [paywallCurrency, setPaywallCurrency] = useState("JPY");
+  const [paywallRate, setPaywallRate] = useState(null);
+  const [paywallRateLoading, setPaywallRateLoading] = useState(false);
+  const [paywallRateError, setPaywallRateError] = useState("");
+  const [paywallRateTime, setPaywallRateTime] = useState(null);
+
+  const CURRENCY_OPTIONS = [
+    { code:"JPY", label:"JPY - 日本円" }, { code:"EUR", label:"EUR - Euro" },
+    { code:"GBP", label:"GBP - British Pound" }, { code:"KRW", label:"KRW - Korean Won" },
+    { code:"CNY", label:"CNY - Chinese Yuan" }, { code:"INR", label:"INR - Indian Rupee" },
+    { code:"VND", label:"VND - Vietnamese Dong" }, { code:"THB", label:"THB - Thai Baht" },
+    { code:"IDR", label:"IDR - Indonesian Rupiah" }, { code:"MYR", label:"MYR - Malaysian Ringgit" },
+    { code:"PHP", label:"PHP - Philippine Peso" }, { code:"TRY", label:"TRY - Turkish Lira" },
+    { code:"NPR", label:"NPR - Nepali Rupee" }, { code:"BRL", label:"BRL - Brazilian Real" },
+    { code:"MXN", label:"MXN - Mexican Peso" }, { code:"CAD", label:"CAD - Canadian Dollar" },
+    { code:"AUD", label:"AUD - Australian Dollar" },
+  ];
+
+  const fetchPaywallRate = async () => {
+    setPaywallRateLoading(true); setPaywallRateError("");
+    try {
+      const res = await fetch(`https://api.frankfurter.app/latest?from=USD&to=${paywallCurrency}`);
+      const data = await res.json();
+      const rate = data?.rates?.[paywallCurrency];
+      if (rate) { setPaywallRate(rate); setPaywallRateTime(new Date()); }
+      else setPaywallRateError("Couldn't get the exchange rate. Please try again.");
+    } catch { setPaywallRateError("Couldn't get the exchange rate. Please try again."); }
+    setPaywallRateLoading(false);
+  };
+
+  const formatConverted = (usd) => {
+    if (!paywallRate) return null;
+    const val = usd * paywallRate;
+    return val.toLocaleString(undefined, { maximumFractionDigits: val >= 100 ? 0 : 2 });
+  };
+
   // If the user arrived here from the diagnostic test result page (with name/email/jlpt
   // in the URL), always land on the Edit Profile form first — even if a profile is
   // already saved locally — so the freshly diagnosed name/email/JLPT level get applied.
@@ -6609,47 +6645,67 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
           <div style={{ background:"linear-gradient(135deg,#1e1b4b,#0f172a)", border:"1.5px solid rgba(139,92,246,0.4)", borderRadius:20, padding:"36px 32px", maxWidth:420, width:"90%", textAlign:"center", boxShadow:"0 8px 40px rgba(139,92,246,0.25)" }}>
             <p style={{ fontSize:28, margin:"0 0 6px" }}>🎌</p>
             <h2 style={{ color:"#f1f5f9", fontSize:20, fontWeight:900, margin:"0 0 8px" }}>{T.studyPlanReadyTitle}</h2>
-            <p style={{ color:"#94a3b8", fontSize:13, margin:"0 0 24px", lineHeight:1.6 }}>{T.studyPlanReadyDesc}</p>
+            <p style={{ color:"#94a3b8", fontSize:13, margin:"0 0 20px", lineHeight:1.6 }}>{T.studyPlanReadyDesc}</p>
+
+            <button onClick={()=>{ setAuthInitialMode("signup"); setShowAuthScreen(true); }} style={{ display:"block", width:"100%", padding:"11px 14px", background:"linear-gradient(135deg,rgba(34,197,94,0.15),rgba(34,197,94,0.05))", border:"1.5px solid rgba(34,197,94,0.45)", borderRadius:10, color:"#4ade80", fontSize:12, fontWeight:800, cursor:"pointer", textAlign:"center", marginBottom:8 }}>
+              🎓 {T.freePlanGakuStudent}
+            </button>
+            <button onClick={()=>{ setAuthInitialMode("login"); setShowAuthScreen(true); }} style={{ display:"block", width:"100%", background:"none", border:"none", color:"#64748b", fontSize:11, cursor:"pointer", marginBottom:18 }}>
+              {T.haveAccount || "Already have an account? Log in"}
+            </button>
+
+            <div style={{ background:"rgba(255,255,255,0.03)", border:"1px solid rgba(255,255,255,0.08)", borderRadius:10, padding:"10px 12px", marginBottom:18, textAlign:"left" }}>
+              <p style={{ color:"#94a3b8", fontSize:10, fontWeight:800, letterSpacing:1, margin:"0 0 8px" }}>💱 {T.convertCurrencyLabel || "SEE PRICES IN YOUR CURRENCY"}</p>
+              <div style={{ display:"flex", gap:6 }}>
+                <select value={paywallCurrency} onChange={e=>{ setPaywallCurrency(e.target.value); setPaywallRate(null); }} style={{ flex:1, background:"rgba(255,255,255,0.05)", border:`1px solid ${C.border}`, borderRadius:8, color:"#f1f5f9", fontSize:12, padding:"6px 8px" }}>
+                  {CURRENCY_OPTIONS.map(c => <option key={c.code} value={c.code} style={{ color:"#000" }}>{c.label}</option>)}
+                </select>
+                <button onClick={fetchPaywallRate} disabled={paywallRateLoading} style={{ padding:"6px 14px", borderRadius:8, background:"linear-gradient(135deg,#06b6d4,#0891b2)", border:"none", color:"#fff", fontSize:12, fontWeight:700, cursor:"pointer", whiteSpace:"nowrap" }}>
+                  {paywallRateLoading ? "⏳" : (T.convertBtn || "Convert")}
+                </button>
+              </div>
+              {paywallRate && (
+                <p style={{ color:"#67e8f9", fontSize:11, margin:"8px 0 0" }}>
+                  1 USD = {paywallRate.toLocaleString(undefined,{maximumFractionDigits:4})} {paywallCurrency} · {paywallRateTime?.toLocaleTimeString()}
+                </p>
+              )}
+              {paywallRateError && <p style={{ color:C.red, fontSize:11, margin:"8px 0 0" }}>{paywallRateError}</p>}
+            </div>
+
             <p style={{ color:"#a855f7", fontSize:10, fontWeight:800, margin:"0 0 6px", textAlign:"left", letterSpacing:1 }}>{T.appOnlyLabel}</p>
             <div style={{ display:"flex", flexDirection:"column", gap:8, marginBottom:14 }}>
               <a href="https://buy.stripe.com/6oU7sL7qWg7C7wV1OqbMQ00" target="_blank" rel="noopener noreferrer" style={{ display:"block", padding:"11px 14px", background:"linear-gradient(135deg,rgba(124,58,237,0.2),rgba(168,85,247,0.1))", border:"1.5px solid rgba(139,92,246,0.5)", borderRadius:10, color:"#f1f5f9", fontSize:12, fontWeight:700, cursor:"pointer", textDecoration:"none", textAlign:"left" }}>
                 <span style={{ color:"#a855f7", fontSize:10, fontWeight:800, display:"block", marginBottom:1 }}>{T.monthlyLabel}</span>
-                💳 $14.99 {T.perMonth}
+                💳 $14.99 {T.perMonth} {formatConverted(14.99) && <span style={{ color:"#67e8f9", fontWeight:400 }}>(≈ {formatConverted(14.99)} {paywallCurrency})</span>}
               </a>
               <a href="https://buy.stripe.com/28E28r9z46x2dVj0KmbMQ02" target="_blank" rel="noopener noreferrer" style={{ display:"block", padding:"11px 14px", background:"linear-gradient(135deg,rgba(6,182,212,0.2),rgba(6,182,212,0.1))", border:"1.5px solid rgba(6,182,212,0.5)", borderRadius:10, color:"#f1f5f9", fontSize:12, fontWeight:700, cursor:"pointer", textDecoration:"none", textAlign:"left" }}>
                 <span style={{ color:"#06b6d4", fontSize:10, fontWeight:800, display:"block", marginBottom:1 }}>{T.threeMonthsSave5}</span>
-                💳 $42.70 <span style={{ color:"#64748b", fontSize:10, fontWeight:400 }}>($14.23/mo)</span>
+                💳 $42.70 <span style={{ color:"#64748b", fontSize:10, fontWeight:400 }}>($14.23/mo)</span> {formatConverted(42.70) && <span style={{ color:"#67e8f9", fontWeight:400 }}>(≈ {formatConverted(42.70)} {paywallCurrency})</span>}
               </a>
               <a href="https://buy.stripe.com/28E5kD8v07B6bNbct4bMQ03" target="_blank" rel="noopener noreferrer" style={{ display:"block", padding:"11px 14px", background:"linear-gradient(135deg,rgba(34,197,94,0.2),rgba(34,197,94,0.1))", border:"1.5px solid rgba(34,197,94,0.5)", borderRadius:10, color:"#f1f5f9", fontSize:12, fontWeight:700, cursor:"pointer", textDecoration:"none", textAlign:"left" }}>
                 <span style={{ color:"#22c55e", fontSize:10, fontWeight:800, display:"block", marginBottom:1 }}>{T.sixMonthsSave10}</span>
-                💳 $80.95 <span style={{ color:"#64748b", fontSize:10, fontWeight:400 }}>($13.49/mo)</span>
+                💳 $80.95 <span style={{ color:"#64748b", fontSize:10, fontWeight:400 }}>($13.49/mo)</span> {formatConverted(80.95) && <span style={{ color:"#67e8f9", fontWeight:400 }}>(≈ {formatConverted(80.95)} {paywallCurrency})</span>}
               </a>
             </div>
             <p style={{ color:"#f59e0b", fontSize:10, fontWeight:800, margin:"0 0 6px", textAlign:"left", letterSpacing:1 }}>{T.appLessonsLabel}</p>
             <div style={{ display:"flex", flexDirection:"column", gap:8, marginBottom:12 }}>
               <a href="https://buy.stripe.com/7sYcN53aGf3y9F3ct4bMQ06" target="_blank" rel="noopener noreferrer" style={{ display:"block", padding:"11px 14px", background:"linear-gradient(135deg,rgba(245,158,11,0.15),rgba(245,158,11,0.05))", border:"1.5px solid rgba(245,158,11,0.4)", borderRadius:10, color:"#f1f5f9", fontSize:12, fontWeight:700, cursor:"pointer", textDecoration:"none", textAlign:"left" }}>
                 <span style={{ color:"#f59e0b", fontSize:10, fontWeight:800, display:"block", marginBottom:1 }}>{T.threeMonthsSave5_30min}</span>
-                💳 $68.95 <span style={{ color:"#64748b", fontSize:10, fontWeight:400 }}>($22.98/mo)</span>
+                💳 $68.95 <span style={{ color:"#64748b", fontSize:10, fontWeight:400 }}>($22.98/mo)</span> {formatConverted(68.95) && <span style={{ color:"#67e8f9", fontWeight:400 }}>(≈ {formatConverted(68.95)} {paywallCurrency})</span>}
               </a>
               <a href="https://buy.stripe.com/6oU8wP6mS6x23gF8cObMQ07" target="_blank" rel="noopener noreferrer" style={{ display:"block", padding:"11px 14px", background:"linear-gradient(135deg,rgba(245,158,11,0.15),rgba(245,158,11,0.05))", border:"1.5px solid rgba(245,158,11,0.4)", borderRadius:10, color:"#f1f5f9", fontSize:12, fontWeight:700, cursor:"pointer", textDecoration:"none", textAlign:"left" }}>
                 <span style={{ color:"#f59e0b", fontSize:10, fontWeight:800, display:"block", marginBottom:1 }}>{T.threeMonthsSave5_1hr}</span>
-                💳 $95.20 <span style={{ color:"#64748b", fontSize:10, fontWeight:400 }}>($31.73/mo)</span>
+                💳 $95.20 <span style={{ color:"#64748b", fontSize:10, fontWeight:400 }}>($31.73/mo)</span> {formatConverted(95.20) && <span style={{ color:"#67e8f9", fontWeight:400 }}>(≈ {formatConverted(95.20)} {paywallCurrency})</span>}
               </a>
               <a href="https://buy.stripe.com/dRm3cvaD8f3y18x0KmbMQ04" target="_blank" rel="noopener noreferrer" style={{ display:"block", padding:"11px 14px", background:"linear-gradient(135deg,rgba(251,191,36,0.2),rgba(251,191,36,0.08))", border:"1.5px solid rgba(251,191,36,0.5)", borderRadius:10, color:"#f1f5f9", fontSize:12, fontWeight:700, cursor:"pointer", textDecoration:"none", textAlign:"left" }}>
                 <span style={{ color:"#fbbf24", fontSize:10, fontWeight:800, display:"block", marginBottom:1 }}>{T.sixMonthsSave5_30min}</span>
-                💳 $133.45 <span style={{ color:"#64748b", fontSize:10, fontWeight:400 }}>($22.24/mo)</span>
+                💳 $133.45 <span style={{ color:"#64748b", fontSize:10, fontWeight:400 }}>($22.24/mo)</span> {formatConverted(133.45) && <span style={{ color:"#67e8f9", fontWeight:400 }}>(≈ {formatConverted(133.45)} {paywallCurrency})</span>}
               </a>
               <a href="https://buy.stripe.com/9B628rcLg7B6eZn0KmbMQ05" target="_blank" rel="noopener noreferrer" style={{ display:"block", padding:"11px 14px", background:"linear-gradient(135deg,rgba(251,191,36,0.2),rgba(251,191,36,0.08))", border:"1.5px solid rgba(251,191,36,0.5)", borderRadius:10, color:"#f1f5f9", fontSize:12, fontWeight:700, cursor:"pointer", textDecoration:"none", textAlign:"left" }}>
                 <span style={{ color:"#fbbf24", fontSize:10, fontWeight:800, display:"block", marginBottom:1 }}>{T.sixMonthsSave10_1hr}</span>
-                💳 $185.95 <span style={{ color:"#64748b", fontSize:10, fontWeight:400 }}>($30.99/mo)</span>
+                💳 $185.95 <span style={{ color:"#64748b", fontSize:10, fontWeight:400 }}>($30.99/mo)</span> {formatConverted(185.95) && <span style={{ color:"#67e8f9", fontWeight:400 }}>(≈ {formatConverted(185.95)} {paywallCurrency})</span>}
               </a>
             </div>
-            <button onClick={()=>{ setAuthInitialMode("signup"); setShowAuthScreen(true); }} style={{ display:"block", width:"100%", padding:"11px 14px", background:"linear-gradient(135deg,rgba(34,197,94,0.15),rgba(34,197,94,0.05))", border:"1.5px solid rgba(34,197,94,0.45)", borderRadius:10, color:"#4ade80", fontSize:12, fontWeight:800, cursor:"pointer", textAlign:"center", marginBottom:8 }}>
-              🎓 {T.freePlanGakuStudent}
-            </button>
-            <button onClick={()=>{ setAuthInitialMode("login"); setShowAuthScreen(true); }} style={{ display:"block", width:"100%", background:"none", border:"none", color:"#64748b", fontSize:11, cursor:"pointer", marginBottom:14 }}>
-              {T.haveAccount || "Already have an account? Log in"}
-            </button>
             <div style={{ marginBottom:14, textAlign:"center" }}>
               <p style={{ color:"#64748b", fontSize:11, margin:"0 0 8px" }}>{T.wantToJoinGaku}</p>
               <a href="https://www.seitojapanese.online/" target="_blank" rel="noopener noreferrer" style={{ display:"inline-block", padding:"9px 28px", background:"linear-gradient(135deg,#22c55e,#16a34a)", color:"#fff", borderRadius:10, fontSize:13, fontWeight:800, textDecoration:"none" }}>{T.yes}</a>
