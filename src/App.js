@@ -54,8 +54,9 @@ export default function App() {
   const urlName  = params.get('name')  || '';
   const urlEmail = params.get('email') || '';
   const urlJlpt  = params.get('jlpt')  || '';
+  const urlPreviewPaywall = params.get('preview') === 'paywall';
 
-  if (current === 'gaku-app') return <div><GakuApp onBack={() => setCurrent(null)} initialName={urlName} initialEmail={urlEmail} initialJlpt={urlJlpt} /><BrandFooter /></div>;
+  if (current === 'gaku-app') return <div><GakuApp onBack={() => setCurrent(null)} initialName={urlName} initialEmail={urlEmail} initialJlpt={urlJlpt} previewPaywall={urlPreviewPaywall} /><BrandFooter /></div>;
 
   if (!current) return <><Home onSelect={setCurrent} /><BrandFooter /></>;
 

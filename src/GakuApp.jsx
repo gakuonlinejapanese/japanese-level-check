@@ -6442,7 +6442,7 @@ function DeviceApprovalGate({ T }) {
 }
 
 
-export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail, skipTrialPaywall }) {
+export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail, skipTrialPaywall, previewPaywall }) {
   const [authUser, setAuthUser] = useState(null);
   const [authChecked, setAuthChecked] = useState(!supabase);
   const [showAuthScreen, setShowAuthScreen] = useState(false);
@@ -6454,7 +6454,7 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
   const [isGakuStudent, setIsGakuStudent] = useState(false);
   const [form, setForm] = useState(null);
   const [editing, setEditing] = useState(false);
-  const [showPaywall, setShowPaywall] = useState(false);
+  const [showPaywall, setShowPaywall] = useState(!!previewPaywall);
   const [paywallCurrency, setPaywallCurrency] = useState("JPY");
   const [paywallRate, setPaywallRate] = useState(null);
   const [paywallRateLoading, setPaywallRateLoading] = useState(false);
@@ -6571,7 +6571,7 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
         // Self-heal: if the paywall was already showing (e.g. from an earlier
         // trial session, before this account was confirmed as a GAKU student),
         // dismiss it now that we know for sure.
-        if (confirmed) setShowPaywall(false);
+        if (confirmed && !previewPaywall) setShowPaywall(false);
       })
       .catch(() => setIsGakuStudent(false));
     fetch("/api/device-check", {
