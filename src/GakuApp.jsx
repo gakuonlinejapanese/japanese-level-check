@@ -6476,9 +6476,18 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
   const fetchPaywallRate = async () => {
     setPaywallRateLoading(true); setPaywallRateError("");
     try {
-      const res = await fetch(`https://api.frankfurter.app/latest?from=USD&to=${paywallCurrency}`);
-      const data = await res.json();
-      const rate = data?.rates?.[paywallCurrency];
+      let rate = null;
+      try {
+        const res = await fetch(`https://api.frankfurter.dev/v1/latest?base=USD&symbols=${paywallCurrency}`);
+        const data = await res.json();
+        rate = data?.rates?.[paywallCurrency] || null;
+      } catch {}
+      if (!rate) {
+        // Frankfurter doesn't cover every currency (e.g. VND, NPR) — fall back to a wider-coverage source
+        const res2 = await fetch(`https://open.er-api.com/v6/latest/USD`);
+        const data2 = await res2.json();
+        if (data2?.result === "success") rate = data2?.rates?.[paywallCurrency] || null;
+      }
       if (rate) { setPaywallRate(rate); setPaywallRateTime(new Date()); }
       else setPaywallRateError("Couldn't get the exchange rate. Please try again.");
     } catch { setPaywallRateError("Couldn't get the exchange rate. Please try again."); }
