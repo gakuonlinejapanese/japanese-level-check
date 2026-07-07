@@ -80,7 +80,7 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: "Method not allowed" });
   }
   try {
-    const { messages, max_tokens, provider } = req.body;
+    const { messages, max_tokens, provider, frequency_penalty } = req.body;
     const systemMessage = messages?.find(m => m.role === "system");
     const userMessages = messages?.filter(m => m.role !== "system") || [];
 
@@ -93,6 +93,9 @@ export default async function handler(req, res) {
       max_tokens: Math.min(max_tokens || 1200, 8000),
       temperature: 0.3,
     };
+    if (typeof frequency_penalty === "number") {
+      commonBody.frequency_penalty = Math.max(-2, Math.min(2, frequency_penalty));
+    }
 
     const deepInfraKey = process.env.DEEPINFRA_API_KEY;
     const groqKeys = [

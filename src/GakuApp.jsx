@@ -4992,10 +4992,6 @@ const SKILL_COLORS = {
 
 function ExerciseCard({ item, revealed, onReveal, T, lang }) {
   const color = SKILL_COLORS[item.skill] || C.purpleLight;
-  const [furigana, setFurigana] = useState("");
-  const [romaji, setRomaji] = useState("");
-  const [translation, setTranslation] = useState("");
-  const [loadingType, setLoadingType] = useState(null);
   const [recording, setRecording] = useState(false);
   const [transcript, setTranscript] = useState("");
   const [recogSupported, setRecogSupported] = useState(true);
@@ -5022,29 +5018,6 @@ function ExerciseCard({ item, revealed, onReveal, T, lang }) {
     setTranscript("");
     setRecording(true);
     recognition.start();
-  };
-
-  const fetchReading = async (mode) => {
-    setLoadingType(mode);
-    try {
-      const instruction = mode === "furigana"
-        ? `Add furigana in parentheses after every kanji word in this Japanese text. Return ONLY the text with furigana added, no explanation:\n\n${item.prompt}`
-        : mode === "romaji"
-        ? `Convert this Japanese text to romaji (Hepburn romanization). Return ONLY the romaji text, no explanation:\n\n${item.prompt}`
-        : `Translate this Japanese text into ${lang || "English"}. Return ONLY the translation, no explanation:\n\n${item.prompt}`;
-      const res = await fetch("/api/claude", {
-        method:"POST", headers:{"Content-Type":"application/json"},
-        body: JSON.stringify({ model:"claude-sonnet-4-20250514", max_tokens:500,
-          messages:[{ role:"user", content: instruction }]
-        })
-      });
-      const d = await res.json();
-      const text = d.content?.map(c=>c.text||"").join("").trim() || "";
-      if (mode === "furigana") setFurigana(text);
-      else if (mode === "romaji") setRomaji(text);
-      else setTranslation(text);
-    } catch {}
-    setLoadingType(null);
   };
 
   return (
@@ -5077,21 +5050,11 @@ function ExerciseCard({ item, revealed, onReveal, T, lang }) {
           )}
         </div>
       )}
-      <div style={{ display:"flex", gap:6, marginBottom:8 }}>
-        <button onClick={()=>fetchReading("furigana")} disabled={loadingType!==null} style={{ fontSize:11, color:"#67e8f9", fontWeight:700, background:"rgba(103,232,249,0.1)", padding:"4px 10px", borderRadius:8, border:"1px solid rgba(103,232,249,0.3)", cursor:"pointer" }}>
-          {loadingType==="furigana" ? "⏳" : (T?.furiganaBtn || "ふりがな")}
-        </button>
-        <button onClick={()=>fetchReading("romaji")} disabled={loadingType!==null} style={{ fontSize:11, color:"#c4b5fd", fontWeight:700, background:"rgba(196,181,253,0.1)", padding:"4px 10px", borderRadius:8, border:"1px solid rgba(196,181,253,0.3)", cursor:"pointer" }}>
-          {loadingType==="romaji" ? "⏳" : (T?.romajiBtn || "Romaji")}
-        </button>
-        <button onClick={()=>fetchReading("translate")} disabled={loadingType!==null} style={{ fontSize:11, color:"#fbbf24", fontWeight:700, background:"rgba(251,191,36,0.1)", padding:"4px 10px", borderRadius:8, border:"1px solid rgba(251,191,36,0.3)", cursor:"pointer" }}>
-          {loadingType==="translate" ? "⏳" : (T?.translateBtn || "Translate")}
-        </button>
-      </div>
-      {furigana && <p style={{ color:"#67e8f9", fontSize:12, margin:"0 0 4px", fontStyle:"italic", whiteSpace:"pre-wrap" }}>{furigana}</p>}
-      {romaji && <p style={{ color:"#c4b5fd", fontSize:12, margin:"0 0 4px", fontStyle:"italic", whiteSpace:"pre-wrap" }}>{romaji}</p>}
-      {translation && <p style={{ color:"#fbbf24", fontSize:12, margin:"0 0 8px", fontStyle:"italic", whiteSpace:"pre-wrap" }}>{translation}</p>}
-      {revealed ? (
+      <JLineTools text={item.prompt} lang={lang} T={T} />
+      <button onClick={onReveal} style={{ padding:"6px 14px", borderRadius:8, background:C.card, border:`1px solid ${C.border}`, color:"#ff1a1a", fontSize:11, cursor:"pointer", marginBottom: revealed?10:0 }}>
+        {revealed ? (T?.hideAnswerBtn || "Hide answer") : (T?.showAnswerBtn || "Show answer")}
+      </button>
+      {revealed && (
         <div style={{ background:"rgba(34,197,94,0.06)", borderRadius:10, padding:"10px 12px" }}>
           <p style={{ color:C.green, fontSize:11, fontWeight:700, margin:"0 0 4px" }}>✅ ANSWER</p>
           <p style={{ color:"#f1f5f9", fontSize:13, margin:"0 0 6px" }}>{item.answer}</p>
@@ -5103,10 +5066,6 @@ function ExerciseCard({ item, revealed, onReveal, T, lang }) {
             </a>
           )}
         </div>
-      ) : (
-        <button onClick={onReveal} style={{ padding:"6px 14px", borderRadius:8, background:C.card, border:`1px solid ${C.border}`, color:"#ff1a1a", fontSize:11, cursor:"pointer" }}>
-          Show answer
-        </button>
       )}
     </div>
   );
@@ -5121,6 +5080,9 @@ function ContentAnalyzer({ form }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [activeSkillFilter, setActiveSkillFilter] = useState("all");
+  const [sourceFuriganaOn, setSourceFuriganaOn] = useState(false);
+  const [sourceFurigana, setSourceFurigana] = useState("");
+  const [sourceFuriganaLoading, setSourceFuriganaLoading] = useState(false);
 
   // Only build activities for the skills the student picked in "WHAT DO YOU WANT TO STUDY?".
   // Falls back to all skills if the student hasn't selected any yet.
@@ -5197,6 +5159,16 @@ Respond ONLY with a valid JSON array, no markdown, no backticks:
   const filteredItems = activeSkillFilter === "all" ? items : items.filter(it => it.skill === activeSkillFilter);
   const skillsInResult = [...new Set(items.map(it => it.skill))];
 
+  const toggleSourceFurigana = async () => {
+    if (sourceFuriganaOn) { setSourceFuriganaOn(false); return; }
+    setSourceFuriganaOn(true);
+    if (!sourceFurigana && source.trim()) {
+      setSourceFuriganaLoading(true);
+      setSourceFurigana(await getFuriganaText(source.trim()));
+      setSourceFuriganaLoading(false);
+    }
+  };
+
   return (
     <div>
       <div style={{ ...S.card, marginBottom:16 }}>
@@ -5206,7 +5178,7 @@ Respond ONLY with a valid JSON array, no markdown, no backticks:
         </p>
         <textarea
           value={source}
-          onChange={e=>setSource(e.target.value)}
+          onChange={e=>{ setSource(e.target.value); setSourceFurigana(""); setSourceFuriganaOn(false); }}
           placeholder={`日本語のテキストをここに貼り付けてください... (${T.contentPlaceholder || "paste Japanese text, subtitles, or a caption here"})`}
           rows={6}
           style={{ width:"100%", boxSizing:"border-box", background:"rgba(255,255,255,0.03)", border:`1px solid ${C.border}`, borderRadius:10, color:"#f1f5f9", fontSize:13, padding:"10px 12px", marginBottom:12, resize:"vertical", fontFamily:"inherit" }}
@@ -5214,6 +5186,15 @@ Respond ONLY with a valid JSON array, no markdown, no backticks:
         <button onClick={analyze} disabled={loading} style={{ ...S.btn, width:"100%", background:loading?"rgba(6,182,212,0.15)":`linear-gradient(135deg,${C.teal},#0891b2)`, color:loading?"#64748b":"#fff" }}>
           {loading ? `⏳ ${T.contentAnalyzing || "Analyzing content..."}` : (items.length ? `🔄 ${T.contentAnalyzeAgain || "Analyze again"}` : `${T.contentAnalyzeButton || "Analyze & Generate Activities"} ✨`)}
         </button>
+        <button onClick={toggleSourceFurigana} disabled={!source.trim() || sourceFuriganaLoading}
+          style={{ ...S.btn, width:"100%", marginTop:8, background:sourceFuriganaOn?"rgba(103,232,249,0.15)":C.card, border:`1px solid ${sourceFuriganaOn?"rgba(103,232,249,0.4)":C.border}`, color:(!source.trim())?"#475569":sourceFuriganaOn?"#67e8f9":"#94a3b8" }}>
+          {sourceFuriganaLoading ? "⏳" : `ふりがな ${sourceFuriganaOn ? "OFF" : "ON"}`}
+        </button>
+        {sourceFuriganaOn && sourceFurigana && (
+          <div style={{ background:"rgba(103,232,249,0.06)", borderRadius:10, padding:"10px 12px", marginTop:10 }}>
+            <p style={{ color:"#67e8f9", fontSize:13, lineHeight:1.9, margin:0, whiteSpace:"pre-wrap" }}>{sourceFurigana}</p>
+          </div>
+        )}
         {error && <p style={{ color:C.red, fontSize:12, marginTop:10 }}>{error}</p>}
       </div>
 
@@ -5233,7 +5214,7 @@ Respond ONLY with a valid JSON array, no markdown, no backticks:
             {filteredItems.map((it,i) => {
               const globalIdx = items.indexOf(it);
               return (
-                <ExerciseCard key={i} item={it} revealed={!!revealed[globalIdx]} onReveal={()=>setRevealed(r=>({...r,[globalIdx]:true}))} T={T} lang={form?.preferredLang || "English"} />
+                <ExerciseCard key={i} item={it} revealed={!!revealed[globalIdx]} onReveal={()=>setRevealed(r=>({...r,[globalIdx]:!r[globalIdx]}))} T={T} lang={form?.preferredLang || "English"} />
               );
             })}
           </div>
@@ -5247,12 +5228,27 @@ Respond ONLY with a valid JSON array, no markdown, no backticks:
 
 // Any run of kanji (incl. the kanji iteration mark 々) NOT immediately followed by "(" is missing its furigana.
 const hasMissingFurigana = (s) => /[\u4E00-\u9FFF\u3005]+(?!\()/.test(s);
-const getMissingKanjiGroups = (s) => s.match(/[\u4E00-\u9FFF\u3005]+(?!\()/g) || [];
+
+// Small/fast models occasionally fall into a repetition loop on exhaustive transform tasks
+// like this one, producing the same phrase over and over. Detect that degenerate case so we
+// never show it to the student.
+function isDegenerateFurigana(original, out) {
+  if (!out) return true;
+  if (out.length > original.length * 5 + 60) return true; // furigana roughly doubles length; way more than that = runaway
+  for (let len = 30; len >= 15; len -= 5) {
+    for (let i = 0; i + len * 3 <= out.length; i += len) {
+      const chunk = out.slice(i, i + len);
+      const second = out.indexOf(chunk, i + len);
+      if (second !== -1 && out.indexOf(chunk, second + len) !== -1) return true; // same chunk appears 3+ times
+    }
+  }
+  return false;
+}
 
 async function callClaudeFast(prompt, maxTokens = 700) {
   const res = await fetch("/api/claude", {
     method:"POST", headers:{"Content-Type":"application/json"},
-    body: JSON.stringify({ model:"claude-sonnet-4-20250514", max_tokens:maxTokens, provider:"fast",
+    body: JSON.stringify({ model:"claude-sonnet-4-20250514", max_tokens:maxTokens, provider:"fast", frequency_penalty:0.4,
       messages:[{ role:"user", content: prompt }]
     })
   });
@@ -5260,12 +5256,13 @@ async function callClaudeFast(prompt, maxTokens = 700) {
   return d.content?.map(c=>c.text||"").join("").trim() || "";
 }
 
-// Generates furigana and automatically retries (up to 2 extra passes) if any kanji were missed,
-// so every kanji in the sentence reliably ends up with a reading.
+// Generates furigana and automatically re-rolls (up to 2 extra passes, always from the ORIGINAL
+// text — never feeding a possibly-broken previous output back in, which is what let a repetition
+// loop compound). Falls back to the plain text (no furigana) rather than ever showing garbage.
 async function getFuriganaText(original) {
-  const firstPrompt = `Add furigana in parentheses immediately after every single kanji word in the following Japanese text.
+  const prompt = `Add furigana in parentheses immediately after every single kanji word in the following Japanese text.
 This is critical: do not skip ANY kanji — including compound words, proper nouns, counters, and uncommon kanji. Every kanji character must be followed directly by its reading in parentheses, using this exact format: 漢字(かんじ)
-Keep every hiragana character, katakana character, and all punctuation exactly as-is. Do not add extra spaces.
+Keep every hiragana character, katakana character, and all punctuation exactly as-is. Do not add extra spaces. Output the text ONCE — never repeat any part of it.
 
 Example:
 Input: 日本語を勉強しています。
@@ -5275,20 +5272,13 @@ Now process this text. Return ONLY the resulting text with furigana added — no
 
 ${original}`;
 
-  let out = await callClaudeFast(firstPrompt);
+  let out = await callClaudeFast(prompt);
   let attempts = 0;
-  while (attempts < 2 && hasMissingFurigana(out)) {
-    const missed = getMissingKanjiGroups(out);
-    const fixPrompt = `You added furigana to a Japanese sentence, but some kanji were missed. Here is the text you produced:
-
-${out}
-
-These kanji still need furigana added in parentheses right after them (format: 漢字(かんじ)): ${missed.join("、")}
-
-Return the COMPLETE corrected text with furigana added after EVERY kanji, including the ones listed above. Return ONLY the corrected full text — no explanation, no markdown.`;
-    out = await callClaudeFast(fixPrompt);
+  while (attempts < 2 && (isDegenerateFurigana(original, out) || hasMissingFurigana(out))) {
+    out = await callClaudeFast(prompt);
     attempts++;
   }
+  if (isDegenerateFurigana(original, out)) return original; // graceful fallback — never show a broken/looping result
   return out;
 }
 
@@ -5296,9 +5286,16 @@ function JLineTools({ text, lang, T }) {
   const [furigana, setFurigana] = useState("");
   const [romaji, setRomaji] = useState("");
   const [translation, setTranslation] = useState("");
+  const [visible, setVisible] = useState({ furigana:false, romaji:false, translate:false });
   const [loadingType, setLoadingType] = useState(null);
 
-  const fetchVariant = async (mode) => {
+  // Odd clicks show, even clicks hide. Content already fetched is cached and reused (never
+  // re-fetched/re-appended), so a sentence is only ever generated once.
+  const toggleVariant = async (mode) => {
+    if (visible[mode]) { setVisible(v=>({ ...v, [mode]:false })); return; }
+    setVisible(v=>({ ...v, [mode]:true }));
+    const already = mode==="furigana" ? furigana : mode==="romaji" ? romaji : translation;
+    if (already) return;
     setLoadingType(mode);
     try {
       if (mode === "furigana") {
@@ -5325,19 +5322,19 @@ function JLineTools({ text, lang, T }) {
   return (
     <div style={{ marginTop:6, marginBottom:6 }}>
       <div style={{ display:"flex", gap:6, marginBottom:6 }}>
-        <button onClick={()=>fetchVariant("furigana")} disabled={loadingType!==null} style={{ fontSize:11, color:"#67e8f9", fontWeight:700, background:"rgba(103,232,249,0.1)", padding:"4px 10px", borderRadius:8, border:"1px solid rgba(103,232,249,0.3)", cursor:"pointer" }}>
+        <button onClick={()=>toggleVariant("furigana")} disabled={loadingType!==null} style={{ fontSize:11, color:"#67e8f9", fontWeight:700, background:visible.furigana?"rgba(103,232,249,0.22)":"rgba(103,232,249,0.1)", padding:"4px 10px", borderRadius:8, border:"1px solid rgba(103,232,249,0.3)", cursor:"pointer" }}>
           {loadingType==="furigana" ? "⏳" : (T?.furiganaBtn || "ふりがな")}
         </button>
-        <button onClick={()=>fetchVariant("romaji")} disabled={loadingType!==null} style={{ fontSize:11, color:"#c4b5fd", fontWeight:700, background:"rgba(196,181,253,0.1)", padding:"4px 10px", borderRadius:8, border:"1px solid rgba(196,181,253,0.3)", cursor:"pointer" }}>
+        <button onClick={()=>toggleVariant("romaji")} disabled={loadingType!==null} style={{ fontSize:11, color:"#c4b5fd", fontWeight:700, background:visible.romaji?"rgba(196,181,253,0.22)":"rgba(196,181,253,0.1)", padding:"4px 10px", borderRadius:8, border:"1px solid rgba(196,181,253,0.3)", cursor:"pointer" }}>
           {loadingType==="romaji" ? "⏳" : (T?.romajiBtn || "Romaji")}
         </button>
-        <button onClick={()=>fetchVariant("translate")} disabled={loadingType!==null} style={{ fontSize:11, color:"#fbbf24", fontWeight:700, background:"rgba(251,191,36,0.1)", padding:"4px 10px", borderRadius:8, border:"1px solid rgba(251,191,36,0.3)", cursor:"pointer" }}>
+        <button onClick={()=>toggleVariant("translate")} disabled={loadingType!==null} style={{ fontSize:11, color:"#fbbf24", fontWeight:700, background:visible.translate?"rgba(251,191,36,0.22)":"rgba(251,191,36,0.1)", padding:"4px 10px", borderRadius:8, border:"1px solid rgba(251,191,36,0.3)", cursor:"pointer" }}>
           {loadingType==="translate" ? "⏳" : (T?.translateBtn || "Translate")}
         </button>
       </div>
-      {furigana && <p style={{ color:"#67e8f9", fontSize:12, margin:"0 0 4px", fontStyle:"italic", whiteSpace:"pre-wrap" }}>{furigana}</p>}
-      {romaji && <p style={{ color:"#c4b5fd", fontSize:12, margin:"0 0 4px", fontStyle:"italic", whiteSpace:"pre-wrap" }}>{romaji}</p>}
-      {translation && <p style={{ color:"#fbbf24", fontSize:12, margin:"0 0 4px", fontStyle:"italic", whiteSpace:"pre-wrap" }}>{translation}</p>}
+      {visible.furigana && furigana && <p style={{ color:"#67e8f9", fontSize:12, margin:"0 0 4px", fontStyle:"italic", whiteSpace:"pre-wrap" }}>{furigana}</p>}
+      {visible.romaji && romaji && <p style={{ color:"#c4b5fd", fontSize:12, margin:"0 0 4px", fontStyle:"italic", whiteSpace:"pre-wrap" }}>{romaji}</p>}
+      {visible.translate && translation && <p style={{ color:"#fbbf24", fontSize:12, margin:"0 0 4px", fontStyle:"italic", whiteSpace:"pre-wrap" }}>{translation}</p>}
     </div>
   );
 }
@@ -5455,7 +5452,10 @@ Respond ONLY with valid JSON, no markdown, no backticks, nothing else.`;
       )}
 
       <div style={{ marginTop:12 }}>
-        {revealed ? (
+        <button onClick={()=>setRevealed(r=>!r)} style={{ padding:"6px 14px", borderRadius:8, background:C.card, border:`1px solid ${C.border}`, color:"#ff1a1a", fontSize:11, cursor:"pointer", marginBottom: revealed?10:0 }}>
+          {revealed ? (T?.convHideBtn || "Hide model answer") : (T?.convRevealBtn || "Show model answer")}
+        </button>
+        {revealed && (
           <div style={{ background:"rgba(34,197,94,0.06)", borderRadius:10, padding:"10px 12px" }}>
             <p style={{ color:C.green, fontSize:11, fontWeight:700, margin:"0 0 4px" }}>✅ {T?.convModelAnswer || "Model answer"}</p>
             <p style={{ color:"#f1f5f9", fontSize:13, margin:"0 0 8px" }}>{turn.speakerBLine}</p>
@@ -5472,10 +5472,6 @@ Respond ONLY with valid JSON, no markdown, no backticks, nothing else.`;
             )}
             {turn.tip && <p style={{ color:"#94a3b8", fontSize:12, margin:"8px 0 0", fontStyle:"italic" }}>💬 {turn.tip}</p>}
           </div>
-        ) : (
-          <button onClick={()=>setRevealed(true)} style={{ padding:"6px 14px", borderRadius:8, background:C.card, border:`1px solid ${C.border}`, color:"#ff1a1a", fontSize:11, cursor:"pointer" }}>
-            {T?.convRevealBtn || "Show model answer"}
-          </button>
         )}
       </div>
     </div>
