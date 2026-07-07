@@ -39,11 +39,11 @@ async function callDeepInfra(deepInfraKey, commonBody) {
   return null;
 }
 
-async function callGroq(groqKeys, commonBody) {
+async function callGroq(groqKeys, commonBody, model = "llama-3.3-70b-versatile") {
   if (!groqKeys.length) return { text: null, lastError: "No Groq keys configured" };
 
   const body = JSON.stringify({
-    model: "llama-3.3-70b-versatile",
+    model,
     ...commonBody,
   });
 
@@ -106,11 +106,31 @@ export default async function handler(req, res) {
       process.env.GROQ_API_KEY_5,
     ].filter(Boolean);
 
-    // provider === "fast": prioritize Groq (speed) for important, user-facing
+    // provider === "turbo": Groq's llama-3.1-8b-instant — several times faster token
+    // throughput than the 70B model, for large-output generation (many exercises/turns
+    // at once) where speed matters most. Falls back to "fast" (70B) if it fails.
+    //
+    // provider === "fast": prioritize Groq 70B (speed + quality) for important, user-facing
     // experiences, falling back to DeepInfra if Groq is unavailable.
     //
     // default (no provider specified): prioritize DeepInfra (cost) for short,
     // high-volume lookups, falling back to Groq if DeepInfra fails.
+    if (provider === "turbo") {
+      const turboResult = await callGroq(groqKeys, commonBody, "llama-3.1-8b-instant");
+      if (turboResult.text !== null) {
+        return res.status(200).json({ content: [{ type: "text", text: turboResult.text }] });
+      }
+      const groqResult = await callGroq(groqKeys, commonBody);
+      if (groqResult.text !== null) {
+        return res.status(200).json({ content: [{ type: "text", text: groqResult.text }] });
+      }
+      const text = await callDeepInfra(deepInfraKey, commonBody);
+      if (text !== null) {
+        return res.status(200).json({ content: [{ type: "text", text }] });
+      }
+      return res.status(groqResult.status || 429).json({ error: groqResult.lastError || "Both providers failed" });
+    }
+
     if (provider === "fast") {
       const groqResult = await callGroq(groqKeys, commonBody);
       if (groqResult.text !== null) {

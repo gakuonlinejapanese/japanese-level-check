@@ -5162,7 +5162,7 @@ function ContentAnalyzer({ form }) {
     try {
       const res = await fetch("/api/claude", {
         method:"POST", headers:{"Content-Type":"application/json"},
-        body: JSON.stringify({ model:"claude-sonnet-4-20250514", max_tokens:4500, provider:"fast",
+        body: JSON.stringify({ model:"claude-sonnet-4-20250514", max_tokens:4500, provider:"turbo",
           messages:[{ role:"user", content:`You are a Japanese teacher using CLT (Communicative Language Teaching). The student's JLPT level is ${form.jlpt}.
 
 The student just encountered this piece of Japanese content (could be a sentence, an article, video subtitles/dialogue, or a social media caption). Analyze it and build practice activities directly FROM it — reuse its actual words, kanji, and sentences rather than generic examples.
@@ -5607,7 +5607,7 @@ function ConversationPredictor({ form }) {
     try {
       const res = await fetch("/api/claude", {
         method:"POST", headers:{"Content-Type":"application/json"},
-        body: JSON.stringify({ model:"claude-sonnet-4-20250514", max_tokens:4000, provider:"fast",
+        body: JSON.stringify({ model:"claude-sonnet-4-20250514", max_tokens:4000, provider:"turbo",
           messages:[{ role:"user", content:`You are a Japanese teacher using CLT (Communicative Language Teaching). The student's JLPT level is ${form.jlpt}.
 
 Below is a real transcript/subtitles from a video the student is watching. Find natural back-and-forth conversational exchanges in it (two speakers, or a speaker and an implied listener) and turn each one into a "predict the next line" speaking practice item.
