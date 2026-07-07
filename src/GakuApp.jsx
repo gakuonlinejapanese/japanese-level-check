@@ -3917,6 +3917,20 @@ function stripForSpeech(text) {
   return (text || "").replace(/[（(][^）)]*[）)]/g, "").trim();
 }
 
+// For "listening" fill-in-the-blank exercises, the prompt text shown to the student has the
+// blank (＿＿＿/___) plus scene-setting/choices that shouldn't be read aloud. For real listening
+// practice, the AUDIO needs to be the complete, correct sentence — so extract the quoted
+// blanked sentence and substitute the real answer word back into the blank before speaking it.
+function getListeningAudioText(item) {
+  const quoted = (item.prompt || "").match(/「([^」]*(?:___|＿+|_+)[^」]*)」/);
+  if (!quoted) return item.prompt;
+  let word = (item.answer || "").trim();
+  for (const c of "①②③④⑤⑥⑦⑧⑨⑩") { if (word.startsWith(c)) { word = word.slice(c.length).trim(); break; } }
+  word = word.replace(/^(correct answer|正解)[:：]?\s*/i, "").trim();
+  if (!word) return quoted[1];
+  return quoted[1].replace(/___+|＿+|_+/g, word);
+}
+
 // ─── WORD DETAIL CARD ──────────────────────────────────────────────────────────
 function WordDetailCard({ card: cardProp, onSave, onBack, form, prefLang }) {
   const T = useUITranslations(prefLang || form?.preferredLang || "English");
@@ -5030,7 +5044,7 @@ function ExerciseCard({ item, revealed, onReveal, T, lang }) {
         <p style={{ color:"#f1f5f9", fontSize:14, lineHeight:1.8, margin:0, whiteSpace:"pre-wrap", flex:1 }}>{item.prompt}</p>
       </div>
       {(item.skill === "listening" || item.skill === "pronunciation") && (
-        <button onClick={()=>speakJapanese(stripForSpeech(item.prompt))}
+        <button onClick={()=>speakJapanese(stripForSpeech(item.skill === "listening" ? getListeningAudioText(item) : item.prompt))}
           style={{ display:"flex", alignItems:"center", gap:6, marginBottom:8, padding:"6px 12px", borderRadius:8, background:"rgba(6,182,212,0.12)", border:`1px solid rgba(6,182,212,0.3)`, color:C.teal, fontSize:12, fontWeight:700, cursor:"pointer" }}>
           🔊 {T?.listenAudio || "Listen"}
         </button>
@@ -5892,6 +5906,7 @@ CRITICAL: Write your ENTIRE response in ${lang}. Every word, including labels an
               {[
                 [T.tabSchedule,   T.howToSchedule],
                 [T.tabPractice,   T.howToPractice],
+                [`🎙️ ${T.convTitle}`, T.convDesc],
                 [T.tabVocabulary, T.howToVocab],
                 [T.tabResources,  T.howToResources],
                 [T.tabMilestones, T.howToMilestones],
@@ -6246,14 +6261,18 @@ function Dashboard({ form, onEdit }) {
   }, [T]);
 
   useEffect(() => {
+    let cancelled = false;
     const lang = form?.preferredLang || "English";
     const base = buildMilestones(form);
     if (lang === "English") {
       setMilestones(base);
     } else {
       // Always translate milestone text via AI for any non-English language
-      translateMilestonesAI(base, lang).then(setMilestones);
+      translateMilestonesAI(base, lang).then(translated => {
+        if (!cancelled) setMilestones(translated); // guard: a stale request from a previously-selected language must not clobber the current one
+      });
     }
+    return () => { cancelled = true; };
   }, [form]);
 
   const toggleTask = useCallback((day, idx) => {
