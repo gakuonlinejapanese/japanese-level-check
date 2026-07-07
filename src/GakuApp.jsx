@@ -5244,6 +5244,54 @@ Respond ONLY with a valid JSON array, no markdown, no backticks:
 }
 
 // ─── Conversation Predictor (YouTube/video dialogue → "predict the next line") ──────
+
+// Any run of kanji (incl. the kanji iteration mark 々) NOT immediately followed by "(" is missing its furigana.
+const hasMissingFurigana = (s) => /[\u4E00-\u9FFF\u3005]+(?!\()/.test(s);
+const getMissingKanjiGroups = (s) => s.match(/[\u4E00-\u9FFF\u3005]+(?!\()/g) || [];
+
+async function callClaudeFast(prompt, maxTokens = 700) {
+  const res = await fetch("/api/claude", {
+    method:"POST", headers:{"Content-Type":"application/json"},
+    body: JSON.stringify({ model:"claude-sonnet-4-20250514", max_tokens:maxTokens, provider:"fast",
+      messages:[{ role:"user", content: prompt }]
+    })
+  });
+  const d = await res.json();
+  return d.content?.map(c=>c.text||"").join("").trim() || "";
+}
+
+// Generates furigana and automatically retries (up to 2 extra passes) if any kanji were missed,
+// so every kanji in the sentence reliably ends up with a reading.
+async function getFuriganaText(original) {
+  const firstPrompt = `Add furigana in parentheses immediately after every single kanji word in the following Japanese text.
+This is critical: do not skip ANY kanji — including compound words, proper nouns, counters, and uncommon kanji. Every kanji character must be followed directly by its reading in parentheses, using this exact format: 漢字(かんじ)
+Keep every hiragana character, katakana character, and all punctuation exactly as-is. Do not add extra spaces.
+
+Example:
+Input: 日本語を勉強しています。
+Output: 日本語(にほんご)を勉強(べんきょう)しています。
+
+Now process this text. Return ONLY the resulting text with furigana added — no explanation, no markdown, nothing else:
+
+${original}`;
+
+  let out = await callClaudeFast(firstPrompt);
+  let attempts = 0;
+  while (attempts < 2 && hasMissingFurigana(out)) {
+    const missed = getMissingKanjiGroups(out);
+    const fixPrompt = `You added furigana to a Japanese sentence, but some kanji were missed. Here is the text you produced:
+
+${out}
+
+These kanji still need furigana added in parentheses right after them (format: 漢字(かんじ)): ${missed.join("、")}
+
+Return the COMPLETE corrected text with furigana added after EVERY kanji, including the ones listed above. Return ONLY the corrected full text — no explanation, no markdown.`;
+    out = await callClaudeFast(fixPrompt);
+    attempts++;
+  }
+  return out;
+}
+
 function JLineTools({ text, lang, T }) {
   const [furigana, setFurigana] = useState("");
   const [romaji, setRomaji] = useState("");
@@ -5253,22 +5301,23 @@ function JLineTools({ text, lang, T }) {
   const fetchVariant = async (mode) => {
     setLoadingType(mode);
     try {
-      const instruction = mode === "furigana"
-        ? `Add furigana in parentheses after every kanji word in this Japanese text. Return ONLY the text with furigana added, no explanation:\n\n${text}`
-        : mode === "romaji"
-        ? `Convert this Japanese text to romaji (Hepburn romanization). Return ONLY the romaji text, no explanation:\n\n${text}`
-        : `Translate this Japanese text into ${lang || "English"}. Return ONLY the translation, no explanation:\n\n${text}`;
-      const res = await fetch("/api/claude", {
-        method:"POST", headers:{"Content-Type":"application/json"},
-        body: JSON.stringify({ model:"claude-sonnet-4-20250514", max_tokens:500,
-          messages:[{ role:"user", content: instruction }]
-        })
-      });
-      const d = await res.json();
-      const out = d.content?.map(c=>c.text||"").join("").trim() || "";
-      if (mode === "furigana") setFurigana(out);
-      else if (mode === "romaji") setRomaji(out);
-      else setTranslation(out);
+      if (mode === "furigana") {
+        setFurigana(await getFuriganaText(text));
+      } else {
+        const instruction = mode === "romaji"
+          ? `Convert this Japanese text to romaji (Hepburn romanization). Return ONLY the romaji text, no explanation:\n\n${text}`
+          : `Translate this Japanese text into ${lang || "English"}. Return ONLY the translation, no explanation:\n\n${text}`;
+        const res = await fetch("/api/claude", {
+          method:"POST", headers:{"Content-Type":"application/json"},
+          body: JSON.stringify({ model:"claude-sonnet-4-20250514", max_tokens:500,
+            messages:[{ role:"user", content: instruction }]
+          })
+        });
+        const d = await res.json();
+        const out = d.content?.map(c=>c.text||"").join("").trim() || "";
+        if (mode === "romaji") setRomaji(out);
+        else setTranslation(out);
+      }
     } catch {}
     setLoadingType(null);
   };
@@ -5298,7 +5347,33 @@ function ConversationTurnCard({ turn, T, lang }) {
   const [recording, setRecording] = useState(false);
   const [transcript, setTranscript] = useState("");
   const [recogSupported, setRecogSupported] = useState(true);
+  const [feedback, setFeedback] = useState(null);
+  const [feedbackLoading, setFeedbackLoading] = useState(false);
   const recognitionRef = useRef(null);
+  const lastTranscriptRef = useRef("");
+
+  const checkGrammar = async (spokenText) => {
+    setFeedbackLoading(true);
+    try {
+      const prompt = `You are a supportive Japanese teacher reviewing a student's SPOKEN Japanese response (captured via speech recognition, so minor mis-transcriptions of particles/sounds are possible — use your judgement).
+
+Conversation prompt the student was responding to: "${turn.speakerALine}"
+Student's spoken response: "${spokenText}"
+
+Check the response for grammar or word-choice mistakes (particle usage, verb conjugation, word order, unnatural phrasing). Ignore trivial speech-recognition artifacts that wouldn't be a real mistake.
+
+If the response is already natural and correct, respond with exactly: {"hasError": false}
+
+If there is a genuine mistake, respond with this JSON shape:
+{"hasError": true, "incorrect": "the student's response as said (in Japanese)", "corrected": "the naturally corrected full sentence (in Japanese)", "translation": "translation of the corrected sentence into ${lang || "English"}", "explanationJa": "short explanation in Japanese of the mistake and the fix", "explanationEn": "the same explanation in ${lang || "English"}", "example": "one short additional Japanese example sentence using the corrected grammar point", "exampleTranslation": "translation of that example into ${lang || "English"}"}
+
+Respond ONLY with valid JSON, no markdown, no backticks, nothing else.`;
+      const out = await callClaudeFast(prompt, 700);
+      const parsed = JSON.parse(out.replace(/```json|```/g,"").trim());
+      setFeedback(parsed);
+    } catch { setFeedback(null); }
+    setFeedbackLoading(false);
+  };
 
   const toggleRecording = () => {
     const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -5308,11 +5383,19 @@ function ConversationTurnCard({ turn, T, lang }) {
     recognition.lang = "ja-JP";
     recognition.interimResults = true;
     recognition.continuous = false;
-    recognition.onresult = (e) => setTranscript(Array.from(e.results).map(r => r[0].transcript).join(""));
-    recognition.onend = () => setRecording(false);
+    recognition.onresult = (e) => {
+      const t = Array.from(e.results).map(r => r[0].transcript).join("");
+      setTranscript(t);
+      lastTranscriptRef.current = t;
+    };
+    recognition.onend = () => {
+      setRecording(false);
+      if (lastTranscriptRef.current.trim()) checkGrammar(lastTranscriptRef.current.trim());
+    };
     recognition.onerror = () => setRecording(false);
     recognitionRef.current = recognition;
-    setTranscript(""); setRecording(true); recognition.start();
+    lastTranscriptRef.current = "";
+    setTranscript(""); setFeedback(null); setRecording(true); recognition.start();
   };
 
   return (
@@ -5343,6 +5426,32 @@ function ConversationTurnCard({ turn, T, lang }) {
           <p style={{ color:C.purpleLight, fontSize:11, fontWeight:700, margin:"0 0 3px" }}>{T?.yourSpokenAnswer || "Your spoken answer:"}</p>
           <p style={{ color:"#f1f5f9", fontSize:13, margin:0 }}>{transcript}</p>
         </div>
+      )}
+      {feedbackLoading && (
+        <p style={{ color:"#94a3b8", fontSize:11, marginTop:8 }}>⏳ {T?.convCheckingGrammar || "AIフィードバック / Checking your grammar..."}</p>
+      )}
+      {!feedbackLoading && feedback && (
+        feedback.hasError ? (
+          <div style={{ background:"rgba(239,68,68,0.06)", borderRadius:8, padding:"10px 12px", marginTop:8, border:"1px solid rgba(239,68,68,0.2)" }}>
+            <p style={{ color:"#f87171", fontSize:13, margin:"0 0 4px" }}>⚠️ {feedback.incorrect}</p>
+            <p style={{ color:C.green, fontSize:13, margin:"0 0 4px" }}>✅ {feedback.corrected}</p>
+            {feedback.translation && <p style={{ color:"#94a3b8", fontSize:11, margin:"0 0 8px", fontStyle:"italic" }}>{feedback.translation}</p>}
+            <p style={{ color:C.amber, fontSize:11, fontWeight:700, margin:"0 0 3px" }}>ていせい / Correction</p>
+            {feedback.explanationJa && <p style={{ color:"#cbd5e1", fontSize:12, margin:"0 0 2px" }}>{feedback.explanationJa}</p>}
+            {feedback.explanationEn && <p style={{ color:"#94a3b8", fontSize:11, margin:"0 0 8px" }}>{feedback.explanationEn}</p>}
+            {feedback.example && (
+              <>
+                <p style={{ color:C.amber, fontSize:11, fontWeight:700, margin:"0 0 3px" }}>れい / Example</p>
+                <p style={{ color:"#f1f5f9", fontSize:12, margin:0 }}>{feedback.example}</p>
+                {feedback.exampleTranslation && <p style={{ color:"#94a3b8", fontSize:11, margin:"2px 0 0" }}>{feedback.exampleTranslation}</p>}
+              </>
+            )}
+          </div>
+        ) : (
+          <div style={{ background:"rgba(34,197,94,0.06)", borderRadius:8, padding:"8px 10px", marginTop:8 }}>
+            <p style={{ color:C.green, fontSize:12, margin:0 }}>✅ {T?.convGrammarOk || "Great — no mistakes found!"}</p>
+          </div>
+        )
       )}
 
       <div style={{ marginTop:12 }}>
