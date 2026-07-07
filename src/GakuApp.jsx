@@ -119,6 +119,32 @@ const SKILL_LABELS = {
   jlpt:"🎯 JLPT Prep", reading:"📖 Reading", kanji:"🈳 Kanji", grammar:"📝 Grammar",
 };
 
+// Maps a profile's selected study skills (pronunciation, listening, conversation, jlpt,
+// reading, kanji, grammar) onto the rating dimensions used by LEVEL_RESOURCES/RESOURCES
+// (vocab, grammar, reading, speaking, listening), so recommendations reflect what the
+// student actually chose to focus on rather than just their JLPT level.
+const SKILL_TO_RESOURCE_DIMS = {
+  pronunciation: ["speaking"],
+  listening: ["listening"],
+  conversation: ["speaking", "listening"],
+  jlpt: ["vocab", "grammar", "reading", "listening"],
+  reading: ["reading"],
+  kanji: ["reading", "vocab"],
+  grammar: ["grammar"],
+};
+function relevantResourceDims(skills) {
+  const dims = new Set();
+  (skills || []).forEach(s => (SKILL_TO_RESOURCE_DIMS[s] || []).forEach(d => dims.add(d)));
+  return dims.size ? [...dims] : ["vocab", "grammar", "reading", "speaking", "listening"];
+}
+function rankResourcesBySkills(list, skills) {
+  const dims = relevantResourceDims(skills);
+  return (list || [])
+    .map(r => ({ ...r, _score: dims.reduce((sum, d) => sum + (r.skills?.[d] || 0), 0) / dims.length }))
+    .filter(r => r._score > 0)
+    .sort((a, b) => b._score - a._score);
+}
+
 // ─── UI TRANSLATIONS ────────────────────────────────────────────────────────────
 // Static translations for all major UI strings across all 6 tabs + form
 const UI_TRANSLATIONS = {
@@ -6588,12 +6614,12 @@ function Dashboard({ form, onEdit }) {
 
             {resourceSubTab==="links" && (
             <div>
-            {(LEVEL_RESOURCES[form.jlpt] || []).length > 0 && (
+            {(() => { const recommended = rankResourcesBySkills(LEVEL_RESOURCES[form.jlpt] || [], form.skills); return recommended.length > 0 && (
               <div style={{ ...S.card, marginBottom:16, borderLeft:`3px solid ${C.teal}` }}>
                 <p style={{ color:C.teal, fontSize:12, fontWeight:700, letterSpacing:1, marginBottom:4 }}>{T.recommendedForLevel}</p>
-                <p style={{ color:"#ffffff", fontSize:12, marginBottom:14 }}>{T.curatedFor} {form.jlpt}</p>
+                <p style={{ color:"#ffffff", fontSize:12, marginBottom:14 }}>{T.curatedFor} {form.jlpt} · {(form.skills||[]).map(s=>T[SKILL_LABEL_KEY[s]]||SKILL_LABELS[s]).join(", ")}</p>
                 <div style={{ display:"flex", flexDirection:"column", gap:12 }}>
-                  {(LEVEL_RESOURCES[form.jlpt] || []).map((r,i) => (
+                  {recommended.map((r,i) => (
                     <div key={i} style={{ background:"rgba(6,182,212,0.04)", borderRadius:12, border:`1px solid rgba(6,182,212,0.15)`, padding:"14px 16px" }}>
                       <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", marginBottom:6 }}>
                         <p style={{ color:"#f1f5f9", fontSize:14, fontWeight:700, margin:0 }}>{r.name}</p>
@@ -6615,7 +6641,7 @@ function Dashboard({ form, onEdit }) {
                   ))}
                 </div>
               </div>
-            )}
+            ); })()}
 
             <div style={{ ...S.card }}>
               <p style={{ color:C.amber, fontSize:12, fontWeight:700, letterSpacing:1, marginBottom:4 }}>{T.yourResources}</p>
