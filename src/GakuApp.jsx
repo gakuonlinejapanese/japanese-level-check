@@ -5049,7 +5049,7 @@ function ExerciseCard({ item, revealed, onReveal, T, lang }) {
           🔊 {T?.listenAudio || "Listen"}
         </button>
       )}
-      {(item.skill === "pronunciation" || item.skill === "conversation") && (
+      {item.skill === "pronunciation" && (
         <div style={{ marginBottom:8 }}>
           <button onClick={toggleRecording}
             style={{ display:"flex", alignItems:"center", gap:6, padding:"6px 12px", borderRadius:8, background:recording?"rgba(239,68,68,0.15)":"rgba(168,85,247,0.12)", border:`1px solid ${recording?"rgba(239,68,68,0.4)":"rgba(168,85,247,0.3)"}`, color:recording?"#f87171":C.purpleLight, fontSize:12, fontWeight:700, cursor:"pointer" }}>
@@ -5062,6 +5062,11 @@ function ExerciseCard({ item, revealed, onReveal, T, lang }) {
               <p style={{ color:"#f1f5f9", fontSize:13, margin:0 }}>{transcript}</p>
             </div>
           )}
+        </div>
+      )}
+      {item.skill === "conversation" && (
+        <div style={{ marginBottom:8 }}>
+          <VoiceGrammarCheck promptContext={item.prompt} lang={lang} T={T} />
         </div>
       )}
       <JLineTools text={item.prompt} lang={lang} T={T} />
@@ -5097,6 +5102,42 @@ function ContentAnalyzer({ form }) {
   const [sourceFuriganaOn, setSourceFuriganaOn] = useState(false);
   const [sourceFurigana, setSourceFurigana] = useState("");
   const [sourceFuriganaLoading, setSourceFuriganaLoading] = useState(false);
+  const [savedSet, setSavedSet] = useState(null); // a previously-generated study set found in this browser, offered via Resume/Reset
+
+  const CONTENT_STORAGE_KEY = "gaku_content_study_set";
+
+  // On first mount, check for a study set left over from before navigating away — but don't
+  // auto-load it; let the student choose Resume or Reset so nothing appears unexpectedly.
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem(scopedKey(CONTENT_STORAGE_KEY));
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (parsed && Array.isArray(parsed.items) && parsed.items.length) setSavedSet(parsed);
+      }
+    } catch {}
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Persist whenever a study set is generated, so it survives navigating to another tab and back.
+  useEffect(() => {
+    if (items.length) {
+      try { localStorage.setItem(scopedKey(CONTENT_STORAGE_KEY), JSON.stringify({ source, items, revealed })); } catch {}
+    }
+  }, [items, source, revealed]);
+
+  const handleResume = () => {
+    if (savedSet) {
+      setSource(savedSet.source || "");
+      setItems(savedSet.items || []);
+      setRevealed(savedSet.revealed || {});
+    }
+    setSavedSet(null);
+  };
+  const handleResetSaved = () => {
+    try { localStorage.removeItem(scopedKey(CONTENT_STORAGE_KEY)); } catch {}
+    setSavedSet(null);
+  };
 
   // Only build activities for the skills the student picked in "WHAT DO YOU WANT TO STUDY?".
   // Falls back to all skills if the student hasn't selected any yet.
@@ -5185,6 +5226,19 @@ Respond ONLY with a valid JSON array, no markdown, no backticks:
 
   return (
     <div>
+      {!items.length && savedSet && (
+        <div style={{ ...S.card, marginBottom:16, borderLeft:`3px solid ${C.purpleLight}` }}>
+          <p style={{ color:C.purpleLight, fontSize:12, fontWeight:700, margin:"0 0 8px" }}>{T.savedSetFound || "You have a saved study set from before."}</p>
+          <div style={{ display:"flex", gap:8 }}>
+            <button onClick={handleResume} style={{ ...S.btn, flex:1, background:`linear-gradient(135deg,${C.teal},#0891b2)`, color:"#fff" }}>
+              {T.resumeStudySet || "▶ Resume study set"}
+            </button>
+            <button onClick={handleResetSaved} style={{ ...S.btn, flex:1, background:C.card, border:`1px solid ${C.border}`, color:"#94a3b8" }}>
+              {T.resetStudySet || "Reset"}
+            </button>
+          </div>
+        </div>
+      )}
       <div style={{ ...S.card, marginBottom:16 }}>
         <p style={{ color:C.teal, fontSize:12, fontWeight:700, letterSpacing:1, marginBottom:4 }}>✨ {T.contentTitle || "CREATE FROM CONTENT"}</p>
         <p style={{ color:"#ffffff", fontSize:12, marginBottom:12, lineHeight:1.7 }}>
@@ -5353,8 +5407,10 @@ function JLineTools({ text, lang, T }) {
   );
 }
 
-function ConversationTurnCard({ turn, T, lang }) {
-  const [revealed, setRevealed] = useState(false);
+// Shared "record your spoken response, get AI grammar feedback" block — used by both
+// Conversation Practice (ConversationTurnCard) and the "conversation" skill in Create From
+// Content (ExerciseCard), so the same feedback experience is available in both places.
+function VoiceGrammarCheck({ promptContext, lang, T }) {
   const [recording, setRecording] = useState(false);
   const [transcript, setTranscript] = useState("");
   const [recogSupported, setRecogSupported] = useState(true);
@@ -5368,7 +5424,7 @@ function ConversationTurnCard({ turn, T, lang }) {
     try {
       const prompt = `You are a supportive Japanese teacher reviewing a student's SPOKEN Japanese response (captured via speech recognition, so minor mis-transcriptions of particles/sounds are possible — use your judgement).
 
-Conversation prompt the student was responding to: "${turn.speakerALine}"
+Conversation prompt the student was responding to: "${promptContext}"
 Student's spoken response: "${spokenText}"
 
 Check the response for grammar or word-choice mistakes (particle usage, verb conjugation, word order, unnatural phrasing). Ignore trivial speech-recognition artifacts that wouldn't be a real mistake.
@@ -5410,23 +5466,7 @@ Respond ONLY with valid JSON, no markdown, no backticks, nothing else.`;
   };
 
   return (
-    <div style={{ ...S.card, borderLeft:`3px solid ${C.purpleLight}` }}>
-      {turn.situation && (
-        <p style={{ color:"#94a3b8", fontSize:11, fontStyle:"italic", margin:"0 0 8px" }}>💭 {turn.situation}</p>
-      )}
-      <div style={{ display:"flex", alignItems:"flex-start", gap:8, marginBottom:10 }}>
-        <span style={{ color:C.teal, fontSize:11, fontWeight:700, flexShrink:0 }}>A:</span>
-        <p style={{ color:"#f1f5f9", fontSize:14, lineHeight:1.8, margin:0, flex:1 }}>{turn.speakerALine}</p>
-      </div>
-      <button onClick={()=>speakJapanese(stripForSpeech(turn.speakerALine))}
-        style={{ display:"flex", alignItems:"center", gap:6, marginBottom:8, padding:"6px 12px", borderRadius:8, background:"rgba(6,182,212,0.12)", border:`1px solid rgba(6,182,212,0.3)`, color:C.teal, fontSize:12, fontWeight:700, cursor:"pointer" }}>
-        🔊 {T?.listenAudio || "Listen"}
-      </button>
-      <JLineTools text={turn.speakerALine} lang={lang} T={T} />
-
-      <p style={{ color:C.purpleLight, fontSize:12, fontWeight:700, margin:"6px 0 8px" }}>
-        {T?.convYourTurn || "How would you respond?"}
-      </p>
+    <div>
       <button onClick={toggleRecording}
         style={{ display:"flex", alignItems:"center", gap:6, padding:"6px 12px", borderRadius:8, background:recording?"rgba(239,68,68,0.15)":"rgba(168,85,247,0.12)", border:`1px solid ${recording?"rgba(239,68,68,0.4)":"rgba(168,85,247,0.3)"}`, color:recording?"#f87171":C.purpleLight, fontSize:12, fontWeight:700, cursor:"pointer" }}>
         {recording ? `⏺ ${T?.recordingInProgress || "Recording..."}` : `🎤 ${T?.recordVoice || "Record"}`}
@@ -5464,6 +5504,32 @@ Respond ONLY with valid JSON, no markdown, no backticks, nothing else.`;
           </div>
         )
       )}
+    </div>
+  );
+}
+
+function ConversationTurnCard({ turn, T, lang }) {
+  const [revealed, setRevealed] = useState(false);
+
+  return (
+    <div style={{ ...S.card, borderLeft:`3px solid ${C.purpleLight}` }}>
+      {turn.situation && (
+        <p style={{ color:"#94a3b8", fontSize:11, fontStyle:"italic", margin:"0 0 8px" }}>💭 {turn.situation}</p>
+      )}
+      <div style={{ display:"flex", alignItems:"flex-start", gap:8, marginBottom:10 }}>
+        <span style={{ color:C.teal, fontSize:11, fontWeight:700, flexShrink:0 }}>A:</span>
+        <p style={{ color:"#f1f5f9", fontSize:14, lineHeight:1.8, margin:0, flex:1 }}>{turn.speakerALine}</p>
+      </div>
+      <button onClick={()=>speakJapanese(stripForSpeech(turn.speakerALine))}
+        style={{ display:"flex", alignItems:"center", gap:6, marginBottom:8, padding:"6px 12px", borderRadius:8, background:"rgba(6,182,212,0.12)", border:`1px solid rgba(6,182,212,0.3)`, color:C.teal, fontSize:12, fontWeight:700, cursor:"pointer" }}>
+        🔊 {T?.listenAudio || "Listen"}
+      </button>
+      <JLineTools text={turn.speakerALine} lang={lang} T={T} />
+
+      <p style={{ color:C.purpleLight, fontSize:12, fontWeight:700, margin:"6px 0 8px" }}>
+        {T?.convYourTurn || "How would you respond?"}
+      </p>
+      <VoiceGrammarCheck promptContext={turn.speakerALine} lang={lang} T={T} />
 
       <div style={{ marginTop:12 }}>
         <button onClick={()=>setRevealed(r=>!r)} style={{ padding:"6px 14px", borderRadius:8, background:C.card, border:`1px solid ${C.border}`, color:"#ff1a1a", fontSize:11, cursor:"pointer", marginBottom: revealed?10:0 }}>
@@ -5499,6 +5565,39 @@ function ConversationPredictor({ form }) {
   const [turns, setTurns] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [savedSet, setSavedSet] = useState(null); // a previously-generated conversation set found in this browser
+
+  const CONV_STORAGE_KEY = "gaku_conv_practice_set";
+
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem(scopedKey(CONV_STORAGE_KEY));
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (parsed && Array.isArray(parsed.turns) && parsed.turns.length) setSavedSet(parsed);
+      }
+    } catch {}
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (turns && turns.length) {
+      try { localStorage.setItem(scopedKey(CONV_STORAGE_KEY), JSON.stringify({ raw, sourceTitle, turns })); } catch {}
+    }
+  }, [turns, raw, sourceTitle]);
+
+  const handleResumeSaved = () => {
+    if (savedSet) {
+      setRaw(savedSet.raw || "");
+      setSourceTitle(savedSet.sourceTitle || "");
+      setTurns(savedSet.turns || null);
+    }
+    setSavedSet(null);
+  };
+  const handleResetSaved = () => {
+    try { localStorage.removeItem(scopedKey(CONV_STORAGE_KEY)); } catch {}
+    setSavedSet(null);
+  };
 
   const generate = async () => {
     const parsedLines = parseSubtitleText(raw);
@@ -5545,11 +5644,24 @@ Respond ONLY with a valid JSON array, no markdown, no backticks:
     setLoading(false);
   };
 
-  const handleReset = () => { setTurns(null); setRaw(""); setError(""); };
+  const handleReset = () => { setTurns(null); setRaw(""); setError(""); try { localStorage.removeItem(scopedKey(CONV_STORAGE_KEY)); } catch {} };
 
   if (!turns) {
     return (
       <div>
+        {savedSet && (
+          <div style={{ ...S.card, marginBottom:16, borderLeft:`3px solid ${C.purpleLight}` }}>
+            <p style={{ color:C.purpleLight, fontSize:12, fontWeight:700, margin:"0 0 8px" }}>{T.savedSetFound || "You have a saved study set from before."}</p>
+            <div style={{ display:"flex", gap:8 }}>
+              <button onClick={handleResumeSaved} style={{ ...S.btn, flex:1, background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff" }}>
+                {T.resumeStudySet || "▶ Resume study set"}
+              </button>
+              <button onClick={handleResetSaved} style={{ ...S.btn, flex:1, background:C.card, border:`1px solid ${C.border}`, color:"#94a3b8" }}>
+                {T.resetStudySet || "Reset"}
+              </button>
+            </div>
+          </div>
+        )}
         <div style={{ ...S.card, marginBottom:16 }}>
           <p style={{ color:C.purpleLight, fontSize:12, fontWeight:700, letterSpacing:1, marginBottom:6 }}>🎙️ {T.convTitle || "Conversation Practice"}</p>
           <p style={{ color:"#39ff14", fontSize:12, lineHeight:1.7, marginBottom:14 }}>
