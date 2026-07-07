@@ -5091,7 +5091,7 @@ function ContentAnalyzer({ form }) {
 
   const SKILL_DESC = {
     pronunciation: "pronunciation: pick a real sentence (or short phrase) from the content and ask the student to shadow it aloud, e.g. 「(real sentence)」を声に出して読んでください. Do NOT append a parenthetical label like「（シャドーイング）」to the Japanese prompt text — the app already shows \"Shadowing\" as a separate label. This gets an automatic 🔊 button so the student can hear the model pronunciation before repeating it, and a 🎤 button to record and check their own voice.",
-    listening: "listening: take a real sentence from the content and turn it into a listening-comprehension fill-in-the-blank, e.g. [場面：(context from the content)]「(real sentence with one word/phrase blanked)」の___に何が入りますか？ with ①②③④ choices. This is meant to be played aloud (the app adds a 🔊 button automatically) — the student listens, not just reads, so keep it phrased as something natural to hear.",
+    listening: "listening: take a real sentence from the content and turn it into a listening-comprehension fill-in-the-blank. Quote the ENTIRE original sentence with exactly ONE word/phrase/particle removed and replaced IN-PLACE, inside the quoted sentence itself, by ＿＿＿ — e.g. if the original sentence is 「簡単な文法だけで話しているので」, the prompt must contain 「簡単な文法だけで＿＿＿しているので」, NOT the full unblanked sentence repeated with a separate 'の___に何が入りますか' tacked on afterward. Prefix with a short scene/context in English like [Scene: ...], then the blanked sentence, then 何が入りますか？ with the ①②③④ choices. This is meant to be played aloud (the app adds a 🔊 button automatically) — the student listens, not just reads, so keep it phrased as something natural to hear.",
     conversation: "conversation: turn a real dialogue moment from the content into a role-play — give the situation in English, quote the real Japanese line that prompts a response, and ask the student to respond in Japanese aloud (the app gives a 🎤 button to record their spoken response).",
     jlpt: "jlpt: JLPT-style vocabulary/grammar check using a real word or phrase from the content — meaning check (\"「◯◯」は何を意味しますか？\") or a 4-choice ①②③④ question grounded in the content.",
     reading: "reading: \"what does this sentence/passage mean?\" comprehension using real text from the content, or a fill-in-the-blank with ①②③④ choices using a real sentence.",
@@ -5362,7 +5362,7 @@ Check the response for grammar or word-choice mistakes (particle usage, verb con
 If the response is already natural and correct, respond with exactly: {"hasError": false}
 
 If there is a genuine mistake, respond with this JSON shape:
-{"hasError": true, "incorrect": "the student's response as said (in Japanese)", "corrected": "the naturally corrected full sentence (in Japanese)", "translation": "translation of the corrected sentence into ${lang || "English"}", "explanationJa": "short explanation in Japanese of the mistake and the fix", "explanationEn": "the same explanation in ${lang || "English"}", "example": "one short additional Japanese example sentence using the corrected grammar point", "exampleTranslation": "translation of that example into ${lang || "English"}"}
+{"hasError": true, "incorrect": "the student's response as said (in Japanese)", "corrected": "the naturally corrected full sentence (in Japanese)", "translation": "translation of the corrected sentence into ${lang || "English"}", "explanation": "short explanation, written in ${lang || "English"}, of the mistake and the fix", "example": "one short additional Japanese example sentence using the corrected grammar point", "exampleTranslation": "translation of that example into ${lang || "English"}"}
 
 Respond ONLY with valid JSON, no markdown, no backticks, nothing else.`;
       const out = await callClaudeFast(prompt, 700);
@@ -5434,13 +5434,13 @@ Respond ONLY with valid JSON, no markdown, no backticks, nothing else.`;
             <p style={{ color:C.green, fontSize:13, margin:"0 0 4px" }}>✅ {feedback.corrected}</p>
             {feedback.translation && <p style={{ color:"#94a3b8", fontSize:11, margin:"0 0 8px", fontStyle:"italic" }}>{feedback.translation}</p>}
             <p style={{ color:C.amber, fontSize:11, fontWeight:700, margin:"0 0 3px" }}>ていせい / Correction</p>
-            {feedback.explanationJa && <p style={{ color:"#cbd5e1", fontSize:12, margin:"0 0 2px" }}>{feedback.explanationJa}</p>}
-            {feedback.explanationEn && <p style={{ color:"#94a3b8", fontSize:11, margin:"0 0 8px" }}>{feedback.explanationEn}</p>}
+            {feedback.explanation && <p style={{ color:"#cbd5e1", fontSize:12, margin:"0 0 8px" }}>{feedback.explanation}</p>}
             {feedback.example && (
               <>
                 <p style={{ color:C.amber, fontSize:11, fontWeight:700, margin:"0 0 3px" }}>れい / Example</p>
-                <p style={{ color:"#f1f5f9", fontSize:12, margin:0 }}>{feedback.example}</p>
-                {feedback.exampleTranslation && <p style={{ color:"#94a3b8", fontSize:11, margin:"2px 0 0" }}>{feedback.exampleTranslation}</p>}
+                <p style={{ color:"#f1f5f9", fontSize:12, margin:"0 0 4px" }}>{feedback.example}</p>
+                {feedback.exampleTranslation && <p style={{ color:"#94a3b8", fontSize:11, margin:"0 0 4px" }}>{feedback.exampleTranslation}</p>}
+                <JLineTools text={feedback.example} lang={lang} T={T} />
               </>
             )}
           </div>
