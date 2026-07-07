@@ -3914,7 +3914,10 @@ function speakJapanese(text) {
 // Strips parenthetical instructional labels (e.g. "（シャドーイング）", "(Shadowing)") from an
 // exercise prompt before it's read aloud — those are UI labels, not content to pronounce.
 function stripForSpeech(text) {
-  return (text || "").replace(/[（(][^）)]*[）)]/g, "").trim();
+  return (text || "")
+    .replace(/[（(][^）)]*[）)]/g, "")
+    .replace(/[［\[][^］\]]*[］\]]/g, "")
+    .trim();
 }
 
 // For "listening" fill-in-the-blank exercises, the prompt text shown to the student has the
