@@ -3914,7 +3914,10 @@ function speakJapanese(text) {
 // Strips parenthetical instructional labels (e.g. "（シャドーイング）", "(Shadowing)") from an
 // exercise prompt before it's read aloud — those are UI labels, not content to pronounce.
 function stripForSpeech(text) {
-  return (text || "").replace(/[（(][^）)]*[）)]/g, "").trim();
+  return (text || "")
+    .replace(/[（(][^）)]*[）)]/g, "")
+    .replace(/[［\[][^］\]]*[］\]]/g, "")
+    .trim();
 }
 
 // For "listening" fill-in-the-blank exercises, the prompt text shown to the student has the
@@ -3922,13 +3925,26 @@ function stripForSpeech(text) {
 // practice, the AUDIO needs to be the complete, correct sentence — so extract the quoted
 // blanked sentence and substitute the real answer word back into the blank before speaking it.
 function getListeningAudioText(item) {
-  const quoted = (item.prompt || "").match(/「([^」]*(?:___|＿+|_+)[^」]*)」/);
-  if (!quoted) return item.prompt;
+  const raw = item.prompt || "";
+  const quoted = raw.match(/「([^」]*(?:___|＿+|_+)[^」]*)」/);
+  let sentence;
+  if (quoted) {
+    sentence = quoted[1];
+  } else {
+    // Fallback for prompts that didn't follow the 「」 quoting instruction: strip the
+    // [Scene: ...] label, the ①②③④ choice list, and the trailing "何が入りますか？" question,
+    // leaving just the blanked sentence so the answer can be substituted into it.
+    sentence = raw
+      .replace(/[［\[][^］\]]*[］\]]/g, "")
+      .split(/①/)[0]
+      .replace(/何が(入り|はい)ますか[？?]?/g, "")
+      .trim();
+  }
   let word = (item.answer || "").trim();
   for (const c of "①②③④⑤⑥⑦⑧⑨⑩") { if (word.startsWith(c)) { word = word.slice(c.length).trim(); break; } }
   word = word.replace(/^(correct answer|正解)[:：]?\s*/i, "").trim();
-  if (!word) return quoted[1];
-  return quoted[1].replace(/___+|＿+|_+/g, word);
+  if (!word) return sentence;
+  return sentence.replace(/___+|＿+|_+/g, word);
 }
 
 // ─── WORD DETAIL CARD ──────────────────────────────────────────────────────────
@@ -4246,6 +4262,7 @@ function FlashcardView({ onBack }) {
   const [flipped, setFlipped] = useState(false);
   const [showHint, setShowHint] = useState(false);
   const [fillingCard, setFillingCard] = useState(false);
+  const [resumeChoice, setResumeChoice] = useState(null); // null = deciding, "resume" | "restart" = decided
 
   const cards = allData.cards || [];
   const folderObjs = allData.folders || [];
@@ -4254,8 +4271,30 @@ function FlashcardView({ onBack }) {
   const displayCards = filteredCards;
   const card = displayCards[idx] || null;
 
-  // Reset idx when folder changes
-  const handleFolderChange = (f) => { setSelectedFolder(f); setIdx(0); setFlipped(false); setShowHint(false); };
+  const posKey = (folder) => `gaku_flashcard_pos_${folder}`;
+  const getSavedPos = (folder) => { try { return parseInt(localStorage.getItem(posKey(folder)) || "0", 10) || 0; } catch { return 0; } };
+  const savePos = (folder, i) => { try { localStorage.setItem(posKey(folder), String(i)); } catch {} };
+
+  // Whenever the folder becomes active, check for a saved position and ask Resume vs Start Again
+  // instead of silently resetting to the first card.
+  useEffect(() => {
+    const saved = getSavedPos(selectedFolder);
+    if (saved > 0 && saved < filteredCards.length) {
+      setResumeChoice(null);
+    } else {
+      setIdx(0);
+      setResumeChoice("restart");
+    }
+    setFlipped(false); setShowHint(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedFolder]);
+
+  // Persist position as the student moves through the deck
+  useEffect(() => {
+    if (resumeChoice) savePos(selectedFolder, idx);
+  }, [idx, selectedFolder, resumeChoice]);
+
+  const handleFolderChange = (f) => { setSelectedFolder(f); };
 
   // Auto-fill reading_example and example_translated for current card if missing
   useEffect(() => {
@@ -4316,7 +4355,17 @@ Only output the JSON object.` }
           </button>
         ))}
       </div>
-      {!card ? (
+      {resumeChoice === null ? (
+        <div style={{ ...S.card, textAlign:"center", padding:"32px 20px" }}>
+          <p style={{ color:"#94a3b8", fontSize:13, marginBottom:18 }}>
+            前回 {getSavedPos(selectedFolder)+1} / {filteredCards.length} で中断しています。続けますか？
+          </p>
+          <div style={{ display:"flex", gap:10, justifyContent:"center" }}>
+            <button onClick={()=>{ setIdx(getSavedPos(selectedFolder)); setResumeChoice("resume"); }} style={{ ...S.btn, background:`linear-gradient(135deg,${C.teal},#0891b2)`, color:"#fff" }}>▶ Resume</button>
+            <button onClick={()=>{ setIdx(0); savePos(selectedFolder, 0); setResumeChoice("restart"); }} style={{ ...S.btn, background:C.card, border:`1px solid ${C.border}`, color:"#94a3b8" }}>🔄 Start Again</button>
+          </div>
+        </div>
+      ) : !card ? (
         <div style={{ ...S.card, textAlign:"center", padding:"40px 20px" }}>
           <p style={{ color:"#94a3b8", fontSize:14 }}>このフォルダに単語がありません</p>
         </div>
