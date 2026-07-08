@@ -4263,6 +4263,7 @@ function FlashcardView({ onBack }) {
   const [showHint, setShowHint] = useState(false);
   const [fillingCard, setFillingCard] = useState(false);
   const [resumeChoice, setResumeChoice] = useState(null); // null = deciding, "resume" | "restart" = decided
+  const [flipImages, setFlipImages] = useState({}); // word -> image url, fetched on demand for the back of the card
 
   const cards = allData.cards || [];
   const folderObjs = allData.folders || [];
@@ -4293,6 +4294,24 @@ function FlashcardView({ onBack }) {
   useEffect(() => {
     if (resumeChoice) savePos(selectedFolder, idx);
   }, [idx, selectedFolder, resumeChoice]);
+
+  // Fetch a supporting image for the back of the card (only when flipped, and only once per word)
+  useEffect(() => {
+    if (!flipped || !card || card.imageUrl || flipImages[card.word]) return;
+    let cancelled = false;
+    (async () => {
+      try {
+        const query = encodeURIComponent(card.imageQuery || card.word);
+        const url = `https://commons.wikimedia.org/w/api.php?action=query&generator=search&gsrnamespace=6&gsrsearch=${query}&gsrlimit=1&prop=imageinfo&iiprop=url&iiurlwidth=400&format=json&origin=*`;
+        const res = await fetch(url);
+        const data = await res.json();
+        const pages = Object.values(data?.query?.pages || {});
+        const thumb = pages.find(p => p?.imageinfo?.[0]?.thumburl && !/svg/i.test(p.imageinfo[0].thumburl))?.imageinfo?.[0]?.thumburl;
+        if (!cancelled && thumb) setFlipImages(prev => ({ ...prev, [card.word]: thumb }));
+      } catch {}
+    })();
+    return () => { cancelled = true; };
+  }, [flipped, card?.word]);
 
   const handleFolderChange = (f) => { setSelectedFolder(f); };
 
@@ -4378,11 +4397,13 @@ Only output the JSON object.` }
                 <p style={{ color:"#f1f5f9", fontSize:44, fontWeight:900, margin:"0 0 6px", letterSpacing:2 }}>{card.word}</p>
                 {showHint && card.reading && <p style={{ color:C.teal, fontSize:20, margin:"0 0 2px", fontWeight:700 }}>{card.reading}</p>}
                 {showHint && card.reading && <p style={{ color:"#67e8f9", fontSize:13, margin:"0 0 6px", fontStyle:"italic" }}>{card.reading.split("").map(c=>{const hMap={"あ":"a","い":"i","う":"u","え":"e","お":"o","か":"ka","き":"ki","く":"ku","け":"ke","こ":"ko","さ":"sa","し":"shi","す":"su","せ":"se","そ":"so","た":"ta","ち":"chi","つ":"tsu","て":"te","と":"to","な":"na","に":"ni","ぬ":"nu","ね":"ne","の":"no","は":"ha","ひ":"hi","ふ":"fu","へ":"he","ほ":"ho","ま":"ma","み":"mi","む":"mu","め":"me","も":"mo","や":"ya","ゆ":"yu","よ":"yo","ら":"ra","り":"ri","る":"ru","れ":"re","ろ":"ro","わ":"wa","を":"wo","ん":"n","が":"ga","ぎ":"gi","ぐ":"gu","げ":"ge","ご":"go","ざ":"za","じ":"ji","ず":"zu","ぜ":"ze","ぞ":"zo","だ":"da","ぢ":"di","づ":"du","で":"de","ど":"do","ば":"ba","び":"bi","ぶ":"bu","べ":"be","ぼ":"bo","ぱ":"pa","ぴ":"pi","ぷ":"pu","ぺ":"pe","ぽ":"po","きゃ":"kya","きゅ":"kyu","きょ":"kyo","しゃ":"sha","しゅ":"shu","しょ":"sho","ちゃ":"cha","ちゅ":"chu","ちょ":"cho","にゃ":"nya","にゅ":"nyu","にょ":"nyo","ひゃ":"hya","ひゅ":"hyu","ひょ":"hyo","みゃ":"mya","みゅ":"myu","みょ":"myo","りゃ":"rya","りゅ":"ryu","りょ":"ryo","ぎゃ":"gya","ぎゅ":"gyu","ぎょ":"gyo","じゃ":"ja","じゅ":"ju","じょ":"jo","びゃ":"bya","びゅ":"byu","びょ":"byo","ぴゃ":"pya","ぴゅ":"pyu","ぴょ":"pyo","っ":"(t)","ー":"-","、":""," ":"","　":""};return hMap[c]||c;}).join("")}</p>}
-                {card.meaning && <p style={{ color:"#94a3b8", fontSize:12, margin:"0 0 10px" }}>{card.meaning}</p>}
                 <p style={{ color:"#334155", fontSize:11 }}>タップして確認</p>
               </>
             ) : (
               <>
+                {(card.imageUrl || flipImages[card.word]) && (
+                  <img src={card.imageUrl || flipImages[card.word]} alt={card.word} style={{ width:"100%", maxWidth:260, borderRadius:10, objectFit:"cover", maxHeight:150, display:"block", margin:"0 auto 12px" }} />
+                )}
                 <p style={{ color:"#f1f5f9", fontSize:28, fontWeight:900, margin:"0 0 4px", letterSpacing:1 }}>{card.word}</p>
                 {card.reading && <p style={{ color:C.teal, fontSize:18, margin:"0 0 4px", fontWeight:700 }}>{card.reading}</p>}
                 {card.meaning && <p style={{ color:"#94a3b8", fontSize:12, margin:"0 0 10px" }}>{card.meaning}</p>}
