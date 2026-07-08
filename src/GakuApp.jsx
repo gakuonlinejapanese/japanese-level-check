@@ -84,6 +84,33 @@ const RESOURCES = {
   ],
 };
 
+// Flattened lookup of every known external resource already curated in this app (Tadoku, Imabi,
+// NHK Web Easy, Anki, etc. — from RESOURCES/LEVEL_RESOURCES below), so schedule tasks that mention
+// one of these by name can link straight to it instead of leaving the student to search for it.
+const ALL_RESOURCE_LOOKUP = {};
+function registerResourceLookup(list) {
+  (list || []).forEach(r => { if (r?.name && !ALL_RESOURCE_LOOKUP[r.name]) ALL_RESOURCE_LOOKUP[r.name] = r; });
+}
+function findTaskResourceLink(taskText) {
+  const t = (taskText || "").toLowerCase();
+  const names = Object.keys(ALL_RESOURCE_LOOKUP).sort((a, b) => b.length - a.length);
+  const match = names.find(n => t.includes(n.split(" (")[0].toLowerCase()));
+  return match ? ALL_RESOURCE_LOOKUP[match] : null;
+}
+
+// Maps schedule-task keywords to the in-app tab (and resources sub-tab, if any) that already
+// covers that kind of practice, so a task like "単語復習" can link straight into GAKU's own
+// Vocabulary/Subtitles/Create-From-Content/Conversation-Practice screens.
+const TASK_APP_NAV = [
+  { test: /会話|conversation|speak/i, tab: "resources", resourceSubTab: "conversation", label: "💬 会話プラクティスへ" },
+  { test: /字幕|subtitle/i, tab: "subtitles", label: "📺 字幕帳へ" },
+  { test: /音読|要約|shadowing|シャドーイング|read aloud|summarize/i, tab: "resources", resourceSubTab: "content", label: "✨ コンテンツからへ" },
+  { test: /単語|vocab|anki|flashcard/i, tab: "vocabulary", label: "📚 単語帳へ" },
+];
+function findTaskAppNav(taskText) {
+  return TASK_APP_NAV.find(n => n.test.test(taskText || "")) || null;
+}
+
 // Level-based recommended resources
 const LEVEL_RESOURCES = {
   "Beginner": [
@@ -113,6 +140,9 @@ const LEVEL_RESOURCES = {
     { name:"Sambon Juku", descKey:"resSambonDesc", url:"https://www.youtube.com/@SambonJuku", free:true, levelKey:"resLevelN2N1", skills:{ vocab:5, grammar:5, reading:3, speaking:3, listening:4 } },
   ],
 };
+
+Object.values(RESOURCES).forEach(registerResourceLookup);
+Object.values(LEVEL_RESOURCES).forEach(registerResourceLookup);
 
 const SKILL_LABELS = {
   pronunciation:"🔊 Pronunciation", listening:"👂 Listening", conversation:"💬 Conversation",
@@ -4295,19 +4325,36 @@ function FlashcardView({ onBack }) {
     if (resumeChoice) savePos(selectedFolder, idx);
   }, [idx, selectedFolder, resumeChoice]);
 
-  // Fetch a supporting image for the back of the card (only when flipped, and only once per word)
+  // Fetch a supporting image for the back of the card (only when flipped, and only once per word).
+  // Wikimedia Commons is mostly indexed in English, so searching by the English meaning first tends
+  // to return far more relevant photos than searching by the raw Japanese word. Falls back to the
+  // word itself, and skips flags/logos/maps which otherwise dominate results for short queries.
   useEffect(() => {
     if (!flipped || !card || card.imageUrl || flipImages[card.word]) return;
     let cancelled = false;
     (async () => {
       try {
-        const query = encodeURIComponent(card.imageQuery || card.word);
-        const url = `https://commons.wikimedia.org/w/api.php?action=query&generator=search&gsrnamespace=6&gsrsearch=${query}&gsrlimit=1&prop=imageinfo&iiprop=url&iiurlwidth=400&format=json&origin=*`;
-        const res = await fetch(url);
-        const data = await res.json();
-        const pages = Object.values(data?.query?.pages || {});
-        const thumb = pages.find(p => p?.imageinfo?.[0]?.thumburl && !/svg/i.test(p.imageinfo[0].thumburl))?.imageinfo?.[0]?.thumburl;
-        if (!cancelled && thumb) setFlipImages(prev => ({ ...prev, [card.word]: thumb }));
+        const cleanMeaning = (card.meaning || "")
+          .replace(/\([^)]*\)/g, "")
+          .replace(/^to\s+/i, "")
+          .split(/[,;]/)[0]
+          .trim();
+        const queries = [cleanMeaning, card.imageQuery, card.word].filter(Boolean);
+        const badTitle = /flag|logo|icon|map of|coat of arms|emblem|disambiguation/i;
+        for (const q of queries) {
+          const url = `https://commons.wikimedia.org/w/api.php?action=query&generator=search&gsrnamespace=6&gsrsearch=${encodeURIComponent(q)}&gsrlimit=5&prop=imageinfo&iiprop=url&iiurlwidth=400&format=json&origin=*`;
+          const res = await fetch(url);
+          const data = await res.json();
+          const pages = Object.values(data?.query?.pages || {});
+          const good = pages.find(p => {
+            const t = p?.imageinfo?.[0]?.thumburl;
+            return t && !/svg/i.test(t) && !badTitle.test(p.title || "");
+          });
+          if (good) {
+            if (!cancelled) setFlipImages(prev => ({ ...prev, [card.word]: good.imageinfo[0].thumburl }));
+            return;
+          }
+        }
       } catch {}
     })();
     return () => { cancelled = true; };
@@ -4397,7 +4444,7 @@ Only output the JSON object.` }
                 <p style={{ color:"#f1f5f9", fontSize:44, fontWeight:900, margin:"0 0 6px", letterSpacing:2 }}>{card.word}</p>
                 {showHint && card.reading && <p style={{ color:C.teal, fontSize:20, margin:"0 0 2px", fontWeight:700 }}>{card.reading}</p>}
                 {showHint && card.reading && <p style={{ color:"#67e8f9", fontSize:13, margin:"0 0 6px", fontStyle:"italic" }}>{card.reading.split("").map(c=>{const hMap={"あ":"a","い":"i","う":"u","え":"e","お":"o","か":"ka","き":"ki","く":"ku","け":"ke","こ":"ko","さ":"sa","し":"shi","す":"su","せ":"se","そ":"so","た":"ta","ち":"chi","つ":"tsu","て":"te","と":"to","な":"na","に":"ni","ぬ":"nu","ね":"ne","の":"no","は":"ha","ひ":"hi","ふ":"fu","へ":"he","ほ":"ho","ま":"ma","み":"mi","む":"mu","め":"me","も":"mo","や":"ya","ゆ":"yu","よ":"yo","ら":"ra","り":"ri","る":"ru","れ":"re","ろ":"ro","わ":"wa","を":"wo","ん":"n","が":"ga","ぎ":"gi","ぐ":"gu","げ":"ge","ご":"go","ざ":"za","じ":"ji","ず":"zu","ぜ":"ze","ぞ":"zo","だ":"da","ぢ":"di","づ":"du","で":"de","ど":"do","ば":"ba","び":"bi","ぶ":"bu","べ":"be","ぼ":"bo","ぱ":"pa","ぴ":"pi","ぷ":"pu","ぺ":"pe","ぽ":"po","きゃ":"kya","きゅ":"kyu","きょ":"kyo","しゃ":"sha","しゅ":"shu","しょ":"sho","ちゃ":"cha","ちゅ":"chu","ちょ":"cho","にゃ":"nya","にゅ":"nyu","にょ":"nyo","ひゃ":"hya","ひゅ":"hyu","ひょ":"hyo","みゃ":"mya","みゅ":"myu","みょ":"myo","りゃ":"rya","りゅ":"ryu","りょ":"ryo","ぎゃ":"gya","ぎゅ":"gyu","ぎょ":"gyo","じゃ":"ja","じゅ":"ju","じょ":"jo","びゃ":"bya","びゅ":"byu","びょ":"byo","ぴゃ":"pya","ぴゅ":"pyu","ぴょ":"pyo","っ":"(t)","ー":"-","、":""," ":"","　":""};return hMap[c]||c;}).join("")}</p>}
-                <p style={{ color:"#334155", fontSize:11 }}>タップして確認</p>
+                <p style={{ color:"#ff0844", fontSize:11, fontWeight:700 }}>タップして確認</p>
               </>
             ) : (
               <>
@@ -6578,7 +6625,30 @@ function Dashboard({ form, onEdit }) {
                           <div style={{ width:20, height:20, borderRadius:6, border:`2px solid ${task.done?C.green:C.border}`, background:task.done?C.green:"transparent", display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0, marginTop:1 }}>
                             {task.done && <span style={{ color:"#fff", fontSize:11, fontWeight:900 }}>✓</span>}
                           </div>
-                          <p style={{ color:task.done?"#64748b":"#cbd5e1", fontSize:13, margin:0, lineHeight:1.6, textDecoration:task.done?"line-through":"none" }}>{task.task}</p>
+                          <div style={{ flex:1, minWidth:0 }}>
+                            <p style={{ color:task.done?"#64748b":"#cbd5e1", fontSize:13, margin:0, lineHeight:1.6, textDecoration:task.done?"line-through":"none" }}>{task.task}</p>
+                            {(() => {
+                              const res = findTaskResourceLink(task.task);
+                              const nav = findTaskAppNav(task.task);
+                              if (!res && !nav) return null;
+                              return (
+                                <div style={{ display:"flex", gap:8, flexWrap:"wrap", marginTop:8 }}>
+                                  {res && (
+                                    <a href={res.url} target="_blank" rel="noopener noreferrer" onClick={e=>e.stopPropagation()}
+                                       style={{ fontSize:11, color:C.teal, textDecoration:"none", border:"1px solid rgba(6,182,212,0.3)", borderRadius:8, padding:"3px 8px", background:"rgba(6,182,212,0.06)" }}>
+                                      🔗 {res.name}
+                                    </a>
+                                  )}
+                                  {nav && (
+                                    <button onClick={e=>{ e.stopPropagation(); setTab(nav.tab); if (nav.resourceSubTab) setResourceSubTab(nav.resourceSubTab); }}
+                                       style={{ fontSize:11, color:C.purpleLight, border:"1px solid rgba(139,92,246,0.3)", borderRadius:8, padding:"3px 8px", background:"rgba(139,92,246,0.06)", cursor:"pointer" }}>
+                                      ▶ {nav.label}
+                                    </button>
+                                  )}
+                                </div>
+                              );
+                            })()}
+                          </div>
                         </div>
                       ))}
                     </div>
