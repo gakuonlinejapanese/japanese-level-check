@@ -166,6 +166,14 @@ const UI_TRANSLATIONS = {
     tabResources: "🔗 Resources",
     tabMilestones: "🏆 Milestones",
     tabSubtitles: "🎬 Subtitles",
+    savedSetFound: "You have a saved study set from before.",
+    resumeStudySet: "▶ Resume study set",
+    resetStudySet: "Reset",
+    flashcardNoWords: "No saved words yet. Search and save words first!",
+    flashcardNoWordsInFolder: "No words in this folder",
+    flashcardResumePrompt: "You stopped at {pos} / {total} last time. Continue?",
+    flashcardResume: "▶ Resume",
+    flashcardStartAgain: "🔄 Start Again",
     // Schedule tab
     yourWeeklySchedule: "📅 YOUR WEEKLY STUDY SCHEDULE",
     restDay: "Rest day 🌸",
@@ -382,7 +390,7 @@ const UI_TRANSLATIONS = {
     subtitlesPasteLabel: "Paste subtitles / transcript here",
     subtitlesPastePlaceholder: "Paste plain text or an .srt file's contents — timestamps and cue numbers are removed automatically.",
     subtitlesLoadBtn: "Load transcript",
-    subtitlesCopyrightNote: "🔒 Nothing you paste here is stored — the full text stays only in this browser tab. Only the specific words/phrases you choose to save are added to your Vocabulary Builder.",
+    subtitlesCopyrightNote: "🔒 Text you paste here is saved only in this browser's local storage, so you can resume later — it's never sent to a server. Only the specific words/phrases you choose to save are added to your Vocabulary Builder.",
     subtitlesDefaultFolder: "Subtitles",
     subtitlesLoadNew: "↺ Load a different transcript",
     subtitlesSavedCount: "Saved this session:",
@@ -423,6 +431,14 @@ const UI_TRANSLATIONS = {
     tabResources: "🔗 Ressources",
     tabMilestones: "🏆 Objectifs",
     tabSubtitles: "🎬 Sous-titres",
+    savedSetFound: "Vous avez un ensemble d'étude enregistré précédemment.",
+    resumeStudySet: "▶ Reprendre l'étude",
+    resetStudySet: "Réinitialiser",
+    flashcardNoWords: "Pas encore de mots enregistrés. Cherchez et enregistrez des mots d'abord !",
+    flashcardNoWordsInFolder: "Aucun mot dans ce dossier",
+    flashcardResumePrompt: "Vous vous étiez arrêté à {pos} / {total} la dernière fois. Continuer ?",
+    flashcardResume: "▶ Reprendre",
+    flashcardStartAgain: "🔄 Recommencer",
     yourWeeklySchedule: "📅 VOTRE PLANNING D'ÉTUDE HEBDOMADAIRE",
     restDay: "Jour de repos 🌸",
     monday: "LUNDI", tuesday: "MARDI", wednesday: "MERCREDI",
@@ -594,7 +610,7 @@ const UI_TRANSLATIONS = {
     subtitlesPasteLabel: "Collez les sous-titres / la transcription ici",
     subtitlesPastePlaceholder: "Collez du texte brut ou le contenu d'un fichier .srt — les horodatages et numéros de repère sont supprimés automatiquement.",
     subtitlesLoadBtn: "Charger la transcription",
-    subtitlesCopyrightNote: "🔒 Rien de ce que vous collez ici n'est enregistré — le texte complet reste uniquement dans cet onglet du navigateur. Seuls les mots/phrases que vous choisissez d'enregistrer sont ajoutés à votre Générateur de vocabulaire.",
+    subtitlesCopyrightNote: "🔒 Le texte que vous collez ici est enregistré uniquement dans le stockage local de ce navigateur, afin que vous puissiez reprendre plus tard — il n'est jamais envoyé à un serveur. Seuls les mots/phrases que vous choisissez d'enregistrer sont ajoutés à votre Générateur de vocabulaire.",
     subtitlesDefaultFolder: "Sous-titres",
     subtitlesLoadNew: "↺ Charger une autre transcription",
     subtitlesSavedCount: "Enregistrés cette session :",
@@ -619,6 +635,14 @@ const UI_TRANSLATIONS = {
     tabResources: "🔗 Recursos",
     tabMilestones: "🏆 Metas",
     tabSubtitles: "🎬 Subtítulos",
+    savedSetFound: "Tienes un conjunto de estudio guardado de antes.",
+    resumeStudySet: "▶ Reanudar estudio",
+    resetStudySet: "Restablecer",
+    flashcardNoWords: "Aún no hay palabras guardadas. ¡Busca y guarda palabras primero!",
+    flashcardNoWordsInFolder: "No hay palabras en esta carpeta",
+    flashcardResumePrompt: "La última vez te quedaste en {pos} / {total}. ¿Continuar?",
+    flashcardResume: "▶ Reanudar",
+    flashcardStartAgain: "🔄 Empezar de nuevo",
     yourWeeklySchedule: "📅 TU HORARIO DE ESTUDIO SEMANAL",
     restDay: "Día de descanso 🌸",
     monday: "LUNES", tuesday: "MARTES", wednesday: "MIÉRCOLES",
@@ -790,7 +814,7 @@ const UI_TRANSLATIONS = {
     subtitlesPasteLabel: "Pega los subtítulos / la transcripción aquí",
     subtitlesPastePlaceholder: "Pega texto plano o el contenido de un archivo .srt — las marcas de tiempo y números de escena se eliminan automáticamente.",
     subtitlesLoadBtn: "Cargar transcripción",
-    subtitlesCopyrightNote: "🔒 Nada de lo que pegues aquí se almacena — el texto completo permanece solo en esta pestaña del navegador. Solo las palabras/frases que elijas guardar se añaden a tu Generador de vocabulario.",
+    subtitlesCopyrightNote: "🔒 El texto que pegas aquí se guarda solo en el almacenamiento local de este navegador, para que puedas continuar más tarde — nunca se envía a un servidor. Solo las palabras/frases que elijas guardar se añaden a tu Generador de vocabulario.",
     subtitlesDefaultFolder: "Subtítulos",
     subtitlesLoadNew: "↺ Cargar otra transcripción",
     subtitlesSavedCount: "Guardados en esta sesión:",
@@ -815,6 +839,14 @@ const UI_TRANSLATIONS = {
     tabResources: "🔗 Recursos",
     tabMilestones: "🏆 Metas",
     tabSubtitles: "🎬 Legendas",
+    savedSetFound: "Você tem um conjunto de estudo salvo de antes.",
+    resumeStudySet: "▶ Retomar estudo",
+    resetStudySet: "Redefinir",
+    flashcardNoWords: "Ainda não há palavras salvas. Pesquise e salve palavras primeiro!",
+    flashcardNoWordsInFolder: "Nenhuma palavra nesta pasta",
+    flashcardResumePrompt: "Você parou em {pos} / {total} da última vez. Continuar?",
+    flashcardResume: "▶ Retomar",
+    flashcardStartAgain: "🔄 Começar de novo",
     yourWeeklySchedule: "📅 SUA AGENDA DE ESTUDOS SEMANAL",
     restDay: "Dia de descanso 🌸",
     monday: "SEGUNDA", tuesday: "TERÇA", wednesday: "QUARTA",
@@ -986,7 +1018,7 @@ const UI_TRANSLATIONS = {
     subtitlesPasteLabel: "Cole as legendas / transcrição aqui",
     subtitlesPastePlaceholder: "Cole texto simples ou o conteúdo de um arquivo .srt — carimbos de data/hora e números de sequência são removidos automaticamente.",
     subtitlesLoadBtn: "Carregar transcrição",
-    subtitlesCopyrightNote: "🔒 Nada do que você cola aqui é armazenado — o texto completo permanece apenas nesta aba do navegador. Somente as palavras/frases que você escolher salvar são adicionadas ao seu Criador de Vocabulário.",
+    subtitlesCopyrightNote: "🔒 O texto que você cola aqui é salvo apenas no armazenamento local deste navegador, para que você possa continuar depois — nunca é enviado a um servidor. Somente as palavras/frases que você escolher salvar são adicionadas ao seu Criador de Vocabulário.",
     subtitlesDefaultFolder: "Legendas",
     subtitlesLoadNew: "↺ Carregar outra transcrição",
     subtitlesSavedCount: "Salvos nesta sessão:",
@@ -1011,6 +1043,14 @@ const UI_TRANSLATIONS = {
     tabResources: "🔗 Ressourcen",
     tabMilestones: "🏆 Meilensteine",
     tabSubtitles: "🎬 Untertitel",
+    savedSetFound: "Du hast ein gespeichertes Lernset von vorher.",
+    resumeStudySet: "▶ Lernset fortsetzen",
+    resetStudySet: "Zurücksetzen",
+    flashcardNoWords: "Noch keine gespeicherten Wörter. Suche und speichere zuerst Wörter!",
+    flashcardNoWordsInFolder: "Keine Wörter in diesem Ordner",
+    flashcardResumePrompt: "Du hast beim letzten Mal bei {pos} / {total} aufgehört. Fortsetzen?",
+    flashcardResume: "▶ Fortsetzen",
+    flashcardStartAgain: "🔄 Neu beginnen",
     yourWeeklySchedule: "📅 IHR WÖCHENTLICHER LERNPLAN",
     restDay: "Ruhetag 🌸",
     monday: "MONTAG", tuesday: "DIENSTAG", wednesday: "MITTWOCH",
@@ -1182,7 +1222,7 @@ const UI_TRANSLATIONS = {
     subtitlesPasteLabel: "Untertitel / Transkript hier einfügen",
     subtitlesPastePlaceholder: "Füge reinen Text oder den Inhalt einer .srt-Datei ein — Zeitstempel und Nummerierungen werden automatisch entfernt.",
     subtitlesLoadBtn: "Transkript laden",
-    subtitlesCopyrightNote: "🔒 Nichts, was du hier einfügst, wird gespeichert — der vollständige Text bleibt nur in diesem Browser-Tab. Nur die Wörter/Phrasen, die du zum Speichern auswählst, werden zu deinem Vokabel-Builder hinzugefügt.",
+    subtitlesCopyrightNote: "🔒 Der hier eingefügte Text wird nur im lokalen Speicher dieses Browsers gespeichert, damit du später fortfahren kannst — er wird nie an einen Server gesendet. Nur die Wörter/Phrasen, die du zum Speichern auswählst, werden zu deinem Vokabel-Builder hinzugefügt.",
     subtitlesDefaultFolder: "Untertitel",
     subtitlesLoadNew: "↺ Ein anderes Transkript laden",
     subtitlesSavedCount: "In dieser Sitzung gespeichert:",
@@ -1207,6 +1247,14 @@ const UI_TRANSLATIONS = {
     tabResources: "🔗 Risorse",
     tabMilestones: "🏆 Obiettivi",
     tabSubtitles: "🎬 Sottotitoli",
+    savedSetFound: "Hai un set di studio salvato da prima.",
+    resumeStudySet: "▶ Riprendi studio",
+    resetStudySet: "Reimposta",
+    flashcardNoWords: "Nessuna parola salvata ancora. Cerca e salva prima delle parole!",
+    flashcardNoWordsInFolder: "Nessuna parola in questa cartella",
+    flashcardResumePrompt: "L'ultima volta ti sei fermato a {pos} / {total}. Continuare?",
+    flashcardResume: "▶ Riprendi",
+    flashcardStartAgain: "🔄 Ricomincia",
     yourWeeklySchedule: "📅 IL TUO PROGRAMMA DI STUDIO SETTIMANALE",
     restDay: "Giorno di riposo 🌸",
     monday: "LUNEDÌ", tuesday: "MARTEDÌ", wednesday: "MERCOLEDÌ",
@@ -1378,7 +1426,7 @@ const UI_TRANSLATIONS = {
     subtitlesPasteLabel: "Incolla qui i sottotitoli / la trascrizione",
     subtitlesPastePlaceholder: "Incolla testo semplice o il contenuto di un file .srt — timestamp e numeri di sequenza vengono rimossi automaticamente.",
     subtitlesLoadBtn: "Carica trascrizione",
-    subtitlesCopyrightNote: "🔒 Nulla di ciò che incolli qui viene memorizzato — il testo completo resta solo in questa scheda del browser. Solo le parole/frasi che scegli di salvare vengono aggiunte al tuo Costruttore di vocabolario.",
+    subtitlesCopyrightNote: "🔒 Il testo che incolli qui viene salvato solo nella memoria locale di questo browser, così puoi riprendere più tardi — non viene mai inviato a un server. Solo le parole/frasi che scegli di salvare vengono aggiunte al tuo Costruttore di vocabolario.",
     subtitlesDefaultFolder: "Sottotitoli",
     subtitlesLoadNew: "↺ Carica un'altra trascrizione",
     subtitlesSavedCount: "Salvati in questa sessione:",
@@ -1403,6 +1451,14 @@ const UI_TRANSLATIONS = {
     tabResources: "🔗 资源",
     tabMilestones: "🏆 里程碑",
     tabSubtitles: "🎬 字幕",
+    savedSetFound: "你有一个之前保存的学习内容。",
+    resumeStudySet: "▶ 继续学习",
+    resetStudySet: "重置",
+    flashcardNoWords: "还没有保存的单词。请先搜索并保存单词！",
+    flashcardNoWordsInFolder: "此文件夹中没有单词",
+    flashcardResumePrompt: "上次进行到 {pos} / {total}。要继续吗？",
+    flashcardResume: "▶ 继续",
+    flashcardStartAgain: "🔄 重新开始",
     yourWeeklySchedule: "📅 你的每周学习日程",
     restDay: "休息日 🌸",
     monday: "周一", tuesday: "周二", wednesday: "周三",
@@ -1574,7 +1630,7 @@ const UI_TRANSLATIONS = {
     subtitlesPasteLabel: "在此粘贴字幕/文字记录",
     subtitlesPastePlaceholder: "粘贴纯文本或 .srt 文件内容——时间戳和序号会自动移除。",
     subtitlesLoadBtn: "加载文字记录",
-    subtitlesCopyrightNote: "🔒 你粘贴的内容不会被存储——完整文本只保留在此浏览器标签页中。只有你选择保存的具体单词/短语会被添加到你的词汇构建器。",
+    subtitlesCopyrightNote: "🔒 你粘贴的文本仅保存在此浏览器的本地存储中，以便稍后继续——绝不会发送到服务器。只有你选择保存的单词/短语会被添加到你的词汇构建器。",
     subtitlesDefaultFolder: "字幕",
     subtitlesLoadNew: "↺ 加载其他文字记录",
     subtitlesSavedCount: "本次已保存：",
@@ -1599,6 +1655,14 @@ const UI_TRANSLATIONS = {
     tabResources: "🔗 資源",
     tabMilestones: "🏆 里程碑",
     tabSubtitles: "🎬 字幕",
+    savedSetFound: "你有一個之前保存的學習內容。",
+    resumeStudySet: "▶ 繼續學習",
+    resetStudySet: "重置",
+    flashcardNoWords: "尚未保存任何單詞。請先搜尋並儲存單詞！",
+    flashcardNoWordsInFolder: "此資料夾中沒有單詞",
+    flashcardResumePrompt: "上次進行到 {pos} / {total}。要繼續嗎？",
+    flashcardResume: "▶ 繼續",
+    flashcardStartAgain: "🔄 重新開始",
     yourWeeklySchedule: "📅 你的每週學習日程",
     restDay: "休息日 🌸",
     monday: "週一", tuesday: "週二", wednesday: "週三",
@@ -1770,7 +1834,7 @@ const UI_TRANSLATIONS = {
     subtitlesPasteLabel: "在此貼上字幕/逐字稿",
     subtitlesPastePlaceholder: "貼上純文字或 .srt 檔案內容——時間戳記與序號會自動移除。",
     subtitlesLoadBtn: "載入逐字稿",
-    subtitlesCopyrightNote: "🔒 你貼上的內容不會被儲存——完整文字只保留在此瀏覽器分頁中。只有你選擇儲存的特定單詞/片語會被加入你的詞彙建構器。",
+    subtitlesCopyrightNote: "🔒 你貼上的文字僅保存在此瀏覽器的本機儲存空間中，以便稍後繼續——絕不會傳送到伺服器。只有你選擇儲存的特定單詞/片語會被加入你的詞彙建構器。",
     subtitlesDefaultFolder: "字幕",
     subtitlesLoadNew: "↺ 載入其他逐字稿",
     subtitlesSavedCount: "本次已儲存：",
@@ -1795,6 +1859,14 @@ const UI_TRANSLATIONS = {
     tabResources: "🔗 자료",
     tabMilestones: "🏆 목표",
     tabSubtitles: "🎬 자막",
+    savedSetFound: "이전에 저장된 학습 세트가 있습니다.",
+    resumeStudySet: "▶ 학습 재개",
+    resetStudySet: "초기화",
+    flashcardNoWords: "아직 저장된 단어가 없습니다. 먼저 단어를 검색하고 저장하세요!",
+    flashcardNoWordsInFolder: "이 폴더에 단어가 없습니다",
+    flashcardResumePrompt: "지난번에 {pos} / {total}에서 멈췄습니다. 계속하시겠습니까?",
+    flashcardResume: "▶ 계속하기",
+    flashcardStartAgain: "🔄 처음부터",
     yourWeeklySchedule: "📅 나의 주간 학습 일정",
     restDay: "휴식일 🌸",
     monday: "월요일", tuesday: "화요일", wednesday: "수요일",
@@ -1966,7 +2038,7 @@ const UI_TRANSLATIONS = {
     subtitlesPasteLabel: "여기에 자막/스크립트를 붙여넣으세요",
     subtitlesPastePlaceholder: "일반 텍스트나 .srt 파일 내용을 붙여넣으세요 — 타임스탬프와 큐 번호는 자동으로 제거됩니다.",
     subtitlesLoadBtn: "스크립트 불러오기",
-    subtitlesCopyrightNote: "🔒 여기에 붙여넣은 내용은 저장되지 않습니다 — 전체 텍스트는 이 브라우저 탭에만 남습니다. 저장하기로 선택한 특정 단어/구문만 단어장에 추가됩니다.",
+    subtitlesCopyrightNote: "🔒 여기에 붙여넣은 텍스트는 나중에 이어서 학습할 수 있도록 이 브라우저의 로컬 저장소에만 저장되며 — 서버로 전송되지 않습니다. 저장하기로 선택한 특정 단어/구문만 단어장에 추가됩니다.",
     subtitlesDefaultFolder: "자막",
     subtitlesLoadNew: "↺ 다른 스크립트 불러오기",
     subtitlesSavedCount: "이번 세션에 저장됨:",
@@ -1991,6 +2063,14 @@ const UI_TRANSLATIONS = {
     tabResources: "🔗 แหล่งเรียนรู้",
     tabMilestones: "🏆 เป้าหมาย",
     tabSubtitles: "🎬 คำบรรยาย",
+    savedSetFound: "คุณมีชุดการเรียนที่บันทึกไว้ก่อนหน้านี้",
+    resumeStudySet: "▶ ดำเนินการต่อ",
+    resetStudySet: "รีเซ็ต",
+    flashcardNoWords: "ยังไม่มีคำศัพท์ที่บันทึกไว้ ค้นหาและบันทึกคำศัพท์ก่อน!",
+    flashcardNoWordsInFolder: "ไม่มีคำศัพท์ในโฟลเดอร์นี้",
+    flashcardResumePrompt: "ครั้งที่แล้วคุณหยุดที่ {pos} / {total} ต้องการดำเนินการต่อหรือไม่?",
+    flashcardResume: "▶ ดำเนินการต่อ",
+    flashcardStartAgain: "🔄 เริ่มใหม่",
     yourWeeklySchedule: "📅 ตารางเรียนรายสัปดาห์ของคุณ",
     restDay: "วันพัก 🌸",
     monday: "จันทร์", tuesday: "อังคาร", wednesday: "พุธ",
@@ -2162,7 +2242,7 @@ const UI_TRANSLATIONS = {
     subtitlesPasteLabel: "วางคำบรรยาย/บทถอดความที่นี่",
     subtitlesPastePlaceholder: "วางข้อความธรรมดาหรือเนื้อหาไฟล์ .srt — การประทับเวลาและหมายเลขคิวจะถูกลบออกโดยอัตโนมัติ",
     subtitlesLoadBtn: "โหลดบทถอดความ",
-    subtitlesCopyrightNote: "🔒 สิ่งที่คุณวางที่นี่จะไม่ถูกจัดเก็บ — ข้อความทั้งหมดจะอยู่ในแท็บเบราว์เซอร์นี้เท่านั้น เฉพาะคำ/วลีที่คุณเลือกบันทึกเท่านั้นที่จะถูกเพิ่มลงในตัวสร้างคำศัพท์ของคุณ",
+    subtitlesCopyrightNote: "🔒 ข้อความที่คุณวางที่นี่จะถูกบันทึกไว้ในที่จัดเก็บข้อมูลท้องถิ่นของเบราว์เซอร์นี้เท่านั้น เพื่อให้คุณกลับมาเรียนต่อได้ — จะไม่ถูกส่งไปยังเซิร์ฟเวอร์ใดๆ เฉพาะคำ/วลีที่คุณเลือกบันทึกเท่านั้นที่จะถูกเพิ่มลงในตัวสร้างคำศัพท์ของคุณ",
     subtitlesDefaultFolder: "คำบรรยาย",
     subtitlesLoadNew: "↺ โหลดบทถอดความอื่น",
     subtitlesSavedCount: "บันทึกแล้วในเซสชันนี้:",
@@ -2187,6 +2267,14 @@ const UI_TRANSLATIONS = {
     tabResources: "🔗 Sumber",
     tabMilestones: "🏆 Pencapaian",
     tabSubtitles: "🎬 Sari Kata",
+    savedSetFound: "Anda mempunyai set pembelajaran yang disimpan sebelum ini.",
+    resumeStudySet: "▶ Sambung semula",
+    resetStudySet: "Set semula",
+    flashcardNoWords: "Belum ada perkataan disimpan. Cari dan simpan perkataan dahulu!",
+    flashcardNoWordsInFolder: "Tiada perkataan dalam folder ini",
+    flashcardResumePrompt: "Anda berhenti di {pos} / {total} kali terakhir. Teruskan?",
+    flashcardResume: "▶ Sambung semula",
+    flashcardStartAgain: "🔄 Mula semula",
     yourWeeklySchedule: "📅 JADUAL BELAJAR MINGGUAN ANDA",
     restDay: "Hari rehat 🌸",
     monday: "ISNIN", tuesday: "SELASA", wednesday: "RABU",
@@ -2358,7 +2446,7 @@ const UI_TRANSLATIONS = {
     subtitlesPasteLabel: "Tampal sari kata / transkrip di sini",
     subtitlesPastePlaceholder: "Tampal teks biasa atau kandungan fail .srt — cap masa dan nombor isyarat akan dibuang secara automatik.",
     subtitlesLoadBtn: "Muatkan transkrip",
-    subtitlesCopyrightNote: "🔒 Apa-apa yang anda tampal di sini tidak disimpan — teks penuh kekal hanya dalam tab pelayar ini. Hanya perkataan/frasa tertentu yang anda pilih untuk disimpan akan ditambah ke Pembina Kosa Kata anda.",
+    subtitlesCopyrightNote: "🔒 Teks yang anda tampal di sini hanya disimpan dalam storan tempatan pelayar ini, supaya anda boleh menyambung semula kemudian — ia tidak pernah dihantar ke pelayan. Hanya perkataan/frasa tertentu yang anda pilih untuk disimpan akan ditambah ke Pembina Kosa Kata anda.",
     subtitlesDefaultFolder: "Sari Kata",
     subtitlesLoadNew: "↺ Muatkan transkrip lain",
     subtitlesSavedCount: "Disimpan dalam sesi ini:",
@@ -2383,6 +2471,14 @@ const UI_TRANSLATIONS = {
     tabResources: "🔗 Sumber",
     tabMilestones: "🏆 Pencapaian",
     tabSubtitles: "🎬 Subtitle",
+    savedSetFound: "Anda memiliki set belajar yang tersimpan sebelumnya.",
+    resumeStudySet: "▶ Lanjutkan belajar",
+    resetStudySet: "Atur ulang",
+    flashcardNoWords: "Belum ada kata yang disimpan. Cari dan simpan kata terlebih dahulu!",
+    flashcardNoWordsInFolder: "Tidak ada kata di folder ini",
+    flashcardResumePrompt: "Terakhir kali Anda berhenti di {pos} / {total}. Lanjutkan?",
+    flashcardResume: "▶ Lanjutkan",
+    flashcardStartAgain: "🔄 Mulai lagi",
     yourWeeklySchedule: "📅 JADWAL BELAJAR MINGGUAN ANDA",
     restDay: "Hari istirahat 🌸",
     monday: "SENIN", tuesday: "SELASA", wednesday: "RABU",
@@ -2554,7 +2650,7 @@ const UI_TRANSLATIONS = {
     subtitlesPasteLabel: "Tempel subtitle / transkrip di sini",
     subtitlesPastePlaceholder: "Tempel teks biasa atau isi file .srt — stempel waktu dan nomor urut akan dihapus otomatis.",
     subtitlesLoadBtn: "Muat transkrip",
-    subtitlesCopyrightNote: "🔒 Apa pun yang Anda tempel di sini tidak disimpan — teks lengkap hanya tetap ada di tab browser ini. Hanya kata/frasa tertentu yang Anda pilih untuk disimpan yang akan ditambahkan ke Pembangun Kosakata Anda.",
+    subtitlesCopyrightNote: "🔒 Teks yang Anda tempel di sini hanya disimpan di penyimpanan lokal browser ini, agar Anda bisa melanjutkan nanti — tidak pernah dikirim ke server. Hanya kata/frasa tertentu yang Anda pilih untuk disimpan yang akan ditambahkan ke Pembangun Kosakata Anda.",
     subtitlesDefaultFolder: "Subtitle",
     subtitlesLoadNew: "↺ Muat transkrip lain",
     subtitlesSavedCount: "Disimpan dalam sesi ini:",
@@ -2579,6 +2675,14 @@ const UI_TRANSLATIONS = {
     tabResources: "🔗 Tài liệu",
     tabMilestones: "🏆 Mục tiêu",
     tabSubtitles: "🎬 Phụ đề",
+    savedSetFound: "Bạn có một bộ học đã lưu từ trước.",
+    resumeStudySet: "▶ Tiếp tục học",
+    resetStudySet: "Đặt lại",
+    flashcardNoWords: "Chưa có từ nào được lưu. Hãy tìm kiếm và lưu từ trước!",
+    flashcardNoWordsInFolder: "Không có từ nào trong thư mục này",
+    flashcardResumePrompt: "Lần trước bạn dừng ở {pos} / {total}. Tiếp tục chứ?",
+    flashcardResume: "▶ Tiếp tục",
+    flashcardStartAgain: "🔄 Bắt đầu lại",
     yourWeeklySchedule: "📅 LỊCH HỌC HÀNG TUẦN CỦA BẠN",
     restDay: "Ngày nghỉ 🌸",
     monday: "THỨ HAI", tuesday: "THỨ BA", wednesday: "THỨ TƯ",
@@ -2750,7 +2854,7 @@ const UI_TRANSLATIONS = {
     subtitlesPasteLabel: "Dán phụ đề / bản ghi lời thoại vào đây",
     subtitlesPastePlaceholder: "Dán văn bản thuần túy hoặc nội dung tệp .srt — dấu thời gian và số thứ tự sẽ tự động bị xóa.",
     subtitlesLoadBtn: "Tải bản ghi lời thoại",
-    subtitlesCopyrightNote: "🔒 Bất cứ điều gì bạn dán ở đây sẽ không được lưu trữ — toàn bộ văn bản chỉ tồn tại trong tab trình duyệt này. Chỉ những từ/cụm từ cụ thể bạn chọn lưu mới được thêm vào Trình xây dựng từ vựng của bạn.",
+    subtitlesCopyrightNote: "🔒 Văn bản bạn dán ở đây chỉ được lưu trong bộ nhớ cục bộ của trình duyệt này để bạn có thể tiếp tục sau — không bao giờ được gửi đến máy chủ. Chỉ những từ/cụm từ cụ thể bạn chọn lưu mới được thêm vào Trình xây dựng từ vựng của bạn.",
     subtitlesDefaultFolder: "Phụ đề",
     subtitlesLoadNew: "↺ Tải bản ghi lời thoại khác",
     subtitlesSavedCount: "Đã lưu trong phiên này:",
@@ -2775,6 +2879,14 @@ const UI_TRANSLATIONS = {
     tabResources: "🔗 संसाधन",
     tabMilestones: "🏆 लक्ष्य",
     tabSubtitles: "🎬 सबटाइटल",
+    savedSetFound: "आपके पास पहले से सहेजा गया अध्ययन सेट है।",
+    resumeStudySet: "▶ अध्ययन जारी रखें",
+    resetStudySet: "रीसेट करें",
+    flashcardNoWords: "अभी तक कोई सहेजा गया शब्द नहीं है। पहले शब्द खोजें और सहेजें!",
+    flashcardNoWordsInFolder: "इस फ़ोल्डर में कोई शब्द नहीं है",
+    flashcardResumePrompt: "पिछली बार आप {pos} / {total} पर रुके थे। जारी रखें?",
+    flashcardResume: "▶ जारी रखें",
+    flashcardStartAgain: "🔄 फिर से शुरू करें",
     yourWeeklySchedule: "📅 आपकी साप्ताहिक अध्ययन समय-सारणी",
     restDay: "आराम का दिन 🌸",
     monday: "सोमवार", tuesday: "मंगलवार", wednesday: "बुधवार",
@@ -2946,7 +3058,7 @@ const UI_TRANSLATIONS = {
     subtitlesPasteLabel: "यहाँ सबटाइटल / ट्रांसक्रिप्ट पेस्ट करें",
     subtitlesPastePlaceholder: "सादा टेक्स्ट या .srt फ़ाइल की सामग्री पेस्ट करें — टाइमस्टैम्प और क्यू नंबर स्वचालित रूप से हटा दिए जाते हैं।",
     subtitlesLoadBtn: "ट्रांसक्रिप्ट लोड करें",
-    subtitlesCopyrightNote: "🔒 आप यहाँ जो कुछ भी पेस्ट करते हैं वह संग्रहीत नहीं होता — पूरा टेक्स्ट केवल इस ब्राउज़र टैब में रहता है। केवल वे विशिष्ट शब्द/वाक्यांश जिन्हें आप सहेजना चुनते हैं, आपके वोकैबुलरी बिल्डर में जोड़े जाते हैं।",
+    subtitlesCopyrightNote: "🔒 आप यहाँ जो टेक्स्ट पेस्ट करते हैं वह केवल इस ब्राउज़र के लोकल स्टोरेज में सहेजा जाता है, ताकि आप बाद में जारी रख सकें — यह कभी भी सर्वर पर नहीं भेजा जाता। केवल वे विशिष्ट शब्द/वाक्यांश जिन्हें आप सहेजना चुनते हैं, आपके वोकैबुलरी बिल्डर में जोड़े जाते हैं।",
     subtitlesDefaultFolder: "सबटाइटल",
     subtitlesLoadNew: "↺ कोई अन्य ट्रांसक्रिप्ट लोड करें",
     subtitlesSavedCount: "इस सत्र में सहेजे गए:",
@@ -2971,6 +3083,14 @@ const UI_TRANSLATIONS = {
     tabResources: "🔗 リソース",
     tabMilestones: "🏆 目標",
     tabSubtitles: "🎬 字幕帳",
+    savedSetFound: "前回保存した学習セットがあります。",
+    resumeStudySet: "▶ 続きから再開",
+    resetStudySet: "リセット",
+    flashcardNoWords: "保存された単語がまだありません。まず単語を検索して保存してください！",
+    flashcardNoWordsInFolder: "このフォルダに単語がありません",
+    flashcardResumePrompt: "前回 {pos} / {total} で中断しています。続けますか？",
+    flashcardResume: "▶ 続きから再開",
+    flashcardStartAgain: "🔄 最初から",
     yourWeeklySchedule: "📅 あなたの週間学習スケジュール",
     restDay: "休息日 🌸",
     monday: "月曜日", tuesday: "火曜日", wednesday: "水曜日",
@@ -3142,7 +3262,7 @@ const UI_TRANSLATIONS = {
     subtitlesPasteLabel: "ここに字幕／トランスクリプトを貼り付けてください",
     subtitlesPastePlaceholder: "プレーンテキストまたは.srtファイルの内容を貼り付けてください — タイムスタンプと通し番号は自動的に削除されます。",
     subtitlesLoadBtn: "トランスクリプトを読み込む",
-    subtitlesCopyrightNote: "🔒 ここに貼り付けた内容は保存されません — 全文はこのブラウザタブ内にのみ残ります。保存を選択した特定の単語／フレーズのみが単語ビルダーに追加されます。",
+    subtitlesCopyrightNote: "🔒 ここに貼り付けたテキストは、後で再開できるようこのブラウザのローカルストレージにのみ保存され、サーバーに送信されることはありません。保存を選択した特定の単語／フレーズのみが単語ビルダーに追加されます。",
     subtitlesDefaultFolder: "字幕",
     subtitlesLoadNew: "↺ 別のトランスクリプトを読み込む",
     subtitlesSavedCount: "今回のセッションで保存済み：",
@@ -3167,6 +3287,14 @@ const UI_TRANSLATIONS = {
     tabResources: "🔗 Kaynaklar",
     tabMilestones: "🏆 Hedefler",
     tabSubtitles: "🎬 Altyazı",
+    savedSetFound: "Daha önce kaydedilmiş bir çalışma setiniz var.",
+    resumeStudySet: "▶ Çalışmaya devam et",
+    resetStudySet: "Sıfırla",
+    flashcardNoWords: "Henüz kaydedilmiş kelime yok. Önce kelime arayıp kaydedin!",
+    flashcardNoWordsInFolder: "Bu klasörde kelime yok",
+    flashcardResumePrompt: "Son seferinde {pos} / {total} noktasında durdunuz. Devam edilsin mi?",
+    flashcardResume: "▶ Devam et",
+    flashcardStartAgain: "🔄 Baştan başla",
     yourWeeklySchedule: "📅 HAFTALIK ÇALIŞMA PROGRAMINIZ",
     restDay: "Dinlenme günü 🌸",
     monday: "PAZARTESİ", tuesday: "SALI", wednesday: "ÇARŞAMBA",
@@ -3338,7 +3466,7 @@ const UI_TRANSLATIONS = {
     subtitlesPasteLabel: "Altyazıyı / metni buraya yapıştırın",
     subtitlesPastePlaceholder: "Düz metin veya bir .srt dosyasının içeriğini yapıştırın — zaman damgaları ve sıra numaraları otomatik olarak kaldırılır.",
     subtitlesLoadBtn: "Metni yükle",
-    subtitlesCopyrightNote: "🔒 Buraya yapıştırdığınız hiçbir şey saklanmaz — tam metin yalnızca bu tarayıcı sekmesinde kalır. Yalnızca kaydetmeyi seçtiğiniz belirli kelimeler/ifadeler Kelime Oluşturucunuza eklenir.",
+    subtitlesCopyrightNote: "🔒 Buraya yapıştırdığınız metin, daha sonra devam edebilmeniz için yalnızca bu tarayıcının yerel deposunda saklanır — asla bir sunucuya gönderilmez. Yalnızca kaydetmeyi seçtiğiniz belirli kelimeler/ifadeler Kelime Oluşturucunuza eklenir.",
     subtitlesDefaultFolder: "Altyazı",
     subtitlesLoadNew: "↺ Başka bir metin yükle",
     subtitlesSavedCount: "Bu oturumda kaydedilenler:",
@@ -3363,6 +3491,14 @@ const UI_TRANSLATIONS = {
     tabResources: "🔗 स्रोतहरू",
     tabMilestones: "🏆 लक्ष्यहरू",
     tabSubtitles: "🎬 सबटाइटल",
+    savedSetFound: "तपाईंसँग पहिलेको सुरक्षित अध्ययन सेट छ।",
+    resumeStudySet: "▶ अध्ययन जारी राख्नुहोस्",
+    resetStudySet: "रिसेट गर्नुहोस्",
+    flashcardNoWords: "अहिलेसम्म कुनै सुरक्षित शब्दहरू छैनन्। पहिले शब्दहरू खोज्नुहोस् र सुरक्षित गर्नुहोस्!",
+    flashcardNoWordsInFolder: "यो फोल्डरमा कुनै शब्द छैन",
+    flashcardResumePrompt: "पछिल्लो पटक तपाईं {pos} / {total} मा रोकिनुभयो। जारी राख्ने?",
+    flashcardResume: "▶ जारी राख्नुहोस्",
+    flashcardStartAgain: "🔄 फेरि सुरु गर्नुहोस्",
     yourWeeklySchedule: "📅 तपाईंको साप्ताहिक अध्ययन तालिका",
     restDay: "विश्राम दिन 🌸",
     monday: "सोमबार", tuesday: "मंगलबार", wednesday: "बुधबार",
@@ -3534,7 +3670,7 @@ const UI_TRANSLATIONS = {
     subtitlesPasteLabel: "यहाँ सबटाइटल / ट्रान्सक्रिप्ट टाँस्नुहोस्",
     subtitlesPastePlaceholder: "सादा पाठ वा .srt फाइलको सामग्री टाँस्नुहोस् — समय-मुद्रा र क्यू नम्बरहरू स्वतः हटाइनेछन्।",
     subtitlesLoadBtn: "ट्रान्सक्रिप्ट लोड गर्नुहोस्",
-    subtitlesCopyrightNote: "🔒 यहाँ टाँसेको कुनै पनि कुरा भण्डारण गरिँदैन — पूरा पाठ यो ब्राउजर ट्याबमा मात्र रहन्छ। तपाईंले सुरक्षित गर्न रोजेका विशिष्ट शब्द/वाक्यांशहरू मात्र तपाईंको शब्दावली निर्माता मा थपिन्छन्।",
+    subtitlesCopyrightNote: "🔒 तपाईंले यहाँ टाँसेको पाठ पछि जारी राख्न सकिने गरी यो ब्राउजरको लोकल स्टोरेजमा मात्र सुरक्षित हुन्छ — यो कहिल्यै सर्भरमा पठाइँदैन। तपाईंले सुरक्षित गर्न रोजेका विशिष्ट शब्द/वाक्यांशहरू मात्र तपाईंको शब्दावली निर्माता मा थपिन्छन्।",
     subtitlesDefaultFolder: "सबटाइटल",
     subtitlesLoadNew: "↺ फरक ट्रान्सक्रिप्ट लोड गर्नुहोस्",
     subtitlesSavedCount: "यस सत्रमा सुरक्षित गरिएको:",
@@ -3559,6 +3695,14 @@ const UI_TRANSLATIONS = {
     tabResources: "🔗 Mga Resources",
     tabMilestones: "🏆 Mga Layunin",
     tabSubtitles: "🎬 Subtitle",
+    savedSetFound: "Mayroon kang naka-save na study set mula noon.",
+    resumeStudySet: "▶ Ipagpatuloy ang pag-aaral",
+    resetStudySet: "I-reset",
+    flashcardNoWords: "Wala pang naka-save na salita. Maghanap at mag-save muna ng mga salita!",
+    flashcardNoWordsInFolder: "Walang salita sa folder na ito",
+    flashcardResumePrompt: "Huminto ka sa {pos} / {total} noong huling beses. Ituloy?",
+    flashcardResume: "▶ Ipagpatuloy",
+    flashcardStartAgain: "🔄 Magsimula ulit",
     yourWeeklySchedule: "📅 ANG IYONG LINGGUHANG ISKEDYUL NG PAG-AARAL",
     restDay: "Araw ng pahinga 🌸",
     monday: "LUNES", tuesday: "MARTES", wednesday: "MIYERKULES",
@@ -3730,7 +3874,7 @@ const UI_TRANSLATIONS = {
     subtitlesPasteLabel: "I-paste ang subtitle / transcript dito",
     subtitlesPastePlaceholder: "I-paste ang plain text o ang laman ng isang .srt file — awtomatikong aalisin ang mga timestamp at cue number.",
     subtitlesLoadBtn: "I-load ang transcript",
-    subtitlesCopyrightNote: "🔒 Walang ini-paste dito ang naka-store — nananatili lamang ang buong teksto sa browser tab na ito. Ang mga partikular na salita/parirala lamang na pinili mong i-save ang idadagdag sa iyong Vocabulary Builder.",
+    subtitlesCopyrightNote: "🔒 Ang tekstong ini-paste mo dito ay naka-save lamang sa local storage ng browser na ito, para magpatuloy ka sa susunod — hindi ito ipinapadala sa anumang server. Ang mga partikular na salita/parirala lamang na pinili mong i-save ang idadagdag sa iyong Vocabulary Builder.",
     subtitlesDefaultFolder: "Subtitle",
     subtitlesLoadNew: "↺ Mag-load ng ibang transcript",
     subtitlesSavedCount: "Na-save sa session na ito:",
@@ -4285,7 +4429,8 @@ function WordDetailCard({ card: cardProp, onSave, onBack, form, prefLang }) {
 }
 
 // ─── FLASHCARD VIEW ────────────────────────────────────────────────────────────
-function FlashcardView({ onBack }) {
+function FlashcardView({ form, onBack }) {
+  const T = useUITranslations(form?.preferredLang || "English");
   const [allData, setAllData] = useState(() => loadVocabData());
   const [selectedFolder, setSelectedFolder] = useState("すべて");
   const [idx, setIdx] = useState(0);
@@ -4405,7 +4550,7 @@ Only output the JSON object.` }
       <button onClick={onBack} style={{ background:"none", border:"none", color:"#64748b", fontSize:13, cursor:"pointer", padding:0, marginBottom:14 }}>← Back</button>
       <div style={{ ...S.card, textAlign:"center", padding:"40px 20px" }}>
         <p style={{ color:"#64748b", fontSize:32, margin:"0 0 12px" }}>📭</p>
-        <p style={{ color:"#94a3b8", fontSize:14 }}>No saved words yet. Search and save words first!</p>
+        <p style={{ color:"#94a3b8", fontSize:14 }}>{T.flashcardNoWords || "No saved words yet. Search and save words first!"}</p>
       </div>
     </div>
   );
@@ -4424,16 +4569,16 @@ Only output the JSON object.` }
       {resumeChoice === null ? (
         <div style={{ ...S.card, textAlign:"center", padding:"32px 20px" }}>
           <p style={{ color:"#94a3b8", fontSize:13, marginBottom:18 }}>
-            前回 {getSavedPos(selectedFolder)+1} / {filteredCards.length} で中断しています。続けますか？
+            {(T.flashcardResumePrompt || "You stopped at {pos} / {total} last time. Continue?").replace("{pos}", getSavedPos(selectedFolder)+1).replace("{total}", filteredCards.length)}
           </p>
           <div style={{ display:"flex", gap:10, justifyContent:"center" }}>
-            <button onClick={()=>{ setIdx(getSavedPos(selectedFolder)); setResumeChoice("resume"); }} style={{ ...S.btn, background:`linear-gradient(135deg,${C.teal},#0891b2)`, color:"#fff" }}>▶ Resume</button>
-            <button onClick={()=>{ setIdx(0); savePos(selectedFolder, 0); setResumeChoice("restart"); }} style={{ ...S.btn, background:C.card, border:`1px solid ${C.border}`, color:"#94a3b8" }}>🔄 Start Again</button>
+            <button onClick={()=>{ setIdx(getSavedPos(selectedFolder)); setResumeChoice("resume"); }} style={{ ...S.btn, background:`linear-gradient(135deg,${C.teal},#0891b2)`, color:"#fff" }}>{T.flashcardResume || "▶ Resume"}</button>
+            <button onClick={()=>{ setIdx(0); savePos(selectedFolder, 0); setResumeChoice("restart"); }} style={{ ...S.btn, background:C.card, border:`1px solid ${C.border}`, color:"#94a3b8" }}>{T.flashcardStartAgain || "🔄 Start Again"}</button>
           </div>
         </div>
       ) : !card ? (
         <div style={{ ...S.card, textAlign:"center", padding:"40px 20px" }}>
-          <p style={{ color:"#94a3b8", fontSize:14 }}>このフォルダに単語がありません</p>
+          <p style={{ color:"#94a3b8", fontSize:14 }}>{T.flashcardNoWordsInFolder || "No words in this folder"}</p>
         </div>
       ) : (
         <>
@@ -4792,7 +4937,7 @@ function VocabBuilder({ form }) {
   if (vocabView === "folderDetail") return <FolderDetailView folderName={selectedFolder} onBack={()=>setVocabView("library")} onViewCard={w=>{setSelectedWord(w);setVocabView("wordDetail");}} />;
   if (vocabView === "wordSearch") return <WordSearchScreen form={form} onBack={()=>setVocabView("main")} onSelectWord={w=>{setSelectedWord(w);setVocabView("wordDetail");}} />;
   if (vocabView === "wordDetail") return <WordDetailCard card={selectedWord} form={form} onBack={()=>setVocabView(selectedFolder?"wordSearch":"wordSearch")} onSave={refreshVocab} prefLang={form.preferredLang} />;
-  if (vocabView === "flashcard") return <FlashcardView onBack={()=>setVocabView("main")} />;
+  if (vocabView === "flashcard") return <FlashcardView form={form} onBack={()=>setVocabView("main")} />;
 
   // ── MAIN VIEW ──
   return (
@@ -4946,7 +5091,30 @@ function SubtitleVocabBuilder({ form }) {
   const [lookupError, setLookupError] = useState("");
   const [sessionSaved, setSessionSaved] = useState([]);
   const [toast, setToast] = useState("");
+  const [savedSet, setSavedSet] = useState(null); // a previously-loaded transcript found in this browser, offered via Resume/Reset
   const containerRef = useRef(null);
+
+  const SUBTITLES_STORAGE_KEY = "gaku_subtitles_study_set";
+
+  // On first mount, check for a transcript left over from before navigating away — but don't
+  // auto-load it; let the student choose Resume or Reset so nothing appears unexpectedly.
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem(scopedKey(SUBTITLES_STORAGE_KEY));
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (parsed && Array.isArray(parsed.lines) && parsed.lines.length) setSavedSet(parsed);
+      }
+    } catch {}
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Persist whenever a transcript is loaded, so it survives navigating to another tab and back.
+  useEffect(() => {
+    if (lines && lines.length) {
+      try { localStorage.setItem(scopedKey(SUBTITLES_STORAGE_KEY), JSON.stringify({ raw, sourceTitle, lines })); } catch {}
+    }
+  }, [lines, raw, sourceTitle]);
 
   const showToast = (msg) => { setToast(msg); setTimeout(() => setToast(""), 2200); };
 
@@ -4956,8 +5124,22 @@ function SubtitleVocabBuilder({ form }) {
     setSelection(null);
   };
 
+  const handleResume = () => {
+    if (savedSet) {
+      setRaw(savedSet.raw || "");
+      setSourceTitle(savedSet.sourceTitle || "");
+      setLines(savedSet.lines || null);
+    }
+    setSavedSet(null);
+  };
+  const handleResetSaved = () => {
+    try { localStorage.removeItem(scopedKey(SUBTITLES_STORAGE_KEY)); } catch {}
+    setSavedSet(null);
+  };
+
   const handleReset = () => {
     setLines(null); setRaw(""); setSelection(null); setLookupError("");
+    try { localStorage.removeItem(scopedKey(SUBTITLES_STORAGE_KEY)); } catch {}
   };
 
   const handleMouseUp = () => {
@@ -5037,6 +5219,19 @@ function SubtitleVocabBuilder({ form }) {
   if (!lines) {
     return (
       <div>
+        {savedSet && (
+          <div style={{ ...S.card, marginBottom:16, borderLeft:`3px solid ${C.purpleLight}` }}>
+            <p style={{ color:C.purpleLight, fontSize:12, fontWeight:700, margin:"0 0 8px" }}>{T.savedSetFound || "You have a saved study set from before."}</p>
+            <div style={{ display:"flex", gap:8 }}>
+              <button onClick={handleResume} style={{ ...S.btn, flex:1, background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff" }}>
+                {T.resumeStudySet || "▶ Resume study set"}
+              </button>
+              <button onClick={handleResetSaved} style={{ ...S.btn, flex:1, background:C.card, border:`1px solid ${C.border}`, color:"#94a3b8" }}>
+                {T.resetStudySet || "Reset"}
+              </button>
+            </div>
+          </div>
+        )}
         <div style={{ ...S.card, marginBottom:16 }}>
           <p style={{ color:C.purpleLight, fontSize:12, fontWeight:700, letterSpacing:1, marginBottom:6 }}>🎬 {T.subtitlesTitle || "Subtitles → Vocabulary"}</p>
           <p style={{ color:"#39ff14", fontSize:12, lineHeight:1.7, marginBottom:14 }}>
@@ -5053,7 +5248,7 @@ function SubtitleVocabBuilder({ form }) {
           </button>
         </div>
         <p style={{ color:"#475569", fontSize:11, lineHeight:1.6 }}>
-          {T.subtitlesCopyrightNote || "🔒 Nothing you paste here is stored — the full text stays only in this browser tab. Only the specific words/phrases you choose to save are added to your Vocabulary Builder."}
+          {T.subtitlesCopyrightNote || "🔒 Text you paste here is saved only in this browser's local storage, so you can resume later — it's never sent to a server. Only the specific words/phrases you choose to save are added to your Vocabulary Builder."}
         </p>
       </div>
     );
