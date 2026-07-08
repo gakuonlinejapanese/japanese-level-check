@@ -24,7 +24,7 @@ export default async function handler(req, res) {
     const { data: profile, error: profileErr } = await supabase
       .from("profiles")
       .select("id, email")
-      .eq("email", studentEmail.trim().toLowerCase())
+      .ilike("email", studentEmail.trim())
       .maybeSingle();
     if (profileErr) return res.status(500).json({ error: profileErr.message });
     if (!profile) {

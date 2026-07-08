@@ -9,11 +9,12 @@ export default async function handler(req, res) {
   try {
     const { userId, email, isGakuStudent } = req.body || {};
     if (!userId || !email) return res.status(400).json({ error: "userId and email are required" });
+    const normalizedEmail = email.trim().toLowerCase();
 
     const supabase = getAdminClient();
     const { error } = await supabase
       .from("profiles")
-      .upsert({ id: userId, email, is_gaku_student: !!isGakuStudent });
+      .upsert({ id: userId, email: normalizedEmail, is_gaku_student: !!isGakuStudent });
     if (error) return res.status(500).json({ error: error.message });
 
     return res.status(200).json({ ok: true });
