@@ -6959,7 +6959,7 @@ function Dashboard({ form, onEdit }) {
 // ─── ACCOUNT: login / signup with optional GAKU invite code ──────────────────
 function AuthScreen({ onAuthed, T, prefillEmail, initialMode }) {
   const [mode, setMode] = useState(initialMode || "login"); // login | signup
-  const [email, setEmail] = useState(prefillEmail || "");
+  const [rawEmail, setRawEmail] = useState(prefillEmail || "");
   const [password, setPassword] = useState("");
   const [inviteCode, setInviteCode] = useState("");
   const [busy, setBusy] = useState(false);
@@ -6972,6 +6972,7 @@ function AuthScreen({ onAuthed, T, prefillEmail, initialMode }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErr(""); setBusy(true);
+    const email = rawEmail.trim().toLowerCase(); // normalize so profile lookups (e.g. teacher assigning vocab) always match
     try {
       if (mode === "signup") {
         if (inviteCode.trim()) {
@@ -7019,7 +7020,7 @@ function AuthScreen({ onAuthed, T, prefillEmail, initialMode }) {
         <h2 style={{ color:"#f1f5f9", fontSize:20, fontWeight:900, margin:"0 0 18px", textAlign:"center" }}>
           {mode === "login" ? (T?.loginTitle || "Log In") : (T?.signupTitle || "Create Your Account")}
         </h2>
-        <input type="email" required placeholder={T?.emailPlaceholder || "Email"} value={email} onChange={e=>setEmail(e.target.value)}
+        <input type="email" required placeholder={T?.emailPlaceholder || "Email"} value={rawEmail} onChange={e=>setRawEmail(e.target.value)}
           style={{ width:"100%", boxSizing:"border-box", padding:"11px 14px", marginBottom:10, background:"#0f172a", border:"1.5px solid rgba(255,255,255,0.1)", borderRadius:10, color:"#f1f5f9", fontSize:14 }} />
         <input type="password" required minLength={6} placeholder={T?.passwordPlaceholder || "Password"} value={password} onChange={e=>setPassword(e.target.value)}
           style={{ width:"100%", boxSizing:"border-box", padding:"11px 14px", marginBottom:10, background:"#0f172a", border:"1.5px solid rgba(255,255,255,0.1)", borderRadius:10, color:"#f1f5f9", fontSize:14 }} />
