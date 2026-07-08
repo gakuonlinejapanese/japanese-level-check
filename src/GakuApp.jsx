@@ -91,11 +91,31 @@ const ALL_RESOURCE_LOOKUP = {};
 function registerResourceLookup(list) {
   (list || []).forEach(r => { if (r?.name && !ALL_RESOURCE_LOOKUP[r.name]) ALL_RESOURCE_LOOKUP[r.name] = r; });
 }
+// AI-generated schedule text often names a resource with different word order/phrasing than our
+// exact resource name (e.g. "NHK Easy News" vs. "NHK Web Easy"). These aliases catch the common
+// variants so the link still gets attached.
+const RESOURCE_ALIASES = {
+  "NHK Web Easy": ["nhk web easy", "nhk easy news", "nhk easy japanese", "easy news"],
+  "NHK News Web (advanced)": ["nhk news web", "nhk news"],
+  "NHK World Lesson": ["nhk world"],
+  "NHK Japan — Learn Japanese": ["nhk japan", "nhk learn japanese"],
+  "Easy Japanese NHK": ["easy japanese nhk"],
+  "Anki (Japanese Decks)": ["anki"],
+  "IRODORI Japanese Online Course": ["irodori"],
+  "MARUGOTO Plus": ["marugoto"],
+  "Japanese Test 4 You — Vocabulary": ["japanese test 4 you"],
+  "Japanese Test 4 You — Reading": ["japanese test 4 you"],
+  "Japanese Test 4 You — Listening": ["japanese test 4 you"],
+  "Tadoku (Free Readers)": ["tadoku"],
+  "Nihonten AI (Bilingual Kanji)": ["nihonten"],
+};
 function findTaskResourceLink(taskText) {
   const t = (taskText || "").toLowerCase();
   const names = Object.keys(ALL_RESOURCE_LOOKUP).sort((a, b) => b.length - a.length);
-  const match = names.find(n => t.includes(n.split(" (")[0].toLowerCase()));
-  return match ? ALL_RESOURCE_LOOKUP[match] : null;
+  const directMatch = names.find(n => t.includes(n.split(" (")[0].toLowerCase()));
+  if (directMatch) return ALL_RESOURCE_LOOKUP[directMatch];
+  const aliasMatch = names.find(n => (RESOURCE_ALIASES[n] || []).some(alias => t.includes(alias)));
+  return aliasMatch ? ALL_RESOURCE_LOOKUP[aliasMatch] : null;
 }
 
 // Maps schedule-task keywords to the in-app tab (and resources sub-tab, if any) that already
