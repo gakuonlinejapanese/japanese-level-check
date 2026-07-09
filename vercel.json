@@ -3,5 +3,8 @@
     { "source": "/demo-plan.html", "destination": "/demo-plan.html" },
     { "source": "/api/(.*)", "destination": "/api/$1" },
     { "source": "/(.*)", "destination": "/" }
+  ],
+  "crons": [
+    { "path": "/api/cron-delete-withdrawn", "schedule": "0 18 * * *" }
   ]
 }

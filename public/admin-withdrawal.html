@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>GAKU — 退学処理</title>
+<meta name="robots" content="noindex, nofollow" />
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; min-height: 100vh; font-family: 'Hiragino Sans', 'Noto Sans JP', sans-serif;
+    background: linear-gradient(160deg,#0a0f1e 0%,#0f172a 60%,#0a0f1e 100%);
+    color: #f1f5f9; display: flex; justify-content: center; padding: 32px 16px;
+  }
+  .wrap { width: 100%; max-width: 560px; }
+  .card {
+    width: 100%; background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 24px; margin-bottom: 20px;
+  }
+  h1 { font-size: 18px; margin: 0 0 4px; }
+  h2 { font-size: 14px; margin: 0 0 12px; color: #cbd5e1; }
+  p.sub { color: #94a3b8; font-size: 13px; margin: 0 0 20px; line-height: 1.6; }
+  label { display: block; color: #64748b; font-size: 11px; font-weight: 700; margin: 14px 0 5px; letter-spacing: 0.5px; }
+  input, textarea {
+    width: 100%; padding: 11px 12px; background: #0f172a; border: 1.5px solid rgba(255,255,255,0.08);
+    border-radius: 10px; color: #f1f5f9; font-size: 14px; outline: none; font-family: inherit;
+  }
+  textarea { resize: vertical; min-height: 50px; }
+  button {
+    width: 100%; margin-top: 20px; padding: 13px 20px; border: none; border-radius: 10px;
+    font-size: 14px; font-weight: 700; cursor: pointer; color: #fff;
+    background: linear-gradient(135deg,#ef4444,#b91c1c);
+  }
+  button:disabled { opacity: 0.5; cursor: not-allowed; }
+  .msg { margin-top: 14px; font-size: 13px; padding: 10px 12px; border-radius: 8px; line-height:1.6; }
+  .msg.ok { background: rgba(34,197,94,0.12); color: #4ade80; border: 1px solid rgba(34,197,94,0.3); }
+  .msg.err { background: rgba(239,68,68,0.12); color: #f87171; border: 1px solid rgba(239,68,68,0.3); }
+  .msg.warn { background: rgba(245,158,11,0.12); color: #fbbf24; border: 1px solid rgba(245,158,11,0.3); }
+  .row2 { display: flex; gap: 10px; }
+  .row2 > div { flex: 1; }
+  .pending-item {
+    background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 10px; padding: 12px 14px; margin-bottom: 10px;
+  }
+  .pending-item .email { font-weight: 700; font-size: 13px; }
+  .pending-item .date { color: #94a3b8; font-size: 12px; margin-top: 2px; }
+  .pending-item .reason { color: #64748b; font-size: 11px; margin-top: 4px; font-style: italic; }
+  .cancel-btn {
+    margin-top: 8px; width: auto; padding: 6px 12px; font-size: 12px;
+    background: linear-gradient(135deg,#06b6d4,#0891b2);
+  }
+  .empty { color: #64748b; font-size: 13px; }
+  .refresh-btn {
+    background: rgba(255,255,255,0.06); margin-bottom: 14px; font-weight: 600;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="card">
+    <h1>⚠️ GAKU — 退学処理</h1>
+    <p class="sub">
+      退学の判定（休学日数・欠席回数・支払い状況など）は引き続き先生の判断で行ってください。
+      ここで「退学処理」を実行すると、<b>即座に有料アクセスを停止</b>し、指定した猶予期間後に
+      <b>アカウントを完全削除</b>するよう予約します。<br /><br />
+      ⚠️ Stripeの解約・プラン変更は自動化されていません。Stripeダッシュボードで別途手動対応してください。
+    </p>
+
+    <label>管理者パスワード (ADMIN_SECRET)</label>
+    <input id="secret" type="password" placeholder="管理者パスワード" />
+
+    <label>生徒のメールアドレス *</label>
+    <input id="studentEmail" type="email" placeholder="student@example.com" />
+
+    <div class="row2">
+      <div>
+        <label>猶予期間（日数）</label>
+        <input id="graceDays" type="number" min="1" value="14" />
+      </div>
+    </div>
+
+    <label>理由・メモ（任意）</label>
+    <textarea id="reason" placeholder="例: 累積休学5ヶ月超過、本人より継続意向なしと確認"></textarea>
+
+    <button id="withdrawBtn" onclick="withdraw()">退学処理を実行</button>
+    <div id="withdrawMsg"></div>
+  </div>
+
+  <div class="card">
+    <h2>⏳ 削除待ちの生徒一覧</h2>
+    <button class="refresh-btn" onclick="loadPending()">🔄 一覧を更新</button>
+    <div id="pendingList"><p class="empty">「一覧を更新」を押してください</p></div>
+  </div>
+</div>
+
+<script>
+function getSecret() { return document.getElementById('secret').value.trim(); }
+
+async function withdraw() {
+  const secret = getSecret();
+  const studentEmail = document.getElementById('studentEmail').value.trim();
+  const graceDays = document.getElementById('graceDays').value.trim();
+  const reason = document.getElementById('reason').value.trim();
+  const msgEl = document.getElementById('withdrawMsg');
+  const btn = document.getElementById('withdrawBtn');
+
+  if (!secret) { msgEl.innerHTML = '<div class="msg err">管理者パスワードを入力してください</div>'; return; }
+  if (!studentEmail) { msgEl.innerHTML = '<div class="msg err">生徒のメールアドレスを入力してください</div>'; return; }
+
+  if (!confirm(studentEmail + ' を退学処理します。よろしいですか？\n（有料アクセスは即座に停止されます）')) return;
+
+  btn.disabled = true;
+  msgEl.innerHTML = '<div class="msg warn">処理中...</div>';
+  try {
+    const res = await fetch('/api/admin-withdraw-student', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ secret, studentEmail, graceDays, reason })
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      msgEl.innerHTML = '<div class="msg err">❌ ' + (data.error || '失敗しました') + '</div>';
+    } else {
+      const d = new Date(data.scheduledDeletionDate);
+      msgEl.innerHTML = '<div class="msg ok">✓ 退学処理を実行しました。有料アクセスは停止済みです。<br />' +
+        d.getFullYear() + '年' + (d.getMonth()+1) + '月' + d.getDate() + '日 に完全削除される予定です。</div>' +
+        '<div class="msg warn">' + data.reminder + '</div>';
+      loadPending();
+    }
+  } catch (e) {
+    msgEl.innerHTML = '<div class="msg err">❌ 通信エラー</div>';
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+async function loadPending() {
+  const secret = getSecret();
+  const listEl = document.getElementById('pendingList');
+  if (!secret) { listEl.innerHTML = '<p class="empty">先に管理者パスワードを入力してください</p>'; return; }
+
+  listEl.innerHTML = '<p class="empty">読み込み中...</p>';
+  try {
+    const res = await fetch('/api/admin-list-withdrawn', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ secret })
+    });
+    const data = await res.json();
+    if (!res.ok) { listEl.innerHTML = '<p class="empty">❌ ' + (data.error || '取得失敗') + '</p>'; return; }
+    if (!data.students || data.students.length === 0) {
+      listEl.innerHTML = '<p class="empty">削除待ちの生徒はいません</p>';
+      return;
+    }
+    listEl.innerHTML = data.students.map(s => {
+      const d = new Date(s.scheduled_deletion_date);
+      const dateStr = d.getFullYear() + '年' + (d.getMonth()+1) + '月' + d.getDate() + '日';
+      return '<div class="pending-item">' +
+        '<div class="email">' + s.email + '</div>' +
+        '<div class="date">🗓 ' + dateStr + ' に削除予定</div>' +
+        (s.withdrawal_reason ? '<div class="reason">' + s.withdrawal_reason + '</div>' : '') +
+        '<button class="cancel-btn" onclick="cancelWithdrawal(\'' + s.email + '\')">↩ 退学処理を取り消す</button>' +
+        '</div>';
+    }).join('');
+  } catch (e) {
+    listEl.innerHTML = '<p class="empty">❌ 通信エラー</p>';
+  }
+}
+
+async function cancelWithdrawal(email) {
+  const secret = getSecret();
+  if (!confirm(email + ' の退学処理を取り消して、アカウントを復元しますか？')) return;
+  try {
+    const res = await fetch('/api/admin-cancel-withdrawal', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ secret, studentEmail: email })
+    });
+    const data = await res.json();
+    if (!res.ok) { alert('❌ ' + (data.error || '失敗しました')); return; }
+    alert('✓ 復元しました');
+    loadPending();
+  } catch (e) {
+    alert('❌ 通信エラー');
+  }
+}
+</script>
+</body>
+</html>
