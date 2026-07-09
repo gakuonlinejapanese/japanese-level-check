@@ -112,10 +112,10 @@ async function withdraw() {
   btn.disabled = true;
   msgEl.innerHTML = '<div class="msg warn">処理中...</div>';
   try {
-    const res = await fetch('/api/admin-withdraw-student', {
+    const res = await fetch('/api/admin-withdrawal', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ secret, studentEmail, graceDays, reason })
+      body: JSON.stringify({ secret, action: 'withdraw', studentEmail, graceDays, reason })
     });
     const data = await res.json();
     if (!res.ok) {
@@ -141,10 +141,10 @@ async function loadPending() {
 
   listEl.innerHTML = '<p class="empty">読み込み中...</p>';
   try {
-    const res = await fetch('/api/admin-list-withdrawn', {
+    const res = await fetch('/api/admin-withdrawal', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ secret })
+      body: JSON.stringify({ secret, action: 'list' })
     });
     const data = await res.json();
     if (!res.ok) { listEl.innerHTML = '<p class="empty">❌ ' + (data.error || '取得失敗') + '</p>'; return; }
@@ -171,10 +171,10 @@ async function cancelWithdrawal(email) {
   const secret = getSecret();
   if (!confirm(email + ' の退学処理を取り消して、アカウントを復元しますか？')) return;
   try {
-    const res = await fetch('/api/admin-cancel-withdrawal', {
+    const res = await fetch('/api/admin-withdrawal', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ secret, studentEmail: email })
+      body: JSON.stringify({ secret, action: 'cancel', studentEmail: email })
     });
     const data = await res.json();
     if (!res.ok) { alert('❌ ' + (data.error || '失敗しました')); return; }

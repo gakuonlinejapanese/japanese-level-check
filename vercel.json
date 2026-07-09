@@ -7,6 +7,6 @@
     { "source": "/(.*)", "destination": "/" }
   ],
   "crons": [
-    { "path": "/api/cron-delete-withdrawn", "schedule": "0 18 * * *" }
+    { "path": "/api/admin-withdrawal", "schedule": "0 18 * * *" }
   ]
 }
