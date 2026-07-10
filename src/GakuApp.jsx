@@ -140,6 +140,13 @@ const LEVEL_RESOURCES = {
     { name:"Sambon Juku", descKey:"resSambonDesc", url:"https://www.youtube.com/@SambonJuku", free:true, levelKey:"resLevelN2N1", skills:{ vocab:5, grammar:5, reading:3, speaking:3, listening:4 } },
   ],
 };
+// Aliases so the new self-estimation scale (Beginner–Mastery) resolves to the same curated
+// resource sets as the old JLPT-based scale (N5–N1), without duplicating the data above.
+LEVEL_RESOURCES["Elementary"] = LEVEL_RESOURCES["N5"];
+LEVEL_RESOURCES["Intermediate"] = LEVEL_RESOURCES["N4"];
+LEVEL_RESOURCES["Upper Intermediate"] = LEVEL_RESOURCES["N3"];
+LEVEL_RESOURCES["Advanced"] = LEVEL_RESOURCES["N2"];
+LEVEL_RESOURCES["Mastery"] = LEVEL_RESOURCES["N1"];
 
 Object.values(RESOURCES).forEach(registerResourceLookup);
 Object.values(LEVEL_RESOURCES).forEach(registerResourceLookup);
@@ -147,7 +154,11 @@ Object.values(LEVEL_RESOURCES).forEach(registerResourceLookup);
 const SKILL_LABELS = {
   pronunciation:"🔊 Pronunciation", listening:"👂 Listening", conversation:"💬 Conversation",
   jlpt:"🎯 JLPT Prep", reading:"📖 Reading", kanji:"🈳 Kanji", grammar:"📝 Grammar",
+  onlyHiragana:"あ Only Hiragana", onlyKatakana:"ア Only Katakana",
 };
+// Selecting one of these switches Create From Content generation into a kana-only mode —
+// see KANA_ONLY_SKILLS usage in the content-generation prompts below.
+const KANA_ONLY_SKILLS = ["onlyHiragana", "onlyKatakana"];
 
 // ─── UI TRANSLATIONS ────────────────────────────────────────────────────────────
 // Static translations for all major UI strings across all 6 tabs + form
@@ -266,11 +277,16 @@ const UI_TRANSLATIONS = {
     selectTimeline: "Select timeline",
     lessThan6: "Less than 6 months", within1: "Within 1 year",
     twoThreeYears: "2–3 years", over3: "Over 3 years",
-    currentJlpt: "CURRENT JLPT LEVEL *",
+    currentJlpt: "CURRENT JAPANESE ESTIMATION LEVEL *",
     autoFilled: "Auto-filled from your test",
     changeLevel: "If you want to change your level, please select below.",
     selectLevel: "Select level",
     beginner: "Beginner",
+    levelElementary: "Elementary",
+    levelIntermediate: "Intermediate",
+    levelUpperIntermediate: "Upper Intermediate",
+    levelAdvanced: "Advanced",
+    levelMastery: "Mastery",
     studyTimePerDay: "STUDY TIME PER DAY *",
     selectHours: "Select hours",
     lessThan1h: "Less than 1 hour", oneTwo: "1–2 hours",
@@ -288,6 +304,7 @@ const UI_TRANSLATIONS = {
     skillPronunciation: "🔊 Pronunciation", skillListening: "👂 Listening",
     skillConversation: "💬 Conversation", skillJlpt: "🎯 JLPT Prep",
     skillReading: "📖 Reading", skillKanji: "🈳 Kanji", skillGrammar: "📝 Grammar",
+    skillOnlyHiragana: "あ Only Hiragana", skillOnlyKatakana: "ア Only Katakana",
     // How to use
     howToTitle: "How to use this app",
     howToSchedule: "Your weekly study plan, broken into daily tasks. Tap a task to mark it done and track your weekly progress.",
@@ -308,6 +325,10 @@ const UI_TRANSLATIONS = {
     invalidCode: "Invalid code. Please try again.",
     wantToJoinGaku: "Want to join GAKU?",
     yes: "Yes",
+    no: "No",
+    didYouUnderstand: "Did you understand this?",
+    levelUpPrompt: "You're understanding almost everything here! Would you like to update your level to a higher level?",
+    chooseNewLevel: "Choose your new level:",
     checkLater: "Check again later",
     // Paywall — main plan content
     studyPlanReadyTitle: "Your Study Plan is Ready!",
@@ -522,11 +543,16 @@ const UI_TRANSLATIONS = {
     selectTimeline: "Sélectionner une période",
     lessThan6: "Moins de 6 mois", within1: "Dans 1 an",
     twoThreeYears: "2–3 ans", over3: "Plus de 3 ans",
-    currentJlpt: "NIVEAU JLPT ACTUEL *",
+    currentJlpt: "NIVEAU D'ESTIMATION JAPONAIS ACTUEL *",
     autoFilled: "Rempli automatiquement depuis votre test",
     changeLevel: "Si vous souhaitez changer votre niveau, veuillez sélectionner ci-dessous.",
     selectLevel: "Sélectionner le niveau",
     beginner: "Débutant",
+    levelElementary: "Élémentaire",
+    levelIntermediate: "Intermédiaire",
+    levelUpperIntermediate: "Intermédiaire supérieur",
+    levelAdvanced: "Avancé",
+    levelMastery: "Maîtrise",
     studyTimePerDay: "TEMPS D'ÉTUDE PAR JOUR *",
     selectHours: "Sélectionner les heures",
     lessThan1h: "Moins d'1 heure", oneTwo: "1–2 heures",
@@ -543,6 +569,7 @@ const UI_TRANSLATIONS = {
     skillPronunciation: "🔊 Prononciation", skillListening: "👂 Écoute",
     skillConversation: "💬 Conversation", skillJlpt: "🎯 Préparation JLPT",
     skillReading: "📖 Lecture", skillKanji: "🈳 Kanji", skillGrammar: "📝 Grammaire",
+    skillOnlyHiragana: "あ Hiragana uniquement", skillOnlyKatakana: "ア Katakana uniquement",
     howToTitle: "Comment utiliser cette application",
     howToSchedule: "Votre plan d'étude hebdomadaire, divisé en tâches quotidiennes. Appuyez sur une tâche pour la marquer comme faite.",
     howToPractice: "Exercices générés par l'IA à partir du texte japonais que vous collez (articles, sous-titres, légendes) — vocabulaire, kanji, grammaire, lecture, écoute, conversation et prononciation. Appuyez sur « Voir la réponse » pour vous corriger.",
@@ -726,11 +753,16 @@ const UI_TRANSLATIONS = {
     selectTimeline: "Seleccionar período",
     lessThan6: "Menos de 6 meses", within1: "En 1 año",
     twoThreeYears: "2–3 años", over3: "Más de 3 años",
-    currentJlpt: "NIVEL JLPT ACTUAL *",
+    currentJlpt: "NIVEL DE ESTIMACIÓN DE JAPONÉS ACTUAL *",
     autoFilled: "Completado automáticamente desde tu prueba",
     changeLevel: "Si deseas cambiar tu nivel, selecciona a continuación.",
     selectLevel: "Seleccionar nivel",
     beginner: "Principiante",
+    levelElementary: "Elemental",
+    levelIntermediate: "Intermedio",
+    levelUpperIntermediate: "Intermedio alto",
+    levelAdvanced: "Avanzado",
+    levelMastery: "Dominio",
     studyTimePerDay: "TIEMPO DE ESTUDIO POR DÍA *",
     selectHours: "Seleccionar horas",
     lessThan1h: "Menos de 1 hora", oneTwo: "1–2 horas",
@@ -747,6 +779,7 @@ const UI_TRANSLATIONS = {
     skillPronunciation: "🔊 Pronunciación", skillListening: "👂 Escucha",
     skillConversation: "💬 Conversación", skillJlpt: "🎯 Preparación JLPT",
     skillReading: "📖 Lectura", skillKanji: "🈳 Kanji", skillGrammar: "📝 Gramática",
+    skillOnlyHiragana: "あ Solo Hiragana", skillOnlyKatakana: "ア Solo Katakana",
     howToTitle: "Cómo usar esta aplicación",
     howToSchedule: "Tu plan de estudio semanal, dividido en tareas diarias. Toca una tarea para marcarla como completada.",
     howToPractice: "Ejercicios generados por IA a partir del texto japonés que pegas (artículos, subtítulos, leyendas) — vocabulario, kanji, gramática, lectura, escucha, conversación y pronunciación. Toca 'Ver respuesta' para comprobar.",
@@ -930,11 +963,16 @@ const UI_TRANSLATIONS = {
     selectTimeline: "Selecionar período",
     lessThan6: "Menos de 6 meses", within1: "Em 1 ano",
     twoThreeYears: "2–3 anos", over3: "Mais de 3 anos",
-    currentJlpt: "NÍVEL JLPT ATUAL *",
+    currentJlpt: "NÍVEL DE ESTIMATIVA DE JAPONÊS ATUAL *",
     autoFilled: "Preenchido automaticamente do seu teste",
     changeLevel: "Se quiser mudar seu nível, selecione abaixo.",
     selectLevel: "Selecionar nível",
     beginner: "Iniciante",
+    levelElementary: "Elementar",
+    levelIntermediate: "Intermediário",
+    levelUpperIntermediate: "Intermediário superior",
+    levelAdvanced: "Avançado",
+    levelMastery: "Domínio",
     studyTimePerDay: "TEMPO DE ESTUDO POR DIA *",
     selectHours: "Selecionar horas",
     lessThan1h: "Menos de 1 hora", oneTwo: "1–2 horas",
@@ -951,6 +989,7 @@ const UI_TRANSLATIONS = {
     skillPronunciation: "🔊 Pronúncia", skillListening: "👂 Escuta",
     skillConversation: "💬 Conversação", skillJlpt: "🎯 Preparação JLPT",
     skillReading: "📖 Leitura", skillKanji: "🈳 Kanji", skillGrammar: "📝 Gramática",
+    skillOnlyHiragana: "あ Apenas Hiragana", skillOnlyKatakana: "ア Apenas Katakana",
     howToTitle: "Como usar este aplicativo",
     howToSchedule: "Seu plano de estudo semanal, dividido em tarefas diárias.",
     howToPractice: "Exercícios gerados por IA a partir do texto japonês que você cola (artigos, legendas, descrições) — vocabulário, kanji, gramática, leitura, escuta, conversação e pronúncia. Toque em 'Ver resposta' para conferir.",
@@ -1134,11 +1173,16 @@ const UI_TRANSLATIONS = {
     selectTimeline: "Zeitraum wählen",
     lessThan6: "Weniger als 6 Monate", within1: "Innerhalb 1 Jahr",
     twoThreeYears: "2–3 Jahre", over3: "Über 3 Jahre",
-    currentJlpt: "AKTUELLES JLPT-NIVEAU *",
+    currentJlpt: "AKTUELLES JAPANISCH-EINSCHÄTZUNGSNIVEAU *",
     autoFilled: "Automatisch aus Ihrem Test ausgefüllt",
     changeLevel: "Wenn Sie Ihr Niveau ändern möchten, wählen Sie bitte unten aus.",
     selectLevel: "Niveau wählen",
     beginner: "Anfänger",
+    levelElementary: "Elementar",
+    levelIntermediate: "Mittelstufe",
+    levelUpperIntermediate: "Obere Mittelstufe",
+    levelAdvanced: "Fortgeschritten",
+    levelMastery: "Meisterschaft",
     studyTimePerDay: "LERNZEIT PRO TAG *",
     selectHours: "Stunden wählen",
     lessThan1h: "Weniger als 1 Stunde", oneTwo: "1–2 Stunden",
@@ -1155,6 +1199,7 @@ const UI_TRANSLATIONS = {
     skillPronunciation: "🔊 Aussprache", skillListening: "👂 Hören",
     skillConversation: "💬 Konversation", skillJlpt: "🎯 JLPT-Vorbereitung",
     skillReading: "📖 Lesen", skillKanji: "🈳 Kanji", skillGrammar: "📝 Grammatik",
+    skillOnlyHiragana: "あ Nur Hiragana", skillOnlyKatakana: "ア Nur Katakana",
     howToTitle: "Wie man diese App benutzt",
     howToSchedule: "Ihr wöchentlicher Lernplan, aufgeteilt in tägliche Aufgaben.",
     howToPractice: "KI-generierte Übungen aus dem japanischen Text, den Sie einfügen (Artikel, Untertitel, Bildunterschriften) — Wortschatz, Kanji, Grammatik, Lesen, Hören, Konversation und Aussprache. Tippen Sie auf 'Antwort anzeigen', um sich selbst zu überprüfen.",
@@ -1338,11 +1383,16 @@ const UI_TRANSLATIONS = {
     selectTimeline: "Seleziona periodo",
     lessThan6: "Meno di 6 mesi", within1: "Entro 1 anno",
     twoThreeYears: "2–3 anni", over3: "Oltre 3 anni",
-    currentJlpt: "LIVELLO JLPT ATTUALE *",
+    currentJlpt: "LIVELLO DI STIMA DEL GIAPPONESE ATTUALE *",
     autoFilled: "Compilato automaticamente dal tuo test",
     changeLevel: "Se vuoi cambiare il tuo livello, seleziona qui sotto.",
     selectLevel: "Seleziona livello",
     beginner: "Principiante",
+    levelElementary: "Elementare",
+    levelIntermediate: "Intermedio",
+    levelUpperIntermediate: "Intermedio superiore",
+    levelAdvanced: "Avanzato",
+    levelMastery: "Padronanza",
     studyTimePerDay: "TEMPO DI STUDIO AL GIORNO *",
     selectHours: "Seleziona ore",
     lessThan1h: "Meno di 1 ora", oneTwo: "1–2 ore",
@@ -1359,6 +1409,7 @@ const UI_TRANSLATIONS = {
     skillPronunciation: "🔊 Pronuncia", skillListening: "👂 Ascolto",
     skillConversation: "💬 Conversazione", skillJlpt: "🎯 Preparazione JLPT",
     skillReading: "📖 Lettura", skillKanji: "🈳 Kanji", skillGrammar: "📝 Grammatica",
+    skillOnlyHiragana: "あ Solo Hiragana", skillOnlyKatakana: "ア Solo Katakana",
     howToTitle: "Come usare questa app",
     howToSchedule: "Il tuo piano di studio settimanale, suddiviso in attività giornaliere. Tocca un'attività per contrassegnarla come completata.",
     howToPractice: "Esercizi generati dall'IA a partire dal testo giapponese che incolli (articoli, sottotitoli, didascalie) — vocabolario, kanji, grammatica, lettura, ascolto, conversazione e pronuncia. Tocca 'Mostra risposta' per verificare.",
@@ -1542,11 +1593,16 @@ const UI_TRANSLATIONS = {
     selectTimeline: "选择时间段",
     lessThan6: "不到6个月", within1: "1年内",
     twoThreeYears: "2-3年", over3: "3年以上",
-    currentJlpt: "当前JLPT级别 *",
+    currentJlpt: "当前日语水平评估 *",
     autoFilled: "已从测试自动填写",
     changeLevel: "如果你想更改级别，请在下方选择。",
     selectLevel: "选择级别",
     beginner: "初学者",
+    levelElementary: "初级",
+    levelIntermediate: "中级",
+    levelUpperIntermediate: "中高级",
+    levelAdvanced: "高级",
+    levelMastery: "精通",
     studyTimePerDay: "每天学习时间 *",
     selectHours: "选择小时数",
     lessThan1h: "不到1小时", oneTwo: "1-2小时",
@@ -1563,6 +1619,7 @@ const UI_TRANSLATIONS = {
     skillPronunciation: "🔊 发音", skillListening: "👂 听力",
     skillConversation: "💬 会话", skillJlpt: "🎯 JLPT备考",
     skillReading: "📖 阅读", skillKanji: "🈳 汉字", skillGrammar: "📝 语法",
+    skillOnlyHiragana: "あ 仅平假名", skillOnlyKatakana: "ア 仅片假名",
     howToTitle: "如何使用此应用",
     howToSchedule: "你的每周学习计划，分为每日任务。点击任务以标记完成并跟踪每周进度。",
     howToPractice: "根据你粘贴的日语文本（文章、字幕、说明）由AI生成的练习——涵盖词汇、汉字、语法、阅读、听力、会话和发音。点击「显示答案」自我检查。",
@@ -1746,11 +1803,16 @@ const UI_TRANSLATIONS = {
     selectTimeline: "選擇時間段",
     lessThan6: "不到6個月", within1: "1年內",
     twoThreeYears: "2-3年", over3: "3年以上",
-    currentJlpt: "當前JLPT級別 *",
+    currentJlpt: "當前日語水平評估 *",
     autoFilled: "已從測試自動填寫",
     changeLevel: "如果你想更改級別，請在下方選擇。",
     selectLevel: "選擇級別",
     beginner: "初學者",
+    levelElementary: "初級",
+    levelIntermediate: "中級",
+    levelUpperIntermediate: "中高級",
+    levelAdvanced: "高級",
+    levelMastery: "精通",
     studyTimePerDay: "每天學習時間 *",
     selectHours: "選擇小時數",
     lessThan1h: "不到1小時", oneTwo: "1-2小時",
@@ -1767,6 +1829,7 @@ const UI_TRANSLATIONS = {
     skillPronunciation: "🔊 發音", skillListening: "👂 聽力",
     skillConversation: "💬 會話", skillJlpt: "🎯 JLPT備考",
     skillReading: "📖 閱讀", skillKanji: "🈳 漢字", skillGrammar: "📝 語法",
+    skillOnlyHiragana: "あ 僅平假名", skillOnlyKatakana: "ア 僅片假名",
     howToTitle: "如何使用此應用",
     howToSchedule: "你的每週學習計劃，分為每日任務。點擊任務以標記完成並跟踪每週進度。",
     howToPractice: "根據你貼上的日語文本（文章、字幕、說明）由AI生成的練習——涵蓋詞彙、漢字、文法、閱讀、聽力、會話和發音。點擊「顯示答案」自我檢查。",
@@ -1950,11 +2013,16 @@ const UI_TRANSLATIONS = {
     selectTimeline: "기간 선택",
     lessThan6: "6개월 미만", within1: "1년 이내",
     twoThreeYears: "2~3년", over3: "3년 이상",
-    currentJlpt: "현재 JLPT 레벨 *",
+    currentJlpt: "현재 일본어 수준 평가 *",
     autoFilled: "테스트에서 자동 입력됨",
     changeLevel: "레벨을 변경하려면 아래에서 선택하세요.",
     selectLevel: "레벨 선택",
     beginner: "초보자",
+    levelElementary: "초급",
+    levelIntermediate: "중급",
+    levelUpperIntermediate: "중상급",
+    levelAdvanced: "고급",
+    levelMastery: "마스터",
     studyTimePerDay: "하루 학습 시간 *",
     selectHours: "시간 선택",
     lessThan1h: "1시간 미만", oneTwo: "1~2시간",
@@ -1971,6 +2039,7 @@ const UI_TRANSLATIONS = {
     skillPronunciation: "🔊 발음", skillListening: "👂 듣기",
     skillConversation: "💬 회화", skillJlpt: "🎯 JLPT 준비",
     skillReading: "📖 독해", skillKanji: "🈳 한자", skillGrammar: "📝 문법",
+    skillOnlyHiragana: "あ 히라가나만", skillOnlyKatakana: "ア 가타카나만",
     howToTitle: "이 앱 사용 방법",
     howToSchedule: "주간 학습 계획, 일별 과제로 나뉩니다. 과제를 눌러 완료 표시하고 주간 진도를 추적하세요.",
     howToPractice: "붙여넣은 일본어 텍스트(기사, 자막, 캡션)를 기반으로 AI가 생성한 연습문제 — 어휘, 한자, 문법, 독해, 듣기, 회화, 발음을 다룹니다. '답 보기'를 눌러 확인하세요.",
@@ -2154,11 +2223,16 @@ const UI_TRANSLATIONS = {
     selectTimeline: "เลือกระยะเวลา",
     lessThan6: "น้อยกว่า 6 เดือน", within1: "ภายใน 1 ปี",
     twoThreeYears: "2–3 ปี", over3: "มากกว่า 3 ปี",
-    currentJlpt: "ระดับ JLPT ปัจจุบัน *",
+    currentJlpt: "ระดับประเมินภาษาญี่ปุ่นปัจจุบัน *",
     autoFilled: "กรอกอัตโนมัติจากการทดสอบของคุณ",
     changeLevel: "หากต้องการเปลี่ยนระดับ กรุณาเลือกด้านล่าง",
     selectLevel: "เลือกระดับ",
     beginner: "ผู้เริ่มต้น",
+    levelElementary: "ระดับต้น",
+    levelIntermediate: "ระดับกลาง",
+    levelUpperIntermediate: "ระดับกลางค่อนข้างสูง",
+    levelAdvanced: "ระดับสูง",
+    levelMastery: "ระดับเชี่ยวชาญ",
     studyTimePerDay: "เวลาเรียนต่อวัน *",
     selectHours: "เลือกชั่วโมง",
     lessThan1h: "น้อยกว่า 1 ชั่วโมง", oneTwo: "1–2 ชั่วโมง",
@@ -2175,6 +2249,7 @@ const UI_TRANSLATIONS = {
     skillPronunciation: "🔊 การออกเสียง", skillListening: "👂 การฟัง",
     skillConversation: "💬 การสนทนา", skillJlpt: "🎯 เตรียม JLPT",
     skillReading: "📖 การอ่าน", skillKanji: "🈳 คันจิ", skillGrammar: "📝 ไวยากรณ์",
+    skillOnlyHiragana: "あ เฉพาะฮิรางานะ", skillOnlyKatakana: "ア เฉพาะคาตากานะ",
     howToTitle: "วิธีใช้แอปนี้",
     howToSchedule: "แผนการเรียนรายสัปดาห์ แบ่งเป็นงานรายวัน แตะงานเพื่อทำเครื่องหมายว่าเสร็จแล้วและติดตามความคืบหน้า",
     howToPractice: "แบบฝึกหัดที่สร้างโดย AI จากข้อความภาษาญี่ปุ่นที่คุณวาง (บทความ คำบรรยาย แคปชั่น) — ครอบคลุมคำศัพท์ คันจิ ไวยากรณ์ การอ่าน การฟัง การสนทนา และการออกเสียง แตะ 'ดูคำตอบ' เพื่อตรวจสอบ",
@@ -2358,11 +2433,16 @@ const UI_TRANSLATIONS = {
     selectTimeline: "Pilih tempoh masa",
     lessThan6: "Kurang dari 6 bulan", within1: "Dalam 1 tahun",
     twoThreeYears: "2–3 tahun", over3: "Lebih 3 tahun",
-    currentJlpt: "TAHAP JLPT SEMASA *",
+    currentJlpt: "TAHAP ANGGARAN BAHASA JEPUN SEMASA *",
     autoFilled: "Diisi secara automatik dari ujian anda",
     changeLevel: "Jika anda ingin menukar tahap, sila pilih di bawah.",
     selectLevel: "Pilih tahap",
     beginner: "Pemula",
+    levelElementary: "Asas",
+    levelIntermediate: "Pertengahan",
+    levelUpperIntermediate: "Pertengahan Atas",
+    levelAdvanced: "Mahir",
+    levelMastery: "Penguasaan",
     studyTimePerDay: "MASA BELAJAR SEHARI *",
     selectHours: "Pilih jam",
     lessThan1h: "Kurang dari 1 jam", oneTwo: "1–2 jam",
@@ -2379,6 +2459,7 @@ const UI_TRANSLATIONS = {
     skillPronunciation: "🔊 Sebutan", skillListening: "👂 Mendengar",
     skillConversation: "💬 Perbualan", skillJlpt: "🎯 Persediaan JLPT",
     skillReading: "📖 Membaca", skillKanji: "🈳 Kanji", skillGrammar: "📝 Tatabahasa",
+    skillOnlyHiragana: "あ Hiragana Sahaja", skillOnlyKatakana: "ア Katakana Sahaja",
     howToTitle: "Cara menggunakan apl ini",
     howToSchedule: "Pelan belajar mingguan anda, dibahagikan kepada tugasan harian. Ketik tugasan untuk tandai selesai.",
     howToPractice: "Latihan yang dijana AI daripada teks Jepun yang anda tampal (artikel, sari kata, kapsyen) — merangkumi kosa kata, kanji, tatabahasa, bacaan, pendengaran, perbualan dan sebutan. Ketik 'Tunjuk jawapan' untuk semak.",
@@ -2562,11 +2643,16 @@ const UI_TRANSLATIONS = {
     selectTimeline: "Pilih jangka waktu",
     lessThan6: "Kurang dari 6 bulan", within1: "Dalam 1 tahun",
     twoThreeYears: "2–3 tahun", over3: "Lebih dari 3 tahun",
-    currentJlpt: "LEVEL JLPT SAAT INI *",
+    currentJlpt: "TINGKAT PERKIRAAN BAHASA JEPANG SAAT INI *",
     autoFilled: "Terisi otomatis dari tes Anda",
     changeLevel: "Jika Anda ingin mengubah level, silakan pilih di bawah.",
     selectLevel: "Pilih level",
     beginner: "Pemula",
+    levelElementary: "Dasar",
+    levelIntermediate: "Menengah",
+    levelUpperIntermediate: "Menengah Atas",
+    levelAdvanced: "Mahir",
+    levelMastery: "Penguasaan",
     studyTimePerDay: "WAKTU BELAJAR PER HARI *",
     selectHours: "Pilih jam",
     lessThan1h: "Kurang dari 1 jam", oneTwo: "1–2 jam",
@@ -2583,6 +2669,7 @@ const UI_TRANSLATIONS = {
     skillPronunciation: "🔊 Pengucapan", skillListening: "👂 Mendengarkan",
     skillConversation: "💬 Percakapan", skillJlpt: "🎯 Persiapan JLPT",
     skillReading: "📖 Membaca", skillKanji: "🈳 Kanji", skillGrammar: "📝 Tata Bahasa",
+    skillOnlyHiragana: "あ Hanya Hiragana", skillOnlyKatakana: "ア Hanya Katakana",
     howToTitle: "Cara menggunakan aplikasi ini",
     howToSchedule: "Rencana belajar mingguan Anda, dibagi menjadi tugas harian. Ketuk tugas untuk menandainya selesai.",
     howToPractice: "Latihan yang dihasilkan AI dari teks Jepang yang Anda tempel (artikel, subtitle, keterangan) — mencakup kosakata, kanji, tata bahasa, membaca, mendengarkan, percakapan, dan pengucapan. Ketuk 'Tampilkan jawaban' untuk memeriksa.",
@@ -2766,11 +2853,16 @@ const UI_TRANSLATIONS = {
     selectTimeline: "Chọn thời gian",
     lessThan6: "Dưới 6 tháng", within1: "Trong 1 năm",
     twoThreeYears: "2–3 năm", over3: "Trên 3 năm",
-    currentJlpt: "CẤP ĐỘ JLPT HIỆN TẠI *",
+    currentJlpt: "CẤP ĐỘ ƯỚC TÍNH TIẾNG NHẬT HIỆN TẠI *",
     autoFilled: "Tự động điền từ bài kiểm tra của bạn",
     changeLevel: "Nếu bạn muốn thay đổi cấp độ, vui lòng chọn bên dưới.",
     selectLevel: "Chọn cấp độ",
     beginner: "Người mới bắt đầu",
+    levelElementary: "Sơ cấp",
+    levelIntermediate: "Trung cấp",
+    levelUpperIntermediate: "Trung cấp cao",
+    levelAdvanced: "Cao cấp",
+    levelMastery: "Thành thạo",
     studyTimePerDay: "THỜI GIAN HỌC MỖI NGÀY *",
     selectHours: "Chọn giờ",
     lessThan1h: "Dưới 1 giờ", oneTwo: "1–2 giờ",
@@ -2787,6 +2879,7 @@ const UI_TRANSLATIONS = {
     skillPronunciation: "🔊 Phát âm", skillListening: "👂 Nghe",
     skillConversation: "💬 Hội thoại", skillJlpt: "🎯 Luyện JLPT",
     skillReading: "📖 Đọc hiểu", skillKanji: "🈳 Kanji", skillGrammar: "📝 Ngữ pháp",
+    skillOnlyHiragana: "あ Chỉ Hiragana", skillOnlyKatakana: "ア Chỉ Katakana",
     howToTitle: "Cách sử dụng ứng dụng này",
     howToSchedule: "Kế hoạch học hàng tuần của bạn, chia thành các nhiệm vụ hàng ngày. Nhấn nhiệm vụ để đánh dấu hoàn thành.",
     howToPractice: "Bài tập do AI tạo từ văn bản tiếng Nhật bạn dán vào (bài viết, phụ đề, chú thích) — bao gồm từ vựng, kanji, ngữ pháp, đọc hiểu, nghe, hội thoại và phát âm. Nhấn 'Hiện đáp án' để kiểm tra.",
@@ -2970,11 +3063,16 @@ const UI_TRANSLATIONS = {
     selectTimeline: "समय-सीमा चुनें",
     lessThan6: "6 महीने से कम", within1: "1 साल के भीतर",
     twoThreeYears: "2–3 साल", over3: "3 साल से अधिक",
-    currentJlpt: "वर्तमान JLPT स्तर *",
+    currentJlpt: "वर्तमान जापानी अनुमानित स्तर *",
     autoFilled: "आपके परीक्षण से स्वतः भरा गया",
     changeLevel: "यदि आप अपना स्तर बदलना चाहते हैं, तो नीचे चुनें।",
     selectLevel: "स्तर चुनें",
     beginner: "शुरुआती",
+    levelElementary: "प्रारंभिक",
+    levelIntermediate: "मध्यम",
+    levelUpperIntermediate: "उच्च मध्यम",
+    levelAdvanced: "उन्नत",
+    levelMastery: "निपुणता",
     studyTimePerDay: "प्रतिदिन अध्ययन समय *",
     selectHours: "घंटे चुनें",
     lessThan1h: "1 घंटे से कम", oneTwo: "1–2 घंटे",
@@ -2991,6 +3089,7 @@ const UI_TRANSLATIONS = {
     skillPronunciation: "🔊 उच्चारण", skillListening: "👂 सुनना",
     skillConversation: "💬 बातचीत", skillJlpt: "🎯 JLPT तैयारी",
     skillReading: "📖 पठन", skillKanji: "🈳 Kanji", skillGrammar: "📝 व्याकरण",
+    skillOnlyHiragana: "あ केवल हिरागाना", skillOnlyKatakana: "ア केवल काताकाना",
     howToTitle: "इस ऐप का उपयोग कैसे करें",
     howToSchedule: "आपकी साप्ताहिक अध्ययन योजना, दैनिक कार्यों में विभाजित। साप्ताहिक प्रगति ट्रैक करने के लिए कार्य टैप करें।",
     howToPractice: "आपके द्वारा पेस्ट किए गए जापानी टेक्स्ट (लेख, सबटाइटल, कैप्शन) से AI-जनित अभ्यास — शब्दावली, कांजी, व्याकरण, पठन, श्रवण, बातचीत और उच्चारण को कवर करता है। जांचने के लिए 'उत्तर दिखाएं' टैप करें।",
@@ -3174,11 +3273,16 @@ const UI_TRANSLATIONS = {
     selectTimeline: "期間を選択",
     lessThan6: "6か月未満", within1: "1年以内",
     twoThreeYears: "2〜3年", over3: "3年以上",
-    currentJlpt: "現在のJLPTレベル *",
+    currentJlpt: "現在の日本語レベル評価 *",
     autoFilled: "テストから自動入力されました",
     changeLevel: "レベルを変更したい場合は下から選択してください。",
     selectLevel: "レベルを選択",
     beginner: "初心者",
+    levelElementary: "初級",
+    levelIntermediate: "中級",
+    levelUpperIntermediate: "中上級",
+    levelAdvanced: "上級",
+    levelMastery: "熟達",
     studyTimePerDay: "1日の学習時間 *",
     selectHours: "時間を選択",
     lessThan1h: "1時間未満", oneTwo: "1〜2時間",
@@ -3195,6 +3299,7 @@ const UI_TRANSLATIONS = {
     skillPronunciation: "🔊 発音", skillListening: "👂 リスニング",
     skillConversation: "💬 会話", skillJlpt: "🎯 JLPT対策",
     skillReading: "📖 読解", skillKanji: "🈳 漢字", skillGrammar: "📝 文法",
+    skillOnlyHiragana: "あ ひらがなのみ", skillOnlyKatakana: "ア カタカナのみ",
     howToTitle: "このアプリの使い方",
     howToSchedule: "週間学習プランを日々のタスクに分割しています。タスクをタップして完了をマークし、週間進捗を追跡します。",
     howToPractice: "貼り付けた日本語テキスト（記事・字幕・キャプション）から生成されるAI練習問題です。語彙・漢字・文法・読解・リスニング・会話・発音をカバーします。「答えを見る」をタップして確認できます。",
@@ -3378,11 +3483,16 @@ const UI_TRANSLATIONS = {
     selectTimeline: "Zaman dilimi seç",
     lessThan6: "6 aydan az", within1: "1 yıl içinde",
     twoThreeYears: "2–3 yıl", over3: "3 yıldan fazla",
-    currentJlpt: "MEVCUT JLPT SEVİYESİ *",
+    currentJlpt: "MEVCUT JAPONCA TAHMİNİ SEVİYE *",
     autoFilled: "Testinizden otomatik dolduruldu",
     changeLevel: "Seviyenizi değiştirmek isterseniz aşağıdan seçin.",
     selectLevel: "Seviye seç",
     beginner: "Başlangıç",
+    levelElementary: "Temel",
+    levelIntermediate: "Orta",
+    levelUpperIntermediate: "Üst Orta",
+    levelAdvanced: "İleri",
+    levelMastery: "Ustalık",
     studyTimePerDay: "GÜNLÜK ÇALIŞMA SÜRESİ *",
     selectHours: "Saat seç",
     lessThan1h: "1 saatten az", oneTwo: "1–2 saat",
@@ -3399,6 +3509,7 @@ const UI_TRANSLATIONS = {
     skillPronunciation: "🔊 Telaffuz", skillListening: "👂 Dinleme",
     skillConversation: "💬 Konuşma", skillJlpt: "🎯 JLPT Hazırlık",
     skillReading: "📖 Okuma", skillKanji: "🈳 Kanji", skillGrammar: "📝 Dil Bilgisi",
+    skillOnlyHiragana: "あ Sadece Hiragana", skillOnlyKatakana: "ア Sadece Katakana",
     howToTitle: "Bu uygulama nasıl kullanılır",
     howToSchedule: "Günlük görevlere bölünmüş haftalık çalışma planınız. Tamamlandı olarak işaretlemek için bir göreve dokunun.",
     howToPractice: "Yapıştırdığınız Japonca metinden (makale, altyazı, açıklama) AI tarafından oluşturulan alıştırmalar — kelime, kanji, dilbilgisi, okuma, dinleme, konuşma ve telaffuzu kapsar. Kontrol etmek için 'Cevabı göster'e dokunun.",
@@ -3582,11 +3693,16 @@ const UI_TRANSLATIONS = {
     selectTimeline: "समयसीमा छनोट गर्नुहोस्",
     lessThan6: "६ महिना भन्दा कम", within1: "१ वर्ष भित्र",
     twoThreeYears: "२–३ वर्ष", over3: "३ वर्ष भन्दा बढी",
-    currentJlpt: "हालको JLPT स्तर *",
+    currentJlpt: "हालको जापानी अनुमानित स्तर *",
     autoFilled: "तपाईंको परीक्षणबाट स्वतः भरिएको",
     changeLevel: "यदि तपाईं आफ्नो स्तर परिवर्तन गर्न चाहनुहुन्छ भने, कृपया तल छनोट गर्नुहोस्।",
     selectLevel: "स्तर छनोट गर्नुहोस्",
     beginner: "सुरुवाती",
+    levelElementary: "प्रारम्भिक",
+    levelIntermediate: "मध्यम",
+    levelUpperIntermediate: "माथिल्लो मध्यम",
+    levelAdvanced: "उन्नत",
+    levelMastery: "निपुणता",
     studyTimePerDay: "दैनिक अध्ययन समय *",
     selectHours: "घण्टा छनोट गर्नुहोस्",
     lessThan1h: "१ घण्टा भन्दा कम", oneTwo: "१–२ घण्टा",
@@ -3603,6 +3719,7 @@ const UI_TRANSLATIONS = {
     skillPronunciation: "🔊 उच्चारण", skillListening: "👂 सुनाइ",
     skillConversation: "💬 कुराकानी", skillJlpt: "🎯 JLPT तयारी",
     skillReading: "📖 पठन", skillKanji: "🈳 कान्जी", skillGrammar: "📝 व्याकरण",
+    skillOnlyHiragana: "あ हिरागाना मात्र", skillOnlyKatakana: "ア काताकाना मात्र",
     howToTitle: "यो एप कसरी प्रयोग गर्ने",
     howToSchedule: "तपाईंको साप्ताहिक अध्ययन योजना, दैनिक कार्यहरूमा विभाजित। साप्ताहिक प्रगति ट्र्याक गर्न कार्यलाई ट्याप गर्नुहोस्।",
     howToPractice: "तपाईंले टाँस्नुभएको जापानी पाठ (लेख, उपशीर्षक, क्याप्शन) बाट AI-उत्पन्न अभ्यास — शब्दावली, कांजी, व्याकरण, पठन, सुनाइ, कुराकानी र उच्चारण समेट्छ। जाँच गर्न 'जवाफ देखाउनुहोस्' ट्याप गर्नुहोस्।",
@@ -3786,11 +3903,16 @@ const UI_TRANSLATIONS = {
     selectTimeline: "Piliin ang timeline",
     lessThan6: "Mas mababa sa 6 na buwan", within1: "Sa loob ng 1 taon",
     twoThreeYears: "2–3 taon", over3: "Higit sa 3 taon",
-    currentJlpt: "KASALUKUYANG ANTAS NG JLPT *",
+    currentJlpt: "KASALUKUYANG TANTIYADONG ANTAS NG NIHONGGO *",
     autoFilled: "Awtomatikong napunan mula sa iyong test",
     changeLevel: "Kung gusto mong baguhin ang iyong antas, pumili sa ibaba.",
     selectLevel: "Piliin ang antas",
     beginner: "Baguhan",
+    levelElementary: "Elementarya",
+    levelIntermediate: "Intermedya",
+    levelUpperIntermediate: "Mataas na Intermedya",
+    levelAdvanced: "Advanced",
+    levelMastery: "Kadalubhasaan",
     studyTimePerDay: "ORAS NG PAG-AARAL KADA ARAW *",
     selectHours: "Piliin ang oras",
     lessThan1h: "Mas mababa sa 1 oras", oneTwo: "1–2 oras",
@@ -3807,6 +3929,7 @@ const UI_TRANSLATIONS = {
     skillPronunciation: "🔊 Pagbigkas", skillListening: "👂 Pakikinig",
     skillConversation: "💬 Pakikipag-usap", skillJlpt: "🎯 Paghahanda sa JLPT",
     skillReading: "📖 Pagbasa", skillKanji: "🈳 Kanji", skillGrammar: "📝 Gramatika",
+    skillOnlyHiragana: "あ Hiragana Lamang", skillOnlyKatakana: "ア Katakana Lamang",
     howToTitle: "Paano gamitin ang app na ito",
     howToSchedule: "Ang iyong lingguhang study plan, nahahati sa araw-araw na gawain. I-tap ang gawain upang markahan itong tapos na.",
     howToPractice: "Mga pagsasanay na ginawa ng AI mula sa Japanese text na iyong idinikit (artikulo, subtitle, caption) — sinasaklaw ang bokabularyo, kanji, gramatika, pagbasa, pakikinig, pag-uusap, at pagbigkas. I-tap ang 'Ipakita ang sagot' upang suriin.",
@@ -5403,7 +5526,7 @@ function ExerciseCard({ item, revealed, onReveal, T, lang }) {
 }
 
 // ─── CONTENT ANALYZER (GAKU Extension-style: paste text, get 10–20 leveled activities) ──
-function ContentAnalyzer({ form }) {
+function ContentAnalyzer({ form, onLevelUp }) {
   const T = useUITranslations(form?.preferredLang || "English");
   const [source, setSource] = useState("");
   const [items, setItems] = useState([]);
@@ -5415,6 +5538,7 @@ function ContentAnalyzer({ form }) {
   const [sourceFurigana, setSourceFurigana] = useState("");
   const [sourceFuriganaLoading, setSourceFuriganaLoading] = useState(false);
   const [savedSet, setSavedSet] = useState(null); // a previously-generated study set found in this browser, offered via Resume/Reset
+  const contentCheck = useComprehensionCheck("content");
 
   const CONTENT_STORAGE_KEY = "gaku_content_study_set";
 
@@ -5456,6 +5580,16 @@ function ContentAnalyzer({ form }) {
   const ALL_SKILLS = ["pronunciation","listening","conversation","jlpt","reading","kanji","grammar"];
   const allowedSkills = (form.skills && form.skills.length) ? form.skills.filter(s => ALL_SKILLS.includes(s)) : ALL_SKILLS;
 
+  // "Only Hiragana" / "Only Katakana" are notation-mode toggles, not activity types themselves —
+  // when picked, every generated activity below is rendered using ONLY that script (no kanji,
+  // and no mixing in the other kana script for whole-word notation). If neither is picked,
+  // generation behaves exactly as before.
+  const kanaOnlyMode = form.skills?.includes("onlyHiragana") ? "hiragana"
+    : form.skills?.includes("onlyKatakana") ? "katakana" : null;
+  const kanaOnlyInstruction = kanaOnlyMode
+    ? `\n\nIMPORTANT NOTATION RULE: The student selected "Only ${kanaOnlyMode === "hiragana" ? "Hiragana" : "Katakana"}" mode. Rewrite every piece of Japanese text you generate (prompts, sentences, answer choices) using ONLY ${kanaOnlyMode} — convert any kanji and any characters from the other kana script into ${kanaOnlyMode}. Do not add parenthetical kanji or furigana. Meaning must stay the same; only the notation changes.`
+    : "";
+
   const SKILL_DESC = {
     pronunciation: "pronunciation: pick a real sentence (or short phrase) from the content and ask the student to shadow it aloud, e.g. 「(real sentence)」を声に出して読んでください. Do NOT append a parenthetical label like「（シャドーイング）」to the Japanese prompt text — the app already shows \"Shadowing\" as a separate label. This gets an automatic 🔊 button so the student can hear the model pronunciation before repeating it, and a 🎤 button to record and check their own voice.",
     listening: "listening: take a real sentence from the content and turn it into a listening-comprehension fill-in-the-blank. Quote the ENTIRE original sentence with exactly ONE word/phrase/particle removed and replaced IN-PLACE, inside the quoted sentence itself, by ＿＿＿ — e.g. if the original sentence is 「簡単な文法だけで話しているので」, the prompt must contain 「簡単な文法だけで＿＿＿しているので」, NOT the full unblanked sentence repeated with a separate 'の___に何が入りますか' tacked on afterward. Prefix with a short scene/context in English like [Scene: ...], then the blanked sentence, then 何が入りますか？ with the ①②③④ choices. This is meant to be played aloud (the app adds a 🔊 button automatically) — the student listens, not just reads, so keep it phrased as something natural to hear.",
@@ -5475,7 +5609,7 @@ function ContentAnalyzer({ form }) {
       const res = await fetch("/api/claude", {
         method:"POST", headers:{"Content-Type":"application/json"},
         body: JSON.stringify({ model:"claude-sonnet-4-20250514", max_tokens:4500, provider:"turbo",
-          messages:[{ role:"user", content:`You are a Japanese teacher using CLT (Communicative Language Teaching). The student's JLPT level is ${form.jlpt}.
+          messages:[{ role:"user", content:`You are a Japanese teacher using CLT (Communicative Language Teaching). The student's JLPT level is ${form.jlpt}.${kanaOnlyInstruction}
 
 The student just encountered this piece of Japanese content (could be a sentence, an article, video subtitles/dialogue, or a social media caption). Analyze it and build practice activities directly FROM it — reuse its actual words, kanji, and sentences rather than generic examples.
 
@@ -5580,6 +5714,7 @@ Respond ONLY with a valid JSON array, no markdown, no backticks:
 
       {items.length > 0 && (
         <>
+          {contentCheck.eligible && <LevelUpOffer T={T} currentLevel={form.jlpt} onConfirm={onLevelUp} />}
           <div style={{ display:"flex", gap:6, flexWrap:"wrap", marginBottom:12 }}>
             <button onClick={()=>setActiveSkillFilter("all")} style={{ padding:"4px 10px", borderRadius:20, fontSize:11, fontWeight:700, cursor:"pointer", border:`1px solid ${activeSkillFilter==="all"?C.purpleLight:C.border}`, background:activeSkillFilter==="all"?"rgba(168,85,247,0.15)":C.card, color:activeSkillFilter==="all"?C.purpleLight:"#64748b" }}>
               すべて ({items.length})
@@ -5594,7 +5729,12 @@ Respond ONLY with a valid JSON array, no markdown, no backticks:
             {filteredItems.map((it,i) => {
               const globalIdx = items.indexOf(it);
               return (
-                <ExerciseCard key={i} item={it} revealed={!!revealed[globalIdx]} onReveal={()=>setRevealed(r=>({...r,[globalIdx]:!r[globalIdx]}))} T={T} lang={form?.preferredLang || "English"} />
+                <div key={i}>
+                  <ExerciseCard item={it} revealed={!!revealed[globalIdx]} onReveal={()=>setRevealed(r=>({...r,[globalIdx]:!r[globalIdx]}))} T={T} lang={form?.preferredLang || "English"} />
+                  {revealed[globalIdx] && (
+                    <ComprehensionCheck itemId={`item-${globalIdx}`} checkins={contentCheck.checkins} onRecord={contentCheck.record} T={T} />
+                  )}
+                </div>
               );
             })}
           </div>
@@ -5636,12 +5776,31 @@ async function callClaudeFast(prompt, maxTokens = 700) {
   return d.content?.map(c=>c.text||"").join("").trim() || "";
 }
 
+// Known misreadings the model has produced in the past, plus katakana spelling variants we
+// never want to show a student. Applied deterministically after generation so a correction is
+// guaranteed regardless of what the model outputs. Add more pairs here as they're reported.
+const JAPANESE_READING_CORRECTIONS = [
+  [/反省(\s*)\(はんしょう\)/g, "反省$1(はんせい)"],
+  [/今朝(\s*)\(こんちょう\)/g, "今朝$1(けさ)"],
+  [/案の定(\s*)\(あのさだめ\)/g, "案の定$1(あんのじょう)"],
+  [/コンヴィニ/g, "コンビニ"],
+];
+function applyJapaneseReadingCorrections(text) {
+  if (!text) return text;
+  let out = text;
+  for (const [pattern, replacement] of JAPANESE_READING_CORRECTIONS) out = out.replace(pattern, replacement);
+  return out;
+}
+
 // Generates furigana and automatically re-rolls (up to 2 extra passes, always from the ORIGINAL
 // text — never feeding a possibly-broken previous output back in, which is what let a repetition
 // loop compound). Falls back to the plain text (no furigana) rather than ever showing garbage.
 async function getFuriganaText(original) {
   const prompt = `Add furigana in parentheses immediately after every single kanji word in the following Japanese text.
 This is critical: do not skip ANY kanji — including compound words, proper nouns, counters, and uncommon kanji. Every kanji character must be followed directly by its reading in parentheses, using this exact format: 漢字(かんじ)
+Never add furigana in parentheses after a hiragana or katakana word — parentheses are ONLY for kanji readings.
+Use standard, dictionary-correct readings — for example 反省 is read (はんせい), never (はんしょう); 今朝 is read (けさ), never (こんちょう); 案の定 is read (あんのじょう), never (あのさだめ).
+Always spell the word for "convenience store" as コンビニ (katakana), never コンヴィニ.
 Keep every hiragana character, katakana character, and all punctuation exactly as-is. Do not add extra spaces. Output the text ONCE — never repeat any part of it.
 
 Example:
@@ -5659,7 +5818,7 @@ ${original}`;
     attempts++;
   }
   if (isDegenerateFurigana(original, out)) return original; // graceful fallback — never show a broken/looping result
-  return out;
+  return applyJapaneseReadingCorrections(out);
 }
 
 function JLineTools({ text, lang, T }) {
@@ -5692,7 +5851,7 @@ function JLineTools({ text, lang, T }) {
         });
         const d = await res.json();
         const out = d.content?.map(c=>c.text||"").join("").trim() || "";
-        if (mode === "romaji") setRomaji(out);
+        if (mode === "romaji") setRomaji(applyJapaneseReadingCorrections(out));
         else setTranslation(out);
       }
     } catch {}
@@ -5870,7 +6029,7 @@ function ConversationTurnCard({ turn, T, lang }) {
   );
 }
 
-function ConversationPredictor({ form }) {
+function ConversationPredictor({ form, onLevelUp }) {
   const T = useUITranslations(form?.preferredLang || "English");
   const [raw, setRaw] = useState("");
   const [sourceTitle, setSourceTitle] = useState("");
@@ -5878,6 +6037,7 @@ function ConversationPredictor({ form }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [savedSet, setSavedSet] = useState(null); // a previously-generated conversation set found in this browser
+  const conversationCheck = useComprehensionCheck("conversation");
 
   const CONV_STORAGE_KEY = "gaku_conv_practice_set";
 
@@ -6004,8 +6164,14 @@ Respond ONLY with a valid JSON array, no markdown, no backticks:
           {T.subtitlesLoadNew || "↺ Load a different transcript"}
         </button>
       </div>
+      {conversationCheck.eligible && <LevelUpOffer T={T} currentLevel={form.jlpt} onConfirm={onLevelUp} />}
       <div style={{ display:"flex", flexDirection:"column", gap:12 }}>
-        {turns.map((turn, i) => <ConversationTurnCard key={i} turn={turn} T={T} lang={form?.preferredLang || "English"} />)}
+        {turns.map((turn, i) => (
+          <div key={i}>
+            <ConversationTurnCard turn={turn} T={T} lang={form?.preferredLang || "English"} />
+            <ComprehensionCheck itemId={`turn-${i}`} checkins={conversationCheck.checkins} onRecord={conversationCheck.record} T={T} />
+          </div>
+        ))}
       </div>
     </div>
   );
@@ -6028,6 +6194,7 @@ const SKILL_LABEL_KEY = {
   pronunciation:"skillPronunciation", listening:"skillListening",
   conversation:"skillConversation", jlpt:"skillJlpt",
   reading:"skillReading", kanji:"skillKanji", grammar:"skillGrammar",
+  onlyHiragana:"skillOnlyHiragana", onlyKatakana:"skillOnlyKatakana",
 };
 
 function buildSchedule(form, T) {
@@ -6458,11 +6625,16 @@ function translateTimeline(rawTimeline, T) {
 }
 
 // ─── FORM ───────────────────────────────────────────────────────────────────────
+// Backward-compat: the level-check quiz historically produced N5–N1, but the survey now
+// uses a self-estimation scale (Beginner–Mastery). Map old values so auto-fill still works.
+const JLPT_TO_ESTIMATION_LEVEL = { "N5":"Elementary", "N4":"Intermediate", "N3":"Upper Intermediate", "N2":"Advanced", "N1":"Mastery" };
+function toEstimationLevel(v) { return JLPT_TO_ESTIMATION_LEVEL[v] || v; }
+
 function FormScreen({ onSubmit, onBack, onCancel, initialJlpt, initialForm }) {
   const [form, setForm] = useState(() => initialForm || {
     name:"", email:"", country:"", preferredLang:"English",
     goal:"", customGoal:"", timeline:"",
-    jlpt: initialJlpt || "",
+    jlpt: toEstimationLevel(initialJlpt) || "",
     hoursPerDay:"", daysPerWeek:"", skills:[]
   });
   const [err, setErr] = useState("");
@@ -6547,8 +6719,11 @@ function FormScreen({ onSubmit, onBack, onCancel, initialJlpt, initialForm }) {
             <select value={form.jlpt} onChange={e=>set("jlpt",e.target.value)} style={S.select}>
               <option value="">{T.selectLevel}</option>
               <option value="Beginner">{T.beginner}</option>
-              <option value="N5">N5</option><option value="N4">N4</option>
-              <option value="N3">N3</option><option value="N2">N2</option><option value="N1">N1</option>
+              <option value="Elementary">{T.levelElementary}</option>
+              <option value="Intermediate">{T.levelIntermediate}</option>
+              <option value="Upper Intermediate">{T.levelUpperIntermediate}</option>
+              <option value="Advanced">{T.levelAdvanced}</option>
+              <option value="Mastery">{T.levelMastery}</option>
             </select>
           </div>
 
@@ -6596,8 +6771,90 @@ function FormScreen({ onSubmit, onBack, onCancel, initialJlpt, initialForm }) {
   );
 }
 
+// ─── Comprehension Check ("Did you understand this?") ──────────────────────────
+// Shared across Weekly Schedule, Create From Content, and Conversation Practice.
+// Each answered item is stored locally per student per section. Once a section has
+// at least CHECKIN_MIN_RESPONSES answers and 80%+ are "Yes", the student is offered
+// the chance to move themselves up to the next estimation level.
+const CHECKIN_MIN_RESPONSES = 5;
+const ESTIMATION_LEVELS = ["Beginner","Elementary","Intermediate","Upper Intermediate","Advanced","Mastery"];
+
+function loadCheckins(sectionId) {
+  try { return JSON.parse(localStorage.getItem(scopedKey(`gaku_checkin_${sectionId}`)) || "{}"); } catch { return {}; }
+}
+function saveCheckins(sectionId, data) {
+  try { localStorage.setItem(scopedKey(`gaku_checkin_${sectionId}`), JSON.stringify(data)); } catch {}
+}
+function useComprehensionCheck(sectionId) {
+  const [checkins, setCheckins] = useState(() => loadCheckins(sectionId));
+  const record = (itemId, understood) => {
+    setCheckins(prev => {
+      const next = { ...prev, [itemId]: understood };
+      saveCheckins(sectionId, next);
+      return next;
+    });
+  };
+  const values = Object.values(checkins);
+  const total = values.length;
+  const yesCount = values.filter(Boolean).length;
+  const pct = total > 0 ? Math.round((yesCount / total) * 100) : 0;
+  const eligible = total >= CHECKIN_MIN_RESPONSES && pct >= 80;
+  return { checkins, record, total, pct, eligible };
+}
+
+// Small inline Yes/No control attached to a single schedule task / activity / turn.
+function ComprehensionCheck({ itemId, checkins, onRecord, T }) {
+  const answered = checkins[itemId];
+  return (
+    <div style={{ display:"flex", alignItems:"center", gap:8, marginTop:8 }} onClick={e=>e.stopPropagation()}>
+      <span style={{ color:"#64748b", fontSize:11 }}>{T.didYouUnderstand || "Did you understand this?"}</span>
+      <button onClick={()=>onRecord(itemId, true)} style={{ fontSize:11, fontWeight:700, padding:"3px 10px", borderRadius:8, border:`1px solid ${answered===true?"rgba(34,197,94,0.5)":C.border}`, background:answered===true?"rgba(34,197,94,0.15)":"transparent", color:answered===true?C.green:"#94a3b8", cursor:"pointer" }}>
+        {T.yes || "Yes"}
+      </button>
+      <button onClick={()=>onRecord(itemId, false)} style={{ fontSize:11, fontWeight:700, padding:"3px 10px", borderRadius:8, border:`1px solid ${answered===false?"rgba(239,68,68,0.5)":C.border}`, background:answered===false?"rgba(239,68,68,0.15)":"transparent", color:answered===false?C.red:"#94a3b8", cursor:"pointer" }}>
+        {T.no || "No"}
+      </button>
+    </div>
+  );
+}
+
+// Banner offering to move up a level once comprehension checks are consistently positive.
+function LevelUpOffer({ T, currentLevel, onConfirm }) {
+  const [showPicker, setShowPicker] = useState(false);
+  const idx = ESTIMATION_LEVELS.indexOf(currentLevel);
+  const next = (idx >= 0 && idx < ESTIMATION_LEVELS.length - 1) ? ESTIMATION_LEVELS[idx + 1] : null;
+  const LEVEL_T_KEY = { "Beginner":"beginner", "Elementary":"levelElementary", "Intermediate":"levelIntermediate", "Upper Intermediate":"levelUpperIntermediate", "Advanced":"levelAdvanced", "Mastery":"levelMastery" };
+  if (!next) return null; // already at the top level
+  return (
+    <div style={{ ...S.card, marginBottom:12, background:"rgba(34,197,94,0.08)", border:"1px solid rgba(34,197,94,0.25)" }}>
+      {!showPicker ? (
+        <>
+          <p style={{ color:"#ffffff", fontSize:13, margin:"0 0 10px" }}>
+            🎉 {T.levelUpPrompt || "You're understanding almost everything here! Would you like to update your level to a higher level?"}
+          </p>
+          <div style={{ display:"flex", gap:8 }}>
+            <button onClick={()=>setShowPicker(true)} style={{ ...S.btn, padding:"7px 14px", background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff", fontSize:12 }}>{T.yes || "Yes"}</button>
+            <button onClick={()=>setShowPicker("dismiss")} style={{ ...S.btn, padding:"7px 14px", background:C.card, color:"#94a3b8", border:`1px solid ${C.border}`, fontSize:12 }}>{T.no || "No"}</button>
+          </div>
+        </>
+      ) : showPicker === "dismiss" ? null : (
+        <>
+          <p style={{ color:"#94a3b8", fontSize:12, marginBottom:8 }}>{T.chooseNewLevel || "Choose your new level:"}</p>
+          <div style={{ display:"flex", flexWrap:"wrap", gap:8 }}>
+            {ESTIMATION_LEVELS.map(l => (
+              <button key={l} onClick={()=>onConfirm(l)} style={{ padding:"6px 12px", borderRadius:20, border:`1.5px solid ${l===next?C.purpleLight:C.border}`, background:l===next?"rgba(168,85,247,0.15)":C.card, color:"#e2e8f0", fontSize:12, cursor:"pointer" }}>
+                {T[LEVEL_T_KEY[l]] || l}
+              </button>
+            ))}
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
+
 // ─── DASHBOARD ──────────────────────────────────────────────────────────────────
-function Dashboard({ form, onEdit }) {
+function Dashboard({ form, onEdit, onLevelUp }) {
   const T = useUITranslations(form?.preferredLang || "English");
   const [schedule, setSchedule] = useState(() => buildSchedule(form, getT(form?.preferredLang || "English")));
   const [milestones, setMilestones] = useState(() => buildMilestones(form));
@@ -6608,6 +6865,7 @@ function Dashboard({ form, onEdit }) {
   const [weekTheme, setWeekTheme] = useState("");
   const [aiScheduleLoading, setAiScheduleLoading] = useState(false);
   const { currentWeek, totalWeeks } = getWeekInfo(form);
+  const scheduleCheck = useComprehensionCheck("schedule");
 
   const loadAISchedule = useCallback(async (forceRegen = false) => {
     setAiScheduleLoading(true);
@@ -6774,6 +7032,7 @@ function Dashboard({ form, onEdit }) {
 
         {tab==="schedule" && (
           <div>
+            {scheduleCheck.eligible && <LevelUpOffer T={T} currentLevel={form.jlpt} onConfirm={onLevelUp} />}
             {/* Week progress banner */}
             <div style={{ ...S.card, marginBottom:12, background:"linear-gradient(135deg,rgba(139,92,246,0.12),rgba(6,182,212,0.08))", border:`1px solid rgba(139,92,246,0.25)` }}>
               <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:8 }}>
@@ -6843,6 +7102,9 @@ function Dashboard({ form, onEdit }) {
                                 </div>
                               );
                             })()}
+                            {task.done && (
+                              <ComprehensionCheck itemId={`${day}-${idx}`} checkins={scheduleCheck.checkins} onRecord={scheduleCheck.record} T={T} />
+                            )}
                           </div>
                         </div>
                       ))}
@@ -6868,9 +7130,9 @@ function Dashboard({ form, onEdit }) {
               ))}
             </div>
 
-            {resourceSubTab==="content" && <ContentAnalyzer form={form} />}
+            {resourceSubTab==="content" && <ContentAnalyzer form={form} onLevelUp={onLevelUp} />}
 
-            {resourceSubTab==="conversation" && <ConversationPredictor form={form} />}
+            {resourceSubTab==="conversation" && <ConversationPredictor form={form} onLevelUp={onLevelUp} />}
 
             {resourceSubTab==="links" && (
             <div>
@@ -7225,13 +7487,13 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
     email: initialEmail || '',
     country: '', preferredLang: 'English',
     goal: '', customGoal: '', timeline: '',
-    jlpt: initialJlpt || '',
+    jlpt: toEstimationLevel(initialJlpt) || '',
     hoursPerDay: '', daysPerWeek: '', skills: []
   } : undefined;
   // When forced by URL params and a profile already exists, merge the existing saved
   // answers with the freshly-diagnosed name/email/JLPT level (URL values take priority).
   const formForEdit = form
-    ? { ...form, name: initialName || form.name, email: initialEmail || form.email, jlpt: initialJlpt || form.jlpt }
+    ? { ...form, name: initialName || form.name, email: initialEmail || form.email, jlpt: toEstimationLevel(initialJlpt) || form.jlpt }
     : prefilledForm;
   const T = useUITranslations(form?.preferredLang || "English");
   // Block all rendering until we know for sure whether someone is logged in (and
@@ -7257,7 +7519,7 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
   if (!form || editing || forceForm) return <FormScreen onSubmit={handleSubmit} onBack={onBack} onCancel={form ? handleCancelEdit : undefined} initialJlpt={initialJlpt} initialForm={formForEdit} />;
   return (
     <div style={{ position:"relative" }} onClickCapture={handleDashboardInteraction}>
-      <Dashboard form={form} onEdit={handleEdit} />
+      <Dashboard form={form} onEdit={handleEdit} onLevelUp={(lvl)=>handleSubmit({ ...form, jlpt: lvl })} />
       {/* TEMP DEBUG — remove after confirming the counter works */}
       <div style={{ position:"fixed", bottom:12, right:12, zIndex:99999, background:"rgba(0,0,0,0.75)", color:"#4ade80", fontSize:11, fontFamily:"monospace", padding:"4px 8px", borderRadius:6 }}>
         count: {interactionCount}/21 {skipTrialPaywall ? "(skip)" : ""} {authUser && isGakuStudent ? "(gaku)" : ""}
