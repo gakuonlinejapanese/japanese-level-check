@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Book a Lesson — GAKU Online Japanese</title>
+<style>
+  :root { --blue:#2f5da8; --green:#22c55e; --red:#ef4444; --ink:#1e293b; }
+  * { box-sizing: border-box; }
+  body { margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif; background:var(--blue); color:#fff; }
+  .wrap { max-width:640px; margin:0 auto; padding:40px 24px 80px; }
+  h1 { font-size:26px; line-height:1.3; margin:0 0 28px; }
+  label { display:block; font-size:14px; margin:20px 0 6px; opacity:.95; }
+  input[type=text], input[type=email], select {
+    width:100%; padding:10px 4px; background:transparent; border:none; border-bottom:1px solid rgba(255,255,255,.6);
+    color:#fff; font-size:15px; outline:none;
+  }
+  input::placeholder { color:rgba(255,255,255,.6); }
+  .checkbox-row { display:flex; align-items:center; gap:8px; margin:8px 0; font-size:14px; }
+  .hint { font-size:12px; opacity:.75; margin-top:4px; }
+  .card { background:rgba(255,255,255,.08); border-radius:12px; padding:16px; margin-top:14px; }
+  .cal-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(92px,1fr)); gap:6px; margin-top:10px; max-height:260px; overflow-y:auto; }
+  .slot { padding:8px 4px; border-radius:8px; font-size:12px; text-align:center; cursor:pointer; user-select:none; }
+  .slot.green { background:var(--green); color:#04331a; font-weight:700; }
+  .slot.red { background:var(--red); color:#3a0a0a; opacity:.55; cursor:not-allowed; }
+  .slot.selected { outline:3px solid #fff; }
+  .option-box { background:rgba(0,0,0,.2); border-radius:8px; padding:10px 12px; margin-top:8px; font-size:13px; }
+  .btn { display:block; width:100%; margin-top:26px; padding:14px; border:none; border-radius:10px; background:#fff; color:var(--blue); font-weight:800; font-size:15px; cursor:pointer; }
+  .btn:disabled { opacity:.5; cursor:not-allowed; }
+  .btn.secondary { background:transparent; border:1.5px solid #fff; color:#fff; }
+  .step { display:none; }
+  .step.active { display:block; }
+  .msgbox { background:rgba(255,255,255,.1); border-radius:12px; padding:20px; font-size:14px; line-height:1.6; }
+  .center { text-align:center; }
+  .agree-row { display:flex; align-items:center; gap:10px; margin-top:16px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- STEP 1: フォーム -->
+  <div class="step active" id="step-form">
+    <h1>Apply for a Lesson (Waitlist)</h1>
+
+    <label>Your Name *</label>
+    <input type="text" id="f-name" placeholder="e.g. Taro Yamada" />
+
+    <label>Email *</label>
+    <input type="email" id="f-email" placeholder="you@example.com" />
+
+    <label>Where do you live now? *</label>
+    <input type="text" id="f-location" placeholder="Please fill your town and country" />
+
+    <label>Your timezone *</label>
+    <select id="f-timezone"></select>
+    <div class="hint">Detected automatically — change it if it's wrong.</div>
+
+    <label>Which course do you want to select? *</label>
+    <select id="f-course">
+      <option>Customized Course</option>
+      <option>Travel Preparation Course</option>
+      <option>JLPT Course</option>
+      <option>Specialized Knowledge Course</option>
+      <option>Music Lyrics Understanding Course</option>
+      <option>Basic Academic Skills Course</option>
+      <option>Media Learning Course</option>
+    </select>
+
+    <label>Your current Japanese level</label>
+    <div class="checkbox-row"><input type="checkbox" name="level" value="Beginner" /> Beginner</div>
+    <div class="checkbox-row"><input type="checkbox" name="level" value="Intermediate" /> Intermediate</div>
+    <div class="checkbox-row"><input type="checkbox" name="level" value="Advanced" /> Advanced</div>
+
+    <div class="card">
+      <strong>Preferred Lesson Times (choose up to 3)</strong>
+      <div class="hint">Green = available, Red = not available. Times are shown in your timezone. Click a green slot to add it as an option.</div>
+      <div class="cal-grid" id="cal-grid"><div class="hint">Loading availability…</div></div>
+      <div id="option-list"></div>
+    </div>
+
+    <button class="btn" id="btn-go-confirm" disabled>Submit</button>
+    <div class="hint center" id="form-error" style="color:#ffd7d7;margin-top:10px;"></div>
+  </div>
+
+  <!-- STEP 2: 注意書き + Agree -->
+  <div class="step" id="step-warning">
+    <div class="msgbox">
+      You are on the waitlist! Since GAKU has a lot of official students and the teacher has a
+      schedule, you might not be able to choose any of the dates to take a lesson. In that case,
+      you need to choose the payment options without lessons.
+    </div>
+    <div class="agree-row">
+      <input type="checkbox" id="f-agree" />
+      <label style="margin:0;" for="f-agree">I agree</label>
+    </div>
+    <button class="btn" id="btn-final-submit" disabled>Submit</button>
+  </div>
+
+  <!-- STEP 3: 完了 -->
+  <div class="step" id="step-done">
+    <div class="msgbox center">
+      <h2 style="margin-top:0;">🎉 Congratulations!</h2>
+      <p>You are on the wait list!</p>
+      <p class="hint" style="color:#fff;opacity:.85;">We'll email you at the address you provided once your lesson time is confirmed.</p>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const params = new URLSearchParams(location.search);
+const planKey = params.get("plan") || "";
+
+// タイムゾーン一覧（主要なものだけ簡易的に）
+const TIMEZONES = ["Asia/Tokyo","America/New_York","America/Chicago","America/Denver","America/Los_Angeles","America/Phoenix","Europe/London","Europe/Paris","Europe/Berlin","Australia/Sydney","Asia/Shanghai","Asia/Seoul","Asia/Singapore","Asia/Bangkok","Pacific/Auckland","America/Sao_Paulo","America/Mexico_City","Asia/Kolkata"];
+const tzSelect = document.getElementById("f-timezone");
+const detectedTz = Intl.DateTimeFormat().resolvedOptions().timeZone || "Asia/Tokyo";
+if (!TIMEZONES.includes(detectedTz)) TIMEZONES.unshift(detectedTz);
+TIMEZONES.forEach(tz => {
+  const opt = document.createElement("option");
+  opt.value = tz; opt.textContent = tz;
+  if (tz === detectedTz) opt.selected = true;
+  tzSelect.appendChild(opt);
+});
+
+const HOURS = ["09:00","10:00","11:00","13:00","14:00","15:00","16:00","17:00","18:00","19:00","20:00"];
+const DAYS_AHEAD = 14;
+let selectedOptions = []; // [{dateJST, timeJST, label}]
+
+function jstDateTimeToDisplay(dateStr, timeStr, tz) {
+  // dateStr/timeStr は JST 基準。JSTのDateを組み立ててから対象タイムゾーンで表示
+  const [h, m] = timeStr.split(":").map(Number);
+  const jstDate = new Date(`${dateStr}T${timeStr}:00+09:00`);
+  return jstDate.toLocaleString("en-US", { timeZone: tz, month:"short", day:"numeric", hour:"numeric", minute:"2-digit" });
+}
+
+async function loadAvailability() {
+  const from = new Date();
+  const to = new Date(Date.now() + DAYS_AHEAD * 86400000);
+  const fmt = d => d.toISOString().slice(0,10);
+  const resp = await fetch("/api/schedule", {
+    method: "POST", headers: {"Content-Type":"application/json"},
+    body: JSON.stringify({ action: "public-availability", fromDate: fmt(from), toDate: fmt(to) })
+  });
+  const data = await resp.json();
+  const takenSet = new Set((data.slots || []).map(s => `${s.date}_${s.time.slice(0,5)}`));
+
+  const grid = document.getElementById("cal-grid");
+  grid.innerHTML = "";
+  const tz = tzSelect.value;
+  for (let i = 1; i <= DAYS_AHEAD; i++) {
+    const d = new Date(Date.now() + i * 86400000);
+    const dateStr = d.toISOString().slice(0,10);
+    HOURS.forEach(time => {
+      const key = `${dateStr}_${time}`;
+      const isTaken = takenSet.has(key);
+      const el = document.createElement("div");
+      el.className = "slot " + (isTaken ? "red" : "green");
+      el.textContent = jstDateTimeToDisplay(dateStr, time, tz);
+      el.dataset.date = dateStr;
+      el.dataset.time = time;
+      if (!isTaken) {
+        el.onclick = () => toggleOption(dateStr, time, el);
+      }
+      grid.appendChild(el);
+    });
+  }
+}
+
+function toggleOption(dateStr, time, el) {
+  const idx = selectedOptions.findIndex(o => o.dateJST === dateStr && o.timeJST === time);
+  if (idx >= 0) {
+    selectedOptions.splice(idx, 1);
+    el.classList.remove("selected");
+  } else {
+    if (selectedOptions.length >= 3) { alert("You can choose up to 3 options."); return; }
+    selectedOptions.push({ dateJST: dateStr, timeJST: time, label: el.textContent });
+    el.classList.add("selected");
+  }
+  renderOptionList();
+}
+
+function renderOptionList() {
+  const box = document.getElementById("option-list");
+  const ordinals = ["First option:", "Second option:", "Third option:"];
+  box.innerHTML = selectedOptions.map((o,i) => `<div class="option-box">${ordinals[i]} ${o.label}</div>`).join("");
+  document.getElementById("btn-go-confirm").disabled = selectedOptions.length === 0;
+}
+
+tzSelect.addEventListener("change", () => { selectedOptions = []; loadAvailability(); renderOptionList(); });
+loadAvailability();
+
+document.getElementById("btn-go-confirm").addEventListener("click", () => {
+  const name = document.getElementById("f-name").value.trim();
+  const email = document.getElementById("f-email").value.trim();
+  const location = document.getElementById("f-location").value.trim();
+  const err = document.getElementById("form-error");
+  if (!name || !email || !location || selectedOptions.length === 0) {
+    err.textContent = "Please fill in your name, email, location, and choose at least one lesson time.";
+    return;
+  }
+  err.textContent = "";
+  document.getElementById("step-form").classList.remove("active");
+  document.getElementById("step-warning").classList.add("active");
+});
+
+document.getElementById("f-agree").addEventListener("change", (e) => {
+  document.getElementById("btn-final-submit").disabled = !e.target.checked;
+});
+
+document.getElementById("btn-final-submit").addEventListener("click", async () => {
+  const btn = document.getElementById("btn-final-submit");
+  btn.disabled = true; btn.textContent = "Submitting…";
+
+  const levels = Array.from(document.querySelectorAll('input[name=level]:checked')).map(c => c.value);
+  const payload = {
+    action: "submit-waitlist",
+    studentName: document.getElementById("f-name").value.trim(),
+    studentEmail: document.getElementById("f-email").value.trim(),
+    planKey,
+    studentTimezone: tzSelect.value,
+    option1Date: selectedOptions[0]?.dateJST, option1Time: selectedOptions[0]?.timeJST,
+    option2Date: selectedOptions[1]?.dateJST, option2Time: selectedOptions[1]?.timeJST,
+    option3Date: selectedOptions[2]?.dateJST, option3Time: selectedOptions[2]?.timeJST,
+    course: document.getElementById("f-course").value,
+    location: document.getElementById("f-location").value.trim(),
+    levels,
+  };
+
+  try {
+    const resp = await fetch("/api/schedule", { method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify(payload) });
+    if (!resp.ok) throw new Error("submit failed");
+    document.getElementById("step-warning").classList.remove("active");
+    document.getElementById("step-done").classList.add("active");
+  } catch (e) {
+    btn.disabled = false; btn.textContent = "Submit";
+    alert("Something went wrong. Please try again.");
+  }
+});
+</script>
+</body>
+</html>
