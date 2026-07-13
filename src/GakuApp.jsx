@@ -140,6 +140,10 @@ const LEVEL_RESOURCES = {
     { name:"Moji Ninja (Kana Challenge)", desc:"Gamified hiragana/katakana recognition challenge.", url:"https://moji.ninja/challenge", free:true, levelKey:"resLevelN5N4", mode:"reading", skills:{ vocab:2, grammar:0, reading:5, speaking:0, listening:0 } },
     { name:"Hirakata (Kana Practice)", desc:"Quick drills for mastering hiragana and katakana recognition.", url:"https://hirakata.io/", free:true, levelKey:"resLevelN5N4", mode:"reading", skills:{ vocab:2, grammar:0, reading:5, speaking:0, listening:0 } },
     { name:"StudyHiragana.com", desc:"Structured hiragana practice with quizzes and stroke order.", url:"https://www.studyhiragana.com/", free:true, levelKey:"resLevelN5N4", mode:"reading", skills:{ vocab:2, grammar:0, reading:5, speaking:0, listening:0 } },
+    { name:"TMS Anime (with GAKU Reader)", desc:"Easy anime clips for comprehensible-input listening and vocabulary; use with GAKU Reader for on-screen lookups.", url:"https://www.youtube.com/@TMSanimeJP", free:true, levelKey:"resLevelN5N4", mode:"listening", skills:{ vocab:4, grammar:0, reading:0, speaking:0, listening:5 } },
+    { name:"Toei Anime (with GAKU Reader)", desc:"Beginner-friendly anime clips for listening and vocabulary; use with GAKU Reader for on-screen lookups.", url:"https://www.youtube.com/@toeianime_MC", free:true, levelKey:"resLevelN5N4", mode:"listening", skills:{ vocab:4, grammar:0, reading:0, speaking:0, listening:5 } },
+    { name:"Pokemon Kids TV (with GAKU Reader)", desc:"Simple, slow Japanese aimed at children — great early listening and vocabulary input.", url:"https://www.pokemon.jp/special/Pokemon-KidsTV/", free:true, levelKey:"resLevelN5N4", mode:"listening", skills:{ vocab:3, grammar:0, reading:0, speaking:0, listening:5 } },
+    { name:"Doraemon the Movie (with GAKU Reader)", desc:"Beginner-accessible anime movie content for listening and vocabulary.", url:"https://www.youtube.com/DoraemonTheMovie", free:true, levelKey:"resLevelN5N4", mode:"listening", skills:{ vocab:3, grammar:0, reading:0, speaking:0, listening:5 } },
   ],
   "N5": [
     { name:"Japanese with Shun", descKey:"resShunDesc", url:"https://www.youtube.com/channel/UCu6sZrHyl4hSS2PvlUo2XZA", free:true, levelKey:"resLevelN5N4", mode:"listening", skills:{ vocab:4, grammar:2, reading:0, speaking:3, listening:5 } },
@@ -148,6 +152,9 @@ const LEVEL_RESOURCES = {
     { name:"Nihongoplay (Flashcard Decks)", desc:"Ready-made JLPT-graded vocabulary decks to review by reading.", url:"https://nihongoplay.com/decks", free:true, levelKey:"resLevelN5N4", mode:"reading", skills:{ vocab:5, grammar:1, reading:3, speaking:0, listening:0 } },
     { name:"MLC N5-N4 Katakana Quiz", desc:"Katakana recognition quiz pitched at N5-N4 level.", url:"https://www.mlcjapanese.co.jp/n5n4_jlpt_katakana_quiz_01.html", free:true, levelKey:"resLevelN5N4", mode:"reading", skills:{ vocab:2, grammar:2, reading:5, speaking:0, listening:0 } },
     { name:"Anime Reading (with GAKU Reader)", desc:"Read manga/anime scripts with the GAKU Reader extension for instant furigana and lookups.", url:"https://jyosiki.com/manga/danmachi/2_2.html", free:true, levelKey:"resLevelN5N4", mode:"reading", skills:{ vocab:4, grammar:2, reading:5, speaking:0, listening:1 } },
+    { name:"TMS Anime (with GAKU Reader)", desc:"Anime clips for comprehensible-input listening and vocabulary; use with GAKU Reader for on-screen lookups.", url:"https://www.youtube.com/@TMSanimeJP", free:true, levelKey:"resLevelN5N4", mode:"listening", skills:{ vocab:4, grammar:0, reading:0, speaking:0, listening:5 } },
+    { name:"Toei Anime (with GAKU Reader)", desc:"Anime clips for listening and vocabulary; use with GAKU Reader for on-screen lookups.", url:"https://www.youtube.com/@toeianime_MC", free:true, levelKey:"resLevelN5N4", mode:"listening", skills:{ vocab:4, grammar:0, reading:0, speaking:0, listening:5 } },
+    { name:"Pokemon Kids TV (with GAKU Reader)", desc:"Simple, slow Japanese aimed at children — listening, vocabulary, and light reading with GAKU Reader.", url:"https://www.pokemon.jp/special/Pokemon-KidsTV/", free:true, levelKey:"resLevelN5N4", mode:"listening", skills:{ vocab:3, grammar:0, reading:2, speaking:0, listening:5 } },
   ],
   "N4": [
     { name:"Marugoto Web", descKey:"resMarugotoDesc", url:"https://marugotoweb.jp/ja/", free:true, levelKey:"resLevelN4N3", mode:"speaking", skills:{ vocab:4, grammar:4, reading:3, speaking:5, listening:5 } },
@@ -156,6 +163,8 @@ const LEVEL_RESOURCES = {
     { name:"Nihongoplay (Flashcard Decks)", desc:"Ready-made JLPT-graded vocabulary decks to review by reading.", url:"https://nihongoplay.com/decks", free:true, levelKey:"resLevelN3N2", mode:"reading", skills:{ vocab:5, grammar:1, reading:3, speaking:0, listening:0 } },
     { name:"MLC N4 Grammar Quiz", desc:"N4-level grammar comprehension quiz.", url:"https://www.mlcjapanese.co.jp/n4_jlpt_grammar_quiz_01.html", free:true, levelKey:"resLevelN3N2", mode:"reading", skills:{ vocab:2, grammar:5, reading:4, speaking:0, listening:0 } },
     { name:"Anime Reading (with GAKU Reader)", desc:"Read manga/anime scripts with the GAKU Reader extension for instant furigana and lookups.", url:"https://jyosiki.com/manga/danmachi/2_2.html", free:true, levelKey:"resLevelN3N2", mode:"reading", skills:{ vocab:4, grammar:2, reading:5, speaking:0, listening:1 } },
+    { name:"TMS Anime (with GAKU Reader)", desc:"Anime clips for comprehensible-input listening and vocabulary; use with GAKU Reader for on-screen lookups.", url:"https://www.youtube.com/@TMSanimeJP", free:true, levelKey:"resLevelN3N2", mode:"listening", skills:{ vocab:4, grammar:0, reading:0, speaking:0, listening:5 } },
+    { name:"Toei Anime (with GAKU Reader)", desc:"Anime clips for listening and vocabulary; use with GAKU Reader for on-screen lookups.", url:"https://www.youtube.com/@toeianime_MC", free:true, levelKey:"resLevelN3N2", mode:"listening", skills:{ vocab:4, grammar:0, reading:0, speaking:0, listening:5 } },
   ],
   "N3": [
     { name:"Nihongo con Teppei", descKey:"resTeppeiDesc", url:"https://nihongoconteppei.com", free:true, levelKey:"resLevelN3N2", mode:"listening", skills:{ vocab:5, grammar:2, reading:0, speaking:3, listening:5 } },
@@ -164,17 +173,23 @@ const LEVEL_RESOURCES = {
     { name:"Nihongoplay (Flashcard Decks)", desc:"Ready-made JLPT-graded vocabulary decks to review by reading.", url:"https://nihongoplay.com/decks", free:true, levelKey:"resLevelN2N1", mode:"reading", skills:{ vocab:5, grammar:1, reading:3, speaking:0, listening:0 } },
     { name:"MLC N3 Grammar Quiz", desc:"N3-level grammar comprehension quiz.", url:"https://www.mlcjapanese.co.jp/n3_jlpt_grammar_quiz_01.html", free:true, levelKey:"resLevelN2N1", mode:"reading", skills:{ vocab:2, grammar:5, reading:4, speaking:0, listening:0 } },
     { name:"Anime Reading (with GAKU Reader)", desc:"Read manga/anime scripts with the GAKU Reader extension for instant furigana and lookups.", url:"https://jyosiki.com/manga/danmachi/2_2.html", free:true, levelKey:"resLevelN2N1", mode:"reading", skills:{ vocab:4, grammar:2, reading:5, speaking:0, listening:1 } },
+    { name:"TMS Anime", desc:"Anime clips for listening and vocabulary practice.", url:"https://www.youtube.com/@TMSanimeJP", free:true, levelKey:"resLevelN2N1", mode:"listening", skills:{ vocab:4, grammar:0, reading:0, speaking:0, listening:5 } },
+    { name:"Toei Anime", desc:"Anime clips for listening and vocabulary practice.", url:"https://www.youtube.com/@toeianime_MC", free:true, levelKey:"resLevelN2N1", mode:"listening", skills:{ vocab:4, grammar:0, reading:0, speaking:0, listening:5 } },
   ],
   "N2": [
     { name:"Sambon Juku", descKey:"resSambonDesc", url:"https://www.youtube.com/@SambonJuku", free:true, levelKey:"resLevelN2N1", mode:"listening", skills:{ vocab:5, grammar:5, reading:3, speaking:3, listening:4 } },
     { name:"YUYU Japanese Podcast", descKey:"resYuyuDesc", url:"https://www.youtube.com/@yuyunihongopodcast", free:true, levelKey:"resLevelN3N2", mode:"listening", skills:{ vocab:5, grammar:2, reading:0, speaking:3, listening:5 } },
     { name:"MLC N2 Grammar Quiz", desc:"N2-level grammar comprehension quiz.", url:"https://www.mlcjapanese.co.jp/n2_jlpt_grammar_quiz_01.html", free:true, levelKey:"resLevelN2N1", mode:"reading", skills:{ vocab:2, grammar:5, reading:4, speaking:0, listening:0 } },
     { name:"Anime Reading (with GAKU Reader)", desc:"Read manga/anime scripts with the GAKU Reader extension for instant furigana and lookups.", url:"https://jyosiki.com/manga/danmachi/2_2.html", free:true, levelKey:"resLevelN2N1", mode:"reading", skills:{ vocab:4, grammar:2, reading:5, speaking:0, listening:1 } },
+    { name:"TMS Anime", desc:"Anime clips for listening and vocabulary practice.", url:"https://www.youtube.com/@TMSanimeJP", free:true, levelKey:"resLevelN2N1", mode:"listening", skills:{ vocab:4, grammar:0, reading:0, speaking:0, listening:5 } },
+    { name:"Toei Anime", desc:"Anime clips for listening and vocabulary practice.", url:"https://www.youtube.com/@toeianime_MC", free:true, levelKey:"resLevelN2N1", mode:"listening", skills:{ vocab:4, grammar:0, reading:0, speaking:0, listening:5 } },
   ],
   "N1": [
     { name:"Sambon Juku", descKey:"resSambonDesc", url:"https://www.youtube.com/@SambonJuku", free:true, levelKey:"resLevelN2N1", mode:"listening", skills:{ vocab:5, grammar:5, reading:3, speaking:3, listening:4 } },
     { name:"MLC N1 Grammar Quiz", desc:"N1-level grammar comprehension quiz.", url:"https://www.mlcjapanese.co.jp/n1_jlpt_grammar_quiz_01.html", free:true, levelKey:"resLevelN2N1", mode:"reading", skills:{ vocab:2, grammar:5, reading:4, speaking:0, listening:0 } },
     { name:"Anime Reading (with GAKU Reader)", desc:"Read manga/anime scripts with the GAKU Reader extension for instant furigana and lookups.", url:"https://jyosiki.com/manga/danmachi/2_2.html", free:true, levelKey:"resLevelN2N1", mode:"reading", skills:{ vocab:4, grammar:2, reading:5, speaking:0, listening:1 } },
+    { name:"TMS Anime", desc:"Anime clips for listening and vocabulary practice.", url:"https://www.youtube.com/@TMSanimeJP", free:true, levelKey:"resLevelN2N1", mode:"listening", skills:{ vocab:4, grammar:0, reading:0, speaking:0, listening:5 } },
+    { name:"Toei Anime", desc:"Anime clips for listening and vocabulary practice.", url:"https://www.youtube.com/@toeianime_MC", free:true, levelKey:"resLevelN2N1", mode:"listening", skills:{ vocab:4, grammar:0, reading:0, speaking:0, listening:5 } },
   ],
 };
 // Aliases so the new self-estimation scale (Beginner–Mastery) resolves to the same curated
