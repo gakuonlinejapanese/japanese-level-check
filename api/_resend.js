@@ -1,22 +1,24 @@
 export async function sendEmail({ to, subject, html }) {
-  const apiKey = process.env.RESEND_API_KEY;
-  if (!apiKey) throw new Error("RESEND_API_KEY not configured");
-  const res = await fetch("https://api.resend.com/emails", {
+  const apiKey = process.env.BREVO_API_KEY;
+  if (!apiKey) throw new Error("BREVO_API_KEY not configured");
+  const toList = Array.isArray(to) ? to : [to];
+  const res = await fetch("https://api.brevo.com/v3/smtp/email", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      "Authorization": `Bearer ${apiKey}`,
+      "Accept": "application/json",
+      "api-key": apiKey,
     },
     body: JSON.stringify({
-      from: "GAKU <onboarding@resend.dev>", // switch to a verified seitojapanese.online address once the domain is added in Resend
-      to: Array.isArray(to) ? to : [to],
+      sender: { name: "GAKU Online Japanese", email: "noreply@seitojapanese.online" },
+      to: toList.map((email) => ({ email })),
       subject,
-      html,
+      htmlContent: html,
     }),
   });
   if (!res.ok) {
     const errText = await res.text().catch(() => "");
-    throw new Error(`Resend error (${res.status}): ${errText}`);
+    throw new Error(`Brevo error (${res.status}): ${errText}`);
   }
   return res.json();
 }
