@@ -22,80 +22,100 @@ const S = {
 // ─── CLT RESOURCES ─────────────────────────────────────────────────────────────
 const RESOURCES = {
   pronunciation: [
-    { name:"Anki (Japanese Decks)", desc:"Build phonetic recognition with audio flashcards. CLT: hear and repeat.", descKey:"resAnkiPronDesc", url:"https://ankiweb.net/shared/decks?search=japanese", free:true },
-    { name:"Japanese Ammo with Misa", desc:"Practical example sentences and pronunciation drills. CLT-focused.", descKey:"resMisaPronDesc", url:"https://www.youtube.com/@JapaneseAmmowithMisa", free:true },
-    { name:"Onomappu", desc:"Japanese-only explanations. Comprehensible Input — CLT compatibility very high.", descKey:"resOnomappuPronDesc", url:"https://www.youtube.com/@Onomappu", free:true },
+    { name:"Anki (Japanese Decks)", desc:"Build phonetic recognition with audio flashcards. CLT: hear and repeat.", descKey:"resAnkiPronDesc", url:"https://ankiweb.net/shared/decks?search=japanese", free:true, mode:"listening" },
+    { name:"Japanese Ammo with Misa", desc:"Practical example sentences and pronunciation drills. CLT-focused.", descKey:"resMisaPronDesc", url:"https://www.youtube.com/@JapaneseAmmowithMisa", free:true, mode:"listening" },
+    { name:"Onomappu", desc:"Japanese-only explanations. Comprehensible Input — CLT compatibility very high.", descKey:"resOnomappuPronDesc", url:"https://www.youtube.com/@Onomappu", free:true, mode:"listening" },
   ],
   listening: [
-    { name:"NHK World Lesson", desc:"Authentic NHK audio lessons. CLT input at natural pace.", url:"https://www3.nhk.or.jp/nhkworld/lesson/en/lessons/", free:true },
-    { name:"Erin's Challenge", desc:"Drama-based listening with real-life scenarios and role-play. CLT compatibility extremely high.", url:"https://www.erin.jpf.go.jp/en/lesson/09/advanced/", free:true },
-    { name:"JapanesePod101 (YouTube)", desc:"Structured listening practice. Watch and shadow for CLT output.", url:"https://www.youtube.com/watch?v=B_55oW65H4M", free:true },
-    { name:"Nihongo con Teppei", desc:"Daily natural conversation podcast. Recommended by Japanese teachers worldwide.", url:"https://nihongoconteppei.com", free:true },
-    { name:"YUYU Japanese Podcast", desc:"Natural speed, authentic materials. CLT-compatible listening at N3-N2.", url:"https://www.youtube.com/@yuyunihongopodcast", free:true },
-    { name:"Japanese with Shun", desc:"Super clear Japanese. Comprehensible Input — N5-N4 level.", url:"https://www.youtube.com/channel/UCu6sZrHyl4hSS2PvlUo2XZA", free:true },
-    { name:"Onomappu", desc:"Japanese-only podcast. Comprehensible Input, CLT compatibility very high. N4-N3.", url:"https://www.youtube.com/@Onomappu", free:true },
-    { name:"Sambon Juku", desc:"Natural Japanese, real conversation expressions. N2-N1 level.", url:"https://www.youtube.com/@SambonJuku", free:true },
-    { name:"Miku Real Japanese", desc:"Native-level conversation, real-life Japanese. High CLT compatibility.", url:"https://www.youtube.com/@mikunihongo", free:true },
-    { name:"Akane Japanese Class", desc:"Natural conversation, Japanese culture, practical expressions. N4-N3.", url:"https://www.youtube.com/@Akane-JapaneseClass", free:true },
-    { name:"Easy Japanese NHK", desc:"Real-world scenario setting, role-play. Very close to CLT research.", url:"https://www.nhk.or.jp/lesson/en/", free:true },
-    { name:"Hilokal", desc:"Audio rooms and group conversation for real practice. CLT compatibility very high.", url:"https://hilokal.com", free:true },
+    { name:"NHK World Lesson", desc:"Authentic NHK audio lessons. CLT input at natural pace.", url:"https://www3.nhk.or.jp/nhkworld/lesson/en/lessons/", free:true, mode:"listening" },
+    { name:"Erin's Challenge", desc:"Drama-based listening with real-life scenarios and role-play. CLT compatibility extremely high.", url:"https://www.erin.jpf.go.jp/en/lesson/09/advanced/", free:true, mode:"listening" },
+    { name:"JapanesePod101 (YouTube)", desc:"Structured listening practice. Watch and shadow for CLT output.", url:"https://www.youtube.com/watch?v=B_55oW65H4M", free:true, mode:"listening" },
+    { name:"Nihongo con Teppei", desc:"Daily natural conversation podcast. Recommended by Japanese teachers worldwide.", url:"https://nihongoconteppei.com", free:true, mode:"listening" },
+    { name:"YUYU Japanese Podcast", desc:"Natural speed, authentic materials. CLT-compatible listening at N3-N2.", url:"https://www.youtube.com/@yuyunihongopodcast", free:true, mode:"listening" },
+    { name:"Japanese with Shun", desc:"Super clear Japanese. Comprehensible Input — N5-N4 level.", url:"https://www.youtube.com/channel/UCu6sZrHyl4hSS2PvlUo2XZA", free:true, mode:"listening" },
+    { name:"Onomappu", desc:"Japanese-only podcast. Comprehensible Input, CLT compatibility very high. N4-N3.", url:"https://www.youtube.com/@Onomappu", free:true, mode:"listening" },
+    { name:"Sambon Juku", desc:"Natural Japanese, real conversation expressions. N2-N1 level.", url:"https://www.youtube.com/@SambonJuku", free:true, mode:"listening" },
+    { name:"Miku Real Japanese", desc:"Native-level conversation, real-life Japanese. High CLT compatibility.", url:"https://www.youtube.com/@mikunihongo", free:true, mode:"listening" },
+    { name:"Akane Japanese Class", desc:"Natural conversation, Japanese culture, practical expressions. N4-N3.", url:"https://www.youtube.com/@Akane-JapaneseClass", free:true, mode:"listening" },
+    { name:"Easy Japanese NHK", desc:"Real-world scenario setting, role-play. Very close to CLT research.", url:"https://www.nhk.or.jp/lesson/en/", free:true, mode:"listening" },
+    { name:"Hilokal", desc:"Audio rooms and group conversation for real practice. CLT compatibility very high.", url:"https://hilokal.com", free:true, mode:"speaking" },
   ],
   conversation: [
-    { name:"NHK Japan — Learn Japanese", desc:"CLT-based conversational Japanese. Real-life scenario practice.", url:"https://www3.nhk.or.jp/nhkworld/en/learnjapanese/", free:true },
-    { name:"Erin's Challenge", desc:"Interactive drama with real situations and role-play. CLT compatibility extremely high.", url:"https://www.erin.jpf.go.jp/en/lesson/09/advanced/", free:true },
-    { name:"MARUGOTO Plus", desc:"Japan Foundation's CEFR-based task-centered course. A1-B1. Represents CLT itself.", url:"https://a1.marugotoweb.jp/en/", free:true },
-    { name:"IRODORI Japanese Online Course", desc:"One of the most CLT-aligned materials in current Japanese education. Life scenarios, role-play, task-based.", url:"https://www.irodori.jpf.go.jp/", free:true },
-    { name:"HelloTalk", desc:"Real interaction with Japanese speakers. CLT level ★★★★★", url:"https://www.hellotalk.com/", free:true },
-    { name:"Tandem", desc:"Language exchange. Real communication practice. CLT level ★★★★★", url:"https://www.tandem.net/", free:true },
-    { name:"Hilokal", desc:"Audio rooms, group conversation, real practice. CLT compatibility very high.", url:"https://hilokal.com", free:true },
-    { name:"JapanesePod101 (YouTube)", desc:"Conversational drills and cultural context. Shadow and repeat.", url:"https://www.youtube.com/watch?v=B_55oW65H4M", free:true },
-    { name:"Japanese Ammo with Misa", desc:"Practical example sentences, conversation-focused. CLT-aligned.", url:"https://www.youtube.com/@JapaneseAmmowithMisa", free:true },
-    { name:"Miku Real Japanese", desc:"Native-to-native conversation, real daily Japanese. High CLT compatibility.", url:"https://www.youtube.com/@mikunihongo", free:true },
-    { name:"Let's Learn Japanese from Small Talk", desc:"Native-to-native conversation, authentic communication.", url:"https://www.youtube.com/@LetsLearnJapanese", free:true },
+    { name:"NHK Japan — Learn Japanese", desc:"CLT-based conversational Japanese. Real-life scenario practice.", url:"https://www3.nhk.or.jp/nhkworld/en/learnjapanese/", free:true, mode:"speaking" },
+    { name:"Erin's Challenge", desc:"Interactive drama with real situations and role-play. CLT compatibility extremely high.", url:"https://www.erin.jpf.go.jp/en/lesson/09/advanced/", free:true, mode:"speaking" },
+    { name:"MARUGOTO Plus", desc:"Japan Foundation's CEFR-based task-centered course. A1-B1. Represents CLT itself.", url:"https://a1.marugotoweb.jp/en/", free:true, mode:"speaking" },
+    { name:"IRODORI Japanese Online Course", desc:"One of the most CLT-aligned materials in current Japanese education. Life scenarios, role-play, task-based.", url:"https://www.irodori.jpf.go.jp/", free:true, mode:"speaking" },
+    { name:"HelloTalk", desc:"Real interaction with Japanese speakers. CLT level ★★★★★", url:"https://www.hellotalk.com/", free:true, mode:"speaking" },
+    { name:"Tandem", desc:"Language exchange. Real communication practice. CLT level ★★★★★", url:"https://www.tandem.net/", free:true, mode:"speaking" },
+    { name:"Hilokal", desc:"Audio rooms, group conversation, real practice. CLT compatibility very high.", url:"https://hilokal.com", free:true, mode:"speaking" },
+    { name:"JapanesePod101 (YouTube)", desc:"Conversational drills and cultural context. Shadow and repeat.", url:"https://www.youtube.com/watch?v=B_55oW65H4M", free:true, mode:"listening" },
+    { name:"Japanese Ammo with Misa", desc:"Practical example sentences, conversation-focused. CLT-aligned.", url:"https://www.youtube.com/@JapaneseAmmowithMisa", free:true, mode:"listening" },
+    { name:"Miku Real Japanese", desc:"Native-to-native conversation, real daily Japanese. High CLT compatibility.", url:"https://www.youtube.com/@mikunihongo", free:true, mode:"speaking" },
+    { name:"Let's Learn Japanese from Small Talk", desc:"Native-to-native conversation, authentic communication.", url:"https://www.youtube.com/@LetsLearnJapanese", free:true, mode:"listening" },
   ],
   jlpt: [
-    { name:"Japanese Test 4 You — Vocabulary", desc:"JLPT vocabulary practice N5-N1. Test your word knowledge.", url:"https://japanesetest4you.com/jlpt-n5-vocabulary/", free:true },
-    { name:"Japanese Test 4 You — Reading", desc:"JLPT reading comprehension N5-N1. Graded passages with questions.", url:"https://japanesetest4you.com/jlpt-n5-reading/", free:true },
-    { name:"Japanese Test 4 You — Listening", desc:"JLPT listening practice N5-N1. Audio-based questions.", url:"https://japanesetest4you.com/jlpt-n5-listening/", free:true },
-    { name:"Nihongo no Mori", desc:"Grammar-rich JLPT prep with natural conversation examples. N2-N1.", url:"https://www.youtube.com/@nihongonomori", free:true },
-    { name:"Sambon Juku", desc:"JLPT N2-N1 grammar and vocabulary in natural context.", url:"https://www.youtube.com/@SambonJuku", free:true },
+    { name:"Japanese Test 4 You — Vocabulary", desc:"JLPT vocabulary practice N5-N1. Test your word knowledge.", url:"https://japanesetest4you.com/jlpt-n5-vocabulary/", free:true, mode:"reading" },
+    { name:"Japanese Test 4 You — Reading", desc:"JLPT reading comprehension N5-N1. Graded passages with questions.", url:"https://japanesetest4you.com/jlpt-n5-reading/", free:true, mode:"reading" },
+    { name:"Japanese Test 4 You — Listening", desc:"JLPT listening practice N5-N1. Audio-based questions.", url:"https://japanesetest4you.com/jlpt-n5-listening/", free:true, mode:"listening" },
+    { name:"Nihongo no Mori", desc:"Grammar-rich JLPT prep with natural conversation examples. N2-N1.", url:"https://www.youtube.com/@nihongonomori", free:true, mode:"listening" },
+    { name:"Sambon Juku", desc:"JLPT N2-N1 grammar and vocabulary in natural context.", url:"https://www.youtube.com/@SambonJuku", free:true, mode:"listening" },
   ],
   reading: [
-    { name:"Tadoku (Free Readers)", desc:"Graded reading from Level 0–4. CLT: read then discuss.", url:"https://tadoku.org/japanese/book-search/?level=&series=&kw=&order=register_desc", free:true },
-    { name:"NHK Web Easy", desc:"Real Japanese news simplified. Perfect A2-B1 reading input. Authentic materials.", url:"https://news.web.nhk/news/easy/", free:true },
-    { name:"FluencyDrop Stories", desc:"Authentic short stories with audio. Build reading fluency.", url:"https://fluencydrop.com/stories/japanese", free:true },
-    { name:"IRODORI Japanese Online Course", desc:"Reading tasks based on daily life in Japan. CLT task-based.", url:"https://www.irodori.jpf.go.jp/", free:true },
-    { name:"Japonin Teacher's Blog", desc:"Conversation-centered teaching materials with free audio. Reading + comprehension.", url:"https://japonin.com/", free:true },
-    { name:"LingQ", desc:"Authentic materials — read and listen simultaneously. Build reading fluency.", url:"https://www.lingq.com/en/learn/ja/", free:false },
-    { name:"NHK News Web (advanced)", desc:"Full-speed NHK news for N2-N1 readers. Authentic materials.", url:"https://www3.nhk.or.jp/news/", free:true },
+    { name:"Tadoku (Free Readers)", desc:"Graded reading from Level 0–4. CLT: read then discuss.", url:"https://tadoku.org/japanese/book-search/?level=&series=&kw=&order=register_desc", free:true, mode:"reading" },
+    { name:"NHK Web Easy", desc:"Real Japanese news simplified. Perfect A2-B1 reading input. Authentic materials.", url:"https://news.web.nhk/news/easy/", free:true, mode:"reading" },
+    { name:"FluencyDrop Stories", desc:"Authentic short stories with audio. Build reading fluency.", url:"https://fluencydrop.com/stories/japanese", free:true, mode:"reading" },
+    { name:"IRODORI Japanese Online Course", desc:"Reading tasks based on daily life in Japan. CLT task-based.", url:"https://www.irodori.jpf.go.jp/", free:true, mode:"reading" },
+    { name:"Japonin Teacher's Blog", desc:"Conversation-centered teaching materials with free audio. Reading + comprehension.", url:"https://japonin.com/", free:true, mode:"reading" },
+    { name:"LingQ", desc:"Authentic materials — read and listen simultaneously. Build reading fluency.", url:"https://www.lingq.com/en/learn/ja/", free:false, mode:"reading" },
+    { name:"NHK News Web (advanced)", desc:"Full-speed NHK news for N2-N1 readers. Authentic materials.", url:"https://www3.nhk.or.jp/news/", free:true, mode:"reading" },
   ],
   kanji: [
-    { name:"Nihonten AI (Bilingual Kanji)", desc:"AI-powered personalized kanji with bilingual translation context.", url:"https://nihonten.ai/", free:false },
-    { name:"IRODORI Japanese Online Course", desc:"Kanji introduced in real-life context. Task-based CLT approach.", url:"https://www.irodori.jpf.go.jp/", free:true },
-    { name:"Nihongo no Mori", desc:"Systematic kanji instruction with vocabulary and usage examples. N2-N1.", url:"https://www.youtube.com/@nihongonomori", free:true },
+    { name:"Nihonten AI (Bilingual Kanji)", desc:"AI-powered personalized kanji with bilingual translation context.", url:"https://nihonten.ai/", free:false, mode:"writing" },
+    { name:"IRODORI Japanese Online Course", desc:"Kanji introduced in real-life context. Task-based CLT approach.", url:"https://www.irodori.jpf.go.jp/", free:true, mode:"reading" },
+    { name:"Nihongo no Mori", desc:"Systematic kanji instruction with vocabulary and usage examples. N2-N1.", url:"https://www.youtube.com/@nihongonomori", free:true, mode:"listening" },
   ],
   grammar: [
-    { name:"Imabi", desc:"The most comprehensive free Japanese grammar reference online.", url:"https://imabi.org/", free:true },
-    { name:"MARUGOTO Plus", desc:"Grammar taught through real communicative tasks. CEFR-based CLT.", url:"https://a1.marugotoweb.jp/en/", free:true },
-    { name:"IRODORI Japanese Online Course", desc:"Grammar in daily-life task contexts. Closest to CLT in current Japanese education.", url:"https://www.irodori.jpf.go.jp/", free:true },
-    { name:"Sambon Juku", desc:"Grammar in natural Japanese conversation. N2-N1 level.", url:"https://www.youtube.com/@SambonJuku", free:true },
-    { name:"Nihongo no Mori", desc:"Structured grammar lessons with example sentences and JLPT focus.", url:"https://www.youtube.com/@nihongonomori", free:true },
-    { name:"Japonin Teacher's Blog", desc:"Conversation-centered grammar materials with audio.", url:"https://japonin.com/", free:true },
+    { name:"Imabi", desc:"The most comprehensive free Japanese grammar reference online.", url:"https://imabi.org/", free:true, mode:"reading" },
+    { name:"MARUGOTO Plus", desc:"Grammar taught through real communicative tasks. CEFR-based CLT.", url:"https://a1.marugotoweb.jp/en/", free:true, mode:"speaking" },
+    { name:"IRODORI Japanese Online Course", desc:"Grammar in daily-life task contexts. Closest to CLT in current Japanese education.", url:"https://www.irodori.jpf.go.jp/", free:true, mode:"reading" },
+    { name:"Sambon Juku", desc:"Grammar in natural Japanese conversation. N2-N1 level.", url:"https://www.youtube.com/@SambonJuku", free:true, mode:"listening" },
+    { name:"Nihongo no Mori", desc:"Structured grammar lessons with example sentences and JLPT focus.", url:"https://www.youtube.com/@nihongonomori", free:true, mode:"listening" },
+    { name:"Japonin Teacher's Blog", desc:"Conversation-centered grammar materials with audio.", url:"https://japonin.com/", free:true, mode:"reading" },
   ],
 };
 
 // Flattened lookup of every known external resource already curated in this app (Tadoku, Imabi,
 // NHK Web Easy, Anki, etc. — from RESOURCES/LEVEL_RESOURCES below), so schedule tasks that mention
 // one of these by name can link straight to it instead of leaving the student to search for it.
+// Every resource carries a `mode` (reading/listening/speaking/writing) describing what a student
+// actually DOES with it. Because the same name (e.g. "Anki", "IRODORI") can appear in more than one
+// category with a different mode, we keep ALL candidates per name and pick the one matching the
+// task's actual skill — this is what prevents e.g. a kanji-writing task from surfacing the
+// listening-focused "Anki (Japanese Decks)" link.
 const ALL_RESOURCE_LOOKUP = {};
 function registerResourceLookup(list) {
-  (list || []).forEach(r => { if (r?.name && !ALL_RESOURCE_LOOKUP[r.name]) ALL_RESOURCE_LOOKUP[r.name] = r; });
+  (list || []).forEach(r => {
+    if (!r?.name) return;
+    if (!ALL_RESOURCE_LOOKUP[r.name]) ALL_RESOURCE_LOOKUP[r.name] = [];
+    if (!ALL_RESOURCE_LOOKUP[r.name].some(existing => existing.url === r.url && existing.mode === r.mode)) {
+      ALL_RESOURCE_LOOKUP[r.name].push(r);
+    }
+  });
 }
-function findTaskResourceLink(taskText) {
+// taskMode (optional): "reading" | "listening" | "speaking" | "writing" — the skill the schedule
+// task actually targets. When provided, only resources tagged with that same mode are eligible,
+// so a task never gets a resource link for the wrong skill just because a keyword matched.
+function findTaskResourceLink(taskText, taskMode) {
   const t = (taskText || "").toLowerCase();
   const names = Object.keys(ALL_RESOURCE_LOOKUP).sort((a, b) => b.length - a.length);
-  const match = names.find(n => t.includes(n.split(" (")[0].toLowerCase()));
-  return match ? ALL_RESOURCE_LOOKUP[match] : null;
+  const matchedName = names.find(n => t.includes(n.split(" (")[0].toLowerCase()));
+  if (!matchedName) return null;
+  const candidates = ALL_RESOURCE_LOOKUP[matchedName];
+  if (taskMode) {
+    const modeMatch = candidates.find(r => r.mode === taskMode);
+    return modeMatch || null; // no cross-mode fallback: better no link than a misleading one
+  }
+  return candidates[0] || null; // legacy tasks with no mode tag: keep old best-effort behavior
 }
 
 // Maps schedule-task keywords to the in-app tab (and resources sub-tab, if any) that already
@@ -114,30 +134,47 @@ function findTaskAppNav(taskText) {
 // Level-based recommended resources
 const LEVEL_RESOURCES = {
   "Beginner": [
-    { name:"Japanese with Shun", descKey:"resShunDesc", url:"https://www.youtube.com/channel/UCu6sZrHyl4hSS2PvlUo2XZA", free:true, levelKey:"resLevelN5N4", skills:{ vocab:4, grammar:2, reading:0, speaking:3, listening:5 } },
-    { name:"Marugoto Web", descKey:"resMarugotoDesc", url:"https://marugotoweb.jp/ja/", free:true, levelKey:"resLevelN4N3", skills:{ vocab:4, grammar:4, reading:3, speaking:5, listening:5 } },
+    { name:"Japanese with Shun", descKey:"resShunDesc", url:"https://www.youtube.com/channel/UCu6sZrHyl4hSS2PvlUo2XZA", free:true, levelKey:"resLevelN5N4", mode:"listening", skills:{ vocab:4, grammar:2, reading:0, speaking:3, listening:5 } },
+    { name:"Marugoto Web", descKey:"resMarugotoDesc", url:"https://marugotoweb.jp/ja/", free:true, levelKey:"resLevelN4N3", mode:"speaking", skills:{ vocab:4, grammar:4, reading:3, speaking:5, listening:5 } },
+    { name:"MLC Hiragana & Katakana Drills", desc:"Side-by-side hiragana and katakana drills for absolute beginners.", url:"https://www.mlcjapanese.co.jp/hiragana_katakana.html", free:true, levelKey:"resLevelN5N4", mode:"reading", skills:{ vocab:2, grammar:0, reading:5, speaking:0, listening:0 } },
+    { name:"Moji Ninja (Kana Challenge)", desc:"Gamified hiragana/katakana recognition challenge.", url:"https://moji.ninja/challenge", free:true, levelKey:"resLevelN5N4", mode:"reading", skills:{ vocab:2, grammar:0, reading:5, speaking:0, listening:0 } },
+    { name:"Hirakata (Kana Practice)", desc:"Quick drills for mastering hiragana and katakana recognition.", url:"https://hirakata.io/", free:true, levelKey:"resLevelN5N4", mode:"reading", skills:{ vocab:2, grammar:0, reading:5, speaking:0, listening:0 } },
+    { name:"StudyHiragana.com", desc:"Structured hiragana practice with quizzes and stroke order.", url:"https://www.studyhiragana.com/", free:true, levelKey:"resLevelN5N4", mode:"reading", skills:{ vocab:2, grammar:0, reading:5, speaking:0, listening:0 } },
   ],
   "N5": [
-    { name:"Japanese with Shun", descKey:"resShunDesc", url:"https://www.youtube.com/channel/UCu6sZrHyl4hSS2PvlUo2XZA", free:true, levelKey:"resLevelN5N4", skills:{ vocab:4, grammar:2, reading:0, speaking:3, listening:5 } },
-    { name:"Marugoto Web", descKey:"resMarugotoDesc", url:"https://marugotoweb.jp/ja/", free:true, levelKey:"resLevelN4N3", skills:{ vocab:4, grammar:4, reading:3, speaking:5, listening:5 } },
-    { name:"Onomappu", descKey:"resOnomappuDesc", url:"https://www.youtube.com/@Onomappu", free:true, levelKey:"resLevelN4N3", skills:{ vocab:5, grammar:3, reading:0, speaking:4, listening:5 } },
+    { name:"Japanese with Shun", descKey:"resShunDesc", url:"https://www.youtube.com/channel/UCu6sZrHyl4hSS2PvlUo2XZA", free:true, levelKey:"resLevelN5N4", mode:"listening", skills:{ vocab:4, grammar:2, reading:0, speaking:3, listening:5 } },
+    { name:"Marugoto Web", descKey:"resMarugotoDesc", url:"https://marugotoweb.jp/ja/", free:true, levelKey:"resLevelN4N3", mode:"speaking", skills:{ vocab:4, grammar:4, reading:3, speaking:5, listening:5 } },
+    { name:"Onomappu", descKey:"resOnomappuDesc", url:"https://www.youtube.com/@Onomappu", free:true, levelKey:"resLevelN4N3", mode:"listening", skills:{ vocab:5, grammar:3, reading:0, speaking:4, listening:5 } },
+    { name:"Nihongoplay (Flashcard Decks)", desc:"Ready-made JLPT-graded vocabulary decks to review by reading.", url:"https://nihongoplay.com/decks", free:true, levelKey:"resLevelN5N4", mode:"reading", skills:{ vocab:5, grammar:1, reading:3, speaking:0, listening:0 } },
+    { name:"MLC N5-N4 Katakana Quiz", desc:"Katakana recognition quiz pitched at N5-N4 level.", url:"https://www.mlcjapanese.co.jp/n5n4_jlpt_katakana_quiz_01.html", free:true, levelKey:"resLevelN5N4", mode:"reading", skills:{ vocab:2, grammar:2, reading:5, speaking:0, listening:0 } },
+    { name:"Anime Reading (with GAKU Reader)", desc:"Read manga/anime scripts with the GAKU Reader extension for instant furigana and lookups.", url:"https://jyosiki.com/manga/danmachi/2_2.html", free:true, levelKey:"resLevelN5N4", mode:"reading", skills:{ vocab:4, grammar:2, reading:5, speaking:0, listening:1 } },
   ],
   "N4": [
-    { name:"Marugoto Web", descKey:"resMarugotoDesc", url:"https://marugotoweb.jp/ja/", free:true, levelKey:"resLevelN4N3", skills:{ vocab:4, grammar:4, reading:3, speaking:5, listening:5 } },
-    { name:"Onomappu", descKey:"resOnomappuDesc", url:"https://www.youtube.com/@Onomappu", free:true, levelKey:"resLevelN4N3", skills:{ vocab:5, grammar:3, reading:0, speaking:4, listening:5 } },
-    { name:"Nihongo con Teppei", descKey:"resTeppeiDesc", url:"https://nihongoconteppei.com", free:true, levelKey:"resLevelN3N2", skills:{ vocab:5, grammar:2, reading:0, speaking:3, listening:5 } },
+    { name:"Marugoto Web", descKey:"resMarugotoDesc", url:"https://marugotoweb.jp/ja/", free:true, levelKey:"resLevelN4N3", mode:"speaking", skills:{ vocab:4, grammar:4, reading:3, speaking:5, listening:5 } },
+    { name:"Onomappu", descKey:"resOnomappuDesc", url:"https://www.youtube.com/@Onomappu", free:true, levelKey:"resLevelN4N3", mode:"listening", skills:{ vocab:5, grammar:3, reading:0, speaking:4, listening:5 } },
+    { name:"Nihongo con Teppei", descKey:"resTeppeiDesc", url:"https://nihongoconteppei.com", free:true, levelKey:"resLevelN3N2", mode:"listening", skills:{ vocab:5, grammar:2, reading:0, speaking:3, listening:5 } },
+    { name:"Nihongoplay (Flashcard Decks)", desc:"Ready-made JLPT-graded vocabulary decks to review by reading.", url:"https://nihongoplay.com/decks", free:true, levelKey:"resLevelN3N2", mode:"reading", skills:{ vocab:5, grammar:1, reading:3, speaking:0, listening:0 } },
+    { name:"MLC N4 Grammar Quiz", desc:"N4-level grammar comprehension quiz.", url:"https://www.mlcjapanese.co.jp/n4_jlpt_grammar_quiz_01.html", free:true, levelKey:"resLevelN3N2", mode:"reading", skills:{ vocab:2, grammar:5, reading:4, speaking:0, listening:0 } },
+    { name:"Anime Reading (with GAKU Reader)", desc:"Read manga/anime scripts with the GAKU Reader extension for instant furigana and lookups.", url:"https://jyosiki.com/manga/danmachi/2_2.html", free:true, levelKey:"resLevelN3N2", mode:"reading", skills:{ vocab:4, grammar:2, reading:5, speaking:0, listening:1 } },
   ],
   "N3": [
-    { name:"Nihongo con Teppei", descKey:"resTeppeiDesc", url:"https://nihongoconteppei.com", free:true, levelKey:"resLevelN3N2", skills:{ vocab:5, grammar:2, reading:0, speaking:3, listening:5 } },
-    { name:"YUYU Japanese Podcast", descKey:"resYuyuDesc", url:"https://www.youtube.com/@yuyunihongopodcast", free:true, levelKey:"resLevelN3N2", skills:{ vocab:5, grammar:2, reading:0, speaking:3, listening:5 } },
-    { name:"Sambon Juku", descKey:"resSambonDesc", url:"https://www.youtube.com/@SambonJuku", free:true, levelKey:"resLevelN2N1", skills:{ vocab:5, grammar:5, reading:3, speaking:3, listening:4 } },
+    { name:"Nihongo con Teppei", descKey:"resTeppeiDesc", url:"https://nihongoconteppei.com", free:true, levelKey:"resLevelN3N2", mode:"listening", skills:{ vocab:5, grammar:2, reading:0, speaking:3, listening:5 } },
+    { name:"YUYU Japanese Podcast", descKey:"resYuyuDesc", url:"https://www.youtube.com/@yuyunihongopodcast", free:true, levelKey:"resLevelN3N2", mode:"listening", skills:{ vocab:5, grammar:2, reading:0, speaking:3, listening:5 } },
+    { name:"Sambon Juku", descKey:"resSambonDesc", url:"https://www.youtube.com/@SambonJuku", free:true, levelKey:"resLevelN2N1", mode:"listening", skills:{ vocab:5, grammar:5, reading:3, speaking:3, listening:4 } },
+    { name:"Nihongoplay (Flashcard Decks)", desc:"Ready-made JLPT-graded vocabulary decks to review by reading.", url:"https://nihongoplay.com/decks", free:true, levelKey:"resLevelN2N1", mode:"reading", skills:{ vocab:5, grammar:1, reading:3, speaking:0, listening:0 } },
+    { name:"MLC N3 Grammar Quiz", desc:"N3-level grammar comprehension quiz.", url:"https://www.mlcjapanese.co.jp/n3_jlpt_grammar_quiz_01.html", free:true, levelKey:"resLevelN2N1", mode:"reading", skills:{ vocab:2, grammar:5, reading:4, speaking:0, listening:0 } },
+    { name:"Anime Reading (with GAKU Reader)", desc:"Read manga/anime scripts with the GAKU Reader extension for instant furigana and lookups.", url:"https://jyosiki.com/manga/danmachi/2_2.html", free:true, levelKey:"resLevelN2N1", mode:"reading", skills:{ vocab:4, grammar:2, reading:5, speaking:0, listening:1 } },
   ],
   "N2": [
-    { name:"Sambon Juku", descKey:"resSambonDesc", url:"https://www.youtube.com/@SambonJuku", free:true, levelKey:"resLevelN2N1", skills:{ vocab:5, grammar:5, reading:3, speaking:3, listening:4 } },
-    { name:"YUYU Japanese Podcast", descKey:"resYuyuDesc", url:"https://www.youtube.com/@yuyunihongopodcast", free:true, levelKey:"resLevelN3N2", skills:{ vocab:5, grammar:2, reading:0, speaking:3, listening:5 } },
+    { name:"Sambon Juku", descKey:"resSambonDesc", url:"https://www.youtube.com/@SambonJuku", free:true, levelKey:"resLevelN2N1", mode:"listening", skills:{ vocab:5, grammar:5, reading:3, speaking:3, listening:4 } },
+    { name:"YUYU Japanese Podcast", descKey:"resYuyuDesc", url:"https://www.youtube.com/@yuyunihongopodcast", free:true, levelKey:"resLevelN3N2", mode:"listening", skills:{ vocab:5, grammar:2, reading:0, speaking:3, listening:5 } },
+    { name:"MLC N2 Grammar Quiz", desc:"N2-level grammar comprehension quiz.", url:"https://www.mlcjapanese.co.jp/n2_jlpt_grammar_quiz_01.html", free:true, levelKey:"resLevelN2N1", mode:"reading", skills:{ vocab:2, grammar:5, reading:4, speaking:0, listening:0 } },
+    { name:"Anime Reading (with GAKU Reader)", desc:"Read manga/anime scripts with the GAKU Reader extension for instant furigana and lookups.", url:"https://jyosiki.com/manga/danmachi/2_2.html", free:true, levelKey:"resLevelN2N1", mode:"reading", skills:{ vocab:4, grammar:2, reading:5, speaking:0, listening:1 } },
   ],
   "N1": [
-    { name:"Sambon Juku", descKey:"resSambonDesc", url:"https://www.youtube.com/@SambonJuku", free:true, levelKey:"resLevelN2N1", skills:{ vocab:5, grammar:5, reading:3, speaking:3, listening:4 } },
+    { name:"Sambon Juku", descKey:"resSambonDesc", url:"https://www.youtube.com/@SambonJuku", free:true, levelKey:"resLevelN2N1", mode:"listening", skills:{ vocab:5, grammar:5, reading:3, speaking:3, listening:4 } },
+    { name:"MLC N1 Grammar Quiz", desc:"N1-level grammar comprehension quiz.", url:"https://www.mlcjapanese.co.jp/n1_jlpt_grammar_quiz_01.html", free:true, levelKey:"resLevelN2N1", mode:"reading", skills:{ vocab:2, grammar:5, reading:4, speaking:0, listening:0 } },
+    { name:"Anime Reading (with GAKU Reader)", desc:"Read manga/anime scripts with the GAKU Reader extension for instant furigana and lookups.", url:"https://jyosiki.com/manga/danmachi/2_2.html", free:true, levelKey:"resLevelN2N1", mode:"reading", skills:{ vocab:4, grammar:2, reading:5, speaking:0, listening:1 } },
   ],
 };
 // Aliases so the new self-estimation scale (Beginner–Mastery) resolves to the same curated
@@ -6372,6 +6409,13 @@ const SKILL_LABEL_KEY = {
   onlyHiragana:"skillOnlyHiragana", onlyKatakana:"skillOnlyKatakana",
 };
 
+// Maps the app's 7-category skill taxonomy (used for time-budgeting the schedule) down to the
+// 4 modes a resource link can actually match: reading / listening / speaking / writing.
+const SKILL_TO_MODE = {
+  conversation:"speaking", listening:"listening", reading:"reading",
+  grammar:"writing", kanji:"writing", jlpt:"reading", pronunciation:"speaking",
+};
+
 function buildSchedule(form, T) {
   const t = T || UI_TRANSLATIONS["English"];
   const hoursMap = { "Less than 1 hour":45, "1–2 hours":90, "2–3 hours":150, "3+ hours":180 };
@@ -6402,9 +6446,9 @@ function buildSchedule(form, T) {
     const skillLabel = t[SKILL_LABEL_KEY[focus.skill]] || SKILL_LABELS[focus.skill] || focus.skill;
     const note = t[SKILL_NOTE_KEY[focus.skill]] || "";
     schedule[day] = [
-      { task:`${skillLabel}: ${note} (${focus.mins} min)`, done:false },
-      { task: t.vocabReview || "Vocabulary review — Anki or saved words (10 min)", done:false },
-      i % 2 === 0 ? { task: t.speakAloud || "Speak aloud: summarize today's content in Japanese (5 min)", done:false } : null,
+      { task:`${skillLabel}: ${note} (${focus.mins} min)`, done:false, skill:SKILL_TO_MODE[focus.skill] },
+      { task: t.vocabReview || "Vocabulary review — Anki or saved words (10 min)", done:false, skill:"reading" },
+      i % 2 === 0 ? { task: t.speakAloud || "Speak aloud: summarize today's content in Japanese (5 min)", done:false, skill:"speaking" } : null,
     ].filter(Boolean);
   });
   WEEKDAYS.slice(days).forEach(day => {
@@ -6455,6 +6499,15 @@ async function buildAIWeeklySchedule(form, weekNum, totalWeeks) {
 
   const langInstruction = lang !== "English" ? `\nIMPORTANT: Write ALL task descriptions and the weekTheme in ${lang}. Do NOT use English for any text content.\n` : "";
 
+  // Curated resources actually available for this student's level + chosen skills, so the AI
+  // references real names/URLs we can already link to, instead of inventing resources we can't match.
+  const levelResList = LEVEL_RESOURCES[form.jlpt] || [];
+  const skillResList = (form.skills || []).flatMap(s => RESOURCES[s] || []);
+  const availableResources = [...levelResList, ...skillResList]
+    .filter((r, i, arr) => arr.findIndex(x => x.name === r.name && x.mode === r.mode) === i)
+    .map(r => `- ${r.name} [${r.mode}] — ${r.url}`)
+    .join("\n");
+
   const prompt = `You are an expert Japanese language teacher using CLT (Communicative Language Teaching) methodology.
 ${langInstruction}
 Student profile:
@@ -6470,17 +6523,21 @@ Student profile:
 Working backwards from the goal:
 - Week ${weekNum} of ${totalWeeks}: ${progressPct < 25 ? "Foundation building phase — establish core habits and basics" : progressPct < 50 ? "Development phase — expanding knowledge and skills" : progressPct < 75 ? "Consolidation phase — deepening understanding and fluency" : "Mastery phase — polishing, testing, and refining"}
 
+Resources actually curated for this student (prefer these by exact name when a task uses one of them; each is tagged with the single skill it trains):
+${availableResources || "(none curated for this level/skill combo — invent a plausible real resource instead)"}
+
 Create a SPECIFIC weekly study schedule for Week ${weekNum}. For each study day, provide 2-3 concrete tasks that:
 1. Are specifically calibrated for ${form.jlpt} level students at week ${weekNum}/${totalWeeks}
-2. Include REAL, specific resources (e.g. specific NHK Easy News articles topic, specific grammar point like て-form conditionals, specific Anki deck, specific Nihongo con Teppei episode topic, etc.)
+2. Include REAL, specific resources — prefer the curated list above by exact name; only invent a resource (e.g. specific NHK Easy News topic, specific grammar point like て-form conditionals) if nothing curated fits
 3. Progress logically from previous weeks (early weeks = fundamentals, later weeks = advanced application)
 4. Total time per day must not exceed ${minsPerDay} minutes${lang !== "English" ? `\n5. All task text MUST be written in ${lang}` : ""}
+5. EACH task must be tagged with exactly ONE "skill" field describing what the student actually DOES for that task: "reading", "listening", "speaking", or "writing". A kanji/vocab task studied from text is "reading", not "listening" — only tag "listening" if the task involves audio/video. Never guess a skill just because a resource name mentions an unrelated word.
 
 Return ONLY a valid JSON object with this exact structure (no markdown, no explanation):
 {
   "weekTheme": "One sentence describing this week's main focus",
   "schedule": {
-    ${activeDays.map(d => `"${d}": [{"task": "specific task description (X min)", "done": false}]`).join(",\n    ")},
+    ${activeDays.map(d => `"${d}": [{"task": "specific task description (X min)", "skill": "reading|listening|speaking|writing", "done": false}]`).join(",\n    ")},
     ${restDays.map(d => `"${d}": [{"task": "Rest day 🌸", "done": false, "rest": true}]`).join(",\n    ")}
   }
 }`;
@@ -7279,7 +7336,7 @@ function Dashboard({ form, onEdit, onLevelUp }) {
                           <div style={{ flex:1, minWidth:0 }}>
                             <p style={{ color:task.done?"#64748b":"#cbd5e1", fontSize:13, margin:0, lineHeight:1.6, textDecoration:task.done?"line-through":"none" }}>{task.task}</p>
                             {(() => {
-                              const res = findTaskResourceLink(task.task);
+                              const res = findTaskResourceLink(task.task, task.skill);
                               const nav = findTaskAppNav(task.task);
                               if (!res && !nav) return null;
                               return (
@@ -7344,7 +7401,7 @@ function Dashboard({ form, onEdit, onLevelUp }) {
                         <p style={{ color:"#f1f5f9", fontSize:14, fontWeight:700, margin:0 }}>{r.name}</p>
                         <span style={{ color:C.teal, fontSize:10, fontWeight:700, background:"rgba(6,182,212,0.1)", padding:"2px 8px", borderRadius:99, whiteSpace:"nowrap", marginLeft:8 }}>{T[r.levelKey]}</span>
                       </div>
-                      <p style={{ color:"#94a3b8", fontSize:12, margin:"0 0 10px", lineHeight:1.6 }}>{T[r.descKey]}</p>
+                      <p style={{ color:"#94a3b8", fontSize:12, margin:"0 0 10px", lineHeight:1.6 }}>{(r.descKey && T[r.descKey]) || r.desc}</p>
                       <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:"3px 12px", marginBottom:10 }}>
                         {[[T.vocab,r.skills.vocab],[T.grammar,r.skills.grammar],[T.reading,r.skills.reading],[T.speaking,r.skills.speaking],[T.listening,r.skills.listening]].map(([label,val])=>(
                           <div key={label} style={{ display:"flex", alignItems:"center", gap:4 }}>
