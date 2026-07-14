@@ -9,6 +9,17 @@ export default async function handler(req, res) {
 
     const supabase = getAdminClient();
 
+    // 0) If this account is under an active 3rd-device suspension, block
+    // every device — including already-approved ones — until it lifts.
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("suspended_until")
+      .eq("id", userId)
+      .maybeSingle();
+    if (profile?.suspended_until && new Date(profile.suspended_until) > new Date()) {
+      return res.status(200).json({ status: "suspended", suspendedUntil: profile.suspended_until });
+    }
+
     // 1) Already a known, approved device — just bump last_seen.
     const { data: existing } = await supabase
       .from("device_sessions")
@@ -35,7 +46,39 @@ export default async function handler(req, res) {
       return res.status(200).json({ status: "approved" });
     }
 
-    // 3) A new (2nd+) device — check for an existing pending request first to avoid spamming emails.
+    // 3) A brand-new 3rd (or later) device, when this account already has 2
+    // approved devices on file — this is treated as suspected account sharing.
+    // Instead of wiping the account's data, lock it out for one week and
+    // notify both the student and Seito by email.
+    if (count >= 2) {
+      const suspendedUntil = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString();
+      const { error: suspendErr } = await supabase
+        .from("profiles")
+        .update({ suspended_until: suspendedUntil, suspended_reason: "third_device" })
+        .eq("id", userId);
+      if (suspendErr) return res.status(500).json({ error: suspendErr.message });
+
+      const untilLabel = new Date(suspendedUntil).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
+      const studentSuspendHtml = `
+        <p>Hi,</p>
+        <p>Your GAKU account was just used to log in from a 3rd device (<strong>${deviceLabel || "Unknown device"}</strong>), beyond the 2 devices already approved on your account.</p>
+        <p>As a precaution against account sharing, access has been temporarily suspended for one week (until <strong>${untilLabel}</strong>).</p>
+        <p>If this was a mistake or you have questions, please contact Seito directly.</p>
+      `;
+      const adminSuspendHtml = `
+        <p>Hi Seito,</p>
+        <p>Student <strong>${email || userId}</strong> logged in from a 3rd device (<strong>${deviceLabel || "Unknown device"}</strong>) — beyond their 2 already-approved devices.</p>
+        <p>Their account has been automatically suspended for one week (until <strong>${untilLabel}</strong>) on suspicion of account sharing.</p>
+      `;
+      await Promise.all([
+        sendEmail({ to: email, subject: "[GAKU] Account temporarily suspended — 3rd device detected", html: studentSuspendHtml }),
+        sendEmail({ to: ADMIN_EMAIL, subject: "[GAKU] Student suspended — 3rd device detected", html: adminSuspendHtml }),
+      ]);
+
+      return res.status(200).json({ status: "suspended", suspendedUntil });
+    }
+
+    // 4) A new 2nd device — check for an existing pending request first to avoid spamming emails.
     const { data: pending } = await supabase
       .from("device_approval_requests")
       .select("*")

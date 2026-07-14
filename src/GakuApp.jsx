@@ -7658,13 +7658,30 @@ function DeviceApprovalGate({ T }) {
   );
 }
 
+// ─── ACCOUNT: blocks the dashboard during a device-sharing-suspicion suspension ──
+function DeviceSuspendedGate({ T, suspendedUntil }) {
+  const untilLabel = suspendedUntil ? new Date(suspendedUntil).toLocaleDateString(undefined, { year: "numeric", month: "long", day: "numeric" }) : "";
+  return (
+    <div style={{ minHeight:"100vh", background:"linear-gradient(160deg,#0a0f1e 0%,#0f172a 60%,#0a0f1e 100%)", display:"flex", alignItems:"center", justifyContent:"center", padding:24, textAlign:"center" }}>
+      <div style={{ maxWidth:380 }}>
+        <p style={{ fontSize:36, margin:"0 0 12px" }}>⏸️</p>
+        <h2 style={{ color:"#f1f5f9", fontSize:18, fontWeight:900, margin:"0 0 10px" }}>{T?.deviceSuspendedTitle || "Account Temporarily Suspended"}</h2>
+        <p style={{ color:"#94a3b8", fontSize:13, lineHeight:1.6 }}>
+          {(T?.deviceSuspendedDesc || "A 3rd device logged into this account, beyond the 2 devices already approved. As a precaution against account sharing, access is suspended until {date}.").replace("{date}", untilLabel)}
+        </p>
+      </div>
+    </div>
+  );
+}
+
 
 export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail, skipTrialPaywall, previewPaywall }) {
   const [authUser, setAuthUser] = useState(null);
   const [authChecked, setAuthChecked] = useState(!supabase);
   const [showAuthScreen, setShowAuthScreen] = useState(false);
   const [authInitialMode, setAuthInitialMode] = useState("login");
-  const [deviceStatus, setDeviceStatus] = useState(null); // null | 'checking' | 'approved' | 'pending'
+  const [deviceStatus, setDeviceStatus] = useState(null); // null | 'checking' | 'approved' | 'pending' | 'suspended'
+  const [deviceSuspendedUntil, setDeviceSuspendedUntil] = useState(null);
   // True once we've confirmed (via the profiles table) that the logged-in
   // account redeemed a GAKU invite code. These students should never hit the
   // trial interaction paywall.
@@ -7880,7 +7897,7 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
       body: JSON.stringify({ userId: authUser.id, email: authUser.email, deviceId: getDeviceId(), deviceLabel: getDeviceLabel() }),
     })
       .then(r => r.json())
-      .then(d => setDeviceStatus(d.status || "pending"))
+      .then(d => { setDeviceStatus(d.status || "pending"); setDeviceSuspendedUntil(d.suspendedUntil || null); })
       .catch(() => setDeviceStatus("pending"));
   }, [authUser]);
   const handleSubmit = (f) => {
@@ -7946,6 +7963,7 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
     if (userId) { setAwaitingUnlock(true); checkAccountStatus(userId); }
   };
   if (showAuthScreen) return <AuthScreen onAuthed={handleAuthed} T={T} prefillEmail={form?.email} initialMode={authInitialMode} />;
+  if (authUser && deviceStatus === "suspended") return <DeviceSuspendedGate T={T} suspendedUntil={deviceSuspendedUntil} />;
   if (authUser && deviceStatus === "pending") return <DeviceApprovalGate T={T} />;
   if (!form || editing || forceForm) return <FormScreen onSubmit={handleSubmit} onBack={onBack} onCancel={form ? handleCancelEdit : undefined} initialJlpt={initialJlpt} initialForm={formForEdit} />;
   return (
