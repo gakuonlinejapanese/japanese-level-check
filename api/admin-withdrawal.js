@@ -8,6 +8,11 @@ import { getAdminClient } from "./_supabaseAdmin.js";
 // POST { secret, action: "withdraw", studentEmail, graceDays, reason } — mark a student withdrawn
 // POST { secret, action: "cancel", studentEmail } — undo a pending withdrawal
 // POST { secret, action: "list" } — list students pending deletion
+// POST { action: "self_delete" } + header Authorization: Bearer <student's supabase access token>
+//   — student-initiated "delete my account" (also covers "uninstalled the app"):
+//   full unconditional wipe for a normal paying student (including payment
+//   status, so re-signing up requires paying again); a no-op for a
+//   confirmed GAKU student, whose data is kept intact
 // GET with header Authorization: Bearer CRON_SECRET — run the daily deletion job (used by vercel.json cron)
 
 async function handleWithdraw(supabase, body, res) {
@@ -103,6 +108,41 @@ async function handleCronDelete(supabase, res) {
   return res.status(200).json({ ok: true, processed: results.length, results });
 }
 
+async function handleSelfDelete(supabase, req, res) {
+  const authHeader = req.headers.authorization || "";
+  const token = authHeader.startsWith("Bearer ") ? authHeader.slice(7) : null;
+  if (!token) return res.status(401).json({ error: "Missing access token" });
+
+  const { data: userData, error: userErr } = await supabase.auth.getUser(token);
+  if (userErr || !userData?.user) return res.status(401).json({ error: "Invalid or expired session" });
+  const userId = userData.user.id;
+
+  const { data: profile, error: findError } = await supabase
+    .from("profiles").select("id, is_gaku_student").eq("id", userId).maybeSingle();
+  if (findError) return res.status(500).json({ error: findError.message });
+
+  // GAKU students (verified via a redeemed invite code) keep their data —
+  // as long as they still have their email/password/invite code they can
+  // simply log back in and everything is exactly as they left it.
+  if (profile?.is_gaku_student) {
+    return res.status(200).json({ ok: true, dataRetained: true });
+  }
+
+  // Everyone else (regular paying students, or no profile row at all): wipe
+  // everything unconditionally, including payment status — re-signing up
+  // starts completely fresh and requires paying again.
+  try {
+    await supabase.from("assigned_vocab").delete().eq("student_id", userId);
+    await supabase.from("device_sessions").delete().eq("user_id", userId);
+    await supabase.from("device_approval_requests").delete().eq("user_id", userId);
+    await supabase.from("profiles").delete().eq("id", userId);
+    await supabase.auth.admin.deleteUser(userId);
+  } catch (e) {
+    return res.status(500).json({ error: e.message });
+  }
+  return res.status(200).json({ ok: true, dataRetained: false });
+}
+
 export default async function handler(req, res) {
   const supabase = getAdminClient();
 
@@ -124,6 +164,11 @@ export default async function handler(req, res) {
   try {
     const body = req.body || {};
     const { secret, action } = body;
+
+    // Self-service deletion is authenticated via the student's own Supabase
+    // session token (checked inside handleSelfDelete), not the admin secret.
+    if (action === "self_delete") return await handleSelfDelete(supabase, req, res);
+
     if (!secret || secret !== process.env.ADMIN_SECRET) {
       return res.status(401).json({ error: "Unauthorized" });
     }

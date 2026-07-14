@@ -7196,7 +7196,7 @@ function LevelUpOffer({ T, currentLevel, onConfirm, onDismiss }) {
 }
 
 // ─── DASHBOARD ──────────────────────────────────────────────────────────────────
-function Dashboard({ form, onEdit, onLevelUp }) {
+function Dashboard({ form, onEdit, onLevelUp, onDeleteAccount, deleteAccountBusy }) {
   const T = useUITranslations(form?.preferredLang || "English");
   const [schedule, setSchedule] = useState(() => buildSchedule(form, getT(form?.preferredLang || "English")));
   const [milestones, setMilestones] = useState(() => buildMilestones(form));
@@ -7337,6 +7337,11 @@ function Dashboard({ form, onEdit, onLevelUp }) {
         <div style={{ display:"flex", gap:8 }}>
           <button onClick={()=>setShowHelp(true)} style={{ ...S.btn, padding:"8px 14px", background:`linear-gradient(135deg,${C.amber},#d97706)`, color:"#fff", fontSize:12 }}>{T.help}</button>
           <button onClick={onEdit} style={{ ...S.btn, padding:"8px 14px", background:C.card, color:"#94a3b8", border:`1px solid ${C.border}`, fontSize:12 }}>{T.editProfile}</button>
+          {onDeleteAccount && (
+            <button onClick={onDeleteAccount} disabled={deleteAccountBusy} style={{ ...S.btn, padding:"8px 14px", background:"rgba(248,113,113,0.08)", color:"#f87171", border:"1px solid rgba(248,113,113,0.3)", fontSize:12, opacity:deleteAccountBusy?0.6:1 }}>
+              {deleteAccountBusy ? "…" : (T.deleteAccount || "Delete Account")}
+            </button>
+          )}
         </div>
       </div>
 
@@ -7916,6 +7921,32 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
   };
   const handleEdit = () => setEditing(true);
   const handleCancelEdit = () => { setEditing(false); setForceForm(false); };
+  const [deleteAccountBusy, setDeleteAccountBusy] = useState(false);
+  const handleDeleteAccount = async () => {
+    if (!authUser || !supabase) return;
+    const confirmMsg = isGakuStudent
+      ? (T?.deleteAccountConfirmGaku || "Delete your account? As a GAKU student, your data will be kept — you can log back in anytime with your email, password, and invite code.")
+      : (T?.deleteAccountConfirmPaid || "Delete your account? This will permanently erase all your data. If you come back later, you'll need to sign up and pay again.");
+    if (!window.confirm(confirmMsg)) return;
+    setDeleteAccountBusy(true);
+    try {
+      const { data: sessionData } = await supabase.auth.getSession();
+      const token = sessionData?.session?.access_token;
+      if (!token) throw new Error("No active session");
+      const res = await fetch("/api/admin-withdrawal", {
+        method: "POST", headers: { "Content-Type":"application/json", Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ action: "self_delete" }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || "Failed to delete account.");
+      await supabase.auth.signOut();
+      window.location.reload();
+    } catch (e) {
+      alert(e.message || "Something went wrong.");
+    } finally {
+      setDeleteAccountBusy(false);
+    }
+  };
   const prefilledForm = (initialName || initialEmail) ? {
     name: initialName || '',
     email: initialEmail || '',
@@ -7968,7 +7999,7 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
   if (!form || editing || forceForm) return <FormScreen onSubmit={handleSubmit} onBack={onBack} onCancel={form ? handleCancelEdit : undefined} initialJlpt={initialJlpt} initialForm={formForEdit} />;
   return (
     <div style={{ position:"relative" }} onClickCapture={handleDashboardInteraction}>
-      <Dashboard form={form} onEdit={handleEdit} onLevelUp={(lvl)=>handleSubmit({ ...form, jlpt: lvl })} />
+      <Dashboard form={form} onEdit={handleEdit} onLevelUp={(lvl)=>handleSubmit({ ...form, jlpt: lvl })} onDeleteAccount={authUser ? handleDeleteAccount : undefined} deleteAccountBusy={deleteAccountBusy} />
       {/* TEMP DEBUG — remove after confirming the counter works */}
       <div style={{ position:"fixed", bottom:12, right:12, zIndex:99999, background:"rgba(0,0,0,0.75)", color:"#4ade80", fontSize:11, fontFamily:"monospace", padding:"4px 8px", borderRadius:6 }}>
         count: {interactionCount}/21 {skipTrialPaywall ? "(skip)" : ""} {authUser && isGakuStudent ? "(gaku)" : ""}
