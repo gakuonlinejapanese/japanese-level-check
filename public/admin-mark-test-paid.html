@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>GAKU — テスト用：支払い済みにする</title>
+<meta name="robots" content="noindex, nofollow" />
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; min-height: 100vh; font-family: 'Hiragino Sans', 'Noto Sans JP', sans-serif;
+    background: linear-gradient(160deg,#0a0f1e 0%,#0f172a 60%,#0a0f1e 100%);
+    color: #f1f5f9; display: flex; justify-content: center; padding: 32px 16px;
+  }
+  .wrap { width: 100%; max-width: 560px; }
+  .card {
+    width: 100%; background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 24px;
+  }
+  h1 { font-size: 18px; margin: 0 0 4px; }
+  p.sub { color: #94a3b8; font-size: 13px; margin: 0 0 20px; line-height: 1.6; }
+  label { display: block; color: #64748b; font-size: 11px; font-weight: 700; margin: 14px 0 5px; letter-spacing: 0.5px; }
+  input {
+    width: 100%; padding: 11px 12px; background: #0f172a; border: 1.5px solid rgba(255,255,255,0.08);
+    border-radius: 10px; color: #f1f5f9; font-size: 14px; outline: none; font-family: inherit;
+  }
+  button {
+    width: 100%; margin-top: 20px; padding: 13px 20px; border: none; border-radius: 10px;
+    font-size: 14px; font-weight: 700; cursor: pointer; color: #fff;
+    background: linear-gradient(135deg,#7c3aed,#a855f7);
+  }
+  button:disabled { opacity: 0.5; cursor: not-allowed; }
+  .msg { margin-top: 14px; font-size: 13px; padding: 10px 12px; border-radius: 8px; line-height:1.6; }
+  .msg.ok { background: rgba(34,197,94,0.12); color: #4ade80; border: 1px solid rgba(34,197,94,0.3); }
+  .msg.err { background: rgba(239,68,68,0.12); color: #f87171; border: 1px solid rgba(239,68,68,0.3); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="card">
+    <h1>🧪 テスト用：支払い済みにする</h1>
+    <p class="sub">
+      実際にStripeで課金せずに、指定したアカウントを「支払い済み」状態にします。<br /><br />
+      使い方：①テスト用アカウントで一度アプリにログイン/サインアップ（プロフィールを作成）→ ②このページでそのメールアドレスを指定 → ③アプリに戻ると通常課金プランと同じ状態になっているので、そこから「Delete Account」を押して、初期化されるか確認できます。
+    </p>
+
+    <label>管理者パスワード (ADMIN_SECRET)</label>
+    <input id="secret" type="password" placeholder="管理者パスワード" />
+
+    <label>テスト用アカウントのメールアドレス *</label>
+    <input id="studentEmail" type="email" placeholder="test@example.com" />
+
+    <button id="submitBtn">支払い済みにする</button>
+    <div id="msg"></div>
+  </div>
+</div>
+<script>
+const secretEl = document.getElementById('secret');
+const emailEl = document.getElementById('studentEmail');
+const btn = document.getElementById('submitBtn');
+const msgEl = document.getElementById('msg');
+
+btn.addEventListener('click', async () => {
+  const secret = secretEl.value.trim();
+  const studentEmail = emailEl.value.trim();
+  msgEl.innerHTML = '';
+  if (!secret || !studentEmail) {
+    msgEl.innerHTML = '<div class="msg err">管理者パスワードとメールアドレスを入力してください。</div>';
+    return;
+  }
+  btn.disabled = true;
+  btn.textContent = '処理中...';
+  try {
+    const res = await fetch('/api/admin-withdrawal', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ secret, action: 'test_mark_paid', studentEmail }),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || '失敗しました。');
+    msgEl.innerHTML = '<div class="msg ok">✅ ' + studentEmail + ' を支払い済み（テスト）にしました。アプリに戻って確認してください。</div>';
+  } catch (e) {
+    msgEl.innerHTML = '<div class="msg err">' + (e.message || 'エラーが発生しました。') + '</div>';
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '支払い済みにする';
+  }
+});
+</script>
+</body>
+</html>

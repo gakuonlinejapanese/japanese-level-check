@@ -8,6 +8,9 @@ import { getAdminClient } from "./_supabaseAdmin.js";
 // POST { secret, action: "withdraw", studentEmail, graceDays, reason } — mark a student withdrawn
 // POST { secret, action: "cancel", studentEmail } — undo a pending withdrawal
 // POST { secret, action: "list" } — list students pending deletion
+// POST { secret, action: "test_mark_paid", studentEmail } — testing only: mark a
+//   profile as paid without a real Stripe payment, so the delete/reset flow can
+//   be verified end-to-end without spending money
 // POST { action: "self_delete" } + header Authorization: Bearer <student's supabase access token>
 //   — student-initiated "delete my account" (also covers "uninstalled the app"):
 //   full unconditional wipe for a normal paying student (including payment
@@ -143,6 +146,25 @@ async function handleSelfDelete(supabase, req, res) {
   return res.status(200).json({ ok: true, dataRetained: false });
 }
 
+async function handleTestMarkPaid(supabase, body, res) {
+  const { studentEmail } = body;
+  if (!studentEmail) return res.status(400).json({ error: "studentEmail is required" });
+  const email = studentEmail.trim().toLowerCase();
+
+  const { data: profile, error: findError } = await supabase
+    .from("profiles").select("id, email").eq("email", email).maybeSingle();
+  if (findError) return res.status(500).json({ error: findError.message });
+  if (!profile) return res.status(404).json({ error: "No profile found for that email. Log in / sign up with this account in the app at least once first." });
+
+  const { error: updateError } = await supabase
+    .from("profiles")
+    .update({ is_paid: true, paid_plan: "TEST (no real payment)", paid_at: new Date().toISOString() })
+    .eq("id", profile.id);
+  if (updateError) return res.status(500).json({ error: updateError.message });
+
+  return res.status(200).json({ ok: true });
+}
+
 export default async function handler(req, res) {
   const supabase = getAdminClient();
 
@@ -176,6 +198,7 @@ export default async function handler(req, res) {
     if (action === "withdraw") return await handleWithdraw(supabase, body, res);
     if (action === "cancel") return await handleCancel(supabase, body, res);
     if (action === "list") return await handleList(supabase, res);
+    if (action === "test_mark_paid") return await handleTestMarkPaid(supabase, body, res);
     return res.status(400).json({ error: "Unknown action" });
   } catch (e) {
     return res.status(500).json({ error: e.message });
