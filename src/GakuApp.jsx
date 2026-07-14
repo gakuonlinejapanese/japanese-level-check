@@ -7564,6 +7564,59 @@ function Dashboard({ form, onEdit, onLevelUp, onDeleteAccount, deleteAccountBusy
   );
 }
 
+// ─── ACCOUNT: policy/terms agreement required before any payment step ────────
+// NOTE: policyText is a placeholder — Seito will supply the finished policy
+// document text later; swap PLACEHOLDER_POLICY_TEXT below once it's ready.
+const PLACEHOLDER_POLICY_TEXT = `This is placeholder text for GAKU's Terms of Service and Refund Policy.
+
+Seito: replace this text with the finished policy document whenever it's ready — no other code changes are needed, students will immediately see the updated text and continue agreeing to it before every payment.`;
+
+function PolicyGate({ T, name, email, plan, onAgreed, onCancel }) {
+  const [agreed, setAgreed] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState("");
+
+  const handleContinue = async () => {
+    if (!agreed || submitting) return;
+    setSubmitting(true);
+    setError("");
+    try {
+      const res = await fetch("/api/policy-agreement", {
+        method: "POST", headers: { "Content-Type":"application/json" },
+        body: JSON.stringify({ name, email, plan }),
+      });
+      if (!res.ok) { const d = await res.json().catch(()=>({})); throw new Error(d.error || "Failed to record agreement."); }
+      onAgreed();
+    } catch (e) {
+      setError(e.message || "Something went wrong. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  return (
+    <div style={{ minHeight:"100vh", background:"linear-gradient(160deg,#0a0f1e 0%,#0f172a 60%,#0a0f1e 100%)", display:"flex", alignItems:"center", justifyContent:"center", padding:24 }}>
+      <div style={{ maxWidth:480, width:"100%", background:"rgba(15,23,42,0.9)", border:"1px solid rgba(148,163,184,0.2)", borderRadius:16, padding:"24px 22px" }}>
+        <h2 style={{ color:"#f1f5f9", fontSize:17, fontWeight:900, margin:"0 0 14px" }}>{T?.policyTitle || "Terms & Refund Policy"}</h2>
+        <div style={{ maxHeight:280, overflowY:"auto", background:"rgba(2,6,23,0.5)", border:"1px solid rgba(148,163,184,0.15)", borderRadius:10, padding:14, marginBottom:16 }}>
+          <p style={{ color:"#94a3b8", fontSize:12.5, lineHeight:1.7, whiteSpace:"pre-wrap", margin:0 }}>{PLACEHOLDER_POLICY_TEXT}</p>
+        </div>
+        <label style={{ display:"flex", alignItems:"flex-start", gap:8, marginBottom:16, cursor:"pointer" }}>
+          <input type="checkbox" checked={agreed} onChange={(e)=>setAgreed(e.target.checked)} style={{ marginTop:2 }} />
+          <span style={{ color:"#e2e8f0", fontSize:12.5, fontWeight:600 }}>{T?.policyAgreeLabel || "I agree to all terms"}</span>
+        </label>
+        {error && <p style={{ color:"#f87171", fontSize:11.5, margin:"0 0 12px" }}>{error}</p>}
+        <div style={{ display:"flex", gap:10 }}>
+          <button onClick={onCancel} style={{ flex:1, padding:"11px 14px", background:"transparent", border:"1px solid rgba(148,163,184,0.3)", borderRadius:10, color:"#94a3b8", fontSize:12.5, fontWeight:700, cursor:"pointer" }}>{T?.cancel || "Cancel"}</button>
+          <button onClick={handleContinue} disabled={!agreed || submitting} style={{ flex:2, padding:"11px 14px", background: agreed ? "linear-gradient(135deg,#7c3aed,#a855f7)" : "rgba(148,163,184,0.15)", border:"none", borderRadius:10, color:"#fff", fontSize:12.5, fontWeight:800, cursor: agreed ? "pointer":"not-allowed", opacity: submitting?0.7:1 }}>
+            {submitting ? "…" : (T?.continueLabel || "Continue")}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // ─── ROOT ────────────────────────────────────────────────────────────────────────
 // ─── ACCOUNT: login / signup with optional GAKU invite code ──────────────────
 function AuthScreen({ onAuthed, T, prefillEmail, initialMode }) {
@@ -7694,10 +7747,15 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
   const [form, setForm] = useState(null);
   const [editing, setEditing] = useState(false);
   const [showPaywall, setShowPaywall] = useState(!!previewPaywall);
-  // Set when a logged-out student clicks a Stripe payment link — we send them
-  // to sign up first (Stripe needs an account id to attach the payment to),
-  // then automatically continue to Stripe once they're authenticated.
-  const [pendingPlanUrl, setPendingPlanUrl] = useState(null);
+  // Set when a logged-out student clicks a paid plan (app-only Stripe link,
+  // or an app+lessons plan) — we send them to sign up first (a Stripe
+  // payment needs an account id to attach to, and the policy-agreement
+  // email needs a real account), then resume straight into the policy
+  // step once they're authenticated.
+  const [pendingPlan, setPendingPlan] = useState(null); // { type: 'stripe'|'lessons', url, planLabel }
+  // Shown as a full-screen step between "student clicked a paid plan" and
+  // "student reaches the actual payment step" — see PolicyGate above.
+  const [policyGate, setPolicyGate] = useState(null); // { type: 'stripe'|'lessons', url, planLabel }
   // True once we've opened a Stripe tab (or the student just logged in) and
   // we're actively polling for confirmation, so we can auto-dismiss the
   // paywall and drop them straight back onto their dashboard.
@@ -7763,13 +7821,23 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
     setAwaitingUnlock(true);
   };
 
-  // Called when a student clicks a paid plan. If they're not logged in yet we
-  // can't attach a client_reference_id to the payment, so send them to sign up
-  // first and remember which plan they wanted — handlePendingPlanAfterAuth
-  // below picks this back up the moment they're authenticated.
-  const handlePayClick = (baseUrl) => {
-    if (authUser) { openStripeCheckout(baseUrl, { userId: authUser.id, email: authUser.email }); return; }
-    setPendingPlanUrl(baseUrl);
+  // Called when a student clicks an app-only paid plan. Requires login first
+  // (so we have a real account for client_reference_id and the policy
+  // record), then shows the policy gate before Stripe.
+  const handlePayClick = (baseUrl, planLabel) => {
+    if (authUser) { setPolicyGate({ type: "stripe", url: baseUrl, planLabel }); return; }
+    setPendingPlan({ type: "stripe", url: baseUrl, planLabel });
+    setAuthInitialMode("signup");
+    setShowAuthScreen(true);
+  };
+
+  // Called when a student clicks an app+lessons plan. Same login-first
+  // pattern, then policy gate, then on to the lesson request/application
+  // page (book-lesson.html) — payment for these plans happens afterward,
+  // once Seito manually confirms the booking and emails a Stripe link.
+  const handleLessonPlanClick = (url, planLabel) => {
+    if (authUser) { setPolicyGate({ type: "lessons", url, planLabel }); return; }
+    setPendingPlan({ type: "lessons", url, planLabel });
     setAuthInitialMode("signup");
     setShowAuthScreen(true);
   };
@@ -7981,19 +8049,30 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
   ACTIVE_USER_ID = authUser?.id || null;
   const handleAuthed = ({ userId, email } = {}) => {
     setShowAuthScreen(false);
-    if (pendingPlanUrl && userId) {
-      const url = pendingPlanUrl;
-      setPendingPlanUrl(null);
-      openStripeCheckout(url, { userId, email });
+    if (pendingPlan && userId) {
+      const plan = pendingPlan;
+      setPendingPlan(null);
+      setPolicyGate(plan);
       return;
     }
-    setPendingPlanUrl(null);
+    setPendingPlan(null);
     // Not a paid-plan signup (e.g. the free GAKU-student flow, or a plain
     // login) — re-check right away instead of waiting on the authUser-effect
     // below, so the paywall doesn't linger for even one extra render.
     if (userId) { setAwaitingUnlock(true); checkAccountStatus(userId); }
   };
+  const handlePolicyAgreed = () => {
+    const gate = policyGate;
+    setPolicyGate(null);
+    if (!gate) return;
+    if (gate.type === "stripe") {
+      openStripeCheckout(gate.url, { userId: authUser.id, email: authUser.email });
+    } else if (gate.type === "lessons") {
+      window.open(gate.url, "_blank", "noopener,noreferrer");
+    }
+  };
   if (showAuthScreen) return <AuthScreen onAuthed={handleAuthed} T={T} prefillEmail={form?.email} initialMode={authInitialMode} />;
+  if (policyGate) return <PolicyGate T={T} name={form?.name || authUser?.email} email={authUser?.email || form?.email} plan={policyGate.planLabel} onAgreed={handlePolicyAgreed} onCancel={()=>setPolicyGate(null)} />;
   if (authUser && deviceStatus === "suspended") return <DeviceSuspendedGate T={T} suspendedUntil={deviceSuspendedUntil} />;
   if (authUser && deviceStatus === "pending") return <DeviceApprovalGate T={T} />;
   if (!form || editing || forceForm) return <FormScreen onSubmit={handleSubmit} onBack={onBack} onCancel={form ? handleCancelEdit : undefined} initialJlpt={initialJlpt} initialForm={formForEdit} />;
@@ -8038,37 +8117,37 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
 
             <p style={{ color:"#a855f7", fontSize:10, fontWeight:800, margin:"0 0 6px", textAlign:"left", letterSpacing:1 }}>{T.appOnlyLabel}</p>
             <div style={{ display:"flex", flexDirection:"column", gap:8, marginBottom:14 }}>
-              <button onClick={()=>handlePayClick("https://buy.stripe.com/6oU7sL7qWg7C7wV1OqbMQ00")} style={{ display:"block", width:"100%", padding:"11px 14px", background:"linear-gradient(135deg,rgba(124,58,237,0.2),rgba(168,85,247,0.1))", border:"1.5px solid rgba(139,92,246,0.5)", borderRadius:10, color:"#f1f5f9", fontSize:12, fontWeight:700, cursor:"pointer", textAlign:"left" }}>
+              <button onClick={()=>handlePayClick("https://buy.stripe.com/6oU7sL7qWg7C7wV1OqbMQ00", "App Only - Monthly ($14.99)")} style={{ display:"block", width:"100%", padding:"11px 14px", background:"linear-gradient(135deg,rgba(124,58,237,0.2),rgba(168,85,247,0.1))", border:"1.5px solid rgba(139,92,246,0.5)", borderRadius:10, color:"#f1f5f9", fontSize:12, fontWeight:700, cursor:"pointer", textAlign:"left" }}>
                 <span style={{ color:"#a855f7", fontSize:10, fontWeight:800, display:"block", marginBottom:1 }}>{T.monthlyLabel}</span>
                 💳 $14.99 {T.perMonth} {formatConverted(14.99) && <span style={{ color:"#67e8f9", fontWeight:400 }}>(≈ {formatConverted(14.99)} {paywallCurrency})</span>}
               </button>
-              <button onClick={()=>handlePayClick("https://buy.stripe.com/28E28r9z46x2dVj0KmbMQ02")} style={{ display:"block", width:"100%", padding:"11px 14px", background:"linear-gradient(135deg,rgba(6,182,212,0.2),rgba(6,182,212,0.1))", border:"1.5px solid rgba(6,182,212,0.5)", borderRadius:10, color:"#f1f5f9", fontSize:12, fontWeight:700, cursor:"pointer", textAlign:"left" }}>
+              <button onClick={()=>handlePayClick("https://buy.stripe.com/28E28r9z46x2dVj0KmbMQ02", "App Only - 3 Months ($42.70)")} style={{ display:"block", width:"100%", padding:"11px 14px", background:"linear-gradient(135deg,rgba(6,182,212,0.2),rgba(6,182,212,0.1))", border:"1.5px solid rgba(6,182,212,0.5)", borderRadius:10, color:"#f1f5f9", fontSize:12, fontWeight:700, cursor:"pointer", textAlign:"left" }}>
                 <span style={{ color:"#06b6d4", fontSize:10, fontWeight:800, display:"block", marginBottom:1 }}>{T.threeMonthsSave5}</span>
                 💳 $42.70 <span style={{ color:"#64748b", fontSize:10, fontWeight:400 }}>($14.23/mo)</span> {formatConverted(42.70) && <span style={{ color:"#67e8f9", fontWeight:400 }}>(≈ {formatConverted(42.70)} {paywallCurrency})</span>}
               </button>
-              <button onClick={()=>handlePayClick("https://buy.stripe.com/28E5kD8v07B6bNbct4bMQ03")} style={{ display:"block", width:"100%", padding:"11px 14px", background:"linear-gradient(135deg,rgba(34,197,94,0.2),rgba(34,197,94,0.1))", border:"1.5px solid rgba(34,197,94,0.5)", borderRadius:10, color:"#f1f5f9", fontSize:12, fontWeight:700, cursor:"pointer", textAlign:"left" }}>
+              <button onClick={()=>handlePayClick("https://buy.stripe.com/28E5kD8v07B6bNbct4bMQ03", "App Only - 6 Months ($80.95)")} style={{ display:"block", width:"100%", padding:"11px 14px", background:"linear-gradient(135deg,rgba(34,197,94,0.2),rgba(34,197,94,0.1))", border:"1.5px solid rgba(34,197,94,0.5)", borderRadius:10, color:"#f1f5f9", fontSize:12, fontWeight:700, cursor:"pointer", textAlign:"left" }}>
                 <span style={{ color:"#22c55e", fontSize:10, fontWeight:800, display:"block", marginBottom:1 }}>{T.sixMonthsSave10}</span>
                 💳 $80.95 <span style={{ color:"#64748b", fontSize:10, fontWeight:400 }}>($13.49/mo)</span> {formatConverted(80.95) && <span style={{ color:"#67e8f9", fontWeight:400 }}>(≈ {formatConverted(80.95)} {paywallCurrency})</span>}
               </button>
             </div>
             <p style={{ color:"#f59e0b", fontSize:10, fontWeight:800, margin:"0 0 6px", textAlign:"left", letterSpacing:1 }}>{T.appLessonsLabel}</p>
             <div style={{ display:"flex", flexDirection:"column", gap:8, marginBottom:12 }}>
-              <a href="/book-lesson.html?plan=3mo_30min" target="_blank" rel="noopener noreferrer" style={{ display:"block", padding:"11px 14px", background:"linear-gradient(135deg,rgba(245,158,11,0.15),rgba(245,158,11,0.05))", border:"1.5px solid rgba(245,158,11,0.4)", borderRadius:10, color:"#f1f5f9", fontSize:12, fontWeight:700, cursor:"pointer", textDecoration:"none", textAlign:"left" }}>
+              <button onClick={()=>handleLessonPlanClick("/book-lesson.html?plan=3mo_30min", "App + Lessons - 3 Months, 30min/mo ($68.95)")} style={{ display:"block", width:"100%", padding:"11px 14px", background:"linear-gradient(135deg,rgba(245,158,11,0.15),rgba(245,158,11,0.05))", border:"1.5px solid rgba(245,158,11,0.4)", borderRadius:10, color:"#f1f5f9", fontSize:12, fontWeight:700, cursor:"pointer", textAlign:"left" }}>
                 <span style={{ color:"#f59e0b", fontSize:10, fontWeight:800, display:"block", marginBottom:1 }}>{T.threeMonthsSave5_30min}</span>
                 💳 $68.95 <span style={{ color:"#64748b", fontSize:10, fontWeight:400 }}>($22.98/mo)</span> {formatConverted(68.95) && <span style={{ color:"#67e8f9", fontWeight:400 }}>(≈ {formatConverted(68.95)} {paywallCurrency})</span>}
-              </a>
-              <a href="/book-lesson.html?plan=3mo_1hr" target="_blank" rel="noopener noreferrer" style={{ display:"block", padding:"11px 14px", background:"linear-gradient(135deg,rgba(245,158,11,0.15),rgba(245,158,11,0.05))", border:"1.5px solid rgba(245,158,11,0.4)", borderRadius:10, color:"#f1f5f9", fontSize:12, fontWeight:700, cursor:"pointer", textDecoration:"none", textAlign:"left" }}>
+              </button>
+              <button onClick={()=>handleLessonPlanClick("/book-lesson.html?plan=3mo_1hr", "App + Lessons - 3 Months, 1hr/mo ($95.20)")} style={{ display:"block", width:"100%", padding:"11px 14px", background:"linear-gradient(135deg,rgba(245,158,11,0.15),rgba(245,158,11,0.05))", border:"1.5px solid rgba(245,158,11,0.4)", borderRadius:10, color:"#f1f5f9", fontSize:12, fontWeight:700, cursor:"pointer", textAlign:"left" }}>
                 <span style={{ color:"#f59e0b", fontSize:10, fontWeight:800, display:"block", marginBottom:1 }}>{T.threeMonthsSave5_1hr}</span>
                 💳 $95.20 <span style={{ color:"#64748b", fontSize:10, fontWeight:400 }}>($31.73/mo)</span> {formatConverted(95.20) && <span style={{ color:"#67e8f9", fontWeight:400 }}>(≈ {formatConverted(95.20)} {paywallCurrency})</span>}
-              </a>
-              <a href="/book-lesson.html?plan=6mo_30min" target="_blank" rel="noopener noreferrer" style={{ display:"block", padding:"11px 14px", background:"linear-gradient(135deg,rgba(251,191,36,0.2),rgba(251,191,36,0.08))", border:"1.5px solid rgba(251,191,36,0.5)", borderRadius:10, color:"#f1f5f9", fontSize:12, fontWeight:700, cursor:"pointer", textDecoration:"none", textAlign:"left" }}>
+              </button>
+              <button onClick={()=>handleLessonPlanClick("/book-lesson.html?plan=6mo_30min", "App + Lessons - 6 Months, 30min/mo ($133.45)")} style={{ display:"block", width:"100%", padding:"11px 14px", background:"linear-gradient(135deg,rgba(251,191,36,0.2),rgba(251,191,36,0.08))", border:"1.5px solid rgba(251,191,36,0.5)", borderRadius:10, color:"#f1f5f9", fontSize:12, fontWeight:700, cursor:"pointer", textAlign:"left" }}>
                 <span style={{ color:"#fbbf24", fontSize:10, fontWeight:800, display:"block", marginBottom:1 }}>{T.sixMonthsSave5_30min}</span>
                 💳 $133.45 <span style={{ color:"#64748b", fontSize:10, fontWeight:400 }}>($22.24/mo)</span> {formatConverted(133.45) && <span style={{ color:"#67e8f9", fontWeight:400 }}>(≈ {formatConverted(133.45)} {paywallCurrency})</span>}
-              </a>
-              <a href="/book-lesson.html?plan=6mo_1hr" target="_blank" rel="noopener noreferrer" style={{ display:"block", padding:"11px 14px", background:"linear-gradient(135deg,rgba(251,191,36,0.2),rgba(251,191,36,0.08))", border:"1.5px solid rgba(251,191,36,0.5)", borderRadius:10, color:"#f1f5f9", fontSize:12, fontWeight:700, cursor:"pointer", textDecoration:"none", textAlign:"left" }}>
+              </button>
+              <button onClick={()=>handleLessonPlanClick("/book-lesson.html?plan=6mo_1hr", "App + Lessons - 6 Months, 1hr/mo ($185.95)")} style={{ display:"block", width:"100%", padding:"11px 14px", background:"linear-gradient(135deg,rgba(251,191,36,0.2),rgba(251,191,36,0.08))", border:"1.5px solid rgba(251,191,36,0.5)", borderRadius:10, color:"#f1f5f9", fontSize:12, fontWeight:700, cursor:"pointer", textAlign:"left" }}>
                 <span style={{ color:"#fbbf24", fontSize:10, fontWeight:800, display:"block", marginBottom:1 }}>{T.sixMonthsSave10_1hr}</span>
                 💳 $185.95 <span style={{ color:"#64748b", fontSize:10, fontWeight:400 }}>($30.99/mo)</span> {formatConverted(185.95) && <span style={{ color:"#67e8f9", fontWeight:400 }}>(≈ {formatConverted(185.95)} {paywallCurrency})</span>}
-              </a>
+              </button>
             </div>
             <div style={{ marginBottom:14, textAlign:"center" }}>
               <p style={{ color:"#64748b", fontSize:11, margin:"0 0 8px" }}>{T.wantToJoinGaku}</p>
