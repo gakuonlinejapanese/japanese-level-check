@@ -7580,9 +7580,9 @@ function AuthScreen({ onAuthed, T, prefillEmail, initialMode }) {
     try {
       if (mode === "signup") {
         if (inviteCode.trim()) {
-          const vRes = await fetch("/api/validate-invite", {
+          const vRes = await fetch("/api/invite", {
             method: "POST", headers: { "Content-Type":"application/json" },
-            body: JSON.stringify({ code: inviteCode.trim(), email }),
+            body: JSON.stringify({ action: "validate", code: inviteCode.trim(), email }),
           });
           const vData = await vRes.json();
           if (!vRes.ok) throw new Error(vData.error || "Invalid invite code.");
@@ -7591,9 +7591,9 @@ function AuthScreen({ onAuthed, T, prefillEmail, initialMode }) {
         if (error) throw error;
         const userId = data?.user?.id;
         if (userId && inviteCode.trim()) {
-          await fetch("/api/redeem-invite", {
+          await fetch("/api/invite", {
             method: "POST", headers: { "Content-Type":"application/json" },
-            body: JSON.stringify({ code: inviteCode.trim(), userId }),
+            body: JSON.stringify({ action: "redeem", code: inviteCode.trim(), userId }),
           });
         }
         if (userId) {
@@ -7606,11 +7606,12 @@ function AuthScreen({ onAuthed, T, prefillEmail, initialMode }) {
             throw new Error(pData.error || "Failed to save your profile.");
           }
         }
+        onAuthed({ userId, email });
       } else {
-        const { error } = await supabase.auth.signInWithPassword({ email, password });
+        const { data, error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
+        onAuthed({ userId: data?.user?.id || null, email });
       }
-      onAuthed();
     } catch (e2) {
       setErr(e2.message || "Something went wrong.");
     } finally {
@@ -7671,6 +7672,14 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
   const [form, setForm] = useState(null);
   const [editing, setEditing] = useState(false);
   const [showPaywall, setShowPaywall] = useState(!!previewPaywall);
+  // Set when a logged-out student clicks a Stripe payment link — we send them
+  // to sign up first (Stripe needs an account id to attach the payment to),
+  // then automatically continue to Stripe once they're authenticated.
+  const [pendingPlanUrl, setPendingPlanUrl] = useState(null);
+  // True once we've opened a Stripe tab (or the student just logged in) and
+  // we're actively polling for confirmation, so we can auto-dismiss the
+  // paywall and drop them straight back onto their dashboard.
+  const [awaitingUnlock, setAwaitingUnlock] = useState(false);
   const [paywallCurrency, setPaywallCurrency] = useState("JPY");
   const [paywallRate, setPaywallRate] = useState(null);
   const [paywallRateLoading, setPaywallRateLoading] = useState(false);
@@ -7715,6 +7724,74 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
     const val = usd * paywallRate;
     return val.toLocaleString(undefined, { maximumFractionDigits: val >= 100 ? 0 : 2 });
   };
+
+  // Attaches the logged-in student's Supabase user id to the Stripe Payment Link
+  // (client_reference_id) so the Stripe webhook knows which account to unlock,
+  // plus their email so Stripe's checkout form is pre-filled.
+  const buildStripeUrl = (baseUrl, user) => {
+    if (!user) return baseUrl;
+    const url = new URL(baseUrl);
+    url.searchParams.set("client_reference_id", user.userId);
+    if (user.email) url.searchParams.set("prefilled_email", user.email);
+    return url.toString();
+  };
+
+  const openStripeCheckout = (baseUrl, user) => {
+    window.open(buildStripeUrl(baseUrl, user), "_blank", "noopener,noreferrer");
+    setAwaitingUnlock(true);
+  };
+
+  // Called when a student clicks a paid plan. If they're not logged in yet we
+  // can't attach a client_reference_id to the payment, so send them to sign up
+  // first and remember which plan they wanted — handlePendingPlanAfterAuth
+  // below picks this back up the moment they're authenticated.
+  const handlePayClick = (baseUrl) => {
+    if (authUser) { openStripeCheckout(baseUrl, { userId: authUser.id, email: authUser.email }); return; }
+    setPendingPlanUrl(baseUrl);
+    setAuthInitialMode("signup");
+    setShowAuthScreen(true);
+  };
+
+  // Asks the server whether this account is now unlocked (paid or a
+  // confirmed GAKU student) and, if so, drops the paywall so the student
+  // lands straight back on their dashboard — no refresh needed.
+  const checkAccountStatus = async (userId) => {
+    try {
+      const res = await fetch("/api/account-status", {
+        method: "POST", headers: { "Content-Type":"application/json" },
+        body: JSON.stringify({ userId }),
+      });
+      const data = await res.json();
+      if (data?.isGakuStudent) setIsGakuStudent(true);
+      if ((data?.isGakuStudent || data?.isPaid) && !previewPaywall) {
+        setShowPaywall(false);
+        setAwaitingUnlock(false);
+        return true;
+      }
+    } catch {}
+    return false;
+  };
+
+  // While we're waiting to hear back from Stripe (or right after login),
+  // re-check account status whenever the student returns to this tab, and
+  // also on a short interval as a fallback — the webhook is usually near-
+  // instant but we don't want to depend on the tab regaining focus alone.
+  useEffect(() => {
+    if (!awaitingUnlock || !authUser) return;
+    checkAccountStatus(authUser.id);
+    const onVisible = () => { if (document.visibilityState === "visible") checkAccountStatus(authUser.id); };
+    document.addEventListener("visibilitychange", onVisible);
+    window.addEventListener("focus", onVisible);
+    const interval = setInterval(() => checkAccountStatus(authUser.id), 4000);
+    const timeout = setTimeout(() => setAwaitingUnlock(false), 5 * 60 * 1000); // stop polling after 5 min
+    return () => {
+      document.removeEventListener("visibilitychange", onVisible);
+      window.removeEventListener("focus", onVisible);
+      clearInterval(interval);
+      clearTimeout(timeout);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [awaitingUnlock, authUser]);
 
   // If the user arrived here from the diagnostic test result page (with name/email/jlpt
   // in the URL), always land on the Edit Profile form first — even if a profile is
@@ -7794,20 +7871,10 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
     if (!authUser) { setDeviceStatus(null); setIsGakuStudent(false); return; }
     syncAssignedVocab(authUser.id);
     setDeviceStatus("checking");
-    fetch("/api/check-gaku-student", {
-      method: "POST", headers: { "Content-Type":"application/json" },
-      body: JSON.stringify({ userId: authUser.id }),
-    })
-      .then(r => r.json())
-      .then(d => {
-        const confirmed = !!d?.isGakuStudent;
-        setIsGakuStudent(confirmed);
-        // Self-heal: if the paywall was already showing (e.g. from an earlier
-        // trial session, before this account was confirmed as a GAKU student),
-        // dismiss it now that we know for sure.
-        if (confirmed && !previewPaywall) setShowPaywall(false);
-      })
-      .catch(() => setIsGakuStudent(false));
+    // Self-heal: if the paywall was already showing (e.g. from an earlier trial
+    // session, or right after login/payment), this dismisses it the moment we
+    // confirm the account is a GAKU student or has paid — no refresh needed.
+    checkAccountStatus(authUser.id);
     fetch("/api/device-check", {
       method: "POST", headers: { "Content-Type":"application/json" },
       body: JSON.stringify({ userId: authUser.id, email: authUser.email, deviceId: getDeviceId(), deviceLabel: getDeviceLabel() }),
@@ -7864,7 +7931,21 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
   // the correct account, with no one-frame window where it could still read
   // the previous user's (or nobody's) data.
   ACTIVE_USER_ID = authUser?.id || null;
-  if (showAuthScreen) return <AuthScreen onAuthed={()=>setShowAuthScreen(false)} T={T} prefillEmail={form?.email} initialMode={authInitialMode} />;
+  const handleAuthed = ({ userId, email } = {}) => {
+    setShowAuthScreen(false);
+    if (pendingPlanUrl && userId) {
+      const url = pendingPlanUrl;
+      setPendingPlanUrl(null);
+      openStripeCheckout(url, { userId, email });
+      return;
+    }
+    setPendingPlanUrl(null);
+    // Not a paid-plan signup (e.g. the free GAKU-student flow, or a plain
+    // login) — re-check right away instead of waiting on the authUser-effect
+    // below, so the paywall doesn't linger for even one extra render.
+    if (userId) { setAwaitingUnlock(true); checkAccountStatus(userId); }
+  };
+  if (showAuthScreen) return <AuthScreen onAuthed={handleAuthed} T={T} prefillEmail={form?.email} initialMode={authInitialMode} />;
   if (authUser && deviceStatus === "pending") return <DeviceApprovalGate T={T} />;
   if (!form || editing || forceForm) return <FormScreen onSubmit={handleSubmit} onBack={onBack} onCancel={form ? handleCancelEdit : undefined} initialJlpt={initialJlpt} initialForm={formForEdit} />;
   return (
@@ -7908,18 +7989,18 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
 
             <p style={{ color:"#a855f7", fontSize:10, fontWeight:800, margin:"0 0 6px", textAlign:"left", letterSpacing:1 }}>{T.appOnlyLabel}</p>
             <div style={{ display:"flex", flexDirection:"column", gap:8, marginBottom:14 }}>
-              <a href="https://buy.stripe.com/6oU7sL7qWg7C7wV1OqbMQ00" target="_blank" rel="noopener noreferrer" style={{ display:"block", padding:"11px 14px", background:"linear-gradient(135deg,rgba(124,58,237,0.2),rgba(168,85,247,0.1))", border:"1.5px solid rgba(139,92,246,0.5)", borderRadius:10, color:"#f1f5f9", fontSize:12, fontWeight:700, cursor:"pointer", textDecoration:"none", textAlign:"left" }}>
+              <button onClick={()=>handlePayClick("https://buy.stripe.com/6oU7sL7qWg7C7wV1OqbMQ00")} style={{ display:"block", width:"100%", padding:"11px 14px", background:"linear-gradient(135deg,rgba(124,58,237,0.2),rgba(168,85,247,0.1))", border:"1.5px solid rgba(139,92,246,0.5)", borderRadius:10, color:"#f1f5f9", fontSize:12, fontWeight:700, cursor:"pointer", textAlign:"left" }}>
                 <span style={{ color:"#a855f7", fontSize:10, fontWeight:800, display:"block", marginBottom:1 }}>{T.monthlyLabel}</span>
                 💳 $14.99 {T.perMonth} {formatConverted(14.99) && <span style={{ color:"#67e8f9", fontWeight:400 }}>(≈ {formatConverted(14.99)} {paywallCurrency})</span>}
-              </a>
-              <a href="https://buy.stripe.com/28E28r9z46x2dVj0KmbMQ02" target="_blank" rel="noopener noreferrer" style={{ display:"block", padding:"11px 14px", background:"linear-gradient(135deg,rgba(6,182,212,0.2),rgba(6,182,212,0.1))", border:"1.5px solid rgba(6,182,212,0.5)", borderRadius:10, color:"#f1f5f9", fontSize:12, fontWeight:700, cursor:"pointer", textDecoration:"none", textAlign:"left" }}>
+              </button>
+              <button onClick={()=>handlePayClick("https://buy.stripe.com/28E28r9z46x2dVj0KmbMQ02")} style={{ display:"block", width:"100%", padding:"11px 14px", background:"linear-gradient(135deg,rgba(6,182,212,0.2),rgba(6,182,212,0.1))", border:"1.5px solid rgba(6,182,212,0.5)", borderRadius:10, color:"#f1f5f9", fontSize:12, fontWeight:700, cursor:"pointer", textAlign:"left" }}>
                 <span style={{ color:"#06b6d4", fontSize:10, fontWeight:800, display:"block", marginBottom:1 }}>{T.threeMonthsSave5}</span>
                 💳 $42.70 <span style={{ color:"#64748b", fontSize:10, fontWeight:400 }}>($14.23/mo)</span> {formatConverted(42.70) && <span style={{ color:"#67e8f9", fontWeight:400 }}>(≈ {formatConverted(42.70)} {paywallCurrency})</span>}
-              </a>
-              <a href="https://buy.stripe.com/28E5kD8v07B6bNbct4bMQ03" target="_blank" rel="noopener noreferrer" style={{ display:"block", padding:"11px 14px", background:"linear-gradient(135deg,rgba(34,197,94,0.2),rgba(34,197,94,0.1))", border:"1.5px solid rgba(34,197,94,0.5)", borderRadius:10, color:"#f1f5f9", fontSize:12, fontWeight:700, cursor:"pointer", textDecoration:"none", textAlign:"left" }}>
+              </button>
+              <button onClick={()=>handlePayClick("https://buy.stripe.com/28E5kD8v07B6bNbct4bMQ03")} style={{ display:"block", width:"100%", padding:"11px 14px", background:"linear-gradient(135deg,rgba(34,197,94,0.2),rgba(34,197,94,0.1))", border:"1.5px solid rgba(34,197,94,0.5)", borderRadius:10, color:"#f1f5f9", fontSize:12, fontWeight:700, cursor:"pointer", textAlign:"left" }}>
                 <span style={{ color:"#22c55e", fontSize:10, fontWeight:800, display:"block", marginBottom:1 }}>{T.sixMonthsSave10}</span>
                 💳 $80.95 <span style={{ color:"#64748b", fontSize:10, fontWeight:400 }}>($13.49/mo)</span> {formatConverted(80.95) && <span style={{ color:"#67e8f9", fontWeight:400 }}>(≈ {formatConverted(80.95)} {paywallCurrency})</span>}
-              </a>
+              </button>
             </div>
             <p style={{ color:"#f59e0b", fontSize:10, fontWeight:800, margin:"0 0 6px", textAlign:"left", letterSpacing:1 }}>{T.appLessonsLabel}</p>
             <div style={{ display:"flex", flexDirection:"column", gap:8, marginBottom:12 }}>

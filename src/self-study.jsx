@@ -149,10 +149,10 @@ function UnlockScreen({ email, plan, cefrLevel, name, resources: initialResource
     setInviteError("");
     setInviteBusy(true);
     try {
-      const res = await fetch("/api/validate-invite", {
+      const res = await fetch("/api/invite", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ code, email }),
+        body: JSON.stringify({ action: "validate", code, email }),
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok || !data?.ok) {
