@@ -4443,29 +4443,42 @@ function collectUserLocalStorage(userId) {
 async function syncMigrationBridge(userId) {
   if (!supabase || !userId) return;
   try {
-    const { data } = await supabase
+    const { data, error } = await supabase
       .from("migration_bridge")
       .select("data")
       .eq("user_id", userId)
       .maybeSingle();
-    const remote = data?.data || {};
-    Object.keys(remote).forEach((k) => {
-      if (localStorage.getItem(k) === null) {
-        try { localStorage.setItem(k, remote[k]); } catch {}
-      }
-    });
-  } catch {
-    // Bridge table missing/unreachable — fail silently, never block login.
+    if (error) {
+      console.error("migration_bridge PULL failed:", error.message, error.details || "");
+    } else {
+      const remote = data?.data || {};
+      const pulledKeys = [];
+      Object.keys(remote).forEach((k) => {
+        if (localStorage.getItem(k) === null) {
+          try { localStorage.setItem(k, remote[k]); pulledKeys.push(k); } catch {}
+        }
+      });
+      console.log("migration_bridge PULL OK — keys found:", Object.keys(remote).length, "keys filled in locally:", pulledKeys);
+    }
+  } catch (e) {
+    console.error("migration_bridge PULL threw:", e.message);
   }
   try {
     const snapshot = collectUserLocalStorage(userId);
     if (Object.keys(snapshot).length > 0) {
-      await supabase
+      const { error } = await supabase
         .from("migration_bridge")
         .upsert({ user_id: userId, data: snapshot, updated_at: new Date().toISOString() });
+      if (error) {
+        console.error("migration_bridge PUSH failed:", error.message, error.details || "");
+      } else {
+        console.log("migration_bridge PUSH OK — keys sent:", Object.keys(snapshot).length);
+      }
+    } else {
+      console.log("migration_bridge PUSH skipped — no local keys to send for this user.");
     }
-  } catch {
-    // Non-fatal — worst case, this domain's data isn't backed up this time.
+  } catch (e) {
+    console.error("migration_bridge PUSH threw:", e.message);
   }
 }
 
