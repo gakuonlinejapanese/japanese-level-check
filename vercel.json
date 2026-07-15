@@ -4,7 +4,6 @@
     { "source": "/admin-vocab.html", "destination": "/admin-vocab.html" },
     { "source": "/admin-withdrawal.html", "destination": "/admin-withdrawal.html" },
     { "source": "/book-lesson.html", "destination": "/book-lesson.html" },
-    { "source": "/migrate-bridge.html", "destination": "/migrate-bridge.html" },
     { "source": "/admin-schedule.html", "destination": "/admin-schedule.html" },
     { "source": "/api/(.*)", "destination": "/api/$1" },
     { "source": "/(.*)", "destination": "/" }

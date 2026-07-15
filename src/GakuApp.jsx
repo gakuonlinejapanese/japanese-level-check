@@ -4418,6 +4418,57 @@ function scopedKey(base) {
   return ACTIVE_USER_ID ? `${base}_${ACTIVE_USER_ID}` : base;
 }
 
+// ─── CROSS-DOMAIN DATA BRIDGE (Supabase) ──────────────────────────────────────
+// Student study data lives only in this browser's localStorage, scoped by
+// user id (see scopedKey above). That's normally fine, but it means the data
+// is invisible on a *different domain* (e.g. moving from the original
+// vercel.app URL to a custom domain) even though it's the exact same account.
+// To fix that, every login: (1) pull down any snapshot left by a login on
+// another domain and fill in whatever's missing locally, then (2) push a
+// fresh snapshot of this browser's data up, so the *next* domain/device can
+// pick it up the same way. Uses a small Supabase table (migration_bridge),
+// not localStorage-to-localStorage tricks, so it isn't affected by browsers'
+// third-party storage partitioning/ITP restrictions on cross-site iframes.
+function collectUserLocalStorage(userId) {
+  const suffix = `_${userId}`;
+  const out = {};
+  try {
+    for (let i = 0; i < localStorage.length; i++) {
+      const k = localStorage.key(i);
+      if (k && k.endsWith(suffix)) out[k] = localStorage.getItem(k);
+    }
+  } catch {}
+  return out;
+}
+async function syncMigrationBridge(userId) {
+  if (!supabase || !userId) return;
+  try {
+    const { data } = await supabase
+      .from("migration_bridge")
+      .select("data")
+      .eq("user_id", userId)
+      .maybeSingle();
+    const remote = data?.data || {};
+    Object.keys(remote).forEach((k) => {
+      if (localStorage.getItem(k) === null) {
+        try { localStorage.setItem(k, remote[k]); } catch {}
+      }
+    });
+  } catch {
+    // Bridge table missing/unreachable — fail silently, never block login.
+  }
+  try {
+    const snapshot = collectUserLocalStorage(userId);
+    if (Object.keys(snapshot).length > 0) {
+      await supabase
+        .from("migration_bridge")
+        .upsert({ user_id: userId, data: snapshot, updated_at: new Date().toISOString() });
+    }
+  } catch {
+    // Non-fatal — worst case, this domain's data isn't backed up this time.
+  }
+}
+
 // ─── VOCAB STORAGE (localStorage) ─────────────────────────────────────────────
 function loadVocabData() {
   try { return JSON.parse(localStorage.getItem(scopedKey("gaku_vocab")) || "null") || { folders:[], cards:[] }; } catch { return { folders:[], cards:[] }; }
@@ -7947,31 +7998,38 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
     // then reload this student's own profile/vocab/interaction data (falls
     // back to the unscoped legacy keys when logged out).
     ACTIVE_USER_ID = authUser?.id || null;
-    try {
-      const saved = localStorage.getItem(scopedKey("gaku_form"));
-      const parsedForm = saved ? JSON.parse(saved) : null;
-      // Migrate any legacy JLPT-tier or pre-rename jlpt value (e.g. "N4", "Beginner (no JLPT)")
-      // stored before the six-tier estimation scale existed, so LevelUpOffer's
-      // ESTIMATION_LEVELS.indexOf(currentLevel) lookup doesn't silently fail forever.
-      if (parsedForm && parsedForm.jlpt) parsedForm.jlpt = toEstimationLevel(parsedForm.jlpt);
-      setForm(parsedForm);
-    } catch { setForm(null); }
-    try { setInteractionCount(parseInt(localStorage.getItem(scopedKey("gaku_interaction_count")) || "0", 10) || 0); } catch { setInteractionCount(0); }
-    try { window.dispatchEvent(new Event("gaku_vocab_updated")); } catch {}
-    if (!authUser) { setDeviceStatus(null); setIsGakuStudent(false); return; }
-    syncAssignedVocab(authUser.id);
-    setDeviceStatus("checking");
-    // Self-heal: if the paywall was already showing (e.g. from an earlier trial
-    // session, or right after login/payment), this dismisses it the moment we
-    // confirm the account is a GAKU student or has paid — no refresh needed.
-    checkAccountStatus(authUser.id);
-    fetch("/api/device-check", {
-      method: "POST", headers: { "Content-Type":"application/json" },
-      body: JSON.stringify({ userId: authUser.id, email: authUser.email, deviceId: getDeviceId(), deviceLabel: getDeviceLabel() }),
-    })
-      .then(r => r.json())
-      .then(d => { setDeviceStatus(d.status || "pending"); setDeviceSuspendedUntil(d.suspendedUntil || null); })
-      .catch(() => setDeviceStatus("pending"));
+    (async () => {
+      // Pull/push the cross-domain bridge FIRST so that if this is the first
+      // time this browser/domain has seen this account, the fields read right
+      // below (gaku_form, gaku_interaction_count, vocab, etc.) already reflect
+      // data brought over from wherever the student logged in previously.
+      if (authUser) { await syncMigrationBridge(authUser.id); }
+      try {
+        const saved = localStorage.getItem(scopedKey("gaku_form"));
+        const parsedForm = saved ? JSON.parse(saved) : null;
+        // Migrate any legacy JLPT-tier or pre-rename jlpt value (e.g. "N4", "Beginner (no JLPT)")
+        // stored before the six-tier estimation scale existed, so LevelUpOffer's
+        // ESTIMATION_LEVELS.indexOf(currentLevel) lookup doesn't silently fail forever.
+        if (parsedForm && parsedForm.jlpt) parsedForm.jlpt = toEstimationLevel(parsedForm.jlpt);
+        setForm(parsedForm);
+      } catch { setForm(null); }
+      try { setInteractionCount(parseInt(localStorage.getItem(scopedKey("gaku_interaction_count")) || "0", 10) || 0); } catch { setInteractionCount(0); }
+      try { window.dispatchEvent(new Event("gaku_vocab_updated")); } catch {}
+      if (!authUser) { setDeviceStatus(null); setIsGakuStudent(false); return; }
+      syncAssignedVocab(authUser.id);
+      setDeviceStatus("checking");
+      // Self-heal: if the paywall was already showing (e.g. from an earlier trial
+      // session, or right after login/payment), this dismisses it the moment we
+      // confirm the account is a GAKU student or has paid — no refresh needed.
+      checkAccountStatus(authUser.id);
+      fetch("/api/device-check", {
+        method: "POST", headers: { "Content-Type":"application/json" },
+        body: JSON.stringify({ userId: authUser.id, email: authUser.email, deviceId: getDeviceId(), deviceLabel: getDeviceLabel() }),
+      })
+        .then(r => r.json())
+        .then(d => { setDeviceStatus(d.status || "pending"); setDeviceSuspendedUntil(d.suspendedUntil || null); })
+        .catch(() => setDeviceStatus("pending"));
+    })();
   }, [authUser]);
   const handleSubmit = (f) => {
     // Preserve planStartDate from existing form (only set it once, on first save)
