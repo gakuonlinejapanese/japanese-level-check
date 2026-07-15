@@ -1,5 +1,22 @@
 import Stripe from "stripe";
 import { getAdminClient } from "./_supabaseAdmin.js";
+import { sendEmail } from "./_resend.js";
+
+const APP_URL = "https://app.seitojapanese.online/app";
+
+function loginLinkReminderHtml() {
+  return `
+    <div style="font-family: Arial, sans-serif; font-size: 15px; color: #222; line-height: 1.6;">
+      <p>Thank you for your payment! Your GAKU account is now active.</p>
+      <p>Bookmark this link so you can always get back to your dashboard:</p>
+      <p style="margin: 20px 0;">
+        <a href="${APP_URL}" style="background: #019bd7; color: #fff; padding: 12px 20px; border-radius: 6px; text-decoration: none; font-weight: bold;">Go to my GAKU dashboard</a>
+      </p>
+      <p>Or copy this link directly:<br/><a href="${APP_URL}">${APP_URL}</a></p>
+      <p>See you inside,<br/>GAKU Online Japanese</p>
+    </div>
+  `;
+}
 
 // Stripe needs the RAW request body to verify the webhook signature, so we
 // must disable Vercel's default JSON body parsing for this route.
@@ -50,6 +67,30 @@ export default async function handler(req, res) {
           .update({ is_paid: true, paid_plan: planLabel, paid_at: new Date().toISOString() })
           .eq("id", userId);
         if (error) console.error("Failed to mark profile as paid:", error.message);
+
+        // One-time "bookmark your dashboard" reminder email, sent once per
+        // successful payment. Uses the account's own profile email (not the
+        // Stripe checkout email field) so the link matches the login the
+        // student actually uses.
+        try {
+          const { data: profile, error: profileFetchError } = await supabase
+            .from("profiles")
+            .select("email")
+            .eq("id", userId)
+            .single();
+          if (profileFetchError) {
+            console.error("Could not fetch profile email for login-link reminder:", profileFetchError.message);
+          } else if (profile?.email) {
+            await sendEmail({
+              to: profile.email,
+              subject: "Your GAKU dashboard link (bookmark this!)",
+              html: loginLinkReminderHtml(),
+            });
+            console.log("Login-link reminder email SENT OK to", profile.email);
+          }
+        } catch (emailErr) {
+          console.error("Login-link reminder email FAILED:", emailErr.message);
+        }
       } else {
         console.error("checkout.session.completed had no client_reference_id — cannot link payment to an account.");
       }
