@@ -6,6 +6,7 @@ export default async function handler(req, res) {
   try {
     const { userId, email, deviceId, deviceLabel } = req.body || {};
     if (!userId || !deviceId) return res.status(400).json({ error: "userId and deviceId are required" });
+    console.log(`[device-check] request email=${email} deviceLabel=${deviceLabel} deviceId=${deviceId?.slice(0, 8)}…`);
 
     const supabase = getAdminClient();
 
@@ -29,6 +30,7 @@ export default async function handler(req, res) {
       .maybeSingle();
 
     if (existing) {
+      console.log(`[device-check] result=approved (already-known device) deviceLabel=${deviceLabel}`);
       await supabase.from("device_sessions").update({ last_seen: new Date().toISOString() }).eq("id", existing.id);
       return res.status(200).json({ status: "approved" });
     }
@@ -40,6 +42,7 @@ export default async function handler(req, res) {
       .eq("user_id", userId);
 
     if (!count || count === 0) {
+      console.log(`[device-check] result=approved (first device, auto-approved) deviceLabel=${deviceLabel}`);
       await supabase.from("device_sessions").insert({
         user_id: userId, device_id: deviceId, device_label: deviceLabel || "Unknown device", approved: true,
       });
@@ -88,6 +91,7 @@ export default async function handler(req, res) {
       .maybeSingle();
 
     if (pending) {
+      console.log(`[device-check] result=pending (approval already requested earlier, not re-sending email) deviceLabel=${deviceLabel}`);
       return res.status(200).json({ status: "pending" });
     }
 
@@ -116,10 +120,16 @@ export default async function handler(req, res) {
       <p><a href="${adminLink}" style="color:#a855f7">Approve this device →</a></p>
     `;
 
-    await Promise.all([
-      sendEmail({ to: email, subject: "[GAKU] New device login — please approve", html: studentHtml }),
-      sendEmail({ to: ADMIN_EMAIL, subject: "[GAKU] Student new device login — approval needed", html: adminHtml }),
-    ]);
+    console.log(`[device-check] result=pending (NEW 2nd device — sending approval emails) to=${email} admin=${ADMIN_EMAIL} deviceLabel=${deviceLabel}`);
+    try {
+      const [studentResult, adminResult] = await Promise.all([
+        sendEmail({ to: email, subject: "[GAKU] New device login — please approve", html: studentHtml }),
+        sendEmail({ to: ADMIN_EMAIL, subject: "[GAKU] Student new device login — approval needed", html: adminHtml }),
+      ]);
+      console.log(`[device-check] approval emails SENT OK student=${JSON.stringify(studentResult)} admin=${JSON.stringify(adminResult)}`);
+    } catch (emailErr) {
+      console.error(`[device-check] approval emails FAILED: ${emailErr.message}`);
+    }
 
     return res.status(200).json({ status: "pending" });
   } catch (e) {
