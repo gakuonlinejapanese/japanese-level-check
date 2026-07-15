@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Cancel or Reschedule a Lesson — GAKU Online Japanese</title>
+<style>
+  :root { --blue:#2f5da8; --ink:#1e293b; }
+  * { box-sizing: border-box; }
+  body { margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif; background:var(--blue); color:#fff; }
+  .wrap { max-width:640px; margin:0 auto; padding:40px 24px 80px; }
+  h1 { font-size:26px; line-height:1.3; margin:0 0 28px; }
+  label { display:block; font-size:14px; margin:20px 0 6px; opacity:.95; }
+  input[type=text], input[type=date] {
+    width:100%; padding:10px 4px; background:transparent; border:none; border-bottom:1px solid rgba(255,255,255,.6);
+    color:#fff; font-size:15px; outline:none;
+  }
+  input::placeholder { color:rgba(255,255,255,.6); }
+  input[type=date] { color-scheme: dark; }
+  .radio-row { display:flex; align-items:center; gap:8px; margin:10px 0; font-size:15px; cursor:pointer; }
+  .radio-row input { width:auto; }
+  .hint { font-size:12px; opacity:.75; margin-top:4px; }
+  .btn { display:block; width:100%; margin-top:26px; padding:14px; border:none; border-radius:10px; background:#fff; color:var(--blue); font-weight:800; font-size:15px; cursor:pointer; }
+  .btn:disabled { opacity:.5; cursor:not-allowed; }
+  .step { display:none; }
+  .step.active { display:block; }
+  .msgbox { background:rgba(255,255,255,.1); border-radius:12px; padding:20px; font-size:14px; line-height:1.6; }
+  .center { text-align:center; }
+  .agree-row { display:flex; align-items:center; gap:10px; margin-top:18px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- STEP 1: Cancel or Reschedule? -->
+  <div class="step active" id="step-type">
+    <h1>Cancel or Reschedule a Lesson</h1>
+    <label>Are you going to: *</label>
+    <div class="radio-row"><input type="radio" name="reqType" id="type-cancel" value="cancel" /> <label for="type-cancel" style="margin:0;">Cancel the lesson</label></div>
+    <div class="radio-row"><input type="radio" name="reqType" id="type-reschedule" value="reschedule" /> <label for="type-reschedule" style="margin:0;">Reschedule the lesson</label></div>
+    <button class="btn" id="btn-go-details" disabled>Next</button>
+  </div>
+
+  <!-- STEP 2: Details (fields shown depend on step 1) -->
+  <div class="step" id="step-details">
+    <h1 id="details-title">Details</h1>
+
+    <label>Your full name *</label>
+    <input type="text" id="f-name" placeholder="e.g. Taro Yamada" />
+
+    <div id="reschedule-only" style="display:none;">
+      <label>Which country/city are you now? *</label>
+      <input type="text" id="f-location" placeholder="e.g. Tokyo, Japan" />
+    </div>
+
+    <label>What date will you cancel the lesson? *</label>
+    <input type="date" id="f-cancel-date" />
+
+    <div id="cancel-only" style="display:none;">
+      <label>If you cancel more than two consecutive lessons, what date will you return? *</label>
+      <input type="date" id="f-return-date" />
+    </div>
+
+    <div id="reschedule-only-2" style="display:none;">
+      <label>Please let me know the date that works best for you to reschedule the session. *</label>
+      <input type="date" id="f-reschedule-date" />
+    </div>
+
+    <button class="btn" id="btn-go-policy" disabled>Next</button>
+    <div class="hint center" id="form-error" style="color:#ffd7d7;margin-top:10px;"></div>
+  </div>
+
+  <!-- STEP 3: Policy + Agree -->
+  <div class="step" id="step-policy">
+    <div class="msgbox">
+      Please NOTE: If you do not return for a lesson on the date you have listed, or do not
+      contact me after two consecutive canceled lessons, your GAKU account and all study data
+      will be permanently and immediately deleted, with no option for recovery.
+      <br /><br />
+      Should you need to pause your lessons for more than two consecutive ones, please email me
+      before the end of that time period so your account isn't removed.
+    </div>
+    <div class="agree-row">
+      <input type="checkbox" id="f-agree" />
+      <label style="margin:0;" for="f-agree">I agree</label>
+    </div>
+    <button class="btn" id="btn-final-submit" disabled>Submit</button>
+  </div>
+
+  <!-- STEP 4: Done -->
+  <div class="step" id="step-done">
+    <div class="msgbox center">
+      <h2 style="margin-top:0;">✅ Received!</h2>
+      <p id="done-message">Your request has been recorded.</p>
+    </div>
+  </div>
+
+</div>
+
+<script>
+let reqType = null;
+
+function selectType(t) {
+  reqType = t;
+  document.getElementById('btn-go-details').disabled = false;
+}
+document.getElementById('type-cancel').addEventListener('change', () => selectType('cancel'));
+document.getElementById('type-reschedule').addEventListener('change', () => selectType('reschedule'));
+
+document.getElementById('btn-go-details').addEventListener('click', () => {
+  const isCancel = reqType === 'cancel';
+  document.getElementById('details-title').textContent = isCancel ? 'Cancel a Lesson' : 'Reschedule a Lesson';
+  document.getElementById('reschedule-only').style.display = isCancel ? 'none' : 'block';
+  document.getElementById('reschedule-only-2').style.display = isCancel ? 'none' : 'block';
+  document.getElementById('cancel-only').style.display = isCancel ? 'block' : 'none';
+  document.getElementById('step-type').classList.remove('active');
+  document.getElementById('step-details').classList.add('active');
+});
+
+document.getElementById('btn-go-policy').addEventListener('click', () => {
+  const isCancel = reqType === 'cancel';
+  const name = document.getElementById('f-name').value.trim();
+  const location = document.getElementById('f-location').value.trim();
+  const cancelDate = document.getElementById('f-cancel-date').value;
+  const returnDate = document.getElementById('f-return-date').value;
+  const rescheduleDate = document.getElementById('f-reschedule-date').value;
+  const err = document.getElementById('form-error');
+
+  if (!name || !cancelDate) {
+    err.textContent = 'Please fill in your name and the date you will cancel the lesson.';
+    return;
+  }
+  if (isCancel && !returnDate) {
+    err.textContent = 'Please fill in the date you will return.';
+    return;
+  }
+  if (!isCancel && (!location || !rescheduleDate)) {
+    err.textContent = 'Please fill in your location and your preferred reschedule date.';
+    return;
+  }
+  err.textContent = '';
+  document.getElementById('step-details').classList.remove('active');
+  document.getElementById('step-policy').classList.add('active');
+});
+
+document.getElementById('f-agree').addEventListener('change', (e) => {
+  document.getElementById('btn-final-submit').disabled = !e.target.checked;
+});
+
+document.getElementById('btn-final-submit').addEventListener('click', async () => {
+  const btn = document.getElementById('btn-final-submit');
+  btn.disabled = true; btn.textContent = 'Submitting…';
+
+  const payload = {
+    action: 'cancellation_request',
+    requestType: reqType,
+    studentName: document.getElementById('f-name').value.trim(),
+    location: document.getElementById('f-location').value.trim() || null,
+    cancelDate: document.getElementById('f-cancel-date').value || null,
+    returnDate: document.getElementById('f-return-date').value || null,
+    rescheduleDate: document.getElementById('f-reschedule-date').value || null,
+  };
+
+  try {
+    const resp = await fetch('/api/policy-agreement', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload)
+    });
+    if (!resp.ok) throw new Error('submit failed');
+    document.getElementById('done-message').textContent = reqType === 'cancel'
+      ? 'Your cancellation has been recorded. Thank you for letting me know.'
+      : 'Your reschedule request has been recorded. I will get back to you about the new date.';
+    document.getElementById('step-policy').classList.remove('active');
+    document.getElementById('step-done').classList.add('active');
+  } catch (e) {
+    btn.disabled = false; btn.textContent = 'Submit';
+    alert('Something went wrong. Please try again.');
+  }
+});
+</script>
+</body>
+</html>
