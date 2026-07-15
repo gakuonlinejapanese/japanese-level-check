@@ -4438,6 +4438,15 @@ function collectUserLocalStorage(userId) {
       if (k && k.endsWith(suffix)) out[k] = localStorage.getItem(k);
     }
   } catch {}
+  // Also carry over this browser's already-approved device id (stored
+  // unscoped, so it isn't picked up by the suffix loop above). Without this,
+  // logging into the same account from a *different domain* generates a
+  // brand-new device id and gets misread as an unrecognized 3rd device,
+  // suspending the account even though it's the same physical browser.
+  try {
+    const deviceId = localStorage.getItem("gaku_device_id");
+    if (deviceId) out.gaku_device_id = deviceId;
+  } catch {}
   return out;
 }
 async function syncMigrationBridge(userId) {
