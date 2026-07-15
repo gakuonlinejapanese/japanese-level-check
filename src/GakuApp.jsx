@@ -5371,6 +5371,15 @@ function VocabBuilder({ form }) {
   const [selectedWord, setSelectedWord] = useState(null);
   const [selectedFolder, setSelectedFolder] = useState("Your Vocabulary");
   const [vocabData, setVocabData] = useState(loadVocabData);
+  // Without this, data restored later by the cross-domain migration bridge
+  // (which finishes after this component's first render) never reaches this
+  // screen — it stays stuck showing whatever was in localStorage at the
+  // instant of mount (often 0 words, on a domain the student hasn't used yet).
+  useEffect(() => {
+    const handler = () => setVocabData(loadVocabData());
+    window.addEventListener("gaku_vocab_updated", handler);
+    return () => window.removeEventListener("gaku_vocab_updated", handler);
+  }, []);
 
   // ── Quick Find Words (original feature, kept on main screen) ──
   const [search, setSearch] = useState("");
