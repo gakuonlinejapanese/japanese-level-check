@@ -4451,6 +4451,14 @@ function collectUserLocalStorage(userId) {
 }
 async function syncMigrationBridge(userId) {
   if (!supabase || !userId) return;
+  // Make sure the Supabase client's auth token is actually attached before we
+  // query a RLS-protected table. getSession() re-reads/refreshes the session
+  // internally; awaiting it here closes a race where the very first .from()
+  // call right after login could still see auth.uid() as null and have RLS
+  // silently return zero rows (no error — just an empty result, which looks
+  // identical to "this account genuinely has no bridge data yet").
+  try { await supabase.auth.getSession(); } catch {}
+  let remote = null; // null = pull never succeeded; {} or {...} = pull succeeded
   try {
     const { data, error } = await supabase
       .from("migration_bridge")
@@ -4460,7 +4468,7 @@ async function syncMigrationBridge(userId) {
     if (error) {
       console.error("migration_bridge PULL failed:", error.message, error.details || "");
     } else {
-      const remote = data?.data || {};
+      remote = data?.data || {};
       const pulledKeys = [];
       Object.keys(remote).forEach((k) => {
         if (localStorage.getItem(k) === null) {
@@ -4472,19 +4480,33 @@ async function syncMigrationBridge(userId) {
   } catch (e) {
     console.error("migration_bridge PULL threw:", e.message);
   }
+  // CRITICAL: if the pull didn't succeed (error, or threw), we do NOT know
+  // what the remote row actually contains. Pushing in that state would
+  // overwrite (upsert) a potentially-larger remote snapshot with whatever
+  // sparse data this fresh browser/domain has locally — silently destroying
+  // data instead of migrating it. Skip the push entirely in that case.
+  if (remote === null) {
+    console.warn("migration_bridge PUSH skipped — pull did not succeed, refusing to risk overwriting remote data.");
+    return;
+  }
   try {
-    const snapshot = collectUserLocalStorage(userId);
-    if (Object.keys(snapshot).length > 0) {
+    const localSnapshot = collectUserLocalStorage(userId);
+    // Merge remote-first so any key this browser hasn't caught up on yet
+    // (e.g. because of the same kind of transient timing gap) is preserved,
+    // while local values still win for keys present on both sides (this
+    // browser is the freshest source for its own data).
+    const merged = { ...remote, ...localSnapshot };
+    if (Object.keys(merged).length > 0) {
       const { error } = await supabase
         .from("migration_bridge")
-        .upsert({ user_id: userId, data: snapshot, updated_at: new Date().toISOString() });
+        .upsert({ user_id: userId, data: merged, updated_at: new Date().toISOString() });
       if (error) {
         console.error("migration_bridge PUSH failed:", error.message, error.details || "");
       } else {
-        console.log("migration_bridge PUSH OK — keys sent:", Object.keys(snapshot).length);
+        console.log("migration_bridge PUSH OK — keys sent:", Object.keys(merged).length, "(local:", Object.keys(localSnapshot).length, "remote-carried:", Object.keys(merged).length - Object.keys(localSnapshot).length, ")");
       }
     } else {
-      console.log("migration_bridge PUSH skipped — no local keys to send for this user.");
+      console.log("migration_bridge PUSH skipped — no local or remote keys to send for this user.");
     }
   } catch (e) {
     console.error("migration_bridge PUSH threw:", e.message);
