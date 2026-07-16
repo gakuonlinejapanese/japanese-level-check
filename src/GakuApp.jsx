@@ -328,6 +328,7 @@ const UI_TRANSLATIONS = {
     goalJob: "Get a job in Japan", goalTravel: "Travel to Japan",
     goalStudyAbroad: "Study abroad in Japan", goalConversation: "Daily conversation",
     goalOther: "Other",
+    goalAnime: "Be able to understand Anime/Manga",
     whatDoYouWantToStudy: "WHAT DO YOU WANT TO STUDY?",
     customGoalPlaceholder: "Tell us what you'd like to study or achieve...",
     whenAchieve: "WHEN DO YOU WANT TO ACHIEVE IT? *",
@@ -603,6 +604,7 @@ const UI_TRANSLATIONS = {
     goalJob: "Trouver un emploi au Japon", goalTravel: "Voyager au Japon",
     goalStudyAbroad: "Étudier au Japon", goalConversation: "Conversation quotidienne",
     goalOther: "Autre",
+    goalAnime: "Être capable de comprendre les anime/mangas",
     whatDoYouWantToStudy: "QUE SOUHAITEZ-VOUS ÉTUDIER ?",
     customGoalPlaceholder: "Dites-nous ce que vous souhaitez étudier ou accomplir...",
     whenAchieve: "QUAND SOUHAITEZ-VOUS Y PARVENIR ? *",
@@ -827,6 +829,7 @@ const UI_TRANSLATIONS = {
     goalJob: "Conseguir trabajo en Japón", goalTravel: "Viajar a Japón",
     goalStudyAbroad: "Estudiar en Japón", goalConversation: "Conversación diaria",
     goalOther: "Otro",
+    goalAnime: "Poder entender anime/manga",
     whatDoYouWantToStudy: "¿QUÉ QUIERES ESTUDIAR?",
     customGoalPlaceholder: "Cuéntanos qué te gustaría estudiar o lograr...",
     whenAchieve: "¿CUÁNDO QUIERES LOGRARLO? *",
@@ -1051,6 +1054,7 @@ const UI_TRANSLATIONS = {
     goalJob: "Conseguir emprego no Japão", goalTravel: "Viajar ao Japão",
     goalStudyAbroad: "Estudar no Japão", goalConversation: "Conversação diária",
     goalOther: "Outro",
+    goalAnime: "Conseguir entender anime/mangá",
     whatDoYouWantToStudy: "O QUE VOCÊ QUER ESTUDAR?",
     customGoalPlaceholder: "Conta-nos o que você gostaria de estudar ou alcançar...",
     whenAchieve: "QUANDO VOCÊ QUER ALCANÇAR ISSO? *",
@@ -1275,6 +1279,7 @@ const UI_TRANSLATIONS = {
     goalJob: "Arbeit in Japan finden", goalTravel: "Japan bereisen",
     goalStudyAbroad: "In Japan studieren", goalConversation: "Alltagsgespräch",
     goalOther: "Sonstiges",
+    goalAnime: "Anime/Manga verstehen können",
     whatDoYouWantToStudy: "WAS MÖCHTEN SIE LERNEN?",
     customGoalPlaceholder: "Erzählen Sie uns, was Sie lernen oder erreichen möchten...",
     whenAchieve: "WANN MÖCHTEN SIE ES ERREICHEN? *",
@@ -1499,6 +1504,7 @@ const UI_TRANSLATIONS = {
     goalJob: "Trovare lavoro in Giappone", goalTravel: "Viaggiare in Giappone",
     goalStudyAbroad: "Studiare in Giappone", goalConversation: "Conversazione quotidiana",
     goalOther: "Altro",
+    goalAnime: "Essere in grado di capire anime/manga",
     whatDoYouWantToStudy: "COSA VUOI STUDIARE?",
     customGoalPlaceholder: "Dicci cosa vorresti studiare o raggiungere...",
     whenAchieve: "QUANDO VUOI RAGGIUNGERE IL TUO OBIETTIVO? *",
@@ -1723,6 +1729,7 @@ const UI_TRANSLATIONS = {
     goalJob: "在日本找工作", goalTravel: "去日本旅行",
     goalStudyAbroad: "去日本留学", goalConversation: "日常对话",
     goalOther: "其他",
+    goalAnime: "能够看懂动漫/漫画",
     whatDoYouWantToStudy: "你想学什么？",
     customGoalPlaceholder: "告诉我们你想学习或实现什么...",
     whenAchieve: "你想何时实现目标？*",
@@ -1947,6 +1954,7 @@ const UI_TRANSLATIONS = {
     goalJob: "在日本找工作", goalTravel: "去日本旅行",
     goalStudyAbroad: "去日本留學", goalConversation: "日常對話",
     goalOther: "其他",
+    goalAnime: "能夠看懂動漫/漫畫",
     whatDoYouWantToStudy: "你想學什麼？",
     customGoalPlaceholder: "告訴我們你想學習或實現什麼...",
     whenAchieve: "你想何時實現目標？*",
@@ -2171,6 +2179,7 @@ const UI_TRANSLATIONS = {
     goalJob: "일본에서 취업", goalTravel: "일본 여행",
     goalStudyAbroad: "일본 유학", goalConversation: "일상 회화",
     goalOther: "기타",
+    goalAnime: "애니메이션/만화 이해하기",
     whatDoYouWantToStudy: "무엇을 공부하고 싶으세요?",
     customGoalPlaceholder: "공부하거나 달성하고 싶은 것을 알려주세요...",
     whenAchieve: "언제 달성하고 싶으세요? *",
@@ -2395,6 +2404,7 @@ const UI_TRANSLATIONS = {
     goalJob: "หางานในญี่ปุ่น", goalTravel: "ท่องเที่ยวญี่ปุ่น",
     goalStudyAbroad: "เรียนต่อที่ญี่ปุ่น", goalConversation: "สนทนาประจำวัน",
     goalOther: "อื่น ๆ",
+    goalAnime: "สามารถเข้าใจอนิเมะ/มังงะได้",
     whatDoYouWantToStudy: "คุณอยากเรียนอะไร?",
     customGoalPlaceholder: "บอกเราว่าคุณอยากเรียนหรือบรรลุอะไร...",
     whenAchieve: "คุณอยากบรรลุเป้าหมายเมื่อไร? *",
@@ -2619,6 +2629,7 @@ const UI_TRANSLATIONS = {
     goalJob: "Cari kerja di Jepun", goalTravel: "Melancong ke Jepun",
     goalStudyAbroad: "Belajar di Jepun", goalConversation: "Perbualan harian",
     goalOther: "Lain-lain",
+    goalAnime: "Dapat memahami anime/manga",
     whatDoYouWantToStudy: "APA YANG INGIN ANDA PELAJARI?",
     customGoalPlaceholder: "Beritahu kami apa yang ingin anda pelajari atau capai...",
     whenAchieve: "BILA ANDA INGIN MENCAPAINYA? *",
@@ -2843,6 +2854,7 @@ const UI_TRANSLATIONS = {
     goalJob: "Mendapat pekerjaan di Jepang", goalTravel: "Perjalanan ke Jepang",
     goalStudyAbroad: "Belajar di Jepang", goalConversation: "Percakapan sehari-hari",
     goalOther: "Lainnya",
+    goalAnime: "Dapat memahami anime/manga",
     whatDoYouWantToStudy: "APA YANG INGIN ANDA PELAJARI?",
     customGoalPlaceholder: "Ceritakan apa yang ingin Anda pelajari atau capai...",
     whenAchieve: "KAPAN ANDA INGIN MENCAPAINYA? *",
@@ -3067,6 +3079,7 @@ const UI_TRANSLATIONS = {
     goalJob: "Tìm việc ở Nhật", goalTravel: "Du lịch Nhật Bản",
     goalStudyAbroad: "Du học Nhật Bản", goalConversation: "Giao tiếp hàng ngày",
     goalOther: "Khác",
+    goalAnime: "Có thể hiểu anime/manga",
     whatDoYouWantToStudy: "BẠN MUỐN HỌC GÌ?",
     customGoalPlaceholder: "Cho chúng tôi biết bạn muốn học hoặc đạt được gì...",
     whenAchieve: "KHI NÀO BẠN MUỐN ĐẠT ĐƯỢC? *",
@@ -3291,6 +3304,7 @@ const UI_TRANSLATIONS = {
     goalJob: "जापान में नौकरी पाएं", goalTravel: "जापान यात्रा करें",
     goalStudyAbroad: "जापान में पढ़ाई करें", goalConversation: "दैनिक बातचीत",
     goalOther: "अन्य",
+    goalAnime: "एनीमे/मंगा समझने में सक्षम होना",
     whatDoYouWantToStudy: "आप क्या पढ़ना चाहते हैं?",
     customGoalPlaceholder: "हमें बताएं कि आप क्या सीखना या हासिल करना चाहते हैं...",
     whenAchieve: "आप इसे कब हासिल करना चाहते हैं? *",
@@ -3515,6 +3529,7 @@ const UI_TRANSLATIONS = {
     goalJob: "日本で仕事を見つける", goalTravel: "日本を旅行する",
     goalStudyAbroad: "日本に留学する", goalConversation: "日常会話",
     goalOther: "その他",
+    goalAnime: "アニメ・漫画を理解できるようになる",
     whatDoYouWantToStudy: "何を勉強したいですか？",
     customGoalPlaceholder: "勉強したいことや達成したいことを教えてください...",
     whenAchieve: "いつまでに達成したいですか？ *",
@@ -3739,6 +3754,7 @@ const UI_TRANSLATIONS = {
     goalJob: "Japonya'da iş bul", goalTravel: "Japonya'ya seyahat et",
     goalStudyAbroad: "Japonya'da okuyun", goalConversation: "Günlük konuşma",
     goalOther: "Diğer",
+    goalAnime: "Anime/Manga anlayabilmek",
     whatDoYouWantToStudy: "NE ÇALIŞMAK İSTİYORSUNUZ?",
     customGoalPlaceholder: "Ne öğrenmek veya başarmak istediğinizi söyleyin...",
     whenAchieve: "BUNU NE ZAMAN BAŞARMAK İSTİYORSUNUZ? *",
@@ -3963,6 +3979,7 @@ const UI_TRANSLATIONS = {
     goalJob: "जापानमा जागिर खोज्ने", goalTravel: "जापान भ्रमण गर्ने",
     goalStudyAbroad: "जापानमा अध्ययन गर्ने", goalConversation: "दैनिक कुराकानी",
     goalOther: "अन्य",
+    goalAnime: "एनिमे/मंगा बुझ्न सक्षम हुनु",
     whatDoYouWantToStudy: "तपाईं के अध्ययन गर्न चाहनुहुन्छ?",
     customGoalPlaceholder: "तपाईं के सिक्न वा हासिल गर्न चाहनुहुन्छ भन्नुहोस्...",
     whenAchieve: "तपाईं यो कहिले हासिल गर्न चाहनुहुन्छ? *",
@@ -4187,6 +4204,7 @@ const UI_TRANSLATIONS = {
     goalJob: "Maghanap ng trabaho sa Japan", goalTravel: "Magbiyahe sa Japan",
     goalStudyAbroad: "Mag-aral sa Japan", goalConversation: "Pang-araw-araw na pag-uusap",
     goalOther: "Iba pa",
+    goalAnime: "Maunawaan ang Anime/Manga",
     whatDoYouWantToStudy: "ANO ANG GUSTO MONG PAG-ARALAN?",
     customGoalPlaceholder: "Sabihin sa amin kung ano ang gusto mong pag-aralan o makamit...",
     whenAchieve: "KAILAN MO GUSTONG MAKAMIT ITO? *",
@@ -6695,10 +6713,15 @@ async function buildAIWeeklySchedule(form, weekNum, totalWeeks) {
   // references real names/URLs we can already link to, instead of inventing resources we can't match.
   const levelResList = LEVEL_RESOURCES[form.jlpt] || [];
   const skillResList = (form.skills || []).flatMap(s => RESOURCES[s] || []);
+  const isAnimeGoal = form.goal === "Understand Anime/Manga" || form.displayGoal === "Understand Anime/Manga";
   const availableResources = [...levelResList, ...skillResList]
     .filter((r, i, arr) => arr.findIndex(x => x.name === r.name && x.mode === r.mode) === i)
+    .sort((a, b) => isAnimeGoal ? Number(/anime|manga/i.test(b.name)) - Number(/anime|manga/i.test(a.name)) : 0)
     .map(r => `- ${r.name} [${r.mode}] — ${r.url}`)
     .join("\n");
+  const animeInstruction = isAnimeGoal
+    ? `\nThis student's final goal is understanding anime/manga. Prioritize the anime/manga-tagged resources above (listed first) over other curated resources whenever they fit the day's skill, and frame tasks around anime/manga comprehension (e.g. watching a clip with GAKU Reader, reading a manga scene) rather than generic study materials wherever a fit exists for this level.\n`
+    : "";
 
   const prompt = `You are an expert Japanese language teacher using CLT (Communicative Language Teaching) methodology.
 ${langInstruction}
@@ -6711,7 +6734,7 @@ Student profile:
 - Study time per day: ${minsPerDay} minutes
 - Study days per week: ${studyDays} days (${activeDays.join(", ")})
 - Skills to focus on: ${(form.skills||[]).join(", ")}
-
+${animeInstruction}
 Working backwards from the goal:
 - Week ${weekNum} of ${totalWeeks}: ${progressPct < 25 ? "Foundation building phase — establish core habits and basics" : progressPct < 50 ? "Development phase — expanding knowledge and skills" : progressPct < 75 ? "Consolidation phase — deepening understanding and fluency" : "Mastery phase — polishing, testing, and refining"}
 
@@ -7033,7 +7056,7 @@ const GOAL_KEY_MAP = {
   "Pass JLPT N5":"goalN5", "Pass JLPT N4":"goalN4", "Pass JLPT N3":"goalN3",
   "Pass JLPT N2":"goalN2", "Pass JLPT N1":"goalN1", "Get a job in Japan":"goalJob",
   "Travel to Japan":"goalTravel", "Study abroad in Japan":"goalStudyAbroad",
-  "Daily conversation":"goalConversation", "Other":"goalOther",
+  "Daily conversation":"goalConversation", "Understand Anime/Manga":"goalAnime", "Other":"goalOther",
 };
 const TIMELINE_KEY_MAP = {
   "Less than 6 months":"lessThan6", "Within 1 year":"within1",
@@ -7112,6 +7135,7 @@ function FormScreen({ onSubmit, onBack, onCancel, initialJlpt, initialForm }) {
               <option value="Travel to Japan">{T.goalTravel}</option>
               <option value="Study abroad in Japan">{T.goalStudyAbroad}</option>
               <option value="Daily conversation">{T.goalConversation}</option>
+              <option value="Understand Anime/Manga">{T.goalAnime}</option>
               <option value="Other">{T.goalOther}</option>
             </select>
             {isOther && (
@@ -7585,14 +7609,23 @@ function Dashboard({ form, onEdit, onLevelUp, onDeleteAccount, deleteAccountBusy
 
             {resourceSubTab==="conversation" && <ConversationPredictor form={form} onLevelUp={onLevelUp} />}
 
-            {resourceSubTab==="links" && (
+            {resourceSubTab==="links" && (() => {
+            // When the student's goal is understanding anime/manga, surface the
+            // anime/manga-tagged resources for their level first, without hiding
+            // the rest of the curated list — same data, reordered by relevance.
+            const isAnimeGoal = form.goal === "Understand Anime/Manga" || form.displayGoal === "Understand Anime/Manga";
+            const rawResList = LEVEL_RESOURCES[form.jlpt] || [];
+            const resList = isAnimeGoal
+              ? [...rawResList].sort((a,b) => Number(/anime|manga/i.test(b.name)) - Number(/anime|manga/i.test(a.name)))
+              : rawResList;
+            return (
             <div>
-            {(LEVEL_RESOURCES[form.jlpt] || []).length > 0 && (
+            {resList.length > 0 && (
               <div style={{ ...S.card, marginBottom:16, borderLeft:`3px solid ${C.teal}` }}>
                 <p style={{ color:C.teal, fontSize:12, fontWeight:700, letterSpacing:1, marginBottom:4 }}>{T.recommendedForLevel}</p>
                 <p style={{ color:"#ffffff", fontSize:12, marginBottom:14 }}>{T.curatedFor} {form.jlpt}</p>
                 <div style={{ display:"flex", flexDirection:"column", gap:12 }}>
-                  {(LEVEL_RESOURCES[form.jlpt] || []).map((r,i) => (
+                  {resList.map((r,i) => (
                     <div key={i} style={{ background:"rgba(6,182,212,0.04)", borderRadius:12, border:`1px solid rgba(6,182,212,0.15)`, padding:"14px 16px" }}>
                       <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", marginBottom:6 }}>
                         <p style={{ color:"#f1f5f9", fontSize:14, fontWeight:700, margin:0 }}>{r.name}</p>
@@ -7637,7 +7670,8 @@ function Dashboard({ form, onEdit, onLevelUp, onDeleteAccount, deleteAccountBusy
               </div>
             </div>
             </div>
-            )}
+            );
+            })()}
           </div>
         )}
 
