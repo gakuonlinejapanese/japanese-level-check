@@ -433,6 +433,7 @@ const UI_TRANSLATIONS = {
     recordingInProgress: "Recording...",
     yourSpokenAnswer: "Your spoken answer:",
     speakExample: "Pronounce example",
+    realExamplesTitle: "REAL EXAMPLES", realExamplesLoading: "Searching real examples...", realExamplesAttribution: "Example sentences provided by Tatoeba.org",
     weblioDict: "📖 Weblio Dictionary",
     googleImages: "🖼 Google Images",
     detailCard: "🃏 Detail Card",
@@ -674,6 +675,7 @@ const UI_TRANSLATIONS = {
     recordingInProgress: "Enregistrement...",
     yourSpokenAnswer: "Votre réponse orale :",
     speakExample: "Prononcer l'exemple",
+    realExamplesTitle: "EXEMPLES RÉELS", realExamplesLoading: "Recherche d\u2019exemples réels...", realExamplesAttribution: "Phrases d\u2019exemple fournies par Tatoeba.org",
     weblioDict: "📖 Dictionnaire Weblio",
     googleImages: "🖼 Images Google",
     detailCard: "🃏 Carte détaillée",
@@ -899,6 +901,7 @@ const UI_TRANSLATIONS = {
     recordingInProgress: "Grabando...",
     yourSpokenAnswer: "Tu respuesta hablada:",
     speakExample: "Pronunciar ejemplo",
+    realExamplesTitle: "EJEMPLOS REALES", realExamplesLoading: "Buscando ejemplos reales...", realExamplesAttribution: "Frases de ejemplo proporcionadas por Tatoeba.org",
     weblioDict: "📖 Diccionario Weblio",
     googleImages: "🖼 Imágenes de Google",
     detailCard: "🃏 Tarjeta detallada",
@@ -1124,6 +1127,7 @@ const UI_TRANSLATIONS = {
     recordingInProgress: "Gravando...",
     yourSpokenAnswer: "Sua resposta falada:",
     speakExample: "Pronunciar exemplo",
+    realExamplesTitle: "EXEMPLOS REAIS", realExamplesLoading: "Procurando exemplos reais...", realExamplesAttribution: "Frases de exemplo fornecidas por Tatoeba.org",
     weblioDict: "📖 Dicionário Weblio",
     googleImages: "🖼 Imagens do Google",
     detailCard: "🃏 Cartão detalhado",
@@ -1349,6 +1353,7 @@ const UI_TRANSLATIONS = {
     recordingInProgress: "Aufnahme läuft...",
     yourSpokenAnswer: "Ihre gesprochene Antwort:",
     speakExample: "Beispiel aussprechen",
+    realExamplesTitle: "ECHTE BEISPIELE", realExamplesLoading: "Suche nach echten Beispielen...", realExamplesAttribution: "Beispielsätze bereitgestellt von Tatoeba.org",
     weblioDict: "📖 Weblio-Wörterbuch",
     googleImages: "🖼 Google-Bilder",
     detailCard: "🃏 Detailkarte",
@@ -1574,6 +1579,7 @@ const UI_TRANSLATIONS = {
     recordingInProgress: "Registrazione...",
     yourSpokenAnswer: "La tua risposta parlata:",
     speakExample: "Pronuncia l'esempio",
+    realExamplesTitle: "ESEMPI REALI", realExamplesLoading: "Ricerca di esempi reali...", realExamplesAttribution: "Frasi di esempio fornite da Tatoeba.org",
     weblioDict: "📖 Dizionario Weblio",
     googleImages: "🖼 Immagini Google",
     detailCard: "🃏 Scheda dettagliata",
@@ -1799,6 +1805,7 @@ const UI_TRANSLATIONS = {
     recordingInProgress: "录音中...",
     yourSpokenAnswer: "你的口头回答：",
     speakExample: "发音例句",
+    realExamplesTitle: "真实例句", realExamplesLoading: "正在搜索真实例句...", realExamplesAttribution: "例句由 Tatoeba.org 提供",
     weblioDict: "📖 Weblio词典",
     googleImages: "🖼 谷歌图片",
     detailCard: "🃏 详情卡",
@@ -2024,6 +2031,7 @@ const UI_TRANSLATIONS = {
     recordingInProgress: "錄音中...",
     yourSpokenAnswer: "你的口頭回答：",
     speakExample: "發音例句",
+    realExamplesTitle: "真實例句", realExamplesLoading: "正在搜尋真實例句...", realExamplesAttribution: "例句由 Tatoeba.org 提供",
     weblioDict: "📖 Weblio詞典",
     googleImages: "🖼 Google圖片",
     detailCard: "🃏 詳情卡",
@@ -2249,6 +2257,7 @@ const UI_TRANSLATIONS = {
     recordingInProgress: "녹음 중...",
     yourSpokenAnswer: "말한 답변:",
     speakExample: "예문 발음 듣기",
+    realExamplesTitle: "실제 예문", realExamplesLoading: "실제 예문 검색 중...", realExamplesAttribution: "예문 제공: Tatoeba.org",
     weblioDict: "📖 Weblio 사전",
     googleImages: "🖼 구글 이미지",
     detailCard: "🃏 상세 카드",
@@ -2474,6 +2483,7 @@ const UI_TRANSLATIONS = {
     recordingInProgress: "กำลังบันทึก...",
     yourSpokenAnswer: "คำตอบที่พูดของคุณ:",
     speakExample: "ออกเสียงตัวอย่าง",
+    realExamplesTitle: "ตัวอย่างจริง", realExamplesLoading: "กำลังค้นหาตัวอย่างจริง...", realExamplesAttribution: "ประโยคตัวอย่างจาก Tatoeba.org",
     weblioDict: "📖 พจนานุกรม Weblio",
     googleImages: "🖼 รูปภาพ Google",
     detailCard: "🃏 การ์ดรายละเอียด",
@@ -2699,6 +2709,7 @@ const UI_TRANSLATIONS = {
     recordingInProgress: "Merakam...",
     yourSpokenAnswer: "Jawapan lisan anda:",
     speakExample: "Sebut contoh",
+    realExamplesTitle: "CONTOH SEBENAR", realExamplesLoading: "Mencari contoh sebenar...", realExamplesAttribution: "Ayat contoh disediakan oleh Tatoeba.org",
     weblioDict: "📖 Kamus Weblio",
     googleImages: "🖼 Imej Google",
     detailCard: "🃏 Kad terperinci",
@@ -2924,6 +2935,7 @@ const UI_TRANSLATIONS = {
     recordingInProgress: "Merekam...",
     yourSpokenAnswer: "Jawaban lisan Anda:",
     speakExample: "Ucapkan contoh",
+    realExamplesTitle: "CONTOH NYATA", realExamplesLoading: "Mencari contoh nyata...", realExamplesAttribution: "Kalimat contoh disediakan oleh Tatoeba.org",
     weblioDict: "📖 Kamus Weblio",
     googleImages: "🖼 Gambar Google",
     detailCard: "🃏 Kartu detail",
@@ -3149,6 +3161,7 @@ const UI_TRANSLATIONS = {
     recordingInProgress: "Đang ghi âm...",
     yourSpokenAnswer: "Câu trả lời nói của bạn:",
     speakExample: "Phát âm ví dụ",
+    realExamplesTitle: "VÍ DỤ THỰC TẾ", realExamplesLoading: "Đang tìm ví dụ thực tế...", realExamplesAttribution: "Câu ví dụ được cung cấp bởi Tatoeba.org",
     weblioDict: "📖 Từ điển Weblio",
     googleImages: "🖼 Hình ảnh Google",
     detailCard: "🃏 Thẻ chi tiết",
@@ -3374,6 +3387,7 @@ const UI_TRANSLATIONS = {
     recordingInProgress: "रिकॉर्डिंग हो रही है...",
     yourSpokenAnswer: "आपका बोला गया उत्तर:",
     speakExample: "उदाहरण का उच्चारण करें",
+    realExamplesTitle: "वास्तविक उदाहरण", realExamplesLoading: "वास्तविक उदाहरण खोजे जा रहे हैं...", realExamplesAttribution: "उदाहरण वाक्य Tatoeba.org द्वारा प्रदान किए गए",
     weblioDict: "📖 Weblio शब्दकोश",
     googleImages: "🖼 Google छवियां",
     detailCard: "🃏 विवरण कार्ड",
@@ -3599,6 +3613,7 @@ const UI_TRANSLATIONS = {
     recordingInProgress: "録音中...",
     yourSpokenAnswer: "あなたの発話：",
     speakExample: "例文を発音",
+    realExamplesTitle: "実際の例文", realExamplesLoading: "実際の例文を検索中...", realExamplesAttribution: "例文提供：Tatoeba.org",
     weblioDict: "📖 Weblio辞書",
     googleImages: "🖼 Google画像",
     detailCard: "🃏 詳細カード",
@@ -3824,6 +3839,7 @@ const UI_TRANSLATIONS = {
     recordingInProgress: "Kaydediliyor...",
     yourSpokenAnswer: "Sözlü cevabınız:",
     speakExample: "Örneği telaffuz et",
+    realExamplesTitle: "GERÇEK ÖRNEKLER", realExamplesLoading: "Gerçek örnekler aranıyor...", realExamplesAttribution: "Örnek cümleler Tatoeba.org tarafından sağlanmaktadır",
     weblioDict: "📖 Weblio Sözlük",
     googleImages: "🖼 Google Görseller",
     detailCard: "🃏 Detay kartı",
@@ -4049,6 +4065,7 @@ const UI_TRANSLATIONS = {
     recordingInProgress: "रेकर्डिङ हुँदैछ...",
     yourSpokenAnswer: "तपाईंको बोलिएको जवाफ:",
     speakExample: "उदाहरण उच्चारण गर्नुहोस्",
+    realExamplesTitle: "वास्तविक उदाहरणहरू", realExamplesLoading: "वास्तविक उदाहरणहरू खोजिँदैछ...", realExamplesAttribution: "उदाहरण वाक्यहरू Tatoeba.org द्वारा प्रदान गरिएको",
     weblioDict: "📖 Weblio शब्दकोश",
     googleImages: "🖼 Google छविहरू",
     detailCard: "🃏 विवरण कार्ड",
@@ -4274,6 +4291,7 @@ const UI_TRANSLATIONS = {
     recordingInProgress: "Nire-record...",
     yourSpokenAnswer: "Ang iyong sinabing sagot:",
     speakExample: "Bigkasin ang halimbawa",
+    realExamplesTitle: "AKTWAL NA HALIMBAWA", realExamplesLoading: "Naghahanap ng aktwal na halimbawa...", realExamplesAttribution: "Ang mga halimbawang pangungusap ay mula sa Tatoeba.org",
     weblioDict: "📖 Weblio Dictionary",
     googleImages: "🖼 Google Images",
     detailCard: "🃏 Detalyadong card",
@@ -4671,6 +4689,39 @@ function WordDetailCard({ card: cardProp, onSave, onBack, form, prefLang }) {
   const [imgSrc, setImgSrc] = useState("");
   const [imgLoading, setImgLoading] = useState(false);
   const [filling, setFilling] = useState(false);
+  const [tatoebaExamples, setTatoebaExamples] = useState([]);
+  const [tatoebaLoading, setTatoebaLoading] = useState(false);
+
+  // Fetch real, existing example sentences containing this word from Tatoeba's
+  // open sentence corpus (CC BY 2.0 FR / CC0 licensed, no API key required).
+  // This is separate from the AI-generated example above: these are real
+  // sentences contributed by real people, not AI-invented ones.
+  useEffect(() => {
+    const word = cardProp.word;
+    if (!word) return;
+    setTatoebaExamples([]);
+    setTatoebaLoading(true);
+    (async () => {
+      try {
+        const url = `https://api.tatoeba.org/unstable/sentences?lang=jpn&q=${encodeURIComponent(word)}&sort=relevance&trans%3Alang=eng&showtrans=matching&limit=8`;
+        const res = await fetch(url);
+        const data = await res.json();
+        const results = (data?.data || [])
+          .filter(s => s.text && s.text.includes(word))
+          .map(s => ({
+            id: s.id,
+            text: s.text,
+            translation: (s.translations || []).find(t => t.lang === "eng")?.text || "",
+          }))
+          .slice(0, 3);
+        setTatoebaExamples(results);
+      } catch (e) {
+        console.error("Tatoeba fetch error:", e);
+        setTatoebaExamples([]);
+      }
+      setTatoebaLoading(false);
+    })();
+  }, [cardProp.word]);
 
   // Auto-fill empty meaning/example via AI when card opens
   useEffect(() => {
@@ -4825,6 +4876,33 @@ function WordDetailCard({ card: cardProp, onSave, onBack, form, prefLang }) {
               }
             </>
         }
+      </div>
+
+      {/* ── REAL EXAMPLES (Tatoeba) ── */}
+      <div style={{ ...S.card, marginBottom:12 }}>
+        <p style={{ color:C.teal, fontSize:11, fontWeight:700, letterSpacing:1, margin:"0 0 8px" }}>🌐 {T.realExamplesTitle || "REAL EXAMPLES"}</p>
+        {tatoebaLoading ? (
+          <p style={{ color:"#475569", fontSize:13, fontStyle:"italic", margin:0 }}>{T.realExamplesLoading || "Searching real examples..."}</p>
+        ) : tatoebaExamples.length > 0 ? (
+          <>
+            <div style={{ display:"flex", flexDirection:"column", gap:12 }}>
+              {tatoebaExamples.map(ex => (
+                <div key={ex.id} style={{ borderLeft:`2px solid ${C.border}`, paddingLeft:10 }}>
+                  <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", gap:8 }}>
+                    <p style={{ color:"#f1f5f9", fontSize:14, lineHeight:1.8, margin:"0 0 3px", flex:1 }}>{ex.text}</p>
+                    <button onClick={()=>speakJapanese(ex.text)} style={{ background:"none", border:"none", color:C.teal, fontSize:13, cursor:"pointer", padding:0, flexShrink:0 }}>🔊</button>
+                  </div>
+                  {ex.translation && <p style={{ color:"#64748b", fontSize:12, margin:0, fontStyle:"italic" }}>{ex.translation}</p>}
+                </div>
+              ))}
+            </div>
+            <p style={{ color:"#475569", fontSize:11, margin:"10px 0 0" }}>
+              <a href="https://tatoeba.org" target="_blank" rel="noopener noreferrer" style={{ color:"#475569" }}>{T.realExamplesAttribution || "Example sentences provided by Tatoeba.org"}</a>
+            </p>
+          </>
+        ) : (
+          <p style={{ color:"#475569", fontSize:13, margin:0 }}>—</p>
+        )}
       </div>
 
       {/* ── IMAGE ASSOCIATION ── */}
