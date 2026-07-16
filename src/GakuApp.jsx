@@ -4892,12 +4892,12 @@ function WordDetailCard({ card: cardProp, onSave, onBack, form, prefLang }) {
                     <p style={{ color:"#f1f5f9", fontSize:14, lineHeight:1.8, margin:"0 0 3px", flex:1 }}>{ex.text}</p>
                     <button onClick={()=>speakJapanese(ex.text)} style={{ background:"none", border:"none", color:C.teal, fontSize:13, cursor:"pointer", padding:0, flexShrink:0 }}>🔊</button>
                   </div>
-                  {ex.translation && <p style={{ color:"#64748b", fontSize:12, margin:0, fontStyle:"italic" }}>{ex.translation}</p>}
+                  {ex.translation && <p style={{ color:"#ff2d2d", fontWeight:600, fontSize:12, margin:0, fontStyle:"italic" }}>{ex.translation}</p>}
                 </div>
               ))}
             </div>
             <p style={{ color:"#475569", fontSize:11, margin:"10px 0 0" }}>
-              <a href="https://tatoeba.org" target="_blank" rel="noopener noreferrer" style={{ color:"#475569" }}>{T.realExamplesAttribution || "Example sentences provided by Tatoeba.org"}</a>
+              <a href="https://tatoeba.org" target="_blank" rel="noopener noreferrer" style={{ color:"#ff2d2d", fontWeight:600 }}>{T.realExamplesAttribution || "Example sentences provided by Tatoeba.org"}</a>
             </p>
           </>
         ) : (
