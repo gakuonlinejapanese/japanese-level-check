@@ -4692,6 +4692,15 @@ function WordDetailCard({ card: cardProp, onSave, onBack, form, prefLang }) {
   const [tatoebaExamples, setTatoebaExamples] = useState([]);
   const [tatoebaLoading, setTatoebaLoading] = useState(false);
 
+  // Maps our app's language names to the ISO 639-3 codes Tatoeba's API expects.
+  const TATOEBA_LANG_CODES = {
+    "English":"eng", "Spanish":"spa", "French":"fra", "German":"deu",
+    "Chinese (Simplified)":"cmn", "Chinese (Traditional)":"cmn", "Italian":"ita",
+    "Korean":"kor", "Thai":"tha", "Malay":"zsm", "Indonesian":"ind",
+    "Vietnamese":"vie", "Hindi":"hin", "Japanese":"jpn", "Turkish":"tur",
+    "Nepali":"nep", "Filipino":"tgl", "Portuguese":"por",
+  };
+
   // Fetch real, existing example sentences containing this word from Tatoeba's
   // open sentence corpus (CC BY 2.0 FR / CC0 licensed, no API key required).
   // This is separate from the AI-generated example above: these are real
@@ -4701,18 +4710,25 @@ function WordDetailCard({ card: cardProp, onSave, onBack, form, prefLang }) {
     if (!word) return;
     setTatoebaExamples([]);
     setTatoebaLoading(true);
+    const studentLang = prefLang || form?.preferredLang || "English";
+    const targetCode = TATOEBA_LANG_CODES[studentLang] || "eng";
     (async () => {
       try {
-        const url = `https://api.tatoeba.org/unstable/sentences?lang=jpn&q=${encodeURIComponent(word)}&sort=relevance&trans%3Alang=eng&showtrans=matching&limit=8`;
+        // Ask for translations in the student's own language OR English, so we
+        // can fall back to English per-sentence if a given sentence has no
+        // translation in the student's language yet.
+        const transLangs = targetCode === "eng" ? "eng" : `${targetCode},eng`;
+        const url = `https://api.tatoeba.org/unstable/sentences?lang=jpn&q=${encodeURIComponent(word)}&sort=relevance&trans%3Alang=${transLangs}&showtrans=matching&limit=8`;
         const res = await fetch(url);
         const data = await res.json();
         const results = (data?.data || [])
           .filter(s => s.text && s.text.includes(word))
-          .map(s => ({
-            id: s.id,
-            text: s.text,
-            translation: (s.translations || []).find(t => t.lang === "eng")?.text || "",
-          }))
+          .map(s => {
+            const trans = s.translations || [];
+            const preferred = trans.find(t => t.lang === targetCode)?.text;
+            const english = trans.find(t => t.lang === "eng")?.text;
+            return { id: s.id, text: s.text, translation: preferred || english || "" };
+          })
           .slice(0, 3);
         setTatoebaExamples(results);
       } catch (e) {
@@ -4721,7 +4737,7 @@ function WordDetailCard({ card: cardProp, onSave, onBack, form, prefLang }) {
       }
       setTatoebaLoading(false);
     })();
-  }, [cardProp.word]);
+  }, [cardProp.word, prefLang, form?.preferredLang]);
 
   // Auto-fill empty meaning/example via AI when card opens
   useEffect(() => {
