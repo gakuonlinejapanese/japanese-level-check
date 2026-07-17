@@ -134,12 +134,16 @@ export default async function handler(req, res) {
     if (provider === "fast") {
       const groqResult = await callGroq(groqKeys, commonBody);
       if (groqResult.text !== null) {
+        console.log("provider=fast: Groq OK");
         return res.status(200).json({ content: [{ type: "text", text: groqResult.text }] });
       }
+      console.error("provider=fast: Groq FAILED —", groqResult.lastError);
       const text = await callDeepInfra(deepInfraKey, commonBody);
       if (text !== null) {
+        console.log("provider=fast: DeepInfra fallback OK");
         return res.status(200).json({ content: [{ type: "text", text }] });
       }
+      console.error("provider=fast: DeepInfra fallback also FAILED");
       return res.status(groqResult.status || 429).json({ error: groqResult.lastError || "Both providers failed" });
     }
 

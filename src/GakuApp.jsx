@@ -5560,9 +5560,15 @@ function VocabBuilder({ form }) {
         const parsed = JSON.parse(clean);
         setWords(Array.isArray(parsed)?parsed:[]);
       } catch {
-        const match = clean.match(/[\s\S]*/);
-        if (match) { try { setWords(JSON.parse(match[0])); } catch { setWords([]); } }
-        else { setWords([]); }
+        // Model sometimes adds preamble/trailing text around the JSON array — extract just the array.
+        const match = clean.match(/\[[\s\S]*\]/);
+        if (match) {
+          try { setWords(JSON.parse(match[0])); }
+          catch (e2) { console.error("findWords parse error:", e2, clean); setWords([]); setFindError("検索結果の解析に失敗しました。もう一度お試しください。"); }
+        } else {
+          console.error("findWords: no JSON array found in response:", clean);
+          setWords([]); setFindError("検索結果の解析に失敗しました。もう一度お試しください。");
+        }
       }
     } catch(e) { console.error("findWords error:", e); setWords([]); setFindError("検索に失敗しました。もう一度お試しください。"); }
     setLoading(false);
