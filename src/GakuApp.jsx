@@ -217,7 +217,7 @@ const KANA_ONLY_SKILLS = ["onlyHiragana", "onlyKatakana"];
 const UI_TRANSLATIONS = {
   "English": {
     // Header / common
-    gakuSelfStudy: "GAKU SELF-STUDY",
+    gakuSelfStudy: "GAKU MASTER",
     studyPlan: "Study Plan",
     help: "🆘 Help",
     editProfile: "✏️ Edit Profile",
@@ -505,7 +505,7 @@ const UI_TRANSLATIONS = {
 },
 
   "French": {
-    gakuSelfStudy: "GAKU AUTO-APPRENTISSAGE",
+    gakuSelfStudy: "GAKU MASTER",
     studyPlan: "Plan d'étude",
     help: "🆘 Aide",
     editProfile: "✏️ Modifier le profil",
@@ -731,7 +731,7 @@ const UI_TRANSLATIONS = {
 },
 
   "Spanish": {
-    gakuSelfStudy: "GAKU AUTOAPRENDIZAJE",
+    gakuSelfStudy: "GAKU MASTER",
     studyPlan: "Plan de estudio",
     help: "🆘 Ayuda",
     editProfile: "✏️ Editar perfil",
@@ -957,7 +957,7 @@ const UI_TRANSLATIONS = {
 },
 
   "Portuguese": {
-    gakuSelfStudy: "GAKU AUTO-ESTUDO",
+    gakuSelfStudy: "GAKU MASTER",
     studyPlan: "Plano de estudo",
     help: "🆘 Ajuda",
     editProfile: "✏️ Editar perfil",
@@ -1183,7 +1183,7 @@ const UI_TRANSLATIONS = {
 },
 
   "German": {
-    gakuSelfStudy: "GAKU SELBSTSTUDIUM",
+    gakuSelfStudy: "GAKU MASTER",
     studyPlan: "Lernplan",
     help: "🆘 Hilfe",
     editProfile: "✏️ Profil bearbeiten",
@@ -1409,7 +1409,7 @@ const UI_TRANSLATIONS = {
 },
 
   "Italian": {
-    gakuSelfStudy: "GAKU AUTO-APPRENDIMENTO",
+    gakuSelfStudy: "GAKU MASTER",
     studyPlan: "Piano di studio",
     help: "🆘 Aiuto",
     editProfile: "✏️ Modifica profilo",
@@ -1635,7 +1635,7 @@ const UI_TRANSLATIONS = {
 },
 
   "Chinese (Simplified)": {
-    gakuSelfStudy: "GAKU 自学",
+    gakuSelfStudy: "GAKU MASTER",
     studyPlan: "学习计划",
     help: "🆘 帮助",
     editProfile: "✏️ 编辑资料",
@@ -1861,7 +1861,7 @@ const UI_TRANSLATIONS = {
 },
 
   "Chinese (Traditional)": {
-    gakuSelfStudy: "GAKU 自學",
+    gakuSelfStudy: "GAKU MASTER",
     studyPlan: "學習計劃",
     help: "🆘 幫助",
     editProfile: "✏️ 編輯資料",
@@ -2087,7 +2087,7 @@ const UI_TRANSLATIONS = {
 },
 
   "Korean": {
-    gakuSelfStudy: "GAKU 자기 학습",
+    gakuSelfStudy: "GAKU MASTER",
     studyPlan: "학습 계획",
     help: "🆘 도움말",
     editProfile: "✏️ 프로필 편집",
@@ -2313,7 +2313,7 @@ const UI_TRANSLATIONS = {
 },
 
   "Thai": {
-    gakuSelfStudy: "GAKU การเรียนรู้ด้วยตนเอง",
+    gakuSelfStudy: "GAKU MASTER",
     studyPlan: "แผนการเรียน",
     help: "🆘 ช่วยเหลือ",
     editProfile: "✏️ แก้ไขโปรไฟล์",
@@ -2539,7 +2539,7 @@ const UI_TRANSLATIONS = {
 },
 
   "Malay": {
-    gakuSelfStudy: "GAKU BELAJAR SENDIRI",
+    gakuSelfStudy: "GAKU MASTER",
     studyPlan: "Pelan belajar",
     help: "🆘 Bantuan",
     editProfile: "✏️ Edit profil",
@@ -2765,7 +2765,7 @@ const UI_TRANSLATIONS = {
 },
 
   "Indonesian": {
-    gakuSelfStudy: "GAKU BELAJAR MANDIRI",
+    gakuSelfStudy: "GAKU MASTER",
     studyPlan: "Rencana belajar",
     help: "🆘 Bantuan",
     editProfile: "✏️ Edit profil",
@@ -2991,7 +2991,7 @@ const UI_TRANSLATIONS = {
 },
 
   "Vietnamese": {
-    gakuSelfStudy: "GAKU TỰ HỌC",
+    gakuSelfStudy: "GAKU MASTER",
     studyPlan: "Kế hoạch học tập",
     help: "🆘 Trợ giúp",
     editProfile: "✏️ Chỉnh sửa hồ sơ",
@@ -3217,7 +3217,7 @@ const UI_TRANSLATIONS = {
 },
 
   "Hindi": {
-    gakuSelfStudy: "GAKU स्व-अध्ययन",
+    gakuSelfStudy: "GAKU MASTER",
     studyPlan: "अध्ययन योजना",
     help: "🆘 सहायता",
     editProfile: "✏️ प्रोफ़ाइल संपादित करें",
@@ -3443,7 +3443,7 @@ const UI_TRANSLATIONS = {
 },
 
   "Japanese": {
-    gakuSelfStudy: "GAKU 自習",
+    gakuSelfStudy: "GAKU MASTER",
     studyPlan: "学習プラン",
     help: "🆘 ヘルプ",
     editProfile: "✏️ プロフィール編集",
@@ -3669,7 +3669,7 @@ const UI_TRANSLATIONS = {
 },
 
   "Turkish": {
-    gakuSelfStudy: "GAKU KENDİ KENDİNE ÇALIŞMA",
+    gakuSelfStudy: "GAKU MASTER",
     studyPlan: "Çalışma planı",
     help: "🆘 Yardım",
     editProfile: "✏️ Profili düzenle",
@@ -3895,7 +3895,7 @@ const UI_TRANSLATIONS = {
 },
 
   "Nepali": {
-    gakuSelfStudy: "GAKU स्व-अध्ययन",
+    gakuSelfStudy: "GAKU MASTER",
     studyPlan: "अध्ययन योजना",
     help: "🆘 मद्दत",
     editProfile: "✏️ प्रोफाइल सम्पादन गर्नुहोस्",
@@ -4121,7 +4121,7 @@ const UI_TRANSLATIONS = {
 },
 
   "Filipino": {
-    gakuSelfStudy: "GAKU SELF-STUDY",
+    gakuSelfStudy: "GAKU MASTER",
     studyPlan: "Study plan",
     help: "🆘 Tulong",
     editProfile: "✏️ I-edit ang profile",
