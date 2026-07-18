@@ -6374,11 +6374,13 @@ Respond ONLY with a valid JSON array, no markdown, no backticks:
         </p>
         <textarea
           value={source}
-          onChange={e=>{ setSource(e.target.value); setSourceFurigana(""); setSourceFuriganaOn(false); }}
+          onChange={e=>{ setSource(e.target.value.slice(0, 2000)); setSourceFurigana(""); setSourceFuriganaOn(false); }}
           placeholder={`日本語のテキストをここに貼り付けてください... (${T.contentPlaceholder || "paste Japanese text, subtitles, or a caption here"})`}
           rows={6}
-          style={{ width:"100%", boxSizing:"border-box", background:"rgba(255,255,255,0.03)", border:`1px solid ${C.border}`, borderRadius:10, color:"#f1f5f9", fontSize:13, padding:"10px 12px", marginBottom:12, resize:"vertical", fontFamily:"inherit" }}
+          maxLength={2000}
+          style={{ width:"100%", boxSizing:"border-box", background:"rgba(255,255,255,0.03)", border:`1px solid ${C.border}`, borderRadius:10, color:"#f1f5f9", fontSize:13, padding:"10px 12px", resize:"vertical", fontFamily:"inherit" }}
         />
+        <p style={{ color: source.length >= 2000 ? C.red : "#64748b", fontSize:11, textAlign:"right", margin:"4px 0 12px" }}>{source.length}/2000</p>
         <button onClick={analyze} disabled={loading} style={{ ...S.btn, width:"100%", background:loading?"rgba(6,182,212,0.15)":`linear-gradient(135deg,${C.teal},#0891b2)`, color:loading?"#64748b":"#fff" }}>
           {loading ? `⏳ ${T.contentAnalyzing || "Analyzing content..."}` : (items.length ? `🔄 ${T.contentAnalyzeAgain || "Analyze again"}` : `${T.contentAnalyzeButton || "Analyze & Generate Activities"} ✨`)}
         </button>
@@ -8359,6 +8361,14 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
         // ESTIMATION_LEVELS.indexOf(currentLevel) lookup doesn't silently fail forever.
         if (parsedForm && parsedForm.jlpt) parsedForm.jlpt = toEstimationLevel(parsedForm.jlpt);
         setForm(parsedForm);
+        // A student who already completed onboarding once must never be sent back
+        // to the profile-setup screen automatically — this used to re-trigger on
+        // every app reopen for anyone whose bookmarked/home-screen URL still carries
+        // ?name=&email=&jlpt= from the diagnostic test result page (forceForm's
+        // initial state below reads those params on every fresh load). Now that we
+        // know for certain a saved profile exists, clear it unconditionally so they
+        // land straight on their dashboard instead of looping back into this form.
+        if (parsedForm) setForceForm(false);
       } catch { setForm(null); }
       try { setInteractionCount(parseInt(localStorage.getItem(scopedKey("gaku_interaction_count")) || "0", 10) || 0); } catch { setInteractionCount(0); }
       try { window.dispatchEvent(new Event("gaku_vocab_updated")); } catch {}
@@ -8480,7 +8490,11 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
   if (policyGate) return <PolicyGate T={T} name={form?.name || authUser?.email} email={authUser?.email || form?.email} plan={policyGate.planLabel} onAgreed={handlePolicyAgreed} onCancel={()=>setPolicyGate(null)} />;
   if (authUser && deviceStatus === "suspended") return <DeviceSuspendedGate T={T} suspendedUntil={deviceSuspendedUntil} />;
   if (authUser && deviceStatus === "pending") return <DeviceApprovalGate T={T} />;
-  if (!form || editing || forceForm) return <FormScreen onSubmit={handleSubmit} onBack={onBack} onCancel={form ? handleCancelEdit : undefined} initialJlpt={initialJlpt} initialForm={formForEdit} />;
+  // Note: intentionally NOT passing onBack here. It used to link back to the
+  // retired legacy quiz landing page (App.js's Home screen) — a dead end with
+  // no way back into the self-study app — which is what students calling this
+  // "the profile screen loops back to the old quiz page" bug were hitting.
+  if (!form || editing || forceForm) return <FormScreen onSubmit={handleSubmit} onCancel={form ? handleCancelEdit : undefined} initialJlpt={initialJlpt} initialForm={formForEdit} />;
   return (
     <div style={{ position:"relative" }} onClickCapture={handleDashboardInteraction}>
       <Dashboard form={form} onEdit={handleEdit} onLevelUp={(lvl)=>handleSubmit({ ...form, jlpt: lvl })} onDeleteAccount={authUser ? handleDeleteAccount : undefined} deleteAccountBusy={deleteAccountBusy} />
