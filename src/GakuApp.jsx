@@ -6374,13 +6374,13 @@ Respond ONLY with a valid JSON array, no markdown, no backticks:
         </p>
         <textarea
           value={source}
-          onChange={e=>{ setSource(e.target.value.slice(0, 2000)); setSourceFurigana(""); setSourceFuriganaOn(false); }}
+          onChange={e=>{ setSource(e.target.value.slice(0, 6000)); setSourceFurigana(""); setSourceFuriganaOn(false); }}
           placeholder={`日本語のテキストをここに貼り付けてください... (${T.contentPlaceholder || "paste Japanese text, subtitles, or a caption here"})`}
           rows={6}
-          maxLength={2000}
+          maxLength={6000}
           style={{ width:"100%", boxSizing:"border-box", background:"rgba(255,255,255,0.03)", border:`1px solid ${C.border}`, borderRadius:10, color:"#f1f5f9", fontSize:13, padding:"10px 12px", resize:"vertical", fontFamily:"inherit" }}
         />
-        <p style={{ color: source.length >= 2000 ? C.red : "#64748b", fontSize:11, textAlign:"right", margin:"4px 0 12px" }}>{source.length}/2000</p>
+        <p style={{ color: source.length >= 6000 ? C.red : "#64748b", fontSize:11, textAlign:"right", margin:"4px 0 12px" }}>{source.length}/6000</p>
         <button onClick={analyze} disabled={loading} style={{ ...S.btn, width:"100%", background:loading?"rgba(6,182,212,0.15)":`linear-gradient(135deg,${C.teal},#0891b2)`, color:loading?"#64748b":"#fff" }}>
           {loading ? `⏳ ${T.contentAnalyzing || "Analyzing content..."}` : (items.length ? `🔄 ${T.contentAnalyzeAgain || "Analyze again"}` : `${T.contentAnalyzeButton || "Analyze & Generate Activities"} ✨`)}
         </button>
