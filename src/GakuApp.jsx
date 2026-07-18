@@ -5498,6 +5498,140 @@ Respond ONLY in valid JSON array format (no markdown, no backticks, no preamble)
 }
 
 // ─── MAIN VOCAB BUILDER ────────────────────────────────────────────────────────
+// Curated 慣用句 (idiom) dataset — used by VocabBuilder's word search so idiom
+// results are the verified real phrase + meaning below, not freely AI-generated
+// (which risked inaccurate/invented idioms). The AI is only asked to translate
+// the given meaning and supply reading/example/tip, never to invent the idiom itself.
+const KANYOUKU_DATA = [
+  ["揚げ足を取る","人の言った言葉じりや言い誤りをとらえてバカにすること。困らせること。"],
+  ["足がつく","逃げた足取りが分かること。痕跡が残っていること。"],
+  ["足が出る","思っていたよりもお金がかかって足りなくなる。出費が予算を上回ること。"],
+  ["足が棒になる","疲れて足がよく動かなくなること。"],
+  ["足元を見る","人の弱いところにつけ込むこと。"],
+  ["足を洗う","悪い仲間、悪い行いや仕事を辞めて、真面目になること。よくないことをやめる。悪い生活態度を改める。"],
+  ["足を伸ばす","遠くに行くこと。本来の目的地よりも少し先にいってみること。"],
+  ["足を引っ張る","他人の成功や昇進の邪魔をする。また、物事のスムーズな進行を妨げること。"],
+  ["頭が下がる","感心して、敬う気持ちが出てくること。"],
+  ["油を売る","仕事などの途中で、無駄話をして時間を無駄にすること。怠けること。"],
+  ["息を飲む","驚いて息ができない様子。はっと驚く様。"],
+  ["板につく","経験を積んで、職業や任務などがその人にピッタリあうようになること。うまくこなしている様。"],
+  ["一目置く","相手を自分より優れていると認めること。"],
+  ["芋を洗うよう","大勢の人で混雑している様子。人が多すぎて身動きがとれない状態。"],
+  ["牛の歩み","進行、進歩が非常に遅いこと。"],
+  ["腕によりをかける","腕前を示そうとして勢い込む。"],
+  ["馬が合う","相手とよく気が合う。"],
+  ["お茶を濁す","いい加減な事を言ったり、したりして、適当にその場をごまかすこと。一時しのぎ。"],
+  ["尾ひれをつける","事実以上のことを付け加えて、話を大げさにすること。"],
+  ["顔が売れる","大勢の人に顔を知られて、勢力を持つようになる。人気者になること。"],
+  ["顔が利く","名が売れていて無理が通ること。"],
+  ["顔が広い","いろいろな人をよく知っている。また、多くの人たちと付き合いがある様子。"],
+  ["顔から火が出る","非常に恥ずかしい思いをすること。うろたえて顔が真っ赤になる。"],
+  ["顔に泥を塗る","相手に恥をかかせること。"],
+  ["顔をしかめる","不快なことがあって、顔にシワを寄せる。"],
+  ["肩を入れる","味方をする。贔屓する。肩入れするとも言う。"],
+  ["肩を落とす","力を落としてがっくりする様。"],
+  ["肩を並べる","対等の位置につく。レベルが同じ。"],
+  ["肩を持つ","味方をする。贔屓（ひいき）をすること。"],
+  ["気が置けない","緊張したり遠慮したりする必要がなく、親しく付き合える様子。打ち解けてのびのびと楽に付き合える様子。"],
+  ["木で鼻をくくる","無愛想に冷たくもてなすこと。"],
+  ["釘を刺す","あとで問題が発生しないように、あらかじめ念を押して強く確認しておくこと。"],
+  ["口が重い","あまりしゃべらない"],
+  ["口が固い","秘密を守ってしゃべらないこと。言いふらさないこと。"],
+  ["口が滑る","言ってはいけないことや隠しておくべきことを、うっかり話してしまうこと。"],
+  ["口車に乗る","うまい話に騙される。"],
+  ["口を切る","最初に話し始める。口火を切るともいう。"],
+  ["口を尖らせる","不満の表情をすること。不満気な態度。"],
+  ["口を挟む","他人の話に横から割り込むこと。会話を邪魔すること。"],
+  ["口を割る","仕方なしに本当のことをいう、白状する。"],
+  ["首を傾げる","本当かどうか疑問に思う、あることに疑問や不信を感じて、納得、同意できないこと。"],
+  ["首を突っ込む","関心を持つ。または深入りすること。"],
+  ["首を長くする","今か今かと待ち遠しく思うこと。"],
+  ["腰を据える","落ち着いて物事に対処すること。"],
+  ["小耳に挟む","ちらっと聞く。不確かさがあるが聞いたことがあること。"],
+  ["匙を投げる","もうだめだとあきらめて、努力することや行動を辞めてしまうこと。医者が患者を見放すこと。"],
+  ["舌を巻く","相手の素晴らしさに驚嘆して言葉が出ない様子。非常に感心する様。"],
+  ["尻馬に乗る","他人の真似をして軽々しい行いをしたり、喋ったりすること。"],
+  ["雀の涙","極めて僅かなもののたとえ。分量や金額がほんの僅かで、とうてい満足できるものではないこと。"],
+  ["高をくくる","程度を軽くみていること。状態を軽く見ていること。"],
+  ["手が掛かる","世話が焼けること。"],
+  ["手塩にかける","面倒を見て大切に育てること。"],
+  ["手に汗握る","はらはら、ドキドキすること。"],
+  ["手に余る","自分の力、能力を超えていて処理が難しい。持て余す。どうすることもできないこと。"],
+  ["手に負えない","自分の力、能力を超えていて処理が難しい。持て余す。どうすることもできないこと。"],
+  ["手も足も出ない","難しくて、どうにも手のうちようがない様子。自分の力ではどうにもならないこと。"],
+  ["手を打つ","話し合いの決着をつける。またはどうしたらうまくいくかを考え、そのようにすること。"],
+  ["手を切る","関係をなくす。これまでの関係をなかったことにする。"],
+  ["手をこまねく","自分からなにもしないで見ている。相手が訪れる事を待っている。"],
+  ["手を結ぶ","同じ目的のために協力する。提携。同盟。"],
+  ["手を焼く","扱いきれずに困る。持て余す。始末に困る。"],
+  ["頭角を現す","才能が人より目立ってくること。"],
+  ["二の足を踏む","勇気が出ず、尻込みする。思い切った行動に出られず、どうしようか迷う。気が進まないでグズグズすること。"],
+  ["猫の手も借りたい","とても忙しく、誰でもいいから手伝ってほしい様子。"],
+  ["猫をかぶる","本性を隠して、人の前でだけおとなしそうに見せかけること。また、知っているのに知らないふりをすること。"],
+  ["音を上げる","弱音を吐く。限界だと感じて諦めること。"],
+  ["歯が浮く","軽はずみなことを見たり聞いたりして嫌な感じがする。"],
+  ["歯が立たない","相手が強すぎたり物事が難しすぎたりして、力が及ばない、全く敵わないこと。"],
+  ["鼻が高い","得意になる。自慢に思うこと。"],
+  ["鼻であしらう","相手の言うことに、ろくに返事もしないで、いい加減に扱う。人を軽んじていい加減に扱うこと。"],
+  ["鼻で笑う","軽蔑して笑うこと。"],
+  ["鼻にかける","自慢する。偉ぶる。"],
+  ["鼻につく","いつものことで、飽きていやになること。わざとらしい様子が嫌味に思えて不快になること。"],
+  ["鼻持ちならない","目を背けるほど見苦しいこと。"],
+  ["鼻を明かす","出し抜いてあっといわせる。予想外のことをして相手を驚かすこと。"],
+  ["腹が黒い","悪い考えを持っている。腹黒いともいう。"],
+  ["腹が立つ","怒っている様。"],
+  ["腹に据えかねる","我慢ができない。我慢の限界を迎える。"],
+  ["腹を決める","覚悟を決める。決断・決心すること。"],
+  ["腹を探る","相手の考えを知ろうとする。相手の懐具合を想像すること。"],
+  ["腹を割る","包み隠さずに、本心を打ち明けること。"],
+  ["歯を食いしばる","苦しさ、悔しさなどを必死に耐える様。"],
+  ["骨が折れる","苦労する。大変な状態。"],
+  ["眉を曇らせる","心配のために表情が暗くなること。"],
+  ["眉をひそめる","心配、不快などで顔をしかめる。他人の言動を不愉快に感じること。"],
+  ["水に流す","前のことはなかったことにして和解する。過去のことを咎めないこと。"],
+  ["水を差す","せっかくうまくいっていることや仲の良い間柄などに、脇から邪魔をしたり、関係を悪くさせること。"],
+  ["身につまされる","人の身の上のつらさを、自分のことのように感じること。"],
+  ["耳が痛い","自分の悪いことをいわれたり、人のいうことが自分の弱点をついていたりして、聞くのがつらいこと。"],
+  ["耳が早い","情報を人より早く手に入れること。"],
+  ["耳にたこができる","同じを何度も聞かされて、うんざりすること。"],
+  ["耳につく","聞き飽きてうるさく感じられる。"],
+  ["耳を疑う","思いがけないことで、聞き間違いではないかと思ってしまうこと。"],
+  ["耳を貸す","他人の話を聞く。聞こうとする。相談にのること。"],
+  ["耳を傾ける","よく注意して聞くこと。"],
+  ["耳を揃える","金額や物の数量などをきっちり用意する。"],
+  ["虫がいい","自分の都合だけ考えて他人を顧みない。自分にいいように考えること。"],
+  ["虫に触る","気に食わないこと。嫌な感じになること。"],
+  ["虫の息","今にも絶えそうな息。今にも命が尽きてしまいそうな様子。"],
+  ["虫の居所が悪い","機嫌が悪く、いつもより怒りっぽい状態。"],
+  ["虫の知らせ","予感がする。なんとなく心に浮かんでくる、感じること。"],
+  ["虫も殺さぬ","穏やかな性格。おとなしい性格な人のこと。"],
+  ["胸を借りる","自分よりも実力が上の者に相手になってもらうこと。"],
+  ["胸を撫で下ろす","ほっと安心すること。"],
+  ["目を見張る","驚いたり、感心したりして、目を大きく開く。驚嘆すること。"],
+  ["目が高い","もののよい悪いを見分ける力がある。よいものを選び出す力が優れている。"],
+  ["目がない","非常に好きである。夢中になる。または見分ける力がない。"],
+  ["目から鼻へ抜ける","賢く、際立ってすばしっこい。"],
+  ["目と鼻の先","すごく近い距離。すぐ近くにある場所。"],
+  ["目に余る","度を越してひどいありさまなので見ていられない。許容範囲を超えていて、これ以上見逃すことができないこと。"],
+  ["目に入れても痛くない","非常に可愛い。"],
+  ["目もくれない","見向きもしない。"],
+  ["目を疑う","意外なことに驚く。信じられないこと起きて、自分の目が正しいのか心配になる。"],
+  ["目を輝かさせる","物事に感動したり、喜んだりしているときの様子。"],
+  ["目をかける","かわいがって、面倒を見る。大切に育てる。"],
+  ["目を凝らす","じっと注意して見る。見つめること。"],
+  ["目を細める","可愛くて、嬉しそうな顔をする。嬉しさや満足感で笑顔になること。"],
+  ["目を丸くする","びっくりして目を大きく開く様。"]
+];
+function pickRandomIdioms(n = 8) {
+  const pool = [...KANYOUKU_DATA];
+  const picked = [];
+  for (let i = 0; i < n && pool.length; i++) {
+    const idx = Math.floor(Math.random() * pool.length);
+    picked.push(pool.splice(idx, 1)[0]);
+  }
+  return picked;
+}
+
 function VocabBuilder({ form }) {
   const T = useUITranslations(form?.preferredLang || "English");
   // vocabView: "main" | "library" | "folderDetail" | "wordSearch" | "wordDetail" | "flashcard"
@@ -5526,15 +5660,25 @@ function VocabBuilder({ form }) {
     setLoading(true);
     setFindError("");
     setWords([]);
+    const isIdiomSearch = /慣用句|kanyouku|idiom/i.test(search.trim());
+    const idiomPicks = isIdiomSearch ? pickRandomIdioms(8) : null;
+    const lang = form.preferredLang || "English";
+    const body = isIdiomSearch
+      ? { model:"claude-sonnet-4-20250514", max_tokens:1500, provider:"fast",
+          messages:[
+            { role:"system", content:`You are a Japanese language expert. For each 慣用句 (idiom) below you are given its EXACT phrase and its authoritative Japanese meaning — do NOT change, reinterpret, or invent a different meaning. You MUST write "meaning", "example_translated", and "tip" EXCLUSIVELY in ${lang}.` },
+            { role:"user", content:`Here are 8 Japanese idioms with their verified meanings:\n${idiomPicks.map((p, i) => `${i+1}. "${p[0]}" — authoritative meaning: 「${p[1]}」`).join("\n")}\n\nFor EACH idiom in the SAME ORDER, return an object with these keys:\n- reading: hiragana reading of the full idiom phrase\n- meaning: a faithful translation of the given authoritative meaning into ${lang} — do not add new information or reinterpret it\n- example: a natural Japanese example sentence that uses the idiom correctly\n- example_translated: translation of that example sentence in ${lang}\n- tip: a short usage tip in ${lang}\n- imageQuery: 2-3 English words for image search\n- imageDesc: brief English image description\n\nOutput ONLY a raw JSON array of exactly 8 objects, in the same order as the list above. No markdown, no backticks, no explanation.` }
+          ]
+        }
+      : { model:"claude-sonnet-4-20250514", max_tokens:1500, provider:"fast",
+          messages:[
+            { role:"system", content:`You are a multilingual Japanese dictionary expert. You MUST write the "meaning", "example_translated", and "tip" fields EXCLUSIVELY in ${lang}. Never use English for these fields unless the student native language IS English.` },
+            { role:"user", content:`Generate 8 authentic Japanese dictionary words related to the topic: "${search}"\n\nThe student native language is: ${lang}\nALL translations must be in ${lang} — NOT in English unless that is the native language.\n\nReturn a JSON array of exactly 8 objects with these keys:\n- word: Japanese word in kanji/kana\n- reading: hiragana reading\n- jlpt: JLPT level (N5/N4/N3/N2/N1) or ""\n- partOfSpeech: part of speech in English\n- meaning: translation in ${lang}\n- meaningNative: simple Japanese definition (e.g. 「食べ物を料理すること」)\n- example: natural Japanese example sentence\n- example_translated: translation of example in ${lang}\n- tip: usage tip in ${lang}\n- imageQuery: 2-3 English words for image search\n- imageDesc: brief English image description\n\nOutput ONLY a raw JSON array. No markdown, no backticks, no explanation.` }
+          ]
+        };
     try {
       const res = await fetch("/api/claude", {
-        method:"POST", headers:{"Content-Type":"application/json"},
-        body: JSON.stringify({ model:"claude-sonnet-4-20250514", max_tokens:1500, provider:"fast",
-          messages:[
-            { role:"system", content:`You are a multilingual Japanese dictionary expert. You MUST write the "meaning", "example_translated", and "tip" fields EXCLUSIVELY in ${form.preferredLang || "English"}. Never use English for these fields unless the student native language IS English.` },
-            { role:"user", content:`Generate 8 authentic Japanese dictionary words related to the topic: "${search}"\n\nThe student native language is: ${form.preferredLang || "English"}\nALL translations must be in ${form.preferredLang || "English"} — NOT in English unless that is the native language.\n\nReturn a JSON array of exactly 8 objects with these keys:\n- word: Japanese word in kanji/kana\n- reading: hiragana reading\n- jlpt: JLPT level (N5/N4/N3/N2/N1) or ""\n- partOfSpeech: part of speech in English\n- meaning: translation in ${form.preferredLang || "English"}\n- meaningNative: simple Japanese definition (e.g. 「食べ物を料理すること」)\n- example: natural Japanese example sentence\n- example_translated: translation of example in ${form.preferredLang || "English"}\n- tip: usage tip in ${form.preferredLang || "English"}\n- imageQuery: 2-3 English words for image search\n- imageDesc: brief English image description\n\nOutput ONLY a raw JSON array. No markdown, no backticks, no explanation.` }
-          ]
-        })
+        method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify(body)
       });
       if (res.status === 429 || res.status === 503) {
         if (retryCount < 2) {
@@ -5556,18 +5700,34 @@ function VocabBuilder({ form }) {
       }
       const text = d.content?.map(c=>c.text||"").join("") || "[]";
       const clean = text.replace(/```json\s*/g,"").replace(/```\s*/g,"").trim();
+      const buildResult = (arr) => {
+        if (!isIdiomSearch) return Array.isArray(arr) ? arr : [];
+        // Merge AI-supplied fields with the verified idiom phrase/meaning — the
+        // AI never controls the word or its meaningNative, only translation/example/reading.
+        return idiomPicks.map((p, i) => ({
+          word: p[0], meaningNative: p[1], jlpt: "", partOfSpeech: "慣用句 (idiom)",
+          reading: arr?.[i]?.reading || "", meaning: arr?.[i]?.meaning || p[1],
+          example: arr?.[i]?.example || "", example_translated: arr?.[i]?.example_translated || "",
+          tip: arr?.[i]?.tip || "", imageQuery: arr?.[i]?.imageQuery || "", imageDesc: arr?.[i]?.imageDesc || ""
+        }));
+      };
       try {
         const parsed = JSON.parse(clean);
-        setWords(Array.isArray(parsed)?parsed:[]);
+        setWords(buildResult(parsed));
       } catch {
         // Model sometimes adds preamble/trailing text around the JSON array — extract just the array.
         const match = clean.match(/\[[\s\S]*\]/);
         if (match) {
-          try { setWords(JSON.parse(match[0])); }
-          catch (e2) { console.error("findWords parse error:", e2, clean); setWords([]); setFindError("検索結果の解析に失敗しました。もう一度お試しください。"); }
+          try { setWords(buildResult(JSON.parse(match[0]))); }
+          catch (e2) {
+            console.error("findWords parse error:", e2, clean);
+            if (isIdiomSearch) { setWords(buildResult(null)); } // still show verified word/meaning even if AI extras failed
+            else { setWords([]); setFindError("検索結果の解析に失敗しました。もう一度お試しください。"); }
+          }
         } else {
           console.error("findWords: no JSON array found in response:", clean);
-          setWords([]); setFindError("検索結果の解析に失敗しました。もう一度お試しください。");
+          if (isIdiomSearch) { setWords(buildResult(null)); }
+          else { setWords([]); setFindError("検索結果の解析に失敗しました。もう一度お試しください。"); }
         }
       }
     } catch(e) { console.error("findWords error:", e); setWords([]); setFindError("検索に失敗しました。もう一度お試しください。"); }
