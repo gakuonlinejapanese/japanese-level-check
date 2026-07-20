@@ -8026,10 +8026,7 @@ Please note that free trial lessons do not count toward the three monthly lesson
 
 Agreement
 By checking the box and clicking "I Agree," you acknowledge that you have read, understood, and agreed to all of GAKU's Terms & Conditions.
-To continue, please provide the following information:
-- Full Name
-- Email Address
-Then click "I Agree."
+To continue, please click "I Agree."
 Your submission constitutes your acceptance of these Terms & Conditions.`;
 
 function PolicyGate({ T, name, email, plan, onAgreed, onCancel }) {
