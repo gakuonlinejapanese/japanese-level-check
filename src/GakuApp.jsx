@@ -8016,7 +8016,7 @@ If your account is again detected using three devices after the suspension:
 - No refunds will be issued.
 
 Refund Policy
-All payments made to GAKU are non-refundable.
+All payments made to GAKU Master are non-refundable.
 Please consider your purchase carefully before subscribing to any GAKU service.
 
 Official GAKU Student Free Plan
@@ -8026,7 +8026,6 @@ Please note that free trial lessons do not count toward the three monthly lesson
 
 Agreement
 By checking the box and clicking "I Agree," you acknowledge that you have read, understood, and agreed to all of GAKU's Terms & Conditions.
-To continue, please click "I Agree."
 Your submission constitutes your acceptance of these Terms & Conditions.`;
 
 function PolicyGate({ T, name, email, plan, onAgreed, onCancel }) {
