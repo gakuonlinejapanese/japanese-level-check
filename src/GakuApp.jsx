@@ -7967,9 +7967,70 @@ function Dashboard({ form, onEdit, onLevelUp, onDeleteAccount, deleteAccountBusy
 // ─── ACCOUNT: policy/terms agreement required before any payment step ────────
 // NOTE: policyText is a placeholder — Seito will supply the finished policy
 // document text later; swap PLACEHOLDER_POLICY_TEXT below once it's ready.
-const PLACEHOLDER_POLICY_TEXT = `This is placeholder text for GAKU's Terms of Service and Refund Policy.
+const PLACEHOLDER_POLICY_TEXT = `Lesson Reservation Policy
+Please review the lesson reservation priority below.
 
-Seito: replace this text with the finished policy document whenever it's ready — no other code changes are needed, students will immediately see the updated text and continue agreeing to it before every payment.`;
+Official Student (Monthly Subscription)
+Students with a monthly subscription receive the highest priority when booking lessons.
+They may reserve any available lesson date and time, and their regular lesson slot will be prioritized.
+
+Official Student (Pay-Per-Lesson)
+Students who pay per lesson also receive booking priority.
+However, if lesson availability becomes limited, priority will be given to students with a monthly subscription. As a result, your preferred lesson time may become unavailable.
+
+Unofficial Student
+Students who are not Official GAKU Students must submit three preferred lesson dates and times when requesting a lesson.
+Lessons are scheduled based on instructor availability.
+Please note that:
+- Your requested lesson time is not guaranteed.
+- During busy periods, lesson requests may not be accepted.
+- Since you are not an Official GAKU Student, your preferred lesson slot may be released to Official Students.
+
+Official vs. Unofficial Students
+An Official GAKU Student is a student who takes at least three regular lessons (30-minute or 60-minute lessons) each month.
+Students who subscribe only to the GAKU app are not considered Official GAKU Students, regardless of how many app plans they purchase or how many lessons they have completed using the app.
+Please carefully review the Lesson Reservation Policy above before using GAKU's services.
+
+Policies for Unofficial Students
+
+App Deletion
+If you uninstall the GAKU app, all of your study guides, learning progress, and saved data will be permanently deleted.
+If you reinstall the app later, you will need to create your study profile again and restart your learning from the beginning.
+
+Multiple Device Policy
+To prevent unauthorized account sharing, GAKU has implemented a strict multi-device policy.
+
+Using Two Devices
+If you log in on a second device, GAKU will send a confirmation email asking you to verify that you wish to use your account on both devices.
+
+Using Three Devices
+If your account is detected on a third device, GAKU will regard this as suspicious activity that may indicate account sharing.
+As a result:
+- Your account will be temporarily suspended for one week.
+- During the suspension period, you will not be able to access the app.
+- After one week, your account will automatically be restored.
+
+If your account is again detected using three devices after the suspension:
+- Your account will be permanently deleted.
+- All learning data will be permanently erased.
+- No refunds will be issued.
+
+Refund Policy
+All payments made to GAKU are non-refundable.
+Please consider your purchase carefully before subscribing to any GAKU service.
+
+Official GAKU Student Free Plan
+The Official GAKU Student Free Plan is an exclusive benefit available only to Official GAKU Students.
+You will receive an invitation code after officially joining GAKU.
+Please note that free trial lessons do not count toward the three monthly lessons required to qualify as an Official GAKU Student.
+
+Agreement
+By checking the box and clicking "I Agree," you acknowledge that you have read, understood, and agreed to all of GAKU's Terms & Conditions.
+To continue, please provide the following information:
+- Full Name
+- Email Address
+Then click "I Agree."
+Your submission constitutes your acceptance of these Terms & Conditions.`;
 
 function PolicyGate({ T, name, email, plan, onAgreed, onCancel }) {
   const [agreed, setAgreed] = useState(false);
