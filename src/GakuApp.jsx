@@ -7986,6 +7986,8 @@ Please note that:
 - During busy periods, lesson requests may not be accepted.
 - Since you are not an Official GAKU Student, your preferred lesson slot may be released to Official Students.
 
+Since lessons are in high demand, it may be difficult to reschedule your lesson compared to an Official Student. As noted above, priority is given to Official Students, so their reschedule requests may be prioritized. If your lesson could not be scheduled on any of your requested dates, you will need to choose a plan without lessons. We apologize for this inconvenience.
+
 Official vs. Unofficial Students
 An Official GAKU Student is a student who takes at least three regular lessons (30-minute or 60-minute lessons) each month.
 Students who subscribe only to the GAKU app are not considered Official GAKU Students, regardless of how many app plans they purchase or how many lessons they have completed using the app.
@@ -8017,12 +8019,18 @@ If your account is again detected using three devices after the suspension:
 
 Refund Policy
 All payments made to GAKU Master are non-refundable.
-Please consider your purchase carefully before subscribing to any GAKU service.
+Please consider your purchase carefully before subscribing to any GAKU Master service.
 
 Official GAKU Student Free Plan
 The Official GAKU Student Free Plan is an exclusive benefit available only to Official GAKU Students.
 You will receive an invitation code after officially joining GAKU.
 Please note that free trial lessons do not count toward the three monthly lessons required to qualify as an Official GAKU Student.
+
+Bug Reports
+If you find any bugs or technical issues, please send me:
+- A screenshot of the screen where the issue occurred. (Please send to seitojapanese.online@gmail.com)
+- A brief description of what happened (or what you expected to happen).
+I will investigate and fix the issue as quickly as possible. In most cases, updates can be completed within about one day, although more complex issues may take a little longer. Thank you for your patience and for helping improve the app!
 
 Agreement
 By checking the box and clicking "I Agree," you acknowledge that you have read, understood, and agreed to all of GAKU's Terms & Conditions.
@@ -8054,7 +8062,7 @@ function PolicyGate({ T, name, email, plan, onAgreed, onCancel }) {
   return (
     <div style={{ minHeight:"100vh", background:"linear-gradient(160deg,#0a0f1e 0%,#0f172a 60%,#0a0f1e 100%)", display:"flex", alignItems:"center", justifyContent:"center", padding:24 }}>
       <div style={{ maxWidth:480, width:"100%", background:"rgba(15,23,42,0.9)", border:"1px solid rgba(148,163,184,0.2)", borderRadius:16, padding:"24px 22px" }}>
-        <h2 style={{ color:"#f1f5f9", fontSize:17, fontWeight:900, margin:"0 0 14px" }}>{T?.policyTitle || "Terms & Refund Policy"}</h2>
+        <h2 style={{ color:"#f1f5f9", fontSize:17, fontWeight:900, margin:"0 0 14px" }}>{T?.policyTitle || "GAKU Master Policy"}</h2>
         <div style={{ maxHeight:280, overflowY:"auto", background:"rgba(2,6,23,0.5)", border:"1px solid rgba(148,163,184,0.15)", borderRadius:10, padding:14, marginBottom:16 }}>
           <p style={{ color:"#94a3b8", fontSize:12.5, lineHeight:1.7, whiteSpace:"pre-wrap", margin:0 }}>{PLACEHOLDER_POLICY_TEXT}</p>
         </div>
