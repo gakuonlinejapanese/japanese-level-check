@@ -149,7 +149,10 @@ async function handleSchoolMatching(req, res) {
       status: "new",
       submitted_at: submittedAt,
     });
-    if (insertErr) return res.status(500).json({ error: insertErr.message });
+    if (insertErr) {
+      console.error("school_matching_requests insert failed:", insertErr.message, insertErr.details || "", insertErr.hint || "");
+      return res.status(500).json({ error: insertErr.message });
+    }
 
     const html = `
       <p>A student submitted a School Matching counseling request.</p>
@@ -177,6 +180,7 @@ async function handleSchoolMatching(req, res) {
 
     return res.status(200).json({ ok: true });
   } catch (e) {
+    console.error("handleSchoolMatching failed:", e.message);
     return res.status(500).json({ error: e.message });
   }
 }

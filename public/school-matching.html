@@ -7,7 +7,7 @@
 <style>
   :root {
     --grad-start:#ff7a3d; --grad-mid:#ff9d5c; --grad-end:#ffd9b3;
-    --ink:#3a2210; --stamp:#c8382b;
+    --ink:#3a2210; --stamp:#c8382b; --neon:#00eaff;
   }
   * { box-sizing: border-box; }
   body {
@@ -17,9 +17,9 @@
   }
   .wrap { max-width:560px; margin:0 auto; padding:32px 24px 90px; }
 
-  .brand { display:flex; align-items:center; gap:10px; margin-bottom:22px; opacity:.95; }
+  .brand { display:flex; align-items:center; gap:10px; margin-bottom:22px; }
   .brand img { height:28px; }
-  .brand span { font-weight:700; letter-spacing:.02em; font-size:14px; }
+  .brand span { font-weight:700; letter-spacing:.02em; font-size:14px; color:var(--neon); }
 
   /* --- hanko stamp progress trail --- */
   .stamps { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:26px; }
@@ -39,10 +39,10 @@
     border-color:#fff; color:#fff; box-shadow: 0 0 0 3px rgba(255,255,255,.35);
   }
 
-  h1 { font-size:22px; line-height:1.4; margin:0 0 6px; }
-  .sub { font-size:13px; opacity:.85; margin:0 0 22px; line-height:1.6; }
+  h1 { font-size:22px; line-height:1.4; margin:0 0 6px; color:var(--neon); text-shadow:0 1px 3px rgba(0,0,0,.25); }
+  .sub { font-size:13px; color:var(--neon); opacity:.95; margin:0 0 22px; line-height:1.6; }
 
-  label { display:block; font-size:14px; margin:0 0 10px; opacity:.95; }
+  label { display:block; font-size:14px; margin:0 0 10px; color:var(--neon); }
   input[type=text], input[type=email] {
     width:100%; padding:12px 14px; background:rgba(255,255,255,.14); border:1.5px solid rgba(255,255,255,.4);
     border-radius:10px; color:#fff; font-size:16px; outline:none;
@@ -79,8 +79,8 @@
     display:flex; align-items:center; justify-content:center; font-size:34px; font-weight:800;
     box-shadow: 0 0 0 5px rgba(255,255,255,.3); transform: rotate(-8deg);
   }
-  .done-box h2 { margin:0 0 10px; font-size:22px; }
-  .done-box p { font-size:14px; opacity:.9; line-height:1.7; margin:6px 0; }
+  .done-box h2 { margin:0 0 10px; font-size:22px; color:var(--neon); }
+  .done-box p { font-size:14px; color:var(--neon); opacity:.95; line-height:1.7; margin:6px 0; }
 
   .error { color:#fff0e8; background:rgba(0,0,0,.2); border-radius:8px; padding:10px 12px; font-size:13px; margin-top:14px; display:none; }
 </style>
@@ -99,17 +99,17 @@
   <div class="error" id="err"></div>
 
   <div class="nav">
-    <button class="btn ghost" id="btn-back">戻る</button>
-    <button class="btn primary" id="btn-next" disabled>次へ</button>
+    <button class="btn ghost" id="btn-back">Back</button>
+    <button class="btn primary" id="btn-next" disabled>Next</button>
   </div>
 
   <!-- 完了画面 -->
   <div class="step" id="step-done">
     <div class="done-box">
-      <div class="done-stamp">済</div>
-      <h2>お申し込みありがとうございます</h2>
-      <p>ご回答内容を確認の上、担当より3〜7営業日以内にご案内のご連絡をいたします。</p>
-      <p>今しばらくお待ちください。</p>
+      <div class="done-stamp">✓</div>
+      <h2>Thank you for applying</h2>
+      <p>We'll review your answers and reach out within 3–7 business days with next steps.</p>
+      <p>Thank you for your patience.</p>
     </div>
   </div>
 
@@ -166,7 +166,7 @@ function renderStamps() {
   QUESTIONS.forEach((_, i) => {
     const s = document.createElement("div");
     s.className = "stamp" + (i < step ? " done" : i === step ? " current" : "");
-    s.textContent = i < step ? "印" : "";
+    s.textContent = i < step ? "✓" : "";
     stampsEl.appendChild(s);
   });
 }
@@ -209,7 +209,7 @@ function renderStep() {
   }
 
   updateNextState();
-  btnNext.textContent = step === QUESTIONS.length - 1 ? "送信する" : "次へ";
+  btnNext.textContent = step === QUESTIONS.length - 1 ? "Submit" : "Next";
 }
 
 function updateNextState() {
@@ -235,7 +235,7 @@ btnNext.addEventListener("click", async () => {
   }
   // 最終送信
   btnNext.disabled = true;
-  btnNext.textContent = "送信中…";
+  btnNext.textContent = "Submitting…";
   try {
     const resp = await fetch("/api/policy-agreement", {
       method: "POST",
@@ -252,10 +252,10 @@ btnNext.addEventListener("click", async () => {
     document.querySelector(".nav").style.display = "none";
     document.getElementById("step-done").classList.add("active");
   } catch (e) {
-    errEl.textContent = "送信に失敗しました。もう一度お試しください。";
+    errEl.textContent = "Something went wrong. Please try again.";
     errEl.style.display = "block";
     btnNext.disabled = false;
-    btnNext.textContent = "送信する";
+    btnNext.textContent = "Submit";
   }
 });
 
