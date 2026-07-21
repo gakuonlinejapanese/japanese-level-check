@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>School Matching — GAKU Online Japanese</title>
+<style>
+  :root {
+    --grad-start:#ff7a3d; --grad-mid:#ff9d5c; --grad-end:#ffd9b3;
+    --ink:#3a2210; --stamp:#c8382b;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+    background: linear-gradient(135deg, var(--grad-start) 0%, var(--grad-mid) 45%, var(--grad-end) 100%);
+    color:#fff; min-height:100vh;
+  }
+  .wrap { max-width:560px; margin:0 auto; padding:32px 24px 90px; }
+
+  .brand { display:flex; align-items:center; gap:10px; margin-bottom:22px; opacity:.95; }
+  .brand img { height:28px; }
+  .brand span { font-weight:700; letter-spacing:.02em; font-size:14px; }
+
+  /* --- hanko stamp progress trail --- */
+  .stamps { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:26px; }
+  .stamp {
+    width:22px; height:22px; border-radius:50%; flex-shrink:0;
+    border:2px solid rgba(255,255,255,.55);
+    display:flex; align-items:center; justify-content:center;
+    font-size:10px; font-weight:700; color:rgba(255,255,255,.7);
+    transition: all .25s ease;
+  }
+  .stamp.done {
+    background: var(--stamp); border-color: var(--stamp); color:#fff5ef;
+    box-shadow: 0 0 0 2px rgba(255,255,255,.25);
+    transform: rotate(-6deg);
+  }
+  .stamp.current {
+    border-color:#fff; color:#fff; box-shadow: 0 0 0 3px rgba(255,255,255,.35);
+  }
+
+  h1 { font-size:22px; line-height:1.4; margin:0 0 6px; }
+  .sub { font-size:13px; opacity:.85; margin:0 0 22px; line-height:1.6; }
+
+  label { display:block; font-size:14px; margin:0 0 10px; opacity:.95; }
+  input[type=text], input[type=email] {
+    width:100%; padding:12px 14px; background:rgba(255,255,255,.14); border:1.5px solid rgba(255,255,255,.4);
+    border-radius:10px; color:#fff; font-size:16px; outline:none;
+  }
+  input::placeholder { color:rgba(255,255,255,.65); }
+  input:focus { border-color:#fff; background:rgba(255,255,255,.22); }
+
+  .options { display:flex; flex-direction:column; gap:10px; margin-top:4px; }
+  .opt {
+    display:block; padding:14px 16px; border-radius:12px; cursor:pointer; user-select:none;
+    background:rgba(255,255,255,.12); border:1.5px solid rgba(255,255,255,.35);
+    font-size:15px; transition: all .15s ease;
+  }
+  .opt:hover { background:rgba(255,255,255,.2); }
+  .opt.selected { background:#fff; color:var(--stamp); border-color:#fff; font-weight:700; }
+
+  .notice {
+    background:rgba(0,0,0,.16); border-left:3px solid #fff; border-radius:8px;
+    padding:14px 16px; font-size:13px; line-height:1.7; margin-bottom:18px;
+  }
+
+  .nav { display:flex; gap:10px; margin-top:28px; }
+  .btn { flex:1; padding:14px; border:none; border-radius:10px; font-weight:800; font-size:15px; cursor:pointer; }
+  .btn.primary { background:#fff; color:var(--stamp); }
+  .btn.primary:disabled { opacity:.45; cursor:not-allowed; }
+  .btn.ghost { background:transparent; border:1.5px solid rgba(255,255,255,.6); color:#fff; flex:0 0 96px; }
+
+  .step { display:none; }
+  .step.active { display:block; }
+
+  .done-box { text-align:center; padding:20px 0; }
+  .done-stamp {
+    width:88px; height:88px; margin:0 auto 20px; border-radius:50%; background:var(--stamp);
+    display:flex; align-items:center; justify-content:center; font-size:34px; font-weight:800;
+    box-shadow: 0 0 0 5px rgba(255,255,255,.3); transform: rotate(-8deg);
+  }
+  .done-box h2 { margin:0 0 10px; font-size:22px; }
+  .done-box p { font-size:14px; opacity:.9; line-height:1.7; margin:6px 0; }
+
+  .error { color:#fff0e8; background:rgba(0,0,0,.2); border-radius:8px; padding:10px 12px; font-size:13px; margin-top:14px; display:none; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="brand">
+    <span>🌸 GAKU School Matching</span>
+  </div>
+
+  <div class="stamps" id="stamps"></div>
+
+  <div id="question-area"></div>
+
+  <div class="error" id="err"></div>
+
+  <div class="nav">
+    <button class="btn ghost" id="btn-back">戻る</button>
+    <button class="btn primary" id="btn-next" disabled>次へ</button>
+  </div>
+
+  <!-- 完了画面 -->
+  <div class="step" id="step-done">
+    <div class="done-box">
+      <div class="done-stamp">済</div>
+      <h2>お申し込みありがとうございます</h2>
+      <p>ご回答内容を確認の上、担当より3〜7営業日以内にご案内のご連絡をいたします。</p>
+      <p>今しばらくお待ちください。</p>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ---- 質問データ ----
+// type: "text" | "email" | "radio"
+const QUESTIONS = [
+  { id:"firstName", type:"text", label:"First Name", placeholder:"e.g. Taro" },
+  { id:"lastName", type:"text", label:"Last Name", placeholder:"e.g. Yamada" },
+  { id:"email", type:"email", label:"Email Address", placeholder:"you@example.com" },
+  { id:"country", type:"text", label:"Which country are you from?", placeholder:"e.g. United States" },
+  { id:"jlptN4", type:"radio", label:"Are you JLPT N4 or above?",
+    options:["Yes","No","I haven't taken JLPT yet"] },
+  { id:"longTermTimeline", type:"radio",
+    label:"Long-term school applications require at least 8 months lead time. Does your timeline allow for this?",
+    options:["I understand","I need to adjust my timeline"] },
+  { id:"shortTermTimeline", type:"radio",
+    label:"Short-term programs require at least 3 months. Does your timeline allow for this?",
+    options:["I understand","I need to adjust my timeline"] },
+  { id:"tuitionAware", type:"radio",
+    label:"Are you aware that annual tuition at Japanese language schools typically starts from ¥1,148,000 (approx. $7,395 USD)?",
+    options:["Yes","No"] },
+  { id:"shortTermBudget", type:"radio",
+    label:"For short-term programs (3 months), tuition typically starts from ¥340,000 (approx. $2,200 USD). Does this fit your budget range?",
+    options:["Yes","No"] },
+  { id:"visaSavings", type:"radio",
+    label:"Japanese student visas generally require proof of at least ¥2,000,000 in savings. Do you meet this requirement?",
+    options:["Yes","No","I'm not sure yet"] },
+  { id:"livingExpenses", type:"radio",
+    label:"Monthly living expenses in Japan (rent, food, transport) typically total ¥90,000–¥120,000 (approx. $600–$800 USD). Are you prepared for this?",
+    options:["Yes","No","Not yet, but I'm working toward it"] },
+  { id:"noScholarship", type:"radio",
+    label:"Please note: This counseling service does not currently support scholarship or financial aid applications.",
+    options:["I understand","I disagree"] },
+  { id:"waitTime", type:"radio",
+    label:"This free counseling service is in high demand. You may need to wait 3–7 business days for your session.",
+    options:["I understand"] },
+];
+
+let step = 0;
+const answers = {};
+const params = new URLSearchParams(location.search);
+
+const stampsEl = document.getElementById("stamps");
+const qArea = document.getElementById("question-area");
+const errEl = document.getElementById("err");
+const btnNext = document.getElementById("btn-next");
+const btnBack = document.getElementById("btn-back");
+
+function renderStamps() {
+  stampsEl.innerHTML = "";
+  QUESTIONS.forEach((_, i) => {
+    const s = document.createElement("div");
+    s.className = "stamp" + (i < step ? " done" : i === step ? " current" : "");
+    s.textContent = i < step ? "印" : "";
+    stampsEl.appendChild(s);
+  });
+}
+
+function renderStep() {
+  errEl.style.display = "none";
+  const q = QUESTIONS[step];
+  renderStamps();
+  btnBack.style.visibility = step === 0 ? "hidden" : "visible";
+
+  let html = `<h1>${q.label}</h1><p class="sub">Question ${step + 1} of ${QUESTIONS.length}</p>`;
+
+  if (q.type === "text" || q.type === "email") {
+    html += `<label>${q.label} *</label><input type="${q.type}" id="qinput" placeholder="${q.placeholder || ""}" value="${answers[q.id] || ""}" />`;
+  } else if (q.type === "radio") {
+    html += `<div class="options" id="qoptions">` + q.options.map(opt => {
+      const sel = answers[q.id] === opt ? " selected" : "";
+      return `<div class="opt${sel}" data-value="${opt}">${opt}</div>`;
+    }).join("") + `</div>`;
+  }
+
+  qArea.innerHTML = html;
+
+  if (q.type === "text" || q.type === "email") {
+    const input = document.getElementById("qinput");
+    input.addEventListener("input", () => {
+      answers[q.id] = input.value.trim();
+      updateNextState();
+    });
+    setTimeout(() => input.focus(), 50);
+  } else {
+    document.querySelectorAll("#qoptions .opt").forEach(el => {
+      el.addEventListener("click", () => {
+        answers[q.id] = el.dataset.value;
+        document.querySelectorAll("#qoptions .opt").forEach(o => o.classList.remove("selected"));
+        el.classList.add("selected");
+        updateNextState();
+      });
+    });
+  }
+
+  updateNextState();
+  btnNext.textContent = step === QUESTIONS.length - 1 ? "送信する" : "次へ";
+}
+
+function updateNextState() {
+  const q = QUESTIONS[step];
+  const val = answers[q.id];
+  let ok = false;
+  if (q.type === "email") ok = !!val && /\S+@\S+\.\S+/.test(val);
+  else ok = !!val;
+  btnNext.disabled = !ok;
+}
+
+btnBack.addEventListener("click", () => {
+  if (step === 0) return;
+  step -= 1;
+  renderStep();
+});
+
+btnNext.addEventListener("click", async () => {
+  if (step < QUESTIONS.length - 1) {
+    step += 1;
+    renderStep();
+    return;
+  }
+  // 最終送信
+  btnNext.disabled = true;
+  btnNext.textContent = "送信中…";
+  try {
+    const resp = await fetch("/api/policy-agreement", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        action: "school_matching",
+        ...answers,
+        referrer: params.get("ref") || null,
+      }),
+    });
+    if (!resp.ok) throw new Error("submit failed");
+    document.querySelector(".stamps").style.display = "none";
+    qArea.style.display = "none";
+    document.querySelector(".nav").style.display = "none";
+    document.getElementById("step-done").classList.add("active");
+  } catch (e) {
+    errEl.textContent = "送信に失敗しました。もう一度お試しください。";
+    errEl.style.display = "block";
+    btnNext.disabled = false;
+    btnNext.textContent = "送信する";
+  }
+});
+
+renderStep();
+</script>
+</body>
+</html>
