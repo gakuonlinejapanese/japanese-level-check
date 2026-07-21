@@ -7336,7 +7336,17 @@ function translateTimeline(rawTimeline, T) {
 // ─── FORM ───────────────────────────────────────────────────────────────────────
 // Backward-compat: the level-check quiz historically produced N5–N1, but the survey now
 // uses a self-estimation scale (Beginner–Mastery). Map old values so auto-fill still works.
-const JLPT_TO_ESTIMATION_LEVEL = { "N5":"Elementary", "N4":"Intermediate", "N3":"Upper Intermediate", "N2":"Advanced", "N1":"Mastery", "Beginner (no JLPT)":"Beginner" };
+const JLPT_TO_ESTIMATION_LEVEL = {
+  "N5":"Elementary", "N4":"Intermediate", "N3":"Upper Intermediate", "N2":"Advanced", "N1":"Mastery", "Beginner (no JLPT)":"Beginner",
+  // CEFR-style results from the diagnostic quiz sections (business-speech.jsx, casual-speech.jsx,
+  // grammar.jsx, reading.jsx, vocabulary.jsx, practical-japanese.jsx) are passed straight into the
+  // ?jlpt= URL param as "Pre-A1"/"A1"/"A2"/"B1"/"B2"/"C1". Without these entries, toEstimationLevel()
+  // returned them unchanged (its `|| v` fallback), so form.jlpt ended up as e.g. "Pre-A1" — a value
+  // that never matches any LEVEL_RESOURCES key or <select> option, silently emptying the curated
+  // resources list (including anime/manga links) and the level-up progression for anyone who arrived
+  // via a quiz-result link and didn't manually reselect their level.
+  "Pre-A1":"Beginner", "A1":"Elementary", "A2":"Intermediate", "B1":"Upper Intermediate", "B2":"Advanced", "C1":"Mastery",
+};
 function toEstimationLevel(v) { return JLPT_TO_ESTIMATION_LEVEL[v] || v; }
 
 function FormScreen({ onSubmit, onBack, onCancel, initialJlpt, initialForm }) {
