@@ -7,7 +7,7 @@
 <style>
   :root {
     --grad-start:#ff7a3d; --grad-mid:#ff9d5c; --grad-end:#ffd9b3;
-    --ink:#3a2210; --stamp:#c8382b; --neon:#00eaff;
+    --ink:#3a2210; --stamp:#c8382b; --neon:#000000;
   }
   * { box-sizing: border-box; }
   body {
@@ -44,20 +44,20 @@
 
   label { display:block; font-size:14px; margin:0 0 10px; color:var(--neon); }
   input[type=text], input[type=email] {
-    width:100%; padding:12px 14px; background:rgba(255,255,255,.14); border:1.5px solid rgba(255,255,255,.4);
-    border-radius:10px; color:#fff; font-size:16px; outline:none;
+    width:100%; padding:12px 14px; background:rgba(255,255,255,.92); border:1.5px solid rgba(0,0,0,.15);
+    border-radius:10px; color:#000; font-size:16px; outline:none;
   }
-  input::placeholder { color:rgba(255,255,255,.65); }
-  input:focus { border-color:#fff; background:rgba(255,255,255,.22); }
+  input::placeholder { color:rgba(0,0,0,.45); }
+  input:focus { border-color:var(--stamp); background:#fff; }
 
   .options { display:flex; flex-direction:column; gap:10px; margin-top:4px; }
   .opt {
     display:block; padding:14px 16px; border-radius:12px; cursor:pointer; user-select:none;
-    background:rgba(255,255,255,.12); border:1.5px solid rgba(255,255,255,.35);
-    font-size:15px; transition: all .15s ease;
+    background:rgba(255,255,255,.92); border:1.5px solid rgba(0,0,0,.15);
+    color:#000; font-size:15px; font-weight:600; transition: all .15s ease;
   }
-  .opt:hover { background:rgba(255,255,255,.2); }
-  .opt.selected { background:#fff; color:var(--stamp); border-color:#fff; font-weight:700; }
+  .opt:hover { background:#fff; }
+  .opt.selected { background:var(--stamp); color:#fff; border-color:var(--stamp); font-weight:700; }
 
   .notice {
     background:rgba(0,0,0,.16); border-left:3px solid #fff; border-radius:8px;
@@ -68,7 +68,7 @@
   .btn { flex:1; padding:14px; border:none; border-radius:10px; font-weight:800; font-size:15px; cursor:pointer; }
   .btn.primary { background:#fff; color:var(--stamp); }
   .btn.primary:disabled { opacity:.45; cursor:not-allowed; }
-  .btn.ghost { background:transparent; border:1.5px solid rgba(255,255,255,.6); color:#fff; flex:0 0 96px; }
+  .btn.ghost { background:rgba(255,255,255,.92); border:1.5px solid rgba(0,0,0,.15); color:#000; flex:0 0 96px; }
 
   .step { display:none; }
   .step.active { display:block; }
