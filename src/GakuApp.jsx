@@ -122,6 +122,7 @@ function findTaskResourceLink(taskText, taskMode) {
 // covers that kind of practice, so a task like "単語復習" can link straight into GAKU's own
 // Vocabulary/Subtitles/Create-From-Content/Conversation-Practice screens.
 const TASK_APP_NAV = [
+  { test: /発音|pronunciation/i, tab: "resources", resourceSubTab: "pronunciation", labelKey: "navGoPronunciation" },
   { test: /会話|conversation|speak/i, tab: "resources", resourceSubTab: "conversation", labelKey: "navGoConversation" },
   { test: /字幕|subtitle/i, tab: "subtitles", labelKey: "navGoSubtitles" },
   { test: /音読|要約|shadowing|シャドーイング|read aloud|summarize/i, tab: "resources", resourceSubTab: "content", labelKey: "navGoContent" },
@@ -237,6 +238,7 @@ const UI_TRANSLATIONS = {
     tabSubtitles: "🎬 Subtitles",
     // In-app navigation shortcuts shown under schedule tasks (link straight to the matching tab)
     navGoConversation: "💬 Go to Conversation Practice",
+    navGoPronunciation: "🗣️ Go to Pronunciation Practice",
     navGoSubtitles: "📺 Go to Subtitles",
     navGoContent: "✨ Go to Create From Content",
     navGoVocabulary: "📚 Go to Vocabulary",
@@ -473,6 +475,22 @@ const UI_TRANSLATIONS = {
     convRevealBtn: "Show model answer",
     convModelAnswer: "Model answer",
     convAltResponses: "Other ways to say it",
+    pronTitle: "Pronunciation Practice",
+    pronDesc: "Paste any Japanese text — an article, video subtitles, a song, your own notes — just like Create From Content. GAKU will pull out natural sentences and phrases for you to read aloud (or listen and repeat), then check how close your spoken attempt was.",
+    pronPasteLabel: "Paste Japanese text here",
+    pronGenerating: "Building pronunciation practice...",
+    pronGenerateBtn: "Build Pronunciation Practice",
+    pronNoItems: "Couldn't find any practice-sized sentences in that content. Try pasting more text.",
+    pronReadMode: "👀 Read",
+    pronListenMode: "👂 Listen",
+    pronRevealText: "Show text",
+    pronHideTextBtn: "Hide text",
+    pronListenFirst: "Tap Listen, then try repeating it back.",
+    pronRecordPrompt: "Now say it out loud",
+    pronCorrect: "Correct! 🎉",
+    pronYourAttempt: "You said:",
+    pronTargetLabel: "Target:",
+    pronTryAgain: "Try again",
     translateBtn: "Translate",
     subtitlesTitle: "Subtitles → Vocabulary",
     subtitlesDesc: "Paste subtitles or a transcript from a video you're already watching (e.g. YouTube's own \"Show transcript\" panel). Double-click a word or drag to select a phrase, then look it up and save it straight to your Vocabulary Builder.",
@@ -6867,6 +6885,296 @@ Respond ONLY with a valid JSON array, no markdown, no backticks:
   );
 }
 
+// ─── Pronunciation Practice ──────────────────────────────────────────────────
+// Lets a student paste ANY Japanese content (free-form, same paste UX as Create From
+// Content — no dialogue/transcript format required) and practice reading it aloud.
+// For each extracted sentence the student picks 読む/Read (see the text first) or
+// 聞く/Listen (text hidden until revealed), then records themselves saying it.
+// Unlike VoiceGrammarCheck (which asks the AI to grade free-form spoken answers),
+// here the "correct answer" is already known — the original target sentence — so
+// checking is a plain client-side text comparison, no extra API call needed.
+
+// Normalizes Japanese text for comparison: strips punctuation/whitespace so minor
+// differences (a trailing 。, a space) don't count as mistakes.
+function normalizeJapaneseForCompare(s) {
+  return (s || "")
+    .replace(/[\s　。、！？!?「」『』・,.\-—…]/g, "")
+    .trim();
+}
+
+// Simple Levenshtein distance, used to score how close a spoken attempt was to the
+// target sentence (allows minor speech-recognition noise without being lenient
+// enough to accept a genuinely different sentence).
+function levenshteinDistance(a, b) {
+  const m = a.length, n = b.length;
+  if (m === 0) return n;
+  if (n === 0) return m;
+  const dp = Array.from({ length: m + 1 }, () => new Array(n + 1).fill(0));
+  for (let i = 0; i <= m; i++) dp[i][0] = i;
+  for (let j = 0; j <= n; j++) dp[0][j] = j;
+  for (let i = 1; i <= m; i++) {
+    for (let j = 1; j <= n; j++) {
+      dp[i][j] = a[i-1] === b[j-1]
+        ? dp[i-1][j-1]
+        : 1 + Math.min(dp[i-1][j-1], dp[i-1][j], dp[i][j-1]);
+    }
+  }
+  return dp[m][n];
+}
+
+function isCloseEnough(target, attempt) {
+  const nt = normalizeJapaneseForCompare(target);
+  const na = normalizeJapaneseForCompare(attempt);
+  if (!nt || !na) return false;
+  const dist = levenshteinDistance(nt, na);
+  const maxLen = Math.max(nt.length, na.length);
+  return dist / maxLen <= 0.2; // allow ~20% character difference
+}
+
+function PronunciationTurnCard({ item, T, lang }) {
+  const [mode, setMode] = useState("read"); // "read" | "listen"
+  const [textRevealed, setTextRevealed] = useState(false);
+  const [recording, setRecording] = useState(false);
+  const [transcript, setTranscript] = useState("");
+  const [recogSupported, setRecogSupported] = useState(true);
+  const [result, setResult] = useState(null); // null | "correct" | "incorrect"
+  const recognitionRef = useRef(null);
+  const lastTranscriptRef = useRef("");
+
+  const switchMode = (m) => {
+    setMode(m);
+    setTextRevealed(false);
+    setTranscript("");
+    setResult(null);
+  };
+
+  const toggleRecording = () => {
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SR) { setRecogSupported(false); return; }
+    if (recording) { recognitionRef.current?.stop(); return; }
+    const recognition = new SR();
+    recognition.lang = "ja-JP";
+    recognition.interimResults = true;
+    recognition.continuous = false;
+    recognition.onresult = (e) => {
+      const t = Array.from(e.results).map(r => r[0].transcript).join("");
+      setTranscript(t);
+      lastTranscriptRef.current = t;
+    };
+    recognition.onend = () => {
+      setRecording(false);
+      const said = lastTranscriptRef.current.trim();
+      if (said) setResult(isCloseEnough(item.text, said) ? "correct" : "incorrect");
+    };
+    recognition.onerror = () => setRecording(false);
+    recognitionRef.current = recognition;
+    lastTranscriptRef.current = "";
+    setTranscript(""); setResult(null); setRecording(true); recognition.start();
+  };
+
+  return (
+    <div style={{ ...S.card, borderLeft:`3px solid ${C.teal}` }}>
+      <div style={{ display:"flex", gap:6, marginBottom:12 }}>
+        <button onClick={()=>switchMode("read")} style={{ padding:"5px 12px", borderRadius:20, border:`1.5px solid ${mode==="read"?C.teal:C.border}`, background:mode==="read"?"rgba(6,182,212,0.12)":"transparent", color:mode==="read"?C.teal:"#64748b", fontSize:11, fontWeight:700, cursor:"pointer" }}>
+          {T?.pronReadMode || "👀 Read"}
+        </button>
+        <button onClick={()=>switchMode("listen")} style={{ padding:"5px 12px", borderRadius:20, border:`1.5px solid ${mode==="listen"?C.teal:C.border}`, background:mode==="listen"?"rgba(6,182,212,0.12)":"transparent", color:mode==="listen"?C.teal:"#64748b", fontSize:11, fontWeight:700, cursor:"pointer" }}>
+          {T?.pronListenMode || "👂 Listen"}
+        </button>
+      </div>
+
+      {(mode === "read" || textRevealed) ? (
+        <p style={{ color:"#f1f5f9", fontSize:15, lineHeight:1.8, margin:"0 0 10px" }}>{item.text}</p>
+      ) : (
+        <p style={{ color:"#64748b", fontSize:12, fontStyle:"italic", margin:"0 0 10px" }}>{T?.pronListenFirst || "Tap Listen, then try repeating it back."}</p>
+      )}
+
+      <div style={{ display:"flex", gap:8, marginBottom:10, flexWrap:"wrap" }}>
+        <button onClick={()=>speakJapanese(stripForSpeech(item.text))}
+          style={{ display:"flex", alignItems:"center", gap:6, padding:"6px 12px", borderRadius:8, background:"rgba(6,182,212,0.12)", border:`1px solid rgba(6,182,212,0.3)`, color:C.teal, fontSize:12, fontWeight:700, cursor:"pointer" }}>
+          🔊 {T?.listenAudio || "Listen"}
+        </button>
+        {mode === "listen" && (
+          <button onClick={()=>setTextRevealed(r=>!r)}
+            style={{ padding:"6px 12px", borderRadius:8, background:C.card, border:`1px solid ${C.border}`, color:"#94a3b8", fontSize:12, cursor:"pointer" }}>
+            {textRevealed ? (T?.pronHideTextBtn || "Hide text") : (T?.pronRevealText || "Show text")}
+          </button>
+        )}
+      </div>
+
+      {(mode === "read" || textRevealed) && <JLineTools text={item.text} lang={lang} T={T} />}
+
+      <p style={{ color:C.purpleLight, fontSize:12, fontWeight:700, margin:"10px 0 8px" }}>
+        {T?.pronRecordPrompt || "Now say it out loud"}
+      </p>
+      <button onClick={toggleRecording}
+        style={{ display:"flex", alignItems:"center", gap:6, padding:"6px 12px", borderRadius:8, background:recording?"rgba(239,68,68,0.15)":"rgba(168,85,247,0.12)", border:`1px solid ${recording?"rgba(239,68,68,0.4)":"rgba(168,85,247,0.3)"}`, color:recording?"#f87171":C.purpleLight, fontSize:12, fontWeight:700, cursor:"pointer" }}>
+        {recording ? `⏺ ${T?.recordingInProgress || "Recording..."}` : `🎤 ${T?.recordVoice || "Record"}`}
+      </button>
+      {!recogSupported && <p style={{ color:C.red, fontSize:11, marginTop:6 }}>Voice input isn't supported in this browser — try Chrome.</p>}
+
+      {result === "correct" && (
+        <div style={{ background:"rgba(34,197,94,0.06)", borderRadius:8, padding:"10px 12px", marginTop:10 }}>
+          <p style={{ color:C.green, fontSize:13, fontWeight:700, margin:0 }}>✅ {T?.pronCorrect || "Correct! 🎉"}</p>
+        </div>
+      )}
+      {result === "incorrect" && (
+        <div style={{ background:"rgba(239,68,68,0.06)", borderRadius:8, padding:"10px 12px", marginTop:10, border:"1px solid rgba(239,68,68,0.2)" }}>
+          <p style={{ color:C.amber, fontSize:11, fontWeight:700, margin:"0 0 3px" }}>{T?.pronYourAttempt || "You said:"}</p>
+          <p style={{ color:"#f87171", fontSize:13, margin:"0 0 8px" }}>⚠️ {transcript}</p>
+          <p style={{ color:C.amber, fontSize:11, fontWeight:700, margin:"0 0 3px" }}>{T?.pronTargetLabel || "Target:"}</p>
+          <p style={{ color:C.green, fontSize:13, margin:"0 0 8px" }}>✅ {item.text}</p>
+          <button onClick={toggleRecording} style={{ padding:"5px 12px", borderRadius:8, background:C.card, border:`1px solid ${C.border}`, color:"#94a3b8", fontSize:11, cursor:"pointer" }}>
+            {T?.pronTryAgain || "Try again"}
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function PronunciationPredictor({ form, onLevelUp }) {
+  const T = useUITranslations(form?.preferredLang || "English");
+  const [raw, setRaw] = useState("");
+  const [sourceTitle, setSourceTitle] = useState("");
+  const [items, setItems] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [savedSet, setSavedSet] = useState(null); // a previously-generated pronunciation set found in this browser
+  const pronunciationCheck = useComprehensionCheck("pronunciation");
+
+  const PRON_STORAGE_KEY = "gaku_pron_practice_set";
+
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem(scopedKey(PRON_STORAGE_KEY));
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (parsed && Array.isArray(parsed.items) && parsed.items.length) setSavedSet(parsed);
+      }
+    } catch {}
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (items && items.length) {
+      try { localStorage.setItem(scopedKey(PRON_STORAGE_KEY), JSON.stringify({ raw, sourceTitle, items })); } catch {}
+    }
+  }, [items, raw, sourceTitle]);
+
+  const handleResumeSaved = () => {
+    if (savedSet) {
+      setRaw(savedSet.raw || "");
+      setSourceTitle(savedSet.sourceTitle || "");
+      setItems(savedSet.items || null);
+    }
+    setSavedSet(null);
+  };
+  const handleResetSaved = () => {
+    try { localStorage.removeItem(scopedKey(PRON_STORAGE_KEY)); } catch {}
+    setSavedSet(null);
+  };
+
+  const generate = async () => {
+    const cleanText = raw.trim();
+    if (!cleanText) { setError(T.contentErrEmpty || "Paste some Japanese text (or a video's subtitles/description) first."); return; }
+    setLoading(true); setError(""); setItems(null);
+    try {
+      const res = await fetch("/api/claude", {
+        method:"POST", headers:{"Content-Type":"application/json"},
+        body: JSON.stringify({ model:"claude-sonnet-4-20250514", max_tokens:2000, provider:"turbo",
+          messages:[{ role:"user", content:`You are a Japanese teacher preparing PRONUNCIATION practice material for a student at JLPT level ${form.jlpt}.
+
+Below is real Japanese text pasted by the student (an article, video subtitles, song, or their own notes — any content, not necessarily dialogue).
+
+TEXT:
+"""
+${cleanText.slice(0, 6000)}
+"""
+
+RULES:
+1. Only use REAL wording quoted or lightly trimmed from the text above — never invent unrelated sentences.
+2. Break the text into 5 to 15 short, natural, self-contained sentences or phrases suitable for reading aloud one at a time (not too long to say in one breath).
+3. Keep them in the original order they appear in the text.
+4. Skip anything that isn't real spoken/readable Japanese (e.g. timestamps, cue numbers, HTML).
+
+Respond ONLY with a valid JSON array of strings, no markdown, no backticks:
+["sentence one", "sentence two"]` }]
+        })
+      });
+      const d = await res.json();
+      const text = d.content?.map(c=>c.text||"").join("") || "[]";
+      const parsed = JSON.parse(text.replace(/```json|```/g,"").trim());
+      if (Array.isArray(parsed) && parsed.length) {
+        setItems(parsed.map(t => ({ text: t })));
+      } else {
+        setError(T.pronNoItems || "Couldn't find any practice-sized sentences in that content. Try pasting more text.");
+      }
+    } catch { setError(T.contentErrGeneric || "Could not analyze this content right now. Please try again."); }
+    setLoading(false);
+  };
+
+  const handleReset = () => { setItems(null); setRaw(""); setError(""); try { localStorage.removeItem(scopedKey(PRON_STORAGE_KEY)); } catch {} };
+
+  if (!items) {
+    return (
+      <div>
+        {savedSet && (
+          <div style={{ ...S.card, marginBottom:16, borderLeft:`3px solid ${C.teal}` }}>
+            <p style={{ color:C.teal, fontSize:12, fontWeight:700, margin:"0 0 8px" }}>{T.savedSetFound || "You have a saved study set from before."}</p>
+            <div style={{ display:"flex", gap:8 }}>
+              <button onClick={handleResumeSaved} style={{ ...S.btn, flex:1, background:`linear-gradient(135deg,${C.teal},#0891b2)`, color:"#fff" }}>
+                {T.resumeStudySet || "▶ Resume study set"}
+              </button>
+              <button onClick={handleResetSaved} style={{ ...S.btn, flex:1, background:C.card, border:`1px solid ${C.border}`, color:"#94a3b8" }}>
+                {T.resetStudySet || "Reset"}
+              </button>
+            </div>
+          </div>
+        )}
+        <div style={{ ...S.card, marginBottom:16 }}>
+          <p style={{ color:C.teal, fontSize:12, fontWeight:700, letterSpacing:1, marginBottom:6 }}>🗣️ {T.pronTitle || "Pronunciation Practice"}</p>
+          <p style={{ color:"#39ff14", fontSize:12, lineHeight:1.7, marginBottom:14 }}>
+            {T.pronDesc || "Paste any Japanese text — an article, video subtitles, a song, your own notes — just like Create From Content. GAKU will pull out natural sentences and phrases for you to read aloud (or listen and repeat), then check how close your spoken attempt was."}
+          </p>
+          <label style={{ ...S.label, color:"#ffffff" }}>{T.subtitlesSourceLabel || "Video title / source (optional)"}</label>
+          <input value={sourceTitle} onChange={e=>setSourceTitle(e.target.value)} placeholder={T.subtitlesSourcePlaceholder || "e.g. NHK news 7/2"} style={{ ...S.input, marginBottom:12 }} />
+          <label style={{ ...S.label, color:"#ffffff" }}>{T.pronPasteLabel || "Paste Japanese text here"}</label>
+          <textarea value={raw} onChange={e=>setRaw(e.target.value)} rows={10}
+            placeholder={T.subtitlesPastePlaceholder || "Paste plain text or an .srt file's contents — timestamps and cue numbers are removed automatically."}
+            style={{ ...S.input, resize:"vertical", fontFamily:"inherit", lineHeight:1.7, marginBottom:14 }} />
+          <button onClick={generate} disabled={loading || !raw.trim()} style={{ ...S.btn, width:"100%", background:(loading||!raw.trim())?"rgba(6,182,212,0.15)":`linear-gradient(135deg,${C.teal},#0891b2)`, color:(loading||!raw.trim())?"#64748b":"#fff" }}>
+            {loading ? `⏳ ${T.pronGenerating || "Building pronunciation practice..."}` : (T.pronGenerateBtn || "Build Pronunciation Practice")} {!loading && "✨"}
+          </button>
+          {error && <p style={{ color:C.red, fontSize:12, marginTop:10 }}>{error}</p>}
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div>
+      <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:12 }}>
+        <p style={{ color:C.teal, fontSize:12, fontWeight:700, letterSpacing:1, margin:0 }}>
+          🗣️ {sourceTitle.trim() || (T.pronTitle || "Pronunciation Practice")}
+        </p>
+        <button onClick={handleReset} style={{ ...S.btn, padding:"6px 12px", fontSize:11, background:C.card, border:`1px solid ${C.border}`, color:"#94a3b8" }}>
+          {T.subtitlesLoadNew || "↺ Load a different transcript"}
+        </button>
+      </div>
+      {pronunciationCheck.eligible && <LevelUpOffer T={T} currentLevel={form.jlpt} onConfirm={onLevelUp} onDismiss={pronunciationCheck.dismiss} />}
+      <div style={{ display:"flex", flexDirection:"column", gap:12 }}>
+        {items.map((item, i) => (
+          <div key={i}>
+            <PronunciationTurnCard item={item} T={T} lang={form?.preferredLang || "English"} />
+            <ComprehensionCheck itemId={`pron-${i}`} checkins={pronunciationCheck.checkins} onRecord={pronunciationCheck.record} T={T} />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 // ─── Schedule builder ────────────────────────────────────────────────────────────
 // Skill note keys mapped to T keys
 const SKILL_NOTE_KEY = {
@@ -7729,6 +8037,7 @@ function Dashboard({ form, onEdit, onLevelUp, onDeleteAccount, deleteAccountBusy
     { id:"links",    label: "🔗 " + (T.tabResources || "Resources") },
     { id:"content",  label: T.tabPractice || "✨ From Content" },
     { id:"conversation", label: "🎙️ " + (T.convTitle || "Conversation") },
+    { id:"pronunciation", label: "🗣️ " + (T.pronTitle || "Pronunciation") },
   ];
 
   return (
@@ -7886,6 +8195,8 @@ function Dashboard({ form, onEdit, onLevelUp, onDeleteAccount, deleteAccountBusy
             {resourceSubTab==="content" && <ContentAnalyzer form={form} onLevelUp={onLevelUp} />}
 
             {resourceSubTab==="conversation" && <ConversationPredictor form={form} onLevelUp={onLevelUp} />}
+
+            {resourceSubTab==="pronunciation" && <PronunciationPredictor form={form} onLevelUp={onLevelUp} />}
 
             {resourceSubTab==="links" && (() => {
             // When the student's goal is understanding anime/manga, surface the
