@@ -6203,7 +6203,7 @@ function ExerciseCard({ item, revealed, onReveal, T, lang }) {
       </div>
       {(item.skill === "listening" || item.skill === "pronunciation") && (
         <div style={{ display:"flex", gap:8, marginBottom:8, flexWrap:"wrap" }}>
-          <button onClick={()=>speakJapanese(stripForSpeech(item.skill === "listening" ? getListeningAudioText(item) : item.prompt))}
+          <button onClick={()=>speakJapanese(stripForSpeech(item.skill === "listening" ? getListeningAudioText(item) : item.prompt), 1)}
             style={{ display:"flex", alignItems:"center", gap:6, padding:"6px 12px", borderRadius:8, background:"rgba(6,182,212,0.12)", border:`1px solid rgba(6,182,212,0.3)`, color:C.teal, fontSize:12, fontWeight:700, cursor:"pointer" }}>
             🔊 {T?.listenAudio || "Listen"}
           </button>
@@ -6720,7 +6720,7 @@ function ConversationTurnCard({ turn, T, lang }) {
         <p style={{ color:"#f1f5f9", fontSize:14, lineHeight:1.8, margin:0, flex:1 }}>{turn.speakerALine}</p>
       </div>
       <div style={{ display:"flex", gap:8, marginBottom:8, flexWrap:"wrap" }}>
-        <button onClick={()=>speakJapanese(stripForSpeech(turn.speakerALine))}
+        <button onClick={()=>speakJapanese(stripForSpeech(turn.speakerALine), 1)}
           style={{ display:"flex", alignItems:"center", gap:6, padding:"6px 12px", borderRadius:8, background:"rgba(6,182,212,0.12)", border:`1px solid rgba(6,182,212,0.3)`, color:C.teal, fontSize:12, fontWeight:700, cursor:"pointer" }}>
           🔊 {T?.listenAudio || "Listen"}
         </button>
@@ -7013,7 +7013,7 @@ function PronunciationTurnCard({ item, T, lang }) {
       )}
 
       <div style={{ display:"flex", gap:8, marginBottom:10, flexWrap:"wrap" }}>
-        <button onClick={()=>speakJapanese(stripForSpeech(item.text))}
+        <button onClick={()=>speakJapanese(stripForSpeech(item.text), 1)}
           style={{ display:"flex", alignItems:"center", gap:6, padding:"6px 12px", borderRadius:8, background:"rgba(6,182,212,0.12)", border:`1px solid rgba(6,182,212,0.3)`, color:C.teal, fontSize:12, fontWeight:700, cursor:"pointer" }}>
           🔊 {T?.listenAudio || "Listen"}
         </button>
