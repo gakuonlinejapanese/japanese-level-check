@@ -4652,15 +4652,32 @@ async function syncAssignedVocab(userId) {
 }
 
 // ─── SPEAK helper ──────────────────────────────────────────────────────────────
-function speakJapanese(text) {
+function speakJapanese(text, rate = 0.85) {
   if (!window.speechSynthesis) return;
   window.speechSynthesis.cancel();
   const u = new SpeechSynthesisUtterance(text);
-  u.lang = "ja-JP"; u.rate = 0.85;
+  u.lang = "ja-JP"; u.rate = rate;
   const voices = window.speechSynthesis.getVoices();
   const jpVoice = voices.find(v => v.lang === "ja-JP" || v.lang === "ja_JP");
   if (jpVoice) u.voice = jpVoice;
   window.speechSynthesis.speak(u);
+}
+
+// Small "0.8x / 0.5x" slow-playback buttons shown next to a Listen button in
+// Create From Content, Conversation Practice, and Pronunciation Practice.
+function SpeedButtons({ text, T }) {
+  return (
+    <>
+      <button onClick={()=>speakJapanese(text, 0.8)}
+        style={{ padding:"6px 10px", borderRadius:8, background:"rgba(148,163,184,0.1)", border:"1px solid rgba(148,163,184,0.25)", color:"#94a3b8", fontSize:11, fontWeight:700, cursor:"pointer" }}>
+        {T?.speed08 || "🐢 0.8x"}
+      </button>
+      <button onClick={()=>speakJapanese(text, 0.5)}
+        style={{ padding:"6px 10px", borderRadius:8, background:"rgba(148,163,184,0.1)", border:"1px solid rgba(148,163,184,0.25)", color:"#94a3b8", fontSize:11, fontWeight:700, cursor:"pointer" }}>
+        {T?.speed05 || "🐌 0.5x"}
+      </button>
+    </>
+  );
 }
 
 // Strips parenthetical instructional labels (e.g. "（シャドーイング）", "(Shadowing)") from an
@@ -6185,10 +6202,13 @@ function ExerciseCard({ item, revealed, onReveal, T, lang }) {
         <p style={{ color:"#f1f5f9", fontSize:14, lineHeight:1.8, margin:0, whiteSpace:"pre-wrap", flex:1 }}>{item.prompt}</p>
       </div>
       {(item.skill === "listening" || item.skill === "pronunciation") && (
-        <button onClick={()=>speakJapanese(stripForSpeech(item.skill === "listening" ? getListeningAudioText(item) : item.prompt))}
-          style={{ display:"flex", alignItems:"center", gap:6, marginBottom:8, padding:"6px 12px", borderRadius:8, background:"rgba(6,182,212,0.12)", border:`1px solid rgba(6,182,212,0.3)`, color:C.teal, fontSize:12, fontWeight:700, cursor:"pointer" }}>
-          🔊 {T?.listenAudio || "Listen"}
-        </button>
+        <div style={{ display:"flex", gap:8, marginBottom:8, flexWrap:"wrap" }}>
+          <button onClick={()=>speakJapanese(stripForSpeech(item.skill === "listening" ? getListeningAudioText(item) : item.prompt))}
+            style={{ display:"flex", alignItems:"center", gap:6, padding:"6px 12px", borderRadius:8, background:"rgba(6,182,212,0.12)", border:`1px solid rgba(6,182,212,0.3)`, color:C.teal, fontSize:12, fontWeight:700, cursor:"pointer" }}>
+            🔊 {T?.listenAudio || "Listen"}
+          </button>
+          <SpeedButtons text={stripForSpeech(item.skill === "listening" ? getListeningAudioText(item) : item.prompt)} T={T} />
+        </div>
       )}
       {item.skill === "pronunciation" && (
         <div style={{ marginBottom:8 }}>
@@ -6699,10 +6719,13 @@ function ConversationTurnCard({ turn, T, lang }) {
         <span style={{ color:C.teal, fontSize:11, fontWeight:700, flexShrink:0 }}>A:</span>
         <p style={{ color:"#f1f5f9", fontSize:14, lineHeight:1.8, margin:0, flex:1 }}>{turn.speakerALine}</p>
       </div>
-      <button onClick={()=>speakJapanese(stripForSpeech(turn.speakerALine))}
-        style={{ display:"flex", alignItems:"center", gap:6, marginBottom:8, padding:"6px 12px", borderRadius:8, background:"rgba(6,182,212,0.12)", border:`1px solid rgba(6,182,212,0.3)`, color:C.teal, fontSize:12, fontWeight:700, cursor:"pointer" }}>
-        🔊 {T?.listenAudio || "Listen"}
-      </button>
+      <div style={{ display:"flex", gap:8, marginBottom:8, flexWrap:"wrap" }}>
+        <button onClick={()=>speakJapanese(stripForSpeech(turn.speakerALine))}
+          style={{ display:"flex", alignItems:"center", gap:6, padding:"6px 12px", borderRadius:8, background:"rgba(6,182,212,0.12)", border:`1px solid rgba(6,182,212,0.3)`, color:C.teal, fontSize:12, fontWeight:700, cursor:"pointer" }}>
+          🔊 {T?.listenAudio || "Listen"}
+        </button>
+        <SpeedButtons text={stripForSpeech(turn.speakerALine)} T={T} />
+      </div>
       <JLineTools text={turn.speakerALine} lang={lang} T={T} />
 
       <p style={{ color:C.purpleLight, fontSize:12, fontWeight:700, margin:"6px 0 8px" }}>
@@ -6994,6 +7017,7 @@ function PronunciationTurnCard({ item, T, lang }) {
           style={{ display:"flex", alignItems:"center", gap:6, padding:"6px 12px", borderRadius:8, background:"rgba(6,182,212,0.12)", border:`1px solid rgba(6,182,212,0.3)`, color:C.teal, fontSize:12, fontWeight:700, cursor:"pointer" }}>
           🔊 {T?.listenAudio || "Listen"}
         </button>
+        <SpeedButtons text={stripForSpeech(item.text)} T={T} />
         {mode === "listen" && (
           <button onClick={()=>setTextRevealed(r=>!r)}
             style={{ padding:"6px 12px", borderRadius:8, background:C.card, border:`1px solid ${C.border}`, color:"#94a3b8", fontSize:12, cursor:"pointer" }}>
@@ -7029,6 +7053,82 @@ function PronunciationTurnCard({ item, T, lang }) {
           </button>
         </div>
       )}
+    </div>
+  );
+}
+
+// Lets a student add one more word/sentence to an already-generated Pronunciation
+// Practice set without resetting it (no need to go back to the paste screen).
+// For anything 3+ characters long, also offers to split it into smaller reading
+// chunks (grammatical parts for a sentence, sub-parts for a compound word).
+function AddPronunciationItem({ onAdd, T, jlpt }) {
+  const [text, setText] = useState("");
+  const [breaking, setBreaking] = useState(false);
+  const [error, setError] = useState("");
+
+  const handleAddPlain = () => {
+    const t = text.trim();
+    if (!t) return;
+    onAdd([{ text: t }]);
+    setText(""); setError("");
+  };
+
+  const breakIntoPhrase = async () => {
+    const t = text.trim();
+    if (!t) return;
+    setBreaking(true); setError("");
+    try {
+      const res = await fetch("/api/claude", {
+        method:"POST", headers:{"Content-Type":"application/json"},
+        body: JSON.stringify({ model:"claude-sonnet-4-20250514", max_tokens:500, provider:"turbo",
+          messages:[{ role:"user", content:`Break the following Japanese word or sentence into natural parts for pronunciation practice (student JLPT level: ${jlpt || "N5"}).
+
+TEXT: "${t}"
+
+RULES:
+- If this is a full sentence, split it into its grammatical chunks in their original order (subject / object / predicate, with particles kept attached to the word they follow) — each chunk should be something a student could naturally read aloud on its own.
+- If this is a single word or short phrase (not a full sentence), split it into its natural sub-parts (e.g. compound word components) only if it genuinely has more than one meaningful part; otherwise just return it unchanged as the only item.
+- Keep the original wording exactly as given — do not translate, paraphrase, or add furigana.
+- Return the parts in their original left-to-right order.
+
+Respond ONLY with a valid JSON array of strings, no markdown, no backticks:
+["part one", "part two"]` }]
+        })
+      });
+      const d = await res.json();
+      const out = d.content?.map(c=>c.text||"").join("") || "[]";
+      const parsed = JSON.parse(out.replace(/```json|```/g,"").trim());
+      if (Array.isArray(parsed) && parsed.length) {
+        onAdd(parsed.map(p => ({ text: p })));
+        setText("");
+      } else {
+        setError(T.pronBreakFailed || "Couldn't break that down. Try adding it as-is instead.");
+      }
+    } catch { setError(T.contentErrGeneric || "Could not analyze this content right now. Please try again."); }
+    setBreaking(false);
+  };
+
+  const showBreakBtn = text.trim().length >= 3;
+
+  return (
+    <div style={{ ...S.card, marginTop:4, border:`1px dashed ${C.border}` }}>
+      <p style={{ color:C.teal, fontSize:12, fontWeight:700, marginBottom:8 }}>➕ {T?.pronAddNewLabel || "単語、文章を追加 / Add a word or sentence"}</p>
+      <textarea value={text} onChange={e=>setText(e.target.value)} rows={2}
+        placeholder={T?.pronAddNewPlaceholder || "Type or paste a Japanese word or sentence..."}
+        style={{ ...S.input, resize:"vertical", fontFamily:"inherit", marginBottom:10 }} />
+      <div style={{ display:"flex", gap:8, flexWrap:"wrap" }}>
+        <button onClick={handleAddPlain} disabled={!text.trim() || breaking}
+          style={{ ...S.btn, background:(!text.trim()||breaking)?"rgba(6,182,212,0.15)":`linear-gradient(135deg,${C.teal},#0891b2)`, color:(!text.trim()||breaking)?"#64748b":"#fff", padding:"7px 14px", fontSize:12 }}>
+          ➕ {T?.pronAddBtn || "Add word/sentence"}
+        </button>
+        {showBreakBtn && (
+          <button onClick={breakIntoPhrase} disabled={breaking}
+            style={{ ...S.btn, background:breaking?"rgba(168,85,247,0.1)":"rgba(168,85,247,0.15)", border:`1px solid rgba(168,85,247,0.3)`, color:C.purpleLight, padding:"7px 14px", fontSize:12 }}>
+            {breaking ? `⏳ ${T?.pronBreaking || "Breaking down..."}` : (T?.pronBreakBtn || "🔍 Break into the phrase")}
+          </button>
+        )}
+      </div>
+      {error && <p style={{ color:C.red, fontSize:11, marginTop:8 }}>{error}</p>}
     </div>
   );
 }
@@ -7170,6 +7270,7 @@ Respond ONLY with a valid JSON array of strings, no markdown, no backticks:
             <ComprehensionCheck itemId={`pron-${i}`} checkins={pronunciationCheck.checkins} onRecord={pronunciationCheck.record} T={T} />
           </div>
         ))}
+        <AddPronunciationItem onAdd={(newItems)=>setItems(prev => [...(prev||[]), ...newItems])} T={T} jlpt={form?.jlpt} />
       </div>
     </div>
   );
