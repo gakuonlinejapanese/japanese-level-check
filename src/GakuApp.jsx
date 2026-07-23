@@ -6954,13 +6954,44 @@ function isCloseEnough(target, attempt) {
   return dist / maxLen <= 0.2; // allow ~20% character difference
 }
 
-function PronunciationTurnCard({ item, T, lang }) {
+// Shared by AddPronunciationItem (new text) and PronunciationTurnCard (an
+// already-generated item) — asks the AI to split one word/sentence into
+// smaller reading chunks. Returns an array of strings, or null on failure.
+async function breakJapaneseIntoParts(text, jlpt) {
+  const t = (text || "").trim();
+  if (!t) return null;
+  const res = await fetch("/api/claude", {
+    method:"POST", headers:{"Content-Type":"application/json"},
+    body: JSON.stringify({ model:"claude-sonnet-4-20250514", max_tokens:500, provider:"turbo",
+      messages:[{ role:"user", content:`Break the following Japanese word or sentence into natural parts for pronunciation practice (student JLPT level: ${jlpt || "N5"}).
+
+TEXT: "${t}"
+
+RULES:
+- If this is a full sentence, split it into its grammatical chunks in their original order (subject / object / predicate, with particles kept attached to the word they follow) — each chunk should be something a student could naturally read aloud on its own.
+- If this is a single word or short phrase (not a full sentence), split it into its natural sub-parts (e.g. compound word components) only if it genuinely has more than one meaningful part; otherwise just return it unchanged as the only item.
+- Keep the original wording exactly as given — do not translate, paraphrase, or add furigana.
+- Return the parts in their original left-to-right order.
+
+Respond ONLY with a valid JSON array of strings, no markdown, no backticks:
+["part one", "part two"]` }]
+    })
+  });
+  const d = await res.json();
+  const out = d.content?.map(c=>c.text||"").join("") || "[]";
+  const parsed = JSON.parse(out.replace(/```json|```/g,"").trim());
+  return (Array.isArray(parsed) && parsed.length) ? parsed : null;
+}
+
+function PronunciationTurnCard({ item, T, lang, onBreak }) {
   const [mode, setMode] = useState("read"); // "read" | "listen"
   const [textRevealed, setTextRevealed] = useState(false);
   const [recording, setRecording] = useState(false);
   const [transcript, setTranscript] = useState("");
   const [recogSupported, setRecogSupported] = useState(true);
   const [result, setResult] = useState(null); // null | "correct" | "incorrect"
+  const [breaking, setBreaking] = useState(false);
+  const [breakError, setBreakError] = useState("");
   const recognitionRef = useRef(null);
   const lastTranscriptRef = useRef("");
 
@@ -6995,6 +7026,18 @@ function PronunciationTurnCard({ item, T, lang }) {
     setTranscript(""); setResult(null); setRecording(true); recognition.start();
   };
 
+  const handleBreak = async () => {
+    if (!onBreak) return;
+    setBreaking(true); setBreakError("");
+    try {
+      const ok = await onBreak();
+      if (!ok) setBreakError(T?.pronBreakFailed || "Couldn't break that down. Try again.");
+    } catch { setBreakError(T?.contentErrGeneric || "Could not analyze this content right now. Please try again."); }
+    setBreaking(false);
+  };
+
+  const showBreakBtn = !!onBreak && (item.text || "").trim().length >= 3;
+
   return (
     <div style={{ ...S.card, borderLeft:`3px solid ${C.teal}` }}>
       <div style={{ display:"flex", gap:6, marginBottom:12 }}>
@@ -7024,7 +7067,14 @@ function PronunciationTurnCard({ item, T, lang }) {
             {textRevealed ? (T?.pronHideTextBtn || "Hide text") : (T?.pronRevealText || "Show text")}
           </button>
         )}
+        {showBreakBtn && (
+          <button onClick={handleBreak} disabled={breaking}
+            style={{ padding:"6px 12px", borderRadius:8, background:breaking?"rgba(168,85,247,0.1)":"rgba(168,85,247,0.15)", border:`1px solid rgba(168,85,247,0.3)`, color:C.purpleLight, fontSize:12, fontWeight:700, cursor:"pointer" }}>
+            {breaking ? `⏳ ${T?.pronBreaking || "Breaking down..."}` : (T?.pronBreakBtn || "🔍 Break into the phrase")}
+          </button>
+        )}
       </div>
+      {breakError && <p style={{ color:C.red, fontSize:11, marginTop:-4, marginBottom:8 }}>{breakError}</p>}
 
       {(mode === "read" || textRevealed) && <JLineTools text={item.text} lang={lang} T={T} />}
 
@@ -7078,28 +7128,9 @@ function AddPronunciationItem({ onAdd, T, jlpt }) {
     if (!t) return;
     setBreaking(true); setError("");
     try {
-      const res = await fetch("/api/claude", {
-        method:"POST", headers:{"Content-Type":"application/json"},
-        body: JSON.stringify({ model:"claude-sonnet-4-20250514", max_tokens:500, provider:"turbo",
-          messages:[{ role:"user", content:`Break the following Japanese word or sentence into natural parts for pronunciation practice (student JLPT level: ${jlpt || "N5"}).
-
-TEXT: "${t}"
-
-RULES:
-- If this is a full sentence, split it into its grammatical chunks in their original order (subject / object / predicate, with particles kept attached to the word they follow) — each chunk should be something a student could naturally read aloud on its own.
-- If this is a single word or short phrase (not a full sentence), split it into its natural sub-parts (e.g. compound word components) only if it genuinely has more than one meaningful part; otherwise just return it unchanged as the only item.
-- Keep the original wording exactly as given — do not translate, paraphrase, or add furigana.
-- Return the parts in their original left-to-right order.
-
-Respond ONLY with a valid JSON array of strings, no markdown, no backticks:
-["part one", "part two"]` }]
-        })
-      });
-      const d = await res.json();
-      const out = d.content?.map(c=>c.text||"").join("") || "[]";
-      const parsed = JSON.parse(out.replace(/```json|```/g,"").trim());
-      if (Array.isArray(parsed) && parsed.length) {
-        onAdd(parsed.map(p => ({ text: p })));
+      const parts = await breakJapaneseIntoParts(t, jlpt);
+      if (parts) {
+        onAdd(parts.map(p => ({ text: p })));
         setText("");
       } else {
         setError(T.pronBreakFailed || "Couldn't break that down. Try adding it as-is instead.");
@@ -7216,6 +7247,21 @@ Respond ONLY with a valid JSON array of strings, no markdown, no backticks:
 
   const handleReset = () => { setItems(null); setRaw(""); setError(""); try { localStorage.removeItem(scopedKey(PRON_STORAGE_KEY)); } catch {} };
 
+  // Splits an already-generated item (by index) into smaller parts in place.
+  // Returns true/false so the card can show its own inline error on failure.
+  const handleBreakItem = async (index) => {
+    const target = items?.[index];
+    if (!target) return false;
+    const parts = await breakJapaneseIntoParts(target.text, form.jlpt);
+    if (!parts) return false;
+    setItems(prev => {
+      const next = [...prev];
+      next.splice(index, 1, ...parts.map(p => ({ text: p })));
+      return next;
+    });
+    return true;
+  };
+
   if (!items) {
     return (
       <div>
@@ -7266,7 +7312,7 @@ Respond ONLY with a valid JSON array of strings, no markdown, no backticks:
       <div style={{ display:"flex", flexDirection:"column", gap:12 }}>
         {items.map((item, i) => (
           <div key={i}>
-            <PronunciationTurnCard item={item} T={T} lang={form?.preferredLang || "English"} />
+            <PronunciationTurnCard item={item} T={T} lang={form?.preferredLang || "English"} onBreak={()=>handleBreakItem(i)} />
             <ComprehensionCheck itemId={`pron-${i}`} checkins={pronunciationCheck.checkins} onRecord={pronunciationCheck.record} T={T} />
           </div>
         ))}
@@ -8637,6 +8683,7 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
   // account redeemed a GAKU invite code. These students should never hit the
   // trial interaction paywall.
   const [isGakuStudent, setIsGakuStudent] = useState(false);
+  const [isPaid, setIsPaid] = useState(false);
   const [form, setForm] = useState(null);
   const [editing, setEditing] = useState(false);
   const [showPaywall, setShowPaywall] = useState(!!previewPaywall);
@@ -8746,6 +8793,7 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
       });
       const data = await res.json();
       if (data?.isGakuStudent) setIsGakuStudent(true);
+      if (data?.isPaid) setIsPaid(true);
       if ((data?.isGakuStudent || data?.isPaid) && !previewPaywall) {
         setShowPaywall(false);
         setAwaitingUnlock(false);
@@ -8800,7 +8848,11 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
   const handleDashboardInteraction = () => {
     // Verified GAKU students (logged in + redeemed an invite code, or arrived
     // here already invite-verified via self-study.jsx) get unlimited use.
-    if (skipTrialPaywall || (authUser && isGakuStudent)) return;
+    // Paying (non-GAKU) accounts must be exempted too — previously only
+    // isGakuStudent was checked here, so a paid student could still hit the
+    // 21-interaction counter and get sent back to the paywall despite having
+    // already unlocked the app.
+    if (skipTrialPaywall || (authUser && (isGakuStudent || isPaid))) return;
     setInteractionCount(c => {
       const next = c + 1;
       try { localStorage.setItem(scopedKey("gaku_interaction_count"), String(next)); } catch {}
@@ -8865,7 +8917,7 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
       } catch { setForm(null); }
       try { setInteractionCount(parseInt(localStorage.getItem(scopedKey("gaku_interaction_count")) || "0", 10) || 0); } catch { setInteractionCount(0); }
       try { window.dispatchEvent(new Event("gaku_vocab_updated")); } catch {}
-      if (!authUser) { setDeviceStatus(null); setIsGakuStudent(false); return; }
+      if (!authUser) { setDeviceStatus(null); setIsGakuStudent(false); setIsPaid(false); return; }
       syncAssignedVocab(authUser.id);
       setDeviceStatus("checking");
       // Self-heal: if the paywall was already showing (e.g. from an earlier trial
@@ -8891,7 +8943,7 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
     try { localStorage.setItem(scopedKey("gaku_form"), JSON.stringify(saved)); } catch {}
     // If this email already used up their free interactions before, go straight
     // to the payment screen instead of letting them browse the dashboard again.
-    if (!skipTrialPaywall && !(authUser && isGakuStudent) && getPaywalledEmails().includes(saved.email)) {
+    if (!skipTrialPaywall && !(authUser && (isGakuStudent || isPaid)) && getPaywalledEmails().includes(saved.email)) {
       setShowPaywall(true);
     }
   };
@@ -8993,7 +9045,7 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
       <Dashboard form={form} onEdit={handleEdit} onLevelUp={(lvl)=>handleSubmit({ ...form, jlpt: lvl })} onDeleteAccount={authUser ? handleDeleteAccount : undefined} deleteAccountBusy={deleteAccountBusy} />
       {/* TEMP DEBUG — remove after confirming the counter works */}
       <div style={{ position:"fixed", bottom:12, right:12, zIndex:99999, background:"rgba(0,0,0,0.75)", color:"#4ade80", fontSize:11, fontFamily:"monospace", padding:"4px 8px", borderRadius:6 }}>
-        count: {interactionCount}/21 {skipTrialPaywall ? "(skip)" : ""} {authUser && isGakuStudent ? "(gaku)" : ""}
+        count: {interactionCount}/21 {skipTrialPaywall ? "(skip)" : ""} {authUser && isGakuStudent ? "(gaku)" : ""} {authUser && isPaid ? "(paid)" : ""}
       </div>
       {showPaywall && (
         <div style={{ position:"fixed", inset:0, zIndex:9999, display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", background:"rgba(10,15,30,0.85)", backdropFilter:"blur(12px)" }}>
