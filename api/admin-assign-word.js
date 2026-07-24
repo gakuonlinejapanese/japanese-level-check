@@ -40,15 +40,21 @@ export default async function handler(req, res) {
       return res.status(404).json({ error: "No student found with that email. Make sure they've signed up in GAKU first." });
     }
 
+    // The extension doesn't always send these as strings (e.g. jlpt can come
+    // through as a number like 3 instead of "N3"), and calling .trim() on a
+    // non-string throws "X.trim is not a function" and 500s the request. This
+    // coerces everything to a string first so any value type is safe.
+    const toStr = (v) => (v === undefined || v === null ? "" : String(v).trim());
+
     const { error: insertErr } = await supabase.from("assigned_vocab").insert({
       student_id: profile.id,
-      word: word.trim(),
-      reading: reading?.trim() || "",
-      jlpt: jlpt?.trim() || "",
-      part_of_speech: partOfSpeech?.trim() || "",
-      meaning: meaning?.trim() || "",
-      example: example?.trim() || "",
-      folder: folder?.trim() || "Your Vocabulary",
+      word: toStr(word),
+      reading: toStr(reading),
+      jlpt: toStr(jlpt),
+      part_of_speech: toStr(partOfSpeech),
+      meaning: toStr(meaning),
+      example: toStr(example),
+      folder: toStr(folder) || "Your Vocabulary",
     });
     if (insertErr) return res.status(500).json({ error: insertErr.message });
 
