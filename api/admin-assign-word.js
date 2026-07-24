@@ -9,6 +9,15 @@ import { getAdminClient } from "./_supabaseAdmin.js";
 // syncAssignedVocab logic in GakuApp.jsx) and it's removed from the queue
 // once delivered.
 export default async function handler(req, res) {
+  // The GAKU Reader Chrome extension calls this endpoint cross-origin, so the
+  // browser sends a CORS preflight (OPTIONS) request first. Without these
+  // headers the preflight gets rejected and the browser never sends the
+  // actual POST, which is what caused "Send to student" to silently fail.
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+
+  if (req.method === "OPTIONS") return res.status(200).end();
   if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed" });
   try {
     const { secret, studentEmail, word, reading, jlpt, partOfSpeech, meaning, example, folder } = req.body || {};
