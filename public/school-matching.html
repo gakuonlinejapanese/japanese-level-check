@@ -82,6 +82,14 @@
   .done-box h2 { margin:0 0 10px; font-size:22px; color:var(--neon); }
   .done-box p { font-size:14px; color:var(--neon); opacity:.95; line-height:1.7; margin:6px 0; }
 
+  .done-stamp.reject { background:#6b6b6b; }
+
+  input[type=file] {
+    width:100%; padding:12px 14px; background:rgba(255,255,255,.92); border:1.5px solid rgba(0,0,0,.15);
+    border-radius:10px; color:#000; font-size:14px;
+  }
+  #fileInfo { color:var(--neon); font-weight:600; }
+
   .error { color:#fff0e8; background:rgba(0,0,0,.2); border-radius:8px; padding:10px 12px; font-size:13px; margin-top:14px; display:none; }
 </style>
 </head>
@@ -110,6 +118,16 @@
       <h2>Thank you for applying</h2>
       <p>We'll review your answers and reach out within 3–7 business days with next steps.</p>
       <p>Thank you for your patience.</p>
+    </div>
+  </div>
+
+  <!-- 不合格画面（授業料・予算・ビザ貯金・生活費すべてNoの場合） -->
+  <div class="step" id="step-rejected">
+    <div class="done-box">
+      <div class="done-stamp reject">–</div>
+      <h2>Unfortunately, there is no school we can provide for you</h2>
+      <p>Based on your answers, we don't currently have a school match that fits your situation.</p>
+      <p>Thank you for your interest in studying in Japan.</p>
     </div>
   </div>
 
@@ -151,6 +169,20 @@ const QUESTIONS = [
     options:["I understand"] },
 ];
 
+// ---- 条件付きで追加される14問目（残高証明書）----
+// Q8(tuitionAware)かQ9(shortTermBudget)のどちらかが "Yes" の場合のみ、13問目の後に追加される。
+const BANK_AGREE_Q = {
+  id: "bankStatementAgree", type: "radio",
+  label: "Since you have a responsibility to pay the tuition and living expenses, GAKU and Ichigo Nihongo have to ask for your bank statement.",
+  options: ["I agree", "No I can't"],
+};
+const BANK_FILE_Q = {
+  id: "bankStatementFile", type: "file",
+  label: "Please upload your bank statement (proof of balance) as a PDF.",
+  accept: "application/pdf",
+};
+const MAX_FILE_BYTES = 3 * 1024 * 1024; // 3MB — stays safely under the server's ~4.5MB request limit
+
 let step = 0;
 const answers = {};
 const params = new URLSearchParams(location.search);
@@ -186,6 +218,9 @@ function renderStep() {
       const sel = answers[q.id] === opt ? " selected" : "";
       return `<div class="opt${sel}" data-value="${opt}">${opt}</div>`;
     }).join("") + `</div>`;
+  } else if (q.type === "file") {
+    html += `<input type="file" id="qfile" accept="${q.accept || "application/pdf"}" />
+              <div id="fileInfo">${answers[q.id]?.name ? "Selected: " + answers[q.id].name : ""}</div>`;
   }
 
   qArea.innerHTML = html;
@@ -208,6 +243,36 @@ function renderStep() {
     });
   }
 
+  if (q.type === "file") {
+    const fileInput = document.getElementById("qfile");
+    const fileInfo = document.getElementById("fileInfo");
+    fileInput.addEventListener("change", () => {
+      errEl.style.display = "none";
+      const file = fileInput.files[0];
+      if (!file) { delete answers[q.id]; fileInfo.textContent = ""; updateNextState(); return; }
+      if (file.type !== "application/pdf") {
+        errEl.textContent = "Please upload a PDF file.";
+        errEl.style.display = "block";
+        fileInput.value = ""; delete answers[q.id]; fileInfo.textContent = ""; updateNextState();
+        return;
+      }
+      if (file.size > MAX_FILE_BYTES) {
+        errEl.textContent = "File is too large. Please upload a PDF under 3MB.";
+        errEl.style.display = "block";
+        fileInput.value = ""; delete answers[q.id]; fileInfo.textContent = ""; updateNextState();
+        return;
+      }
+      const reader = new FileReader();
+      reader.onload = () => {
+        const base64 = reader.result.split(",")[1];
+        answers[q.id] = { name: file.name, mime: file.type, base64 };
+        fileInfo.textContent = "Selected: " + file.name;
+        updateNextState();
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
   updateNextState();
   btnNext.textContent = step === QUESTIONS.length - 1 ? "Submit" : "Next";
 }
@@ -221,36 +286,94 @@ function updateNextState() {
   btnNext.disabled = !ok;
 }
 
+// 授業料(Q8)・短期予算(Q9)・ビザ貯金(Q10)・生活費(Q11)の4問。
+// すべて "Yes" 以外（"I'm not sure yet" 等も含む）なら不合格。
+const FINANCE_QUESTION_IDS = ["tuitionAware", "shortTermBudget", "visaSavings", "livingExpenses"];
+function isRejectionCase() {
+  if (!FINANCE_QUESTION_IDS.every(id => answers[id])) return false; // 4問すべて未回答ならまだ判定しない
+  return FINANCE_QUESTION_IDS.every(id => answers[id] !== "Yes");
+}
+function wantsBankStatement() {
+  return answers.tuitionAware === "Yes" || answers.shortTermBudget === "Yes";
+}
+
+const bankFlow = { agreeAdded: false, fileAdded: false };
+
 btnBack.addEventListener("click", () => {
   if (step === 0) return;
   step -= 1;
   renderStep();
 });
 
+async function postSchoolMatching(extra) {
+  const payload = {
+    action: "school_matching",
+    ...answers,
+    referrer: params.get("ref") || null,
+    ...extra,
+  };
+  const resp = await fetch("/api/policy-agreement", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+  if (!resp.ok) throw new Error("submit failed");
+}
+
+function showResultScreen(which) {
+  document.querySelector(".stamps").style.display = "none";
+  qArea.style.display = "none";
+  document.querySelector(".nav").style.display = "none";
+  document.getElementById(which).classList.add("active");
+}
+
 btnNext.addEventListener("click", async () => {
+  const q = QUESTIONS[step];
+
+  // 4問すべてNo系 → 無条件で不合格画面（残りの質問は聞かない）
+  if (isRejectionCase()) {
+    btnNext.disabled = true;
+    try {
+      await postSchoolMatching({ outcome: "rejected" });
+    } catch (e) {
+      // 不合格画面はネットワークエラーでもユーザーには必ず見せる。記録は失敗しても
+      // ユーザー体験をブロックしない（他の送信処理と同じ非ブロッキング方針）。
+      console.error("rejected-outcome submit error:", e.message);
+    }
+    showResultScreen("step-rejected");
+    return;
+  }
+
   if (step < QUESTIONS.length - 1) {
     step += 1;
     renderStep();
     return;
   }
+
+  // 13問目(waitTime)の直後：Q8/Q9のどちらかがYesなら14問目（残高証明書の同意）を追加
+  if (q.id === "waitTime" && !bankFlow.agreeAdded && wantsBankStatement()) {
+    bankFlow.agreeAdded = true;
+    QUESTIONS.push(BANK_AGREE_Q);
+    step += 1;
+    renderStep();
+    return;
+  }
+
+  // 14問目(同意)の直後：「I agree」ならPDFアップロード欄を追加。「No I can't」ならそのまま提出へ。
+  if (q.id === "bankStatementAgree" && answers.bankStatementAgree === "I agree" && !bankFlow.fileAdded) {
+    bankFlow.fileAdded = true;
+    QUESTIONS.push(BANK_FILE_Q);
+    step += 1;
+    renderStep();
+    return;
+  }
+
   // 最終送信
   btnNext.disabled = true;
   btnNext.textContent = "Submitting…";
   try {
-    const resp = await fetch("/api/policy-agreement", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        action: "school_matching",
-        ...answers,
-        referrer: params.get("ref") || null,
-      }),
-    });
-    if (!resp.ok) throw new Error("submit failed");
-    document.querySelector(".stamps").style.display = "none";
-    qArea.style.display = "none";
-    document.querySelector(".nav").style.display = "none";
-    document.getElementById("step-done").classList.add("active");
+    await postSchoolMatching({});
+    showResultScreen("step-done");
   } catch (e) {
     errEl.textContent = "Something went wrong. Please try again.";
     errEl.style.display = "block";

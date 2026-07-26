@@ -17,10 +17,14 @@ import { ADMIN_EMAIL } from "./_supabaseAdmin.js";
 //
 // POST { action: "school_matching", firstName, lastName, email, country, jlptN4,
 // longTermTimeline, shortTermTimeline, tuitionAware, shortTermBudget, visaSavings,
-// livingExpenses, noScholarship, waitTime, referrer } — called from
-// public/school-matching.html, the school-introduction counseling wizard. Records the
-// submission in `school_matching_requests` and emails Seito. Also kept on this same
-// endpoint for the same 12-function-cap reason above.
+// livingExpenses, noScholarship, waitTime, referrer, bankStatementAgree, bankStatementFile,
+// outcome } — called from public/school-matching.html, the school-introduction counseling
+// wizard. Records the submission in `school_matching_requests` and emails Seito.
+// bankStatementFile is { name, mime, base64 } and is only ever emailed as an attachment —
+// it is NOT stored in Supabase (no schema change), per Seito's request to keep this to email
+// only. outcome is "rejected" when the applicant answered "No" to all four
+// tuition/budget/visa/living-expense questions (auto-declined before finishing the wizard);
+// otherwise omitted. Also kept on this same endpoint for the same 12-function-cap reason above.
 export default async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed" });
   try {
@@ -122,10 +126,17 @@ async function handleSchoolMatching(req, res) {
     const {
       firstName, lastName, email, country, jlptN4, longTermTimeline, shortTermTimeline,
       tuitionAware, shortTermBudget, visaSavings, livingExpenses, noScholarship, waitTime,
-      referrer,
+      referrer, bankStatementAgree, bankStatementFile, outcome,
     } = req.body || {};
     if (!firstName || !lastName || !email) {
       return res.status(400).json({ error: "firstName, lastName, and email are required" });
+    }
+
+    // Guard against oversized payloads reaching here (Vercel's request body limit is ~4.5MB;
+    // base64 inflates size ~33%, so a 3MB file is already ~4MB encoded). The client also caps
+    // uploads at 3MB, but this is a second line of defense.
+    if (bankStatementFile?.base64 && bankStatementFile.base64.length > 4_000_000) {
+      return res.status(413).json({ error: "Attachment too large" });
     }
 
     const supabase = getAdminClient();
@@ -146,7 +157,7 @@ async function handleSchoolMatching(req, res) {
       no_scholarship_ack: noScholarship || null,
       wait_time_ack: waitTime || null,
       referrer: referrer || null,
-      status: "new",
+      status: outcome === "rejected" ? "rejected" : "new",
       submitted_at: submittedAt,
     });
     if (insertErr) {
@@ -154,7 +165,10 @@ async function handleSchoolMatching(req, res) {
       return res.status(500).json({ error: insertErr.message });
     }
 
+    const subjectPrefix = outcome === "rejected" ? "[GAKU] School Matching — no match" : "[GAKU] School Matching request";
+
     const html = `
+      ${outcome === "rejected" ? `<p style="color:#c8382b;"><strong>Outcome: No school matched (auto-declined) — the applicant was shown "Unfortunately there is no school we can provide for you" and did not continue past this point.</strong></p>` : ""}
       <p>A student submitted a School Matching counseling request.</p>
       <p><strong>Name:</strong> ${firstName} ${lastName}<br/>
          <strong>Email:</strong> ${email}<br/>
@@ -168,10 +182,15 @@ async function handleSchoolMatching(req, res) {
          <strong>Living expenses ready:</strong> ${livingExpenses || "-"}<br/>
          <strong>No-scholarship acknowledged:</strong> ${noScholarship || "-"}<br/>
          <strong>Wait-time acknowledged:</strong> ${waitTime || "-"}<br/>
+         ${bankStatementAgree ? `<strong>Bank statement request:</strong> ${bankStatementAgree}<br/>` : ""}
+         ${bankStatementFile?.name ? `<strong>Bank statement file:</strong> attached (${bankStatementFile.name})<br/>` : ""}
          <strong>Submitted at:</strong> ${submittedAt}</p>
     `;
     try {
-      await sendEmail({ to: ADMIN_EMAIL, subject: `[GAKU] School Matching request — ${firstName} ${lastName}`, html });
+      const attachments = bankStatementFile?.base64
+        ? [{ name: bankStatementFile.name || "bank-statement.pdf", base64: bankStatementFile.base64 }]
+        : undefined;
+      await sendEmail({ to: ADMIN_EMAIL, subject: `${subjectPrefix} — ${firstName} ${lastName}`, html, attachments });
     } catch (e) {
       // Don't block the student's submission just because the notification email failed —
       // the request is already durably recorded in school_matching_requests above.
