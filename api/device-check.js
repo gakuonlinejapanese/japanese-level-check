@@ -4,7 +4,7 @@ import { sendEmail } from "./_resend.js";
 export default async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed" });
   try {
-    const { userId, email, deviceId, deviceLabel } = req.body || {};
+    const { userId, email, deviceId, deviceLabel, isPwaStandalone } = req.body || {};
     if (!userId || !deviceId) return res.status(400).json({ error: "userId and deviceId are required" });
     console.log(`[device-check] request email=${email} deviceLabel=${deviceLabel} deviceId=${deviceId?.slice(0, 8)}…`);
 
@@ -32,6 +32,9 @@ export default async function handler(req, res) {
     if (existing) {
       console.log(`[device-check] result=approved (already-known device) deviceLabel=${deviceLabel}`);
       await supabase.from("device_sessions").update({ last_seen: new Date().toISOString() }).eq("id", existing.id);
+      if (isPwaStandalone) {
+        await supabase.from("profiles").update({ pwa_detected_at: new Date().toISOString() }).eq("id", userId).is("pwa_detected_at", null);
+      }
       return res.status(200).json({ status: "approved" });
     }
 
@@ -46,6 +49,9 @@ export default async function handler(req, res) {
       await supabase.from("device_sessions").insert({
         user_id: userId, device_id: deviceId, device_label: deviceLabel || "Unknown device", approved: true,
       });
+      if (isPwaStandalone) {
+        await supabase.from("profiles").update({ pwa_detected_at: new Date().toISOString() }).eq("id", userId).is("pwa_detected_at", null);
+      }
       return res.status(200).json({ status: "approved" });
     }
 

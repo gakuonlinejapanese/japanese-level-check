@@ -9357,9 +9357,13 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
       // session, or right after login/payment), this dismisses it the moment we
       // confirm the account is a GAKU student or has paid — no refresh needed.
       checkAccountStatus(authUser.id);
-      fetch("/api/device-check", {
+      const isPwaStandalone = (typeof window !== "undefined") && (
+      window.matchMedia("(display-mode: standalone)").matches ||
+      window.navigator.standalone === true
+    );
+    fetch("/api/device-check", {
         method: "POST", headers: { "Content-Type":"application/json" },
-        body: JSON.stringify({ userId: authUser.id, email: authUser.email, deviceId: getDeviceId(), deviceLabel: getDeviceLabel() }),
+        body: JSON.stringify({ userId: authUser.id, email: authUser.email, deviceId: getDeviceId(), deviceLabel: getDeviceLabel(), isPwaStandalone }),
       })
         .then(r => r.json())
         .then(d => { setDeviceStatus(d.status || "pending"); setDeviceSuspendedUntil(d.suspendedUntil || null); })
