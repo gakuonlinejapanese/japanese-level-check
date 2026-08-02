@@ -1,6 +1,13 @@
 import { getAdminClient, ADMIN_EMAIL } from "./_supabaseAdmin.js";
 import { sendEmail } from "./_resend.js";
 
+// Accounts used for repeated internal testing across browsers/devices —
+// exempt from the 3rd-device account-sharing suspicion check below, since
+// hopping between browsers/incognito windows during testing would otherwise
+// trigger it constantly. Still gets its device recorded normally, just
+// never suspended or sent through the dual-approval flow.
+const DEVICE_CHECK_EXEMPT_EMAILS = ["0425starwars@gmail.com"];
+
 export default async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed" });
   try {
@@ -9,6 +16,15 @@ export default async function handler(req, res) {
     console.log(`[device-check] request email=${email} deviceLabel=${deviceLabel} deviceId=${deviceId?.slice(0, 8)}…`);
 
     const supabase = getAdminClient();
+
+    if (email && DEVICE_CHECK_EXEMPT_EMAILS.includes(email.trim().toLowerCase())) {
+      console.log(`[device-check] result=approved (exempt test account) email=${email}`);
+      await supabase.from("device_sessions").upsert(
+        { user_id: userId, device_id: deviceId, device_label: deviceLabel || "Unknown device", approved: true, last_seen: new Date().toISOString() },
+        { onConflict: "user_id,device_id" }
+      );
+      return res.status(200).json({ status: "approved" });
+    }
 
     // 0) If this account is under an active 3rd-device suspension, block
     // every device — including already-approved ones — until it lifts.
