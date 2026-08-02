@@ -11,6 +11,19 @@ import { getAdminClient } from "./_supabaseAdmin.js";
 //
 // Replaces the old check-gaku-student.js (same request shape) so existing
 // callers only need their response-field expectations updated.
+//
+// Also enforces the 7-day free trial server-side: 7 days after
+// trial_started_at (set once, at signup — see api/create-profile.js), a
+// non-paid, non-GAKU-student account is reported as trialExpired so the
+// client hard-locks it to the payment screen, no matter which device it
+// opens on or how many times the app was uninstalled/reinstalled. A further
+// 3-day grace period (10 days total) is given before we wipe that account's
+// study data (assigned_vocab + migration_bridge), so a payment that's just
+// running a little late (or a webhook delay) doesn't destroy real data.
+// The wipe only ever runs once per account (guarded by data_reset_at).
+const TRIAL_DAYS = 7;
+const GRACE_DAYS = 3; // total 10 days from trial_started_at before data is wiped
+
 export default async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed" });
   try {
@@ -20,7 +33,7 @@ export default async function handler(req, res) {
     const supabase = getAdminClient();
     const { data, error } = await supabase
       .from("profiles")
-      .select("is_gaku_student, is_paid, paid_plan, suspended_until")
+      .select("is_gaku_student, is_paid, paid_plan, suspended_until, trial_started_at, data_reset_at")
       .eq("id", userId)
       .maybeSingle();
 
@@ -28,13 +41,35 @@ export default async function handler(req, res) {
 
     const suspendedUntil = data?.suspended_until || null;
     const suspended = !!(suspendedUntil && new Date(suspendedUntil) > new Date());
+    const isGakuStudent = !!data?.is_gaku_student;
+    const isPaid = !!data?.is_paid;
+
+    const trialStartedAt = data?.trial_started_at ? new Date(data.trial_started_at) : null;
+    const daysSinceTrial = trialStartedAt ? (Date.now() - trialStartedAt.getTime()) / 86400000 : null;
+    const trialExpired = !isPaid && !isGakuStudent && daysSinceTrial !== null && daysSinceTrial >= TRIAL_DAYS;
+    const daysUntilTrialEnds = daysSinceTrial !== null ? Math.max(0, Math.ceil(TRIAL_DAYS - daysSinceTrial)) : null;
+
+    let dataWasReset = false;
+    if (!isPaid && !isGakuStudent && !data?.data_reset_at && daysSinceTrial !== null && daysSinceTrial >= (TRIAL_DAYS + GRACE_DAYS)) {
+      try {
+        await supabase.from("assigned_vocab").delete().eq("student_id", userId);
+        await supabase.from("migration_bridge").delete().eq("user_id", userId);
+        await supabase.from("profiles").update({ data_reset_at: new Date().toISOString() }).eq("id", userId);
+        dataWasReset = true;
+      } catch (wipeErr) {
+        console.error("Trial data-reset wipe failed:", wipeErr.message);
+      }
+    }
 
     return res.status(200).json({
-      isGakuStudent: !!data?.is_gaku_student,
-      isPaid: !!data?.is_paid,
+      isGakuStudent,
+      isPaid,
       paidPlan: data?.paid_plan || null,
       suspended,
       suspendedUntil,
+      trialExpired,
+      daysUntilTrialEnds,
+      dataWasReset,
     });
   } catch (e) {
     return res.status(500).json({ error: e.message });

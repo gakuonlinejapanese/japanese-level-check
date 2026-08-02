@@ -4942,6 +4942,23 @@ function collectUserLocalStorage(userId) {
   } catch {}
   return out;
 }
+// Removes every locally-stored key for this account (profile form, vocab,
+// interaction count, etc.) — used when api/account-status.js reports that
+// the 7-day trial + 3-day grace period expired without payment and the
+// server already wiped this account's assigned_vocab/migration_bridge data.
+// Deliberately does NOT touch gaku_device_id (unscoped) or trial state,
+// since the account itself must stay locked to the payment screen.
+function clearUserLocalStorage(userId) {
+  const suffix = `_${userId}`;
+  try {
+    const keysToRemove = [];
+    for (let i = 0; i < localStorage.length; i++) {
+      const k = localStorage.key(i);
+      if (k && k.endsWith(suffix)) keysToRemove.push(k);
+    }
+    keysToRemove.forEach(k => localStorage.removeItem(k));
+  } catch {}
+}
 async function syncMigrationBridge(userId) {
   if (!supabase || !userId) return;
   // Make sure the Supabase client's auth token is actually attached before we
@@ -9117,6 +9134,13 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
   // trial interaction paywall.
   const [isGakuStudent, setIsGakuStudent] = useState(false);
   const [isPaid, setIsPaid] = useState(false);
+  // True once api/account-status.js reports the 7-day trial has expired for
+  // this account (tracked server-side by trial_started_at, not by local
+  // device state — so it can't be reset by uninstalling/reinstalling).
+  // Unlike showPaywall (the soft, dismissible 21-interaction nudge), this
+  // hard-locks the account to the payment screen with no "check later" out.
+  const [trialLocked, setTrialLocked] = useState(false);
+  const [daysUntilTrialEnds, setDaysUntilTrialEnds] = useState(null);
   const [form, setForm] = useState(null);
   const [editing, setEditing] = useState(false);
   const [showPaywall, setShowPaywall] = useState(!!previewPaywall);
@@ -9230,7 +9254,23 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
       if ((data?.isGakuStudent || data?.isPaid) && !previewPaywall) {
         setShowPaywall(false);
         setAwaitingUnlock(false);
+        setTrialLocked(false);
         return true;
+      }
+      // Server-enforced 7-day trial (not resettable by uninstalling/
+      // reinstalling — trial_started_at lives in Supabase, keyed by account).
+      setDaysUntilTrialEnds(typeof data?.daysUntilTrialEnds === "number" ? data.daysUntilTrialEnds : null);
+      if (data?.trialExpired && !data?.isGakuStudent && !data?.isPaid) {
+        setTrialLocked(true);
+        // The server just wiped this account's study data (10 days with no
+        // payment) — clear it locally too so a stale copy doesn't linger,
+        // and drop them back to onboarding once they eventually do pay.
+        if (data?.dataWasReset) {
+          clearUserLocalStorage(userId);
+          setForm(null);
+          setForceForm(true);
+          setInteractionCount(0);
+        }
       }
     } catch {}
     return false;
@@ -9472,6 +9512,62 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
   if (policyGate) return <PolicyGate T={T} name={form?.name || authUser?.email} email={authUser?.email || form?.email} plan={policyGate.planLabel} onAgreed={handlePolicyAgreed} onCancel={()=>setPolicyGate(null)} />;
   if (authUser && deviceStatus === "suspended") return <DeviceSuspendedGate T={T} suspendedUntil={deviceSuspendedUntil} />;
   if (authUser && deviceStatus === "pending") return <DeviceApprovalGate T={T} />;
+  // Hard, non-dismissible paywall: the server (api/account-status.js) has
+  // confirmed 7 days passed since this account's trial_started_at with no
+  // payment. Unlike the soft `showPaywall` interaction-count nudge (which
+  // has a "check later" button), there is no way to dismiss this and reach
+  // the dashboard — the only ways out are paying or fully deleting the
+  // account (self-service delete, which starts a real fresh trial).
+  if (authUser && trialLocked && !isPaid && !isGakuStudent) {
+    return (
+      <div style={{ minHeight:"100vh", background:"linear-gradient(160deg,#0a0f1e 0%,#0f172a 60%,#0a0f1e 100%)", display:"flex", alignItems:"center", justifyContent:"center", padding:24 }}>
+        <div style={{ background:"linear-gradient(135deg,#1e1b4b,#0f172a)", border:"1.5px solid rgba(139,92,246,0.4)", borderRadius:20, padding:"36px 32px", maxWidth:420, width:"90%", textAlign:"center", boxShadow:"0 8px 40px rgba(139,92,246,0.25)" }}>
+          <p style={{ fontSize:28, margin:"0 0 6px" }}>⏳</p>
+          <h2 style={{ color:"#f1f5f9", fontSize:20, fontWeight:900, margin:"0 0 8px" }}>{T?.trialEndedTitle || "Your 7-day free trial has ended"}</h2>
+          <p style={{ color:"#94a3b8", fontSize:13, margin:"0 0 20px", lineHeight:1.6 }}>
+            {T?.trialEndedDesc || "Choose a plan below to keep your progress. If no payment is made, your saved data will be reset after a short grace period."}
+          </p>
+
+          <div style={{ background:"rgba(255,255,255,0.03)", border:"1px solid rgba(255,255,255,0.08)", borderRadius:10, padding:"10px 12px", marginBottom:18, textAlign:"left" }}>
+            <p style={{ color:"#94a3b8", fontSize:10, fontWeight:800, letterSpacing:1, margin:"0 0 8px" }}>💱 {T?.convertCurrencyLabel || "SEE PRICES IN YOUR CURRENCY"}</p>
+            <div style={{ display:"flex", gap:6 }}>
+              <select value={paywallCurrency} onChange={e=>{ setPaywallCurrency(e.target.value); setPaywallRate(null); }} style={{ flex:1, background:"rgba(255,255,255,0.05)", border:`1px solid ${C.border}`, borderRadius:8, color:"#f1f5f9", fontSize:12, padding:"6px 8px" }}>
+                {CURRENCY_OPTIONS.map(c => <option key={c.code} value={c.code} style={{ color:"#000" }}>{c.label}</option>)}
+              </select>
+              <button onClick={fetchPaywallRate} disabled={paywallRateLoading} style={{ padding:"6px 14px", borderRadius:8, background:"linear-gradient(135deg,#06b6d4,#0891b2)", border:"none", color:"#fff", fontSize:12, fontWeight:700, cursor:"pointer", whiteSpace:"nowrap" }}>
+                {paywallRateLoading ? "⏳" : (T?.convertBtn || "Convert")}
+              </button>
+            </div>
+            {paywallRate && (
+              <p style={{ color:"#67e8f9", fontSize:11, margin:"8px 0 0" }}>
+                1 USD = {paywallRate.toLocaleString(undefined,{maximumFractionDigits:4})} {paywallCurrency} · {paywallRateTime?.toLocaleTimeString()}
+              </p>
+            )}
+            {paywallRateError && <p style={{ color:C.red, fontSize:11, margin:"8px 0 0" }}>{paywallRateError}</p>}
+          </div>
+
+          <p style={{ color:"#a855f7", fontSize:10, fontWeight:800, margin:"0 0 6px", textAlign:"left", letterSpacing:1 }}>{T?.appOnlyLabel}</p>
+          <div style={{ display:"flex", flexDirection:"column", gap:8, marginBottom:14 }}>
+            <button onClick={()=>handlePayClick("https://buy.stripe.com/6oU7sL7qWg7C7wV1OqbMQ00", "App Only - Monthly ($14.99)")} style={{ display:"block", width:"100%", padding:"11px 14px", background:"linear-gradient(135deg,rgba(124,58,237,0.2),rgba(168,85,247,0.1))", border:"1.5px solid rgba(139,92,246,0.5)", borderRadius:10, color:"#f1f5f9", fontSize:12, fontWeight:700, cursor:"pointer", textAlign:"left" }}>
+              <span style={{ color:"#a855f7", fontSize:10, fontWeight:800, display:"block", marginBottom:1 }}>{T?.monthlyLabel}</span>
+              💳 $14.99 {T?.perMonth} {formatConverted(14.99) && <span style={{ color:"#67e8f9", fontWeight:400 }}>(≈ {formatConverted(14.99)} {paywallCurrency})</span>}
+            </button>
+            <button onClick={()=>handlePayClick("https://buy.stripe.com/28E28r9z46x2dVj0KmbMQ02", "App Only - 3 Months ($42.70)")} style={{ display:"block", width:"100%", padding:"11px 14px", background:"linear-gradient(135deg,rgba(6,182,212,0.2),rgba(6,182,212,0.1))", border:"1.5px solid rgba(6,182,212,0.5)", borderRadius:10, color:"#f1f5f9", fontSize:12, fontWeight:700, cursor:"pointer", textAlign:"left" }}>
+              <span style={{ color:"#06b6d4", fontSize:10, fontWeight:800, display:"block", marginBottom:1 }}>{T?.threeMonthsSave5}</span>
+              💳 $42.70 <span style={{ color:"#64748b", fontSize:10, fontWeight:400 }}>($14.23/mo)</span> {formatConverted(42.70) && <span style={{ color:"#67e8f9", fontWeight:400 }}>(≈ {formatConverted(42.70)} {paywallCurrency})</span>}
+            </button>
+            <button onClick={()=>handlePayClick("https://buy.stripe.com/28E5kD8v07B6bNbct4bMQ03", "App Only - 6 Months ($80.95)")} style={{ display:"block", width:"100%", padding:"11px 14px", background:"linear-gradient(135deg,rgba(34,197,94,0.2),rgba(34,197,94,0.1))", border:"1.5px solid rgba(34,197,94,0.5)", borderRadius:10, color:"#f1f5f9", fontSize:12, fontWeight:700, cursor:"pointer", textAlign:"left" }}>
+              <span style={{ color:"#22c55e", fontSize:10, fontWeight:800, display:"block", marginBottom:1 }}>{T?.sixMonthsSave10}</span>
+              💳 $80.95 <span style={{ color:"#64748b", fontSize:10, fontWeight:400 }}>($13.49/mo)</span> {formatConverted(80.95) && <span style={{ color:"#67e8f9", fontWeight:400 }}>(≈ {formatConverted(80.95)} {paywallCurrency})</span>}
+            </button>
+          </div>
+          <button onClick={authUser ? handleDeleteAccount : undefined} disabled={deleteAccountBusy} style={{ background:"none", border:"none", color:"#475569", fontSize:11, cursor:"pointer", textDecoration:"underline" }}>
+            {T?.deleteAccountLink || "Delete my account instead"}
+          </button>
+        </div>
+      </div>
+    );
+  }
   // Note: intentionally NOT passing onBack here. It used to link back to the
   // retired legacy quiz landing page (App.js's Home screen) — a dead end with
   // no way back into the self-study app — which is what students calling this
