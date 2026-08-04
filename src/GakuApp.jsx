@@ -9410,6 +9410,26 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
         .catch(() => setDeviceStatus("pending"));
     })();
   }, [authUser]);
+  // Safety net: iOS can evict a standalone PWA's localStorage (and with it,
+  // the Supabase session token) at any time while the app is backgrounded —
+  // there's no reliable "before you get wiped" warning, so the best defense
+  // is to keep the migration bridge as close to up-to-date as possible.
+  // visibilitychange→hidden fires reliably when a student switches away from
+  // or closes the home-screen app, so push whatever's in localStorage then,
+  // catching profile/vocab/progress changes that happened since the last push
+  // (login, and profile save, already push — this covers everything else).
+  useEffect(() => {
+    if (!authUser) return;
+    const pushOnHide = () => {
+      if (document.visibilityState === "hidden") syncMigrationBridge(authUser.id);
+    };
+    document.addEventListener("visibilitychange", pushOnHide);
+    window.addEventListener("pagehide", pushOnHide);
+    return () => {
+      document.removeEventListener("visibilitychange", pushOnHide);
+      window.removeEventListener("pagehide", pushOnHide);
+    };
+  }, [authUser]);
   const handleSubmit = (f) => {
     // Preserve planStartDate from existing form (only set it once, on first save)
     const startDate = (form && form.planStartDate) ? form.planStartDate : new Date().toISOString();
@@ -9418,6 +9438,16 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
     setEditing(false);
     setForceForm(false);
     try { localStorage.setItem(scopedKey("gaku_form"), JSON.stringify(saved)); } catch {}
+    // Push the freshly-saved profile up to the migration bridge right away —
+    // previously the bridge only synced at login time, so a student who filled
+    // out their profile *after* logging in (the normal flow) had it sitting only
+    // in this browser's localStorage until their *next* login. On iOS, standalone
+    // PWA localStorage can be wiped by the OS between sessions, and Supabase's
+    // own session token lives in localStorage too — so a wipe forced a fresh
+    // login, which pulled from a bridge that had never received this profile,
+    // sending the student back to onboarding every single time. Pushing here
+    // closes that gap: the profile reaches Supabase the moment it's saved.
+    if (authUser) { syncMigrationBridge(authUser.id); }
     // If this email already used up their free interactions before, go straight
     // to the payment screen instead of letting them browse the dashboard again.
     if (!skipTrialPaywall && !(authUser && (isGakuStudent || isPaid)) && getPaywalledEmails().includes(saved.email)) {
