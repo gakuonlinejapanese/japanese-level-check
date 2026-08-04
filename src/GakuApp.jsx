@@ -6962,6 +6962,18 @@ const JAPANESE_READING_CORRECTIONS = [
   [/今朝(\s*)\(こんちょう\)/g, "今朝$1(けさ)"],
   [/案の定(\s*)\(あのさだめ\)/g, "案の定$1(あんのじょう)"],
   [/コンヴィニ/g, "コンビニ"],
+  [/以下(\s*)\(いこう\)/g, "以下$1(いか)"],
+  [/窓口(\s*)\((?:そうこう|そうこく)\)/g, "窓口(まどぐち)"],
+  [/提示(\s*)\(じひょう\)/g, "提示$1(ていじ)"],
+  [/騒々しい(\s*)\(さわさわしい\)/g, "騒々しい$1(そうぞうしい)"],
+  [/十分(\s*)\(たいっぷん\)/g, "十分$1(じゅうぶん)"],
+  // Katakana words the model sometimes wrongly attaches furigana to — furigana is only for kanji.
+  [/システム(\s*)\((?:しすてむ)\)/g, "システム"],
+  // Common short kanji words the model sometimes skips entirely — insert if missing, but never
+  // touch them if they're already part of a longer, already-furigana'd compound (i.e. immediately
+  // followed by another kanji or already followed by "(").
+  [/事前(?![\(\u4E00-\u9FFF\u3005])/g, "事前(じぜん)"],
+  [/場合(?![\(\u4E00-\u9FFF\u3005])/g, "場合(ばあい)"],
 ];
 function applyJapaneseReadingCorrections(text) {
   if (!text) return text;
