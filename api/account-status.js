@@ -49,6 +49,27 @@ export default async function handler(req, res) {
     const trialExpired = !isPaid && !isGakuStudent && daysSinceTrial !== null && daysSinceTrial >= TRIAL_DAYS;
     const daysUntilTrialEnds = daysSinceTrial !== null ? Math.max(0, Math.ceil(TRIAL_DAYS - daysSinceTrial)) : null;
 
+    // Trial engagement tracking: this endpoint is already polled every ~4s
+    // while the app is open, so it doubles as a free "is this trial account
+    // actually active today" signal. One upsert row per (user, calendar day)
+    // — cheap no-op on repeat calls the same day. Read by the daily cron in
+    // api/admin-withdrawal.js to spot engaged-but-hasn't-converted trial
+    // students and offer them a free lesson consultation.
+    if (!isPaid && !isGakuStudent && trialStartedAt) {
+      const today = new Date().toISOString().slice(0, 10);
+      try {
+        const { error: pingErr } = await supabase
+          .from("trial_engagement_days")
+          .upsert(
+            { user_id: userId, day: today, last_ping_at: new Date().toISOString() },
+            { onConflict: "user_id,day" }
+          );
+        if (pingErr) console.error("[account-status] trial engagement ping failed:", pingErr.message);
+      } catch (pingErr) {
+        console.error("[account-status] trial engagement ping threw:", pingErr.message);
+      }
+    }
+
     let dataWasReset = false;
     if (!isPaid && !isGakuStudent && !data?.data_reset_at && daysSinceTrial !== null && daysSinceTrial >= (TRIAL_DAYS + GRACE_DAYS)) {
       try {

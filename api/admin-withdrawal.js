@@ -1,4 +1,5 @@
 import { getAdminClient } from "./_supabaseAdmin.js";
+import { sendEmail } from "./_resend.js";
 
 // Consolidates what used to be 4 separate serverless functions
 // (admin-withdraw-student, admin-cancel-withdrawal, admin-list-withdrawn,
@@ -87,14 +88,14 @@ async function handleList(supabase, res) {
   return res.status(200).json({ students: data || [] });
 }
 
-async function handleCronDelete(supabase, res) {
+async function runCronDelete(supabase) {
   const nowIso = new Date().toISOString();
   const { data: due, error: findError } = await supabase
     .from("profiles")
     .select("id, email")
     .eq("enrollment_status", "withdrawn")
     .lte("scheduled_deletion_date", nowIso);
-  if (findError) return res.status(500).json({ error: findError.message });
+  if (findError) throw new Error(findError.message);
 
   const results = [];
   for (const profile of due || []) {
@@ -108,7 +109,7 @@ async function handleCronDelete(supabase, res) {
       results.push({ email: profile.email, deleted: false, error: innerErr.message });
     }
   }
-  return res.status(200).json({ ok: true, processed: results.length, results });
+  return { ok: true, processed: results.length, results };
 }
 
 async function handleSelfDelete(supabase, req, res) {
@@ -146,6 +147,69 @@ async function handleSelfDelete(supabase, req, res) {
   return res.status(200).json({ ok: true, dataRetained: false });
 }
 
+// Runs once a day as part of the existing cron (piggybacking so we don't
+// need a 13th serverless function — Vercel Hobby caps at 12).
+//
+// Looks at trial accounts (not paid, not GAKU students) whose 7-day trial
+// started 3–6 days ago and who haven't been emailed about this yet. If
+// api/account-status.js has recorded them as "active" (logged in / had the
+// app open) on 2+ distinct days, they're a good candidate: interested and
+// using the app, just hasn't converted — so we offer a free 15-min lesson
+// consultation instead of just letting the trial silently expire.
+//
+// Deliberately does NOT touch accounts outside the 3–6 day window (younger
+// accounts haven't had enough time to show a pattern yet; older ones are
+// about to hit trialExpired anyway via api/account-status.js).
+const ENGAGEMENT_WINDOW_MIN_DAYS = 3;
+const ENGAGEMENT_WINDOW_MAX_DAYS = 6;
+const ENGAGEMENT_ACTIVE_DAYS_THRESHOLD = 2;
+const BOOK_LESSON_URL = "https://app.seitojapanese.online/book-lesson.html";
+
+async function handleTrialEngagementCheck(supabase) {
+  const now = Date.now();
+  const windowStartIso = new Date(now - ENGAGEMENT_WINDOW_MAX_DAYS * 86400000).toISOString();
+  const windowEndIso = new Date(now - ENGAGEMENT_WINDOW_MIN_DAYS * 86400000).toISOString();
+
+  const { data: candidates, error: candidatesErr } = await supabase
+    .from("profiles")
+    .select("id, email, trial_started_at")
+    .eq("is_paid", false)
+    .eq("is_gaku_student", false)
+    .is("trial_engagement_notified_at", null)
+    .gte("trial_started_at", windowStartIso)
+    .lte("trial_started_at", windowEndIso);
+
+  if (candidatesErr) return { checked: 0, notified: 0, error: candidatesErr.message };
+
+  let notified = 0;
+  for (const profile of candidates || []) {
+    if (!profile.email) continue;
+    try {
+      const { count, error: countErr } = await supabase
+        .from("trial_engagement_days")
+        .select("day", { count: "exact", head: true })
+        .eq("user_id", profile.id);
+      if (countErr || (count || 0) < ENGAGEMENT_ACTIVE_DAYS_THRESHOLD) continue;
+
+      const html = `
+        <p>Hi,</p>
+        <p>I noticed you've been using GAKU Master to study Japanese this week — that's great!</p>
+        <p>If you'd like, I'd be happy to offer you a free 15-minute 1-on-1 consultation to answer any questions and see if a lesson would help you reach your goals faster.</p>
+        <p><a href="${BOOK_LESSON_URL}" style="color:#a855f7">Book your free 15-minute consultation →</a></p>
+        <p>No pressure at all — keep enjoying GAKU Master either way!</p>
+        <p>— Seito</p>
+      `;
+      await sendEmail({ to: profile.email, subject: "Loving GAKU Master so far? Let's talk 1-on-1 (free 15 min)", html });
+      await supabase.from("profiles").update({ trial_engagement_notified_at: new Date().toISOString() }).eq("id", profile.id);
+      notified += 1;
+    } catch (innerErr) {
+      console.error(`[trial-engagement] failed for ${profile.email}:`, innerErr.message);
+    }
+  }
+
+  return { checked: (candidates || []).length, notified };
+}
+
 async function handleTestMarkPaid(supabase, body, res) {
   const { studentEmail } = body;
   if (!studentEmail) return res.status(400).json({ error: "studentEmail is required" });
@@ -175,7 +239,14 @@ export default async function handler(req, res) {
       return res.status(401).json({ error: "Unauthorized" });
     }
     try {
-      return await handleCronDelete(supabase, res);
+      // Two independent daily jobs share this one cron slot (Vercel Hobby
+      // caps serverless functions at 12) — run both, let either fail
+      // without blocking the other, then respond once.
+      const [deleteResult, engagementResult] = await Promise.all([
+        runCronDelete(supabase).catch((e) => ({ ok: false, error: e.message })),
+        handleTrialEngagementCheck(supabase).catch((e) => ({ error: e.message })),
+      ]);
+      return res.status(200).json({ ...deleteResult, trialEngagement: engagementResult });
     } catch (e) {
       return res.status(500).json({ error: e.message });
     }
