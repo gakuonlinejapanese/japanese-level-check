@@ -24,6 +24,7 @@
     border-radius: 10px; color: #f1f5f9; font-size: 14px; outline: none; font-family: inherit;
   }
   textarea { resize: vertical; min-height: 50px; }
+  #word { min-height: 74px; }
   button {
     width: 100%; margin-top: 20px; padding: 13px 20px; border: none; border-radius: 10px;
     font-size: 14px; font-weight: 700; cursor: pointer; color: #fff;
@@ -33,8 +34,23 @@
   .msg { margin-top: 14px; font-size: 13px; padding: 10px 12px; border-radius: 8px; }
   .msg.ok { background: rgba(34,197,94,0.12); color: #4ade80; border: 1px solid rgba(34,197,94,0.3); }
   .msg.err { background: rgba(239,68,68,0.12); color: #f87171; border: 1px solid rgba(239,68,68,0.3); }
+  .msg.info { background: rgba(148,163,184,0.12); color: #cbd5e1; border: 1px solid rgba(148,163,184,0.3); }
   .row2 { display: flex; gap: 10px; }
   .row2 > div { flex: 1; }
+  .hint { color: #64748b; font-size: 11.5px; margin-top: 4px; line-height: 1.5; }
+  #singleFields.disabled { opacity: 0.35; pointer-events: none; }
+  #bulkLog {
+    margin-top: 12px; max-height: 220px; overflow-y: auto; font-size: 12.5px;
+    background: #0f172a; border: 1px solid rgba(255,255,255,0.08); border-radius: 10px;
+    padding: 8px 10px; display: none;
+  }
+  #bulkLog div { padding: 3px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+  #bulkLog div:last-child { border-bottom: none; }
+  #progressBarWrap {
+    display: none; margin-top: 10px; height: 8px; border-radius: 6px;
+    background: rgba(255,255,255,0.08); overflow: hidden;
+  }
+  #progressBarFill { height: 100%; width: 0%; background: linear-gradient(135deg,#06b6d4,#0891b2); transition: width 0.15s; }
 </style>
 </head>
 <body>
@@ -48,65 +64,95 @@
     <label>生徒のメールアドレス *</label>
     <input id="studentEmail" type="email" placeholder="student@example.com" />
 
-    <label>単語 *</label>
+    <label>単語 * </label>
     <div style="display:flex; gap:8px;">
-      <input id="word" placeholder="例: 頑張る" style="flex:1;" />
-      <button type="button" id="lookupBtn" onclick="lookupWord()" style="width:auto; margin-top:0; white-space:nowrap; background:linear-gradient(135deg,#8b5cf6,#7c3aed);">🔍 調べる</button>
+      <textarea id="word" placeholder="例: こんにちは、さよなら、食べる、逃げる&#10;(1つだけなら下の欄で読み方などを編集できます)" style="flex:1;"></textarea>
+      <button type="button" id="lookupBtn" onclick="lookupWord()" style="width:auto; margin-top:0; white-space:nowrap; background:linear-gradient(135deg,#8b5cf6,#7c3aed); align-self:flex-start;">🔍 調べる</button>
     </div>
+    <div class="hint">複数の単語はカンマ「,」「、」または改行で区切って一気に貼り付けできます。それぞれ自動で意味・読み方を調べて別々の単語として送信します。単語を1つだけ入れた場合は、下の欄で内容を確認・編集してから送れます。</div>
     <div id="lookupMsg" style="font-size:12px; color:#64748b; margin-top:6px;"></div>
 
-    <div class="row2">
-      <div>
-        <label>読み方</label>
-        <input id="reading" placeholder="がんばる" />
+    <div id="singleFields">
+      <div class="row2">
+        <div>
+          <label>読み方</label>
+          <input id="reading" placeholder="がんばる" />
+        </div>
+        <div>
+          <label>JLPT</label>
+          <select id="jlpt">
+            <option value="">-</option>
+            <option>N5</option><option>N4</option><option>N3</option><option>N2</option><option>N1</option>
+          </select>
+        </div>
       </div>
-      <div>
-        <label>JLPT</label>
-        <select id="jlpt">
-          <option value="">-</option>
-          <option>N5</option><option>N4</option><option>N3</option><option>N2</option><option>N1</option>
-        </select>
-      </div>
+
+      <label>品詞</label>
+      <input id="partOfSpeech" placeholder="例: verb" />
+
+      <label>意味</label>
+      <input id="meaning" placeholder="例: to try hard, to do one's best" />
+
+      <label>例文</label>
+      <textarea id="example" placeholder="例: 明日のテスト、頑張ってね。"></textarea>
     </div>
-
-    <label>品詞</label>
-    <input id="partOfSpeech" placeholder="例: verb" />
-
-    <label>意味</label>
-    <input id="meaning" placeholder="例: to try hard, to do one's best" />
-
-    <label>例文</label>
-    <textarea id="example" placeholder="例: 明日のテスト、頑張ってね。"></textarea>
 
     <label>フォルダ名(任意・空欄可)</label>
     <input id="folder" placeholder="Your Vocabulary" />
 
     <button id="submitBtn" onclick="sendWord()">生徒に送る ✨</button>
+    <div id="progressBarWrap"><div id="progressBarFill"></div></div>
     <div id="result"></div>
+    <div id="bulkLog"></div>
   </div>
 
 <script>
+// Splits pasted text into individual words on newlines, half-width commas,
+// full-width commas, and the Japanese "、" separator. Trims and drops blanks.
+function splitWords(raw) {
+  return raw
+    .split(/[\n,，、]+/)
+    .map(w => w.trim())
+    .filter(Boolean);
+}
+
+function updateSingleFieldsState() {
+  const words = splitWords(document.getElementById('word').value);
+  const single = document.getElementById('singleFields');
+  if (words.length > 1) {
+    single.classList.add('disabled');
+  } else {
+    single.classList.remove('disabled');
+  }
+}
+document.getElementById('word').addEventListener('input', updateSingleFieldsState);
+
+async function fetchWordInfo(word) {
+  const res = await fetch('/api/claude', {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      provider: 'fast',
+      max_tokens: 500,
+      messages: [{ role: 'user', content:
+        `You are an expert Japanese dictionary. For the Japanese word/phrase "${word}", provide: reading (hiragana), jlpt (N5/N4/N3/N2/N1/Native), partOfSpeech (in English), meaning (in English), example (a natural Japanese example sentence using this word).\n\nRespond ONLY in valid JSON (no markdown, no backticks): {"reading":"","jlpt":"","partOfSpeech":"","meaning":"","example":""}` }]
+    })
+  });
+  const data = await res.json();
+  const text = (data.content?.map(c => c.text || '').join('') || '{}').replace(/```json|```/g, '').trim();
+  return JSON.parse(text);
+}
+
 async function lookupWord() {
   const btn = document.getElementById('lookupBtn');
   const msgEl = document.getElementById('lookupMsg');
-  const word = document.getElementById('word').value.trim();
-  if (!word) { msgEl.textContent = '先に単語を入力してください。'; msgEl.style.color = '#f87171'; return; }
+  const words = splitWords(document.getElementById('word').value);
+  if (words.length === 0) { msgEl.textContent = '先に単語を入力してください。'; msgEl.style.color = '#f87171'; return; }
+  if (words.length > 1) { msgEl.textContent = '「調べる」は単語が1つのときだけ使えます。複数入力時は「生徒に送る」を押すと自動で調べて送信します。'; msgEl.style.color = '#f87171'; return; }
 
   btn.disabled = true; btn.textContent = '調べ中...';
   msgEl.textContent = ''; msgEl.style.color = '#64748b';
   try {
-    const res = await fetch('/api/claude', {
-      method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        provider: 'fast',
-        max_tokens: 500,
-        messages: [{ role: 'user', content:
-          `You are an expert Japanese dictionary. For the Japanese word/phrase "${word}", provide: reading (hiragana), jlpt (N5/N4/N3/N2/N1/Native), partOfSpeech (in English), meaning (in English), example (a natural Japanese example sentence using this word).\n\nRespond ONLY in valid JSON (no markdown, no backticks): {"reading":"","jlpt":"","partOfSpeech":"","meaning":"","example":""}` }]
-      })
-    });
-    const data = await res.json();
-    const text = (data.content?.map(c => c.text || '').join('') || '{}').replace(/```json|```/g, '').trim();
-    const parsed = JSON.parse(text);
+    const parsed = await fetchWordInfo(words[0]);
     document.getElementById('reading').value = parsed.reading || '';
     document.getElementById('jlpt').value = parsed.jlpt || '';
     document.getElementById('partOfSpeech').value = parsed.partOfSpeech || '';
@@ -121,44 +167,118 @@ async function lookupWord() {
   btn.disabled = false; btn.textContent = '🔍 調べる';
 }
 
+async function assignWord(secret, studentEmail, folder, word, info) {
+  const res = await fetch('/api/admin-assign-word', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      secret, studentEmail, folder,
+      word,
+      reading: info.reading || '',
+      jlpt: info.jlpt || '',
+      partOfSpeech: info.partOfSpeech || '',
+      meaning: info.meaning || '',
+      example: info.example || ''
+    })
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || '送信に失敗しました。');
+}
+
+function logLine(text, ok) {
+  const log = document.getElementById('bulkLog');
+  log.style.display = 'block';
+  const line = document.createElement('div');
+  line.textContent = (ok ? '✅ ' : '❌ ') + text;
+  line.style.color = ok ? '#4ade80' : '#f87171';
+  log.appendChild(line);
+  log.scrollTop = log.scrollHeight;
+}
+
+async function sendWordsBulk(secret, studentEmail, folder, words) {
+  const resultEl = document.getElementById('result');
+  const progWrap = document.getElementById('progressBarWrap');
+  const progFill = document.getElementById('progressBarFill');
+  const log = document.getElementById('bulkLog');
+  log.innerHTML = ''; log.style.display = 'block';
+  progWrap.style.display = 'block'; progFill.style.width = '0%';
+
+  let okCount = 0;
+  const failed = [];
+
+  for (let i = 0; i < words.length; i++) {
+    const word = words[i];
+    resultEl.innerHTML = '<div class="msg info">送信中… ' + (i + 1) + ' / ' + words.length + '(' + word + ')</div>';
+    try {
+      let info = {};
+      try { info = await fetchWordInfo(word); } catch (e) { info = {}; }
+      await assignWord(secret, studentEmail, folder, word, info);
+      okCount++;
+      logLine(word + (info.meaning ? ' — ' + info.meaning : ''), true);
+    } catch (e) {
+      failed.push(word);
+      logLine(word + ' — ' + e.message, false);
+    }
+    progFill.style.width = Math.round(((i + 1) / words.length) * 100) + '%';
+    // Small pause between requests so we don't overload the lookup/insert APIs.
+    await new Promise(r => setTimeout(r, 120));
+  }
+
+  if (failed.length === 0) {
+    resultEl.innerHTML = '<div class="msg ok">✅ 全 ' + okCount + ' 件を ' + studentEmail + ' さんに送りました。次回ログイン時に単語帳に反映されます。</div>';
+  } else {
+    resultEl.innerHTML = '<div class="msg err">✅ ' + okCount + ' 件成功 / ❌ ' + failed.length + ' 件失敗<br>失敗した単語: ' + failed.join('、') + '<br>失敗分だけ上の欄に貼り直して再送信できます。</div>';
+  }
+}
+
 async function sendWord() {
   const btn = document.getElementById('submitBtn');
   const resultEl = document.getElementById('result');
   resultEl.innerHTML = '';
+  document.getElementById('bulkLog').innerHTML = '';
+  document.getElementById('bulkLog').style.display = 'none';
+  document.getElementById('progressBarWrap').style.display = 'none';
 
   const secret = document.getElementById('secret').value.trim();
   const studentEmail = document.getElementById('studentEmail').value.trim();
-  const word = document.getElementById('word').value.trim();
-  const reading = document.getElementById('reading').value.trim();
-  const jlpt = document.getElementById('jlpt').value;
-  const partOfSpeech = document.getElementById('partOfSpeech').value.trim();
-  const meaning = document.getElementById('meaning').value.trim();
-  const example = document.getElementById('example').value.trim();
   const folder = document.getElementById('folder').value.trim();
+  const words = splitWords(document.getElementById('word').value);
 
-  if (!secret || !studentEmail || !word) {
+  if (!secret || !studentEmail || words.length === 0) {
     resultEl.innerHTML = '<div class="msg err">管理者パスワード、メールアドレス、単語は必須です。</div>';
     return;
   }
 
   btn.disabled = true; btn.textContent = '送信中...';
+
   try {
-    const res = await fetch('/api/admin-assign-word', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ secret, studentEmail, word, reading, jlpt, partOfSpeech, meaning, example, folder })
-    });
-    const data = await res.json();
-    if (res.ok) {
-      resultEl.innerHTML = '<div class="msg ok">✅ 「' + word + '」を ' + studentEmail + ' さんに送りました。次回ログイン時に単語帳に反映されます。</div>';
-      ['word','reading','partOfSpeech','meaning','example'].forEach(id => document.getElementById(id).value = '');
+    if (words.length === 1) {
+      // Single word: use whatever is in the detail fields (auto-filled by
+      // "調べる" and/or manually edited) so teachers can still correct a
+      // word before sending it.
+      const info = {
+        reading: document.getElementById('reading').value.trim(),
+        jlpt: document.getElementById('jlpt').value,
+        partOfSpeech: document.getElementById('partOfSpeech').value.trim(),
+        meaning: document.getElementById('meaning').value.trim(),
+        example: document.getElementById('example').value.trim()
+      };
+      await assignWord(secret, studentEmail, folder, words[0], info);
+      resultEl.innerHTML = '<div class="msg ok">✅ 「' + words[0] + '」を ' + studentEmail + ' さんに送りました。次回ログイン時に単語帳に反映されます。</div>';
+      ['reading','partOfSpeech','meaning','example'].forEach(id => document.getElementById(id).value = '');
       document.getElementById('jlpt').value = '';
+      document.getElementById('word').value = '';
     } else {
-      resultEl.innerHTML = '<div class="msg err">❌ ' + (data.error || '送信に失敗しました。') + '</div>';
+      // Multiple words pasted at once: look each one up automatically and
+      // send them one by one as separate vocabulary entries.
+      await sendWordsBulk(secret, studentEmail, folder, words);
+      document.getElementById('word').value = '';
+      updateSingleFieldsState();
     }
   } catch (e) {
-    resultEl.innerHTML = '<div class="msg err">❌ 通信エラーが発生しました。</div>';
+    resultEl.innerHTML = '<div class="msg err">❌ ' + e.message + '</div>';
   }
+
   btn.disabled = false; btn.textContent = '生徒に送る ✨';
 }
 </script>
