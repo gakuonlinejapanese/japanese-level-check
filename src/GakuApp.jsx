@@ -7235,15 +7235,24 @@ Respond ONLY with valid JSON, no markdown, no backticks:
       <JLineTools text={line.text} lang={lang} T={T} />
 
       <div style={{ marginTop:12 }}>
+        <p style={{ color:C.purpleLight, fontSize:12, fontWeight:700, margin:"0 0 8px" }}>{T?.convYourTurn || "How would you respond?"}</p>
+        <VoiceGrammarCheck promptContext={line.text} lang={lang} T={T} />
+      </div>
+
+      <div style={{ marginTop:14 }}>
+        <div style={{ display:"flex", alignItems:"center", gap:10, margin:"0 0 12px" }}>
+          <div style={{ flex:1, height:1, background:C.border }} />
+          <span style={{ color:"#64748b", fontSize:11, fontWeight:700 }}>{T?.convOrDivider || "OR"}</span>
+          <div style={{ flex:1, height:1, background:C.border }} />
+        </div>
         {!hint && (
           <button onClick={getHint} disabled={loadingHint} style={{ ...S.btn, background:loadingHint?"rgba(168,85,247,0.15)":`linear-gradient(135deg,${C.purple},#9333ea)`, color:loadingHint?"#64748b":"#fff", fontSize:12, padding:"9px 14px", width:"100%" }}>
-            {loadingHint ? `⏳ ${T?.convHintLoading || "Thinking of response hints..."}` : `💡 ${T?.convHintBtn || "How would you respond? (4 choices)"}`}
+            {loadingHint ? `⏳ ${T?.convHintLoading || "Thinking of response hints..."}` : `💡 ${T?.convHintBtn || "See 4 response ideas"}`}
           </button>
         )}
         {hintError && <p style={{ color:C.red, fontSize:12, marginTop:8 }}>{hintError}</p>}
         {hint && (
           <div style={{ marginTop:6 }}>
-            <p style={{ color:C.purpleLight, fontSize:12, fontWeight:700, margin:"0 0 8px" }}>{T?.convYourTurn || "How would you respond?"}</p>
             <div style={{ display:"flex", flexDirection:"column", gap:8 }}>
               {hint.options.map((opt, i) => {
                 const showFeedback = selectedIdx !== null;
