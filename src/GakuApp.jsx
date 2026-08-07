@@ -475,6 +475,13 @@ const UI_TRANSLATIONS = {
     convRevealBtn: "Show model answer",
     convModelAnswer: "Model answer",
     convAltResponses: "Other ways to say it",
+    convOrDivider: "OR",
+    convListenTitle: "Listen along with a video",
+    convListenDesc: "Play a YouTube/video with the sound on near your mic. GAKU will listen and build the transcript above for you — then tap \"Build Conversation Practice\" as usual.",
+    convListenStart: "Start listening",
+    convListenStop: "Stop listening",
+    convListening: "Listening…",
+    convListenUnsupported: "Live listening isn't supported in this browser — try Chrome on desktop or Android.",
     pronTitle: "Pronunciation Practice",
     pronDesc: "Paste any Japanese text — an article, video subtitles, a song, your own notes — just like Create From Content. GAKU will pull out natural sentences and phrases for you to read aloud (or listen and repeat), then check how close your spoken attempt was.",
     pronPasteLabel: "Paste Japanese text here",
@@ -7272,7 +7279,72 @@ function ConversationPredictor({ form, onLevelUp }) {
     setSavedSet(null);
   };
 
+  // Live listening: build the transcript by having the mic pick up a video's audio
+  // (student plays the video on another screen/tab with speakers on, near the mic)
+  // instead of pasting subtitles. Reuses the same Web Speech API pattern used elsewhere
+  // in the app, but continuous + auto-restarting since a video keeps talking.
+  const [listening, setListening] = useState(false);
+  const [interimText, setInterimText] = useState("");
+  const [recogSupported, setRecogSupported] = useState(true);
+  const recognitionRef = useRef(null);
+  const shouldListenRef = useRef(false);
+
+  const startRecognition = () => {
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SR) { setRecogSupported(false); return; }
+    const recognition = new SR();
+    recognition.lang = "ja-JP";
+    recognition.interimResults = true;
+    recognition.continuous = true;
+    recognition.onresult = (e) => {
+      let finalChunk = "", interimChunk = "";
+      for (let i = e.resultIndex; i < e.results.length; i++) {
+        const t = e.results[i][0].transcript;
+        if (e.results[i].isFinal) finalChunk += t; else interimChunk += t;
+      }
+      if (finalChunk.trim()) {
+        setRaw(prev => (prev ? prev.trim() + "\n" : "") + finalChunk.trim());
+        setInterimText("");
+      } else {
+        setInterimText(interimChunk);
+      }
+    };
+    recognition.onend = () => {
+      // continuous recognition can stop itself after a pause — restart while the
+      // student hasn't tapped "stop" themselves
+      if (shouldListenRef.current) {
+        try { recognition.start(); } catch {}
+      } else {
+        setListening(false); setInterimText("");
+      }
+    };
+    recognition.onerror = (e) => {
+      if (e.error === "no-speech" || e.error === "aborted") return; // onend will restart it
+      shouldListenRef.current = false; setListening(false); setInterimText("");
+    };
+    recognitionRef.current = recognition;
+    recognition.start();
+  };
+
+  const toggleListening = () => {
+    if (listening) {
+      shouldListenRef.current = false;
+      recognitionRef.current?.stop();
+      setListening(false); setInterimText("");
+      return;
+    }
+    shouldListenRef.current = true;
+    setListening(true);
+    startRecognition();
+  };
+
+  useEffect(() => {
+    return () => { shouldListenRef.current = false; try { recognitionRef.current?.stop(); } catch {} };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const generate = async () => {
+    if (listening) toggleListening();
     const parsedLines = parseSubtitleText(raw);
     const cleanText = parsedLines.join("\n");
     if (!cleanText.trim()) { setError(T.contentErrEmpty || "Paste some Japanese text (or a video's subtitles/description) first."); return; }
@@ -7346,6 +7418,29 @@ Respond ONLY with a valid JSON array, no markdown, no backticks:
           <textarea value={raw} onChange={e=>setRaw(e.target.value)} rows={10}
             placeholder={T.subtitlesPastePlaceholder || "Paste plain text or an .srt file's contents — timestamps and cue numbers are removed automatically."}
             style={{ ...S.input, resize:"vertical", fontFamily:"inherit", lineHeight:1.7, marginBottom:14 }} />
+
+          <div style={{ display:"flex", alignItems:"center", gap:10, margin:"2px 0 14px" }}>
+            <div style={{ flex:1, height:1, background:C.border }} />
+            <span style={{ color:"#64748b", fontSize:11, fontWeight:700 }}>{T.convOrDivider || "OR"}</span>
+            <div style={{ flex:1, height:1, background:C.border }} />
+          </div>
+
+          <div style={{ ...S.card, background:"rgba(6,182,212,0.05)", border:`1px solid rgba(6,182,212,0.2)`, marginBottom:14 }}>
+            <p style={{ color:C.teal, fontSize:12, fontWeight:700, letterSpacing:1, margin:"0 0 6px" }}>🎙️ {T.convListenTitle || "Listen along with a video"}</p>
+            <p style={{ color:"#94a3b8", fontSize:12, lineHeight:1.6, margin:"0 0 12px" }}>
+              {T.convListenDesc || "Play a YouTube/video with the sound on near your mic. GAKU will listen and build the transcript above for you — then tap \"Build Conversation Practice\" as usual."}
+            </p>
+            <button onClick={toggleListening} style={{ display:"flex", alignItems:"center", justifyContent:"center", gap:8, width:"100%", padding:"10px 12px", borderRadius:10, border:`1px solid ${listening?"rgba(239,68,68,0.4)":"rgba(6,182,212,0.35)"}`, background:listening?"rgba(239,68,68,0.12)":"rgba(6,182,212,0.1)", color:listening?"#f87171":C.teal, fontSize:13, fontWeight:700, cursor:"pointer" }}>
+              {listening ? `⏺ ${T.convListenStop || "Stop listening"}` : `🎤 ${T.convListenStart || "Start listening"}`}
+            </button>
+            {!recogSupported && <p style={{ color:C.red, fontSize:11, marginTop:8 }}>{T.convListenUnsupported || "Live listening isn't supported in this browser — try Chrome on desktop or Android."}</p>}
+            {listening && (
+              <p style={{ color:"#94a3b8", fontSize:12, marginTop:10, fontStyle:"italic", minHeight:16 }}>
+                {interimText || (T.convListening || "Listening…")}
+              </p>
+            )}
+          </div>
+
           <button onClick={generate} disabled={loading || !raw.trim()} style={{ ...S.btn, width:"100%", background:(loading||!raw.trim())?"rgba(168,85,247,0.15)":`linear-gradient(135deg,${C.purple},#9333ea)`, color:(loading||!raw.trim())?"#64748b":"#fff" }}>
             {loading ? `⏳ ${T.convGenerating || "Building conversation practice..."}` : (T.convGenerateBtn || "Build Conversation Practice")} {!loading && "✨"}
           </button>
