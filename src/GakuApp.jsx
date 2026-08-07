@@ -476,6 +476,12 @@ const UI_TRANSLATIONS = {
     convModelAnswer: "Model answer",
     convAltResponses: "Other ways to say it",
     convOrDivider: "OR",
+    convDescLive: "Play a YouTube/video with the sound on near your mic. GAKU listens to the real dialogue and, line by line, helps you understand it and hints at how you could respond.",
+    convHeardTitle: "What GAKU heard",
+    convClearBtn: "🗑 Clear",
+    convHintBtn: "How would you respond? (4 choices)",
+    convHintLoading: "Thinking of response hints...",
+    convTryAgain: "↺ Try again",
     convListenTitle: "Listen along with a video",
     convListenDesc: "Play a YouTube/video with the sound on near your mic. GAKU will listen and build the transcript above for you — then tap \"Build Conversation Practice\" as usual.",
     convListenStart: "Start listening",
@@ -7184,52 +7190,85 @@ Respond ONLY with valid JSON, no markdown, no backticks, nothing else.`;
   );
 }
 
-function ConversationTurnCard({ turn, T, lang }) {
-  const [revealed, setRevealed] = useState(false);
+function LiveHeardLineCard({ line, T, lang, jlpt }) {
+  const [hint, setHint] = useState(null); // { options: [{text, best, note}] }
+  const [loadingHint, setLoadingHint] = useState(false);
+  const [hintError, setHintError] = useState("");
+  const [selectedIdx, setSelectedIdx] = useState(null);
+
+  const getHint = async () => {
+    setLoadingHint(true); setHintError("");
+    try {
+      const res = await fetch("/api/claude", {
+        method:"POST", headers:{"Content-Type":"application/json"},
+        body: JSON.stringify({ model:"claude-sonnet-4-20250514", max_tokens:800, provider:"turbo",
+          messages:[{ role:"user", content:`A Japanese-learning student (JLPT level ${jlpt || "N5"}) just heard this REAL line of Japanese, picked up live from a video: "${line.text}"
+
+Give them 4 short, natural ways they could respond to it in Japanese, as if they were the other person in this real conversation. Vary the options so the choice is meaningful (e.g. different politeness levels, or genuinely different but still reasonable responses) — don't make 3 of them obviously wrong. Exactly ONE option should be marked as the most natural/appropriate response for this context; the other 3 should still be plausible Japanese, just slightly less ideal here. For every option, write one short note in ${lang || "English"} on why it works or what nuance/politeness level it has.
+
+Respond ONLY with valid JSON, no markdown, no backticks:
+{"options":[{"text":"","best":true,"note":""},{"text":"","best":false,"note":""},{"text":"","best":false,"note":""},{"text":"","best":false,"note":""}]}` }]
+        })
+      });
+      const d = await res.json();
+      const text = d.content?.map(c=>c.text||"").join("") || "{}";
+      const parsed = JSON.parse(text.replace(/```json|```/g,"").trim());
+      if (parsed && Array.isArray(parsed.options) && parsed.options.length) setHint(parsed);
+      else setHintError(T?.contentErrGeneric || "Could not build a hint right now. Please try again.");
+    } catch { setHintError(T?.contentErrGeneric || "Could not build a hint right now. Please try again."); }
+    setLoadingHint(false);
+  };
 
   return (
     <div style={{ ...S.card, borderLeft:`3px solid ${C.purpleLight}` }}>
-      {turn.situation && (
-        <p style={{ color:"#94a3b8", fontSize:11, fontStyle:"italic", margin:"0 0 8px" }}>💭 {turn.situation}</p>
-      )}
       <div style={{ display:"flex", alignItems:"flex-start", gap:8, marginBottom:10 }}>
-        <span style={{ color:C.teal, fontSize:11, fontWeight:700, flexShrink:0 }}>A:</span>
-        <p style={{ color:"#f1f5f9", fontSize:14, lineHeight:1.8, margin:0, flex:1 }}>{turn.speakerALine}</p>
+        <span style={{ color:C.teal, fontSize:13, flexShrink:0 }}>🎧</span>
+        <p style={{ color:"#f1f5f9", fontSize:14, lineHeight:1.8, margin:0, flex:1 }}>{line.text}</p>
       </div>
       <div style={{ display:"flex", gap:8, marginBottom:8, flexWrap:"wrap" }}>
-        <button onClick={()=>speakJapanese(stripForSpeech(turn.speakerALine), 1)}
+        <button onClick={()=>speakJapanese(stripForSpeech(line.text), 1)}
           style={{ display:"flex", alignItems:"center", gap:6, padding:"6px 12px", borderRadius:8, background:"rgba(6,182,212,0.12)", border:`1px solid rgba(6,182,212,0.3)`, color:C.teal, fontSize:12, fontWeight:700, cursor:"pointer" }}>
           🔊 {T?.listenAudio || "Listen"}
         </button>
-        <SpeedButtons text={stripForSpeech(turn.speakerALine)} T={T} />
+        <SpeedButtons text={stripForSpeech(line.text)} T={T} />
       </div>
-      <JLineTools text={turn.speakerALine} lang={lang} T={T} />
-
-      <p style={{ color:C.purpleLight, fontSize:12, fontWeight:700, margin:"6px 0 8px" }}>
-        {T?.convYourTurn || "How would you respond?"}
-      </p>
-      <VoiceGrammarCheck promptContext={turn.speakerALine} lang={lang} T={T} />
+      <JLineTools text={line.text} lang={lang} T={T} />
 
       <div style={{ marginTop:12 }}>
-        <button onClick={()=>setRevealed(r=>!r)} style={{ padding:"6px 14px", borderRadius:8, background:C.card, border:`1px solid ${C.border}`, color:"#ff1a1a", fontSize:11, cursor:"pointer", marginBottom: revealed?10:0 }}>
-          {revealed ? (T?.convHideBtn || "Hide model answer") : (T?.convRevealBtn || "Show model answer")}
-        </button>
-        {revealed && (
-          <div style={{ background:"rgba(34,197,94,0.06)", borderRadius:10, padding:"10px 12px" }}>
-            <p style={{ color:C.green, fontSize:11, fontWeight:700, margin:"0 0 4px" }}>✅ {T?.convModelAnswer || "Model answer"}</p>
-            <p style={{ color:"#f1f5f9", fontSize:13, margin:"0 0 8px" }}>{turn.speakerBLine}</p>
-            <JLineTools text={turn.speakerBLine} lang={lang} T={T} />
-            {Array.isArray(turn.altResponses) && turn.altResponses.length > 0 && (
-              <>
-                <p style={{ color:"#94a3b8", fontSize:11, fontWeight:700, margin:"8px 0 4px" }}>{T?.convAltResponses || "Other ways to say it"}</p>
-                {turn.altResponses.map((alt, i) => (
-                  <p key={i} style={{ color:"#cbd5e1", fontSize:12, margin:"0 0 3px" }}>
-                    <span style={{ color:C.amber, fontWeight:700 }}>{alt.style ? `[${alt.style}] ` : ""}</span>{alt.text}
-                  </p>
-                ))}
-              </>
+        {!hint && (
+          <button onClick={getHint} disabled={loadingHint} style={{ ...S.btn, background:loadingHint?"rgba(168,85,247,0.15)":`linear-gradient(135deg,${C.purple},#9333ea)`, color:loadingHint?"#64748b":"#fff", fontSize:12, padding:"9px 14px", width:"100%" }}>
+            {loadingHint ? `⏳ ${T?.convHintLoading || "Thinking of response hints..."}` : `💡 ${T?.convHintBtn || "How would you respond? (4 choices)"}`}
+          </button>
+        )}
+        {hintError && <p style={{ color:C.red, fontSize:12, marginTop:8 }}>{hintError}</p>}
+        {hint && (
+          <div style={{ marginTop:6 }}>
+            <p style={{ color:C.purpleLight, fontSize:12, fontWeight:700, margin:"0 0 8px" }}>{T?.convYourTurn || "How would you respond?"}</p>
+            <div style={{ display:"flex", flexDirection:"column", gap:8 }}>
+              {hint.options.map((opt, i) => {
+                const showFeedback = selectedIdx !== null;
+                const isSelected = selectedIdx === i;
+                const borderColor = showFeedback ? (opt.best ? C.green : (isSelected ? C.red : C.border)) : C.border;
+                return (
+                  <div key={i}>
+                    <button onClick={()=>setSelectedIdx(i)} disabled={showFeedback}
+                      style={{ width:"100%", textAlign:"left", padding:"10px 12px", borderRadius:10,
+                        background: showFeedback && opt.best ? "rgba(34,197,94,0.1)" : (showFeedback && isSelected ? "rgba(239,68,68,0.1)" : "rgba(255,255,255,0.03)"),
+                        border:`1px solid ${borderColor}`, color:"#f1f5f9", fontSize:13, cursor:showFeedback?"default":"pointer" }}>
+                      {opt.text}{showFeedback && opt.best ? " ✅" : ""}{showFeedback && isSelected && !opt.best ? " ❌" : ""}
+                    </button>
+                    {showFeedback && (isSelected || opt.best) && opt.note && (
+                      <p style={{ color:"#94a3b8", fontSize:11, margin:"4px 0 0 12px", fontStyle:"italic" }}>{opt.note}</p>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+            {selectedIdx !== null && (
+              <button onClick={()=>setSelectedIdx(null)} style={{ marginTop:10, padding:"6px 12px", borderRadius:8, background:C.card, border:`1px solid ${C.border}`, color:"#94a3b8", fontSize:11, cursor:"pointer" }}>
+                {T?.convTryAgain || "↺ Try again"}
+              </button>
             )}
-            {turn.tip && <p style={{ color:"#ffffff", fontSize:12, margin:"8px 0 0", fontStyle:"italic" }}>💬 {turn.tip}</p>}
           </div>
         )}
       </div>
@@ -7237,57 +7276,38 @@ function ConversationTurnCard({ turn, T, lang }) {
   );
 }
 
+// ─── Conversation Practice ───────────────────────────────────────────────────
+// Centered on REAL audio from a video the student is watching, not AI-invented dialogue.
+// The student plays a video (YouTube etc.) with sound on near the mic; GAKU listens
+// continuously (Web Speech API, same pattern as Pronunciation Practice) and turns each
+// recognized line into a card: replay/furigana/romaji/translate (JLineTools), plus an
+// on-demand "how would you respond?" 4-choice hint generated from that real line.
 function ConversationPredictor({ form, onLevelUp }) {
   const T = useUITranslations(form?.preferredLang || "English");
-  const [raw, setRaw] = useState("");
-  const [sourceTitle, setSourceTitle] = useState("");
-  const [turns, setTurns] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-  const [savedSet, setSavedSet] = useState(null); // a previously-generated conversation set found in this browser
+  const [heardLines, setHeardLines] = useState([]); // [{id, text}]
+  const [listening, setListening] = useState(false);
+  const [interimText, setInterimText] = useState("");
+  const [recogSupported, setRecogSupported] = useState(true);
+  const recognitionRef = useRef(null);
+  const shouldListenRef = useRef(false);
   const conversationCheck = useComprehensionCheck("conversation");
 
-  const CONV_STORAGE_KEY = "gaku_conv_practice_set";
+  const HEARD_STORAGE_KEY = "gaku_conv_heard_lines";
 
   useEffect(() => {
     try {
-      const stored = localStorage.getItem(scopedKey(CONV_STORAGE_KEY));
+      const stored = localStorage.getItem(scopedKey(HEARD_STORAGE_KEY));
       if (stored) {
         const parsed = JSON.parse(stored);
-        if (parsed && Array.isArray(parsed.turns) && parsed.turns.length) setSavedSet(parsed);
+        if (Array.isArray(parsed) && parsed.length) setHeardLines(parsed);
       }
     } catch {}
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
-    if (turns && turns.length) {
-      try { localStorage.setItem(scopedKey(CONV_STORAGE_KEY), JSON.stringify({ raw, sourceTitle, turns })); } catch {}
-    }
-  }, [turns, raw, sourceTitle]);
-
-  const handleResumeSaved = () => {
-    if (savedSet) {
-      setRaw(savedSet.raw || "");
-      setSourceTitle(savedSet.sourceTitle || "");
-      setTurns(savedSet.turns || null);
-    }
-    setSavedSet(null);
-  };
-  const handleResetSaved = () => {
-    try { localStorage.removeItem(scopedKey(CONV_STORAGE_KEY)); } catch {}
-    setSavedSet(null);
-  };
-
-  // Live listening: build the transcript by having the mic pick up a video's audio
-  // (student plays the video on another screen/tab with speakers on, near the mic)
-  // instead of pasting subtitles. Reuses the same Web Speech API pattern used elsewhere
-  // in the app, but continuous + auto-restarting since a video keeps talking.
-  const [listening, setListening] = useState(false);
-  const [interimText, setInterimText] = useState("");
-  const [recogSupported, setRecogSupported] = useState(true);
-  const recognitionRef = useRef(null);
-  const shouldListenRef = useRef(false);
+    try { localStorage.setItem(scopedKey(HEARD_STORAGE_KEY), JSON.stringify(heardLines)); } catch {}
+  }, [heardLines]);
 
   const startRecognition = () => {
     const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -7303,15 +7323,13 @@ function ConversationPredictor({ form, onLevelUp }) {
         if (e.results[i].isFinal) finalChunk += t; else interimChunk += t;
       }
       if (finalChunk.trim()) {
-        setRaw(prev => (prev ? prev.trim() + "\n" : "") + finalChunk.trim());
+        setHeardLines(prev => [...prev, { id:`${Date.now()}_${Math.random().toString(36).slice(2,7)}`, text: finalChunk.trim() }]);
         setInterimText("");
       } else {
         setInterimText(interimChunk);
       }
     };
     recognition.onend = () => {
-      // continuous recognition can stop itself after a pause — restart while the
-      // student hasn't tapped "stop" themselves
       if (shouldListenRef.current) {
         try { recognition.start(); } catch {}
       } else {
@@ -7343,132 +7361,51 @@ function ConversationPredictor({ form, onLevelUp }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const generate = async () => {
+  const handleClear = () => {
     if (listening) toggleListening();
-    const parsedLines = parseSubtitleText(raw);
-    const cleanText = parsedLines.join("\n");
-    if (!cleanText.trim()) { setError(T.contentErrEmpty || "Paste some Japanese text (or a video's subtitles/description) first."); return; }
-    setLoading(true); setError(""); setTurns(null);
-    try {
-      const res = await fetch("/api/claude", {
-        method:"POST", headers:{"Content-Type":"application/json"},
-        body: JSON.stringify({ model:"claude-sonnet-4-20250514", max_tokens:4000, provider:"turbo",
-          messages:[{ role:"user", content:`You are a Japanese teacher using CLT (Communicative Language Teaching). The student's JLPT level is ${form.jlpt}.
-
-Below is a real transcript/subtitles from a video the student is watching. Find natural back-and-forth conversational exchanges in it (two speakers, or a speaker and an implied listener) and turn each one into a "predict the next line" speaking practice item.
-
-TRANSCRIPT:
-"""
-${cleanText.slice(0, 6000)}
-"""
-
-RULES:
-1. Only use REAL lines quoted or lightly adapted from the transcript above — never invent unrelated dialogue.
-2. Find between 5 and 12 exchanges (fewer if the transcript is short — don't pad).
-3. For each exchange:
-   - situation: one short sentence in ${form.preferredLang || "English"} describing the context (who's talking, where, why)
-   - speakerALine: the real line that prompts a response (in Japanese)
-   - speakerBLine: the real/actual response that follows it in the transcript (in Japanese) — this is the "model answer"
-   - altResponses: an array of 2-3 alternate natural ways to respond to speakerALine, each as {"style":"casual"|"polite"|"native-like","text":"..."}, showing register variation
-   - tip: one short CLT-style tip in ${form.preferredLang || "English"} about the response (nuance, politeness level, or when to use it)
-4. Scale vocabulary/grammar complexity awareness to ${form.jlpt} in the tip, but always keep speakerALine/speakerBLine as the REAL transcript text.
-
-Respond ONLY with a valid JSON array, no markdown, no backticks:
-[{"situation":"","speakerALine":"","speakerBLine":"","altResponses":[{"style":"","text":""}],"tip":""}]` }]
-        })
-      });
-      const d = await res.json();
-      const text = d.content?.map(c=>c.text||"").join("") || "[]";
-      const parsed = JSON.parse(text.replace(/```json|```/g,"").trim());
-      if (Array.isArray(parsed) && parsed.length) {
-        setTurns(parsed);
-      } else {
-        setError(T.convNoTurns || "Couldn't find a conversation in that content. Try pasting a transcript with more dialogue.");
-      }
-    } catch { setError(T.contentErrGeneric || "Could not analyze this content right now. Please try again."); }
-    setLoading(false);
+    setHeardLines([]);
+    try { localStorage.removeItem(scopedKey(HEARD_STORAGE_KEY)); } catch {}
   };
-
-  const handleReset = () => { setTurns(null); setRaw(""); setError(""); try { localStorage.removeItem(scopedKey(CONV_STORAGE_KEY)); } catch {} };
-
-  if (!turns) {
-    return (
-      <div>
-        {savedSet && (
-          <div style={{ ...S.card, marginBottom:16, borderLeft:`3px solid ${C.purpleLight}` }}>
-            <p style={{ color:C.purpleLight, fontSize:12, fontWeight:700, margin:"0 0 8px" }}>{T.savedSetFound || "You have a saved study set from before."}</p>
-            <div style={{ display:"flex", gap:8 }}>
-              <button onClick={handleResumeSaved} style={{ ...S.btn, flex:1, background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff" }}>
-                {T.resumeStudySet || "▶ Resume study set"}
-              </button>
-              <button onClick={handleResetSaved} style={{ ...S.btn, flex:1, background:C.card, border:`1px solid ${C.border}`, color:"#94a3b8" }}>
-                {T.resetStudySet || "Reset"}
-              </button>
-            </div>
-          </div>
-        )}
-        <div style={{ ...S.card, marginBottom:16 }}>
-          <p style={{ color:C.purpleLight, fontSize:12, fontWeight:700, letterSpacing:1, marginBottom:6 }}>🎙️ {T.convTitle || "Conversation Practice"}</p>
-          <p style={{ color:"#39ff14", fontSize:12, lineHeight:1.7, marginBottom:14 }}>
-            {T.convDesc || "Paste a video's subtitles or transcript (e.g. YouTube's own \"Show transcript\" panel). GAKU will find real conversational exchanges and let you predict — and speak — the next line before revealing the model answer."}
-          </p>
-          <label style={{ ...S.label, color:"#ffffff" }}>{T.subtitlesSourceLabel || "Video title / source (optional)"}</label>
-          <input value={sourceTitle} onChange={e=>setSourceTitle(e.target.value)} placeholder={T.subtitlesSourcePlaceholder || "e.g. NHK news 7/2"} style={{ ...S.input, marginBottom:12 }} />
-          <label style={{ ...S.label, color:"#ffffff" }}>{T.convPasteLabel || "Paste subtitles / transcript here"}</label>
-          <textarea value={raw} onChange={e=>setRaw(e.target.value)} rows={10}
-            placeholder={T.subtitlesPastePlaceholder || "Paste plain text or an .srt file's contents — timestamps and cue numbers are removed automatically."}
-            style={{ ...S.input, resize:"vertical", fontFamily:"inherit", lineHeight:1.7, marginBottom:14 }} />
-
-          <div style={{ display:"flex", alignItems:"center", gap:10, margin:"2px 0 14px" }}>
-            <div style={{ flex:1, height:1, background:C.border }} />
-            <span style={{ color:"#64748b", fontSize:11, fontWeight:700 }}>{T.convOrDivider || "OR"}</span>
-            <div style={{ flex:1, height:1, background:C.border }} />
-          </div>
-
-          <div style={{ ...S.card, background:"rgba(6,182,212,0.05)", border:`1px solid rgba(6,182,212,0.2)`, marginBottom:14 }}>
-            <p style={{ color:C.teal, fontSize:12, fontWeight:700, letterSpacing:1, margin:"0 0 6px" }}>🎙️ {T.convListenTitle || "Listen along with a video"}</p>
-            <p style={{ color:"#94a3b8", fontSize:12, lineHeight:1.6, margin:"0 0 12px" }}>
-              {T.convListenDesc || "Play a YouTube/video with the sound on near your mic. GAKU will listen and build the transcript above for you — then tap \"Build Conversation Practice\" as usual."}
-            </p>
-            <button onClick={toggleListening} style={{ display:"flex", alignItems:"center", justifyContent:"center", gap:8, width:"100%", padding:"10px 12px", borderRadius:10, border:`1px solid ${listening?"rgba(239,68,68,0.4)":"rgba(6,182,212,0.35)"}`, background:listening?"rgba(239,68,68,0.12)":"rgba(6,182,212,0.1)", color:listening?"#f87171":C.teal, fontSize:13, fontWeight:700, cursor:"pointer" }}>
-              {listening ? `⏺ ${T.convListenStop || "Stop listening"}` : `🎤 ${T.convListenStart || "Start listening"}`}
-            </button>
-            {!recogSupported && <p style={{ color:C.red, fontSize:11, marginTop:8 }}>{T.convListenUnsupported || "Live listening isn't supported in this browser — try Chrome on desktop or Android."}</p>}
-            {listening && (
-              <p style={{ color:"#94a3b8", fontSize:12, marginTop:10, fontStyle:"italic", minHeight:16 }}>
-                {interimText || (T.convListening || "Listening…")}
-              </p>
-            )}
-          </div>
-
-          <button onClick={generate} disabled={loading || !raw.trim()} style={{ ...S.btn, width:"100%", background:(loading||!raw.trim())?"rgba(168,85,247,0.15)":`linear-gradient(135deg,${C.purple},#9333ea)`, color:(loading||!raw.trim())?"#64748b":"#fff" }}>
-            {loading ? `⏳ ${T.convGenerating || "Building conversation practice..."}` : (T.convGenerateBtn || "Build Conversation Practice")} {!loading && "✨"}
-          </button>
-          {error && <p style={{ color:C.red, fontSize:12, marginTop:10 }}>{error}</p>}
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div>
-      <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:12 }}>
-        <p style={{ color:C.purpleLight, fontSize:12, fontWeight:700, letterSpacing:1, margin:0 }}>
-          🎙️ {sourceTitle.trim() || (T.convTitle || "Conversation Practice")}
+      <div style={{ ...S.card, marginBottom:16 }}>
+        <p style={{ color:C.purpleLight, fontSize:12, fontWeight:700, letterSpacing:1, marginBottom:6 }}>🎙️ {T.convTitle || "Conversation Practice"}</p>
+        <p style={{ color:"#39ff14", fontSize:12, lineHeight:1.7, marginBottom:14 }}>
+          {T.convDescLive || "Play a YouTube/video with the sound on near your mic. GAKU listens to the real dialogue and, line by line, helps you understand it and hints at how you could respond."}
         </p>
-        <button onClick={handleReset} style={{ ...S.btn, padding:"6px 12px", fontSize:11, background:C.card, border:`1px solid ${C.border}`, color:"#94a3b8" }}>
-          {T.subtitlesLoadNew || "↺ Load a different transcript"}
+        <button onClick={toggleListening} style={{ display:"flex", alignItems:"center", justifyContent:"center", gap:8, width:"100%", padding:"12px 12px", borderRadius:10, border:`1px solid ${listening?"rgba(239,68,68,0.4)":"rgba(6,182,212,0.35)"}`, background:listening?"rgba(239,68,68,0.12)":"rgba(6,182,212,0.1)", color:listening?"#f87171":C.teal, fontSize:14, fontWeight:700, cursor:"pointer" }}>
+          {listening ? `⏺ ${T.convListenStop || "Stop listening"}` : `🎤 ${T.convListenStart || "Start listening"}`}
         </button>
+        {!recogSupported && <p style={{ color:C.red, fontSize:11, marginTop:8 }}>{T.convListenUnsupported || "Live listening isn't supported in this browser — try Chrome on desktop or Android."}</p>}
+        {listening && (
+          <p style={{ color:"#94a3b8", fontSize:12, marginTop:10, fontStyle:"italic", minHeight:16 }}>
+            {interimText || (T.convListening || "Listening…")}
+          </p>
+        )}
       </div>
-      {conversationCheck.eligible && <LevelUpOffer T={T} currentLevel={form.jlpt} onConfirm={onLevelUp} onDismiss={conversationCheck.dismiss} />}
-      <div style={{ display:"flex", flexDirection:"column", gap:12 }}>
-        {turns.map((turn, i) => (
-          <div key={i}>
-            <ConversationTurnCard turn={turn} T={T} lang={form?.preferredLang || "English"} />
-            <ComprehensionCheck itemId={`turn-${i}`} checkins={conversationCheck.checkins} onRecord={conversationCheck.record} T={T} />
+
+      {heardLines.length > 0 && (
+        <>
+          <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:12 }}>
+            <p style={{ color:C.purpleLight, fontSize:12, fontWeight:700, letterSpacing:1, margin:0 }}>
+              {T.convHeardTitle || "What GAKU heard"}
+            </p>
+            <button onClick={handleClear} style={{ ...S.btn, padding:"6px 12px", fontSize:11, background:C.card, border:`1px solid ${C.border}`, color:"#94a3b8" }}>
+              {T.convClearBtn || "🗑 Clear"}
+            </button>
           </div>
-        ))}
-      </div>
+          {conversationCheck.eligible && <LevelUpOffer T={T} currentLevel={form.jlpt} onConfirm={onLevelUp} onDismiss={conversationCheck.dismiss} />}
+          <div style={{ display:"flex", flexDirection:"column", gap:12 }}>
+            {heardLines.map((line) => (
+              <div key={line.id}>
+                <LiveHeardLineCard line={line} T={T} lang={form?.preferredLang || "English"} jlpt={form?.jlpt} />
+                <ComprehensionCheck itemId={`heard-${line.id}`} checkins={conversationCheck.checkins} onRecord={conversationCheck.record} T={T} />
+              </div>
+            ))}
+          </div>
+        </>
+      )}
     </div>
   );
 }
