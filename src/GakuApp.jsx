@@ -207,6 +207,113 @@ LEVEL_RESOURCES["Upper Intermediate"] = LEVEL_RESOURCES["N3"];
 LEVEL_RESOURCES["Advanced"] = LEVEL_RESOURCES["N2"];
 LEVEL_RESOURCES["Mastery"] = LEVEL_RESOURCES["N1"];
 
+// ─── OFFICIAL JLPT EXAM-SECTION RESOURCES ────────────────────────────────────────
+// When a student's goal is literally "Pass JLPT N5"–"Pass JLPT N1" (see isJlptTargetGoal),
+// the weekly schedule must ONLY pull from this curated set of real JLPT-format practice-test
+// sites, broken down by the exact exam section (vocabulary / grammar / kanji / reading /
+// listening) and, for the sites that are numbered exercise sets, the real exercise-number
+// range available on that site — so the AI can assign e.g. "Reading Exercise 5-7" instead of
+// inventing generic study material that has nothing to do with the actual JLPT test format.
+const JLPT_EXAM_RESOURCES = {
+  N5: {
+    vocabulary: [ { name:"Japanese Test 4 You — N5 Vocabulary", url:"https://japanesetest4you.com/category/jlpt-n5/jlpt-n5-vocabulary-test/", range:[1,24] } ],
+    grammar: [
+      { name:"Japanese Test 4 You — N5 Grammar", url:"https://japanesetest4you.com/category/jlpt-n5/jlpt-n5-grammar-test/", range:[1,26] },
+      { name:"MLC — N5 Grammar Quiz", url:"https://www.mlcjapanese.co.jp/n5_jlpt_grammar_quiz_01.html", range:[1,12] },
+    ],
+    reading: [ { name:"Japanese Test 4 You — N5 Reading", url:"https://japanesetest4you.com/category/jlpt-n5/jlpt-n5-reading-tests/", range:[2,14] } ],
+    listening: [ { name:"Japanese Test 4 You — N5 Listening", url:"https://japanesetest4you.com/category/jlpt-n5/jlpt-n5-listening-test/", range:[1,43] } ],
+    kanji: [
+      { name:"Japanese Test 4 You — N5 Kanji", url:"https://japanesetest4you.com/category/jlpt-n5/jlpt-n5-kanji-test/", range:[1,19] },
+      { name:"MLC — N5 Kanji Quiz", url:"https://www.mlcjapanese.co.jp/n5_jlpt_kanji_quiz_01.html", range:[1,10] },
+    ],
+    katakana: [ { name:"MLC — N5/N4 Katakana Quiz", url:"https://www.mlcjapanese.co.jp/n5n4_jlpt_katakana_quiz_01.html", range:[1,2] } ],
+    general: [ { name:"Challenge JLPT N5 (vocabulary, grammar, kanji reading, kanji multiple choice)", url:"https://challenge-jlpt.com/", range:null } ],
+  },
+  N4: {
+    vocabulary: [ { name:"Japanese Test 4 You — N4 Vocabulary", url:"https://japanesetest4you.com/category/jlpt-n4/jlpt-n4-vocabulary-test/", range:[1,31] } ],
+    grammar: [
+      { name:"Japanese Test 4 You — N4 Grammar", url:"https://japanesetest4you.com/category/jlpt-n4/jlpt-n4-grammar-test/", range:[1,30] },
+      { name:"MLC — N4 Grammar Quiz", url:"https://www.mlcjapanese.co.jp/n4_jlpt_grammar_quiz_01.html", range:[1,12] },
+    ],
+    reading: [ { name:"Japanese Test 4 You — N4 Reading", url:"https://japanesetest4you.com/category/jlpt-n4/jlpt-n4-reading-test/", range:[1,22] } ],
+    listening: [ { name:"Japanese Test 4 You — N4 Listening", url:"https://japanesetest4you.com/category/jlpt-n4/jlpt-n4-listening-test/", range:[1,54] } ],
+    kanji: [
+      { name:"Japanese Test 4 You — N4 Kanji", url:"https://japanesetest4you.com/category/jlpt-n4/jlpt-n4-kanji-test/", range:[1,19] },
+      { name:"MLC — N4 Kanji Quiz", url:"https://www.mlcjapanese.co.jp/n4_jlpt_kanji_quiz_01.html", range:[1,10] },
+    ],
+    katakana: [ { name:"MLC — N5/N4 Katakana Quiz", url:"https://www.mlcjapanese.co.jp/n5n4_jlpt_katakana_quiz_01.html", range:[1,2] } ],
+    general: [ { name:"Challenge JLPT N4 (vocabulary, grammar, kanji reading, kanji multiple choice)", url:"https://challenge-jlpt.com/", range:null } ],
+  },
+  N3: {
+    vocabulary: [ { name:"Japanese Test 4 You — N3 Vocabulary", url:"https://japanesetest4you.com/category/jlpt-n3/jlpt-n3-vocabulary-test/", range:[1,31] } ],
+    grammar: [
+      { name:"Japanese Test 4 You — N3 Grammar", url:"https://japanesetest4you.com/category/jlpt-n3/jlpt-n3-grammar-test/", range:[1,29] },
+      { name:"MLC — N3 Grammar Quiz", url:"https://www.mlcjapanese.co.jp/n3_jlpt_grammar_quiz_01.html", range:[1,12] },
+    ],
+    reading: [ { name:"Japanese Test 4 You — N3 Reading", url:"https://japanesetest4you.com/category/jlpt-n3/jlpt-n3-reading-test/", range:[1,16] } ],
+    listening: [ { name:"Japanese Test 4 You — N3 Listening", url:"https://japanesetest4you.com/category/jlpt-n3/jlpt-n3-listening-test/", range:[1,22] } ],
+    kanji: [
+      { name:"Japanese Test 4 You — N3 Kanji", url:"https://japanesetest4you.com/category/jlpt-n3/jlpt-n3-kanji-test/", range:[1,31] },
+      { name:"MLC — N3 Kanji Quiz", url:"https://www.mlcjapanese.co.jp/n3_jlpt_kanji_quiz_01.html", range:[1,10] },
+    ],
+    katakana: [],
+    general: [ { name:"Challenge JLPT N3 (vocabulary, grammar, kanji reading, kanji multiple choice)", url:"https://challenge-jlpt.com/", range:null } ],
+  },
+  N2: {
+    vocabulary: [ { name:"Japanese Test 4 You — N2 Vocabulary", url:"https://japanesetest4you.com/category/jlpt-n2/jlpt-n2-vocabulary-test/", range:[1,26] } ],
+    grammar: [
+      { name:"Japanese Test 4 You — N2 Grammar", url:"https://japanesetest4you.com/category/jlpt-n2/jlpt-n2-grammar-test/", range:[1,25] },
+      { name:"MLC — N2 Grammar Quiz", url:"https://www.mlcjapanese.co.jp/n2_jlpt_grammar_quiz_01.html", range:[1,12] },
+    ],
+    reading: [ { name:"Japanese Test 4 You — N2 Reading", url:"https://japanesetest4you.com/category/jlpt-n2/jlpt-n2-reading-test/", range:[1,41] } ],
+    listening: [ { name:"Japanese Test 4 You — N2 Listening", url:"https://japanesetest4you.com/category/jlpt-n2/jlpt-n2-listening-test/", range:[1,35] } ],
+    kanji: [
+      { name:"Japanese Test 4 You — N2 Kanji", url:"https://japanesetest4you.com/category/jlpt-n2/jlpt-n2-kanji-test/", range:[1,21] },
+      { name:"MLC — N2 Kanji Quiz", url:"https://www.mlcjapanese.co.jp/n2_jlpt_kanji_quiz_01.html", range:[1,10] },
+    ],
+    katakana: [],
+    general: [ { name:"Challenge JLPT N2 (vocabulary, grammar, kanji reading, kanji multiple choice)", url:"https://challenge-jlpt.com/", range:null } ],
+  },
+  N1: {
+    vocabulary: [ { name:"Japanese Test 4 You — N1 Vocabulary", url:"https://japanesetest4you.com/category/jlpt-n1/jlpt-n1-vocabulary-test/", range:[1,22] } ],
+    grammar: [
+      { name:"Japanese Test 4 You — N1 Grammar", url:"https://japanesetest4you.com/category/jlpt-n1/jlpt-n1-grammar-test/", range:[1,25] },
+      { name:"MLC — N1 Grammar Quiz", url:"https://www.mlcjapanese.co.jp/n1_jlpt_grammar_quiz_01.html", range:[1,12] },
+    ],
+    reading: [ { name:"Japanese Test 4 You — N1 Reading", url:"https://japanesetest4you.com/category/jlpt-n1/jlpt-n1-reading-test/", range:[1,55] } ],
+    listening: [ { name:"Japanese Test 4 You — N1 Listening", url:"https://japanesetest4you.com/category/jlpt-n1/jlpt-n1-listening-test/", range:[1,28] } ],
+    kanji: [
+      { name:"Japanese Test 4 You — N1 Kanji", url:"https://japanesetest4you.com/category/jlpt-n1/jlpt-n1-kanji-test/", range:[1,21] },
+      { name:"MLC — N1 Kanji Quiz", url:"https://www.mlcjapanese.co.jp/n1_jlpt_kanji_quiz_01.html", range:[1,10] },
+    ],
+    katakana: [],
+    general: [ { name:"Challenge JLPT N1 (vocabulary, grammar, kanji reading, kanji multiple choice)", url:"https://challenge-jlpt.com/", range:null } ],
+  },
+};
+// Maps a SKILL_LABELS checkbox key to the JLPT_EXAM_RESOURCES section(s) it should pull from.
+// "jlpt" (JLPT Prep) is the catch-all exam-format section (vocabulary + the general multi-section
+// site) since Vocabulary has no dedicated checkbox of its own. "conversation" is intentionally
+// excluded — the JLPT has no conversation section (see isJlptTargetGoal / conversation warning UI).
+const SKILL_TO_JLPT_SECTIONS = {
+  reading: ["reading"], listening: ["listening"], kanji: ["kanji"], grammar: ["grammar"],
+  jlpt: ["vocabulary", "general"], onlyKatakana: ["katakana"],
+};
+function isJlptTargetGoal(goal) { return /^Pass JLPT (N[1-5])$/.test(goal || ""); }
+function jlptTargetLevel(goal) { const m = /^Pass JLPT (N[1-5])$/.exec(goal || ""); return m ? m[1] : null; }
+// Splits a resource's full exercise range across the plan's total weeks, so week N only ever
+// gets assigned the slice of exercises that logically comes next (never the whole range every week).
+function jlptWeekSlice(range, weekNum, totalWeeks) {
+  if (!range) return null;
+  const [lo, hi] = range;
+  const totalCount = hi - lo + 1;
+  const perWeek = Math.max(1, Math.ceil(totalCount / Math.max(totalWeeks, 1)));
+  const start = lo + (weekNum - 1) * perWeek;
+  if (start > hi) return null; // this resource's range is already exhausted by this week — skip it
+  const end = Math.min(start + perWeek - 1, hi);
+  return [start, end];
+}
+
 Object.values(RESOURCES).forEach(registerResourceLookup);
 Object.values(LEVEL_RESOURCES).forEach(registerResourceLookup);
 
@@ -7922,7 +8029,7 @@ const AI_SCHEDULE_CACHE = {};
 
 async function buildAIWeeklySchedule(form, weekNum, totalWeeks) {
   const lang = form.preferredLang || "English";
-  const cacheKey = `${form.email || form.name}_w${weekNum}_${form.jlpt}_${(form.skills||[]).join("")}_${lang}`;
+  const cacheKey = `${form.email || form.name}_w${weekNum}_${form.jlpt}_${form.goal || ""}_${(form.skills||[]).join("")}_${lang}`;
   // Check localStorage first
   try {
     const stored = localStorage.getItem(`gaku_sched_${cacheKey}`);
@@ -7943,19 +8050,51 @@ async function buildAIWeeklySchedule(form, weekNum, totalWeeks) {
 
   const langInstruction = lang !== "English" ? `\nIMPORTANT: Write ALL task descriptions and the weekTheme in ${lang}. Do NOT use English for any text content.\n` : "";
 
-  // Curated resources actually available for this student's level + chosen skills, so the AI
-  // references real names/URLs we can already link to, instead of inventing resources we can't match.
-  const levelResList = LEVEL_RESOURCES[form.jlpt] || [];
-  const skillResList = (form.skills || []).flatMap(s => RESOURCES[s] || []);
-  const isAnimeGoal = form.goal === "Understand Anime/Manga" || form.displayGoal === "Understand Anime/Manga";
-  const availableResources = [...levelResList, ...skillResList]
-    .filter((r, i, arr) => arr.findIndex(x => x.name === r.name && x.mode === r.mode) === i)
-    .sort((a, b) => isAnimeGoal ? Number(/anime|manga/i.test(b.name)) - Number(/anime|manga/i.test(a.name)) : 0)
-    .map(r => `- ${r.name} [${r.mode}] — ${r.url}`)
-    .join("\n");
-  const animeInstruction = isAnimeGoal
-    ? `\nThis student's final goal is understanding anime/manga. Prioritize the anime/manga-tagged resources above (listed first) over other curated resources whenever they fit the day's skill, and frame tasks around anime/manga comprehension (e.g. watching a clip with GAKU Reader, reading a manga scene) rather than generic study materials wherever a fit exists for this level.\n`
-    : "";
+  // ─── JLPT-goal branch ───────────────────────────────────────────────────────
+  // When the student's actual goal is "Pass JLPT N5"–"Pass JLPT N1", the schedule must be built
+  // ONLY from real JLPT-format practice-test sites (JLPT_EXAM_RESOURCES), restricted to the exam
+  // sections matching the skills they actually selected, with each resource's exercise range
+  // sliced down to just this week's portion — instead of the general CLT resource pool below.
+  const jlptGoalActive = isJlptTargetGoal(form.goal);
+  const jlptLevel = jlptTargetLevel(form.goal);
+  const selectedSkills = form.skills || [];
+
+  let availableResources, jlptOnlyInstruction, animeInstruction = "";
+  if (jlptGoalActive && jlptLevel && JLPT_EXAM_RESOURCES[jlptLevel]) {
+    const levelData = JLPT_EXAM_RESOURCES[jlptLevel];
+    const wantedSections = Array.from(new Set(selectedSkills.flatMap(s => SKILL_TO_JLPT_SECTIONS[s] || [])));
+    const lines = [];
+    wantedSections.forEach(section => {
+      (levelData[section] || []).forEach(res => {
+        const slice = jlptWeekSlice(res.range, weekNum, totalWeeks);
+        if (res.range && !slice) return; // this resource's numbered exercises are already used up
+        const rangeText = slice ? ` — Exercise ${slice[0]}-${slice[1]} (of ${res.range[0]}-${res.range[1]} total)` : "";
+        lines.push(`- [${section}] ${res.name}${rangeText} — ${res.url}`);
+      });
+    });
+    // Conversation was kept (student answered "Yes" to the JLPT/conversation warning) — pull from
+    // the normal conversation-practice resource pool since the JLPT itself has no such section.
+    if (selectedSkills.includes("conversation")) {
+      (RESOURCES.conversation || []).forEach(r => lines.push(`- [conversation] ${r.name} — ${r.url}`));
+    }
+    availableResources = lines.join("\n");
+    jlptOnlyInstruction = `\nThis student's goal is to PASS JLPT ${jlptLevel} — this is an exam-prep plan, not general study. STRICT RULES:\n- Use ONLY the official JLPT ${jlptLevel} practice sources listed below. Do NOT invent, substitute, or add any other app, podcast, YouTube channel, or website.\n- Where a source lists an exercise range for this week (e.g. "Exercise 5-7"), the task text MUST state that exact exercise range (e.g. "Reading Exercise 5-7") — never just link the site with no range.\n- Only include exam sections that match the skills the student selected below (e.g. if they only selected Reading and Listening, every task this week must be Reading or Listening only — do not add Grammar, Kanji, or Vocabulary tasks unless that section was selected).\n`;
+  } else {
+    // Non-JLPT goal (or JLPT current-level without a JLPT pass-goal): normal curated CLT pool,
+    // but still hard-restricted to the skills the student actually selected.
+    const levelResList = LEVEL_RESOURCES[form.jlpt] || [];
+    const skillResList = selectedSkills.flatMap(s => RESOURCES[s] || []);
+    const isAnimeGoal = form.goal === "Understand Anime/Manga" || form.displayGoal === "Understand Anime/Manga";
+    availableResources = [...levelResList, ...skillResList]
+      .filter((r, i, arr) => arr.findIndex(x => x.name === r.name && x.mode === r.mode) === i)
+      .sort((a, b) => isAnimeGoal ? Number(/anime|manga/i.test(b.name)) - Number(/anime|manga/i.test(a.name)) : 0)
+      .map(r => `- ${r.name} [${r.mode}] — ${r.url}`)
+      .join("\n");
+    animeInstruction = isAnimeGoal
+      ? `\nThis student's final goal is understanding anime/manga. Prioritize the anime/manga-tagged resources above (listed first) over other curated resources whenever they fit the day's skill, and frame tasks around anime/manga comprehension (e.g. watching a clip with GAKU Reader, reading a manga scene) rather than generic study materials wherever a fit exists for this level.\n`
+      : "";
+    jlptOnlyInstruction = `\nSTRICT RULE: only create tasks for the skills the student selected below. Do not add tasks for any other skill area, even if it seems generally useful — if they only selected Grammar, every task this week must be Grammar.\n`;
+  }
 
   const prompt = `You are an expert Japanese language teacher using CLT (Communicative Language Teaching) methodology.
 ${langInstruction}
@@ -7967,8 +8106,8 @@ Student profile:
 - Current week: Week ${weekNum} of ${totalWeeks} (${progressPct}% through the plan, ${weeksLeft} weeks remaining)
 - Study time per day: ${minsPerDay} minutes
 - Study days per week: ${studyDays} days (${activeDays.join(", ")})
-- Skills to focus on: ${(form.skills||[]).join(", ")}
-${animeInstruction}
+- Skills to focus on: ${selectedSkills.join(", ")}
+${animeInstruction}${jlptOnlyInstruction}
 Working backwards from the goal:
 - Week ${weekNum} of ${totalWeeks}: ${progressPct < 25 ? "Foundation building phase — establish core habits and basics" : progressPct < 50 ? "Development phase — expanding knowledge and skills" : progressPct < 75 ? "Consolidation phase — deepening understanding and fluency" : "Mastery phase — polishing, testing, and refining"}
 
@@ -7977,7 +8116,7 @@ ${availableResources || "(none curated for this level/skill combo — invent a p
 
 Create a SPECIFIC weekly study schedule for Week ${weekNum}. For each study day, provide 2-3 concrete tasks that:
 1. Are specifically calibrated for ${form.jlpt} level students at week ${weekNum}/${totalWeeks}
-2. Include REAL, specific resources — prefer the curated list above by exact name; only invent a resource (e.g. specific NHK Easy News topic, specific grammar point like て-form conditionals) if nothing curated fits
+2. Include REAL, specific resources — prefer the curated list above by exact name${jlptGoalActive ? " (do NOT invent a substitute — this is a JLPT exam-prep plan)" : "; only invent a resource (e.g. specific NHK Easy News topic, specific grammar point like て-form conditionals) if nothing curated fits"}
 3. Progress logically from previous weeks (early weeks = fundamentals, later weeks = advanced application)
 4. Total time per day must not exceed ${minsPerDay} minutes${lang !== "English" ? `\n5. All task text MUST be written in ${lang}` : ""}
 5. EACH task must be tagged with exactly ONE "skill" field describing what the student actually DOES for that task: "reading", "listening", "speaking", or "writing". A kanji/vocab task studied from text is "reading", not "listening" — only tag "listening" if the task involves audio/video. Never guess a skill just because a resource name mentions an unrelated word.
@@ -8329,8 +8468,10 @@ function FormScreen({ onSubmit, onBack, onCancel, initialJlpt, initialForm }) {
     hoursPerDay:"", daysPerWeek:"", skills:[]
   });
   const [err, setErr] = useState("");
-  const set = (k,v) => setForm(f=>({...f,[k]:v}));
-  const toggleSkill = (s) => setForm(f=>({ ...f, skills: f.skills.includes(s) ? f.skills.filter(x=>x!==s) : [...f.skills, s] }));
+  const [convWarningDismissed, setConvWarningDismissed] = useState(false);
+  const set = (k,v) => { setForm(f=>({...f,[k]:v})); if (k === "goal") setConvWarningDismissed(false); };
+  const toggleSkill = (s) => { setForm(f=>({ ...f, skills: f.skills.includes(s) ? f.skills.filter(x=>x!==s) : [...f.skills, s] })); if (s === "conversation") setConvWarningDismissed(false); };
+  const showConvJlptWarning = isJlptTargetGoal(form.goal) && form.skills.includes("conversation") && !convWarningDismissed;
   const T = useUITranslations(form.preferredLang);
   const isOther = form.goal === "Other";
   const valid = form.name && form.email && form.country && form.goal && (isOther ? form.customGoal.trim() : true) && form.timeline && form.jlpt && form.hoursPerDay && form.daysPerWeek && form.skills.length > 0;
@@ -8451,6 +8592,16 @@ function FormScreen({ onSubmit, onBack, onCancel, initialJlpt, initialForm }) {
               ))}
             </div>
             <p style={{ color:"#475569", fontSize:11, marginTop:6 }}>{T.writingNote}</p>
+            {showConvJlptWarning && (
+              <div style={{ marginTop:10, background:"rgba(245,158,11,0.1)", border:`1px solid ${C.amber}`, borderRadius:10, padding:"12px 14px" }}>
+                <p style={{ color:C.amber, fontSize:12, fontWeight:700, margin:"0 0 4px" }}>JLPT doesn't have a conversation section</p>
+                <p style={{ color:"#cbd5e1", fontSize:12, margin:"0 0 10px" }}>Would you like to practice conversation with different sources?</p>
+                <div style={{ display:"flex", gap:8 }}>
+                  <button onClick={()=>setConvWarningDismissed(true)} style={{ ...S.btn, padding:"7px 14px", fontSize:12, background:C.amber, color:"#1a1200" }}>Yes</button>
+                  <button onClick={()=>toggleSkill("conversation")} style={{ ...S.btn, padding:"7px 14px", fontSize:12, background:"transparent", border:`1px solid ${C.border}`, color:"#94a3b8" }}>Get rid of the conversation</button>
+                </div>
+              </div>
+            )}
           </div>
         </div>
 
