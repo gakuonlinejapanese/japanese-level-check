@@ -216,79 +216,79 @@ LEVEL_RESOURCES["Mastery"] = LEVEL_RESOURCES["N1"];
 // inventing generic study material that has nothing to do with the actual JLPT test format.
 const JLPT_EXAM_RESOURCES = {
   N5: {
-    vocabulary: [ { name:"Japanese Test 4 You — N5 Vocabulary", url:"https://japanesetest4you.com/category/jlpt-n5/jlpt-n5-vocabulary-test/", range:[1,24] } ],
+    vocabulary: [ { name:"Japanese Test 4 You — N5 Vocabulary", url:"https://japanesetest4you.com/category/jlpt-n5/jlpt-n5-vocabulary-test/", range:[1,24], mode:"reading" } ],
     grammar: [
-      { name:"Japanese Test 4 You — N5 Grammar", url:"https://japanesetest4you.com/category/jlpt-n5/jlpt-n5-grammar-test/", range:[1,26] },
-      { name:"MLC — N5 Grammar Quiz", url:"https://www.mlcjapanese.co.jp/n5_jlpt_grammar_quiz_01.html", range:[1,12] },
+      { name:"Japanese Test 4 You — N5 Grammar", url:"https://japanesetest4you.com/category/jlpt-n5/jlpt-n5-grammar-test/", range:[1,26], mode:"reading" },
+      { name:"MLC — N5 Grammar Quiz", url:"https://www.mlcjapanese.co.jp/n5_jlpt_grammar_quiz_01.html", range:[1,12], mode:"reading" },
     ],
-    reading: [ { name:"Japanese Test 4 You — N5 Reading", url:"https://japanesetest4you.com/category/jlpt-n5/jlpt-n5-reading-tests/", range:[2,14] } ],
-    listening: [ { name:"Japanese Test 4 You — N5 Listening", url:"https://japanesetest4you.com/category/jlpt-n5/jlpt-n5-listening-test/", range:[1,43] } ],
+    reading: [ { name:"Japanese Test 4 You — N5 Reading", url:"https://japanesetest4you.com/category/jlpt-n5/jlpt-n5-reading-tests/", range:[2,14], mode:"reading" } ],
+    listening: [ { name:"Japanese Test 4 You — N5 Listening", url:"https://japanesetest4you.com/category/jlpt-n5/jlpt-n5-listening-test/", range:[1,43], mode:"listening" } ],
     kanji: [
-      { name:"Japanese Test 4 You — N5 Kanji", url:"https://japanesetest4you.com/category/jlpt-n5/jlpt-n5-kanji-test/", range:[1,19] },
-      { name:"MLC — N5 Kanji Quiz", url:"https://www.mlcjapanese.co.jp/n5_jlpt_kanji_quiz_01.html", range:[1,10] },
+      { name:"Japanese Test 4 You — N5 Kanji", url:"https://japanesetest4you.com/category/jlpt-n5/jlpt-n5-kanji-test/", range:[1,19], mode:"reading" },
+      { name:"MLC — N5 Kanji Quiz", url:"https://www.mlcjapanese.co.jp/n5_jlpt_kanji_quiz_01.html", range:[1,10], mode:"reading" },
     ],
-    katakana: [ { name:"MLC — N5/N4 Katakana Quiz", url:"https://www.mlcjapanese.co.jp/n5n4_jlpt_katakana_quiz_01.html", range:[1,2] } ],
-    general: [ { name:"Challenge JLPT N5 (vocabulary, grammar, kanji reading, kanji multiple choice)", url:"https://challenge-jlpt.com/", range:null } ],
+    katakana: [ { name:"MLC — N5/N4 Katakana Quiz", url:"https://www.mlcjapanese.co.jp/n5n4_jlpt_katakana_quiz_01.html", range:[1,2], mode:"reading" } ],
+    general: [ { name:"Challenge JLPT N5 (vocabulary, grammar, kanji reading, kanji multiple choice)", url:"https://challenge-jlpt.com/", range:null, mode:"reading" } ],
   },
   N4: {
-    vocabulary: [ { name:"Japanese Test 4 You — N4 Vocabulary", url:"https://japanesetest4you.com/category/jlpt-n4/jlpt-n4-vocabulary-test/", range:[1,31] } ],
+    vocabulary: [ { name:"Japanese Test 4 You — N4 Vocabulary", url:"https://japanesetest4you.com/category/jlpt-n4/jlpt-n4-vocabulary-test/", range:[1,31], mode:"reading" } ],
     grammar: [
-      { name:"Japanese Test 4 You — N4 Grammar", url:"https://japanesetest4you.com/category/jlpt-n4/jlpt-n4-grammar-test/", range:[1,30] },
-      { name:"MLC — N4 Grammar Quiz", url:"https://www.mlcjapanese.co.jp/n4_jlpt_grammar_quiz_01.html", range:[1,12] },
+      { name:"Japanese Test 4 You — N4 Grammar", url:"https://japanesetest4you.com/category/jlpt-n4/jlpt-n4-grammar-test/", range:[1,30], mode:"reading" },
+      { name:"MLC — N4 Grammar Quiz", url:"https://www.mlcjapanese.co.jp/n4_jlpt_grammar_quiz_01.html", range:[1,12], mode:"reading" },
     ],
-    reading: [ { name:"Japanese Test 4 You — N4 Reading", url:"https://japanesetest4you.com/category/jlpt-n4/jlpt-n4-reading-test/", range:[1,22] } ],
-    listening: [ { name:"Japanese Test 4 You — N4 Listening", url:"https://japanesetest4you.com/category/jlpt-n4/jlpt-n4-listening-test/", range:[1,54] } ],
+    reading: [ { name:"Japanese Test 4 You — N4 Reading", url:"https://japanesetest4you.com/category/jlpt-n4/jlpt-n4-reading-test/", range:[1,22], mode:"reading" } ],
+    listening: [ { name:"Japanese Test 4 You — N4 Listening", url:"https://japanesetest4you.com/category/jlpt-n4/jlpt-n4-listening-test/", range:[1,54], mode:"listening" } ],
     kanji: [
-      { name:"Japanese Test 4 You — N4 Kanji", url:"https://japanesetest4you.com/category/jlpt-n4/jlpt-n4-kanji-test/", range:[1,19] },
-      { name:"MLC — N4 Kanji Quiz", url:"https://www.mlcjapanese.co.jp/n4_jlpt_kanji_quiz_01.html", range:[1,10] },
+      { name:"Japanese Test 4 You — N4 Kanji", url:"https://japanesetest4you.com/category/jlpt-n4/jlpt-n4-kanji-test/", range:[1,19], mode:"reading" },
+      { name:"MLC — N4 Kanji Quiz", url:"https://www.mlcjapanese.co.jp/n4_jlpt_kanji_quiz_01.html", range:[1,10], mode:"reading" },
     ],
-    katakana: [ { name:"MLC — N5/N4 Katakana Quiz", url:"https://www.mlcjapanese.co.jp/n5n4_jlpt_katakana_quiz_01.html", range:[1,2] } ],
-    general: [ { name:"Challenge JLPT N4 (vocabulary, grammar, kanji reading, kanji multiple choice)", url:"https://challenge-jlpt.com/", range:null } ],
+    katakana: [ { name:"MLC — N5/N4 Katakana Quiz", url:"https://www.mlcjapanese.co.jp/n5n4_jlpt_katakana_quiz_01.html", range:[1,2], mode:"reading" } ],
+    general: [ { name:"Challenge JLPT N4 (vocabulary, grammar, kanji reading, kanji multiple choice)", url:"https://challenge-jlpt.com/", range:null, mode:"reading" } ],
   },
   N3: {
-    vocabulary: [ { name:"Japanese Test 4 You — N3 Vocabulary", url:"https://japanesetest4you.com/category/jlpt-n3/jlpt-n3-vocabulary-test/", range:[1,31] } ],
+    vocabulary: [ { name:"Japanese Test 4 You — N3 Vocabulary", url:"https://japanesetest4you.com/category/jlpt-n3/jlpt-n3-vocabulary-test/", range:[1,31], mode:"reading" } ],
     grammar: [
-      { name:"Japanese Test 4 You — N3 Grammar", url:"https://japanesetest4you.com/category/jlpt-n3/jlpt-n3-grammar-test/", range:[1,29] },
-      { name:"MLC — N3 Grammar Quiz", url:"https://www.mlcjapanese.co.jp/n3_jlpt_grammar_quiz_01.html", range:[1,12] },
+      { name:"Japanese Test 4 You — N3 Grammar", url:"https://japanesetest4you.com/category/jlpt-n3/jlpt-n3-grammar-test/", range:[1,29], mode:"reading" },
+      { name:"MLC — N3 Grammar Quiz", url:"https://www.mlcjapanese.co.jp/n3_jlpt_grammar_quiz_01.html", range:[1,12], mode:"reading" },
     ],
-    reading: [ { name:"Japanese Test 4 You — N3 Reading", url:"https://japanesetest4you.com/category/jlpt-n3/jlpt-n3-reading-test/", range:[1,16] } ],
-    listening: [ { name:"Japanese Test 4 You — N3 Listening", url:"https://japanesetest4you.com/category/jlpt-n3/jlpt-n3-listening-test/", range:[1,22] } ],
+    reading: [ { name:"Japanese Test 4 You — N3 Reading", url:"https://japanesetest4you.com/category/jlpt-n3/jlpt-n3-reading-test/", range:[1,16], mode:"reading" } ],
+    listening: [ { name:"Japanese Test 4 You — N3 Listening", url:"https://japanesetest4you.com/category/jlpt-n3/jlpt-n3-listening-test/", range:[1,22], mode:"listening" } ],
     kanji: [
-      { name:"Japanese Test 4 You — N3 Kanji", url:"https://japanesetest4you.com/category/jlpt-n3/jlpt-n3-kanji-test/", range:[1,31] },
-      { name:"MLC — N3 Kanji Quiz", url:"https://www.mlcjapanese.co.jp/n3_jlpt_kanji_quiz_01.html", range:[1,10] },
+      { name:"Japanese Test 4 You — N3 Kanji", url:"https://japanesetest4you.com/category/jlpt-n3/jlpt-n3-kanji-test/", range:[1,31], mode:"reading" },
+      { name:"MLC — N3 Kanji Quiz", url:"https://www.mlcjapanese.co.jp/n3_jlpt_kanji_quiz_01.html", range:[1,10], mode:"reading" },
     ],
     katakana: [],
-    general: [ { name:"Challenge JLPT N3 (vocabulary, grammar, kanji reading, kanji multiple choice)", url:"https://challenge-jlpt.com/", range:null } ],
+    general: [ { name:"Challenge JLPT N3 (vocabulary, grammar, kanji reading, kanji multiple choice)", url:"https://challenge-jlpt.com/", range:null, mode:"reading" } ],
   },
   N2: {
-    vocabulary: [ { name:"Japanese Test 4 You — N2 Vocabulary", url:"https://japanesetest4you.com/category/jlpt-n2/jlpt-n2-vocabulary-test/", range:[1,26] } ],
+    vocabulary: [ { name:"Japanese Test 4 You — N2 Vocabulary", url:"https://japanesetest4you.com/category/jlpt-n2/jlpt-n2-vocabulary-test/", range:[1,26], mode:"reading" } ],
     grammar: [
-      { name:"Japanese Test 4 You — N2 Grammar", url:"https://japanesetest4you.com/category/jlpt-n2/jlpt-n2-grammar-test/", range:[1,25] },
-      { name:"MLC — N2 Grammar Quiz", url:"https://www.mlcjapanese.co.jp/n2_jlpt_grammar_quiz_01.html", range:[1,12] },
+      { name:"Japanese Test 4 You — N2 Grammar", url:"https://japanesetest4you.com/category/jlpt-n2/jlpt-n2-grammar-test/", range:[1,25], mode:"reading" },
+      { name:"MLC — N2 Grammar Quiz", url:"https://www.mlcjapanese.co.jp/n2_jlpt_grammar_quiz_01.html", range:[1,12], mode:"reading" },
     ],
-    reading: [ { name:"Japanese Test 4 You — N2 Reading", url:"https://japanesetest4you.com/category/jlpt-n2/jlpt-n2-reading-test/", range:[1,41] } ],
-    listening: [ { name:"Japanese Test 4 You — N2 Listening", url:"https://japanesetest4you.com/category/jlpt-n2/jlpt-n2-listening-test/", range:[1,35] } ],
+    reading: [ { name:"Japanese Test 4 You — N2 Reading", url:"https://japanesetest4you.com/category/jlpt-n2/jlpt-n2-reading-test/", range:[1,41], mode:"reading" } ],
+    listening: [ { name:"Japanese Test 4 You — N2 Listening", url:"https://japanesetest4you.com/category/jlpt-n2/jlpt-n2-listening-test/", range:[1,35], mode:"listening" } ],
     kanji: [
-      { name:"Japanese Test 4 You — N2 Kanji", url:"https://japanesetest4you.com/category/jlpt-n2/jlpt-n2-kanji-test/", range:[1,21] },
-      { name:"MLC — N2 Kanji Quiz", url:"https://www.mlcjapanese.co.jp/n2_jlpt_kanji_quiz_01.html", range:[1,10] },
+      { name:"Japanese Test 4 You — N2 Kanji", url:"https://japanesetest4you.com/category/jlpt-n2/jlpt-n2-kanji-test/", range:[1,21], mode:"reading" },
+      { name:"MLC — N2 Kanji Quiz", url:"https://www.mlcjapanese.co.jp/n2_jlpt_kanji_quiz_01.html", range:[1,10], mode:"reading" },
     ],
     katakana: [],
-    general: [ { name:"Challenge JLPT N2 (vocabulary, grammar, kanji reading, kanji multiple choice)", url:"https://challenge-jlpt.com/", range:null } ],
+    general: [ { name:"Challenge JLPT N2 (vocabulary, grammar, kanji reading, kanji multiple choice)", url:"https://challenge-jlpt.com/", range:null, mode:"reading" } ],
   },
   N1: {
-    vocabulary: [ { name:"Japanese Test 4 You — N1 Vocabulary", url:"https://japanesetest4you.com/category/jlpt-n1/jlpt-n1-vocabulary-test/", range:[1,22] } ],
+    vocabulary: [ { name:"Japanese Test 4 You — N1 Vocabulary", url:"https://japanesetest4you.com/category/jlpt-n1/jlpt-n1-vocabulary-test/", range:[1,22], mode:"reading" } ],
     grammar: [
-      { name:"Japanese Test 4 You — N1 Grammar", url:"https://japanesetest4you.com/category/jlpt-n1/jlpt-n1-grammar-test/", range:[1,25] },
-      { name:"MLC — N1 Grammar Quiz", url:"https://www.mlcjapanese.co.jp/n1_jlpt_grammar_quiz_01.html", range:[1,12] },
+      { name:"Japanese Test 4 You — N1 Grammar", url:"https://japanesetest4you.com/category/jlpt-n1/jlpt-n1-grammar-test/", range:[1,25], mode:"reading" },
+      { name:"MLC — N1 Grammar Quiz", url:"https://www.mlcjapanese.co.jp/n1_jlpt_grammar_quiz_01.html", range:[1,12], mode:"reading" },
     ],
-    reading: [ { name:"Japanese Test 4 You — N1 Reading", url:"https://japanesetest4you.com/category/jlpt-n1/jlpt-n1-reading-test/", range:[1,55] } ],
-    listening: [ { name:"Japanese Test 4 You — N1 Listening", url:"https://japanesetest4you.com/category/jlpt-n1/jlpt-n1-listening-test/", range:[1,28] } ],
+    reading: [ { name:"Japanese Test 4 You — N1 Reading", url:"https://japanesetest4you.com/category/jlpt-n1/jlpt-n1-reading-test/", range:[1,55], mode:"reading" } ],
+    listening: [ { name:"Japanese Test 4 You — N1 Listening", url:"https://japanesetest4you.com/category/jlpt-n1/jlpt-n1-listening-test/", range:[1,28], mode:"listening" } ],
     kanji: [
-      { name:"Japanese Test 4 You — N1 Kanji", url:"https://japanesetest4you.com/category/jlpt-n1/jlpt-n1-kanji-test/", range:[1,21] },
-      { name:"MLC — N1 Kanji Quiz", url:"https://www.mlcjapanese.co.jp/n1_jlpt_kanji_quiz_01.html", range:[1,10] },
+      { name:"Japanese Test 4 You — N1 Kanji", url:"https://japanesetest4you.com/category/jlpt-n1/jlpt-n1-kanji-test/", range:[1,21], mode:"reading" },
+      { name:"MLC — N1 Kanji Quiz", url:"https://www.mlcjapanese.co.jp/n1_jlpt_kanji_quiz_01.html", range:[1,10], mode:"reading" },
     ],
     katakana: [],
-    general: [ { name:"Challenge JLPT N1 (vocabulary, grammar, kanji reading, kanji multiple choice)", url:"https://challenge-jlpt.com/", range:null } ],
+    general: [ { name:"Challenge JLPT N1 (vocabulary, grammar, kanji reading, kanji multiple choice)", url:"https://challenge-jlpt.com/", range:null, mode:"reading" } ],
   },
 };
 // Maps a SKILL_LABELS checkbox key to the JLPT_EXAM_RESOURCES section(s) it should pull from.
@@ -316,6 +316,7 @@ function jlptWeekSlice(range, weekNum, totalWeeks) {
 
 Object.values(RESOURCES).forEach(registerResourceLookup);
 Object.values(LEVEL_RESOURCES).forEach(registerResourceLookup);
+Object.values(JLPT_EXAM_RESOURCES).forEach(levelData => Object.values(levelData).forEach(registerResourceLookup));
 
 const SKILL_LABELS = {
   pronunciation:"🔊 Pronunciation", listening:"👂 Listening", conversation:"💬 Conversation",
