@@ -8461,7 +8461,7 @@ const JLPT_TO_ESTIMATION_LEVEL = {
 };
 function toEstimationLevel(v) { return JLPT_TO_ESTIMATION_LEVEL[v] || v; }
 
-function FormScreen({ onSubmit, onBack, onCancel, initialJlpt, initialForm }) {
+function FormScreen({ onSubmit, onBack, onCancel, initialJlpt, initialForm, onLoginClick }) {
   const [form, setForm] = useState(() => initialForm || {
     name:"", email:"", country:"", preferredLang:"English",
     goal:"", customGoal:"", timeline:"",
@@ -8493,6 +8493,20 @@ function FormScreen({ onSubmit, onBack, onCancel, initialJlpt, initialForm }) {
         <p style={{ color:C.purpleLight, fontSize:11, fontWeight:700, letterSpacing:2, marginBottom:4 }}>GAKU SELF-STUDY APP</p>
         <h1 style={{ fontSize:24, fontWeight:900, margin:"0 0 4px" }}>{initialForm ? T.formEditTitle : T.formTitle}</h1>
         <p style={{ color:"#64748b", fontSize:13, marginBottom:24 }}>{initialForm ? T.formEditSubtitle : T.formSubtitle}</p>
+
+        {/* Shown whenever the visitor isn't logged in — landing on this blank
+            form is often not a brand-new student but a returning one whose
+            local browser data is gone (new device, cleared cache, iOS storage
+            eviction). Their real profile/progress may already be saved under
+            their account; logging in pulls it back instead of starting over. */}
+        {onLoginClick && (
+          <div style={{ background:"rgba(139,92,246,0.08)", border:"1px solid rgba(139,92,246,0.3)", borderRadius:10, padding:"12px 14px", marginBottom:20, display:"flex", alignItems:"center", justifyContent:"space-between", gap:10, flexWrap:"wrap" }}>
+            <span style={{ color:"#c4b5fd", fontSize:12, fontWeight:600 }}>{T.alreadyUsedAppBefore || "Already used GAKU Master before?"}</span>
+            <button onClick={onLoginClick} style={{ background:"linear-gradient(135deg,#7c3aed,#a855f7)", border:"none", borderRadius:8, color:"#fff", fontSize:12, fontWeight:800, padding:"7px 16px", cursor:"pointer", whiteSpace:"nowrap" }}>
+              {T.logInToRestoreData || "Log in to restore my data"}
+            </button>
+          </div>
+        )}
 
         <div style={{ display:"flex", flexDirection:"column", gap:14 }}>
           <div><label style={S.label}>{T.yourName}</label><input value={form.name} onChange={e=>set("name",e.target.value)} placeholder={T.namePlaceholder} style={S.input}/></div>
@@ -9363,6 +9377,15 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
   // email needs a real account), then resume straight into the policy
   // step once they're authenticated.
   const [pendingPlan, setPendingPlan] = useState(null); // { type: 'stripe'|'lessons', url, planLabel }
+  // Holds a just-completed profile form while we send a not-yet-logged-in
+  // student to sign up first. Without an account, a saved profile lives only
+  // in this one browser's localStorage — clearing cache, switching devices,
+  // reinstalling the PWA, or iOS evicting storage silently wipes it with no
+  // server-side copy to recover from (this is what caused students to land
+  // back on a blank onboarding screen after already setting up their plan).
+  // Requiring an account at save time guarantees every profile reaches the
+  // migration_bridge table right away.
+  const [pendingProfileSave, setPendingProfileSave] = useState(null);
   // Shown as a full-screen step between "student clicked a paid plan" and
   // "student reaches the actual payment step" — see PolicyGate above.
   const [policyGate, setPolicyGate] = useState(null); // { type: 'stripe'|'lessons', url, planLabel }
@@ -9644,6 +9667,20 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
     };
   }, [authUser]);
   const handleSubmit = (f) => {
+    // Require an account before a profile is ever committed. If we let a
+    // logged-out visitor save straight to localStorage, their entire study
+    // plan/progress exists in exactly one browser with no server backup —
+    // the first cache clear, device switch, or iOS storage eviction sends
+    // them right back to this same blank form with no way to recover.
+    if (!authUser) {
+      setPendingProfileSave(f);
+      setAuthInitialMode("signup");
+      setShowAuthScreen(true);
+      return;
+    }
+    completeProfileSave(f);
+  };
+  const completeProfileSave = (f) => {
     // Preserve planStartDate from existing form (only set it once, on first save)
     const startDate = (form && form.planStartDate) ? form.planStartDate : new Date().toISOString();
     const saved = { ...f, planStartDate: startDate };
@@ -9729,6 +9766,15 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
   ACTIVE_USER_ID = authUser?.id || null;
   const handleAuthed = ({ userId, email } = {}) => {
     setShowAuthScreen(false);
+    // A profile form was filled out but held back because the student wasn't
+    // logged in yet (see handleSubmit) — commit it now and push it to the
+    // migration bridge immediately so it's backed up from the very first save.
+    if (pendingProfileSave) {
+      const f = pendingProfileSave;
+      setPendingProfileSave(null);
+      completeProfileSave(f);
+      if (userId) syncMigrationBridge(userId);
+    }
     if (pendingPlan && userId) {
       const plan = pendingPlan;
       setPendingPlan(null);
@@ -9815,7 +9861,15 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
   // retired legacy quiz landing page (App.js's Home screen) — a dead end with
   // no way back into the self-study app — which is what students calling this
   // "the profile screen loops back to the old quiz page" bug were hitting.
-  if (!form || editing || forceForm) return <FormScreen onSubmit={handleSubmit} onCancel={form ? handleCancelEdit : undefined} initialJlpt={initialJlpt} initialForm={formForEdit} />;
+  if (!form || editing || forceForm) return (
+    <FormScreen
+      onSubmit={handleSubmit}
+      onCancel={form ? handleCancelEdit : undefined}
+      initialJlpt={initialJlpt}
+      initialForm={formForEdit}
+      onLoginClick={!authUser ? () => { setAuthInitialMode("login"); setShowAuthScreen(true); } : undefined}
+    />
+  );
   return (
     <div style={{ position:"relative" }} onClickCapture={handleDashboardInteraction}>
       <Dashboard form={form} onEdit={handleEdit} onLevelUp={(lvl)=>handleSubmit({ ...form, jlpt: lvl })} onDeleteAccount={authUser ? handleDeleteAccount : undefined} deleteAccountBusy={deleteAccountBusy} />
