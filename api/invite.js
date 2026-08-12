@@ -49,9 +49,8 @@ async function handleValidate(supabase, body, res) {
   if (data.student_email.toLowerCase() !== email.trim().toLowerCase()) {
     return res.status(403).json({ error: "This invite code is registered to a different email address." });
   }
-  if (data.used_by) {
-    return res.status(409).json({ error: "This invite code has already been used." });
-  }
+  // A code that matches its registered email is always valid for that student,
+  // even if it was redeemed before (password reset / re-signup / new device, etc).
   return res.status(200).json({ ok: true });
 }
 
@@ -66,8 +65,19 @@ async function handleRedeem(supabase, body, res) {
     .maybeSingle();
   if (fetchErr) return res.status(500).json({ error: fetchErr.message });
   if (!invite) return res.status(404).json({ error: "Invalid invite code." });
+
   if (invite.used_by && invite.used_by !== userId) {
-    return res.status(409).json({ error: "This invite code has already been used." });
+    // Someone else already holds this redemption — only allow re-assigning it
+    // to a new userId if that account's email still matches the code's
+    // registered email (e.g. student deleted/recreated their account, or
+    // signed up fresh after a password reset).
+    const { data: userData, error: userErr } = await supabase.auth.admin.getUserById(userId);
+    if (userErr || !userData?.user?.email) {
+      return res.status(409).json({ error: "This invite code has already been used." });
+    }
+    if (userData.user.email.trim().toLowerCase() !== invite.student_email.toLowerCase()) {
+      return res.status(409).json({ error: "This invite code has already been used." });
+    }
   }
 
   const { error: updateErr } = await supabase
