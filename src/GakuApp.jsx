@@ -9263,6 +9263,13 @@ function AuthScreen({ onAuthed, T, prefillEmail, initialMode }) {
         }
         const { data, error } = await supabase.auth.signUp({ email, password });
         if (error) throw error;
+        // Supabase silently no-ops signUp for an already-registered, confirmed email
+        // (anti-enumeration behavior) and returns a placeholder user with no real
+        // auth.users row — writing to profiles/invite_codes with that id would violate
+        // the profiles_id_fkey constraint. Catch it here and send them to Log In instead.
+        if (data?.user && Array.isArray(data.user.identities) && data.user.identities.length === 0) {
+          throw new Error(T?.emailAlreadyRegistered || "This email is already registered. Please log in instead.");
+        }
         const userId = data?.user?.id;
         if (userId && inviteCode.trim()) {
           await fetch("/api/invite", {
