@@ -41,8 +41,29 @@ export default async function handler(req, res) {
 
     const suspendedUntil = data?.suspended_until || null;
     const suspended = !!(suspendedUntil && new Date(suspendedUntil) > new Date());
-    const isGakuStudent = !!data?.is_gaku_student;
+    let isGakuStudent = !!data?.is_gaku_student;
     const isPaid = !!data?.is_paid;
+
+    // Safety net: profiles.is_gaku_student can end up out of sync with reality
+    // (e.g. the redeem step failed/raced during signup). A GAKU student must
+    // NEVER see the paywall, so before trusting the flag, fall back to
+    // checking whether this account's own email matches a registered invite
+    // code — and if so, self-heal the profile row so this only has to run once.
+    if (!isGakuStudent) {
+      const { data: userData } = await supabase.auth.admin.getUserById(userId);
+      const userEmail = userData?.user?.email?.trim().toLowerCase();
+      if (userEmail) {
+        const { data: invites } = await supabase
+          .from("invite_codes")
+          .select("id")
+          .eq("student_email", userEmail)
+          .limit(1);
+        if (invites && invites.length > 0) {
+          isGakuStudent = true;
+          await supabase.from("profiles").upsert({ id: userId, is_gaku_student: true });
+        }
+      }
+    }
 
     const trialStartedAt = data?.trial_started_at ? new Date(data.trial_started_at) : null;
     const daysSinceTrial = trialStartedAt ? (Date.now() - trialStartedAt.getTime()) / 86400000 : null;
