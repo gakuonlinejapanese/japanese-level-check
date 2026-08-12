@@ -9373,7 +9373,7 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
   // device state — so it can't be reset by uninstalling/reinstalling).
   // Unlike showPaywall (the soft, dismissible 21-interaction nudge), this
   // hard-locks the account to the payment screen with no "check later" out.
-  const [trialLocked, setTrialLocked] = useState(false);
+  const [trialLocked, setTrialLocked] = useState(!!previewPaywall);
   const [daysUntilTrialEnds, setDaysUntilTrialEnds] = useState(null);
   const [form, setForm] = useState(null);
   const [editing, setEditing] = useState(false);
@@ -9814,7 +9814,7 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
   // has a "check later" button), there is no way to dismiss this and reach
   // the dashboard — the only ways out are paying or fully deleting the
   // account (self-service delete, which starts a real fresh trial).
-  if (authUser && trialLocked && !isPaid && !isGakuStudent) {
+  if (authUser && trialLocked && (previewPaywall || (!isPaid && !isGakuStudent))) {
     return (
       <div style={{ minHeight:"100vh", background:"linear-gradient(160deg,#0a0f1e 0%,#0f172a 60%,#0a0f1e 100%)", display:"flex", alignItems:"center", justifyContent:"center", padding:24 }}>
         <div style={{ background:"linear-gradient(135deg,#1e1b4b,#0f172a)", border:"1.5px solid rgba(139,92,246,0.4)", borderRadius:20, padding:"36px 32px", maxWidth:420, width:"90%", textAlign:"center", boxShadow:"0 8px 40px rgba(139,92,246,0.25)" }}>
