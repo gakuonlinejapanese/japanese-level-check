@@ -9714,6 +9714,42 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
   const handleEdit = () => setEditing(true);
   const handleCancelEdit = () => { setEditing(false); setForceForm(false); };
   const [deleteAccountBusy, setDeleteAccountBusy] = useState(false);
+  const [lockedInviteCode, setLockedInviteCode] = useState("");
+  const [lockedInviteBusy, setLockedInviteBusy] = useState(false);
+  const [lockedInviteErr, setLockedInviteErr] = useState("");
+
+  // Lets an already-logged-in trial-locked student redeem a GAKU invite code
+  // they never entered at signup, so they don't have to pay if they're
+  // actually a GAKU student. Mirrors the redeem step in AuthScreen's signup.
+  const handleLockedInviteRedeem = async () => {
+    if (!lockedInviteCode.trim() || !authUser) return;
+    setLockedInviteBusy(true);
+    setLockedInviteErr("");
+    try {
+      const vRes = await fetch("/api/invite", {
+        method: "POST", headers: { "Content-Type":"application/json" },
+        body: JSON.stringify({ action: "validate", code: lockedInviteCode.trim(), email: authUser.email }),
+      });
+      const vData = await vRes.json();
+      if (!vRes.ok) throw new Error(vData.error || "Invalid invite code.");
+      const rRes = await fetch("/api/invite", {
+        method: "POST", headers: { "Content-Type":"application/json" },
+        body: JSON.stringify({ action: "redeem", code: lockedInviteCode.trim(), userId: authUser.id }),
+      });
+      const rData = await rRes.json();
+      if (!rRes.ok) throw new Error(rData.error || "Could not redeem this invite code.");
+      await fetch("/api/create-profile", {
+        method: "POST", headers: { "Content-Type":"application/json" },
+        body: JSON.stringify({ userId: authUser.id, email: authUser.email, isGakuStudent: true }),
+      });
+      setIsGakuStudent(true);
+      setTrialLocked(false);
+    } catch (e) {
+      setLockedInviteErr(e.message || "Something went wrong.");
+    } finally {
+      setLockedInviteBusy(false);
+    }
+  };
   const handleDeleteAccount = async () => {
     if (!authUser || !supabase) return;
     const confirmMsg = isGakuStudent
@@ -9840,6 +9876,17 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
               </p>
             )}
             {paywallRateError && <p style={{ color:C.red, fontSize:11, margin:"8px 0 0" }}>{paywallRateError}</p>}
+          </div>
+
+          <div style={{ background:"rgba(74,222,128,0.06)", border:"1px solid rgba(74,222,128,0.3)", borderRadius:10, padding:"12px 14px", marginBottom:18, textAlign:"left" }}>
+            <p style={{ color:"#4ade80", fontSize:11, fontWeight:800, letterSpacing:0.5, margin:"0 0 8px" }}>🎓 {T?.freePlanGakuStudent || "FREE Plan (Only GAKU students)"}</p>
+            <div style={{ display:"flex", gap:6 }}>
+              <input value={lockedInviteCode} onChange={e=>setLockedInviteCode(e.target.value)} placeholder={T?.inviteCodePlaceholder || "Enter invite code..."} style={{ flex:1, background:"rgba(255,255,255,0.05)", border:`1px solid ${C.border}`, borderRadius:8, color:"#f1f5f9", fontSize:12, padding:"8px 10px" }} />
+              <button onClick={handleLockedInviteRedeem} disabled={lockedInviteBusy || !lockedInviteCode.trim()} style={{ padding:"8px 14px", borderRadius:8, background:"linear-gradient(135deg,#22c55e,#16a34a)", border:"none", color:"#fff", fontSize:12, fontWeight:700, cursor:"pointer", whiteSpace:"nowrap" }}>
+                {lockedInviteBusy ? "⏳" : (T?.unlockBtn || "Unlock")}
+              </button>
+            </div>
+            {lockedInviteErr && <p style={{ color:C.red, fontSize:11, margin:"8px 0 0" }}>{lockedInviteErr}</p>}
           </div>
 
           <p style={{ color:"#a855f7", fontSize:10, fontWeight:800, margin:"0 0 6px", textAlign:"left", letterSpacing:1 }}>{T?.appOnlyLabel}</p>
