@@ -9857,6 +9857,25 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
               💳 $80.95 <span style={{ color:"#64748b", fontSize:10, fontWeight:400 }}>($13.49/mo)</span> {formatConverted(80.95) && <span style={{ color:"#67e8f9", fontWeight:400 }}>(≈ {formatConverted(80.95)} {paywallCurrency})</span>}
             </button>
           </div>
+          <p style={{ color:"#f59e0b", fontSize:10, fontWeight:800, margin:"0 0 6px", textAlign:"left", letterSpacing:1 }}>{T?.appLessonsLabel}</p>
+          <div style={{ display:"flex", flexDirection:"column", gap:8, marginBottom:14 }}>
+            <button onClick={()=>handleLessonPlanClick("/book-lesson.html?plan=3mo_30min", "App + Lessons - 3 Months, 30min/mo ($68.95)")} style={{ display:"block", width:"100%", padding:"11px 14px", background:"linear-gradient(135deg,rgba(245,158,11,0.15),rgba(245,158,11,0.05))", border:"1.5px solid rgba(245,158,11,0.4)", borderRadius:10, color:"#f1f5f9", fontSize:12, fontWeight:700, cursor:"pointer", textAlign:"left" }}>
+              <span style={{ color:"#f59e0b", fontSize:10, fontWeight:800, display:"block", marginBottom:1 }}>{T?.threeMonthsSave5_30min}</span>
+              💳 $68.95 <span style={{ color:"#64748b", fontSize:10, fontWeight:400 }}>($22.98/mo)</span> {formatConverted(68.95) && <span style={{ color:"#67e8f9", fontWeight:400 }}>(≈ {formatConverted(68.95)} {paywallCurrency})</span>}
+            </button>
+            <button onClick={()=>handleLessonPlanClick("/book-lesson.html?plan=3mo_1hr", "App + Lessons - 3 Months, 1hr/mo ($95.20)")} style={{ display:"block", width:"100%", padding:"11px 14px", background:"linear-gradient(135deg,rgba(245,158,11,0.15),rgba(245,158,11,0.05))", border:"1.5px solid rgba(245,158,11,0.4)", borderRadius:10, color:"#f1f5f9", fontSize:12, fontWeight:700, cursor:"pointer", textAlign:"left" }}>
+              <span style={{ color:"#f59e0b", fontSize:10, fontWeight:800, display:"block", marginBottom:1 }}>{T?.threeMonthsSave5_1hr}</span>
+              💳 $95.20 <span style={{ color:"#64748b", fontSize:10, fontWeight:400 }}>($31.73/mo)</span> {formatConverted(95.20) && <span style={{ color:"#67e8f9", fontWeight:400 }}>(≈ {formatConverted(95.20)} {paywallCurrency})</span>}
+            </button>
+            <button onClick={()=>handleLessonPlanClick("/book-lesson.html?plan=6mo_30min", "App + Lessons - 6 Months, 30min/mo ($133.45)")} style={{ display:"block", width:"100%", padding:"11px 14px", background:"linear-gradient(135deg,rgba(251,191,36,0.2),rgba(251,191,36,0.08))", border:"1.5px solid rgba(251,191,36,0.5)", borderRadius:10, color:"#f1f5f9", fontSize:12, fontWeight:700, cursor:"pointer", textAlign:"left" }}>
+              <span style={{ color:"#fbbf24", fontSize:10, fontWeight:800, display:"block", marginBottom:1 }}>{T?.sixMonthsSave5_30min}</span>
+              💳 $133.45 <span style={{ color:"#64748b", fontSize:10, fontWeight:400 }}>($22.24/mo)</span> {formatConverted(133.45) && <span style={{ color:"#67e8f9", fontWeight:400 }}>(≈ {formatConverted(133.45)} {paywallCurrency})</span>}
+            </button>
+            <button onClick={()=>handleLessonPlanClick("/book-lesson.html?plan=6mo_1hr", "App + Lessons - 6 Months, 1hr/mo ($185.95)")} style={{ display:"block", width:"100%", padding:"11px 14px", background:"linear-gradient(135deg,rgba(251,191,36,0.2),rgba(251,191,36,0.08))", border:"1.5px solid rgba(251,191,36,0.5)", borderRadius:10, color:"#f1f5f9", fontSize:12, fontWeight:700, cursor:"pointer", textAlign:"left" }}>
+              <span style={{ color:"#fbbf24", fontSize:10, fontWeight:800, display:"block", marginBottom:1 }}>{T?.sixMonthsSave10_1hr}</span>
+              💳 $185.95 <span style={{ color:"#64748b", fontSize:10, fontWeight:400 }}>($30.99/mo)</span> {formatConverted(185.95) && <span style={{ color:"#67e8f9", fontWeight:400 }}>(≈ {formatConverted(185.95)} {paywallCurrency})</span>}
+            </button>
+          </div>
           <button onClick={authUser ? handleDeleteAccount : undefined} disabled={deleteAccountBusy} style={{ background:"none", border:"none", color:"#475569", fontSize:11, cursor:"pointer", textDecoration:"underline" }}>
             {T?.deleteAccountLink || "Delete my account instead"}
           </button>
