@@ -7144,13 +7144,13 @@ Now process this text. Return ONLY the resulting text with furigana added — no
 
 ${original}`;
 
-  let out = await callClaudeFast(prompt);
-  let attempts = 0;
-  while (attempts < 2 && (isDegenerateFurigana(original, out) || hasMissingFurigana(out))) {
-    out = await callClaudeFast(prompt);
-    attempts++;
-  }
-  if (isDegenerateFurigana(original, out)) return original; // graceful fallback — never show a broken/looping result
+  // Fire all 3 attempts in PARALLEL (not one-at-a-time) — each is independent since they all
+  // start from the same original text, so there's no reason to wait on one before starting the
+  // next. This cuts worst-case latency from ~3 sequential round-trips down to ~1.
+  const results = await Promise.all([callClaudeFast(prompt), callClaudeFast(prompt), callClaudeFast(prompt)]);
+  let out = results.find(o => !isDegenerateFurigana(original, o) && !hasMissingFurigana(o));
+  if (!out) out = results.find(o => !isDegenerateFurigana(original, o)); // relaxed: prefer a non-garbled result even if a rare kanji got missed
+  if (!out || isDegenerateFurigana(original, out)) return original; // graceful fallback — never show a broken/looping result
   return applyJapaneseReadingCorrections(out);
 }
 
