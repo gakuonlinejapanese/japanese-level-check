@@ -7103,6 +7103,20 @@ const JAPANESE_READING_CORRECTIONS = [
   // followed by another kanji or already followed by "(").
   [/事前(?![\(\u4E00-\u9FFF\u3005])/g, "事前(じぜん)"],
   [/場合(?![\(\u4E00-\u9FFF\u3005])/g, "場合(ばあい)"],
+  [/一日中(\s*)\((?!いちにちじゅう\))[^)]*\)/g, "一日中$1(いちにちじゅう)"],
+  [/初日(\s*)\((?!しょにち\))[^)]*\)/g, "初日$1(しょにち)"],
+  [/勝手(\s*)\((?!かって\))[^)]*\)/g, "勝手$1(かって)"],
+  [/一言(\s*)\((?!ひとこと\))[^)]*\)/g, "一言$1(ひとこと)"],
+  [/幸い(\s*)\([^)]*\)/g, "幸(さいわ)い"],
+  [/付け加える(\s*)\([^)]*\)/g, "付け加える$1(つけくわえる)"],
+  // 前 as a standalone word (e.g. 前の, 前に) — not part of a compound like 午前/名前, so only
+  // insert when it isn't immediately preceded OR followed by another kanji.
+  [/(?<![\u4E00-\u9FFF])前(?![\(\u4E00-\u9FFF\u3005])/g, "前(まえ)"],
+  // Katakana never takes furigana — strip any reading the model attaches to a katakana run.
+  [/([ァ-ヶー]+)(\s*)\([^)]*\)/g, "$1"],
+  // Hiragana-only words never take furigana either — strip a (bogus, kana-only) reading the
+  // model sometimes attaches right after a run of pure hiragana (e.g. こと(こと), した(した)).
+  [/([ぁ-ん]+)(\s*)\([ぁ-んー]+\)/g, "$1"],
 ];
 function applyJapaneseReadingCorrections(text) {
   if (!text) return text;
