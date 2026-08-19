@@ -5310,7 +5310,7 @@ function WordDetailCard({ card: cardProp, onSave, onBack, form, prefLang }) {
     "Chinese (Simplified)":"cmn", "Chinese (Traditional)":"cmn", "Italian":"ita",
     "Korean":"kor", "Thai":"tha", "Malay":"zsm", "Indonesian":"ind",
     "Vietnamese":"vie", "Hindi":"hin", "Japanese":"jpn", "Turkish":"tur",
-    "Nepali":"nep", "Filipino":"tgl", "Portuguese":"por",
+    "Nepali":"nep", "Filipino":"tgl", "Portuguese":"por", "Mizo":"lus",
   };
 
   // Fetch real, existing example sentences containing this word from Tatoeba's
@@ -8422,11 +8422,13 @@ Warm, under 100 words, English.` }]
 }
 
 // ─── LANGUAGES for translation ─────────────────────────────────────────────────
-// All 17 languages are fully statically translated (instant switch, no AI delay)
+// All 17 languages are fully statically translated (instant switch, no AI delay).
+// Additional languages (e.g. Mizo) can be listed here too — they'll fall back to
+// on-the-fly AI translation via useUITranslations() instead of static strings.
 const LANGUAGES = [
   "English","Spanish","French","German","Chinese (Simplified)","Chinese (Traditional)",
   "Italian","Korean","Thai","Malay","Indonesian","Vietnamese","Hindi",
-  "Japanese","Turkish","Nepali","Filipino",
+  "Japanese","Turkish","Nepali","Filipino","Mizo",
 ];
 
 // Native-script display names for the 🌐 language badge (shown regardless of UI language)
@@ -8435,7 +8437,7 @@ const NATIVE_LANG_NAMES = {
   "Chinese (Simplified)":"简体中文","Chinese (Traditional)":"繁體中文","Italian":"Italiano",
   "Korean":"한국어","Thai":"ไทย","Malay":"Bahasa Melayu","Indonesian":"Bahasa Indonesia",
   "Vietnamese":"Tiếng Việt","Hindi":"हिन्दी","Japanese":"日本語","Turkish":"Türkçe",
-  "Nepali":"नेपाली","Filipino":"Filipino",
+  "Nepali":"नेपाली","Filipino":"Filipino","Mizo":"Mizo ṭawng",
 };
 
 // Maps the raw English values stored in form.goal / form.timeline to their T-object key,
