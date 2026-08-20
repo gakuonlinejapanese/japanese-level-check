@@ -9564,7 +9564,7 @@ function FormScreen({ onSubmit, onBack, onCancel, initialJlpt, initialForm, onLo
   };
   const acceptJlptMockOffer = () => {
     dismissJlptMockOffer();
-    window.open("https://www.seitojapanese.online/", "_blank", "noopener,noreferrer");
+    window.open("https://www.seitojapanese.online/seitojapanese", "_blank", "noopener,noreferrer");
   };
   const showConvJlptWarning = isJlptTargetGoal(form.goal) && form.skills.includes("conversation") && !convWarningDismissed;
   const showJlptMockOffer = form.skills.includes("jlpt") && !jlptMockDismissed;
