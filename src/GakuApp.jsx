@@ -479,6 +479,7 @@ const UI_TRANSLATIONS = {
     skillConversation: "💬 Conversation", skillJlpt: "🎯 JLPT Prep",
     skillReading: "📖 Reading", skillKanji: "🈳 Kanji", skillGrammar: "📝 Grammar",
     skillOnlyHiragana: "あ Only Hiragana", skillOnlyKatakana: "ア Only Katakana",
+    jlptMockOfferTitle: "Would you like to take a JLPT mock test and get your actual level and study guide?",
     // How to use
     howToTitle: "How to use this app",
     howToSchedule: "Your weekly study plan, broken into daily tasks. Tap a task to mark it done and track your weekly progress.",
@@ -803,6 +804,7 @@ const UI_TRANSLATIONS = {
     skillConversation: "💬 Conversation", skillJlpt: "🎯 Préparation JLPT",
     skillReading: "📖 Lecture", skillKanji: "🈳 Kanji", skillGrammar: "📝 Grammaire",
     skillOnlyHiragana: "あ Hiragana uniquement", skillOnlyKatakana: "ア Katakana uniquement",
+    jlptMockOfferTitle: "Souhaitez-vous passer un examen blanc du JLPT et obtenir votre niveau réel ainsi qu'un guide d'étude ?",
     howToTitle: "Comment utiliser cette application",
     howToSchedule: "Votre plan d'étude hebdomadaire, divisé en tâches quotidiennes. Appuyez sur une tâche pour la marquer comme faite.",
     howToPractice: "Exercices générés par l'IA à partir du texte japonais que vous collez (articles, sous-titres, légendes) — vocabulaire, kanji, grammaire, lecture, écoute, conversation et prononciation. Appuyez sur « Voir la réponse » pour vous corriger.",
@@ -1113,6 +1115,7 @@ const UI_TRANSLATIONS = {
     skillConversation: "💬 Conversación", skillJlpt: "🎯 Preparación JLPT",
     skillReading: "📖 Lectura", skillKanji: "🈳 Kanji", skillGrammar: "📝 Gramática",
     skillOnlyHiragana: "あ Solo Hiragana", skillOnlyKatakana: "ア Solo Katakana",
+    jlptMockOfferTitle: "¿Te gustaría hacer un simulacro del JLPT y obtener tu nivel real y una guía de estudio?",
     howToTitle: "Cómo usar esta aplicación",
     howToSchedule: "Tu plan de estudio semanal, dividido en tareas diarias. Toca una tarea para marcarla como completada.",
     howToPractice: "Ejercicios generados por IA a partir del texto japonés que pegas (artículos, subtítulos, leyendas) — vocabulario, kanji, gramática, lectura, escucha, conversación y pronunciación. Toca 'Ver respuesta' para comprobar.",
@@ -1423,6 +1426,7 @@ const UI_TRANSLATIONS = {
     skillConversation: "💬 Conversação", skillJlpt: "🎯 Preparação JLPT",
     skillReading: "📖 Leitura", skillKanji: "🈳 Kanji", skillGrammar: "📝 Gramática",
     skillOnlyHiragana: "あ Apenas Hiragana", skillOnlyKatakana: "ア Apenas Katakana",
+    jlptMockOfferTitle: "Gostaria de fazer um simulado do JLPT e receber seu nível real e um guia de estudos?",
     howToTitle: "Como usar este aplicativo",
     howToSchedule: "Seu plano de estudo semanal, dividido em tarefas diárias.",
     howToPractice: "Exercícios gerados por IA a partir do texto japonês que você cola (artigos, legendas, descrições) — vocabulário, kanji, gramática, leitura, escuta, conversação e pronúncia. Toque em 'Ver resposta' para conferir.",
@@ -1733,6 +1737,7 @@ const UI_TRANSLATIONS = {
     skillConversation: "💬 Konversation", skillJlpt: "🎯 JLPT-Vorbereitung",
     skillReading: "📖 Lesen", skillKanji: "🈳 Kanji", skillGrammar: "📝 Grammatik",
     skillOnlyHiragana: "あ Nur Hiragana", skillOnlyKatakana: "ア Nur Katakana",
+    jlptMockOfferTitle: "Möchtest du einen JLPT-Probetest machen und deinen tatsächlichen Level sowie einen Lernleitfaden erhalten?",
     howToTitle: "Wie man diese App benutzt",
     howToSchedule: "Ihr wöchentlicher Lernplan, aufgeteilt in tägliche Aufgaben.",
     howToPractice: "KI-generierte Übungen aus dem japanischen Text, den Sie einfügen (Artikel, Untertitel, Bildunterschriften) — Wortschatz, Kanji, Grammatik, Lesen, Hören, Konversation und Aussprache. Tippen Sie auf 'Antwort anzeigen', um sich selbst zu überprüfen.",
@@ -2043,6 +2048,7 @@ const UI_TRANSLATIONS = {
     skillConversation: "💬 Conversazione", skillJlpt: "🎯 Preparazione JLPT",
     skillReading: "📖 Lettura", skillKanji: "🈳 Kanji", skillGrammar: "📝 Grammatica",
     skillOnlyHiragana: "あ Solo Hiragana", skillOnlyKatakana: "ア Solo Katakana",
+    jlptMockOfferTitle: "Vuoi fare una simulazione del JLPT e ricevere il tuo livello reale e una guida di studio?",
     howToTitle: "Come usare questa app",
     howToSchedule: "Il tuo piano di studio settimanale, suddiviso in attività giornaliere. Tocca un'attività per contrassegnarla come completata.",
     howToPractice: "Esercizi generati dall'IA a partire dal testo giapponese che incolli (articoli, sottotitoli, didascalie) — vocabolario, kanji, grammatica, lettura, ascolto, conversazione e pronuncia. Tocca 'Mostra risposta' per verificare.",
@@ -2353,6 +2359,7 @@ const UI_TRANSLATIONS = {
     skillConversation: "💬 会话", skillJlpt: "🎯 JLPT备考",
     skillReading: "📖 阅读", skillKanji: "🈳 汉字", skillGrammar: "📝 语法",
     skillOnlyHiragana: "あ 仅平假名", skillOnlyKatakana: "ア 仅片假名",
+    jlptMockOfferTitle: "您想参加JLPT模拟考试并获得您的实际水平和学习指南吗？",
     howToTitle: "如何使用此应用",
     howToSchedule: "你的每周学习计划，分为每日任务。点击任务以标记完成并跟踪每周进度。",
     howToPractice: "根据你粘贴的日语文本（文章、字幕、说明）由AI生成的练习——涵盖词汇、汉字、语法、阅读、听力、会话和发音。点击「显示答案」自我检查。",
@@ -2663,6 +2670,7 @@ const UI_TRANSLATIONS = {
     skillConversation: "💬 會話", skillJlpt: "🎯 JLPT備考",
     skillReading: "📖 閱讀", skillKanji: "🈳 漢字", skillGrammar: "📝 語法",
     skillOnlyHiragana: "あ 僅平假名", skillOnlyKatakana: "ア 僅片假名",
+    jlptMockOfferTitle: "您想參加JLPT模擬考試並獲得您的實際程度和學習指南嗎？",
     howToTitle: "如何使用此應用",
     howToSchedule: "你的每週學習計劃，分為每日任務。點擊任務以標記完成並跟踪每週進度。",
     howToPractice: "根據你貼上的日語文本（文章、字幕、說明）由AI生成的練習——涵蓋詞彙、漢字、文法、閱讀、聽力、會話和發音。點擊「顯示答案」自我檢查。",
@@ -2973,6 +2981,7 @@ const UI_TRANSLATIONS = {
     skillConversation: "💬 회화", skillJlpt: "🎯 JLPT 준비",
     skillReading: "📖 독해", skillKanji: "🈳 한자", skillGrammar: "📝 문법",
     skillOnlyHiragana: "あ 히라가나만", skillOnlyKatakana: "ア 가타카나만",
+    jlptMockOfferTitle: "JLPT 모의고사를 보고 실제 레벨과 학습 가이드를 받아보시겠어요?",
     howToTitle: "이 앱 사용 방법",
     howToSchedule: "주간 학습 계획, 일별 과제로 나뉩니다. 과제를 눌러 완료 표시하고 주간 진도를 추적하세요.",
     howToPractice: "붙여넣은 일본어 텍스트(기사, 자막, 캡션)를 기반으로 AI가 생성한 연습문제 — 어휘, 한자, 문법, 독해, 듣기, 회화, 발음을 다룹니다. '답 보기'를 눌러 확인하세요.",
@@ -3283,6 +3292,7 @@ const UI_TRANSLATIONS = {
     skillConversation: "💬 การสนทนา", skillJlpt: "🎯 เตรียม JLPT",
     skillReading: "📖 การอ่าน", skillKanji: "🈳 คันจิ", skillGrammar: "📝 ไวยากรณ์",
     skillOnlyHiragana: "あ เฉพาะฮิรางานะ", skillOnlyKatakana: "ア เฉพาะคาตากานะ",
+    jlptMockOfferTitle: "คุณอยากทำข้อสอบจำลอง JLPT เพื่อดูระดับที่แท้จริงและรับคู่มือการเรียนของคุณไหม?",
     howToTitle: "วิธีใช้แอปนี้",
     howToSchedule: "แผนการเรียนรายสัปดาห์ แบ่งเป็นงานรายวัน แตะงานเพื่อทำเครื่องหมายว่าเสร็จแล้วและติดตามความคืบหน้า",
     howToPractice: "แบบฝึกหัดที่สร้างโดย AI จากข้อความภาษาญี่ปุ่นที่คุณวาง (บทความ คำบรรยาย แคปชั่น) — ครอบคลุมคำศัพท์ คันจิ ไวยากรณ์ การอ่าน การฟัง การสนทนา และการออกเสียง แตะ 'ดูคำตอบ' เพื่อตรวจสอบ",
@@ -3593,6 +3603,7 @@ const UI_TRANSLATIONS = {
     skillConversation: "💬 Perbualan", skillJlpt: "🎯 Persediaan JLPT",
     skillReading: "📖 Membaca", skillKanji: "🈳 Kanji", skillGrammar: "📝 Tatabahasa",
     skillOnlyHiragana: "あ Hiragana Sahaja", skillOnlyKatakana: "ア Katakana Sahaja",
+    jlptMockOfferTitle: "Adakah anda ingin mengambil ujian percubaan JLPT dan mendapatkan tahap sebenar serta panduan belajar anda?",
     howToTitle: "Cara menggunakan apl ini",
     howToSchedule: "Pelan belajar mingguan anda, dibahagikan kepada tugasan harian. Ketik tugasan untuk tandai selesai.",
     howToPractice: "Latihan yang dijana AI daripada teks Jepun yang anda tampal (artikel, sari kata, kapsyen) — merangkumi kosa kata, kanji, tatabahasa, bacaan, pendengaran, perbualan dan sebutan. Ketik 'Tunjuk jawapan' untuk semak.",
@@ -3903,6 +3914,7 @@ const UI_TRANSLATIONS = {
     skillConversation: "💬 Percakapan", skillJlpt: "🎯 Persiapan JLPT",
     skillReading: "📖 Membaca", skillKanji: "🈳 Kanji", skillGrammar: "📝 Tata Bahasa",
     skillOnlyHiragana: "あ Hanya Hiragana", skillOnlyKatakana: "ア Hanya Katakana",
+    jlptMockOfferTitle: "Apakah Anda ingin mengikuti tes simulasi JLPT dan mendapatkan level sebenarnya serta panduan belajar Anda?",
     howToTitle: "Cara menggunakan aplikasi ini",
     howToSchedule: "Rencana belajar mingguan Anda, dibagi menjadi tugas harian. Ketuk tugas untuk menandainya selesai.",
     howToPractice: "Latihan yang dihasilkan AI dari teks Jepang yang Anda tempel (artikel, subtitle, keterangan) — mencakup kosakata, kanji, tata bahasa, membaca, mendengarkan, percakapan, dan pengucapan. Ketuk 'Tampilkan jawaban' untuk memeriksa.",
@@ -4213,6 +4225,7 @@ const UI_TRANSLATIONS = {
     skillConversation: "💬 Hội thoại", skillJlpt: "🎯 Luyện JLPT",
     skillReading: "📖 Đọc hiểu", skillKanji: "🈳 Kanji", skillGrammar: "📝 Ngữ pháp",
     skillOnlyHiragana: "あ Chỉ Hiragana", skillOnlyKatakana: "ア Chỉ Katakana",
+    jlptMockOfferTitle: "Bạn có muốn làm bài thi thử JLPT để biết trình độ thực tế và nhận hướng dẫn học tập không?",
     howToTitle: "Cách sử dụng ứng dụng này",
     howToSchedule: "Kế hoạch học hàng tuần của bạn, chia thành các nhiệm vụ hàng ngày. Nhấn nhiệm vụ để đánh dấu hoàn thành.",
     howToPractice: "Bài tập do AI tạo từ văn bản tiếng Nhật bạn dán vào (bài viết, phụ đề, chú thích) — bao gồm từ vựng, kanji, ngữ pháp, đọc hiểu, nghe, hội thoại và phát âm. Nhấn 'Hiện đáp án' để kiểm tra.",
@@ -4523,6 +4536,7 @@ const UI_TRANSLATIONS = {
     skillConversation: "💬 बातचीत", skillJlpt: "🎯 JLPT तैयारी",
     skillReading: "📖 पठन", skillKanji: "🈳 Kanji", skillGrammar: "📝 व्याकरण",
     skillOnlyHiragana: "あ केवल हिरागाना", skillOnlyKatakana: "ア केवल काताकाना",
+    jlptMockOfferTitle: "क्या आप JLPT मॉक टेस्ट देना चाहेंगे और अपना वास्तविक स्तर तथा स्टडी गाइड प्राप्त करना चाहेंगे?",
     howToTitle: "इस ऐप का उपयोग कैसे करें",
     howToSchedule: "आपकी साप्ताहिक अध्ययन योजना, दैनिक कार्यों में विभाजित। साप्ताहिक प्रगति ट्रैक करने के लिए कार्य टैप करें।",
     howToPractice: "आपके द्वारा पेस्ट किए गए जापानी टेक्स्ट (लेख, सबटाइटल, कैप्शन) से AI-जनित अभ्यास — शब्दावली, कांजी, व्याकरण, पठन, श्रवण, बातचीत और उच्चारण को कवर करता है। जांचने के लिए 'उत्तर दिखाएं' टैप करें।",
@@ -4833,6 +4847,7 @@ const UI_TRANSLATIONS = {
     skillConversation: "💬 会話", skillJlpt: "🎯 JLPT対策",
     skillReading: "📖 読解", skillKanji: "🈳 漢字", skillGrammar: "📝 文法",
     skillOnlyHiragana: "あ ひらがなのみ", skillOnlyKatakana: "ア カタカナのみ",
+    jlptMockOfferTitle: "JLPTの模擬試験を受けて、あなたの本当のレベルと学習ガイドを手に入れませんか？",
     howToTitle: "このアプリの使い方",
     howToSchedule: "週間学習プランを日々のタスクに分割しています。タスクをタップして完了をマークし、週間進捗を追跡します。",
     howToPractice: "貼り付けた日本語テキスト（記事・字幕・キャプション）から生成されるAI練習問題です。語彙・漢字・文法・読解・リスニング・会話・発音をカバーします。「答えを見る」をタップして確認できます。",
@@ -5143,6 +5158,7 @@ const UI_TRANSLATIONS = {
     skillConversation: "💬 Konuşma", skillJlpt: "🎯 JLPT Hazırlık",
     skillReading: "📖 Okuma", skillKanji: "🈳 Kanji", skillGrammar: "📝 Dil Bilgisi",
     skillOnlyHiragana: "あ Sadece Hiragana", skillOnlyKatakana: "ア Sadece Katakana",
+    jlptMockOfferTitle: "JLPT deneme sınavına girip gerçek seviyenizi ve çalışma rehberinizi almak ister misiniz?",
     howToTitle: "Bu uygulama nasıl kullanılır",
     howToSchedule: "Günlük görevlere bölünmüş haftalık çalışma planınız. Tamamlandı olarak işaretlemek için bir göreve dokunun.",
     howToPractice: "Yapıştırdığınız Japonca metinden (makale, altyazı, açıklama) AI tarafından oluşturulan alıştırmalar — kelime, kanji, dilbilgisi, okuma, dinleme, konuşma ve telaffuzu kapsar. Kontrol etmek için 'Cevabı göster'e dokunun.",
@@ -5453,6 +5469,7 @@ const UI_TRANSLATIONS = {
     skillConversation: "💬 कुराकानी", skillJlpt: "🎯 JLPT तयारी",
     skillReading: "📖 पठन", skillKanji: "🈳 कान्जी", skillGrammar: "📝 व्याकरण",
     skillOnlyHiragana: "あ हिरागाना मात्र", skillOnlyKatakana: "ア काताकाना मात्र",
+    jlptMockOfferTitle: "के तपाईं JLPT नमूना परीक्षा दिन र आफ्नो वास्तविक तह र अध्ययन गाइड प्राप्त गर्न चाहनुहुन्छ?",
     howToTitle: "यो एप कसरी प्रयोग गर्ने",
     howToSchedule: "तपाईंको साप्ताहिक अध्ययन योजना, दैनिक कार्यहरूमा विभाजित। साप्ताहिक प्रगति ट्र्याक गर्न कार्यलाई ट्याप गर्नुहोस्।",
     howToPractice: "तपाईंले टाँस्नुभएको जापानी पाठ (लेख, उपशीर्षक, क्याप्शन) बाट AI-उत्पन्न अभ्यास — शब्दावली, कांजी, व्याकरण, पठन, सुनाइ, कुराकानी र उच्चारण समेट्छ। जाँच गर्न 'जवाफ देखाउनुहोस्' ट्याप गर्नुहोस्।",
@@ -5763,6 +5780,7 @@ const UI_TRANSLATIONS = {
     skillConversation: "💬 Pakikipag-usap", skillJlpt: "🎯 Paghahanda sa JLPT",
     skillReading: "📖 Pagbasa", skillKanji: "🈳 Kanji", skillGrammar: "📝 Gramatika",
     skillOnlyHiragana: "あ Hiragana Lamang", skillOnlyKatakana: "ア Katakana Lamang",
+    jlptMockOfferTitle: "Gusto mo bang kumuha ng JLPT mock test at malaman ang tunay mong level at makakuha ng study guide?",
     howToTitle: "Paano gamitin ang app na ito",
     howToSchedule: "Ang iyong lingguhang study plan, nahahati sa araw-araw na gawain. I-tap ang gawain upang markahan itong tapos na.",
     howToPractice: "Mga pagsasanay na ginawa ng AI mula sa Japanese text na iyong idinikit (artikulo, subtitle, caption) — sinasaklaw ang bokabularyo, kanji, gramatika, pagbasa, pakikinig, pag-uusap, at pagbigkas. I-tap ang 'Ipakita ang sagot' upang suriin.",
@@ -9528,9 +9546,28 @@ function FormScreen({ onSubmit, onBack, onCancel, initialJlpt, initialForm, onLo
   });
   const [err, setErr] = useState("");
   const [convWarningDismissed, setConvWarningDismissed] = useState(false);
+  // "Take a free JLPT mock test?" offer — shown once a student has JLPT Prep among their
+  // study skills. Persisted in localStorage (scopedKey) so it doesn't nag on every profile edit
+  // once the student has answered Yes or No; re-toggling the "jlpt" skill off then back on resets it.
+  const [jlptMockDismissed, setJlptMockDismissed] = useState(() => {
+    try { return localStorage.getItem(scopedKey("gaku_jlptmock_dismissed")) === "1"; } catch { return false; }
+  });
   const set = (k,v) => { setForm(f=>({...f,[k]:v})); if (k === "goal") setConvWarningDismissed(false); };
-  const toggleSkill = (s) => { setForm(f=>({ ...f, skills: f.skills.includes(s) ? f.skills.filter(x=>x!==s) : [...f.skills, s] })); if (s === "conversation") setConvWarningDismissed(false); };
+  const toggleSkill = (s) => {
+    setForm(f=>({ ...f, skills: f.skills.includes(s) ? f.skills.filter(x=>x!==s) : [...f.skills, s] }));
+    if (s === "conversation") setConvWarningDismissed(false);
+    if (s === "jlpt") { setJlptMockDismissed(false); try { localStorage.removeItem(scopedKey("gaku_jlptmock_dismissed")); } catch {} }
+  };
+  const dismissJlptMockOffer = () => {
+    setJlptMockDismissed(true);
+    try { localStorage.setItem(scopedKey("gaku_jlptmock_dismissed"), "1"); } catch {}
+  };
+  const acceptJlptMockOffer = () => {
+    dismissJlptMockOffer();
+    window.open("https://www.seitojapanese.online/", "_blank", "noopener,noreferrer");
+  };
   const showConvJlptWarning = isJlptTargetGoal(form.goal) && form.skills.includes("conversation") && !convWarningDismissed;
+  const showJlptMockOffer = form.skills.includes("jlpt") && !jlptMockDismissed;
   const T = useUITranslations(form.preferredLang);
   const isOther = form.goal === "Other";
   const valid = form.name && form.email && form.country && form.goal && (isOther ? form.customGoal.trim() : true) && form.timeline && form.jlpt && form.hoursPerDay && form.daysPerWeek && form.skills.length > 0;
@@ -9672,6 +9709,15 @@ function FormScreen({ onSubmit, onBack, onCancel, initialJlpt, initialForm, onLo
                 <div style={{ display:"flex", gap:8 }}>
                   <button onClick={()=>setConvWarningDismissed(true)} style={{ ...S.btn, padding:"7px 14px", fontSize:12, background:C.amber, color:"#1a1200" }}>Yes</button>
                   <button onClick={()=>toggleSkill("conversation")} style={{ ...S.btn, padding:"7px 14px", fontSize:12, background:"transparent", border:`1px solid ${C.border}`, color:"#94a3b8" }}>Get rid of the conversation</button>
+                </div>
+              </div>
+            )}
+            {showJlptMockOffer && (
+              <div style={{ marginTop:10, background:"rgba(168,85,247,0.1)", border:`1px solid ${C.purpleLight}`, borderRadius:10, padding:"12px 14px" }}>
+                <p style={{ color:C.purpleLight, fontSize:12, fontWeight:700, margin:"0 0 10px" }}>🎯 {T.jlptMockOfferTitle}</p>
+                <div style={{ display:"flex", gap:8 }}>
+                  <button onClick={acceptJlptMockOffer} style={{ ...S.btn, padding:"7px 14px", fontSize:12, background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff" }}>{T.yes}</button>
+                  <button onClick={dismissJlptMockOffer} style={{ ...S.btn, padding:"7px 14px", fontSize:12, background:"transparent", border:`1px solid ${C.border}`, color:"#94a3b8" }}>{T.no}</button>
                 </div>
               </div>
             )}
