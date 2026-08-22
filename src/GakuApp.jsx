@@ -10598,6 +10598,22 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
       const data = await res.json();
       if (data?.isGakuStudent) setIsGakuStudent(true);
       if (data?.isPaid) setIsPaid(true);
+      // Mirror the server's trial verdict into a fixed (non-scoped) localStorage
+      // key so the GAKU Reader extension — which has no knowledge of Supabase
+      // auth or userId — can read it whenever this app's tab is open, the same
+      // way it already reads folder data via syncFoldersFromGakuApp(). Invitation-
+      // code (GAKU) students and paid accounts must never show as trial-expired.
+      try {
+        const isGakuStudentNow = !!data?.isGakuStudent;
+        const isPaidNow = !!data?.isPaid;
+        const trialExpiredNow = !!(data?.trialExpired && !isGakuStudentNow && !isPaidNow);
+        localStorage.setItem("gaku_trial_status", JSON.stringify({
+          trialExpired: trialExpiredNow,
+          isGakuStudent: isGakuStudentNow,
+          isPaid: isPaidNow,
+          userId,
+        }));
+      } catch {}
       if ((data?.isGakuStudent || data?.isPaid) && !previewPaywall) {
         setShowPaywall(false);
         setAwaitingUnlock(false);
