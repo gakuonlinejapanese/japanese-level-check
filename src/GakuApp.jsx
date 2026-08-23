@@ -10612,6 +10612,7 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
           isGakuStudent: isGakuStudentNow,
           isPaid: isPaidNow,
           userId,
+          email: authUser?.email || null,
         }));
       } catch {}
       if ((data?.isGakuStudent || data?.isPaid) && !previewPaywall) {
