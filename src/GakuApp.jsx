@@ -10384,7 +10384,7 @@ function AuthScreen({ onAuthed, T, prefillEmail, initialMode }) {
         if (userId) {
           const pRes = await fetch("/api/create-profile", {
             method: "POST", headers: { "Content-Type":"application/json" },
-            body: JSON.stringify({ userId, email, isGakuStudent: !!inviteCode.trim() }),
+            body: JSON.stringify({ userId, email, isGakuStudent: !!inviteCode.trim(), deviceId: getDeviceId() }),
           });
           if (!pRes.ok) {
             const pData = await pRes.json().catch(() => ({}));
