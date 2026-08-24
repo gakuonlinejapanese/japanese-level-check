@@ -8080,7 +8080,7 @@ async function fillMissingFurigana(text) {
   const missingWords = [...new Set((text.match(/[\u4E00-\u9FFF\u3005]+(?!\()/g) || []))];
   if (!missingWords.length) return text;
   try {
-    const prompt = `For each Japanese word below, give ONLY its correct hiragana reading in this exact context, one per line, in the exact format word=reading (no spaces, no extra text, no numbering):\n\n${missingWords.join("\n")}`;
+    const prompt = `For each Japanese word below, give ONLY its correct reading written in HIRAGANA CHARACTERS (ひらがな) — never romaji, never katakana. One per line, in the exact format word=reading (no spaces, no extra text, no numbering).\n\nExample: 食べる=たべる\n\nWords:\n${missingWords.join("\n")}`;
     const result = await callClaudeFast(prompt, 300);
     let out = text;
     result.split("\n").forEach(line => {
@@ -8089,6 +8089,7 @@ async function fillMissingFurigana(text) {
       const w = line.slice(0, idx).trim();
       const r = line.slice(idx + 1).trim();
       if (!w || !r || !missingWords.includes(w)) return;
+      if (!/^[ぁ-んー]+$/.test(r)) return; // guard against romaji/katakana/garbage slipping through
       const escaped = w.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
       out = out.replace(new RegExp(escaped + "(?!\\()", "g"), `${w}(${r})`);
     });
@@ -8256,8 +8257,9 @@ ${original}`;
   let out = results.find(o => !isDegenerateFurigana(original, o) && !hasMissingFurigana(o));
   if (!out) out = results.find(o => !isDegenerateFurigana(original, o)); // relaxed: prefer a non-garbled result even if a rare kanji got missed
   if (!out || isDegenerateFurigana(original, out)) return original; // graceful fallback — never show a broken/looping result
-  if (hasMissingFurigana(out)) out = await fillMissingFurigana(out); // second-pass fill for whatever's still missing
-  return applyJapaneseReadingCorrections(out);
+  out = applyJapaneseReadingCorrections(out); // fix known words/readings FIRST, deterministically
+  if (hasMissingFurigana(out)) out = await fillMissingFurigana(out); // then AI-fill only whatever's still genuinely unknown
+  return out;
 }
 
 function JLineTools({ text, lang, T }) {
