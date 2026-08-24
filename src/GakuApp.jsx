@@ -8069,6 +8069,35 @@ Respond ONLY with a valid JSON array, no markdown, no backticks:
 // Any run of kanji (incl. the kanji iteration mark 々) NOT immediately followed by "(" is missing its furigana.
 const hasMissingFurigana = (s) => /[\u4E00-\u9FFF\u3005]+(?!\()/.test(s);
 
+// Second-pass safety net: after picking the best of the 3 parallel attempts, there can still be
+// individual kanji words the model skipped (reported repeatedly for longer passages — the model's
+// adherence to "annotate every kanji" seems to degrade over longer text). Rather than only relying
+// on a growing hand-maintained list of specific words (JAPANESE_READING_CORRECTIONS), this scans
+// the chosen output for whatever kanji words are STILL missing a reading, asks the model for just
+// those readings in one small follow-up call, and inserts them wherever that exact word appears
+// unannotated. This generalizes to any word, not just ones we've seen and hard-coded before.
+async function fillMissingFurigana(text) {
+  const missingWords = [...new Set((text.match(/[\u4E00-\u9FFF\u3005]+(?!\()/g) || []))];
+  if (!missingWords.length) return text;
+  try {
+    const prompt = `For each Japanese word below, give ONLY its correct hiragana reading in this exact context, one per line, in the exact format word=reading (no spaces, no extra text, no numbering):\n\n${missingWords.join("\n")}`;
+    const result = await callClaudeFast(prompt, 300);
+    let out = text;
+    result.split("\n").forEach(line => {
+      const idx = line.indexOf("=");
+      if (idx === -1) return;
+      const w = line.slice(0, idx).trim();
+      const r = line.slice(idx + 1).trim();
+      if (!w || !r || !missingWords.includes(w)) return;
+      const escaped = w.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+      out = out.replace(new RegExp(escaped + "(?!\\()", "g"), `${w}(${r})`);
+    });
+    return out;
+  } catch {
+    return text; // if the follow-up call fails, keep whatever furigana we already had
+  }
+}
+
 // Small/fast models occasionally fall into a repetition loop on exhaustive transform tasks
 // like this one, producing the same phrase over and over. Detect that degenerate case so we
 // never show it to the student.
@@ -8147,6 +8176,17 @@ const JAPANESE_READING_CORRECTIONS = [
   [/出(?!\()す/g, "出(だ)す"],
   [/必(?!\()ず/g, "必(かなら)ず"],
   [/誘(?!\()(?=[ぁ-ん])/g, "誘(さそ)"],
+  [/思(?!\()(?=[ぁ-ん])/g, "思(おも)"],
+  [/楽(?!\()しく/g, "楽(たの)しく"],
+  [/続(?!\()(?=[ぁ-ん])/g, "続(つづ)"],
+  [/向(?!\()かう/g, "向(む)かう"],
+  [/余計(?!\()/g, "余計(よけい)"],
+  [/困(?!\()(?=[ぁ-ん])/g, "困(こま)"],
+  [/過(?!\()ぎた/g, "過(す)ぎた"],
+  [/痛(?!\()(?=[ぁ-ん])/g, "痛(いた)"],
+  [/忙(?!\()しい/g, "忙(いそが)しい"],
+  [/買(?!\()えない/g, "買(か)えない"],
+  [/自分(?!\()/g, "自分(じぶん)"],
   [/探(?!\()(?=[ぁ-ん])/g, "探(さが)"],
   [/見(?!\()(?=[ぁ-ん])/g, "見(み)"],
   [/合(?!\()(?=[ぁ-ん])/g, "合(あ)"],
@@ -8216,6 +8256,7 @@ ${original}`;
   let out = results.find(o => !isDegenerateFurigana(original, o) && !hasMissingFurigana(o));
   if (!out) out = results.find(o => !isDegenerateFurigana(original, o)); // relaxed: prefer a non-garbled result even if a rare kanji got missed
   if (!out || isDegenerateFurigana(original, out)) return original; // graceful fallback — never show a broken/looping result
+  if (hasMissingFurigana(out)) out = await fillMissingFurigana(out); // second-pass fill for whatever's still missing
   return applyJapaneseReadingCorrections(out);
 }
 
