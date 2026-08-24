@@ -8142,6 +8142,11 @@ const JAPANESE_READING_CORRECTIONS = [
   // Words/expressions the model sometimes leaves with NO furigana at all — insert if missing
   // (never touch if already followed by an opening paren, i.e. already has a reading).
   [/契約済み(?!\()/g, "契約済(けいやくず)み"],
+  // Reported 2026-08-24: these were missing furigana entirely in Create From Content output.
+  [/分(?!\()(?=かった|かる|から|かり|かれ|かって)/g, "分(わ)"],
+  [/出(?!\()す/g, "出(だ)す"],
+  [/必(?!\()ず/g, "必(かなら)ず"],
+  [/誘(?!\()(?=[ぁ-ん])/g, "誘(さそ)"],
   [/探(?!\()(?=[ぁ-ん])/g, "探(さが)"],
   [/見(?!\()(?=[ぁ-ん])/g, "見(み)"],
   [/合(?!\()(?=[ぁ-ん])/g, "合(あ)"],
@@ -8192,7 +8197,7 @@ async function getFuriganaText(original) {
   const prompt = `Add furigana in parentheses immediately after every single kanji word in the following Japanese text.
 This is critical: do not skip ANY kanji — including compound words, proper nouns, counters, and uncommon kanji. Every kanji character must be followed directly by its reading in parentheses, using this exact format: 漢字(かんじ)
 Never add furigana in parentheses after a hiragana or katakana word — parentheses are ONLY for kanji readings.
-Use standard, dictionary-correct readings — for example 反省 is read (はんせい), never (はんしょう); 今朝 is read (けさ), never (こんちょう); 案の定 is read (あんのじょう), never (あのさだめ); standalone 海 (as in 海が) is read (うみ), never (かい); 厳しい is read (きびしい), never (げんしい); 応えて is read (こたえて), never (おうえて); 各国 is read (かっこく); 一層 is read (いっそう); 私 is read (わたし), never just (わた); 節水 is read (せっすい), never (せつすい); 意外 is read (いがい), never (いご). Never skip furigana on verb stems like 探す, 見た, 合う, 並んで, 驚いた, 訪ねて, 加えて, 限られている, 守るべき, 受けた, 騒がしくしない, 決められた, 必ず従う, 引っ越し, 急いだ, 濡らして, 狭いだろう.
+Use standard, dictionary-correct readings — for example 反省 is read (はんせい), never (はんしょう); 今朝 is read (けさ), never (こんちょう); 案の定 is read (あんのじょう), never (あのさだめ); standalone 海 (as in 海が) is read (うみ), never (かい); 厳しい is read (きびしい), never (げんしい); 応えて is read (こたえて), never (おうえて); 各国 is read (かっこく); 一層 is read (いっそう); 私 is read (わたし), never just (わた); 節水 is read (せっすい), never (せつすい); 意外 is read (いがい), never (いご). Never skip furigana on verb stems like 探す, 見た, 合う, 並んで, 驚いた, 訪ねて, 加えて, 限られている, 守るべき, 受けた, 騒がしくしない, 決められた, 必ず従う, 引っ越し, 急いだ, 濡らして, 狭いだろう, 分かった, 出す, 誘われて.
 Always spell the word for "convenience store" as コンビニ (katakana), never コンヴィニ.
 Keep every hiragana character, katakana character, and all punctuation exactly as-is. Do not add extra spaces. Output the text ONCE — never repeat any part of it.
 
