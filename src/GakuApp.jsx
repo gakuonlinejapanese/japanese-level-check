@@ -9886,7 +9886,7 @@ function LevelUpOffer({ T, currentLevel, onConfirm, onDismiss }) {
 }
 
 // ─── DASHBOARD ──────────────────────────────────────────────────────────────────
-function Dashboard({ form, onEdit, onLevelUp, onDeleteAccount, deleteAccountBusy }) {
+function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteAccountBusy }) {
   const T = useUITranslations(form?.preferredLang || "English");
   const [schedule, setSchedule] = useState(() => buildSchedule(form, getT(form?.preferredLang || "English")));
   const [milestones, setMilestones] = useState(() => buildMilestones(form));
@@ -10028,6 +10028,11 @@ function Dashboard({ form, onEdit, onLevelUp, onDeleteAccount, deleteAccountBusy
         <div style={{ display:"flex", gap:8 }}>
           <button onClick={()=>setShowHelp(true)} style={{ ...S.btn, padding:"8px 14px", background:`linear-gradient(135deg,${C.amber},#d97706)`, color:"#fff", fontSize:12 }}>{T.help}</button>
           <button onClick={onEdit} style={{ ...S.btn, padding:"8px 14px", background:C.card, color:"#94a3b8", border:`1px solid ${C.border}`, fontSize:12 }}>{T.editProfile}</button>
+          {onLogout && (
+            <button onClick={onLogout} style={{ ...S.btn, padding:"8px 14px", background:C.card, color:"#94a3b8", border:`1px solid ${C.border}`, fontSize:12 }}>
+              {T.logOut || "Log Out"}
+            </button>
+          )}
           {onDeleteAccount && (
             <button onClick={onDeleteAccount} disabled={deleteAccountBusy} style={{ ...S.btn, padding:"8px 14px", background:"rgba(248,113,113,0.08)", color:"#f87171", border:"1px solid rgba(248,113,113,0.3)", fontSize:12, opacity:deleteAccountBusy?0.6:1 }}>
               {deleteAccountBusy ? "…" : (T.deleteAccount || "Delete Account")}
@@ -10919,6 +10924,14 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
       setLockedInviteBusy(false);
     }
   };
+  const handleLogout = async () => {
+    if (!supabase) return;
+    try {
+      await supabase.auth.signOut();
+    } finally {
+      window.location.reload();
+    }
+  };
   const handleDeleteAccount = async () => {
     if (!authUser || !supabase) return;
     const confirmMsg = isGakuStudent
@@ -11114,7 +11127,7 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
   );
   return (
     <div style={{ position:"relative" }} onClickCapture={handleDashboardInteraction}>
-      <Dashboard form={form} onEdit={handleEdit} onLevelUp={(lvl)=>handleSubmit({ ...form, jlpt: lvl })} onDeleteAccount={authUser ? handleDeleteAccount : undefined} deleteAccountBusy={deleteAccountBusy} />
+      <Dashboard form={form} onEdit={handleEdit} onLevelUp={(lvl)=>handleSubmit({ ...form, jlpt: lvl })} onLogout={authUser ? handleLogout : undefined} onDeleteAccount={authUser ? handleDeleteAccount : undefined} deleteAccountBusy={deleteAccountBusy} />
       {/* TEMP DEBUG — remove after confirming the counter works */}
       <div style={{ position:"fixed", bottom:12, right:12, zIndex:99999, background:"rgba(0,0,0,0.75)", color:"#4ade80", fontSize:11, fontFamily:"monospace", padding:"4px 8px", borderRadius:6 }}>
         count: {interactionCount}/21 {skipTrialPaywall ? "(skip)" : ""} {authUser && isGakuStudent ? "(gaku)" : ""} {authUser && isPaid ? "(paid)" : ""}
