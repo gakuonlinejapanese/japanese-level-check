@@ -205,7 +205,83 @@ const BANK_FILE_Q = {
   label: "Please upload your bank statement (proof of balance) as a PDF.",
   accept: "application/pdf",
 };
+// 「No I can't」を選んだ場合に表示する注意書き付き確認質問
+const BANK_NO_CONFIRM_Q = {
+  id: "bankStatementNoConfirm", type: "radio",
+  label: "If you don't have a personal bank statement, it might be difficult for us to let you participate in the counseling.",
+  options: ["I understand", "I can't agree"],
+};
 const MAX_FILE_BYTES = 3 * 1024 * 1024; // 3MB — stays safely under the server's ~4.5MB request limit
+
+// ---- 対応国リスト（契約上、以下の国・地域のみカウンセリング可能）----
+// 差別・誤解を避けるため、Q4（国籍入力）の時点では判定せず、最後の質問（Bank
+// Statement 関連の質問）に回答した後、送信直前に初めて判定する。
+const ALLOWED_COUNTRIES = [
+  // アジア（13）
+  "south korea","cyprus","saudi arabia","singapore","thailand","taiwan","china",
+  "hong kong","macau","turkey","brunei","malaysia","maldives",
+  // 太平洋（9）
+  "australia","samoa","tuvalu","tonga","nauru","new zealand","palau","fiji","marshall islands",
+  // 北米（2）
+  "united states","canada",
+  // 中南米（28）
+  "argentina","antigua and barbuda","uruguay","ecuador","guyana","cuba","guatemala",
+  "grenada","costa rica","jamaica","suriname","colombia","saint kitts and nevis",
+  "saint vincent and the grenadines","saint lucia","chile","dominica","dominican republic",
+  "trinidad and tobago","panama","bahamas","paraguay","barbados","brazil","venezuela",
+  "belize","peru","mexico",
+  // 欧州（47）
+  "iceland","ireland","azerbaijan","albania","armenia","andorra","united kingdom","italy",
+  "estonia","austria","netherlands","kazakhstan","north macedonia","greece","croatia",
+  "kosovo","san marino","georgia","switzerland","sweden","spain","slovakia","slovenia",
+  "serbia","czech republic","denmark","germany","turkmenistan","norway","hungary",
+  "finland","france","bulgaria","belarus","belgium","poland","bosnia and herzegovina",
+  "portugal","malta","monaco","montenegro","latvia","lithuania","liechtenstein",
+  "romania","luxembourg","russia",
+  // 中東（10）
+  "united arab emirates","israel","iraq","iran","oman","qatar","kuwait","bahrain",
+  "jordan","lebanon",
+  // アフリカ（9）
+  "algeria","gabon","seychelles","equatorial guinea","namibia","botswana",
+  "south africa","mauritius","libya",
+];
+const ALLOWED_COUNTRY_SET = new Set(ALLOWED_COUNTRIES);
+// よくある別表記・略称のゆらぎ吸収用
+const COUNTRY_ALIASES = {
+  "korea":"south korea","republic of korea":"south korea","rok":"south korea",
+  "usa":"united states","us":"united states","united states of america":"united states","america":"united states",
+  "uk":"united kingdom","england":"united kingdom","great britain":"united kingdom","britain":"united kingdom",
+  "scotland":"united kingdom","wales":"united kingdom","northern ireland":"united kingdom",
+  "uae":"united arab emirates","emirates":"united arab emirates",
+  "hong kong sar":"hong kong","hongkong":"hong kong",
+  "macao":"macau","macau sar":"macau",
+  "czechia":"czech republic",
+  "turkiye":"turkey",
+  "trinidad and tobago ":"trinidad and tobago",
+  "st kitts and nevis":"saint kitts and nevis",
+  "st vincent and the grenadines":"saint vincent and the grenadines",
+  "st lucia":"saint lucia",
+  "bosnia":"bosnia and herzegovina",
+  "macedonia":"north macedonia",
+  "prc":"china","peoples republic of china":"china","mainland china":"china",
+  "republic of china":"taiwan","chinese taipei":"taiwan",
+  "russian federation":"russia",
+};
+function normalizeCountry(s) {
+  return (s || "")
+    .toLowerCase()
+    .trim()
+    .replace(/\./g, "")
+    .replace(/&/g, "and")
+    .replace(/\s+/g, " ");
+}
+function isCountryAllowed(input) {
+  const norm = normalizeCountry(input);
+  if (!norm) return false;
+  if (ALLOWED_COUNTRY_SET.has(norm)) return true;
+  const alias = COUNTRY_ALIASES[norm];
+  return !!alias && ALLOWED_COUNTRY_SET.has(alias);
+}
 
 let step = 0;
 const answers = {};
@@ -324,7 +400,7 @@ function wantsBankStatement() {
   return answers.tuitionAware === "Yes" || answers.shortTermBudget === "Yes";
 }
 
-const bankFlow = { agreeAdded: false, fileAdded: false };
+const bankFlow = { agreeAdded: false, fileAdded: false, noConfirmAdded: false };
 
 btnBack.addEventListener("click", () => {
   if (step === 0) return;
@@ -386,7 +462,7 @@ btnNext.addEventListener("click", async () => {
     return;
   }
 
-  // 14問目(同意)の直後：「I agree」ならPDFアップロード欄を追加。「No I can't」ならそのまま提出へ。
+  // 14問目(同意)の直後：「I agree」ならPDFアップロード欄を追加。「No I can't」なら注意書き付きの確認質問を追加。
   if (q.id === "bankStatementAgree" && answers.bankStatementAgree === "I agree" && !bankFlow.fileAdded) {
     bankFlow.fileAdded = true;
     QUESTIONS.push(BANK_FILE_Q);
@@ -394,19 +470,35 @@ btnNext.addEventListener("click", async () => {
     renderStep();
     return;
   }
+  if (q.id === "bankStatementAgree" && answers.bankStatementAgree === "No I can't" && !bankFlow.noConfirmAdded) {
+    bankFlow.noConfirmAdded = true;
+    QUESTIONS.push(BANK_NO_CONFIRM_Q);
+    step += 1;
+    renderStep();
+    return;
+  }
 
   // 最終送信
+  // 対応国リストの判定はここ（最後の質問に回答した後）で初めて行う。
+  // 差別的・失礼な印象を避けるため、他の条件がどれだけ合っていても、
+  // 対応国リストにない場合は無条件で不合格とする。
   btnNext.disabled = true;
   btnNext.textContent = "Submitting…";
+  const countryOk = isCountryAllowed(answers.country);
   try {
-    await postSchoolMatching({});
-    showResultScreen("step-done");
+    await postSchoolMatching({ outcome: countryOk ? "accepted" : "rejected_country" });
   } catch (e) {
-    errEl.textContent = "Something went wrong. Please try again.";
-    errEl.style.display = "block";
-    btnNext.disabled = false;
-    btnNext.textContent = "Submit";
+    if (countryOk) {
+      errEl.textContent = "Something went wrong. Please try again.";
+      errEl.style.display = "block";
+      btnNext.disabled = false;
+      btnNext.textContent = "Submit";
+      return;
+    }
+    // 対応国外の不合格画面は、他の不合格ケースと同様にネットワークエラーでも必ず表示する
+    console.error("rejected-country outcome submit error:", e.message);
   }
+  showResultScreen(countryOk ? "step-done" : "step-rejected");
 });
 
 renderStep();
