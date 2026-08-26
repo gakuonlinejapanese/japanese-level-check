@@ -1,4 +1,4 @@
-export async function sendEmail({ to, subject, html, attachments }) {
+export async function sendEmail({ to, subject, html, attachments, replyTo }) {
   const apiKey = process.env.BREVO_API_KEY;
   if (!apiKey) throw new Error("BREVO_API_KEY not configured");
   const toList = Array.isArray(to) ? to : [to];
@@ -8,6 +8,7 @@ export async function sendEmail({ to, subject, html, attachments }) {
     subject,
     htmlContent: html,
   };
+  if (replyTo) body.replyTo = { email: replyTo };
   // attachments: [{ name, base64 }] — Brevo expects base64 content (no data: prefix) per attachment
   if (Array.isArray(attachments) && attachments.length > 0) {
     body.attachment = attachments.map((a) => ({ name: a.name, content: a.base64 }));

@@ -142,6 +142,13 @@ async function handleSchoolMatching(req, res) {
     const supabase = getAdminClient();
     const submittedAt = new Date().toISOString();
 
+    const isRejected = outcome === "rejected" || outcome === "rejected_country";
+    const rejectionReason = outcome === "rejected_country"
+      ? "Country not currently supported"
+      : outcome === "rejected"
+        ? "Finance readiness answers"
+        : null;
+
     const { error: insertErr } = await supabase.from("school_matching_requests").insert({
       first_name: firstName,
       last_name: lastName,
@@ -157,7 +164,7 @@ async function handleSchoolMatching(req, res) {
       no_scholarship_ack: noScholarship || null,
       wait_time_ack: waitTime || null,
       referrer: referrer || null,
-      status: outcome === "rejected" ? "rejected" : "new",
+      status: isRejected ? "rejected" : "new",
       submitted_at: submittedAt,
     });
     if (insertErr) {
@@ -165,10 +172,10 @@ async function handleSchoolMatching(req, res) {
       return res.status(500).json({ error: insertErr.message });
     }
 
-    const subjectPrefix = outcome === "rejected" ? "[GAKU] School Matching — no match" : "[GAKU] School Matching request";
+    const subjectPrefix = isRejected ? "[GAKU] School Matching — no match" : "[GAKU] School Matching request";
 
     const html = `
-      ${outcome === "rejected" ? `<p style="color:#c8382b;"><strong>Outcome: No school matched (auto-declined) — the applicant was shown "Unfortunately there is no school we can provide for you" and did not continue past this point.</strong></p>` : ""}
+      ${isRejected ? `<p style="color:#c8382b;"><strong>Outcome: No school matched (auto-declined)${rejectionReason ? ` — reason: ${rejectionReason}` : ""} — the applicant was shown "Unfortunately there is no school we can provide for you" and did not continue past this point.</strong></p>` : ""}
       <p>A student submitted a School Matching counseling request.</p>
       <p><strong>Name:</strong> ${firstName} ${lastName}<br/>
          <strong>Email:</strong> ${email}<br/>
@@ -190,7 +197,7 @@ async function handleSchoolMatching(req, res) {
       const attachments = bankStatementFile?.base64
         ? [{ name: bankStatementFile.name || "bank-statement.pdf", base64: bankStatementFile.base64 }]
         : undefined;
-      await sendEmail({ to: ADMIN_EMAIL, subject: `${subjectPrefix} — ${firstName} ${lastName}`, html, attachments });
+      await sendEmail({ to: ADMIN_EMAIL, subject: `${subjectPrefix} — ${firstName} ${lastName}`, html, attachments, replyTo: email });
     } catch (e) {
       // Don't block the student's submission just because the notification email failed —
       // the request is already durably recorded in school_matching_requests above.
