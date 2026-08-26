@@ -10353,14 +10353,22 @@ function PolicyGate({ T, name, email, plan, onAgreed, onCancel }) {
     if (!agreed || submitting) return;
     setSubmitting(true);
     setError("");
+    // Open the destination tab RIGHT NOW, synchronously, while we're still
+    // inside the click handler — before the awaited fetch below. Opening it
+    // after an await is what was silently getting blocked by Safari/Chrome's
+    // popup blocker (no error, no console message), leaving students stuck
+    // re-clicking "agree" with no visible result. We navigate this blank tab
+    // to the real URL once the agreement record succeeds.
+    const preOpenedWindow = window.open("", "_blank");
     try {
       const res = await fetch("/api/policy-agreement", {
         method: "POST", headers: { "Content-Type":"application/json" },
         body: JSON.stringify({ name, email, plan }),
       });
       if (!res.ok) { const d = await res.json().catch(()=>({})); throw new Error(d.error || "Failed to record agreement."); }
-      onAgreed();
+      onAgreed(preOpenedWindow);
     } catch (e) {
+      if (preOpenedWindow) { try { preOpenedWindow.close(); } catch {} }
       setError(e.message || "Something went wrong. Please try again.");
     } finally {
       setSubmitting(false);
@@ -10613,8 +10621,21 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
     return url.toString();
   };
 
-  const openStripeCheckout = (baseUrl, user) => {
-    window.open(buildStripeUrl(baseUrl, user), "_blank", "noopener,noreferrer");
+  // preOpenedWindow (optional): a tab opened SYNCHRONOUSLY inside the click
+  // handler that triggered this, before any `await`. Safari (and increasingly
+  // Chrome) silently block window.open() calls that happen after an awaited
+  // fetch, because they're no longer considered a direct result of the user's
+  // click/tap. Navigating an already-open tab via .location.href has no such
+  // restriction, so callers that are inside an async flow (see PolicyGate)
+  // should open a blank tab first and pass it in here.
+  const openStripeCheckout = (baseUrl, user, preOpenedWindow) => {
+    const url = buildStripeUrl(baseUrl, user);
+    if (preOpenedWindow) {
+      try { preOpenedWindow.location.href = url; }
+      catch { window.open(url, "_blank", "noopener,noreferrer"); }
+    } else {
+      window.open(url, "_blank", "noopener,noreferrer");
+    }
     setAwaitingUnlock(true);
   };
 
@@ -11012,14 +11033,21 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
     // below, so the paywall doesn't linger for even one extra render.
     if (userId) { setAwaitingUnlock(true); checkAccountStatus(userId); }
   };
-  const handlePolicyAgreed = () => {
+  const handlePolicyAgreed = (preOpenedWindow) => {
     const gate = policyGate;
     setPolicyGate(null);
     if (!gate) return;
     if (gate.type === "stripe") {
-      openStripeCheckout(gate.url, { userId: authUser.id, email: authUser.email });
+      openStripeCheckout(gate.url, { userId: authUser.id, email: authUser.email }, preOpenedWindow);
     } else if (gate.type === "lessons") {
-      window.open(gate.url, "_blank", "noopener,noreferrer");
+      if (preOpenedWindow) {
+        try { preOpenedWindow.location.href = gate.url; }
+        catch { window.open(gate.url, "_blank", "noopener,noreferrer"); }
+      } else {
+        window.open(gate.url, "_blank", "noopener,noreferrer");
+      }
+    } else if (preOpenedWindow) {
+      preOpenedWindow.close();
     }
   };
   if (showAuthScreen) return <AuthScreen onAuthed={handleAuthed} T={T} prefillEmail={form?.email} initialMode={authInitialMode} />;
