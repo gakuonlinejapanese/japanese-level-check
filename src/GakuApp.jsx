@@ -10610,14 +10610,32 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
     return val.toLocaleString(undefined, { maximumFractionDigits: val >= 100 ? 0 : 2 });
   };
 
+  // Maps GAKU Master's 18 native-language options to the locale codes Stripe
+  // Checkout / Payment Links actually support (34 languages as of 2026-08).
+  // Languages GAKU offers that Stripe has no matching locale for (Hindi,
+  // Nepali, Mizo) fall back to "auto" so Stripe uses the browser's own
+  // detected language instead of forcing English on them.
+  const STRIPE_LOCALE_MAP = {
+    "English": "en", "Spanish": "es", "French": "fr", "German": "de",
+    "Chinese (Simplified)": "zh", "Chinese (Traditional)": "zh", "Italian": "it",
+    "Korean": "ko", "Thai": "th", "Malay": "ms", "Indonesian": "id",
+    "Vietnamese": "vi", "Japanese": "ja", "Turkish": "tr", "Filipino": "fil",
+    // Not supported by Stripe — let Stripe auto-detect from the browser instead
+    "Hindi": "auto", "Nepali": "auto", "Mizo": "auto",
+  };
+
   // Attaches the logged-in student's Supabase user id to the Stripe Payment Link
   // (client_reference_id) so the Stripe webhook knows which account to unlock,
-  // plus their email so Stripe's checkout form is pre-filled.
+  // plus their email so Stripe's checkout form is pre-filled, plus a locale
+  // matching the student's GAKU Master UI language so the Stripe checkout page
+  // itself renders in that language rather than auto-detecting the browser's.
   const buildStripeUrl = (baseUrl, user) => {
     if (!user) return baseUrl;
     const url = new URL(baseUrl);
     url.searchParams.set("client_reference_id", user.userId);
     if (user.email) url.searchParams.set("prefilled_email", user.email);
+    const locale = STRIPE_LOCALE_MAP[user.preferredLang] || "auto";
+    url.searchParams.set("locale", locale);
     return url.toString();
   };
 
@@ -11038,7 +11056,7 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
     setPolicyGate(null);
     if (!gate) return;
     if (gate.type === "stripe") {
-      openStripeCheckout(gate.url, { userId: authUser.id, email: authUser.email }, preOpenedWindow);
+      openStripeCheckout(gate.url, { userId: authUser.id, email: authUser.email, preferredLang: form?.preferredLang }, preOpenedWindow);
     } else if (gate.type === "lessons") {
       if (preOpenedWindow) {
         try { preOpenedWindow.location.href = gate.url; }
