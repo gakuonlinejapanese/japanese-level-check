@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>GAKU Reader へようこそ</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700&family=Noto+Sans+JP:wght@400;500;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --red: #E8382F;
+    --dark: #1a1a2e;
+    --gold: #f5a623;
+    --green: #27ae60;
+    --gray: #6b7280;
+    --border: #e5e7eb;
+    --light: #f8f6f0;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'DM Sans', 'Noto Sans JP', sans-serif;
+    background: var(--light);
+    color: var(--dark);
+    min-height: 100vh;
+  }
+  .wrap { max-width: 720px; margin: 0 auto; padding: 48px 20px 80px; }
+  .badge {
+    display: inline-block;
+    background: var(--dark);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    padding: 6px 14px;
+    border-radius: 99px;
+    margin-bottom: 18px;
+  }
+  h1 {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 30px;
+    line-height: 1.4;
+    margin-bottom: 12px;
+  }
+  .sub { color: var(--gray); font-size: 15px; line-height: 1.8; margin-bottom: 32px; }
+  .step {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 18px 20px;
+    margin-bottom: 14px;
+  }
+  .step-num {
+    flex-shrink: 0;
+    width: 30px; height: 30px;
+    border-radius: 50%;
+    background: var(--red);
+    color: #fff;
+    font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px;
+  }
+  .step-body h3 { font-size: 15px; margin-bottom: 4px; }
+  .step-body p { font-size: 13.5px; color: var(--gray); line-height: 1.7; }
+  .demo-box {
+    background: #fff;
+    border: 2px dashed var(--red);
+    border-radius: 16px;
+    padding: 28px 24px;
+    margin: 32px 0;
+    position: relative;
+  }
+  .demo-label {
+    position: absolute;
+    top: -13px;
+    left: 20px;
+    background: var(--red);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    padding: 4px 12px;
+    border-radius: 99px;
+  }
+  .demo-text {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 21px;
+    line-height: 2.3;
+    color: var(--dark);
+  }
+  .demo-hint {
+    margin-top: 18px;
+    font-size: 13px;
+    color: var(--gray);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .arrow-bounce { display: inline-block; animation: bounce 1.4s infinite; }
+  @keyframes bounce { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-4px);} }
+  .cta {
+    text-align: center;
+    background: var(--dark);
+    color: #fff;
+    border-radius: 16px;
+    padding: 30px 24px;
+    margin-top: 36px;
+  }
+  .cta h2 { font-family: 'Noto Serif JP', serif; font-size: 20px; margin-bottom: 8px; }
+  .cta p { font-size: 13.5px; color: #cbd5e1; margin-bottom: 20px; line-height: 1.7; }
+  .cta a {
+    display: inline-block;
+    background: var(--red);
+    color: #fff;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 14px;
+    padding: 13px 28px;
+    border-radius: 10px;
+  }
+  .footnote { text-align: center; font-size: 12px; color: #9ca3af; margin-top: 22px; }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <span class="badge">🌸 GAKU Reader インストール完了</span>
+    <h1>さっそく、下の文章で試してみましょう</h1>
+    <p class="sub">GAKU Readerは、ウェブ上の日本語テキストを選択するだけで意味・読み方・例文がその場でわかる拡張機能です。使い方はとてもシンプルです。</p>
+
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <h3>下の文章の中から、気になる単語をドラッグして選択</h3>
+        <p>マウスで単語をなぞって選択するだけでOKです。</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <h3>ポップアップが自動で表示されます</h3>
+        <p>意味・読み方・品詞・例文がその場で確認できます。</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <h3>「＋」ボタンで自分の単語帳に保存</h3>
+        <p>気に入った単語はワンクリックでGAKUの単語帳に追加できます。</p>
+      </div>
+    </div>
+
+    <div class="demo-box">
+      <span class="demo-label">ここで試す ↓</span>
+      <p class="demo-text">
+        日本語を勉強するのは楽しいですが、難しい単語に出会うこともあります。この文章の中の好きな単語を選択してみてください。
+      </p>
+      <div class="demo-hint">
+        <span class="arrow-bounce">👆</span>
+        <span>例えば「出会う」や「難しい」を選択してみましょう</span>
+      </div>
+    </div>
+
+    <div class="cta">
+      <h2>これから普段使っているサイトでも使えます</h2>
+      <p>ニュース記事、SNS、ブログなど、日本語が書かれたどのページでも同じように使えます。GAKU Masterのアカウントと連携すると、先生から直接単語が送られてきたり、保存した単語がそのまま復習教材になります。</p>
+      <a href="https://app.seitojapanese.online/gaku-master/" target="_blank">GAKU Masterを見てみる →</a>
+    </div>
+    <p class="footnote">このページはいつでも閉じて大丈夫です。次からは普段のブラウジング中に自然に使えます。</p>
+  </div>
+</body>
+</html>
