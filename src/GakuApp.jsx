@@ -6205,16 +6205,25 @@ function saveVocabData(data) {
 // ─── TEACHER-ASSIGNED VOCAB SYNC ───────────────────────────────────────────────
 // Seito can push a word directly into a student's account (via the admin-only
 // api/admin-assign-word endpoint — no student password needed). This pulls any
-// pending words for the logged-in student from the `assigned_vocab` table,
-// merges them into their local vocab, then removes the synced rows so they're
-// not re-delivered next time.
+// pending (not-yet-delivered) words for the logged-in student from the
+// `assigned_vocab` table and merges them into their local vocab.
+//
+// Rows used to be hard-deleted once delivered, but that made it impossible
+// for GAKU Reader to ever ask "has this student already been sent word X?"
+// (student vocab itself lives only in that student's own browser
+// localStorage, never on the server). Delivered rows are now kept and just
+// marked with `delivered_at` instead, so assigned_vocab doubles as a
+// permanent per-student history the admin-assign-word GET endpoint can query
+// for duplicate-checking. Only undelivered rows (delivered_at IS NULL) are
+// pulled/merged here so nothing is re-delivered on next login.
 async function syncAssignedVocab(userId) {
   if (!supabase || !userId) return;
   try {
     const { data: rows, error } = await supabase
       .from("assigned_vocab")
       .select("*")
-      .eq("student_id", userId);
+      .eq("student_id", userId)
+      .is("delivered_at", null);
     if (error || !rows || !rows.length) return;
 
     const vocabData = loadVocabData();
@@ -6238,8 +6247,9 @@ async function syncAssignedVocab(userId) {
       saveVocabData(vocabData);
       try { window.dispatchEvent(new Event("gaku_vocab_updated")); } catch {}
     }
-    // Remove delivered rows so they aren't merged again on next login.
-    await supabase.from("assigned_vocab").delete().eq("student_id", userId);
+    // Mark these rows delivered instead of deleting, so admin-assign-word's
+    // GET (duplicate check) can still see them going forward.
+    await supabase.from("assigned_vocab").update({ delivered_at: new Date().toISOString() }).eq("student_id", userId).is("delivered_at", null);
   } catch {}
 }
 

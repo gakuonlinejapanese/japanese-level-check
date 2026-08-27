@@ -14,10 +14,48 @@ export default async function handler(req, res) {
   // headers the preflight gets rejected and the browser never sends the
   // actual POST, which is what caused "Send to student" to silently fail.
   res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
 
   if (req.method === "OPTIONS") return res.status(200).end();
+
+  // GET: return every headword ever assigned to a given student (delivered
+  // or still pending), so GAKU Reader can block re-sending a word the
+  // student already has. assigned_vocab rows are now kept permanently
+  // (marked with delivered_at instead of being deleted — see
+  // syncAssignedVocab in GakuApp.jsx) specifically so this lookup works even
+  // after the student has already received the word into their own vocab.
+  if (req.method === "GET") {
+    try {
+      const { secret, studentEmail } = req.query || {};
+      if (!secret || secret !== process.env.ADMIN_SECRET) {
+        return res.status(401).json({ error: "Unauthorized" });
+      }
+      if (!studentEmail) {
+        return res.status(400).json({ error: "studentEmail is required" });
+      }
+      const supabase = getAdminClient();
+      const { data: profile, error: profileErr } = await supabase
+        .from("profiles")
+        .select("id, email")
+        .ilike("email", String(studentEmail).trim())
+        .maybeSingle();
+      if (profileErr) return res.status(500).json({ error: profileErr.message });
+      if (!profile) {
+        return res.status(404).json({ error: "No student found with that email." });
+      }
+      const { data: rows, error: vocabErr } = await supabase
+        .from("assigned_vocab")
+        .select("word")
+        .eq("student_id", profile.id);
+      if (vocabErr) return res.status(500).json({ error: vocabErr.message });
+      const words = [...new Set((rows || []).map((r) => (r.word || "").trim()).filter(Boolean))];
+      return res.status(200).json({ ok: true, words });
+    } catch (e) {
+      return res.status(500).json({ error: e.message });
+    }
+  }
+
   if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed" });
   try {
     const { secret, studentEmail, word, reading, jlpt, partOfSpeech, meaning, example, folder } = req.body || {};
