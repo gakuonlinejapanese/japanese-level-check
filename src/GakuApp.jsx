@@ -6253,6 +6253,69 @@ async function syncAssignedVocab(userId) {
   } catch {}
 }
 
+// ─── JLPT RESULTS (teacher-entered, login-gated) ───────────────────────────────
+// Fetches this student's own rows from `jlpt_results` — RLS restricts SELECT to
+// `student_id = auth.uid()`, so this only ever returns results belonging to whoever is
+// currently logged in (nothing shows for a logged-out visitor). This is the "GAKU Master
+// login only" gate: the notification email never carries the PDF itself, only a login link.
+function JlptResultsPanel({ userId }) {
+  const [results, setResults] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let cancelled = false;
+    if (!supabase || !userId) { setLoading(false); return; }
+    (async () => {
+      const { data } = await supabase
+        .from("jlpt_results")
+        .select("id, jlpt_level, passed, score, test_date, notes, pdf_base64, created_at")
+        .eq("student_id", userId)
+        .order("created_at", { ascending: false });
+      if (!cancelled) { setResults(data || []); setLoading(false); }
+    })();
+    return () => { cancelled = true; };
+  }, [userId]);
+
+  const downloadPdf = (r) => {
+    try {
+      const bytes = atob(r.pdf_base64);
+      const arr = new Uint8Array(bytes.length);
+      for (let i = 0; i < bytes.length; i++) arr[i] = bytes.charCodeAt(i);
+      const blob = new Blob([arr], { type: "application/pdf" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url; a.download = `JLPT_${r.jlpt_level}_diagnosis.pdf`;
+      document.body.appendChild(a); a.click(); a.remove();
+      URL.revokeObjectURL(url);
+    } catch {}
+  };
+
+  if (loading || !results.length) return null;
+
+  return (
+    <div style={{ ...S.card, marginBottom:16, borderLeft:"3px solid #a855f7" }}>
+      <p style={{ color:"#c4b5fd", fontSize:12, fontWeight:700, margin:"0 0 10px" }}>🎓 JLPT Diagnosis Results</p>
+      <div style={{ display:"flex", flexDirection:"column", gap:10 }}>
+        {results.map(r => (
+          <div key={r.id} style={{ background:"rgba(168,85,247,0.06)", borderRadius:10, padding:"10px 12px", display:"flex", justifyContent:"space-between", alignItems:"center", gap:10, flexWrap:"wrap" }}>
+            <div>
+              <p style={{ color:"#f1f5f9", fontSize:13, fontWeight:700, margin:"0 0 2px" }}>
+                {r.jlpt_level}{r.passed === true ? " — ✅ Pass" : r.passed === false ? " — ❌ Not pass" : ""}
+              </p>
+              <p style={{ color:"#94a3b8", fontSize:11, margin:0 }}>
+                {r.score ? `Score: ${r.score} · ` : ""}{r.test_date ? `Tested: ${r.test_date}` : new Date(r.created_at).toLocaleDateString()}
+              </p>
+            </div>
+            <button onClick={()=>downloadPdf(r)} style={{ ...S.btn, padding:"7px 14px", fontSize:12, background:"linear-gradient(135deg,#a855f7,#9333ea)", color:"#fff", whiteSpace:"nowrap" }}>
+              📄 Download PDF
+            </button>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 // ─── SPEAK helper ──────────────────────────────────────────────────────────────
 function speakJapanese(text, rate = 0.85) {
   if (!window.speechSynthesis) return;
@@ -8079,6 +8142,44 @@ Respond ONLY with a valid JSON array, no markdown, no backticks:
 // Any run of kanji (incl. the kanji iteration mark 々) NOT immediately followed by "(" is missing its furigana.
 const hasMissingFurigana = (s) => /[\u4E00-\u9FFF\u3005]+(?!\()/.test(s);
 
+// Reported 2026-08-28: a subtler bug than "missing" furigana — the model sometimes takes a single
+// compound word (e.g. 変化, 正確, 連濁) and splits it into two+ separate kanji-run+(reading) groups
+// glued directly together with no gap, e.g. 変(へん)化(へんか) instead of 変化(へんか). Every kanji
+// technically has SOME reading attached so hasMissingFurigana doesn't catch this — it looks
+// well-formed but the readings are garbled/duplicated. Detect any 2+ chained kanji(reading) groups
+// with zero separator between them, since a real compound should get exactly one reading.
+const SPLIT_COMPOUND_FURIGANA_RE = /(?:[\u4E00-\u9FFF\u3005]+\([^)]+\)){2,}/g;
+const hasSplitCompoundFurigana = (s) => /(?:[\u4E00-\u9FFF\u3005]+\([^)]+\)){2,}/.test(s);
+
+// Repair pass for the split-compound bug above: pulls out each garbled chain, asks for ONE
+// correct reading for the whole compound word, and replaces the chain with word(reading).
+async function fixSplitCompoundFurigana(text) {
+  const chains = [...new Set((text.match(SPLIT_COMPOUND_FURIGANA_RE) || []))];
+  if (!chains.length) return text;
+  const words = chains.map(chain => (chain.match(/[\u4E00-\u9FFF\u3005]+/g) || []).join(""));
+  try {
+    const prompt = `For each Japanese word below, give ONLY its correct reading written in HIRAGANA CHARACTERS (ひらがな) — never romaji, never katakana — as ONE single reading for the whole word (do not split it per character). One per line, in the exact format word=reading (no spaces, no extra text, no numbering).\n\nExample: 卒業式=そつぎょうしき\n\nWords:\n${words.join("\n")}`;
+    const result = await callClaudeFast(prompt, 300);
+    const readings = {};
+    result.split("\n").forEach(line => {
+      const idx = line.indexOf("=");
+      if (idx === -1) return;
+      const w = line.slice(0, idx).trim();
+      const r = line.slice(idx + 1).trim();
+      if (w && r && /^[ぁ-んー]+$/.test(r)) readings[w] = r;
+    });
+    let out = text;
+    chains.forEach((chain, i) => {
+      const reading = readings[words[i]];
+      if (!reading) return;
+      out = out.split(chain).join(`${words[i]}(${reading})`);
+    });
+    return out;
+  } catch {
+    return text; // if the follow-up call fails, keep whatever furigana we already had
+  }
+}
+
 // Second-pass safety net: after picking the best of the 3 parallel attempts, there can still be
 // individual kanji words the model skipped (reported repeatedly for longer passages — the model's
 // adherence to "annotate every kanji" seems to degrade over longer text). Rather than only relying
@@ -8225,6 +8326,10 @@ const JAPANESE_READING_CORRECTIONS = [
   [/承(?!\()(?=[ぁ-ん])/g, "承(うけたまわ)"],
   [/選(?!\()(?=[ぁ-ん])/g, "選(えら)"],
   [/得(?!\()なかった/g, "得(え)なかった"],
+  // Reported 2026-08-28: model over-includes the trailing okurigana え inside the reading itself,
+  // producing a duplicated え (e.g. 考(かんがえ)えます). The kanji stem's reading is かんが — the
+  // え belongs to the okurigana, not inside the parentheses.
+  [/考(\s*)\(かんがえ\)/g, "考$1(かんが)"],
   // 前 as a standalone word (e.g. 前の, 前に) — not part of a compound like 午前/名前, so only
   // insert when it isn't immediately preceded OR followed by another kanji.
   [/(?<![\u4E00-\u9FFF])前(?![\(\u4E00-\u9FFF\u3005])/g, "前(まえ)"],
@@ -8250,6 +8355,7 @@ This is critical: do not skip ANY kanji — including compound words, proper nou
 Never add furigana in parentheses after a hiragana or katakana word — parentheses are ONLY for kanji readings.
 Use standard, dictionary-correct readings — for example 反省 is read (はんせい), never (はんしょう); 今朝 is read (けさ), never (こんちょう); 案の定 is read (あんのじょう), never (あのさだめ); standalone 海 (as in 海が) is read (うみ), never (かい); 厳しい is read (きびしい), never (げんしい); 応えて is read (こたえて), never (おうえて); 各国 is read (かっこく); 一層 is read (いっそう); 私 is read (わたし), never just (わた); 節水 is read (せっすい), never (せつすい); 意外 is read (いがい), never (いご). Never skip furigana on verb stems like 探す, 見た, 合う, 並んで, 驚いた, 訪ねて, 加えて, 限られている, 守るべき, 受けた, 騒がしくしない, 決められた, 必ず従う, 引っ越し, 急いだ, 濡らして, 狭いだろう, 分かった, 出す, 誘われて.
 Always spell the word for "convenience store" as コンビニ (katakana), never コンヴィニ.
+When two or more kanji in a row form ONE compound word (e.g. 変化, 正確, 連濁, 卒業式), give the WHOLE compound a single reading placed after the LAST kanji — never split it into separate parenthetical readings after each individual kanji. For example, write 変化(へんか) — NEVER 変(へん)化(へんか). Write 正確(せいかく) — NEVER 正(ただ)確(せいき).
 Keep every hiragana character, katakana character, and all punctuation exactly as-is. Do not add extra spaces. Output the text ONCE — never repeat any part of it.
 
 Example:
@@ -8264,11 +8370,13 @@ ${original}`;
   // start from the same original text, so there's no reason to wait on one before starting the
   // next. This cuts worst-case latency from ~3 sequential round-trips down to ~1.
   const results = await Promise.all([callClaudeFast(prompt), callClaudeFast(prompt), callClaudeFast(prompt)]);
-  let out = results.find(o => !isDegenerateFurigana(original, o) && !hasMissingFurigana(o));
-  if (!out) out = results.find(o => !isDegenerateFurigana(original, o)); // relaxed: prefer a non-garbled result even if a rare kanji got missed
+  let out = results.find(o => !isDegenerateFurigana(original, o) && !hasMissingFurigana(o) && !hasSplitCompoundFurigana(o));
+  if (!out) out = results.find(o => !isDegenerateFurigana(original, o) && !hasMissingFurigana(o)); // relaxed: allow a split-compound result if that's the best we got
+  if (!out) out = results.find(o => !isDegenerateFurigana(original, o)); // further relaxed: prefer a non-garbled result even if a rare kanji got missed
   if (!out || isDegenerateFurigana(original, out)) return original; // graceful fallback — never show a broken/looping result
   out = applyJapaneseReadingCorrections(out); // fix known words/readings FIRST, deterministically
-  if (hasMissingFurigana(out)) out = await fillMissingFurigana(out); // then AI-fill only whatever's still genuinely unknown
+  if (hasMissingFurigana(out)) out = await fillMissingFurigana(out); // then AI-fill whatever's still genuinely missing
+  if (hasSplitCompoundFurigana(out)) out = await fixSplitCompoundFurigana(out); // then repair any compound that got split into per-kanji readings
   return out;
 }
 
@@ -9896,7 +10004,7 @@ function LevelUpOffer({ T, currentLevel, onConfirm, onDismiss }) {
 }
 
 // ─── DASHBOARD ──────────────────────────────────────────────────────────────────
-function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteAccountBusy }) {
+function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteAccountBusy, userId }) {
   const T = useUITranslations(form?.preferredLang || "English");
   const [schedule, setSchedule] = useState(() => buildSchedule(form, getT(form?.preferredLang || "English")));
   const [milestones, setMilestones] = useState(() => buildMilestones(form));
@@ -10059,6 +10167,7 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
         </div>
       )}
       <div style={{ maxWidth:600, margin:"0 auto", padding:"20px 16px" }}>
+        <JlptResultsPanel userId={userId} />
         <div style={{ ...S.card, marginBottom:16 }}>
           <div style={{ display:"flex", justifyContent:"space-between", marginBottom:8 }}>
             <p style={{ color:"#f1f5f9", fontSize:13, fontWeight:700, margin:0 }}>{T.weeklyProgress}</p>
@@ -11183,7 +11292,7 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
   );
   return (
     <div style={{ position:"relative" }} onClickCapture={handleDashboardInteraction}>
-      <Dashboard form={form} onEdit={handleEdit} onLevelUp={(lvl)=>handleSubmit({ ...form, jlpt: lvl })} onLogout={authUser ? handleLogout : undefined} onDeleteAccount={authUser ? handleDeleteAccount : undefined} deleteAccountBusy={deleteAccountBusy} />
+      <Dashboard form={form} onEdit={handleEdit} onLevelUp={(lvl)=>handleSubmit({ ...form, jlpt: lvl })} onLogout={authUser ? handleLogout : undefined} onDeleteAccount={authUser ? handleDeleteAccount : undefined} deleteAccountBusy={deleteAccountBusy} userId={authUser?.id} />
       {/* TEMP DEBUG — remove after confirming the counter works */}
       <div style={{ position:"fixed", bottom:12, right:12, zIndex:99999, background:"rgba(0,0,0,0.75)", color:"#4ade80", fontSize:11, fontFamily:"monospace", padding:"4px 8px", borderRadius:6 }}>
         count: {interactionCount}/21 {skipTrialPaywall ? "(skip)" : ""} {authUser && isGakuStudent ? "(gaku)" : ""} {authUser && isPaid ? "(paid)" : ""}

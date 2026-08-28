@@ -1,4 +1,6 @@
 import { getAdminClient } from "./_supabaseAdmin.js";
+import { buildJlptResultPdf } from "./_jlptPdf.js";
+import { sendEmail } from "./_resend.js";
 
 // Lets the teacher (Seito) push a vocabulary word directly into a specific
 // student's GAKU account, without ever needing that student's password.
@@ -57,6 +59,85 @@ export default async function handler(req, res) {
   }
 
   if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed" });
+
+  // Reuses this same route (rather than a new serverless function — the project is already
+  // at Vercel's 12-function cap on the Hobby plan) for a second admin bulk-send action: pushing
+  // a JLPT diagnosis result (entered manually by the teacher after a student takes the real
+  // JLPT exam, same "paste and send" workflow as the vocab bulk-send above) into a new
+  // `jlpt_results` table. The PDF report is only ever readable by that student once logged in
+  // (RLS: `student_id = auth.uid()`, see the jlpt_results migration) — the notification email
+  // deliberately does NOT attach the PDF, only a link to log into GAKU Master, so results stay
+  // gated behind login as requested.
+  if (req.body?.action === "submit_jlpt_result") {
+    try {
+      const { secret, studentEmail, jlptLevel, passed, score, testDate, notes } = req.body || {};
+      if (!secret || secret !== process.env.ADMIN_SECRET) {
+        return res.status(401).json({ error: "Unauthorized" });
+      }
+      if (!studentEmail || !jlptLevel) {
+        return res.status(400).json({ error: "studentEmail and jlptLevel are required" });
+      }
+
+      const supabase = getAdminClient();
+      const { data: profile, error: profileErr } = await supabase
+        .from("profiles")
+        .select("id, email")
+        .ilike("email", String(studentEmail).trim())
+        .maybeSingle();
+      if (profileErr) return res.status(500).json({ error: profileErr.message });
+      if (!profile) {
+        return res.status(404).json({ error: "No student found with that email. Make sure they've signed up in GAKU first." });
+      }
+
+      const passedBool = passed === true || passed === "true" || passed === "pass" || passed === "合格"
+        ? true
+        : (passed === false || passed === "false" || passed === "fail" || passed === "不合格" ? false : null);
+
+      const pdfBase64 = await buildJlptResultPdf({
+        studentName: profile.email.split("@")[0],
+        studentEmail: profile.email,
+        jlptLevel: String(jlptLevel).trim(),
+        passed: passedBool,
+        score: score ? String(score).trim() : "",
+        testDate: testDate ? String(testDate).trim() : "",
+        notes: notes ? String(notes).trim() : "",
+      });
+
+      const { error: insertErr } = await supabase.from("jlpt_results").insert({
+        student_id: profile.id,
+        student_email: profile.email,
+        jlpt_level: String(jlptLevel).trim(),
+        passed: passedBool,
+        score: score ? String(score).trim() : null,
+        test_date: testDate ? String(testDate).trim() : null,
+        notes: notes ? String(notes).trim() : null,
+        pdf_base64: pdfBase64,
+        delivered_at: new Date().toISOString(),
+      });
+      if (insertErr) return res.status(500).json({ error: insertErr.message });
+
+      try {
+        await sendEmail({
+          to: profile.email,
+          subject: "🎓 Your JLPT diagnosis result is ready",
+          html: `<p>Hi ${profile.email.split("@")[0]},</p>
+            <p>Your JLPT ${String(jlptLevel).trim()} diagnosis result has been added to your GAKU Master account.</p>
+            <p>Log in to view your result and download your diagnosis report (PDF):</p>
+            <p><a href="https://app.seitojapanese.online/app" style="background:#06b6d4;color:#fff;padding:10px 18px;border-radius:8px;text-decoration:none;font-weight:bold;">Open GAKU Master</a></p>
+            <p style="color:#94a3b8;font-size:12px;">— Seito Sakamoto, GAKU Online Japanese</p>`,
+        });
+      } catch (emailErr) {
+        // Result is already saved and visible in-app even if the notification email fails —
+        // don't fail the whole request over a Brevo hiccup.
+        console.error("[admin-assign-word/submit_jlpt_result] email failed:", emailErr.message);
+      }
+
+      return res.status(200).json({ ok: true });
+    } catch (e) {
+      return res.status(500).json({ error: e.message });
+    }
+  }
+
   try {
     const { secret, studentEmail, word, reading, jlpt, partOfSpeech, meaning, example, folder } = req.body || {};
     if (!secret || secret !== process.env.ADMIN_SECRET) {

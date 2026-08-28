@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>GAKU — JLPT結果を送る</title>
+<meta name="robots" content="noindex, nofollow" />
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; min-height: 100vh; font-family: 'Hiragino Sans', 'Noto Sans JP', sans-serif;
+    background: linear-gradient(160deg,#0a0f1e 0%,#0f172a 60%,#0a0f1e 100%);
+    color: #f1f5f9; display: flex; justify-content: center; padding: 32px 16px;
+  }
+  .card {
+    width: 100%; max-width: 560px; background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 24px;
+  }
+  h1 { font-size: 18px; margin: 0 0 4px; }
+  p.sub { color: #94a3b8; font-size: 13px; margin: 0 0 20px; line-height: 1.6; }
+  label { display: block; color: #64748b; font-size: 11px; font-weight: 700; margin: 14px 0 5px; letter-spacing: 0.5px; }
+  input, textarea {
+    width: 100%; padding: 11px 12px; background: #0f172a; border: 1.5px solid rgba(255,255,255,0.08);
+    border-radius: 10px; color: #f1f5f9; font-size: 14px; outline: none; font-family: inherit;
+  }
+  textarea { resize: vertical; min-height: 110px; }
+  button {
+    width: 100%; margin-top: 20px; padding: 13px 20px; border: none; border-radius: 10px;
+    font-size: 14px; font-weight: 700; cursor: pointer; color: #fff;
+    background: linear-gradient(135deg,#06b6d4,#0891b2);
+  }
+  button:disabled { opacity: 0.5; cursor: not-allowed; }
+  .msg { margin-top: 14px; font-size: 13px; padding: 10px 12px; border-radius: 8px; line-height: 1.6; }
+  .msg.ok { background: rgba(34,197,94,0.12); color: #4ade80; border: 1px solid rgba(34,197,94,0.3); }
+  .msg.err { background: rgba(239,68,68,0.12); color: #f87171; border: 1px solid rgba(239,68,68,0.3); }
+  .msg.info { background: rgba(148,163,184,0.12); color: #cbd5e1; border: 1px solid rgba(148,163,184,0.3); }
+  .hint { color: #64748b; font-size: 11.5px; margin-top: 4px; line-height: 1.6; }
+  .hint code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 4px; }
+  #bulkLog {
+    margin-top: 12px; max-height: 260px; overflow-y: auto; font-size: 12.5px;
+    background: #0f172a; border: 1px solid rgba(255,255,255,0.08); border-radius: 10px;
+    padding: 8px 10px; display: none;
+  }
+  #bulkLog div { padding: 3px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+  #bulkLog div:last-child { border-bottom: none; }
+  #progressBarWrap {
+    display: none; margin-top: 10px; height: 8px; border-radius: 6px;
+    background: rgba(255,255,255,0.08); overflow: hidden;
+  }
+  #progressBarFill { height: 100%; width: 0%; background: linear-gradient(135deg,#06b6d4,#0891b2); transition: width 0.15s; }
+</style>
+</head>
+<body>
+  <div class="card">
+    <h1>🎓 GAKU — JLPT結果診断書を送る</h1>
+    <p class="sub">
+      生徒が実際に受けたJLPTの結果を入力すると、GAKU Masterアカウントに診断書PDFが届きます（メール自体にはPDFは添付されず、GAKU Masterへのログインを促す通知のみが送られます — 結果はログインした本人しか見られません）。
+    </p>
+
+    <label>管理者パスワード (ADMIN_SECRET)</label>
+    <input id="secret" type="password" placeholder="管理者パスワード" />
+
+    <label>結果 * （1行につき1人。複数行貼り付けで一気に送信できます）</label>
+    <textarea id="bulkInput" placeholder="student@example.com, N3, 合格, 118/180, 2026-08-20, よく頑張りました"></textarea>
+    <div class="hint">
+      形式: <code>メールアドレス, JLPTレベル, 合格/不合格, 点数(任意), 受験日(任意), コメント(任意)</code><br />
+      例: <code>taro@example.com, N2, 不合格, 95/180, 2026-07-06</code><br />
+      「合格/不合格」欄は <code>合格</code> / <code>不合格</code> / <code>pass</code> / <code>fail</code> のいずれでもOKです。空欄でも送信できます。
+    </div>
+
+    <button id="submitBtn" onclick="sendResults()">生徒に送る ✨</button>
+    <div id="progressBarWrap"><div id="progressBarFill"></div></div>
+    <div id="result"></div>
+    <div id="bulkLog"></div>
+  </div>
+
+<script>
+// One line = one student's result. Fields are comma-separated; trailing empty fields are optional.
+function parseLines(raw) {
+  return raw.split(/\n+/).map(l => l.trim()).filter(Boolean).map(line => {
+    const parts = line.split(',').map(p => p.trim());
+    return {
+      studentEmail: parts[0] || '',
+      jlptLevel: parts[1] || '',
+      passed: parts[2] || '',
+      score: parts[3] || '',
+      testDate: parts[4] || '',
+      notes: parts.slice(5).join(',').trim() || '',
+    };
+  });
+}
+
+async function submitResult(secret, entry) {
+  const res = await fetch('/api/admin-assign-word', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ action: 'submit_jlpt_result', secret, ...entry })
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || '送信に失敗しました。');
+}
+
+function logLine(text, ok) {
+  const log = document.getElementById('bulkLog');
+  log.style.display = 'block';
+  const line = document.createElement('div');
+  line.textContent = (ok ? '✅ ' : '❌ ') + text;
+  line.style.color = ok ? '#4ade80' : '#f87171';
+  log.appendChild(line);
+  log.scrollTop = log.scrollHeight;
+}
+
+async function sendResults() {
+  const btn = document.getElementById('submitBtn');
+  const resultEl = document.getElementById('result');
+  const log = document.getElementById('bulkLog');
+  const progWrap = document.getElementById('progressBarWrap');
+  const progFill = document.getElementById('progressBarFill');
+  resultEl.innerHTML = ''; log.innerHTML = ''; log.style.display = 'none';
+  progWrap.style.display = 'none'; progFill.style.width = '0%';
+
+  const secret = document.getElementById('secret').value.trim();
+  const entries = parseLines(document.getElementById('bulkInput').value);
+
+  if (!secret || entries.length === 0) {
+    resultEl.innerHTML = '<div class="msg err">管理者パスワードと、少なくとも1件の結果（メールアドレス・JLPTレベル）が必要です。</div>';
+    return;
+  }
+  const invalid = entries.find(e => !e.studentEmail || !e.jlptLevel);
+  if (invalid) {
+    resultEl.innerHTML = '<div class="msg err">各行に メールアドレス と JLPTレベル は必須です。不備のある行: ' + (invalid.studentEmail || '(空欄)') + '</div>';
+    return;
+  }
+
+  btn.disabled = true; btn.textContent = '送信中...';
+  progWrap.style.display = 'block'; log.style.display = 'block';
+
+  let okCount = 0;
+  const failed = [];
+  for (let i = 0; i < entries.length; i++) {
+    const e = entries[i];
+    resultEl.innerHTML = '<div class="msg info">送信中… ' + (i + 1) + ' / ' + entries.length + '（' + e.studentEmail + '）</div>';
+    try {
+      await submitResult(secret, e);
+      okCount++;
+      logLine(e.studentEmail + ' — ' + e.jlptLevel + (e.passed ? ' (' + e.passed + ')' : ''), true);
+    } catch (err) {
+      failed.push(e.studentEmail);
+      logLine(e.studentEmail + ' — ' + err.message, false);
+    }
+    progFill.style.width = Math.round(((i + 1) / entries.length) * 100) + '%';
+    await new Promise(r => setTimeout(r, 120));
+  }
+
+  if (failed.length === 0) {
+    resultEl.innerHTML = '<div class="msg ok">✅ 全 ' + okCount + ' 件を送信しました。各生徒はGAKU Masterにログインすると結果と診断書PDFを確認できます。</div>';
+    document.getElementById('bulkInput').value = '';
+  } else {
+    resultEl.innerHTML = '<div class="msg err">✅ ' + okCount + ' 件成功 / ❌ ' + failed.length + ' 件失敗<br>失敗: ' + failed.join('、') + '<br>失敗分だけ上の欄に貼り直して再送信できます。</div>';
+  }
+
+  btn.disabled = false; btn.textContent = '生徒に送る ✨';
+}
+</script>
+</body>
+</html>
