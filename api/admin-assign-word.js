@@ -134,11 +134,13 @@ export default async function handler(req, res) {
           to: profile.email,
           subject: "🎓 Your JLPT diagnosis result is ready",
           html: `<p>Hi ${profile.email.split("@")[0]},</p>
-            <p>Your JLPT ${String(jlptLevel).trim()} diagnosis result is attached as a PDF.</p>
-            <p>You can also view it anytime by logging into your GAKU Master account:</p>
+            <p>Your JLPT ${String(jlptLevel).trim()} diagnosis result has been added to your GAKU Master account.</p>
+            <p>Log in to view your result and download your diagnosis report (PDF):</p>
             <p><a href="https://app.seitojapanese.online/app" style="background:#06b6d4;color:#fff;padding:10px 18px;border-radius:8px;text-decoration:none;font-weight:bold;">Open GAKU Master</a></p>
             <p style="color:#94a3b8;font-size:12px;">— Seito Sakamoto, GAKU Online Japanese</p>`,
-          attachments: [{ name: pdfFileName || `JLPT_${String(jlptLevel).trim()}_diagnosis.pdf`, base64: pdfBase64 }],
+          // Intentionally NOT attaching the PDF here — the whole point of putting it behind
+          // GAKU Master login is to give students a reason to log in and see it there. An
+          // attachment would let them read it without ever opening the app.
         });
       } catch (emailErr) {
         // Result is already saved and visible in-app even if the notification email fails —
