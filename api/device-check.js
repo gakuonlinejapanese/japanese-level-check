@@ -6,7 +6,7 @@ import { sendEmail } from "./_resend.js";
 // hopping between browsers/incognito windows during testing would otherwise
 // trigger it constantly. Still gets its device recorded normally, just
 // never suspended or sent through the dual-approval flow.
-const DEVICE_CHECK_EXEMPT_EMAILS = ["0425starwars@gmail.com"];
+const DEVICE_CHECK_EXEMPT_EMAILS = ["0425starwars@gmail.com", "seitojapanese.online@gmail.com"];
 
 export default async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed" });
