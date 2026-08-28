@@ -60,13 +60,23 @@
     <label>管理者パスワード (ADMIN_SECRET)</label>
     <input id="secret" type="password" placeholder="管理者パスワード" />
 
+    <label>PDFファイル（任意 — 選択すると自動生成の代わりにこのファイルをそのまま送ります）</label>
+    <input id="pdfFiles" type="file" accept="application/pdf" multiple />
+    <div class="hint">
+      1件だけ送るときはPDFを1つ選択。複数人まとめて送るときは、下の「結果」欄の行の順番と同じ順番でPDFを複数選択してください（1行目→1つ目のPDF、2行目→2つ目のPDF…）。PDFを選ばなかった行は今まで通り自動生成されます。
+    </div>
+
     <label>結果 * （1行につき1人。複数行貼り付けで一気に送信できます）</label>
     <textarea id="bulkInput" placeholder="student@example.com, N3, 合格, 118/180, 2026-08-20, よく頑張りました"></textarea>
     <div class="hint">
       形式: <code>メールアドレス, JLPTレベル, 合格/不合格, 点数(任意), 受験日(任意), コメント(任意)</code><br />
       例: <code>taro@example.com, N2, 不合格, 95/180, 2026-07-06</code><br />
-      「合格/不合格」欄は <code>合格</code> / <code>不合格</code> / <code>pass</code> / <code>fail</code> のいずれでもOKです。空欄でも送信できます。
+      「合格/不合格」欄は <code>合格</code> / <code>不合格</code> / <code>pass</code> / <code>fail</code> のいずれでもOKです。空欄でも送信できます。PDFを添付する場合でも、メールアドレスとJLPTレベルは必ず入力してください（記録用）。
     </div>
+
+    <label>詳細レポート全文（任意 — 貼り付けると、上のPDFアップロードがない場合にこの内容全体をPDF化します。1件送信のときのみ使えます）</label>
+    <textarea id="rawReportInput" placeholder="📊 JLPT N5 Result Analysis Report ... （レポート全文をここに貼り付け）" style="min-height:160px;"></textarea>
+    <div class="hint">この欄を使うときは、上の「結果」欄は1行だけにしてください（対象の生徒のメールアドレスとJLPTレベルは引き続き必要です）。</div>
 
     <button id="submitBtn" onclick="sendResults()">生徒に送る ✨</button>
     <div id="progressBarWrap"><div id="progressBarFill"></div></div>
@@ -87,6 +97,15 @@ function parseLines(raw) {
       testDate: parts[4] || '',
       notes: parts.slice(5).join(',').trim() || '',
     };
+  });
+}
+
+function fileToBase64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result.split(',')[1]); // strip the data:application/pdf;base64, prefix
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
   });
 }
 
@@ -121,6 +140,8 @@ async function sendResults() {
 
   const secret = document.getElementById('secret').value.trim();
   const entries = parseLines(document.getElementById('bulkInput').value);
+  const files = Array.from(document.getElementById('pdfFiles').files || []);
+  const rawReportText = document.getElementById('rawReportInput').value.trim();
 
   if (!secret || entries.length === 0) {
     resultEl.innerHTML = '<div class="msg err">管理者パスワードと、少なくとも1件の結果（メールアドレス・JLPTレベル）が必要です。</div>';
@@ -129,6 +150,14 @@ async function sendResults() {
   const invalid = entries.find(e => !e.studentEmail || !e.jlptLevel);
   if (invalid) {
     resultEl.innerHTML = '<div class="msg err">各行に メールアドレス と JLPTレベル は必須です。不備のある行: ' + (invalid.studentEmail || '(空欄)') + '</div>';
+    return;
+  }
+  if (files.length > 0 && files.length !== entries.length) {
+    resultEl.innerHTML = '<div class="msg err">選択したPDFの数（' + files.length + '件）と、結果の行数（' + entries.length + '件）が一致していません。PDFを送る場合は、行の順番と同じ順番でPDFを選択してください。</div>';
+    return;
+  }
+  if (rawReportText && entries.length > 1) {
+    resultEl.innerHTML = '<div class="msg err">「詳細レポート全文」欄は1件送信のときだけ使えます。結果欄を1行にしてください。</div>';
     return;
   }
 
@@ -141,9 +170,15 @@ async function sendResults() {
     const e = entries[i];
     resultEl.innerHTML = '<div class="msg info">送信中… ' + (i + 1) + ' / ' + entries.length + '（' + e.studentEmail + '）</div>';
     try {
+      if (files[i]) {
+        e.pdfBase64Override = await fileToBase64(files[i]);
+        e.pdfFileName = files[i].name;
+      } else if (rawReportText) {
+        e.rawReportText = rawReportText;
+      }
       await submitResult(secret, e);
       okCount++;
-      logLine(e.studentEmail + ' — ' + e.jlptLevel + (e.passed ? ' (' + e.passed + ')' : ''), true);
+      logLine(e.studentEmail + ' — ' + e.jlptLevel + (e.passed ? ' (' + e.passed + ')' : '') + (files[i] ? ' 📎' : ''), true);
     } catch (err) {
       failed.push(e.studentEmail);
       logLine(e.studentEmail + ' — ' + err.message, false);
@@ -155,6 +190,8 @@ async function sendResults() {
   if (failed.length === 0) {
     resultEl.innerHTML = '<div class="msg ok">✅ 全 ' + okCount + ' 件を送信しました。各生徒はGAKU Masterにログインすると結果と診断書PDFを確認できます。</div>';
     document.getElementById('bulkInput').value = '';
+    document.getElementById('pdfFiles').value = '';
+    document.getElementById('rawReportInput').value = '';
   } else {
     resultEl.innerHTML = '<div class="msg err">✅ ' + okCount + ' 件成功 / ❌ ' + failed.length + ' 件失敗<br>失敗: ' + failed.join('、') + '<br>失敗分だけ上の欄に貼り直して再送信できます。</div>';
   }

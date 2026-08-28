@@ -1,5 +1,6 @@
 import { getAdminClient } from "./_supabaseAdmin.js";
 import { buildJlptResultPdf } from "./_jlptPdf.js";
+import { buildRichReportPdf } from "./_richReportPdf.js";
 import { sendEmail } from "./_resend.js";
 
 // Lets the teacher (Seito) push a vocabulary word directly into a specific
@@ -70,7 +71,7 @@ export default async function handler(req, res) {
   // gated behind login as requested.
   if (req.body?.action === "submit_jlpt_result") {
     try {
-      const { secret, studentEmail, jlptLevel, passed, score, testDate, notes } = req.body || {};
+      const { secret, studentEmail, jlptLevel, passed, score, testDate, notes, pdfBase64Override, pdfFileName, rawReportText, studentName } = req.body || {};
       if (!secret || secret !== process.env.ADMIN_SECRET) {
         return res.status(401).json({ error: "Unauthorized" });
       }
@@ -93,7 +94,19 @@ export default async function handler(req, res) {
         ? true
         : (passed === false || passed === "false" || passed === "fail" || passed === "不合格" ? false : null);
 
-      const pdfBase64 = await buildJlptResultPdf({
+      // Priority: an uploaded PDF file (sent as-is) > a pasted full free-form report (rendered
+      // via the generic multi-page renderer) > the simple structured-fields auto-generated report.
+      const pdfBase64 = pdfBase64Override
+        ? pdfBase64Override
+        : rawReportText
+        ? await buildRichReportPdf({
+            studentName: studentName ? String(studentName).trim() : profile.email.split("@")[0],
+            studentEmail: profile.email,
+            jlptLevel: String(jlptLevel).trim(),
+            title: `JLPT ${String(jlptLevel).trim()} Result Analysis Report`,
+            rawText: String(rawReportText),
+          })
+        : await buildJlptResultPdf({
         studentName: profile.email.split("@")[0],
         studentEmail: profile.email,
         jlptLevel: String(jlptLevel).trim(),
@@ -125,7 +138,7 @@ export default async function handler(req, res) {
             <p>You can also view it anytime by logging into your GAKU Master account:</p>
             <p><a href="https://app.seitojapanese.online/app" style="background:#06b6d4;color:#fff;padding:10px 18px;border-radius:8px;text-decoration:none;font-weight:bold;">Open GAKU Master</a></p>
             <p style="color:#94a3b8;font-size:12px;">— Seito Sakamoto, GAKU Online Japanese</p>`,
-          attachments: [{ name: `JLPT_${String(jlptLevel).trim()}_diagnosis.pdf`, base64: pdfBase64 }],
+          attachments: [{ name: pdfFileName || `JLPT_${String(jlptLevel).trim()}_diagnosis.pdf`, base64: pdfBase64 }],
         });
       } catch (emailErr) {
         // Result is already saved and visible in-app even if the notification email fails —
