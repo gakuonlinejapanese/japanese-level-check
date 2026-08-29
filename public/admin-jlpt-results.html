@@ -84,6 +84,16 @@
     <div id="bulkLog"></div>
   </div>
 
+  <div class="card" style="margin-top:20px;">
+    <h1>🗑 送信済みのJLPT結果を削除</h1>
+    <p class="sub">誤って送った結果、テスト用データ、送信先を間違えた結果などをここから削除できます。上と同じ管理者パスワードを使います。</p>
+    <label>メールアドレスで絞り込み（任意・空欄で全件表示、最新200件まで）</label>
+    <input id="listFilterEmail" type="text" placeholder="student@example.com" />
+    <button onclick="loadJlptResults()" style="margin-top:12px;">一覧を表示 🔍</button>
+    <div id="listResult"></div>
+    <div id="jlptList" style="margin-top:14px; display:none;"></div>
+  </div>
+
 <script>
 // One line = one student's result. Fields are comma-separated; trailing empty fields are optional.
 function parseLines(raw) {
@@ -197,6 +207,79 @@ async function sendResults() {
   }
 
   btn.disabled = false; btn.textContent = '生徒に送る ✨';
+}
+
+async function loadJlptResults() {
+  const secret = document.getElementById('secret').value.trim();
+  const email = document.getElementById('listFilterEmail').value.trim();
+  const listResultEl = document.getElementById('listResult');
+  const listEl = document.getElementById('jlptList');
+  listResultEl.innerHTML = '';
+  listEl.style.display = 'none';
+  listEl.innerHTML = '';
+
+  if (!secret) {
+    listResultEl.innerHTML = '<div class="msg err">上の「管理者パスワード」欄を入力してください。</div>';
+    return;
+  }
+
+  listResultEl.innerHTML = '<div class="msg info">読み込み中…</div>';
+  try {
+    const res = await fetch('/api/admin-assign-word', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'list_jlpt_results', secret, studentEmail: email || undefined })
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || '取得に失敗しました。');
+
+    listResultEl.innerHTML = '';
+    if (!data.results.length) {
+      listResultEl.innerHTML = '<div class="msg info">該当する結果はありません。</div>';
+      return;
+    }
+
+    listEl.style.display = 'block';
+    data.results.forEach(r => {
+      const row = document.createElement('div');
+      row.style.cssText = 'display:flex; justify-content:space-between; align-items:center; gap:10px; padding:10px 12px; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:10px; margin-bottom:8px; flex-wrap:wrap;';
+      const info = document.createElement('div');
+      const passedLabel = r.passed === true ? ' — ✅ 合格' : r.passed === false ? ' — ❌ 不合格' : '';
+      info.innerHTML = '<div style="font-size:13px; font-weight:700;">' + r.student_email + ' — ' + r.jlpt_level + passedLabel + '</div>' +
+        '<div style="font-size:11px; color:#94a3b8; margin-top:2px;">' +
+        (r.score ? 'Score: ' + r.score + ' · ' : '') +
+        (r.test_date ? '受験日: ' + r.test_date + ' · ' : '') +
+        '送信日: ' + new Date(r.created_at).toLocaleDateString() + '</div>';
+      const delBtn = document.createElement('button');
+      delBtn.textContent = '削除 🗑';
+      delBtn.style.cssText = 'width:auto; margin:0; padding:8px 14px; font-size:12px; background:rgba(248,113,113,0.15); color:#f87171; border:1px solid rgba(248,113,113,0.35);';
+      delBtn.onclick = () => deleteJlptResult(r.id, delBtn, row);
+      row.appendChild(info);
+      row.appendChild(delBtn);
+      listEl.appendChild(row);
+    });
+  } catch (err) {
+    listResultEl.innerHTML = '<div class="msg err">' + err.message + '</div>';
+  }
+}
+
+async function deleteJlptResult(id, btnEl, rowEl) {
+  if (!confirm('この結果を削除しますか？この操作は取り消せません。')) return;
+  const secret = document.getElementById('secret').value.trim();
+  btnEl.disabled = true; btnEl.textContent = '削除中...';
+  try {
+    const res = await fetch('/api/admin-assign-word', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'delete_jlpt_result', secret, id })
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || '削除に失敗しました。');
+    rowEl.remove();
+  } catch (err) {
+    alert(err.message);
+    btnEl.disabled = false; btnEl.textContent = '削除 🗑';
+  }
 }
 </script>
 </body>

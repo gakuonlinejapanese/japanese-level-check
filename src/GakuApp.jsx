@@ -343,6 +343,7 @@ const UI_TRANSLATIONS = {
     tabVocabulary: "📚 Vocabulary",
     tabResources: "🔗 Resources",
     tabMilestones: "🏆 Milestones",
+    tabJlpt: "🎓 JLPT Results",
     tabSubtitles: "🎬 Subtitles",
     // In-app navigation shortcuts shown under schedule tasks (link straight to the matching tab)
     navGoConversation: "💬 Go to Conversation Practice",
@@ -669,6 +670,7 @@ const UI_TRANSLATIONS = {
     tabVocabulary: "📚 Vocabulaire",
     tabResources: "🔗 Ressources",
     tabMilestones: "🏆 Objectifs",
+    tabJlpt: "🎓 Résultats JLPT",
     tabSubtitles: "🎬 Sous-titres",
     navGoConversation: "💬 Aller à la pratique de conversation",
     navGoPronunciation: "🗣️ Aller à la pratique de prononciation",
@@ -980,6 +982,7 @@ const UI_TRANSLATIONS = {
     tabVocabulary: "📚 Vocabulario",
     tabResources: "🔗 Recursos",
     tabMilestones: "🏆 Metas",
+    tabJlpt: "🎓 Resultados JLPT",
     tabSubtitles: "🎬 Subtítulos",
     navGoConversation: "💬 Ir a práctica de conversación",
     navGoPronunciation: "🗣️ Ir a Práctica de pronunciación",
@@ -1291,6 +1294,7 @@ const UI_TRANSLATIONS = {
     tabVocabulary: "📚 Vocabulário",
     tabResources: "🔗 Recursos",
     tabMilestones: "🏆 Metas",
+    tabJlpt: "🎓 Resultados JLPT",
     tabSubtitles: "🎬 Legendas",
     navGoConversation: "💬 Ir para prática de conversação",
     navGoPronunciation: "🗣️ Ir para Prática de pronúncia",
@@ -1602,6 +1606,7 @@ const UI_TRANSLATIONS = {
     tabVocabulary: "📚 Vokabular",
     tabResources: "🔗 Ressourcen",
     tabMilestones: "🏆 Meilensteine",
+    tabJlpt: "🎓 JLPT-Ergebnisse",
     tabSubtitles: "🎬 Untertitel",
     navGoConversation: "💬 Zur Gesprächsübung",
     navGoPronunciation: "🗣️ Zur Ausspracheübung",
@@ -1913,6 +1918,7 @@ const UI_TRANSLATIONS = {
     tabVocabulary: "📚 Vocabolario",
     tabResources: "🔗 Risorse",
     tabMilestones: "🏆 Obiettivi",
+    tabJlpt: "🎓 Risultati JLPT",
     tabSubtitles: "🎬 Sottotitoli",
     navGoConversation: "💬 Vai alla pratica di conversazione",
     navGoPronunciation: "🗣️ Vai a Pratica di pronuncia",
@@ -2224,6 +2230,7 @@ const UI_TRANSLATIONS = {
     tabVocabulary: "📚 词汇",
     tabResources: "🔗 资源",
     tabMilestones: "🏆 里程碑",
+    tabJlpt: "🎓 JLPT成绩",
     tabSubtitles: "🎬 字幕",
     navGoConversation: "💬 前往对话练习",
     navGoPronunciation: "🗣️ 前往发音练习",
@@ -2535,6 +2542,7 @@ const UI_TRANSLATIONS = {
     tabVocabulary: "📚 詞彙",
     tabResources: "🔗 資源",
     tabMilestones: "🏆 里程碑",
+    tabJlpt: "🎓 JLPT成績",
     tabSubtitles: "🎬 字幕",
     navGoConversation: "💬 前往對話練習",
     navGoPronunciation: "🗣️ 前往發音練習",
@@ -2846,6 +2854,7 @@ const UI_TRANSLATIONS = {
     tabVocabulary: "📚 어휘",
     tabResources: "🔗 자료",
     tabMilestones: "🏆 목표",
+    tabJlpt: "🎓 JLPT 결과",
     tabSubtitles: "🎬 자막",
     navGoConversation: "💬 회화 연습으로 이동",
     navGoPronunciation: "🗣️ 발음 연습으로 이동",
@@ -3157,6 +3166,7 @@ const UI_TRANSLATIONS = {
     tabVocabulary: "📚 คำศัพท์",
     tabResources: "🔗 แหล่งเรียนรู้",
     tabMilestones: "🏆 เป้าหมาย",
+    tabJlpt: "🎓 ผลสอบ JLPT",
     tabSubtitles: "🎬 คำบรรยาย",
     navGoConversation: "💬 ไปที่การฝึกสนทนา",
     navGoPronunciation: "🗣️ ไปที่การฝึกออกเสียง",
@@ -3468,6 +3478,7 @@ const UI_TRANSLATIONS = {
     tabVocabulary: "📚 Kosa Kata",
     tabResources: "🔗 Sumber",
     tabMilestones: "🏆 Pencapaian",
+    tabJlpt: "🎓 Keputusan JLPT",
     tabSubtitles: "🎬 Sari Kata",
     navGoConversation: "💬 Pergi ke Latihan Perbualan",
     navGoPronunciation: "🗣️ Pergi ke Latihan Sebutan",
@@ -3779,6 +3790,7 @@ const UI_TRANSLATIONS = {
     tabVocabulary: "📚 Kosakata",
     tabResources: "🔗 Sumber",
     tabMilestones: "🏆 Pencapaian",
+    tabJlpt: "🎓 Hasil JLPT",
     tabSubtitles: "🎬 Subtitle",
     navGoConversation: "💬 Menuju Latihan Percakapan",
     navGoPronunciation: "🗣️ Menuju Latihan Pengucapan",
@@ -4090,6 +4102,7 @@ const UI_TRANSLATIONS = {
     tabVocabulary: "📚 Từ vựng",
     tabResources: "🔗 Tài liệu",
     tabMilestones: "🏆 Mục tiêu",
+    tabJlpt: "🎓 Kết quả JLPT",
     tabSubtitles: "🎬 Phụ đề",
     navGoConversation: "💬 Đến phần Luyện hội thoại",
     navGoPronunciation: "🗣️ Đến phần Luyện phát âm",
@@ -4401,6 +4414,7 @@ const UI_TRANSLATIONS = {
     tabVocabulary: "📚 शब्दावली",
     tabResources: "🔗 संसाधन",
     tabMilestones: "🏆 लक्ष्य",
+    tabJlpt: "🎓 JLPT परिणाम",
     tabSubtitles: "🎬 सबटाइटल",
     navGoConversation: "💬 वार्तालाप अभ्यास पर जाएं",
     navGoPronunciation: "🗣️ उच्चारण अभ्यास पर जाएं",
@@ -4712,6 +4726,7 @@ const UI_TRANSLATIONS = {
     tabVocabulary: "📚 単語帳",
     tabResources: "🔗 リソース",
     tabMilestones: "🏆 目標",
+    tabJlpt: "🎓 JLPT結果",
     tabSubtitles: "🎬 字幕帳",
     navGoConversation: "💬 会話プラクティスへ",
     navGoPronunciation: "🗣️ 発音練習へ",
@@ -5023,6 +5038,7 @@ const UI_TRANSLATIONS = {
     tabVocabulary: "📚 Kelime Bilgisi",
     tabResources: "🔗 Kaynaklar",
     tabMilestones: "🏆 Hedefler",
+    tabJlpt: "🎓 JLPT Sonuçları",
     tabSubtitles: "🎬 Altyazı",
     navGoConversation: "💬 Konuşma Pratiğine Git",
     navGoPronunciation: "🗣️ Telaffuz Alıştırmasına Git",
@@ -5334,6 +5350,7 @@ const UI_TRANSLATIONS = {
     tabVocabulary: "📚 शब्दावली",
     tabResources: "🔗 स्रोतहरू",
     tabMilestones: "🏆 लक्ष्यहरू",
+    tabJlpt: "🎓 JLPT नतिजा",
     tabSubtitles: "🎬 सबटाइटल",
     navGoConversation: "💬 वार्तालाप अभ्यासमा जानुहोस्",
     navGoPronunciation: "🗣️ उच्चारण अभ्यासमा जानुहोस्",
@@ -5645,6 +5662,7 @@ const UI_TRANSLATIONS = {
     tabVocabulary: "📚 Bokabularyo",
     tabResources: "🔗 Mga Resources",
     tabMilestones: "🏆 Mga Layunin",
+    tabJlpt: "🎓 Resulta ng JLPT",
     tabSubtitles: "🎬 Subtitle",
     navGoConversation: "💬 Pumunta sa Pagsasanay sa Pag-uusap",
     navGoPronunciation: "🗣️ Pumunta sa Pagsasanay sa Pagbigkas",
@@ -6258,9 +6276,10 @@ async function syncAssignedVocab(userId) {
 // `student_id = auth.uid()`, so this only ever returns results belonging to whoever is
 // currently logged in (nothing shows for a logged-out visitor). This is the "GAKU Master
 // login only" gate: the notification email never carries the PDF itself, only a login link.
-function JlptResultsPanel({ userId }) {
+function JlptResultsPanel({ userId, T }) {
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [deletingId, setDeletingId] = useState(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -6290,28 +6309,57 @@ function JlptResultsPanel({ userId }) {
     } catch {}
   };
 
-  if (loading || !results.length) return null;
+  // Student-initiated delete of their own result. Relies on an RLS DELETE
+  // policy scoped to `student_id = auth.uid()` (see the jlpt_results table
+  // policies) — without it this call silently deletes 0 rows.
+  const deleteResult = async (r) => {
+    if (!supabase) return;
+    const ok = window.confirm(
+      (T?.jlptDeleteConfirm) || `Delete this ${r.jlpt_level} result? This can't be undone.`
+    );
+    if (!ok) return;
+    setDeletingId(r.id);
+    try {
+      const { error } = await supabase.from("jlpt_results").delete().eq("id", r.id).eq("student_id", userId);
+      if (!error) setResults(prev => prev.filter(x => x.id !== r.id));
+    } finally {
+      setDeletingId(null);
+    }
+  };
+
+  if (loading) return null;
 
   return (
-    <div style={{ ...S.card, marginBottom:16, borderLeft:"3px solid #a855f7" }}>
-      <p style={{ color:"#c4b5fd", fontSize:12, fontWeight:700, margin:"0 0 10px" }}>🎓 JLPT Diagnosis Results</p>
-      <div style={{ display:"flex", flexDirection:"column", gap:10 }}>
-        {results.map(r => (
-          <div key={r.id} style={{ background:"rgba(168,85,247,0.06)", borderRadius:10, padding:"10px 12px", display:"flex", justifyContent:"space-between", alignItems:"center", gap:10, flexWrap:"wrap" }}>
-            <div>
-              <p style={{ color:"#f1f5f9", fontSize:13, fontWeight:700, margin:"0 0 2px" }}>
-                {r.jlpt_level}{r.passed === true ? " — ✅ Pass" : r.passed === false ? " — ❌ Not pass" : ""}
-              </p>
-              <p style={{ color:"#94a3b8", fontSize:11, margin:0 }}>
-                {r.score ? `Score: ${r.score} · ` : ""}{r.test_date ? `Tested: ${r.test_date}` : new Date(r.created_at).toLocaleDateString()}
-              </p>
+    <div style={{ ...S.card, borderLeft:"3px solid #a855f7" }}>
+      <p style={{ color:"#c4b5fd", fontSize:12, fontWeight:700, margin:"0 0 10px" }}>🎓 {T?.tabJlpt ? T.tabJlpt.replace(/^🎓\s*/, "") : "JLPT Diagnosis Results"}</p>
+      {!results.length ? (
+        <p style={{ color:"#64748b", fontSize:13, margin:0 }}>
+          {T?.jlptNoResults || "No JLPT results yet. Once your teacher sends one, it'll show up here."}
+        </p>
+      ) : (
+        <div style={{ display:"flex", flexDirection:"column", gap:10 }}>
+          {results.map(r => (
+            <div key={r.id} style={{ background:"rgba(168,85,247,0.06)", borderRadius:10, padding:"10px 12px", display:"flex", justifyContent:"space-between", alignItems:"center", gap:10, flexWrap:"wrap" }}>
+              <div>
+                <p style={{ color:"#f1f5f9", fontSize:13, fontWeight:700, margin:"0 0 2px" }}>
+                  {r.jlpt_level}{r.passed === true ? " — ✅ Pass" : r.passed === false ? " — ❌ Not pass" : ""}
+                </p>
+                <p style={{ color:"#94a3b8", fontSize:11, margin:0 }}>
+                  {r.score ? `Score: ${r.score} · ` : ""}{r.test_date ? `Tested: ${r.test_date}` : new Date(r.created_at).toLocaleDateString()}
+                </p>
+              </div>
+              <div style={{ display:"flex", gap:8 }}>
+                <button onClick={()=>downloadPdf(r)} style={{ ...S.btn, padding:"7px 14px", fontSize:12, background:"linear-gradient(135deg,#a855f7,#9333ea)", color:"#fff", whiteSpace:"nowrap" }}>
+                  📄 {T?.download || "Download PDF"}
+                </button>
+                <button onClick={()=>deleteResult(r)} disabled={deletingId===r.id} style={{ ...S.btn, padding:"7px 12px", fontSize:12, background:"rgba(248,113,113,0.08)", color:"#f87171", border:"1px solid rgba(248,113,113,0.3)", whiteSpace:"nowrap", opacity:deletingId===r.id?0.6:1 }}>
+                  {deletingId===r.id ? "…" : "🗑️"}
+                </button>
+              </div>
             </div>
-            <button onClick={()=>downloadPdf(r)} style={{ ...S.btn, padding:"7px 14px", fontSize:12, background:"linear-gradient(135deg,#a855f7,#9333ea)", color:"#fff", whiteSpace:"nowrap" }}>
-              📄 Download PDF
-            </button>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
@@ -10126,6 +10174,7 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
     { id:"subtitles",  label: T.tabSubtitles || "🎬 字幕帳" },
     { id:"resources",  label: T.tabResources },
     { id:"milestones", label: T.tabMilestones },
+    { id:"jlpt",       label: T.tabJlpt || "🎓 JLPT結果" },
   ];
   const RESOURCE_SUBTABS = [
     { id:"links",    label: "🔗 " + (T.tabResources || "Resources") },
@@ -10167,7 +10216,6 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
         </div>
       )}
       <div style={{ maxWidth:600, margin:"0 auto", padding:"20px 16px" }}>
-        <JlptResultsPanel userId={userId} />
         <div style={{ ...S.card, marginBottom:16 }}>
           <div style={{ display:"flex", justifyContent:"space-between", marginBottom:8 }}>
             <p style={{ color:"#f1f5f9", fontSize:13, fontWeight:700, margin:0 }}>{T.weeklyProgress}</p>
@@ -10386,6 +10434,8 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
             </a>
           </div>
         )}
+
+        {tab==="jlpt" && <JlptResultsPanel userId={userId} T={T} />}
       </div>
     </div>
   );

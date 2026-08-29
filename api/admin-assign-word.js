@@ -154,6 +154,46 @@ export default async function handler(req, res) {
     }
   }
 
+  // Lets the admin (Seito) list and delete previously-sent JLPT results — e.g. a result
+  // sent to the wrong student, with a typo, or a test entry. GET-side listing uses the same
+  // POST route with action branches so no new Vercel function slot is needed (12/12 cap).
+  if (req.body?.action === "list_jlpt_results") {
+    try {
+      const { secret, studentEmail } = req.body || {};
+      if (!secret || secret !== process.env.ADMIN_SECRET) {
+        return res.status(401).json({ error: "Unauthorized" });
+      }
+      const supabase = getAdminClient();
+      let query = supabase
+        .from("jlpt_results")
+        .select("id, student_email, jlpt_level, passed, score, test_date, notes, created_at")
+        .order("created_at", { ascending: false })
+        .limit(200);
+      if (studentEmail) query = query.ilike("student_email", `%${String(studentEmail).trim()}%`);
+      const { data, error } = await query;
+      if (error) return res.status(500).json({ error: error.message });
+      return res.status(200).json({ ok: true, results: data || [] });
+    } catch (e) {
+      return res.status(500).json({ error: e.message });
+    }
+  }
+
+  if (req.body?.action === "delete_jlpt_result") {
+    try {
+      const { secret, id } = req.body || {};
+      if (!secret || secret !== process.env.ADMIN_SECRET) {
+        return res.status(401).json({ error: "Unauthorized" });
+      }
+      if (!id) return res.status(400).json({ error: "id is required" });
+      const supabase = getAdminClient();
+      const { error } = await supabase.from("jlpt_results").delete().eq("id", id);
+      if (error) return res.status(500).json({ error: error.message });
+      return res.status(200).json({ ok: true });
+    } catch (e) {
+      return res.status(500).json({ error: e.message });
+    }
+  }
+
   try {
     const { secret, studentEmail, word, reading, jlpt, partOfSpeech, meaning, example, folder } = req.body || {};
     if (!secret || secret !== process.env.ADMIN_SECRET) {
