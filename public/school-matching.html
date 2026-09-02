@@ -145,6 +145,20 @@
     </div>
   </div>
 
+  <!-- 参加ギフト（合否に関わらず、結果画面の下に表示） -->
+  <div class="done-box" id="gift-box" style="display:none;">
+    <p id="gift-question">🎁 Would you like to accept the gift: <strong>Generating your Japanese study guide</strong>?</p>
+    <div class="nav" id="gift-buttons">
+      <button class="btn primary" id="gift-yes">Yes</button>
+      <button class="btn ghost" id="gift-no" style="flex:1;">No, thank you</button>
+    </div>
+    <div id="gift-accept" style="display:none;">
+      <a class="btn primary" id="gift-link" href="https://app.seitojapanese.online/gaku-master/" target="_blank" rel="noopener noreferrer" style="display:block;text-decoration:none;text-align:center;padding:14px;border-radius:10px;font-weight:800;font-size:15px;">Open GAKU Master</a>
+      <p style="margin-top:14px;">Go to the button and click "Start free"</p>
+    </div>
+    <p id="gift-declined" style="display:none;">No problem — thank you again for your time!</p>
+  </div>
+
   <div class="presented-by">
     <span class="presented-by-label">Presented by</span>
     <a href="https://glocal-jp.com/ichigonihongo" target="_blank" rel="noopener noreferrer" aria-label="Ichigo Nihongo">
@@ -428,7 +442,20 @@ function showResultScreen(which) {
   qArea.style.display = "none";
   document.querySelector(".nav").style.display = "none";
   document.getElementById(which).classList.add("active");
+  // 参加ギフトのオファーは、採用・不採用どちらの結果画面でも同じように表示する
+  document.getElementById("gift-box").style.display = "block";
 }
+
+document.getElementById("gift-yes").addEventListener("click", () => {
+  document.getElementById("gift-question").style.display = "none";
+  document.getElementById("gift-buttons").style.display = "none";
+  document.getElementById("gift-accept").style.display = "block";
+});
+document.getElementById("gift-no").addEventListener("click", () => {
+  document.getElementById("gift-question").style.display = "none";
+  document.getElementById("gift-buttons").style.display = "none";
+  document.getElementById("gift-declined").style.display = "block";
+});
 
 btnNext.addEventListener("click", async () => {
   const q = QUESTIONS[step];
