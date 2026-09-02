@@ -80,15 +80,22 @@ export default async function handler(req, res) {
       }
 
       const supabase = getAdminClient();
+      const normalizedEmail = String(studentEmail).trim();
       const { data: profile, error: profileErr } = await supabase
         .from("profiles")
         .select("id, email")
-        .ilike("email", String(studentEmail).trim())
+        .ilike("email", normalizedEmail)
         .maybeSingle();
       if (profileErr) return res.status(500).json({ error: profileErr.message });
-      if (!profile) {
-        return res.status(404).json({ error: "No student found with that email. Make sure they've signed up in GAKU first." });
-      }
+      // No profile found: the student hasn't signed up for GAKU yet. We still send the
+      // result — it's stored with student_id NULL and gets auto-claimed (linked to their
+      // account) the moment they sign up with this email (see the jlpt_results migration /
+      // claim_pending_jlpt_results trigger). This is intentional: results can be sent to
+      // anyone, but they can only ever be *viewed* by logging into a GAKU account, which is
+      // exactly the incentive to sign up and become a paid GAKU Master member or Official
+      // Student in the first place.
+      const recipientEmail = profile ? profile.email : normalizedEmail;
+      const recipientId = profile ? profile.id : null;
 
       const passedBool = passed === true || passed === "true" || passed === "pass" || passed === "合格"
         ? true
@@ -100,15 +107,15 @@ export default async function handler(req, res) {
         ? pdfBase64Override
         : rawReportText
         ? await buildRichReportPdf({
-            studentName: studentName ? String(studentName).trim() : profile.email.split("@")[0],
-            studentEmail: profile.email,
+            studentName: studentName ? String(studentName).trim() : recipientEmail.split("@")[0],
+            studentEmail: recipientEmail,
             jlptLevel: String(jlptLevel).trim(),
             title: `JLPT ${String(jlptLevel).trim()} Result Analysis Report`,
             rawText: String(rawReportText),
           })
         : await buildJlptResultPdf({
-        studentName: profile.email.split("@")[0],
-        studentEmail: profile.email,
+        studentName: recipientEmail.split("@")[0],
+        studentEmail: recipientEmail,
         jlptLevel: String(jlptLevel).trim(),
         passed: passedBool,
         score: score ? String(score).trim() : "",
@@ -117,8 +124,8 @@ export default async function handler(req, res) {
       });
 
       const { error: insertErr } = await supabase.from("jlpt_results").insert({
-        student_id: profile.id,
-        student_email: profile.email,
+        student_id: recipientId,
+        student_email: recipientEmail,
         jlpt_level: String(jlptLevel).trim(),
         passed: passedBool,
         score: score ? String(score).trim() : null,
@@ -130,14 +137,21 @@ export default async function handler(req, res) {
       if (insertErr) return res.status(500).json({ error: insertErr.message });
 
       try {
-        await sendEmail({
-          to: profile.email,
-          subject: "🎓 Your JLPT diagnosis result is ready",
-          html: `<p>Hi ${profile.email.split("@")[0]},</p>
+        const html = profile
+          ? `<p>Hi ${recipientEmail.split("@")[0]},</p>
             <p>Your JLPT ${String(jlptLevel).trim()} diagnosis result has been added to your GAKU Master account.</p>
             <p>Log in to view your result and download your diagnosis report (PDF):</p>
             <p><a href="https://app.seitojapanese.online/app" style="background:#06b6d4;color:#fff;padding:10px 18px;border-radius:8px;text-decoration:none;font-weight:bold;">Open GAKU Master</a></p>
-            <p style="color:#94a3b8;font-size:12px;">— Seito Sakamoto, GAKU Online Japanese</p>`,
+            <p style="color:#94a3b8;font-size:12px;">— Seito Sakamoto, GAKU Online Japanese</p>`
+          : `<p>Hi ${recipientEmail.split("@")[0]},</p>
+            <p>Your JLPT ${String(jlptLevel).trim()} diagnosis result is ready and waiting for you on GAKU Master.</p>
+            <p>Sign up (or become an Official Student) with this same email address to view your result and download your diagnosis report (PDF):</p>
+            <p><a href="https://app.seitojapanese.online/app" style="background:#06b6d4;color:#fff;padding:10px 18px;border-radius:8px;text-decoration:none;font-weight:bold;">Open GAKU Master</a></p>
+            <p style="color:#94a3b8;font-size:12px;">— Seito Sakamoto, GAKU Online Japanese</p>`;
+        await sendEmail({
+          to: recipientEmail,
+          subject: "🎓 Your JLPT diagnosis result is ready",
+          html,
           // Intentionally NOT attaching the PDF here — the whole point of putting it behind
           // GAKU Master login is to give students a reason to log in and see it there. An
           // attachment would let them read it without ever opening the app.
