@@ -197,7 +197,11 @@ async function handleSchoolMatching(req, res) {
       const attachments = bankStatementFile?.base64
         ? [{ name: bankStatementFile.name || "bank-statement.pdf", base64: bankStatementFile.base64 }]
         : undefined;
-      await sendEmail({ to: ADMIN_EMAIL, subject: `${subjectPrefix} — ${firstName} ${lastName}`, html, attachments, replyTo: email });
+      // Applicants who cleared every condition (not rejected) also go to info@glocaljp.com,
+      // in addition to the usual ADMIN_EMAIL notification. Rejected/no-match submissions keep
+      // going to ADMIN_EMAIL only.
+      const recipients = isRejected ? ADMIN_EMAIL : [ADMIN_EMAIL, "info@glocaljp.com"];
+      await sendEmail({ to: recipients, subject: `${subjectPrefix} — ${firstName} ${lastName}`, html, attachments, replyTo: email });
     } catch (e) {
       // Don't block the student's submission just because the notification email failed —
       // the request is already durably recorded in school_matching_requests above.
