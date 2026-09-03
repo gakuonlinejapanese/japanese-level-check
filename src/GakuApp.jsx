@@ -299,8 +299,20 @@ const SKILL_TO_JLPT_SECTIONS = {
   reading: ["reading"], listening: ["listening"], kanji: ["kanji"], grammar: ["grammar"],
   jlpt: ["vocabulary", "general"], onlyKatakana: ["katakana"],
 };
-function isJlptTargetGoal(goal) { return /^Pass JLPT (N[1-5])$/.test(goal || ""); }
-function jlptTargetLevel(goal) { const m = /^Pass JLPT (N[1-5])$/.exec(goal || ""); return m ? m[1] : null; }
+// `goal` used to be a single string; it's now an array of selected goals (see FormScreen).
+// Both shapes are accepted here so old saved profiles (single string) keep working.
+function isJlptTargetGoal(goal) {
+  const goals = Array.isArray(goal) ? goal : (goal ? [goal] : []);
+  return goals.some(g => /^Pass JLPT (N[1-5])$/.test(g || ""));
+}
+function jlptTargetLevel(goal) {
+  const goals = Array.isArray(goal) ? goal : (goal ? [goal] : []);
+  for (const g of goals) {
+    const m = /^Pass JLPT (N[1-5])$/.exec(g || "");
+    if (m) return m[1];
+  }
+  return null;
+}
 // Splits a resource's full exercise range across the plan's total weeks, so week N only ever
 // gets assigned the slice of exercises that logically comes next (never the whole range every week).
 function jlptWeekSlice(range, weekNum, totalWeeks) {
@@ -9390,7 +9402,7 @@ const AI_SCHEDULE_CACHE = {};
 
 async function buildAIWeeklySchedule(form, weekNum, totalWeeks) {
   const lang = form.preferredLang || "English";
-  const cacheKey = `${form.email || form.name}_w${weekNum}_${form.jlpt}_${form.goal || ""}_${(form.skills||[]).join("")}_${lang}`;
+  const cacheKey = `${form.email || form.name}_w${weekNum}_${form.jlpt}_${(Array.isArray(form.goal)?form.goal:(form.goal?[form.goal]:[])).join("")}_${(form.skills||[]).join("")}_${lang}`;
   // Check localStorage first
   try {
     const stored = localStorage.getItem(`gaku_sched_${cacheKey}`);
@@ -9445,7 +9457,7 @@ async function buildAIWeeklySchedule(form, weekNum, totalWeeks) {
     // but still hard-restricted to the skills the student actually selected.
     const levelResList = LEVEL_RESOURCES[form.jlpt] || [];
     const skillResList = selectedSkills.flatMap(s => RESOURCES[s] || []);
-    const isAnimeGoal = form.goal === "Understand Anime/Manga" || form.displayGoal === "Understand Anime/Manga";
+    const isAnimeGoal = (Array.isArray(form.goal) ? form.goal : (form.goal?[form.goal]:[])).includes("Understand Anime/Manga") || (form.displayGoal||"").includes("Understand Anime/Manga");
     availableResources = [...levelResList, ...skillResList]
       .filter((r, i, arr) => arr.findIndex(x => x.name === r.name && x.mode === r.mode) === i)
       .sort((a, b) => isAnimeGoal ? Number(/anime|manga/i.test(b.name)) - Number(/anime|manga/i.test(a.name)) : 0)
@@ -9798,10 +9810,14 @@ const TIMELINE_KEY_MAP = {
   "Less than 6 months":"lessThan6", "Within 1 year":"within1",
   "2-3 years":"twoThreeYears", "Over 3 years":"over3",
 };
-function translateGoal(rawGoal, displayGoal, T) {
-  // "Other" goals store free text in displayGoal — never look that up in the map.
-  if (rawGoal === "Other") return displayGoal || rawGoal;
-  return T[GOAL_KEY_MAP[rawGoal]] || displayGoal || rawGoal;
+// `rawGoal` is now an array of selected goals (old single-string profiles still work).
+// `customGoalText` is the student's free-text answer for an "Other" goal, if selected.
+function translateGoal(rawGoal, customGoalText, T) {
+  const goals = Array.isArray(rawGoal) ? rawGoal : (rawGoal ? [rawGoal] : []);
+  if (!goals.length) return "";
+  return goals
+    .map(g => g === "Other" ? (customGoalText || g) : (T[GOAL_KEY_MAP[g]] || g))
+    .join(", ");
 }
 function translateTimeline(rawTimeline, T) {
   return T[TIMELINE_KEY_MAP[rawTimeline]] || rawTimeline;
@@ -9824,11 +9840,16 @@ const JLPT_TO_ESTIMATION_LEVEL = {
 function toEstimationLevel(v) { return JLPT_TO_ESTIMATION_LEVEL[v] || v; }
 
 function FormScreen({ onSubmit, onBack, onCancel, initialJlpt, initialForm, onLoginClick }) {
-  const [form, setForm] = useState(() => initialForm || {
-    name:"", email:"", country:"", preferredLang:"English",
-    goal:"", customGoal:"", timeline:"",
-    jlpt: toEstimationLevel(initialJlpt) || "",
-    hoursPerDay:"", daysPerWeek:"", skills:[]
+  const [form, setForm] = useState(() => {
+    const base = initialForm || {
+      name:"", email:"", country:"", preferredLang:"English",
+      goal:[], customGoal:"", timeline:"",
+      jlpt: toEstimationLevel(initialJlpt) || "",
+      hoursPerDay:"", daysPerWeek:"", skills:[]
+    };
+    // `goal` used to be a single string; normalize any legacy value into an array
+    // so the multi-select buttons below always have an array to work with.
+    return { ...base, goal: Array.isArray(base.goal) ? base.goal : (base.goal ? [base.goal] : []) };
   });
   const [err, setErr] = useState("");
   const [convWarningDismissed, setConvWarningDismissed] = useState(false);
@@ -9844,6 +9865,10 @@ function FormScreen({ onSubmit, onBack, onCancel, initialJlpt, initialForm, onLo
     if (s === "conversation") setConvWarningDismissed(false);
     if (s === "jlpt") { setJlptMockDismissed(false); try { localStorage.removeItem(scopedKey("gaku_jlptmock_dismissed")); } catch {} }
   };
+  const toggleGoal = (g) => {
+    setForm(f=>({ ...f, goal: f.goal.includes(g) ? f.goal.filter(x=>x!==g) : [...f.goal, g] }));
+    setConvWarningDismissed(false);
+  };
   const dismissJlptMockOffer = () => {
     setJlptMockDismissed(true);
     try { localStorage.setItem(scopedKey("gaku_jlptmock_dismissed"), "1"); } catch {}
@@ -9855,8 +9880,8 @@ function FormScreen({ onSubmit, onBack, onCancel, initialJlpt, initialForm, onLo
   const showConvJlptWarning = isJlptTargetGoal(form.goal) && form.skills.includes("conversation") && !convWarningDismissed;
   const showJlptMockOffer = form.skills.includes("jlpt") && !jlptMockDismissed;
   const T = useUITranslations(form.preferredLang);
-  const isOther = form.goal === "Other";
-  const valid = form.name && form.email && form.country && form.goal && (isOther ? form.customGoal.trim() : true) && form.timeline && form.jlpt && form.hoursPerDay && form.daysPerWeek && form.skills.length > 0;
+  const isOther = form.goal.includes("Other");
+  const valid = form.name && form.email && form.country && form.goal.length > 0 && (isOther ? form.customGoal.trim() : true) && form.timeline && form.jlpt && form.hoursPerDay && form.daysPerWeek && form.skills.length > 0;
 
   // When editing an existing profile (initialForm present) and the student changes
   // their study skills (勉強内容), the daily study-set cache key includes `skills`
@@ -9871,7 +9896,10 @@ function FormScreen({ onSubmit, onBack, onCancel, initialJlpt, initialForm, onLo
     : false;
   const attemptSubmit = () => {
     if (!valid) { setErr(T.fillRequired); return; }
-    const submitted = { ...form, displayGoal: isOther ? form.customGoal : form.goal };
+    // Multiple goals can be selected; join them into one readable string for the
+    // AI prompts and dashboard subtitle, substituting the free-text answer for "Other".
+    const displayGoal = form.goal.map(g => g === "Other" ? form.customGoal : g).join(", ");
+    const submitted = { ...form, displayGoal };
     const skillsDiffer = initialForm && JSON.stringify([...(initialForm.skills||[])].sort()) !== JSON.stringify([...(submitted.skills||[])].sort());
     if (skillsDiffer) {
       setPendingSubmitForm(submitted);
@@ -9934,23 +9962,16 @@ function FormScreen({ onSubmit, onBack, onCancel, initialJlpt, initialForm, onLo
             </select>
           </div>
 
-          {/* Final Goal */}
+          {/* Final Goal — multi-select buttons, mirroring the study-skills UI below */}
           <div>
             <label style={S.label}>{T.finalGoal}</label>
-            <select value={form.goal} onChange={e=>set("goal",e.target.value)} style={S.select}>
-              <option value="">{T.selectGoal}</option>
-              <option value="Pass JLPT N5">{T.goalN5}</option>
-              <option value="Pass JLPT N4">{T.goalN4}</option>
-              <option value="Pass JLPT N3">{T.goalN3}</option>
-              <option value="Pass JLPT N2">{T.goalN2}</option>
-              <option value="Pass JLPT N1">{T.goalN1}</option>
-              <option value="Get a job in Japan">{T.goalJob}</option>
-              <option value="Travel to Japan">{T.goalTravel}</option>
-              <option value="Study abroad in Japan">{T.goalStudyAbroad}</option>
-              <option value="Daily conversation">{T.goalConversation}</option>
-              <option value="Understand Anime/Manga">{T.goalAnime}</option>
-              <option value="Other">{T.goalOther}</option>
-            </select>
+            <div style={{ display:"flex", flexWrap:"wrap", gap:8 }}>
+              {Object.keys(GOAL_KEY_MAP).map(g => (
+                <button key={g} onClick={()=>toggleGoal(g)} style={{ padding:"8px 14px", borderRadius:20, border:`1.5px solid ${form.goal.includes(g)?C.purpleLight:C.border}`, background:form.goal.includes(g)?"rgba(168,85,247,0.15)":C.card, color:form.goal.includes(g)?C.purpleLight:"#94a3b8", fontSize:12, fontWeight:600, cursor:"pointer" }}>
+                  {T[GOAL_KEY_MAP[g]] || g}
+                </button>
+              ))}
+            </div>
             {isOther && (
               <div style={{ marginTop:8 }}>
                 <label style={{ ...S.label, marginBottom:4 }}>{T.whatDoYouWantToStudy}</label>
@@ -10345,7 +10366,7 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
             <div style={{ width:`${progress}%`, height:"100%", background:`linear-gradient(90deg,${C.purple},${C.purpleLight})`, borderRadius:99, transition:"width 0.4s" }} />
           </div>
           <div style={{ display:"flex", gap:12, marginTop:10, flexWrap:"wrap" }}>
-            <p style={{ color:"#39ff14", fontSize:11, margin:0 }}>🎯 {translateGoal(form.goal, form.displayGoal, T)}</p>
+            <p style={{ color:"#39ff14", fontSize:11, margin:0 }}>🎯 {translateGoal(form.goal, form.customGoal, T)}</p>
             <p style={{ color:"#39ff14", fontSize:11, margin:0 }}>📅 {translateTimeline(form.timeline, T)}</p>
             <p style={{ color:"#39ff14", fontSize:11, margin:0 }}>📊 {form.jlpt}</p>
             <p style={{ color:"#39ff14", fontSize:11, margin:0 }}>🌐 {NATIVE_LANG_NAMES[form.preferredLang] || form.preferredLang}</p>
@@ -10470,7 +10491,7 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
             // When the student's goal is understanding anime/manga, surface the
             // anime/manga-tagged resources for their level first, without hiding
             // the rest of the curated list — same data, reordered by relevance.
-            const isAnimeGoal = form.goal === "Understand Anime/Manga" || form.displayGoal === "Understand Anime/Manga";
+            const isAnimeGoal = (Array.isArray(form.goal) ? form.goal : (form.goal?[form.goal]:[])).includes("Understand Anime/Manga") || (form.displayGoal||"").includes("Understand Anime/Manga");
             const rawResList = LEVEL_RESOURCES[form.jlpt] || [];
             const resList = isAnimeGoal
               ? [...rawResList].sort((a,b) => Number(/anime|manga/i.test(b.name)) - Number(/anime|manga/i.test(a.name)))
@@ -10535,7 +10556,7 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
         {tab==="milestones" && (
           <div style={{ ...S.card }}>
             <p style={{ color:C.red, fontSize:12, fontWeight:700, letterSpacing:1, marginBottom:16 }}>{T.yourGoalRoadmap}</p>
-            <p style={{ color:"#ffffff", fontSize:13, marginBottom:16 }}>{T.levelToGoal}: {form.jlpt} → {T.goal}: {form.displayGoal||form.goal}</p>
+            <p style={{ color:"#ffffff", fontSize:13, marginBottom:16 }}>{T.levelToGoal}: {form.jlpt} → {T.goal}: {translateGoal(form.goal, form.customGoal, T)}</p>
             {milestones.map((m,i) => (
               <div key={i} onClick={()=>setMsDone(p=>p.includes(i)?p.filter(x=>x!==i):[...p,i])} style={{ display:"flex", gap:12, padding:"12px 14px", borderRadius:12, background:msDone.includes(i)?"rgba(34,197,94,0.06)":C.card, border:`1px solid ${msDone.includes(i)?"rgba(34,197,94,0.2)":C.border}`, marginBottom:8, cursor:"pointer", alignItems:"flex-start" }}>
                 <div style={{ width:24, height:24, borderRadius:8, border:`2px solid ${msDone.includes(i)?C.green:C.border}`, background:msDone.includes(i)?C.green:"transparent", display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0 }}>
@@ -11123,6 +11144,9 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
         // stored before the six-tier estimation scale existed, so LevelUpOffer's
         // ESTIMATION_LEVELS.indexOf(currentLevel) lookup doesn't silently fail forever.
         if (parsedForm && parsedForm.jlpt) parsedForm.jlpt = toEstimationLevel(parsedForm.jlpt);
+        // `goal` used to be a single string (one goal); it's now an array so students
+        // can select multiple goals. Wrap any legacy string value into a 1-item array.
+        if (parsedForm && !Array.isArray(parsedForm.goal)) parsedForm.goal = parsedForm.goal ? [parsedForm.goal] : [];
         setForm(parsedForm);
         // A student who already completed onboarding once must never be sent back
         // to the profile-setup screen automatically — this used to re-trigger on
@@ -11289,7 +11313,7 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
     name: initialName || '',
     email: initialEmail || '',
     country: '', preferredLang: 'English',
-    goal: '', customGoal: '', timeline: '',
+    goal: [], customGoal: '', timeline: '',
     jlpt: toEstimationLevel(initialJlpt) || '',
     hoursPerDay: '', daysPerWeek: '', skills: []
   } : undefined;
