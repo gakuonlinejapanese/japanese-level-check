@@ -10354,7 +10354,7 @@ function FormScreen({ onSubmit, onBack, onCancel, initialJlpt, initialForm, onLo
               ))}
             </div>
             <p style={{ color:"#475569", fontSize:11, marginTop:6 }}>{T.writingNote}</p>
-            {(form.skills.includes("onlyHiragana") || form.skills.includes("onlyKatakana")) && (
+            {(form.skills.includes("onlyHiragana") || form.skills.includes("onlyKatakana") || form.jlpt === "Beginner") && (
               <div style={{ marginTop:10, background:"rgba(6,182,212,0.06)", border:`1px solid rgba(6,182,212,0.2)`, borderRadius:10, padding:"12px 14px" }}>
                 <p style={{ color:C.teal, fontSize:12, fontWeight:700, margin:"0 0 4px" }}>{T.kanaResourcesTitle}</p>
                 <p style={{ color:"#94a3b8", fontSize:11, margin:"0 0 10px" }}>{T.kanaResourcesDesc}</p>
@@ -10841,7 +10841,7 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
               : rawResList;
             return (
             <div>
-            {(form.skills.includes("onlyHiragana") || form.skills.includes("onlyKatakana")) && (
+            {(form.skills.includes("onlyHiragana") || form.skills.includes("onlyKatakana") || form.jlpt === "Beginner") && (
               <div style={{ ...S.card, marginBottom:16, borderLeft:`3px solid ${C.teal}` }}>
                 <p style={{ color:C.teal, fontSize:12, fontWeight:700, letterSpacing:1, marginBottom:4 }}>{T.kanaResourcesTitle}</p>
                 <p style={{ color:"#ffffff", fontSize:12, marginBottom:14 }}>{T.kanaResourcesDesc}</p>
