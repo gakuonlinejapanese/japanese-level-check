@@ -352,6 +352,20 @@ const UI_TRANSLATIONS = {
     skillsChangeDesc: "You changed your study skills. Would you like new content generated for these skills, or keep the study content you already have?",
     skillsChangeUpdateBtn: "Yes, update my study content",
     skillsChangeKeepBtn: "No, keep my previous study content",
+    streakUnit: "day streak",
+    trialEndsToday: "Your free trial ends today!",
+    trialEndsTomorrow: "Your free trial ends tomorrow!",
+    viewPlansCta: "View plans",
+    firstWinKicker: "QUICK START",
+    firstWinTitle: "Try your first word!",
+    firstWinTapToReveal: "Tap to reveal",
+    firstWinDoneBtn: "Got it! Continue",
+    firstWinHint: "Tap the card above",
+    installPromptTitle: "Add GAKU Master to your home screen",
+    installPromptDesc: "One tap to open, and you'll never lose your progress.",
+    installPromptCta: "Add to Home Screen",
+    installPromptSkip: "Maybe later",
+    installPromptIosSteps: "Tap the Share button, then \"Add to Home Screen\"",
     weeklyProgress: "Weekly Progress",
     // Tab labels
     tabSchedule: "📅 Schedule",
@@ -684,6 +698,20 @@ const UI_TRANSLATIONS = {
     skillsChangeDesc: "Vous avez changé vos compétences d'étude. Voulez-vous générer un nouveau contenu pour ces compétences, ou conserver le contenu que vous avez déjà ?",
     skillsChangeUpdateBtn: "Oui, modifier mon contenu d'étude",
     skillsChangeKeepBtn: "Non, garder mon contenu précédent",
+    streakUnit: "jours de suite",
+    trialEndsToday: "Votre essai gratuit se termine aujourd'hui !",
+    trialEndsTomorrow: "Votre essai gratuit se termine demain !",
+    viewPlansCta: "Voir les formules",
+    firstWinKicker: "DÉMARRAGE RAPIDE",
+    firstWinTitle: "Essayez votre premier mot !",
+    firstWinTapToReveal: "Touchez pour révéler",
+    firstWinDoneBtn: "Compris ! Continuer",
+    firstWinHint: "Touchez la carte ci-dessus",
+    installPromptTitle: "Ajoutez GAKU Master à votre écran d'accueil",
+    installPromptDesc: "Un seul geste pour l'ouvrir, et vous ne perdrez jamais votre progression.",
+    installPromptCta: "Ajouter à l'écran d'accueil",
+    installPromptSkip: "Plus tard",
+    installPromptIosSteps: "Appuyez sur Partager, puis « Sur l'écran d'accueil »",
     weeklyProgress: "Progression hebdomadaire",
     tabSchedule: "📅 Planning",
     tabPractice: "✨ À partir du contenu",
@@ -1000,6 +1028,20 @@ const UI_TRANSLATIONS = {
     skillsChangeDesc: "Has cambiado tus habilidades de estudio. ¿Quieres generar contenido nuevo para estas habilidades, o mantener el contenido que ya tienes?",
     skillsChangeUpdateBtn: "Sí, actualizar mi contenido de estudio",
     skillsChangeKeepBtn: "No, mantener mi contenido anterior",
+    streakUnit: "días seguidos",
+    trialEndsToday: "¡Tu prueba gratuita termina hoy!",
+    trialEndsTomorrow: "¡Tu prueba gratuita termina mañana!",
+    viewPlansCta: "Ver planes",
+    firstWinKicker: "INICIO RÁPIDO",
+    firstWinTitle: "¡Prueba tu primera palabra!",
+    firstWinTapToReveal: "Toca para revelar",
+    firstWinDoneBtn: "¡Entendido! Continuar",
+    firstWinHint: "Toca la tarjeta de arriba",
+    installPromptTitle: "Añade GAKU Master a tu pantalla de inicio",
+    installPromptDesc: "Ábrela con un toque y nunca pierdas tu progreso.",
+    installPromptCta: "Añadir a pantalla de inicio",
+    installPromptSkip: "Más tarde",
+    installPromptIosSteps: "Toca Compartir y luego \"Añadir a pantalla de inicio\"",
     weeklyProgress: "Progreso semanal",
     tabSchedule: "📅 Horario",
     tabPractice: "✨ Desde el contenido",
@@ -1316,6 +1358,20 @@ const UI_TRANSLATIONS = {
     skillsChangeDesc: "Você alterou suas habilidades de estudo. Deseja gerar novo conteúdo para essas habilidades ou manter o conteúdo que você já possui?",
     skillsChangeUpdateBtn: "Sim, atualizar meu conteúdo de estudo",
     skillsChangeKeepBtn: "Não, manter meu conteúdo anterior",
+    streakUnit: "dias seguidos",
+    trialEndsToday: "Seu teste grátis termina hoje!",
+    trialEndsTomorrow: "Seu teste grátis termina amanhã!",
+    viewPlansCta: "Ver planos",
+    firstWinKicker: "INÍCIO RÁPIDO",
+    firstWinTitle: "Experimente sua primeira palavra!",
+    firstWinTapToReveal: "Toque para revelar",
+    firstWinDoneBtn: "Entendi! Continuar",
+    firstWinHint: "Toque no cartão acima",
+    installPromptTitle: "Adicione o GAKU Master à tela inicial",
+    installPromptDesc: "Abra com um toque e nunca perca seu progresso.",
+    installPromptCta: "Adicionar à tela inicial",
+    installPromptSkip: "Mais tarde",
+    installPromptIosSteps: "Toque em Compartilhar e depois em \"Adicionar à Tela de Início\"",
     weeklyProgress: "Progresso semanal",
     tabSchedule: "📅 Agenda",
     tabPractice: "✨ A partir do conteúdo",
@@ -1632,6 +1688,20 @@ const UI_TRANSLATIONS = {
     skillsChangeDesc: "Du hast deine Lernfähigkeiten geändert. Möchtest du neue Inhalte für diese Fähigkeiten erstellen lassen oder deine bisherigen Lerninhalte behalten?",
     skillsChangeUpdateBtn: "Ja, Lerninhalte aktualisieren",
     skillsChangeKeepBtn: "Nein, bisherige Lerninhalte behalten",
+    streakUnit: "Tage in Folge",
+    trialEndsToday: "Deine kostenlose Testphase endet heute!",
+    trialEndsTomorrow: "Deine kostenlose Testphase endet morgen!",
+    viewPlansCta: "Pläne ansehen",
+    firstWinKicker: "SCHNELLSTART",
+    firstWinTitle: "Probier dein erstes Wort!",
+    firstWinTapToReveal: "Tippen zum Aufdecken",
+    firstWinDoneBtn: "Verstanden! Weiter",
+    firstWinHint: "Tippe auf die Karte oben",
+    installPromptTitle: "GAKU Master zum Startbildschirm hinzufügen",
+    installPromptDesc: "Ein Fingertipp zum Öffnen, und dein Fortschritt geht nie verloren.",
+    installPromptCta: "Zum Startbildschirm hinzufügen",
+    installPromptSkip: "Vielleicht später",
+    installPromptIosSteps: "Tippe auf Teilen, dann auf „Zum Home-Bildschirm\"",
     weeklyProgress: "Wöchentlicher Fortschritt",
     tabSchedule: "📅 Zeitplan",
     tabPractice: "✨ Aus Inhalt",
@@ -1948,6 +2018,20 @@ const UI_TRANSLATIONS = {
     skillsChangeDesc: "Hai modificato le tue competenze di studio. Vuoi generare nuovi contenuti per queste competenze o mantenere quelli che hai già?",
     skillsChangeUpdateBtn: "Sì, aggiorna i miei contenuti",
     skillsChangeKeepBtn: "No, mantieni i contenuti precedenti",
+    streakUnit: "giorni di fila",
+    trialEndsToday: "La tua prova gratuita termina oggi!",
+    trialEndsTomorrow: "La tua prova gratuita termina domani!",
+    viewPlansCta: "Vedi i piani",
+    firstWinKicker: "INIZIO RAPIDO",
+    firstWinTitle: "Prova la tua prima parola!",
+    firstWinTapToReveal: "Tocca per rivelare",
+    firstWinDoneBtn: "Capito! Continua",
+    firstWinHint: "Tocca la carta qui sopra",
+    installPromptTitle: "Aggiungi GAKU Master alla schermata Home",
+    installPromptDesc: "Aprilo con un tocco e non perderai mai i tuoi progressi.",
+    installPromptCta: "Aggiungi a Home",
+    installPromptSkip: "Più tardi",
+    installPromptIosSteps: "Tocca Condividi, poi \"Aggiungi a Home\"",
     weeklyProgress: "Progressi settimanali",
     tabSchedule: "📅 Programma",
     tabPractice: "✨ Dal contenuto",
@@ -2264,6 +2348,20 @@ const UI_TRANSLATIONS = {
     skillsChangeDesc: "你更改了学习技能。是要为这些技能生成新的学习内容，还是保留之前的学习内容？",
     skillsChangeUpdateBtn: "是，更新我的学习内容",
     skillsChangeKeepBtn: "否，保留之前的学习内容",
+    streakUnit: "天连续",
+    trialEndsToday: "你的免费试用今天到期！",
+    trialEndsTomorrow: "你的免费试用明天到期！",
+    viewPlansCta: "查看方案",
+    firstWinKicker: "快速开始",
+    firstWinTitle: "试试你的第一个单词！",
+    firstWinTapToReveal: "点击查看",
+    firstWinDoneBtn: "知道了！继续",
+    firstWinHint: "点击上方卡片",
+    installPromptTitle: "将GAKU Master添加到主屏幕",
+    installPromptDesc: "一键打开，学习进度永不丢失。",
+    installPromptCta: "添加到主屏幕",
+    installPromptSkip: "以后再说",
+    installPromptIosSteps: "点击分享按钮，然后选择\"添加到主屏幕\"",
     weeklyProgress: "每周进度",
     tabSchedule: "📅 日程",
     tabPractice: "✨ 来自内容",
@@ -2580,6 +2678,20 @@ const UI_TRANSLATIONS = {
     skillsChangeDesc: "你更改了學習技能。要為這些技能產生新的學習內容，還是保留之前的學習內容？",
     skillsChangeUpdateBtn: "是，更新我的學習內容",
     skillsChangeKeepBtn: "否，保留之前的學習內容",
+    streakUnit: "天連續",
+    trialEndsToday: "你的免費試用今天到期！",
+    trialEndsTomorrow: "你的免費試用明天到期！",
+    viewPlansCta: "查看方案",
+    firstWinKicker: "快速開始",
+    firstWinTitle: "試試你的第一個單字！",
+    firstWinTapToReveal: "點擊查看",
+    firstWinDoneBtn: "知道了！繼續",
+    firstWinHint: "點擊上方卡片",
+    installPromptTitle: "將GAKU Master加入主畫面",
+    installPromptDesc: "一鍵開啟，學習進度永不遺失。",
+    installPromptCta: "加入主畫面",
+    installPromptSkip: "稍後再說",
+    installPromptIosSteps: "點擊分享按鈕，然後選擇「加入主畫面」",
     weeklyProgress: "每週進度",
     tabSchedule: "📅 日程",
     tabPractice: "✨ 來自內容",
@@ -2896,6 +3008,20 @@ const UI_TRANSLATIONS = {
     skillsChangeDesc: "학습 스킬을 변경하셨습니다. 이 스킬에 맞춰 새로운 학습 내용을 만들까요, 아니면 이전에 만든 학습 내용을 그대로 유지할까요?",
     skillsChangeUpdateBtn: "네, 학습 내용을 변경합니다",
     skillsChangeKeepBtn: "아니요, 이전 학습 내용을 유지합니다",
+    streakUnit: "일 연속",
+    trialEndsToday: "무료 체험이 오늘 종료됩니다!",
+    trialEndsTomorrow: "무료 체험이 내일 종료됩니다!",
+    viewPlansCta: "요금제 보기",
+    firstWinKicker: "빠른 시작",
+    firstWinTitle: "첫 단어를 배워보세요!",
+    firstWinTapToReveal: "탭하여 확인",
+    firstWinDoneBtn: "알겠어요! 계속하기",
+    firstWinHint: "위 카드를 탭하세요",
+    installPromptTitle: "GAKU Master를 홈 화면에 추가",
+    installPromptDesc: "한 번의 탭으로 열고, 진행 상황을 절대 잃지 않아요.",
+    installPromptCta: "홈 화면에 추가",
+    installPromptSkip: "나중에",
+    installPromptIosSteps: "공유 버튼을 탭한 후 \"홈 화면에 추가\"를 선택하세요",
     weeklyProgress: "주간 진도",
     tabSchedule: "📅 일정",
     tabPractice: "✨ 콘텐츠에서",
@@ -3212,6 +3338,20 @@ const UI_TRANSLATIONS = {
     skillsChangeDesc: "คุณเปลี่ยนทักษะการเรียนแล้ว ต้องการให้สร้างเนื้อหาใหม่ตามทักษะนี้ หรือเก็บเนื้อหาการเรียนเดิมไว้?",
     skillsChangeUpdateBtn: "ใช่ อัปเดตเนื้อหาการเรียนของฉัน",
     skillsChangeKeepBtn: "ไม่ เก็บเนื้อหาการเรียนเดิมไว้",
+    streakUnit: "วันติดต่อกัน",
+    trialEndsToday: "ทดลองใช้ฟรีของคุณจะหมดอายุวันนี้!",
+    trialEndsTomorrow: "ทดลองใช้ฟรีของคุณจะหมดอายุพรุ่งนี้!",
+    viewPlansCta: "ดูแพ็กเกจ",
+    firstWinKicker: "เริ่มต้นอย่างรวดเร็ว",
+    firstWinTitle: "ลองคำแรกของคุณ!",
+    firstWinTapToReveal: "แตะเพื่อดูคำตอบ",
+    firstWinDoneBtn: "เข้าใจแล้ว! ดำเนินการต่อ",
+    firstWinHint: "แตะที่การ์ดด้านบน",
+    installPromptTitle: "เพิ่ม GAKU Master ไว้ที่หน้าจอหลัก",
+    installPromptDesc: "เปิดได้ในแตะเดียว และไม่มีวันสูญเสียความคืบหน้า",
+    installPromptCta: "เพิ่มไปยังหน้าจอหลัก",
+    installPromptSkip: "ไว้ทีหลัง",
+    installPromptIosSteps: "แตะปุ่มแชร์ แล้วเลือก \"เพิ่มไปยังหน้าจอหลัก\"",
     weeklyProgress: "ความคืบหน้ารายสัปดาห์",
     tabSchedule: "📅 ตารางเรียน",
     tabPractice: "✨ จากเนื้อหา",
@@ -3528,6 +3668,20 @@ const UI_TRANSLATIONS = {
     skillsChangeDesc: "Anda telah menukar kemahiran pembelajaran anda. Adakah anda mahu kandungan baharu dijana untuk kemahiran ini, atau kekalkan kandungan pembelajaran sedia ada?",
     skillsChangeUpdateBtn: "Ya, kemaskini kandungan pembelajaran saya",
     skillsChangeKeepBtn: "Tidak, kekalkan kandungan pembelajaran sebelumnya",
+    streakUnit: "hari berturut-turut",
+    trialEndsToday: "Percubaan percuma anda tamat hari ini!",
+    trialEndsTomorrow: "Percubaan percuma anda tamat esok!",
+    viewPlansCta: "Lihat pelan",
+    firstWinKicker: "MULA PANTAS",
+    firstWinTitle: "Cuba perkataan pertama anda!",
+    firstWinTapToReveal: "Ketik untuk lihat",
+    firstWinDoneBtn: "Faham! Teruskan",
+    firstWinHint: "Ketik kad di atas",
+    installPromptTitle: "Tambah GAKU Master ke skrin utama",
+    installPromptDesc: "Buka dengan satu ketikan, dan kemajuan anda tidak akan hilang.",
+    installPromptCta: "Tambah ke Skrin Utama",
+    installPromptSkip: "Mungkin nanti",
+    installPromptIosSteps: "Ketik butang Kongsi, kemudian \"Tambah ke Skrin Utama\"",
     weeklyProgress: "Kemajuan mingguan",
     tabSchedule: "📅 Jadual",
     tabPractice: "✨ Dari Kandungan",
@@ -3844,6 +3998,20 @@ const UI_TRANSLATIONS = {
     skillsChangeDesc: "Anda telah mengubah keterampilan belajar Anda. Apakah Anda ingin konten baru dibuat untuk keterampilan ini, atau tetap menggunakan konten belajar yang sudah ada?",
     skillsChangeUpdateBtn: "Ya, perbarui konten belajar saya",
     skillsChangeKeepBtn: "Tidak, pertahankan konten belajar sebelumnya",
+    streakUnit: "hari berturut-turut",
+    trialEndsToday: "Uji coba gratis Anda berakhir hari ini!",
+    trialEndsTomorrow: "Uji coba gratis Anda berakhir besok!",
+    viewPlansCta: "Lihat paket",
+    firstWinKicker: "MULAI CEPAT",
+    firstWinTitle: "Coba kata pertamamu!",
+    firstWinTapToReveal: "Ketuk untuk lihat",
+    firstWinDoneBtn: "Paham! Lanjutkan",
+    firstWinHint: "Ketuk kartu di atas",
+    installPromptTitle: "Tambahkan GAKU Master ke layar utama",
+    installPromptDesc: "Buka dengan satu ketukan, dan progresmu tidak akan pernah hilang.",
+    installPromptCta: "Tambah ke Layar Utama",
+    installPromptSkip: "Nanti saja",
+    installPromptIosSteps: "Ketuk tombol Bagikan, lalu \"Tambah ke Layar Utama\"",
     weeklyProgress: "Kemajuan mingguan",
     tabSchedule: "📅 Jadwal",
     tabPractice: "✨ Dari Konten",
@@ -4160,6 +4328,20 @@ const UI_TRANSLATIONS = {
     skillsChangeDesc: "Bạn đã thay đổi kỹ năng học tập. Bạn có muốn tạo nội dung mới cho các kỹ năng này, hay giữ nguyên nội dung học tập trước đó?",
     skillsChangeUpdateBtn: "Có, cập nhật nội dung học tập của tôi",
     skillsChangeKeepBtn: "Không, giữ nội dung học tập trước đó",
+    streakUnit: "ngày liên tiếp",
+    trialEndsToday: "Bản dùng thử miễn phí của bạn kết thúc hôm nay!",
+    trialEndsTomorrow: "Bản dùng thử miễn phí của bạn kết thúc vào ngày mai!",
+    viewPlansCta: "Xem các gói",
+    firstWinKicker: "BẮT ĐẦU NHANH",
+    firstWinTitle: "Thử từ đầu tiên của bạn!",
+    firstWinTapToReveal: "Chạm để xem",
+    firstWinDoneBtn: "Đã hiểu! Tiếp tục",
+    firstWinHint: "Chạm vào thẻ phía trên",
+    installPromptTitle: "Thêm GAKU Master vào màn hình chính",
+    installPromptDesc: "Mở chỉ với một chạm, và tiến trình của bạn sẽ không bao giờ mất.",
+    installPromptCta: "Thêm vào màn hình chính",
+    installPromptSkip: "Để sau",
+    installPromptIosSteps: "Chạm nút Chia sẻ, sau đó chọn \"Thêm vào MH chính\"",
     weeklyProgress: "Tiến độ hàng tuần",
     tabSchedule: "📅 Lịch học",
     tabPractice: "✨ Từ nội dung",
@@ -4476,6 +4658,20 @@ const UI_TRANSLATIONS = {
     skillsChangeDesc: "आपने अपने अध्ययन कौशल बदल दिए हैं। क्या आप इन कौशलों के लिए नई सामग्री बनवाना चाहते हैं, या पहले से बनाई गई अध्ययन सामग्री को वैसे ही रखना चाहते हैं?",
     skillsChangeUpdateBtn: "हाँ, मेरी अध्ययन सामग्री अपडेट करें",
     skillsChangeKeepBtn: "नहीं, पिछली अध्ययन सामग्री रखें",
+    streakUnit: "दिन लगातार",
+    trialEndsToday: "आपका मुफ़्त ट्रायल आज समाप्त हो रहा है!",
+    trialEndsTomorrow: "आपका मुफ़्त ट्रायल कल समाप्त हो रहा है!",
+    viewPlansCta: "प्लान देखें",
+    firstWinKicker: "क्विक स्टार्ट",
+    firstWinTitle: "अपना पहला शब्द आज़माएँ!",
+    firstWinTapToReveal: "देखने के लिए टैप करें",
+    firstWinDoneBtn: "समझ गया! आगे बढ़ें",
+    firstWinHint: "ऊपर वाले कार्ड पर टैप करें",
+    installPromptTitle: "GAKU Master को होम स्क्रीन पर जोड़ें",
+    installPromptDesc: "एक टैप में खोलें, और आपकी प्रगति कभी नहीं खोएगी।",
+    installPromptCta: "होम स्क्रीन पर जोड़ें",
+    installPromptSkip: "बाद में",
+    installPromptIosSteps: "शेयर बटन टैप करें, फिर \"होम स्क्रीन पर जोड़ें\" चुनें",
     weeklyProgress: "साप्ताहिक प्रगति",
     tabSchedule: "📅 समय-सारणी",
     tabPractice: "✨ सामग्री से",
@@ -4792,6 +4988,20 @@ const UI_TRANSLATIONS = {
     skillsChangeDesc: "学習スキルの選択が変わりました。この内容に合わせて新しい勉強内容を作成しますか？それとも、以前作成した勉強内容をそのまま引き継ぎますか？",
     skillsChangeUpdateBtn: "勉強内容を変更する",
     skillsChangeKeepBtn: "以前の勉強内容をそのまま引き継ぐ",
+    streakUnit: "日連続",
+    trialEndsToday: "無料トライアルは今日で終了します！",
+    trialEndsTomorrow: "無料トライアルは明日で終了します！",
+    viewPlansCta: "プランを見る",
+    firstWinKicker: "クイックスタート",
+    firstWinTitle: "最初の1問に挑戦してみよう！",
+    firstWinTapToReveal: "タップして答えを見る",
+    firstWinDoneBtn: "できた！次へ",
+    firstWinHint: "上のカードをタップしてください",
+    installPromptTitle: "GAKU Masterをホーム画面に追加",
+    installPromptDesc: "ワンタップで開けて、学習の進み具合も失われません。",
+    installPromptCta: "ホーム画面に追加",
+    installPromptSkip: "あとで",
+    installPromptIosSteps: "共有ボタンをタップし、「ホーム画面に追加」を選んでください",
     weeklyProgress: "週間進捗",
     tabSchedule: "📅 スケジュール",
     tabPractice: "✨ コンテンツから",
@@ -5108,6 +5318,20 @@ const UI_TRANSLATIONS = {
     skillsChangeDesc: "Çalışma becerilerinizi değiştirdiniz. Bu beceriler için yeni içerik oluşturulmasını mı istersiniz, yoksa önceki çalışma içeriğinizi mi korumak istersiniz?",
     skillsChangeUpdateBtn: "Evet, çalışma içeriğimi güncelle",
     skillsChangeKeepBtn: "Hayır, önceki çalışma içeriğimi koru",
+    streakUnit: "gün üst üste",
+    trialEndsToday: "Ücretsiz deneme süreniz bugün sona eriyor!",
+    trialEndsTomorrow: "Ücretsiz deneme süreniz yarın sona eriyor!",
+    viewPlansCta: "Planları görüntüle",
+    firstWinKicker: "HIZLI BAŞLANGIÇ",
+    firstWinTitle: "İlk kelimeni dene!",
+    firstWinTapToReveal: "Görmek için dokun",
+    firstWinDoneBtn: "Anladım! Devam et",
+    firstWinHint: "Yukarıdaki karta dokun",
+    installPromptTitle: "GAKU Master'ı ana ekrana ekle",
+    installPromptDesc: "Tek dokunuşla aç, ilerlemen asla kaybolmasın.",
+    installPromptCta: "Ana Ekrana Ekle",
+    installPromptSkip: "Belki sonra",
+    installPromptIosSteps: "Paylaş düğmesine, ardından \"Ana Ekrana Ekle\"ye dokunun",
     weeklyProgress: "Haftalık ilerleme",
     tabSchedule: "📅 Program",
     tabPractice: "✨ İçerikten",
@@ -5424,6 +5648,20 @@ const UI_TRANSLATIONS = {
     skillsChangeDesc: "तपाईंले आफ्नो अध्ययन सीपहरू परिवर्तन गर्नुभयो। के तपाईं यी सीपहरूका लागि नयाँ सामग्री बनाउन चाहनुहुन्छ, वा पहिले बनाइएको अध्ययन सामग्री त्यसै राख्न चाहनुहुन्छ?",
     skillsChangeUpdateBtn: "हो, मेरो अध्ययन सामग्री अपडेट गर्नुहोस्",
     skillsChangeKeepBtn: "होइन, अघिल्लो अध्ययन सामग्री राख्नुहोस्",
+    streakUnit: "दिन लगातार",
+    trialEndsToday: "तपाईंको निःशुल्क ट्रायल आज सकिन्छ!",
+    trialEndsTomorrow: "तपाईंको निःशुल्क ट्रायल भोलि सकिन्छ!",
+    viewPlansCta: "योजनाहरू हेर्नुहोस्",
+    firstWinKicker: "द्रुत सुरुवात",
+    firstWinTitle: "आफ्नो पहिलो शब्द प्रयास गर्नुहोस्!",
+    firstWinTapToReveal: "हेर्न ट्याप गर्नुहोस्",
+    firstWinDoneBtn: "बुझें! अगाडि बढ्नुहोस्",
+    firstWinHint: "माथिको कार्ड ट्याप गर्नुहोस्",
+    installPromptTitle: "GAKU Master लाई होम स्क्रिनमा थप्नुहोस्",
+    installPromptDesc: "एक ट्यापमा खोल्नुहोस्, र तपाईंको प्रगति कहिल्यै हराउँदैन।",
+    installPromptCta: "होम स्क्रिनमा थप्नुहोस्",
+    installPromptSkip: "पछि",
+    installPromptIosSteps: "सेयर बटन ट्याप गर्नुहोस्, त्यसपछि \"होम स्क्रिनमा थप्नुहोस्\" छान्नुहोस्",
     weeklyProgress: "साप्ताहिक प्रगति",
     tabSchedule: "📅 तालिका",
     tabPractice: "✨ सामग्रीबाट",
@@ -5740,6 +5978,20 @@ const UI_TRANSLATIONS = {
     skillsChangeDesc: "Binago mo ang iyong study skills. Gusto mo bang gumawa ng bagong content para sa mga skill na ito, o panatilihin na lang ang dati mong study content?",
     skillsChangeUpdateBtn: "Oo, i-update ang aking study content",
     skillsChangeKeepBtn: "Hindi, panatilihin ang dating study content",
+    streakUnit: "araw sunod-sunod",
+    trialEndsToday: "Magtatapos na ngayong araw ang iyong libreng trial!",
+    trialEndsTomorrow: "Magtatapos bukas ang iyong libreng trial!",
+    viewPlansCta: "Tingnan ang mga plano",
+    firstWinKicker: "MABILIS NA SIMULA",
+    firstWinTitle: "Subukan ang unang salita mo!",
+    firstWinTapToReveal: "I-tap para makita",
+    firstWinDoneBtn: "Nakuha ko! Magpatuloy",
+    firstWinHint: "I-tap ang card sa itaas",
+    installPromptTitle: "Idagdag ang GAKU Master sa home screen",
+    installPromptDesc: "Buksan sa isang tap, at hindi na mawawala ang iyong progreso.",
+    installPromptCta: "Idagdag sa Home Screen",
+    installPromptSkip: "Sa ibang pagkakataon",
+    installPromptIosSteps: "I-tap ang Share, pagkatapos ay \"Idagdag sa Home Screen\"",
     weeklyProgress: "Lingguhang progreso",
     tabSchedule: "📅 Iskedyul",
     tabPractice: "✨ Mula sa Nilalaman",
@@ -9812,6 +10064,18 @@ const TIMELINE_KEY_MAP = {
 };
 // `rawGoal` is now an array of selected goals (old single-string profiles still work).
 // `customGoalText` is the student's free-text answer for an "Other" goal, if selected.
+// One quick, instantly-completable vocab card per level, shown right after
+// signup (see the "firstwin" onboarding step in GakuApp) — no AI call, no
+// loading delay, just an immediate small win before the full dashboard.
+const FIRST_WIN_ITEMS = {
+  Beginner: { word: "こんにちは", reading: "こんにちは", meaning: "Hello" },
+  N5: { word: "ありがとう", reading: "ありがとう", meaning: "Thank you" },
+  N4: { word: "大丈夫", reading: "だいじょうぶ", meaning: "It's okay / alright" },
+  N3: { word: "以上", reading: "いじょう", meaning: "and above / that concludes it" },
+  N2: { word: "率直", reading: "そっちょく", meaning: "frank, candid" },
+  N1: { word: "圧倒的", reading: "あっとうてき", meaning: "overwhelming" },
+};
+
 function translateGoal(rawGoal, customGoalText, T) {
   const goals = Array.isArray(rawGoal) ? rawGoal : (rawGoal ? [rawGoal] : []);
   if (!goals.length) return "";
@@ -10193,7 +10457,7 @@ function LevelUpOffer({ T, currentLevel, onConfirm, onDismiss }) {
 }
 
 // ─── DASHBOARD ──────────────────────────────────────────────────────────────────
-function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteAccountBusy, userId }) {
+function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteAccountBusy, userId, streakDays, daysUntilTrialEnds, isTrialAccount }) {
   const T = useUITranslations(form?.preferredLang || "English");
   const [schedule, setSchedule] = useState(() => buildSchedule(form, getT(form?.preferredLang || "English")));
   const [milestones, setMilestones] = useState(() => buildMilestones(form));
@@ -10331,7 +10595,14 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
       <div style={{ background:"rgba(10,15,30,0.95)", borderBottom:`1px solid ${C.border}`, padding:"14px 20px", position:"sticky", top:0, zIndex:100, display:"flex", justifyContent:"space-between", alignItems:"center" }}>
         <div>
           <p style={{ color:C.purpleLight, fontSize:10, fontWeight:700, letterSpacing:2, margin:0 }}>{T.gakuSelfStudy}</p>
-          <p style={{ color:"#f1f5f9", fontSize:14, fontWeight:800, margin:0 }}>{form.name}'s {T.studyPlan}</p>
+          <div style={{ display:"flex", alignItems:"center", gap:8 }}>
+            <p style={{ color:"#f1f5f9", fontSize:14, fontWeight:800, margin:0 }}>{form.name}'s {T.studyPlan}</p>
+            {streakDays > 0 && (
+              <span style={{ display:"inline-flex", alignItems:"center", gap:3, padding:"2px 8px", borderRadius:99, background:streakDays>=3?"rgba(251,191,36,0.15)":"rgba(168,85,247,0.15)", border:`1px solid ${streakDays>=3?"rgba(251,191,36,0.4)":"rgba(168,85,247,0.3)"}`, color:streakDays>=3?"#fbbf24":C.purpleLight, fontSize:11, fontWeight:800 }}>
+                🔥 {streakDays} {T.streakUnit}
+              </span>
+            )}
+          </div>
         </div>
         <div style={{ display:"flex", gap:8 }}>
           <button onClick={()=>setShowHelp(true)} style={{ ...S.btn, padding:"8px 14px", background:`linear-gradient(135deg,${C.amber},#d97706)`, color:"#fff", fontSize:12 }}>{T.help}</button>
@@ -10354,6 +10625,16 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
           <p style={{ color:C.purpleLight, fontSize:12, fontWeight:700, margin:0 }}>
             🌐 Translating UI into {form.preferredLang}...
           </p>
+        </div>
+      )}
+      {isTrialAccount && (daysUntilTrialEnds === 0 || daysUntilTrialEnds === 1) && (
+        <div style={{ background:"rgba(251,191,36,0.12)", borderBottom:"1px solid rgba(251,191,36,0.35)", padding:"10px 20px", display:"flex", alignItems:"center", justifyContent:"center", gap:12, flexWrap:"wrap" }}>
+          <p style={{ color:"#fbbf24", fontSize:12, fontWeight:700, margin:0 }}>
+            ⏰ {daysUntilTrialEnds === 0 ? T.trialEndsToday : T.trialEndsTomorrow}
+          </p>
+          <a href="/app?preview=paywall" style={{ padding:"5px 12px", borderRadius:8, background:"#fbbf24", color:"#1e293b", fontSize:12, fontWeight:800, textDecoration:"none" }}>
+            {T.viewPlansCta}
+          </a>
         </div>
       )}
       <div style={{ maxWidth:600, margin:"0 auto", padding:"20px 16px" }}>
@@ -10850,6 +11131,28 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
   // hard-locks the account to the payment screen with no "check later" out.
   const [trialLocked, setTrialLocked] = useState(!!previewPaywall);
   const [daysUntilTrialEnds, setDaysUntilTrialEnds] = useState(null);
+  const [streakDays, setStreakDays] = useState(0);
+  // Post-signup onboarding: right after a brand-new profile is saved (never
+  // for profile edits), walk the student through one quick "first win"
+  // activity, then (if applicable) an install-to-home-screen prompt, before
+  // ever showing the full dashboard. See completeProfileSave below, which
+  // sets this to "firstwin" only when `form` was null before the save.
+  const [onboardingStep, setOnboardingStep] = useState(null); // null | "firstwin" | "install"
+  const [firstWinRevealed, setFirstWinRevealed] = useState(false);
+  // Captured globally (not inside the install screen itself) because the
+  // 'beforeinstallprompt' event can fire before that screen ever mounts —
+  // Chrome/Android fire it once, early, per page load.
+  const deferredInstallPromptRef = useRef(null);
+  const [canInstallPwa, setCanInstallPwa] = useState(false);
+  useEffect(() => {
+    const handler = (e) => {
+      e.preventDefault();
+      deferredInstallPromptRef.current = e;
+      setCanInstallPwa(true);
+    };
+    window.addEventListener("beforeinstallprompt", handler);
+    return () => window.removeEventListener("beforeinstallprompt", handler);
+  }, []);
   const [form, setForm] = useState(null);
   const [editing, setEditing] = useState(false);
   const [showPaywall, setShowPaywall] = useState(!!previewPaywall);
@@ -11017,6 +11320,10 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
           email: authUser?.email || null,
         }));
       } catch {}
+      // Streak applies to everyone (paid/GAKU students included), so set it
+      // before the early-return below, which only short-circuits the
+      // trial-specific paywall checks.
+      setStreakDays(typeof data?.streakDays === "number" ? data.streakDays : 0);
       if ((data?.isGakuStudent || data?.isPaid) && !previewPaywall) {
         setShowPaywall(false);
         setAwaitingUnlock(false);
@@ -11214,6 +11521,9 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
     completeProfileSave(f);
   };
   const completeProfileSave = (f) => {
+    // Capture before setForm below overwrites it: a brand-new signup has no
+    // prior form at all, whereas an edit always has one already.
+    const isBrandNewProfile = !form;
     // Preserve planStartDate from existing form (only set it once, on first save)
     const startDate = (form && form.planStartDate) ? form.planStartDate : new Date().toISOString();
     const saved = { ...f, planStartDate: startDate };
@@ -11235,7 +11545,13 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
     // to the payment screen instead of letting them browse the dashboard again.
     if (!skipTrialPaywall && !(authUser && (isGakuStudent || isPaid)) && getPaywalledEmails().includes(saved.email)) {
       setShowPaywall(true);
+      return;
     }
+    // First-ever signup (not an edit, not a re-save after the paywall):
+    // give them one quick win before the full dashboard. Most trial
+    // students who ever bounce do so after their very first session, so
+    // this is the highest-leverage moment to hook them.
+    if (isBrandNewProfile) { setFirstWinRevealed(false); setOnboardingStep("firstwin"); }
   };
   const handleEdit = () => setEditing(true);
   const handleCancelEdit = () => { setEditing(false); setForceForm(false); };
@@ -11484,9 +11800,81 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
       onLoginClick={!authUser ? () => { setAuthInitialMode("login"); setShowAuthScreen(true); } : undefined}
     />
   );
+  if (onboardingStep === "firstwin") {
+    const item = FIRST_WIN_ITEMS[form.jlpt] || FIRST_WIN_ITEMS.N5;
+    return (
+      <div style={{ minHeight:"100vh", background:C.bg, display:"flex", alignItems:"center", justifyContent:"center", padding:24 }}>
+        <div style={{ background:"linear-gradient(135deg,#1e1b4b,#0f172a)", border:"1.5px solid rgba(139,92,246,0.4)", borderRadius:20, padding:"36px 32px", maxWidth:420, width:"90%", textAlign:"center", boxShadow:"0 8px 40px rgba(139,92,246,0.25)" }}>
+          <p style={{ color:C.purpleLight, fontSize:11, fontWeight:800, letterSpacing:1, margin:"0 0 8px" }}>{T.firstWinKicker}</p>
+          <h2 style={{ color:"#f1f5f9", fontSize:20, fontWeight:900, margin:"0 0 20px" }}>{T.firstWinTitle}</h2>
+          <div onClick={()=>setFirstWinRevealed(true)} style={{ background:"rgba(255,255,255,0.04)", border:`1.5px solid ${C.border}`, borderRadius:14, padding:"30px 16px", marginBottom:20, cursor:"pointer" }}>
+            <p style={{ color:"#f1f5f9", fontSize:34, fontWeight:900, margin:"0 0 10px" }}>{item.word}</p>
+            {firstWinRevealed ? (
+              <>
+                <p style={{ color:C.purpleLight, fontSize:15, margin:"0 0 4px" }}>{item.reading}</p>
+                <p style={{ color:"#94a3b8", fontSize:13, margin:0 }}>{item.meaning}</p>
+              </>
+            ) : (
+              <p style={{ color:"#64748b", fontSize:12, margin:0 }}>{T.firstWinTapToReveal}</p>
+            )}
+          </div>
+          {firstWinRevealed ? (
+            <button onClick={()=>{
+              const alreadyStandalone = (typeof window !== "undefined") && (
+                window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true
+              );
+              const isIOSNow = typeof navigator !== "undefined" && /iphone|ipad|ipod/i.test(navigator.userAgent);
+              // Only show the install screen when there's something actionable to
+              // do there: Chrome/Android fired beforeinstallprompt, or iOS (which
+              // never fires it, but has its own manual "Share > Add to Home
+              // Screen" steps worth showing). Otherwise skip straight to the dashboard.
+              const canShowInstallStep = !alreadyStandalone && (canInstallPwa || isIOSNow);
+              setOnboardingStep(canShowInstallStep ? "install" : null);
+            }} style={{ ...S.btn, width:"100%", background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff" }}>
+              🎉 {T.firstWinDoneBtn}
+            </button>
+          ) : (
+            <p style={{ color:"#64748b", fontSize:11, margin:0 }}>{T.firstWinHint}</p>
+          )}
+        </div>
+      </div>
+    );
+  }
+  if (onboardingStep === "install") {
+    const isIOS = typeof navigator !== "undefined" && /iphone|ipad|ipod/i.test(navigator.userAgent);
+    const handleInstallClick = async () => {
+      const evt = deferredInstallPromptRef.current;
+      if (evt) {
+        evt.prompt();
+        try { await evt.userChoice; } catch {}
+        deferredInstallPromptRef.current = null;
+      }
+      setOnboardingStep(null);
+    };
+    return (
+      <div style={{ minHeight:"100vh", background:C.bg, display:"flex", alignItems:"center", justifyContent:"center", padding:24 }}>
+        <div style={{ background:"linear-gradient(135deg,#1e1b4b,#0f172a)", border:"1.5px solid rgba(139,92,246,0.4)", borderRadius:20, padding:"36px 32px", maxWidth:420, width:"90%", textAlign:"center", boxShadow:"0 8px 40px rgba(139,92,246,0.25)" }}>
+          <p style={{ fontSize:32, margin:"0 0 6px" }}>📲</p>
+          <h2 style={{ color:"#f1f5f9", fontSize:19, fontWeight:900, margin:"0 0 8px" }}>{T.installPromptTitle}</h2>
+          <p style={{ color:"#94a3b8", fontSize:13, margin:"0 0 22px", lineHeight:1.6 }}>{T.installPromptDesc}</p>
+          {isIOS ? (
+            <>
+              <p style={{ color:"#cbd5e1", fontSize:12, margin:"0 0 18px", lineHeight:1.6 }}>{T.installPromptIosSteps}</p>
+              <button onClick={()=>setOnboardingStep(null)} style={{ ...S.btn, width:"100%", background:C.card, color:"#94a3b8", border:`1px solid ${C.border}` }}>{T.installPromptSkip}</button>
+            </>
+          ) : (
+            <>
+              <button onClick={handleInstallClick} style={{ ...S.btn, width:"100%", marginBottom:10, background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff" }}>{T.installPromptCta}</button>
+              <button onClick={()=>setOnboardingStep(null)} style={{ ...S.btn, width:"100%", background:"none", border:"none", color:"#64748b" }}>{T.installPromptSkip}</button>
+            </>
+          )}
+        </div>
+      </div>
+    );
+  }
   return (
     <div style={{ position:"relative" }} onClickCapture={handleDashboardInteraction}>
-      <Dashboard form={form} onEdit={handleEdit} onLevelUp={(lvl)=>handleSubmit({ ...form, jlpt: lvl })} onLogout={authUser ? handleLogout : undefined} onDeleteAccount={authUser ? handleDeleteAccount : undefined} deleteAccountBusy={deleteAccountBusy} userId={authUser?.id} />
+      <Dashboard form={form} onEdit={handleEdit} onLevelUp={(lvl)=>handleSubmit({ ...form, jlpt: lvl })} onLogout={authUser ? handleLogout : undefined} onDeleteAccount={authUser ? handleDeleteAccount : undefined} deleteAccountBusy={deleteAccountBusy} userId={authUser?.id} streakDays={streakDays} daysUntilTrialEnds={daysUntilTrialEnds} isTrialAccount={!isGakuStudent && !isPaid} />
       {/* TEMP DEBUG — remove after confirming the counter works */}
       <div style={{ position:"fixed", bottom:12, right:12, zIndex:99999, background:"rgba(0,0,0,0.75)", color:"#4ade80", fontSize:11, fontFamily:"monospace", padding:"4px 8px", borderRadius:6 }}>
         count: {interactionCount}/21 {skipTrialPaywall ? "(skip)" : ""} {authUser && isGakuStudent ? "(gaku)" : ""} {authUser && isPaid ? "(paid)" : ""}

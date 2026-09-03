@@ -70,13 +70,21 @@ export default async function handler(req, res) {
     const trialExpired = !isPaid && !isGakuStudent && daysSinceTrial !== null && daysSinceTrial >= TRIAL_DAYS;
     const daysUntilTrialEnds = daysSinceTrial !== null ? Math.max(0, Math.ceil(TRIAL_DAYS - daysSinceTrial)) : null;
 
-    // Trial engagement tracking: this endpoint is already polled every ~4s
-    // while the app is open, so it doubles as a free "is this trial account
-    // actually active today" signal. One upsert row per (user, calendar day)
-    // — cheap no-op on repeat calls the same day. Read by the daily cron in
-    // api/admin-withdrawal.js to spot engaged-but-hasn't-converted trial
-    // students and offer them a free lesson consultation.
-    if (!isPaid && !isGakuStudent && trialStartedAt) {
+    // Daily engagement ping: this endpoint is already polled every ~4s while
+    // the app is open, so it doubles as a free "was this account active
+    // today" signal. One upsert row per (user, calendar day) — cheap no-op
+    // on repeat calls the same day. Used for two things:
+    //  1. The daily cron in api/admin-withdrawal.js reads it (filtered to
+    //     trial-only accounts there) to spot engaged-but-hasn't-converted
+    //     trial students and offer them a free lesson consultation, and to
+    //     send re-engagement/trial-ending reminder emails.
+    //  2. streakDays below, computed for every account (paid/GAKU included)
+    //     so the dashboard can show a consecutive-day streak to everyone,
+    //     not just trial students.
+    // Previously gated to trial-only accounts; now pings for every account
+    // that has a trial_started_at (i.e. every account, since that's set at
+    // signup for everyone) so the streak feature works app-wide.
+    if (trialStartedAt) {
       const today = new Date().toISOString().slice(0, 10);
       try {
         const { error: pingErr } = await supabase
@@ -85,10 +93,35 @@ export default async function handler(req, res) {
             { user_id: userId, day: today, last_ping_at: new Date().toISOString() },
             { onConflict: "user_id,day" }
           );
-        if (pingErr) console.error("[account-status] trial engagement ping failed:", pingErr.message);
+        if (pingErr) console.error("[account-status] engagement ping failed:", pingErr.message);
       } catch (pingErr) {
-        console.error("[account-status] trial engagement ping threw:", pingErr.message);
+        console.error("[account-status] engagement ping threw:", pingErr.message);
       }
+    }
+
+    // Consecutive-day streak (today or yesterday counts as "current", so a
+    // student who hasn't opened the app yet today doesn't see their streak
+    // reset to 0 the moment midnight passes). Looks back at most 60 days.
+    let streakDays = 0;
+    try {
+      const { data: recentDays } = await supabase
+        .from("trial_engagement_days")
+        .select("day")
+        .eq("user_id", userId)
+        .order("day", { ascending: false })
+        .limit(60);
+      const daySet = new Set((recentDays || []).map(r => r.day));
+      const cursor = new Date();
+      // If today has no ping yet, start counting from yesterday instead —
+      // otherwise a student who is about to open the app right now would
+      // briefly see yesterday's streak drop to 0 first.
+      if (!daySet.has(cursor.toISOString().slice(0, 10))) cursor.setDate(cursor.getDate() - 1);
+      while (daySet.has(cursor.toISOString().slice(0, 10))) {
+        streakDays += 1;
+        cursor.setDate(cursor.getDate() - 1);
+      }
+    } catch (streakErr) {
+      console.error("[account-status] streak calculation failed:", streakErr.message);
     }
 
     let dataWasReset = false;
@@ -112,6 +145,7 @@ export default async function handler(req, res) {
       trialExpired,
       daysUntilTrialEnds,
       dataWasReset,
+      streakDays,
     });
   } catch (e) {
     return res.status(500).json({ error: e.message });

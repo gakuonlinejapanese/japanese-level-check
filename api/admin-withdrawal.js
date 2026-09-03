@@ -210,6 +210,114 @@ async function handleTrialEngagementCheck(supabase) {
   return { checked: (candidates || []).length, notified };
 }
 
+// ─── Learning-engagement strategy: two more staged reminder emails ────────
+// Together with handleTrialEngagementCheck (day 3–6, 2+ engaged days —
+// "you're clearly using it, want a free lesson?") these give trial students
+// a 3-touch cadence: Day 2 nudge → Day 3–6 lesson offer (if engaged) →
+// Day 6 heads-up. Each guarded by its own *_sent_at column so it only ever
+// fires once per account. All three piggyback on the same daily cron slot
+// (Vercel Hobby plan caps serverless functions at 12).
+
+// Day-2 "continue where you left off" nudge — specifically for the students
+// who are NOT already covered by the day 3–6 lesson-offer email: those who
+// opened the app on fewer than 2 distinct days. This is the biggest group
+// (roughly 80% of trial signups use the app exactly once and never return),
+// and until now nothing ever reached them again after their first session.
+const LOW_ENGAGEMENT_WINDOW_MIN_DAYS = 2;
+const LOW_ENGAGEMENT_WINDOW_MAX_DAYS = 3;
+const LOW_ENGAGEMENT_ACTIVE_DAYS_THRESHOLD = 2; // fewer than this = "low engagement"
+const APP_URL = "https://app.seitojapanese.online/app";
+
+async function handleLowEngagementReminder(supabase) {
+  const now = Date.now();
+  const windowStartIso = new Date(now - LOW_ENGAGEMENT_WINDOW_MAX_DAYS * 86400000).toISOString();
+  const windowEndIso = new Date(now - LOW_ENGAGEMENT_WINDOW_MIN_DAYS * 86400000).toISOString();
+
+  const { data: candidates, error: candidatesErr } = await supabase
+    .from("profiles")
+    .select("id, email")
+    .eq("is_paid", false)
+    .eq("is_gaku_student", false)
+    .is("low_engagement_reminder_sent_at", null)
+    .gte("trial_started_at", windowStartIso)
+    .lte("trial_started_at", windowEndIso);
+
+  if (candidatesErr) return { checked: 0, notified: 0, error: candidatesErr.message };
+
+  let notified = 0;
+  for (const profile of candidates || []) {
+    if (!profile.email) continue;
+    try {
+      const { count, error: countErr } = await supabase
+        .from("trial_engagement_days")
+        .select("day", { count: "exact", head: true })
+        .eq("user_id", profile.id);
+      if (countErr || (count || 0) >= LOW_ENGAGEMENT_ACTIVE_DAYS_THRESHOLD) continue;
+
+      const html = `
+        <p>Hi,</p>
+        <p>You started your Japanese study plan on GAKU Master a couple of days ago — nice start! Life gets busy, so this is just a friendly nudge to pick up right where you left off.</p>
+        <p>Your plan, vocabulary, and progress are all still waiting for you.</p>
+        <p><a href="${APP_URL}" style="color:#a855f7">Continue studying →</a></p>
+        <p>Even 5 minutes today keeps the momentum going!</p>
+        <p>— Seito</p>
+      `;
+      await sendEmail({ to: profile.email, subject: "Your Japanese study plan is still here 🇯🇵", html });
+      await supabase.from("profiles").update({ low_engagement_reminder_sent_at: new Date().toISOString() }).eq("id", profile.id);
+      notified += 1;
+    } catch (innerErr) {
+      console.error(`[low-engagement] failed for ${profile.email}:`, innerErr.message);
+    }
+  }
+
+  return { checked: (candidates || []).length, notified };
+}
+
+// Day-6 "your trial is ending soon" heads-up — sent to every non-paid,
+// non-GAKU-student account regardless of engagement level, one day before
+// api/account-status.js starts reporting trialExpired=true. Softens what
+// would otherwise be a sudden, unannounced paywall on day 7.
+const TRIAL_ENDING_WARNING_DAY = 6; // trial_started_at this many days ago
+
+async function handleTrialEndingWarning(supabase) {
+  const now = Date.now();
+  const dayStartIso = new Date(now - (TRIAL_ENDING_WARNING_DAY + 1) * 86400000).toISOString();
+  const dayEndIso = new Date(now - TRIAL_ENDING_WARNING_DAY * 86400000).toISOString();
+
+  const { data: candidates, error: candidatesErr } = await supabase
+    .from("profiles")
+    .select("id, email")
+    .eq("is_paid", false)
+    .eq("is_gaku_student", false)
+    .is("trial_ending_warning_sent_at", null)
+    .gte("trial_started_at", dayStartIso)
+    .lte("trial_started_at", dayEndIso);
+
+  if (candidatesErr) return { checked: 0, notified: 0, error: candidatesErr.message };
+
+  let notified = 0;
+  for (const profile of candidates || []) {
+    if (!profile.email) continue;
+    try {
+      const html = `
+        <p>Hi,</p>
+        <p>Just a heads-up: your free 7-day trial of GAKU Master ends tomorrow.</p>
+        <p>After that, you'll need to choose a plan to keep studying — but don't worry, nothing is deleted right away, so you'll have a few extra days to decide.</p>
+        <p><a href="${APP_URL}?preview=paywall" style="color:#a855f7">View plans →</a></p>
+        <p>Thank you for trying GAKU Master this week!</p>
+        <p>— Seito</p>
+      `;
+      await sendEmail({ to: profile.email, subject: "Your GAKU Master free trial ends tomorrow", html });
+      await supabase.from("profiles").update({ trial_ending_warning_sent_at: new Date().toISOString() }).eq("id", profile.id);
+      notified += 1;
+    } catch (innerErr) {
+      console.error(`[trial-ending] failed for ${profile.email}:`, innerErr.message);
+    }
+  }
+
+  return { checked: (candidates || []).length, notified };
+}
+
 async function handleTestMarkPaid(supabase, body, res) {
   const { studentEmail } = body;
   if (!studentEmail) return res.status(400).json({ error: "studentEmail is required" });
@@ -239,14 +347,21 @@ export default async function handler(req, res) {
       return res.status(401).json({ error: "Unauthorized" });
     }
     try {
-      // Two independent daily jobs share this one cron slot (Vercel Hobby
-      // caps serverless functions at 12) — run both, let either fail
-      // without blocking the other, then respond once.
-      const [deleteResult, engagementResult] = await Promise.all([
+      // Four independent daily jobs share this one cron slot (Vercel Hobby
+      // caps serverless functions at 12) — run them together, let any one
+      // fail without blocking the others, then respond once.
+      const [deleteResult, engagementResult, lowEngagementResult, trialEndingResult] = await Promise.all([
         runCronDelete(supabase).catch((e) => ({ ok: false, error: e.message })),
         handleTrialEngagementCheck(supabase).catch((e) => ({ error: e.message })),
+        handleLowEngagementReminder(supabase).catch((e) => ({ error: e.message })),
+        handleTrialEndingWarning(supabase).catch((e) => ({ error: e.message })),
       ]);
-      return res.status(200).json({ ...deleteResult, trialEngagement: engagementResult });
+      return res.status(200).json({
+        ...deleteResult,
+        trialEngagement: engagementResult,
+        lowEngagementReminder: lowEngagementResult,
+        trialEndingWarning: trialEndingResult,
+      });
     } catch (e) {
       return res.status(500).json({ error: e.message });
     }
