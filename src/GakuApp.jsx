@@ -336,6 +336,10 @@ const UI_TRANSLATIONS = {
     studyPlan: "Study Plan",
     help: "🆘 Help",
     editProfile: "✏️ Edit Profile",
+    skillsChangeTitle: "Update your study content?",
+    skillsChangeDesc: "You changed your study skills. Would you like new content generated for these skills, or keep the study content you already have?",
+    skillsChangeUpdateBtn: "Yes, update my study content",
+    skillsChangeKeepBtn: "No, keep my previous study content",
     weeklyProgress: "Weekly Progress",
     // Tab labels
     tabSchedule: "📅 Schedule",
@@ -664,6 +668,10 @@ const UI_TRANSLATIONS = {
     studyPlan: "Plan d'étude",
     help: "🆘 Aide",
     editProfile: "✏️ Modifier le profil",
+    skillsChangeTitle: "Modifier votre contenu d'étude ?",
+    skillsChangeDesc: "Vous avez changé vos compétences d'étude. Voulez-vous générer un nouveau contenu pour ces compétences, ou conserver le contenu que vous avez déjà ?",
+    skillsChangeUpdateBtn: "Oui, modifier mon contenu d'étude",
+    skillsChangeKeepBtn: "Non, garder mon contenu précédent",
     weeklyProgress: "Progression hebdomadaire",
     tabSchedule: "📅 Planning",
     tabPractice: "✨ À partir du contenu",
@@ -976,6 +984,10 @@ const UI_TRANSLATIONS = {
     studyPlan: "Plan de estudio",
     help: "🆘 Ayuda",
     editProfile: "✏️ Editar perfil",
+    skillsChangeTitle: "¿Actualizar tu contenido de estudio?",
+    skillsChangeDesc: "Has cambiado tus habilidades de estudio. ¿Quieres generar contenido nuevo para estas habilidades, o mantener el contenido que ya tienes?",
+    skillsChangeUpdateBtn: "Sí, actualizar mi contenido de estudio",
+    skillsChangeKeepBtn: "No, mantener mi contenido anterior",
     weeklyProgress: "Progreso semanal",
     tabSchedule: "📅 Horario",
     tabPractice: "✨ Desde el contenido",
@@ -1288,6 +1300,10 @@ const UI_TRANSLATIONS = {
     studyPlan: "Plano de estudo",
     help: "🆘 Ajuda",
     editProfile: "✏️ Editar perfil",
+    skillsChangeTitle: "Atualizar seu conteúdo de estudo?",
+    skillsChangeDesc: "Você alterou suas habilidades de estudo. Deseja gerar novo conteúdo para essas habilidades ou manter o conteúdo que você já possui?",
+    skillsChangeUpdateBtn: "Sim, atualizar meu conteúdo de estudo",
+    skillsChangeKeepBtn: "Não, manter meu conteúdo anterior",
     weeklyProgress: "Progresso semanal",
     tabSchedule: "📅 Agenda",
     tabPractice: "✨ A partir do conteúdo",
@@ -1600,6 +1616,10 @@ const UI_TRANSLATIONS = {
     studyPlan: "Lernplan",
     help: "🆘 Hilfe",
     editProfile: "✏️ Profil bearbeiten",
+    skillsChangeTitle: "Lerninhalte aktualisieren?",
+    skillsChangeDesc: "Du hast deine Lernfähigkeiten geändert. Möchtest du neue Inhalte für diese Fähigkeiten erstellen lassen oder deine bisherigen Lerninhalte behalten?",
+    skillsChangeUpdateBtn: "Ja, Lerninhalte aktualisieren",
+    skillsChangeKeepBtn: "Nein, bisherige Lerninhalte behalten",
     weeklyProgress: "Wöchentlicher Fortschritt",
     tabSchedule: "📅 Zeitplan",
     tabPractice: "✨ Aus Inhalt",
@@ -1912,6 +1932,10 @@ const UI_TRANSLATIONS = {
     studyPlan: "Piano di studio",
     help: "🆘 Aiuto",
     editProfile: "✏️ Modifica profilo",
+    skillsChangeTitle: "Aggiornare i tuoi contenuti di studio?",
+    skillsChangeDesc: "Hai modificato le tue competenze di studio. Vuoi generare nuovi contenuti per queste competenze o mantenere quelli che hai già?",
+    skillsChangeUpdateBtn: "Sì, aggiorna i miei contenuti",
+    skillsChangeKeepBtn: "No, mantieni i contenuti precedenti",
     weeklyProgress: "Progressi settimanali",
     tabSchedule: "📅 Programma",
     tabPractice: "✨ Dal contenuto",
@@ -2224,6 +2248,10 @@ const UI_TRANSLATIONS = {
     studyPlan: "学习计划",
     help: "🆘 帮助",
     editProfile: "✏️ 编辑资料",
+    skillsChangeTitle: "要更新学习内容吗？",
+    skillsChangeDesc: "你更改了学习技能。是要为这些技能生成新的学习内容，还是保留之前的学习内容？",
+    skillsChangeUpdateBtn: "是，更新我的学习内容",
+    skillsChangeKeepBtn: "否，保留之前的学习内容",
     weeklyProgress: "每周进度",
     tabSchedule: "📅 日程",
     tabPractice: "✨ 来自内容",
@@ -2536,6 +2564,10 @@ const UI_TRANSLATIONS = {
     studyPlan: "學習計劃",
     help: "🆘 幫助",
     editProfile: "✏️ 編輯資料",
+    skillsChangeTitle: "要更新學習內容嗎？",
+    skillsChangeDesc: "你更改了學習技能。要為這些技能產生新的學習內容，還是保留之前的學習內容？",
+    skillsChangeUpdateBtn: "是，更新我的學習內容",
+    skillsChangeKeepBtn: "否，保留之前的學習內容",
     weeklyProgress: "每週進度",
     tabSchedule: "📅 日程",
     tabPractice: "✨ 來自內容",
@@ -2848,6 +2880,10 @@ const UI_TRANSLATIONS = {
     studyPlan: "학습 계획",
     help: "🆘 도움말",
     editProfile: "✏️ 프로필 편집",
+    skillsChangeTitle: "학습 내용을 변경하시겠습니까?",
+    skillsChangeDesc: "학습 스킬을 변경하셨습니다. 이 스킬에 맞춰 새로운 학습 내용을 만들까요, 아니면 이전에 만든 학습 내용을 그대로 유지할까요?",
+    skillsChangeUpdateBtn: "네, 학습 내용을 변경합니다",
+    skillsChangeKeepBtn: "아니요, 이전 학습 내용을 유지합니다",
     weeklyProgress: "주간 진도",
     tabSchedule: "📅 일정",
     tabPractice: "✨ 콘텐츠에서",
@@ -3160,6 +3196,10 @@ const UI_TRANSLATIONS = {
     studyPlan: "แผนการเรียน",
     help: "🆘 ช่วยเหลือ",
     editProfile: "✏️ แก้ไขโปรไฟล์",
+    skillsChangeTitle: "ต้องการอัปเดตเนื้อหาการเรียนหรือไม่?",
+    skillsChangeDesc: "คุณเปลี่ยนทักษะการเรียนแล้ว ต้องการให้สร้างเนื้อหาใหม่ตามทักษะนี้ หรือเก็บเนื้อหาการเรียนเดิมไว้?",
+    skillsChangeUpdateBtn: "ใช่ อัปเดตเนื้อหาการเรียนของฉัน",
+    skillsChangeKeepBtn: "ไม่ เก็บเนื้อหาการเรียนเดิมไว้",
     weeklyProgress: "ความคืบหน้ารายสัปดาห์",
     tabSchedule: "📅 ตารางเรียน",
     tabPractice: "✨ จากเนื้อหา",
@@ -3472,6 +3512,10 @@ const UI_TRANSLATIONS = {
     studyPlan: "Pelan belajar",
     help: "🆘 Bantuan",
     editProfile: "✏️ Edit profil",
+    skillsChangeTitle: "Kemaskini kandungan pembelajaran anda?",
+    skillsChangeDesc: "Anda telah menukar kemahiran pembelajaran anda. Adakah anda mahu kandungan baharu dijana untuk kemahiran ini, atau kekalkan kandungan pembelajaran sedia ada?",
+    skillsChangeUpdateBtn: "Ya, kemaskini kandungan pembelajaran saya",
+    skillsChangeKeepBtn: "Tidak, kekalkan kandungan pembelajaran sebelumnya",
     weeklyProgress: "Kemajuan mingguan",
     tabSchedule: "📅 Jadual",
     tabPractice: "✨ Dari Kandungan",
@@ -3784,6 +3828,10 @@ const UI_TRANSLATIONS = {
     studyPlan: "Rencana belajar",
     help: "🆘 Bantuan",
     editProfile: "✏️ Edit profil",
+    skillsChangeTitle: "Perbarui konten belajar Anda?",
+    skillsChangeDesc: "Anda telah mengubah keterampilan belajar Anda. Apakah Anda ingin konten baru dibuat untuk keterampilan ini, atau tetap menggunakan konten belajar yang sudah ada?",
+    skillsChangeUpdateBtn: "Ya, perbarui konten belajar saya",
+    skillsChangeKeepBtn: "Tidak, pertahankan konten belajar sebelumnya",
     weeklyProgress: "Kemajuan mingguan",
     tabSchedule: "📅 Jadwal",
     tabPractice: "✨ Dari Konten",
@@ -4096,6 +4144,10 @@ const UI_TRANSLATIONS = {
     studyPlan: "Kế hoạch học tập",
     help: "🆘 Trợ giúp",
     editProfile: "✏️ Chỉnh sửa hồ sơ",
+    skillsChangeTitle: "Cập nhật nội dung học tập của bạn?",
+    skillsChangeDesc: "Bạn đã thay đổi kỹ năng học tập. Bạn có muốn tạo nội dung mới cho các kỹ năng này, hay giữ nguyên nội dung học tập trước đó?",
+    skillsChangeUpdateBtn: "Có, cập nhật nội dung học tập của tôi",
+    skillsChangeKeepBtn: "Không, giữ nội dung học tập trước đó",
     weeklyProgress: "Tiến độ hàng tuần",
     tabSchedule: "📅 Lịch học",
     tabPractice: "✨ Từ nội dung",
@@ -4408,6 +4460,10 @@ const UI_TRANSLATIONS = {
     studyPlan: "अध्ययन योजना",
     help: "🆘 सहायता",
     editProfile: "✏️ प्रोफ़ाइल संपादित करें",
+    skillsChangeTitle: "क्या आप अपनी अध्ययन सामग्री अपडेट करना चाहते हैं?",
+    skillsChangeDesc: "आपने अपने अध्ययन कौशल बदल दिए हैं। क्या आप इन कौशलों के लिए नई सामग्री बनवाना चाहते हैं, या पहले से बनाई गई अध्ययन सामग्री को वैसे ही रखना चाहते हैं?",
+    skillsChangeUpdateBtn: "हाँ, मेरी अध्ययन सामग्री अपडेट करें",
+    skillsChangeKeepBtn: "नहीं, पिछली अध्ययन सामग्री रखें",
     weeklyProgress: "साप्ताहिक प्रगति",
     tabSchedule: "📅 समय-सारणी",
     tabPractice: "✨ सामग्री से",
@@ -4720,6 +4776,10 @@ const UI_TRANSLATIONS = {
     studyPlan: "学習プラン",
     help: "🆘 ヘルプ",
     editProfile: "✏️ プロフィール編集",
+    skillsChangeTitle: "勉強内容を変更しますか？",
+    skillsChangeDesc: "学習スキルの選択が変わりました。この内容に合わせて新しい勉強内容を作成しますか？それとも、以前作成した勉強内容をそのまま引き継ぎますか？",
+    skillsChangeUpdateBtn: "勉強内容を変更する",
+    skillsChangeKeepBtn: "以前の勉強内容をそのまま引き継ぐ",
     weeklyProgress: "週間進捗",
     tabSchedule: "📅 スケジュール",
     tabPractice: "✨ コンテンツから",
@@ -5032,6 +5092,10 @@ const UI_TRANSLATIONS = {
     studyPlan: "Çalışma planı",
     help: "🆘 Yardım",
     editProfile: "✏️ Profili düzenle",
+    skillsChangeTitle: "Çalışma içeriğinizi güncellemek ister misiniz?",
+    skillsChangeDesc: "Çalışma becerilerinizi değiştirdiniz. Bu beceriler için yeni içerik oluşturulmasını mı istersiniz, yoksa önceki çalışma içeriğinizi mi korumak istersiniz?",
+    skillsChangeUpdateBtn: "Evet, çalışma içeriğimi güncelle",
+    skillsChangeKeepBtn: "Hayır, önceki çalışma içeriğimi koru",
     weeklyProgress: "Haftalık ilerleme",
     tabSchedule: "📅 Program",
     tabPractice: "✨ İçerikten",
@@ -5344,6 +5408,10 @@ const UI_TRANSLATIONS = {
     studyPlan: "अध्ययन योजना",
     help: "🆘 मद्दत",
     editProfile: "✏️ प्रोफाइल सम्पादन गर्नुहोस्",
+    skillsChangeTitle: "तपाईंको अध्ययन सामग्री अपडेट गर्ने?",
+    skillsChangeDesc: "तपाईंले आफ्नो अध्ययन सीपहरू परिवर्तन गर्नुभयो। के तपाईं यी सीपहरूका लागि नयाँ सामग्री बनाउन चाहनुहुन्छ, वा पहिले बनाइएको अध्ययन सामग्री त्यसै राख्न चाहनुहुन्छ?",
+    skillsChangeUpdateBtn: "हो, मेरो अध्ययन सामग्री अपडेट गर्नुहोस्",
+    skillsChangeKeepBtn: "होइन, अघिल्लो अध्ययन सामग्री राख्नुहोस्",
     weeklyProgress: "साप्ताहिक प्रगति",
     tabSchedule: "📅 तालिका",
     tabPractice: "✨ सामग्रीबाट",
@@ -5656,6 +5724,10 @@ const UI_TRANSLATIONS = {
     studyPlan: "Study plan",
     help: "🆘 Tulong",
     editProfile: "✏️ I-edit ang profile",
+    skillsChangeTitle: "I-update ang iyong study content?",
+    skillsChangeDesc: "Binago mo ang iyong study skills. Gusto mo bang gumawa ng bagong content para sa mga skill na ito, o panatilihin na lang ang dati mong study content?",
+    skillsChangeUpdateBtn: "Oo, i-update ang aking study content",
+    skillsChangeKeepBtn: "Hindi, panatilihin ang dating study content",
     weeklyProgress: "Lingguhang progreso",
     tabSchedule: "📅 Iskedyul",
     tabPractice: "✨ Mula sa Nilalaman",
@@ -9786,6 +9858,38 @@ function FormScreen({ onSubmit, onBack, onCancel, initialJlpt, initialForm, onLo
   const isOther = form.goal === "Other";
   const valid = form.name && form.email && form.country && form.goal && (isOther ? form.customGoal.trim() : true) && form.timeline && form.jlpt && form.hoursPerDay && form.daysPerWeek && form.skills.length > 0;
 
+  // When editing an existing profile (initialForm present) and the student changes
+  // their study skills (勉強内容), the daily study-set cache key includes `skills`
+  // (see cacheKey construction below), so a skills change silently starts generating
+  // brand-new content next time they open the app. Ask explicitly instead of doing
+  // this silently: let them choose to generate new content for the new skills, or
+  // keep studying the content already built for their previous skill selection
+  // (in which case we save everything else but leave `skills` untouched).
+  const [pendingSubmitForm, setPendingSubmitForm] = useState(null);
+  const skillsChanged = initialForm && pendingSubmitForm
+    ? JSON.stringify([...(initialForm.skills||[])].sort()) !== JSON.stringify([...(pendingSubmitForm.skills||[])].sort())
+    : false;
+  const attemptSubmit = () => {
+    if (!valid) { setErr(T.fillRequired); return; }
+    const submitted = { ...form, displayGoal: isOther ? form.customGoal : form.goal };
+    const skillsDiffer = initialForm && JSON.stringify([...(initialForm.skills||[])].sort()) !== JSON.stringify([...(submitted.skills||[])].sort());
+    if (skillsDiffer) {
+      setPendingSubmitForm(submitted);
+      return;
+    }
+    onSubmit(submitted);
+  };
+  const confirmUpdateStudyContent = () => {
+    const f = pendingSubmitForm;
+    setPendingSubmitForm(null);
+    onSubmit(f);
+  };
+  const confirmKeepStudyContent = () => {
+    const f = pendingSubmitForm;
+    setPendingSubmitForm(null);
+    onSubmit({ ...f, skills: initialForm.skills });
+  };
+
   return (
     <div style={{ ...S.page, display:"flex", alignItems:"flex-start", justifyContent:"center", padding:"40px 16px 60px" }}>
       <div style={{ width:"100%", maxWidth:520 }}>
@@ -9939,10 +10043,26 @@ function FormScreen({ onSubmit, onBack, onCancel, initialJlpt, initialForm, onLo
         </div>
 
         {err && <p style={{ color:C.red, fontSize:12, margin:"12px 0 0", textAlign:"center" }}>{err}</p>}
-        <button onClick={()=>{ if(!valid){setErr(T.fillRequired);return;} onSubmit({ ...form, displayGoal: isOther ? form.customGoal : form.goal }); }} style={{ ...S.btn, width:"100%", marginTop:20, background:valid?`linear-gradient(135deg,${C.purple},#9333ea)`:"#1e293b", color:valid?"#fff":"#475569" }}>
+        <button onClick={attemptSubmit} style={{ ...S.btn, width:"100%", marginTop:20, background:valid?`linear-gradient(135deg,${C.purple},#9333ea)`:"#1e293b", color:valid?"#fff":"#475569" }}>
           {initialForm ? T.saveChanges : T.buildPlan}
         </button>
       </div>
+      {pendingSubmitForm && (
+        <div style={{ position:"fixed", inset:0, background:"rgba(0,0,0,0.6)", display:"flex", alignItems:"center", justifyContent:"center", padding:16, zIndex:1000 }}>
+          <div style={{ background:C.card, border:`1px solid ${C.border}`, borderRadius:14, padding:24, maxWidth:420, width:"100%" }}>
+            <p style={{ color:"#fff", fontSize:16, fontWeight:700, margin:"0 0 10px" }}>{T.skillsChangeTitle}</p>
+            <p style={{ color:"#94a3b8", fontSize:13, margin:"0 0 20px", lineHeight:1.5 }}>{T.skillsChangeDesc}</p>
+            <div style={{ display:"flex", flexDirection:"column", gap:10 }}>
+              <button onClick={confirmUpdateStudyContent} style={{ ...S.btn, width:"100%", background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff" }}>
+                {T.skillsChangeUpdateBtn}
+              </button>
+              <button onClick={confirmKeepStudyContent} style={{ ...S.btn, width:"100%", background:"transparent", border:`1px solid ${C.border}`, color:"#94a3b8" }}>
+                {T.skillsChangeKeepBtn}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
