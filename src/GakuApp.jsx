@@ -339,6 +339,19 @@ const SKILL_LABELS = {
 // see KANA_ONLY_SKILLS usage in the content-generation prompts below.
 const KANA_ONLY_SKILLS = ["onlyHiragana", "onlyKatakana"];
 
+// Dedicated hiragana/katakana practice sites — shown (in the Resources tab and directly in the
+// profile form) only to students who selected "Only Hiragana" and/or "Only Katakana", regardless
+// of their JLPT level (unlike LEVEL_RESOURCES, which is level-gated and only surfaces these to
+// "Beginner"-level students otherwise).
+const KANA_PRACTICE_RESOURCES = [
+  { name:"MLC Hiragana & Katakana Drills", desc:"Side-by-side hiragana and katakana drills for absolute beginners.", url:"https://www.mlcjapanese.co.jp/hiragana_katakana.html", free:true },
+  { name:"Moji Ninja (Kana Challenge)", desc:"Gamified hiragana/katakana recognition challenge.", url:"https://moji.ninja/challenge", free:true },
+  { name:"Hirakana.com", desc:"Simple, quick hiragana recognition practice.", url:"https://hirakana.com/", free:true },
+  { name:"Hirakata (Kana Practice)", desc:"Quick drills for mastering hiragana and katakana recognition.", url:"https://hirakata.io/", free:true },
+  { name:"StudyHiragana.com", desc:"Structured hiragana practice with quizzes and stroke order.", url:"https://www.studyhiragana.com/", free:true },
+];
+registerResourceLookup(KANA_PRACTICE_RESOURCES);
+
 // ─── UI TRANSLATIONS ────────────────────────────────────────────────────────────
 // Static translations for all major UI strings across all 6 tabs + form
 const UI_TRANSLATIONS = {
@@ -407,6 +420,8 @@ const UI_TRANSLATIONS = {
     // Resources tab
     recommendedForLevel: "⭐ Recommended for Your Level",
     curatedFor: "Curated for level",
+    kanaResourcesTitle: "🔤 Kana Practice Sites",
+    kanaResourcesDesc: "Extra hiragana/katakana practice, since you selected kana-only mode:",
     yourResources: "🔗 YOUR RESOURCES",
     curatedForLevel: "Curated for level",
     skills: "skills:",
@@ -748,6 +763,8 @@ const UI_TRANSLATIONS = {
     taskPronunciation: "Cartes audio Anki — shadow 20 mots",
     recommendedForLevel: "⭐ Recommandé pour votre niveau",
     curatedFor: "Sélectionné pour le niveau",
+    kanaResourcesTitle: "🔤 Sites de pratique des kana",
+    kanaResourcesDesc: "Pratique supplémentaire des hiragana/katakana, car vous avez sélectionné le mode kana uniquement :",
     yourResources: "🔗 VOS RESSOURCES",
     curatedForLevel: "Sélectionné pour le niveau",
     skills: "compétences :",
@@ -1078,6 +1095,8 @@ const UI_TRANSLATIONS = {
     taskPronunciation: "Tarjetas de audio Anki — shadowing 20 palabras",
     recommendedForLevel: "⭐ Recomendado para tu nivel",
     curatedFor: "Seleccionado para el nivel",
+    kanaResourcesTitle: "🔤 Sitios de práctica de kana",
+    kanaResourcesDesc: "Práctica adicional de hiragana/katakana, ya que seleccionaste el modo solo kana:",
     yourResources: "🔗 TUS RECURSOS",
     curatedForLevel: "Seleccionado para el nivel",
     skills: "habilidades:",
@@ -1408,6 +1427,8 @@ const UI_TRANSLATIONS = {
     taskPronunciation: "Cartões de áudio Anki — shadowing 20 palavras",
     recommendedForLevel: "⭐ Recomendado para o seu nível",
     curatedFor: "Selecionado para o nível",
+    kanaResourcesTitle: "🔤 Sites de prática de kana",
+    kanaResourcesDesc: "Prática extra de hiragana/katakana, já que você selecionou o modo somente kana:",
     yourResources: "🔗 SEUS RECURSOS",
     curatedForLevel: "Selecionado para o nível",
     skills: "habilidades:",
@@ -1738,6 +1759,8 @@ const UI_TRANSLATIONS = {
     taskPronunciation: "Anki-Audiokarten — 20 Wörter shadowen",
     recommendedForLevel: "⭐ Empfohlen für Ihr Niveau",
     curatedFor: "Ausgewählt für Niveau",
+    kanaResourcesTitle: "🔤 Kana-Übungsseiten",
+    kanaResourcesDesc: "Zusätzliche Hiragana/Katakana-Übung, da Sie den Nur-Kana-Modus ausgewählt haben:",
     yourResources: "🔗 IHRE RESSOURCEN",
     curatedForLevel: "Ausgewählt für Niveau",
     skills: "Fähigkeiten:",
@@ -2068,6 +2091,8 @@ const UI_TRANSLATIONS = {
     taskPronunciation: "Schede audio Anki — shadow 20 parole",
     recommendedForLevel: "⭐ Consigliato per il tuo livello",
     curatedFor: "Selezionato per il livello",
+    kanaResourcesTitle: "🔤 Siti di pratica kana",
+    kanaResourcesDesc: "Pratica extra di hiragana/katakana, poiché hai selezionato la modalità solo kana:",
     yourResources: "🔗 LE TUE RISORSE",
     curatedForLevel: "Selezionato per il livello",
     skills: "abilità:",
@@ -2398,6 +2423,8 @@ const UI_TRANSLATIONS = {
     taskPronunciation: "Anki 音频卡片 — 跟读20个单词",
     recommendedForLevel: "⭐ 根据你的级别推荐",
     curatedFor: "为级别精选",
+    kanaResourcesTitle: "🔤 假名练习网站",
+    kanaResourcesDesc: "由于你选择了仅假名模式，这里有额外的平假名/片假名练习：",
     yourResources: "🔗 你的资源",
     curatedForLevel: "为级别精选",
     skills: "技能：",
@@ -2728,6 +2755,8 @@ const UI_TRANSLATIONS = {
     taskPronunciation: "Anki 音頻卡片 — 跟讀20個單字",
     recommendedForLevel: "⭐ 根據你的級別推薦",
     curatedFor: "為級別精選",
+    kanaResourcesTitle: "🔤 假名練習網站",
+    kanaResourcesDesc: "由於你選擇了僅假名模式，這裡有額外的平假名/片假名練習：",
     yourResources: "🔗 你的資源",
     curatedForLevel: "為級別精選",
     skills: "技能：",
@@ -3058,6 +3087,8 @@ const UI_TRANSLATIONS = {
     taskPronunciation: "Anki 오디오 카드 — 단어 20개 섀도잉",
     recommendedForLevel: "⭐ 내 레벨에 추천",
     curatedFor: "레벨을 위해 선별됨",
+    kanaResourcesTitle: "🔤 가나 연습 사이트",
+    kanaResourcesDesc: "가나 전용 모드를 선택하셨으니, 추가 히라가나/가타카나 연습을 확인해보세요:",
     yourResources: "🔗 나의 자료",
     curatedForLevel: "레벨을 위해 선별됨",
     skills: "스킬:",
@@ -3388,6 +3419,8 @@ const UI_TRANSLATIONS = {
     taskPronunciation: "Anki audio cards — shadow 20 คำ",
     recommendedForLevel: "⭐ แนะนำสำหรับระดับของคุณ",
     curatedFor: "คัดสรรสำหรับระดับ",
+    kanaResourcesTitle: "🔤 เว็บฝึกคะนะ",
+    kanaResourcesDesc: "ฝึกฮิรางานะ/คาตากานะเพิ่มเติม เนื่องจากคุณเลือกโหมดคะนะเท่านั้น:",
     yourResources: "🔗 แหล่งเรียนรู้ของคุณ",
     curatedForLevel: "คัดสรรสำหรับระดับ",
     skills: "ทักษะ:",
@@ -3718,6 +3751,8 @@ const UI_TRANSLATIONS = {
     taskPronunciation: "Kad audio Anki — shadow 20 perkataan",
     recommendedForLevel: "⭐ Disyorkan untuk tahap anda",
     curatedFor: "Dipilih untuk tahap",
+    kanaResourcesTitle: "🔤 Laman Latihan Kana",
+    kanaResourcesDesc: "Latihan tambahan hiragana/katakana kerana anda memilih mod kana sahaja:",
     yourResources: "🔗 SUMBER ANDA",
     curatedForLevel: "Dipilih untuk tahap",
     skills: "kemahiran:",
@@ -4048,6 +4083,8 @@ const UI_TRANSLATIONS = {
     taskPronunciation: "Kartu audio Anki — shadow 20 kata",
     recommendedForLevel: "⭐ Direkomendasikan untuk level Anda",
     curatedFor: "Dipilih untuk level",
+    kanaResourcesTitle: "🔤 Situs Latihan Kana",
+    kanaResourcesDesc: "Latihan tambahan hiragana/katakana karena Anda memilih mode kana saja:",
     yourResources: "🔗 SUMBER ANDA",
     curatedForLevel: "Dipilih untuk level",
     skills: "keterampilan:",
@@ -4378,6 +4415,8 @@ const UI_TRANSLATIONS = {
     taskPronunciation: "Thẻ âm thanh Anki — shadow 20 từ",
     recommendedForLevel: "⭐ Đề xuất cho cấp độ của bạn",
     curatedFor: "Tuyển chọn cho cấp độ",
+    kanaResourcesTitle: "🔤 Trang luyện tập Kana",
+    kanaResourcesDesc: "Luyện tập hiragana/katakana bổ sung vì bạn đã chọn chế độ chỉ kana:",
     yourResources: "🔗 TÀI LIỆU CỦA BẠN",
     curatedForLevel: "Tuyển chọn cho cấp độ",
     skills: "kỹ năng:",
@@ -4708,6 +4747,8 @@ const UI_TRANSLATIONS = {
     taskPronunciation: "Anki ऑडियो कार्ड — 20 शब्दों की shadow करें",
     recommendedForLevel: "⭐ आपके स्तर के लिए अनुशंसित",
     curatedFor: "स्तर के लिए चुना गया",
+    kanaResourcesTitle: "🔤 काना अभ्यास साइटें",
+    kanaResourcesDesc: "चूँकि आपने केवल-काना मोड चुना है, यहाँ अतिरिक्त हिरागाना/काताकाना अभ्यास दिया गया है:",
     yourResources: "🔗 आपके संसाधन",
     curatedForLevel: "स्तर के लिए चुना गया",
     skills: "कौशल:",
@@ -5038,6 +5079,8 @@ const UI_TRANSLATIONS = {
     taskPronunciation: "Ankiオーディオカード — 20単語シャドーイング",
     recommendedForLevel: "⭐ あなたのレベルにおすすめ",
     curatedFor: "レベル別に厳選",
+    kanaResourcesTitle: "🔤 かな練習サイト",
+    kanaResourcesDesc: "「かなのみ」モードを選択したので、追加のひらがな・カタカナ練習サイトはこちら:",
     yourResources: "🔗 あなたのリソース",
     curatedForLevel: "レベル別に厳選",
     skills: "スキル：",
@@ -5368,6 +5411,8 @@ const UI_TRANSLATIONS = {
     taskPronunciation: "Anki ses kartları — 20 kelime shadow et",
     recommendedForLevel: "⭐ Seviyeniz için önerilir",
     curatedFor: "Seviye için seçildi",
+    kanaResourcesTitle: "🔤 Kana Alıştırma Siteleri",
+    kanaResourcesDesc: "Yalnızca kana modunu seçtiğiniz için ekstra hiragana/katakana alıştırmaları:",
     yourResources: "🔗 KAYNAKLARINIZ",
     curatedForLevel: "Seviye için seçildi",
     skills: "beceriler:",
@@ -5698,6 +5743,8 @@ const UI_TRANSLATIONS = {
     taskPronunciation: "Anki अडियो कार्डहरू — २० शब्द shadow गर्नुहोस्",
     recommendedForLevel: "⭐ तपाईंको स्तरका लागि सिफारिस गरिएको",
     curatedFor: "स्तरका लागि छनोट गरिएको",
+    kanaResourcesTitle: "🔤 काना अभ्यास साइटहरू",
+    kanaResourcesDesc: "तपाईंले काना-मात्र मोड रोज्नुभएकाले, थप हिरागाना/काताकाना अभ्यास यहाँ छ:",
     yourResources: "🔗 तपाईंका स्रोतहरू",
     curatedForLevel: "स्तरका लागि छनोट गरिएको",
     skills: "सीपहरू:",
@@ -6028,6 +6075,8 @@ const UI_TRANSLATIONS = {
     taskPronunciation: "Anki audio cards — i-shadow ang 20 salita",
     recommendedForLevel: "⭐ Inirerekomenda para sa iyong antas",
     curatedFor: "Pinili para sa antas",
+    kanaResourcesTitle: "🔤 Mga Site para sa Pagsasanay ng Kana",
+    kanaResourcesDesc: "Dagdag na pagsasanay sa hiragana/katakana dahil pinili mo ang kana-only mode:",
     yourResources: "🔗 ANG IYONG MGA RESOURCES",
     curatedForLevel: "Pinili para sa antas",
     skills: "mga kasanayan:",
@@ -10305,6 +10354,19 @@ function FormScreen({ onSubmit, onBack, onCancel, initialJlpt, initialForm, onLo
               ))}
             </div>
             <p style={{ color:"#475569", fontSize:11, marginTop:6 }}>{T.writingNote}</p>
+            {(form.skills.includes("onlyHiragana") || form.skills.includes("onlyKatakana")) && (
+              <div style={{ marginTop:10, background:"rgba(6,182,212,0.06)", border:`1px solid rgba(6,182,212,0.2)`, borderRadius:10, padding:"12px 14px" }}>
+                <p style={{ color:C.teal, fontSize:12, fontWeight:700, margin:"0 0 4px" }}>{T.kanaResourcesTitle}</p>
+                <p style={{ color:"#94a3b8", fontSize:11, margin:"0 0 10px" }}>{T.kanaResourcesDesc}</p>
+                <div style={{ display:"flex", flexDirection:"column", gap:6 }}>
+                  {KANA_PRACTICE_RESOURCES.map((r,i) => (
+                    <a key={i} href={r.url} target="_blank" rel="noopener noreferrer" style={{ color:C.teal, fontSize:12, fontWeight:600, textDecoration:"none" }}>
+                      → {r.name}
+                    </a>
+                  ))}
+                </div>
+              </div>
+            )}
             {showConvJlptWarning && (
               <div style={{ marginTop:10, background:"rgba(245,158,11,0.1)", border:`1px solid ${C.amber}`, borderRadius:10, padding:"12px 14px" }}>
                 <p style={{ color:C.amber, fontSize:12, fontWeight:700, margin:"0 0 4px" }}>JLPT doesn't have a conversation section</p>
@@ -10779,6 +10841,23 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
               : rawResList;
             return (
             <div>
+            {(form.skills.includes("onlyHiragana") || form.skills.includes("onlyKatakana")) && (
+              <div style={{ ...S.card, marginBottom:16, borderLeft:`3px solid ${C.teal}` }}>
+                <p style={{ color:C.teal, fontSize:12, fontWeight:700, letterSpacing:1, marginBottom:4 }}>{T.kanaResourcesTitle}</p>
+                <p style={{ color:"#ffffff", fontSize:12, marginBottom:14 }}>{T.kanaResourcesDesc}</p>
+                <div style={{ display:"flex", flexDirection:"column", gap:12 }}>
+                  {KANA_PRACTICE_RESOURCES.map((r,i) => (
+                    <div key={i} style={{ background:"rgba(6,182,212,0.04)", borderRadius:12, border:`1px solid rgba(6,182,212,0.15)`, padding:"14px 16px" }}>
+                      <p style={{ color:"#f1f5f9", fontSize:14, fontWeight:700, margin:"0 0 6px" }}>{r.name}</p>
+                      <p style={{ color:"#94a3b8", fontSize:12, margin:"0 0 10px", lineHeight:1.6 }}>{r.desc}</p>
+                      <a href={r.url} target="_blank" rel="noopener noreferrer" style={{ display:"block", textAlign:"center", padding:"9px", background:`linear-gradient(135deg,${C.teal},#0891b2)`, color:"#fff", borderRadius:8, fontSize:12, fontWeight:700, textDecoration:"none" }}>
+                        → {T.openResource} {r.name}
+                      </a>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
             {resList.length > 0 && (
               <div style={{ ...S.card, marginBottom:16, borderLeft:`3px solid ${C.teal}` }}>
                 <p style={{ color:C.teal, fontSize:12, fontWeight:700, letterSpacing:1, marginBottom:4 }}>{T.recommendedForLevel}</p>
