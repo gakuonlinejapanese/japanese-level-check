@@ -2,55 +2,98 @@ import { getAdminClient } from "./_supabaseAdmin.js";
 import { sendEmail } from "./_resend.js";
 import { ADMIN_EMAIL } from "./_supabaseAdmin.js";
 
-// ---- Free trial lesson: approved-country check (server-side re-check of what
+// ---- Free trial lesson: country/city validation (server-side re-check of what
 // public/trial-lesson.html already enforces client-side against the free-text
-// "Where do you live now?" answer, e.g. "Osaka, Japan" or "Arizona, USA"). Each
-// entry is a list of alternate names/abbreviations for the same country; a match is a
-// whole-word/phrase hit anywhere in the normalized location text. ----
-const TRIAL_COUNTRY_TERMS = [
-  ["united states", "usa", "u s a", "us", "america"],
-  ["canada"],
-  ["united kingdom", "uk", "england", "great britain", "britain", "scotland", "wales", "northern ireland"],
-  ["australia"],
-  ["new zealand", "nz"],
-  ["ireland"],
-  ["singapore"],
-  ["switzerland"],
-  ["netherlands", "holland"],
-  ["germany"],
-  ["denmark"],
-  ["sweden"],
-  ["norway"],
-  ["finland"],
-  ["austria"],
-  ["belgium"],
-  ["france"],
-  ["italy"],
-  ["spain"],
-  ["portugal"],
-  ["israel"],
-  ["luxembourg"],
-  ["iceland"],
-  ["czechia", "czech republic"],
-  ["poland"],
-  ["slovenia"],
-  ["estonia"],
-  ["hong kong", "hongkong"],
-  ["uae", "united arab emirates", "emirates"],
-  ["qatar"],
-  ["kuwait"],
-  ["south korea", "korea", "republic of korea"],
-  ["taiwan"],
-  ["bahrain"],
-  ["oman"],
+// "Where do you live now?" answer, e.g. "Osaka, Japan" or "Arizona, USA"). Mirrors the
+// client's WORLD_COUNTRIES/aliases/analyzeLocation logic exactly — keep both in sync. ----
+const WORLD_COUNTRIES = [
+  "afghanistan", "albania", "algeria", "andorra", "angola", "antigua and barbuda",
+  "argentina", "armenia", "australia", "austria", "azerbaijan", "bahamas",
+  "bahrain", "bangladesh", "barbados", "belarus", "belgium", "belize",
+  "benin", "bhutan", "bolivia", "bosnia and herzegovina", "botswana", "brazil",
+  "brunei", "bulgaria", "burkina faso", "burundi", "cambodia", "cameroon",
+  "canada", "cape verde", "central african republic", "chad", "chile", "china",
+  "colombia", "comoros", "costa rica", "croatia", "cuba", "cyprus",
+  "czech republic", "democratic republic of the congo", "denmark", "djibouti", "dominica", "dominican republic",
+  "ecuador", "egypt", "el salvador", "equatorial guinea", "eritrea", "estonia",
+  "eswatini", "ethiopia", "fiji", "finland", "france", "gabon",
+  "gambia", "georgia", "germany", "ghana", "greece", "grenada",
+  "guatemala", "guinea", "guinea-bissau", "guyana", "haiti", "honduras",
+  "hong kong", "hungary", "iceland", "india", "indonesia", "iran",
+  "iraq", "ireland", "israel", "italy", "ivory coast", "jamaica",
+  "japan", "jordan", "kazakhstan", "kenya", "kiribati", "kosovo",
+  "kuwait", "kyrgyzstan", "laos", "latvia", "lebanon", "lesotho",
+  "liberia", "libya", "liechtenstein", "lithuania", "luxembourg", "macau",
+  "madagascar", "malawi", "malaysia", "maldives", "mali", "malta",
+  "marshall islands", "mauritania", "mauritius", "mexico", "micronesia", "moldova",
+  "monaco", "mongolia", "montenegro", "morocco", "mozambique", "myanmar",
+  "namibia", "nauru", "nepal", "netherlands", "new zealand", "nicaragua",
+  "niger", "nigeria", "north korea", "north macedonia", "norway", "oman",
+  "pakistan", "palau", "palestine", "panama", "papua new guinea", "paraguay",
+  "peru", "philippines", "poland", "portugal", "qatar", "republic of the congo",
+  "romania", "russia", "rwanda", "saint kitts and nevis", "saint lucia", "saint vincent and the grenadines",
+  "samoa", "san marino", "sao tome and principe", "saudi arabia", "senegal", "serbia",
+  "seychelles", "sierra leone", "singapore", "slovakia", "slovenia", "solomon islands",
+  "somalia", "south africa", "south korea", "south sudan", "spain", "sri lanka",
+  "sudan", "suriname", "sweden", "switzerland", "syria", "taiwan",
+  "tajikistan", "tanzania", "thailand", "timor-leste", "togo", "tonga",
+  "trinidad and tobago", "tunisia", "turkey", "turkmenistan", "tuvalu", "uganda",
+  "ukraine", "united arab emirates", "united kingdom", "united states", "uruguay", "uzbekistan",
+  "vanuatu", "vatican city", "venezuela", "vietnam", "yemen", "zambia",
+  "zimbabwe",
 ];
-function normalizeLocation(s) {
-  return (s || "").toLowerCase().replace(/[.,]/g, " ").replace(/\s+/g, " ").trim();
+
+const WORLD_COUNTRY_ALIASES = {
+  "usa":"united states", "us":"united states", "u s a":"united states",
+  "america":"united states", "united states of america":"united states", "uk":"united kingdom",
+  "england":"united kingdom", "great britain":"united kingdom", "britain":"united kingdom",
+  "scotland":"united kingdom", "wales":"united kingdom", "northern ireland":"united kingdom",
+  "uae":"united arab emirates", "emirates":"united arab emirates", "korea":"south korea",
+  "republic of korea":"south korea", "rok":"south korea", "hongkong":"hong kong",
+  "hong kong sar":"hong kong", "macao":"macau", "czechia":"czech republic",
+  "turkiye":"turkey", "nz":"new zealand", "holland":"netherlands",
+  "cote d ivoire":"ivory coast", "cote divoire":"ivory coast", "drc":"democratic republic of the congo",
+  "dr congo":"democratic republic of the congo", "congo kinshasa":"democratic republic of the congo", "congo brazzaville":"republic of the congo",
+  "burma":"myanmar", "swaziland":"eswatini", "russian federation":"russia",
+};
+
+const TRIAL_ALLOWED_LIST = [
+  "united states", "canada", "united kingdom", "australia", "new zealand", "ireland",
+  "singapore", "switzerland", "netherlands", "germany", "denmark", "sweden",
+  "norway", "finland", "austria", "belgium", "france", "italy",
+  "spain", "portugal", "israel", "luxembourg", "iceland", "czech republic",
+  "poland", "slovenia", "estonia", "hong kong", "united arab emirates", "qatar",
+  "kuwait", "south korea", "taiwan", "bahrain", "oman",
+];
+
+function normalizeLocationText(s) {
+  return (s || "").toLowerCase().replace(/&/g, "and").replace(/[.,]/g, " ").replace(/\s+/g, " ").trim();
 }
-function isLocationAllowed(location) {
-  const padded = " " + normalizeLocation(location) + " ";
-  return TRIAL_COUNTRY_TERMS.some(terms => terms.some(term => padded.includes(" " + term + " ")));
+// All searchable phrases (country names + aliases), longest first so multi-word matches
+// (e.g. "south korea") are tried before shorter ones (e.g. "korea") — order barely matters
+// for correctness here since they resolve to the same canonical country, but longest-first
+// keeps the matched phrase (used to detect leftover "city" text) as specific as possible.
+const COUNTRY_LOOKUP = [
+  ...WORLD_COUNTRIES.map(c => [c, c]),
+  ...Object.entries(WORLD_COUNTRY_ALIASES),
+].sort((a, b) => b[0].length - a[0].length);
+const TRIAL_ALLOWED_SET = new Set(TRIAL_ALLOWED_LIST);
+
+// Finds a country mention anywhere in the free-text location answer. Returns
+// { canonical, matchedPhrase, hasCityText } or null if no country name is found at all.
+function analyzeLocation(raw) {
+  const norm = normalizeLocationText(raw);
+  const padded = " " + norm + " ";
+  for (const [phrase, canonical] of COUNTRY_LOOKUP) {
+    const needle = " " + phrase + " ";
+    if (padded.includes(needle)) {
+      const remainder = (padded.split(needle).join(" ")).trim();
+      return { canonical, matchedPhrase: phrase, hasCityText: remainder.length > 0 };
+    }
+  }
+  return null;
 }
+
 
 // POST { name, email, plan, userId } (action omitted or "policy_agreement") — called
 // right before a student is allowed to proceed to a payment step (either the direct
@@ -288,7 +331,8 @@ async function handleTrialLesson(req, res) {
       return res.status(400).json({ error: "fullName and email are required" });
     }
 
-    const isRejected = outcome === "rejected_country" || !isLocationAllowed(location);
+    const analysis = analyzeLocation(location);
+    const isRejected = outcome === "rejected_country" || !analysis || !analysis.hasCityText || !TRIAL_ALLOWED_SET.has(analysis.canonical);
     // A non-rejected submission must have gone through the page-gated policy step and
     // ticked Agree — reject the request server-side if that flag is missing, same spirit as
     // the location re-check above (never trust the client alone for a gate like this).
