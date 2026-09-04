@@ -34,16 +34,15 @@
   .agree-row { display:flex; align-items:flex-start; gap:10px; margin-top:16px; }
   .error-msg { background:#ff3b3b; color:#fff; font-weight:700; font-size:13px; padding:10px 14px; border-radius:8px; margin-top:14px; text-align:center; display:none; }
   .error-msg.show { display:block; }
-  /* Policy pages */
-  .policy-progress { display:flex; gap:6px; margin-bottom:14px; }
-  .policy-progress .dot { flex:1; height:4px; border-radius:2px; background:rgba(255,255,255,.25); }
-  .policy-progress .dot.done { background:#fff; }
-  .policy-page { display:none; }
-  .policy-page.active { display:block; }
-  .policy-page h2 { font-size:17px; margin:0 0 12px; }
-  .policy-body { background:rgba(0,0,0,.18); border-radius:10px; padding:16px; font-size:13.5px; line-height:1.8; max-height:340px; overflow-y:auto; }
-  .policy-body p { margin:0 0 12px; }
-  .policy-body p:last-child { margin-bottom:0; }
+  /* Policy — single continuous scroll box */
+  .policy-scrollbox { background:rgba(0,0,0,.18); border-radius:10px; padding:18px; font-size:13.5px; line-height:1.8; max-height:52vh; overflow-y:auto; margin-top:10px; }
+  .policy-scrollbox h2 { font-size:16px; margin:22px 0 10px; }
+  .policy-scrollbox h2:first-child { margin-top:0; }
+  .policy-scrollbox p { margin:0 0 12px; }
+  .policy-scrollbox p:last-child { margin-bottom:0; }
+  .scroll-hint { font-size:12px; opacity:.85; margin-top:8px; display:flex; align-items:center; gap:6px; }
+  .scroll-hint .arrow { animation: bounce 1.2s infinite; }
+  @keyframes bounce { 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(4px); } }
 </style>
 </head>
 <body>
@@ -105,17 +104,17 @@
     </div>
   </div>
 
-  <!-- STEP 2: ポリシー（全ページ閲覧必須） -->
+  <!-- STEP 2: ポリシー（一つのスクロールボックス。最後まで読まないと同意できない） -->
   <div class="step" id="step-policy">
     <h1 style="font-size:19px;">Please review our trial lesson policy</h1>
-    <div class="policy-progress" id="policy-progress"></div>
 
     <label style="margin-top:0;">Full Name *</label>
     <input type="text" id="p-name" placeholder="" />
     <label>Email *</label>
     <input type="email" id="p-email" placeholder="" />
 
-    <div id="policy-pages"></div>
+    <div class="policy-scrollbox" id="policy-scrollbox"></div>
+    <div class="scroll-hint" id="scroll-hint"><span class="arrow">↓</span> Please scroll down to read the entire policy before you can agree.</div>
 
     <div id="policy-agree-area" style="display:none;">
       <div class="agree-row">
@@ -124,9 +123,7 @@
       </div>
     </div>
 
-    <button class="btn secondary" id="btn-policy-back" style="display:none;">Back</button>
-    <button class="btn" id="btn-policy-next" disabled>Next</button>
-    <button class="btn" id="btn-final-submit" style="display:none;" disabled>Submit</button>
+    <button class="btn" id="btn-final-submit" disabled>Submit</button>
     <div class="error-msg" id="policy-error"></div>
   </div>
 
@@ -500,41 +497,34 @@ const POLICY_PAGES = [
     ],
   },
 ];
-let policyPageIndex = 0;
 
 function initPolicy() {
-  policyPageIndex = 0;
-  const container = document.getElementById("policy-pages");
-  container.innerHTML = POLICY_PAGES.map((p, i) => `
-    <div class="policy-page" id="policy-page-${i}">
-      <h2>${p.title}</h2>
-      <div class="policy-body">${p.body.map(t => `<p>${t}</p>`).join("")}</div>
-    </div>
+  const container = document.getElementById("policy-scrollbox");
+  container.innerHTML = POLICY_PAGES.map(p => `
+    <h2>${p.title}</h2>
+    ${p.body.map(t => `<p>${t}</p>`).join("")}
   `).join("");
-  const progress = document.getElementById("policy-progress");
-  progress.innerHTML = POLICY_PAGES.map((_, i) => `<div class="dot" id="policy-dot-${i}"></div>`).join("");
-  renderPolicyPage();
-}
-
-function renderPolicyPage() {
-  document.querySelectorAll(".policy-page").forEach((el, i) => el.classList.toggle("active", i === policyPageIndex));
-  document.querySelectorAll("#policy-progress .dot").forEach((el, i) => el.classList.toggle("done", i <= policyPageIndex));
-
-  const isLast = policyPageIndex === POLICY_PAGES.length - 1;
-  document.getElementById("btn-policy-back").style.display = policyPageIndex > 0 ? "block" : "none";
-  document.getElementById("btn-policy-next").style.display = isLast ? "none" : "block";
-  document.getElementById("btn-final-submit").style.display = isLast ? "block" : "none";
-  document.getElementById("policy-agree-area").style.display = isLast ? "block" : "none";
-  document.getElementById("btn-policy-next").disabled = false;
+  document.getElementById("policy-agree-area").style.display = "none";
+  document.getElementById("scroll-hint").style.display = "flex";
+  document.getElementById("f-agree").checked = false;
+  document.getElementById("btn-final-submit").disabled = true;
   setError(document.getElementById("policy-error"), "");
+  container.scrollTop = 0;
+  checkPolicyScrolled();
 }
 
-document.getElementById("btn-policy-back").addEventListener("click", () => {
-  if (policyPageIndex > 0) { policyPageIndex--; renderPolicyPage(); }
-});
-document.getElementById("btn-policy-next").addEventListener("click", () => {
-  if (policyPageIndex < POLICY_PAGES.length - 1) { policyPageIndex++; renderPolicyPage(); }
-});
+// Reveals the agreement checkbox only once the student has scrolled the policy box to
+// (near) the bottom — this is the "must read everything before you can agree" gate.
+function checkPolicyScrolled() {
+  const box = document.getElementById("policy-scrollbox");
+  const reachedBottom = box.scrollTop + box.clientHeight >= box.scrollHeight - 24;
+  if (reachedBottom) {
+    document.getElementById("policy-agree-area").style.display = "block";
+    document.getElementById("scroll-hint").style.display = "none";
+  }
+}
+document.getElementById("policy-scrollbox").addEventListener("scroll", checkPolicyScrolled);
+
 document.getElementById("f-agree").addEventListener("change", (e) => {
   document.getElementById("btn-final-submit").disabled = !e.target.checked;
 });
