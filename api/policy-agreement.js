@@ -130,6 +130,17 @@ function analyzeLocation(raw) {
 // agreed must be true for a non-rejected submission (the policy page gates its Agree button
 // behind paging through every policy page). Also kept on this same endpoint for the same
 // 12-function-cap reason above.
+//
+// POST { action: "admin_list_trial_lessons", secret } — called from
+// public/admin-trial-lessons.html. Requires ADMIN_SECRET. Returns { pending, processed }:
+// pending = status "new" requests (country-approved, not yet responded to), oldest first;
+// processed = the last 30 "accepted"/"declined" requests, most recently responded to first.
+//
+// POST { action: "admin_respond_trial_lesson", secret, requestId, decision, confirmedDateTime,
+// note } — called from public/admin-trial-lessons.html when Seito accepts or declines a
+// pending request. decision is "accept" or "decline". Updates the row's status/admin_note/
+// confirmed_datetime/responded_at and emails the student the decision plus Seito's note.
+// Also kept on this same endpoint for the same 12-function-cap reason above.
 export default async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed" });
   try {
@@ -137,6 +148,8 @@ export default async function handler(req, res) {
     if (action === "cancellation_request") return handleCancellationRequest(req, res);
     if (action === "school_matching") return handleSchoolMatching(req, res);
     if (action === "trial_lesson") return handleTrialLesson(req, res);
+    if (action === "admin_list_trial_lessons") return handleAdminListTrialLessons(req, res);
+    if (action === "admin_respond_trial_lesson") return handleAdminRespondTrialLesson(req, res);
 
     const { name, email, plan, userId } = req.body || {};
     if (!email) return res.status(400).json({ error: "email is required" });
@@ -374,7 +387,7 @@ async function handleTrialLesson(req, res) {
          ${lessonDuration ? `<strong>Lesson length:</strong> ${lessonDuration}<br/>` : ""}
          ${!isRejected ? `<strong>Agreed to policy:</strong> Yes<br/>` : ""}
          <strong>Submitted at:</strong> ${submittedAt}</p>
-      ${!isRejected ? `<p>Please check your schedule against the preferred date/time above and confirm the lesson with the student.</p>` : ""}
+      ${!isRejected ? `<p>Please check your schedule against the preferred date/time above, then accept or decline (with an optional note) from the admin page: <a href="https://app.seitojapanese.online/admin-trial-lessons.html">admin-trial-lessons.html</a>.</p>` : ""}
     `;
     try {
       await sendEmail({ to: ADMIN_EMAIL, subject: `${subjectPrefix} — ${fullName}`, html, replyTo: email });
@@ -387,6 +400,98 @@ async function handleTrialLesson(req, res) {
     return res.status(200).json({ ok: true });
   } catch (e) {
     console.error("handleTrialLesson failed:", e.message);
+    return res.status(500).json({ error: e.message });
+  }
+}
+
+function checkAdminSecret(req) {
+  return req.body?.secret && req.body.secret === process.env.ADMIN_SECRET;
+}
+
+async function handleAdminListTrialLessons(req, res) {
+  if (!checkAdminSecret(req)) return res.status(401).json({ error: "Invalid admin secret" });
+  try {
+    const supabase = getAdminClient();
+    const { data: pending, error: pendingErr } = await supabase
+      .from("trial_lesson_requests")
+      .select("*")
+      .eq("status", "new")
+      .order("submitted_at", { ascending: true });
+    if (pendingErr) return res.status(500).json({ error: pendingErr.message });
+
+    const { data: processed, error: processedErr } = await supabase
+      .from("trial_lesson_requests")
+      .select("*")
+      .in("status", ["accepted", "declined"])
+      .order("responded_at", { ascending: false })
+      .limit(30);
+    if (processedErr) return res.status(500).json({ error: processedErr.message });
+
+    return res.status(200).json({ pending: pending || [], processed: processed || [] });
+  } catch (e) {
+    console.error("handleAdminListTrialLessons failed:", e.message);
+    return res.status(500).json({ error: e.message });
+  }
+}
+
+async function handleAdminRespondTrialLesson(req, res) {
+  if (!checkAdminSecret(req)) return res.status(401).json({ error: "Invalid admin secret" });
+  try {
+    const { requestId, decision, confirmedDateTime, note } = req.body || {};
+    if (!requestId || !["accept", "decline"].includes(decision)) {
+      return res.status(400).json({ error: "requestId and a valid decision (accept/decline) are required" });
+    }
+
+    const supabase = getAdminClient();
+    const { data: existing, error: fetchErr } = await supabase
+      .from("trial_lesson_requests")
+      .select("*")
+      .eq("id", requestId)
+      .single();
+    if (fetchErr || !existing) return res.status(404).json({ error: "Request not found" });
+
+    const respondedAt = new Date().toISOString();
+    const newStatus = decision === "accept" ? "accepted" : "declined";
+    const { error: updateErr } = await supabase
+      .from("trial_lesson_requests")
+      .update({
+        status: newStatus,
+        admin_note: note || null,
+        confirmed_datetime: decision === "accept" ? (confirmedDateTime || existing.preferred_datetime || null) : null,
+        responded_at: respondedAt,
+      })
+      .eq("id", requestId);
+    if (updateErr) return res.status(500).json({ error: updateErr.message });
+
+    const isAccept = decision === "accept";
+    const html = `
+      <p>Hi ${existing.full_name},</p>
+      ${isAccept
+        ? `<p>Great news — your free trial lesson request has been <strong>confirmed</strong> for:</p>
+           <p style="font-size:16px;"><strong>${confirmedDateTime || existing.preferred_datetime || "(to be confirmed)"}</strong> (your local time)</p>`
+        : `<p>Thank you for your interest in a free trial lesson. Unfortunately, the teacher isn't able to offer the requested time, and we're not able to arrange your free trial lesson at this time.</p>`
+      }
+      ${note ? `<p><strong>A note from your teacher:</strong><br/>${note.replace(/\n/g, "<br/>")}</p>` : ""}
+      ${isAccept ? `<p>If you have any questions before the lesson, feel free to reply to this email.</p>` : `<p>If you'd like to try again with a different time, feel free to reply to this email or submit a new request.</p>`}
+      <p>— GAKU Online Japanese</p>
+    `;
+    try {
+      await sendEmail({
+        to: existing.email,
+        subject: isAccept ? "[GAKU] Your Free Trial Lesson is confirmed!" : "[GAKU] About your Free Trial Lesson request",
+        html,
+        replyTo: ADMIN_EMAIL,
+      });
+    } catch (e) {
+      console.error("Failed to send trial-lesson response email:", e.message);
+      // The decision is already saved — surface the email failure so Seito knows to follow
+      // up manually, but don't treat the whole action as failed.
+      return res.status(200).json({ ok: true, emailFailed: true });
+    }
+
+    return res.status(200).json({ ok: true });
+  } catch (e) {
+    console.error("handleAdminRespondTrialLesson failed:", e.message);
     return res.status(500).json({ error: e.message });
   }
 }

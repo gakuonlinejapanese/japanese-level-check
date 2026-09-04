@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>GAKU 無料体験レッスン管理</title>
+<style>
+  :root { --ink:#1e293b; --green:#16a34a; --red:#dc2626; --amber:#d97706; }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Segoe UI",sans-serif; background:#f8fafc; color:var(--ink); }
+  header { background:#1e293b; color:#fff; padding:18px 24px; }
+  header h1 { margin:0; font-size:18px; }
+  .wrap { max-width:900px; margin:0 auto; padding:24px; }
+  section { background:#fff; border:1px solid #e2e8f0; border-radius:12px; padding:18px; margin-bottom:22px; }
+  h2 { font-size:15px; margin:0 0 14px; }
+  .req-card { border:1px solid #e2e8f0; border-radius:10px; padding:14px 16px; margin-bottom:12px; }
+  .req-head { display:flex; justify-content:space-between; align-items:flex-start; font-size:14px; font-weight:700; gap:10px; }
+  .badge { padding:2px 8px; border-radius:6px; font-size:11px; font-weight:700; white-space:nowrap; }
+  .badge.pending { background:#fef3c7; color:var(--amber); }
+  .badge.accepted { background:#dcfce7; color:var(--green); }
+  .badge.declined { background:#fee2e2; color:var(--red); }
+  .details { font-size:13px; color:#475569; margin:8px 0; line-height:1.7; }
+  .details b { color:var(--ink); }
+  .row { display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-top:10px; }
+  textarea, input[type=text] { padding:8px; border:1px solid #cbd5e1; border-radius:6px; font-size:13px; font-family:inherit; }
+  textarea { width:100%; min-height:60px; resize:vertical; }
+  .btn { padding:8px 14px; border:none; border-radius:8px; font-size:13px; font-weight:700; cursor:pointer; }
+  .btn.accept { background:var(--green); color:#fff; }
+  .btn.decline { background:var(--red); color:#fff; }
+  .gate { max-width:360px; margin:80px auto; text-align:center; }
+  .empty { color:#94a3b8; font-size:13px; }
+</style>
+</head>
+<body>
+
+<div id="gate" class="gate">
+  <h2>管理者パスワード</h2>
+  <input type="password" id="gate-secret" placeholder="ADMIN_SECRET" style="width:100%;padding:10px;margin-top:10px;" />
+  <button class="btn accept" style="margin-top:10px;width:100%;" onclick="enterAdmin()">入る</button>
+</div>
+
+<div id="app" style="display:none;">
+<header><h1>GAKU 無料体験レッスン管理</h1></header>
+<div class="wrap">
+
+  <section>
+    <h2>📋 未対応のリクエスト</h2>
+    <div id="pending-list"><p class="empty">読み込み中…</p></div>
+  </section>
+
+  <section>
+    <h2>✅ 対応済み（直近30件）</h2>
+    <div id="processed-list"><p class="empty">読み込み中…</p></div>
+  </section>
+
+</div>
+</div>
+
+<script>
+let SECRET = "";
+
+function enterAdmin() {
+  SECRET = document.getElementById("gate-secret").value.trim();
+  if (!SECRET) return;
+  document.getElementById("gate").style.display = "none";
+  document.getElementById("app").style.display = "block";
+  loadList();
+}
+
+async function api(action, extra = {}) {
+  const resp = await fetch("/api/policy-agreement", {
+    method: "POST", headers: {"Content-Type":"application/json"},
+    body: JSON.stringify({ secret: SECRET, action, ...extra })
+  });
+  if (resp.status === 401) { alert("パスワードが違います"); location.reload(); }
+  return resp.json();
+}
+
+function esc(s) {
+  return (s || "").replace(/[&<>"']/g, c => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[c]));
+}
+
+function detailsHtml(r) {
+  return `
+    <b>Email:</b> ${esc(r.email)}<br/>
+    <b>Where they live:</b> ${esc(r.location) || "—"}<br/>
+    <b>Preferred date/time:</b> ${esc(r.preferred_datetime) || "—"}<br/>
+    <b>Course:</b> ${esc(r.course) || "—"}<br/>
+    <b>Level:</b> ${esc(r.japanese_level) || "—"}<br/>
+    <b>Duration:</b> ${esc(r.lesson_duration) || "—"}<br/>
+    <b>Submitted:</b> ${r.submitted_at ? new Date(r.submitted_at).toLocaleString() : "—"}
+  `;
+}
+
+async function loadList() {
+  const data = await api("admin_list_trial_lessons");
+
+  const pendingEl = document.getElementById("pending-list");
+  const pending = data.pending || [];
+  pendingEl.innerHTML = pending.length === 0 ? '<p class="empty">現在、未対応のリクエストはありません。</p>' :
+    pending.map(r => `
+      <div class="req-card" id="req-${r.id}">
+        <div class="req-head">
+          <span>${esc(r.full_name)}</span>
+          <span class="badge pending">pending</span>
+        </div>
+        <div class="details">${detailsHtml(r)}</div>
+        <label style="font-size:12px;color:#64748b;">確定日時（承諾する場合。空欄なら生徒の希望日時をそのまま使用）</label>
+        <input type="text" id="confirm-dt-${r.id}" placeholder="${esc(r.preferred_datetime) || 'e.g. April 6, 11AM'}" style="width:100%;" />
+        <label style="font-size:12px;color:#64748b;margin-top:8px;display:block;">生徒へのひとこと（任意）</label>
+        <textarea id="note-${r.id}" placeholder="任意のメッセージ"></textarea>
+        <div class="row">
+          <button class="btn accept" onclick="respond('${r.id}','accept')">承諾して送信</button>
+          <button class="btn decline" onclick="respond('${r.id}','decline')">お断りして送信</button>
+        </div>
+      </div>
+    `).join("");
+
+  const processedEl = document.getElementById("processed-list");
+  const processed = data.processed || [];
+  processedEl.innerHTML = processed.length === 0 ? '<p class="empty">対応済みのリクエストはまだありません。</p>' :
+    processed.map(r => `
+      <div class="req-card">
+        <div class="req-head">
+          <span>${esc(r.full_name)}</span>
+          <span class="badge ${r.status}">${r.status}</span>
+        </div>
+        <div class="details">
+          ${detailsHtml(r)}<br/>
+          ${r.status === "accepted" ? `<b>確定日時:</b> ${esc(r.confirmed_datetime) || "—"}<br/>` : ""}
+          ${r.admin_note ? `<b>ひとこと:</b> ${esc(r.admin_note)}<br/>` : ""}
+          <b>対応日時:</b> ${r.responded_at ? new Date(r.responded_at).toLocaleString() : "—"}
+        </div>
+      </div>
+    `).join("");
+}
+
+async function respond(id, decision) {
+  const confirmedDateTime = document.getElementById(`confirm-dt-${id}`).value.trim();
+  const note = document.getElementById(`note-${id}`).value.trim();
+  const verb = decision === "accept" ? "承諾" : "お断り";
+  if (!confirm(`この生徒に「${verb}」の連絡メールを送信します。よろしいですか？`)) return;
+  const result = await api("admin_respond_trial_lesson", { requestId: id, decision, confirmedDateTime, note });
+  if (result.error) { alert("エラー: " + result.error); return; }
+  if (result.emailFailed) alert("記録は保存されましたが、メール送信に失敗しました。手動でご連絡ください。");
+  loadList();
+}
+</script>
+</body>
+</html>
