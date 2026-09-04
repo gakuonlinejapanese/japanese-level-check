@@ -120,7 +120,7 @@
     <div id="policy-agree-area" style="display:none;">
       <div class="agree-row">
         <input type="checkbox" id="f-agree" />
-        <label style="margin:0;" for="f-agree">I have read all pages of this policy and I agree.</label>
+        <label style="margin:0;" for="f-agree">I hereby agree to follow all of the policies stated here.</label>
       </div>
     </div>
 
@@ -384,26 +384,119 @@ document.getElementById("btn-step1-next").addEventListener("click", async () => 
 // ---- STEP 2: ポリシー（全ページ閲覧必須。最終ページでのみチェックボックス表示）----
 const POLICY_PAGES = [
   {
-    title: "About Your Free Trial Lesson",
+    title: "Language Requirement",
     body: [
-      "Thank you for your interest in a free trial lesson with GAKU Online Japanese!",
-      "The date/time you requested is a preference, not a confirmed booking. The teacher will check their real schedule and confirm the exact date and time by email.",
-      "A free trial lesson is offered once per student. It does not count toward the three lessons per month required for Official GAKU Student status.",
+      "USE TRANSLATION IF YOU DO NOT UNDERSTAND.",
+      "Warning: The teacher speaks <strong>ONLY English and Japanese</strong>. Therefore, you must be proficient in either English or Japanese. If you find it difficult to speak either language, the teacher will communicate using a translation device.",
+      "If you cannot agree to this condition, GAKU sincerely apologizes, but cannot guarantee the same fair service to you as to other students. Therefore, please make sure in advance that you are proficient in either Japanese or English.",
+      "Your free trial lesson itself is free of charge — you do not have to worry about any payment for this lesson.",
     ],
   },
   {
-    title: "Rescheduling & Cancellation",
+    title: "Purpose of the Free Trial Lesson",
     body: [
-      "If you need to reschedule, please contact us at least 24 hours before your confirmed lesson time — we'll do our best to find another slot.",
-      "No-shows or cancellations made less than 24 hours before the lesson may forfeit your free trial lesson.",
-      "If your requested date/time isn't available, we'll reach out by email to arrange another option together.",
+      "The purpose of the free trial lesson is to determine if you actually want to take the lesson officially, assess your level, and understand what you want to focus on studying.",
+      "If you are looking for traditional \"regular free lessons,\" this trial lesson is NOT RECOMMENDED for you. Eventually you will need to pay for lessons, so please consider in advance whether you actually want to take lessons with payment.",
+      "Please do not send any payment until the free trial lesson has been completed. Payment is required only after the lesson, and only if you decide to continue and are satisfied with the service.",
     ],
   },
   {
-    title: "Privacy & Agreement",
+    title: "GAKU Master — Free Plan Eligibility",
     body: [
-      "The information you provide is used only to schedule and contact you about your free trial lesson.",
-      "By checking the box below and clicking \"Submit,\" you confirm that you have read all pages of this policy and agree to the terms described above.",
+      "If you're taking a lesson with the goal of qualifying for GAKU Master's free plan, please note: to become an official student and receive an invitation code, you must complete at least 3 lessons within a calendar month.",
+      "The Free Trial Lesson does NOT count toward this total. You'll need to complete a minimum of 3 paid lessons to qualify for the GAKU Master free plan.",
+      "If you have any questions about your eligibility or lesson count, feel free to reach out anytime.",
+    ],
+  },
+  {
+    title: "1. Late Arrivals & No-Shows",
+    body: [
+      "If you do not show up within 15 minutes, the teacher will NOT conduct the lesson for that day.",
+      "If you will be late, please inform the teacher at least one day before the lesson.",
+      "If you arrive within 15 minutes, you can still take the class. However, your lesson time will be deducted accordingly. For example, if your lesson starts at 18:00 and you join at 18:10, your total lesson time will be reduced to 50 minutes.",
+      "In the event of internet connectivity issues, a delay of up to 15 minutes will be considered '15 minutes late.' If the issue cannot be resolved within 15 minutes, that time will no longer be suitable for the free trial lesson, and the opportunity to take the lesson at that time will be forfeited.",
+    ],
+  },
+  {
+    title: "2. During the Class",
+    body: [
+      "Please turn your camera ON and try to respond to the teacher.",
+      "If there is a special reason you want to keep your camera off, please say so at the beginning of the lesson.",
+      "If you do not respond for more than 1 minute after the teacher speaks to you, the lesson will end.",
+      "If you don't provide a reason, the teacher will end the lesson.",
+    ],
+  },
+  {
+    title: "3. Rescheduling After No-Shows or Repeated Lateness",
+    body: [
+      "If you miss a lesson without notice, the teacher will assume you are no longer interested and will NOT invite you to future lessons unless you contact them.",
+      "If you are more than 15 minutes late twice, the teacher will not invite you to future lessons. The first instance will be forgiven, but if you are late again by more than 15 minutes, no further lessons will be scheduled for you.",
+      "If you are a no-show, don't send the written agreement to this policy, or arrive more than 15 minutes late — and this happens twice — you will permanently lose your eligibility for a free trial lesson. After this occurs twice, if you apply for another lesson, no lessons will be conducted unless the lesson fee is paid in advance. This rule is strictly enforced.",
+    ],
+  },
+  {
+    title: "4. Confirming Your Interest",
+    body: [
+      "If you want to take a lesson, please let the teacher know within 3 days, or specify a deadline for when you will confirm.",
+      "If more than 3 days pass, or the deadline you mentioned has passed, the teacher will assume you are no longer interested and will not contact you again. However, if you later decide to take lessons, you may contact them.",
+    ],
+  },
+  {
+    title: "5. Policy for Students Under 18",
+    body: [
+      "For students under 18 years of age, or if you want a student under 18 to take the lesson, a parent or legal guardian must be present in the same location during the lesson.",
+      "If a parent or guardian is not present, the lesson will not be conducted.",
+    ],
+  },
+  {
+    title: "6. In-Person Lesson Policy",
+    body: [
+      "In-person lessons are available only under the following conditions:",
+      "<strong>Student travels to the teacher's area</strong> — limited to Osaka or Hyogo Prefecture (within the range from Umeda to Takarazuka). You must pay the transportation fare from the teacher's house to the destination, and any location fee (such as a café or restaurant), in advance before the lesson starts — this is entirely separate from the lesson fee. If you can't agree to this, an online lesson is recommended instead.",
+      "<strong>The teacher travels to the student's city for other purposes</strong> — an in-person lesson may be arranged if the teacher happens to visit the student's city for reasons unrelated to teaching. The teacher will not travel to a city solely to conduct a lesson.",
+      "<strong>The teacher visits the student's city or country</strong> — if the location is reasonably close to the teacher's travel destination, an in-person lesson may be possible.",
+      "For an in-person free trial lesson, please arrive 30 minutes before the lesson starts. Canceling without early notice after the teacher has already traveled to the location is seriously disrespectful — if this happens, the teacher will not accept you as a student for any future lessons, for any reason.",
+    ],
+  },
+  {
+    title: "7. Group Lessons",
+    body: [
+      "Group lessons are NOT ACCEPTABLE. If you bring other people, the teacher will not conduct any lesson.",
+    ],
+  },
+  {
+    title: "8. JLPT Free Trial Lesson Policy (Important)",
+    body: [
+      "If you choose to take the JLPT exam as your free trial lesson, you must strictly follow the rules below.",
+      "You may choose EITHER 60 minutes OR 30 minutes for the trial. Once the selected time is over, the lesson will end immediately, regardless of whether you are still answering questions. No extensions will be given under any circumstances — the full JLPT exam is a privilege reserved exclusively for GAKU students.",
+      "This session is counted as ONE \"free trial lesson.\" You are allowed to take a free trial lesson ONLY ONCE — you cannot take another free trial lesson even under a different course (JLPT, travel preparation, basic academic, or any other course). Once you have taken, or are scheduled to take, any free trial lesson, you are NOT eligible to take the Free JLPT as a separate free trial lesson.",
+    ],
+  },
+  {
+    title: "Warning 1 — Permanent Loss of Eligibility",
+    body: [
+      "If any of the following occurs even once, you will never again be eligible for any free trial lesson, and any future lessons must be taken as paid lessons only, without exception:",
+      "• You miss the lesson without providing prior notice or obtaining permission in advance.",
+      "• You arrive more than 15 minutes late without notifying the teacher beforehand, or your internet connection remains unstable for more than 15 minutes.",
+      "• You do not provide a clear written agreement to this policy after it has been sent to you.",
+      "• You fail to explain the reason you cannot agree to the policy, or you do not ask questions about any part you are unsure of.",
+      "• You do not respond to a request to provide missing date and/or time information when it was not included in your message.",
+      "• You do not turn on your camera and do not respond for more than 1 minute after the teacher speaks to you.",
+    ],
+  },
+  {
+    title: "9–10. Spam & Conduct",
+    body: [
+      "<strong>Spam Policy:</strong> if you call or text the teacher continuously without receiving a response, you will be considered \"spam\" and blocked, to protect the teacher's social media and privacy. If you can't attend a class, are told to join the next lesson, but repeatedly call or text without a response, this will also be considered spam and the teacher will never contact you again.",
+      "<strong>Name-calling:</strong> if you complain to the teacher and use abusive words to hurt them, you will be removed from the lesson and blocked on all social media accounts. If you have complaints about the contents of this policy itself, please do not proceed — you will not be considered a GAKU student for the rest of your life.",
+    ],
+  },
+  {
+    title: "11. Fraudulent Use & Closing",
+    body: [
+      "<strong>Fraudulent use:</strong> if you cancel or fail to attend a lesson and then attempt to receive an additional free trial lesson under a different name, this will be treated as fraudulent use. If this occurs, the teacher will immediately refuse to provide any future lessons, and reserves the full right to take legal action — including contacting an attorney to pursue compensation for damages and lost time.",
+      "GAKU provides professional teaching and services. Manners and politeness are very important, just as they would be in a workplace.",
+      "If you are a student who cannot adhere to the expectations outlined in this policy, please do not take the lesson. Thank you for understanding.",
     ],
   },
 ];
