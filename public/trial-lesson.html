@@ -12,20 +12,16 @@
   h1 { font-size:24px; line-height:1.3; margin:0 0 6px; }
   .sub { font-size:13px; opacity:.85; margin:0 0 26px; line-height:1.6; }
   label { display:block; font-size:14px; margin:20px 0 6px; opacity:.95; }
-  input[type=text], input[type=email], select {
+  input[type=text], input[type=email] {
     width:100%; padding:10px 4px; background:transparent; border:none; border-bottom:1px solid rgba(255,255,255,.6);
     color:#fff; font-size:15px; outline:none;
   }
-  select option { color:#000; }
   input::placeholder { color:rgba(255,255,255,.6); }
   .hint { font-size:12px; opacity:.75; margin-top:4px; }
+  .radio-group, .check-group { margin-top:8px; display:flex; flex-direction:column; gap:10px; }
+  .radio-row, .check-row { display:flex; align-items:center; gap:10px; font-size:14.5px; cursor:pointer; }
+  .radio-row input, .check-row input { width:18px; height:18px; flex-shrink:0; }
   .card { background:rgba(255,255,255,.08); border-radius:12px; padding:16px; margin-top:14px; }
-  .cal-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(92px,1fr)); gap:6px; margin-top:10px; max-height:260px; overflow-y:auto; }
-  .slot { padding:8px 4px; border-radius:8px; font-size:12px; text-align:center; cursor:pointer; user-select:none; }
-  .slot.green { background:var(--green); color:#04331a; font-weight:700; }
-  .slot.red { background:var(--red); color:#3a0a0a; opacity:.55; cursor:not-allowed; }
-  .slot.selected { outline:3px solid #fff; }
-  .option-box { background:rgba(0,0,0,.2); border-radius:8px; padding:10px 12px; margin-top:8px; font-size:13px; }
   .btn { display:block; width:100%; margin-top:26px; padding:14px; border:none; border-radius:10px; background:#fff; color:var(--blue); font-weight:800; font-size:15px; cursor:pointer; }
   .btn:disabled { opacity:.5; cursor:not-allowed; }
   .btn.secondary { background:transparent; border:1.5px solid #fff; color:#fff; margin-top:12px; }
@@ -44,28 +40,52 @@
   .policy-body { background:rgba(0,0,0,.18); border-radius:10px; padding:16px; font-size:13.5px; line-height:1.8; max-height:340px; overflow-y:auto; }
   .policy-body p { margin:0 0 12px; }
   .policy-body p:last-child { margin-bottom:0; }
-  .policy-nav-hint { font-size:12px; opacity:.7; margin-top:8px; }
 </style>
 </head>
 <body>
 <div class="wrap">
 
-  <!-- STEP 1: 基本情報 + 国 -->
+  <!-- STEP 1: 申し込みフォーム（既存サイトのBook a Lessonフォームと同じ質問構成） -->
   <div class="step active" id="step-form">
     <h1>🌸 Free Trial Lesson</h1>
-    <p class="sub">Tell us a bit about you and pick a few times that could work — we'll check the teacher's schedule and confirm your exact lesson time by email.</p>
+    <p class="sub">Tell us a bit about you — we'll check the teacher's schedule and confirm your exact lesson time by email.</p>
 
-    <label>Your Full Name *</label>
-    <input type="text" id="f-name" placeholder="e.g. Taro Yamada" />
+    <label>Your Name *</label>
+    <input type="text" id="f-name" placeholder="" />
 
     <label>Email *</label>
-    <input type="email" id="f-email" placeholder="you@example.com" />
+    <input type="email" id="f-email" placeholder="" />
 
-    <label>Country of Residence *</label>
-    <select id="f-country">
-      <option value="">Select your country…</option>
-    </select>
-    <div class="hint">Free trial lessons are currently only available to residents of the countries listed above.</div>
+    <label>Where do you live now? *</label>
+    <input type="text" id="f-location" placeholder="Please fill your town and country." />
+    <div class="hint">Free trial lessons are currently only available to residents of a specific list of countries.</div>
+
+    <label>Preferred Lesson Date/Time (your local time) *</label>
+    <input type="text" id="f-datetime" placeholder="e.g. April 6, 11AM" />
+
+    <label>Which course do you want to select? *</label>
+    <div class="radio-group" id="course-group">
+      <label class="radio-row"><input type="radio" name="course" value="Customized Course" />Customized Course</label>
+      <label class="radio-row"><input type="radio" name="course" value="Travel Preparation Course" />Travel Preparation Course</label>
+      <label class="radio-row"><input type="radio" name="course" value="JLPT Course" />JLPT Course</label>
+      <label class="radio-row"><input type="radio" name="course" value="Specialized Knowledge Course" />Specialized Knowledge Course</label>
+      <label class="radio-row"><input type="radio" name="course" value="Music Lyrics Understanding Course" />Music Lyrics Understanding Course</label>
+      <label class="radio-row"><input type="radio" name="course" value="Basic Academic Skills Course" />Basic Academic Skills Course</label>
+      <label class="radio-row"><input type="radio" name="course" value="Media Learning Course" />Media Learning Course</label>
+    </div>
+
+    <label>Your current Japanese level</label>
+    <div class="check-group" id="level-group">
+      <label class="check-row"><input type="checkbox" name="level" value="Beginner" />Beginner</label>
+      <label class="check-row"><input type="checkbox" name="level" value="Intermediate" />Intermediate</label>
+      <label class="check-row"><input type="checkbox" name="level" value="Advance" />Advance</label>
+    </div>
+
+    <label>Do you want a 30-minute or 1-hour lesson? *</label>
+    <div class="radio-group" id="duration-group">
+      <label class="radio-row"><input type="radio" name="duration" value="1 hour" />1 hour</label>
+      <label class="radio-row"><input type="radio" name="duration" value="30 minute" />30 minute</label>
+    </div>
 
     <button class="btn" id="btn-step1-next" disabled>Next</button>
     <div class="hint center" id="form-error" style="color:#ffd7d7;margin-top:10px;"></div>
@@ -80,35 +100,15 @@
     </div>
   </div>
 
-  <!-- STEP 2: 希望日時 -->
-  <div class="step" id="step-calendar">
-    <h1 style="font-size:19px;">Pick up to 3 preferred times</h1>
-    <p class="sub">These are requests, not confirmed bookings — the teacher will check availability and confirm one exact time by email.</p>
-
-    <label>Your timezone</label>
-    <select id="f-timezone"></select>
-    <div class="hint">Detected automatically — change it if it's wrong.</div>
-
-    <div class="card">
-      <strong>Preferred Lesson Times (choose up to 3)</strong>
-      <div class="hint">Green = available, Red = not available. Times are shown in your timezone. Click a green slot to add it as an option.</div>
-      <div class="cal-grid" id="cal-grid"><div class="hint">Loading availability…</div></div>
-      <div id="option-list"></div>
-    </div>
-
-    <button class="btn" id="btn-step2-next" disabled>Next</button>
-    <div class="hint center" id="calendar-error" style="color:#ffd7d7;margin-top:10px;"></div>
-  </div>
-
-  <!-- STEP 3: ポリシー（全ページ閲覧必須） -->
+  <!-- STEP 2: ポリシー（全ページ閲覧必須） -->
   <div class="step" id="step-policy">
     <h1 style="font-size:19px;">Please review our trial lesson policy</h1>
     <div class="policy-progress" id="policy-progress"></div>
 
     <label style="margin-top:0;">Full Name *</label>
-    <input type="text" id="p-name" placeholder="e.g. Taro Yamada" />
+    <input type="text" id="p-name" placeholder="" />
     <label>Email *</label>
-    <input type="email" id="p-email" placeholder="you@example.com" />
+    <input type="email" id="p-email" placeholder="" />
 
     <div id="policy-pages"></div>
 
@@ -125,45 +125,66 @@
     <div class="hint center" id="policy-error" style="color:#ffd7d7;margin-top:10px;"></div>
   </div>
 
-  <!-- STEP 4: 完了 -->
+  <!-- STEP 3: 完了 -->
   <div class="step" id="step-done">
     <div class="msgbox center">
       <h2 style="margin-top:0;">🎉 Request received!</h2>
       <p>Thank you — your free trial lesson request has been sent.</p>
-      <p class="hint" style="color:#fff;opacity:.85;">We'll check the teacher's schedule against your preferred times and email you at the address you provided once your exact lesson time is confirmed.</p>
+      <p class="hint" style="color:#fff;opacity:.85;">We'll check the teacher's schedule against your preferred date/time and email you at the address you provided once your exact lesson time is confirmed.</p>
     </div>
   </div>
 
 </div>
 
 <script>
-// ---- Approved countries (server re-checks this — do not rely on the client alone) ----
-const COUNTRIES = [
-  ["united states","🇺🇸 The U.S.A"], ["canada","🇨🇦 Canada"], ["united kingdom","🇬🇧 UK"],
-  ["australia","🇦🇺 Australia"], ["new zealand","🇳🇿 New Zealand"], ["ireland","🇮🇪 Ireland"],
-  ["singapore","🇸🇬 Singapore"], ["switzerland","🇨🇭 Switzerland"], ["netherlands","🇳🇱 Netherlands"],
-  ["germany","🇩🇪 Germany"], ["denmark","🇩🇰 Denmark"], ["sweden","🇸🇪 Sweden"],
-  ["norway","🇳🇴 Norway"], ["finland","🇫🇮 Finland"], ["austria","🇦🇹 Austria"],
-  ["belgium","🇧🇪 Belgium"], ["france","🇫🇷 France"], ["italy","🇮🇹 Italy"],
-  ["spain","🇪🇸 Spain"], ["portugal","🇵🇹 Portugal"], ["israel","🇮🇱 Israel"],
-  ["luxembourg","🇱🇺 Luxembourg"], ["iceland","🇮🇸 Iceland"], ["czechia","🇨🇿 Czechia"],
-  ["poland","🇵🇱 Poland"], ["slovenia","🇸🇮 Slovenia"], ["estonia","🇪🇪 Estonia"],
-  ["hong kong","🇭🇰 Hong Kong"], ["uae","🇦🇪 UAE"], ["qatar","🇶🇦 Qatar"],
-  ["kuwait","🇰🇼 Kuwait"], ["south korea","🇰🇷 South Korea"], ["taiwan","🇹🇼 Taiwan"],
-  ["bahrain","🇧🇭 Bahrain"], ["oman","🇴🇲 Oman"],
+// ---- Approved-country check on the free-text "Where do you live now?" answer.
+// Server re-checks this too — never rely on the client alone. ----
+const COUNTRY_TERMS = [
+  ["united states", "usa", "u s a", "us", "america"],
+  ["canada"],
+  ["united kingdom", "uk", "england", "great britain", "britain", "scotland", "wales", "northern ireland"],
+  ["australia"],
+  ["new zealand", "nz"],
+  ["ireland"],
+  ["singapore"],
+  ["switzerland"],
+  ["netherlands", "holland"],
+  ["germany"],
+  ["denmark"],
+  ["sweden"],
+  ["norway"],
+  ["finland"],
+  ["austria"],
+  ["belgium"],
+  ["france"],
+  ["italy"],
+  ["spain"],
+  ["portugal"],
+  ["israel"],
+  ["luxembourg"],
+  ["iceland"],
+  ["czechia", "czech republic"],
+  ["poland"],
+  ["slovenia"],
+  ["estonia"],
+  ["hong kong", "hongkong"],
+  ["uae", "united arab emirates", "emirates"],
+  ["qatar"],
+  ["kuwait"],
+  ["south korea", "korea", "republic of korea"],
+  ["taiwan"],
+  ["bahrain"],
+  ["oman"],
 ];
-const ALLOWED_SET = new Set(COUNTRIES.map(c => c[0]));
-const countrySelect = document.getElementById("f-country");
-COUNTRIES.forEach(([value, label]) => {
-  const opt = document.createElement("option");
-  opt.value = value; opt.textContent = label;
-  countrySelect.appendChild(opt);
-});
-const otherOpt = document.createElement("option");
-otherOpt.value = "other"; otherOpt.textContent = "Other (not listed)";
-countrySelect.appendChild(otherOpt);
+function normalizeLocation(s) {
+  return (s || "").toLowerCase().replace(/[.,]/g, " ").replace(/\s+/g, " ").trim();
+}
+function isLocationAllowed(location) {
+  const padded = " " + normalizeLocation(location) + " ";
+  return COUNTRY_TERMS.some(terms => terms.some(term => padded.includes(" " + term + " ")));
+}
 
-let submittedName = "", submittedEmail = "", submittedCountry = "";
+let submittedName = "", submittedEmail = "", submittedLocation = "", submittedDateTime = "", submittedCourse = "", submittedLevel = [], submittedDuration = "";
 
 function showStep(id) {
   document.querySelectorAll(".step").forEach(s => s.classList.remove("active"));
@@ -173,31 +194,48 @@ function showStep(id) {
 // ---- STEP 1 ----
 const nameInput = document.getElementById("f-name");
 const emailInput = document.getElementById("f-email");
+const locationInput = document.getElementById("f-location");
+const datetimeInput = document.getElementById("f-datetime");
+
+function selectedRadio(name) {
+  const el = document.querySelector(`input[name="${name}"]:checked`);
+  return el ? el.value : "";
+}
+function selectedChecks(name) {
+  return Array.from(document.querySelectorAll(`input[name="${name}"]:checked`)).map(el => el.value);
+}
+
 function step1Valid() {
-  return nameInput.value.trim() && emailInput.value.trim() && countrySelect.value;
+  return nameInput.value.trim() && emailInput.value.trim() && locationInput.value.trim()
+    && datetimeInput.value.trim() && selectedRadio("course") && selectedRadio("duration");
 }
 function refreshStep1Btn() {
   document.getElementById("btn-step1-next").disabled = !step1Valid();
 }
-[nameInput, emailInput, countrySelect].forEach(el => el.addEventListener("input", refreshStep1Btn));
-countrySelect.addEventListener("change", refreshStep1Btn);
+[nameInput, emailInput, locationInput, datetimeInput].forEach(el => el.addEventListener("input", refreshStep1Btn));
+document.querySelectorAll('input[name="course"], input[name="duration"], input[name="level"]').forEach(el => el.addEventListener("change", refreshStep1Btn));
 
 document.getElementById("btn-step1-next").addEventListener("click", async () => {
   const err = document.getElementById("form-error");
-  if (!step1Valid()) { err.textContent = "Please fill in all fields."; return; }
+  if (!step1Valid()) { err.textContent = "Please fill in all required fields."; return; }
   err.textContent = "";
   submittedName = nameInput.value.trim();
   submittedEmail = emailInput.value.trim();
-  submittedCountry = countrySelect.value;
+  submittedLocation = locationInput.value.trim();
+  submittedDateTime = datetimeInput.value.trim();
+  submittedCourse = selectedRadio("course");
+  submittedLevel = selectedChecks("level");
+  submittedDuration = selectedRadio("duration");
 
-  if (submittedCountry === "other" || !ALLOWED_SET.has(submittedCountry)) {
+  if (!isLocationAllowed(submittedLocation)) {
     // Record + notify even though this applicant is declined, then show the decline screen.
     try {
       await fetch("/api/policy-agreement", {
         method: "POST", headers: { "Content-Type":"application/json" },
         body: JSON.stringify({
           action: "trial_lesson", fullName: submittedName, email: submittedEmail,
-          country: submittedCountry === "other" ? "(other / not listed)" : submittedCountry,
+          location: submittedLocation, preferredDateTime: submittedDateTime,
+          course: submittedCourse, japaneseLevel: submittedLevel.join(", "), lessonDuration: submittedDuration,
           outcome: "rejected_country",
         }),
       });
@@ -208,99 +246,17 @@ document.getElementById("btn-step1-next").addEventListener("click", async () => 
 
   document.getElementById("p-name").value = submittedName;
   document.getElementById("p-email").value = submittedEmail;
-  showStep("step-calendar");
-  loadAvailability();
-});
-
-// ---- STEP 2: カレンダー（book-lesson.htmlと同じロジック）----
-const TIMEZONES = ["Asia/Tokyo","America/New_York","America/Chicago","America/Denver","America/Los_Angeles","America/Phoenix","Europe/London","Europe/Paris","Europe/Berlin","Australia/Sydney","Asia/Shanghai","Asia/Seoul","Asia/Singapore","Asia/Bangkok","Pacific/Auckland","America/Sao_Paulo","America/Mexico_City","Asia/Kolkata"];
-const tzSelect = document.getElementById("f-timezone");
-const detectedTz = Intl.DateTimeFormat().resolvedOptions().timeZone || "Asia/Tokyo";
-if (!TIMEZONES.includes(detectedTz)) TIMEZONES.unshift(detectedTz);
-TIMEZONES.forEach(tz => {
-  const opt = document.createElement("option");
-  opt.value = tz; opt.textContent = tz;
-  if (tz === detectedTz) opt.selected = true;
-  tzSelect.appendChild(opt);
-});
-
-const HOURS = ["08:00","09:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00","18:00","19:00","20:00","21:00","22:00"];
-const DAYS_AHEAD = 14;
-let selectedOptions = []; // [{dateJST, timeJST, label}]
-
-function jstDateTimeToDisplay(dateStr, timeStr, tz) {
-  const jstDate = new Date(`${dateStr}T${timeStr}:00+09:00`);
-  return jstDate.toLocaleString("en-US", { timeZone: tz, month:"short", day:"numeric", hour:"numeric", minute:"2-digit" });
-}
-
-async function loadAvailability() {
-  const from = new Date();
-  const to = new Date(Date.now() + DAYS_AHEAD * 86400000);
-  const fmt = d => d.toISOString().slice(0,10);
-  const resp = await fetch("/api/schedule", {
-    method: "POST", headers: {"Content-Type":"application/json"},
-    body: JSON.stringify({ action: "public-availability", fromDate: fmt(from), toDate: fmt(to) })
-  });
-  const data = await resp.json();
-  const takenSet = new Set((data.slots || []).map(s => `${s.date}_${s.time.slice(0,5)}`));
-
-  const grid = document.getElementById("cal-grid");
-  grid.innerHTML = "";
-  const tz = tzSelect.value;
-  for (let i = 1; i <= DAYS_AHEAD; i++) {
-    const d = new Date(Date.now() + i * 86400000);
-    const dateStr = d.toISOString().slice(0,10);
-    HOURS.forEach(time => {
-      const key = `${dateStr}_${time}`;
-      const isTaken = takenSet.has(key);
-      const el = document.createElement("div");
-      el.className = "slot " + (isTaken ? "red" : "green");
-      el.textContent = jstDateTimeToDisplay(dateStr, time, tz);
-      el.dataset.date = dateStr;
-      el.dataset.time = time;
-      if (!isTaken) el.onclick = () => toggleOption(dateStr, time, el);
-      grid.appendChild(el);
-    });
-  }
-}
-
-function toggleOption(dateStr, time, el) {
-  const idx = selectedOptions.findIndex(o => o.dateJST === dateStr && o.timeJST === time);
-  if (idx >= 0) {
-    selectedOptions.splice(idx, 1);
-    el.classList.remove("selected");
-  } else {
-    if (selectedOptions.length >= 3) { alert("You can choose up to 3 options."); return; }
-    selectedOptions.push({ dateJST: dateStr, timeJST: time, label: el.textContent });
-    el.classList.add("selected");
-  }
-  renderOptionList();
-}
-
-function renderOptionList() {
-  const box = document.getElementById("option-list");
-  const ordinals = ["First option:", "Second option:", "Third option:"];
-  box.innerHTML = selectedOptions.map((o,i) => `<div class="option-box">${ordinals[i]} ${o.label}</div>`).join("");
-  document.getElementById("btn-step2-next").disabled = selectedOptions.length === 0;
-}
-
-tzSelect.addEventListener("change", () => { selectedOptions = []; loadAvailability(); renderOptionList(); });
-
-document.getElementById("btn-step2-next").addEventListener("click", () => {
-  const err = document.getElementById("calendar-error");
-  if (selectedOptions.length === 0) { err.textContent = "Please choose at least one preferred time."; return; }
-  err.textContent = "";
   showStep("step-policy");
   initPolicy();
 });
 
-// ---- STEP 3: ポリシー（全ページ閲覧必須。最終ページでのみチェックボックス表示）----
+// ---- STEP 2: ポリシー（全ページ閲覧必須。最終ページでのみチェックボックス表示）----
 const POLICY_PAGES = [
   {
     title: "About Your Free Trial Lesson",
     body: [
       "Thank you for your interest in a free trial lesson with GAKU Online Japanese!",
-      "The preferred times you selected are requests, not a confirmed booking. The teacher will check their real schedule against your options and confirm one exact date and time by email.",
+      "The date/time you requested is a preference, not a confirmed booking. The teacher will check their real schedule and confirm the exact date and time by email.",
       "A free trial lesson is offered once per student. It does not count toward the three lessons per month required for Official GAKU Student status.",
     ],
   },
@@ -309,13 +265,13 @@ const POLICY_PAGES = [
     body: [
       "If you need to reschedule, please contact us at least 24 hours before your confirmed lesson time — we'll do our best to find another slot.",
       "No-shows or cancellations made less than 24 hours before the lesson may forfeit your free trial lesson.",
-      "If none of your preferred times are available, we'll reach out by email to arrange another option together.",
+      "If your requested date/time isn't available, we'll reach out by email to arrange another option together.",
     ],
   },
   {
     title: "Privacy & Agreement",
     body: [
-      "The name, email, and preferred times you provide are used only to schedule and contact you about your free trial lesson.",
+      "The information you provide is used only to schedule and contact you about your free trial lesson.",
       "By checking the box below and clicking \"Submit,\" you confirm that you have read all pages of this policy and agree to the terms described above.",
     ],
   },
@@ -374,11 +330,11 @@ document.getElementById("btn-final-submit").addEventListener("click", async () =
     action: "trial_lesson",
     fullName: pName,
     email: pEmail,
-    country: submittedCountry,
-    studentTimezone: tzSelect.value,
-    option1Date: selectedOptions[0]?.dateJST, option1Time: selectedOptions[0]?.timeJST,
-    option2Date: selectedOptions[1]?.dateJST, option2Time: selectedOptions[1]?.timeJST,
-    option3Date: selectedOptions[2]?.dateJST, option3Time: selectedOptions[2]?.timeJST,
+    location: submittedLocation,
+    preferredDateTime: submittedDateTime,
+    course: submittedCourse,
+    japaneseLevel: submittedLevel.join(", "),
+    lessonDuration: submittedDuration,
     agreed: true,
   };
 

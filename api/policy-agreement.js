@@ -2,15 +2,55 @@ import { getAdminClient } from "./_supabaseAdmin.js";
 import { sendEmail } from "./_resend.js";
 import { ADMIN_EMAIL } from "./_supabaseAdmin.js";
 
-// ---- Free trial lesson: approved-country list (server-side re-check of what
-// public/trial-lesson.html already enforces client-side) ----
-const TRIAL_ALLOWED_COUNTRIES = new Set([
-  "united states", "canada", "united kingdom", "australia", "new zealand", "ireland",
-  "singapore", "switzerland", "netherlands", "germany", "denmark", "sweden", "norway",
-  "finland", "austria", "belgium", "france", "italy", "spain", "portugal", "israel",
-  "luxembourg", "iceland", "czechia", "poland", "slovenia", "estonia", "hong kong",
-  "uae", "qatar", "kuwait", "south korea", "taiwan", "bahrain", "oman",
-]);
+// ---- Free trial lesson: approved-country check (server-side re-check of what
+// public/trial-lesson.html already enforces client-side against the free-text
+// "Where do you live now?" answer, e.g. "Osaka, Japan" or "Arizona, USA"). Each
+// entry is a list of alternate names/abbreviations for the same country; a match is a
+// whole-word/phrase hit anywhere in the normalized location text. ----
+const TRIAL_COUNTRY_TERMS = [
+  ["united states", "usa", "u s a", "us", "america"],
+  ["canada"],
+  ["united kingdom", "uk", "england", "great britain", "britain", "scotland", "wales", "northern ireland"],
+  ["australia"],
+  ["new zealand", "nz"],
+  ["ireland"],
+  ["singapore"],
+  ["switzerland"],
+  ["netherlands", "holland"],
+  ["germany"],
+  ["denmark"],
+  ["sweden"],
+  ["norway"],
+  ["finland"],
+  ["austria"],
+  ["belgium"],
+  ["france"],
+  ["italy"],
+  ["spain"],
+  ["portugal"],
+  ["israel"],
+  ["luxembourg"],
+  ["iceland"],
+  ["czechia", "czech republic"],
+  ["poland"],
+  ["slovenia"],
+  ["estonia"],
+  ["hong kong", "hongkong"],
+  ["uae", "united arab emirates", "emirates"],
+  ["qatar"],
+  ["kuwait"],
+  ["south korea", "korea", "republic of korea"],
+  ["taiwan"],
+  ["bahrain"],
+  ["oman"],
+];
+function normalizeLocation(s) {
+  return (s || "").toLowerCase().replace(/[.,]/g, " ").replace(/\s+/g, " ").trim();
+}
+function isLocationAllowed(location) {
+  const padded = " " + normalizeLocation(location) + " ";
+  return TRIAL_COUNTRY_TERMS.some(terms => terms.some(term => padded.includes(" " + term + " ")));
+}
 
 // POST { name, email, plan, userId } (action omitted or "policy_agreement") — called
 // right before a student is allowed to proceed to a payment step (either the direct
@@ -36,15 +76,17 @@ const TRIAL_ALLOWED_COUNTRIES = new Set([
 // tuition/budget/visa/living-expense questions (auto-declined before finishing the wizard);
 // otherwise omitted. Also kept on this same endpoint for the same 12-function-cap reason above.
 //
-// POST { action: "trial_lesson", fullName, email, country, studentTimezone, option1Date,
-// option1Time, option2Date, option2Time, option3Date, option3Time, agreed, outcome } —
-// called from public/trial-lesson.html, the free-trial-lesson request form. Records the
-// submission in `trial_lesson_requests` and emails Seito. outcome is "rejected_country" when
-// the applicant's country isn't on the approved list (checked client-side against the same
-// list, re-validated here) — the applicant sees a decline screen and never reaches the
-// calendar/policy steps; agreed must be true for a non-rejected submission (the policy page
-// gates its Agree button behind scrolling through every policy page). Also kept on this same
-// endpoint for the same 12-function-cap reason above.
+// POST { action: "trial_lesson", fullName, email, location, preferredDateTime, course,
+// japaneseLevel, lessonDuration, agreed, outcome } — called from public/trial-lesson.html,
+// the free-trial-lesson request form (fields match Seito's existing "Book a Lesson" form on
+// seitojapanese.online: Name, Email, "Where do you live now?", "Preferred Lesson Date/Time",
+// course choice, current level, 30-min/1-hour choice). Records the submission in
+// `trial_lesson_requests` and emails Seito. outcome is "rejected_country" when the
+// applicant's free-text location doesn't match any approved country (checked client-side,
+// re-validated here) — the applicant sees a decline screen and never reaches the policy step;
+// agreed must be true for a non-rejected submission (the policy page gates its Agree button
+// behind paging through every policy page). Also kept on this same endpoint for the same
+// 12-function-cap reason above.
 export default async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed" });
   try {
@@ -239,18 +281,17 @@ async function handleSchoolMatching(req, res) {
 async function handleTrialLesson(req, res) {
   try {
     const {
-      fullName, email, country, studentTimezone,
-      option1Date, option1Time, option2Date, option2Time, option3Date, option3Time,
+      fullName, email, location, preferredDateTime, course, japaneseLevel, lessonDuration,
       agreed, outcome,
     } = req.body || {};
     if (!fullName || !email) {
       return res.status(400).json({ error: "fullName and email are required" });
     }
 
-    const isRejected = outcome === "rejected_country" || !TRIAL_ALLOWED_COUNTRIES.has((country || "").trim().toLowerCase());
-    // A non-rejected submission must have gone through the scroll-gated policy page and
+    const isRejected = outcome === "rejected_country" || !isLocationAllowed(location);
+    // A non-rejected submission must have gone through the page-gated policy step and
     // ticked Agree — reject the request server-side if that flag is missing, same spirit as
-    // the country re-check above (never trust the client alone for a gate like this).
+    // the location re-check above (never trust the client alone for a gate like this).
     if (!isRejected && !agreed) {
       return res.status(400).json({ error: "Policy agreement is required" });
     }
@@ -261,12 +302,12 @@ async function handleTrialLesson(req, res) {
     const { error: insertErr } = await supabase.from("trial_lesson_requests").insert({
       full_name: fullName,
       email: email.trim().toLowerCase(),
-      country: country || null,
+      location: location || null,
       status: isRejected ? "rejected_country" : "new",
-      option1_date: option1Date || null, option1_time: option1Time || null,
-      option2_date: option2Date || null, option2_time: option2Time || null,
-      option3_date: option3Date || null, option3_time: option3Time || null,
-      student_timezone: studentTimezone || null,
+      preferred_datetime: preferredDateTime || null,
+      course: course || null,
+      japanese_level: japaneseLevel || null,
+      lesson_duration: lessonDuration || null,
       agreed_at: isRejected ? null : submittedAt,
       submitted_at: submittedAt,
     });
@@ -276,22 +317,20 @@ async function handleTrialLesson(req, res) {
     }
 
     const subjectPrefix = isRejected ? "[GAKU] Free Trial Lesson — declined (country)" : "[GAKU] Free Trial Lesson request";
-    const optionLines = [
-      option1Date ? `First option: ${option1Date} ${option1Time} (${studentTimezone || "JST"})` : null,
-      option2Date ? `Second option: ${option2Date} ${option2Time} (${studentTimezone || "JST"})` : null,
-      option3Date ? `Third option: ${option3Date} ${option3Time} (${studentTimezone || "JST"})` : null,
-    ].filter(Boolean);
 
     const html = `
-      ${isRejected ? `<p style="color:#c8382b;"><strong>Outcome: Declined — country "${country || "(not provided)"}" is not on the approved list. The applicant was shown the decline screen and did not reach the calendar or policy steps.</strong></p>` : ""}
+      ${isRejected ? `<p style="color:#c8382b;"><strong>Outcome: Declined — location "${location || "(not provided)"}" did not match any approved country. The applicant was shown the decline screen and did not reach the policy step.</strong></p>` : ""}
       <p>A student requested a free trial lesson${isRejected ? " (declined before scheduling)" : ""}.</p>
       <p><strong>Name:</strong> ${fullName}<br/>
          <strong>Email:</strong> ${email}<br/>
-         <strong>Country:</strong> ${country || "(not provided)"}<br/>
-         ${optionLines.length ? `<strong>Preferred times:</strong><br/>${optionLines.join("<br/>")}<br/>` : ""}
+         <strong>Where they live:</strong> ${location || "(not provided)"}<br/>
+         ${preferredDateTime ? `<strong>Preferred lesson date/time:</strong> ${preferredDateTime}<br/>` : ""}
+         ${course ? `<strong>Course:</strong> ${course}<br/>` : ""}
+         ${japaneseLevel ? `<strong>Current Japanese level:</strong> ${japaneseLevel}<br/>` : ""}
+         ${lessonDuration ? `<strong>Lesson length:</strong> ${lessonDuration}<br/>` : ""}
          ${!isRejected ? `<strong>Agreed to policy:</strong> Yes<br/>` : ""}
          <strong>Submitted at:</strong> ${submittedAt}</p>
-      ${!isRejected ? `<p>Please check your schedule against the preferred times above and confirm the lesson with the student.</p>` : ""}
+      ${!isRejected ? `<p>Please check your schedule against the preferred date/time above and confirm the lesson with the student.</p>` : ""}
     `;
     try {
       await sendEmail({ to: ADMIN_EMAIL, subject: `${subjectPrefix} — ${fullName}`, html, replyTo: email });
