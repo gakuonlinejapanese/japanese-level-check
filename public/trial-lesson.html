@@ -16,9 +16,11 @@
     width:100%; padding:10px 4px; background:transparent; border:none; border-bottom:1px solid rgba(255,255,255,.6);
     color:#fff; font-size:15px; outline:none;
   }
+  input.invalid { border-bottom:2px solid #ff3b3b; }
   input::placeholder { color:rgba(255,255,255,.6); }
   .hint { font-size:12px; opacity:.75; margin-top:4px; }
-  .radio-group, .check-group { margin-top:8px; display:flex; flex-direction:column; gap:10px; }
+  .radio-group, .check-group { margin-top:8px; display:flex; flex-direction:column; gap:10px; padding:8px; border-radius:8px; border:2px solid transparent; }
+  .radio-group.invalid, .check-group.invalid { border-color:#ff3b3b; }
   .radio-row, .check-row { display:flex; align-items:center; gap:10px; font-size:14.5px; cursor:pointer; }
   .radio-row input, .check-row input { width:18px; height:18px; flex-shrink:0; }
   .card { background:rgba(255,255,255,.08); border-radius:12px; padding:16px; margin-top:14px; }
@@ -30,6 +32,8 @@
   .msgbox { background:rgba(255,255,255,.1); border-radius:12px; padding:20px; font-size:14px; line-height:1.6; }
   .center { text-align:center; }
   .agree-row { display:flex; align-items:flex-start; gap:10px; margin-top:16px; }
+  .error-msg { background:#ff3b3b; color:#fff; font-weight:700; font-size:13px; padding:10px 14px; border-radius:8px; margin-top:14px; text-align:center; display:none; }
+  .error-msg.show { display:block; }
   /* Policy pages */
   .policy-progress { display:flex; gap:6px; margin-bottom:14px; }
   .policy-progress .dot { flex:1; height:4px; border-radius:2px; background:rgba(255,255,255,.25); }
@@ -88,7 +92,7 @@
     </div>
 
     <button class="btn" id="btn-step1-next" disabled>Next</button>
-    <div class="hint center" id="form-error" style="color:#ffd7d7;margin-top:10px;"></div>
+    <div class="error-msg" id="form-error"></div>
   </div>
 
   <!-- STEP 1b: 対象国外 -->
@@ -122,7 +126,7 @@
     <button class="btn secondary" id="btn-policy-back" style="display:none;">Back</button>
     <button class="btn" id="btn-policy-next" disabled>Next</button>
     <button class="btn" id="btn-final-submit" style="display:none;" disabled>Submit</button>
-    <div class="hint center" id="policy-error" style="color:#ffd7d7;margin-top:10px;"></div>
+    <div class="error-msg" id="policy-error"></div>
   </div>
 
   <!-- STEP 3: 完了 -->
@@ -235,11 +239,19 @@ function showStep(id) {
   document.getElementById(id).classList.add("active");
 }
 
+function setError(el, msg) {
+  el.textContent = msg || "";
+  el.classList.toggle("show", !!msg);
+}
+
 // ---- STEP 1 ----
 const nameInput = document.getElementById("f-name");
 const emailInput = document.getElementById("f-email");
 const locationInput = document.getElementById("f-location");
 const datetimeInput = document.getElementById("f-datetime");
+const courseGroup = document.getElementById("course-group");
+const levelGroup = document.getElementById("level-group");
+const durationGroup = document.getElementById("duration-group");
 
 function selectedRadio(name) {
   const el = document.querySelector(`input[name="${name}"]:checked`);
@@ -255,13 +267,39 @@ function step1Valid() {
 }
 function refreshStep1Btn() {
   document.getElementById("btn-step1-next").disabled = !step1Valid();
+  // Clear the red highlight on any field the student has now filled in, without waiting
+  // for them to press Next again.
+  if (nameInput.value.trim()) nameInput.classList.remove("invalid");
+  if (emailInput.value.trim()) emailInput.classList.remove("invalid");
+  if (locationInput.value.trim()) locationInput.classList.remove("invalid");
+  if (datetimeInput.value.trim()) datetimeInput.classList.remove("invalid");
+  if (selectedRadio("course")) courseGroup.classList.remove("invalid");
+  if (selectedRadio("duration")) durationGroup.classList.remove("invalid");
 }
 [nameInput, emailInput, locationInput, datetimeInput].forEach(el => el.addEventListener("input", refreshStep1Btn));
 document.querySelectorAll('input[name="course"], input[name="duration"], input[name="level"]').forEach(el => el.addEventListener("change", refreshStep1Btn));
 
 document.getElementById("btn-step1-next").addEventListener("click", async () => {
   const err = document.getElementById("form-error");
-  if (!step1Valid()) { err.textContent = "Please fill in all required fields."; return; }
+
+  const missingName = !nameInput.value.trim();
+  const missingEmail = !emailInput.value.trim();
+  const missingLocation = !locationInput.value.trim();
+  const missingDatetime = !datetimeInput.value.trim();
+  const missingCourse = !selectedRadio("course");
+  const missingDuration = !selectedRadio("duration");
+
+  nameInput.classList.toggle("invalid", missingName);
+  emailInput.classList.toggle("invalid", missingEmail);
+  locationInput.classList.toggle("invalid", missingLocation);
+  datetimeInput.classList.toggle("invalid", missingDatetime);
+  courseGroup.classList.toggle("invalid", missingCourse);
+  durationGroup.classList.toggle("invalid", missingDuration);
+
+  if (missingName || missingEmail || missingLocation || missingDatetime || missingCourse || missingDuration) {
+    setError(err, "Please fill in all fields highlighted in red.");
+    return;
+  }
 
   submittedName = nameInput.value.trim();
   submittedEmail = emailInput.value.trim();
@@ -273,14 +311,16 @@ document.getElementById("btn-step1-next").addEventListener("click", async () => 
 
   const analysis = analyzeLocation(submittedLocation);
   if (!analysis) {
-    err.textContent = "Please make sure to include your country name (e.g. Japan, United States, France…).";
+    locationInput.classList.add("invalid");
+    setError(err, "Please make sure to include your country name (e.g. Japan, United States, France…).");
     return;
   }
   if (!analysis.hasCityText) {
-    err.textContent = "Please also write your town or city name, not just the country.";
+    locationInput.classList.add("invalid");
+    setError(err, "Please also write your town or city name, not just the country.");
     return;
   }
-  err.textContent = "";
+  setError(err, "");
 
   if (!TRIAL_ALLOWED_SET.has(analysis.canonical)) {
     // Record + notify even though this applicant is declined, then show the decline screen.
@@ -357,7 +397,7 @@ function renderPolicyPage() {
   document.getElementById("btn-final-submit").style.display = isLast ? "block" : "none";
   document.getElementById("policy-agree-area").style.display = isLast ? "block" : "none";
   document.getElementById("btn-policy-next").disabled = false;
-  document.getElementById("policy-error").textContent = "";
+  setError(document.getElementById("policy-error"), "");
 }
 
 document.getElementById("btn-policy-back").addEventListener("click", () => {
@@ -369,14 +409,20 @@ document.getElementById("btn-policy-next").addEventListener("click", () => {
 document.getElementById("f-agree").addEventListener("change", (e) => {
   document.getElementById("btn-final-submit").disabled = !e.target.checked;
 });
+document.getElementById("p-name").addEventListener("input", (e) => { if (e.target.value.trim()) e.target.classList.remove("invalid"); });
+document.getElementById("p-email").addEventListener("input", (e) => { if (e.target.value.trim()) e.target.classList.remove("invalid"); });
 
 document.getElementById("btn-final-submit").addEventListener("click", async () => {
   const err = document.getElementById("policy-error");
-  const pName = document.getElementById("p-name").value.trim();
-  const pEmail = document.getElementById("p-email").value.trim();
-  if (!pName || !pEmail) { err.textContent = "Please fill in your full name and email."; return; }
-  if (!document.getElementById("f-agree").checked) { err.textContent = "Please check the box to agree before submitting."; return; }
-  err.textContent = "";
+  const pNameEl = document.getElementById("p-name");
+  const pEmailEl = document.getElementById("p-email");
+  const pName = pNameEl.value.trim();
+  const pEmail = pEmailEl.value.trim();
+  pNameEl.classList.toggle("invalid", !pName);
+  pEmailEl.classList.toggle("invalid", !pEmail);
+  if (!pName || !pEmail) { setError(err, "Please fill in your full name and email."); return; }
+  if (!document.getElementById("f-agree").checked) { setError(err, "Please check the box to agree before submitting."); return; }
+  setError(err, "");
 
   const btn = document.getElementById("btn-final-submit");
   btn.disabled = true; btn.textContent = "Submitting…";
@@ -399,7 +445,7 @@ document.getElementById("btn-final-submit").addEventListener("click", async () =
     showStep("step-done");
   } catch (e) {
     btn.disabled = false; btn.textContent = "Submit";
-    err.textContent = "Something went wrong. Please try again.";
+    setError(err, "Something went wrong. Please try again.");
   }
 });
 </script>
