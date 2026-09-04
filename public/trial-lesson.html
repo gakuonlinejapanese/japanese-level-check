@@ -66,6 +66,7 @@
 
     <label>Preferred Lesson Date/Time (your local time) *</label>
     <input type="text" id="f-datetime" placeholder="e.g. April 6, 11AM" />
+    <div class="error-msg" id="datetime-error"></div>
 
     <label>Which course do you want to select? *</label>
     <div class="radio-group" id="course-group">
@@ -231,6 +232,24 @@ function analyzeLocation(raw) {
   return null;
 }
 
+// ---- Preferred Lesson Date/Time free-text check: catches an answer that only has a date
+// ("April 6") or only a time ("11AM") but not both. ----
+const DATE_PATTERNS = [
+  /\b(jan|feb|mar|apr|may|jun|jul|aug|sep|sept|oct|nov|dec)[a-z]*\s*\d{0,2}\b/i, // month name (+ optional day)
+  /\b\d{1,2}\s*(jan|feb|mar|apr|may|jun|jul|aug|sep|sept|oct|nov|dec)[a-z]*\b/i, // day + month name
+  /\b\d{1,2}(st|nd|rd|th)\b/i, // ordinal day, e.g. "6th"
+  /\b\d{1,2}[\/\-]\d{1,2}([\/\-]\d{2,4})?\b/, // 4/6, 04-06-2026
+  /\b(mon|tue|wed|thu|fri|sat|sun)[a-z]*\b/i, // weekday name
+  /\b(today|tomorrow)\b/i,
+];
+const TIME_PATTERNS = [
+  /\b\d{1,2}(:\d{2})?\s*(am|pm)\b/i, // 11am, 11:30 pm
+  /\b\d{1,2}:\d{2}\b/, // 14:00
+  /\b(noon|midnight|morning|afternoon|evening)\b/i,
+];
+function hasDatePart(text) { return DATE_PATTERNS.some(re => re.test(text)); }
+function hasTimePart(text) { return TIME_PATTERNS.some(re => re.test(text)); }
+
 
 let submittedName = "", submittedEmail = "", submittedLocation = "", submittedDateTime = "", submittedCourse = "", submittedLevel = [], submittedDuration = "";
 
@@ -275,6 +294,8 @@ function refreshStep1Btn() {
   if (datetimeInput.value.trim()) datetimeInput.classList.remove("invalid");
   if (selectedRadio("course")) courseGroup.classList.remove("invalid");
   if (selectedRadio("duration")) durationGroup.classList.remove("invalid");
+  const dtValue = datetimeInput.value.trim();
+  if (hasDatePart(dtValue) && hasTimePart(dtValue)) setError(document.getElementById("datetime-error"), "");
 }
 [nameInput, emailInput, locationInput, datetimeInput].forEach(el => el.addEventListener("input", refreshStep1Btn));
 document.querySelectorAll('input[name="course"], input[name="duration"], input[name="level"]').forEach(el => el.addEventListener("change", refreshStep1Btn));
@@ -301,10 +322,25 @@ document.getElementById("btn-step1-next").addEventListener("click", async () => 
     return;
   }
 
+  const dtErr = document.getElementById("datetime-error");
+  const dtValue = datetimeInput.value.trim();
+  const dtHasDate = hasDatePart(dtValue);
+  const dtHasTime = hasTimePart(dtValue);
+  if (!dtHasDate || !dtHasTime) {
+    datetimeInput.classList.add("invalid");
+    setError(dtErr, !dtHasDate && !dtHasTime
+      ? "Please include both a date and a time (e.g. April 6, 11AM)."
+      : !dtHasDate
+        ? "Please also include a date (e.g. April 6)."
+        : "Please also include a time (e.g. 11AM).");
+    return;
+  }
+  setError(dtErr, "");
+
   submittedName = nameInput.value.trim();
   submittedEmail = emailInput.value.trim();
   submittedLocation = locationInput.value.trim();
-  submittedDateTime = datetimeInput.value.trim();
+  submittedDateTime = dtValue;
   submittedCourse = selectedRadio("course");
   submittedLevel = selectedChecks("level");
   submittedDuration = selectedRadio("duration");
