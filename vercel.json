@@ -5,6 +5,13 @@
     { "source": "/admin-withdrawal.html", "destination": "/admin-withdrawal.html" },
     { "source": "/book-lesson.html", "destination": "/book-lesson.html" },
     { "source": "/admin-schedule.html", "destination": "/admin-schedule.html" },
+    { "source": "/school-matching.html", "destination": "/school-matching.html" },
+    { "source": "/cancel-reschedule.html", "destination": "/cancel-reschedule.html" },
+    { "source": "/admin-jlpt-results.html", "destination": "/admin-jlpt-results.html" },
+    { "source": "/admin-mark-test-paid.html", "destination": "/admin-mark-test-paid.html" },
+    { "source": "/reader-welcome.html", "destination": "/reader-welcome.html" },
+    { "source": "/trial-lesson.html", "destination": "/trial-lesson.html" },
+    { "source": "/admin-trial-lessons.html", "destination": "/admin-trial-lessons.html" },
     { "source": "/api/(.*)", "destination": "/api/$1" },
     { "source": "/(.*)", "destination": "/" }
   ],
