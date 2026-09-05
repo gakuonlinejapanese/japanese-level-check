@@ -10166,32 +10166,19 @@ function FormScreen({ onSubmit, onBack, onCancel, initialJlpt, initialForm, onLo
   });
   const [err, setErr] = useState("");
   const [convWarningDismissed, setConvWarningDismissed] = useState(false);
-  // "Take a free JLPT mock test?" offer — shown once a student has JLPT Prep among their
-  // study skills. Persisted in localStorage (scopedKey) so it doesn't nag on every profile edit
-  // once the student has answered Yes or No; re-toggling the "jlpt" skill off then back on resets it.
-  const [jlptMockDismissed, setJlptMockDismissed] = useState(() => {
-    try { return localStorage.getItem(scopedKey("gaku_jlptmock_dismissed")) === "1"; } catch { return false; }
-  });
   const set = (k,v) => { setForm(f=>({...f,[k]:v})); if (k === "goal") setConvWarningDismissed(false); };
   const toggleSkill = (s) => {
     setForm(f=>({ ...f, skills: f.skills.includes(s) ? f.skills.filter(x=>x!==s) : [...f.skills, s] }));
     if (s === "conversation") setConvWarningDismissed(false);
-    if (s === "jlpt") { setJlptMockDismissed(false); try { localStorage.removeItem(scopedKey("gaku_jlptmock_dismissed")); } catch {} }
+    // Re-toggling "jlpt" off then back on resets the dismissed state of the JLPT mock-test
+    // offer shown later on the Dashboard, so it can prompt again for the new selection.
+    if (s === "jlpt") { try { localStorage.removeItem(scopedKey("gaku_jlptmock_dismissed")); } catch {} }
   };
   const toggleGoal = (g) => {
     setForm(f=>({ ...f, goal: f.goal.includes(g) ? f.goal.filter(x=>x!==g) : [...f.goal, g] }));
     setConvWarningDismissed(false);
   };
-  const dismissJlptMockOffer = () => {
-    setJlptMockDismissed(true);
-    try { localStorage.setItem(scopedKey("gaku_jlptmock_dismissed"), "1"); } catch {}
-  };
-  const acceptJlptMockOffer = () => {
-    dismissJlptMockOffer();
-    window.open("https://www.seitojapanese.online/seitojapanese", "_blank", "noopener,noreferrer");
-  };
   const showConvJlptWarning = isJlptTargetGoal(form.goal) && form.skills.includes("conversation") && !convWarningDismissed;
-  const showJlptMockOffer = form.skills.includes("jlpt") && !jlptMockDismissed;
   const T = useUITranslations(form.preferredLang);
   const isOther = form.goal.includes("Other");
   const valid = form.name && form.email && form.country && form.goal.length > 0 && (isOther ? form.customGoal.trim() : true) && form.timeline && form.jlpt && form.hoursPerDay && form.daysPerWeek && form.skills.length > 0;
@@ -10377,15 +10364,6 @@ function FormScreen({ onSubmit, onBack, onCancel, initialJlpt, initialForm, onLo
                 </div>
               </div>
             )}
-            {showJlptMockOffer && (
-              <div style={{ marginTop:10, background:"rgba(168,85,247,0.1)", border:`1px solid ${C.purpleLight}`, borderRadius:10, padding:"12px 14px" }}>
-                <p style={{ color:C.purpleLight, fontSize:12, fontWeight:700, margin:"0 0 10px" }}>🎯 {T.jlptMockOfferTitle}</p>
-                <div style={{ display:"flex", gap:8 }}>
-                  <button onClick={acceptJlptMockOffer} style={{ ...S.btn, padding:"7px 14px", fontSize:12, background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff" }}>{T.yes}</button>
-                  <button onClick={dismissJlptMockOffer} style={{ ...S.btn, padding:"7px 14px", fontSize:12, background:"transparent", border:`1px solid ${C.border}`, color:"#94a3b8" }}>{T.no}</button>
-                </div>
-              </div>
-            )}
           </div>
         </div>
 
@@ -10531,6 +10509,22 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
   const [aiScheduleLoading, setAiScheduleLoading] = useState(false);
   const { currentWeek, totalWeeks } = getWeekInfo(form);
   const scheduleCheck = useComprehensionCheck("schedule");
+  // "Take a free JLPT mock test?" offer — shown on the Dashboard (after registration/onboarding
+  // is complete) once a student has JLPT Prep among their study skills. Persisted in localStorage
+  // (scopedKey) so it doesn't nag on every visit once the student has answered Yes or No;
+  // re-toggling the "jlpt" skill off then back on in Edit Profile resets it (see FormScreen).
+  const [jlptMockDismissed, setJlptMockDismissed] = useState(() => {
+    try { return localStorage.getItem(scopedKey("gaku_jlptmock_dismissed")) === "1"; } catch { return false; }
+  });
+  const dismissJlptMockOffer = () => {
+    setJlptMockDismissed(true);
+    try { localStorage.setItem(scopedKey("gaku_jlptmock_dismissed"), "1"); } catch {}
+  };
+  const acceptJlptMockOffer = () => {
+    dismissJlptMockOffer();
+    window.open("https://www.seitojapanese.online/seitojapanese", "_blank", "noopener,noreferrer");
+  };
+  const showJlptMockOffer = (form.skills||[]).includes("jlpt") && !jlptMockDismissed;
 
   const loadAISchedule = useCallback(async (forceRegen = false) => {
     setAiScheduleLoading(true);
@@ -10715,6 +10709,16 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
             <p style={{ color:"#39ff14", fontSize:11, margin:0 }}>🌐 {NATIVE_LANG_NAMES[form.preferredLang] || form.preferredLang}</p>
           </div>
         </div>
+
+        {showJlptMockOffer && (
+          <div style={{ ...S.card, marginBottom:16, background:"rgba(168,85,247,0.1)", border:`1px solid ${C.purpleLight}` }}>
+            <p style={{ color:C.purpleLight, fontSize:12, fontWeight:700, margin:"0 0 10px" }}>🎯 {T.jlptMockOfferTitle}</p>
+            <div style={{ display:"flex", gap:8 }}>
+              <button onClick={acceptJlptMockOffer} style={{ ...S.btn, padding:"7px 14px", fontSize:12, background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff" }}>{T.yes}</button>
+              <button onClick={dismissJlptMockOffer} style={{ ...S.btn, padding:"7px 14px", fontSize:12, background:"transparent", border:`1px solid ${C.border}`, color:"#94a3b8" }}>{T.no}</button>
+            </div>
+          </div>
+        )}
 
         <div style={{ display:"flex", gap:6, marginBottom:16, overflowX:"auto", paddingBottom:4 }}>
           {TABS.map(t => (
