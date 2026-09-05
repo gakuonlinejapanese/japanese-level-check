@@ -106,6 +106,16 @@
       <p>Unfortunately, free trial lessons are currently only available to residents of a specific list of countries, and we're not able to offer one to you at this time.</p>
       <p class="hint" style="color:#fff;opacity:.85;">Thank you for your interest in GAKU Online Japanese — you're still very welcome to explore GAKU Master or reach out about paid lessons.</p>
     </div>
+    <div class="msgbox center" id="rejected-guide-offer" style="margin-top:14px;">
+      <p style="font-size:16.5px; font-weight:700; margin:0 0 16px; line-height:1.5;">To show my apology, I would like to give you a chance to make a Japanese study guide for you for free. Would you like to take one?</p>
+      <div style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap;">
+        <button class="btn" id="btn-guide-yes" style="margin-top:0; width:auto; padding:12px 30px;">Yes</button>
+        <button class="btn secondary" id="btn-guide-no" style="margin-top:0; width:auto; padding:12px 30px;">No, thank you</button>
+      </div>
+    </div>
+    <div class="msgbox center" id="rejected-guide-thanks" style="display:none; margin-top:14px;">
+      <p style="margin:0;">No problem at all — thank you again for your interest in GAKU Online Japanese!</p>
+    </div>
   </div>
 
   <!-- STEP 2: ポリシー（一つのスクロールボックス。最後まで読まないと同意できない） -->
@@ -385,6 +395,26 @@ document.getElementById("btn-step1-next").addEventListener("click", async () => 
   document.getElementById("p-email").value = submittedEmail;
   showStep("step-policy");
   initPolicy();
+});
+
+// ---- STEP 1b: 対象国外の場合の「無料スタディガイド」代替オファー ----
+document.getElementById("btn-guide-yes").addEventListener("click", async () => {
+  try {
+    await fetch("/api/policy-agreement", {
+      method: "POST", headers: { "Content-Type":"application/json" },
+      body: JSON.stringify({
+        action: "trial_lesson", fullName: submittedName, email: submittedEmail,
+        location: submittedLocation, originCountry: submittedOriginCountry,
+        outcome: "accepted_free_study_guide_offer",
+      }),
+    });
+  } catch (e) { /* still send them to the app even if the notification failed */ }
+  const params = new URLSearchParams({ name: submittedName, email: submittedEmail });
+  window.location.href = "https://app.seitojapanese.online/app?" + params.toString();
+});
+document.getElementById("btn-guide-no").addEventListener("click", () => {
+  document.getElementById("rejected-guide-offer").style.display = "none";
+  document.getElementById("rejected-guide-thanks").style.display = "block";
 });
 
 // ---- STEP 2: ポリシー（全ページ閲覧必須。最終ページでのみチェックボックス表示）----
