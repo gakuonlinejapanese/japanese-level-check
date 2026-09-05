@@ -84,6 +84,7 @@ function detailsHtml(r) {
   return `
     <b>Email:</b> ${esc(r.email)}<br/>
     <b>Where they live:</b> ${esc(r.location) || "—"}<br/>
+    <b>Origin country:</b> ${esc(r.origin_country) || "—"}<br/>
     <b>Preferred date/time:</b> ${esc(r.preferred_datetime) || "—"}<br/>
     <b>Course:</b> ${esc(r.course) || "—"}<br/>
     <b>Level:</b> ${esc(r.japanese_level) || "—"}<br/>

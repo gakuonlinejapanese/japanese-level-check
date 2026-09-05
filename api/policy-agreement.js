@@ -63,7 +63,7 @@ const TRIAL_ALLOWED_LIST = [
   "norway", "finland", "austria", "belgium", "france", "italy",
   "spain", "portugal", "israel", "luxembourg", "iceland", "czech republic",
   "poland", "slovenia", "estonia", "hong kong", "united arab emirates", "qatar",
-  "kuwait", "south korea", "taiwan", "bahrain", "oman",
+  "kuwait", "south korea", "taiwan", "bahrain", "oman", "japan",
 ];
 
 function normalizeLocationText(s) {
@@ -119,8 +119,8 @@ function analyzeLocation(raw) {
 // tuition/budget/visa/living-expense questions (auto-declined before finishing the wizard);
 // otherwise omitted. Also kept on this same endpoint for the same 12-function-cap reason above.
 //
-// POST { action: "trial_lesson", fullName, email, location, preferredDateTime, course,
-// japaneseLevel, lessonDuration, agreed, outcome } — called from public/trial-lesson.html,
+// POST { action: "trial_lesson", fullName, email, location, originCountry, preferredDateTime,
+// course, japaneseLevel, lessonDuration, agreed, outcome } — called from public/trial-lesson.html,
 // the free-trial-lesson request form (fields match Seito's existing "Book a Lesson" form on
 // seitojapanese.online: Name, Email, "Where do you live now?", "Preferred Lesson Date/Time",
 // course choice, current level, 30-min/1-hour choice). Records the submission in
@@ -337,7 +337,7 @@ async function handleSchoolMatching(req, res) {
 async function handleTrialLesson(req, res) {
   try {
     const {
-      fullName, email, location, preferredDateTime, course, japaneseLevel, lessonDuration,
+      fullName, email, location, originCountry, preferredDateTime, course, japaneseLevel, lessonDuration,
       agreed, outcome,
     } = req.body || {};
     if (!fullName || !email) {
@@ -360,6 +360,7 @@ async function handleTrialLesson(req, res) {
       full_name: fullName,
       email: email.trim().toLowerCase(),
       location: location || null,
+      origin_country: originCountry || null,
       status: isRejected ? "rejected_country" : "new",
       preferred_datetime: preferredDateTime || null,
       course: course || null,
@@ -381,6 +382,7 @@ async function handleTrialLesson(req, res) {
       <p><strong>Name:</strong> ${fullName}<br/>
          <strong>Email:</strong> ${email}<br/>
          <strong>Where they live:</strong> ${location || "(not provided)"}<br/>
+         ${originCountry ? `<strong>Origin country:</strong> ${originCountry}<br/>` : ""}
          ${preferredDateTime ? `<strong>Preferred lesson date/time:</strong> ${preferredDateTime}<br/>` : ""}
          ${course ? `<strong>Course:</strong> ${course}<br/>` : ""}
          ${japaneseLevel ? `<strong>Current Japanese level:</strong> ${japaneseLevel}<br/>` : ""}

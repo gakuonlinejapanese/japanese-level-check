@@ -63,6 +63,10 @@
     <input type="text" id="f-location" placeholder="e.g. Los Angeles, United States" />
     <div class="hint">Please include both your town/city and your country. Free trial lessons are currently only available to residents of a specific list of countries.</div>
 
+    <label>Your Origin Country *</label>
+    <input type="text" id="f-origin" placeholder="e.g. Japan" />
+    <div class="hint">The country you're originally from (if different from where you live now, that's okay).</div>
+
     <label>Preferred Lesson Date/Time (your local time) *</label>
     <input type="text" id="f-datetime" placeholder="e.g. April 6, 11AM" />
     <div class="error-msg" id="datetime-error"></div>
@@ -198,7 +202,7 @@ const TRIAL_ALLOWED_LIST = [
   "norway", "finland", "austria", "belgium", "france", "italy",
   "spain", "portugal", "israel", "luxembourg", "iceland", "czech republic",
   "poland", "slovenia", "estonia", "hong kong", "united arab emirates", "qatar",
-  "kuwait", "south korea", "taiwan", "bahrain", "oman",
+  "kuwait", "south korea", "taiwan", "bahrain", "oman", "japan",
 ];
 
 function normalizeLocationText(s) {
@@ -248,7 +252,7 @@ function hasDatePart(text) { return DATE_PATTERNS.some(re => re.test(text)); }
 function hasTimePart(text) { return TIME_PATTERNS.some(re => re.test(text)); }
 
 
-let submittedName = "", submittedEmail = "", submittedLocation = "", submittedDateTime = "", submittedCourse = "", submittedLevel = [], submittedDuration = "";
+let submittedName = "", submittedEmail = "", submittedLocation = "", submittedOriginCountry = "", submittedDateTime = "", submittedCourse = "", submittedLevel = [], submittedDuration = "";
 
 function showStep(id) {
   document.querySelectorAll(".step").forEach(s => s.classList.remove("active"));
@@ -264,6 +268,7 @@ function setError(el, msg) {
 const nameInput = document.getElementById("f-name");
 const emailInput = document.getElementById("f-email");
 const locationInput = document.getElementById("f-location");
+const originInput = document.getElementById("f-origin");
 const datetimeInput = document.getElementById("f-datetime");
 const courseGroup = document.getElementById("course-group");
 const levelGroup = document.getElementById("level-group");
@@ -279,7 +284,7 @@ function selectedChecks(name) {
 
 function step1Valid() {
   return nameInput.value.trim() && emailInput.value.trim() && locationInput.value.trim()
-    && datetimeInput.value.trim() && selectedRadio("course") && selectedRadio("duration");
+    && originInput.value.trim() && datetimeInput.value.trim() && selectedRadio("course") && selectedRadio("duration");
 }
 function refreshStep1Btn() {
   document.getElementById("btn-step1-next").disabled = !step1Valid();
@@ -288,13 +293,14 @@ function refreshStep1Btn() {
   if (nameInput.value.trim()) nameInput.classList.remove("invalid");
   if (emailInput.value.trim()) emailInput.classList.remove("invalid");
   if (locationInput.value.trim()) locationInput.classList.remove("invalid");
+  if (originInput.value.trim()) originInput.classList.remove("invalid");
   if (datetimeInput.value.trim()) datetimeInput.classList.remove("invalid");
   if (selectedRadio("course")) courseGroup.classList.remove("invalid");
   if (selectedRadio("duration")) durationGroup.classList.remove("invalid");
   const dtValue = datetimeInput.value.trim();
   if (hasDatePart(dtValue) && hasTimePart(dtValue)) setError(document.getElementById("datetime-error"), "");
 }
-[nameInput, emailInput, locationInput, datetimeInput].forEach(el => el.addEventListener("input", refreshStep1Btn));
+[nameInput, emailInput, locationInput, originInput, datetimeInput].forEach(el => el.addEventListener("input", refreshStep1Btn));
 document.querySelectorAll('input[name="course"], input[name="duration"], input[name="level"]').forEach(el => el.addEventListener("change", refreshStep1Btn));
 
 document.getElementById("btn-step1-next").addEventListener("click", async () => {
@@ -303,6 +309,7 @@ document.getElementById("btn-step1-next").addEventListener("click", async () => 
   const missingName = !nameInput.value.trim();
   const missingEmail = !emailInput.value.trim();
   const missingLocation = !locationInput.value.trim();
+  const missingOrigin = !originInput.value.trim();
   const missingDatetime = !datetimeInput.value.trim();
   const missingCourse = !selectedRadio("course");
   const missingDuration = !selectedRadio("duration");
@@ -310,11 +317,12 @@ document.getElementById("btn-step1-next").addEventListener("click", async () => 
   nameInput.classList.toggle("invalid", missingName);
   emailInput.classList.toggle("invalid", missingEmail);
   locationInput.classList.toggle("invalid", missingLocation);
+  originInput.classList.toggle("invalid", missingOrigin);
   datetimeInput.classList.toggle("invalid", missingDatetime);
   courseGroup.classList.toggle("invalid", missingCourse);
   durationGroup.classList.toggle("invalid", missingDuration);
 
-  if (missingName || missingEmail || missingLocation || missingDatetime || missingCourse || missingDuration) {
+  if (missingName || missingEmail || missingLocation || missingOrigin || missingDatetime || missingCourse || missingDuration) {
     setError(err, "Please fill in all fields highlighted in red.");
     return;
   }
@@ -337,6 +345,7 @@ document.getElementById("btn-step1-next").addEventListener("click", async () => 
   submittedName = nameInput.value.trim();
   submittedEmail = emailInput.value.trim();
   submittedLocation = locationInput.value.trim();
+  submittedOriginCountry = originInput.value.trim();
   submittedDateTime = dtValue;
   submittedCourse = selectedRadio("course");
   submittedLevel = selectedChecks("level");
@@ -362,7 +371,7 @@ document.getElementById("btn-step1-next").addEventListener("click", async () => 
         method: "POST", headers: { "Content-Type":"application/json" },
         body: JSON.stringify({
           action: "trial_lesson", fullName: submittedName, email: submittedEmail,
-          location: submittedLocation, preferredDateTime: submittedDateTime,
+          location: submittedLocation, originCountry: submittedOriginCountry, preferredDateTime: submittedDateTime,
           course: submittedCourse, japaneseLevel: submittedLevel.join(", "), lessonDuration: submittedDuration,
           outcome: "rejected_country",
         }),
@@ -551,6 +560,7 @@ document.getElementById("btn-final-submit").addEventListener("click", async () =
     fullName: pName,
     email: pEmail,
     location: submittedLocation,
+    originCountry: submittedOriginCountry,
     preferredDateTime: submittedDateTime,
     course: submittedCourse,
     japaneseLevel: submittedLevel.join(", "),
