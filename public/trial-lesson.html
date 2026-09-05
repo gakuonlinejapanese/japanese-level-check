@@ -408,9 +408,8 @@ document.getElementById("btn-guide-yes").addEventListener("click", async () => {
         outcome: "accepted_free_study_guide_offer",
       }),
     });
-  } catch (e) { /* still send them to the app even if the notification failed */ }
-  const params = new URLSearchParams({ name: submittedName, email: submittedEmail });
-  window.location.href = "https://app.seitojapanese.online/app?" + params.toString();
+  } catch (e) { /* still send them to the marketing page even if the notification failed */ }
+  window.location.href = "https://app.seitojapanese.online/gaku-master/";
 });
 document.getElementById("btn-guide-no").addEventListener("click", () => {
   document.getElementById("rejected-guide-offer").style.display = "none";
