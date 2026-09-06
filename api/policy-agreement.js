@@ -520,6 +520,23 @@ const JLPT_MATERIALS = {
     ],
     answerSheet: { url: `${JLPT_MATERIALS_BASE}/N2/answer_sheet.pdf`, label: "JLPT N2 Answers (blank answer sheet)" },
   },
+  N1: {
+    // Like N2, N1's real JLPT booklet keeps Vocabulary and Grammar as separate
+    // files (not pre-combined like N3-N5), so both are sent for "language_knowledge".
+    vocab: { url: `${JLPT_MATERIALS_BASE}/N1/vocab.pdf`, label: "Vocabulary questions (PDF)" },
+    grammar: { url: `${JLPT_MATERIALS_BASE}/N1/grammar.pdf`, label: "Grammar questions (PDF)" },
+    get languageKnowledge() { return [this.vocab, this.grammar]; },
+    readingOnly: { url: `${JLPT_MATERIALS_BASE}/N1/reading_only.pdf`, label: "Reading questions (PDF)" },
+    listening: { url: `${JLPT_MATERIALS_BASE}/N1/listening.pdf`, label: "Listening questions (PDF)" },
+    listeningAudio: [
+      { url: `${JLPT_MATERIALS_BASE}/N1/listening_q1.mp3`, label: "Listening audio — Q1" },
+      { url: `${JLPT_MATERIALS_BASE}/N1/listening_q2.mp3`, label: "Listening audio — Q2" },
+      { url: `${JLPT_MATERIALS_BASE}/N1/listening_q3.mp3`, label: "Listening audio — Q3" },
+      { url: `${JLPT_MATERIALS_BASE}/N1/listening_q4.mp3`, label: "Listening audio — Q4" },
+      { url: `${JLPT_MATERIALS_BASE}/N1/listening_q5.mp3`, label: "Listening audio — Q5" },
+    ],
+    answerSheet: { url: `${JLPT_MATERIALS_BASE}/N1/answer_sheet.pdf`, label: "JLPT N1 Answers (blank answer sheet)" },
+  },
 };
 
 function materialsForRequest(level, testSection) {
