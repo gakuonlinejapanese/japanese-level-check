@@ -451,6 +451,46 @@ const JLPT_MOCK_IMAGES = {
   resultsDownload: "https://app.seitojapanese.online/jlpt-mock-results-download.png",
 };
 
+// Actual JLPT practice-test materials, hosted as static files (public/jlpt-materials/<level>/…)
+// rather than emailed as attachments — the listening audio alone can run several MB per file,
+// well past what's practical to attach, so students get download links instead. Only levels
+// present here have real files; others fall back to a "materials coming separately" note.
+// The answer KEY (teacher's grading sheet) is intentionally never included — only the blank
+// answer sheet the student fills in.
+const JLPT_MATERIALS_BASE = "https://app.seitojapanese.online/jlpt-materials";
+const JLPT_MATERIALS = {
+  N5: {
+    vocab: { url: `${JLPT_MATERIALS_BASE}/N5/vocab.pdf`, label: "Vocabulary questions (PDF)" },
+    grammarReading: { url: `${JLPT_MATERIALS_BASE}/N5/grammar_reading.pdf`, label: "Grammar & Reading questions (PDF)" },
+    readingOnly: { url: `${JLPT_MATERIALS_BASE}/N5/reading_only.pdf`, label: "Reading questions (PDF)" },
+    listening: { url: `${JLPT_MATERIALS_BASE}/N5/listening.pdf`, label: "Listening questions (PDF)" },
+    listeningAudio: [
+      { url: `${JLPT_MATERIALS_BASE}/N5/listening_q1.mp3`, label: "Listening audio — Q1" },
+      { url: `${JLPT_MATERIALS_BASE}/N5/listening_q2.mp3`, label: "Listening audio — Q2" },
+      { url: `${JLPT_MATERIALS_BASE}/N5/listening_q3.mp3`, label: "Listening audio — Q3" },
+      { url: `${JLPT_MATERIALS_BASE}/N5/listening_q4.mp3`, label: "Listening audio — Q4" },
+    ],
+    answerSheet: { url: `${JLPT_MATERIALS_BASE}/N5/answer_sheet.pdf`, label: "JLPT N5 Answers (blank answer sheet)" },
+  },
+};
+
+function materialsForRequest(level, testSection) {
+  const set = JLPT_MATERIALS[level];
+  if (!set) return null;
+  const links = [];
+  if (!testSection || testSection === "all" || testSection === "language_knowledge") {
+    links.push(set.vocab, set.grammarReading);
+  }
+  if (testSection === "reading") {
+    links.push(set.readingOnly);
+  }
+  if (!testSection || testSection === "all" || testSection === "listening") {
+    links.push(set.listening, ...set.listeningAudio);
+  }
+  links.push(set.answerSheet);
+  return links.filter(Boolean);
+}
+
 function buildJlptMockOfferEmailHtml(name, jlptLevel, testSection, preferredMode) {
   const level = (jlptLevel || "N5").replace(/^Pass\s+JLPT\s+/i, "").trim() || "N5";
   const greeting = name ? `Dear ${name},` : "Hi,";
@@ -461,11 +501,16 @@ function buildJlptMockOfferEmailHtml(name, jlptLevel, testSection, preferredMode
     listening: "Listening",
     all: "full",
   }[testSection] || "full";
+  const materials = materialsForRequest(level, testSection);
   const materialsDesc = testSection && testSection !== "all"
     ? `the JLPT ${level} ${sectionLabel} practice materials`
     : `the JLPT ${level} practice test materials`;
+  const materialsBlock = materials
+    ? `<p>Here are ${materialsDesc} — click each link below to download:</p>
+       <ul>${materials.map(m => `<li><a href="${m.url}" style="color:#06b6d4;">${m.label}</a></li>`).join("")}</ul>`
+    : `<p>I'll send you ${materialsDesc} separately by email shortly.</p>`;
   const listeningNote = (!testSection || testSection === "all" || testSection === "listening")
-    ? " (Listening test, Q1-Q2, Q3, Q4 are the audio)"
+    ? " (Listening test, Q1-Q2, Q3, Q4 are the audio files linked above)"
     : "";
   const modeParagraph = preferredMode === "trial_lesson"
     ? `<p>Since you chose to take it as part of a <strong>Free Trial Lesson</strong>, I'll also reach out separately to schedule a time for your trial lesson, where we'll go through the test together.</p>`
@@ -474,9 +519,9 @@ function buildJlptMockOfferEmailHtml(name, jlptLevel, testSection, preferredMode
   return `
     <p>${greeting}</p>
     <p>Thank you for applying for the JLPT practice test!</p>
-    <p>Attached are ${materialsDesc}.<br/>
-    Please fill in your answers in the document titled "JLPT ${level} Answers."</p>
-    <p>1. All other attached documents (except the one with your name and Japanese text) contain the questions for the test.<br/>
+    ${materialsBlock}
+    <p>Please fill in your answers in the document titled "JLPT ${level} Answers."</p>
+    <p>1. All other documents above (except the answer sheet) contain the questions for the test.<br/>
     Please use those to take the test and then send your completed answer sheet back to me.${listeningNote}</p>
     ${modeParagraph}
     <p>There is no due date, so take your time. However, since the result will be sent to the GAKU Master, I recommend submitting the test within a week. (You might need to pay for GAKU Master if you want to see your result.) When you have done so, please send me the answers.</p>
@@ -568,6 +613,7 @@ async function handleRequestJlptMockTest(req, res) {
         all: "Full test",
       }[testSection] || "Full test";
       const modeLabel = preferredMode === "trial_lesson" ? "As a Free Trial Lesson" : "By myself";
+      const hasMaterials = !!materialsForRequest(level, testSection);
       try {
         await sendEmail({
           to: normalizedEmail,
@@ -581,13 +627,15 @@ async function handleRequestJlptMockTest(req, res) {
         await sendEmail({
           to: ADMIN_EMAIL,
           subject: `[GAKU] JLPT free mock test requested — ${name || normalizedEmail}`,
-          html: `<p>A student requested the free JLPT mock test and was just sent the assessment-report email automatically.</p>
+          html: `<p>A student requested the free JLPT mock test and was just sent the assessment-report email automatically${hasMaterials ? " (with download links to the test materials already included)" : ""}.</p>
                  <p><strong>Name:</strong> ${name || "(not provided)"}<br/>
                     <strong>Email:</strong> ${normalizedEmail}<br/>
                     <strong>JLPT level:</strong> ${jltLevelSafe(jlptLevel)}<br/>
                     <strong>Section requested:</strong> ${sectionLabel}<br/>
                     <strong>Preferred mode:</strong> ${modeLabel}</p>
-                 <p>Please send the actual JLPT ${level} test PDF attachments to this student directly${preferredMode === "trial_lesson" ? ", and follow up to schedule their free trial lesson" : ""}.</p>`,
+                 <p>${hasMaterials
+                    ? "No action needed for the test materials — the student already received download links."
+                    : `Please send the actual JLPT ${level} test materials to this student directly — they aren't hosted yet.`}${preferredMode === "trial_lesson" ? " Please also follow up to schedule their free trial lesson." : ""}</p>`,
         });
       } catch (emailErr) {
         console.error("[request_jlpt_mock_test] admin notify failed:", emailErr.message);
