@@ -462,6 +462,7 @@ const JLPT_MATERIALS = {
   N5: {
     vocab: { url: `${JLPT_MATERIALS_BASE}/N5/vocab.pdf`, label: "Vocabulary questions (PDF)" },
     grammarReading: { url: `${JLPT_MATERIALS_BASE}/N5/grammar_reading.pdf`, label: "Grammar & Reading questions (PDF)" },
+    get languageKnowledge() { return [this.vocab, this.grammarReading]; },
     readingOnly: { url: `${JLPT_MATERIALS_BASE}/N5/reading_only.pdf`, label: "Reading questions (PDF)" },
     listening: { url: `${JLPT_MATERIALS_BASE}/N5/listening.pdf`, label: "Listening questions (PDF)" },
     listeningAudio: [
@@ -475,6 +476,7 @@ const JLPT_MATERIALS = {
   N4: {
     vocab: { url: `${JLPT_MATERIALS_BASE}/N4/vocab.pdf`, label: "Vocabulary questions (PDF)" },
     grammarReading: { url: `${JLPT_MATERIALS_BASE}/N4/grammar_reading.pdf`, label: "Grammar & Reading questions (PDF)" },
+    get languageKnowledge() { return [this.vocab, this.grammarReading]; },
     readingOnly: { url: `${JLPT_MATERIALS_BASE}/N4/reading_only.pdf`, label: "Reading questions (PDF)" },
     listening: { url: `${JLPT_MATERIALS_BASE}/N4/listening.pdf`, label: "Listening questions (PDF)" },
     listeningAudio: [
@@ -488,6 +490,7 @@ const JLPT_MATERIALS = {
   N3: {
     vocab: { url: `${JLPT_MATERIALS_BASE}/N3/vocab.pdf`, label: "Vocabulary questions (PDF)" },
     grammarReading: { url: `${JLPT_MATERIALS_BASE}/N3/grammar_reading.pdf`, label: "Grammar & Reading questions (PDF)" },
+    get languageKnowledge() { return [this.vocab, this.grammarReading]; },
     readingOnly: { url: `${JLPT_MATERIALS_BASE}/N3/reading_only.pdf`, label: "Reading questions (PDF)" },
     listening: { url: `${JLPT_MATERIALS_BASE}/N3/listening.pdf`, label: "Listening questions (PDF)" },
     listeningAudio: [
@@ -499,6 +502,24 @@ const JLPT_MATERIALS = {
     ],
     answerSheet: { url: `${JLPT_MATERIALS_BASE}/N3/answer_sheet.pdf`, label: "JLPT N3 Answers (blank answer sheet)" },
   },
+  N2: {
+    // N2's real JLPT booklet combines Vocabulary/Grammar/Reading into one book,
+    // so unlike N3-N5 (whose grammar+reading came pre-combined), vocab and
+    // grammar are separate files here and are both sent for "language_knowledge".
+    vocab: { url: `${JLPT_MATERIALS_BASE}/N2/vocab.pdf`, label: "Vocabulary questions (PDF)" },
+    grammar: { url: `${JLPT_MATERIALS_BASE}/N2/grammar.pdf`, label: "Grammar questions (PDF)" },
+    get languageKnowledge() { return [this.vocab, this.grammar]; },
+    readingOnly: { url: `${JLPT_MATERIALS_BASE}/N2/reading_only.pdf`, label: "Reading questions (PDF)" },
+    listening: { url: `${JLPT_MATERIALS_BASE}/N2/listening.pdf`, label: "Listening questions (PDF)" },
+    listeningAudio: [
+      { url: `${JLPT_MATERIALS_BASE}/N2/listening_q1.mp3`, label: "Listening audio — Q1" },
+      { url: `${JLPT_MATERIALS_BASE}/N2/listening_q2.mp3`, label: "Listening audio — Q2" },
+      { url: `${JLPT_MATERIALS_BASE}/N2/listening_q3.mp3`, label: "Listening audio — Q3" },
+      { url: `${JLPT_MATERIALS_BASE}/N2/listening_q4.mp3`, label: "Listening audio — Q4" },
+      { url: `${JLPT_MATERIALS_BASE}/N2/listening_q5.mp3`, label: "Listening audio — Q5" },
+    ],
+    answerSheet: { url: `${JLPT_MATERIALS_BASE}/N2/answer_sheet.pdf`, label: "JLPT N2 Answers (blank answer sheet)" },
+  },
 };
 
 function materialsForRequest(level, testSection) {
@@ -506,7 +527,7 @@ function materialsForRequest(level, testSection) {
   if (!set) return null;
   const links = [];
   if (!testSection || testSection === "all" || testSection === "language_knowledge") {
-    links.push(set.vocab, set.grammarReading);
+    links.push(...(set.languageKnowledge || []));
   }
   if (testSection === "reading") {
     links.push(set.readingOnly);
@@ -543,14 +564,19 @@ function buildJlptMockOfferEmailHtml(name, jlptLevel, testSection, preferredMode
   const modeParagraph = preferredMode === "trial_lesson"
     ? `<p>Since you chose to take it as part of a <strong>Free Trial Lesson</strong>, I'll also reach out separately to schedule a time for your trial lesson, where we'll go through the test together.</p>`
     : "";
+  const hasAnswerSheet = !!(JLPT_MATERIALS[level] && JLPT_MATERIALS[level].answerSheet);
+  const answerInstructions = hasAnswerSheet
+    ? `<p>Please fill in your answers in the document titled "JLPT ${level} Answers."</p>
+       <p>1. All other documents above (except the answer sheet) contain the questions for the test.<br/>
+       Please use those to take the test and then send your completed answer sheet back to me.${listeningNote}</p>`
+    : `<p>1. The documents above contain the questions for the test.<br/>
+       Please use those to take the test, write your answers on a separate sheet, and send me a photo or scan of your completed answers.${listeningNote}</p>`;
 
   return `
     <p>${greeting}</p>
     <p>Thank you for applying for the JLPT practice test!</p>
     ${materialsBlock}
-    <p>Please fill in your answers in the document titled "JLPT ${level} Answers."</p>
-    <p>1. All other documents above (except the answer sheet) contain the questions for the test.<br/>
-    Please use those to take the test and then send your completed answer sheet back to me.${listeningNote}</p>
+    ${answerInstructions}
     ${modeParagraph}
     <p>There is no due date, so take your time. However, since the result will be sent to the GAKU Master, I recommend submitting the test within a week. (You might need to pay for GAKU Master if you want to see your result.) When you have done so, please send me the answers.</p>
     <p>Once you've submitted your answers, I will send you your results along with a study guide based on what you need to focus on to pass the JLPT ${level}. (Look at the sample of results below!!)</p>
