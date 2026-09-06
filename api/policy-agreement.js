@@ -472,6 +472,19 @@ const JLPT_MATERIALS = {
     ],
     answerSheet: { url: `${JLPT_MATERIALS_BASE}/N5/answer_sheet.pdf`, label: "JLPT N5 Answers (blank answer sheet)" },
   },
+  N4: {
+    vocab: { url: `${JLPT_MATERIALS_BASE}/N4/vocab.pdf`, label: "Vocabulary questions (PDF)" },
+    grammarReading: { url: `${JLPT_MATERIALS_BASE}/N4/grammar_reading.pdf`, label: "Grammar & Reading questions (PDF)" },
+    readingOnly: { url: `${JLPT_MATERIALS_BASE}/N4/reading_only.pdf`, label: "Reading questions (PDF)" },
+    listening: { url: `${JLPT_MATERIALS_BASE}/N4/listening.pdf`, label: "Listening questions (PDF)" },
+    listeningAudio: [
+      { url: `${JLPT_MATERIALS_BASE}/N4/listening_q1.mp3`, label: "Listening audio — Q1" },
+      { url: `${JLPT_MATERIALS_BASE}/N4/listening_q2.mp3`, label: "Listening audio — Q2" },
+      { url: `${JLPT_MATERIALS_BASE}/N4/listening_q3.mp3`, label: "Listening audio — Q3" },
+      { url: `${JLPT_MATERIALS_BASE}/N4/listening_q4.mp3`, label: "Listening audio — Q4" },
+    ],
+    answerSheet: { url: `${JLPT_MATERIALS_BASE}/N4/answer_sheet.pdf`, label: "JLPT N4 Answers (blank answer sheet)" },
+  },
 };
 
 function materialsForRequest(level, testSection) {
