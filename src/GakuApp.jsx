@@ -10511,24 +10511,24 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
   const scheduleCheck = useComprehensionCheck("schedule");
   // "Take a free JLPT mock test?" offer — shown on the Dashboard (after registration/onboarding
   // is complete) once a student has JLPT Prep among their study skills. Persisted in localStorage
-  // (scopedKey) so it doesn't nag on every visit once the student has answered Yes or No;
-  // re-toggling the "jlpt" skill off then back on in Edit Profile resets it (see FormScreen).
+  // (scopedKey) so it doesn't nag on every visit once the student has answered Yes/No or submitted
+  // the form below; re-toggling the "jlpt" skill off then back on in Edit Profile resets it (see
+  // FormScreen). "Yes" expands into the same short questionnaire as the JLPT Free Assessment
+  // Report form on seitojapanese.online/seitojapanese (level / self or trial-lesson / section),
+  // then submits it — the email content sent back adapts to these answers.
   const [jlptMockDismissed, setJlptMockDismissed] = useState(() => {
     try { return localStorage.getItem(scopedKey("gaku_jlptmock_dismissed")) === "1"; } catch { return false; }
   });
+  const [jlptMockStep, setJlptMockStep] = useState("offer"); // "offer" | "form" | "done"
+  const [jlptMockAnswers, setJlptMockAnswers] = useState({
+    level: (form.jlpt || "N5").match(/N[1-5]/)?.[0] || "N5",
+    mode: "self",
+    section: "all",
+  });
+  const [jlptMockSubmitting, setJlptMockSubmitting] = useState(false);
   const dismissJlptMockOffer = () => {
     setJlptMockDismissed(true);
     try { localStorage.setItem(scopedKey("gaku_jlptmock_dismissed"), "1"); } catch {}
-  };
-  const acceptJlptMockOffer = () => {
-    dismissJlptMockOffer();
-    fetch("/api/policy-agreement", {
-      method: "POST", headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        action: "request_jlpt_mock_test",
-        userId, email: form.email, name: form.name, jlptLevel: form.jlpt, response: "yes",
-      }),
-    }).catch(() => {});
   };
   const declineJlptMockOffer = () => {
     dismissJlptMockOffer();
@@ -10539,6 +10539,22 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
         userId, email: form.email, name: form.name, jlptLevel: form.jlpt, response: "no",
       }),
     }).catch(() => {});
+  };
+  const submitJlptMockRequest = async () => {
+    setJlptMockSubmitting(true);
+    try {
+      await fetch("/api/policy-agreement", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: "request_jlpt_mock_test",
+          userId, email: form.email, name: form.name, jlptLevel: jlptMockAnswers.level,
+          response: "yes", testSection: jlptMockAnswers.section, preferredMode: jlptMockAnswers.mode,
+        }),
+      });
+    } catch {}
+    setJlptMockSubmitting(false);
+    setJlptMockStep("done");
+    dismissJlptMockOffer();
   };
   const showJlptMockOffer = (form.skills||[]).includes("jlpt") && !jlptMockDismissed;
 
@@ -10726,13 +10742,51 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
           </div>
         </div>
 
-        {showJlptMockOffer && (
+        {showJlptMockOffer && jlptMockStep === "offer" && (
           <div style={{ ...S.card, marginBottom:16, background:"rgba(168,85,247,0.1)", border:`1px solid ${C.purpleLight}` }}>
             <p style={{ color:C.purpleLight, fontSize:12, fontWeight:700, margin:"0 0 10px" }}>🎯 {T.jlptMockOfferTitle}</p>
             <div style={{ display:"flex", gap:8 }}>
-              <button onClick={acceptJlptMockOffer} style={{ ...S.btn, padding:"7px 14px", fontSize:12, background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff" }}>{T.yes}</button>
+              <button onClick={()=>setJlptMockStep("form")} style={{ ...S.btn, padding:"7px 14px", fontSize:12, background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff" }}>{T.yes}</button>
               <button onClick={declineJlptMockOffer} style={{ ...S.btn, padding:"7px 14px", fontSize:12, background:"transparent", border:`1px solid ${C.border}`, color:"#94a3b8" }}>{T.no}</button>
             </div>
+          </div>
+        )}
+
+        {showJlptMockOffer && jlptMockStep === "form" && (
+          <div style={{ ...S.card, marginBottom:16, background:"rgba(168,85,247,0.1)", border:`1px solid ${C.purpleLight}` }}>
+            <p style={{ color:C.purpleLight, fontSize:12, fontWeight:700, margin:"0 0 12px" }}>🎯 JLPT Free Assessment Report — APPLY NOW</p>
+
+            <label style={{ ...S.label, fontSize:11 }}>Which JLPT do you want to take?</label>
+            <select value={jlptMockAnswers.level} onChange={e=>setJlptMockAnswers(a=>({...a, level:e.target.value}))} style={{ ...S.input, marginBottom:10 }}>
+              {["N5","N4","N3","N2","N1"].map(l => <option key={l} value={l}>{l}</option>)}
+            </select>
+
+            <label style={{ ...S.label, fontSize:11 }}>How do you prefer to take it?</label>
+            <select value={jlptMockAnswers.mode} onChange={e=>setJlptMockAnswers(a=>({...a, mode:e.target.value}))} style={{ ...S.input, marginBottom:10 }}>
+              <option value="self">By myself</option>
+              <option value="trial_lesson">Take one as a Free Trial Lesson</option>
+            </select>
+
+            <label style={{ ...S.label, fontSize:11 }}>Which part of JLPT do you want to do?</label>
+            <select value={jlptMockAnswers.section} onChange={e=>setJlptMockAnswers(a=>({...a, section:e.target.value}))} style={{ ...S.input, marginBottom:12 }}>
+              <option value="language_knowledge">Language knowledge (Vocabulary/Grammar)</option>
+              <option value="reading">Reading</option>
+              <option value="listening">Listening</option>
+              <option value="all">All</option>
+            </select>
+
+            <div style={{ display:"flex", gap:8 }}>
+              <button onClick={submitJlptMockRequest} disabled={jlptMockSubmitting} style={{ ...S.btn, padding:"7px 14px", fontSize:12, background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff", opacity:jlptMockSubmitting?0.6:1 }}>
+                {jlptMockSubmitting ? "Submitting…" : "Submit"}
+              </button>
+              <button onClick={()=>setJlptMockStep("offer")} style={{ ...S.btn, padding:"7px 14px", fontSize:12, background:"transparent", border:`1px solid ${C.border}`, color:"#94a3b8" }}>Back</button>
+            </div>
+          </div>
+        )}
+
+        {jlptMockStep === "done" && (
+          <div style={{ ...S.card, marginBottom:16, background:"rgba(34,197,94,0.1)", border:"1px solid #22c55e" }}>
+            <p style={{ color:"#4ade80", fontSize:12, margin:0 }}>✅ Thanks! Your JLPT Free Assessment Report request was sent — check your email for the next steps.</p>
           </div>
         )}
 

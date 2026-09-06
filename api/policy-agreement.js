@@ -451,17 +451,34 @@ const JLPT_MOCK_IMAGES = {
   resultsDownload: "https://app.seitojapanese.online/jlpt-mock-results-download.png",
 };
 
-function buildJlptMockOfferEmailHtml(name, jlptLevel) {
+function buildJlptMockOfferEmailHtml(name, jlptLevel, testSection, preferredMode) {
   const level = (jlptLevel || "N5").replace(/^Pass\s+JLPT\s+/i, "").trim() || "N5";
   const greeting = name ? `Dear ${name},` : "Hi,";
   const imgStyle = "max-width:420px;width:100%;height:auto;display:block;border-radius:8px;margin:12px 0;";
+  const sectionLabel = {
+    language_knowledge: "Language Knowledge (Vocabulary/Grammar)",
+    reading: "Reading",
+    listening: "Listening",
+    all: "full",
+  }[testSection] || "full";
+  const materialsDesc = testSection && testSection !== "all"
+    ? `the JLPT ${level} ${sectionLabel} practice materials`
+    : `the JLPT ${level} practice test materials`;
+  const listeningNote = (!testSection || testSection === "all" || testSection === "listening")
+    ? " (Listening test, Q1-Q2, Q3, Q4 are the audio)"
+    : "";
+  const modeParagraph = preferredMode === "trial_lesson"
+    ? `<p>Since you chose to take it as part of a <strong>Free Trial Lesson</strong>, I'll also reach out separately to schedule a time for your trial lesson, where we'll go through the test together.</p>`
+    : "";
+
   return `
     <p>${greeting}</p>
     <p>Thank you for applying for the JLPT practice test!</p>
-    <p>Attached are the JLPT ${level} practice test materials.<br/>
+    <p>Attached are ${materialsDesc}.<br/>
     Please fill in your answers in the document titled "JLPT ${level} Answers."</p>
     <p>1. All other attached documents (except the one with your name and Japanese text) contain the questions for the test.<br/>
-    Please use those to take the test and then send your completed answer sheet back to me. (Listening test, Q1-Q2, Q3, Q4 are the audio)</p>
+    Please use those to take the test and then send your completed answer sheet back to me.${listeningNote}</p>
+    ${modeParagraph}
     <p>There is no due date, so take your time. However, since the result will be sent to the GAKU Master, I recommend submitting the test within a week. (You might need to pay for GAKU Master if you want to see your result.) When you have done so, please send me the answers.</p>
     <p>Once you've submitted your answers, I will send you your results along with a study guide based on what you need to focus on to pass the JLPT ${level}. (Look at the sample of results below!!)</p>
     <p>If you have any questions, feel free to reach out at any time.<br/>
@@ -524,7 +541,7 @@ function buildJlptMockOfferEmailHtml(name, jlptLevel) {
 
 async function handleRequestJlptMockTest(req, res) {
   try {
-    const { userId, email, name, jlptLevel, response } = req.body || {};
+    const { userId, email, name, jlptLevel, response, testSection, preferredMode } = req.body || {};
     if (!email) return res.status(400).json({ error: "email is required" });
     if (response !== "yes" && response !== "no") return res.status(400).json({ error: "response must be 'yes' or 'no'" });
 
@@ -537,16 +554,25 @@ async function handleRequestJlptMockTest(req, res) {
       name: name || null,
       jlpt_level: jlptLevel || null,
       response,
+      test_section: response === "yes" ? (testSection || null) : null,
+      preferred_mode: response === "yes" ? (preferredMode || null) : null,
     });
     if (insertErr) return res.status(500).json({ error: insertErr.message });
 
     if (response === "yes") {
       const level = (jlptLevel || "N5").replace(/^Pass\s+JLPT\s+/i, "").trim() || "N5";
+      const sectionLabel = {
+        language_knowledge: "Language Knowledge (Vocabulary/Grammar)",
+        reading: "Reading",
+        listening: "Listening",
+        all: "Full test",
+      }[testSection] || "Full test";
+      const modeLabel = preferredMode === "trial_lesson" ? "As a Free Trial Lesson" : "By myself";
       try {
         await sendEmail({
           to: normalizedEmail,
           subject: `Re: JLPT ${level} Free Assessment Report`,
-          html: buildJlptMockOfferEmailHtml(name, jlptLevel),
+          html: buildJlptMockOfferEmailHtml(name, jlptLevel, testSection, preferredMode),
         });
       } catch (emailErr) {
         console.error("[request_jlpt_mock_test] student email failed:", emailErr.message);
@@ -558,8 +584,10 @@ async function handleRequestJlptMockTest(req, res) {
           html: `<p>A student requested the free JLPT mock test and was just sent the assessment-report email automatically.</p>
                  <p><strong>Name:</strong> ${name || "(not provided)"}<br/>
                     <strong>Email:</strong> ${normalizedEmail}<br/>
-                    <strong>JLPT level:</strong> ${jltLevelSafe(jlptLevel)}</p>
-                 <p>Please send the actual JLPT ${level} test PDF attachments to this student directly.</p>`,
+                    <strong>JLPT level:</strong> ${jltLevelSafe(jlptLevel)}<br/>
+                    <strong>Section requested:</strong> ${sectionLabel}<br/>
+                    <strong>Preferred mode:</strong> ${modeLabel}</p>
+                 <p>Please send the actual JLPT ${level} test PDF attachments to this student directly${preferredMode === "trial_lesson" ? ", and follow up to schedule their free trial lesson" : ""}.</p>`,
         });
       } catch (emailErr) {
         console.error("[request_jlpt_mock_test] admin notify failed:", emailErr.message);
