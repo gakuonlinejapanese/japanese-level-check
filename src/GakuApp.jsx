@@ -10522,7 +10522,23 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
   };
   const acceptJlptMockOffer = () => {
     dismissJlptMockOffer();
-    window.open("https://www.seitojapanese.online/seitojapanese", "_blank", "noopener,noreferrer");
+    fetch("/api/policy-agreement", {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        action: "request_jlpt_mock_test",
+        userId, email: form.email, name: form.name, jlptLevel: form.jlpt, response: "yes",
+      }),
+    }).catch(() => {});
+  };
+  const declineJlptMockOffer = () => {
+    dismissJlptMockOffer();
+    fetch("/api/policy-agreement", {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        action: "request_jlpt_mock_test",
+        userId, email: form.email, name: form.name, jlptLevel: form.jlpt, response: "no",
+      }),
+    }).catch(() => {});
   };
   const showJlptMockOffer = (form.skills||[]).includes("jlpt") && !jlptMockDismissed;
 
@@ -10715,7 +10731,7 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
             <p style={{ color:C.purpleLight, fontSize:12, fontWeight:700, margin:"0 0 10px" }}>🎯 {T.jlptMockOfferTitle}</p>
             <div style={{ display:"flex", gap:8 }}>
               <button onClick={acceptJlptMockOffer} style={{ ...S.btn, padding:"7px 14px", fontSize:12, background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff" }}>{T.yes}</button>
-              <button onClick={dismissJlptMockOffer} style={{ ...S.btn, padding:"7px 14px", fontSize:12, background:"transparent", border:`1px solid ${C.border}`, color:"#94a3b8" }}>{T.no}</button>
+              <button onClick={declineJlptMockOffer} style={{ ...S.btn, padding:"7px 14px", fontSize:12, background:"transparent", border:`1px solid ${C.border}`, color:"#94a3b8" }}>{T.no}</button>
             </div>
           </div>
         )}

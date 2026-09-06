@@ -150,6 +150,7 @@ export default async function handler(req, res) {
     if (action === "trial_lesson") return handleTrialLesson(req, res);
     if (action === "admin_list_trial_lessons") return handleAdminListTrialLessons(req, res);
     if (action === "admin_respond_trial_lesson") return handleAdminRespondTrialLesson(req, res);
+    if (action === "request_jlpt_mock_test") return handleRequestJlptMockTest(req, res);
 
     const { name, email, plan, userId } = req.body || {};
     if (!email) return res.status(400).json({ error: "email is required" });
@@ -435,6 +436,144 @@ async function handleAdminListTrialLessons(req, res) {
     return res.status(500).json({ error: e.message });
   }
 }
+
+// ---- Free JLPT mock test offer: shown on the GAKU Master Dashboard once a
+// student has "JLPT Prep" among their study skills (see GakuApp.jsx
+// showJlptMockOffer/acceptJlptMockOffer). Clicking "Yes" logs the request and
+// sends the student this email; clicking "No" just logs it (no email). The
+// actual test PDF attachments are still sent manually by Seito after this —
+// this only notifies him via ADMIN_EMAIL so he knows to follow up. ----
+const JLPT_LOGO_IMG = "https://app.seitojapanese.online/gaku-logo-circle.png";
+const JLPT_MOCK_IMAGES = {
+  profileSetup: "https://app.seitojapanese.online/jlpt-mock-profile-setup.png",
+  weeklySchedule: "https://app.seitojapanese.online/jlpt-mock-weekly-schedule.png",
+  vocabExercise: "https://app.seitojapanese.online/jlpt-mock-vocab-exercise.png",
+  resultsDownload: "https://app.seitojapanese.online/jlpt-mock-results-download.png",
+};
+
+function buildJlptMockOfferEmailHtml(name, jlptLevel) {
+  const level = (jlptLevel || "N5").replace(/^Pass\s+JLPT\s+/i, "").trim() || "N5";
+  const greeting = name ? `Dear ${name},` : "Hi,";
+  const imgStyle = "max-width:420px;width:100%;height:auto;display:block;border-radius:8px;margin:12px 0;";
+  return `
+    <p>${greeting}</p>
+    <p>Thank you for applying for the JLPT practice test!</p>
+    <p>Attached are the JLPT ${level} practice test materials.<br/>
+    Please fill in your answers in the document titled "JLPT ${level} Answers."</p>
+    <p>1. All other attached documents (except the one with your name and Japanese text) contain the questions for the test.<br/>
+    Please use those to take the test and then send your completed answer sheet back to me. (Listening test, Q1-Q2, Q3, Q4 are the audio)</p>
+    <p>There is no due date, so take your time. However, since the result will be sent to the GAKU Master, I recommend submitting the test within a week. (You might need to pay for GAKU Master if you want to see your result.) When you have done so, please send me the answers.</p>
+    <p>Once you've submitted your answers, I will send you your results along with a study guide based on what you need to focus on to pass the JLPT ${level}. (Look at the sample of results below!!)</p>
+    <p>If you have any questions, feel free to reach out at any time.<br/>
+    Good luck on your JLPT ${level}!</p>
+    <br/>
+    <h3 style="margin:0 0 12px;">JLPT Study Guide! (GAKU Master)</h3>
+    <p>You can set up your JLPT study guide in GAKU Master by FREE!</p>
+    <p>👉 <strong>GAKU Master</strong><br/>
+    "Try GAKU Master FREE" → "Free Plan"<br/>
+    <a href="https://www.seitojapanese.online" style="color:#06b6d4;">https://www.seitojapanese.online</a></p>
+    <p><strong>Set up your JLPT level (N5-N1)</strong></p>
+    <p><img src="${JLPT_MOCK_IMAGES.profileSetup}" alt="Set up your JLPT level in GAKU Master" style="${imgStyle}" /></p>
+    <p><strong>GAKU Master generates your study guide for JLPT</strong></p>
+    <p><img src="${JLPT_MOCK_IMAGES.weeklySchedule}" alt="GAKU Master weekly study schedule" style="${imgStyle}" /></p>
+    <p><strong>You can use the study resources for the JLPT for Free!</strong></p>
+    <p><img src="${JLPT_MOCK_IMAGES.vocabExercise}" alt="JLPT vocabulary exercise sample" style="${imgStyle}" /></p>
+    <p><strong>Try GAKU Master a one-week trial!</strong></p>
+    <p><strong>Your JLPT Result will be sent to the GAKU Master!</strong><br/>
+    Click the "Download PDF" (Red arrow)</p>
+    <p><img src="${JLPT_MOCK_IMAGES.resultsDownload}" alt="Download your JLPT result PDF in GAKU Master" style="${imgStyle}" /></p>
+    <p>🎯 <strong>What can you get from Free JLPT Practice Test &amp; Result Analysis by GAKU?</strong></p>
+    <p>With this free service, you'll get much more than just your score:</p>
+    <ul>
+      <li>✅ Your current JLPT level and score breakdown</li>
+      <li>✅ A clear explanation of what to do next</li>
+      <li>✅ Your personal milestone roadmap</li>
+      <li>✅ A sample 1-week study plan to help you pass the JLPT</li>
+      <li>✅ Recommended study contents — and how GAKU can support you!</li>
+    </ul>
+    <p>You can get the results based on your sections and give you feedback as a summary!!</p>
+    <p>And, you need to be a student in GAKU because…</p>
+    <p>📊 <strong>Can Get Your Score + Receive a Personalized Study Guide</strong><br/>
+    If you become a student in GAKU, you will receive a score report and a custom study guide designed specifically for you.<br/>
+    This study guide is not random or generic.<br/>
+    It is created based on your personal learning situation, including:</p>
+    <p>✅ How many hours per week you can realistically study<br/>
+    ✅ Which JLPT sections you feel most confident in<br/>
+    ✅ Which sections you feel least confident in</p>
+    <p>Using this information, we build a step-by-step plan that tells you exactly what to study, how to study it, and how to improve efficiently — without wasting time.</p>
+    <p>This allows you to focus only on what will raise your score fastest.</p>
+    <p><strong>Let's unlock the study guide by joining GAKU!</strong></p>
+    <br/>
+    <p>Warm regards,<br/>
+    Seito Sakamoto<br/>
+    Online Japanese Tutor | GAKU Online Japanese, Japanese Language Instructor, Master of Art, Teaching International Language</p>
+    <p>
+      For more details about GAKU, please see my website:
+      <a href="https://www.seitojapanese.online" style="color:#06b6d4;">https://www.seitojapanese.online</a>
+      or Google business page
+      <a href="https://g.co/kgs/TzBMwyU" style="color:#06b6d4;">https://g.co/kgs/TzBMwyU</a><br/>
+      Gmail: <a href="mailto:seitojapanese.online@gmail.com" style="color:#06b6d4;">seitojapanese.online@gmail.com</a><br/>
+      Phone: +81 80 2510 5951<br/>
+      Facebook: <a href="https://www.facebook.com/profile.php?id=61564825647440" style="color:#06b6d4;">https://www.facebook.com/profile.php?id=61564825647440</a><br/>
+      Instagram: <a href="https://www.instagram.com/seitojapanese.online/" style="color:#06b6d4;">https://www.instagram.com/seitojapanese.online/</a><br/>
+      Amazing Talker: <a href="https://en.amazingtalker.com/blog/en/other/116528/" style="color:#06b6d4;">https://en.amazingtalker.com/blog/en/other/116528/</a>
+    </p>
+    <p><img src="${JLPT_LOGO_IMG}" alt="GAKU logo" style="width:160px;height:auto;display:block;margin-top:12px;" /></p>
+  `;
+}
+
+async function handleRequestJlptMockTest(req, res) {
+  try {
+    const { userId, email, name, jlptLevel, response } = req.body || {};
+    if (!email) return res.status(400).json({ error: "email is required" });
+    if (response !== "yes" && response !== "no") return res.status(400).json({ error: "response must be 'yes' or 'no'" });
+
+    const supabase = getAdminClient();
+    const normalizedEmail = email.trim().toLowerCase();
+
+    const { error: insertErr } = await supabase.from("jlpt_mock_test_requests").insert({
+      user_id: userId || null,
+      email: normalizedEmail,
+      name: name || null,
+      jlpt_level: jlptLevel || null,
+      response,
+    });
+    if (insertErr) return res.status(500).json({ error: insertErr.message });
+
+    if (response === "yes") {
+      const level = (jlptLevel || "N5").replace(/^Pass\s+JLPT\s+/i, "").trim() || "N5";
+      try {
+        await sendEmail({
+          to: normalizedEmail,
+          subject: `Re: JLPT ${level} Free Assessment Report`,
+          html: buildJlptMockOfferEmailHtml(name, jlptLevel),
+        });
+      } catch (emailErr) {
+        console.error("[request_jlpt_mock_test] student email failed:", emailErr.message);
+      }
+      try {
+        await sendEmail({
+          to: ADMIN_EMAIL,
+          subject: `[GAKU] JLPT free mock test requested — ${name || normalizedEmail}`,
+          html: `<p>A student requested the free JLPT mock test and was just sent the assessment-report email automatically.</p>
+                 <p><strong>Name:</strong> ${name || "(not provided)"}<br/>
+                    <strong>Email:</strong> ${normalizedEmail}<br/>
+                    <strong>JLPT level:</strong> ${jltLevelSafe(jlptLevel)}</p>
+                 <p>Please send the actual JLPT ${level} test PDF attachments to this student directly.</p>`,
+        });
+      } catch (emailErr) {
+        console.error("[request_jlpt_mock_test] admin notify failed:", emailErr.message);
+      }
+    }
+
+    return res.status(200).json({ ok: true });
+  } catch (e) {
+    console.error("handleRequestJlptMockTest failed:", e.message);
+    return res.status(500).json({ error: e.message });
+  }
+}
+
+function jltLevelSafe(v) { return v || "(not set)"; }
 
 async function handleAdminRespondTrialLesson(req, res) {
   if (!checkAdminSecret(req)) return res.status(401).json({ error: "Invalid admin secret" });
