@@ -485,6 +485,20 @@ const JLPT_MATERIALS = {
     ],
     answerSheet: { url: `${JLPT_MATERIALS_BASE}/N4/answer_sheet.pdf`, label: "JLPT N4 Answers (blank answer sheet)" },
   },
+  N3: {
+    vocab: { url: `${JLPT_MATERIALS_BASE}/N3/vocab.pdf`, label: "Vocabulary questions (PDF)" },
+    grammarReading: { url: `${JLPT_MATERIALS_BASE}/N3/grammar_reading.pdf`, label: "Grammar & Reading questions (PDF)" },
+    readingOnly: { url: `${JLPT_MATERIALS_BASE}/N3/reading_only.pdf`, label: "Reading questions (PDF)" },
+    listening: { url: `${JLPT_MATERIALS_BASE}/N3/listening.pdf`, label: "Listening questions (PDF)" },
+    listeningAudio: [
+      { url: `${JLPT_MATERIALS_BASE}/N3/listening_q1.mp3`, label: "Listening audio — Q1" },
+      { url: `${JLPT_MATERIALS_BASE}/N3/listening_q2.mp3`, label: "Listening audio — Q2" },
+      { url: `${JLPT_MATERIALS_BASE}/N3/listening_q3.mp3`, label: "Listening audio — Q3" },
+      { url: `${JLPT_MATERIALS_BASE}/N3/listening_q4.mp3`, label: "Listening audio — Q4" },
+      { url: `${JLPT_MATERIALS_BASE}/N3/listening_q5.mp3`, label: "Listening audio — Q5" },
+    ],
+    answerSheet: { url: `${JLPT_MATERIALS_BASE}/N3/answer_sheet.pdf`, label: "JLPT N3 Answers (blank answer sheet)" },
+  },
 };
 
 function materialsForRequest(level, testSection) {
@@ -522,8 +536,9 @@ function buildJlptMockOfferEmailHtml(name, jlptLevel, testSection, preferredMode
     ? `<p>Here are ${materialsDesc} — click each link below to download:</p>
        <ul>${materials.map(m => `<li><a href="${m.url}" style="color:#06b6d4;">${m.label}</a></li>`).join("")}</ul>`
     : `<p>I'll send you ${materialsDesc} separately by email shortly.</p>`;
-  const listeningNote = (!testSection || testSection === "all" || testSection === "listening")
-    ? " (Listening test, Q1-Q2, Q3, Q4 are the audio files linked above)"
+  const listeningAudioCount = (JLPT_MATERIALS[level] && JLPT_MATERIALS[level].listeningAudio || []).length;
+  const listeningNote = (!testSection || testSection === "all" || testSection === "listening") && listeningAudioCount > 0
+    ? ` (Listening test, Q1${listeningAudioCount > 1 ? `-Q${listeningAudioCount}` : ""} are the audio files linked above)`
     : "";
   const modeParagraph = preferredMode === "trial_lesson"
     ? `<p>Since you chose to take it as part of a <strong>Free Trial Lesson</strong>, I'll also reach out separately to schedule a time for your trial lesson, where we'll go through the test together.</p>`
