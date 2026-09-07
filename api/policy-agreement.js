@@ -148,6 +148,7 @@ export default async function handler(req, res) {
     if (action === "cancellation_request") return handleCancellationRequest(req, res);
     if (action === "school_matching") return handleSchoolMatching(req, res);
     if (action === "trial_lesson") return handleTrialLesson(req, res);
+    if (action === "check_trial_lesson_repeat") return handleCheckTrialLessonRepeat(req, res);
     if (action === "admin_list_trial_lessons") return handleAdminListTrialLessons(req, res);
     if (action === "admin_respond_trial_lesson") return handleAdminRespondTrialLesson(req, res);
     if (action === "request_jlpt_mock_test") return handleRequestJlptMockTest(req, res);
@@ -335,18 +336,47 @@ async function handleSchoolMatching(req, res) {
   }
 }
 
+// "Have you done a weekly trial for GAKU Master?" = Yes overrides the country restriction
+// entirely — those applicants are accepted no matter where they live. It does NOT apply to
+// applicants who are blocked for having already been declined once before (that check happens
+// before this function is ever called for that case, via handleCheckTrialLessonRepeat).
 async function handleTrialLesson(req, res) {
   try {
     const {
       fullName, email, location, originCountry, preferredDateTime, course, japaneseLevel, lessonDuration,
-      agreed, outcome,
+      weeklyTrialDone, agreed, outcome,
     } = req.body || {};
     if (!fullName || !email) {
       return res.status(400).json({ error: "fullName and email are required" });
     }
 
+    if (outcome === "blocked_repeat_rejection") {
+      // Just a record of a blocked repeat attempt — no email, no policy step involved.
+      const supabase = getAdminClient();
+      const submittedAt = new Date().toISOString();
+      const { error: insertErr } = await supabase.from("trial_lesson_requests").insert({
+        full_name: fullName,
+        email: email.trim().toLowerCase(),
+        location: location || null,
+        origin_country: originCountry || null,
+        status: "blocked_repeat",
+        preferred_datetime: preferredDateTime || null,
+        course: course || null,
+        japanese_level: japaneseLevel || null,
+        lesson_duration: lessonDuration || null,
+        weekly_trial_done: !!weeklyTrialDone,
+        agreed_at: null,
+        submitted_at: submittedAt,
+      });
+      if (insertErr) {
+        console.error("trial_lesson_requests insert failed (blocked_repeat):", insertErr.message);
+      }
+      return res.status(200).json({ ok: true });
+    }
+
     const analysis = analyzeLocation(location);
-    const isRejected = outcome === "rejected_country" || !analysis || !analysis.hasCityText || !TRIAL_ALLOWED_SET.has(analysis.canonical);
+    const isRejected = !weeklyTrialDone
+      && (outcome === "rejected_country" || !analysis || !analysis.hasCityText || !TRIAL_ALLOWED_SET.has(analysis.canonical));
     // A non-rejected submission must have gone through the page-gated policy step and
     // ticked Agree — reject the request server-side if that flag is missing, same spirit as
     // the location re-check above (never trust the client alone for a gate like this).
@@ -367,6 +397,7 @@ async function handleTrialLesson(req, res) {
       course: course || null,
       japanese_level: japaneseLevel || null,
       lesson_duration: lessonDuration || null,
+      weekly_trial_done: !!weeklyTrialDone,
       agreed_at: isRejected ? null : submittedAt,
       submitted_at: submittedAt,
     });
@@ -388,6 +419,8 @@ async function handleTrialLesson(req, res) {
          ${course ? `<strong>Course:</strong> ${course}<br/>` : ""}
          ${japaneseLevel ? `<strong>Current Japanese level:</strong> ${japaneseLevel}<br/>` : ""}
          ${lessonDuration ? `<strong>Lesson length:</strong> ${lessonDuration}<br/>` : ""}
+         <strong>Weekly GAKU Master trial already done:</strong> ${weeklyTrialDone ? "Yes" : "No"}<br/>
+         ${weeklyTrialDone && !TRIAL_ALLOWED_SET.has((analysis && analysis.canonical) || "") ? `<strong style="color:#c8382b;">Accepted despite non-approved country because they answered Yes to the weekly-trial question.</strong><br/>` : ""}
          ${!isRejected ? `<strong>Agreed to policy:</strong> Yes<br/>` : ""}
          <strong>Submitted at:</strong> ${submittedAt}</p>
       ${!isRejected ? `<p>Please check your schedule against the preferred date/time above, then accept or decline (with an optional note) from the admin page: <a href="https://app.seitojapanese.online/admin-trial-lessons.html">admin-trial-lessons.html</a>.</p>` : ""}
@@ -404,6 +437,33 @@ async function handleTrialLesson(req, res) {
   } catch (e) {
     console.error("handleTrialLesson failed:", e.message);
     return res.status(500).json({ error: e.message });
+  }
+}
+
+// POST { action: "check_trial_lesson_repeat", email } — called from trial-lesson.html right
+// before showing the country-decline screen. Returns { blocked: true } if this email already
+// has a prior "rejected_country" submission, so the client shows the immediate-block message
+// instead of the normal decline+free-study-guide offer a second time.
+async function handleCheckTrialLessonRepeat(req, res) {
+  try {
+    const { email } = req.body || {};
+    if (!email) return res.status(400).json({ error: "email is required" });
+
+    const supabase = getAdminClient();
+    const { data, error } = await supabase
+      .from("trial_lesson_requests")
+      .select("id")
+      .eq("email", email.trim().toLowerCase())
+      .eq("status", "rejected_country")
+      .limit(1);
+    if (error) {
+      console.error("check_trial_lesson_repeat query failed:", error.message);
+      return res.status(200).json({ blocked: false });
+    }
+    return res.status(200).json({ blocked: !!(data && data.length > 0) });
+  } catch (e) {
+    console.error("handleCheckTrialLessonRepeat failed:", e.message);
+    return res.status(200).json({ blocked: false });
   }
 }
 

@@ -95,6 +95,12 @@
       <label class="radio-row"><input type="radio" name="duration" value="30 minute" />30 minute</label>
     </div>
 
+    <label>Have you done a weekly trial for GAKU Master? *</label>
+    <div class="radio-group" id="weeklytrial-group">
+      <label class="radio-row"><input type="radio" name="weeklytrial" value="Yes" />Yes</label>
+      <label class="radio-row"><input type="radio" name="weeklytrial" value="No" />No</label>
+    </div>
+
     <button class="btn" id="btn-step1-next" disabled>Next</button>
     <div class="error-msg" id="form-error"></div>
   </div>
@@ -115,6 +121,14 @@
     </div>
     <div class="msgbox center" id="rejected-guide-thanks" style="display:none; margin-top:14px;">
       <p style="margin:0;">No problem at all — thank you again for your interest in GAKU Online Japanese!</p>
+    </div>
+  </div>
+
+  <!-- STEP 1c: 対象国外で過去に一度お断り済み → メール一致で即ブロック -->
+  <div class="step" id="step-blocked">
+    <div class="msgbox center">
+      <p style="margin:0 0 16px;">Unfortunately your application was rejected once time. So your application was blocked in this moment. First, please download GAKU Master and generate your Japanese study guide.</p>
+      <button class="btn" id="btn-blocked-gaku-master" style="margin-top:0; width:auto; padding:12px 30px;">Go to GAKU Master</button>
     </div>
   </div>
 
@@ -262,7 +276,7 @@ function hasDatePart(text) { return DATE_PATTERNS.some(re => re.test(text)); }
 function hasTimePart(text) { return TIME_PATTERNS.some(re => re.test(text)); }
 
 
-let submittedName = "", submittedEmail = "", submittedLocation = "", submittedOriginCountry = "", submittedDateTime = "", submittedCourse = "", submittedLevel = [], submittedDuration = "";
+let submittedName = "", submittedEmail = "", submittedLocation = "", submittedOriginCountry = "", submittedDateTime = "", submittedCourse = "", submittedLevel = [], submittedDuration = "", submittedWeeklyTrial = "";
 
 function showStep(id) {
   document.querySelectorAll(".step").forEach(s => s.classList.remove("active"));
@@ -292,9 +306,12 @@ function selectedChecks(name) {
   return Array.from(document.querySelectorAll(`input[name="${name}"]:checked`)).map(el => el.value);
 }
 
+const weeklyTrialGroup = document.getElementById("weeklytrial-group");
+
 function step1Valid() {
   return nameInput.value.trim() && emailInput.value.trim() && locationInput.value.trim()
-    && originInput.value.trim() && datetimeInput.value.trim() && selectedRadio("course") && selectedRadio("duration");
+    && originInput.value.trim() && datetimeInput.value.trim() && selectedRadio("course") && selectedRadio("duration")
+    && selectedRadio("weeklytrial");
 }
 function refreshStep1Btn() {
   document.getElementById("btn-step1-next").disabled = !step1Valid();
@@ -307,11 +324,12 @@ function refreshStep1Btn() {
   if (datetimeInput.value.trim()) datetimeInput.classList.remove("invalid");
   if (selectedRadio("course")) courseGroup.classList.remove("invalid");
   if (selectedRadio("duration")) durationGroup.classList.remove("invalid");
+  if (selectedRadio("weeklytrial")) weeklyTrialGroup.classList.remove("invalid");
   const dtValue = datetimeInput.value.trim();
   if (hasDatePart(dtValue) && hasTimePart(dtValue)) setError(document.getElementById("datetime-error"), "");
 }
 [nameInput, emailInput, locationInput, originInput, datetimeInput].forEach(el => el.addEventListener("input", refreshStep1Btn));
-document.querySelectorAll('input[name="course"], input[name="duration"], input[name="level"]').forEach(el => el.addEventListener("change", refreshStep1Btn));
+document.querySelectorAll('input[name="course"], input[name="duration"], input[name="level"], input[name="weeklytrial"]').forEach(el => el.addEventListener("change", refreshStep1Btn));
 
 document.getElementById("btn-step1-next").addEventListener("click", async () => {
   const err = document.getElementById("form-error");
@@ -323,6 +341,7 @@ document.getElementById("btn-step1-next").addEventListener("click", async () => 
   const missingDatetime = !datetimeInput.value.trim();
   const missingCourse = !selectedRadio("course");
   const missingDuration = !selectedRadio("duration");
+  const missingWeeklyTrial = !selectedRadio("weeklytrial");
 
   nameInput.classList.toggle("invalid", missingName);
   emailInput.classList.toggle("invalid", missingEmail);
@@ -331,8 +350,9 @@ document.getElementById("btn-step1-next").addEventListener("click", async () => 
   datetimeInput.classList.toggle("invalid", missingDatetime);
   courseGroup.classList.toggle("invalid", missingCourse);
   durationGroup.classList.toggle("invalid", missingDuration);
+  weeklyTrialGroup.classList.toggle("invalid", missingWeeklyTrial);
 
-  if (missingName || missingEmail || missingLocation || missingOrigin || missingDatetime || missingCourse || missingDuration) {
+  if (missingName || missingEmail || missingLocation || missingOrigin || missingDatetime || missingCourse || missingDuration || missingWeeklyTrial) {
     setError(err, "Please fill in all fields highlighted in red.");
     return;
   }
@@ -360,6 +380,7 @@ document.getElementById("btn-step1-next").addEventListener("click", async () => 
   submittedCourse = selectedRadio("course");
   submittedLevel = selectedChecks("level");
   submittedDuration = selectedRadio("duration");
+  submittedWeeklyTrial = selectedRadio("weeklytrial");
 
   const analysis = analyzeLocation(submittedLocation);
   if (!analysis) {
@@ -374,7 +395,40 @@ document.getElementById("btn-step1-next").addEventListener("click", async () => 
   }
   setError(err, "");
 
-  if (!TRIAL_ALLOWED_SET.has(analysis.canonical)) {
+  // "Have you done a weekly trial for GAKU Master?" = Yes means we accept them for the free
+  // trial lesson regardless of country — the country restriction below only applies to No.
+  const weeklyTrialDone = submittedWeeklyTrial === "Yes";
+
+  if (!weeklyTrialDone && !TRIAL_ALLOWED_SET.has(analysis.canonical)) {
+    // Non-registered-country applicants who already got the decline screen once before (same
+    // email) are blocked immediately on any further attempt, without re-showing the normal
+    // decline+free-study-guide flow.
+    let alreadyRejectedBefore = false;
+    try {
+      const checkRes = await fetch("/api/policy-agreement", {
+        method: "POST", headers: { "Content-Type":"application/json" },
+        body: JSON.stringify({ action: "check_trial_lesson_repeat", email: submittedEmail }),
+      });
+      const checkData = await checkRes.json();
+      alreadyRejectedBefore = !!(checkData && checkData.blocked);
+    } catch (e) { /* if the check fails, fall back to the normal decline flow below */ }
+
+    if (alreadyRejectedBefore) {
+      try {
+        await fetch("/api/policy-agreement", {
+          method: "POST", headers: { "Content-Type":"application/json" },
+          body: JSON.stringify({
+            action: "trial_lesson", fullName: submittedName, email: submittedEmail,
+            location: submittedLocation, originCountry: submittedOriginCountry, preferredDateTime: submittedDateTime,
+            course: submittedCourse, japaneseLevel: submittedLevel.join(", "), lessonDuration: submittedDuration,
+            weeklyTrialDone, outcome: "blocked_repeat_rejection",
+          }),
+        });
+      } catch (e) { /* still show the blocked screen even if the notification failed */ }
+      showStep("step-blocked");
+      return;
+    }
+
     // Record + notify even though this applicant is declined, then show the decline screen.
     try {
       await fetch("/api/policy-agreement", {
@@ -383,7 +437,7 @@ document.getElementById("btn-step1-next").addEventListener("click", async () => 
           action: "trial_lesson", fullName: submittedName, email: submittedEmail,
           location: submittedLocation, originCountry: submittedOriginCountry, preferredDateTime: submittedDateTime,
           course: submittedCourse, japaneseLevel: submittedLevel.join(", "), lessonDuration: submittedDuration,
-          outcome: "rejected_country",
+          weeklyTrialDone, outcome: "rejected_country",
         }),
       });
     } catch (e) { /* still show the decline screen even if the notification failed */ }
@@ -395,6 +449,10 @@ document.getElementById("btn-step1-next").addEventListener("click", async () => 
   document.getElementById("p-email").value = submittedEmail;
   showStep("step-policy");
   initPolicy();
+});
+
+document.getElementById("btn-blocked-gaku-master").addEventListener("click", () => {
+  window.location.href = "https://app.seitojapanese.online/gaku-master/";
 });
 
 // ---- STEP 1b: 対象国外の場合の「無料スタディガイド」代替オファー ----
@@ -594,6 +652,7 @@ document.getElementById("btn-final-submit").addEventListener("click", async () =
     course: submittedCourse,
     japaneseLevel: submittedLevel.join(", "),
     lessonDuration: submittedDuration,
+    weeklyTrialDone: submittedWeeklyTrial === "Yes",
     agreed: true,
   };
 
