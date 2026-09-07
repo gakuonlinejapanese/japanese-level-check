@@ -142,6 +142,14 @@ function analyzeLocation(raw) {
 // confirmed_datetime/responded_at and emails the student the decision plus Seito's note.
 // Also kept on this same endpoint for the same 12-function-cap reason above.
 export default async function handler(req, res) {
+  // The GAKU Reader extension calls the jlpt_scan_consent action below cross-origin,
+  // so a CORS preflight (OPTIONS) needs to succeed regardless of which action follows.
+  if (req.method === "OPTIONS") {
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
+    res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+    return res.status(200).end();
+  }
   if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed" });
   try {
     const { action } = req.body || {};
@@ -153,6 +161,10 @@ export default async function handler(req, res) {
     if (action === "admin_respond_trial_lesson") return handleAdminRespondTrialLesson(req, res);
     if (action === "request_jlpt_mock_test") return handleRequestJlptMockTest(req, res);
     if (action === "check_jlpt_mock_applied") return handleCheckJlptMockApplied(req, res);
+    if (action === "jlpt_scan_consent") {
+      res.setHeader("Access-Control-Allow-Origin", "*");
+      return handleJlptScanConsent(req, res);
+    }
 
     const { name, email, plan, userId } = req.body || {};
     if (!email) return res.status(400).json({ error: "email is required" });
@@ -186,6 +198,34 @@ export default async function handler(req, res) {
 
     return res.status(200).json({ ok: true });
   } catch (e) {
+    return res.status(500).json({ error: e.message });
+  }
+}
+
+// POST { action: "jlpt_scan_consent", email, userId, instanceId, pledgeVersion } — called from
+// the GAKU Reader extension's screenshot-scan feature right before entering "JLPT解答解説"
+// mode. Records that the user agreed to the anti-cheating pledge (JLPT answer support is for
+// the user's own exam-prep purposes only, never for cheating on tests/mock exams/homework, and
+// GAKU bears no responsibility if it's misused) into jlpt_scan_consent_log, so there's a
+// durable record of who agreed and when. Called cross-origin from the extension (see CORS
+// header set above). Kept on this same endpoint for the same 12-function-cap reason above.
+async function handleJlptScanConsent(req, res) {
+  try {
+    const { email, userId, instanceId, pledgeVersion } = req.body || {};
+    if (!email && !instanceId) {
+      return res.status(400).json({ error: "email or instanceId is required" });
+    }
+    const supabase = getAdminClient();
+    const { error: insertErr } = await supabase.from("jlpt_scan_consent_log").insert({
+      user_id: userId || null,
+      email: email ? email.trim().toLowerCase() : null,
+      instance_id: instanceId || null,
+      pledge_version: pledgeVersion || "v1",
+    });
+    if (insertErr) return res.status(500).json({ error: insertErr.message });
+    return res.status(200).json({ ok: true });
+  } catch (e) {
+    console.error("handleJlptScanConsent failed:", e.message);
     return res.status(500).json({ error: e.message });
   }
 }

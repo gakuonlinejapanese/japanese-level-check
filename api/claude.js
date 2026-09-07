@@ -106,6 +106,22 @@ export default async function handler(req, res) {
       process.env.GROQ_API_KEY_5,
     ].filter(Boolean);
 
+    // provider === "vision": GAKU Reader's screenshot-scan feature (問題作成/JLPT解答解説
+    // modes). messages already contain multimodal content parts (an image_url data-URI
+    // alongside the text prompt), built by the caller — this branch just routes to a
+    // vision-capable Groq model instead of the text-only 70B model. Always called from
+    // background.js (extension context, exempt from CORS), never directly from content.js,
+    // since chrome.tabs.captureVisibleTab() is itself background/service-worker-only. No
+    // DeepInfra fallback yet (no vision-capable model wired up on that side) — add one here
+    // if Groq's vision accuracy or availability becomes a problem.
+    if (provider === "vision") {
+      const visionResult = await callGroq(groqKeys, commonBody, "meta-llama/llama-4-scout-17b-16e-instruct");
+      if (visionResult.text !== null) {
+        return res.status(200).json({ content: [{ type: "text", text: visionResult.text }] });
+      }
+      return res.status(visionResult.status || 429).json({ error: visionResult.lastError || "Vision provider failed" });
+    }
+
     // provider === "turbo": Groq's llama-3.1-8b-instant — several times faster token
     // throughput than the 70B model, for large-output generation (many exercises/turns
     // at once) where speed matters most. Falls back to "fast" (70B) if it fails.
