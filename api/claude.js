@@ -114,8 +114,11 @@ export default async function handler(req, res) {
     // since chrome.tabs.captureVisibleTab() is itself background/service-worker-only. No
     // DeepInfra fallback yet (no vision-capable model wired up on that side) — add one here
     // if Groq's vision accuracy or availability becomes a problem.
+    // NOTE (2026-09-08): meta-llama/llama-4-scout-17b-16e-instruct was deprecated by Groq
+    // on 2026-06-17. Switched to qwen/qwen3.6-27b, Groq's recommended vision-capable
+    // successor — note this is currently a Groq "preview" model, not GA/production-tier.
     if (provider === "vision") {
-      const visionResult = await callGroq(groqKeys, commonBody, "meta-llama/llama-4-scout-17b-16e-instruct");
+      const visionResult = await callGroq(groqKeys, commonBody, "qwen/qwen3.6-27b");
       if (visionResult.text !== null) {
         return res.status(200).json({ content: [{ type: "text", text: visionResult.text }] });
       }
