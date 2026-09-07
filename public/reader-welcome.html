@@ -119,54 +119,313 @@
     padding: 13px 28px;
     border-radius: 10px;
   }
-  .footnote { text-align: center; font-size: 12px; color: #9ca3af; margin-top: 22px; }
+  .lang-switch {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    z-index: 10;
+  }
+  .lang-switch select {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    padding: 6px 10px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: #fff;
+    color: var(--dark);
+  }
 </style>
 </head>
 <body>
+  <div class="lang-switch">
+    <select id="lang-select" onchange="applyLang(this.value)"></select>
+  </div>
   <div class="wrap">
-    <span class="badge">🌸 GAKU Reader インストール完了</span>
-    <h1>さっそく、下の文章で試してみましょう</h1>
-    <p class="sub">GAKU Readerは、ウェブ上の日本語テキストを選択するだけで意味・読み方・例文がその場でわかる拡張機能です。使い方はとてもシンプルです。</p>
+    <span class="badge" id="t-badge"></span>
+    <h1 id="t-h1"></h1>
+    <p class="sub" id="t-sub"></p>
 
     <div class="step">
       <div class="step-num">1</div>
       <div class="step-body">
-        <h3>下の文章の中から、気になる単語をドラッグして選択</h3>
-        <p>マウスで単語をなぞって選択するだけでOKです。</p>
+        <h3 id="t-step1h"></h3>
+        <p id="t-step1p"></p>
       </div>
     </div>
     <div class="step">
       <div class="step-num">2</div>
       <div class="step-body">
-        <h3>ポップアップが自動で表示されます</h3>
-        <p>意味・読み方・品詞・例文がその場で確認できます。</p>
+        <h3 id="t-step2h"></h3>
+        <p id="t-step2p"></p>
       </div>
     </div>
     <div class="step">
       <div class="step-num">3</div>
       <div class="step-body">
-        <h3>「＋」ボタンで自分の単語帳に保存</h3>
-        <p>気に入った単語はワンクリックでGAKUの単語帳に追加できます。</p>
+        <h3 id="t-step3h"></h3>
+        <p id="t-step3p"></p>
       </div>
     </div>
 
     <div class="demo-box">
-      <span class="demo-label">ここで試す ↓</span>
-      <p class="demo-text">
-        日本語を勉強するのは楽しいですが、難しい単語に出会うこともあります。この文章の中の好きな単語を選択してみてください。
-      </p>
+      <span class="demo-label" id="t-demoLabel"></span>
+      <p class="demo-text" id="t-demoText"></p>
       <div class="demo-hint">
         <span class="arrow-bounce">👆</span>
-        <span>例えば「出会う」や「難しい」を選択してみましょう</span>
+        <span id="t-demoHint"></span>
       </div>
     </div>
 
     <div class="cta">
-      <h2>これから普段使っているサイトでも使えます</h2>
-      <p>ニュース記事、SNS、ブログなど、日本語が書かれたどのページでも同じように使えます。GAKU Masterのアカウントと連携すると、先生から直接単語が送られてきたり、保存した単語がそのまま復習教材になります。</p>
-      <a href="https://app.seitojapanese.online/gaku-master/" target="_blank">GAKU Masterを見てみる →</a>
+      <h2 id="t-ctaH2"></h2>
+      <p id="t-ctaP"></p>
+      <a href="https://app.seitojapanese.online/gaku-master/" target="_blank" id="t-ctaLink"></a>
     </div>
-    <p class="footnote">このページはいつでも閉じて大丈夫です。次からは普段のブラウジング中に自然に使えます。</p>
+    <p class="footnote" id="t-footnote"></p>
   </div>
+
+  <script>
+    // 拡張機能(popup.html)と同じ17言語。デモ文(demoText/demoHint)は日本語学習のサンプルなので
+    // 言語を切り替えても常に日本語のまま — それ以外のUI文言だけを翻訳する。
+    var DEMO_TEXT = "日本語を勉強するのは楽しいですが、難しい単語に出会うこともあります。この文章の中の好きな単語を選択してみてください。";
+    var DEMO_HINT = "例えば「出会う」や「難しい」を選択してみましょう";
+
+    var LANG_NAMES = {
+      en: "English", ja: "日本語", es: "Español", fr: "Français", de: "Deutsch",
+      ko: "한국어", "zh-Hans": "中文（简体）", "zh-Hant": "中文（繁體）", th: "ภาษาไทย",
+      vi: "Tiếng Việt", id: "Bahasa Indonesia", hi: "हिन्दी", tr: "Türkçe",
+      ne: "नेपाली", fil: "Filipino", ms: "Bahasa Melayu", it: "Italiano"
+    };
+
+    var T = {
+      en: {
+        badge: "🌸 GAKU Reader Installed", h1: "Try it out with the text below",
+        sub: "GAKU Reader is an extension that shows you the meaning, reading, and example sentences of any Japanese text on the web — just by selecting it. It's very simple to use.",
+        step1h: "Drag-select any word you're curious about in the text below", step1p: "Just highlight a word with your mouse — that's it.",
+        step2h: "A popup appears automatically", step2p: "See the meaning, reading, part of speech, and example sentences instantly.",
+        step3h: "Save it to your vocabulary list with the \"+\" button", step3p: "One click adds the word to your GAKU vocabulary list.",
+        demoLabel: "Try it here ↓", demoHint: "For example, try selecting 「出会う」 or 「難しい」",
+        ctaH2: "From now on, you can use it on any site you browse", ctaP: "It works the same way on news articles, social media, blogs — any page with Japanese text. Connect it to your GAKU Master account and your teacher can send you words directly, with saved words turning straight into review material.",
+        ctaLink: "Check out GAKU Master →", footnote: "You can close this page any time. From now on, you can use it naturally while browsing."
+      },
+      ja: {
+        badge: "🌸 GAKU Reader インストール完了", h1: "さっそく、下の文章で試してみましょう",
+        sub: "GAKU Readerは、ウェブ上の日本語テキストを選択するだけで意味・読み方・例文がその場でわかる拡張機能です。使い方はとてもシンプルです。",
+        step1h: "下の文章の中から、気になる単語をドラッグして選択", step1p: "マウスで単語をなぞって選択するだけでOKです。",
+        step2h: "ポップアップが自動で表示されます", step2p: "意味・読み方・品詞・例文がその場で確認できます。",
+        step3h: "「＋」ボタンで自分の単語帳に保存", step3p: "気に入った単語はワンクリックでGAKUの単語帳に追加できます。",
+        demoLabel: "ここで試す ↓", demoHint: "例えば「出会う」や「難しい」を選択してみましょう",
+        ctaH2: "これから普段使っているサイトでも使えます", ctaP: "ニュース記事、SNS、ブログなど、日本語が書かれたどのページでも同じように使えます。GAKU Masterのアカウントと連携すると、先生から直接単語が送られてきたり、保存した単語がそのまま復習教材になります。",
+        ctaLink: "GAKU Masterを見てみる →", footnote: "このページはいつでも閉じて大丈夫です。次からは普段のブラウジング中に自然に使えます。"
+      },
+      es: {
+        badge: "🌸 GAKU Reader instalado", h1: "Pruébalo ahora con el siguiente texto",
+        sub: "GAKU Reader es una extensión que muestra el significado, la lectura y frases de ejemplo de cualquier texto japonés en la web con solo seleccionarlo. Es muy fácil de usar.",
+        step1h: "Selecciona con el mouse cualquier palabra del texto de abajo", step1p: "Basta con arrastrar el cursor sobre la palabra para seleccionarla.",
+        step2h: "Aparece una ventana emergente automáticamente", step2p: "Verás al instante el significado, la lectura, la categoría gramatical y frases de ejemplo.",
+        step3h: "Guárdala en tu lista de vocabulario con el botón \"+\"", step3p: "Con un clic, la palabra se agrega a tu lista de vocabulario de GAKU.",
+        demoLabel: "Pruébalo aquí ↓", demoHint: "Por ejemplo, intenta seleccionar 「出会う」 o 「難しい」",
+        ctaH2: "A partir de ahora puedes usarlo en cualquier sitio que visites", ctaP: "Funciona igual en artículos de noticias, redes sociales, blogs — cualquier página con texto en japonés. Si lo conectas a tu cuenta de GAKU Master, tu profesor podrá enviarte palabras directamente y las palabras guardadas se convertirán en material de repaso.",
+        ctaLink: "Descubre GAKU Master →", footnote: "Puedes cerrar esta página cuando quieras. A partir de ahora podrás usarlo de forma natural mientras navegas."
+      },
+      fr: {
+        badge: "🌸 GAKU Reader installé", h1: "Essayez tout de suite avec le texte ci-dessous",
+        sub: "GAKU Reader est une extension qui affiche instantanément le sens, la lecture et des phrases d'exemple pour tout texte japonais sur le web, simplement en le sélectionnant. Son utilisation est très simple.",
+        step1h: "Sélectionnez un mot qui vous intrigue dans le texte ci-dessous", step1p: "Il suffit de surligner un mot avec la souris.",
+        step2h: "Une fenêtre s'affiche automatiquement", step2p: "Le sens, la lecture, la nature grammaticale et des phrases d'exemple apparaissent instantanément.",
+        step3h: "Enregistrez-le dans votre liste de vocabulaire avec le bouton « + »", step3p: "Un clic suffit pour ajouter le mot à votre liste de vocabulaire GAKU.",
+        demoLabel: "Essayez ici ↓", demoHint: "Essayez par exemple de sélectionner « 出会う » ou « 難しい »",
+        ctaH2: "Vous pouvez désormais l'utiliser sur tous vos sites habituels", ctaP: "Cela fonctionne de la même façon sur les articles de presse, les réseaux sociaux, les blogs — toute page contenant du japonais. En le reliant à votre compte GAKU Master, votre professeur peut vous envoyer des mots directement, et les mots enregistrés deviennent automatiquement du matériel de révision.",
+        ctaLink: "Découvrir GAKU Master →", footnote: "Vous pouvez fermer cette page à tout moment. Vous pourrez ensuite l'utiliser naturellement en navigant."
+      },
+      de: {
+        badge: "🌸 GAKU Reader installiert", h1: "Probieren Sie es gleich mit dem Text unten aus",
+        sub: "GAKU Reader ist eine Erweiterung, die Ihnen Bedeutung, Lesung und Beispielsätze für japanischen Text im Web sofort anzeigt — einfach durch Markieren. Die Bedienung ist sehr einfach.",
+        step1h: "Markieren Sie ein Wort, das Sie interessiert, im Text unten", step1p: "Einfach mit der Maus über das Wort ziehen, um es auszuwählen.",
+        step2h: "Ein Popup erscheint automatisch", step2p: "Bedeutung, Lesung, Wortart und Beispielsätze sehen Sie sofort.",
+        step3h: "Mit dem „+"-Button zu Ihrer Vokabelliste hinzufügen", step3p: "Ein Klick genügt, um das Wort zu Ihrer GAKU-Vokabelliste hinzuzufügen.",
+        demoLabel: "Hier ausprobieren ↓", demoHint: "Versuchen Sie zum Beispiel „出会う" oder „難しい" zu markieren",
+        ctaH2: "Ab jetzt können Sie es auf jeder Website nutzen", ctaP: "Es funktioniert genauso bei Nachrichtenartikeln, sozialen Medien, Blogs — auf jeder Seite mit japanischem Text. Verbinden Sie es mit Ihrem GAKU-Master-Konto, damit Ihre Lehrkraft Ihnen direkt Wörter schicken kann und gespeicherte Wörter automatisch zu Übungsmaterial werden.",
+        ctaLink: "GAKU Master entdecken →", footnote: "Sie können diese Seite jederzeit schließen. Ab sofort können Sie es ganz natürlich beim Surfen nutzen."
+      },
+      ko: {
+        badge: "🌸 GAKU Reader 설치 완료", h1: "아래 문장으로 바로 사용해 보세요",
+        sub: "GAKU Reader는 웹상의 일본어 텍스트를 선택하기만 하면 의미·읽는 법·예문을 바로 확인할 수 있는 확장 프로그램입니다. 사용 방법은 매우 간단합니다.",
+        step1h: "아래 문장에서 궁금한 단어를 드래그하여 선택하세요", step1p: "마우스로 단어를 드래그해서 선택하기만 하면 됩니다.",
+        step2h: "팝업이 자동으로 표시됩니다", step2p: "의미·읽는 법·품사·예문을 바로 확인할 수 있습니다.",
+        step3h: "\"+\" 버튼으로 나만의 단어장에 저장", step3p: "마음에 든 단어는 클릭 한 번으로 GAKU 단어장에 추가됩니다.",
+        demoLabel: "여기서 시도해보세요 ↓", demoHint: "예를 들어 「出会う」나 「難しい」를 선택해 보세요",
+        ctaH2: "이제 평소 사용하는 사이트에서도 사용할 수 있습니다", ctaP: "뉴스 기사, SNS, 블로그 등 일본어가 적힌 어떤 페이지에서도 똑같이 사용할 수 있습니다. GAKU Master 계정과 연동하면 선생님이 직접 단어를 보내주거나, 저장한 단어가 그대로 복습 교재가 됩니다.",
+        ctaLink: "GAKU Master 살펴보기 →", footnote: "이 페이지는 언제든지 닫으셔도 됩니다. 이후에는 평소 브라우징 중에 자연스럽게 사용할 수 있습니다."
+      },
+      "zh-Hans": {
+        badge: "🌸 GAKU Reader 安装完成", h1: "马上用下面的句子试一试吧",
+        sub: "GAKU Reader 是一款浏览器扩展，只需选中网页上的日语文本，就能立即看到意思、读音和例句。使用方法非常简单。",
+        step1h: "在下方文章中拖动选中你感兴趣的单词", step1p: "只需用鼠标划过单词即可选中。",
+        step2h: "弹窗会自动显示", step2p: "可以立即查看意思、读音、词性和例句。",
+        step3h: "点击「+」按钮保存到自己的单词本", step3p: "喜欢的单词只需点击一下就能添加到 GAKU 单词本。",
+        demoLabel: "在这里试试 ↓", demoHint: "例如试着选中「出会う」或「難しい」",
+        ctaH2: "以后在常用的网站上也能使用", ctaP: "新闻文章、社交媒体、博客等任何含有日语文本的网页都可以同样使用。连接 GAKU Master 账户后，老师可以直接发送单词，保存的单词也会直接变成复习资料。",
+        ctaLink: "了解 GAKU Master →", footnote: "这个页面随时都可以关闭。之后在日常浏览时就能自然地使用了。"
+      },
+      "zh-Hant": {
+        badge: "🌸 GAKU Reader 安裝完成", h1: "馬上用下面的句子試試看吧",
+        sub: "GAKU Reader 是一款瀏覽器擴充功能，只要選取網頁上的日文文字，就能立即看到意思、讀音和例句。使用方法非常簡單。",
+        step1h: "在下方文章中拖曳選取你感興趣的單字", step1p: "只需用滑鼠拖曳劃過單字即可選取。",
+        step2h: "彈出視窗會自動顯示", step2p: "可以立即查看意思、讀音、詞性和例句。",
+        step3h: "點擊「+」按鈕儲存到自己的單字本", step3p: "喜歡的單字只需點擊一下就能加入 GAKU 單字本。",
+        demoLabel: "在這裡試試看 ↓", demoHint: "例如試著選取「出会う」或「難しい」",
+        ctaH2: "之後在常用的網站上也能使用", ctaP: "新聞文章、社群媒體、部落格等任何含有日文文字的網頁都能一樣使用。連接 GAKU Master 帳戶後，老師可以直接傳送單字，儲存的單字也會直接變成複習教材。",
+        ctaLink: "了解 GAKU Master →", footnote: "這個頁面隨時都可以關閉。之後在日常瀏覽時就能自然地使用了。"
+      },
+      th: {
+        badge: "🌸 ติดตั้ง GAKU Reader เรียบร้อยแล้ว", h1: "ลองใช้กับข้อความด้านล่างนี้ได้เลย",
+        sub: "GAKU Reader คือส่วนขยายที่แสดงความหมาย การอ่าน และประโยคตัวอย่างของข้อความภาษาญี่ปุ่นบนเว็บทันทีที่เลือกข้อความนั้น วิธีใช้งานง่ายมาก",
+        step1h: "ลากเลือกคำที่คุณสนใจในข้อความด้านล่าง", step1p: "เพียงใช้เมาส์ลากคลุมคำก็เลือกได้แล้ว",
+        step2h: "ป็อปอัปจะแสดงขึ้นมาโดยอัตโนมัติ", step2p: "ดูความหมาย การอ่าน ชนิดของคำ และประโยคตัวอย่างได้ทันที",
+        step3h: "บันทึกลงสมุดคำศัพท์ของคุณด้วยปุ่ม \"+\"", step3p: "แค่คลิกเดียวก็เพิ่มคำนั้นลงในสมุดคำศัพท์ GAKU ได้",
+        demoLabel: "ลองที่นี่ ↓", demoHint: "ลองเลือกคำเช่น 「出会う」 หรือ 「難しい」 ดูสิ",
+        ctaH2: "ต่อจากนี้ใช้ได้กับทุกเว็บไซต์ที่คุณเข้าใช้เป็นประจำ", ctaP: "ใช้งานได้เหมือนกันกับบทความข่าว โซเชียลมีเดีย บล็อก หรือหน้าใดก็ตามที่มีข้อความภาษาญี่ปุ่น หากเชื่อมต่อกับบัญชี GAKU Master ครูสามารถส่งคำศัพท์ให้คุณโดยตรง และคำที่บันทึกไว้จะกลายเป็นสื่อทบทวนทันที",
+        ctaLink: "ดู GAKU Master →", footnote: "ปิดหน้านี้เมื่อไหร่ก็ได้ ต่อจากนี้คุณจะใช้งานได้อย่างเป็นธรรมชาติระหว่างท่องเว็บตามปกติ"
+      },
+      vi: {
+        badge: "🌸 Đã cài đặt GAKU Reader", h1: "Hãy thử ngay với đoạn văn bên dưới",
+        sub: "GAKU Reader là tiện ích mở rộng giúp bạn xem ngay nghĩa, cách đọc và câu ví dụ của bất kỳ văn bản tiếng Nhật nào trên web, chỉ bằng cách bôi đen. Cách dùng rất đơn giản.",
+        step1h: "Kéo chọn một từ bạn tò mò trong đoạn văn bên dưới", step1p: "Chỉ cần dùng chuột bôi đen từ đó là được.",
+        step2h: "Cửa sổ bật lên sẽ tự động hiện ra", step2p: "Bạn có thể xem ngay nghĩa, cách đọc, từ loại và câu ví dụ.",
+        step3h: "Lưu vào sổ từ vựng của bạn bằng nút \"+\"", step3p: "Chỉ một cú nhấp chuột để thêm từ vào sổ từ vựng GAKU.",
+        demoLabel: "Thử ở đây ↓", demoHint: "Ví dụ, hãy thử chọn 「出会う」 hoặc 「難しい」",
+        ctaH2: "Từ giờ bạn có thể dùng trên mọi trang web mình hay truy cập", ctaP: "Hoạt động tương tự trên bài báo, mạng xã hội, blog — bất kỳ trang nào có văn bản tiếng Nhật. Khi liên kết với tài khoản GAKU Master, giáo viên có thể gửi từ vựng trực tiếp cho bạn, và những từ đã lưu sẽ trở thành tài liệu ôn tập.",
+        ctaLink: "Khám phá GAKU Master →", footnote: "Bạn có thể đóng trang này bất cứ lúc nào. Từ giờ bạn có thể dùng một cách tự nhiên trong lúc lướt web."
+      },
+      id: {
+        badge: "🌸 GAKU Reader Terpasang", h1: "Coba langsung dengan teks di bawah ini",
+        sub: "GAKU Reader adalah ekstensi yang langsung menampilkan arti, cara baca, dan contoh kalimat dari teks bahasa Jepang mana pun di web, cukup dengan memilihnya. Cara pakainya sangat sederhana.",
+        step1h: "Seret untuk memilih kata yang ingin Anda ketahui pada teks di bawah", step1p: "Cukup sorot kata dengan mouse untuk memilihnya.",
+        step2h: "Jendela pop-up akan muncul secara otomatis", step2p: "Arti, cara baca, jenis kata, dan contoh kalimat langsung terlihat.",
+        step3h: "Simpan ke daftar kosakata Anda dengan tombol \"+\"", step3p: "Satu klik saja untuk menambahkan kata ke daftar kosakata GAKU Anda.",
+        demoLabel: "Coba di sini ↓", demoHint: "Misalnya, coba pilih 「出会う」 atau 「難しい」",
+        ctaH2: "Mulai sekarang Anda bisa memakainya di situs mana pun yang biasa Anda kunjungi", ctaP: "Berfungsi sama di artikel berita, media sosial, blog — halaman apa pun yang berisi teks bahasa Jepang. Hubungkan dengan akun GAKU Master agar guru bisa mengirim kosakata langsung, dan kata yang disimpan langsung menjadi materi review.",
+        ctaLink: "Lihat GAKU Master →", footnote: "Anda bisa menutup halaman ini kapan saja. Mulai sekarang Anda bisa memakainya secara alami saat browsing."
+      },
+      hi: {
+        badge: "🌸 GAKU Reader इंस्टॉल हो गया", h1: "नीचे दिए गए वाक्य से अभी आज़माएँ",
+        sub: "GAKU Reader एक एक्सटेंशन है जो वेब पर किसी भी जापानी टेक्स्ट को चुनते ही उसका अर्थ, उच्चारण और उदाहरण वाक्य तुरंत दिखा देता है। इसका इस्तेमाल बहुत आसान है।",
+        step1h: "नीचे दिए गए टेक्स्ट में जिस शब्द के बारे में जानना चाहें उसे ड्रैग करके चुनें", step1p: "बस माउस से शब्द को हाइलाइट कर दें, इतना ही काफी है।",
+        step2h: "पॉपअप अपने आप दिखाई देता है", step2p: "अर्थ, उच्चारण, शब्द भेद और उदाहरण वाक्य तुरंत देख सकते हैं।",
+        step3h: "\"+\" बटन से अपनी शब्दावली सूची में सेव करें", step3p: "एक क्लिक में शब्द GAKU की शब्दावली सूची में जुड़ जाता है।",
+        demoLabel: "यहाँ आज़माएँ ↓", demoHint: "उदाहरण के लिए 「出会う」 या 「難しい」 चुनकर देखें",
+        ctaH2: "अब से आप इसे किसी भी वेबसाइट पर इस्तेमाल कर सकते हैं", ctaP: "यह न्यूज़ आर्टिकल, सोशल मीडिया, ब्लॉग — जापानी टेक्स्ट वाले किसी भी पेज पर उसी तरह काम करता है। GAKU Master अकाउंट से जोड़ने पर शिक्षक सीधे शब्द भेज सकते हैं, और सेव किए गए शब्द सीधे रिवीज़न सामग्री बन जाते हैं।",
+        ctaLink: "GAKU Master देखें →", footnote: "इस पेज को कभी भी बंद किया जा सकता है। अब से आप ब्राउज़िंग के दौरान इसे स्वाभाविक रूप से इस्तेमाल कर पाएँगे।"
+      },
+      tr: {
+        badge: "🌸 GAKU Reader Kuruldu", h1: "Hemen aşağıdaki metinle deneyin",
+        sub: "GAKU Reader, web'deki herhangi bir Japonca metni seçtiğinizde anlamını, okunuşunu ve örnek cümlelerini anında gösteren bir uzantıdır. Kullanımı çok basittir.",
+        step1h: "Aşağıdaki metinde merak ettiğiniz kelimeyi sürükleyerek seçin", step1p: "Kelimenin üzerine fareyle sürüklemeniz yeterli.",
+        step2h: "Bir pop-up otomatik olarak görünür", step2p: "Anlamı, okunuşu, sözcük türünü ve örnek cümleleri anında görürsünüz.",
+        step3h: "\"+\" butonuyla kelime listenize kaydedin", step3p: "Tek tıkla kelime GAKU kelime listenize eklenir.",
+        demoLabel: "Burada deneyin ↓", demoHint: "Örneğin 「出会う」 veya 「難しい」 kelimelerini seçmeyi deneyin",
+        ctaH2: "Artık her zaman kullandığınız sitelerde de kullanabilirsiniz", ctaP: "Haber makaleleri, sosyal medya, bloglar — Japonca metin içeren her sayfada aynı şekilde çalışır. GAKU Master hesabınızla bağladığınızda öğretmeniniz size doğrudan kelime gönderebilir ve kaydettiğiniz kelimeler doğrudan tekrar materyaline dönüşür.",
+        ctaLink: "GAKU Master'a göz atın →", footnote: "Bu sayfayı istediğiniz zaman kapatabilirsiniz. Artık normal gezinirken bunu doğal şekilde kullanabilirsiniz."
+      },
+      ne: {
+        badge: "🌸 GAKU Reader स्थापना सम्पन्न", h1: "तलको वाक्यमा अहिले नै प्रयोग गरेर हेर्नुहोस्",
+        sub: "GAKU Reader एउटा एक्सटेन्सन हो जसले वेबमा भएको कुनै पनि जापानी पाठ छनोट गर्ने बित्तिकै त्यसको अर्थ, उच्चारण, र उदाहरण वाक्यहरू तुरुन्तै देखाउँछ। प्रयोग गर्न धेरै सजिलो छ।",
+        step1h: "तलको पाठमा तपाईंलाई चासो लागेको शब्द ड्र्याग गरेर छान्नुहोस्", step1p: "माउसले शब्दलाई हाइलाइट गरेर छान्नुभए पुग्छ।",
+        step2h: "पप-अप स्वतः देखा पर्छ", step2p: "अर्थ, उच्चारण, शब्द वर्ग, र उदाहरण वाक्यहरू तुरुन्तै हेर्न सकिन्छ।",
+        step3h: "\"+\" बटनद्वारा आफ्नो शब्दावली सूचीमा सेभ गर्नुहोस्", step3p: "एउटा क्लिकले शब्द GAKU को शब्दावली सूचीमा थपिन्छ।",
+        demoLabel: "यहाँ प्रयोग गरेर हेर्नुहोस् ↓", demoHint: "उदाहरणका लागि 「出会う」 वा 「難しい」 छानेर हेर्नुहोस्",
+        ctaH2: "अबदेखि तपाईंले प्रयोग गर्ने जुनसुकै साइटमा पनि यसलाई प्रयोग गर्न सकिन्छ", ctaP: "समाचार लेख, सामाजिक सञ्जाल, ब्लग — जापानी पाठ भएको जुनसुकै पृष्ठमा उस्तै तरिकाले काम गर्छ। GAKU Master खातासँग जोड्दा शिक्षकले सिधै शब्दहरू पठाउन सक्नुहुन्छ, र सेभ गरिएका शब्दहरू सिधै पुनरावलोकन सामग्री बन्छन्।",
+        ctaLink: "GAKU Master हेर्नुहोस् →", footnote: "यो पृष्ठ जुनसुकै बेला बन्द गर्न सकिन्छ। अबदेखि सामान्य ब्राउजिङका क्रममा स्वाभाविक रूपमा प्रयोग गर्न सकिन्छ।"
+      },
+      fil: {
+        badge: "🌸 Na-install na ang GAKU Reader", h1: "Subukan agad gamit ang teksto sa ibaba",
+        sub: "Ang GAKU Reader ay isang extension na agad nagpapakita ng kahulugan, pagbasa, at mga halimbawang pangungusap ng anumang tekstong Hapon sa web — sa pamamagitan lamang ng pag-select nito. Napakasimple gamitin.",
+        step1h: "I-drag at piliin ang salitang gusto mong malaman sa teksto sa ibaba", step1p: "I-highlight lang gamit ang mouse ang salita para mapili ito.",
+        step2h: "Awtomatikong lalabas ang popup", step2p: "Makikita mo agad ang kahulugan, pagbasa, bahagi ng pananalita, at mga halimbawang pangungusap.",
+        step3h: "I-save sa iyong vocabulary list gamit ang \"+\" button", step3p: "Isang click lang para maidagdag ang salita sa iyong GAKU vocabulary list.",
+        demoLabel: "Subukan dito ↓", demoHint: "Halimbawa, subukang piliin ang 「出会う」 o 「難しい」",
+        ctaH2: "Simula ngayon, magagamit mo ito sa anumang site na dinadalaw mo", ctaP: "Gumagana ito sa parehong paraan sa mga artikulo ng balita, social media, blog — anumang pahinang may tekstong Hapon. Kapag kinonekta sa iyong GAKU Master account, maaaring magpadala ang guro mo ng salita nang direkta, at ang mga na-save na salita ay direktang magiging review material.",
+        ctaLink: "Tingnan ang GAKU Master →", footnote: "Puwede mong isara ang pahinang ito anumang oras. Simula ngayon, magagamit mo ito nang natural habang nagba-browse."
+      },
+      ms: {
+        badge: "🌸 GAKU Reader Dipasang", h1: "Cuba sekarang dengan teks di bawah",
+        sub: "GAKU Reader ialah sambungan yang memaparkan maksud, sebutan, dan ayat contoh bagi mana-mana teks Jepun di web sebaik sahaja anda memilihnya. Cara penggunaannya sangat mudah.",
+        step1h: "Seret untuk memilih perkataan yang anda ingin tahu dalam teks di bawah", step1p: "Cukup sorot perkataan dengan tetikus untuk memilihnya.",
+        step2h: "Tetingkap pop timbul akan muncul secara automatik", step2p: "Maksud, sebutan, jenis kata, dan ayat contoh dapat dilihat serta-merta.",
+        step3h: "Simpan ke senarai kosa kata anda dengan butang \"+\"", step3p: "Satu klik sahaja untuk menambah perkataan ke senarai kosa kata GAKU anda.",
+        demoLabel: "Cuba di sini ↓", demoHint: "Contohnya, cuba pilih 「出会う」 atau 「難しい」",
+        ctaH2: "Mulai sekarang anda boleh menggunakannya di mana-mana laman web yang biasa anda lawati", ctaP: "Ia berfungsi sama pada artikel berita, media sosial, blog — mana-mana halaman yang mengandungi teks Jepun. Sambungkan dengan akaun GAKU Master anda supaya guru boleh menghantar perkataan secara terus, dan perkataan yang disimpan terus menjadi bahan ulang kaji.",
+        ctaLink: "Lihat GAKU Master →", footnote: "Anda boleh menutup halaman ini pada bila-bila masa. Mulai sekarang anda boleh menggunakannya secara semula jadi semasa melayari web."
+      },
+      it: {
+        badge: "🌸 GAKU Reader installato", h1: "Provalo subito con il testo qui sotto",
+        sub: "GAKU Reader è un'estensione che mostra immediatamente il significato, la lettura e frasi di esempio di qualsiasi testo giapponese sul web, semplicemente selezionandolo. È molto semplice da usare.",
+        step1h: "Seleziona trascinando qualsiasi parola che ti incuriosisce nel testo qui sotto", step1p: "Basta evidenziare la parola con il mouse per selezionarla.",
+        step2h: "Un popup appare automaticamente", step2p: "Vedrai subito il significato, la lettura, la categoria grammaticale e frasi di esempio.",
+        step3h: "Salvala nella tua lista di vocaboli con il pulsante \"+\"", step3p: "Un clic aggiunge la parola alla tua lista di vocaboli GAKU.",
+        demoLabel: "Provalo qui ↓", demoHint: "Ad esempio, prova a selezionare 「出会う」 o 「難しい」",
+        ctaH2: "D'ora in poi potrai usarlo su qualsiasi sito visiti abitualmente", ctaP: "Funziona allo stesso modo su articoli di notizie, social media, blog — qualsiasi pagina con testo giapponese. Collegandolo al tuo account GAKU Master, il tuo insegnante potrà inviarti parole direttamente e le parole salvate diventeranno materiale di ripasso.",
+        ctaLink: "Scopri GAKU Master →", footnote: "Puoi chiudere questa pagina in qualsiasi momento. D'ora in poi potrai usarlo in modo naturale durante la navigazione."
+      }
+    };
+
+    function detectLang() {
+      var saved = localStorage.getItem("gaku_reader_welcome_lang");
+      if (saved && T[saved]) return saved;
+      var nav = (navigator.language || navigator.userLanguage || "en").toLowerCase();
+      if (nav.indexOf("ja") === 0) return "ja";
+      if (nav.indexOf("es") === 0) return "es";
+      if (nav.indexOf("fr") === 0) return "fr";
+      if (nav.indexOf("de") === 0) return "de";
+      if (nav.indexOf("ko") === 0) return "ko";
+      if (nav.indexOf("zh") === 0) return (nav.indexOf("tw") !== -1 || nav.indexOf("hk") !== -1 || nav.indexOf("hant") !== -1) ? "zh-Hant" : "zh-Hans";
+      if (nav.indexOf("th") === 0) return "th";
+      if (nav.indexOf("vi") === 0) return "vi";
+      if (nav.indexOf("id") === 0) return "id";
+      if (nav.indexOf("hi") === 0) return "hi";
+      if (nav.indexOf("tr") === 0) return "tr";
+      if (nav.indexOf("ne") === 0) return "ne";
+      if (nav.indexOf("fil") === 0 || nav.indexOf("tl") === 0) return "fil";
+      if (nav.indexOf("ms") === 0) return "ms";
+      if (nav.indexOf("it") === 0) return "it";
+      return "en";
+    }
+
+    function applyLang(lang) {
+      var t = T[lang] || T.en;
+      document.getElementById("t-badge").textContent = t.badge;
+      document.getElementById("t-h1").textContent = t.h1;
+      document.getElementById("t-sub").textContent = t.sub;
+      document.getElementById("t-step1h").textContent = t.step1h;
+      document.getElementById("t-step1p").textContent = t.step1p;
+      document.getElementById("t-step2h").textContent = t.step2h;
+      document.getElementById("t-step2p").textContent = t.step2p;
+      document.getElementById("t-step3h").textContent = t.step3h;
+      document.getElementById("t-step3p").textContent = t.step3p;
+      document.getElementById("t-demoLabel").textContent = t.demoLabel;
+      document.getElementById("t-demoText").textContent = DEMO_TEXT;
+      document.getElementById("t-demoHint").textContent = t.demoHint;
+      document.getElementById("t-ctaH2").textContent = t.ctaH2;
+      document.getElementById("t-ctaP").textContent = t.ctaP;
+      document.getElementById("t-ctaLink").textContent = t.ctaLink;
+      document.getElementById("t-footnote").textContent = t.footnote;
+      document.getElementById("lang-select").value = lang;
+      document.documentElement.lang = lang.indexOf("zh") === 0 ? "zh" : lang;
+      localStorage.setItem("gaku_reader_welcome_lang", lang);
+    }
+
+    (function init() {
+      var sel = document.getElementById("lang-select");
+      Object.keys(LANG_NAMES).forEach(function (code) {
+        var opt = document.createElement("option");
+        opt.value = code;
+        opt.textContent = LANG_NAMES[code];
+        sel.appendChild(opt);
+      });
+      applyLang(detectLang());
+    })();
+  </script>
 </body>
 </html>
+

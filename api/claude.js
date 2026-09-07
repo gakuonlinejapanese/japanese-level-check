@@ -118,7 +118,10 @@ export default async function handler(req, res) {
     // on 2026-06-17. Switched to qwen/qwen3.6-27b, Groq's recommended vision-capable
     // successor — note this is currently a Groq "preview" model, not GA/production-tier.
     if (provider === "vision") {
-      const visionResult = await callGroq(groqKeys, commonBody, "qwen/qwen3.6-27b");
+      // reasoning_effort:"none" + reasoning_format:"hidden" stop qwen3.6-27b from thinking
+      // out loud (e.g. "Wait, let me look again...") in the visible response text.
+      const visionBody = { ...commonBody, reasoning_effort: "none", reasoning_format: "hidden" };
+      const visionResult = await callGroq(groqKeys, visionBody, "qwen/qwen3.6-27b");
       if (visionResult.text !== null) {
         return res.status(200).json({ content: [{ type: "text", text: visionResult.text }] });
       }
