@@ -152,6 +152,7 @@ export default async function handler(req, res) {
     if (action === "admin_list_trial_lessons") return handleAdminListTrialLessons(req, res);
     if (action === "admin_respond_trial_lesson") return handleAdminRespondTrialLesson(req, res);
     if (action === "request_jlpt_mock_test") return handleRequestJlptMockTest(req, res);
+    if (action === "check_jlpt_mock_applied") return handleCheckJlptMockApplied(req, res);
 
     const { name, email, plan, userId } = req.body || {};
     if (!email) return res.status(400).json({ error: "email is required" });
@@ -723,6 +724,18 @@ async function handleRequestJlptMockTest(req, res) {
 
     const supabase = getAdminClient();
     const normalizedEmail = email.trim().toLowerCase();
+    const normalizedName = (name || "").trim().toLowerCase();
+
+    // The free JLPT mock test is a one-time-per-student offer — never trust the client alone
+    // for this gate, re-check here even though the Dashboard already checks before showing
+    // the form. A match on email OR name (case-insensitive) against any prior "yes" response
+    // blocks a second application.
+    if (response === "yes") {
+      const alreadyApplied = await hasAppliedForJlptMock(supabase, normalizedEmail, normalizedName);
+      if (alreadyApplied) {
+        return res.status(409).json({ error: "already_applied" });
+      }
+    }
 
     const { error: insertErr } = await supabase.from("jlpt_mock_test_requests").insert({
       user_id: userId || null,
@@ -777,6 +790,45 @@ async function handleRequestJlptMockTest(req, res) {
   } catch (e) {
     console.error("handleRequestJlptMockTest failed:", e.message);
     return res.status(500).json({ error: e.message });
+  }
+}
+
+// Shared by handleRequestJlptMockTest (server-side re-check before inserting) and
+// handleCheckJlptMockApplied (Dashboard's pre-check before showing the form at all).
+async function hasAppliedForJlptMock(supabase, normalizedEmail, normalizedName) {
+  const { data, error } = await supabase
+    .from("jlpt_mock_test_requests")
+    .select("email, name")
+    .eq("response", "yes");
+  if (error) {
+    console.error("hasAppliedForJlptMock query failed:", error.message);
+    return false; // fail open — don't block a legitimate first-time applicant over a query hiccup
+  }
+  return (data || []).some(r =>
+    (normalizedEmail && (r.email || "").trim().toLowerCase() === normalizedEmail) ||
+    (normalizedName && (r.name || "").trim().toLowerCase() === normalizedName)
+  );
+}
+
+// POST { action: "check_jlpt_mock_applied", email, name } — called from the GAKU Master
+// Dashboard right when the student clicks "Yes" on the mock-test offer, before showing the
+// level/mode/section form. Returns { alreadyApplied: true } if this email or name already has
+// a prior "yes" response, so the Dashboard can show the one-time-offer message immediately
+// instead of letting them fill out the form only to be rejected on submit.
+async function handleCheckJlptMockApplied(req, res) {
+  try {
+    const { email, name } = req.body || {};
+    if (!email && !name) return res.status(400).json({ error: "email or name is required" });
+    const supabase = getAdminClient();
+    const alreadyApplied = await hasAppliedForJlptMock(
+      supabase,
+      (email || "").trim().toLowerCase(),
+      (name || "").trim().toLowerCase()
+    );
+    return res.status(200).json({ alreadyApplied });
+  } catch (e) {
+    console.error("handleCheckJlptMockApplied failed:", e.message);
+    return res.status(200).json({ alreadyApplied: false });
   }
 }
 

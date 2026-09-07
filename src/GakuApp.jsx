@@ -540,6 +540,7 @@ const UI_TRANSLATIONS = {
     jlptSubmitting: "Submitting…",
     jlptBack: "Back",
     jlptDoneMessage: "Thanks! Your JLPT Free Assessment Report request was sent — check your email for the next steps.",
+    jlptAlreadyAppliedMessage: "You've already applied for the free JLPT mock test before — it's a one-time offer, so we can't send it again.",
     // How to use
     howToTitle: "How to use this app",
     howToSchedule: "Your weekly study plan, broken into daily tasks. Tap a task to mark it done and track your weekly progress.",
@@ -900,6 +901,7 @@ const UI_TRANSLATIONS = {
     jlptSubmitting: "Envoi en cours…",
     jlptBack: "Retour",
     jlptDoneMessage: "Merci ! Votre demande de rapport d'évaluation JLPT gratuit a été envoyée — vérifiez votre e-mail pour la suite.",
+    jlptAlreadyAppliedMessage: "Vous avez déjà demandé l'examen blanc du JLPT gratuit auparavant — il s'agit d'une offre unique, nous ne pouvons donc pas la renvoyer.",
     howToTitle: "Comment utiliser cette application",
     howToSchedule: "Votre plan d'étude hebdomadaire, divisé en tâches quotidiennes. Appuyez sur une tâche pour la marquer comme faite.",
     howToPractice: "Exercices générés par l'IA à partir du texte japonais que vous collez (articles, sous-titres, légendes) — vocabulaire, kanji, grammaire, lecture, écoute, conversation et prononciation. Appuyez sur « Voir la réponse » pour vous corriger.",
@@ -1246,6 +1248,7 @@ const UI_TRANSLATIONS = {
     jlptSubmitting: "Enviando…",
     jlptBack: "Atrás",
     jlptDoneMessage: "¡Gracias! Tu solicitud de Informe de evaluación gratuita del JLPT fue enviada — revisa tu correo para los próximos pasos.",
+    jlptAlreadyAppliedMessage: "Ya solicitaste el simulacro gratuito del JLPT anteriormente — es una oferta única, por lo que no podemos enviarla de nuevo.",
     howToTitle: "Cómo usar esta aplicación",
     howToSchedule: "Tu plan de estudio semanal, dividido en tareas diarias. Toca una tarea para marcarla como completada.",
     howToPractice: "Ejercicios generados por IA a partir del texto japonés que pegas (artículos, subtítulos, leyendas) — vocabulario, kanji, gramática, lectura, escucha, conversación y pronunciación. Toca 'Ver respuesta' para comprobar.",
@@ -1592,6 +1595,7 @@ const UI_TRANSLATIONS = {
     jlptSubmitting: "Enviando…",
     jlptBack: "Voltar",
     jlptDoneMessage: "Obrigado! Sua solicitação do Relatório de Avaliação Gratuita do JLPT foi enviada — verifique seu e-mail para os próximos passos.",
+    jlptAlreadyAppliedMessage: "Você já solicitou o simulado gratuito do JLPT anteriormente — é uma oferta única, então não podemos enviá-lo novamente.",
     howToTitle: "Como usar este aplicativo",
     howToSchedule: "Seu plano de estudo semanal, dividido em tarefas diárias.",
     howToPractice: "Exercícios gerados por IA a partir do texto japonês que você cola (artigos, legendas, descrições) — vocabulário, kanji, gramática, leitura, escuta, conversação e pronúncia. Toque em 'Ver resposta' para conferir.",
@@ -1938,6 +1942,7 @@ const UI_TRANSLATIONS = {
     jlptSubmitting: "Wird gesendet…",
     jlptBack: "Zurück",
     jlptDoneMessage: "Danke! Deine Anfrage für den kostenlosen JLPT-Bewertungsbericht wurde gesendet — schau in deine E-Mails für die nächsten Schritte.",
+    jlptAlreadyAppliedMessage: "Du hast den kostenlosen JLPT-Probetest bereits einmal beantragt — es ist ein einmaliges Angebot, daher können wir ihn nicht erneut senden.",
     howToTitle: "Wie man diese App benutzt",
     howToSchedule: "Ihr wöchentlicher Lernplan, aufgeteilt in tägliche Aufgaben.",
     howToPractice: "KI-generierte Übungen aus dem japanischen Text, den Sie einfügen (Artikel, Untertitel, Bildunterschriften) — Wortschatz, Kanji, Grammatik, Lesen, Hören, Konversation und Aussprache. Tippen Sie auf 'Antwort anzeigen', um sich selbst zu überprüfen.",
@@ -2284,6 +2289,7 @@ const UI_TRANSLATIONS = {
     jlptSubmitting: "Invio in corso…",
     jlptBack: "Indietro",
     jlptDoneMessage: "Grazie! La tua richiesta per il Rapporto di valutazione JLPT gratuito è stata inviata — controlla la tua email per i prossimi passi.",
+    jlptAlreadyAppliedMessage: "Hai già richiesto il simulato JLPT gratuito in precedenza — è un'offerta unica, quindi non possiamo inviarlo di nuovo.",
     howToTitle: "Come usare questa app",
     howToSchedule: "Il tuo piano di studio settimanale, suddiviso in attività giornaliere. Tocca un'attività per contrassegnarla come completata.",
     howToPractice: "Esercizi generati dall'IA a partire dal testo giapponese che incolli (articoli, sottotitoli, didascalie) — vocabolario, kanji, grammatica, lettura, ascolto, conversazione e pronuncia. Tocca 'Mostra risposta' per verificare.",
@@ -2630,6 +2636,7 @@ const UI_TRANSLATIONS = {
     jlptSubmitting: "提交中…",
     jlptBack: "返回",
     jlptDoneMessage: "谢谢！您的JLPT免费评估报告申请已发送——请查看您的邮箱以获取后续步骤。",
+    jlptAlreadyAppliedMessage: "您之前已经申请过免费的JLPT模拟考试——这是一次性优惠，我们无法再次发送。",
     howToTitle: "如何使用此应用",
     howToSchedule: "你的每周学习计划，分为每日任务。点击任务以标记完成并跟踪每周进度。",
     howToPractice: "根据你粘贴的日语文本（文章、字幕、说明）由AI生成的练习——涵盖词汇、汉字、语法、阅读、听力、会话和发音。点击「显示答案」自我检查。",
@@ -2976,6 +2983,7 @@ const UI_TRANSLATIONS = {
     jlptSubmitting: "提交中…",
     jlptBack: "返回",
     jlptDoneMessage: "謝謝！您的JLPT免費評估報告申請已發送——請查看您的電子郵件以獲取後續步驟。",
+    jlptAlreadyAppliedMessage: "您之前已經申請過免費的JLPT模擬考試——這是一次性優惠，我們無法再次發送。",
     howToTitle: "如何使用此應用",
     howToSchedule: "你的每週學習計劃，分為每日任務。點擊任務以標記完成並跟踪每週進度。",
     howToPractice: "根據你貼上的日語文本（文章、字幕、說明）由AI生成的練習——涵蓋詞彙、漢字、文法、閱讀、聽力、會話和發音。點擊「顯示答案」自我檢查。",
@@ -3322,6 +3330,7 @@ const UI_TRANSLATIONS = {
     jlptSubmitting: "제출 중…",
     jlptBack: "뒤로",
     jlptDoneMessage: "감사합니다! JLPT 무료 평가 리포트 신청이 전송되었습니다 — 다음 단계는 이메일을 확인해주세요.",
+    jlptAlreadyAppliedMessage: "이전에 이미 무료 JLPT 모의고사를 신청하셨습니다 — 1회 한정 혜택이라 다시 보내드릴 수 없습니다.",
     howToTitle: "이 앱 사용 방법",
     howToSchedule: "주간 학습 계획, 일별 과제로 나뉩니다. 과제를 눌러 완료 표시하고 주간 진도를 추적하세요.",
     howToPractice: "붙여넣은 일본어 텍스트(기사, 자막, 캡션)를 기반으로 AI가 생성한 연습문제 — 어휘, 한자, 문법, 독해, 듣기, 회화, 발음을 다룹니다. '답 보기'를 눌러 확인하세요.",
@@ -3668,6 +3677,7 @@ const UI_TRANSLATIONS = {
     jlptSubmitting: "กำลังส่ง…",
     jlptBack: "ย้อนกลับ",
     jlptDoneMessage: "ขอบคุณ! คำขอรายงานประเมิน JLPT ฟรีของคุณถูกส่งแล้ว — ตรวจสอบอีเมลของคุณสำหรับขั้นตอนถัดไป",
+    jlptAlreadyAppliedMessage: "คุณเคยสมัครสอบ JLPT จำลองฟรีไปแล้วก่อนหน้านี้ — เป็นสิทธิ์ครั้งเดียว เราจึงไม่สามารถส่งให้อีกครั้งได้",
     howToTitle: "วิธีใช้แอปนี้",
     howToSchedule: "แผนการเรียนรายสัปดาห์ แบ่งเป็นงานรายวัน แตะงานเพื่อทำเครื่องหมายว่าเสร็จแล้วและติดตามความคืบหน้า",
     howToPractice: "แบบฝึกหัดที่สร้างโดย AI จากข้อความภาษาญี่ปุ่นที่คุณวาง (บทความ คำบรรยาย แคปชั่น) — ครอบคลุมคำศัพท์ คันจิ ไวยากรณ์ การอ่าน การฟัง การสนทนา และการออกเสียง แตะ 'ดูคำตอบ' เพื่อตรวจสอบ",
@@ -4014,6 +4024,7 @@ const UI_TRANSLATIONS = {
     jlptSubmitting: "Menghantar…",
     jlptBack: "Kembali",
     jlptDoneMessage: "Terima kasih! Permintaan Laporan Penilaian JLPT Percuma anda telah dihantar — semak e-mel anda untuk langkah seterusnya.",
+    jlptAlreadyAppliedMessage: "Anda pernah memohon ujian percubaan JLPT percuma sebelum ini — ia adalah tawaran sekali sahaja, jadi kami tidak dapat menghantarnya semula.",
     howToTitle: "Cara menggunakan apl ini",
     howToSchedule: "Pelan belajar mingguan anda, dibahagikan kepada tugasan harian. Ketik tugasan untuk tandai selesai.",
     howToPractice: "Latihan yang dijana AI daripada teks Jepun yang anda tampal (artikel, sari kata, kapsyen) — merangkumi kosa kata, kanji, tatabahasa, bacaan, pendengaran, perbualan dan sebutan. Ketik 'Tunjuk jawapan' untuk semak.",
@@ -4360,6 +4371,7 @@ const UI_TRANSLATIONS = {
     jlptSubmitting: "Mengirim…",
     jlptBack: "Kembali",
     jlptDoneMessage: "Terima kasih! Permintaan Laporan Penilaian JLPT Gratis Anda telah dikirim — periksa email Anda untuk langkah selanjutnya.",
+    jlptAlreadyAppliedMessage: "Anda sudah pernah mengajukan tes simulasi JLPT gratis sebelumnya — ini adalah penawaran satu kali, jadi kami tidak dapat mengirimkannya lagi.",
     howToTitle: "Cara menggunakan aplikasi ini",
     howToSchedule: "Rencana belajar mingguan Anda, dibagi menjadi tugas harian. Ketuk tugas untuk menandainya selesai.",
     howToPractice: "Latihan yang dihasilkan AI dari teks Jepang yang Anda tempel (artikel, subtitle, keterangan) — mencakup kosakata, kanji, tata bahasa, membaca, mendengarkan, percakapan, dan pengucapan. Ketuk 'Tampilkan jawaban' untuk memeriksa.",
@@ -4706,6 +4718,7 @@ const UI_TRANSLATIONS = {
     jlptSubmitting: "Đang gửi…",
     jlptBack: "Quay lại",
     jlptDoneMessage: "Cảm ơn bạn! Yêu cầu Báo cáo Đánh giá JLPT Miễn phí của bạn đã được gửi — hãy kiểm tra email để biết các bước tiếp theo.",
+    jlptAlreadyAppliedMessage: "Bạn đã từng đăng ký bài thi thử JLPT miễn phí trước đây — đây là ưu đãi chỉ dành một lần, vì vậy chúng tôi không thể gửi lại.",
     howToTitle: "Cách sử dụng ứng dụng này",
     howToSchedule: "Kế hoạch học hàng tuần của bạn, chia thành các nhiệm vụ hàng ngày. Nhấn nhiệm vụ để đánh dấu hoàn thành.",
     howToPractice: "Bài tập do AI tạo từ văn bản tiếng Nhật bạn dán vào (bài viết, phụ đề, chú thích) — bao gồm từ vựng, kanji, ngữ pháp, đọc hiểu, nghe, hội thoại và phát âm. Nhấn 'Hiện đáp án' để kiểm tra.",
@@ -5052,6 +5065,7 @@ const UI_TRANSLATIONS = {
     jlptSubmitting: "सबमिट हो रहा है…",
     jlptBack: "वापस",
     jlptDoneMessage: "धन्यवाद! आपका JLPT निःशुल्क मूल्यांकन रिपोर्ट अनुरोध भेज दिया गया है — अगले चरणों के लिए अपना ईमेल देखें।",
+    jlptAlreadyAppliedMessage: "आपने पहले ही निःशुल्क JLPT मॉक टेस्ट के लिए आवेदन किया था — यह एक बार की पेशकश है, इसलिए हम इसे दोबारा नहीं भेज सकते।",
     howToTitle: "इस ऐप का उपयोग कैसे करें",
     howToSchedule: "आपकी साप्ताहिक अध्ययन योजना, दैनिक कार्यों में विभाजित। साप्ताहिक प्रगति ट्रैक करने के लिए कार्य टैप करें।",
     howToPractice: "आपके द्वारा पेस्ट किए गए जापानी टेक्स्ट (लेख, सबटाइटल, कैप्शन) से AI-जनित अभ्यास — शब्दावली, कांजी, व्याकरण, पठन, श्रवण, बातचीत और उच्चारण को कवर करता है। जांचने के लिए 'उत्तर दिखाएं' टैप करें।",
@@ -5398,6 +5412,7 @@ const UI_TRANSLATIONS = {
     jlptSubmitting: "送信中…",
     jlptBack: "戻る",
     jlptDoneMessage: "ありがとうございます！JLPT無料アセスメントレポートのリクエストを送信しました。次のステップはメールをご確認ください。",
+    jlptAlreadyAppliedMessage: "以前に無料のJLPT模擬試験にすでにお申し込みいただいています — 一人一回限りの特典のため、再度お送りすることはできません。",
     howToTitle: "このアプリの使い方",
     howToSchedule: "週間学習プランを日々のタスクに分割しています。タスクをタップして完了をマークし、週間進捗を追跡します。",
     howToPractice: "貼り付けた日本語テキスト（記事・字幕・キャプション）から生成されるAI練習問題です。語彙・漢字・文法・読解・リスニング・会話・発音をカバーします。「答えを見る」をタップして確認できます。",
@@ -5744,6 +5759,7 @@ const UI_TRANSLATIONS = {
     jlptSubmitting: "Gönderiliyor…",
     jlptBack: "Geri",
     jlptDoneMessage: "Teşekkürler! Ücretsiz JLPT Değerlendirme Raporu talebiniz gönderildi — sonraki adımlar için e-postanızı kontrol edin.",
+    jlptAlreadyAppliedMessage: "Daha önce ücretsiz JLPT deneme sınavına başvurdunuz — bu tek seferlik bir teklif olduğu için tekrar gönderemiyoruz.",
     howToTitle: "Bu uygulama nasıl kullanılır",
     howToSchedule: "Günlük görevlere bölünmüş haftalık çalışma planınız. Tamamlandı olarak işaretlemek için bir göreve dokunun.",
     howToPractice: "Yapıştırdığınız Japonca metinden (makale, altyazı, açıklama) AI tarafından oluşturulan alıştırmalar — kelime, kanji, dilbilgisi, okuma, dinleme, konuşma ve telaffuzu kapsar. Kontrol etmek için 'Cevabı göster'e dokunun.",
@@ -6090,6 +6106,7 @@ const UI_TRANSLATIONS = {
     jlptSubmitting: "पेश गर्दै…",
     jlptBack: "फिर्ता",
     jlptDoneMessage: "धन्यवाद! तपाईंको JLPT निःशुल्क मूल्याङ्कन प्रतिवेदन अनुरोध पठाइयो — अर्को चरणहरूको लागि आफ्नो इमेल जाँच गर्नुहोस्।",
+    jlptAlreadyAppliedMessage: "तपाईंले पहिले नै निःशुल्क JLPT नमूना परीक्षाको लागि आवेदन दिनुभएको छ — यो एक पटकको मात्र प्रस्ताव भएकाले हामी यसलाई फेरि पठाउन सक्दैनौं।",
     howToTitle: "यो एप कसरी प्रयोग गर्ने",
     howToSchedule: "तपाईंको साप्ताहिक अध्ययन योजना, दैनिक कार्यहरूमा विभाजित। साप्ताहिक प्रगति ट्र्याक गर्न कार्यलाई ट्याप गर्नुहोस्।",
     howToPractice: "तपाईंले टाँस्नुभएको जापानी पाठ (लेख, उपशीर्षक, क्याप्शन) बाट AI-उत्पन्न अभ्यास — शब्दावली, कांजी, व्याकरण, पठन, सुनाइ, कुराकानी र उच्चारण समेट्छ। जाँच गर्न 'जवाफ देखाउनुहोस्' ट्याप गर्नुहोस्।",
@@ -6436,6 +6453,7 @@ const UI_TRANSLATIONS = {
     jlptSubmitting: "Ipinapasa…",
     jlptBack: "Bumalik",
     jlptDoneMessage: "Salamat! Naipadala na ang iyong request para sa Libreng JLPT Assessment Report — tingnan ang iyong email para sa susunod na hakbang.",
+    jlptAlreadyAppliedMessage: "Nag-apply ka na dati para sa libreng JLPT mock test — isang beses lang ito ibinibigay, kaya hindi na namin ito maipapadala muli.",
     howToTitle: "Paano gamitin ang app na ito",
     howToSchedule: "Ang iyong lingguhang study plan, nahahati sa araw-araw na gawain. I-tap ang gawain upang markahan itong tapos na.",
     howToPractice: "Mga pagsasanay na ginawa ng AI mula sa Japanese text na iyong idinikit (artikulo, subtitle, caption) — sinasaklaw ang bokabularyo, kanji, gramatika, pagbasa, pakikinig, pag-uusap, at pagbigkas. I-tap ang 'Ipakita ang sagot' upang suriin.",
@@ -10771,13 +10789,14 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
   const [jlptMockDismissed, setJlptMockDismissed] = useState(() => {
     try { return localStorage.getItem(scopedKey("gaku_jlptmock_dismissed")) === "1"; } catch { return false; }
   });
-  const [jlptMockStep, setJlptMockStep] = useState("offer"); // "offer" | "form" | "done"
+  const [jlptMockStep, setJlptMockStep] = useState("offer"); // "offer" | "form" | "already_applied" | "done"
   const [jlptMockAnswers, setJlptMockAnswers] = useState({
     level: (form.jlpt || "N5").match(/N[1-5]/)?.[0] || "N5",
     mode: "self",
     section: "all",
   });
   const [jlptMockSubmitting, setJlptMockSubmitting] = useState(false);
+  const [jlptMockCheckingApplied, setJlptMockCheckingApplied] = useState(false);
   const dismissJlptMockOffer = () => {
     setJlptMockDismissed(true);
     try { localStorage.setItem(scopedKey("gaku_jlptmock_dismissed"), "1"); } catch {}
@@ -10792,10 +10811,31 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
       }),
     }).catch(() => {});
   };
+  // The free JLPT mock test is a one-time-per-student offer. Before showing the level/mode/
+  // section form, check whether this student (by email or name) has already applied once —
+  // avoids them filling out the form only to be rejected on submit. Server re-checks this too.
+  const acceptJlptMockOffer = async () => {
+    setJlptMockCheckingApplied(true);
+    try {
+      const res = await fetch("/api/policy-agreement", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "check_jlpt_mock_applied", email: form.email, name: form.name }),
+      });
+      const data = await res.json();
+      if (data && data.alreadyApplied) {
+        setJlptMockCheckingApplied(false);
+        setJlptMockStep("already_applied");
+        dismissJlptMockOffer();
+        return;
+      }
+    } catch {}
+    setJlptMockCheckingApplied(false);
+    setJlptMockStep("form");
+  };
   const submitJlptMockRequest = async () => {
     setJlptMockSubmitting(true);
     try {
-      await fetch("/api/policy-agreement", {
+      const res = await fetch("/api/policy-agreement", {
         method: "POST", headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           action: "request_jlpt_mock_test",
@@ -10803,6 +10843,12 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
           response: "yes", testSection: jlptMockAnswers.section, preferredMode: jlptMockAnswers.mode,
         }),
       });
+      if (res.status === 409) {
+        setJlptMockSubmitting(false);
+        setJlptMockStep("already_applied");
+        dismissJlptMockOffer();
+        return;
+      }
     } catch {}
     setJlptMockSubmitting(false);
     setJlptMockStep("done");
@@ -10998,7 +11044,7 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
           <div style={{ ...S.card, marginBottom:16, background:"rgba(168,85,247,0.1)", border:`1px solid ${C.purpleLight}` }}>
             <p style={{ color:C.purpleLight, fontSize:12, fontWeight:700, margin:"0 0 10px" }}>🎯 {T.jlptMockOfferTitle}</p>
             <div style={{ display:"flex", gap:8 }}>
-              <button onClick={()=>setJlptMockStep("form")} style={{ ...S.btn, padding:"7px 14px", fontSize:12, background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff" }}>{T.yes}</button>
+              <button onClick={acceptJlptMockOffer} disabled={jlptMockCheckingApplied} style={{ ...S.btn, padding:"7px 14px", fontSize:12, background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff", opacity:jlptMockCheckingApplied?0.6:1 }}>{T.yes}</button>
               <button onClick={declineJlptMockOffer} style={{ ...S.btn, padding:"7px 14px", fontSize:12, background:"transparent", border:`1px solid ${C.border}`, color:"#94a3b8" }}>{T.no}</button>
             </div>
           </div>
@@ -11033,6 +11079,12 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
               </button>
               <button onClick={()=>setJlptMockStep("offer")} style={{ ...S.btn, padding:"7px 14px", fontSize:12, background:"transparent", border:`1px solid ${C.border}`, color:"#94a3b8" }}>{T.jlptBack}</button>
             </div>
+          </div>
+        )}
+
+        {jlptMockStep === "already_applied" && (
+          <div style={{ ...S.card, marginBottom:16, background:"rgba(239,68,68,0.1)", border:"1px solid #ef4444" }}>
+            <p style={{ color:"#f87171", fontSize:12, margin:0 }}>ℹ️ {T.jlptAlreadyAppliedMessage}</p>
           </div>
         )}
 
