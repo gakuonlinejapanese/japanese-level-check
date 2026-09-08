@@ -310,6 +310,19 @@ async function handleSchoolMatching(req, res) {
       : outcome === "rejected"
         ? "Finance readiness answers"
         : null;
+    // info@glocaljp.com (Ichigo Nihongo) is only cc'd for fully-qualified applicants: listed
+    // country AND every questionnaire answer positive AND an actual bank statement upload.
+    // ADMIN_EMAIL (Seito) is still notified for every submission, qualified or not.
+    const isFullyQualified = !isRejected
+      && jlptN4 === "Yes"
+      && longTermTimeline === "I understand"
+      && shortTermTimeline === "I understand"
+      && tuitionAware === "Yes"
+      && shortTermBudget === "Yes"
+      && visaSavings === "Yes"
+      && livingExpenses === "Yes"
+      && bankStatementAgree === "I agree"
+      && !!bankStatementFile?.base64;
 
     const { error: insertErr } = await supabase.from("school_matching_requests").insert({
       first_name: firstName,
@@ -338,6 +351,7 @@ async function handleSchoolMatching(req, res) {
 
     const html = `
       ${isRejected ? `<p style="color:#c8382b;"><strong>Outcome: No school matched (auto-declined)${rejectionReason ? ` — reason: ${rejectionReason}` : ""} — the applicant was shown "Unfortunately there is no school we can provide for you" and did not continue past this point.</strong></p>` : ""}
+      ${!isRejected ? `<p><strong>info@glocaljp.com cc'd:</strong> ${isFullyQualified ? "Yes (fully qualified — listed country, every answer positive, bank statement uploaded)" : "No (some condition not fully met)"}</p>` : ""}
       <p>A student submitted a School Matching counseling request.</p>
       <p><strong>Name:</strong> ${firstName} ${lastName}<br/>
          <strong>Email:</strong> ${email}<br/>
@@ -359,10 +373,7 @@ async function handleSchoolMatching(req, res) {
       const attachments = bankStatementFile?.base64
         ? [{ name: bankStatementFile.name || "bank-statement.pdf", base64: bankStatementFile.base64 }]
         : undefined;
-      // Applicants who cleared every condition (not rejected) also go to info@glocaljp.com,
-      // in addition to the usual ADMIN_EMAIL notification. Rejected/no-match submissions keep
-      // going to ADMIN_EMAIL only.
-      const recipients = isRejected ? ADMIN_EMAIL : [ADMIN_EMAIL, "info@glocaljp.com"];
+      const recipients = isFullyQualified ? [ADMIN_EMAIL, "info@glocaljp.com"] : ADMIN_EMAIL;
       await sendEmail({ to: recipients, subject: `${subjectPrefix} — ${firstName} ${lastName}`, html, attachments, replyTo: email });
     } catch (e) {
       // Don't block the student's submission just because the notification email failed —
