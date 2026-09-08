@@ -10095,13 +10095,17 @@ async function buildAIWeeklySchedule(form, weekNum, totalWeeks) {
     const levelResList = LEVEL_RESOURCES[form.jlpt] || [];
     const skillResList = selectedSkills.flatMap(s => RESOURCES[s] || []);
     const isAnimeGoal = (Array.isArray(form.goal) ? form.goal : (form.goal?[form.goal]:[])).includes("Understand Anime/Manga") || (form.displayGoal||"").includes("Understand Anime/Manga");
-    availableResources = [...levelResList, ...skillResList]
+    const showTravelResources = isTravelGoal(form.goal, form.displayGoal);
+    availableResources = [...levelResList, ...skillResList, ...(showTravelResources ? TRAVEL_JAPAN_RESOURCES : [])]
       .filter((r, i, arr) => arr.findIndex(x => x.name === r.name && x.mode === r.mode) === i)
       .sort((a, b) => isAnimeGoal ? Number(/anime|manga/i.test(b.name)) - Number(/anime|manga/i.test(a.name)) : 0)
       .map(r => `- ${r.name} [${r.mode}] — ${r.url}`)
       .join("\n");
     animeInstruction = isAnimeGoal
       ? `\nThis student's final goal is understanding anime/manga. Prioritize the anime/manga-tagged resources above (listed first) over other curated resources whenever they fit the day's skill, and frame tasks around anime/manga comprehension (e.g. watching a clip with GAKU Reader, reading a manga scene) rather than generic study materials wherever a fit exists for this level.\n`
+      : "";
+    animeInstruction += showTravelResources
+      ? `\nThis student's final goal is traveling to Japan. Whenever a day's skill is reading or listening, prefer the real travel-conversation videos and airport floor-map pages listed above (ordering food, convenience store, hotel check-in, taxi, train, airplane, etc.) over generic study materials, framing the task around that practical scenario — e.g. "Watch the real conversation video 'Ordering Food — Hamburger Shop' and use GAKU Reader to look up any words you don't understand (20 min)". Rotate through a different scenario each time rather than repeating the same one across the week.\n`
       : "";
     jlptOnlyInstruction = `\nSTRICT RULE: only create tasks for the skills the student selected below. Do not add tasks for any other skill area, even if it seems generally useful — if they only selected Grammar, every task this week must be Grammar.\n`;
   }
@@ -10928,7 +10932,7 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
       // Clear cache for this week
       const hoursMap = { "Less than 1 hour": 45, "1–2 hours": 90, "2–3 hours": 150, "3+ hours": 180 };
       const daysMap  = { "1–2 days": 2, "3–4 days": 4, "5–6 days": 5, "Every day": 7 };
-      const cacheKey = `${form.email || form.name}_w${currentWeek}_${form.jlpt}_${(form.skills||[]).join("")}_${form.preferredLang || "English"}`;
+      const cacheKey = `${form.email || form.name}_w${currentWeek}_${form.jlpt}_${(Array.isArray(form.goal)?form.goal:(form.goal?[form.goal]:[])).join("")}_${(form.skills||[]).join("")}_${form.preferredLang || "English"}`;
       try { localStorage.removeItem(`gaku_sched_${cacheKey}`); } catch {}
       delete AI_SCHEDULE_CACHE[cacheKey];
     }
