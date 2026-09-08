@@ -352,6 +352,36 @@ const KANA_PRACTICE_RESOURCES = [
 ];
 registerResourceLookup(KANA_PRACTICE_RESOURCES);
 
+// Real-conversation video scripts for students whose Final Goal is "Travel to Japan" — shown
+// (Resources tab, "links" sub-tab) in addition to their level-based LEVEL_RESOURCES, regardless of
+// JLPT level, since travel Japanese is a practical-scenario skill rather than a level-graded one.
+// Each entry is a real video of an actual Japanese conversation in a travel scenario; students are
+// pointed to GAKU Reader to look up any words/phrases they don't understand while watching.
+const TRAVEL_JAPAN_RESOURCES = [
+  { name:"How to Ask for Recommendations", desc:"A real conversation asking a local for recommendations — useful small talk for any trip. Watch and use GAKU Reader to check any words you don't know.", url:"https://youtu.be/S4CHGm0ouPo?si=bYsvwEHnZ6bgsN_g", free:true, mode:"listening" },
+  { name:"Ordering Food — Hamburger Shop", desc:"A real conversation ordering at a hamburger shop. Watch and use GAKU Reader to check any words you don't know.", url:"https://youtu.be/BgKkcC-0_3o?si=vHpaCVYJj9jm4ILR", free:true, mode:"listening" },
+  { name:"Ordering Food — Taiyaki Stand", desc:"A real conversation ordering taiyaki from a street stand. Watch and use GAKU Reader to check any words you don't know.", url:"https://youtu.be/-gXOU2AyhO8?si=mXzJVWuGeMxkJMxW", free:true, mode:"listening" },
+  { name:"Conversation at the Convenience Store (Part 1)", desc:"A real conversation at a Japanese convenience store (konbini). Watch and use GAKU Reader to check any words you don't know.", url:"https://www.youtube.com/watch?v=NnprVmj8PO4&list=PLkK7KO2TnEcwTKbRv0PhMcGhlIOtwTEoT&index=10", free:true, mode:"listening" },
+  { name:"Conversation at the Convenience Store (Part 2)", desc:"A second real conversation at a Japanese convenience store. Watch and use GAKU Reader to check any words you don't know.", url:"https://www.youtube.com/watch?v=k60oVAjr0aE&list=PLkK7KO2TnEcwTKbRv0PhMcGhlIOtwTEoT&index=23", free:true, mode:"listening" },
+  { name:"Ordering Noodles", desc:"A real conversation ordering noodles at a restaurant. Watch and use GAKU Reader to check any words you don't know.", url:"https://www.youtube.com/watch?v=EbhjDhlkmX0&list=PLkK7KO2TnEcwTKbRv0PhMcGhlIOtwTEoT&index=12", free:true, mode:"listening" },
+  { name:"Ordering at a Cafe (Part 1)", desc:"A real conversation ordering at a cafe. Watch and use GAKU Reader to check any words you don't know.", url:"https://www.youtube.com/watch?v=jmErNzQ5dQ8&list=PLkK7KO2TnEcwTKbRv0PhMcGhlIOtwTEoT&index=15", free:true, mode:"listening" },
+  { name:"Ordering at a Cafe (Part 2)", desc:"A second real conversation ordering at a cafe. Watch and use GAKU Reader to check any words you don't know.", url:"https://www.youtube.com/watch?v=XzLFk_uEr4&list=PLkK7KO2TnEcwTKbRv0PhMcGhlIOtwTEoT&index=16", free:true, mode:"listening" },
+  { name:"Ordering at a Restaurant", desc:"A real conversation ordering at a full-service restaurant. Watch and use GAKU Reader to check any words you don't know.", url:"https://www.youtube.com/watch?v=8Nd8C1KuprA&list=PLkK7KO2TnEcwTKbRv0PhMcGhlIOtwTEoT&index=26", free:true, mode:"listening" },
+  { name:"Hotel Check-in (Part 1)", desc:"A real hotel check-in conversation in Japanese. Watch and use GAKU Reader to check any words you don't know.", url:"https://www.youtube.com/watch?v=Zdt_-Ag9mco", free:true, mode:"listening" },
+  { name:"Hotel Check-in (Part 2)", desc:"A second real hotel check-in conversation in Japanese. Watch and use GAKU Reader to check any words you don't know.", url:"https://www.youtube.com/watch?v=X9auVKiZgsM", free:true, mode:"listening" },
+  { name:"On the Airplane (Japanese Airline)", desc:"Real in-flight announcements and conversations on a Japanese airline. Watch and use GAKU Reader to check any words you don't know.", url:"https://www.youtube.com/watch?v=Loo_gHCBJoE", free:true, mode:"listening" },
+  { name:"Conversation at the Taxi", desc:"A real conversation with a taxi driver in Japan. Watch and use GAKU Reader to check any words you don't know.", url:"https://www.youtube.com/watch?v=T0JbQ8VeyoU", free:true, mode:"listening" },
+  { name:"On the Train", desc:"Real Japanese train announcements and conversation. Watch and use GAKU Reader to check any words you don't know.", url:"https://www.youtube.com/watch?v=VnTVz39FAVQ", free:true, mode:"listening" },
+  { name:"Narita Airport Floor Map", desc:"Narita Airport's official floor map page — great for learning airport kanji and vocabulary. Use GAKU Reader to translate the page.", url:"https://www.jal.co.jp/jp/ja/inter/airport/nrt/info/", free:true, mode:"reading" },
+  { name:"Haneda Airport Floor Map", desc:"Haneda Airport's official floor map page — great for learning airport kanji and vocabulary. Use GAKU Reader to translate the page.", url:"https://tokyo-haneda.com/floor/index.html", free:true, mode:"reading" },
+  { name:"Kansai Airport Floor Map", desc:"Kansai Airport's official floor map page — great for learning airport kanji and vocabulary. Use GAKU Reader to translate the page.", url:"https://www.kansai-airport.or.jp/map/guidance", free:true, mode:"reading" },
+];
+registerResourceLookup(TRAVEL_JAPAN_RESOURCES);
+function isTravelGoal(goal, displayGoal) {
+  const goals = Array.isArray(goal) ? goal : (goal ? [goal] : []);
+  return goals.includes("Travel to Japan") || (displayGoal||"").includes("Travel to Japan");
+}
+
 // ─── UI TRANSLATIONS ────────────────────────────────────────────────────────────
 // Static translations for all major UI strings across all 6 tabs + form
 const UI_TRANSLATIONS = {
@@ -422,6 +452,8 @@ const UI_TRANSLATIONS = {
     curatedFor: "Curated for level",
     kanaResourcesTitle: "🔤 Kana Practice Sites",
     kanaResourcesDesc: "Extra hiragana/katakana practice, since you selected kana-only mode:",
+    travelResourcesTitle: "✈️ Travel Japanese Practice",
+    travelResourcesDesc: "Real conversation scripts for traveling in Japan — practice with the videos below, and use GAKU Reader to check any words or phrases you don't understand:",
     yourResources: "🔗 YOUR RESOURCES",
     curatedForLevel: "Curated for level",
     skills: "skills:",
@@ -780,6 +812,8 @@ const UI_TRANSLATIONS = {
     curatedFor: "Sélectionné pour le niveau",
     kanaResourcesTitle: "🔤 Sites de pratique des kana",
     kanaResourcesDesc: "Pratique supplémentaire des hiragana/katakana, car vous avez sélectionné le mode kana uniquement :",
+    travelResourcesTitle: "✈️ Pratique de japonais pour voyager",
+    travelResourcesDesc: "Scripts de conversations réelles pour voyager au Japon — entraînez-vous avec les vidéos ci-dessous et utilisez GAKU Reader pour vérifier les mots ou expressions que vous ne comprenez pas :",
     yourResources: "🔗 VOS RESSOURCES",
     curatedForLevel: "Sélectionné pour le niveau",
     skills: "compétences :",
@@ -1127,6 +1161,8 @@ const UI_TRANSLATIONS = {
     curatedFor: "Seleccionado para el nivel",
     kanaResourcesTitle: "🔤 Sitios de práctica de kana",
     kanaResourcesDesc: "Práctica adicional de hiragana/katakana, ya que seleccionaste el modo solo kana:",
+    travelResourcesTitle: "✈️ Práctica de japonés para viajar",
+    travelResourcesDesc: "Guiones de conversaciones reales para viajar por Japón — practica con los videos de abajo y usa GAKU Reader para comprobar las palabras o frases que no entiendas:",
     yourResources: "🔗 TUS RECURSOS",
     curatedForLevel: "Seleccionado para el nivel",
     skills: "habilidades:",
@@ -1474,6 +1510,8 @@ const UI_TRANSLATIONS = {
     curatedFor: "Selecionado para o nível",
     kanaResourcesTitle: "🔤 Sites de prática de kana",
     kanaResourcesDesc: "Prática extra de hiragana/katakana, já que você selecionou o modo somente kana:",
+    travelResourcesTitle: "✈️ Prática de japonês para viagem",
+    travelResourcesDesc: "Roteiros de conversas reais para viajar pelo Japão — pratique com os vídeos abaixo e use o GAKU Reader para verificar palavras ou frases que não entender:",
     yourResources: "🔗 SEUS RECURSOS",
     curatedForLevel: "Selecionado para o nível",
     skills: "habilidades:",
@@ -1821,6 +1859,8 @@ const UI_TRANSLATIONS = {
     curatedFor: "Ausgewählt für Niveau",
     kanaResourcesTitle: "🔤 Kana-Übungsseiten",
     kanaResourcesDesc: "Zusätzliche Hiragana/Katakana-Übung, da Sie den Nur-Kana-Modus ausgewählt haben:",
+    travelResourcesTitle: "✈️ Reise-Japanisch üben",
+    travelResourcesDesc: "Echte Gesprächsskripte für Reisen in Japan — übe mit den Videos unten und nutze GAKU Reader, um Wörter oder Sätze zu überprüfen, die du nicht verstehst:",
     yourResources: "🔗 IHRE RESSOURCEN",
     curatedForLevel: "Ausgewählt für Niveau",
     skills: "Fähigkeiten:",
@@ -2168,6 +2208,8 @@ const UI_TRANSLATIONS = {
     curatedFor: "Selezionato per il livello",
     kanaResourcesTitle: "🔤 Siti di pratica kana",
     kanaResourcesDesc: "Pratica extra di hiragana/katakana, poiché hai selezionato la modalità solo kana:",
+    travelResourcesTitle: "✈️ Pratica di giapponese per viaggiare",
+    travelResourcesDesc: "Copioni di conversazioni reali per viaggiare in Giappone — esercitati con i video qui sotto e usa GAKU Reader per controllare parole o frasi che non capisci:",
     yourResources: "🔗 LE TUE RISORSE",
     curatedForLevel: "Selezionato per il livello",
     skills: "abilità:",
@@ -2515,6 +2557,8 @@ const UI_TRANSLATIONS = {
     curatedFor: "为级别精选",
     kanaResourcesTitle: "🔤 假名练习网站",
     kanaResourcesDesc: "由于你选择了仅假名模式，这里有额外的平假名/片假名练习：",
+    travelResourcesTitle: "✈️ 旅行日语练习",
+    travelResourcesDesc: "去日本旅行时会用到的真实对话内容——通过下方视频练习，遇到不懂的单词或句子可使用GAKU Reader查询含义：",
     yourResources: "🔗 你的资源",
     curatedForLevel: "为级别精选",
     skills: "技能：",
@@ -2862,6 +2906,8 @@ const UI_TRANSLATIONS = {
     curatedFor: "為級別精選",
     kanaResourcesTitle: "🔤 假名練習網站",
     kanaResourcesDesc: "由於你選擇了僅假名模式，這裡有額外的平假名/片假名練習：",
+    travelResourcesTitle: "✈️ 旅行日語練習",
+    travelResourcesDesc: "去日本旅行時會用到的真實對話內容——透過下方影片練習，遇到不懂的單字或句子可使用GAKU Reader查詢含義：",
     yourResources: "🔗 你的資源",
     curatedForLevel: "為級別精選",
     skills: "技能：",
@@ -3209,6 +3255,8 @@ const UI_TRANSLATIONS = {
     curatedFor: "레벨을 위해 선별됨",
     kanaResourcesTitle: "🔤 가나 연습 사이트",
     kanaResourcesDesc: "가나 전용 모드를 선택하셨으니, 추가 히라가나/가타카나 연습을 확인해보세요:",
+    travelResourcesTitle: "✈️ 여행 일본어 연습",
+    travelResourcesDesc: "일본 여행에 필요한 실제 대화 스크립트입니다 — 아래 영상으로 연습하고, 이해되지 않는 단어나 문장은 GAKU Reader로 뜻을 확인하세요:",
     yourResources: "🔗 나의 자료",
     curatedForLevel: "레벨을 위해 선별됨",
     skills: "스킬:",
@@ -3556,6 +3604,8 @@ const UI_TRANSLATIONS = {
     curatedFor: "คัดสรรสำหรับระดับ",
     kanaResourcesTitle: "🔤 เว็บฝึกคะนะ",
     kanaResourcesDesc: "ฝึกฮิรางานะ/คาตากานะเพิ่มเติม เนื่องจากคุณเลือกโหมดคะนะเท่านั้น:",
+    travelResourcesTitle: "✈️ ฝึกภาษาญี่ปุ่นสำหรับการเดินทาง",
+    travelResourcesDesc: "บทสนทนาจริงที่ใช้ตอนไปเที่ยวญี่ปุ่น — ฝึกจากวิดีโอด้านล่าง และใช้ GAKU Reader ตรวจสอบความหมายของคำหรือประโยคที่ไม่เข้าใจ:",
     yourResources: "🔗 แหล่งเรียนรู้ของคุณ",
     curatedForLevel: "คัดสรรสำหรับระดับ",
     skills: "ทักษะ:",
@@ -3903,6 +3953,8 @@ const UI_TRANSLATIONS = {
     curatedFor: "Dipilih untuk tahap",
     kanaResourcesTitle: "🔤 Laman Latihan Kana",
     kanaResourcesDesc: "Latihan tambahan hiragana/katakana kerana anda memilih mod kana sahaja:",
+    travelResourcesTitle: "✈️ Latihan Bahasa Jepun untuk Melancong",
+    travelResourcesDesc: "Skrip perbualan sebenar untuk melancong di Jepun — berlatih dengan video di bawah dan gunakan GAKU Reader untuk menyemak maksud perkataan atau ayat yang tidak difahami:",
     yourResources: "🔗 SUMBER ANDA",
     curatedForLevel: "Dipilih untuk tahap",
     skills: "kemahiran:",
@@ -4250,6 +4302,8 @@ const UI_TRANSLATIONS = {
     curatedFor: "Dipilih untuk level",
     kanaResourcesTitle: "🔤 Situs Latihan Kana",
     kanaResourcesDesc: "Latihan tambahan hiragana/katakana karena Anda memilih mode kana saja:",
+    travelResourcesTitle: "✈️ Latihan Bahasa Jepang untuk Bepergian",
+    travelResourcesDesc: "Skrip percakapan nyata untuk bepergian di Jepang — berlatihlah dengan video di bawah dan gunakan GAKU Reader untuk memeriksa arti kata atau kalimat yang tidak kamu pahami:",
     yourResources: "🔗 SUMBER ANDA",
     curatedForLevel: "Dipilih untuk level",
     skills: "keterampilan:",
@@ -4597,6 +4651,8 @@ const UI_TRANSLATIONS = {
     curatedFor: "Tuyển chọn cho cấp độ",
     kanaResourcesTitle: "🔤 Trang luyện tập Kana",
     kanaResourcesDesc: "Luyện tập hiragana/katakana bổ sung vì bạn đã chọn chế độ chỉ kana:",
+    travelResourcesTitle: "✈️ Luyện tiếng Nhật du lịch",
+    travelResourcesDesc: "Các đoạn hội thoại thực tế dùng khi du lịch Nhật Bản — hãy luyện tập với các video bên dưới và dùng GAKU Reader để tra nghĩa những từ hoặc câu bạn chưa hiểu:",
     yourResources: "🔗 TÀI LIỆU CỦA BẠN",
     curatedForLevel: "Tuyển chọn cho cấp độ",
     skills: "kỹ năng:",
@@ -4944,6 +5000,8 @@ const UI_TRANSLATIONS = {
     curatedFor: "स्तर के लिए चुना गया",
     kanaResourcesTitle: "🔤 काना अभ्यास साइटें",
     kanaResourcesDesc: "चूँकि आपने केवल-काना मोड चुना है, यहाँ अतिरिक्त हिरागाना/काताकाना अभ्यास दिया गया है:",
+    travelResourcesTitle: "✈️ यात्रा जापानी अभ्यास",
+    travelResourcesDesc: "जापान यात्रा के लिए असली बातचीत की स्क्रिप्ट — नीचे दिए गए वीडियो से अभ्यास करें और जो शब्द या वाक्य समझ न आएं उनका अर्थ जानने के लिए GAKU Reader का उपयोग करें:",
     yourResources: "🔗 आपके संसाधन",
     curatedForLevel: "स्तर के लिए चुना गया",
     skills: "कौशल:",
@@ -5291,6 +5349,8 @@ const UI_TRANSLATIONS = {
     curatedFor: "レベル別に厳選",
     kanaResourcesTitle: "🔤 かな練習サイト",
     kanaResourcesDesc: "「かなのみ」モードを選択したので、追加のひらがな・カタカナ練習サイトはこちら:",
+    travelResourcesTitle: "✈️ 旅行日本語の練習",
+    travelResourcesDesc: "日本旅行で実際に使う会話です。下の動画で練習し、わからない単語や表現はGAKU Readerで意味を確認してください:",
     yourResources: "🔗 あなたのリソース",
     curatedForLevel: "レベル別に厳選",
     skills: "スキル：",
@@ -5638,6 +5698,8 @@ const UI_TRANSLATIONS = {
     curatedFor: "Seviye için seçildi",
     kanaResourcesTitle: "🔤 Kana Alıştırma Siteleri",
     kanaResourcesDesc: "Yalnızca kana modunu seçtiğiniz için ekstra hiragana/katakana alıştırmaları:",
+    travelResourcesTitle: "✈️ Seyahat Japoncası Pratiği",
+    travelResourcesDesc: "Japonya'da seyahat ederken kullanacağınız gerçek konuşma metinleri — aşağıdaki videolarla pratik yapın ve anlamadığınız kelime veya cümleleri kontrol etmek için GAKU Reader'ı kullanın:",
     yourResources: "🔗 KAYNAKLARINIZ",
     curatedForLevel: "Seviye için seçildi",
     skills: "beceriler:",
@@ -5985,6 +6047,8 @@ const UI_TRANSLATIONS = {
     curatedFor: "स्तरका लागि छनोट गरिएको",
     kanaResourcesTitle: "🔤 काना अभ्यास साइटहरू",
     kanaResourcesDesc: "तपाईंले काना-मात्र मोड रोज्नुभएकाले, थप हिरागाना/काताकाना अभ्यास यहाँ छ:",
+    travelResourcesTitle: "✈️ यात्रा जापानी अभ्यास",
+    travelResourcesDesc: "जापान भ्रमणका लागि वास्तविक कुराकानीका स्क्रिप्टहरू — तलका भिडियोहरूबाट अभ्यास गर्नुहोस् र नबुझेका शब्द वा वाक्यको अर्थ हेर्न GAKU Reader प्रयोग गर्नुहोस्:",
     yourResources: "🔗 तपाईंका स्रोतहरू",
     curatedForLevel: "स्तरका लागि छनोट गरिएको",
     skills: "सीपहरू:",
@@ -6332,6 +6396,8 @@ const UI_TRANSLATIONS = {
     curatedFor: "Pinili para sa antas",
     kanaResourcesTitle: "🔤 Mga Site para sa Pagsasanay ng Kana",
     kanaResourcesDesc: "Dagdag na pagsasanay sa hiragana/katakana dahil pinili mo ang kana-only mode:",
+    travelResourcesTitle: "✈️ Pagsasanay sa Paglalakbay na Hapon",
+    travelResourcesDesc: "Mga tunay na iskrip ng usapan na gagamitin mo sa paglalakbay sa Japan — magsanay gamit ang mga video sa ibaba at gamitin ang GAKU Reader para tingnan ang kahulugan ng mga salita o pangungusap na hindi mo naiintindihan:",
     yourResources: "🔗 ANG IYONG MGA RESOURCES",
     curatedForLevel: "Pinili para sa antas",
     skills: "mga kasanayan:",
@@ -11217,8 +11283,26 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
             const resList = isAnimeGoal
               ? [...rawResList].sort((a,b) => Number(/anime|manga/i.test(b.name)) - Number(/anime|manga/i.test(a.name)))
               : rawResList;
+            const showTravelResources = isTravelGoal(form.goal, form.displayGoal);
             return (
             <div>
+            {showTravelResources && (
+              <div style={{ ...S.card, marginBottom:16, borderLeft:`3px solid ${C.teal}` }}>
+                <p style={{ color:C.teal, fontSize:12, fontWeight:700, letterSpacing:1, marginBottom:4 }}>{T.travelResourcesTitle}</p>
+                <p style={{ color:"#ffffff", fontSize:12, marginBottom:14 }}>{T.travelResourcesDesc}</p>
+                <div style={{ display:"flex", flexDirection:"column", gap:12 }}>
+                  {TRAVEL_JAPAN_RESOURCES.map((r,i) => (
+                    <div key={i} style={{ background:"rgba(6,182,212,0.04)", borderRadius:12, border:`1px solid rgba(6,182,212,0.15)`, padding:"14px 16px" }}>
+                      <p style={{ color:"#f1f5f9", fontSize:14, fontWeight:700, margin:"0 0 6px" }}>{r.name}</p>
+                      <p style={{ color:"#94a3b8", fontSize:12, margin:"0 0 10px", lineHeight:1.6 }}>{r.desc}</p>
+                      <a href={r.url} target="_blank" rel="noopener noreferrer" style={{ display:"block", textAlign:"center", padding:"9px", background:`linear-gradient(135deg,${C.teal},#0891b2)`, color:"#fff", borderRadius:8, fontSize:12, fontWeight:700, textDecoration:"none" }}>
+                        → {T.openResource} {r.name}
+                      </a>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
             {(form.skills.includes("onlyHiragana") || form.skills.includes("onlyKatakana") || form.jlpt === "Beginner") && (
               <div style={{ ...S.card, marginBottom:16, borderLeft:`3px solid ${C.teal}` }}>
                 <p style={{ color:C.teal, fontSize:12, fontWeight:700, letterSpacing:1, marginBottom:4 }}>{T.kanaResourcesTitle}</p>
