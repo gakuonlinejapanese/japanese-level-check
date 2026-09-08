@@ -386,6 +386,7 @@ async function handleTrialLesson(req, res) {
     const {
       fullName, email, location, originCountry, preferredDateTime, course, japaneseLevel, lessonDuration,
       weeklyTrialDone, agreed, outcome,
+      countryScreeningPassed, screeningQ1, screeningQ2, screeningQ3,
     } = req.body || {};
     if (!fullName || !email) {
       return res.status(400).json({ error: "fullName and email are required" });
@@ -416,7 +417,10 @@ async function handleTrialLesson(req, res) {
     }
 
     const analysis = analyzeLocation(location);
-    const isRejected = !weeklyTrialDone
+    // A student outside the approved-country list can still be accepted if they passed the
+    // 3-question screening (see public/trial-lesson.html) — countryScreeningPassed is only ever
+    // sent (true or false) for that path; it's undefined for everyone else.
+    const isRejected = !weeklyTrialDone && countryScreeningPassed !== true
       && (outcome === "rejected_country" || !analysis || !analysis.hasCityText || !TRIAL_ALLOWED_SET.has(analysis.canonical));
     // A non-rejected submission must have gone through the page-gated policy step and
     // ticked Agree — reject the request server-side if that flag is missing, same spirit as
@@ -439,6 +443,10 @@ async function handleTrialLesson(req, res) {
       japanese_level: japaneseLevel || null,
       lesson_duration: lessonDuration || null,
       weekly_trial_done: !!weeklyTrialDone,
+      screening_q1: screeningQ1 || null,
+      screening_q2: screeningQ2 || null,
+      screening_q3: screeningQ3 || null,
+      screening_passed: typeof countryScreeningPassed === "boolean" ? countryScreeningPassed : null,
       agreed_at: isRejected ? null : submittedAt,
       submitted_at: submittedAt,
     });
@@ -462,6 +470,8 @@ async function handleTrialLesson(req, res) {
          ${lessonDuration ? `<strong>Lesson length:</strong> ${lessonDuration}<br/>` : ""}
          <strong>Weekly GAKU Master trial already done:</strong> ${weeklyTrialDone ? "Yes" : "No"}<br/>
          ${weeklyTrialDone && !TRIAL_ALLOWED_SET.has((analysis && analysis.canonical) || "") ? `<strong style="color:#c8382b;">Accepted despite non-approved country because they answered Yes to the weekly-trial question.</strong><br/>` : ""}
+         ${screeningQ1 ? `<strong>Non-approved-country screening:</strong> Q1 (not a regular free lesson) — ${screeningQ1}; Q2 ($35/hr affordable) — ${screeningQ2 || "-"}; Q3 ($17.5/30min affordable) — ${screeningQ3 || "-"}<br/>` : ""}
+         ${countryScreeningPassed === true ? `<strong style="color:#c8382b;">Accepted despite non-approved country because they passed the screening questions.</strong><br/>` : ""}
          ${!isRejected ? `<strong>Agreed to policy:</strong> Yes<br/>` : ""}
          <strong>Submitted at:</strong> ${submittedAt}</p>
       ${!isRejected ? `<p>Please check your schedule against the preferred date/time above, then accept or decline (with an optional note) from the admin page: <a href="https://app.seitojapanese.online/admin-trial-lessons.html">admin-trial-lessons.html</a>.</p>` : ""}

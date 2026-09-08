@@ -132,6 +132,33 @@
     </div>
   </div>
 
+  <!-- STEP 1d: 対象国外の応募者向けスクリーニング質問（3問） -->
+  <div class="step" id="step-screening">
+    <h1 style="font-size:19px;">A few quick questions</h1>
+    <p class="sub">Free trial lessons are normally limited to a specific list of countries. Since you're outside that list, please answer these questions before we can continue.</p>
+
+    <label style="margin-top:0;">1. This free trial lesson is not for regular free lessons. *</label>
+    <div class="radio-group" id="screen-q1-group">
+      <label class="radio-row"><input type="radio" name="screen-q1" value="agree" />I agree</label>
+      <label class="radio-row"><input type="radio" name="screen-q1" value="disagree" />I disagree</label>
+    </div>
+
+    <label>2. Are you affordable for $35 USD for an hour? *</label>
+    <div class="radio-group" id="screen-q2-group">
+      <label class="radio-row"><input type="radio" name="screen-q2" value="yes" />Yes</label>
+      <label class="radio-row"><input type="radio" name="screen-q2" value="no" />No</label>
+    </div>
+
+    <label>3. Are you affordable to pay $17.5 USD for 30 minutes? *</label>
+    <div class="radio-group" id="screen-q3-group">
+      <label class="radio-row"><input type="radio" name="screen-q3" value="yes" />Yes</label>
+      <label class="radio-row"><input type="radio" name="screen-q3" value="no" />No</label>
+    </div>
+
+    <button class="btn" id="btn-screening-next" disabled>Next</button>
+    <div class="error-msg" id="screening-error"></div>
+  </div>
+
   <!-- STEP 2: ポリシー（一つのスクロールボックス。最後まで読まないと同意できない） -->
   <div class="step" id="step-policy">
     <h1 style="font-size:19px;">Please review our trial lesson policy</h1>
@@ -429,19 +456,9 @@ document.getElementById("btn-step1-next").addEventListener("click", async () => 
       return;
     }
 
-    // Record + notify even though this applicant is declined, then show the decline screen.
-    try {
-      await fetch("/api/policy-agreement", {
-        method: "POST", headers: { "Content-Type":"application/json" },
-        body: JSON.stringify({
-          action: "trial_lesson", fullName: submittedName, email: submittedEmail,
-          location: submittedLocation, originCountry: submittedOriginCountry, preferredDateTime: submittedDateTime,
-          course: submittedCourse, japaneseLevel: submittedLevel.join(", "), lessonDuration: submittedDuration,
-          weeklyTrialDone, outcome: "rejected_country",
-        }),
-      });
-    } catch (e) { /* still show the decline screen even if the notification failed */ }
-    showStep("step-rejected");
+    // Not blocked outright — give them a short screening instead of an immediate decline.
+    resetScreeningStep();
+    showStep("step-screening");
     return;
   }
 
@@ -453,6 +470,65 @@ document.getElementById("btn-step1-next").addEventListener("click", async () => 
 
 document.getElementById("btn-blocked-gaku-master").addEventListener("click", () => {
   window.location.href = "https://app.seitojapanese.online/gaku-master/";
+});
+
+// ---- STEP 1d: 対象国外の応募者向けスクリーニング（3問） ----
+// Passes only when Q1 = "I agree" AND at least one of Q2/Q3 = "Yes". If Q1 is "I disagree",
+// or Q1 is "I agree" but both price questions are "No", the applicant is declined exactly as
+// before (decline screen + free-study-guide offer, one-time-only via the repeat-block check).
+let submittedScreeningPassed = null, submittedScreeningQ1 = "", submittedScreeningQ2 = "", submittedScreeningQ3 = "";
+const screeningBtn = document.getElementById("btn-screening-next");
+function resetScreeningStep() {
+  document.querySelectorAll('input[name="screen-q1"], input[name="screen-q2"], input[name="screen-q3"]').forEach(el => el.checked = false);
+  document.getElementById("screen-q1-group").classList.remove("invalid");
+  document.getElementById("screen-q2-group").classList.remove("invalid");
+  document.getElementById("screen-q3-group").classList.remove("invalid");
+  setError(document.getElementById("screening-error"), "");
+  screeningBtn.disabled = true;
+}
+document.querySelectorAll('input[name="screen-q1"], input[name="screen-q2"], input[name="screen-q3"]').forEach(el => el.addEventListener("change", () => {
+  screeningBtn.disabled = !(selectedRadio("screen-q1") && selectedRadio("screen-q2") && selectedRadio("screen-q3"));
+  document.getElementById("screen-q1-group").classList.remove("invalid");
+  document.getElementById("screen-q2-group").classList.remove("invalid");
+  document.getElementById("screen-q3-group").classList.remove("invalid");
+}));
+
+screeningBtn.addEventListener("click", async () => {
+  const err = document.getElementById("screening-error");
+  const q1 = selectedRadio("screen-q1"), q2 = selectedRadio("screen-q2"), q3 = selectedRadio("screen-q3");
+  const missingQ1 = !q1, missingQ2 = !q2, missingQ3 = !q3;
+  document.getElementById("screen-q1-group").classList.toggle("invalid", missingQ1);
+  document.getElementById("screen-q2-group").classList.toggle("invalid", missingQ2);
+  document.getElementById("screen-q3-group").classList.toggle("invalid", missingQ3);
+  if (missingQ1 || missingQ2 || missingQ3) { setError(err, "Please answer all three questions."); return; }
+  setError(err, "");
+
+  submittedScreeningQ1 = q1; submittedScreeningQ2 = q2; submittedScreeningQ3 = q3;
+  submittedScreeningPassed = q1 === "agree" && (q2 === "yes" || q3 === "yes");
+
+  if (submittedScreeningPassed) {
+    document.getElementById("p-name").value = submittedName;
+    document.getElementById("p-email").value = submittedEmail;
+    showStep("step-policy");
+    initPolicy();
+    return;
+  }
+
+  // Record + notify even though this applicant is declined, then show the decline screen.
+  try {
+    await fetch("/api/policy-agreement", {
+      method: "POST", headers: { "Content-Type":"application/json" },
+      body: JSON.stringify({
+        action: "trial_lesson", fullName: submittedName, email: submittedEmail,
+        location: submittedLocation, originCountry: submittedOriginCountry, preferredDateTime: submittedDateTime,
+        course: submittedCourse, japaneseLevel: submittedLevel.join(", "), lessonDuration: submittedDuration,
+        weeklyTrialDone: false, outcome: "rejected_country",
+        screeningQ1: submittedScreeningQ1, screeningQ2: submittedScreeningQ2, screeningQ3: submittedScreeningQ3,
+        countryScreeningPassed: false,
+      }),
+    });
+  } catch (e) { /* still show the decline screen even if the notification failed */ }
+  showStep("step-rejected");
 });
 
 // ---- STEP 1b: 対象国外の場合の「無料スタディガイド」代替オファー ----
@@ -655,6 +731,12 @@ document.getElementById("btn-final-submit").addEventListener("click", async () =
     weeklyTrialDone: submittedWeeklyTrial === "Yes",
     agreed: true,
   };
+  if (submittedScreeningPassed !== null) {
+    payload.countryScreeningPassed = submittedScreeningPassed;
+    payload.screeningQ1 = submittedScreeningQ1;
+    payload.screeningQ2 = submittedScreeningQ2;
+    payload.screeningQ3 = submittedScreeningQ3;
+  }
 
   try {
     const resp = await fetch("/api/policy-agreement", { method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify(payload) });
