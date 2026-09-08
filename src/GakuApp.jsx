@@ -10089,6 +10089,23 @@ async function buildAIWeeklySchedule(form, weekNum, totalWeeks) {
     }
     availableResources = lines.join("\n");
     jlptOnlyInstruction = `\nThis student's goal is to PASS JLPT ${jlptLevel} — this is an exam-prep plan, not general study. STRICT RULES:\n- Use ONLY the official JLPT ${jlptLevel} practice sources listed below. Do NOT invent, substitute, or add any other app, podcast, YouTube channel, or website.\n- Where a source lists an exercise range for this week (e.g. "Exercise 5-7"), the task text MUST state that exact exercise range (e.g. "Reading Exercise 5-7") — never just link the site with no range.\n- Only include exam sections that match the skills the student selected below (e.g. if they only selected Reading and Listening, every task this week must be Reading or Listening only — do not add Grammar, Kanji, or Vocabulary tasks unless that section was selected).\n`;
+  } else if (isTravelGoal(form.goal, form.displayGoal)) {
+    // ─── Travel-to-Japan-goal branch ───────────────────────────────────────────
+    // Same strict pattern as the JLPT branch above: the schedule must be built ONLY from the
+    // curated TRAVEL_JAPAN_RESOURCES videos/pages for any reading or listening task, one specific
+    // item assigned per week (rotating through the list), rather than a generic CLT resource pool.
+    const travelListening = TRAVEL_JAPAN_RESOURCES.filter(r => r.mode === "listening");
+    const travelReading = TRAVEL_JAPAN_RESOURCES.filter(r => r.mode === "reading");
+    const thisWeekListening = travelListening[(weekNum - 1) % travelListening.length];
+    const thisWeekReading = travelReading[(weekNum - 1) % travelReading.length];
+    const lines = TRAVEL_JAPAN_RESOURCES.map(r => `- [${r.mode}] ${r.name} — ${r.url}`);
+    // Non-travel skills the student also selected (grammar/kanji/pronunciation) still need real
+    // resources, since none of the travel videos cover those skill areas.
+    const otherSkillResList = selectedSkills.filter(s => s !== "reading" && s !== "listening" && s !== "jlpt")
+      .flatMap(s => RESOURCES[s] || []);
+    otherSkillResList.forEach(r => lines.push(`- [${r.mode}] ${r.name} — ${r.url}`));
+    availableResources = lines.join("\n");
+    jlptOnlyInstruction = `\nThis student's final goal is traveling to Japan — this is a practical travel-Japanese plan, not general study. STRICT RULES:\n- For ANY reading or listening task this week, use ONLY this week's assigned resource(s) — do NOT use NHK Web Easy, Nihongo con Teppei, Tadoku, Onomappu, or any other generic app/podcast/site for reading or listening tasks, even if it seems like a good fit.\n- This week's assigned listening resource: "${thisWeekListening.name}" — ${thisWeekListening.url}. Frame the listening task around watching this real conversation video and using GAKU Reader to check unfamiliar words/phrases.\n- This week's assigned reading resource: "${thisWeekReading.name}" — ${thisWeekReading.url}. Frame the reading task around using this page (with GAKU Reader) to learn the vocabulary/kanji on it.\n- Only use the "other resources" listed above (if any) for skills the travel videos don't cover, such as grammar, kanji, or pronunciation — never substitute them for a reading/listening task.\n- Only include skills the student actually selected below.\n`;
   } else {
     // Non-JLPT goal (or JLPT current-level without a JLPT pass-goal): normal curated CLT pool,
     // but still hard-restricted to the skills the student actually selected.
