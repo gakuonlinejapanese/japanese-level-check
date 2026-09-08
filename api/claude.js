@@ -118,9 +118,12 @@ export default async function handler(req, res) {
     // on 2026-06-17. Switched to qwen/qwen3.6-27b, Groq's recommended vision-capable
     // successor — note this is currently a Groq "preview" model, not GA/production-tier.
     if (provider === "vision") {
-      // reasoning_effort:"none" + reasoning_format:"hidden" stop qwen3.6-27b from thinking
-      // out loud (e.g. "Wait, let me look again...") in the visible response text.
-      const visionBody = { ...commonBody, reasoning_effort: "none", reasoning_format: "hidden" };
+      // reasoning_format:"hidden" keeps qwen3.6-27b's internal thinking out of the
+      // visible response (no more "Wait, let me look again..." leaking through).
+      // Deliberately NOT setting reasoning_effort:"none" — that disabled reasoning
+      // entirely and hurt answer accuracy on grammar questions. Letting the model
+      // actually think (just not show it) trades a few more tokens for correctness.
+      const visionBody = { ...commonBody, reasoning_format: "hidden" };
       const visionResult = await callGroq(groqKeys, visionBody, "qwen/qwen3.6-27b");
       if (visionResult.text !== null) {
         return res.status(200).json({ content: [{ type: "text", text: visionResult.text }] });
