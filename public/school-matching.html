@@ -41,6 +41,7 @@
 
   h1 { font-size:22px; line-height:1.4; margin:0 0 6px; font-weight:800; color:var(--neon); text-shadow:0 1px 3px rgba(0,0,0,.25); }
   .sub { font-size:13px; font-weight:700; color:var(--neon); opacity:.95; margin:0 0 22px; line-height:1.6; }
+  .desc { font-size:15px; font-weight:500; margin:-14px 0 22px; line-height:1.6; }
 
   label { display:block; font-size:14px; font-weight:700; margin:0 0 10px; color:var(--neon); }
   input[type=text], input[type=email] {
@@ -178,6 +179,9 @@ const QUESTIONS = [
   { id:"firstName", type:"text", label:"First Name", placeholder:"e.g. Taro" },
   { id:"lastName", type:"text", label:"Last Name", placeholder:"e.g. Yamada" },
   { id:"email", type:"email", label:"Email Address", placeholder:"you@example.com" },
+  { id:"whatsapp", type:"text", label:"Your WhatsApp Account",
+    desc:"Having a WhatsApp account will help your counseling session go more smoothly.",
+    placeholder:"e.g. +1 555-123-4567" },
   { id:"country", type:"text", label:"Which country are you from?", placeholder:"e.g. United States" },
   { id:"jlptN4", type:"radio", label:"Are you JLPT N4 or above?",
     options:["Yes","No","I haven't taken JLPT yet"] },
@@ -324,6 +328,7 @@ function renderStep() {
   btnBack.style.visibility = step === 0 ? "hidden" : "visible";
 
   let html = `<h1>${q.label}</h1><p class="sub">Question ${step + 1} of ${QUESTIONS.length}</p>`;
+  if (q.desc) html += `<p class="desc">${q.desc}</p>`;
 
   if (q.type === "text" || q.type === "email") {
     html += `<label>${q.label} *</label><input type="${q.type}" id="qinput" placeholder="${q.placeholder || ""}" value="${answers[q.id] || ""}" />`;

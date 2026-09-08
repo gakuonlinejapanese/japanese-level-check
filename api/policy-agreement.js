@@ -286,7 +286,7 @@ async function handleCancellationRequest(req, res) {
 async function handleSchoolMatching(req, res) {
   try {
     const {
-      firstName, lastName, email, country, jlptN4, longTermTimeline, shortTermTimeline,
+      firstName, lastName, email, whatsapp, country, jlptN4, longTermTimeline, shortTermTimeline,
       tuitionAware, shortTermBudget, visaSavings, livingExpenses, noScholarship, waitTime,
       referrer, bankStatementAgree, bankStatementFile, outcome,
     } = req.body || {};
@@ -328,6 +328,7 @@ async function handleSchoolMatching(req, res) {
       first_name: firstName,
       last_name: lastName,
       email: email.trim().toLowerCase(),
+      whatsapp: whatsapp || null,
       country: country || null,
       jlpt_n4: jlptN4 || null,
       long_term_timeline: longTermTimeline || null,
@@ -355,6 +356,7 @@ async function handleSchoolMatching(req, res) {
       <p>A student submitted a School Matching counseling request.</p>
       <p><strong>Name:</strong> ${firstName} ${lastName}<br/>
          <strong>Email:</strong> ${email}<br/>
+         <strong>WhatsApp:</strong> ${whatsapp || "(not provided)"}<br/>
          <strong>Country:</strong> ${country || "(not provided)"}<br/>
          <strong>JLPT N4+:</strong> ${jlptN4 || "-"}<br/>
          <strong>Long-term timeline OK:</strong> ${longTermTimeline || "-"}<br/>
