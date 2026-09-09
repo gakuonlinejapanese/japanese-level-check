@@ -141,6 +141,19 @@ function analyzeLocation(raw) {
 // pending request. decision is "accept" or "decline". Updates the row's status/admin_note/
 // confirmed_datetime/responded_at and emails the student the decision plus Seito's note.
 // Also kept on this same endpoint for the same 12-function-cap reason above.
+//
+// POST { action: "check_feedback_submitted", email } — called from the Dashboard's
+// "💬 Feedback" tab on mount (non-invite students only) to check whether this student has
+// already used their one lifetime feedback submission, before showing the form at all.
+//
+// POST { action: "submit_feedback", userId, email, name, isGakuStudent, feedbackText } —
+// called from the same tab on submit. Invite-code (GAKU) students may submit any number of
+// times; non-invite students are limited to one submission ever (re-checked here). Every
+// submission is screened by AI for abusive/harassing/discriminatory content before being
+// accepted — ordinary negative product feedback is always allowed, but flagged text is
+// rejected outright (422) and never stored or emailed. Accepted feedback is recorded in
+// `student_feedback` and emailed to Seito in full. Also kept on this same endpoint for the
+// same 12-function-cap reason above.
 export default async function handler(req, res) {
   // The GAKU Reader extension calls the jlpt_scan_consent action below cross-origin,
   // so a CORS preflight (OPTIONS) needs to succeed regardless of which action follows.
@@ -161,6 +174,8 @@ export default async function handler(req, res) {
     if (action === "admin_respond_trial_lesson") return handleAdminRespondTrialLesson(req, res);
     if (action === "request_jlpt_mock_test") return handleRequestJlptMockTest(req, res);
     if (action === "check_jlpt_mock_applied") return handleCheckJlptMockApplied(req, res);
+    if (action === "submit_feedback") return handleSubmitFeedback(req, res);
+    if (action === "check_feedback_submitted") return handleCheckFeedbackSubmitted(req, res);
     if (action === "jlpt_scan_consent") {
       res.setHeader("Access-Control-Allow-Origin", "*");
       return handleJlptScanConsent(req, res);
@@ -955,6 +970,154 @@ async function handleAdminRespondTrialLesson(req, res) {
     return res.status(200).json({ ok: true });
   } catch (e) {
     console.error("handleAdminRespondTrialLesson failed:", e.message);
+    return res.status(500).json({ error: e.message });
+  }
+}
+
+// ---- Feedback & Opinion (Dashboard "💬 Feedback" tab) ----
+
+// Screens a feedback submission for abusive/harassing/discriminatory content before it's
+// stored. Ordinary negative or harshly-worded product feedback ("this app is buggy and
+// frustrating") is always allowed — only personal insults/slurs, harassment, threats, hate
+// speech, or discriminatory/obscene language get flagged. Reuses the same Groq keys as
+// api/claude.js. Fails open (never flags) if no key is configured or every key errors out, so
+// a moderation-service hiccup never blocks a legitimate student from being heard.
+async function moderateFeedbackText(text) {
+  const groqKeys = [
+    process.env.GROQ_API_KEY,
+    process.env.GROQ_API_KEY_2,
+    process.env.GROQ_API_KEY_3,
+    process.env.GROQ_API_KEY_4,
+    process.env.GROQ_API_KEY_5,
+  ].filter(Boolean);
+  if (!groqKeys.length) return { flagged: false };
+
+  const body = JSON.stringify({
+    model: "llama-3.3-70b-versatile",
+    temperature: 0,
+    max_tokens: 10,
+    messages: [
+      {
+        role: "system",
+        content:
+          "You are a content moderator for a Japanese-language-school app's student feedback box. " +
+          "The student's message may be in any language and may be a completely legitimate, harshly " +
+          "worded, or negative product complaint — negative opinions about the app itself are ALWAYS " +
+          "allowed and must never be flagged. Reply with the single word FLAG only if the message " +
+          "contains personal insults or slurs directed at a person, harassment, threats, hate speech " +
+          "or discriminatory language, or obscene abusive language. Otherwise reply with the single " +
+          "word OK. Reply with exactly one word and nothing else.",
+      },
+      { role: "user", content: text.slice(0, 4000) },
+    ],
+  });
+
+  for (const key of groqKeys) {
+    try {
+      const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "Authorization": `Bearer ${key}` },
+        body,
+      });
+      if (response.status === 429) continue; // try next key
+      const data = await response.json();
+      if (!response.ok) return { flagged: false }; // fail open on API error
+      const verdict = (data.choices?.[0]?.message?.content || "").trim().toUpperCase();
+      return { flagged: verdict.startsWith("FLAG") };
+    } catch {
+      continue; // try next key
+    }
+  }
+  return { flagged: false }; // all keys exhausted — fail open
+}
+
+async function hasSubmittedFeedback(supabase, normalizedEmail) {
+  const { data, error } = await supabase
+    .from("student_feedback")
+    .select("id")
+    .eq("email", normalizedEmail)
+    .limit(1);
+  if (error) {
+    console.error("hasSubmittedFeedback query failed:", error.message);
+    return false; // fail open — don't block a legitimate first-time submission over a query hiccup
+  }
+  return (data || []).length > 0;
+}
+
+function escapeHtmlForFeedback(s) {
+  return (s || "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
+async function handleCheckFeedbackSubmitted(req, res) {
+  try {
+    const { email } = req.body || {};
+    if (!email) return res.status(400).json({ error: "email is required" });
+    const supabase = getAdminClient();
+    const alreadySubmitted = await hasSubmittedFeedback(supabase, email.trim().toLowerCase());
+    return res.status(200).json({ alreadySubmitted });
+  } catch (e) {
+    console.error("handleCheckFeedbackSubmitted failed:", e.message);
+    return res.status(200).json({ alreadySubmitted: false });
+  }
+}
+
+async function handleSubmitFeedback(req, res) {
+  try {
+    const { userId, email, name, isGakuStudent, feedbackText } = req.body || {};
+    if (!email) return res.status(400).json({ error: "email is required" });
+    const text = (feedbackText || "").trim();
+    if (!text) return res.status(400).json({ error: "feedbackText is required" });
+    if (text.length > 3000) return res.status(400).json({ error: "feedbackText is too long (3000 char max)" });
+
+    const normalizedEmail = email.trim().toLowerCase();
+    const supabase = getAdminClient();
+
+    // Non-invite students get exactly one lifetime submission — re-checked here even though
+    // the client also checks, to close the race/bypass window.
+    if (!isGakuStudent) {
+      const already = await hasSubmittedFeedback(supabase, normalizedEmail);
+      if (already) return res.status(409).json({ error: "already_submitted" });
+    }
+
+    const { flagged } = await moderateFeedbackText(text);
+    if (flagged) return res.status(422).json({ error: "flagged" });
+
+    const createdAt = new Date().toISOString();
+    const { error: insertErr } = await supabase.from("student_feedback").insert({
+      user_id: userId || null,
+      email: normalizedEmail,
+      name: name || null,
+      is_gaku_student: !!isGakuStudent,
+      feedback_text: text,
+      created_at: createdAt,
+    });
+    if (insertErr) return res.status(500).json({ error: insertErr.message });
+
+    try {
+      await sendEmail({
+        to: ADMIN_EMAIL,
+        subject: `[GAKU] New feedback from ${name || normalizedEmail}`,
+        html: `<p>A student submitted feedback via the Feedback &amp; Opinion tab.</p>
+               <p><strong>Name:</strong> ${name || "(not provided)"}<br/>
+                  <strong>Email:</strong> ${normalizedEmail}<br/>
+                  <strong>Invite-code (GAKU) student:</strong> ${isGakuStudent ? "Yes" : "No"}<br/>
+                  <strong>Submitted at:</strong> ${createdAt}</p>
+               <p><strong>Feedback:</strong></p>
+               <p style="white-space:pre-wrap;">${escapeHtmlForFeedback(text)}</p>`,
+      });
+    } catch (emailErr) {
+      // The feedback is already durably recorded above — don't fail the student's submission
+      // just because the admin notification email had a hiccup.
+      console.error("[submit_feedback] admin notify failed:", emailErr.message);
+    }
+
+    return res.status(200).json({ ok: true });
+  } catch (e) {
+    console.error("handleSubmitFeedback failed:", e.message);
     return res.status(500).json({ error: e.message });
   }
 }

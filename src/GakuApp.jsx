@@ -10854,7 +10854,7 @@ function LevelUpOffer({ T, currentLevel, onConfirm, onDismiss }) {
 }
 
 // ─── DASHBOARD ──────────────────────────────────────────────────────────────────
-function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteAccountBusy, userId, streakDays, daysUntilTrialEnds, isTrialAccount }) {
+function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteAccountBusy, userId, streakDays, daysUntilTrialEnds, isTrialAccount, isGakuStudent }) {
   const T = useUITranslations(form?.preferredLang || "English");
   const [schedule, setSchedule] = useState(() => buildSchedule(form, getT(form?.preferredLang || "English")));
   const [milestones, setMilestones] = useState(() => buildMilestones(form));
@@ -10942,6 +10942,50 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
     dismissJlptMockOffer();
   };
   const showJlptMockOffer = (form.skills||[]).includes("jlpt") && !jlptMockDismissed;
+
+  // "💬 Feedback" tab — students can report bugs/improvement ideas any time. Invite-code (GAKU)
+  // students can submit any number of times; non-invite (trial) students get exactly one
+  // lifetime submission, checked here on first visit to the tab so the form can be swapped for
+  // an "already submitted" message up front (server re-checks on submit too). Every submission
+  // is screened server-side for abusive/harassing content before being accepted; ordinary
+  // negative feedback about the app is always welcome.
+  const [feedbackText, setFeedbackText] = useState("");
+  const [feedbackStatus, setFeedbackStatus] = useState("idle"); // idle | checking | form | already_submitted | submitting | success | rejected | error
+  const [feedbackChecked, setFeedbackChecked] = useState(false);
+  useEffect(() => {
+    if (tab !== "feedback" || feedbackChecked) return;
+    setFeedbackChecked(true);
+    if (isGakuStudent) { setFeedbackStatus("form"); return; }
+    setFeedbackStatus("checking");
+    fetch("/api/policy-agreement", {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action: "check_feedback_submitted", email: form.email }),
+    })
+      .then(r => r.json())
+      .then(data => setFeedbackStatus(data?.alreadySubmitted ? "already_submitted" : "form"))
+      .catch(() => setFeedbackStatus("form"));
+  }, [tab, feedbackChecked, isGakuStudent, form.email]);
+  const submitFeedback = async () => {
+    const text = feedbackText.trim();
+    if (!text) return;
+    setFeedbackStatus("submitting");
+    try {
+      const res = await fetch("/api/policy-agreement", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: "submit_feedback",
+          userId, email: form.email, name: form.name, isGakuStudent: !!isGakuStudent, feedbackText: text,
+        }),
+      });
+      if (res.status === 409) { setFeedbackStatus("already_submitted"); return; }
+      if (res.status === 422) { setFeedbackStatus("rejected"); return; }
+      if (!res.ok) { setFeedbackStatus("error"); return; }
+      setFeedbackText("");
+      setFeedbackStatus("success");
+    } catch {
+      setFeedbackStatus("error");
+    }
+  };
 
   const loadAISchedule = useCallback(async (forceRegen = false) => {
     setAiScheduleLoading(true);
@@ -11053,6 +11097,7 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
     { id:"resources",  label: T.tabResources },
     { id:"milestones", label: T.tabMilestones },
     { id:"jlpt",       label: T.tabJlpt || "🎓 JLPT結果" },
+    { id:"feedback",   label: T.tabFeedback || "💬 Feedback" },
   ];
   const RESOURCE_SUBTABS = [
     { id:"links",    label: "🔗 " + (T.tabResources || "Resources") },
@@ -11420,6 +11465,71 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
         )}
 
         {tab==="jlpt" && <JlptResultsPanel userId={userId} T={T} />}
+
+        {tab==="feedback" && (
+          <div style={{ ...S.card }}>
+            <p style={{ color:C.purpleLight, fontSize:13, fontWeight:700, marginBottom:6 }}>
+              {T.feedbackTitle || "💬 Feedback & Opinion"}
+            </p>
+            <p style={{ color:"#94a3b8", fontSize:12, marginBottom:14, lineHeight:1.5 }}>
+              {T.feedbackSubtitle || "Tell us what you'd like improved or anything that's bothering you about the app. We read every message."}
+            </p>
+
+            <div style={{ background:"rgba(239,68,68,0.1)", border:"1px solid rgba(239,68,68,0.4)", borderRadius:10, padding:"10px 12px", marginBottom:14 }}>
+              <p style={{ color:"#f87171", fontSize:11, margin:0, lineHeight:1.5, fontWeight:600 }}>
+                ⚠️ {T.feedbackWarning || "万が一誹謗中傷、暴言、差別用語などを書いた場合は直ちにアカウント停止。訴訟が起こっても一切の責任は負いません。"}
+              </p>
+            </div>
+
+            {feedbackStatus === "checking" && (
+              <p style={{ color:"#64748b", fontSize:12 }}>{T.feedbackChecking || "Checking..."}</p>
+            )}
+
+            {feedbackStatus === "already_submitted" && (
+              <p style={{ color:"#fbbf24", fontSize:12, margin:0 }}>
+                ℹ️ {T.feedbackAlreadySubmitted || "You've already submitted your one-time feedback. Thank you! (GAKU-invited students can submit as many times as they like.)"}
+              </p>
+            )}
+
+            {feedbackStatus === "success" && (
+              <p style={{ color:"#4ade80", fontSize:12, margin:0 }}>
+                ✅ {T.feedbackSuccess || "Thank you — your feedback was sent."}
+              </p>
+            )}
+
+            {(feedbackStatus === "form" || feedbackStatus === "submitting" || feedbackStatus === "rejected" || feedbackStatus === "error") && (
+              <div>
+                <textarea
+                  value={feedbackText}
+                  onChange={e => setFeedbackText(e.target.value.slice(0, 3000))}
+                  placeholder={T.feedbackPlaceholder || "What would you like us to improve, or what's on your mind?"}
+                  rows={6}
+                  style={{ ...S.input, resize:"vertical", lineHeight:1.5 }}
+                />
+                <p style={{ color:"#64748b", fontSize:10, textAlign:"right", margin:"4px 0 10px" }}>{feedbackText.length}/3000</p>
+
+                {feedbackStatus === "rejected" && (
+                  <p style={{ color:"#f87171", fontSize:12, marginBottom:10 }}>
+                    ⚠️ {T.feedbackRejected || "This message couldn't be accepted. Please rephrase without personal insults, harassment, or discriminatory language."}
+                  </p>
+                )}
+                {feedbackStatus === "error" && (
+                  <p style={{ color:"#f87171", fontSize:12, marginBottom:10 }}>
+                    ⚠️ {T.feedbackError || "Something went wrong sending your feedback. Please try again."}
+                  </p>
+                )}
+
+                <button
+                  onClick={submitFeedback}
+                  disabled={feedbackStatus === "submitting" || !feedbackText.trim()}
+                  style={{ ...S.btn, padding:"10px 16px", background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff", opacity:(feedbackStatus === "submitting" || !feedbackText.trim()) ? 0.6 : 1 }}
+                >
+                  {feedbackStatus === "submitting" ? (T.feedbackSubmitting || "Sending...") : (T.feedbackSubmit || "Submit Feedback")}
+                </button>
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );
@@ -12436,7 +12546,7 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
   }
   return (
     <div style={{ position:"relative" }} onClickCapture={handleDashboardInteraction}>
-      <Dashboard form={form} onEdit={handleEdit} onLevelUp={(lvl)=>handleSubmit({ ...form, jlpt: lvl })} onLogout={authUser ? handleLogout : undefined} onDeleteAccount={authUser ? handleDeleteAccount : undefined} deleteAccountBusy={deleteAccountBusy} userId={authUser?.id} streakDays={streakDays} daysUntilTrialEnds={daysUntilTrialEnds} isTrialAccount={!isGakuStudent && !isPaid} />
+      <Dashboard form={form} onEdit={handleEdit} onLevelUp={(lvl)=>handleSubmit({ ...form, jlpt: lvl })} onLogout={authUser ? handleLogout : undefined} onDeleteAccount={authUser ? handleDeleteAccount : undefined} deleteAccountBusy={deleteAccountBusy} userId={authUser?.id} streakDays={streakDays} daysUntilTrialEnds={daysUntilTrialEnds} isTrialAccount={!isGakuStudent && !isPaid} isGakuStudent={isGakuStudent} />
       {/* TEMP DEBUG — remove after confirming the counter works */}
       <div style={{ position:"fixed", bottom:12, right:12, zIndex:99999, background:"rgba(0,0,0,0.75)", color:"#4ade80", fontSize:11, fontFamily:"monospace", padding:"4px 8px", borderRadius:6 }}>
         count: {interactionCount}/21 {skipTrialPaywall ? "(skip)" : ""} {authUser && isGakuStudent ? "(gaku)" : ""} {authUser && isPaid ? "(paid)" : ""}
