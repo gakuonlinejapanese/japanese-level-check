@@ -180,6 +180,10 @@ export default async function handler(req, res) {
       res.setHeader("Access-Control-Allow-Origin", "*");
       return handleJlptScanConsent(req, res);
     }
+    if (action === "check_jlpt_scan_consent") {
+      res.setHeader("Access-Control-Allow-Origin", "*");
+      return handleCheckJlptScanConsent(req, res);
+    }
 
     const { name, email, plan, userId } = req.body || {};
     if (!email) return res.status(400).json({ error: "email is required" });
@@ -217,31 +221,94 @@ export default async function handler(req, res) {
   }
 }
 
-// POST { action: "jlpt_scan_consent", email, userId, instanceId, pledgeVersion } — called from
-// the GAKU Reader extension's screenshot-scan feature right before entering "JLPT解答解説"
-// mode. Records that the user agreed to the anti-cheating pledge (JLPT answer support is for
-// the user's own exam-prep purposes only, never for cheating on tests/mock exams/homework, and
-// GAKU bears no responsibility if it's misused) into jlpt_scan_consent_log, so there's a
-// durable record of who agreed and when. Called cross-origin from the extension (see CORS
-// header set above). Kept on this same endpoint for the same 12-function-cap reason above.
+// POST { action: "jlpt_scan_consent", fullName, email, userId, instanceId, pledgeVersion } —
+// called from the GAKU Reader extension's screenshot-scan feature right before entering
+// "JLPT解答解説" mode. Records that the user agreed to the anti-cheating pledge (JLPT answer
+// support is for the user's own exam-prep purposes only, never for cheating on tests/mock
+// exams/homework, and GAKU bears no responsibility if it's misused) into
+// jlpt_scan_consent_log, so there's a durable record of who agreed, their full name (for
+// identity verification), and when. fullName and email are both required — the extension
+// gates its "I agree" button on both being filled in first. Sends Seito an admin notification
+// email for every new consent (best-effort — a failed notify never blocks the student's
+// consent from being recorded). Called cross-origin from the extension (see CORS header set
+// above). Kept on this same endpoint for the same 12-function-cap reason above.
 async function handleJlptScanConsent(req, res) {
   try {
-    const { email, userId, instanceId, pledgeVersion } = req.body || {};
+    const { fullName, email, userId, instanceId, pledgeVersion } = req.body || {};
+    if (!fullName || !fullName.trim()) {
+      return res.status(400).json({ error: "fullName is required" });
+    }
     if (!email && !instanceId) {
       return res.status(400).json({ error: "email or instanceId is required" });
     }
     const supabase = getAdminClient();
+    const normalizedEmail = email ? email.trim().toLowerCase() : null;
+    const consentedAt = new Date().toISOString();
     const { error: insertErr } = await supabase.from("jlpt_scan_consent_log").insert({
       user_id: userId || null,
-      email: email ? email.trim().toLowerCase() : null,
+      email: normalizedEmail,
+      full_name: fullName.trim(),
       instance_id: instanceId || null,
       pledge_version: pledgeVersion || "v1",
+      consented_at: consentedAt,
     });
     if (insertErr) return res.status(500).json({ error: insertErr.message });
+
+    try {
+      await sendEmail({
+        to: ADMIN_EMAIL,
+        subject: `[GAKU Reader] JLPT scan pledge agreed — ${fullName.trim()}`,
+        html: `<p>A student agreed to the JLPT answer-support anti-cheating pledge in GAKU Reader.</p>
+               <p><strong>Full name:</strong> ${fullName.trim()}<br/>
+                  <strong>Email:</strong> ${normalizedEmail || "(not provided)"}<br/>
+                  <strong>Instance ID:</strong> ${instanceId || "(not provided)"}<br/>
+                  <strong>Pledge version:</strong> ${pledgeVersion || "v1"}<br/>
+                  <strong>Agreed at:</strong> ${consentedAt}</p>`,
+      });
+    } catch (emailErr) {
+      // The consent is already durably recorded above — don't fail the student's flow
+      // just because the admin notification email had a hiccup.
+      console.error("[jlpt_scan_consent] admin notify failed:", emailErr.message);
+    }
+
     return res.status(200).json({ ok: true });
   } catch (e) {
     console.error("handleJlptScanConsent failed:", e.message);
     return res.status(500).json({ error: e.message });
+  }
+}
+
+// POST { action: "check_jlpt_scan_consent", email, instanceId } — called from the GAKU Reader
+// extension before showing the anti-cheating pledge popup, so a student who has already
+// agreed once (on this browser instance, or with this email on any browser) is never shown
+// it again. Matches on instanceId OR email, whichever is provided — returns the earliest
+// match. Fails open toward "not yet consented" (shows the pledge again) on any query error,
+// since re-showing a pledge is harmless while wrongly hiding it is not.
+async function handleCheckJlptScanConsent(req, res) {
+  try {
+    const { email, instanceId } = req.body || {};
+    if (!email && !instanceId) {
+      return res.status(200).json({ consented: false });
+    }
+    const supabase = getAdminClient();
+    let query = supabase.from("jlpt_scan_consent_log").select("id").limit(1);
+    const normalizedEmail = email ? email.trim().toLowerCase() : null;
+    if (normalizedEmail && instanceId) {
+      query = query.or(`email.eq.${normalizedEmail},instance_id.eq.${instanceId}`);
+    } else if (normalizedEmail) {
+      query = query.eq("email", normalizedEmail);
+    } else {
+      query = query.eq("instance_id", instanceId);
+    }
+    const { data, error } = await query;
+    if (error) {
+      console.error("handleCheckJlptScanConsent query failed:", error.message);
+      return res.status(200).json({ consented: false });
+    }
+    return res.status(200).json({ consented: (data || []).length > 0 });
+  } catch (e) {
+    console.error("handleCheckJlptScanConsent failed:", e.message);
+    return res.status(200).json({ consented: false });
   }
 }
 

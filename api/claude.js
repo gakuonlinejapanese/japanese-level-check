@@ -39,6 +39,34 @@ async function callDeepInfra(deepInfraKey, commonBody) {
   return null;
 }
 
+async function callDeepInfraVision(deepInfraKey, commonBody) {
+  if (!deepInfraKey) return null;
+
+  const body = JSON.stringify({
+    model: "Qwen/Qwen3-VL-235B-A22B-Instruct",
+    ...commonBody,
+  });
+
+  try {
+    const response = await fetch("https://api.deepinfra.com/v1/openai/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${deepInfraKey}`,
+      },
+      body,
+    });
+
+    const data = await response.json();
+    if (response.ok) {
+      return data.choices?.[0]?.message?.content || "";
+    }
+    return null; // non-retryable error
+  } catch (e) {
+    return null; // network error
+  }
+}
+
 async function callGroq(groqKeys, commonBody, model = "llama-3.3-70b-versatile") {
   if (!groqKeys.length) return { text: null, lastError: "No Groq keys configured" };
 
@@ -112,11 +140,13 @@ export default async function handler(req, res) {
     // vision-capable Groq model instead of the text-only 70B model. Always called from
     // background.js (extension context, exempt from CORS), never directly from content.js,
     // since chrome.tabs.captureVisibleTab() is itself background/service-worker-only. No
-    // DeepInfra fallback yet (no vision-capable model wired up on that side) — add one here
-    // if Groq's vision accuracy or availability becomes a problem.
     // NOTE (2026-09-08): meta-llama/llama-4-scout-17b-16e-instruct was deprecated by Groq
     // on 2026-06-17. Switched to qwen/qwen3.6-27b, Groq's recommended vision-capable
     // successor — note this is currently a Groq "preview" model, not GA/production-tier.
+    // NOTE (2026-09-09): this account's on-demand tier caps qwen3.6-27b at 1000 output
+    // tokens/min, which thinking-enabled requests blow past almost immediately. Added a
+    // DeepInfra fallback (Qwen3-VL-235B-A22B-Instruct) below for when Groq rate-limits or
+    // errors out, so the scan feature degrades gracefully instead of failing outright.
     if (provider === "vision") {
       // reasoning_format:"hidden" keeps qwen3.6-27b's internal thinking out of the
       // visible response (no more "Wait, let me look again..." leaking through).
@@ -126,8 +156,16 @@ export default async function handler(req, res) {
       const visionBody = { ...commonBody, reasoning_format: "hidden" };
       const visionResult = await callGroq(groqKeys, visionBody, "qwen/qwen3.6-27b");
       if (visionResult.text !== null) {
+        console.log("provider=vision: Groq OK");
         return res.status(200).json({ content: [{ type: "text", text: visionResult.text }] });
       }
+      console.error("provider=vision: Groq FAILED —", visionResult.lastError);
+      const deepInfraVisionText = await callDeepInfraVision(deepInfraKey, commonBody);
+      if (deepInfraVisionText !== null) {
+        console.log("provider=vision: DeepInfra fallback OK");
+        return res.status(200).json({ content: [{ type: "text", text: deepInfraVisionText }] });
+      }
+      console.error("provider=vision: DeepInfra fallback also FAILED");
       return res.status(visionResult.status || 429).json({ error: visionResult.lastError || "Vision provider failed" });
     }
 
