@@ -585,6 +585,19 @@ const UI_TRANSLATIONS = {
     jlptBack: "Back",
     jlptDoneMessage: "Thanks! Your JLPT Free Assessment Report request was sent — check your email for the next steps.",
     jlptAlreadyAppliedMessage: "You've already applied for the free JLPT mock test before — it's a one-time offer, so we can't send it again.",
+    // Quick Start / Complete Profile onboarding (2-stage)
+    quickNameQuestion: "What should we call you?",
+    quickEmailQuestion: "What's your email?",
+    quickGoalQuestion: "What's your main goal?",
+    quickLevelQuestion: "What's your current level?",
+    quickNoJlptHint: "(no JLPT)",
+    next: "Next",
+    skipForNow: "Skip for now, I'll finish this later",
+    doneArrow: "Done →",
+    completeCountryQuestion: "Which country are you in?",
+    completeLangQuestion: "What's your native language?",
+    profileNudgeText: "Finish setting up your profile to get study content matched to your schedule and goals.",
+    profileNudgeCta: "Finish now",
     // How to use
     howToTitle: "How to use this app",
     howToSchedule: "Your weekly study plan, broken into daily tasks. Tap a task to mark it done and track your weekly progress.",
@@ -960,6 +973,19 @@ const UI_TRANSLATIONS = {
     jlptBack: "Retour",
     jlptDoneMessage: "Merci ! Votre demande de rapport d'évaluation JLPT gratuit a été envoyée — vérifiez votre e-mail pour la suite.",
     jlptAlreadyAppliedMessage: "Vous avez déjà demandé l'examen blanc du JLPT gratuit auparavant — il s'agit d'une offre unique, nous ne pouvons donc pas la renvoyer.",
+    // Quick Start / Complete Profile onboarding (2-stage)
+    quickNameQuestion: "Comment devons-nous vous appeler ?",
+    quickEmailQuestion: "Quelle est votre adresse e-mail ?",
+    quickGoalQuestion: "Quel est votre objectif principal ?",
+    quickLevelQuestion: "Quel est votre niveau actuel ?",
+    quickNoJlptHint: "(pas de JLPT)",
+    next: "Suivant",
+    skipForNow: "Passer pour l'instant, je terminerai plus tard",
+    doneArrow: "Terminé →",
+    completeCountryQuestion: "Dans quel pays êtes-vous ?",
+    completeLangQuestion: "Quelle est votre langue maternelle ?",
+    profileNudgeText: "Terminez votre profil pour obtenir un contenu d'étude adapté à votre emploi du temps et à vos objectifs.",
+    profileNudgeCta: "Terminer maintenant",
     howToTitle: "Comment utiliser cette application",
     howToSchedule: "Votre plan d'étude hebdomadaire, divisé en tâches quotidiennes. Appuyez sur une tâche pour la marquer comme faite.",
     howToPractice: "Exercices générés par l'IA à partir du texte japonais que vous collez (articles, sous-titres, légendes) — vocabulaire, kanji, grammaire, lecture, écoute, conversation et prononciation. Appuyez sur « Voir la réponse » pour vous corriger.",
@@ -1321,6 +1347,19 @@ const UI_TRANSLATIONS = {
     jlptBack: "Atrás",
     jlptDoneMessage: "¡Gracias! Tu solicitud de Informe de evaluación gratuita del JLPT fue enviada — revisa tu correo para los próximos pasos.",
     jlptAlreadyAppliedMessage: "Ya solicitaste el simulacro gratuito del JLPT anteriormente — es una oferta única, por lo que no podemos enviarla de nuevo.",
+    // Quick Start / Complete Profile onboarding (2-stage)
+    quickNameQuestion: "¿Cómo debemos llamarte?",
+    quickEmailQuestion: "¿Cuál es tu correo electrónico?",
+    quickGoalQuestion: "¿Cuál es tu objetivo principal?",
+    quickLevelQuestion: "¿Cuál es tu nivel actual?",
+    quickNoJlptHint: "(sin JLPT)",
+    next: "Siguiente",
+    skipForNow: "Omitir por ahora, lo terminaré más tarde",
+    doneArrow: "Hecho →",
+    completeCountryQuestion: "¿En qué país estás?",
+    completeLangQuestion: "¿Cuál es tu idioma nativo?",
+    profileNudgeText: "Termina de configurar tu perfil para obtener contenido de estudio adaptado a tu horario y objetivos.",
+    profileNudgeCta: "Terminar ahora",
     howToTitle: "Cómo usar esta aplicación",
     howToSchedule: "Tu plan de estudio semanal, dividido en tareas diarias. Toca una tarea para marcarla como completada.",
     howToPractice: "Ejercicios generados por IA a partir del texto japonés que pegas (artículos, subtítulos, leyendas) — vocabulario, kanji, gramática, lectura, escucha, conversación y pronunciación. Toca 'Ver respuesta' para comprobar.",
@@ -1682,6 +1721,19 @@ const UI_TRANSLATIONS = {
     jlptBack: "Voltar",
     jlptDoneMessage: "Obrigado! Sua solicitação do Relatório de Avaliação Gratuita do JLPT foi enviada — verifique seu e-mail para os próximos passos.",
     jlptAlreadyAppliedMessage: "Você já solicitou o simulado gratuito do JLPT anteriormente — é uma oferta única, então não podemos enviá-lo novamente.",
+    // Quick Start / Complete Profile onboarding (2-stage)
+    quickNameQuestion: "Como devemos te chamar?",
+    quickEmailQuestion: "Qual é o seu e-mail?",
+    quickGoalQuestion: "Qual é o seu principal objetivo?",
+    quickLevelQuestion: "Qual é o seu nível atual?",
+    quickNoJlptHint: "(sem JLPT)",
+    next: "Próximo",
+    skipForNow: "Pular por enquanto, vou terminar depois",
+    doneArrow: "Concluído →",
+    completeCountryQuestion: "Em qual país você está?",
+    completeLangQuestion: "Qual é a sua língua nativa?",
+    profileNudgeText: "Termine de configurar seu perfil para obter conteúdo de estudo adaptado à sua agenda e objetivos.",
+    profileNudgeCta: "Terminar agora",
     howToTitle: "Como usar este aplicativo",
     howToSchedule: "Seu plano de estudo semanal, dividido em tarefas diárias.",
     howToPractice: "Exercícios gerados por IA a partir do texto japonês que você cola (artigos, legendas, descrições) — vocabulário, kanji, gramática, leitura, escuta, conversação e pronúncia. Toque em 'Ver resposta' para conferir.",
@@ -2043,6 +2095,19 @@ const UI_TRANSLATIONS = {
     jlptBack: "Zurück",
     jlptDoneMessage: "Danke! Deine Anfrage für den kostenlosen JLPT-Bewertungsbericht wurde gesendet — schau in deine E-Mails für die nächsten Schritte.",
     jlptAlreadyAppliedMessage: "Du hast den kostenlosen JLPT-Probetest bereits einmal beantragt — es ist ein einmaliges Angebot, daher können wir ihn nicht erneut senden.",
+    // Quick Start / Complete Profile onboarding (2-stage)
+    quickNameQuestion: "Wie sollen wir dich nennen?",
+    quickEmailQuestion: "Wie lautet deine E-Mail-Adresse?",
+    quickGoalQuestion: "Was ist dein Hauptziel?",
+    quickLevelQuestion: "Was ist dein aktuelles Niveau?",
+    quickNoJlptHint: "(kein JLPT)",
+    next: "Weiter",
+    skipForNow: "Vorerst überspringen, ich mache später weiter",
+    doneArrow: "Fertig →",
+    completeCountryQuestion: "In welchem Land befindest du dich?",
+    completeLangQuestion: "Was ist deine Muttersprache?",
+    profileNudgeText: "Vervollständige dein Profil, um Lerninhalte zu erhalten, die zu deinem Zeitplan und deinen Zielen passen.",
+    profileNudgeCta: "Jetzt fertigstellen",
     howToTitle: "Wie man diese App benutzt",
     howToSchedule: "Ihr wöchentlicher Lernplan, aufgeteilt in tägliche Aufgaben.",
     howToPractice: "KI-generierte Übungen aus dem japanischen Text, den Sie einfügen (Artikel, Untertitel, Bildunterschriften) — Wortschatz, Kanji, Grammatik, Lesen, Hören, Konversation und Aussprache. Tippen Sie auf 'Antwort anzeigen', um sich selbst zu überprüfen.",
@@ -2404,6 +2469,19 @@ const UI_TRANSLATIONS = {
     jlptBack: "Indietro",
     jlptDoneMessage: "Grazie! La tua richiesta per il Rapporto di valutazione JLPT gratuito è stata inviata — controlla la tua email per i prossimi passi.",
     jlptAlreadyAppliedMessage: "Hai già richiesto il simulato JLPT gratuito in precedenza — è un'offerta unica, quindi non possiamo inviarlo di nuovo.",
+    // Quick Start / Complete Profile onboarding (2-stage)
+    quickNameQuestion: "Come dovremmo chiamarti?",
+    quickEmailQuestion: "Qual è la tua email?",
+    quickGoalQuestion: "Qual è il tuo obiettivo principale?",
+    quickLevelQuestion: "Qual è il tuo livello attuale?",
+    quickNoJlptHint: "(senza JLPT)",
+    next: "Avanti",
+    skipForNow: "Salta per ora, finirò più tardi",
+    doneArrow: "Fatto →",
+    completeCountryQuestion: "In quale paese ti trovi?",
+    completeLangQuestion: "Qual è la tua lingua madre?",
+    profileNudgeText: "Completa il tuo profilo per ottenere contenuti di studio adatti al tuo programma e ai tuoi obiettivi.",
+    profileNudgeCta: "Completa ora",
     howToTitle: "Come usare questa app",
     howToSchedule: "Il tuo piano di studio settimanale, suddiviso in attività giornaliere. Tocca un'attività per contrassegnarla come completata.",
     howToPractice: "Esercizi generati dall'IA a partire dal testo giapponese che incolli (articoli, sottotitoli, didascalie) — vocabolario, kanji, grammatica, lettura, ascolto, conversazione e pronuncia. Tocca 'Mostra risposta' per verificare.",
@@ -2765,6 +2843,19 @@ const UI_TRANSLATIONS = {
     jlptBack: "返回",
     jlptDoneMessage: "谢谢！您的JLPT免费评估报告申请已发送——请查看您的邮箱以获取后续步骤。",
     jlptAlreadyAppliedMessage: "您之前已经申请过免费的JLPT模拟考试——这是一次性优惠，我们无法再次发送。",
+    // Quick Start / Complete Profile onboarding (2-stage)
+    quickNameQuestion: "我们该怎么称呼你？",
+    quickEmailQuestion: "你的邮箱是？",
+    quickGoalQuestion: "你的主要目标是什么？",
+    quickLevelQuestion: "你目前的水平是？",
+    quickNoJlptHint: "(无JLPT)",
+    next: "下一步",
+    skipForNow: "暂时跳过，稍后再完成",
+    doneArrow: "完成 →",
+    completeCountryQuestion: "你在哪个国家？",
+    completeLangQuestion: "你的母语是什么？",
+    profileNudgeText: "完成个人资料设置，获取与你的日程和目标相匹配的学习内容。",
+    profileNudgeCta: "立即完成",
     howToTitle: "如何使用此应用",
     howToSchedule: "你的每周学习计划，分为每日任务。点击任务以标记完成并跟踪每周进度。",
     howToPractice: "根据你粘贴的日语文本（文章、字幕、说明）由AI生成的练习——涵盖词汇、汉字、语法、阅读、听力、会话和发音。点击「显示答案」自我检查。",
@@ -3126,6 +3217,19 @@ const UI_TRANSLATIONS = {
     jlptBack: "返回",
     jlptDoneMessage: "謝謝！您的JLPT免費評估報告申請已發送——請查看您的電子郵件以獲取後續步驟。",
     jlptAlreadyAppliedMessage: "您之前已經申請過免費的JLPT模擬考試——這是一次性優惠，我們無法再次發送。",
+    // Quick Start / Complete Profile onboarding (2-stage)
+    quickNameQuestion: "我們該怎麼稱呼你？",
+    quickEmailQuestion: "你的電子郵件是？",
+    quickGoalQuestion: "你的主要目標是什麼？",
+    quickLevelQuestion: "你目前的程度是？",
+    quickNoJlptHint: "(無JLPT)",
+    next: "下一步",
+    skipForNow: "暫時跳過，稍後再完成",
+    doneArrow: "完成 →",
+    completeCountryQuestion: "你在哪個國家？",
+    completeLangQuestion: "你的母語是什麼？",
+    profileNudgeText: "完成個人資料設定，取得符合你的行程與目標的學習內容。",
+    profileNudgeCta: "立即完成",
     howToTitle: "如何使用此應用",
     howToSchedule: "你的每週學習計劃，分為每日任務。點擊任務以標記完成並跟踪每週進度。",
     howToPractice: "根據你貼上的日語文本（文章、字幕、說明）由AI生成的練習——涵蓋詞彙、漢字、文法、閱讀、聽力、會話和發音。點擊「顯示答案」自我檢查。",
@@ -3487,6 +3591,19 @@ const UI_TRANSLATIONS = {
     jlptBack: "뒤로",
     jlptDoneMessage: "감사합니다! JLPT 무료 평가 리포트 신청이 전송되었습니다 — 다음 단계는 이메일을 확인해주세요.",
     jlptAlreadyAppliedMessage: "이전에 이미 무료 JLPT 모의고사를 신청하셨습니다 — 1회 한정 혜택이라 다시 보내드릴 수 없습니다.",
+    // Quick Start / Complete Profile onboarding (2-stage)
+    quickNameQuestion: "어떻게 불러드리면 될까요?",
+    quickEmailQuestion: "이메일 주소가 어떻게 되나요?",
+    quickGoalQuestion: "주요 목표가 무엇인가요?",
+    quickLevelQuestion: "현재 수준이 어떻게 되나요?",
+    quickNoJlptHint: "(JLPT 없음)",
+    next: "다음",
+    skipForNow: "나중에 완료할게요, 지금은 건너뛰기",
+    doneArrow: "완료 →",
+    completeCountryQuestion: "어느 나라에 계신가요?",
+    completeLangQuestion: "모국어가 무엇인가요?",
+    profileNudgeText: "프로필을 완성하면 일정과 목표에 맞는 학습 콘텐츠를 받을 수 있어요.",
+    profileNudgeCta: "지금 완료하기",
     howToTitle: "이 앱 사용 방법",
     howToSchedule: "주간 학습 계획, 일별 과제로 나뉩니다. 과제를 눌러 완료 표시하고 주간 진도를 추적하세요.",
     howToPractice: "붙여넣은 일본어 텍스트(기사, 자막, 캡션)를 기반으로 AI가 생성한 연습문제 — 어휘, 한자, 문법, 독해, 듣기, 회화, 발음을 다룹니다. '답 보기'를 눌러 확인하세요.",
@@ -3848,6 +3965,19 @@ const UI_TRANSLATIONS = {
     jlptBack: "ย้อนกลับ",
     jlptDoneMessage: "ขอบคุณ! คำขอรายงานประเมิน JLPT ฟรีของคุณถูกส่งแล้ว — ตรวจสอบอีเมลของคุณสำหรับขั้นตอนถัดไป",
     jlptAlreadyAppliedMessage: "คุณเคยสมัครสอบ JLPT จำลองฟรีไปแล้วก่อนหน้านี้ — เป็นสิทธิ์ครั้งเดียว เราจึงไม่สามารถส่งให้อีกครั้งได้",
+    // Quick Start / Complete Profile onboarding (2-stage)
+    quickNameQuestion: "เราควรเรียกคุณว่าอะไรดี?",
+    quickEmailQuestion: "อีเมลของคุณคืออะไร?",
+    quickGoalQuestion: "เป้าหมายหลักของคุณคืออะไร?",
+    quickLevelQuestion: "ระดับปัจจุบันของคุณคืออะไร?",
+    quickNoJlptHint: "(ไม่มี JLPT)",
+    next: "ถัดไป",
+    skipForNow: "ข้ามไปก่อน แล้วค่อยทำให้เสร็จทีหลัง",
+    doneArrow: "เสร็จสิ้น →",
+    completeCountryQuestion: "คุณอยู่ประเทศอะไร?",
+    completeLangQuestion: "ภาษาแม่ของคุณคืออะไร?",
+    profileNudgeText: "กรอกโปรไฟล์ให้เสร็จสมบูรณ์เพื่อรับเนื้อหาการเรียนที่เหมาะกับตารางเวลาและเป้าหมายของคุณ",
+    profileNudgeCta: "ทำให้เสร็จตอนนี้",
     howToTitle: "วิธีใช้แอปนี้",
     howToSchedule: "แผนการเรียนรายสัปดาห์ แบ่งเป็นงานรายวัน แตะงานเพื่อทำเครื่องหมายว่าเสร็จแล้วและติดตามความคืบหน้า",
     howToPractice: "แบบฝึกหัดที่สร้างโดย AI จากข้อความภาษาญี่ปุ่นที่คุณวาง (บทความ คำบรรยาย แคปชั่น) — ครอบคลุมคำศัพท์ คันจิ ไวยากรณ์ การอ่าน การฟัง การสนทนา และการออกเสียง แตะ 'ดูคำตอบ' เพื่อตรวจสอบ",
@@ -4209,6 +4339,19 @@ const UI_TRANSLATIONS = {
     jlptBack: "Kembali",
     jlptDoneMessage: "Terima kasih! Permintaan Laporan Penilaian JLPT Percuma anda telah dihantar — semak e-mel anda untuk langkah seterusnya.",
     jlptAlreadyAppliedMessage: "Anda pernah memohon ujian percubaan JLPT percuma sebelum ini — ia adalah tawaran sekali sahaja, jadi kami tidak dapat menghantarnya semula.",
+    // Quick Start / Complete Profile onboarding (2-stage)
+    quickNameQuestion: "Apa nama panggilan anda?",
+    quickEmailQuestion: "Apakah e-mel anda?",
+    quickGoalQuestion: "Apakah matlamat utama anda?",
+    quickLevelQuestion: "Apakah tahap semasa anda?",
+    quickNoJlptHint: "(tiada JLPT)",
+    next: "Seterusnya",
+    skipForNow: "Langkau buat masa ini, saya akan selesaikan kemudian",
+    doneArrow: "Selesai →",
+    completeCountryQuestion: "Anda berada di negara mana?",
+    completeLangQuestion: "Apakah bahasa ibunda anda?",
+    profileNudgeText: "Lengkapkan profil anda untuk mendapatkan kandungan pembelajaran yang sesuai dengan jadual dan matlamat anda.",
+    profileNudgeCta: "Selesaikan sekarang",
     howToTitle: "Cara menggunakan apl ini",
     howToSchedule: "Pelan belajar mingguan anda, dibahagikan kepada tugasan harian. Ketik tugasan untuk tandai selesai.",
     howToPractice: "Latihan yang dijana AI daripada teks Jepun yang anda tampal (artikel, sari kata, kapsyen) — merangkumi kosa kata, kanji, tatabahasa, bacaan, pendengaran, perbualan dan sebutan. Ketik 'Tunjuk jawapan' untuk semak.",
@@ -4570,6 +4713,19 @@ const UI_TRANSLATIONS = {
     jlptBack: "Kembali",
     jlptDoneMessage: "Terima kasih! Permintaan Laporan Penilaian JLPT Gratis Anda telah dikirim — periksa email Anda untuk langkah selanjutnya.",
     jlptAlreadyAppliedMessage: "Anda sudah pernah mengajukan tes simulasi JLPT gratis sebelumnya — ini adalah penawaran satu kali, jadi kami tidak dapat mengirimkannya lagi.",
+    // Quick Start / Complete Profile onboarding (2-stage)
+    quickNameQuestion: "Bagaimana kami harus memanggil Anda?",
+    quickEmailQuestion: "Apa alamat email Anda?",
+    quickGoalQuestion: "Apa tujuan utama Anda?",
+    quickLevelQuestion: "Apa level Anda saat ini?",
+    quickNoJlptHint: "(tanpa JLPT)",
+    next: "Berikutnya",
+    skipForNow: "Lewati dulu, saya akan selesaikan nanti",
+    doneArrow: "Selesai →",
+    completeCountryQuestion: "Anda berada di negara mana?",
+    completeLangQuestion: "Apa bahasa ibu Anda?",
+    profileNudgeText: "Selesaikan profil Anda untuk mendapatkan konten belajar yang sesuai dengan jadwal dan tujuan Anda.",
+    profileNudgeCta: "Selesaikan sekarang",
     howToTitle: "Cara menggunakan aplikasi ini",
     howToSchedule: "Rencana belajar mingguan Anda, dibagi menjadi tugas harian. Ketuk tugas untuk menandainya selesai.",
     howToPractice: "Latihan yang dihasilkan AI dari teks Jepang yang Anda tempel (artikel, subtitle, keterangan) — mencakup kosakata, kanji, tata bahasa, membaca, mendengarkan, percakapan, dan pengucapan. Ketuk 'Tampilkan jawaban' untuk memeriksa.",
@@ -4931,6 +5087,19 @@ const UI_TRANSLATIONS = {
     jlptBack: "Quay lại",
     jlptDoneMessage: "Cảm ơn bạn! Yêu cầu Báo cáo Đánh giá JLPT Miễn phí của bạn đã được gửi — hãy kiểm tra email để biết các bước tiếp theo.",
     jlptAlreadyAppliedMessage: "Bạn đã từng đăng ký bài thi thử JLPT miễn phí trước đây — đây là ưu đãi chỉ dành một lần, vì vậy chúng tôi không thể gửi lại.",
+    // Quick Start / Complete Profile onboarding (2-stage)
+    quickNameQuestion: "Chúng tôi nên gọi bạn là gì?",
+    quickEmailQuestion: "Email của bạn là gì?",
+    quickGoalQuestion: "Mục tiêu chính của bạn là gì?",
+    quickLevelQuestion: "Trình độ hiện tại của bạn là gì?",
+    quickNoJlptHint: "(không có JLPT)",
+    next: "Tiếp theo",
+    skipForNow: "Bỏ qua bây giờ, tôi sẽ hoàn tất sau",
+    doneArrow: "Hoàn tất →",
+    completeCountryQuestion: "Bạn đang ở quốc gia nào?",
+    completeLangQuestion: "Tiếng mẹ đẻ của bạn là gì?",
+    profileNudgeText: "Hoàn tất hồ sơ của bạn để nhận nội dung học phù hợp với lịch trình và mục tiêu của bạn.",
+    profileNudgeCta: "Hoàn tất ngay",
     howToTitle: "Cách sử dụng ứng dụng này",
     howToSchedule: "Kế hoạch học hàng tuần của bạn, chia thành các nhiệm vụ hàng ngày. Nhấn nhiệm vụ để đánh dấu hoàn thành.",
     howToPractice: "Bài tập do AI tạo từ văn bản tiếng Nhật bạn dán vào (bài viết, phụ đề, chú thích) — bao gồm từ vựng, kanji, ngữ pháp, đọc hiểu, nghe, hội thoại và phát âm. Nhấn 'Hiện đáp án' để kiểm tra.",
@@ -5292,6 +5461,19 @@ const UI_TRANSLATIONS = {
     jlptBack: "वापस",
     jlptDoneMessage: "धन्यवाद! आपका JLPT निःशुल्क मूल्यांकन रिपोर्ट अनुरोध भेज दिया गया है — अगले चरणों के लिए अपना ईमेल देखें।",
     jlptAlreadyAppliedMessage: "आपने पहले ही निःशुल्क JLPT मॉक टेस्ट के लिए आवेदन किया था — यह एक बार की पेशकश है, इसलिए हम इसे दोबारा नहीं भेज सकते।",
+    // Quick Start / Complete Profile onboarding (2-stage)
+    quickNameQuestion: "हम आपको क्या कहकर बुलाएं?",
+    quickEmailQuestion: "आपका ईमेल क्या है?",
+    quickGoalQuestion: "आपका मुख्य लक्ष्य क्या है?",
+    quickLevelQuestion: "आपका वर्तमान स्तर क्या है?",
+    quickNoJlptHint: "(JLPT नहीं)",
+    next: "अगला",
+    skipForNow: "अभी के लिए छोड़ें, बाद में पूरा करूंगा",
+    doneArrow: "पूर्ण →",
+    completeCountryQuestion: "आप किस देश में हैं?",
+    completeLangQuestion: "आपकी मातृभाषा क्या है?",
+    profileNudgeText: "अपनी समयसारिणी और लक्ष्यों के अनुरूप अध्ययन सामग्री पाने के लिए अपनी प्रोफ़ाइल पूरी करें।",
+    profileNudgeCta: "अभी पूरा करें",
     howToTitle: "इस ऐप का उपयोग कैसे करें",
     howToSchedule: "आपकी साप्ताहिक अध्ययन योजना, दैनिक कार्यों में विभाजित। साप्ताहिक प्रगति ट्रैक करने के लिए कार्य टैप करें।",
     howToPractice: "आपके द्वारा पेस्ट किए गए जापानी टेक्स्ट (लेख, सबटाइटल, कैप्शन) से AI-जनित अभ्यास — शब्दावली, कांजी, व्याकरण, पठन, श्रवण, बातचीत और उच्चारण को कवर करता है। जांचने के लिए 'उत्तर दिखाएं' टैप करें।",
@@ -5653,6 +5835,19 @@ const UI_TRANSLATIONS = {
     jlptBack: "戻る",
     jlptDoneMessage: "ありがとうございます！JLPT無料アセスメントレポートのリクエストを送信しました。次のステップはメールをご確認ください。",
     jlptAlreadyAppliedMessage: "以前に無料のJLPT模擬試験にすでにお申し込みいただいています — 一人一回限りの特典のため、再度お送りすることはできません。",
+    // Quick Start / Complete Profile onboarding (2-stage)
+    quickNameQuestion: "お名前を教えてください",
+    quickEmailQuestion: "メールアドレスを教えてください",
+    quickGoalQuestion: "主な目標は何ですか？",
+    quickLevelQuestion: "現在のレベルは？",
+    quickNoJlptHint: "(JLPTなし)",
+    next: "次へ",
+    skipForNow: "後で完了する（今はスキップ）",
+    doneArrow: "完了 →",
+    completeCountryQuestion: "どちらの国にお住まいですか？",
+    completeLangQuestion: "母国語は何ですか？",
+    profileNudgeText: "プロフィールを完成させると、あなたのスケジュールと目標に合った学習コンテンツが表示されます。",
+    profileNudgeCta: "今すぐ完成させる",
     howToTitle: "このアプリの使い方",
     howToSchedule: "週間学習プランを日々のタスクに分割しています。タスクをタップして完了をマークし、週間進捗を追跡します。",
     howToPractice: "貼り付けた日本語テキスト（記事・字幕・キャプション）から生成されるAI練習問題です。語彙・漢字・文法・読解・リスニング・会話・発音をカバーします。「答えを見る」をタップして確認できます。",
@@ -6014,6 +6209,19 @@ const UI_TRANSLATIONS = {
     jlptBack: "Geri",
     jlptDoneMessage: "Teşekkürler! Ücretsiz JLPT Değerlendirme Raporu talebiniz gönderildi — sonraki adımlar için e-postanızı kontrol edin.",
     jlptAlreadyAppliedMessage: "Daha önce ücretsiz JLPT deneme sınavına başvurdunuz — bu tek seferlik bir teklif olduğu için tekrar gönderemiyoruz.",
+    // Quick Start / Complete Profile onboarding (2-stage)
+    quickNameQuestion: "Size nasıl hitap etmeliyiz?",
+    quickEmailQuestion: "E-postanız nedir?",
+    quickGoalQuestion: "Ana hedefiniz nedir?",
+    quickLevelQuestion: "Mevcut seviyeniz nedir?",
+    quickNoJlptHint: "(JLPT yok)",
+    next: "İleri",
+    skipForNow: "Şimdilik atla, daha sonra tamamlarım",
+    doneArrow: "Tamamlandı →",
+    completeCountryQuestion: "Hangi ülkedesiniz?",
+    completeLangQuestion: "Ana diliniz nedir?",
+    profileNudgeText: "Programınıza ve hedeflerinize uygun çalışma içeriği almak için profilinizi tamamlayın.",
+    profileNudgeCta: "Şimdi tamamla",
     howToTitle: "Bu uygulama nasıl kullanılır",
     howToSchedule: "Günlük görevlere bölünmüş haftalık çalışma planınız. Tamamlandı olarak işaretlemek için bir göreve dokunun.",
     howToPractice: "Yapıştırdığınız Japonca metinden (makale, altyazı, açıklama) AI tarafından oluşturulan alıştırmalar — kelime, kanji, dilbilgisi, okuma, dinleme, konuşma ve telaffuzu kapsar. Kontrol etmek için 'Cevabı göster'e dokunun.",
@@ -6375,6 +6583,19 @@ const UI_TRANSLATIONS = {
     jlptBack: "फिर्ता",
     jlptDoneMessage: "धन्यवाद! तपाईंको JLPT निःशुल्क मूल्याङ्कन प्रतिवेदन अनुरोध पठाइयो — अर्को चरणहरूको लागि आफ्नो इमेल जाँच गर्नुहोस्।",
     jlptAlreadyAppliedMessage: "तपाईंले पहिले नै निःशुल्क JLPT नमूना परीक्षाको लागि आवेदन दिनुभएको छ — यो एक पटकको मात्र प्रस्ताव भएकाले हामी यसलाई फेरि पठाउन सक्दैनौं।",
+    // Quick Start / Complete Profile onboarding (2-stage)
+    quickNameQuestion: "हामीले तपाईंलाई के भनेर बोलाऔं?",
+    quickEmailQuestion: "तपाईंको इमेल के हो?",
+    quickGoalQuestion: "तपाईंको मुख्य लक्ष्य के हो?",
+    quickLevelQuestion: "तपाईंको हालको स्तर के हो?",
+    quickNoJlptHint: "(JLPT छैन)",
+    next: "अर्को",
+    skipForNow: "अहिलेलाई छोड्नुहोस्, पछि पूरा गर्छु",
+    doneArrow: "सम्पन्न →",
+    completeCountryQuestion: "तपाईं कुन देशमा हुनुहुन्छ?",
+    completeLangQuestion: "तपाईंको मातृभाषा के हो?",
+    profileNudgeText: "तपाईंको तालिका र लक्ष्यसँग मिल्ने अध्ययन सामग्री पाउन आफ्नो प्रोफाइल पूरा गर्नुहोस्।",
+    profileNudgeCta: "अहिले पूरा गर्नुहोस्",
     howToTitle: "यो एप कसरी प्रयोग गर्ने",
     howToSchedule: "तपाईंको साप्ताहिक अध्ययन योजना, दैनिक कार्यहरूमा विभाजित। साप्ताहिक प्रगति ट्र्याक गर्न कार्यलाई ट्याप गर्नुहोस्।",
     howToPractice: "तपाईंले टाँस्नुभएको जापानी पाठ (लेख, उपशीर्षक, क्याप्शन) बाट AI-उत्पन्न अभ्यास — शब्दावली, कांजी, व्याकरण, पठन, सुनाइ, कुराकानी र उच्चारण समेट्छ। जाँच गर्न 'जवाफ देखाउनुहोस्' ट्याप गर्नुहोस्।",
@@ -6736,6 +6957,19 @@ const UI_TRANSLATIONS = {
     jlptBack: "Bumalik",
     jlptDoneMessage: "Salamat! Naipadala na ang iyong request para sa Libreng JLPT Assessment Report — tingnan ang iyong email para sa susunod na hakbang.",
     jlptAlreadyAppliedMessage: "Nag-apply ka na dati para sa libreng JLPT mock test — isang beses lang ito ibinibigay, kaya hindi na namin ito maipapadala muli.",
+    // Quick Start / Complete Profile onboarding (2-stage)
+    quickNameQuestion: "Ano ang dapat naming itawag sa iyo?",
+    quickEmailQuestion: "Ano ang iyong email?",
+    quickGoalQuestion: "Ano ang pangunahing layunin mo?",
+    quickLevelQuestion: "Ano ang kasalukuyang antas mo?",
+    quickNoJlptHint: "(walang JLPT)",
+    next: "Susunod",
+    skipForNow: "Laktawan muna, tatapusin ko na lang mamaya",
+    doneArrow: "Tapos na →",
+    completeCountryQuestion: "Anong bansa ka nakatira?",
+    completeLangQuestion: "Ano ang iyong katutubong wika?",
+    profileNudgeText: "Kumpletuhin ang iyong profile para makakuha ng study content na akma sa iyong iskedyul at layunin.",
+    profileNudgeCta: "Kumpletuhin ngayon",
     howToTitle: "Paano gamitin ang app na ito",
     howToSchedule: "Ang iyong lingguhang study plan, nahahati sa araw-araw na gawain. I-tap ang gawain upang markahan itong tapos na.",
     howToPractice: "Mga pagsasanay na ginawa ng AI mula sa Japanese text na iyong idinikit (artikulo, subtitle, caption) — sinasaklaw ang bokabularyo, kanji, gramatika, pagbasa, pakikinig, pag-uusap, at pagbigkas. I-tap ang 'Ipakita ang sagot' upang suriin.",
@@ -10672,6 +10906,35 @@ const NATIVE_LANG_NAMES = {
   "Nepali":"नेपाली","Filipino":"Filipino","Mizo":"Mizo ṭawng",
 };
 
+// QuickStartForm runs before the student has picked a preferredLang (that question is
+// deferred to CompleteProfileScreen), so it can't read form.preferredLang like every other
+// screen does. Guess a reasonable starting language from the browser instead, so a
+// non-English-speaking visitor doesn't see an all-English signup flow while the app is
+// technically capable of showing their language. Only maps to languages that exist as
+// static UI_TRANSLATIONS blocks (so useUITranslations() has no AI-translation loading
+// delay on this very first screen); anything unrecognized falls back to English.
+const BROWSER_LANG_MAP = {
+  en: "English", es: "Spanish", fr: "French", pt: "Portuguese", de: "German", it: "Italian",
+  zh: "Chinese (Simplified)", "zh-tw": "Chinese (Traditional)", "zh-hk": "Chinese (Traditional)",
+  ko: "Korean", th: "Thai", ms: "Malay", id: "Indonesian", vi: "Vietnamese", hi: "Hindi",
+  ja: "Japanese", tr: "Turkish", ne: "Nepali", tl: "Filipino", fil: "Filipino",
+};
+function detectBrowserLanguage() {
+  try {
+    const tags = (typeof navigator !== "undefined" && navigator.languages && navigator.languages.length)
+      ? navigator.languages
+      : [typeof navigator !== "undefined" ? navigator.language : ""];
+    for (const tag of tags) {
+      if (!tag) continue;
+      const lower = tag.toLowerCase();
+      if (BROWSER_LANG_MAP[lower]) return BROWSER_LANG_MAP[lower];
+      const primary = lower.split("-")[0];
+      if (BROWSER_LANG_MAP[primary]) return BROWSER_LANG_MAP[primary];
+    }
+  } catch {}
+  return "English";
+}
+
 // Maps the raw English values stored in form.goal / form.timeline to their T-object key,
 // so the stored value can always be re-translated into the student's chosen UI language.
 const GOAL_KEY_MAP = {
@@ -10683,6 +10946,14 @@ const GOAL_KEY_MAP = {
 const TIMELINE_KEY_MAP = {
   "Less than 6 months":"lessThan6", "Within 1 year":"within1",
   "2-3 years":"twoThreeYears", "Over 3 years":"over3",
+};
+const HOURS_KEY_MAP = {
+  "Less than 1 hour":"lessThan1h", "1-2 hours":"oneTwo",
+  "2-3 hours":"twoThree", "3+ hours":"threePlus",
+};
+const DAYS_KEY_MAP = {
+  "1-2 days":"oneTwoDays", "3-4 days":"threeFourDays",
+  "5-6 days":"fiveSixDays", "Every day":"everyDay",
 };
 // `rawGoal` is now an array of selected goals (old single-string profiles still work).
 // `customGoalText` is the student's free-text answer for an "Other" goal, if selected.
@@ -10749,15 +11020,23 @@ const QUICK_DEFAULTS = {
   timeline: "", hoursPerDay: "1-2 hours", daysPerWeek: "3-4 days",
   skills: ["vocabulary", "grammar"],
 };
+// [val, levelTKey, approxSuffix] — approxSuffix ("~N5" etc.) is JLPT-code notation that
+// reads the same in every language, so only the level name + the "(no JLPT)" hint (for
+// Beginner) are looked up in T; see quickNoJlptHint in UI_TRANSLATIONS.
 const QUICK_JLPT_OPTIONS = [
-  ["Beginner", "Beginner (no JLPT)"],
-  ["Elementary", "Elementary (~N5)"],
-  ["Intermediate", "Intermediate (~N4)"],
-  ["Upper Intermediate", "Upper Intermediate (~N3)"],
-  ["Advanced", "Advanced (~N2)"],
-  ["Mastery", "Mastery (~N1)"],
+  ["Beginner", "beginner", null],
+  ["Elementary", "levelElementary", "~N5"],
+  ["Intermediate", "levelIntermediate", "~N4"],
+  ["Upper Intermediate", "levelUpperIntermediate", "~N3"],
+  ["Advanced", "levelAdvanced", "~N2"],
+  ["Mastery", "levelMastery", "~N1"],
 ];
 function QuickStartForm({ onSubmit, initialJlpt, initialForm, onLoginClick }) {
+  // No preferredLang choice has happened yet at this point in onboarding (that question
+  // lives in CompleteProfileScreen, step 2), so guess a starting UI language from the
+  // browser instead of defaulting every new visitor to English.
+  const [quickLang] = useState(() => detectBrowserLanguage());
+  const T = useUITranslations(quickLang);
   const [step, setStep] = useState(0);
   const [name, setName] = useState(initialForm?.name || "");
   const [email, setEmail] = useState(initialForm?.email || "");
@@ -10767,10 +11046,10 @@ function QuickStartForm({ onSubmit, initialJlpt, initialForm, onLoginClick }) {
   const [err, setErr] = useState("");
   const isOther = goal.includes("Other");
   const steps = [
-    { key: "name", label: "What should we call you?", valid: !!name.trim() },
-    { key: "email", label: "What's your email?", valid: !!email.trim() },
-    { key: "goal", label: "What's your main goal?", valid: goal.length > 0 && (isOther ? customGoal.trim() : true) },
-    { key: "jlpt", label: "What's your current level?", valid: !!jlpt },
+    { key: "name", label: T.quickNameQuestion, valid: !!name.trim() },
+    { key: "email", label: T.quickEmailQuestion, valid: !!email.trim() },
+    { key: "goal", label: T.quickGoalQuestion, valid: goal.length > 0 && (isOther ? customGoal.trim() : true) },
+    { key: "jlpt", label: T.quickLevelQuestion, valid: !!jlpt },
   ];
   const total = steps.length;
   const current = steps[step];
@@ -10779,12 +11058,15 @@ function QuickStartForm({ onSubmit, initialJlpt, initialForm, onLoginClick }) {
   const goNext = (overrideJlpt) => {
     const jlptVal = overrideJlpt ?? jlpt;
     if (step === total - 1) {
-      if (!jlptVal) { setErr("Please select your level."); return; }
+      if (!jlptVal) { setErr(T.fillRequired); return; }
       const displayGoal = goal.map(g => g === "Other" ? customGoal : g).join(", ");
-      onSubmit({ name: name.trim(), email: email.trim(), jlpt: jlptVal, goal, customGoal, displayGoal, ...QUICK_DEFAULTS, profileComplete: false });
+      // detectBrowserLanguage() (not the QUICK_DEFAULTS placeholder) becomes the account's
+      // starting preferredLang, so the rest of the app opens in the guessed language too —
+      // the student can still change it explicitly in CompleteProfileScreen step 2.
+      onSubmit({ name: name.trim(), email: email.trim(), jlpt: jlptVal, goal, customGoal, displayGoal, ...QUICK_DEFAULTS, preferredLang: quickLang, profileComplete: false });
       return;
     }
-    if (!current.valid) { setErr("Please fill this in to continue."); return; }
+    if (!current.valid) { setErr(T.fillRequired); return; }
     setErr("");
     setStep(s => s + 1);
   };
@@ -10806,30 +11088,30 @@ function QuickStartForm({ onSubmit, initialJlpt, initialForm, onLoginClick }) {
         <p style={{ color:C.purpleLight, fontSize:11, fontWeight:700, letterSpacing:2, marginBottom:4 }}>STEP {step+1} OF {total}</p>
         <h1 style={{ fontSize:22, fontWeight:900, margin:"0 0 20px", color:"#f1f5f9" }}>{current.label}</h1>
         {current.key === "name" && (
-          <input autoFocus value={name} onChange={e=>setName(e.target.value)} placeholder="Your name" style={S.input} onKeyDown={e=>{ if (e.key === "Enter") goNext(); }} />
+          <input autoFocus value={name} onChange={e=>setName(e.target.value)} placeholder={T.namePlaceholder} style={S.input} onKeyDown={e=>{ if (e.key === "Enter") goNext(); }} />
         )}
         {current.key === "email" && (
-          <input autoFocus type="email" value={email} onChange={e=>setEmail(e.target.value)} placeholder="you@example.com" style={S.input} onKeyDown={e=>{ if (e.key === "Enter") goNext(); }} />
+          <input autoFocus type="email" value={email} onChange={e=>setEmail(e.target.value)} placeholder={T.emailPlaceholder} style={S.input} onKeyDown={e=>{ if (e.key === "Enter") goNext(); }} />
         )}
         {current.key === "goal" && (
           <>
             <div style={{ display:"flex", flexWrap:"wrap", gap:8 }}>
               {Object.keys(GOAL_KEY_MAP).map(g => (
                 <button key={g} onClick={()=>toggleGoal(g)} style={{ padding:"9px 16px", borderRadius:20, border:`1.5px solid ${goal.includes(g)?C.purpleLight:C.border}`, background:goal.includes(g)?"rgba(168,85,247,0.15)":C.card, color:goal.includes(g)?C.purpleLight:"#94a3b8", fontSize:13, fontWeight:600, cursor:"pointer" }}>
-                  {g}
+                  {T[GOAL_KEY_MAP[g]] || g}
                 </button>
               ))}
             </div>
             {isOther && (
-              <input value={customGoal} onChange={e=>setCustomGoal(e.target.value)} placeholder="What do you want to study?" style={{ ...S.input, marginTop:10 }} />
+              <input value={customGoal} onChange={e=>setCustomGoal(e.target.value)} placeholder={T.customGoalPlaceholder} style={{ ...S.input, marginTop:10 }} />
             )}
           </>
         )}
         {current.key === "jlpt" && (
           <div style={{ display:"flex", flexDirection:"column", gap:8 }}>
-            {QUICK_JLPT_OPTIONS.map(([val,label]) => (
+            {QUICK_JLPT_OPTIONS.map(([val,levelKey,approx]) => (
               <button key={val} onClick={()=>{ setJlpt(val); goNext(val); }} style={{ textAlign:"left", padding:"12px 16px", borderRadius:10, border:`1.5px solid ${jlpt===val?C.purpleLight:C.border}`, background:jlpt===val?"rgba(168,85,247,0.15)":C.card, color:jlpt===val?C.purpleLight:"#e2e8f0", fontSize:13, fontWeight:600, cursor:"pointer" }}>
-                {label}
+                {T[levelKey]} {approx ? `(${approx})` : T.quickNoJlptHint}
               </button>
             ))}
           </div>
@@ -10837,10 +11119,10 @@ function QuickStartForm({ onSubmit, initialJlpt, initialForm, onLoginClick }) {
         {err && <p style={{ color:C.red, fontSize:12, margin:"12px 0 0" }}>{err}</p>}
         <div style={{ display:"flex", gap:10, marginTop:22 }}>
           {step > 0 && (
-            <button onClick={goBack} style={{ ...S.btn, flex:"0 0 auto", padding:"12px 18px", background:"transparent", border:`1px solid ${C.border}`, color:"#94a3b8" }}>Back</button>
+            <button onClick={goBack} style={{ ...S.btn, flex:"0 0 auto", padding:"12px 18px", background:"transparent", border:`1px solid ${C.border}`, color:"#94a3b8" }}>{T.back}</button>
           )}
           {current.key !== "jlpt" && (
-            <button onClick={()=>goNext()} style={{ ...S.btn, flex:1, background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff" }}>Next</button>
+            <button onClick={()=>goNext()} style={{ ...S.btn, flex:1, background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff" }}>{T.next}</button>
           )}
         </div>
       </div>
@@ -10861,14 +11143,19 @@ function CompleteProfileScreen({ initialForm, onFinish, onSkip }) {
   const [daysPerWeek, setDaysPerWeek] = useState(initialForm?.daysPerWeek || "");
   const [skills, setSkills] = useState(initialForm?.skills?.length ? initialForm.skills : []);
   const [err, setErr] = useState("");
+  // Recomputed every render from the current preferredLang state, so the moment the
+  // student picks their native language on the "preferredLang" step, every remaining
+  // step (and the Back/Next/Done buttons) switches into that language immediately —
+  // no extra re-render or effect needed since this is a plain function-body value.
+  const T = useUITranslations(preferredLang);
   const toggleSkill = (s) => setSkills(sk => sk.includes(s) ? sk.filter(x=>x!==s) : [...sk, s]);
   const steps = [
-    { key:"country", label:"Which country are you in?", valid: !!country.trim() },
-    { key:"preferredLang", label:"What's your native language?", valid: !!preferredLang },
-    { key:"timeline", label:"When do you want to achieve your goal?", valid: !!timeline },
-    { key:"hoursPerDay", label:"How much time can you study per day?", valid: !!hoursPerDay },
-    { key:"daysPerWeek", label:"How many days per week?", valid: !!daysPerWeek },
-    { key:"skills", label:"What do you want to study?", valid: skills.length > 0 },
+    { key:"country", label:T.completeCountryQuestion, valid: !!country.trim() },
+    { key:"preferredLang", label:T.completeLangQuestion, valid: !!preferredLang },
+    { key:"timeline", label:T.whenAchieve, valid: !!timeline },
+    { key:"hoursPerDay", label:T.studyTimePerDay, valid: !!hoursPerDay },
+    { key:"daysPerWeek", label:T.daysPerWeek, valid: !!daysPerWeek },
+    { key:"skills", label:T.whatStudySkills, valid: skills.length > 0 },
   ];
   const total = steps.length;
   const current = steps[step];
@@ -10876,7 +11163,7 @@ function CompleteProfileScreen({ initialForm, onFinish, onSkip }) {
   const finish = () => onFinish({ country, preferredLang, timeline, hoursPerDay, daysPerWeek, skills });
   const goNext = (overrideVal) => {
     const stepValid = overrideVal !== undefined ? true : current.valid;
-    if (!stepValid) { setErr("Please answer this to continue."); return; }
+    if (!stepValid) { setErr(T.fillRequired); return; }
     setErr("");
     if (step === total - 1) { finish(); return; }
     setStep(s => s + 1);
@@ -10892,7 +11179,7 @@ function CompleteProfileScreen({ initialForm, onFinish, onSkip }) {
         <p style={{ color:C.purpleLight, fontSize:11, fontWeight:700, letterSpacing:2, marginBottom:4 }}>COMPLETE YOUR PROFILE · {step+1}/{total}</p>
         <h1 style={{ fontSize:22, fontWeight:900, margin:"0 0 20px", color:"#f1f5f9" }}>{current.label}</h1>
         {current.key === "country" && (
-          <input autoFocus value={country} onChange={e=>setCountry(e.target.value)} placeholder="Country" style={S.input} onKeyDown={e=>{ if (e.key==="Enter") goNext(); }} />
+          <input autoFocus value={country} onChange={e=>setCountry(e.target.value)} placeholder={T.countryPlaceholder} style={S.input} onKeyDown={e=>{ if (e.key==="Enter") goNext(); }} />
         )}
         {current.key === "preferredLang" && (
           <div style={{ display:"flex", flexDirection:"column", gap:8, maxHeight:320, overflowY:"auto" }}>
@@ -10903,43 +11190,43 @@ function CompleteProfileScreen({ initialForm, onFinish, onSkip }) {
         )}
         {current.key === "timeline" && (
           <div style={{ display:"flex", flexDirection:"column", gap:8 }}>
-            {["Less than 6 months","Within 1 year","2-3 years","Over 3 years"].map(v => (
-              <button key={v} onClick={()=>{ setTimeline(v); goNext(v); }} style={{ textAlign:"left", padding:"12px 16px", borderRadius:10, border:`1.5px solid ${timeline===v?C.purpleLight:C.border}`, background:timeline===v?"rgba(168,85,247,0.15)":C.card, color:timeline===v?C.purpleLight:"#e2e8f0", fontSize:13, fontWeight:600, cursor:"pointer" }}>{v}</button>
+            {Object.keys(TIMELINE_KEY_MAP).map(v => (
+              <button key={v} onClick={()=>{ setTimeline(v); goNext(v); }} style={{ textAlign:"left", padding:"12px 16px", borderRadius:10, border:`1.5px solid ${timeline===v?C.purpleLight:C.border}`, background:timeline===v?"rgba(168,85,247,0.15)":C.card, color:timeline===v?C.purpleLight:"#e2e8f0", fontSize:13, fontWeight:600, cursor:"pointer" }}>{T[TIMELINE_KEY_MAP[v]]}</button>
             ))}
           </div>
         )}
         {current.key === "hoursPerDay" && (
           <div style={{ display:"flex", flexDirection:"column", gap:8 }}>
-            {["Less than 1 hour","1-2 hours","2-3 hours","3+ hours"].map(v => (
-              <button key={v} onClick={()=>{ setHoursPerDay(v); goNext(v); }} style={{ textAlign:"left", padding:"12px 16px", borderRadius:10, border:`1.5px solid ${hoursPerDay===v?C.purpleLight:C.border}`, background:hoursPerDay===v?"rgba(168,85,247,0.15)":C.card, color:hoursPerDay===v?C.purpleLight:"#e2e8f0", fontSize:13, fontWeight:600, cursor:"pointer" }}>{v}</button>
+            {Object.keys(HOURS_KEY_MAP).map(v => (
+              <button key={v} onClick={()=>{ setHoursPerDay(v); goNext(v); }} style={{ textAlign:"left", padding:"12px 16px", borderRadius:10, border:`1.5px solid ${hoursPerDay===v?C.purpleLight:C.border}`, background:hoursPerDay===v?"rgba(168,85,247,0.15)":C.card, color:hoursPerDay===v?C.purpleLight:"#e2e8f0", fontSize:13, fontWeight:600, cursor:"pointer" }}>{T[HOURS_KEY_MAP[v]]}</button>
             ))}
           </div>
         )}
         {current.key === "daysPerWeek" && (
           <div style={{ display:"flex", flexDirection:"column", gap:8 }}>
-            {["1-2 days","3-4 days","5-6 days","Every day"].map(v => (
-              <button key={v} onClick={()=>{ setDaysPerWeek(v); goNext(v); }} style={{ textAlign:"left", padding:"12px 16px", borderRadius:10, border:`1.5px solid ${daysPerWeek===v?C.purpleLight:C.border}`, background:daysPerWeek===v?"rgba(168,85,247,0.15)":C.card, color:daysPerWeek===v?C.purpleLight:"#e2e8f0", fontSize:13, fontWeight:600, cursor:"pointer" }}>{v}</button>
+            {Object.keys(DAYS_KEY_MAP).map(v => (
+              <button key={v} onClick={()=>{ setDaysPerWeek(v); goNext(v); }} style={{ textAlign:"left", padding:"12px 16px", borderRadius:10, border:`1.5px solid ${daysPerWeek===v?C.purpleLight:C.border}`, background:daysPerWeek===v?"rgba(168,85,247,0.15)":C.card, color:daysPerWeek===v?C.purpleLight:"#e2e8f0", fontSize:13, fontWeight:600, cursor:"pointer" }}>{T[DAYS_KEY_MAP[v]]}</button>
             ))}
           </div>
         )}
         {current.key === "skills" && (
           <div style={{ display:"flex", flexWrap:"wrap", gap:8 }}>
             {Object.keys(SKILL_LABELS).map(k => (
-              <button key={k} onClick={()=>toggleSkill(k)} style={{ padding:"9px 16px", borderRadius:20, border:`1.5px solid ${skills.includes(k)?C.purpleLight:C.border}`, background:skills.includes(k)?"rgba(168,85,247,0.15)":C.card, color:skills.includes(k)?C.purpleLight:"#94a3b8", fontSize:13, fontWeight:600, cursor:"pointer" }}>{SKILL_LABELS[k]}</button>
+              <button key={k} onClick={()=>toggleSkill(k)} style={{ padding:"9px 16px", borderRadius:20, border:`1.5px solid ${skills.includes(k)?C.purpleLight:C.border}`, background:skills.includes(k)?"rgba(168,85,247,0.15)":C.card, color:skills.includes(k)?C.purpleLight:"#94a3b8", fontSize:13, fontWeight:600, cursor:"pointer" }}>{T[SKILL_LABEL_KEY[k]] || SKILL_LABELS[k]}</button>
             ))}
           </div>
         )}
         {err && <p style={{ color:C.red, fontSize:12, margin:"12px 0 0" }}>{err}</p>}
         <div style={{ display:"flex", gap:10, marginTop:22 }}>
           {step > 0 && (
-            <button onClick={goBack} style={{ ...S.btn, flex:"0 0 auto", padding:"12px 18px", background:"transparent", border:`1px solid ${C.border}`, color:"#94a3b8" }}>Back</button>
+            <button onClick={goBack} style={{ ...S.btn, flex:"0 0 auto", padding:"12px 18px", background:"transparent", border:`1px solid ${C.border}`, color:"#94a3b8" }}>{T.back}</button>
           )}
           {(current.key === "country" || current.key === "skills") && (
-            <button onClick={()=>goNext()} style={{ ...S.btn, flex:1, background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff" }}>{current.key === "skills" ? "Done →" : "Next"}</button>
+            <button onClick={()=>goNext()} style={{ ...S.btn, flex:1, background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff" }}>{current.key === "skills" ? T.doneArrow : T.next}</button>
           )}
         </div>
         <button onClick={onSkip} style={{ display:"block", margin:"14px auto 0", background:"none", border:"none", color:"#64748b", fontSize:12, cursor:"pointer", textDecoration:"underline" }}>
-          Skip for now, I'll finish this later
+          {T.skipForNow}
         </button>
       </div>
     </div>
@@ -11595,10 +11882,10 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
       {onCompleteProfile && (
         <div style={{ background:"rgba(139,92,246,0.1)", borderBottom:"1px solid rgba(139,92,246,0.3)", padding:"10px 20px", display:"flex", alignItems:"center", justifyContent:"center", gap:12, flexWrap:"wrap" }}>
           <p style={{ color:C.purpleLight, fontSize:12, fontWeight:700, margin:0 }}>
-            ✍️ Finish setting up your profile to get study content matched to your schedule and goals.
+            ✍️ {T.profileNudgeText}
           </p>
           <button onClick={onCompleteProfile} style={{ padding:"5px 12px", borderRadius:8, background:C.purpleLight, border:"none", color:"#1e1033", fontSize:12, fontWeight:800, cursor:"pointer" }}>
-            Finish now
+            {T.profileNudgeCta}
           </button>
         </div>
       )}
