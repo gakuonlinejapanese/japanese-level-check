@@ -10689,13 +10689,21 @@ const TIMELINE_KEY_MAP = {
 // One quick, instantly-completable vocab card per level, shown right after
 // signup (see the "firstwin" onboarding step in GakuApp) — no AI call, no
 // loading delay, just an immediate small win before the full dashboard.
+// Keyed by the self-estimation scale actually stored in form.jlpt (Beginner /
+// Elementary / Intermediate / Upper Intermediate / Advanced / Mastery — see
+// JLPT_TO_ESTIMATION_LEVEL above), NOT by raw JLPT level names. Using N5-N1
+// keys here previously meant this object only ever matched "Beginner" and
+// silently fell back to the N5 ("ありがとう") item for every other level,
+// including Advanced/Mastery students — showing them a trivially easy word
+// as their very first impression of the app instead of something matched to
+// their actual level.
 const FIRST_WIN_ITEMS = {
   Beginner: { word: "こんにちは", reading: "こんにちは", meaning: "Hello" },
-  N5: { word: "ありがとう", reading: "ありがとう", meaning: "Thank you" },
-  N4: { word: "大丈夫", reading: "だいじょうぶ", meaning: "It's okay / alright" },
-  N3: { word: "以上", reading: "いじょう", meaning: "and above / that concludes it" },
-  N2: { word: "率直", reading: "そっちょく", meaning: "frank, candid" },
-  N1: { word: "圧倒的", reading: "あっとうてき", meaning: "overwhelming" },
+  Elementary: { word: "ありがとう", reading: "ありがとう", meaning: "Thank you" },
+  Intermediate: { word: "大丈夫", reading: "だいじょうぶ", meaning: "It's okay / alright" },
+  "Upper Intermediate": { word: "以上", reading: "いじょう", meaning: "and above / that concludes it" },
+  Advanced: { word: "率直", reading: "そっちょく", meaning: "frank, candid" },
+  Mastery: { word: "圧倒的", reading: "あっとうてき", meaning: "overwhelming" },
 };
 
 function translateGoal(rawGoal, customGoalText, T) {
@@ -12689,7 +12697,7 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
     />
   );
   if (onboardingStep === "firstwin") {
-    const item = FIRST_WIN_ITEMS[form.jlpt] || FIRST_WIN_ITEMS.N5;
+    const item = FIRST_WIN_ITEMS[form.jlpt] || FIRST_WIN_ITEMS.Elementary;
     return (
       <div style={{ minHeight:"100vh", background:C.bg, display:"flex", alignItems:"center", justifyContent:"center", padding:24 }}>
         <div style={{ background:"linear-gradient(135deg,#1e1b4b,#0f172a)", border:"1.5px solid rgba(139,92,246,0.4)", borderRadius:20, padding:"36px 32px", maxWidth:420, width:"90%", textAlign:"center", boxShadow:"0 8px 40px rgba(139,92,246,0.25)" }}>
