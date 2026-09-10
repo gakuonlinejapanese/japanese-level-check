@@ -10733,6 +10733,219 @@ const JLPT_TO_ESTIMATION_LEVEL = {
 };
 function toEstimationLevel(v) { return JLPT_TO_ESTIMATION_LEVEL[v] || v; }
 
+// ─── QUICK START (2-stage onboarding) ──────────────────────────────────────
+// A brand-new visitor's very first screen. Collects only what's needed to
+// create the account and show a level-matched First Win (name, email, goal,
+// JLPT level) one question at a time with a progress bar, so they reach
+// their first taste of value in four short taps instead of a 9-field form.
+// Everything else (country, native language, timeline, daily/weekly study
+// time, study skills) is deferred to CompleteProfileScreen below, which runs
+// *after* First Win — with safe defaults filled in immediately here so
+// nothing downstream that reads form.skills/hoursPerDay/etc. before that
+// step runs into missing data. Editing an existing profile always uses the
+// original single-page FormScreen further down, unchanged.
+const QUICK_DEFAULTS = {
+  country: "", preferredLang: "English", customGoal: "",
+  timeline: "", hoursPerDay: "1-2 hours", daysPerWeek: "3-4 days",
+  skills: ["vocabulary", "grammar"],
+};
+const QUICK_JLPT_OPTIONS = [
+  ["Beginner", "Beginner (no JLPT)"],
+  ["Elementary", "Elementary (~N5)"],
+  ["Intermediate", "Intermediate (~N4)"],
+  ["Upper Intermediate", "Upper Intermediate (~N3)"],
+  ["Advanced", "Advanced (~N2)"],
+  ["Mastery", "Mastery (~N1)"],
+];
+function QuickStartForm({ onSubmit, initialJlpt, initialForm, onLoginClick }) {
+  const [step, setStep] = useState(0);
+  const [name, setName] = useState(initialForm?.name || "");
+  const [email, setEmail] = useState(initialForm?.email || "");
+  const [goal, setGoal] = useState(initialForm?.goal?.length ? initialForm.goal : []);
+  const [customGoal, setCustomGoal] = useState(initialForm?.customGoal || "");
+  const [jlpt, setJlpt] = useState(toEstimationLevel(initialJlpt) || initialForm?.jlpt || "");
+  const [err, setErr] = useState("");
+  const isOther = goal.includes("Other");
+  const steps = [
+    { key: "name", label: "What should we call you?", valid: !!name.trim() },
+    { key: "email", label: "What's your email?", valid: !!email.trim() },
+    { key: "goal", label: "What's your main goal?", valid: goal.length > 0 && (isOther ? customGoal.trim() : true) },
+    { key: "jlpt", label: "What's your current level?", valid: !!jlpt },
+  ];
+  const total = steps.length;
+  const current = steps[step];
+  const toggleGoal = (g) => setGoal(gs => gs.includes(g) ? gs.filter(x=>x!==g) : [...gs, g]);
+  const goBack = () => { if (step > 0) { setErr(""); setStep(s => s - 1); } };
+  const goNext = (overrideJlpt) => {
+    const jlptVal = overrideJlpt ?? jlpt;
+    if (step === total - 1) {
+      if (!jlptVal) { setErr("Please select your level."); return; }
+      const displayGoal = goal.map(g => g === "Other" ? customGoal : g).join(", ");
+      onSubmit({ name: name.trim(), email: email.trim(), jlpt: jlptVal, goal, customGoal, displayGoal, ...QUICK_DEFAULTS, profileComplete: false });
+      return;
+    }
+    if (!current.valid) { setErr("Please fill this in to continue."); return; }
+    setErr("");
+    setStep(s => s + 1);
+  };
+  return (
+    <div style={{ ...S.page, display:"flex", alignItems:"center", justifyContent:"center", padding:"40px 16px 60px" }}>
+      <div style={{ width:"100%", maxWidth:440 }}>
+        {onLoginClick && (
+          <div style={{ textAlign:"right", marginBottom:14 }}>
+            <button onClick={onLoginClick} style={{ background:"none", border:"none", color:"#94a3b8", fontSize:12, cursor:"pointer", textDecoration:"underline" }}>
+              Already used GAKU Master before? Log in
+            </button>
+          </div>
+        )}
+        <div style={{ display:"flex", gap:6, marginBottom:20 }}>
+          {steps.map((s,i) => (
+            <div key={s.key} style={{ flex:1, height:4, borderRadius:2, background: i<=step ? `linear-gradient(135deg,${C.purple},#9333ea)` : "rgba(255,255,255,0.08)" }} />
+          ))}
+        </div>
+        <p style={{ color:C.purpleLight, fontSize:11, fontWeight:700, letterSpacing:2, marginBottom:4 }}>STEP {step+1} OF {total}</p>
+        <h1 style={{ fontSize:22, fontWeight:900, margin:"0 0 20px", color:"#f1f5f9" }}>{current.label}</h1>
+        {current.key === "name" && (
+          <input autoFocus value={name} onChange={e=>setName(e.target.value)} placeholder="Your name" style={S.input} onKeyDown={e=>{ if (e.key === "Enter") goNext(); }} />
+        )}
+        {current.key === "email" && (
+          <input autoFocus type="email" value={email} onChange={e=>setEmail(e.target.value)} placeholder="you@example.com" style={S.input} onKeyDown={e=>{ if (e.key === "Enter") goNext(); }} />
+        )}
+        {current.key === "goal" && (
+          <>
+            <div style={{ display:"flex", flexWrap:"wrap", gap:8 }}>
+              {Object.keys(GOAL_KEY_MAP).map(g => (
+                <button key={g} onClick={()=>toggleGoal(g)} style={{ padding:"9px 16px", borderRadius:20, border:`1.5px solid ${goal.includes(g)?C.purpleLight:C.border}`, background:goal.includes(g)?"rgba(168,85,247,0.15)":C.card, color:goal.includes(g)?C.purpleLight:"#94a3b8", fontSize:13, fontWeight:600, cursor:"pointer" }}>
+                  {g}
+                </button>
+              ))}
+            </div>
+            {isOther && (
+              <input value={customGoal} onChange={e=>setCustomGoal(e.target.value)} placeholder="What do you want to study?" style={{ ...S.input, marginTop:10 }} />
+            )}
+          </>
+        )}
+        {current.key === "jlpt" && (
+          <div style={{ display:"flex", flexDirection:"column", gap:8 }}>
+            {QUICK_JLPT_OPTIONS.map(([val,label]) => (
+              <button key={val} onClick={()=>{ setJlpt(val); goNext(val); }} style={{ textAlign:"left", padding:"12px 16px", borderRadius:10, border:`1.5px solid ${jlpt===val?C.purpleLight:C.border}`, background:jlpt===val?"rgba(168,85,247,0.15)":C.card, color:jlpt===val?C.purpleLight:"#e2e8f0", fontSize:13, fontWeight:600, cursor:"pointer" }}>
+                {label}
+              </button>
+            ))}
+          </div>
+        )}
+        {err && <p style={{ color:C.red, fontSize:12, margin:"12px 0 0" }}>{err}</p>}
+        <div style={{ display:"flex", gap:10, marginTop:22 }}>
+          {step > 0 && (
+            <button onClick={goBack} style={{ ...S.btn, flex:"0 0 auto", padding:"12px 18px", background:"transparent", border:`1px solid ${C.border}`, color:"#94a3b8" }}>Back</button>
+          )}
+          {current.key !== "jlpt" && (
+            <button onClick={()=>goNext()} style={{ ...S.btn, flex:1, background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff" }}>Next</button>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Stage 2 of onboarding: runs after First Win (and the install prompt, if
+// shown), filling in the fields QuickStartForm deferred. Skippable — a
+// skipped student keeps QUICK_DEFAULTS and sees a light nudge on the
+// Dashboard (profileComplete === false) inviting them back to finish later.
+function CompleteProfileScreen({ initialForm, onFinish, onSkip }) {
+  const [step, setStep] = useState(0);
+  const [country, setCountry] = useState(initialForm?.country || "");
+  const [preferredLang, setPreferredLang] = useState(initialForm?.preferredLang || "English");
+  const [timeline, setTimeline] = useState(initialForm?.timeline || "");
+  const [hoursPerDay, setHoursPerDay] = useState(initialForm?.hoursPerDay || "");
+  const [daysPerWeek, setDaysPerWeek] = useState(initialForm?.daysPerWeek || "");
+  const [skills, setSkills] = useState(initialForm?.skills?.length ? initialForm.skills : []);
+  const [err, setErr] = useState("");
+  const toggleSkill = (s) => setSkills(sk => sk.includes(s) ? sk.filter(x=>x!==s) : [...sk, s]);
+  const steps = [
+    { key:"country", label:"Which country are you in?", valid: !!country.trim() },
+    { key:"preferredLang", label:"What's your native language?", valid: !!preferredLang },
+    { key:"timeline", label:"When do you want to achieve your goal?", valid: !!timeline },
+    { key:"hoursPerDay", label:"How much time can you study per day?", valid: !!hoursPerDay },
+    { key:"daysPerWeek", label:"How many days per week?", valid: !!daysPerWeek },
+    { key:"skills", label:"What do you want to study?", valid: skills.length > 0 },
+  ];
+  const total = steps.length;
+  const current = steps[step];
+  const goBack = () => { if (step > 0) { setErr(""); setStep(s => s - 1); } };
+  const finish = () => onFinish({ country, preferredLang, timeline, hoursPerDay, daysPerWeek, skills });
+  const goNext = (overrideVal) => {
+    const stepValid = overrideVal !== undefined ? true : current.valid;
+    if (!stepValid) { setErr("Please answer this to continue."); return; }
+    setErr("");
+    if (step === total - 1) { finish(); return; }
+    setStep(s => s + 1);
+  };
+  return (
+    <div style={{ ...S.page, display:"flex", alignItems:"center", justifyContent:"center", padding:"40px 16px 60px" }}>
+      <div style={{ width:"100%", maxWidth:440 }}>
+        <div style={{ display:"flex", gap:6, marginBottom:20 }}>
+          {steps.map((s,i) => (
+            <div key={s.key} style={{ flex:1, height:4, borderRadius:2, background: i<=step ? `linear-gradient(135deg,${C.purple},#9333ea)` : "rgba(255,255,255,0.08)" }} />
+          ))}
+        </div>
+        <p style={{ color:C.purpleLight, fontSize:11, fontWeight:700, letterSpacing:2, marginBottom:4 }}>COMPLETE YOUR PROFILE · {step+1}/{total}</p>
+        <h1 style={{ fontSize:22, fontWeight:900, margin:"0 0 20px", color:"#f1f5f9" }}>{current.label}</h1>
+        {current.key === "country" && (
+          <input autoFocus value={country} onChange={e=>setCountry(e.target.value)} placeholder="Country" style={S.input} onKeyDown={e=>{ if (e.key==="Enter") goNext(); }} />
+        )}
+        {current.key === "preferredLang" && (
+          <div style={{ display:"flex", flexDirection:"column", gap:8, maxHeight:320, overflowY:"auto" }}>
+            {LANGUAGES.map(l => (
+              <button key={l} onClick={()=>{ setPreferredLang(l); goNext(l); }} style={{ textAlign:"left", padding:"10px 14px", borderRadius:10, border:`1.5px solid ${preferredLang===l?C.purpleLight:C.border}`, background:preferredLang===l?"rgba(168,85,247,0.15)":C.card, color:preferredLang===l?C.purpleLight:"#e2e8f0", fontSize:13, fontWeight:600, cursor:"pointer" }}>{l}</button>
+            ))}
+          </div>
+        )}
+        {current.key === "timeline" && (
+          <div style={{ display:"flex", flexDirection:"column", gap:8 }}>
+            {["Less than 6 months","Within 1 year","2-3 years","Over 3 years"].map(v => (
+              <button key={v} onClick={()=>{ setTimeline(v); goNext(v); }} style={{ textAlign:"left", padding:"12px 16px", borderRadius:10, border:`1.5px solid ${timeline===v?C.purpleLight:C.border}`, background:timeline===v?"rgba(168,85,247,0.15)":C.card, color:timeline===v?C.purpleLight:"#e2e8f0", fontSize:13, fontWeight:600, cursor:"pointer" }}>{v}</button>
+            ))}
+          </div>
+        )}
+        {current.key === "hoursPerDay" && (
+          <div style={{ display:"flex", flexDirection:"column", gap:8 }}>
+            {["Less than 1 hour","1-2 hours","2-3 hours","3+ hours"].map(v => (
+              <button key={v} onClick={()=>{ setHoursPerDay(v); goNext(v); }} style={{ textAlign:"left", padding:"12px 16px", borderRadius:10, border:`1.5px solid ${hoursPerDay===v?C.purpleLight:C.border}`, background:hoursPerDay===v?"rgba(168,85,247,0.15)":C.card, color:hoursPerDay===v?C.purpleLight:"#e2e8f0", fontSize:13, fontWeight:600, cursor:"pointer" }}>{v}</button>
+            ))}
+          </div>
+        )}
+        {current.key === "daysPerWeek" && (
+          <div style={{ display:"flex", flexDirection:"column", gap:8 }}>
+            {["1-2 days","3-4 days","5-6 days","Every day"].map(v => (
+              <button key={v} onClick={()=>{ setDaysPerWeek(v); goNext(v); }} style={{ textAlign:"left", padding:"12px 16px", borderRadius:10, border:`1.5px solid ${daysPerWeek===v?C.purpleLight:C.border}`, background:daysPerWeek===v?"rgba(168,85,247,0.15)":C.card, color:daysPerWeek===v?C.purpleLight:"#e2e8f0", fontSize:13, fontWeight:600, cursor:"pointer" }}>{v}</button>
+            ))}
+          </div>
+        )}
+        {current.key === "skills" && (
+          <div style={{ display:"flex", flexWrap:"wrap", gap:8 }}>
+            {Object.keys(SKILL_LABELS).map(k => (
+              <button key={k} onClick={()=>toggleSkill(k)} style={{ padding:"9px 16px", borderRadius:20, border:`1.5px solid ${skills.includes(k)?C.purpleLight:C.border}`, background:skills.includes(k)?"rgba(168,85,247,0.15)":C.card, color:skills.includes(k)?C.purpleLight:"#94a3b8", fontSize:13, fontWeight:600, cursor:"pointer" }}>{SKILL_LABELS[k]}</button>
+            ))}
+          </div>
+        )}
+        {err && <p style={{ color:C.red, fontSize:12, margin:"12px 0 0" }}>{err}</p>}
+        <div style={{ display:"flex", gap:10, marginTop:22 }}>
+          {step > 0 && (
+            <button onClick={goBack} style={{ ...S.btn, flex:"0 0 auto", padding:"12px 18px", background:"transparent", border:`1px solid ${C.border}`, color:"#94a3b8" }}>Back</button>
+          )}
+          {(current.key === "country" || current.key === "skills") && (
+            <button onClick={()=>goNext()} style={{ ...S.btn, flex:1, background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff" }}>{current.key === "skills" ? "Done →" : "Next"}</button>
+          )}
+        </div>
+        <button onClick={onSkip} style={{ display:"block", margin:"14px auto 0", background:"none", border:"none", color:"#64748b", fontSize:12, cursor:"pointer", textDecoration:"underline" }}>
+          Skip for now, I'll finish this later
+        </button>
+      </div>
+    </div>
+  );
+}
+
 function FormScreen({ onSubmit, onBack, onCancel, initialJlpt, initialForm, onLoginClick }) {
   const [form, setForm] = useState(() => {
     const base = initialForm || {
@@ -11078,7 +11291,7 @@ function LevelUpOffer({ T, currentLevel, onConfirm, onDismiss }) {
 }
 
 // ─── DASHBOARD ──────────────────────────────────────────────────────────────────
-function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteAccountBusy, userId, streakDays, daysUntilTrialEnds, isTrialAccount, isGakuStudent }) {
+function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteAccountBusy, userId, streakDays, daysUntilTrialEnds, isTrialAccount, isGakuStudent, onCompleteProfile }) {
   const T = useUITranslations(form?.preferredLang || "English");
   const [schedule, setSchedule] = useState(() => buildSchedule(form, getT(form?.preferredLang || "English")));
   const [milestones, setMilestones] = useState(() => buildMilestones(form));
@@ -11377,6 +11590,16 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
           <a href="/app?preview=paywall" style={{ padding:"5px 12px", borderRadius:8, background:"#fbbf24", color:"#1e293b", fontSize:12, fontWeight:800, textDecoration:"none" }}>
             {T.viewPlansCta}
           </a>
+        </div>
+      )}
+      {onCompleteProfile && (
+        <div style={{ background:"rgba(139,92,246,0.1)", borderBottom:"1px solid rgba(139,92,246,0.3)", padding:"10px 20px", display:"flex", alignItems:"center", justifyContent:"center", gap:12, flexWrap:"wrap" }}>
+          <p style={{ color:C.purpleLight, fontSize:12, fontWeight:700, margin:0 }}>
+            ✍️ Finish setting up your profile to get study content matched to your schedule and goals.
+          </p>
+          <button onClick={onCompleteProfile} style={{ padding:"5px 12px", borderRadius:8, background:C.purpleLight, border:"none", color:"#1e1033", fontSize:12, fontWeight:800, cursor:"pointer" }}>
+            Finish now
+          </button>
         </div>
       )}
       <div style={{ maxWidth:600, margin:"0 auto", padding:"20px 16px" }}>
@@ -12423,6 +12646,12 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
     // Preserve planStartDate from existing form (only set it once, on first save)
     const startDate = (form && form.planStartDate) ? form.planStartDate : new Date().toISOString();
     const saved = { ...f, planStartDate: startDate };
+    // A save that already has every deferred field filled in (e.g. the
+    // student used the full edit form directly, or finished CompleteProfileScreen)
+    // is complete regardless of which path it came through.
+    if (saved.country && saved.timeline && saved.hoursPerDay && saved.daysPerWeek && saved.skills?.length > 0) {
+      saved.profileComplete = true;
+    }
     setForm(saved);
     setEditing(false);
     setForceForm(false);
@@ -12687,7 +12916,18 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
   // retired legacy quiz landing page (App.js's Home screen) — a dead end with
   // no way back into the self-study app — which is what students calling this
   // "the profile screen loops back to the old quiz page" bug were hitting.
-  if (!form || editing || forceForm) return (
+  // Brand-new visitor (no saved profile yet at all): the short, stepped
+  // QuickStartForm — see its comment above for why this is split from the
+  // full FormScreen used for edits below.
+  if (!form) return (
+    <QuickStartForm
+      onSubmit={handleSubmit}
+      initialJlpt={initialJlpt}
+      initialForm={formForEdit}
+      onLoginClick={!authUser ? () => { setAuthInitialMode("login"); setShowAuthScreen(true); } : undefined}
+    />
+  );
+  if (editing || forceForm) return (
     <FormScreen
       onSubmit={handleSubmit}
       onCancel={form ? handleCancelEdit : undefined}
@@ -12696,6 +12936,12 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
       onLoginClick={!authUser ? () => { setAuthInitialMode("login"); setShowAuthScreen(true); } : undefined}
     />
   );
+  // Where to go once First Win (and the install prompt, if shown) are done:
+  // straight to the dashboard for a fully-filled-out profile, or to
+  // CompleteProfileScreen first for an account that came through
+  // QuickStartForm and hasn't filled in country/language/study-time/skills
+  // yet (profileComplete === false).
+  const nextStepAfterOnboarding = form?.profileComplete === false ? "completeProfile" : null;
   if (onboardingStep === "firstwin") {
     const item = FIRST_WIN_ITEMS[form.jlpt] || FIRST_WIN_ITEMS.Elementary;
     return (
@@ -12725,7 +12971,7 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
               // never fires it, but has its own manual "Share > Add to Home
               // Screen" steps worth showing). Otherwise skip straight to the dashboard.
               const canShowInstallStep = !alreadyStandalone && (canInstallPwa || isIOSNow);
-              setOnboardingStep(canShowInstallStep ? "install" : null);
+              setOnboardingStep(canShowInstallStep ? "install" : nextStepAfterOnboarding);
             }} style={{ ...S.btn, width:"100%", background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff" }}>
               🎉 {T.firstWinDoneBtn}
             </button>
@@ -12745,7 +12991,7 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
         try { await evt.userChoice; } catch {}
         deferredInstallPromptRef.current = null;
       }
-      setOnboardingStep(null);
+      setOnboardingStep(nextStepAfterOnboarding);
     };
     return (
       <div style={{ minHeight:"100vh", background:C.bg, display:"flex", alignItems:"center", justifyContent:"center", padding:24 }}>
@@ -12756,21 +13002,36 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
           {isIOS ? (
             <>
               <p style={{ color:"#cbd5e1", fontSize:12, margin:"0 0 18px", lineHeight:1.6 }}>{T.installPromptIosSteps}</p>
-              <button onClick={()=>setOnboardingStep(null)} style={{ ...S.btn, width:"100%", background:C.card, color:"#94a3b8", border:`1px solid ${C.border}` }}>{T.installPromptSkip}</button>
+              <button onClick={()=>setOnboardingStep(nextStepAfterOnboarding)} style={{ ...S.btn, width:"100%", background:C.card, color:"#94a3b8", border:`1px solid ${C.border}` }}>{T.installPromptSkip}</button>
             </>
           ) : (
             <>
               <button onClick={handleInstallClick} style={{ ...S.btn, width:"100%", marginBottom:10, background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff" }}>{T.installPromptCta}</button>
-              <button onClick={()=>setOnboardingStep(null)} style={{ ...S.btn, width:"100%", background:"none", border:"none", color:"#64748b" }}>{T.installPromptSkip}</button>
+              <button onClick={()=>setOnboardingStep(nextStepAfterOnboarding)} style={{ ...S.btn, width:"100%", background:"none", border:"none", color:"#64748b" }}>{T.installPromptSkip}</button>
             </>
           )}
         </div>
       </div>
     );
   }
+  if (onboardingStep === "completeProfile") {
+    return (
+      <CompleteProfileScreen
+        initialForm={form}
+        onFinish={(extra) => {
+          const saved = { ...form, ...extra, profileComplete: true };
+          setForm(saved);
+          try { localStorage.setItem(scopedKey("gaku_form"), JSON.stringify(saved)); } catch {}
+          if (authUser) { syncMigrationBridge(authUser.id); }
+          setOnboardingStep(null);
+        }}
+        onSkip={() => setOnboardingStep(null)}
+      />
+    );
+  }
   return (
     <div style={{ position:"relative" }} onClickCapture={handleDashboardInteraction}>
-      <Dashboard form={form} onEdit={handleEdit} onLevelUp={(lvl)=>handleSubmit({ ...form, jlpt: lvl })} onLogout={authUser ? handleLogout : undefined} onDeleteAccount={authUser ? handleDeleteAccount : undefined} deleteAccountBusy={deleteAccountBusy} userId={authUser?.id} streakDays={streakDays} daysUntilTrialEnds={daysUntilTrialEnds} isTrialAccount={!isGakuStudent && !isPaid} isGakuStudent={isGakuStudent} />
+      <Dashboard form={form} onEdit={handleEdit} onLevelUp={(lvl)=>handleSubmit({ ...form, jlpt: lvl })} onLogout={authUser ? handleLogout : undefined} onDeleteAccount={authUser ? handleDeleteAccount : undefined} deleteAccountBusy={deleteAccountBusy} userId={authUser?.id} streakDays={streakDays} daysUntilTrialEnds={daysUntilTrialEnds} isTrialAccount={!isGakuStudent && !isPaid} isGakuStudent={isGakuStudent} onCompleteProfile={form?.profileComplete === false ? () => setOnboardingStep("completeProfile") : undefined} />
       {/* TEMP DEBUG — remove after confirming the counter works */}
       <div style={{ position:"fixed", bottom:12, right:12, zIndex:99999, background:"rgba(0,0,0,0.75)", color:"#4ade80", fontSize:11, fontFamily:"monospace", padding:"4px 8px", borderRadius:6 }}>
         count: {interactionCount}/21 {skipTrialPaywall ? "(skip)" : ""} {authUser && isGakuStudent ? "(gaku)" : ""} {authUser && isPaid ? "(paid)" : ""}
