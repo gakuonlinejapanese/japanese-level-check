@@ -23,6 +23,11 @@ import { sendEmail } from "./_resend.js";
 //   → どの希望も合わなかった場合。生徒に「空き枠なし」メールを送る
 // POST { secret, action: "list-official-students" }
 // POST { secret, action: "add-official-student", name, email, notes }
+// POST { secret, action: "set-zoom-link", ids: [teacher_availability.id, ...], zoomLink }
+//   → 選択した確定済み予約(複数可)に同じZoomリンクを一括登録
+// POST { secret, action: "send-lesson-reminders" }
+//   → レッスン開始の約25〜40分前で、zoom_link登録済み・reminder未送信の予約に
+//     リマインドメールを送信（外部cronサービスから10分おきに呼び出す想定）
 
 function requireAdmin(body) {
   return body.secret && body.secret === process.env.ADMIN_SECRET;
@@ -248,6 +253,98 @@ async function handleAddOfficialStudent(supabase, body, res) {
   return res.status(200).json({ ok: true, student: data });
 }
 
+async function handleSetZoomLink(supabase, body, res) {
+  const { ids, zoomLink } = body;
+  if (!Array.isArray(ids) || ids.length === 0) return res.status(400).json({ error: "ids (array) is required" });
+  if (!zoomLink || typeof zoomLink !== "string") return res.status(400).json({ error: "zoomLink is required" });
+
+  const { error, count } = await supabase
+    .from("teacher_availability")
+    .update({ zoom_link: zoomLink.trim() }, { count: "exact" })
+    .in("id", ids)
+    .eq("status", "booked");
+  if (error) return res.status(500).json({ error: error.message });
+  return res.status(200).json({ ok: true, updated: count ?? ids.length });
+}
+
+// JSTのlesson_date + start_timeをUTCのミリ秒に変換（JSTはUTC+9、DSTなし）
+function jstSlotToUtcMs(lessonDate, startTime) {
+  const [h, m, s] = startTime.split(":").map(Number);
+  const utcMs = Date.parse(`${lessonDate}T00:00:00.000Z`) + ((h * 60 + m) * 60 + (s || 0)) * 1000 - 9 * 3600 * 1000;
+  return utcMs;
+}
+
+async function handleSendLessonReminders(supabase, res) {
+  const { data: candidates, error } = await supabase
+    .from("teacher_availability")
+    .select("*")
+    .eq("status", "booked")
+    .not("zoom_link", "is", null)
+    .is("reminder_sent_at", null);
+  if (error) return res.status(500).json({ error: error.message });
+
+  const now = Date.now();
+  // 25〜40分後にレッスンが始まる予約だけを対象にする（外部cronは10分おき想定なので幅を持たせて取りこぼしを防ぐ）
+  const due = (candidates || []).filter((s) => {
+    const startMs = jstSlotToUtcMs(s.lesson_date, s.start_time);
+    const minutesUntil = (startMs - now) / 60000;
+    return minutesUntil >= 20 && minutesUntil <= 40;
+  });
+
+  if (due.length === 0) return res.status(200).json({ ok: true, sent: 0 });
+
+  const officialIds = [...new Set(due.filter((s) => s.official_student_id).map((s) => s.official_student_id))];
+  const waitlistIds = [...new Set(due.filter((s) => s.waitlist_request_id).map((s) => s.waitlist_request_id))];
+
+  const officialMap = {};
+  if (officialIds.length > 0) {
+    const { data } = await supabase.from("official_students").select("id, name, email").in("id", officialIds);
+    (data || []).forEach((r) => { officialMap[r.id] = r; });
+  }
+  const waitlistMap = {};
+  if (waitlistIds.length > 0) {
+    const { data } = await supabase.from("waitlist_requests").select("id, student_name, student_email").in("id", waitlistIds);
+    (data || []).forEach((r) => { waitlistMap[r.id] = r; });
+  }
+
+  const sentIds = [];
+  for (const slot of due) {
+    let name = slot.label || "there";
+    let email = null;
+    if (slot.official_student_id && officialMap[slot.official_student_id]) {
+      name = officialMap[slot.official_student_id].name;
+      email = officialMap[slot.official_student_id].email;
+    } else if (slot.waitlist_request_id && waitlistMap[slot.waitlist_request_id]) {
+      name = waitlistMap[slot.waitlist_request_id].student_name;
+      email = waitlistMap[slot.waitlist_request_id].student_email;
+    }
+    if (!email) continue; // メール不明な枠はスキップ（手動追加された枠等）
+
+    try {
+      await sendEmail({
+        to: email,
+        subject: "Your GAKU lesson starts in 30 minutes!",
+        html: `
+          <p>Hi ${name},</p>
+          <p>This is a reminder that your lesson today at <strong>${slot.lesson_date} ${slot.start_time.slice(0,5)} (Japan Standard Time)</strong> starts in about 30 minutes.</p>
+          <p>Please join using this link:</p>
+          <p><a href="${slot.zoom_link}">${slot.zoom_link}</a></p>
+          <p>See you soon!<br/>GAKU Online Japanese</p>
+        `,
+      });
+      sentIds.push(slot.id);
+    } catch (e) {
+      console.error(`Failed to send reminder for slot ${slot.id}:`, e.message);
+    }
+  }
+
+  if (sentIds.length > 0) {
+    await supabase.from("teacher_availability").update({ reminder_sent_at: new Date().toISOString() }).in("id", sentIds);
+  }
+
+  return res.status(200).json({ ok: true, sent: sentIds.length, checked: due.length });
+}
+
 export default async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed" });
   const supabase = getAdminClient();
@@ -272,6 +369,8 @@ export default async function handler(req, res) {
     if (action === "reject-waitlist") return await handleRejectWaitlist(supabase, body, res);
     if (action === "list-official-students") return await handleListOfficialStudents(supabase, res);
     if (action === "add-official-student") return await handleAddOfficialStudent(supabase, body, res);
+    if (action === "set-zoom-link") return await handleSetZoomLink(supabase, body, res);
+    if (action === "send-lesson-reminders") return await handleSendLessonReminders(supabase, res);
 
     return res.status(400).json({ error: "Unknown action" });
   } catch (e) {

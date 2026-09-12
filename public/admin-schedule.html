@@ -65,6 +65,22 @@
   </section>
 
   <section>
+    <h2>🔗 Zoomリンク一括登録（レッスン30分前リマインドメール用）</h2>
+    <div class="row">
+      <input type="date" id="zoom-date" />
+      <button class="btn confirm" onclick="loadZoomDaySlots()">この日の予約を読み込む</button>
+    </div>
+    <div id="zoom-slot-list" style="margin-top:10px;"></div>
+    <div class="row">
+      <input type="text" id="zoom-link-input" placeholder="Zoomリンク（例: https://zoom.us/j/...）" style="flex:1;min-width:260px;" />
+      <button class="btn confirm" onclick="applyZoomLink()">選択した予約に一括登録</button>
+    </div>
+    <p style="font-size:12px;color:#64748b;margin-top:8px;">
+      登録すると、レッスン開始の約30分前（20〜40分の間で外部cronが検知したタイミング）に生徒へ自動でリマインドメールが送信されます。
+    </p>
+  </section>
+
+  <section>
     <h2>🎓 Official Students 名簿</h2>
     <div id="official-list"></div>
     <div class="row">
@@ -205,6 +221,40 @@ async function blockSlot() {
   if (!date || !time) return alert("日付と時間を入力してください");
   await api("block-slot", { date, time: time + ":00", durationMinutes: 60, label });
   loadAvailabilityGrid();
+}
+
+let zoomDaySlots = [];
+
+async function loadZoomDaySlots() {
+  const date = document.getElementById("zoom-date").value;
+  const el = document.getElementById("zoom-slot-list");
+  if (!date) { alert("日付を選択してください"); return; }
+
+  const data = await api("list-availability", { fromDate: date, toDate: date });
+  zoomDaySlots = (data.slots || []).filter(s => s.status === "booked");
+
+  if (zoomDaySlots.length === 0) {
+    el.innerHTML = "<p>この日に確定済みの予約はありません。</p>";
+    return;
+  }
+
+  el.innerHTML = zoomDaySlots.map(s => {
+    const already = s.zoom_link ? ` <span style="color:${'var(--green)'};font-size:11px;">✓登録済み</span>` : "";
+    return `<label style="display:flex;align-items:center;gap:8px;font-size:13px;padding:4px 0;">
+      <input type="checkbox" class="zoom-slot-cb" value="${s.id}" />
+      ${s.start_time.slice(0,5)}${s.label ? " — " + s.label : ""}${already}
+    </label>`;
+  }).join("");
+}
+
+async function applyZoomLink() {
+  const checked = Array.from(document.querySelectorAll(".zoom-slot-cb:checked")).map(cb => cb.value);
+  const zoomLink = document.getElementById("zoom-link-input").value.trim();
+  if (checked.length === 0) return alert("予約を1つ以上選択してください");
+  if (!zoomLink) return alert("Zoomリンクを入力してください");
+  await api("set-zoom-link", { ids: checked, zoomLink });
+  alert(`${checked.length}件の予約にZoomリンクを登録しました。`);
+  loadZoomDaySlots();
 }
 
 async function loadOfficialStudents() {
