@@ -91,6 +91,24 @@
     </div>
   </section>
 
+  <section>
+    <h2>📌 生徒との予約を作成（確定済み予約として登録）</h2>
+    <div class="row">
+      <select id="booking-student"></select>
+      <input type="date" id="booking-date" />
+      <input type="time" id="booking-time" />
+      <select id="booking-duration">
+        <option value="30">30分</option>
+        <option value="60" selected>60分</option>
+      </select>
+      <input type="text" id="booking-label" placeholder="メモ（任意）" style="flex:1;min-width:160px;" />
+      <button class="btn confirm" onclick="createOfficialBooking()">予約を作成</button>
+    </div>
+    <p style="font-size:12px;color:#64748b;margin-top:8px;">
+      作成後、この日付を上の「Zoomリンク一括登録」で選べば、すぐにリンクを紐付けられます。
+    </p>
+  </section>
+
 </div>
 </div>
 
@@ -263,6 +281,25 @@ async function loadOfficialStudents() {
   el.innerHTML = (data.students || []).map(s =>
     `<div class="req-card"><strong>${s.name}</strong> — ${s.email}${s.notes ? " — " + s.notes : ""}</div>`
   ).join("") || "<p>まだ登録されていません。</p>";
+
+  const sel = document.getElementById("booking-student");
+  if (sel) {
+    sel.innerHTML = (data.students || []).map(s => `<option value="${s.id}">${s.name} (${s.email})</option>`).join("");
+  }
+}
+
+async function createOfficialBooking() {
+  const officialStudentId = document.getElementById("booking-student").value;
+  const date = document.getElementById("booking-date").value;
+  const time = document.getElementById("booking-time").value;
+  const durationMinutes = Number(document.getElementById("booking-duration").value);
+  const label = document.getElementById("booking-label").value.trim();
+  if (!officialStudentId) return alert("生徒を選択してください（Official Studentsに未登録なら先に登録してください）");
+  if (!date || !time) return alert("日付と時間を入力してください");
+  await api("add-official-booking", { date, time: time + ":00", durationMinutes, officialStudentId, label });
+  alert("予約を作成しました。続けてZoomリンクを登録できます。");
+  document.getElementById("booking-label").value = "";
+  loadAvailabilityGrid();
 }
 
 async function addOfficialStudent() {
