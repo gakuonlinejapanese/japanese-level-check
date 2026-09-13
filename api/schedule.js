@@ -23,6 +23,8 @@ import { sendEmail } from "./_resend.js";
 //   → どの希望も合わなかった場合。生徒に「空き枠なし」メールを送る
 // POST { secret, action: "list-official-students" }
 // POST { secret, action: "add-official-student", name, email, notes }
+// POST { secret, action: "update-official-student", id, name, email?, notes? }
+//   → 既存のOfficial Studentの名前（・メール・メモ）を更新
 // POST { secret, action: "set-zoom-link", ids: [teacher_availability.id, ...], zoomLink }
 //   → 選択した確定済み予約(複数可)に同じZoomリンクを一括登録
 // POST { secret, action: "send-lesson-reminders" }
@@ -253,6 +255,25 @@ async function handleAddOfficialStudent(supabase, body, res) {
   return res.status(200).json({ ok: true, student: data });
 }
 
+async function handleUpdateOfficialStudent(supabase, body, res) {
+  const { id, name, email, notes } = body;
+  if (!id) return res.status(400).json({ error: "id is required" });
+  if (!name) return res.status(400).json({ error: "name is required" });
+
+  const updates = { name };
+  if (email !== undefined) updates.email = email.trim().toLowerCase();
+  if (notes !== undefined) updates.notes = notes || null;
+
+  const { data, error } = await supabase
+    .from("official_students")
+    .update(updates)
+    .eq("id", id)
+    .select()
+    .single();
+  if (error) return res.status(500).json({ error: error.message });
+  return res.status(200).json({ ok: true, student: data });
+}
+
 async function handleSetZoomLink(supabase, body, res) {
   const { ids, zoomLink } = body;
   if (!Array.isArray(ids) || ids.length === 0) return res.status(400).json({ error: "ids (array) is required" });
@@ -369,6 +390,7 @@ export default async function handler(req, res) {
     if (action === "reject-waitlist") return await handleRejectWaitlist(supabase, body, res);
     if (action === "list-official-students") return await handleListOfficialStudents(supabase, res);
     if (action === "add-official-student") return await handleAddOfficialStudent(supabase, body, res);
+    if (action === "update-official-student") return await handleUpdateOfficialStudent(supabase, body, res);
     if (action === "set-zoom-link") return await handleSetZoomLink(supabase, body, res);
     if (action === "send-lesson-reminders") return await handleSendLessonReminders(supabase, res);
 

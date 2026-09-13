@@ -279,7 +279,10 @@ async function loadOfficialStudents() {
   const data = await api("list-official-students");
   const el = document.getElementById("official-list");
   el.innerHTML = (data.students || []).map(s =>
-    `<div class="req-card"><strong>${s.name}</strong> — ${s.email}${s.notes ? " — " + s.notes : ""}</div>`
+    `<div class="req-card" style="display:flex;justify-content:space-between;align-items:center;gap:8px;">
+      <span><strong>${s.name}</strong> — ${s.email}${s.notes ? " — " + s.notes : ""}</span>
+      <button class="opt-btn avail" style="flex-shrink:0;" onclick="editOfficialStudentName('${s.id}','${s.name.replace(/'/g, "\\'")}')">✏️ 名前を編集</button>
+    </div>`
   ).join("") || "<p>まだ登録されていません。</p>";
 
   const sel = document.getElementById("booking-student");
@@ -300,6 +303,16 @@ async function createOfficialBooking() {
   alert("予約を作成しました。続けてZoomリンクを登録できます。");
   document.getElementById("booking-label").value = "";
   loadAvailabilityGrid();
+}
+
+async function editOfficialStudentName(id, currentName) {
+  const newName = prompt("新しい名前を入力してください：", currentName);
+  if (newName === null) return; // キャンセル
+  const trimmed = newName.trim();
+  if (!trimmed) return alert("名前を入力してください");
+  if (trimmed === currentName) return;
+  await api("update-official-student", { id, name: trimmed });
+  loadOfficialStudents();
 }
 
 async function addOfficialStudent() {
