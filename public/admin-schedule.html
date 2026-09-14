@@ -32,6 +32,7 @@
   .slot { padding:8px 4px; border-radius:8px; font-size:11px; text-align:center; cursor:pointer; }
   .slot.open { background:#f1f5f9; color:#475569; }
   .slot.booked { background:#dcfce7; color:var(--green); }
+  .slot.booked.trial { background:#dbeafe; color:#2563eb; }
   .slot.blocked { background:#fee2e2; color:var(--red); }
   .gate { max-width:360px; margin:80px auto; text-align:center; }
 </style>
@@ -92,6 +93,14 @@
   </section>
 
   <section>
+    <h2>🆓 Free Trial Lesson 予約一覧（Official Studentとは別枠）</h2>
+    <div id="trial-lesson-list"><p>読み込み中…</p></div>
+    <p style="font-size:12px;color:#64748b;margin-top:8px;">
+      admin-trial-lessons.htmlで「承諾して送信」を押すと、生徒の現地時間から自動で日本時間に変換されてここに追加されます。あとは上の「Zoomリンク一括登録」からリンクを登録するだけです。
+    </p>
+  </section>
+
+  <section>
     <h2>📌 生徒との予約を作成（確定済み予約として登録）</h2>
     <div class="row">
       <select id="booking-student"></select>
@@ -129,6 +138,7 @@ function enterAdmin() {
   loadWaitlist();
   loadAvailabilityGrid();
   loadOfficialStudents();
+  loadTrialLessonList();
 }
 
 async function api(action, extra = {}) {
@@ -212,8 +222,9 @@ async function loadAvailabilityGrid() {
       const key = `${dateStr}_${time}`;
       const slot = map[key];
       const status = slot ? slot.status : "open";
-      const labelExtra = slot && slot.label ? ` — ${slot.label}` : "";
-      html += `<div class="slot ${status}" title="クリックでブロック解除/ブロック"
+      const isTrial = slot && slot.source === "trial_lesson";
+      const labelExtra = slot && slot.label ? ` — ${isTrial ? "🆓 " : ""}${slot.label}` : "";
+      html += `<div class="slot ${status}${isTrial ? " trial" : ""}" title="クリックでブロック解除/ブロック"
         onclick="toggleSlot('${dateStr}','${time}','${status}')">${dateStr.slice(5)} ${time}${labelExtra}</div>`;
     });
   }
@@ -258,9 +269,10 @@ async function loadZoomDaySlots() {
 
   el.innerHTML = zoomDaySlots.map(s => {
     const already = s.zoom_link ? ` <span style="color:${'var(--green)'};font-size:11px;">✓登録済み</span>` : "";
+    const trialTag = s.source === "trial_lesson" ? ` <span style="color:#2563eb;font-size:11px;">🆓 Free Trial</span>` : "";
     return `<label style="display:flex;align-items:center;gap:8px;font-size:13px;padding:4px 0;">
       <input type="checkbox" class="zoom-slot-cb" value="${s.id}" />
-      ${s.start_time.slice(0,5)}${s.label ? " — " + s.label : ""}${already}
+      ${s.start_time.slice(0,5)}${s.label ? " — " + s.label : ""}${trialTag}${already}
     </label>`;
   }).join("");
 }
@@ -273,6 +285,7 @@ async function applyZoomLink() {
   await api("set-zoom-link", { ids: checked, zoomLink });
   alert(`${checked.length}件の予約にZoomリンクを登録しました。`);
   loadZoomDaySlots();
+  loadTrialLessonList();
 }
 
 async function loadOfficialStudents() {
@@ -289,6 +302,26 @@ async function loadOfficialStudents() {
   if (sel) {
     sel.innerHTML = (data.students || []).map(s => `<option value="${s.id}">${s.name} (${s.email})</option>`).join("");
   }
+}
+
+async function loadTrialLessonList() {
+  const el = document.getElementById("trial-lesson-list");
+  const todayStr = new Date().toISOString().slice(0, 10);
+  const data = await api("list-availability", { fromDate: todayStr });
+  const trials = (data.slots || []).filter(s => s.source === "trial_lesson")
+    .sort((a, b) => (a.lesson_date + a.start_time).localeCompare(b.lesson_date + b.start_time));
+
+  if (trials.length === 0) { el.innerHTML = "<p>今後の予定に無料体験レッスンはありません。</p>"; return; }
+
+  el.innerHTML = trials.map(s => {
+    const zoomTag = s.zoom_link
+      ? `<span style="color:var(--green);font-size:12px;">✓ Zoom登録済み</span>`
+      : `<span style="color:var(--amber);font-size:12px;">Zoom未登録</span>`;
+    return `<div class="req-card" style="display:flex;justify-content:space-between;align-items:center;gap:8px;">
+      <span>${s.lesson_date} ${s.start_time.slice(0,5)} (JST) — ${s.label || ""}</span>
+      ${zoomTag}
+    </div>`;
+  }).join("");
 }
 
 async function createOfficialBooking() {

@@ -59,6 +59,117 @@
 <script>
 let SECRET = "";
 
+// ---- 現地時間 → 日本時間 自動変換 ----
+// 生徒の自由記述「Where do you live now?」(都市名+国名) からIANAタイムゾーンを推測する。
+// 複数タイムゾーンを持つ国(アメリカ/カナダ/オーストラリア)は主要都市名を先にチェックし、
+// それ以外の登録国はほぼ単一タイムゾーンなので国名だけで判定する。
+const CITY_TZ_HINTS = [
+  // アメリカ
+  [/\b(new york|nyc|boston|miami|atlanta|washington|philadelphia|orlando)\b/, "America/New_York"],
+  [/\b(chicago|dallas|houston|austin|minneapolis|texas)\b/, "America/Chicago"],
+  [/\b(phoenix|arizona)\b/, "America/Phoenix"],
+  [/\b(denver|salt lake|colorado)\b/, "America/Denver"],
+  [/\b(los angeles|la|san francisco|seattle|portland|san diego|las vegas|california)\b/, "America/Los_Angeles"],
+  [/\b(anchorage|alaska)\b/, "America/Anchorage"],
+  [/\b(honolulu|hawaii)\b/, "Pacific/Honolulu"],
+  // カナダ
+  [/\b(vancouver)\b/, "America/Vancouver"],
+  [/\b(calgary|edmonton)\b/, "America/Edmonton"],
+  [/\b(winnipeg)\b/, "America/Winnipeg"],
+  [/\b(halifax)\b/, "America/Halifax"],
+  [/\b(toronto|ottawa|montreal|montréal)\b/, "America/Toronto"],
+  // オーストラリア
+  [/\b(perth)\b/, "Australia/Perth"],
+  [/\b(adelaide)\b/, "Australia/Adelaide"],
+  [/\b(brisbane|queensland)\b/, "Australia/Brisbane"],
+  [/\b(sydney|melbourne|canberra)\b/, "Australia/Sydney"],
+];
+const COUNTRY_TZ = {
+  "united states": "America/New_York", "usa": "America/New_York", "u.s.": "America/New_York", "us": "America/New_York",
+  "canada": "America/Toronto",
+  "united kingdom": "Europe/London", "uk": "Europe/London", "england": "Europe/London", "scotland": "Europe/London", "wales": "Europe/London",
+  "ireland": "Europe/Dublin",
+  "australia": "Australia/Sydney",
+  "new zealand": "Pacific/Auckland",
+  "singapore": "Asia/Singapore",
+  "switzerland": "Europe/Zurich",
+  "netherlands": "Europe/Amsterdam", "holland": "Europe/Amsterdam",
+  "germany": "Europe/Berlin",
+  "denmark": "Europe/Copenhagen",
+  "sweden": "Europe/Stockholm",
+  "norway": "Europe/Oslo",
+  "finland": "Europe/Helsinki",
+  "austria": "Europe/Vienna",
+  "belgium": "Europe/Brussels",
+  "france": "Europe/Paris",
+  "italy": "Europe/Rome",
+  "spain": "Europe/Madrid",
+  "portugal": "Europe/Lisbon",
+  "israel": "Asia/Jerusalem",
+  "luxembourg": "Europe/Luxembourg",
+  "iceland": "Atlantic/Reykjavik",
+  "czech": "Europe/Prague", "czechia": "Europe/Prague",
+  "poland": "Europe/Warsaw",
+  "slovenia": "Europe/Ljubljana",
+  "estonia": "Europe/Tallinn",
+  "hong kong": "Asia/Hong_Kong",
+  "uae": "Asia/Dubai", "united arab emirates": "Asia/Dubai",
+  "qatar": "Asia/Qatar",
+  "kuwait": "Asia/Kuwait",
+  "bahrain": "Asia/Bahrain",
+  "oman": "Asia/Muscat",
+};
+
+// 生徒が入力した自由記述(location優先、なければoriginCountry)からタイムゾーンを推測する。
+// 判定できない場合はnullを返す(その場合は自動変換せず、日本時間欄を手入力にする)。
+function guessTimezone(text) {
+  const s = (text || "").toLowerCase();
+  if (!s) return null;
+  for (const [re, tz] of CITY_TZ_HINTS) if (re.test(s)) return tz;
+  for (const country in COUNTRY_TZ) if (s.includes(country)) return COUNTRY_TZ[country];
+  return null;
+}
+
+// 指定タイムゾーンでの「壁時計時刻」→ UTCミリ秒への変換(標準的な近似アルゴリズム。
+// DST切替の前後1〜2時間だけごく稀にズレる可能性があるため、常にJST側の表示をSeitoが確認する前提)
+function zoneWallTimeToUtcMs(y, mo, d, h, mi, timeZone) {
+  const guess = Date.UTC(y, mo - 1, d, h, mi);
+  const dtf = new Intl.DateTimeFormat("en-US", {
+    timeZone, hour12: false, year: "numeric", month: "2-digit", day: "2-digit",
+    hour: "2-digit", minute: "2-digit", second: "2-digit",
+  });
+  const parts = dtf.formatToParts(new Date(guess)).reduce((acc, p) => { acc[p.type] = p.value; return acc; }, {});
+  const asIfUtc = Date.UTC(parts.year, Number(parts.month) - 1, parts.day, parts.hour === "24" ? 0 : parts.hour, parts.minute, parts.second);
+  const offsetMs = asIfUtc - guess;
+  return guess - offsetMs;
+}
+
+// 生徒の現地時間(date, time文字列, タイムゾーン) → 日本時間のdate/time文字列に変換
+function localToJst(dateStr, timeStr, timeZone) {
+  const [y, mo, d] = dateStr.split("-").map(Number);
+  const [h, mi] = timeStr.split(":").map(Number);
+  const utcMs = zoneWallTimeToUtcMs(y, mo, d, h, mi, timeZone);
+  const jstMs = utcMs + 9 * 3600 * 1000;
+  const jst = new Date(jstMs);
+  const jstDate = `${jst.getUTCFullYear()}-${String(jst.getUTCMonth() + 1).padStart(2, "0")}-${String(jst.getUTCDate()).padStart(2, "0")}`;
+  const jstTime = `${String(jst.getUTCHours()).padStart(2, "0")}:${String(jst.getUTCMinutes()).padStart(2, "0")}`;
+  return { jstDate, jstTime };
+}
+
+function updateJstPreview(id) {
+  const dateEl = document.getElementById(`confirm-date-${id}`);
+  const timeEl = document.getElementById(`confirm-time-${id}`);
+  const previewEl = document.getElementById(`jst-preview-${id}`);
+  const tz = previewEl.dataset.tz;
+  if (!dateEl.value || !timeEl.value) { previewEl.textContent = ""; return; }
+  if (!tz) {
+    previewEl.innerHTML = `⚠️ この生徒のタイムゾーンを自動判定できませんでした。入力した日時をそのまま日本時間として登録します（確認してください）。`;
+    return;
+  }
+  const { jstDate, jstTime } = localToJst(dateEl.value, timeEl.value, tz);
+  previewEl.innerHTML = `→ <b>日本時間: ${jstDate} ${jstTime}</b>（推定タイムゾーン: ${tz}。違う場合は下の日時をタイムゾーン分ずらして入力してください）`;
+}
+
 function enterAdmin() {
   SECRET = document.getElementById("gate-secret").value.trim();
   if (!SECRET) return;
@@ -108,8 +219,12 @@ async function loadList() {
           <span class="badge pending">pending</span>
         </div>
         <div class="details">${detailsHtml(r)}</div>
-        <label style="font-size:12px;color:#64748b;">確定日時（承諾する場合。空欄なら生徒の希望日時をそのまま使用）</label>
-        <input type="text" id="confirm-dt-${r.id}" placeholder="${esc(r.preferred_datetime) || 'e.g. April 6, 11AM'}" style="width:100%;" />
+        <label style="font-size:12px;color:#64748b;">確定日時（承諾する場合。<b>生徒の現地時間</b>で入力してください。参考: 生徒の希望「${esc(r.preferred_datetime) || '未記入'}」）</label>
+        <div class="row" style="margin-top:4px;">
+          <input type="date" id="confirm-date-${r.id}" oninput="updateJstPreview('${r.id}')" />
+          <input type="time" id="confirm-time-${r.id}" oninput="updateJstPreview('${r.id}')" />
+        </div>
+        <p id="jst-preview-${r.id}" data-tz="${guessTimezone(r.location) || guessTimezone(r.origin_country) || ""}" style="font-size:12px;color:#2563eb;margin:6px 0 0;"></p>
         <label style="font-size:12px;color:#64748b;margin-top:8px;display:block;">生徒へのひとこと（任意）</label>
         <textarea id="note-${r.id}" placeholder="任意のメッセージ"></textarea>
         <div class="row">
@@ -130,7 +245,7 @@ async function loadList() {
         </div>
         <div class="details">
           ${detailsHtml(r)}<br/>
-          ${r.status === "accepted" ? `<b>確定日時:</b> ${esc(r.confirmed_datetime) || "—"}<br/>` : ""}
+          ${r.status === "accepted" ? `<b>確定日時:</b> ${esc(r.confirmed_datetime) || "—"}${r.confirmed_date_jst ? ` （日本時間: ${esc(r.confirmed_date_jst)} ${esc((r.confirmed_time_jst || "").slice(0,5))}）` : ""}<br/>` : ""}
           ${r.admin_note ? `<b>ひとこと:</b> ${esc(r.admin_note)}<br/>` : ""}
           <b>対応日時:</b> ${r.responded_at ? new Date(r.responded_at).toLocaleString() : "—"}
         </div>
@@ -139,11 +254,33 @@ async function loadList() {
 }
 
 async function respond(id, decision) {
-  const confirmedDateTime = document.getElementById(`confirm-dt-${id}`).value.trim();
   const note = document.getElementById(`note-${id}`).value.trim();
   const verb = decision === "accept" ? "承諾" : "お断り";
-  if (!confirm(`この生徒に「${verb}」の連絡メールを送信します。よろしいですか？`)) return;
-  const result = await api("admin_respond_trial_lesson", { requestId: id, decision, confirmedDateTime, note });
+
+  let payload = { requestId: id, decision, note };
+
+  if (decision === "accept") {
+    const dateEl = document.getElementById(`confirm-date-${id}`);
+    const timeEl = document.getElementById(`confirm-time-${id}`);
+    const dateLocal = dateEl.value;
+    const timeLocal = timeEl.value;
+    if (!dateLocal || !timeLocal) return alert("承諾する場合は、生徒の現地時間での日付と時間を入力してください。");
+
+    const previewEl = document.getElementById(`jst-preview-${id}`);
+    const tz = previewEl.dataset.tz;
+    let dateJst = dateLocal, timeJst = timeLocal; // タイムゾーン不明な場合はそのまま日本時間として扱う(要確認)
+    if (tz) {
+      const { jstDate, jstTime } = localToJst(dateLocal, timeLocal, tz);
+      dateJst = jstDate; timeJst = jstTime;
+    }
+    const confirmedDateTime = `${dateLocal} ${timeLocal} (student's local time)`;
+    if (!confirm(`生徒の現地時間 ${dateLocal} ${timeLocal} → 日本時間 ${dateJst} ${timeJst} で確定し、スケジュールに登録します。生徒にもメールが送信されます。よろしいですか？`)) return;
+    payload = { ...payload, confirmedDateTime, confirmedDateLocal: dateLocal, confirmedTimeLocal: timeLocal, confirmedDateJst: dateJst, confirmedTimeJst: timeJst, timezoneUsed: tz || null };
+  } else {
+    if (!confirm(`この生徒に「${verb}」の連絡メールを送信します。よろしいですか？`)) return;
+  }
+
+  const result = await api("admin_respond_trial_lesson", payload);
   if (result.error) { alert("エラー: " + result.error); return; }
   if (result.emailFailed) alert("記録は保存されましたが、メール送信に失敗しました。手動でご連絡ください。");
   loadList();

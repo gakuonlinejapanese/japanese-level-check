@@ -137,10 +137,19 @@ function analyzeLocation(raw) {
 // processed = the last 30 "accepted"/"declined" requests, most recently responded to first.
 //
 // POST { action: "admin_respond_trial_lesson", secret, requestId, decision, confirmedDateTime,
+// confirmedDateLocal, confirmedTimeLocal, confirmedDateJst, confirmedTimeJst, timezoneUsed,
 // note } — called from public/admin-trial-lessons.html when Seito accepts or declines a
 // pending request. decision is "accept" or "decline". Updates the row's status/admin_note/
 // confirmed_datetime/responded_at and emails the student the decision plus Seito's note.
-// Also kept on this same endpoint for the same 12-function-cap reason above.
+// On accept, confirmedDateLocal/confirmedTimeLocal are the lesson's date/time in the
+// STUDENT's local time (as Seito enters them), and confirmedDateJst/confirmedTimeJst are the
+// same moment converted to Japan time by the admin page (using a timezone guessed from the
+// student's "Where do you live now?" text — timezoneUsed carries that guess for the record).
+// When the JST values are present, this also creates a "booked" row directly in
+// teacher_availability (source: "trial_lesson", trial_lesson_request_id set) — separate from
+// Official Student bookings (source: "official") — so the slot shows up on admin-schedule.html
+// and all that's left for Seito to do is attach a Zoom link there. Also kept on this same
+// endpoint for the same 12-function-cap reason above.
 //
 // POST { action: "check_feedback_submitted", email } — called from the Dashboard's
 // "💬 Feedback" tab on mount (non-invite students only) to check whether this student has
@@ -979,10 +988,19 @@ async function handleCheckJlptMockApplied(req, res) {
 
 function jltLevelSafe(v) { return v || "(not set)"; }
 
+// "1 hour" / "30 minute" (the trial-lesson form's radio choice) → minutes for the
+// teacher_availability row. Defaults to 60 if the text is missing or unrecognized.
+function trialDurationMinutes(lessonDurationText) {
+  return (lessonDurationText || "").includes("30") ? 30 : 60;
+}
+
 async function handleAdminRespondTrialLesson(req, res) {
   if (!checkAdminSecret(req)) return res.status(401).json({ error: "Invalid admin secret" });
   try {
-    const { requestId, decision, confirmedDateTime, note } = req.body || {};
+    const {
+      requestId, decision, confirmedDateTime, note,
+      confirmedDateLocal, confirmedTimeLocal, confirmedDateJst, confirmedTimeJst, timezoneUsed,
+    } = req.body || {};
     if (!requestId || !["accept", "decline"].includes(decision)) {
       return res.status(400).json({ error: "requestId and a valid decision (accept/decline) are required" });
     }
@@ -1003,10 +1021,33 @@ async function handleAdminRespondTrialLesson(req, res) {
         status: newStatus,
         admin_note: note || null,
         confirmed_datetime: decision === "accept" ? (confirmedDateTime || existing.preferred_datetime || null) : null,
+        confirmed_date_jst: decision === "accept" ? (confirmedDateJst || null) : null,
+        confirmed_time_jst: decision === "accept" ? (confirmedTimeJst || null) : null,
+        timezone_used: decision === "accept" ? (timezoneUsed || null) : null,
         responded_at: respondedAt,
       })
       .eq("id", requestId);
     if (updateErr) return res.status(500).json({ error: updateErr.message });
+
+    // On accept, with a JST date/time computed by the admin page, auto-create the booking on
+    // the same schedule Official Students use (admin-schedule.html) — as its own category
+    // (source: "trial_lesson") so it stays visually separate from Official Student bookings.
+    // Seito's remaining step is just attaching a Zoom link there, same as any other booking.
+    if (decision === "accept" && confirmedDateJst && confirmedTimeJst) {
+      const { error: slotErr } = await supabase.from("teacher_availability").upsert(
+        {
+          lesson_date: confirmedDateJst,
+          start_time: confirmedTimeJst.length === 5 ? `${confirmedTimeJst}:00` : confirmedTimeJst,
+          duration_minutes: trialDurationMinutes(existing.lesson_duration),
+          status: "booked",
+          source: "trial_lesson",
+          trial_lesson_request_id: requestId,
+          label: `${existing.full_name} (Free Trial)`,
+        },
+        { onConflict: "lesson_date,start_time" }
+      );
+      if (slotErr) console.error("Failed to create trial-lesson schedule slot:", slotErr.message);
+    }
 
     const isAccept = decision === "accept";
     const html = `
