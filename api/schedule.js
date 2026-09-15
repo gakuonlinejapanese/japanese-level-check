@@ -193,7 +193,7 @@ async function handleConfirmBooking(supabase, body, res) {
       subject: "Your GAKU lesson time is confirmed!",
       html: `
         <p>Hi ${wl.student_name},</p>
-        <p>Great news — your lesson has been scheduled for <strong>${date} ${time} (Japan Standard Time)</strong>.</p>
+        <p>Great news — your lesson has been scheduled for ${lessonTimeLine(date, time.length === 5 ? time + ":00" : time, wl.student_timezone)}.</p>
         <p>Please complete your payment to secure this slot:</p>
         <p><a href="${stripeLink || "https://www.seitojapanese.online/"}">Complete payment</a></p>
         <p>Thank you!<br/>GAKU Online Japanese</p>
@@ -244,11 +244,11 @@ async function handleListOfficialStudents(supabase, res) {
 }
 
 async function handleAddOfficialStudent(supabase, body, res) {
-  const { name, email, notes } = body;
+  const { name, email, notes, timezone } = body;
   if (!name || !email) return res.status(400).json({ error: "name and email are required" });
   const { data, error } = await supabase
     .from("official_students")
-    .insert({ name, email: email.trim().toLowerCase(), notes: notes || null })
+    .insert({ name, email: email.trim().toLowerCase(), notes: notes || null, timezone: timezone || null })
     .select()
     .single();
   if (error) return res.status(500).json({ error: error.message });
@@ -256,13 +256,14 @@ async function handleAddOfficialStudent(supabase, body, res) {
 }
 
 async function handleUpdateOfficialStudent(supabase, body, res) {
-  const { id, name, email, notes } = body;
+  const { id, name, email, notes, timezone } = body;
   if (!id) return res.status(400).json({ error: "id is required" });
   if (!name) return res.status(400).json({ error: "name is required" });
 
   const updates = { name };
   if (email !== undefined) updates.email = email.trim().toLowerCase();
   if (notes !== undefined) updates.notes = notes || null;
+  if (timezone !== undefined) updates.timezone = timezone || null;
 
   const { data, error } = await supabase
     .from("official_students")
@@ -295,6 +296,27 @@ function jstSlotToUtcMs(lessonDate, startTime) {
   return utcMs;
 }
 
+// 日本時間の日時を、指定のIANAタイムゾーンでの表示文字列に変換する。
+// tzが未設定/不正な場合はnullを返す（呼び出し側はJSTのみを載せる）。
+function formatInStudentTimezone(lessonDate, startTime, tz) {
+  if (!tz) return null;
+  try {
+    const jstDate = new Date(`${lessonDate}T${startTime.length === 5 ? startTime + ":00" : startTime}+09:00`);
+    return jstDate.toLocaleString("en-US", {
+      timeZone: tz, weekday: "short", month: "short", day: "numeric", hour: "numeric", minute: "2-digit",
+    }) + ` (${tz} time)`;
+  } catch {
+    return null;
+  }
+}
+
+// メール本文用に「日本時間 + （わかれば）生徒の現地時間」の1行を組み立てる
+function lessonTimeLine(lessonDate, startTime, tz) {
+  const local = formatInStudentTimezone(lessonDate, startTime, tz);
+  const jstPart = `<strong>${lessonDate} ${startTime.slice(0, 5)} (Japan Standard Time)</strong>`;
+  return local ? `${jstPart}<br/>Your local time: <strong>${local}</strong>` : jstPart;
+}
+
 async function handleSendLessonReminders(supabase, res) {
   const { data: candidates, error } = await supabase
     .from("teacher_availability")
@@ -316,28 +338,41 @@ async function handleSendLessonReminders(supabase, res) {
 
   const officialIds = [...new Set(due.filter((s) => s.official_student_id).map((s) => s.official_student_id))];
   const waitlistIds = [...new Set(due.filter((s) => s.waitlist_request_id).map((s) => s.waitlist_request_id))];
+  const trialIds = [...new Set(due.filter((s) => s.trial_lesson_request_id).map((s) => s.trial_lesson_request_id))];
 
   const officialMap = {};
   if (officialIds.length > 0) {
-    const { data } = await supabase.from("official_students").select("id, name, email").in("id", officialIds);
+    const { data } = await supabase.from("official_students").select("id, name, email, timezone").in("id", officialIds);
     (data || []).forEach((r) => { officialMap[r.id] = r; });
   }
   const waitlistMap = {};
   if (waitlistIds.length > 0) {
-    const { data } = await supabase.from("waitlist_requests").select("id, student_name, student_email").in("id", waitlistIds);
+    const { data } = await supabase.from("waitlist_requests").select("id, student_name, student_email, student_timezone").in("id", waitlistIds);
     (data || []).forEach((r) => { waitlistMap[r.id] = r; });
+  }
+  const trialMap = {};
+  if (trialIds.length > 0) {
+    const { data } = await supabase.from("trial_lesson_requests").select("id, full_name, email, timezone_used").in("id", trialIds);
+    (data || []).forEach((r) => { trialMap[r.id] = r; });
   }
 
   const sentIds = [];
   for (const slot of due) {
     let name = slot.label || "there";
     let email = null;
+    let tz = null;
     if (slot.official_student_id && officialMap[slot.official_student_id]) {
       name = officialMap[slot.official_student_id].name;
       email = officialMap[slot.official_student_id].email;
+      tz = officialMap[slot.official_student_id].timezone;
     } else if (slot.waitlist_request_id && waitlistMap[slot.waitlist_request_id]) {
       name = waitlistMap[slot.waitlist_request_id].student_name;
       email = waitlistMap[slot.waitlist_request_id].student_email;
+      tz = waitlistMap[slot.waitlist_request_id].student_timezone;
+    } else if (slot.trial_lesson_request_id && trialMap[slot.trial_lesson_request_id]) {
+      name = trialMap[slot.trial_lesson_request_id].full_name;
+      email = trialMap[slot.trial_lesson_request_id].email;
+      tz = trialMap[slot.trial_lesson_request_id].timezone_used;
     }
     if (!email) continue; // メール不明な枠はスキップ（手動追加された枠等）
 
@@ -347,7 +382,7 @@ async function handleSendLessonReminders(supabase, res) {
         subject: "Your GAKU lesson starts in 30 minutes!",
         html: `
           <p>Hi ${name},</p>
-          <p>This is a reminder that your lesson today at <strong>${slot.lesson_date} ${slot.start_time.slice(0,5)} (Japan Standard Time)</strong> starts in about 30 minutes.</p>
+          <p>This is a reminder that your lesson today at ${lessonTimeLine(slot.lesson_date, slot.start_time, tz)} starts in about 30 minutes.</p>
           <p>Please join using this link:</p>
           <p><a href="${slot.zoom_link}">${slot.zoom_link}</a></p>
           <p>See you soon!<br/>GAKU Online Japanese</p>

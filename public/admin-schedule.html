@@ -88,8 +88,12 @@
       <input type="text" id="off-name" placeholder="名前" />
       <input type="email" id="off-email" placeholder="メール" />
       <input type="text" id="off-notes" placeholder="メモ（固定スケジュール等）" />
+      <select id="off-timezone"></select>
       <button class="btn confirm" onclick="addOfficialStudent()">追加</button>
     </div>
+    <p style="font-size:12px;color:#64748b;margin-top:4px;">
+      タイムゾーンを設定しておくと、レッスン30分前リマインドメールに日本時間と一緒にその方の現地時間も自動で記載されます。
+    </p>
   </section>
 
   <section>
@@ -123,6 +127,12 @@
 
 <script>
 let SECRET = "";
+const TIMEZONES = ["Asia/Tokyo","America/New_York","America/Chicago","America/Denver","America/Los_Angeles","America/Phoenix","America/Toronto","America/Vancouver","Europe/London","Europe/Dublin","Europe/Paris","Europe/Berlin","Europe/Madrid","Europe/Rome","Europe/Amsterdam","Europe/Zurich","Australia/Sydney","Australia/Perth","Asia/Shanghai","Asia/Seoul","Asia/Singapore","Asia/Hong_Kong","Asia/Bangkok","Asia/Dubai","Pacific/Auckland","America/Sao_Paulo","America/Mexico_City","Asia/Kolkata"];
+(function populateTimezoneSelect() {
+  const sel = document.getElementById("off-timezone");
+  sel.innerHTML = `<option value="">タイムゾーン（任意）</option>` +
+    TIMEZONES.map(tz => `<option value="${tz}">${tz}</option>`).join("");
+})();
 const PLAN_LINKS = {
   "3mo_30min": { label: "3 MONTHS · 30min/mo — $68.95", url: "https://buy.stripe.com/7sYcN53aGf3y9F3ct4bMQ06" },
   "3mo_1hr":   { label: "3 MONTHS · 1hr/mo — $95.20",   url: "https://buy.stripe.com/6oU8wP6mS6x23gF8cObMQ07" },
@@ -293,8 +303,11 @@ async function loadOfficialStudents() {
   const el = document.getElementById("official-list");
   el.innerHTML = (data.students || []).map(s =>
     `<div class="req-card" style="display:flex;justify-content:space-between;align-items:center;gap:8px;">
-      <span><strong>${s.name}</strong> — ${s.email}${s.notes ? " — " + s.notes : ""}</span>
-      <button class="opt-btn avail" style="flex-shrink:0;" onclick="editOfficialStudentName('${s.id}','${s.name.replace(/'/g, "\\'")}')">✏️ 名前を編集</button>
+      <span><strong>${s.name}</strong> — ${s.email}${s.notes ? " — " + s.notes : ""} — TZ: ${s.timezone || "未設定"}</span>
+      <span style="flex-shrink:0;display:flex;gap:4px;">
+        <button class="opt-btn avail" onclick="editOfficialStudentName('${s.id}','${s.name.replace(/'/g, "\\'")}')">✏️ 名前</button>
+        <button class="opt-btn avail" onclick="editOfficialStudentTimezone('${s.id}','${s.timezone || ""}')">🌐 タイムゾーン</button>
+      </span>
     </div>`
   ).join("") || "<p>まだ登録されていません。</p>";
 
@@ -348,12 +361,25 @@ async function editOfficialStudentName(id, currentName) {
   loadOfficialStudents();
 }
 
+async function editOfficialStudentTimezone(id, currentTz) {
+  const list = TIMEZONES.map((tz, i) => `${i + 1}: ${tz}`).join("\n");
+  const input = prompt(`タイムゾーンを番号または名前で入力してください（現在: ${currentTz || "未設定"}）\n\n${list}`, currentTz || "");
+  if (input === null) return; // キャンセル
+  const trimmed = input.trim();
+  const idx = Number(trimmed);
+  const tz = (Number.isInteger(idx) && TIMEZONES[idx - 1]) ? TIMEZONES[idx - 1] : trimmed;
+  const student = (await api("list-official-students")).students.find(s => s.id === id);
+  await api("update-official-student", { id, name: student.name, timezone: tz || null });
+  loadOfficialStudents();
+}
+
 async function addOfficialStudent() {
   const name = document.getElementById("off-name").value.trim();
   const email = document.getElementById("off-email").value.trim();
   const notes = document.getElementById("off-notes").value.trim();
+  const timezone = document.getElementById("off-timezone").value;
   if (!name || !email) return alert("名前とメールを入力してください");
-  await api("add-official-student", { name, email, notes });
+  await api("add-official-student", { name, email, notes, timezone });
   document.getElementById("off-name").value = "";
   document.getElementById("off-email").value = "";
   document.getElementById("off-notes").value = "";
