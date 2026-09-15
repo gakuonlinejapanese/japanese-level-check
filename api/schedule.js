@@ -126,7 +126,38 @@ async function handleListAvailability(supabase, body, res) {
   if (toDate) query = query.lte("lesson_date", toDate);
   const { data, error } = await query;
   if (error) return res.status(500).json({ error: error.message });
-  return res.status(200).json({ slots: data || [] });
+
+  const slots = data || [];
+  const officialIds = [...new Set(slots.filter((s) => s.official_student_id).map((s) => s.official_student_id))];
+  const waitlistIds = [...new Set(slots.filter((s) => s.waitlist_request_id).map((s) => s.waitlist_request_id))];
+  const trialIds = [...new Set(slots.filter((s) => s.trial_lesson_request_id).map((s) => s.trial_lesson_request_id))];
+
+  const officialMap = {};
+  if (officialIds.length > 0) {
+    const { data: rows } = await supabase.from("official_students").select("id, name").in("id", officialIds);
+    (rows || []).forEach((r) => { officialMap[r.id] = r.name; });
+  }
+  const waitlistMap = {};
+  if (waitlistIds.length > 0) {
+    const { data: rows } = await supabase.from("waitlist_requests").select("id, student_name").in("id", waitlistIds);
+    (rows || []).forEach((r) => { waitlistMap[r.id] = r.student_name; });
+  }
+  const trialMap = {};
+  if (trialIds.length > 0) {
+    const { data: rows } = await supabase.from("trial_lesson_requests").select("id, full_name").in("id", trialIds);
+    (rows || []).forEach((r) => { trialMap[r.id] = r.full_name; });
+  }
+
+  const withNames = slots.map((s) => ({
+    ...s,
+    student_name:
+      (s.official_student_id && officialMap[s.official_student_id]) ||
+      (s.waitlist_request_id && waitlistMap[s.waitlist_request_id]) ||
+      (s.trial_lesson_request_id && trialMap[s.trial_lesson_request_id]) ||
+      null,
+  }));
+
+  return res.status(200).json({ slots: withNames });
 }
 
 async function handleBlockSlot(supabase, body, res) {

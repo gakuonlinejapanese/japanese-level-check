@@ -402,9 +402,10 @@ async function loadZoomDaySlots() {
   el.innerHTML = zoomDaySlots.map(s => {
     const already = s.zoom_link ? ` <span style="color:${'var(--green)'};font-size:11px;">✓登録済み</span>` : "";
     const trialTag = s.source === "trial_lesson" ? ` <span style="color:#2563eb;font-size:11px;">🆓 Free Trial</span>` : "";
+    const nameTag = s.student_name ? ` <strong>${s.student_name}</strong>` : "";
     return `<label style="display:flex;align-items:center;gap:8px;font-size:13px;padding:4px 0;">
       <input type="checkbox" class="zoom-slot-cb" value="${s.id}" />
-      ${s.start_time.slice(0,5)}${s.label ? " — " + s.label : ""}${trialTag}${already}
+      ${s.start_time.slice(0,5)}${nameTag}${s.label ? " — " + s.label : ""}${trialTag}${already}
     </label>`;
   }).join("");
 }
