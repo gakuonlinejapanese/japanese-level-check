@@ -159,6 +159,31 @@ async function handleAddOfficialBooking(supabase, body, res) {
     { onConflict: "lesson_date,start_time" }
   );
   if (error) return res.status(500).json({ error: error.message });
+
+  // 予約確定と同時に、生徒へ日本時間＋（登録済みなら）現地時間入りの確認メールを送る
+  if (officialStudentId) {
+    try {
+      const { data: student } = await supabase
+        .from("official_students")
+        .select("name, email, timezone")
+        .eq("id", officialStudentId)
+        .maybeSingle();
+      if (student && student.email) {
+        await sendEmail({
+          to: student.email,
+          subject: "Your GAKU lesson time is confirmed!",
+          html: `
+            <p>Hi ${student.name},</p>
+            <p>Your lesson has been scheduled for ${lessonTimeLine(date, time.length === 5 ? time + ":00" : time, student.timezone)}.</p>
+            <p>See you then!<br/>GAKU Online Japanese</p>
+          `,
+        });
+      }
+    } catch (e) {
+      console.error("Failed to send official booking confirmation email:", e.message);
+    }
+  }
+
   return res.status(200).json({ ok: true });
 }
 
@@ -244,11 +269,14 @@ async function handleListOfficialStudents(supabase, res) {
 }
 
 async function handleAddOfficialStudent(supabase, body, res) {
-  const { name, email, notes, timezone } = body;
+  const { name, email, notes, timezone, country, state } = body;
   if (!name || !email) return res.status(400).json({ error: "name and email are required" });
   const { data, error } = await supabase
     .from("official_students")
-    .insert({ name, email: email.trim().toLowerCase(), notes: notes || null, timezone: timezone || null })
+    .insert({
+      name, email: email.trim().toLowerCase(), notes: notes || null,
+      timezone: timezone || null, country: country || null, state: state || null,
+    })
     .select()
     .single();
   if (error) return res.status(500).json({ error: error.message });
@@ -256,7 +284,7 @@ async function handleAddOfficialStudent(supabase, body, res) {
 }
 
 async function handleUpdateOfficialStudent(supabase, body, res) {
-  const { id, name, email, notes, timezone } = body;
+  const { id, name, email, notes, timezone, country, state } = body;
   if (!id) return res.status(400).json({ error: "id is required" });
   if (!name) return res.status(400).json({ error: "name is required" });
 
@@ -264,6 +292,8 @@ async function handleUpdateOfficialStudent(supabase, body, res) {
   if (email !== undefined) updates.email = email.trim().toLowerCase();
   if (notes !== undefined) updates.notes = notes || null;
   if (timezone !== undefined) updates.timezone = timezone || null;
+  if (country !== undefined) updates.country = country || null;
+  if (state !== undefined) updates.state = state || null;
 
   const { data, error } = await supabase
     .from("official_students")

@@ -103,11 +103,13 @@
       <input type="text" id="off-name" placeholder="名前" />
       <input type="email" id="off-email" placeholder="メール" />
       <input type="text" id="off-notes" placeholder="メモ（固定スケジュール等）" />
-      <select id="off-timezone"></select>
+      <select id="off-country"></select>
+      <select id="off-state" style="display:none;"></select>
+      <select id="off-timezone-other" style="display:none;"></select>
       <button class="btn confirm" onclick="addOfficialStudent()">追加</button>
     </div>
     <p style="font-size:12px;color:#64748b;margin-top:4px;">
-      タイムゾーンを設定しておくと、レッスン30分前リマインドメールに日本時間と一緒にその方の現地時間も自動で記載されます。
+      生徒から聞いた「国」（アメリカ・カナダ・オーストラリアなど複数タイムゾーンがある国は「州・地域」も）を選んでください。予約確定メールやレッスン30分前リマインドメールに、日本時間と一緒にその方の現地時間が自動で記載されます。
     </p>
   </section>
 
@@ -152,11 +154,73 @@ let availabilityMap = {};
   endSel.innerHTML = opts;
   endSel.value = HOURS[HOURS.length - 1];
 })();
-const TIMEZONES = ["Asia/Tokyo","America/New_York","America/Chicago","America/Denver","America/Los_Angeles","America/Phoenix","America/Toronto","America/Vancouver","Europe/London","Europe/Dublin","Europe/Paris","Europe/Berlin","Europe/Madrid","Europe/Rome","Europe/Amsterdam","Europe/Zurich","Australia/Sydney","Australia/Perth","Asia/Shanghai","Asia/Seoul","Asia/Singapore","Asia/Hong_Kong","Asia/Bangkok","Asia/Dubai","Pacific/Auckland","America/Sao_Paulo","America/Mexico_City","Asia/Kolkata"];
-(function populateTimezoneSelect() {
-  const sel = document.getElementById("off-timezone");
-  sel.innerHTML = `<option value="">タイムゾーン（任意）</option>` +
-    TIMEZONES.map(tz => `<option value="${tz}">${tz}</option>`).join("");
+// 国 → タイムゾーン。複数タイムゾーンを持つ国は states で「州・地域 → タイムゾーン」を持つ
+const COUNTRY_TZ = {
+  "日本": { tz: "Asia/Tokyo" },
+  "アメリカ合衆国": { states: {
+    "東部 (NY・FL・GAなど)": "America/New_York",
+    "中部 (TX・ILなど)": "America/Chicago",
+    "山岳部 (CO・UTなど)": "America/Denver",
+    "アリゾナ州（サマータイムなし）": "America/Phoenix",
+    "太平洋部 (CA・WAなど)": "America/Los_Angeles",
+  }},
+  "カナダ": { states: {
+    "東部 (オンタリオ・ケベックなど)": "America/Toronto",
+    "太平洋部 (ブリティッシュコロンビア)": "America/Vancouver",
+  }},
+  "イギリス": { tz: "Europe/London" },
+  "アイルランド": { tz: "Europe/Dublin" },
+  "フランス": { tz: "Europe/Paris" },
+  "ドイツ": { tz: "Europe/Berlin" },
+  "スペイン": { tz: "Europe/Madrid" },
+  "イタリア": { tz: "Europe/Rome" },
+  "オランダ": { tz: "Europe/Amsterdam" },
+  "スイス": { tz: "Europe/Zurich" },
+  "オーストラリア": { states: {
+    "東部 (NSW・VIC・QLDなど)": "Australia/Sydney",
+    "西オーストラリア州": "Australia/Perth",
+  }},
+  "中国": { tz: "Asia/Shanghai" },
+  "韓国": { tz: "Asia/Seoul" },
+  "シンガポール": { tz: "Asia/Singapore" },
+  "香港": { tz: "Asia/Hong_Kong" },
+  "タイ": { tz: "Asia/Bangkok" },
+  "アラブ首長国連邦": { tz: "Asia/Dubai" },
+  "ニュージーランド": { tz: "Pacific/Auckland" },
+  "ブラジル": { tz: "America/Sao_Paulo" },
+  "メキシコ": { tz: "America/Mexico_City" },
+  "インド": { tz: "Asia/Kolkata" },
+  "その他（一覧にない国）": { other: true },
+};
+const OTHER_TIMEZONES = ["Asia/Tokyo","America/New_York","America/Chicago","America/Denver","America/Los_Angeles","America/Phoenix","America/Toronto","America/Vancouver","Europe/London","Europe/Dublin","Europe/Paris","Europe/Berlin","Europe/Madrid","Europe/Rome","Europe/Amsterdam","Europe/Zurich","Australia/Sydney","Australia/Perth","Asia/Shanghai","Asia/Seoul","Asia/Singapore","Asia/Hong_Kong","Asia/Bangkok","Asia/Dubai","Pacific/Auckland","America/Sao_Paulo","America/Mexico_City","Asia/Kolkata"];
+
+function populateCountrySelect(selectEl) {
+  selectEl.innerHTML = `<option value="">国（任意）</option>` +
+    Object.keys(COUNTRY_TZ).map(c => `<option value="${c}">${c}</option>`).join("");
+}
+function populateStateSelectFor(country, stateSelectEl, otherSelectEl) {
+  const entry = COUNTRY_TZ[country];
+  if (entry && entry.states) {
+    stateSelectEl.innerHTML = `<option value="">州・地域を選択</option>` +
+      Object.entries(entry.states).map(([label, tz]) => `<option value="${tz}">${label}</option>`).join("");
+    stateSelectEl.style.display = "";
+    otherSelectEl.style.display = "none";
+  } else if (entry && entry.other) {
+    otherSelectEl.innerHTML = `<option value="">タイムゾーンを選択</option>` +
+      OTHER_TIMEZONES.map(tz => `<option value="${tz}">${tz}</option>`).join("");
+    otherSelectEl.style.display = "";
+    stateSelectEl.style.display = "none";
+  } else {
+    stateSelectEl.style.display = "none";
+    otherSelectEl.style.display = "none";
+  }
+}
+(function initOfficialCountrySelects() {
+  const countrySel = document.getElementById("off-country");
+  const stateSel = document.getElementById("off-state");
+  const otherSel = document.getElementById("off-timezone-other");
+  populateCountrySelect(countrySel);
+  countrySel.addEventListener("change", () => populateStateSelectFor(countrySel.value, stateSel, otherSel));
 })();
 const PLAN_LINKS = {
   "3mo_30min": { label: "3 MONTHS · 30min/mo — $68.95", url: "https://buy.stripe.com/7sYcN53aGf3y9F3ct4bMQ06" },
@@ -359,15 +423,18 @@ async function applyZoomLink() {
 async function loadOfficialStudents() {
   const data = await api("list-official-students");
   const el = document.getElementById("official-list");
-  el.innerHTML = (data.students || []).map(s =>
-    `<div class="req-card" style="display:flex;justify-content:space-between;align-items:center;gap:8px;">
-      <span><strong>${s.name}</strong> — ${s.email}${s.notes ? " — " + s.notes : ""} — TZ: ${s.timezone || "未設定"}</span>
+  el.innerHTML = (data.students || []).map(s => {
+    const locationLabel = s.country
+      ? `${s.country}${s.state ? " – " + s.state : ""}`
+      : "住まい未登録";
+    return `<div class="req-card" style="display:flex;justify-content:space-between;align-items:center;gap:8px;">
+      <span><strong>${s.name}</strong> — ${s.email}${s.notes ? " — " + s.notes : ""} — 📍${locationLabel}${s.timezone ? " (" + s.timezone + ")" : ""}</span>
       <span style="flex-shrink:0;display:flex;gap:4px;">
         <button class="opt-btn avail" onclick="editOfficialStudentName('${s.id}','${s.name.replace(/'/g, "\\'")}')">✏️ 名前</button>
-        <button class="opt-btn avail" onclick="editOfficialStudentTimezone('${s.id}','${s.timezone || ""}')">🌐 タイムゾーン</button>
+        <button class="opt-btn avail" onclick="editOfficialStudentLocation('${s.id}')">📍 住まい</button>
       </span>
-    </div>`
-  ).join("") || "<p>まだ登録されていません。</p>";
+    </div>`;
+  }).join("") || "<p>まだ登録されていません。</p>";
 
   const sel = document.getElementById("booking-student");
   if (sel) {
@@ -419,15 +486,40 @@ async function editOfficialStudentName(id, currentName) {
   loadOfficialStudents();
 }
 
-async function editOfficialStudentTimezone(id, currentTz) {
-  const list = TIMEZONES.map((tz, i) => `${i + 1}: ${tz}`).join("\n");
-  const input = prompt(`タイムゾーンを番号または名前で入力してください（現在: ${currentTz || "未設定"}）\n\n${list}`, currentTz || "");
-  if (input === null) return; // キャンセル
-  const trimmed = input.trim();
-  const idx = Number(trimmed);
-  const tz = (Number.isInteger(idx) && TIMEZONES[idx - 1]) ? TIMEZONES[idx - 1] : trimmed;
+async function editOfficialStudentLocation(id) {
   const student = (await api("list-official-students")).students.find(s => s.id === id);
-  await api("update-official-student", { id, name: student.name, timezone: tz || null });
+  if (!student) return;
+  const countries = Object.keys(COUNTRY_TZ);
+  const list = countries.map((c, i) => `${i + 1}: ${c}`).join("\n");
+  const input = prompt(`国を番号で選んでください（現在: ${student.country || "未設定"}${student.state ? " – " + student.state : ""}）\n\n${list}`, "");
+  if (input === null) return; // キャンセル
+  const idx = Number(input.trim());
+  const country = countries[idx - 1];
+  if (!country) return alert("番号が正しくありません");
+
+  const entry = COUNTRY_TZ[country];
+  let timezone = null, state = null;
+  if (entry.tz) {
+    timezone = entry.tz;
+  } else if (entry.states) {
+    const stateEntries = Object.entries(entry.states);
+    const stateList = stateEntries.map(([label], i) => `${i + 1}: ${label}`).join("\n");
+    const stateInput = prompt(`州・地域を番号で選んでください\n\n${stateList}`, "");
+    if (stateInput === null) return;
+    const chosen = stateEntries[Number(stateInput.trim()) - 1];
+    if (!chosen) return alert("番号が正しくありません");
+    state = chosen[0];
+    timezone = chosen[1];
+  } else if (entry.other) {
+    const tzList = OTHER_TIMEZONES.map((tz, i) => `${i + 1}: ${tz}`).join("\n");
+    const tzInput = prompt(`タイムゾーンを番号で選んでください\n\n${tzList}`, "");
+    if (tzInput === null) return;
+    timezone = OTHER_TIMEZONES[Number(tzInput.trim()) - 1];
+    if (!timezone) return alert("番号が正しくありません");
+    state = timezone;
+  }
+
+  await api("update-official-student", { id, name: student.name, country, state, timezone });
   loadOfficialStudents();
 }
 
@@ -435,12 +527,34 @@ async function addOfficialStudent() {
   const name = document.getElementById("off-name").value.trim();
   const email = document.getElementById("off-email").value.trim();
   const notes = document.getElementById("off-notes").value.trim();
-  const timezone = document.getElementById("off-timezone").value;
+  const country = document.getElementById("off-country").value;
+  const stateSel = document.getElementById("off-state");
+  const otherSel = document.getElementById("off-timezone-other");
   if (!name || !email) return alert("名前とメールを入力してください");
-  await api("add-official-student", { name, email, notes, timezone });
+
+  let timezone = null, state = null;
+  const entry = COUNTRY_TZ[country];
+  if (entry) {
+    if (entry.tz) {
+      timezone = entry.tz;
+    } else if (entry.states) {
+      if (!stateSel.value) return alert("州・地域を選択してください");
+      timezone = stateSel.value;
+      state = stateSel.options[stateSel.selectedIndex].text;
+    } else if (entry.other) {
+      if (!otherSel.value) return alert("タイムゾーンを選択してください");
+      timezone = otherSel.value;
+      state = otherSel.value;
+    }
+  }
+
+  await api("add-official-student", { name, email, notes, country: country || null, state, timezone });
   document.getElementById("off-name").value = "";
   document.getElementById("off-email").value = "";
   document.getElementById("off-notes").value = "";
+  document.getElementById("off-country").value = "";
+  stateSel.style.display = "none"; stateSel.innerHTML = "";
+  otherSel.style.display = "none"; otherSel.innerHTML = "";
   loadOfficialStudents();
 }
 </script>
