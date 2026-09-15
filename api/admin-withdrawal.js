@@ -17,7 +17,10 @@ import { sendEmail } from "./_resend.js";
 //   full unconditional wipe for a normal paying student (including payment
 //   status, so re-signing up requires paying again); a no-op for a
 //   confirmed GAKU student, whose data is kept intact
-// GET with header Authorization: Bearer CRON_SECRET — run the daily deletion job (used by vercel.json cron)
+// GET with header Authorization: Bearer CRON_SECRET — run the daily deletion job (used by
+//   vercel.json cron); this also piggybacks the engagement/reminder emails, including
+//   handleUnpaidCheckoutReminder (nudges students who agreed to the policy but never
+//   completed Stripe checkout — see comment above that function)
 
 async function handleWithdraw(supabase, body, res) {
   const { studentEmail, graceDays, reason } = body;
@@ -318,6 +321,81 @@ async function handleTrialEndingWarning(supabase) {
   return { checked: (candidates || []).length, notified };
 }
 
+// Unpaid-checkout reminder — the "[GAKU] Policy agreement recorded" email fires the moment
+// a student agrees to the terms, which is BEFORE the Stripe checkout tab even opens. It is
+// not proof they reached Stripe, let alone completed payment. This job catches students who
+// agreed but never ended up paid, and nudges them once with a link straight back into their
+// checkout (client_reference_id + prefilled_email already attached, mirroring buildStripeUrl
+// in GakuApp.jsx, so they don't have to re-navigate the app or re-agree to the policy).
+//
+// Runs on the shared daily cron slot (Vercel Hobby caps crons at once/day), so "agreed_at
+// <= 1 hour ago" in practice means anywhere from ~1 to ~24 hours after agreeing, depending on
+// what time of day they agreed relative to the cron's fixed run time. The 48h lower bound on
+// the window is just a safety cap so a missed/failed cron run doesn't suddenly email a large
+// backlog of very old agreements once it recovers.
+const UNPAID_REMINDER_MIN_AGE_MS = 60 * 60 * 1000; // 1 hour
+const UNPAID_REMINDER_MAX_AGE_MS = 48 * 60 * 60 * 1000; // 48 hours
+const PLAN_STRIPE_LINKS = {
+  "App Only - Monthly ($14.99)": "https://buy.stripe.com/6oU7sL7qWg7C7wV1OqbMQ00",
+  "App Only - 3 Months ($42.70)": "https://buy.stripe.com/28E28r9z46x2dVj0KmbMQ02",
+  "App Only - 6 Months ($80.95)": "https://buy.stripe.com/28E5kD8v07B6bNbct4bMQ03",
+};
+
+async function handleUnpaidCheckoutReminder(supabase) {
+  const now = Date.now();
+  const windowStartIso = new Date(now - UNPAID_REMINDER_MAX_AGE_MS).toISOString();
+  const windowEndIso = new Date(now - UNPAID_REMINDER_MIN_AGE_MS).toISOString();
+
+  const { data: candidates, error: candidatesErr } = await supabase
+    .from("policy_agreements")
+    .select("id, user_id, email, name, plan, agreed_at")
+    .is("reminder_sent_at", null)
+    .not("user_id", "is", null)
+    .in("plan", Object.keys(PLAN_STRIPE_LINKS))
+    .gte("agreed_at", windowStartIso)
+    .lte("agreed_at", windowEndIso);
+
+  if (candidatesErr) return { checked: 0, notified: 0, error: candidatesErr.message };
+
+  let notified = 0;
+  for (const row of candidates || []) {
+    if (!row.email || !row.user_id) continue;
+    try {
+      const { data: profile, error: profileErr } = await supabase
+        .from("profiles")
+        .select("is_paid, is_gaku_student")
+        .eq("id", row.user_id)
+        .maybeSingle();
+      if (profileErr) throw profileErr;
+      // Already paid (or somehow a GAKU student) — nothing to remind them about.
+      // Still mark reminder_sent_at so this row isn't re-checked every day forever.
+      if (profile?.is_paid || profile?.is_gaku_student) {
+        await supabase.from("policy_agreements").update({ reminder_sent_at: new Date().toISOString() }).eq("id", row.id);
+        continue;
+      }
+
+      const baseUrl = PLAN_STRIPE_LINKS[row.plan];
+      const checkoutUrl = new URL(baseUrl);
+      checkoutUrl.searchParams.set("client_reference_id", row.user_id);
+      checkoutUrl.searchParams.set("prefilled_email", row.email);
+
+      const html = `
+        <p>Hi${row.name ? ` ${row.name}` : ""},</p>
+        <p>It looks like your GAKU Master purchase (${row.plan}) wasn't completed.</p>
+        <p><a href="${checkoutUrl.toString()}" style="color:#a855f7">Complete your purchase →</a></p>
+        <p>— Seito</p>
+      `;
+      await sendEmail({ to: row.email, subject: "Your GAKU Master purchase wasn't completed", html });
+      await supabase.from("policy_agreements").update({ reminder_sent_at: new Date().toISOString() }).eq("id", row.id);
+      notified += 1;
+    } catch (innerErr) {
+      console.error(`[unpaid-checkout-reminder] failed for ${row.email}:`, innerErr.message);
+    }
+  }
+
+  return { checked: (candidates || []).length, notified };
+}
+
 async function handleTestMarkPaid(supabase, body, res) {
   const { studentEmail } = body;
   if (!studentEmail) return res.status(400).json({ error: "studentEmail is required" });
@@ -347,20 +425,22 @@ export default async function handler(req, res) {
       return res.status(401).json({ error: "Unauthorized" });
     }
     try {
-      // Four independent daily jobs share this one cron slot (Vercel Hobby
+      // Five independent daily jobs share this one cron slot (Vercel Hobby
       // caps serverless functions at 12) — run them together, let any one
       // fail without blocking the others, then respond once.
-      const [deleteResult, engagementResult, lowEngagementResult, trialEndingResult] = await Promise.all([
+      const [deleteResult, engagementResult, lowEngagementResult, trialEndingResult, unpaidReminderResult] = await Promise.all([
         runCronDelete(supabase).catch((e) => ({ ok: false, error: e.message })),
         handleTrialEngagementCheck(supabase).catch((e) => ({ error: e.message })),
         handleLowEngagementReminder(supabase).catch((e) => ({ error: e.message })),
         handleTrialEndingWarning(supabase).catch((e) => ({ error: e.message })),
+        handleUnpaidCheckoutReminder(supabase).catch((e) => ({ error: e.message })),
       ]);
       return res.status(200).json({
         ...deleteResult,
         trialEngagement: engagementResult,
         lowEngagementReminder: lowEngagementResult,
         trialEndingWarning: trialEndingResult,
+        unpaidCheckoutReminder: unpaidReminderResult,
       });
     } catch (e) {
       return res.status(500).json({ error: e.message });
