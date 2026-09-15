@@ -62,6 +62,21 @@
       <input type="text" id="block-label" placeholder="メモ（任意）" />
       <button class="btn reject" onclick="blockSlot()">この枠をブロック</button>
     </div>
+    <div class="row" style="margin-top:10px;align-items:center;">
+      <strong style="font-size:13px;color:#475569;">🔴 まとめてブロック：</strong>
+      <input type="date" id="bulk-block-from-date" />
+      <span style="font-size:12px;color:#64748b;">〜</span>
+      <input type="date" id="bulk-block-to-date" placeholder="終了日（空欄なら開始日と同じ）" />
+      <select id="bulk-block-start-time"></select>
+      <span style="font-size:12px;color:#64748b;">から</span>
+      <select id="bulk-block-end-time"></select>
+      <span style="font-size:12px;color:#64748b;">まで（両方含む）</span>
+      <input type="text" id="bulk-block-label" placeholder="メモ（任意）" />
+      <button class="btn reject" onclick="bulkBlockRange()">まとめてブロック</button>
+    </div>
+    <p style="font-size:12px;color:#64748b;margin:4px 0 0;">
+      すでに予約が入っている枠はスキップされます（ブロックされません）。
+    </p>
     <div class="cal-grid" id="cal-grid" style="margin-top:14px;"></div>
   </section>
 
@@ -127,6 +142,16 @@
 
 <script>
 let SECRET = "";
+const HOURS = ["08:00","09:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00","18:00","19:00","20:00","21:00","22:00"];
+let availabilityMap = {};
+(function populateBulkBlockTimeSelects() {
+  const startSel = document.getElementById("bulk-block-start-time");
+  const endSel = document.getElementById("bulk-block-end-time");
+  const opts = HOURS.map(t => `<option value="${t}">${t}</option>`).join("");
+  startSel.innerHTML = opts;
+  endSel.innerHTML = opts;
+  endSel.value = HOURS[HOURS.length - 1];
+})();
 const TIMEZONES = ["Asia/Tokyo","America/New_York","America/Chicago","America/Denver","America/Los_Angeles","America/Phoenix","America/Toronto","America/Vancouver","Europe/London","Europe/Dublin","Europe/Paris","Europe/Berlin","Europe/Madrid","Europe/Rome","Europe/Amsterdam","Europe/Zurich","Australia/Sydney","Australia/Perth","Asia/Shanghai","Asia/Seoul","Asia/Singapore","Asia/Hong_Kong","Asia/Bangkok","Asia/Dubai","Pacific/Auckland","America/Sao_Paulo","America/Mexico_City","Asia/Kolkata"];
 (function populateTimezoneSelect() {
   const sel = document.getElementById("off-timezone");
@@ -222,8 +247,8 @@ async function loadAvailabilityGrid() {
   const grid = document.getElementById("cal-grid");
   const map = {};
   (data.slots || []).forEach(s => { map[`${s.lesson_date}_${s.start_time.slice(0,5)}`] = s; });
+  availabilityMap = map;
 
-  const HOURS = ["08:00","09:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00","18:00","19:00","20:00","21:00","22:00"];
   let html = "";
   for (let i = 0; i < 14; i++) {
     const d = new Date(Date.now() + i * 86400000);
@@ -259,6 +284,39 @@ async function blockSlot() {
   const label = document.getElementById("block-label").value;
   if (!date || !time) return alert("日付と時間を入力してください");
   await api("block-slot", { date, time: time + ":00", durationMinutes: 60, label });
+  loadAvailabilityGrid();
+}
+
+async function bulkBlockRange() {
+  const fromDate = document.getElementById("bulk-block-from-date").value;
+  const toDate = document.getElementById("bulk-block-to-date").value || fromDate;
+  const startTime = document.getElementById("bulk-block-start-time").value;
+  const endTime = document.getElementById("bulk-block-end-time").value;
+  const label = document.getElementById("bulk-block-label").value;
+  if (!fromDate) return alert("開始日を入力してください");
+  if (toDate < fromDate) return alert("終了日は開始日より後にしてください");
+  if (endTime < startTime) return alert("終了時刻は開始時刻より後にしてください");
+
+  const targets = [];
+  for (let d = new Date(fromDate + "T00:00:00"); d <= new Date(toDate + "T00:00:00"); d.setDate(d.getDate() + 1)) {
+    const dateStr = d.toISOString().slice(0, 10);
+    HOURS.forEach(time => {
+      if (time < startTime || time > endTime) return;
+      const existing = availabilityMap[`${dateStr}_${time}`];
+      if (existing && existing.status === "booked") return; // 予約済みはスキップ
+      targets.push({ dateStr, time });
+    });
+  }
+  if (targets.length === 0) return alert("対象の枠がありません。");
+  if (!confirm(`${fromDate}〜${toDate}の${startTime}〜${endTime}の間で、${targets.length}件の枠をブロックします。よろしいですか？`)) return;
+
+  let done = 0;
+  for (let i = 0; i < targets.length; i += 8) {
+    const chunk = targets.slice(i, i + 8);
+    await Promise.all(chunk.map(t => api("block-slot", { date: t.dateStr, time: t.time + ":00", durationMinutes: 60, label })));
+    done += chunk.length;
+  }
+  alert(`${done}件の枠をブロックしました。`);
   loadAvailabilityGrid();
 }
 
