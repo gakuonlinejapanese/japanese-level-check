@@ -491,6 +491,7 @@ async function handleTrialLesson(req, res) {
       fullName, email, location, originCountry, preferredDateTime, course, japaneseLevel, lessonDuration,
       weeklyTrialDone, agreed, outcome,
       countryScreeningPassed, screeningQ1, screeningQ2, screeningQ3,
+      exactDateLocal, exactTimeLocal, exactTimezone, exactDateJst, exactTimeJst,
     } = req.body || {};
     if (!fullName || !email) {
       return res.status(400).json({ error: "fullName and email are required" });
@@ -551,6 +552,11 @@ async function handleTrialLesson(req, res) {
       screening_q2: screeningQ2 || null,
       screening_q3: screeningQ3 || null,
       screening_passed: typeof countryScreeningPassed === "boolean" ? countryScreeningPassed : null,
+      exact_date_local: exactDateLocal || null,
+      exact_time_local: exactTimeLocal || null,
+      exact_timezone: exactTimezone || null,
+      exact_date_jst: exactDateJst || null,
+      exact_time_jst: exactTimeJst || null,
       agreed_at: isRejected ? null : submittedAt,
       submitted_at: submittedAt,
     });
@@ -569,6 +575,7 @@ async function handleTrialLesson(req, res) {
          <strong>Where they live:</strong> ${location || "(not provided)"}<br/>
          ${originCountry ? `<strong>Origin country:</strong> ${originCountry}<br/>` : ""}
          ${preferredDateTime ? `<strong>Preferred lesson date/time:</strong> ${preferredDateTime}<br/>` : ""}
+         ${exactDateJst && exactTimeJst ? `<strong>Checked & confirmed-available exact time:</strong> ${exactDateLocal} ${exactTimeLocal} (${exactTimezone || "their local time"}) = <strong>${exactDateJst} ${exactTimeJst} JST</strong><br/>` : ""}
          ${course ? `<strong>Course:</strong> ${course}<br/>` : ""}
          ${japaneseLevel ? `<strong>Current Japanese level:</strong> ${japaneseLevel}<br/>` : ""}
          ${lessonDuration ? `<strong>Lesson length:</strong> ${lessonDuration}<br/>` : ""}

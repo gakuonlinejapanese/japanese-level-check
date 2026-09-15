@@ -43,6 +43,11 @@
   .scroll-hint { font-size:12px; opacity:.85; margin-top:8px; display:flex; align-items:center; gap:6px; }
   .scroll-hint .arrow { animation: bounce 1.2s infinite; }
   @keyframes bounce { 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(4px); } }
+  .cal-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(92px,1fr)); gap:6px; margin-top:10px; max-height:280px; overflow-y:auto; }
+  .slot { padding:8px 4px; border-radius:8px; font-size:12px; text-align:center; cursor:pointer; user-select:none; }
+  .slot.green { background:var(--green); color:#04331a; font-weight:700; }
+  .slot.red { background:var(--red); color:#3a0a0a; opacity:.55; cursor:not-allowed; }
+  input[type=date], select { color-scheme: dark; }
 </style>
 </head>
 <body>
@@ -70,6 +75,18 @@
     <label>Preferred Lesson Date/Time (your local time) *</label>
     <input type="text" id="f-datetime" placeholder="e.g. April 6, 11AM" />
     <div class="error-msg" id="datetime-error"></div>
+
+    <label>Exact Date &amp; Time (your local time) *</label>
+    <div style="display:flex;gap:10px;">
+      <input type="date" id="f-exact-date" style="flex:1;" />
+      <select id="f-exact-time" style="flex:1;padding:10px 4px;background:transparent;border:none;border-bottom:1px solid rgba(255,255,255,.6);color:#fff;font-size:15px;" disabled><option value="" style="color:#000;">Select a date first</option></select>
+    </div>
+    <div class="hint">We'll check the teacher's real schedule using this exact time and let you know right away if it's available.</div>
+    <div class="error-msg" id="exact-time-error"></div>
+    <div id="exact-slot-fallback" style="display:none;margin-top:14px;">
+      <div class="hint" style="margin-bottom:6px;">Please pick an open time below (shown in your local time):</div>
+      <div class="cal-grid" id="fallback-cal-grid"></div>
+    </div>
 
     <label>Which course do you want to select? *</label>
     <div class="radio-group" id="course-group">
@@ -324,6 +341,116 @@ const datetimeInput = document.getElementById("f-datetime");
 const courseGroup = document.getElementById("course-group");
 const levelGroup = document.getElementById("level-group");
 const durationGroup = document.getElementById("duration-group");
+const exactDateInput = document.getElementById("f-exact-date");
+const exactTimeSelect = document.getElementById("f-exact-time");
+
+// ---- Exact Date/Time availability check ----
+// Detects the visitor's own browser timezone (no manual selection needed) and uses it to
+// convert between the fixed JST hourly lesson slots (matching admin-schedule.html's grid) and
+// the student's local wall-clock time, so we can check their choice against the real schedule.
+const detectedTz = Intl.DateTimeFormat().resolvedOptions().timeZone || "Asia/Tokyo";
+const EXACT_HOURS = ["08:00","09:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00","18:00","19:00","20:00","21:00","22:00"];
+let exactSlotCheckAttempts = 0;
+let finalExactDateJst = "", finalExactTimeJst = "", finalExactDateLocal = "", finalExactTimeLocal = "", finalExactTimezone = "";
+
+function setFinalExactSlot(jstDate, jstTime) {
+  const jstDt = new Date(`${jstDate}T${jstTime}:00+09:00`);
+  finalExactDateJst = jstDate;
+  finalExactTimeJst = jstTime;
+  finalExactTimezone = detectedTz;
+  finalExactDateLocal = jstDt.toLocaleDateString("en-CA", { timeZone: detectedTz }); // YYYY-MM-DD
+  finalExactTimeLocal = jstDt.toLocaleTimeString("en-GB", { timeZone: detectedTz, hour: "2-digit", minute: "2-digit", hour12: false }); // HH:MM
+}
+
+// For a given LOCAL calendar date, finds which of the fixed JST hourly slots (checking a day
+// on either side, since JST and local dates can differ) fall on that local date.
+function getLocalTimeOptionsForDate(localDateStr) {
+  if (!localDateStr) return [];
+  const base = new Date(localDateStr + "T12:00:00");
+  const options = [];
+  for (let dOffset = -1; dOffset <= 1; dOffset++) {
+    const probe = new Date(base.getTime() + dOffset * 86400000);
+    const jstDateStr = `${probe.getFullYear()}-${String(probe.getMonth() + 1).padStart(2, "0")}-${String(probe.getDate()).padStart(2, "0")}`;
+    EXACT_HOURS.forEach(t => {
+      const jstDt = new Date(`${jstDateStr}T${t}:00+09:00`);
+      const localDateOfSlot = jstDt.toLocaleDateString("en-CA", { timeZone: detectedTz });
+      if (localDateOfSlot === localDateStr) {
+        const timeLabel = jstDt.toLocaleTimeString("en-US", { timeZone: detectedTz, hour: "numeric", minute: "2-digit" });
+        options.push({ jstDate: jstDateStr, jstTime: t, localLabel: timeLabel });
+      }
+    });
+  }
+  options.sort((a, b) => new Date(`${a.jstDate}T${a.jstTime}:00+09:00`) - new Date(`${b.jstDate}T${b.jstTime}:00+09:00`));
+  return options;
+}
+
+exactDateInput.addEventListener("change", () => {
+  const opts = getLocalTimeOptionsForDate(exactDateInput.value);
+  exactSlotCheckAttempts = 0;
+  finalExactDateJst = "";
+  document.getElementById("exact-slot-fallback").style.display = "none";
+  setError(document.getElementById("exact-time-error"), "");
+  if (opts.length === 0) {
+    exactTimeSelect.innerHTML = `<option value="" style="color:#000;">No lesson times that day</option>`;
+    exactTimeSelect.disabled = true;
+  } else {
+    exactTimeSelect.disabled = false;
+    exactTimeSelect.innerHTML = `<option value="" style="color:#000;">Select a time</option>` +
+      opts.map(o => `<option value="${o.jstDate}|${o.jstTime}" style="color:#000;">${o.localLabel}</option>`).join("");
+  }
+  refreshStep1Btn();
+});
+exactTimeSelect.addEventListener("change", () => {
+  exactSlotCheckAttempts = 0;
+  finalExactDateJst = "";
+  document.getElementById("exact-slot-fallback").style.display = "none";
+  setError(document.getElementById("exact-time-error"), "");
+  refreshStep1Btn();
+});
+
+async function isExactSlotAvailable(jstDate, jstTime) {
+  const resp = await fetch("/api/schedule", {
+    method: "POST", headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ action: "public-availability", fromDate: jstDate, toDate: jstDate }),
+  });
+  const data = await resp.json();
+  const match = (data.slots || []).find(s => s.date === jstDate && s.time.slice(0, 5) === jstTime);
+  return !match || (match.status !== "booked" && match.status !== "blocked");
+}
+
+async function loadFallbackCalendar() {
+  const grid = document.getElementById("fallback-cal-grid");
+  grid.innerHTML = "<p>Loading…</p>";
+  const from = new Date();
+  const to = new Date(Date.now() + 14 * 86400000);
+  const fmt = d => d.toISOString().slice(0, 10);
+  const resp = await fetch("/api/schedule", {
+    method: "POST", headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ action: "public-availability", fromDate: fmt(from), toDate: fmt(to) }),
+  });
+  const data = await resp.json();
+  const takenSet = new Set((data.slots || []).map(s => `${s.date}_${s.time.slice(0, 5)}`));
+  grid.innerHTML = "";
+  for (let i = 1; i <= 14; i++) {
+    const d = new Date(Date.now() + i * 86400000);
+    const dateStr = d.toISOString().slice(0, 10);
+    EXACT_HOURS.forEach(time => {
+      const isTaken = takenSet.has(`${dateStr}_${time}`);
+      const el = document.createElement("div");
+      el.className = "slot " + (isTaken ? "red" : "green");
+      const jstDt = new Date(`${dateStr}T${time}:00+09:00`);
+      el.textContent = jstDt.toLocaleString("en-US", { timeZone: detectedTz, month: "short", day: "numeric", hour: "numeric", minute: "2-digit" });
+      if (!isTaken) el.onclick = () => {
+        setFinalExactSlot(dateStr, time);
+        document.getElementById("exact-slot-fallback").style.display = "none";
+        setError(document.getElementById("exact-time-error"), "");
+        proceedAfterExactSlotConfirmed();
+      };
+      grid.appendChild(el);
+    });
+  }
+}
+
 
 function selectedRadio(name) {
   const el = document.querySelector(`input[name="${name}"]:checked`);
@@ -338,7 +465,7 @@ const weeklyTrialGroup = document.getElementById("weeklytrial-group");
 function step1Valid() {
   return nameInput.value.trim() && emailInput.value.trim() && locationInput.value.trim()
     && originInput.value.trim() && datetimeInput.value.trim() && selectedRadio("course") && selectedRadio("duration")
-    && selectedRadio("weeklytrial");
+    && selectedRadio("weeklytrial") && exactDateInput.value && exactTimeSelect.value;
 }
 function refreshStep1Btn() {
   document.getElementById("btn-step1-next").disabled = !step1Valid();
@@ -352,6 +479,8 @@ function refreshStep1Btn() {
   if (selectedRadio("course")) courseGroup.classList.remove("invalid");
   if (selectedRadio("duration")) durationGroup.classList.remove("invalid");
   if (selectedRadio("weeklytrial")) weeklyTrialGroup.classList.remove("invalid");
+  if (exactDateInput.value) exactDateInput.classList.remove("invalid");
+  if (exactTimeSelect.value) exactTimeSelect.classList.remove("invalid");
   const dtValue = datetimeInput.value.trim();
   if (hasDatePart(dtValue) && hasTimePart(dtValue)) setError(document.getElementById("datetime-error"), "");
 }
@@ -399,6 +528,15 @@ document.getElementById("btn-step1-next").addEventListener("click", async () => 
   }
   setError(dtErr, "");
 
+  const missingExactDate = !exactDateInput.value;
+  const missingExactTime = !exactTimeSelect.value;
+  exactDateInput.classList.toggle("invalid", missingExactDate);
+  exactTimeSelect.classList.toggle("invalid", missingExactTime);
+  if (missingExactDate || missingExactTime) {
+    setError(err, "Please fill in all fields highlighted in red.");
+    return;
+  }
+
   submittedName = nameInput.value.trim();
   submittedEmail = emailInput.value.trim();
   submittedLocation = locationInput.value.trim();
@@ -408,6 +546,40 @@ document.getElementById("btn-step1-next").addEventListener("click", async () => 
   submittedLevel = selectedChecks("level");
   submittedDuration = selectedRadio("duration");
   submittedWeeklyTrial = selectedRadio("weeklytrial");
+
+  // If a slot hasn't already been locked in via the fallback calendar (2nd conflict), check
+  // whatever the student currently has typed in Exact Date/Time against the real schedule.
+  const exactTimeErr = document.getElementById("exact-time-error");
+  if (!finalExactDateJst) {
+    const [jstDate, jstTime] = exactTimeSelect.value.split("|");
+    const btn = document.getElementById("btn-step1-next");
+    btn.disabled = true; const originalLabel = btn.textContent; btn.textContent = "Checking availability…";
+    let available = true;
+    try { available = await isExactSlotAvailable(jstDate, jstTime); } catch (e) { /* if the check itself fails, don't block the student — proceed and let Seito verify manually */ }
+    btn.textContent = originalLabel; btn.disabled = false;
+
+    if (!available) {
+      exactSlotCheckAttempts++;
+      exactDateInput.classList.add("invalid");
+      exactTimeSelect.classList.add("invalid");
+      if (exactSlotCheckAttempts >= 2) {
+        setError(exactTimeErr, "Unfortunately, that time is already booked by another student. Please choose an open time from the schedule below.");
+        document.getElementById("exact-slot-fallback").style.display = "block";
+        loadFallbackCalendar();
+      } else {
+        setError(exactTimeErr, "Unfortunately, the time you selected is already booked by another student. Please choose a different date and time.");
+      }
+      return;
+    }
+    setFinalExactSlot(jstDate, jstTime);
+  }
+  setError(exactTimeErr, "");
+
+  await proceedAfterExactSlotConfirmed();
+});
+
+async function proceedAfterExactSlotConfirmed() {
+  const err = document.getElementById("form-error");
 
   const analysis = analyzeLocation(submittedLocation);
   if (!analysis) {
@@ -466,7 +638,7 @@ document.getElementById("btn-step1-next").addEventListener("click", async () => 
   document.getElementById("p-email").value = submittedEmail;
   showStep("step-policy");
   initPolicy();
-});
+}
 
 document.getElementById("btn-blocked-gaku-master").addEventListener("click", () => {
   window.location.href = "https://app.seitojapanese.online/gaku-master/";
@@ -730,6 +902,8 @@ document.getElementById("btn-final-submit").addEventListener("click", async () =
     lessonDuration: submittedDuration,
     weeklyTrialDone: submittedWeeklyTrial === "Yes",
     agreed: true,
+    exactDateLocal: finalExactDateLocal, exactTimeLocal: finalExactTimeLocal,
+    exactTimezone: finalExactTimezone, exactDateJst: finalExactDateJst, exactTimeJst: finalExactTimeJst,
   };
   if (submittedScreeningPassed !== null) {
     payload.countryScreeningPassed = submittedScreeningPassed;

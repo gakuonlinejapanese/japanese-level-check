@@ -162,6 +162,10 @@ function updateJstPreview(id) {
   const previewEl = document.getElementById(`jst-preview-${id}`);
   const tz = previewEl.dataset.tz;
   if (!dateEl.value || !timeEl.value) { previewEl.textContent = ""; return; }
+  if (previewEl.dataset.alreadyJst === "true") {
+    previewEl.innerHTML = `この日時はすでに日本時間として入力されています（生徒が空き確認した時点のもの）。現地時間に戻して変換する必要はありません。`;
+    return;
+  }
   if (!tz) {
     previewEl.innerHTML = `⚠️ この生徒のタイムゾーンを自動判定できませんでした。入力した日時をそのまま日本時間として登録します（確認してください）。`;
     return;
@@ -197,6 +201,7 @@ function detailsHtml(r) {
     <b>Where they live:</b> ${esc(r.location) || "—"}<br/>
     <b>Origin country:</b> ${esc(r.origin_country) || "—"}<br/>
     <b>Preferred date/time:</b> ${esc(r.preferred_datetime) || "—"}<br/>
+    ${r.exact_date_jst ? `<b>✅ 空き確認済みの正確な時間（生徒がフォームで直接チェック済み）:</b> ${esc(r.exact_date_local)} ${esc((r.exact_time_local||"").slice(0,5))} (${esc(r.exact_timezone)||"local"}) = <b>${esc(r.exact_date_jst)} ${esc((r.exact_time_jst||"").slice(0,5))} JST</b><br/>` : ""}
     <b>Course:</b> ${esc(r.course) || "—"}<br/>
     <b>Level:</b> ${esc(r.japanese_level) || "—"}<br/>
     <b>Duration:</b> ${esc(r.lesson_duration) || "—"}<br/>
@@ -206,8 +211,11 @@ function detailsHtml(r) {
   `;
 }
 
+let pendingRequestsCache = {};
+
 async function loadList() {
   const data = await api("admin_list_trial_lessons");
+  (data.pending || []).forEach(r => { pendingRequestsCache[r.id] = r; });
 
   const pendingEl = document.getElementById("pending-list");
   const pending = data.pending || [];
@@ -221,10 +229,10 @@ async function loadList() {
         <div class="details">${detailsHtml(r)}</div>
         <label style="font-size:12px;color:#64748b;">確定日時（承諾する場合。<b>生徒の現地時間</b>で入力してください。参考: 生徒の希望「${esc(r.preferred_datetime) || '未記入'}」）</label>
         <div class="row" style="margin-top:4px;">
-          <input type="date" id="confirm-date-${r.id}" oninput="updateJstPreview('${r.id}')" />
-          <input type="time" id="confirm-time-${r.id}" oninput="updateJstPreview('${r.id}')" />
+          <input type="date" id="confirm-date-${r.id}" value="${esc(r.exact_date_jst) || ""}" oninput="updateJstPreview('${r.id}')" />
+          <input type="time" id="confirm-time-${r.id}" value="${esc((r.exact_time_jst||"").slice(0,5))}" oninput="updateJstPreview('${r.id}')" />
         </div>
-        <p id="jst-preview-${r.id}" data-tz="${guessTimezone(r.location) || guessTimezone(r.origin_country) || ""}" style="font-size:12px;color:#2563eb;margin:6px 0 0;"></p>
+        <p id="jst-preview-${r.id}" data-tz="${r.exact_timezone || guessTimezone(r.location) || guessTimezone(r.origin_country) || ""}" data-already-jst="${r.exact_date_jst ? "true" : "false"}" style="font-size:12px;color:#2563eb;margin:6px 0 0;">${r.exact_date_jst ? "生徒が入力時点で空き確認済みのため、上の日付欄はすでに日本時間で入力されています（そのまま承諾できます）。" : ""}</p>
         <label style="font-size:12px;color:#64748b;margin-top:8px;display:block;">生徒へのひとこと（任意）</label>
         <textarea id="note-${r.id}" placeholder="任意のメッセージ"></textarea>
         <div class="row">
@@ -269,11 +277,15 @@ async function respond(id, decision) {
     const previewEl = document.getElementById(`jst-preview-${id}`);
     const tz = previewEl.dataset.tz;
     let dateJst = dateLocal, timeJst = timeLocal; // タイムゾーン不明な場合はそのまま日本時間として扱う(要確認)
-    if (tz) {
+    if (previewEl.dataset.alreadyJst === "true") {
+      // 生徒がフォーム送信時点で空き確認済み → すでに日本時間なので変換不要
+    } else if (tz) {
       const { jstDate, jstTime } = localToJst(dateLocal, timeLocal, tz);
       dateJst = jstDate; timeJst = jstTime;
     }
-    const confirmedDateTime = `${dateLocal} ${timeLocal} (student's local time)`;
+    const confirmedDateTime = previewEl.dataset.alreadyJst === "true"
+      ? `${pendingRequestsCache[id]?.exact_date_local || ""} ${(pendingRequestsCache[id]?.exact_time_local || "").slice(0,5)} (${pendingRequestsCache[id]?.exact_timezone || "student's local time"})`
+      : `${dateLocal} ${timeLocal} (student's local time)`;
     if (!confirm(`生徒の現地時間 ${dateLocal} ${timeLocal} → 日本時間 ${dateJst} ${timeJst} で確定し、スケジュールに登録します。生徒にもメールが送信されます。よろしいですか？`)) return;
     payload = { ...payload, confirmedDateTime, confirmedDateLocal: dateLocal, confirmedTimeLocal: timeLocal, confirmedDateJst: dateJst, confirmedTimeJst: timeJst, timezoneUsed: tz || null };
   } else {
