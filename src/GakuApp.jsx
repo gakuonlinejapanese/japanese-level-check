@@ -12341,7 +12341,7 @@ Agreement
 By checking the box and clicking "I Agree," you acknowledge that you have read, understood, and agreed to all of GAKU's Terms & Conditions.
 Your submission constitutes your acceptance of these Terms & Conditions.`;
 
-function PolicyGate({ T, name, email, plan, onAgreed, onCancel }) {
+function PolicyGate({ T, name, email, plan, userId, onAgreed, onCancel }) {
   const [agreed, setAgreed] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
@@ -12360,7 +12360,7 @@ function PolicyGate({ T, name, email, plan, onAgreed, onCancel }) {
     try {
       const res = await fetch("/api/policy-agreement", {
         method: "POST", headers: { "Content-Type":"application/json" },
-        body: JSON.stringify({ name, email, plan }),
+        body: JSON.stringify({ name, email, plan, userId }),
       });
       if (!res.ok) { const d = await res.json().catch(()=>({})); throw new Error(d.error || "Failed to record agreement."); }
       onAgreed(preOpenedWindow);
@@ -13110,7 +13110,7 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
     }
   };
   if (showAuthScreen) return <AuthScreen onAuthed={handleAuthed} T={T} prefillEmail={form?.email} initialMode={authInitialMode} />;
-  if (policyGate) return <PolicyGate T={T} name={form?.name || authUser?.email} email={authUser?.email || form?.email} plan={policyGate.planLabel} onAgreed={handlePolicyAgreed} onCancel={()=>setPolicyGate(null)} />;
+  if (policyGate) return <PolicyGate T={T} name={form?.name || authUser?.email} email={authUser?.email || form?.email} plan={policyGate.planLabel} userId={authUser?.id} onAgreed={handlePolicyAgreed} onCancel={()=>setPolicyGate(null)} />;
   if (authUser && deviceStatus === "suspended") return <DeviceSuspendedGate T={T} suspendedUntil={deviceSuspendedUntil} />;
   if (authUser && deviceStatus === "pending") return <DeviceApprovalGate T={T} />;
   // Hard, non-dismissible paywall: the server (api/account-status.js) has
