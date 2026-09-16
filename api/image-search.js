@@ -26,14 +26,41 @@ export default async function handler(req, res) {
       let trialStatus = null;
       let resolvedUserId = userId || null;
       if (email) {
+        const normalizedEmail = email.trim().toLowerCase();
         const { data: profile } = await supabase
           .from("profiles")
           .select("id, is_gaku_student, is_paid, trial_started_at")
-          .ilike("email", email.trim())
+          .ilike("email", normalizedEmail)
           .maybeSingle();
         if (profile) {
           resolvedUserId = profile.id;
-          trialStatus = { found: true, userId: profile.id, ...computeTrialFields(profile) };
+          // Safety net (mirrors api/account-status.js): profiles.is_gaku_student
+          // can end up out of sync with reality if the redeem step failed/raced
+          // during signup. A GAKU student must NEVER be told their trial has
+          // ended, so before trusting the flag, fall back to checking whether
+          // this account's email matches a registered invite code — and if so,
+          // self-heal the profile row so this only has to run once. Without
+          // this, a student whose flag drifted could redeem fine and use the
+          // main app normally (which has this same fallback) while GAKU Reader
+          // kept showing "Free trial has ended" forever, since it only ever
+          // read the raw (broken) flag.
+          let isGakuStudentResolved = !!profile.is_gaku_student;
+          if (!isGakuStudentResolved) {
+            const { data: invites } = await supabase
+              .from("invite_codes")
+              .select("id")
+              .eq("student_email", normalizedEmail)
+              .limit(1);
+            if (invites && invites.length > 0) {
+              isGakuStudentResolved = true;
+              await supabase.from("profiles").upsert({ id: profile.id, is_gaku_student: true });
+            }
+          }
+          trialStatus = {
+            found: true,
+            userId: profile.id,
+            ...computeTrialFields({ ...profile, is_gaku_student: isGakuStudentResolved }),
+          };
         } else {
           trialStatus = { found: false };
         }
