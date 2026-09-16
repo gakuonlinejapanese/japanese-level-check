@@ -12397,7 +12397,7 @@ function PolicyGate({ T, name, email, plan, userId, onAgreed, onCancel }) {
 
 // ─── ROOT ────────────────────────────────────────────────────────────────────────
 // ─── ACCOUNT: login / signup with optional GAKU invite code ──────────────────
-function AuthScreen({ onAuthed, T, prefillEmail, initialMode }) {
+function AuthScreen({ onAuthed, T, prefillEmail, initialMode, quickStartStep }) {
   const [mode, setMode] = useState(initialMode || "login"); // login | signup
   const [rawEmail, setRawEmail] = useState(prefillEmail || "");
   const [password, setPassword] = useState("");
@@ -12465,8 +12465,24 @@ function AuthScreen({ onAuthed, T, prefillEmail, initialMode }) {
   return (
     <div style={{ minHeight:"100vh", background:"linear-gradient(160deg,#0a0f1e 0%,#0f172a 60%,#0a0f1e 100%)", display:"flex", alignItems:"center", justifyContent:"center", padding:24 }}>
       <form onSubmit={handleSubmit} style={{ width:"100%", maxWidth:380, background:"rgba(255,255,255,0.03)", border:"1.5px solid rgba(255,255,255,0.1)", borderRadius:20, padding:28 }}>
+        {/* Without this, a brand-new QuickStartForm signup lands here with zero
+            visual continuity from the 4-step wizard the student just finished —
+            no progress bar, no "you're almost done" cue, nothing tying it to
+            what they were doing. Students reported this looked like a dead end
+            / a different, unrelated page, and backed out of the browser
+            entirely rather than realizing one more field would finish signup. */}
+        {quickStartStep && mode === "signup" && (
+          <>
+            <div style={{ display:"flex", gap:6, marginBottom:16 }}>
+              {[0,1,2,3].map(i => (
+                <div key={i} style={{ flex:1, height:4, borderRadius:2, background:`linear-gradient(135deg,${C.purple},#9333ea)` }} />
+              ))}
+            </div>
+            <p style={{ color:C.purpleLight, fontSize:11, fontWeight:700, letterSpacing:2, marginBottom:4, textAlign:"center" }}>LAST STEP</p>
+          </>
+        )}
         <h2 style={{ color:"#f1f5f9", fontSize:20, fontWeight:900, margin:"0 0 18px", textAlign:"center" }}>
-          {mode === "login" ? (T?.loginTitle || "Log In") : (T?.signupTitle || "Create Your Account")}
+          {mode === "login" ? (T?.loginTitle || "Log In") : (quickStartStep ? "Create a password to save your plan" : (T?.signupTitle || "Create Your Account"))}
         </h2>
         <input type="email" required placeholder={T?.emailPlaceholder || "Email"} value={rawEmail} onChange={e=>setRawEmail(e.target.value)}
           style={{ width:"100%", boxSizing:"border-box", padding:"11px 14px", marginBottom:10, background:"#0f172a", border:"1.5px solid rgba(255,255,255,0.1)", borderRadius:10, color:"#f1f5f9", fontSize:14 }} />
@@ -13109,7 +13125,19 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
       preOpenedWindow.close();
     }
   };
-  if (showAuthScreen) return <AuthScreen onAuthed={handleAuthed} T={T} prefillEmail={form?.email} initialMode={authInitialMode} />;
+  if (showAuthScreen) return (
+    <AuthScreen
+      onAuthed={handleAuthed}
+      T={T}
+      // For a brand-new QuickStartForm signup, `form` is still null here (it
+      // isn't set until completeProfileSave runs post-auth) — using form?.email
+      // silently dropped the email the student had just typed in step 2,
+      // making this screen look blank/reset instead of continuing their signup.
+      prefillEmail={pendingProfileSave?.email || form?.email}
+      initialMode={authInitialMode}
+      quickStartStep={!!pendingProfileSave}
+    />
+  );
   if (policyGate) return <PolicyGate T={T} name={form?.name || authUser?.email} email={authUser?.email || form?.email} plan={policyGate.planLabel} userId={authUser?.id} onAgreed={handlePolicyAgreed} onCancel={()=>setPolicyGate(null)} />;
   if (authUser && deviceStatus === "suspended") return <DeviceSuspendedGate T={T} suspendedUntil={deviceSuspendedUntil} />;
   if (authUser && deviceStatus === "pending") return <DeviceApprovalGate T={T} />;
