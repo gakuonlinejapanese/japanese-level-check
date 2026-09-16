@@ -30,6 +30,11 @@ import { sendEmail } from "./_resend.js";
 // POST { secret, action: "send-lesson-reminders" }
 //   → レッスン開始の約25〜40分前で、zoom_link登録済み・reminder未送信の予約に
 //     リマインドメールを送信（外部cronサービスから10分おきに呼び出す想定）
+// POST { secret, action: "list-cancellation-requests" }
+//   → cancel-reschedule.html経由のキャンセル・リスケ申請を新しい順に全件返す
+//     （api/policy-agreement.jsが受付時にメール一致で予約枠を自動解放し、その結果も含む）
+// POST { secret, action: "acknowledge-cancellation-request", id }
+//   → 申請を「確認済み」にする（admin-schedule.htmlの一覧から消える）
 
 function requireAdmin(body) {
   return body.secret && body.secret === process.env.ADMIN_SECRET;
@@ -336,6 +341,26 @@ async function handleUpdateOfficialStudent(supabase, body, res) {
   return res.status(200).json({ ok: true, student: data });
 }
 
+async function handleListCancellationRequests(supabase, res) {
+  const { data, error } = await supabase
+    .from("cancellation_requests")
+    .select("*")
+    .order("created_at", { ascending: false });
+  if (error) return res.status(500).json({ error: error.message });
+  return res.status(200).json({ requests: data || [] });
+}
+
+async function handleAcknowledgeCancellationRequest(supabase, body, res) {
+  const { id } = body;
+  if (!id) return res.status(400).json({ error: "id is required" });
+  const { error } = await supabase
+    .from("cancellation_requests")
+    .update({ acknowledged: true, acknowledged_at: new Date().toISOString() })
+    .eq("id", id);
+  if (error) return res.status(500).json({ error: error.message });
+  return res.status(200).json({ ok: true });
+}
+
 async function handleSetZoomLink(supabase, body, res) {
   const { ids, zoomLink } = body;
   if (!Array.isArray(ids) || ids.length === 0) return res.status(400).json({ error: "ids (array) is required" });
@@ -489,6 +514,8 @@ export default async function handler(req, res) {
     if (action === "update-official-student") return await handleUpdateOfficialStudent(supabase, body, res);
     if (action === "set-zoom-link") return await handleSetZoomLink(supabase, body, res);
     if (action === "send-lesson-reminders") return await handleSendLessonReminders(supabase, res);
+    if (action === "list-cancellation-requests") return await handleListCancellationRequests(supabase, res);
+    if (action === "acknowledge-cancellation-request") return await handleAcknowledgeCancellationRequest(supabase, body, res);
 
     return res.status(400).json({ error: "Unknown action" });
   } catch (e) {

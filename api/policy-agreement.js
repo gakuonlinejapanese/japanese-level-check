@@ -321,45 +321,111 @@ async function handleCheckJlptScanConsent(req, res) {
   }
 }
 
+// Tries to find the single booked teacher_availability slot that corresponds to this
+// student's email + the lesson date they're canceling, across all three ways a booking
+// can be linked (official_student_id / waitlist_request_id / trial_lesson_request_id).
+// Returns the matched slot row, or null if zero or more-than-one candidates were found
+// (ambiguous matches are left alone for the teacher to handle manually, rather than
+// guessing and freeing the wrong lesson).
+async function findMatchingBookedSlot(supabase, email, cancelDate) {
+  const normalizedEmail = email.trim().toLowerCase();
+
+  const [{ data: officials }, { data: waitlisted }, { data: trials }] = await Promise.all([
+    supabase.from("official_students").select("id").eq("email", normalizedEmail),
+    supabase.from("waitlist_requests").select("id").eq("student_email", normalizedEmail),
+    supabase.from("trial_lesson_requests").select("id").eq("email", normalizedEmail),
+  ]);
+
+  const officialIds = (officials || []).map((r) => r.id);
+  const waitlistIds = (waitlisted || []).map((r) => r.id);
+  const trialIds = (trials || []).map((r) => r.id);
+
+  if (officialIds.length === 0 && waitlistIds.length === 0 && trialIds.length === 0) return null;
+
+  const orParts = [];
+  if (officialIds.length) orParts.push(`official_student_id.in.(${officialIds.join(",")})`);
+  if (waitlistIds.length) orParts.push(`waitlist_request_id.in.(${waitlistIds.join(",")})`);
+  if (trialIds.length) orParts.push(`trial_lesson_request_id.in.(${trialIds.join(",")})`);
+
+  const { data: candidates, error } = await supabase
+    .from("teacher_availability")
+    .select("*")
+    .eq("lesson_date", cancelDate)
+    .eq("status", "booked")
+    .or(orParts.join(","));
+  if (error || !candidates || candidates.length !== 1) return null;
+  return candidates[0];
+}
+
 async function handleCancellationRequest(req, res) {
   try {
-    const { requestType, studentName, location, cancelDate, returnDate, rescheduleDate } = req.body || {};
+    const { requestType, studentName, studentEmail, location, cancelDate, returnDate, rescheduleDate } = req.body || {};
     if (!requestType || !["cancel", "reschedule"].includes(requestType)) {
       return res.status(400).json({ error: "requestType must be 'cancel' or 'reschedule'" });
     }
     if (!studentName || !cancelDate) {
       return res.status(400).json({ error: "studentName and cancelDate are required" });
     }
+    if (!studentEmail) {
+      return res.status(400).json({ error: "studentEmail is required" });
+    }
 
     const supabase = getAdminClient();
     const createdAt = new Date().toISOString();
+    const normalizedEmail = studentEmail.trim().toLowerCase();
+
+    // Try to auto-free the actual booked slot this request refers to.
+    let autoOpened = false;
+    let matchedSlot = null;
+    try {
+      matchedSlot = await findMatchingBookedSlot(supabase, normalizedEmail, cancelDate);
+      if (matchedSlot) {
+        const { error: deleteErr } = await supabase.from("teacher_availability").delete().eq("id", matchedSlot.id);
+        if (!deleteErr) autoOpened = true;
+        else matchedSlot = null; // couldn't actually free it — don't claim success below
+      }
+    } catch (e) {
+      console.error("Cancellation auto-match lookup failed:", e.message);
+      matchedSlot = null;
+    }
 
     const { error: insertErr } = await supabase.from("cancellation_requests").insert({
       request_type: requestType,
       student_name: studentName,
+      student_email: normalizedEmail,
       location: location || null,
       cancel_date: cancelDate,
       return_date: returnDate || null,
       reschedule_date: rescheduleDate || null,
       created_at: createdAt,
+      auto_opened: autoOpened,
+      matched_start_time: matchedSlot ? matchedSlot.start_time : null,
+      matched_source: matchedSlot ? matchedSlot.source : null,
+      matched_label: matchedSlot ? matchedSlot.label : null,
     });
     if (insertErr) return res.status(500).json({ error: insertErr.message });
 
     const isCancel = requestType === "cancel";
+    const matchLine = autoOpened
+      ? `<p style="color:#16a34a;"><strong>✅ Matched and automatically freed the ${matchedSlot.start_time.slice(0, 5)} slot on ${cancelDate}.</strong></p>`
+      : `<p style="color:#dc2626;"><strong>⚠️ Could not automatically match this to a booked slot — please free it manually in admin-schedule.html.</strong></p>`;
     const html = `
       <p>A student submitted a ${isCancel ? "cancellation" : "reschedule"} request.</p>
+      ${matchLine}
       <p><strong>Type:</strong> ${isCancel ? "Cancel" : "Reschedule"}<br/>
          <strong>Name:</strong> ${studentName}<br/>
+         <strong>Email:</strong> ${normalizedEmail}<br/>
          ${location ? `<strong>Location:</strong> ${location}<br/>` : ""}
          <strong>Lesson date being canceled:</strong> ${cancelDate}<br/>
          ${returnDate ? `<strong>Returning on:</strong> ${returnDate}<br/>` : ""}
          ${rescheduleDate ? `<strong>Preferred reschedule date:</strong> ${rescheduleDate}<br/>` : ""}
          <strong>Submitted at:</strong> ${createdAt}</p>
+      <p>This also appears in the "📋 Cancellation / Reschedule Requests" panel in admin-schedule.html until you mark it handled.</p>
     `;
     try {
       await sendEmail({
         to: ADMIN_EMAIL,
-        subject: `[GAKU] ${isCancel ? "Cancellation" : "Reschedule"} request — ${studentName}`,
+        subject: `[GAKU] ${isCancel ? "Cancellation" : "Reschedule"} request — ${studentName}${autoOpened ? " (slot auto-freed)" : " (needs manual check)"}`,
         html,
       });
     } catch (e) {
@@ -368,7 +434,7 @@ async function handleCancellationRequest(req, res) {
       console.error("Failed to send cancellation-request notification email:", e.message);
     }
 
-    return res.status(200).json({ ok: true });
+    return res.status(200).json({ ok: true, autoOpened });
   } catch (e) {
     return res.status(500).json({ error: e.message });
   }

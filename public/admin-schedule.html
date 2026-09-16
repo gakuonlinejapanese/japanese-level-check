@@ -20,6 +20,8 @@
   .badge.pending { background:#fef3c7; color:var(--amber); }
   .badge.confirmed { background:#dcfce7; color:var(--green); }
   .badge.no_availability { background:#fee2e2; color:var(--red); }
+  .badge.auto { background:#dcfce7; color:var(--green); }
+  .badge.manual { background:#fee2e2; color:var(--red); }
   .opt-btn { padding:5px 10px; border-radius:6px; border:none; font-size:12px; font-weight:700; cursor:pointer; }
   .opt-btn.avail { background:var(--green); color:#fff; }
   .opt-btn.taken { background:#e2e8f0; color:#94a3b8; cursor:not-allowed; }
@@ -52,6 +54,11 @@
   <section>
     <h2>📋 ウェイトリスト（未確定の予約希望）</h2>
     <div id="waitlist-list"><p>読み込み中…</p></div>
+  </section>
+
+  <section>
+    <h2>📋 キャンセル・リスケ申請</h2>
+    <div id="cancellation-list"><p>読み込み中…</p></div>
   </section>
 
   <section>
@@ -238,6 +245,7 @@ function enterAdmin() {
   loadAvailabilityGrid();
   loadOfficialStudents();
   loadTrialLessonList();
+  loadCancellationRequests();
 }
 
 async function api(action, extra = {}) {
@@ -304,6 +312,41 @@ async function rejectWaitlist(waitlistId) {
   if (!confirm("このリクエストをお断りしてよいですか？生徒に案内メールが送信されます。")) return;
   await api("reject-waitlist", { waitlistId });
   loadWaitlist();
+}
+
+async function loadCancellationRequests() {
+  const data = await api("list-cancellation-requests");
+  const el = document.getElementById("cancellation-list");
+  const pending = (data.requests || []).filter(r => !r.acknowledged);
+  if (pending.length === 0) { el.innerHTML = "<p>現在、未確認のキャンセル・リスケ申請はありません。</p>"; return; }
+
+  el.innerHTML = pending.map(r => {
+    const isCancel = r.request_type === "cancel";
+    const statusBadge = r.auto_opened
+      ? `<span class="badge auto">✅ 枠を自動解放済み${r.matched_start_time ? "（" + r.matched_start_time.slice(0,5) + "）" : ""}</span>`
+      : `<span class="badge manual">⚠️ 要手動確認（自動一致せず）</span>`;
+    return `<div class="req-card">
+      <div class="req-head">
+        <span>${r.student_name} (${r.student_email || "メール未登録"}) — ${isCancel ? "キャンセル" : "リスケ"}</span>
+        ${statusBadge}
+      </div>
+      <div style="font-size:12px;color:#64748b;margin:6px 0;">
+        キャンセル対象日: ${r.cancel_date}
+        ${r.return_date ? ` / 復帰予定日: ${r.return_date}` : ""}
+        ${r.reschedule_date ? ` / 希望リスケ日: ${r.reschedule_date}` : ""}
+        ${r.location ? ` / 現在地: ${r.location}` : ""}
+      </div>
+      <div class="row">
+        <button class="btn confirm" onclick="acknowledgeCancellationRequest('${r.id}')">確認済みにする</button>
+      </div>
+    </div>`;
+  }).join("");
+}
+
+async function acknowledgeCancellationRequest(id) {
+  await api("acknowledge-cancellation-request", { id });
+  loadCancellationRequests();
+  loadAvailabilityGrid();
 }
 
 async function loadAvailabilityGrid() {

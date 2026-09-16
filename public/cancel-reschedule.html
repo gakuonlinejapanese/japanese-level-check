@@ -48,6 +48,9 @@
     <label>Your full name *</label>
     <input type="text" id="f-name" placeholder="e.g. Taro Yamada" />
 
+    <label>Your email address (the one you used to register) *</label>
+    <input type="text" id="f-email" placeholder="e.g. taro@example.com" />
+
     <div id="reschedule-only" style="display:none;">
       <label>Which country/city are you now? *</label>
       <input type="text" id="f-location" placeholder="e.g. Tokyo, Japan" />
@@ -120,6 +123,7 @@ document.getElementById('btn-go-details').addEventListener('click', () => {
 document.getElementById('btn-go-policy').addEventListener('click', () => {
   const isCancel = reqType === 'cancel';
   const name = document.getElementById('f-name').value.trim();
+  const email = document.getElementById('f-email').value.trim();
   const location = document.getElementById('f-location').value.trim();
   const cancelDate = document.getElementById('f-cancel-date').value;
   const returnDate = document.getElementById('f-return-date').value;
@@ -128,6 +132,10 @@ document.getElementById('btn-go-policy').addEventListener('click', () => {
 
   if (!name || !cancelDate) {
     err.textContent = 'Please fill in your name and the date you will cancel the lesson.';
+    return;
+  }
+  if (!email || !email.includes('@')) {
+    err.textContent = 'Please enter a valid email address so we can find your lesson.';
     return;
   }
   if (isCancel && !returnDate) {
@@ -155,6 +163,7 @@ document.getElementById('btn-final-submit').addEventListener('click', async () =
     action: 'cancellation_request',
     requestType: reqType,
     studentName: document.getElementById('f-name').value.trim(),
+    studentEmail: document.getElementById('f-email').value.trim(),
     location: document.getElementById('f-location').value.trim() || null,
     cancelDate: document.getElementById('f-cancel-date').value || null,
     returnDate: document.getElementById('f-return-date').value || null,
