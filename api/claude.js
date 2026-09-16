@@ -103,15 +103,91 @@ async function callGroq(groqKeys, commonBody, model = "llama-3.3-70b-versatile")
   return { text: null, lastError: `All Groq keys rate limited. ${lastError}` };
 }
 
+// Groq's audio transcription endpoint (Whisper large-v3) — unlike callGroq above,
+// this is multipart/form-data (a file upload), not a JSON chat completion, so it
+// gets its own request builder. Used by provider === "whisper" for GAKU Reader's
+// 🎧 listening answer-explanation scan mode: the extension records the tab's
+// audio while the student replays a JLPT listening question, base64-encodes it,
+// and sends it here to get a Japanese transcript back.
+async function callGroqWhisper(groqKeys, audioBuffer, mimeType) {
+  if (!groqKeys.length) return { text: null, lastError: "No Groq keys configured" };
+
+  let lastError = null;
+  for (let i = 0; i < groqKeys.length; i++) {
+    try {
+      const form = new FormData();
+      const ext = (mimeType || "").includes("webm") ? "webm" : "wav";
+      form.append("file", new Blob([audioBuffer], { type: mimeType || "audio/webm" }), `audio.${ext}`);
+      form.append("model", "whisper-large-v3");
+      form.append("language", "ja"); // JLPT listening audio is Japanese
+      form.append("response_format", "json");
+
+      const response = await fetch("https://api.groq.com/openai/v1/audio/transcriptions", {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${groqKeys[i]}`,
+        },
+        body: form,
+      });
+
+      const data = await response.json();
+
+      if (response.status === 429) {
+        lastError = data.error?.message || "Rate limit exceeded";
+        continue; // try next key
+      }
+
+      if (!response.ok) {
+        return { text: null, lastError: data.error?.message || "Groq transcription error", status: response.status };
+      }
+
+      return { text: data.text || "" };
+    } catch (e) {
+      lastError = e.message;
+      continue;
+    }
+  }
+
+  return { text: null, lastError: `All Groq keys rate limited or failed for transcription. ${lastError}` };
+}
+
 export default async function handler(req, res) {
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
   }
+
   try {
-    const { messages, max_tokens, provider, frequency_penalty } = req.body;
+    const { messages, max_tokens, provider, frequency_penalty, audioBase64, mimeType } = req.body;
+
+    const groqKeys = [
+      process.env.GROQ_API_KEY,
+      process.env.GROQ_API_KEY_2,
+      process.env.GROQ_API_KEY_3,
+      process.env.GROQ_API_KEY_4,
+      process.env.GROQ_API_KEY_5,
+    ].filter(Boolean);
+
+    // provider === "whisper": audio transcription for GAKU Reader's 🎧 listening
+    // scan mode. Body shape is different from every other provider here — no
+    // `messages`, just base64 audio — so this is handled before the chat-message
+    // parsing below, and returns { text } directly (not the { content: [...] }
+    // shape the chat providers use) since background.js reads resp.text for this.
+    if (provider === "whisper") {
+      if (!audioBase64) {
+        return res.status(400).json({ error: "Missing audioBase64" });
+      }
+      const audioBuffer = Buffer.from(audioBase64, "base64");
+      const whisperResult = await callGroqWhisper(groqKeys, audioBuffer, mimeType);
+      if (whisperResult.text !== null) {
+        console.log("provider=whisper: Groq OK");
+        return res.status(200).json({ text: whisperResult.text });
+      }
+      console.error("provider=whisper: Groq FAILED —", whisperResult.lastError);
+      return res.status(whisperResult.status || 429).json({ error: whisperResult.lastError || "Transcription failed" });
+    }
+
     const systemMessage = messages?.find(m => m.role === "system");
     const userMessages = messages?.filter(m => m.role !== "system") || [];
-
     const chatMessages = systemMessage
       ? [{ role: "system", content: systemMessage.content }, ...userMessages]
       : userMessages;
@@ -121,18 +197,12 @@ export default async function handler(req, res) {
       max_tokens: Math.min(max_tokens || 1200, 8000),
       temperature: 0.3,
     };
+
     if (typeof frequency_penalty === "number") {
       commonBody.frequency_penalty = Math.max(-2, Math.min(2, frequency_penalty));
     }
 
     const deepInfraKey = process.env.DEEPINFRA_API_KEY;
-    const groqKeys = [
-      process.env.GROQ_API_KEY,
-      process.env.GROQ_API_KEY_2,
-      process.env.GROQ_API_KEY_3,
-      process.env.GROQ_API_KEY_4,
-      process.env.GROQ_API_KEY_5,
-    ].filter(Boolean);
 
     // provider === "vision": GAKU Reader's screenshot-scan feature (問題作成/JLPT解答解説
     // modes). messages already contain multimodal content parts (an image_url data-URI
@@ -219,7 +289,6 @@ export default async function handler(req, res) {
       return res.status(200).json({ content: [{ type: "text", text: groqResult.text }] });
     }
     return res.status(groqResult.status || 429).json({ error: groqResult.lastError || "Both providers failed" });
-
   } catch (error) {
     return res.status(500).json({ error: "Failed to call API", details: error.message });
   }
