@@ -22,6 +22,31 @@ import { sendEmail } from "./_resend.js";
 //   handleUnpaidCheckoutReminder (nudges students who agreed to the policy but never
 //   completed Stripe checkout — see comment above that function)
 
+const APP_URL = "https://app.seitojapanese.online/app";
+
+// Sent to a student the moment a teacher runs a withdrawal in
+// public/admin-withdrawal.html. Separate from the trial-related reminder
+// emails further down this file — this one is for students who WERE a
+// confirmed GAKU (invitation-code) student and no longer are, so unlike a
+// trial student they may not otherwise expect a paywall to appear next time
+// they log in. Failure to send this must never block the withdrawal itself
+// (the teacher still needs is_gaku_student flipped off immediately either
+// way), so the caller wraps this in try/catch and only logs on failure.
+function buildWithdrawalEmailHtml({ name, days, scheduledDeletionDate }) {
+  const dateStr = scheduledDeletionDate.toLocaleDateString("en-US", {
+    year: "numeric", month: "long", day: "numeric",
+  });
+  return `
+    <p>Hi${name ? ` ${name}` : ""},</p>
+    <p>This is to let you know that you are no longer an official GAKU student.</p>
+    <p>Please decide whether you'd like to keep your account and study content. If you'd like to continue, you'll need to sign up for one of GAKU Master's paid plans.</p>
+    <p><a href="${APP_URL}?preview=paywall" style="color:#a855f7">View plans →</a></p>
+    <p>If we don't hear from you, your account will be permanently deleted on <b>${dateStr}</b> (${days} day${days === 1 ? "" : "s"} from today).</p>
+    <p>If you have any questions, feel free to reach out.</p>
+    <p>— Seito</p>
+  `;
+}
+
 async function handleWithdraw(supabase, body, res) {
   const { studentEmail, graceDays, reason } = body;
   if (!studentEmail) return res.status(400).json({ error: "studentEmail is required" });
@@ -30,7 +55,7 @@ async function handleWithdraw(supabase, body, res) {
   const email = studentEmail.trim().toLowerCase();
 
   const { data: profile, error: findError } = await supabase
-    .from("profiles").select("id, email").eq("email", email).maybeSingle();
+    .from("profiles").select("id, email, name").eq("email", email).maybeSingle();
   if (findError) return res.status(500).json({ error: findError.message });
   if (!profile) return res.status(404).json({ error: "Student not found" });
 
@@ -49,10 +74,24 @@ async function handleWithdraw(supabase, body, res) {
     .eq("id", profile.id);
   if (updateError) return res.status(500).json({ error: updateError.message });
 
+  let emailSent = false;
+  try {
+    await sendEmail({
+      to: profile.email,
+      subject: "Your GAKU student status has changed",
+      html: buildWithdrawalEmailHtml({ name: profile.name, days, scheduledDeletionDate: scheduledDeletion }),
+    });
+    emailSent = true;
+  } catch (emailErr) {
+    console.error(`[admin-withdrawal] failed to email ${profile.email}:`, emailErr.message);
+  }
+
   return res.status(200).json({
     ok: true,
     scheduledDeletionDate: scheduledDeletion.toISOString(),
-    reminder: "Stripe側の解約/プラン変更は自動化されていません。Stripeダッシュボードで手動対応してください。",
+    emailSent,
+    reminder: "Stripe側の解約/プラン変更は自動化されていません。Stripeダッシュボードで手動対応してください。"
+      + (emailSent ? "" : "（生徒へのお知らせメール送信に失敗したため、手動で連絡してください）"),
   });
 }
 
@@ -229,7 +268,6 @@ async function handleTrialEngagementCheck(supabase) {
 const LOW_ENGAGEMENT_WINDOW_MIN_DAYS = 2;
 const LOW_ENGAGEMENT_WINDOW_MAX_DAYS = 3;
 const LOW_ENGAGEMENT_ACTIVE_DAYS_THRESHOLD = 2; // fewer than this = "low engagement"
-const APP_URL = "https://app.seitojapanese.online/app";
 
 async function handleLowEngagementReminder(supabase) {
   const now = Date.now();
