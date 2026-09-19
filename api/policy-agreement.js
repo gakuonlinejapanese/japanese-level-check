@@ -185,6 +185,7 @@ export default async function handler(req, res) {
     if (action === "check_jlpt_mock_applied") return handleCheckJlptMockApplied(req, res);
     if (action === "submit_feedback") return handleSubmitFeedback(req, res);
     if (action === "check_feedback_submitted") return handleCheckFeedbackSubmitted(req, res);
+    if (action === "send_free_plan_winback_emails") return handleSendFreePlanWinback(req, res);
     if (action === "jlpt_scan_consent") {
       res.setHeader("Access-Control-Allow-Origin", "*");
       return handleJlptScanConsent(req, res);
@@ -692,6 +693,92 @@ async function handleCheckTrialLessonRepeat(req, res) {
   } catch (e) {
     console.error("handleCheckTrialLessonRepeat failed:", e.message);
     return res.status(200).json({ blocked: false });
+  }
+}
+
+// ---- Free-Plan win-back campaign: emails everyone who ever reached the
+// payment-agreement step (policy_agreements) but never actually converted
+// (not is_paid, not is_gaku_student in profiles), pitching the FREE Plan
+// (become a GAKU lesson student, from $35/hr) as an alternative to the
+// $14.99/mo App Only plan — the same anchor shown on the forced payment
+// screen (see freePlanGakuStudentHint in GakuApp.jsx). Manually triggered by
+// Seito (admin secret required), not automatic — this is a one-off/
+// occasional campaign, not a per-user lifecycle email. Each email address is
+// only ever sent once across repeated runs (tracked in winback_emails_sent).
+// Pass { dryRun: true } to preview the recipient count/sample without
+// sending or recording anything.
+async function handleSendFreePlanWinback(req, res) {
+  if (!checkAdminSecret(req)) return res.status(401).json({ error: "Invalid admin secret" });
+  try {
+    const { dryRun } = req.body || {};
+    const supabase = getAdminClient();
+
+    const { data: agreements, error: agreementsErr } = await supabase
+      .from("policy_agreements")
+      .select("email, name")
+      .order("agreed_at", { ascending: false });
+    if (agreementsErr) return res.status(500).json({ error: agreementsErr.message });
+
+    // Dedupe by email — policy_agreements has one row per checkout attempt,
+    // so the same student who agreed 5 times (see the Aug 25 popup-block bug)
+    // must only ever get one win-back email.
+    const byEmail = new Map();
+    for (const row of agreements || []) {
+      const email = (row.email || "").trim().toLowerCase();
+      if (email && !byEmail.has(email)) byEmail.set(email, row.name || "");
+    }
+
+    const { data: alreadySent, error: sentErr } = await supabase
+      .from("winback_emails_sent")
+      .select("email");
+    if (sentErr) return res.status(500).json({ error: sentErr.message });
+    const sentSet = new Set((alreadySent || []).map(r => r.email));
+
+    const { data: profiles, error: profilesErr } = await supabase
+      .from("profiles")
+      .select("email, is_paid, is_gaku_student")
+      .in("email", [...byEmail.keys()]);
+    if (profilesErr) return res.status(500).json({ error: profilesErr.message });
+    const convertedSet = new Set(
+      (profiles || [])
+        .filter(p => p.is_paid || p.is_gaku_student)
+        .map(p => (p.email || "").trim().toLowerCase())
+    );
+
+    const targets = [...byEmail.entries()].filter(
+      ([email]) => !sentSet.has(email) && !convertedSet.has(email)
+    );
+
+    if (dryRun) {
+      return res.status(200).json({ ok: true, dryRun: true, wouldSend: targets.length, sample: targets.slice(0, 10).map(([email]) => email) });
+    }
+
+    let sentCount = 0;
+    const failed = [];
+    for (const [email, name] of targets) {
+      const html = `
+        <p>Hi ${name || "there"},</p>
+        <p>You looked into a GAKU Master plan a while back — no pressure, it's still there whenever you're ready.</p>
+        <p>Quick reminder there are actually two ways to keep using GAKU Master:</p>
+        <ul>
+          <li><strong>App Only</strong> — from $14.99/month, cancel anytime.</li>
+          <li><strong>Free</strong> — GAKU lesson students (lessons from $35/hr) get the app included at no extra cost. If you'd rather take lessons than pay for the app on its own, <a href="https://app.seitojapanese.online/book-lesson.html">book a lesson here</a> and you'll get a free-plan invite code.</li>
+        </ul>
+        <p>Either way, your progress is waiting for you.</p>
+        <p>— Seito, GAKU Online Japanese</p>
+      `;
+      try {
+        await sendEmail({ to: email, subject: "Still there? Two ways to keep using GAKU Master", html });
+        await supabase.from("winback_emails_sent").insert({ email });
+        sentCount++;
+      } catch (e) {
+        failed.push({ email, error: e.message });
+      }
+    }
+
+    return res.status(200).json({ ok: true, sent: sentCount, failed, totalCandidates: targets.length });
+  } catch (e) {
+    return res.status(500).json({ error: e.message });
   }
 }
 

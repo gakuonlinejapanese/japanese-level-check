@@ -398,6 +398,8 @@ const UI_TRANSLATIONS = {
     streakUnit: "day streak",
     trialEndsToday: "Your free trial ends today!",
     trialEndsTomorrow: "Your free trial ends tomorrow!",
+    dataResetWarning: "If payment isn't completed within 1 week, all your saved study data (vocabulary, progress, and settings) will be permanently reset. Subscribe now to keep everything you've built so far.",
+    dataResetWarningShort: "Reminder: if you don't finish payment within 1 week, your saved data will be reset.",
     viewPlansCta: "View plans",
     firstWinKicker: "QUICK START",
     firstWinTitle: "Try your first word!",
@@ -612,6 +614,7 @@ const UI_TRANSLATIONS = {
     vocabSearchPlaceholder: "e.g. food, travel, emotions...",
     // Paywall — free plan / invite code / join GAKU section
     freePlanGakuStudent: "FREE Plan (Only GAKU students)",
+    freePlanGakuStudentHint: "GAKU lesson students (lessons from $35/hr) get the app included free. No code? Book a lesson to become one →",
     invitationCodeLabel: "INVITATION CODE",
     inviteCodePlaceholder: "Enter invite code...",
     confirmCode: "Confirm",
@@ -788,6 +791,8 @@ const UI_TRANSLATIONS = {
     streakUnit: "jours de suite",
     trialEndsToday: "Votre essai gratuit se termine aujourd'hui !",
     trialEndsTomorrow: "Votre essai gratuit se termine demain !",
+    dataResetWarning: "Si le paiement n'est pas effectué sous 1 semaine, toutes vos données d'étude enregistrées (vocabulaire, progression et paramètres) seront définitivement réinitialisées. Abonnez-vous maintenant pour conserver tout ce que vous avez accompli.",
+    dataResetWarningShort: "Rappel : si le paiement n'est pas finalisé sous 1 semaine, vos données enregistrées seront réinitialisées.",
     viewPlansCta: "Voir les formules",
     firstWinKicker: "DÉMARRAGE RAPIDE",
     firstWinTitle: "Essayez votre premier mot !",
@@ -1092,6 +1097,7 @@ const UI_TRANSLATIONS = {
     furiganaBtn: "ふりがな",
     romajiBtn: "Romaji",
     freePlanGakuStudent: "Plan GRATUIT (élèves GAKU uniquement)",
+    freePlanGakuStudentHint: "Les élèves qui prennent des cours GAKU (à partir de 35 $/h) ont l'application incluse gratuitement. Pas de code ? Réservez un cours pour le devenir →",
     invitationCodeLabel: "CODE D'INVITATION",
     inviteCodePlaceholder: "Entrez le code d'invitation...",
     confirmCode: "Confirmer",
@@ -1162,6 +1168,8 @@ const UI_TRANSLATIONS = {
     streakUnit: "días seguidos",
     trialEndsToday: "¡Tu prueba gratuita termina hoy!",
     trialEndsTomorrow: "¡Tu prueba gratuita termina mañana!",
+    dataResetWarning: "Si no completas el pago en 1 semana, todos tus datos de estudio guardados (vocabulario, progreso y configuración) se restablecerán de forma permanente. Suscríbete ahora para conservar todo lo que has logrado.",
+    dataResetWarningShort: "Recordatorio: si no completas el pago en 1 semana, tus datos guardados se restablecerán.",
     viewPlansCta: "Ver planes",
     firstWinKicker: "INICIO RÁPIDO",
     firstWinTitle: "¡Prueba tu primera palabra!",
@@ -1466,6 +1474,7 @@ const UI_TRANSLATIONS = {
     furiganaBtn: "ふりがな",
     romajiBtn: "Romaji",
     freePlanGakuStudent: "Plan GRATIS (solo alumnos de GAKU)",
+    freePlanGakuStudentHint: "Los alumnos con clases GAKU (desde $35/hora) reciben la app gratis. ¿Sin código? Reserva una clase para serlo →",
     invitationCodeLabel: "CÓDIGO DE INVITACIÓN",
     inviteCodePlaceholder: "Ingresa el código de invitación...",
     confirmCode: "Confirmar",
@@ -1536,6 +1545,8 @@ const UI_TRANSLATIONS = {
     streakUnit: "dias seguidos",
     trialEndsToday: "Seu teste grátis termina hoje!",
     trialEndsTomorrow: "Seu teste grátis termina amanhã!",
+    dataResetWarning: "Se o pagamento não for concluído em 1 semana, todos os seus dados de estudo salvos (vocabulário, progresso e configurações) serão permanentemente apagados. Assine agora para manter tudo o que você já construiu.",
+    dataResetWarningShort: "Lembrete: se você não concluir o pagamento em 1 semana, seus dados salvos serão apagados.",
     viewPlansCta: "Ver planos",
     firstWinKicker: "INÍCIO RÁPIDO",
     firstWinTitle: "Experimente sua primeira palavra!",
@@ -1840,6 +1851,7 @@ const UI_TRANSLATIONS = {
     furiganaBtn: "ふりがな",
     romajiBtn: "Romaji",
     freePlanGakuStudent: "Plano GRATUITO (somente alunos GAKU)",
+    freePlanGakuStudentHint: "Alunos com aulas GAKU (a partir de US$35/hora) recebem o app incluso e grátis. Sem código? Agende uma aula para se tornar um →",
     invitationCodeLabel: "CÓDIGO DE CONVITE",
     inviteCodePlaceholder: "Digite o código de convite...",
     confirmCode: "Confirmar",
@@ -1910,6 +1922,8 @@ const UI_TRANSLATIONS = {
     streakUnit: "Tage in Folge",
     trialEndsToday: "Deine kostenlose Testphase endet heute!",
     trialEndsTomorrow: "Deine kostenlose Testphase endet morgen!",
+    dataResetWarning: "Wenn die Zahlung nicht innerhalb von 1 Woche abgeschlossen wird, werden alle deine gespeicherten Lerndaten (Vokabeln, Fortschritt und Einstellungen) dauerhaft zurückgesetzt. Abonniere jetzt, um alles zu behalten, was du bisher aufgebaut hast.",
+    dataResetWarningShort: "Erinnerung: Wenn die Zahlung nicht innerhalb von 1 Woche abgeschlossen wird, werden deine gespeicherten Daten zurückgesetzt.",
     viewPlansCta: "Pläne ansehen",
     firstWinKicker: "SCHNELLSTART",
     firstWinTitle: "Probier dein erstes Wort!",
@@ -2214,6 +2228,7 @@ const UI_TRANSLATIONS = {
     furiganaBtn: "ふりがな",
     romajiBtn: "Romaji",
     freePlanGakuStudent: "KOSTENLOSER Plan (nur GAKU-Schüler)",
+    freePlanGakuStudentHint: "GAKU-Schüler mit Unterricht (ab 35 $/Std.) erhalten die App kostenlos inklusive. Kein Code? Buche eine Stunde, um einer zu werden →",
     invitationCodeLabel: "EINLADUNGSCODE",
     inviteCodePlaceholder: "Einladungscode eingeben...",
     confirmCode: "Bestätigen",
@@ -2284,6 +2299,8 @@ const UI_TRANSLATIONS = {
     streakUnit: "giorni di fila",
     trialEndsToday: "La tua prova gratuita termina oggi!",
     trialEndsTomorrow: "La tua prova gratuita termina domani!",
+    dataResetWarning: "Se il pagamento non viene completato entro 1 settimana, tutti i tuoi dati di studio salvati (vocabolario, progressi e impostazioni) verranno azzerati permanentemente. Abbonati ora per conservare tutto ciò che hai costruito finora.",
+    dataResetWarningShort: "Promemoria: se non completi il pagamento entro 1 settimana, i tuoi dati salvati verranno azzerati.",
     viewPlansCta: "Vedi i piani",
     firstWinKicker: "INIZIO RAPIDO",
     firstWinTitle: "Prova la tua prima parola!",
@@ -2588,6 +2605,7 @@ const UI_TRANSLATIONS = {
     furiganaBtn: "ふりがな",
     romajiBtn: "Romaji",
     freePlanGakuStudent: "Piano GRATUITO (solo studenti GAKU)",
+    freePlanGakuStudentHint: "Gli studenti con lezioni GAKU (da 35$/ora) ricevono l'app inclusa gratis. Nessun codice? Prenota una lezione per diventarlo →",
     invitationCodeLabel: "CODICE DI INVITO",
     inviteCodePlaceholder: "Inserisci il codice di invito...",
     confirmCode: "Conferma",
@@ -2658,6 +2676,8 @@ const UI_TRANSLATIONS = {
     streakUnit: "天连续",
     trialEndsToday: "你的免费试用今天到期！",
     trialEndsTomorrow: "你的免费试用明天到期！",
+    dataResetWarning: "如果未在1周内完成付款，您保存的所有学习数据（词汇、进度和设置）将被永久重置。立即订阅以保留您已建立的一切。",
+    dataResetWarningShort: "提醒：如果未在1周内完成付款，您保存的数据将被重置。",
     viewPlansCta: "查看方案",
     firstWinKicker: "快速开始",
     firstWinTitle: "试试你的第一个单词！",
@@ -2962,6 +2982,7 @@ const UI_TRANSLATIONS = {
     furiganaBtn: "ふりがな",
     romajiBtn: "Romaji",
     freePlanGakuStudent: "免费计划（仅限GAKU学生）",
+    freePlanGakuStudentHint: "上GAKU课程的学生（每小时35美元起）可免费获得应用。没有邀请码？预约一节课成为GAKU学生 →",
     invitationCodeLabel: "邀请码",
     inviteCodePlaceholder: "输入邀请码...",
     confirmCode: "确认",
@@ -3032,6 +3053,8 @@ const UI_TRANSLATIONS = {
     streakUnit: "天連續",
     trialEndsToday: "你的免費試用今天到期！",
     trialEndsTomorrow: "你的免費試用明天到期！",
+    dataResetWarning: "如果未在1週內完成付款，您保存的所有學習資料（詞彙、進度和設定）將被永久重置。立即訂閱以保留您已建立的一切。",
+    dataResetWarningShort: "提醒：如果未在1週內完成付款，您保存的資料將被重置。",
     viewPlansCta: "查看方案",
     firstWinKicker: "快速開始",
     firstWinTitle: "試試你的第一個單字！",
@@ -3336,6 +3359,7 @@ const UI_TRANSLATIONS = {
     furiganaBtn: "ふりがな",
     romajiBtn: "Romaji",
     freePlanGakuStudent: "免費方案（僅限GAKU學生）",
+    freePlanGakuStudentHint: "上GAKU課程的學生（每小時35美元起）可免費獲得應用程式。沒有邀請碼？預約一堂課成為GAKU學生 →",
     invitationCodeLabel: "邀請碼",
     inviteCodePlaceholder: "輸入邀請碼...",
     confirmCode: "確認",
@@ -3406,6 +3430,8 @@ const UI_TRANSLATIONS = {
     streakUnit: "일 연속",
     trialEndsToday: "무료 체험이 오늘 종료됩니다!",
     trialEndsTomorrow: "무료 체험이 내일 종료됩니다!",
+    dataResetWarning: "1주일 이내에 결제를 완료하지 않으면 저장된 모든 학습 데이터(단어, 진행 상황, 설정)가 영구적으로 초기화됩니다. 지금까지 쌓아온 것을 지키려면 지금 구독하세요.",
+    dataResetWarningShort: "알림: 1주일 이내에 결제를 완료하지 않으면 저장된 데이터가 초기화됩니다.",
     viewPlansCta: "요금제 보기",
     firstWinKicker: "빠른 시작",
     firstWinTitle: "첫 단어를 배워보세요!",
@@ -3710,6 +3736,7 @@ const UI_TRANSLATIONS = {
     furiganaBtn: "ふりがな",
     romajiBtn: "Romaji",
     freePlanGakuStudent: "무료 플랜 (GAKU 학생 전용)",
+    freePlanGakuStudentHint: "GAKU 레슨을 받는 학생(시간당 $35부터)은 앱을 무료로 이용할 수 있습니다. 코드가 없나요? 레슨을 예약해 GAKU 학생이 되어보세요 →",
     invitationCodeLabel: "초대 코드",
     inviteCodePlaceholder: "초대 코드를 입력하세요...",
     confirmCode: "확인",
@@ -3780,6 +3807,8 @@ const UI_TRANSLATIONS = {
     streakUnit: "วันติดต่อกัน",
     trialEndsToday: "ทดลองใช้ฟรีของคุณจะหมดอายุวันนี้!",
     trialEndsTomorrow: "ทดลองใช้ฟรีของคุณจะหมดอายุพรุ่งนี้!",
+    dataResetWarning: "หากไม่ชำระเงินภายใน 1 สัปดาห์ ข้อมูลการเรียนที่บันทึกไว้ทั้งหมด (คำศัพท์ ความคืบหน้า และการตั้งค่า) จะถูกรีเซ็ตอย่างถาวร สมัครสมาชิกตอนนี้เพื่อรักษาสิ่งที่คุณสร้างมาทั้งหมด",
+    dataResetWarningShort: "เตือนความจำ: หากไม่ชำระเงินให้เสร็จภายใน 1 สัปดาห์ ข้อมูลที่บันทึกไว้ของคุณจะถูกรีเซ็ต",
     viewPlansCta: "ดูแพ็กเกจ",
     firstWinKicker: "เริ่มต้นอย่างรวดเร็ว",
     firstWinTitle: "ลองคำแรกของคุณ!",
@@ -4084,6 +4113,7 @@ const UI_TRANSLATIONS = {
     furiganaBtn: "ふりがな",
     romajiBtn: "Romaji",
     freePlanGakuStudent: "แผนฟรี (เฉพาะนักเรียน GAKU)",
+    freePlanGakuStudentHint: "นักเรียนที่เรียนคอร์ส GAKU (เริ่มต้น $35/ชม.) จะได้แอปฟรี ไม่มีรหัส? จองคอร์สเรียนเพื่อเป็นนักเรียน GAKU →",
     invitationCodeLabel: "รหัสคำเชิญ",
     inviteCodePlaceholder: "ป้อนรหัสคำเชิญ...",
     confirmCode: "ยืนยัน",
@@ -4154,6 +4184,8 @@ const UI_TRANSLATIONS = {
     streakUnit: "hari berturut-turut",
     trialEndsToday: "Percubaan percuma anda tamat hari ini!",
     trialEndsTomorrow: "Percubaan percuma anda tamat esok!",
+    dataResetWarning: "Jika pembayaran tidak diselesaikan dalam masa 1 minggu, semua data pembelajaran anda yang disimpan (kosa kata, kemajuan dan tetapan) akan ditetapkan semula secara kekal. Langgan sekarang untuk mengekalkan segala yang telah anda bina.",
+    dataResetWarningShort: "Peringatan: jika anda tidak menyelesaikan pembayaran dalam masa 1 minggu, data anda yang disimpan akan ditetapkan semula.",
     viewPlansCta: "Lihat pelan",
     firstWinKicker: "MULA PANTAS",
     firstWinTitle: "Cuba perkataan pertama anda!",
@@ -4458,6 +4490,7 @@ const UI_TRANSLATIONS = {
     furiganaBtn: "ふりがな",
     romajiBtn: "Romaji",
     freePlanGakuStudent: "Pelan PERCUMA (Pelajar GAKU sahaja)",
+    freePlanGakuStudentHint: "Pelajar yang mengambil kelas GAKU (dari $35/jam) mendapat aplikasi ini percuma. Tiada kod? Tempah kelas untuk menjadi pelajar GAKU →",
     invitationCodeLabel: "KOD JEMPUTAN",
     inviteCodePlaceholder: "Masukkan kod jemputan...",
     confirmCode: "Sahkan",
@@ -4528,6 +4561,8 @@ const UI_TRANSLATIONS = {
     streakUnit: "hari berturut-turut",
     trialEndsToday: "Uji coba gratis Anda berakhir hari ini!",
     trialEndsTomorrow: "Uji coba gratis Anda berakhir besok!",
+    dataResetWarning: "Jika pembayaran tidak diselesaikan dalam 1 minggu, semua data belajar Anda yang tersimpan (kosakata, progres, dan pengaturan) akan direset secara permanen. Berlangganan sekarang untuk menjaga semua yang telah Anda bangun.",
+    dataResetWarningShort: "Pengingat: jika Anda tidak menyelesaikan pembayaran dalam 1 minggu, data tersimpan Anda akan direset.",
     viewPlansCta: "Lihat paket",
     firstWinKicker: "MULAI CEPAT",
     firstWinTitle: "Coba kata pertamamu!",
@@ -4832,6 +4867,7 @@ const UI_TRANSLATIONS = {
     furiganaBtn: "ふりがな",
     romajiBtn: "Romaji",
     freePlanGakuStudent: "Paket GRATIS (Hanya siswa GAKU)",
+    freePlanGakuStudentHint: "Siswa yang mengikuti kelas GAKU (mulai $35/jam) mendapatkan aplikasi ini gratis. Tidak punya kode? Pesan kelas untuk menjadi siswa GAKU →",
     invitationCodeLabel: "KODE UNDANGAN",
     inviteCodePlaceholder: "Masukkan kode undangan...",
     confirmCode: "Konfirmasi",
@@ -4902,6 +4938,8 @@ const UI_TRANSLATIONS = {
     streakUnit: "ngày liên tiếp",
     trialEndsToday: "Bản dùng thử miễn phí của bạn kết thúc hôm nay!",
     trialEndsTomorrow: "Bản dùng thử miễn phí của bạn kết thúc vào ngày mai!",
+    dataResetWarning: "Nếu không hoàn tất thanh toán trong vòng 1 tuần, toàn bộ dữ liệu học tập đã lưu (từ vựng, tiến độ và cài đặt) của bạn sẽ bị đặt lại vĩnh viễn. Đăng ký ngay để giữ lại mọi thứ bạn đã xây dựng.",
+    dataResetWarningShort: "Nhắc nhở: nếu không hoàn tất thanh toán trong vòng 1 tuần, dữ liệu đã lưu của bạn sẽ bị đặt lại.",
     viewPlansCta: "Xem các gói",
     firstWinKicker: "BẮT ĐẦU NHANH",
     firstWinTitle: "Thử từ đầu tiên của bạn!",
@@ -5206,6 +5244,7 @@ const UI_TRANSLATIONS = {
     furiganaBtn: "ふりがな",
     romajiBtn: "Romaji",
     freePlanGakuStudent: "Gói MIỄN PHÍ (Chỉ dành cho học viên GAKU)",
+    freePlanGakuStudentHint: "Học viên học các buổi GAKU (từ $35/giờ) được sử dụng ứng dụng miễn phí. Chưa có mã? Đặt một buổi học để trở thành học viên GAKU →",
     invitationCodeLabel: "MÃ MỜI",
     inviteCodePlaceholder: "Nhập mã mời...",
     confirmCode: "Xác nhận",
@@ -5276,6 +5315,8 @@ const UI_TRANSLATIONS = {
     streakUnit: "दिन लगातार",
     trialEndsToday: "आपका मुफ़्त ट्रायल आज समाप्त हो रहा है!",
     trialEndsTomorrow: "आपका मुफ़्त ट्रायल कल समाप्त हो रहा है!",
+    dataResetWarning: "अगर 1 सप्ताह के भीतर भुगतान पूरा नहीं होता है, तो आपका सारा सेव किया हुआ स्टडी डेटा (शब्दावली, प्रगति और सेटिंग्स) हमेशा के लिए रीसेट हो जाएगा। अब तक जो कुछ आपने बनाया है उसे बचाने के लिए अभी सब्सक्राइब करें।",
+    dataResetWarningShort: "याद दिलाना: अगर आप 1 सप्ताह के भीतर भुगतान पूरा नहीं करते, तो आपका सेव किया हुआ डेटा रीसेट हो जाएगा।",
     viewPlansCta: "प्लान देखें",
     firstWinKicker: "क्विक स्टार्ट",
     firstWinTitle: "अपना पहला शब्द आज़माएँ!",
@@ -5580,6 +5621,7 @@ const UI_TRANSLATIONS = {
     furiganaBtn: "ふりがな",
     romajiBtn: "Romaji",
     freePlanGakuStudent: "फ्री प्लान (केवल GAKU छात्रों के लिए)",
+    freePlanGakuStudentHint: "GAKU लेसन लेने वाले छात्रों (शुरुआत $35/घंटा) को ऐप मुफ़्त मिलता है। कोड नहीं है? GAKU छात्र बनने के लिए लेसन बुक करें →",
     invitationCodeLabel: "आमंत्रण कोड",
     inviteCodePlaceholder: "आमंत्रण कोड दर्ज करें...",
     confirmCode: "पुष्टि करें",
@@ -5650,6 +5692,8 @@ const UI_TRANSLATIONS = {
     streakUnit: "日連続",
     trialEndsToday: "無料トライアルは今日で終了します！",
     trialEndsTomorrow: "無料トライアルは明日で終了します！",
+    dataResetWarning: "1週間以内にお支払いが完了しない場合、保存されている学習データ(単語・進捗・設定)はすべて完全に初期化されます。今までの積み重ねを守るために、今すぐご登録ください。",
+    dataResetWarningShort: "リマインダー: 1週間以内にお支払いが完了しないと、保存されたデータが初期化されます。",
     viewPlansCta: "プランを見る",
     firstWinKicker: "クイックスタート",
     firstWinTitle: "最初の1問に挑戦してみよう！",
@@ -5954,6 +5998,7 @@ const UI_TRANSLATIONS = {
     furiganaBtn: "ふりがな",
     romajiBtn: "Romaji",
     freePlanGakuStudent: "無料プラン（GAKU生限定）",
+    freePlanGakuStudentHint: "GAKUのレッスンを受けている生徒(1時間$35〜)はアプリが無料で使えます。招待コードをお持ちでない方は、レッスンを予約してGAKU生になりましょう →",
     invitationCodeLabel: "招待コード",
     inviteCodePlaceholder: "招待コードを入力...",
     confirmCode: "確認",
@@ -6024,6 +6069,8 @@ const UI_TRANSLATIONS = {
     streakUnit: "gün üst üste",
     trialEndsToday: "Ücretsiz deneme süreniz bugün sona eriyor!",
     trialEndsTomorrow: "Ücretsiz deneme süreniz yarın sona eriyor!",
+    dataResetWarning: "Ödeme 1 hafta içinde tamamlanmazsa, kaydedilen tüm çalışma verileriniz (kelimeler, ilerleme ve ayarlar) kalıcı olarak sıfırlanacaktır. Şimdiye kadar oluşturduğunuz her şeyi korumak için hemen abone olun.",
+    dataResetWarningShort: "Hatırlatma: ödemeyi 1 hafta içinde tamamlamazsanız, kaydedilen verileriniz sıfırlanacaktır.",
     viewPlansCta: "Planları görüntüle",
     firstWinKicker: "HIZLI BAŞLANGIÇ",
     firstWinTitle: "İlk kelimeni dene!",
@@ -6328,6 +6375,7 @@ const UI_TRANSLATIONS = {
     furiganaBtn: "ふりがな",
     romajiBtn: "Romaji",
     freePlanGakuStudent: "ÜCRETSİZ Plan (Yalnızca GAKU öğrencileri)",
+    freePlanGakuStudentHint: "GAKU ders alan öğrenciler (35$/saatten başlayan) uygulamayı ücretsiz kullanır. Kodunuz yok mu? GAKU öğrencisi olmak için bir ders rezervasyonu yapın →",
     invitationCodeLabel: "DAVET KODU",
     inviteCodePlaceholder: "Davet kodunu girin...",
     confirmCode: "Onayla",
@@ -6398,6 +6446,8 @@ const UI_TRANSLATIONS = {
     streakUnit: "दिन लगातार",
     trialEndsToday: "तपाईंको निःशुल्क ट्रायल आज सकिन्छ!",
     trialEndsTomorrow: "तपाईंको निःशुल्क ट्रायल भोलि सकिन्छ!",
+    dataResetWarning: "यदि १ हप्ताभित्र भुक्तानी पूरा गरिएन भने, तपाईंको सुरक्षित गरिएको सबै अध्ययन डाटा (शब्दावली, प्रगति र सेटिङहरू) स्थायी रूपमा रिसेट हुनेछ। अहिलेसम्म बनाएको सबै कुरा जोगाउन अहिले नै सदस्यता लिनुहोस्।",
+    dataResetWarningShort: "सम्झना: यदि तपाईंले १ हप्ताभित्र भुक्तानी पूरा गर्नुभएन भने, तपाईंको सुरक्षित डाटा रिसेट हुनेछ।",
     viewPlansCta: "योजनाहरू हेर्नुहोस्",
     firstWinKicker: "द्रुत सुरुवात",
     firstWinTitle: "आफ्नो पहिलो शब्द प्रयास गर्नुहोस्!",
@@ -6702,6 +6752,7 @@ const UI_TRANSLATIONS = {
     furiganaBtn: "ふりがな",
     romajiBtn: "Romaji",
     freePlanGakuStudent: "निःशुल्क योजना (GAKU विद्यार्थीहरूका लागि मात्र)",
+    freePlanGakuStudentHint: "GAKU कक्षा लिने विद्यार्थीहरूले (प्रति घण्टा $35 देखि सुरु) एप निःशुल्क पाउँछन्। कोड छैन? GAKU विद्यार्थी बन्न कक्षा बुक गर्नुहोस् →",
     invitationCodeLabel: "आमन्त्रण कोड",
     inviteCodePlaceholder: "आमन्त्रण कोड प्रविष्ट गर्नुहोस्...",
     confirmCode: "पुष्टि गर्नुहोस्",
@@ -6772,6 +6823,8 @@ const UI_TRANSLATIONS = {
     streakUnit: "araw sunod-sunod",
     trialEndsToday: "Magtatapos na ngayong araw ang iyong libreng trial!",
     trialEndsTomorrow: "Magtatapos bukas ang iyong libreng trial!",
+    dataResetWarning: "Kung hindi makukumpleto ang bayad sa loob ng 1 linggo, ma-reset nang permanente ang lahat ng iyong naka-save na study data (bokabularyo, progreso, at mga setting). Mag-subscribe na ngayon para mapanatili ang lahat ng iyong napagtagumpayan.",
+    dataResetWarningShort: "Paalala: kung hindi mo makukumpleto ang bayad sa loob ng 1 linggo, ma-reset ang iyong naka-save na data.",
     viewPlansCta: "Tingnan ang mga plano",
     firstWinKicker: "MABILIS NA SIMULA",
     firstWinTitle: "Subukan ang unang salita mo!",
@@ -7076,6 +7129,7 @@ const UI_TRANSLATIONS = {
     furiganaBtn: "ふりがな",
     romajiBtn: "Romaji",
     freePlanGakuStudent: "LIBRENG Plano (Mga estudyante lang ng GAKU)",
+    freePlanGakuStudentHint: "Ang mga estudyanteng may GAKU lessons (mula $35/oras) ay libreng makakagamit ng app. Walang code? Mag-book ng lesson para maging isa →",
     invitationCodeLabel: "CODE NG PAG-IMBITA",
     inviteCodePlaceholder: "Ilagay ang invite code...",
     confirmCode: "Kumpirmahin",
@@ -12379,10 +12433,13 @@ function PolicyGate({ T, name, email, plan, userId, onAgreed, onCancel }) {
         <div style={{ maxHeight:280, overflowY:"auto", background:"rgba(2,6,23,0.5)", border:"1px solid rgba(148,163,184,0.15)", borderRadius:10, padding:14, marginBottom:16 }}>
           <p style={{ color:"#94a3b8", fontSize:12.5, lineHeight:1.7, whiteSpace:"pre-wrap", margin:0 }}>{PLACEHOLDER_POLICY_TEXT}</p>
         </div>
-        <label style={{ display:"flex", alignItems:"flex-start", gap:8, marginBottom:16, cursor:"pointer" }}>
+        <label style={{ display:"flex", alignItems:"flex-start", gap:8, marginBottom:12, cursor:"pointer" }}>
           <input type="checkbox" checked={agreed} onChange={(e)=>setAgreed(e.target.checked)} style={{ marginTop:2 }} />
           <span style={{ color:"#e2e8f0", fontSize:12.5, fontWeight:600 }}>{T?.policyAgreeLabel || "I agree to all terms"}</span>
         </label>
+        <p style={{ color:"#fca5a5", fontSize:11, fontWeight:600, margin:"0 0 16px", lineHeight:1.6 }}>
+          ⚠️ {T?.dataResetWarningShort || "Reminder: if you don't finish payment within 1 week, your saved data will be reset."}
+        </p>
         {error && <p style={{ color:"#f87171", fontSize:11.5, margin:"0 0 12px" }}>{error}</p>}
         <div style={{ display:"flex", gap:10 }}>
           <button onClick={onCancel} style={{ flex:1, padding:"11px 14px", background:"transparent", border:"1px solid rgba(148,163,184,0.3)", borderRadius:10, color:"#94a3b8", fontSize:12.5, fontWeight:700, cursor:"pointer" }}>{T?.cancel || "Cancel"}</button>
@@ -13153,9 +13210,19 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
         <div style={{ background:"linear-gradient(135deg,#1e1b4b,#0f172a)", border:"1.5px solid rgba(139,92,246,0.4)", borderRadius:20, padding:"36px 32px", maxWidth:420, width:"90%", textAlign:"center", boxShadow:"0 8px 40px rgba(139,92,246,0.25)" }}>
           <p style={{ fontSize:28, margin:"0 0 6px" }}>⏳</p>
           <h2 style={{ color:"#f1f5f9", fontSize:20, fontWeight:900, margin:"0 0 8px" }}>{T?.trialEndedTitle || "Your 7-day free trial has ended"}</h2>
-          <p style={{ color:"#94a3b8", fontSize:13, margin:"0 0 20px", lineHeight:1.6 }}>
-            {T?.trialEndedDesc || "Choose a plan below to keep your progress. If no payment is made, your saved data will be reset after a short grace period."}
+          <p style={{ color:"#94a3b8", fontSize:13, margin:"0 0 14px", lineHeight:1.6 }}>
+            {T?.trialEndedDesc || "Choose a plan below to keep your progress."}
           </p>
+
+          {/* Data-reset urgency warning — matches the real 7-day grace period
+              enforced server-side in api/account-status.js (GRACE_DAYS).
+              Shown unconditionally on this screen, regardless of whether the
+              student goes on to agree to the policy or just closes the tab. */}
+          <div style={{ background:"rgba(239,68,68,0.08)", border:"1px solid rgba(239,68,68,0.35)", borderRadius:10, padding:"10px 12px", marginBottom:18, textAlign:"left" }}>
+            <p style={{ color:"#fca5a5", fontSize:12, fontWeight:700, margin:0, lineHeight:1.6 }}>
+              ⚠️ {T?.dataResetWarning || "If payment isn't completed within 1 week, all your saved study data (vocabulary, progress, and settings) will be permanently reset. Subscribe now to keep everything you've built so far."}
+            </p>
+          </div>
 
           <div style={{ background:"rgba(255,255,255,0.03)", border:"1px solid rgba(255,255,255,0.08)", borderRadius:10, padding:"10px 12px", marginBottom:18, textAlign:"left" }}>
             <p style={{ color:"#94a3b8", fontSize:10, fontWeight:800, letterSpacing:1, margin:"0 0 8px" }}>💱 {T?.convertCurrencyLabel || "SEE PRICES IN YOUR CURRENCY"}</p>
@@ -13184,6 +13251,9 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
               </button>
             </div>
             {lockedInviteErr && <p style={{ color:C.red, fontSize:11, margin:"8px 0 0" }}>{lockedInviteErr}</p>}
+            <a href="/book-lesson.html" target="_blank" rel="noopener noreferrer" style={{ display:"block", color:"#86efac", fontSize:11, fontWeight:600, margin:"8px 0 0", textDecoration:"underline" }}>
+              {T?.freePlanGakuStudentHint || "GAKU lesson students (lessons from $35/hr) get the app included free. No code? Book a lesson to become one →"}
+            </a>
           </div>
 
           <p style={{ color:"#a855f7", fontSize:10, fontWeight:800, margin:"0 0 6px", textAlign:"left", letterSpacing:1 }}>{T?.appOnlyLabel}</p>

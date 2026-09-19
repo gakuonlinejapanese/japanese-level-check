@@ -17,12 +17,14 @@ import { getAdminClient } from "./_supabaseAdmin.js";
 // non-paid, non-GAKU-student account is reported as trialExpired so the
 // client hard-locks it to the payment screen, no matter which device it
 // opens on or how many times the app was uninstalled/reinstalled. A further
-// 3-day grace period (10 days total) is given before we wipe that account's
-// study data (assigned_vocab + migration_bridge), so a payment that's just
-// running a little late (or a webhook delay) doesn't destroy real data.
+// 7-day grace period (14 days total) is given before we wipe that account's
+// study data (assigned_vocab + migration_bridge) — this is deliberately
+// framed to the student as "pay within 1 week of hitting the payment screen
+// or your data resets" (see trialEndedDesc / PolicyGate copy in
+// GakuApp.jsx), so GRACE_DAYS must stay in sync with that "1 week" wording.
 // The wipe only ever runs once per account (guarded by data_reset_at).
 const TRIAL_DAYS = 7;
-const GRACE_DAYS = 3; // total 10 days from trial_started_at before data is wiped
+const GRACE_DAYS = 7; // total 14 days from trial_started_at before data is wiped
 
 export default async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed" });

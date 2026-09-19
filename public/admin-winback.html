@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>GAKU — Free Planメール(未転換者へ)</title>
+<meta name="robots" content="noindex, nofollow" />
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; min-height: 100vh; font-family: 'Hiragino Sans', 'Noto Sans JP', sans-serif;
+    background: linear-gradient(160deg,#0a0f1e 0%,#0f172a 60%,#0a0f1e 100%);
+    color: #f1f5f9; display: flex; justify-content: center; padding: 32px 16px;
+  }
+  .wrap { width: 100%; max-width: 560px; }
+  .card {
+    width: 100%; background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 24px;
+  }
+  h1 { font-size: 18px; margin: 0 0 4px; }
+  p.sub { color: #94a3b8; font-size: 13px; margin: 0 0 20px; line-height: 1.6; }
+  label { display: block; color: #64748b; font-size: 11px; font-weight: 700; margin: 14px 0 5px; letter-spacing: 0.5px; }
+  input {
+    width: 100%; padding: 11px 12px; background: #0f172a; border: 1.5px solid rgba(255,255,255,0.08);
+    border-radius: 10px; color: #f1f5f9; font-size: 14px; outline: none; font-family: inherit;
+  }
+  .row { display:flex; gap: 10px; margin-top: 20px; }
+  button {
+    flex:1; padding: 13px 14px; border: none; border-radius: 10px;
+    font-size: 13px; font-weight: 700; cursor: pointer; color: #fff;
+  }
+  #previewBtn { background: rgba(255,255,255,0.08); color:#e2e8f0; border:1px solid rgba(255,255,255,0.15); }
+  #sendBtn { background: linear-gradient(135deg,#7c3aed,#a855f7); }
+  button:disabled { opacity: 0.5; cursor: not-allowed; }
+  .msg { margin-top: 14px; font-size: 13px; padding: 10px 12px; border-radius: 8px; line-height:1.6; white-space: pre-wrap; }
+  .msg.ok { background: rgba(34,197,94,0.12); color: #4ade80; border: 1px solid rgba(34,197,94,0.3); }
+  .msg.err { background: rgba(239,68,68,0.12); color: #f87171; border: 1px solid rgba(239,68,68,0.3); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="card">
+    <h1>📧 未転換者へ「Free Plan」案内メール</h1>
+    <p class="sub">
+      過去に支払いページでポリシーに同意した(=決済を試みた)が、現在も有料/GAKU生になっていない生徒全員に、
+      「App Onlyプラン($14.99/月〜)」と「Free Plan(GAKUレッスン生は無料、$35/時間〜)」の2択を案内するメールを送ります。<br /><br />
+      同じメールアドレスには一度しか送信されません(2回目以降の実行では新規の未送信分のみが対象になります)。
+      先に「プレビュー」で件数を確認してから送信してください。
+    </p>
+
+    <label>管理者パスワード (ADMIN_SECRET)</label>
+    <input id="secret" type="password" placeholder="管理者パスワード" />
+
+    <div class="row">
+      <button id="previewBtn">プレビュー(件数確認のみ)</button>
+      <button id="sendBtn">送信する</button>
+    </div>
+    <div id="msg"></div>
+  </div>
+</div>
+<script>
+const secretEl = document.getElementById('secret');
+const previewBtn = document.getElementById('previewBtn');
+const sendBtn = document.getElementById('sendBtn');
+const msgEl = document.getElementById('msg');
+
+async function run(dryRun) {
+  const secret = secretEl.value.trim();
+  msgEl.innerHTML = '';
+  if (!secret) {
+    msgEl.innerHTML = '<div class="msg err">管理者パスワードを入力してください。</div>';
+    return;
+  }
+  previewBtn.disabled = true;
+  sendBtn.disabled = true;
+  const btn = dryRun ? previewBtn : sendBtn;
+  const originalText = btn.textContent;
+  btn.textContent = '処理中...';
+  try {
+    const res = await fetch('/api/policy-agreement', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ secret, action: 'send_free_plan_winback_emails', dryRun }),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || '失敗しました。');
+    if (dryRun) {
+      msgEl.innerHTML = `<div class="msg ok">対象: ${data.wouldSend}件\n\n例:\n${(data.sample || []).join('\n')}</div>`;
+    } else {
+      msgEl.innerHTML = `<div class="msg ok">送信完了: ${data.sent}件 / 対象 ${data.totalCandidates}件\n失敗: ${(data.failed || []).length}件</div>`;
+    }
+  } catch (e) {
+    msgEl.innerHTML = `<div class="msg err">エラー: ${e.message}</div>`;
+  } finally {
+    btn.textContent = originalText;
+    previewBtn.disabled = false;
+    sendBtn.disabled = false;
+  }
+}
+
+previewBtn.addEventListener('click', () => run(true));
+sendBtn.addEventListener('click', () => {
+  if (confirm('本当にメールを送信しますか？(未送信の対象者全員に送られます)')) run(false);
+});
+</script>
+</body>
+</html>
