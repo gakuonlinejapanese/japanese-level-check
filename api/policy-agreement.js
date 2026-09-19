@@ -1214,7 +1214,8 @@ async function handleAdminRespondTrialLesson(req, res) {
       <p>Hi ${existing.full_name},</p>
       ${isAccept
         ? `<p>Great news — your free trial lesson request has been <strong>confirmed</strong> for:</p>
-           <p style="font-size:16px;"><strong>${confirmedDateTime || existing.preferred_datetime || "(to be confirmed)"}</strong> (your local time)</p>`
+           <p style="font-size:16px;"><strong>${confirmedDateTime || existing.preferred_datetime || "(to be confirmed)"}</strong> (your local time)</p>
+           <p>The lesson link will be sent approximately 30 minutes before your scheduled lesson.</p>`
         : `<p>Thank you for your interest in a free trial lesson. Unfortunately, the teacher isn't able to offer the requested time, and we're not able to arrange your free trial lesson at this time.</p>`
       }
       ${note ? `<p><strong>A note from your teacher:</strong><br/>${note.replace(/\n/g, "<br/>")}</p>` : ""}
