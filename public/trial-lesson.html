@@ -637,7 +637,7 @@ async function proceedAfterExactSlotConfirmed() {
   document.getElementById("p-name").value = submittedName;
   document.getElementById("p-email").value = submittedEmail;
   showStep("step-policy");
-  initPolicy();
+  initPolicy(weeklyTrialDone);
 }
 
 document.getElementById("btn-blocked-gaku-master").addEventListener("click", () => {
@@ -842,12 +842,16 @@ const POLICY_PAGES = [
   },
 ];
 
-function initPolicy() {
+function initPolicy(weeklyTrialDone) {
   const container = document.getElementById("policy-scrollbox");
   container.innerHTML = POLICY_PAGES.map(p => `
     <h2>${p.title}</h2>
     ${p.body.map(t => `<p>${t}</p>`).join("")}
-  `).join("");
+  `).join("") + (weeklyTrialDone ? `
+    <h2>🎓 GAKU Master, included free</h2>
+    <p>Once you're a GAKU lesson student, GAKU Master (the self-study app you already tried) is included at no extra cost — no separate subscription needed.</p>
+    <p>If you'd rather not book a lesson yet, GAKU Master is also available on its own starting at just $14.99/month — see all app plans at <a href="https://app.seitojapanese.online/app" target="_blank" rel="noopener noreferrer" style="color:#86efac;text-decoration:underline;">app.seitojapanese.online</a>.</p>
+  ` : "");
   document.getElementById("policy-agree-area").style.display = "none";
   document.getElementById("scroll-hint").style.display = "flex";
   document.getElementById("f-agree").checked = false;
