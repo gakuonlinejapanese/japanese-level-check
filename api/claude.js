@@ -1,10 +1,32 @@
-async function callDeepInfra(deepInfraKey, commonBody) {
+// ---- Model IDs -------------------------------------------------------------
+// NOTE (2026-09-24): Groq retired llama-3.3-70b-versatile and llama-3.1-8b-instant
+// (deprecated 2026-08-16 for free/developer tiers; Groq recommends openai/gpt-oss-120b
+// and gpt-oss-20b instead). Every provider:"fast"/"turbo" request was first hitting the
+// dead Groq model, failing, and only then falling back to DeepInfra — a wasted round
+// trip on every AI call, which is what made Create From Content feel so slow.
+const DEEPINFRA_LEGACY_MODEL = "meta-llama/Llama-3.3-70B-Instruct-Turbo";
+const DEEPINFRA_CONTENT_MODEL = "openai/gpt-oss-120b-Turbo";
+const GROQ_DEFAULT_MODEL = "openai/gpt-oss-120b";
+const GROQ_CONTENT_MODEL = "openai/gpt-oss-120b";
+
+const isGptOss = (model) => /gpt-oss/i.test(model || "");
+
+// gpt-oss models "think" before answering and those reasoning tokens count against
+// max_tokens. Keep reasoning low (this is generation, not puzzle-solving) and give a
+// little extra headroom so long JSON answers never get cut off mid-way.
+function buildModelBody(commonBody, model) {
+  if (!isGptOss(model)) return { ...commonBody };
+  return {
+    ...commonBody,
+    max_tokens: Math.min((commonBody.max_tokens || 1200) + 1000, 9000),
+    reasoning_effort: "low",
+  };
+}
+
+async function callDeepInfra(deepInfraKey, commonBody, model = DEEPINFRA_LEGACY_MODEL) {
   if (!deepInfraKey) return null;
 
-  const body = JSON.stringify({
-    model: "meta-llama/Llama-3.3-70B-Instruct-Turbo",
-    ...commonBody,
-  });
+  let payload = { model, ...buildModelBody(commonBody, model) };
 
   // Retry a couple of times on transient 429s from DeepInfra before giving up.
   const maxAttempts = 3;
@@ -16,7 +38,7 @@ async function callDeepInfra(deepInfraKey, commonBody) {
           "Content-Type": "application/json",
           "Authorization": `Bearer ${deepInfraKey}`,
         },
-        body,
+        body: JSON.stringify(payload),
       });
 
       if (response.status === 429) {
@@ -30,6 +52,12 @@ async function callDeepInfra(deepInfraKey, commonBody) {
       const data = await response.json();
       if (response.ok) {
         return data.choices?.[0]?.message?.content || "";
+      }
+      // If a model rejects the reasoning_effort parameter, retry once without it.
+      if (response.status === 400 && payload.reasoning_effort) {
+        const { reasoning_effort, ...rest } = payload;
+        payload = rest;
+        continue;
       }
       return null; // non-retryable error
     } catch (e) {
@@ -67,26 +95,31 @@ async function callDeepInfraVision(deepInfraKey, commonBody) {
   }
 }
 
-async function callGroq(groqKeys, commonBody, model = "llama-3.3-70b-versatile") {
+async function callGroq(groqKeys, commonBody, model = GROQ_DEFAULT_MODEL) {
   if (!groqKeys.length) return { text: null, lastError: "No Groq keys configured" };
 
   const body = JSON.stringify({
     model,
-    ...commonBody,
+    ...buildModelBody(commonBody, model),
   });
 
   let lastError = null;
   for (let i = 0; i < groqKeys.length; i++) {
-    const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${groqKeys[i]}`,
-      },
-      body,
-    });
-
-    const data = await response.json();
+    let response, data;
+    try {
+      response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${groqKeys[i]}`,
+        },
+        body,
+      });
+      data = await response.json();
+    } catch (e) {
+      lastError = e.message;
+      continue; // network error — try next key
+    }
 
     if (response.status === 429) {
       lastError = data.error?.message || "Rate limit exceeded";
@@ -97,7 +130,13 @@ async function callGroq(groqKeys, commonBody, model = "llama-3.3-70b-versatile")
       return { text: null, lastError: data.error?.message || "Groq API error", status: response.status };
     }
 
-    return { text: data.choices?.[0]?.message?.content || "" };
+    const text = data.choices?.[0]?.message?.content;
+    if (!text) {
+      // Empty reply (e.g. reasoning used up the token budget) — treat as a failure so the
+      // caller falls through to the next provider instead of returning a blank answer.
+      return { text: null, lastError: "Empty response from Groq" };
+    }
+    return { text };
   }
 
   return { text: null, lastError: `All Groq keys rate limited. ${lastError}` };
@@ -239,47 +278,60 @@ export default async function handler(req, res) {
       return res.status(visionResult.status || 429).json({ error: visionResult.lastError || "Vision provider failed" });
     }
 
-    // provider === "turbo": Groq's llama-3.1-8b-instant — several times faster token
-    // throughput than the 70B model, for large-output generation (many exercises/turns
-    // at once) where speed matters most. Falls back to "fast" (70B) if it fails.
-    //
-    // provider === "fast": prioritize Groq 70B (speed + quality) for important, user-facing
-    // experiences, falling back to DeepInfra if Groq is unavailable.
-    //
+    // provider === "content": Create From Content — a long, structured-JSON generation where
+    // speed matters most. Groq's openai/gpt-oss-120b (~500 tokens/s) first; then DeepInfra's
+    // gpt-oss-120b-Turbo; then the older DeepInfra Llama as a last resort. Empty replies count
+    // as failures. Timings are logged so the fastest option can be confirmed from Vercel logs.
+    if (provider === "content") {
+      const t0 = Date.now();
+      const groqResult = await callGroq(groqKeys, commonBody, GROQ_CONTENT_MODEL);
+      if (groqResult.text) {
+        console.log(`provider=content: Groq ${GROQ_CONTENT_MODEL} OK in ${Date.now() - t0}ms`);
+        return res.status(200).json({ content: [{ type: "text", text: groqResult.text }] });
+      }
+      console.error("provider=content: Groq FAILED —", groqResult.lastError);
+
+      const t1 = Date.now();
+      const turboText = await callDeepInfra(deepInfraKey, commonBody, DEEPINFRA_CONTENT_MODEL);
+      if (turboText) {
+        console.log(`provider=content: DeepInfra ${DEEPINFRA_CONTENT_MODEL} OK in ${Date.now() - t1}ms`);
+        return res.status(200).json({ content: [{ type: "text", text: turboText }] });
+      }
+      console.error(`provider=content: DeepInfra ${DEEPINFRA_CONTENT_MODEL} FAILED`);
+
+      const t2 = Date.now();
+      const legacyText = await callDeepInfra(deepInfraKey, commonBody);
+      if (legacyText) {
+        console.log(`provider=content: DeepInfra legacy Llama OK in ${Date.now() - t2}ms`);
+        return res.status(200).json({ content: [{ type: "text", text: legacyText }] });
+      }
+      console.error("provider=content: all providers FAILED");
+      return res.status(groqResult.status || 502).json({ error: groqResult.lastError || "All providers failed" });
+    }
+
+    // provider === "fast" / "turbo": these used to route to Groq's llama-3.3-70b-versatile /
+    // llama-3.1-8b-instant, both retired (see note at the top). Trying Groq first only added a
+    // failed round trip to every call, so go straight to DeepInfra (the model that was actually
+    // answering these requests anyway) and keep Groq's current model as the fallback.
+    if (provider === "fast" || provider === "turbo") {
+      const t0 = Date.now();
+      const text = await callDeepInfra(deepInfraKey, commonBody);
+      if (text !== null) {
+        console.log(`provider=${provider}: DeepInfra OK in ${Date.now() - t0}ms`);
+        return res.status(200).json({ content: [{ type: "text", text }] });
+      }
+      console.error(`provider=${provider}: DeepInfra FAILED`);
+      const groqResult = await callGroq(groqKeys, commonBody);
+      if (groqResult.text) {
+        console.log(`provider=${provider}: Groq fallback OK`);
+        return res.status(200).json({ content: [{ type: "text", text: groqResult.text }] });
+      }
+      console.error(`provider=${provider}: Groq fallback also FAILED —`, groqResult.lastError);
+      return res.status(groqResult.status || 429).json({ error: groqResult.lastError || "Both providers failed" });
+    }
+
     // default (no provider specified): prioritize DeepInfra (cost) for short,
     // high-volume lookups, falling back to Groq if DeepInfra fails.
-    if (provider === "turbo") {
-      const turboResult = await callGroq(groqKeys, commonBody, "llama-3.1-8b-instant");
-      if (turboResult.text !== null) {
-        return res.status(200).json({ content: [{ type: "text", text: turboResult.text }] });
-      }
-      const groqResult = await callGroq(groqKeys, commonBody);
-      if (groqResult.text !== null) {
-        return res.status(200).json({ content: [{ type: "text", text: groqResult.text }] });
-      }
-      const text = await callDeepInfra(deepInfraKey, commonBody);
-      if (text !== null) {
-        return res.status(200).json({ content: [{ type: "text", text }] });
-      }
-      return res.status(groqResult.status || 429).json({ error: groqResult.lastError || "Both providers failed" });
-    }
-
-    if (provider === "fast") {
-      const groqResult = await callGroq(groqKeys, commonBody);
-      if (groqResult.text !== null) {
-        console.log("provider=fast: Groq OK");
-        return res.status(200).json({ content: [{ type: "text", text: groqResult.text }] });
-      }
-      console.error("provider=fast: Groq FAILED —", groqResult.lastError);
-      const text = await callDeepInfra(deepInfraKey, commonBody);
-      if (text !== null) {
-        console.log("provider=fast: DeepInfra fallback OK");
-        return res.status(200).json({ content: [{ type: "text", text }] });
-      }
-      console.error("provider=fast: DeepInfra fallback also FAILED");
-      return res.status(groqResult.status || 429).json({ error: groqResult.lastError || "Both providers failed" });
-    }
-
     const text = await callDeepInfra(deepInfraKey, commonBody);
     if (text !== null) {
       return res.status(200).json({ content: [{ type: "text", text }] });

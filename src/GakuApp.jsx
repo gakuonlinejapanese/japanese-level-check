@@ -9272,7 +9272,7 @@ function ContentAnalyzer({ form, onLevelUp }) {
     try {
       const res = await fetch("/api/claude", {
         method:"POST", headers:{"Content-Type":"application/json"},
-        body: JSON.stringify({ model:"claude-sonnet-4-20250514", max_tokens:4500, provider:"turbo",
+        body: JSON.stringify({ model:"claude-sonnet-4-20250514", max_tokens:4500, provider:"content",
           messages:[{ role:"user", content:`You are a Japanese teacher using CLT (Communicative Language Teaching). The student's JLPT level is ${form.jlpt}.${kanaOnlyInstruction}
 
 The student just encountered this piece of Japanese content (could be a sentence, an article, video subtitles/dialogue, or a social media caption). Analyze it and build practice activities directly FROM it — reuse its actual words, kanji, and sentences rather than generic examples.
