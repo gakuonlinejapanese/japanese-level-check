@@ -186,6 +186,7 @@ export default async function handler(req, res) {
     if (action === "submit_feedback") return handleSubmitFeedback(req, res);
     if (action === "check_feedback_submitted") return handleCheckFeedbackSubmitted(req, res);
     if (action === "send_free_plan_winback_emails") return handleSendFreePlanWinback(req, res);
+    if (action === "send_trial_ended_notice_emails") return handleSendTrialEndedNotice(req, res);
     if (action === "jlpt_scan_consent") {
       res.setHeader("Access-Control-Allow-Origin", "*");
       return handleJlptScanConsent(req, res);
@@ -773,6 +774,96 @@ async function handleSendFreePlanWinback(req, res) {
         sentCount++;
       } catch (e) {
         failed.push({ email, error: e.message });
+      }
+    }
+
+    return res.status(200).json({ ok: true, sent: sentCount, failed, totalCandidates: targets.length });
+  } catch (e) {
+    return res.status(500).json({ error: e.message });
+  }
+}
+
+// ---- Trial-ended notice: one-off, admin-triggered email to everyone whose 7-day GAKU Master
+// trial has ended but who never paid / never became a GAKU student. Tells them (1) their study
+// materials will be deleted, (2) a different account/email on the same device won't restart the
+// free trial, (3) the way to keep the app FREE is to become an official GAKU student (lessons
+// from $35/hr), and (4) if lessons don't fit their budget/schedule, pick the lowest-priced
+// GAKU Master plan. Targeting mirrors the app's own trial logic (trial_started_at + 7 days, see
+// api/_trialStatus.js). Each address is only ever emailed once — it shares the winback_emails_sent
+// table with the Free Plan win-back campaign, so people who already got that email are skipped.
+// Pass { dryRun: true } to see the exact recipient list without sending or recording anything.
+const TRIAL_ENDED_DAYS = 7;
+
+const escapeHtml = (v) => String(v || "").replace(/[&<>"']/g, ch => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch]));
+
+async function handleSendTrialEndedNotice(req, res) {
+  if (!checkAdminSecret(req)) return res.status(401).json({ error: "Invalid admin secret" });
+  try {
+    const { dryRun } = req.body || {};
+    const supabase = getAdminClient();
+
+    const { data: profiles, error: profilesErr } = await supabase
+      .from("profiles")
+      .select("email, name, is_paid, is_gaku_student, enrollment_status, trial_started_at")
+      .not("trial_started_at", "is", null);
+    if (profilesErr) return res.status(500).json({ error: profilesErr.message });
+
+    const { data: officials, error: officialsErr } = await supabase.from("official_students").select("email");
+    if (officialsErr) return res.status(500).json({ error: officialsErr.message });
+    const officialSet = new Set((officials || []).map(r => (r.email || "").trim().toLowerCase()));
+
+    const { data: alreadySent, error: sentErr } = await supabase.from("winback_emails_sent").select("email");
+    if (sentErr) return res.status(500).json({ error: sentErr.message });
+    const sentSet = new Set((alreadySent || []).map(r => (r.email || "").trim().toLowerCase()));
+
+    const now = Date.now();
+    const seen = new Set();
+    const targets = [];
+    for (const p of profiles || []) {
+      const email = (p.email || "").trim().toLowerCase();
+      if (!email || seen.has(email)) continue;
+      if (p.is_paid || p.is_gaku_student) continue;
+      if (officialSet.has(email) || sentSet.has(email)) continue;
+      if (p.enrollment_status && p.enrollment_status !== "active") continue;
+      const daysSince = (now - new Date(p.trial_started_at).getTime()) / 86400000;
+      if (!(daysSince >= TRIAL_ENDED_DAYS)) continue;
+      seen.add(email);
+      targets.push({ email, name: p.name || "", daysSince: Math.floor(daysSince) });
+    }
+    targets.sort((a, b) => b.daysSince - a.daysSince);
+
+    if (dryRun) {
+      return res.status(200).json({
+        ok: true, dryRun: true, wouldSend: targets.length,
+        recipients: targets.map(t => ({ email: t.email, daysSince: t.daysSince })),
+      });
+    }
+
+    let sentCount = 0;
+    const failed = [];
+    for (const t of targets) {
+      const html = `
+        <p>Hi ${escapeHtml(t.name) || "there"},</p>
+        <p>Your 7-day free trial of GAKU Master has ended, and your account has not been activated yet.</p>
+        <p>If you don't activate it, here is what will happen:</p>
+        <ul>
+          <li>Your study materials (study plan, saved vocabulary, and content practice sets) will be deleted and cannot be restored.</li>
+          <li>The free trial is available only once. Logging in again with a different account or email on the same device will not start a new free trial.</li>
+        </ul>
+        <p><strong>How to keep learning:</strong></p>
+        <ol>
+          <li><strong>Become an official GAKU student.</strong> GAKU Master is free for GAKU students. Lessons start at $35 per hour.<br/><a href="https://app.seitojapanese.online/book-lesson.html">https://app.seitojapanese.online/book-lesson.html</a></li>
+          <li><strong>If lessons don't fit your budget or your schedule, choose the lowest-priced GAKU Master plan.</strong> You can see the plans after you log in:<br/><a href="https://app.seitojapanese.online/app">https://app.seitojapanese.online/app</a></li>
+        </ol>
+        <p>If you have any questions, just reply to this email.</p>
+        <p>Seito<br/>GAKU Online Japanese</p>
+      `;
+      try {
+        await sendEmail({ to: t.email, subject: "Your GAKU Master study set will be deleted \u2014 here's how to keep it", html });
+        await supabase.from("winback_emails_sent").insert({ email: t.email });
+        sentCount++;
+      } catch (e) {
+        failed.push({ email: t.email, error: e.message });
       }
     }
 

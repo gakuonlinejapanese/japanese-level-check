@@ -29,8 +29,8 @@
     flex:1; padding: 13px 14px; border: none; border-radius: 10px;
     font-size: 13px; font-weight: 700; cursor: pointer; color: #fff;
   }
-  #previewBtn { background: rgba(255,255,255,0.08); color:#e2e8f0; border:1px solid rgba(255,255,255,0.15); }
-  #sendBtn { background: linear-gradient(135deg,#7c3aed,#a855f7); }
+  #previewBtn, #previewBtn2 { background: rgba(255,255,255,0.08); color:#e2e8f0; border:1px solid rgba(255,255,255,0.15); }
+  #sendBtn, #sendBtn2 { background: linear-gradient(135deg,#7c3aed,#a855f7); }
   button:disabled { opacity: 0.5; cursor: not-allowed; }
   .msg { margin-top: 14px; font-size: 13px; padding: 10px 12px; border-radius: 8px; line-height:1.6; white-space: pre-wrap; }
   .msg.ok { background: rgba(34,197,94,0.12); color: #4ade80; border: 1px solid rgba(34,197,94,0.3); }
@@ -57,35 +57,56 @@
     </div>
     <div id="msg"></div>
   </div>
+
+  <div class="card" style="margin-top:20px;">
+    <h1>⏰ トライアル終了のお知らせ(未払いの生徒へ)</h1>
+    <p class="sub">
+      7日間トライアルが終了したのに、支払い・GAKU生徒登録がまだの生徒全員に送ります。<br />
+      内容: ①支払わないと学習内容が削除される ②別アカウント/別メールでもFree Trialは再開できない
+      ③無料で続けたいならGAKU公式生徒(レッスン$35/時間〜) ④お金・時間がなければ最安値のGAKU Masterプラン。<br /><br />
+      同じメールアドレスには一度しか送信されません(上の「Free Plan」メールを受け取った方は対象外です)。
+      必ず「プレビュー」で送信先一覧を確認してから送信してください。上の管理者パスワード欄を使います。
+    </p>
+    <div class="row">
+      <button id="previewBtn2">プレビュー(送信先一覧)</button>
+      <button id="sendBtn2">送信する</button>
+    </div>
+    <div id="msg2"></div>
+  </div>
 </div>
 <script>
 const secretEl = document.getElementById('secret');
 const previewBtn = document.getElementById('previewBtn');
 const sendBtn = document.getElementById('sendBtn');
 const msgEl = document.getElementById('msg');
+const previewBtn2 = document.getElementById('previewBtn2');
+const sendBtn2 = document.getElementById('sendBtn2');
+const msgEl2 = document.getElementById('msg2');
 
-async function run(dryRun) {
+async function run(action, dryRun, btn, msgEl) {
   const secret = secretEl.value.trim();
   msgEl.innerHTML = '';
   if (!secret) {
     msgEl.innerHTML = '<div class="msg err">管理者パスワードを入力してください。</div>';
     return;
   }
-  previewBtn.disabled = true;
-  sendBtn.disabled = true;
-  const btn = dryRun ? previewBtn : sendBtn;
+  const allBtns = document.querySelectorAll('button');
+  allBtns.forEach(b => b.disabled = true);
   const originalText = btn.textContent;
   btn.textContent = '処理中...';
   try {
     const res = await fetch('/api/policy-agreement', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ secret, action: 'send_free_plan_winback_emails', dryRun }),
+      body: JSON.stringify({ secret, action, dryRun }),
     });
     const data = await res.json();
     if (!res.ok) throw new Error(data.error || '失敗しました。');
     if (dryRun) {
-      msgEl.innerHTML = `<div class="msg ok">対象: ${data.wouldSend}件\n\n例:\n${(data.sample || []).join('\n')}</div>`;
+      const list = data.recipients
+        ? data.recipients.map(r => `${r.email}(登録から${r.daysSince}日)`).join('\n')
+        : (data.sample || []).join('\n');
+      msgEl.innerHTML = `<div class="msg ok">対象: ${data.wouldSend}件\n\n${data.recipients ? '送信先一覧' : '例'}:\n${list}</div>`;
     } else {
       msgEl.innerHTML = `<div class="msg ok">送信完了: ${data.sent}件 / 対象 ${data.totalCandidates}件\n失敗: ${(data.failed || []).length}件</div>`;
     }
@@ -93,14 +114,17 @@ async function run(dryRun) {
     msgEl.innerHTML = `<div class="msg err">エラー: ${e.message}</div>`;
   } finally {
     btn.textContent = originalText;
-    previewBtn.disabled = false;
-    sendBtn.disabled = false;
+    document.querySelectorAll('button').forEach(b => b.disabled = false);
   }
 }
 
-previewBtn.addEventListener('click', () => run(true));
+previewBtn.addEventListener('click', () => run('send_free_plan_winback_emails', true, previewBtn, msgEl));
 sendBtn.addEventListener('click', () => {
-  if (confirm('本当にメールを送信しますか？(未送信の対象者全員に送られます)')) run(false);
+  if (confirm('本当にメールを送信しますか？(未送信の対象者全員に送られます)')) run('send_free_plan_winback_emails', false, sendBtn, msgEl);
+});
+previewBtn2.addEventListener('click', () => run('send_trial_ended_notice_emails', true, previewBtn2, msgEl2));
+sendBtn2.addEventListener('click', () => {
+  if (confirm('トライアル終了のお知らせメールを、プレビューで確認した対象者全員に送信しますか？(送信は取り消せません)')) run('send_trial_ended_notice_emails', false, sendBtn2, msgEl2);
 });
 </script>
 </body>
