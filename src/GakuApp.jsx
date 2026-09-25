@@ -420,6 +420,23 @@ const UI_TRANSLATIONS = {
     tabMilestones: "🏆 Milestones",
     tabJlpt: "🎓 JLPT Results",
     tabFeedback: "💬 Feedback",
+    // Tutorial feature
+    tutorialBtn: "🎓 Tutorial",
+    tutorialWelcomeTitle: "Welcome to GAKU Master! 👋",
+    tutorialWelcomeDesc: "Let's take a quick tour of the 5 main features together. It only takes about a minute — tap through with me!",
+    tutorialStartBtn: "Start Tour",
+    tutorialSkipBtn: "Skip",
+    tutorialStepOf: "Step {current} of {total}",
+    tutorialClickPrompt: "👉 Tap this tab to try it",
+    tutorialNextBtn: "Next →",
+    tutorialScheduleDesc: "This is your personalized weekly study plan. Check off tasks as you finish them and watch your progress bar fill up.",
+    tutorialVocabularyDesc: "Search any Japanese word, save it to your own deck, and review it anytime with flashcards.",
+    tutorialSubtitlesDesc: "Turn a video's subtitles or spoken audio into your own listening and vocabulary practice.",
+    tutorialResourcesDesc: "Hand-picked learning resources for your level, plus tools to build practice from any content you paste in.",
+    tutorialMilestonesDesc: "Your roadmap to your Japanese goal — see how far you've come and what's coming next.",
+    tutorialCompleteTitle: "All done! 🎉",
+    tutorialCompleteDesc: "You've seen all 5 main features of GAKU Master. You can replay this tour anytime from the 🎓 Tutorial button.",
+    tutorialCompleteBtn: "Start Studying",
     feedbackTitle: "💬 Feedback & Opinion",
     feedbackSubtitle: "Tell us what you'd like improved or anything that's bothering you about the app. We read every message.",
     feedbackWarning: "If you post slander, abusive language, or discriminatory terms, your account will be suspended immediately. We accept no responsibility even if legal action results.",
@@ -812,6 +829,23 @@ const UI_TRANSLATIONS = {
     tabMilestones: "🏆 Objectifs",
     tabJlpt: "🎓 Résultats JLPT",
     tabFeedback: "💬 Retour",
+    // Tutorial feature
+    tutorialBtn: "🎓 Tutoriel",
+    tutorialWelcomeTitle: "Bienvenue sur GAKU Master ! 👋",
+    tutorialWelcomeDesc: "Faisons ensemble un rapide tour des 5 fonctionnalités principales. Cela ne prend qu'une minute — suivez le guide !",
+    tutorialStartBtn: "Commencer la visite",
+    tutorialSkipBtn: "Passer",
+    tutorialStepOf: "Étape {current} sur {total}",
+    tutorialClickPrompt: "👉 Appuyez sur cet onglet pour l'essayer",
+    tutorialNextBtn: "Suivant →",
+    tutorialScheduleDesc: "Voici votre planning d'étude hebdomadaire personnalisé. Cochez les tâches terminées et regardez votre barre de progression avancer.",
+    tutorialVocabularyDesc: "Recherchez n'importe quel mot japonais, enregistrez-le dans votre propre deck et révisez-le à tout moment avec des flashcards.",
+    tutorialSubtitlesDesc: "Transformez les sous-titres ou l'audio d'une vidéo en exercice d'écoute et de vocabulaire personnalisé.",
+    tutorialResourcesDesc: "Des ressources d'apprentissage sélectionnées pour votre niveau, ainsi que des outils pour créer des exercices à partir de n'importe quel contenu que vous collez.",
+    tutorialMilestonesDesc: "Votre feuille de route vers votre objectif en japonais — voyez le chemin parcouru et ce qui vous attend.",
+    tutorialCompleteTitle: "Terminé ! 🎉",
+    tutorialCompleteDesc: "Vous avez découvert les 5 fonctionnalités principales de GAKU Master. Vous pouvez revoir cette visite à tout moment via le bouton 🎓 Tutoriel.",
+    tutorialCompleteBtn: "Commencer à étudier",
     feedbackTitle: "💬 Retour & Avis",
     feedbackSubtitle: "Dites-nous ce que vous aimeriez voir amélioré ou ce qui vous dérange dans l'application. Nous lisons chaque message.",
     feedbackWarning: "En cas de diffamation, propos injurieux ou termes discriminatoires, votre compte sera immédiatement suspendu. Nous déclinons toute responsabilité, même en cas de poursuites judiciaires.",
@@ -1189,6 +1223,23 @@ const UI_TRANSLATIONS = {
     tabMilestones: "🏆 Metas",
     tabJlpt: "🎓 Resultados JLPT",
     tabFeedback: "💬 Comentarios",
+    // Tutorial feature
+    tutorialBtn: "🎓 Tutorial",
+    tutorialWelcomeTitle: "¡Bienvenido a GAKU Master! 👋",
+    tutorialWelcomeDesc: "Hagamos juntos un recorrido rápido por las 5 funciones principales. Solo toma un minuto — ¡sígueme!",
+    tutorialStartBtn: "Comenzar el recorrido",
+    tutorialSkipBtn: "Omitir",
+    tutorialStepOf: "Paso {current} de {total}",
+    tutorialClickPrompt: "👉 Toca esta pestaña para probarla",
+    tutorialNextBtn: "Siguiente →",
+    tutorialScheduleDesc: "Este es tu plan de estudio semanal personalizado. Marca las tareas al terminarlas y observa cómo avanza tu barra de progreso.",
+    tutorialVocabularyDesc: "Busca cualquier palabra en japonés, guárdala en tu propio mazo y repásala cuando quieras con tarjetas de memoria.",
+    tutorialSubtitlesDesc: "Convierte los subtítulos o el audio de un video en tu propia práctica de escucha y vocabulario.",
+    tutorialResourcesDesc: "Recursos de aprendizaje seleccionados para tu nivel, además de herramientas para crear ejercicios a partir de cualquier contenido que pegues.",
+    tutorialMilestonesDesc: "Tu hoja de ruta hacia tu objetivo en japonés — mira lo lejos que has llegado y lo que sigue.",
+    tutorialCompleteTitle: "¡Listo! 🎉",
+    tutorialCompleteDesc: "Has visto las 5 funciones principales de GAKU Master. Puedes repetir este recorrido cuando quieras desde el botón 🎓 Tutorial.",
+    tutorialCompleteBtn: "Empezar a estudiar",
     feedbackTitle: "💬 Comentarios y Opinión",
     feedbackSubtitle: "Cuéntanos qué te gustaría que mejoráramos o qué te molesta de la app. Leemos todos los mensajes.",
     feedbackWarning: "Si publicas difamación, lenguaje abusivo o términos discriminatorios, tu cuenta será suspendida de inmediato. No asumimos ninguna responsabilidad aunque se inicien acciones legales.",
@@ -1566,6 +1617,23 @@ const UI_TRANSLATIONS = {
     tabMilestones: "🏆 Metas",
     tabJlpt: "🎓 Resultados JLPT",
     tabFeedback: "💬 Feedback",
+    // Tutorial feature
+    tutorialBtn: "🎓 Tutorial",
+    tutorialWelcomeTitle: "Bem-vindo ao GAKU Master! 👋",
+    tutorialWelcomeDesc: "Vamos fazer juntos um tour rápido pelas 5 principais funções. Leva só um minuto — vem comigo!",
+    tutorialStartBtn: "Iniciar tour",
+    tutorialSkipBtn: "Pular",
+    tutorialStepOf: "Passo {current} de {total}",
+    tutorialClickPrompt: "👉 Toque nesta aba para experimentar",
+    tutorialNextBtn: "Próximo →",
+    tutorialScheduleDesc: "Este é o seu plano de estudos semanal personalizado. Marque as tarefas ao concluí-las e veja sua barra de progresso avançar.",
+    tutorialVocabularyDesc: "Pesquise qualquer palavra em japonês, salve-a no seu próprio baralho e revise a qualquer momento com flashcards.",
+    tutorialSubtitlesDesc: "Transforme as legendas ou o áudio de um vídeo em sua própria prática de escuta e vocabulário.",
+    tutorialResourcesDesc: "Recursos de aprendizado selecionados para o seu nível, além de ferramentas para criar exercícios a partir de qualquer conteúdo que você colar.",
+    tutorialMilestonesDesc: "Seu roteiro rumo ao seu objetivo em japonês — veja o quanto já avançou e o que vem a seguir.",
+    tutorialCompleteTitle: "Tudo pronto! 🎉",
+    tutorialCompleteDesc: "Você conheceu as 5 principais funções do GAKU Master. Você pode rever este tour a qualquer momento pelo botão 🎓 Tutorial.",
+    tutorialCompleteBtn: "Começar a estudar",
     feedbackTitle: "💬 Feedback e Opinião",
     feedbackSubtitle: "Conte-nos o que você gostaria que melhorássemos ou o que está incomodando você no app. Lemos todas as mensagens.",
     feedbackWarning: "Se você publicar difamação, linguagem abusiva ou termos discriminatórios, sua conta será suspensa imediatamente. Não assumimos nenhuma responsabilidade mesmo que haja ação judicial.",
@@ -1943,6 +2011,23 @@ const UI_TRANSLATIONS = {
     tabMilestones: "🏆 Meilensteine",
     tabJlpt: "🎓 JLPT-Ergebnisse",
     tabFeedback: "💬 Feedback",
+    // Tutorial feature
+    tutorialBtn: "🎓 Tutorial",
+    tutorialWelcomeTitle: "Willkommen bei GAKU Master! 👋",
+    tutorialWelcomeDesc: "Machen wir gemeinsam eine kurze Tour durch die 5 Hauptfunktionen. Es dauert nur eine Minute — komm mit!",
+    tutorialStartBtn: "Tour starten",
+    tutorialSkipBtn: "Überspringen",
+    tutorialStepOf: "Schritt {current} von {total}",
+    tutorialClickPrompt: "👉 Tippe auf diesen Tab, um ihn auszuprobieren",
+    tutorialNextBtn: "Weiter →",
+    tutorialScheduleDesc: "Das ist dein persönlicher wöchentlicher Lernplan. Hake Aufgaben ab, sobald du sie erledigt hast, und beobachte, wie dein Fortschrittsbalken wächst.",
+    tutorialVocabularyDesc: "Suche nach jedem japanischen Wort, speichere es in deinem eigenen Stapel und wiederhole es jederzeit mit Karteikarten.",
+    tutorialSubtitlesDesc: "Verwandle die Untertitel oder den Ton eines Videos in dein eigenes Hör- und Vokabeltraining.",
+    tutorialResourcesDesc: "Handverlesene Lernressourcen für dein Niveau sowie Tools, um Übungen aus beliebigem eingefügtem Inhalt zu erstellen.",
+    tutorialMilestonesDesc: "Deine Roadmap zu deinem Japanisch-Ziel — sieh, wie weit du schon gekommen bist und was als Nächstes kommt.",
+    tutorialCompleteTitle: "Fertig! 🎉",
+    tutorialCompleteDesc: "Du hast alle 5 Hauptfunktionen von GAKU Master kennengelernt. Du kannst diese Tour jederzeit über den 🎓 Tutorial-Button wiederholen.",
+    tutorialCompleteBtn: "Mit dem Lernen beginnen",
     feedbackTitle: "💬 Feedback & Meinung",
     feedbackSubtitle: "Sag uns, was wir verbessern sollen oder was dich an der App stört. Wir lesen jede Nachricht.",
     feedbackWarning: "Bei Verleumdung, beleidigender Sprache oder diskriminierenden Begriffen wird dein Konto sofort gesperrt. Wir übernehmen keine Verantwortung, selbst wenn rechtliche Schritte eingeleitet werden.",
@@ -2320,6 +2405,23 @@ const UI_TRANSLATIONS = {
     tabMilestones: "🏆 Obiettivi",
     tabJlpt: "🎓 Risultati JLPT",
     tabFeedback: "💬 Feedback",
+    // Tutorial feature
+    tutorialBtn: "🎓 Tutorial",
+    tutorialWelcomeTitle: "Benvenuto su GAKU Master! 👋",
+    tutorialWelcomeDesc: "Facciamo insieme un rapido tour delle 5 funzioni principali. Basta un minuto — seguimi!",
+    tutorialStartBtn: "Inizia il tour",
+    tutorialSkipBtn: "Salta",
+    tutorialStepOf: "Passaggio {current} di {total}",
+    tutorialClickPrompt: "👉 Tocca questa scheda per provarla",
+    tutorialNextBtn: "Avanti →",
+    tutorialScheduleDesc: "Questo è il tuo piano di studio settimanale personalizzato. Spunta le attività completate e guarda avanzare la barra di progresso.",
+    tutorialVocabularyDesc: "Cerca qualsiasi parola giapponese, salvala nel tuo mazzo personale e ripassala quando vuoi con le flashcard.",
+    tutorialSubtitlesDesc: "Trasforma i sottotitoli o l'audio di un video in un esercizio personale di ascolto e vocabolario.",
+    tutorialResourcesDesc: "Risorse di apprendimento selezionate per il tuo livello, oltre a strumenti per creare esercizi da qualsiasi contenuto incollato.",
+    tutorialMilestonesDesc: "La tua roadmap verso il tuo obiettivo in giapponese — guarda quanta strada hai fatto e cosa ti aspetta.",
+    tutorialCompleteTitle: "Fatto! 🎉",
+    tutorialCompleteDesc: "Hai visto tutte le 5 funzioni principali di GAKU Master. Puoi rivedere questo tour in qualsiasi momento dal pulsante 🎓 Tutorial.",
+    tutorialCompleteBtn: "Inizia a studiare",
     feedbackTitle: "💬 Feedback e Opinioni",
     feedbackSubtitle: "Dicci cosa vorresti che migliorassimo o cosa ti disturba dell'app. Leggiamo ogni messaggio.",
     feedbackWarning: "In caso di diffamazione, linguaggio offensivo o termini discriminatori, il tuo account verrà sospeso immediatamente. Non ci assumiamo alcuna responsabilità anche in caso di azioni legali.",
@@ -2697,6 +2799,23 @@ const UI_TRANSLATIONS = {
     tabMilestones: "🏆 里程碑",
     tabJlpt: "🎓 JLPT成绩",
     tabFeedback: "💬 反馈",
+    // Tutorial feature
+    tutorialBtn: "🎓 教程",
+    tutorialWelcomeTitle: "欢迎使用GAKU Master！👋",
+    tutorialWelcomeDesc: "让我们快速浏览一下5个主要功能吧，只需一分钟——跟我点一点！",
+    tutorialStartBtn: "开始导览",
+    tutorialSkipBtn: "跳过",
+    tutorialStepOf: "第 {current} 步，共 {total} 步",
+    tutorialClickPrompt: "👉 点击此标签试试看",
+    tutorialNextBtn: "下一步 →",
+    tutorialScheduleDesc: "这是你的个性化每周学习计划。完成任务后勾选，看着进度条不断增长。",
+    tutorialVocabularyDesc: "搜索任何日语单词，保存到你自己的单词本，随时用抽认卡复习。",
+    tutorialSubtitlesDesc: "把视频的字幕或语音变成属于你自己的听力和词汇练习。",
+    tutorialResourcesDesc: "为你的水平精选的学习资源，还有可以用任何粘贴内容制作练习的工具。",
+    tutorialMilestonesDesc: "通往你日语目标的路线图——看看你已经走了多远，接下来是什么。",
+    tutorialCompleteTitle: "全部完成！🎉",
+    tutorialCompleteDesc: "你已经了解了GAKU Master的全部5个主要功能。随时可以通过🎓教程按钮重新观看导览。",
+    tutorialCompleteBtn: "开始学习",
     feedbackTitle: "💬 反馈与意见",
     feedbackSubtitle: "告诉我们你希望我们改进什么，或者对这个应用有什么不满意的地方。我们会阅读每一条留言。",
     feedbackWarning: "万一发布诽谤、辱骂或歧视性言论，账号将立即被停用。即使因此产生诉讼，我们也概不负责。",
@@ -3074,6 +3193,23 @@ const UI_TRANSLATIONS = {
     tabMilestones: "🏆 里程碑",
     tabJlpt: "🎓 JLPT成績",
     tabFeedback: "💬 意見回饋",
+    // Tutorial feature
+    tutorialBtn: "🎓 教學",
+    tutorialWelcomeTitle: "歡迎使用GAKU Master！👋",
+    tutorialWelcomeDesc: "讓我們快速瀏覽一下5個主要功能吧，只需一分鐘——跟我點一點！",
+    tutorialStartBtn: "開始導覽",
+    tutorialSkipBtn: "跳過",
+    tutorialStepOf: "第 {current} 步，共 {total} 步",
+    tutorialClickPrompt: "👉 點擊此分頁試試看",
+    tutorialNextBtn: "下一步 →",
+    tutorialScheduleDesc: "這是你的個人化每週學習計畫。完成任務後打勾，看著進度條不斷增長。",
+    tutorialVocabularyDesc: "搜尋任何日文單字，儲存到你自己的單字本，隨時用抽認卡複習。",
+    tutorialSubtitlesDesc: "把影片的字幕或語音變成屬於你自己的聽力和詞彙練習。",
+    tutorialResourcesDesc: "為你的程度精選的學習資源，還有可以用任何貼上的內容製作練習的工具。",
+    tutorialMilestonesDesc: "通往你日文目標的路線圖——看看你已經走了多遠，接下來是什麼。",
+    tutorialCompleteTitle: "全部完成！🎉",
+    tutorialCompleteDesc: "你已經了解了GAKU Master的全部5個主要功能。隨時可以透過🎓教學按鈕重新觀看導覽。",
+    tutorialCompleteBtn: "開始學習",
     feedbackTitle: "💬 意見回饋與想法",
     feedbackSubtitle: "告訴我們你希望我們改進什麼，或是對這個應用程式有什麼不滿意的地方。我們會閱讀每一則留言。",
     feedbackWarning: "萬一發布誹謗、辱罵或歧視性言論，帳號將立即被停用。即使因此產生訴訟，我們也概不負責。",
@@ -3451,6 +3587,23 @@ const UI_TRANSLATIONS = {
     tabMilestones: "🏆 목표",
     tabJlpt: "🎓 JLPT 결과",
     tabFeedback: "💬 피드백",
+    // Tutorial feature
+    tutorialBtn: "🎓 튜토리얼",
+    tutorialWelcomeTitle: "GAKU Master에 오신 것을 환영합니다! 👋",
+    tutorialWelcomeDesc: "5가지 주요 기능을 함께 빠르게 둘러볼까요? 1분이면 충분해요 — 저와 함께 눌러보세요!",
+    tutorialStartBtn: "투어 시작",
+    tutorialSkipBtn: "건너뛰기",
+    tutorialStepOf: "{total}단계 중 {current}단계",
+    tutorialClickPrompt: "👉 이 탭을 눌러 사용해 보세요",
+    tutorialNextBtn: "다음 →",
+    tutorialScheduleDesc: "이것은 당신만의 맞춤 주간 학습 계획입니다. 완료한 작업을 체크하고 진행률 바가 채워지는 것을 지켜보세요.",
+    tutorialVocabularyDesc: "일본어 단어를 검색하고 나만의 단어장에 저장한 후, 플래시카드로 언제든지 복습하세요.",
+    tutorialSubtitlesDesc: "영상의 자막이나 음성을 나만의 듣기·어휘 학습 자료로 만들어 보세요.",
+    tutorialResourcesDesc: "당신의 레벨에 맞춰 엄선된 학습 자료와, 붙여넣은 콘텐츠로 연습 문제를 만드는 도구입니다.",
+    tutorialMilestonesDesc: "당신의 일본어 목표까지의 로드맵 — 지금까지 온 길과 앞으로 다가올 것을 확인하세요.",
+    tutorialCompleteTitle: "완료! 🎉",
+    tutorialCompleteDesc: "GAKU Master의 5가지 주요 기능을 모두 살펴보셨습니다. 🎓 튜토리얼 버튼을 통해 언제든 다시 볼 수 있어요.",
+    tutorialCompleteBtn: "학습 시작하기",
     feedbackTitle: "💬 피드백 및 의견",
     feedbackSubtitle: "개선했으면 하는 점이나 앱에서 불편한 점을 알려주세요. 모든 메시지를 읽습니다.",
     feedbackWarning: "만약 명예훼손, 욕설, 차별적 표현을 작성할 경우 계정이 즉시 정지됩니다. 소송이 발생하더라도 일체의 책임을 지지 않습니다.",
@@ -3828,6 +3981,23 @@ const UI_TRANSLATIONS = {
     tabMilestones: "🏆 เป้าหมาย",
     tabJlpt: "🎓 ผลสอบ JLPT",
     tabFeedback: "💬 ความคิดเห็น",
+    // Tutorial feature
+    tutorialBtn: "🎓 บทแนะนำ",
+    tutorialWelcomeTitle: "ยินดีต้อนรับสู่ GAKU Master! 👋",
+    tutorialWelcomeDesc: "มาชมฟีเจอร์หลักทั้ง 5 อย่างรวดเร็วไปด้วยกันนะ ใช้เวลาแค่นาทีเดียว — กดตามมาได้เลย!",
+    tutorialStartBtn: "เริ่มทัวร์",
+    tutorialSkipBtn: "ข้าม",
+    tutorialStepOf: "ขั้นตอนที่ {current} จาก {total}",
+    tutorialClickPrompt: "👉 แตะแท็บนี้เพื่อลองใช้",
+    tutorialNextBtn: "ถัดไป →",
+    tutorialScheduleDesc: "นี่คือแผนการเรียนรายสัปดาห์ที่ปรับให้เหมาะกับคุณ ทำเครื่องหมายเมื่อทำงานเสร็จ แล้วดูแถบความคืบหน้าค่อย ๆ เต็มขึ้น",
+    tutorialVocabularyDesc: "ค้นหาคำศัพท์ภาษาญี่ปุ่นคำไหนก็ได้ บันทึกลงในชุดคำศัพท์ของคุณ แล้วทบทวนได้ทุกเมื่อด้วยแฟลชการ์ด",
+    tutorialSubtitlesDesc: "เปลี่ยนคำบรรยายหรือเสียงพูดในวิดีโอให้กลายเป็นแบบฝึกฟังและคำศัพท์ของคุณเอง",
+    tutorialResourcesDesc: "แหล่งเรียนรู้ที่คัดสรรมาให้เหมาะกับระดับของคุณ พร้อมเครื่องมือสร้างแบบฝึกหัดจากเนื้อหาที่คุณวางลงไป",
+    tutorialMilestonesDesc: "แผนที่นำทางสู่เป้าหมายภาษาญี่ปุ่นของคุณ — ดูว่าคุณมาไกลแค่ไหนแล้วและอะไรจะตามมา",
+    tutorialCompleteTitle: "เสร็จเรียบร้อย! 🎉",
+    tutorialCompleteDesc: "คุณได้ชมฟีเจอร์หลักทั้ง 5 ของ GAKU Master แล้ว สามารถดูทัวร์นี้ซ้ำได้ทุกเมื่อผ่านปุ่ม 🎓 บทแนะนำ",
+    tutorialCompleteBtn: "เริ่มเรียนเลย",
     feedbackTitle: "💬 ความคิดเห็นและข้อเสนอแนะ",
     feedbackSubtitle: "บอกเราว่าคุณอยากให้ปรับปรุงอะไร หรือมีอะไรที่กวนใจคุณเกี่ยวกับแอปนี้ เราจะอ่านทุกข้อความ",
     feedbackWarning: "หากคุณโพสต์ข้อความหมิ่นประมาท คำหยาบคาย หรือถ้อยคำเลือกปฏิบัติ บัญชีของคุณจะถูกระงับทันที เราจะไม่รับผิดชอบใด ๆ แม้จะเกิดการฟ้องร้อง",
@@ -4205,6 +4375,23 @@ const UI_TRANSLATIONS = {
     tabMilestones: "🏆 Pencapaian",
     tabJlpt: "🎓 Keputusan JLPT",
     tabFeedback: "💬 Maklum Balas",
+    // Tutorial feature
+    tutorialBtn: "🎓 Tutorial",
+    tutorialWelcomeTitle: "Selamat datang ke GAKU Master! 👋",
+    tutorialWelcomeDesc: "Jom kita lihat sepintas lalu 5 ciri utama bersama-sama. Cuma ambil masa seminit sahaja — ikut saya!",
+    tutorialStartBtn: "Mula Lawatan",
+    tutorialSkipBtn: "Langkau",
+    tutorialStepOf: "Langkah {current} daripada {total}",
+    tutorialClickPrompt: "👉 Ketik tab ini untuk mencubanya",
+    tutorialNextBtn: "Seterusnya →",
+    tutorialScheduleDesc: "Ini ialah jadual belajar mingguan yang diperibadikan untuk anda. Tandakan tugasan setelah selesai dan lihat bar kemajuan anda bertambah.",
+    tutorialVocabularyDesc: "Cari sebarang perkataan Jepun, simpan ke dalam set kad anda sendiri, dan ulang kaji bila-bila masa dengan kad imbas.",
+    tutorialSubtitlesDesc: "Tukar sari kata atau audio video kepada latihan pendengaran dan kosa kata anda sendiri.",
+    tutorialResourcesDesc: "Sumber pembelajaran pilihan untuk tahap anda, ditambah alat untuk membina latihan daripada sebarang kandungan yang anda tampal.",
+    tutorialMilestonesDesc: "Pelan hala tuju anda ke arah matlamat bahasa Jepun anda — lihat sejauh mana anda telah melangkah dan apa yang akan datang.",
+    tutorialCompleteTitle: "Selesai! 🎉",
+    tutorialCompleteDesc: "Anda telah melihat kesemua 5 ciri utama GAKU Master. Anda boleh ulang tayang lawatan ini bila-bila masa melalui butang 🎓 Tutorial.",
+    tutorialCompleteBtn: "Mula Belajar",
     feedbackTitle: "💬 Maklum Balas & Pendapat",
     feedbackSubtitle: "Beritahu kami apa yang anda mahu diperbaiki atau apa-apa yang mengganggu anda tentang aplikasi ini. Kami membaca setiap mesej.",
     feedbackWarning: "Sekiranya anda menulis fitnah, bahasa kesat, atau istilah diskriminasi, akaun anda akan digantung serta-merta. Kami tidak bertanggungjawab walaupun tindakan undang-undang diambil.",
@@ -4582,6 +4769,23 @@ const UI_TRANSLATIONS = {
     tabMilestones: "🏆 Pencapaian",
     tabJlpt: "🎓 Hasil JLPT",
     tabFeedback: "💬 Masukan",
+    // Tutorial feature
+    tutorialBtn: "🎓 Tutorial",
+    tutorialWelcomeTitle: "Selamat datang di GAKU Master! 👋",
+    tutorialWelcomeDesc: "Yuk, kita jelajahi 5 fitur utama bersama-sama. Hanya butuh waktu satu menit — ikuti saya!",
+    tutorialStartBtn: "Mulai Tur",
+    tutorialSkipBtn: "Lewati",
+    tutorialStepOf: "Langkah {current} dari {total}",
+    tutorialClickPrompt: "👉 Ketuk tab ini untuk mencobanya",
+    tutorialNextBtn: "Berikutnya →",
+    tutorialScheduleDesc: "Ini adalah rencana belajar mingguan yang dipersonalisasi untuk Anda. Centang tugas setelah selesai dan lihat bilah kemajuan Anda terisi.",
+    tutorialVocabularyDesc: "Cari kata bahasa Jepang apa pun, simpan ke dek Anda sendiri, dan tinjau kapan saja dengan kartu flash.",
+    tutorialSubtitlesDesc: "Ubah subtitle atau audio video menjadi latihan mendengarkan dan kosakata Anda sendiri.",
+    tutorialResourcesDesc: "Sumber belajar pilihan sesuai level Anda, ditambah alat untuk membuat latihan dari konten apa pun yang Anda tempel.",
+    tutorialMilestonesDesc: "Peta jalan menuju tujuan bahasa Jepang Anda — lihat sejauh mana Anda telah melangkah dan apa berikutnya.",
+    tutorialCompleteTitle: "Selesai! 🎉",
+    tutorialCompleteDesc: "Anda telah melihat semua 5 fitur utama GAKU Master. Anda bisa memutar ulang tur ini kapan saja lewat tombol 🎓 Tutorial.",
+    tutorialCompleteBtn: "Mulai Belajar",
     feedbackTitle: "💬 Masukan & Pendapat",
     feedbackSubtitle: "Beri tahu kami apa yang ingin Anda tingkatkan atau apa yang mengganggu Anda tentang aplikasi ini. Kami membaca setiap pesan.",
     feedbackWarning: "Jika Anda menulis fitnah, bahasa kasar, atau istilah diskriminatif, akun Anda akan langsung ditangguhkan. Kami tidak bertanggung jawab meskipun terjadi tuntutan hukum.",
@@ -4959,6 +5163,23 @@ const UI_TRANSLATIONS = {
     tabMilestones: "🏆 Mục tiêu",
     tabJlpt: "🎓 Kết quả JLPT",
     tabFeedback: "💬 Phản hồi",
+    // Tutorial feature
+    tutorialBtn: "🎓 Hướng dẫn",
+    tutorialWelcomeTitle: "Chào mừng đến với GAKU Master! 👋",
+    tutorialWelcomeDesc: "Hãy cùng khám phá nhanh 5 tính năng chính nhé. Chỉ mất khoảng một phút thôi — bấm theo mình nào!",
+    tutorialStartBtn: "Bắt đầu tham quan",
+    tutorialSkipBtn: "Bỏ qua",
+    tutorialStepOf: "Bước {current} trên {total}",
+    tutorialClickPrompt: "👉 Nhấn vào tab này để thử",
+    tutorialNextBtn: "Tiếp theo →",
+    tutorialScheduleDesc: "Đây là kế hoạch học tập hàng tuần được cá nhân hóa cho bạn. Đánh dấu hoàn thành khi làm xong nhiệm vụ và xem thanh tiến trình đầy dần.",
+    tutorialVocabularyDesc: "Tìm bất kỳ từ tiếng Nhật nào, lưu vào bộ thẻ của riêng bạn, và ôn tập bất cứ lúc nào bằng thẻ ghi nhớ.",
+    tutorialSubtitlesDesc: "Biến phụ đề hoặc âm thanh của video thành bài luyện nghe và từ vựng của riêng bạn.",
+    tutorialResourcesDesc: "Tài nguyên học tập được chọn lọc phù hợp với trình độ của bạn, cùng công cụ tạo bài luyện tập từ bất kỳ nội dung nào bạn dán vào.",
+    tutorialMilestonesDesc: "Lộ trình đến mục tiêu tiếng Nhật của bạn — xem bạn đã đi được bao xa và điều gì sắp tới.",
+    tutorialCompleteTitle: "Xong rồi! 🎉",
+    tutorialCompleteDesc: "Bạn đã xem qua cả 5 tính năng chính của GAKU Master. Bạn có thể xem lại chuyến tham quan này bất cứ lúc nào qua nút 🎓 Hướng dẫn.",
+    tutorialCompleteBtn: "Bắt đầu học",
     feedbackTitle: "💬 Phản hồi & Ý kiến",
     feedbackSubtitle: "Hãy cho chúng tôi biết bạn muốn cải thiện điều gì hoặc điều gì đang làm bạn khó chịu về ứng dụng. Chúng tôi đọc mọi tin nhắn.",
     feedbackWarning: "Nếu bạn viết nội dung phỉ báng, ngôn từ lăng mạ hoặc phân biệt đối xử, tài khoản của bạn sẽ bị đình chỉ ngay lập tức. Chúng tôi không chịu bất kỳ trách nhiệm nào kể cả khi có kiện tụng xảy ra.",
@@ -5336,6 +5557,23 @@ const UI_TRANSLATIONS = {
     tabMilestones: "🏆 लक्ष्य",
     tabJlpt: "🎓 JLPT परिणाम",
     tabFeedback: "💬 प्रतिक्रिया",
+    // Tutorial feature
+    tutorialBtn: "🎓 ट्यूटोरियल",
+    tutorialWelcomeTitle: "GAKU Master में आपका स्वागत है! 👋",
+    tutorialWelcomeDesc: "आइए मिलकर 5 मुख्य फीचर्स का एक छोटा दौरा करें। इसमें बस एक मिनट लगेगा — मेरे साथ टैप करते चलिए!",
+    tutorialStartBtn: "टूर शुरू करें",
+    tutorialSkipBtn: "छोड़ें",
+    tutorialStepOf: "चरण {current} / {total}",
+    tutorialClickPrompt: "👉 इसे आज़माने के लिए इस टैब पर टैप करें",
+    tutorialNextBtn: "अगला →",
+    tutorialScheduleDesc: "यह आपकी व्यक्तिगत साप्ताहिक अध्ययन योजना है। कार्य पूरा होने पर उसे चेक करें और अपनी प्रगति पट्टी को भरते हुए देखें।",
+    tutorialVocabularyDesc: "कोई भी जापानी शब्द खोजें, उसे अपने खुद के डेक में सेव करें, और कभी भी फ्लैशकार्ड से रिवीजन करें।",
+    tutorialSubtitlesDesc: "किसी वीडियो की सबटाइटल या ऑडियो को अपनी खुद की लिसनिंग और वोकैबुलरी प्रैक्टिस में बदलें।",
+    tutorialResourcesDesc: "आपके स्तर के लिए चुने गए अध्ययन संसाधन, साथ ही किसी भी पेस्ट किए गए कंटेंट से अभ्यास बनाने के टूल।",
+    tutorialMilestonesDesc: "आपके जापानी लक्ष्य तक का रोडमैप — देखें कि आप कितनी दूर आ चुके हैं और आगे क्या है।",
+    tutorialCompleteTitle: "सब हो गया! 🎉",
+    tutorialCompleteDesc: "आपने GAKU Master के सभी 5 मुख्य फीचर्स देख लिए हैं। आप 🎓 ट्यूटोरियल बटन से कभी भी यह टूर दोबारा देख सकते हैं।",
+    tutorialCompleteBtn: "पढ़ाई शुरू करें",
     feedbackTitle: "💬 प्रतिक्रिया और राय",
     feedbackSubtitle: "हमें बताएं कि आप ऐप में क्या सुधार चाहते हैं या आपको क्या परेशान कर रहा है। हम हर संदेश पढ़ते हैं।",
     feedbackWarning: "यदि आप मानहानि, अपमानजनक भाषा या भेदभावपूर्ण शब्दों का उपयोग करते हैं, तो आपका खाता तुरंत निलंबित कर दिया जाएगा। कानूनी कार्रवाई होने पर भी हम कोई ज़िम्मेदारी नहीं लेंगे।",
@@ -5713,6 +5951,23 @@ const UI_TRANSLATIONS = {
     tabMilestones: "🏆 目標",
     tabJlpt: "🎓 JLPT結果",
     tabFeedback: "💬 フィードバック",
+    // Tutorial feature
+    tutorialBtn: "🎓 チュートリアル",
+    tutorialWelcomeTitle: "GAKU Masterへようこそ！👋",
+    tutorialWelcomeDesc: "5つの主な機能を一緒にサクッと見てみましょう。1分だけです — 一緒にタップしていきましょう！",
+    tutorialStartBtn: "ツアーを始める",
+    tutorialSkipBtn: "スキップ",
+    tutorialStepOf: "ステップ {current} / {total}",
+    tutorialClickPrompt: "👉 このタブをタップして使ってみましょう",
+    tutorialNextBtn: "次へ →",
+    tutorialScheduleDesc: "これはあなた専用の週間学習プランです。終わったタスクにチェックを入れて、進捗バーが伸びていくのを見てみましょう。",
+    tutorialVocabularyDesc: "日本語の単語を検索して自分の単語帳に保存し、フラッシュカードでいつでも復習できます。",
+    tutorialSubtitlesDesc: "動画の字幕や音声を、自分だけのリスニング・単語練習に変えられます。",
+    tutorialResourcesDesc: "あなたのレベルに合わせて厳選された学習リソースと、貼り付けた内容から練習問題を作れるツールです。",
+    tutorialMilestonesDesc: "日本語の目標までのロードマップです。ここまでの進み具合と、この先の道のりを確認できます。",
+    tutorialCompleteTitle: "完了しました！🎉",
+    tutorialCompleteDesc: "GAKU Masterの5つの主な機能をすべて見てもらいました。🎓チュートリアルボタンからいつでもこのツアーをもう一度見られます。",
+    tutorialCompleteBtn: "勉強を始める",
     feedbackTitle: "💬 フィードバック・ご意見",
     feedbackSubtitle: "アプリで改善してほしい点や気になる点を教えてください。すべてのメッセージに目を通しています。",
     feedbackWarning: "万が一誹謗中傷、暴言、差別用語などを書いた場合は直ちにアカウント停止。訴訟が起こっても一切の責任は負いません。",
@@ -6090,6 +6345,23 @@ const UI_TRANSLATIONS = {
     tabMilestones: "🏆 Hedefler",
     tabJlpt: "🎓 JLPT Sonuçları",
     tabFeedback: "💬 Geri Bildirim",
+    // Tutorial feature
+    tutorialBtn: "🎓 Eğitim",
+    tutorialWelcomeTitle: "GAKU Master'a hoş geldiniz! 👋",
+    tutorialWelcomeDesc: "5 ana özelliği birlikte hızlıca gezelim. Sadece bir dakika sürer — benimle dokunun!",
+    tutorialStartBtn: "Turu Başlat",
+    tutorialSkipBtn: "Atla",
+    tutorialStepOf: "{total} adımdan {current}.",
+    tutorialClickPrompt: "👉 Denemek için bu sekmeye dokunun",
+    tutorialNextBtn: "İleri →",
+    tutorialScheduleDesc: "Bu, size özel haftalık çalışma planınız. Görevleri bitirdikçe işaretleyin ve ilerleme çubuğunuzun dolduğunu izleyin.",
+    tutorialVocabularyDesc: "Herhangi bir Japonca kelimeyi arayın, kendi destenize kaydedin ve dilediğiniz zaman kartlarla tekrar edin.",
+    tutorialSubtitlesDesc: "Bir videonun altyazısını veya sesini kendi dinleme ve kelime alıştırmanıza dönüştürün.",
+    tutorialResourcesDesc: "Seviyenize özel seçilmiş öğrenme kaynakları ve yapıştırdığınız herhangi bir içerikten alıştırma oluşturma araçları.",
+    tutorialMilestonesDesc: "Japonca hedefinize giden yol haritanız — ne kadar yol kat ettiğinizi ve sırada ne olduğunu görün.",
+    tutorialCompleteTitle: "Tamamlandı! 🎉",
+    tutorialCompleteDesc: "GAKU Master'ın 5 ana özelliğinin tamamını gördünüz. Bu turu istediğiniz zaman 🎓 Eğitim düğmesinden tekrar izleyebilirsiniz.",
+    tutorialCompleteBtn: "Çalışmaya Başla",
     feedbackTitle: "💬 Geri Bildirim ve Görüş",
     feedbackSubtitle: "Neyi iyileştirmemizi istediğinizi veya uygulamayla ilgili sizi rahatsız eden bir şeyi bize bildirin. Her mesajı okuyoruz.",
     feedbackWarning: "İftira, hakaret içeren dil veya ayrımcı ifadeler yazmanız durumunda hesabınız derhal askıya alınacaktır. Dava açılsa dahi hiçbir sorumluluk kabul etmiyoruz.",
@@ -6467,6 +6739,23 @@ const UI_TRANSLATIONS = {
     tabMilestones: "🏆 लक्ष्यहरू",
     tabJlpt: "🎓 JLPT नतिजा",
     tabFeedback: "💬 प्रतिक्रिया",
+    // Tutorial feature
+    tutorialBtn: "🎓 ट्युटोरियल",
+    tutorialWelcomeTitle: "GAKU Master मा स्वागत छ! 👋",
+    tutorialWelcomeDesc: "आउनुहोस् सँगै ५ वटा मुख्य सुविधाहरूको छोटो भ्रमण गरौं। यसले जम्मा एक मिनेट मात्र लिन्छ — मसँगै ट्याप गर्नुहोस्!",
+    tutorialStartBtn: "भ्रमण सुरु गर्नुहोस्",
+    tutorialSkipBtn: "छोड्नुहोस्",
+    tutorialStepOf: "चरण {current} / {total}",
+    tutorialClickPrompt: "👉 प्रयोग गर्न यो ट्याबमा ट्याप गर्नुहोस्",
+    tutorialNextBtn: "अर्को →",
+    tutorialScheduleDesc: "यो तपाईंको व्यक्तिगत साप्ताहिक अध्ययन योजना हो। कार्यहरू सकिएपछि चेक गर्नुहोस् र आफ्नो प्रगति बार भरिँदै जाने हेर्नुहोस्।",
+    tutorialVocabularyDesc: "कुनै पनि जापानी शब्द खोज्नुहोस्, आफ्नै डेकमा सेभ गर्नुहोस्, र फ्ल्यासकार्डको साथ जहिले पनि पुनरावलोकन गर्नुहोस्।",
+    tutorialSubtitlesDesc: "कुनै भिडियोको सबटाइटल वा अडियोलाई आफ्नै सुनाइ र शब्दावली अभ्यासमा बदल्नुहोस्।",
+    tutorialResourcesDesc: "तपाईंको स्तरका लागि छानिएका अध्ययन सामग्रीहरू, साथै टाँसिएको कुनै पनि सामग्रीबाट अभ्यास बनाउने उपकरणहरू।",
+    tutorialMilestonesDesc: "तपाईंको जापानी लक्ष्यसम्मको रोडम्याप — तपाईं कति टाढा आउनुभयो र अब के आउँदैछ हेर्नुहोस्।",
+    tutorialCompleteTitle: "सबै पूरा भयो! 🎉",
+    tutorialCompleteDesc: "तपाईंले GAKU Master का सबै ५ मुख्य सुविधाहरू हेर्नुभयो। तपाईं जुनसुकै बेला 🎓 ट्युटोरियल बटनबाट यो भ्रमण फेरि हेर्न सक्नुहुन्छ।",
+    tutorialCompleteBtn: "अध्ययन सुरु गर्नुहोस्",
     feedbackTitle: "💬 प्रतिक्रिया र विचार",
     feedbackSubtitle: "एपमा के सुधार गरिदिए हुन्थ्यो वा के कुराले तपाईंलाई अप्ठ्यारो पारिरहेको छ भनी हामीलाई बताउनुहोस्। हामी हरेक सन्देश पढ्छौं।",
     feedbackWarning: "यदि तपाईंले मानहानि, अपमानजनक भाषा वा भेदभावपूर्ण शब्द लेख्नुभयो भने तपाईंको खाता तुरुन्तै निलम्बन गरिनेछ। मुद्दा परे पनि हामी कुनै जिम्मेवारी लिने छैनौं।",
@@ -6844,6 +7133,23 @@ const UI_TRANSLATIONS = {
     tabMilestones: "🏆 Mga Layunin",
     tabJlpt: "🎓 Resulta ng JLPT",
     tabFeedback: "💬 Puna",
+    // Tutorial feature
+    tutorialBtn: "🎓 Tutorial",
+    tutorialWelcomeTitle: "Maligayang pagdating sa GAKU Master! 👋",
+    tutorialWelcomeDesc: "Mabilisan lang nating tignan ang 5 pangunahing feature. Isang minuto lang ito — sabay-sabay tayong mag-tap!",
+    tutorialStartBtn: "Simulan ang Tour",
+    tutorialSkipBtn: "Laktawan",
+    tutorialStepOf: "Hakbang {current} sa {total}",
+    tutorialClickPrompt: "👉 I-tap ang tab na ito para subukan",
+    tutorialNextBtn: "Susunod →",
+    tutorialScheduleDesc: "Ito ang iyong personalized na lingguhang study plan. I-check ang mga tapos nang gawain at panoorin ang iyong progress bar habang tumataas.",
+    tutorialVocabularyDesc: "Maghanap ng anumang salitang Hapon, i-save ito sa sarili mong deck, at balikan anumang oras gamit ang flashcards.",
+    tutorialSubtitlesDesc: "Gawing sarili mong listening at vocabulary practice ang subtitle o audio ng isang video.",
+    tutorialResourcesDesc: "Mga hand-picked na learning resource para sa iyong level, kasama ang mga tool para gumawa ng practice mula sa anumang content na i-paste mo.",
+    tutorialMilestonesDesc: "Ang iyong roadmap patungo sa iyong layunin sa Nihongo — tingnan kung gaano ka na kalayo at kung ano ang susunod.",
+    tutorialCompleteTitle: "Tapos na! 🎉",
+    tutorialCompleteDesc: "Nakita mo na ang lahat ng 5 pangunahing feature ng GAKU Master. Puwede mong ulitin ang tour na ito anumang oras gamit ang 🎓 Tutorial button.",
+    tutorialCompleteBtn: "Simulan ang Pag-aaral",
     feedbackTitle: "💬 Puna at Opinyon",
     feedbackSubtitle: "Sabihin sa amin kung ano ang gusto mong pagbutihin o anumang bagay na nakakaabala sa iyo tungkol sa app. Binabasa namin ang bawat mensahe.",
     feedbackWarning: "Kung magsulat ka ng paninirang-puri, mapanlait na wika, o mga diskriminasyong termino, agad na sususpindihin ang iyong account. Wala kaming pananagutan kahit magkaroon ng legal na aksyon.",
@@ -11632,6 +11938,81 @@ function LevelUpOffer({ T, currentLevel, onConfirm, onDismiss }) {
 }
 
 // ─── DASHBOARD ──────────────────────────────────────────────────────────────────
+// ─── TUTORIAL (guided tour of the 5 main GAKU Master tabs) ────────────────────
+// Steps: 0 = welcome modal, 1-5 = one per tab in TUTORIAL_TAB_IDS order
+// (the student must actually tap into the real tab to unlock its explanation
+// and the "Next" button — this is intentional so they *use* each feature, not
+// just read about it), 6 = completion modal.
+const TUTORIAL_TAB_IDS = ["schedule", "vocabulary", "subtitles", "resources", "milestones"];
+const TUTORIAL_DESC_KEYS = {
+  schedule: "tutorialScheduleDesc",
+  vocabulary: "tutorialVocabularyDesc",
+  subtitles: "tutorialSubtitlesDesc",
+  resources: "tutorialResourcesDesc",
+  milestones: "tutorialMilestonesDesc",
+};
+
+function TutorialOverlay({ T, step, tab, tabsMeta, onStart, onSkip, onAdvance, onFinish }) {
+  if (step === 0) {
+    return (
+      <div style={{ position:"fixed", inset:0, background:"rgba(0,0,0,0.75)", display:"flex", alignItems:"center", justifyContent:"center", zIndex:1000, padding:16 }}>
+        <div style={{ ...S.card, width:"100%", maxWidth:400, textAlign:"center" }}>
+          <div style={{ fontSize:40, marginBottom:10 }}>🎓</div>
+          <p style={{ color:"#f1f5f9", fontSize:16, fontWeight:800, margin:"0 0 10px" }}>{T.tutorialWelcomeTitle}</p>
+          <p style={{ color:"#94a3b8", fontSize:13, lineHeight:1.6, margin:"0 0 20px" }}>{T.tutorialWelcomeDesc}</p>
+          <div style={{ display:"flex", gap:10, justifyContent:"center" }}>
+            <button onClick={onStart} style={{ ...S.btn, background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff" }}>{T.tutorialStartBtn}</button>
+            <button onClick={onSkip} style={{ ...S.btn, background:"transparent", border:`1px solid ${C.border}`, color:"#64748b" }}>{T.tutorialSkipBtn}</button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (step >= 1 && step <= 5) {
+    const targetId = TUTORIAL_TAB_IDS[step - 1];
+    const reached = tab === targetId;
+    const targetLabel = tabsMeta.find(t => t.id === targetId)?.label || targetId;
+    const descKey = TUTORIAL_DESC_KEYS[targetId];
+    const stepOfText = (T.tutorialStepOf || "Step {current} of {total}")
+      .replace("{current}", String(step)).replace("{total}", "5");
+    return (
+      <div style={{ position:"fixed", left:16, right:16, bottom:16, maxWidth:480, margin:"0 auto", zIndex:150, background:"#0f172a", border:`1.5px solid ${C.purpleLight}`, borderRadius:16, padding:"16px 18px", boxShadow:"0 8px 30px rgba(0,0,0,0.5)" }}>
+        <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:8 }}>
+          <p style={{ color:C.purpleLight, fontSize:10, fontWeight:800, letterSpacing:1, margin:0 }}>{stepOfText}</p>
+          <button onClick={onSkip} style={{ background:"none", border:"none", color:"#475569", fontSize:11, cursor:"pointer", fontWeight:700, padding:0 }}>{T.tutorialSkipBtn}</button>
+        </div>
+        <p style={{ color:"#f1f5f9", fontSize:14, fontWeight:800, margin:"0 0 6px" }}>{targetLabel}</p>
+        {reached ? (
+          <>
+            <p style={{ color:"#94a3b8", fontSize:13, lineHeight:1.6, margin:"0 0 14px" }}>{T[descKey]}</p>
+            <button onClick={onAdvance} style={{ ...S.btn, width:"100%", background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff" }}>
+              {step === 5 ? T.tutorialCompleteBtn : T.tutorialNextBtn}
+            </button>
+          </>
+        ) : (
+          <p style={{ color:C.purpleLight, fontSize:13, fontWeight:700, margin:0 }}>{T.tutorialClickPrompt}</p>
+        )}
+      </div>
+    );
+  }
+
+  if (step === 6) {
+    return (
+      <div style={{ position:"fixed", inset:0, background:"rgba(0,0,0,0.75)", display:"flex", alignItems:"center", justifyContent:"center", zIndex:1000, padding:16 }}>
+        <div style={{ ...S.card, width:"100%", maxWidth:400, textAlign:"center" }}>
+          <div style={{ fontSize:40, marginBottom:10 }}>🎉</div>
+          <p style={{ color:"#f1f5f9", fontSize:16, fontWeight:800, margin:"0 0 10px" }}>{T.tutorialCompleteTitle}</p>
+          <p style={{ color:"#94a3b8", fontSize:13, lineHeight:1.6, margin:"0 0 20px" }}>{T.tutorialCompleteDesc}</p>
+          <button onClick={onFinish} style={{ ...S.btn, width:"100%", background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff" }}>{T.tutorialCompleteBtn}</button>
+        </div>
+      </div>
+    );
+  }
+
+  return null;
+}
+
 function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteAccountBusy, userId, streakDays, daysUntilTrialEnds, isTrialAccount, isGakuStudent, onCompleteProfile }) {
   const T = useUITranslations(form?.preferredLang || "English");
   const [schedule, setSchedule] = useState(() => buildSchedule(form, getT(form?.preferredLang || "English")));
@@ -11640,6 +12021,11 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
   const [showHelp, setShowHelp] = useState(false);
   const [tab, setTab] = useState("schedule");
   const [resourceSubTab, setResourceSubTab] = useState("links");
+  // Tutorial (guided tour) — see TutorialOverlay above. Auto-launches once per
+  // account (localStorage flag, scoped like other per-student flags) unless
+  // already completed or skipped; always replayable via the header button.
+  const [tutorialActive, setTutorialActive] = useState(false);
+  const [tutorialStep, setTutorialStep] = useState(0);
   const [weekTheme, setWeekTheme] = useState("");
   const [aiScheduleLoading, setAiScheduleLoading] = useState(false);
   const { currentWeek, totalWeeks } = getWeekInfo(form);
@@ -11855,6 +12241,38 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
     return () => { cancelled = true; };
   }, [form]);
 
+  // Auto-launch the Tutorial once per account, unless already completed/skipped.
+  useEffect(() => {
+    try {
+      if (localStorage.getItem(scopedKey("gaku_tutorial_done")) !== "1") {
+        setTutorialActive(true);
+        setTutorialStep(0);
+      }
+    } catch {}
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const markTutorialDone = useCallback(() => {
+    try { localStorage.setItem(scopedKey("gaku_tutorial_done"), "1"); } catch {}
+  }, []);
+
+  const handleTutorialSkip = useCallback(() => {
+    markTutorialDone();
+    setTutorialActive(false);
+  }, [markTutorialDone]);
+
+  const handleTutorialAdvance = useCallback(() => {
+    setTutorialStep(s => {
+      const next = s + 1;
+      if (next === 6) markTutorialDone();
+      return next;
+    });
+  }, [markTutorialDone]);
+
+  const handleTutorialFinish = useCallback(() => {
+    setTutorialActive(false);
+  }, []);
+
   const toggleTask = useCallback((day, idx) => {
     setSchedule(prev => ({ ...prev, [day]: prev[day].map((t,i) => i===idx ? {...t,done:!t.done} : t) }));
   }, []);
@@ -11887,6 +12305,18 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
   return (
     <div style={{ ...S.page, paddingBottom:60 }}>
       {showHelp && <HelpModal onClose={()=>setShowHelp(false)} form={form} />}
+      {tutorialActive && (
+        <TutorialOverlay
+          T={T}
+          step={tutorialStep}
+          tab={tab}
+          tabsMeta={TABS}
+          onStart={() => setTutorialStep(1)}
+          onSkip={handleTutorialSkip}
+          onAdvance={handleTutorialAdvance}
+          onFinish={handleTutorialFinish}
+        />
+      )}
 
       <div style={{ background:"rgba(10,15,30,0.95)", borderBottom:`1px solid ${C.border}`, padding:"14px 20px", position:"sticky", top:0, zIndex:100, display:"flex", justifyContent:"space-between", alignItems:"center" }}>
         <div>
@@ -11901,6 +12331,7 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
           </div>
         </div>
         <div style={{ display:"flex", gap:8 }}>
+          <button onClick={()=>{ setTutorialStep(0); setTutorialActive(true); }} style={{ ...S.btn, padding:"8px 14px", background:"transparent", border:`1px solid ${C.purpleLight}`, color:C.purpleLight, fontSize:12 }}>{T.tutorialBtn}</button>
           <button onClick={()=>setShowHelp(true)} style={{ ...S.btn, padding:"8px 14px", background:`linear-gradient(135deg,${C.amber},#d97706)`, color:"#fff", fontSize:12 }}>{T.help}</button>
           <button onClick={onEdit} style={{ ...S.btn, padding:"8px 14px", background:C.card, color:"#94a3b8", border:`1px solid ${C.border}`, fontSize:12 }}>{T.editProfile}</button>
           {onLogout && (
@@ -12015,11 +12446,14 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
         )}
 
         <div style={{ display:"flex", gap:6, marginBottom:16, overflowX:"auto", paddingBottom:4 }}>
-          {TABS.map(t => (
-            <button key={t.id} onClick={()=>setTab(t.id)} style={{ padding:"8px 14px", borderRadius:20, border:`1.5px solid ${tab===t.id?C.purpleLight:C.border}`, background:tab===t.id?"rgba(168,85,247,0.15)":C.card, color:tab===t.id?C.purpleLight:"#64748b", fontSize:12, fontWeight:700, cursor:"pointer", whiteSpace:"nowrap" }}>
-              {t.label}
-            </button>
-          ))}
+          {TABS.map(t => {
+            const isTutorialTarget = tutorialActive && tutorialStep>=1 && tutorialStep<=5 && TUTORIAL_TAB_IDS[tutorialStep-1] === t.id;
+            return (
+              <button key={t.id} onClick={()=>setTab(t.id)} style={{ padding:"8px 14px", borderRadius:20, border:`1.5px solid ${isTutorialTarget?C.purpleLight:(tab===t.id?C.purpleLight:C.border)}`, background:tab===t.id?"rgba(168,85,247,0.15)":C.card, color:tab===t.id?C.purpleLight:"#64748b", fontSize:12, fontWeight:700, cursor:"pointer", whiteSpace:"nowrap", boxShadow:isTutorialTarget?"0 0 0 3px rgba(168,85,247,0.35)":"none" }}>
+                {t.label}
+              </button>
+            );
+          })}
         </div>
 
         {tab==="schedule" && (
