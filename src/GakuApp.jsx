@@ -398,6 +398,8 @@ const UI_TRANSLATIONS = {
     streakUnit: "day streak",
     trialEndsToday: "Your free trial ends today!",
     trialEndsTomorrow: "Your free trial ends tomorrow!",
+    tutorialGraceEndsToday: "Your bonus Tutorial week ends today!",
+    tutorialGraceEndsTomorrow: "Your bonus Tutorial week ends tomorrow!",
     dataResetWarning: "If payment isn't completed within 1 week, all your saved study data (vocabulary, progress, and settings) will be permanently reset. Subscribe now to keep everything you've built so far.",
     dataResetWarningShort: "Reminder: if you don't finish payment within 1 week, your saved data will be reset.",
     viewPlansCta: "View plans",
@@ -808,6 +810,8 @@ const UI_TRANSLATIONS = {
     streakUnit: "jours de suite",
     trialEndsToday: "Votre essai gratuit se termine aujourd'hui !",
     trialEndsTomorrow: "Votre essai gratuit se termine demain !",
+    tutorialGraceEndsToday: "Votre semaine bonus Tutoriel se termine aujourd'hui !",
+    tutorialGraceEndsTomorrow: "Votre semaine bonus Tutoriel se termine demain !",
     dataResetWarning: "Si le paiement n'est pas effectué sous 1 semaine, toutes vos données d'étude enregistrées (vocabulaire, progression et paramètres) seront définitivement réinitialisées. Abonnez-vous maintenant pour conserver tout ce que vous avez accompli.",
     dataResetWarningShort: "Rappel : si le paiement n'est pas finalisé sous 1 semaine, vos données enregistrées seront réinitialisées.",
     viewPlansCta: "Voir les formules",
@@ -1202,6 +1206,8 @@ const UI_TRANSLATIONS = {
     streakUnit: "días seguidos",
     trialEndsToday: "¡Tu prueba gratuita termina hoy!",
     trialEndsTomorrow: "¡Tu prueba gratuita termina mañana!",
+    tutorialGraceEndsToday: "¡Tu semana extra de Tutorial termina hoy!",
+    tutorialGraceEndsTomorrow: "¡Tu semana extra de Tutorial termina mañana!",
     dataResetWarning: "Si no completas el pago en 1 semana, todos tus datos de estudio guardados (vocabulario, progreso y configuración) se restablecerán de forma permanente. Suscríbete ahora para conservar todo lo que has logrado.",
     dataResetWarningShort: "Recordatorio: si no completas el pago en 1 semana, tus datos guardados se restablecerán.",
     viewPlansCta: "Ver planes",
@@ -1596,6 +1602,8 @@ const UI_TRANSLATIONS = {
     streakUnit: "dias seguidos",
     trialEndsToday: "Seu teste grátis termina hoje!",
     trialEndsTomorrow: "Seu teste grátis termina amanhã!",
+    tutorialGraceEndsToday: "Sua semana bônus de Tutorial termina hoje!",
+    tutorialGraceEndsTomorrow: "Sua semana bônus de Tutorial termina amanhã!",
     dataResetWarning: "Se o pagamento não for concluído em 1 semana, todos os seus dados de estudo salvos (vocabulário, progresso e configurações) serão permanentemente apagados. Assine agora para manter tudo o que você já construiu.",
     dataResetWarningShort: "Lembrete: se você não concluir o pagamento em 1 semana, seus dados salvos serão apagados.",
     viewPlansCta: "Ver planos",
@@ -1990,6 +1998,8 @@ const UI_TRANSLATIONS = {
     streakUnit: "Tage in Folge",
     trialEndsToday: "Deine kostenlose Testphase endet heute!",
     trialEndsTomorrow: "Deine kostenlose Testphase endet morgen!",
+    tutorialGraceEndsToday: "Deine Bonus-Tutorial-Woche endet heute!",
+    tutorialGraceEndsTomorrow: "Deine Bonus-Tutorial-Woche endet morgen!",
     dataResetWarning: "Wenn die Zahlung nicht innerhalb von 1 Woche abgeschlossen wird, werden alle deine gespeicherten Lerndaten (Vokabeln, Fortschritt und Einstellungen) dauerhaft zurückgesetzt. Abonniere jetzt, um alles zu behalten, was du bisher aufgebaut hast.",
     dataResetWarningShort: "Erinnerung: Wenn die Zahlung nicht innerhalb von 1 Woche abgeschlossen wird, werden deine gespeicherten Daten zurückgesetzt.",
     viewPlansCta: "Pläne ansehen",
@@ -2384,6 +2394,8 @@ const UI_TRANSLATIONS = {
     streakUnit: "giorni di fila",
     trialEndsToday: "La tua prova gratuita termina oggi!",
     trialEndsTomorrow: "La tua prova gratuita termina domani!",
+    tutorialGraceEndsToday: "La tua settimana bonus del Tutorial termina oggi!",
+    tutorialGraceEndsTomorrow: "La tua settimana bonus del Tutorial termina domani!",
     dataResetWarning: "Se il pagamento non viene completato entro 1 settimana, tutti i tuoi dati di studio salvati (vocabolario, progressi e impostazioni) verranno azzerati permanentemente. Abbonati ora per conservare tutto ciò che hai costruito finora.",
     dataResetWarningShort: "Promemoria: se non completi il pagamento entro 1 settimana, i tuoi dati salvati verranno azzerati.",
     viewPlansCta: "Vedi i piani",
@@ -2778,6 +2790,8 @@ const UI_TRANSLATIONS = {
     streakUnit: "天连续",
     trialEndsToday: "你的免费试用今天到期！",
     trialEndsTomorrow: "你的免费试用明天到期！",
+    tutorialGraceEndsToday: "你的额外教程周今天结束！",
+    tutorialGraceEndsTomorrow: "你的额外教程周明天结束！",
     dataResetWarning: "如果未在1周内完成付款，您保存的所有学习数据（词汇、进度和设置）将被永久重置。立即订阅以保留您已建立的一切。",
     dataResetWarningShort: "提醒：如果未在1周内完成付款，您保存的数据将被重置。",
     viewPlansCta: "查看方案",
@@ -3172,6 +3186,8 @@ const UI_TRANSLATIONS = {
     streakUnit: "天連續",
     trialEndsToday: "你的免費試用今天到期！",
     trialEndsTomorrow: "你的免費試用明天到期！",
+    tutorialGraceEndsToday: "你的額外教學週今天結束！",
+    tutorialGraceEndsTomorrow: "你的額外教學週明天結束！",
     dataResetWarning: "如果未在1週內完成付款，您保存的所有學習資料（詞彙、進度和設定）將被永久重置。立即訂閱以保留您已建立的一切。",
     dataResetWarningShort: "提醒：如果未在1週內完成付款，您保存的資料將被重置。",
     viewPlansCta: "查看方案",
@@ -3566,6 +3582,8 @@ const UI_TRANSLATIONS = {
     streakUnit: "일 연속",
     trialEndsToday: "무료 체험이 오늘 종료됩니다!",
     trialEndsTomorrow: "무료 체험이 내일 종료됩니다!",
+    tutorialGraceEndsToday: "보너스 튜토리얼 주간이 오늘 종료됩니다!",
+    tutorialGraceEndsTomorrow: "보너스 튜토리얼 주간이 내일 종료됩니다!",
     dataResetWarning: "1주일 이내에 결제를 완료하지 않으면 저장된 모든 학습 데이터(단어, 진행 상황, 설정)가 영구적으로 초기화됩니다. 지금까지 쌓아온 것을 지키려면 지금 구독하세요.",
     dataResetWarningShort: "알림: 1주일 이내에 결제를 완료하지 않으면 저장된 데이터가 초기화됩니다.",
     viewPlansCta: "요금제 보기",
@@ -3960,6 +3978,8 @@ const UI_TRANSLATIONS = {
     streakUnit: "วันติดต่อกัน",
     trialEndsToday: "ทดลองใช้ฟรีของคุณจะหมดอายุวันนี้!",
     trialEndsTomorrow: "ทดลองใช้ฟรีของคุณจะหมดอายุพรุ่งนี้!",
+    tutorialGraceEndsToday: "สัปดาห์โบนัสบทแนะนำของคุณจะสิ้นสุดวันนี้!",
+    tutorialGraceEndsTomorrow: "สัปดาห์โบนัสบทแนะนำของคุณจะสิ้นสุดพรุ่งนี้!",
     dataResetWarning: "หากไม่ชำระเงินภายใน 1 สัปดาห์ ข้อมูลการเรียนที่บันทึกไว้ทั้งหมด (คำศัพท์ ความคืบหน้า และการตั้งค่า) จะถูกรีเซ็ตอย่างถาวร สมัครสมาชิกตอนนี้เพื่อรักษาสิ่งที่คุณสร้างมาทั้งหมด",
     dataResetWarningShort: "เตือนความจำ: หากไม่ชำระเงินให้เสร็จภายใน 1 สัปดาห์ ข้อมูลที่บันทึกไว้ของคุณจะถูกรีเซ็ต",
     viewPlansCta: "ดูแพ็กเกจ",
@@ -4354,6 +4374,8 @@ const UI_TRANSLATIONS = {
     streakUnit: "hari berturut-turut",
     trialEndsToday: "Percubaan percuma anda tamat hari ini!",
     trialEndsTomorrow: "Percubaan percuma anda tamat esok!",
+    tutorialGraceEndsToday: "Minggu bonus Tutorial anda tamat hari ini!",
+    tutorialGraceEndsTomorrow: "Minggu bonus Tutorial anda tamat esok!",
     dataResetWarning: "Jika pembayaran tidak diselesaikan dalam masa 1 minggu, semua data pembelajaran anda yang disimpan (kosa kata, kemajuan dan tetapan) akan ditetapkan semula secara kekal. Langgan sekarang untuk mengekalkan segala yang telah anda bina.",
     dataResetWarningShort: "Peringatan: jika anda tidak menyelesaikan pembayaran dalam masa 1 minggu, data anda yang disimpan akan ditetapkan semula.",
     viewPlansCta: "Lihat pelan",
@@ -4748,6 +4770,8 @@ const UI_TRANSLATIONS = {
     streakUnit: "hari berturut-turut",
     trialEndsToday: "Uji coba gratis Anda berakhir hari ini!",
     trialEndsTomorrow: "Uji coba gratis Anda berakhir besok!",
+    tutorialGraceEndsToday: "Minggu bonus Tutorial Anda berakhir hari ini!",
+    tutorialGraceEndsTomorrow: "Minggu bonus Tutorial Anda berakhir besok!",
     dataResetWarning: "Jika pembayaran tidak diselesaikan dalam 1 minggu, semua data belajar Anda yang tersimpan (kosakata, progres, dan pengaturan) akan direset secara permanen. Berlangganan sekarang untuk menjaga semua yang telah Anda bangun.",
     dataResetWarningShort: "Pengingat: jika Anda tidak menyelesaikan pembayaran dalam 1 minggu, data tersimpan Anda akan direset.",
     viewPlansCta: "Lihat paket",
@@ -5142,6 +5166,8 @@ const UI_TRANSLATIONS = {
     streakUnit: "ngày liên tiếp",
     trialEndsToday: "Bản dùng thử miễn phí của bạn kết thúc hôm nay!",
     trialEndsTomorrow: "Bản dùng thử miễn phí của bạn kết thúc vào ngày mai!",
+    tutorialGraceEndsToday: "Tuần thưởng Hướng dẫn của bạn kết thúc hôm nay!",
+    tutorialGraceEndsTomorrow: "Tuần thưởng Hướng dẫn của bạn kết thúc vào ngày mai!",
     dataResetWarning: "Nếu không hoàn tất thanh toán trong vòng 1 tuần, toàn bộ dữ liệu học tập đã lưu (từ vựng, tiến độ và cài đặt) của bạn sẽ bị đặt lại vĩnh viễn. Đăng ký ngay để giữ lại mọi thứ bạn đã xây dựng.",
     dataResetWarningShort: "Nhắc nhở: nếu không hoàn tất thanh toán trong vòng 1 tuần, dữ liệu đã lưu của bạn sẽ bị đặt lại.",
     viewPlansCta: "Xem các gói",
@@ -5536,6 +5562,8 @@ const UI_TRANSLATIONS = {
     streakUnit: "दिन लगातार",
     trialEndsToday: "आपका मुफ़्त ट्रायल आज समाप्त हो रहा है!",
     trialEndsTomorrow: "आपका मुफ़्त ट्रायल कल समाप्त हो रहा है!",
+    tutorialGraceEndsToday: "आपका बोनस ट्यूटोरियल सप्ताह आज समाप्त हो रहा है!",
+    tutorialGraceEndsTomorrow: "आपका बोनस ट्यूटोरियल सप्ताह कल समाप्त हो रहा है!",
     dataResetWarning: "अगर 1 सप्ताह के भीतर भुगतान पूरा नहीं होता है, तो आपका सारा सेव किया हुआ स्टडी डेटा (शब्दावली, प्रगति और सेटिंग्स) हमेशा के लिए रीसेट हो जाएगा। अब तक जो कुछ आपने बनाया है उसे बचाने के लिए अभी सब्सक्राइब करें।",
     dataResetWarningShort: "याद दिलाना: अगर आप 1 सप्ताह के भीतर भुगतान पूरा नहीं करते, तो आपका सेव किया हुआ डेटा रीसेट हो जाएगा।",
     viewPlansCta: "प्लान देखें",
@@ -5930,6 +5958,8 @@ const UI_TRANSLATIONS = {
     streakUnit: "日連続",
     trialEndsToday: "無料トライアルは今日で終了します！",
     trialEndsTomorrow: "無料トライアルは明日で終了します！",
+    tutorialGraceEndsToday: "ボーナスのTutorial期間は今日で終了します！",
+    tutorialGraceEndsTomorrow: "ボーナスのTutorial期間は明日で終了します！",
     dataResetWarning: "1週間以内にお支払いが完了しない場合、保存されている学習データ(単語・進捗・設定)はすべて完全に初期化されます。今までの積み重ねを守るために、今すぐご登録ください。",
     dataResetWarningShort: "リマインダー: 1週間以内にお支払いが完了しないと、保存されたデータが初期化されます。",
     viewPlansCta: "プランを見る",
@@ -6324,6 +6354,8 @@ const UI_TRANSLATIONS = {
     streakUnit: "gün üst üste",
     trialEndsToday: "Ücretsiz deneme süreniz bugün sona eriyor!",
     trialEndsTomorrow: "Ücretsiz deneme süreniz yarın sona eriyor!",
+    tutorialGraceEndsToday: "Bonus Eğitim haftanız bugün sona eriyor!",
+    tutorialGraceEndsTomorrow: "Bonus Eğitim haftanız yarın sona eriyor!",
     dataResetWarning: "Ödeme 1 hafta içinde tamamlanmazsa, kaydedilen tüm çalışma verileriniz (kelimeler, ilerleme ve ayarlar) kalıcı olarak sıfırlanacaktır. Şimdiye kadar oluşturduğunuz her şeyi korumak için hemen abone olun.",
     dataResetWarningShort: "Hatırlatma: ödemeyi 1 hafta içinde tamamlamazsanız, kaydedilen verileriniz sıfırlanacaktır.",
     viewPlansCta: "Planları görüntüle",
@@ -6718,6 +6750,8 @@ const UI_TRANSLATIONS = {
     streakUnit: "दिन लगातार",
     trialEndsToday: "तपाईंको निःशुल्क ट्रायल आज सकिन्छ!",
     trialEndsTomorrow: "तपाईंको निःशुल्क ट्रायल भोलि सकिन्छ!",
+    tutorialGraceEndsToday: "तपाईंको बोनस ट्युटोरियल हप्ता आज सकिन्छ!",
+    tutorialGraceEndsTomorrow: "तपाईंको बोनस ट्युटोरियल हप्ता भोलि सकिन्छ!",
     dataResetWarning: "यदि १ हप्ताभित्र भुक्तानी पूरा गरिएन भने, तपाईंको सुरक्षित गरिएको सबै अध्ययन डाटा (शब्दावली, प्रगति र सेटिङहरू) स्थायी रूपमा रिसेट हुनेछ। अहिलेसम्म बनाएको सबै कुरा जोगाउन अहिले नै सदस्यता लिनुहोस्।",
     dataResetWarningShort: "सम्झना: यदि तपाईंले १ हप्ताभित्र भुक्तानी पूरा गर्नुभएन भने, तपाईंको सुरक्षित डाटा रिसेट हुनेछ।",
     viewPlansCta: "योजनाहरू हेर्नुहोस्",
@@ -7112,6 +7146,8 @@ const UI_TRANSLATIONS = {
     streakUnit: "araw sunod-sunod",
     trialEndsToday: "Magtatapos na ngayong araw ang iyong libreng trial!",
     trialEndsTomorrow: "Magtatapos bukas ang iyong libreng trial!",
+    tutorialGraceEndsToday: "Nagtatapos ngayon ang bonus na Tutorial week mo!",
+    tutorialGraceEndsTomorrow: "Bukas magtatapos ang bonus na Tutorial week mo!",
     dataResetWarning: "Kung hindi makukumpleto ang bayad sa loob ng 1 linggo, ma-reset nang permanente ang lahat ng iyong naka-save na study data (bokabularyo, progreso, at mga setting). Mag-subscribe na ngayon para mapanatili ang lahat ng iyong napagtagumpayan.",
     dataResetWarningShort: "Paalala: kung hindi mo makukumpleto ang bayad sa loob ng 1 linggo, ma-reset ang iyong naka-save na data.",
     viewPlansCta: "Tingnan ang mga plano",
@@ -12013,7 +12049,7 @@ function TutorialOverlay({ T, step, tab, tabsMeta, onStart, onSkip, onAdvance, o
   return null;
 }
 
-function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteAccountBusy, userId, streakDays, daysUntilTrialEnds, isTrialAccount, isGakuStudent, onCompleteProfile, onTutorialGateDone }) {
+function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteAccountBusy, userId, streakDays, daysUntilTrialEnds, tutorialGraceDaysLeft, isTrialAccount, isGakuStudent, onCompleteProfile }) {
   const T = useUITranslations(form?.preferredLang || "English");
   const [schedule, setSchedule] = useState(() => buildSchedule(form, getT(form?.preferredLang || "English")));
   const [milestones, setMilestones] = useState(() => buildMilestones(form));
@@ -12259,8 +12295,7 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
   const handleTutorialSkip = useCallback(() => {
     markTutorialDone();
     setTutorialActive(false);
-    onTutorialGateDone?.();
-  }, [markTutorialDone, onTutorialGateDone]);
+  }, [markTutorialDone]);
 
   const handleTutorialAdvance = useCallback(() => {
     setTutorialStep(s => {
@@ -12272,8 +12307,7 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
 
   const handleTutorialFinish = useCallback(() => {
     setTutorialActive(false);
-    onTutorialGateDone?.();
-  }, [onTutorialGateDone]);
+  }, []);
 
   const toggleTask = useCallback((day, idx) => {
     setSchedule(prev => ({ ...prev, [day]: prev[day].map((t,i) => i===idx ? {...t,done:!t.done} : t) }));
@@ -12362,6 +12396,16 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
             ⏰ {daysUntilTrialEnds === 0 ? T.trialEndsToday : T.trialEndsTomorrow}
           </p>
           <a href="/app?preview=paywall" style={{ padding:"5px 12px", borderRadius:8, background:"#fbbf24", color:"#1e293b", fontSize:12, fontWeight:800, textDecoration:"none" }}>
+            {T.viewPlansCta}
+          </a>
+        </div>
+      )}
+      {isTrialAccount && (tutorialGraceDaysLeft === 0 || tutorialGraceDaysLeft === 1) && (
+        <div style={{ background:"rgba(168,85,247,0.12)", borderBottom:"1px solid rgba(168,85,247,0.35)", padding:"10px 20px", display:"flex", alignItems:"center", justifyContent:"center", gap:12, flexWrap:"wrap" }}>
+          <p style={{ color:C.purpleLight, fontSize:12, fontWeight:700, margin:0 }}>
+            ⏰ {tutorialGraceDaysLeft === 0 ? T.tutorialGraceEndsToday : T.tutorialGraceEndsTomorrow}
+          </p>
+          <a href="/app?preview=paywall" style={{ padding:"5px 12px", borderRadius:8, background:C.purpleLight, color:"#1e1033", fontSize:12, fontWeight:800, textDecoration:"none" }}>
             {T.viewPlansCta}
           </a>
         </div>
@@ -13045,11 +13089,12 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
   // Unlike showPaywall (the soft, dismissible 21-interaction nudge), this
   // hard-locks the account to the payment screen with no "check later" out.
   const [trialLocked, setTrialLocked] = useState(!!previewPaywall);
-  // Bumped by the Tutorial (inside Dashboard) whenever a student finishes or
-  // skips it — forces a re-render here so the trial-lock gate below re-checks
-  // the (freshly-written) localStorage flag immediately, with no page reload.
-  const [tutorialGateVersion, setTutorialGateVersion] = useState(0);
   const [daysUntilTrialEnds, setDaysUntilTrialEnds] = useState(null);
+  // Days left in the one-time bonus "Tutorial week" granted right after the
+  // 7-day trial ends (see api/account-status.js) — null once it's over or
+  // not applicable. Used for the same kind of "ending soon" banner as
+  // daysUntilTrialEnds, just for this second countdown.
+  const [tutorialGraceDaysLeft, setTutorialGraceDaysLeft] = useState(null);
   const [streakDays, setStreakDays] = useState(0);
   // Post-signup onboarding: right after a brand-new profile is saved (never
   // for profile edits), walk the student through one quick "first win"
@@ -13252,6 +13297,7 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
       // Server-enforced 7-day trial (not resettable by uninstalling/
       // reinstalling — trial_started_at lives in Supabase, keyed by account).
       setDaysUntilTrialEnds(typeof data?.daysUntilTrialEnds === "number" ? data.daysUntilTrialEnds : null);
+      setTutorialGraceDaysLeft(typeof data?.tutorialGraceDaysLeft === "number" ? data.tutorialGraceDaysLeft : null);
       if (data?.trialExpired && !data?.isGakuStudent && !data?.isPaid) {
         setTrialLocked(true);
         // The server just wiped this account's study data (10 days with no
@@ -13582,14 +13628,6 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
   // the correct account, with no one-frame window where it could still read
   // the previous user's (or nobody's) data.
   ACTIVE_USER_ID = authUser?.id || null;
-  // Re-read fresh on every render (not cached in state) so there's no stale
-  // flash of the wrong screen: tutorialGateVersion above just forces this
-  // render to happen again right after Dashboard writes the flag.
-  const tutorialAlreadyDone = (() => {
-    try { return localStorage.getItem(scopedKey("gaku_tutorial_done")) === "1"; }
-    catch { return false; }
-  })();
-  const handleTutorialGateDone = () => setTutorialGateVersion(v => v + 1);
   const handleAuthed = ({ userId, email } = {}) => {
     setShowAuthScreen(false);
     // A profile form was filled out but held back because the student wasn't
@@ -13647,17 +13685,13 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
   if (authUser && deviceStatus === "suspended") return <DeviceSuspendedGate T={T} suspendedUntil={deviceSuspendedUntil} />;
   if (authUser && deviceStatus === "pending") return <DeviceApprovalGate T={T} />;
   // Hard, non-dismissible paywall: the server (api/account-status.js) has
-  // confirmed 7 days passed since this account's trial_started_at with no
-  // payment. Unlike the soft `showPaywall` interaction-count nudge (which
-  // has a "check later" button), there is no way to dismiss this and reach
-  // the dashboard — the only ways out are paying or fully deleting the
-  // account (self-service delete, which starts a real fresh trial).
-  // Exception: students who haven't yet completed the Tutorial are let
-  // through to the dashboard one more time so they can actually take it —
-  // this screen re-appears the moment they finish or skip it (see
-  // handleTutorialGateDone / tutorialGateVersion above). Doesn't apply to
-  // the manual ?preview=paywall testing flag, which must always show this.
-  if (authUser && trialLocked && (previewPaywall || (!isPaid && !isGakuStudent)) && (previewPaywall || tutorialAlreadyDone)) {
+  // confirmed the 7-day trial plus the one-time bonus Tutorial week are both
+  // over, with no payment. Unlike the soft `showPaywall` interaction-count
+  // nudge (which has a "check later" button), there is no way to dismiss
+  // this and reach the dashboard — the only ways out are paying or fully
+  // deleting the account (self-service delete, which starts a real fresh
+  // trial).
+  if (authUser && trialLocked && (previewPaywall || (!isPaid && !isGakuStudent))) {
     return (
       <div style={{ minHeight:"100vh", background:"linear-gradient(160deg,#0a0f1e 0%,#0f172a 60%,#0a0f1e 100%)", display:"flex", alignItems:"center", justifyContent:"center", padding:24 }}>
         <div style={{ background:"linear-gradient(135deg,#1e1b4b,#0f172a)", border:"1.5px solid rgba(139,92,246,0.4)", borderRadius:20, padding:"36px 32px", maxWidth:420, width:"90%", textAlign:"center", boxShadow:"0 8px 40px rgba(139,92,246,0.25)" }}>
@@ -13869,7 +13903,7 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
   }
   return (
     <div style={{ position:"relative" }} onClickCapture={handleDashboardInteraction}>
-      <Dashboard form={form} onEdit={handleEdit} onLevelUp={(lvl)=>handleSubmit({ ...form, jlpt: lvl })} onLogout={authUser ? handleLogout : undefined} onDeleteAccount={authUser ? handleDeleteAccount : undefined} deleteAccountBusy={deleteAccountBusy} userId={authUser?.id} streakDays={streakDays} daysUntilTrialEnds={daysUntilTrialEnds} isTrialAccount={!isGakuStudent && !isPaid} isGakuStudent={isGakuStudent} onCompleteProfile={form?.profileComplete === false ? () => setOnboardingStep("completeProfile") : undefined} onTutorialGateDone={handleTutorialGateDone} />
+      <Dashboard form={form} onEdit={handleEdit} onLevelUp={(lvl)=>handleSubmit({ ...form, jlpt: lvl })} onLogout={authUser ? handleLogout : undefined} onDeleteAccount={authUser ? handleDeleteAccount : undefined} deleteAccountBusy={deleteAccountBusy} userId={authUser?.id} streakDays={streakDays} daysUntilTrialEnds={daysUntilTrialEnds} tutorialGraceDaysLeft={tutorialGraceDaysLeft} isTrialAccount={!isGakuStudent && !isPaid} isGakuStudent={isGakuStudent} onCompleteProfile={form?.profileComplete === false ? () => setOnboardingStep("completeProfile") : undefined} />
       {/* TEMP DEBUG — remove after confirming the counter works */}
       <div style={{ position:"fixed", bottom:12, right:12, zIndex:99999, background:"rgba(0,0,0,0.75)", color:"#4ade80", fontSize:11, fontFamily:"monospace", padding:"4px 8px", borderRadius:6 }}>
         count: {interactionCount}/21 {skipTrialPaywall ? "(skip)" : ""} {authUser && isGakuStudent ? "(gaku)" : ""} {authUser && isPaid ? "(paid)" : ""}

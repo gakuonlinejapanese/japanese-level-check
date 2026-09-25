@@ -14,17 +14,25 @@ import { getAdminClient } from "./_supabaseAdmin.js";
 //
 // Also enforces the 7-day free trial server-side: 7 days after
 // trial_started_at (set once, at signup — see api/create-profile.js), a
-// non-paid, non-GAKU-student account is reported as trialExpired so the
-// client hard-locks it to the payment screen, no matter which device it
-// opens on or how many times the app was uninstalled/reinstalled. A further
-// 7-day grace period (14 days total) is given before we wipe that account's
-// study data (assigned_vocab + migration_bridge) — this is deliberately
-// framed to the student as "pay within 1 week of hitting the payment screen
-// or your data resets" (see trialEndedDesc / PolicyGate copy in
-// GakuApp.jsx), so GRACE_DAYS must stay in sync with that "1 week" wording.
+// non-paid, non-GAKU-student account would normally be reported as
+// trialExpired... except we now grant every such account a one-time bonus
+// "Tutorial week" right at that point (tutorial_grace_started_at, stamped
+// once and never reset) during which trialExpired stays false and the
+// account keeps full access — this is deliberately when the Tutorial
+// feature (see GakuApp.jsx TutorialOverlay) auto-launches, so the student
+// actually learns the 5 main tabs before being asked to decide on a plan.
+// Once that bonus week elapses, trialExpired flips true for good and the
+// client hard-locks to the payment screen, no matter which device it opens
+// on or how many times the app was uninstalled/reinstalled. A further
+// 7-day grace period is given after THAT before we wipe the account's study
+// data (assigned_vocab + migration_bridge) — this is deliberately framed to
+// the student as "pay within 1 week of hitting the payment screen or your
+// data resets" (see trialEndedDesc / PolicyGate copy in GakuApp.jsx), so
+// GRACE_DAYS must stay in sync with that "1 week" wording.
 // The wipe only ever runs once per account (guarded by data_reset_at).
 const TRIAL_DAYS = 7;
-const GRACE_DAYS = 7; // total 14 days from trial_started_at before data is wiped
+const TUTORIAL_GRACE_DAYS = 7; // one-time bonus week granted right when the 7-day trial ends
+const GRACE_DAYS = 7; // additional 7 days after the tutorial-grace week ends before data is wiped
 
 export default async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed" });
@@ -35,7 +43,7 @@ export default async function handler(req, res) {
     const supabase = getAdminClient();
     const { data, error } = await supabase
       .from("profiles")
-      .select("is_gaku_student, is_paid, paid_plan, suspended_until, trial_started_at, data_reset_at")
+      .select("is_gaku_student, is_paid, paid_plan, suspended_until, trial_started_at, data_reset_at, tutorial_grace_started_at")
       .eq("id", userId)
       .maybeSingle();
 
@@ -69,8 +77,28 @@ export default async function handler(req, res) {
 
     const trialStartedAt = data?.trial_started_at ? new Date(data.trial_started_at) : null;
     const daysSinceTrial = trialStartedAt ? (Date.now() - trialStartedAt.getTime()) / 86400000 : null;
-    const trialExpired = !isPaid && !isGakuStudent && daysSinceTrial !== null && daysSinceTrial >= TRIAL_DAYS;
-    const daysUntilTrialEnds = daysSinceTrial !== null ? Math.max(0, Math.ceil(TRIAL_DAYS - daysSinceTrial)) : null;
+    const pastTrial = daysSinceTrial !== null && daysSinceTrial >= TRIAL_DAYS;
+
+    // Grant the one-time bonus "Tutorial week" the first moment an unpaid,
+    // non-GAKU account crosses the 7-day mark. Stamped once and never
+    // touched again, so re-crossing this check on later polls is a no-op.
+    let tutorialGraceStartedAt = data?.tutorial_grace_started_at ? new Date(data.tutorial_grace_started_at) : null;
+    if (!isPaid && !isGakuStudent && pastTrial && !tutorialGraceStartedAt) {
+      tutorialGraceStartedAt = new Date();
+      try {
+        await supabase.from("profiles").update({ tutorial_grace_started_at: tutorialGraceStartedAt.toISOString() }).eq("id", userId);
+      } catch (grantErr) {
+        console.error("[account-status] failed to grant tutorial grace week:", grantErr.message);
+      }
+    }
+    const daysSinceTutorialGrace = tutorialGraceStartedAt ? (Date.now() - tutorialGraceStartedAt.getTime()) / 86400000 : null;
+    const inTutorialGraceWeek = daysSinceTutorialGrace !== null && daysSinceTutorialGrace < TUTORIAL_GRACE_DAYS;
+    const trialExpired = !isPaid && !isGakuStudent && pastTrial && !inTutorialGraceWeek;
+    const daysUntilTrialEnds = daysSinceTrial !== null && !pastTrial ? Math.max(0, Math.ceil(TRIAL_DAYS - daysSinceTrial)) : null;
+    // Days left in the bonus Tutorial week (null once it's over/not applicable) —
+    // lets the client show a "your bonus week is ending" banner, mirroring the
+    // existing daysUntilTrialEnds one for the original 7-day trial.
+    const tutorialGraceDaysLeft = inTutorialGraceWeek ? Math.max(0, Math.ceil(TUTORIAL_GRACE_DAYS - daysSinceTutorialGrace)) : null;
 
     // Daily engagement ping: this endpoint is already polled every ~4s while
     // the app is open, so it doubles as a free "was this account active
@@ -127,7 +155,16 @@ export default async function handler(req, res) {
     }
 
     let dataWasReset = false;
-    if (!isPaid && !isGakuStudent && !data?.data_reset_at && daysSinceTrial !== null && daysSinceTrial >= (TRIAL_DAYS + GRACE_DAYS)) {
+    // Wipe once GRACE_DAYS have passed since the payment screen actually
+    // started showing (i.e. since the bonus Tutorial week ended) — not since
+    // the original trial_started_at, since that bonus week pushes the real
+    // lock point out by TUTORIAL_GRACE_DAYS. Falls back to the old trial-only
+    // math for the rare case tutorial_grace_started_at never got stamped.
+    const effectiveLockAt = tutorialGraceStartedAt
+      ? new Date(tutorialGraceStartedAt.getTime() + TUTORIAL_GRACE_DAYS * 86400000)
+      : (trialStartedAt ? new Date(trialStartedAt.getTime() + TRIAL_DAYS * 86400000) : null);
+    const daysSinceLocked = effectiveLockAt ? (Date.now() - effectiveLockAt.getTime()) / 86400000 : null;
+    if (!isPaid && !isGakuStudent && !data?.data_reset_at && daysSinceLocked !== null && daysSinceLocked >= GRACE_DAYS) {
       try {
         await supabase.from("assigned_vocab").delete().eq("student_id", userId);
         await supabase.from("migration_bridge").delete().eq("user_id", userId);
@@ -146,6 +183,7 @@ export default async function handler(req, res) {
       suspendedUntil,
       trialExpired,
       daysUntilTrialEnds,
+      tutorialGraceDaysLeft,
       dataWasReset,
       streakDays,
     });
