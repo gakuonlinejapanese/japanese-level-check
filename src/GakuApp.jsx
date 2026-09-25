@@ -12013,7 +12013,7 @@ function TutorialOverlay({ T, step, tab, tabsMeta, onStart, onSkip, onAdvance, o
   return null;
 }
 
-function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteAccountBusy, userId, streakDays, daysUntilTrialEnds, isTrialAccount, isGakuStudent, onCompleteProfile }) {
+function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteAccountBusy, userId, streakDays, daysUntilTrialEnds, isTrialAccount, isGakuStudent, onCompleteProfile, onTutorialGateDone }) {
   const T = useUITranslations(form?.preferredLang || "English");
   const [schedule, setSchedule] = useState(() => buildSchedule(form, getT(form?.preferredLang || "English")));
   const [milestones, setMilestones] = useState(() => buildMilestones(form));
@@ -12259,7 +12259,8 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
   const handleTutorialSkip = useCallback(() => {
     markTutorialDone();
     setTutorialActive(false);
-  }, [markTutorialDone]);
+    onTutorialGateDone?.();
+  }, [markTutorialDone, onTutorialGateDone]);
 
   const handleTutorialAdvance = useCallback(() => {
     setTutorialStep(s => {
@@ -12271,7 +12272,8 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
 
   const handleTutorialFinish = useCallback(() => {
     setTutorialActive(false);
-  }, []);
+    onTutorialGateDone?.();
+  }, [onTutorialGateDone]);
 
   const toggleTask = useCallback((day, idx) => {
     setSchedule(prev => ({ ...prev, [day]: prev[day].map((t,i) => i===idx ? {...t,done:!t.done} : t) }));
@@ -13043,6 +13045,10 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
   // Unlike showPaywall (the soft, dismissible 21-interaction nudge), this
   // hard-locks the account to the payment screen with no "check later" out.
   const [trialLocked, setTrialLocked] = useState(!!previewPaywall);
+  // Bumped by the Tutorial (inside Dashboard) whenever a student finishes or
+  // skips it — forces a re-render here so the trial-lock gate below re-checks
+  // the (freshly-written) localStorage flag immediately, with no page reload.
+  const [tutorialGateVersion, setTutorialGateVersion] = useState(0);
   const [daysUntilTrialEnds, setDaysUntilTrialEnds] = useState(null);
   const [streakDays, setStreakDays] = useState(0);
   // Post-signup onboarding: right after a brand-new profile is saved (never
@@ -13576,6 +13582,14 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
   // the correct account, with no one-frame window where it could still read
   // the previous user's (or nobody's) data.
   ACTIVE_USER_ID = authUser?.id || null;
+  // Re-read fresh on every render (not cached in state) so there's no stale
+  // flash of the wrong screen: tutorialGateVersion above just forces this
+  // render to happen again right after Dashboard writes the flag.
+  const tutorialAlreadyDone = (() => {
+    try { return localStorage.getItem(scopedKey("gaku_tutorial_done")) === "1"; }
+    catch { return false; }
+  })();
+  const handleTutorialGateDone = () => setTutorialGateVersion(v => v + 1);
   const handleAuthed = ({ userId, email } = {}) => {
     setShowAuthScreen(false);
     // A profile form was filled out but held back because the student wasn't
@@ -13638,7 +13652,12 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
   // has a "check later" button), there is no way to dismiss this and reach
   // the dashboard — the only ways out are paying or fully deleting the
   // account (self-service delete, which starts a real fresh trial).
-  if (authUser && trialLocked && (previewPaywall || (!isPaid && !isGakuStudent))) {
+  // Exception: students who haven't yet completed the Tutorial are let
+  // through to the dashboard one more time so they can actually take it —
+  // this screen re-appears the moment they finish or skip it (see
+  // handleTutorialGateDone / tutorialGateVersion above). Doesn't apply to
+  // the manual ?preview=paywall testing flag, which must always show this.
+  if (authUser && trialLocked && (previewPaywall || (!isPaid && !isGakuStudent)) && (previewPaywall || tutorialAlreadyDone)) {
     return (
       <div style={{ minHeight:"100vh", background:"linear-gradient(160deg,#0a0f1e 0%,#0f172a 60%,#0a0f1e 100%)", display:"flex", alignItems:"center", justifyContent:"center", padding:24 }}>
         <div style={{ background:"linear-gradient(135deg,#1e1b4b,#0f172a)", border:"1.5px solid rgba(139,92,246,0.4)", borderRadius:20, padding:"36px 32px", maxWidth:420, width:"90%", textAlign:"center", boxShadow:"0 8px 40px rgba(139,92,246,0.25)" }}>
@@ -13850,7 +13869,7 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
   }
   return (
     <div style={{ position:"relative" }} onClickCapture={handleDashboardInteraction}>
-      <Dashboard form={form} onEdit={handleEdit} onLevelUp={(lvl)=>handleSubmit({ ...form, jlpt: lvl })} onLogout={authUser ? handleLogout : undefined} onDeleteAccount={authUser ? handleDeleteAccount : undefined} deleteAccountBusy={deleteAccountBusy} userId={authUser?.id} streakDays={streakDays} daysUntilTrialEnds={daysUntilTrialEnds} isTrialAccount={!isGakuStudent && !isPaid} isGakuStudent={isGakuStudent} onCompleteProfile={form?.profileComplete === false ? () => setOnboardingStep("completeProfile") : undefined} />
+      <Dashboard form={form} onEdit={handleEdit} onLevelUp={(lvl)=>handleSubmit({ ...form, jlpt: lvl })} onLogout={authUser ? handleLogout : undefined} onDeleteAccount={authUser ? handleDeleteAccount : undefined} deleteAccountBusy={deleteAccountBusy} userId={authUser?.id} streakDays={streakDays} daysUntilTrialEnds={daysUntilTrialEnds} isTrialAccount={!isGakuStudent && !isPaid} isGakuStudent={isGakuStudent} onCompleteProfile={form?.profileComplete === false ? () => setOnboardingStep("completeProfile") : undefined} onTutorialGateDone={handleTutorialGateDone} />
       {/* TEMP DEBUG — remove after confirming the counter works */}
       <div style={{ position:"fixed", bottom:12, right:12, zIndex:99999, background:"rgba(0,0,0,0.75)", color:"#4ade80", fontSize:11, fontFamily:"monospace", padding:"4px 8px", borderRadius:6 }}>
         count: {interactionCount}/21 {skipTrialPaywall ? "(skip)" : ""} {authUser && isGakuStudent ? "(gaku)" : ""} {authUser && isPaid ? "(paid)" : ""}
