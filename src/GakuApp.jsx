@@ -436,9 +436,13 @@ const UI_TRANSLATIONS = {
     tutorialSubtitlesDesc: "Paste a video link below and turn its subtitles or audio into your own listening and vocabulary practice.",
     tutorialResourcesDesc: "Browse the resources picked for your level below, or paste some content to build your own practice set.",
     tutorialMilestonesDesc: "This is your roadmap to your Japanese goal. Take a look at what's coming next on your journey.",
+    tutorialContentDesc: "Try it now: paste some Japanese text below (an article, subtitles, a caption) and let GAKU build practice activities from it — just like GAKU Reader does on the web.",
+    tutorialConversationDesc: "Try it now: play a video near your mic and let GAKU listen to the real dialogue — it'll help you understand each line and suggest how you could respond.",
+    tutorialPronunciationDesc: "Try it now: paste some Japanese text, read a sentence aloud, and see how close your pronunciation was.",
     tutorialCompleteTitle: "All done! 🎉",
     tutorialCompleteDesc: "You've seen all 5 main features of GAKU Master. You can replay this tour anytime from the 🎓 Tutorial button.",
     tutorialCompleteBtn: "Start Studying",
+    tutorialReaderCta: "📬 Get the GAKU Reader from your email!",
     feedbackTitle: "💬 Feedback & Opinion",
     feedbackSubtitle: "Tell us what you'd like improved or anything that's bothering you about the app. We read every message.",
     feedbackWarning: "If you post slander, abusive language, or discriminatory terms, your account will be suspended immediately. We accept no responsibility even if legal action results.",
@@ -847,9 +851,13 @@ const UI_TRANSLATIONS = {
     tutorialSubtitlesDesc: "Collez un lien de vidéo ci-dessous et transformez ses sous-titres ou son audio en exercice d'écoute et de vocabulaire personnalisé.",
     tutorialResourcesDesc: "Parcourez les ressources sélectionnées pour votre niveau ci-dessous, ou collez du contenu pour créer votre propre exercice.",
     tutorialMilestonesDesc: "Voici votre feuille de route vers votre objectif en japonais. Jetez un œil à ce qui vous attend ensuite.",
+    tutorialContentDesc: "Essayez maintenant : collez un texte japonais ci-dessous (un article, des sous-titres, une légende) et laissez GAKU en créer des exercices — comme le fait GAKU Reader sur le web.",
+    tutorialConversationDesc: "Essayez maintenant : lancez une vidéo près de votre micro et laissez GAKU écouter le vrai dialogue — il vous aidera à comprendre chaque réplique et vous suggérera comment répondre.",
+    tutorialPronunciationDesc: "Essayez maintenant : collez un texte japonais, lisez une phrase à voix haute, et voyez à quel point votre prononciation était proche.",
     tutorialCompleteTitle: "Terminé ! 🎉",
     tutorialCompleteDesc: "Vous avez découvert les 5 fonctionnalités principales de GAKU Master. Vous pouvez revoir cette visite à tout moment via le bouton 🎓 Tutoriel.",
     tutorialCompleteBtn: "Commencer à étudier",
+    tutorialReaderCta: "📬 Recevez GAKU Reader par e-mail !",
     feedbackTitle: "💬 Retour & Avis",
     feedbackSubtitle: "Dites-nous ce que vous aimeriez voir amélioré ou ce qui vous dérange dans l'application. Nous lisons chaque message.",
     feedbackWarning: "En cas de diffamation, propos injurieux ou termes discriminatoires, votre compte sera immédiatement suspendu. Nous déclinons toute responsabilité, même en cas de poursuites judiciaires.",
@@ -1243,9 +1251,13 @@ const UI_TRANSLATIONS = {
     tutorialSubtitlesDesc: "Pega el enlace de un video abajo y convierte sus subtítulos o audio en tu propia práctica de escucha y vocabulario.",
     tutorialResourcesDesc: "Explora los recursos elegidos para tu nivel abajo, o pega contenido para crear tu propio ejercicio.",
     tutorialMilestonesDesc: "Esta es tu hoja de ruta hacia tu objetivo en japonés. Echa un vistazo a lo que viene a continuación.",
+    tutorialContentDesc: "Pruébalo ahora: pega un texto en japonés abajo (un artículo, subtítulos, una leyenda) y deja que GAKU cree ejercicios a partir de él, igual que hace GAKU Reader en la web.",
+    tutorialConversationDesc: "Pruébalo ahora: reproduce un video cerca de tu micrófono y deja que GAKU escuche el diálogo real — te ayudará a entender cada línea y te sugerirá cómo responder.",
+    tutorialPronunciationDesc: "Pruébalo ahora: pega un texto en japonés, lee una frase en voz alta y mira qué tan cercana estuvo tu pronunciación.",
     tutorialCompleteTitle: "¡Listo! 🎉",
     tutorialCompleteDesc: "Has visto las 5 funciones principales de GAKU Master. Puedes repetir este recorrido cuando quieras desde el botón 🎓 Tutorial.",
     tutorialCompleteBtn: "Empezar a estudiar",
+    tutorialReaderCta: "📬 ¡Recibe GAKU Reader por correo!",
     feedbackTitle: "💬 Comentarios y Opinión",
     feedbackSubtitle: "Cuéntanos qué te gustaría que mejoráramos o qué te molesta de la app. Leemos todos los mensajes.",
     feedbackWarning: "Si publicas difamación, lenguaje abusivo o términos discriminatorios, tu cuenta será suspendida de inmediato. No asumimos ninguna responsabilidad aunque se inicien acciones legales.",
@@ -1639,9 +1651,13 @@ const UI_TRANSLATIONS = {
     tutorialSubtitlesDesc: "Cole o link de um vídeo abaixo e transforme as legendas ou o áudio em sua própria prática de escuta e vocabulário.",
     tutorialResourcesDesc: "Explore os recursos selecionados para o seu nível abaixo, ou cole um conteúdo para criar seu próprio exercício.",
     tutorialMilestonesDesc: "Este é o seu roteiro rumo ao seu objetivo em japonês. Dê uma olhada no que vem a seguir.",
+    tutorialContentDesc: "Experimente agora: cole um texto em japonês abaixo (um artigo, legendas, uma legenda de foto) e deixe o GAKU criar atividades a partir dele, assim como o GAKU Reader faz na web.",
+    tutorialConversationDesc: "Experimente agora: reproduza um vídeo perto do seu microfone e deixe o GAKU ouvir o diálogo real — ele vai te ajudar a entender cada fala e sugerir como responder.",
+    tutorialPronunciationDesc: "Experimente agora: cole um texto em japonês, leia uma frase em voz alta e veja o quão próxima sua pronúncia ficou.",
     tutorialCompleteTitle: "Tudo pronto! 🎉",
     tutorialCompleteDesc: "Você conheceu as 5 principais funções do GAKU Master. Você pode rever este tour a qualquer momento pelo botão 🎓 Tutorial.",
     tutorialCompleteBtn: "Começar a estudar",
+    tutorialReaderCta: "📬 Receba o GAKU Reader pelo e-mail!",
     feedbackTitle: "💬 Feedback e Opinião",
     feedbackSubtitle: "Conte-nos o que você gostaria que melhorássemos ou o que está incomodando você no app. Lemos todas as mensagens.",
     feedbackWarning: "Se você publicar difamação, linguagem abusiva ou termos discriminatórios, sua conta será suspensa imediatamente. Não assumimos nenhuma responsabilidade mesmo que haja ação judicial.",
@@ -2035,9 +2051,13 @@ const UI_TRANSLATIONS = {
     tutorialSubtitlesDesc: "Füge unten einen Video-Link ein und verwandle dessen Untertitel oder Ton in dein eigenes Hör- und Vokabeltraining.",
     tutorialResourcesDesc: "Stöbere unten in den für dein Niveau ausgewählten Ressourcen oder füge einen Text ein, um eine eigene Übung zu erstellen.",
     tutorialMilestonesDesc: "Das ist deine Roadmap zu deinem Japanisch-Ziel. Wirf einen Blick darauf, was als Nächstes kommt.",
+    tutorialContentDesc: "Probier's gleich aus: Füge unten einen japanischen Text ein (einen Artikel, Untertitel, eine Bildunterschrift) und lass GAKU daraus Übungen erstellen — genau wie GAKU Reader es im Web tut.",
+    tutorialConversationDesc: "Probier's gleich aus: Spiele ein Video in der Nähe deines Mikrofons ab und lass GAKU dem echten Dialog zuhören — es hilft dir, jede Zeile zu verstehen, und schlägt dir Antworten vor.",
+    tutorialPronunciationDesc: "Probier's gleich aus: Füge einen japanischen Text ein, lies einen Satz laut vor und sieh, wie nah deine Aussprache war.",
     tutorialCompleteTitle: "Fertig! 🎉",
     tutorialCompleteDesc: "Du hast alle 5 Hauptfunktionen von GAKU Master kennengelernt. Du kannst diese Tour jederzeit über den 🎓 Tutorial-Button wiederholen.",
     tutorialCompleteBtn: "Mit dem Lernen beginnen",
+    tutorialReaderCta: "📬 Hol dir GAKU Reader per E-Mail!",
     feedbackTitle: "💬 Feedback & Meinung",
     feedbackSubtitle: "Sag uns, was wir verbessern sollen oder was dich an der App stört. Wir lesen jede Nachricht.",
     feedbackWarning: "Bei Verleumdung, beleidigender Sprache oder diskriminierenden Begriffen wird dein Konto sofort gesperrt. Wir übernehmen keine Verantwortung, selbst wenn rechtliche Schritte eingeleitet werden.",
@@ -2431,9 +2451,13 @@ const UI_TRANSLATIONS = {
     tutorialSubtitlesDesc: "Incolla il link di un video qui sotto e trasforma i suoi sottotitoli o l'audio in un esercizio personale di ascolto e vocabolario.",
     tutorialResourcesDesc: "Sfoglia le risorse selezionate per il tuo livello qui sotto, oppure incolla un contenuto per creare il tuo esercizio.",
     tutorialMilestonesDesc: "Questa è la tua roadmap verso il tuo obiettivo in giapponese. Dai un'occhiata a cosa ti aspetta.",
+    tutorialContentDesc: "Provalo subito: incolla un testo giapponese qui sotto (un articolo, sottotitoli, una didascalia) e lascia che GAKU crei attività a partire da esso, proprio come fa GAKU Reader sul web.",
+    tutorialConversationDesc: "Provalo subito: riproduci un video vicino al microfono e lascia che GAKU ascolti il dialogo reale — ti aiuterà a capire ogni battuta e ti suggerirà come rispondere.",
+    tutorialPronunciationDesc: "Provalo subito: incolla un testo giapponese, leggi una frase ad alta voce e guarda quanto è stata precisa la tua pronuncia.",
     tutorialCompleteTitle: "Fatto! 🎉",
     tutorialCompleteDesc: "Hai visto tutte le 5 funzioni principali di GAKU Master. Puoi rivedere questo tour in qualsiasi momento dal pulsante 🎓 Tutorial.",
     tutorialCompleteBtn: "Inizia a studiare",
+    tutorialReaderCta: "📬 Ricevi GAKU Reader via e-mail!",
     feedbackTitle: "💬 Feedback e Opinioni",
     feedbackSubtitle: "Dicci cosa vorresti che migliorassimo o cosa ti disturba dell'app. Leggiamo ogni messaggio.",
     feedbackWarning: "In caso di diffamazione, linguaggio offensivo o termini discriminatori, il tuo account verrà sospeso immediatamente. Non ci assumiamo alcuna responsabilità anche in caso di azioni legali.",
@@ -2827,9 +2851,13 @@ const UI_TRANSLATIONS = {
     tutorialSubtitlesDesc: "在下面粘贴一个视频链接，把它的字幕或语音变成属于你自己的听力和词汇练习。",
     tutorialResourcesDesc: "浏览下面为你的水平精选的学习资源，或者粘贴一段内容来制作你自己的练习。",
     tutorialMilestonesDesc: "这是通往你日语目标的路线图。看看接下来会遇到什么。",
+    tutorialContentDesc: "现在就试试：在下面粘贴一段日语文本(文章、字幕、说明文字)，让GAKU据此生成练习活动——就像GAKU Reader在网页上做的那样。",
+    tutorialConversationDesc: "现在就试试：在麦克风旁边播放一段视频，让GAKU聆听真实对话——它会帮你理解每一句话，并给出回应建议。",
+    tutorialPronunciationDesc: "现在就试试：粘贴一段日语文本，大声朗读一句话，看看你的发音有多接近。",
     tutorialCompleteTitle: "全部完成！🎉",
     tutorialCompleteDesc: "你已经了解了GAKU Master的全部5个主要功能。随时可以通过🎓教程按钮重新观看导览。",
     tutorialCompleteBtn: "开始学习",
+    tutorialReaderCta: "📬 通过邮件领取GAKU Reader！",
     feedbackTitle: "💬 反馈与意见",
     feedbackSubtitle: "告诉我们你希望我们改进什么，或者对这个应用有什么不满意的地方。我们会阅读每一条留言。",
     feedbackWarning: "万一发布诽谤、辱骂或歧视性言论，账号将立即被停用。即使因此产生诉讼，我们也概不负责。",
@@ -3223,9 +3251,13 @@ const UI_TRANSLATIONS = {
     tutorialSubtitlesDesc: "在下面貼上一個影片連結，把它的字幕或語音變成屬於你自己的聽力和詞彙練習。",
     tutorialResourcesDesc: "瀏覽下面為你的程度精選的學習資源，或貼上一段內容來製作你自己的練習。",
     tutorialMilestonesDesc: "這是通往你日文目標的路線圖。看看接下來會遇到什麼。",
+    tutorialContentDesc: "現在就試試：在下面貼上一段日語文字(文章、字幕、說明文字)，讓GAKU據此生成練習活動——就像GAKU Reader在網頁上做的那樣。",
+    tutorialConversationDesc: "現在就試試：在麥克風旁播放一段影片，讓GAKU聆聽真實對話——它會幫你理解每一句話，並給出回應建議。",
+    tutorialPronunciationDesc: "現在就試試：貼上一段日語文字，大聲朗讀一句話，看看你的發音有多接近。",
     tutorialCompleteTitle: "全部完成！🎉",
     tutorialCompleteDesc: "你已經了解了GAKU Master的全部5個主要功能。隨時可以透過🎓教學按鈕重新觀看導覽。",
     tutorialCompleteBtn: "開始學習",
+    tutorialReaderCta: "📬 透過電子郵件領取GAKU Reader！",
     feedbackTitle: "💬 意見回饋與想法",
     feedbackSubtitle: "告訴我們你希望我們改進什麼，或是對這個應用程式有什麼不滿意的地方。我們會閱讀每一則留言。",
     feedbackWarning: "萬一發布誹謗、辱罵或歧視性言論，帳號將立即被停用。即使因此產生訴訟，我們也概不負責。",
@@ -3619,9 +3651,13 @@ const UI_TRANSLATIONS = {
     tutorialSubtitlesDesc: "아래에 영상 링크를 붙여넣어 자막이나 음성을 나만의 듣기·어휘 학습 자료로 만들어 보세요.",
     tutorialResourcesDesc: "아래에서 당신의 레벨에 맞춰 엄선된 자료를 둘러보거나, 콘텐츠를 붙여넣어 나만의 연습 문제를 만들어 보세요.",
     tutorialMilestonesDesc: "이것은 당신의 일본어 목표까지의 로드맵입니다. 다음에 무엇이 있는지 살펴보세요.",
+    tutorialContentDesc: "지금 해보세요: 아래에 일본어 텍스트(기사, 자막, 캡션 등)를 붙여넣으면 GAKU가 그걸로 연습 활동을 만들어줍니다 — 웹의 GAKU Reader와 똑같이요.",
+    tutorialConversationDesc: "지금 해보세요: 마이크 가까이에서 영상을 재생하면 GAKU가 실제 대화를 듣습니다 — 한 줄씩 이해를 돕고 어떻게 대답할지 제안해줘요.",
+    tutorialPronunciationDesc: "지금 해보세요: 일본어 텍스트를 붙여넣고 문장을 소리 내어 읽어보세요. 발음이 얼마나 가까웠는지 확인할 수 있어요.",
     tutorialCompleteTitle: "완료! 🎉",
     tutorialCompleteDesc: "GAKU Master의 5가지 주요 기능을 모두 살펴보셨습니다. 🎓 튜토리얼 버튼을 통해 언제든 다시 볼 수 있어요.",
     tutorialCompleteBtn: "학습 시작하기",
+    tutorialReaderCta: "📬 이메일에서 GAKU Reader를 받아보세요!",
     feedbackTitle: "💬 피드백 및 의견",
     feedbackSubtitle: "개선했으면 하는 점이나 앱에서 불편한 점을 알려주세요. 모든 메시지를 읽습니다.",
     feedbackWarning: "만약 명예훼손, 욕설, 차별적 표현을 작성할 경우 계정이 즉시 정지됩니다. 소송이 발생하더라도 일체의 책임을 지지 않습니다.",
@@ -4015,9 +4051,13 @@ const UI_TRANSLATIONS = {
     tutorialSubtitlesDesc: "วางลิงก์วิดีโอด้านล่าง แล้วเปลี่ยนคำบรรยายหรือเสียงพูดให้กลายเป็นแบบฝึกฟังและคำศัพท์ของคุณเอง",
     tutorialResourcesDesc: "ลองดูแหล่งเรียนรู้ที่คัดสรรมาให้เหมาะกับระดับของคุณด้านล่าง หรือวางเนื้อหาเพื่อสร้างแบบฝึกหัดของคุณเอง",
     tutorialMilestonesDesc: "นี่คือแผนที่นำทางสู่เป้าหมายภาษาญี่ปุ่นของคุณ ลองดูว่าอะไรจะตามมาต่อไป",
+    tutorialContentDesc: "ลองเลย: วางข้อความภาษาญี่ปุ่นด้านล่าง (บทความ คำบรรยาย หรือคำอธิบายภาพ) แล้วให้ GAKU สร้างกิจกรรมฝึกฝนจากมัน เหมือนที่ GAKU Reader ทำบนเว็บ",
+    tutorialConversationDesc: "ลองเลย: เปิดวิดีโอใกล้ไมโครโฟนของคุณ แล้วให้ GAKU ฟังบทสนทนาจริง — มันจะช่วยให้คุณเข้าใจแต่ละประโยคและแนะนำวิธีตอบกลับ",
+    tutorialPronunciationDesc: "ลองเลย: วางข้อความภาษาญี่ปุ่น อ่านออกเสียงหนึ่งประโยค แล้วดูว่าการออกเสียงของคุณใกล้เคียงแค่ไหน",
     tutorialCompleteTitle: "เสร็จเรียบร้อย! 🎉",
     tutorialCompleteDesc: "คุณได้ชมฟีเจอร์หลักทั้ง 5 ของ GAKU Master แล้ว สามารถดูทัวร์นี้ซ้ำได้ทุกเมื่อผ่านปุ่ม 🎓 บทแนะนำ",
     tutorialCompleteBtn: "เริ่มเรียนเลย",
+    tutorialReaderCta: "📬 รับ GAKU Reader ทางอีเมล!",
     feedbackTitle: "💬 ความคิดเห็นและข้อเสนอแนะ",
     feedbackSubtitle: "บอกเราว่าคุณอยากให้ปรับปรุงอะไร หรือมีอะไรที่กวนใจคุณเกี่ยวกับแอปนี้ เราจะอ่านทุกข้อความ",
     feedbackWarning: "หากคุณโพสต์ข้อความหมิ่นประมาท คำหยาบคาย หรือถ้อยคำเลือกปฏิบัติ บัญชีของคุณจะถูกระงับทันที เราจะไม่รับผิดชอบใด ๆ แม้จะเกิดการฟ้องร้อง",
@@ -4411,9 +4451,13 @@ const UI_TRANSLATIONS = {
     tutorialSubtitlesDesc: "Tampal pautan video di bawah dan tukar sari kata atau audionya kepada latihan pendengaran dan kosa kata anda sendiri.",
     tutorialResourcesDesc: "Lihat sumber pembelajaran pilihan untuk tahap anda di bawah, atau tampal kandungan untuk membina latihan anda sendiri.",
     tutorialMilestonesDesc: "Ini ialah pelan hala tuju anda ke arah matlamat bahasa Jepun anda. Lihat apa yang akan datang seterusnya.",
+    tutorialContentDesc: "Cubalah sekarang: tampal teks Jepun di bawah (artikel, sari kata, kapsyen) dan biarkan GAKU membina aktiviti latihan daripadanya — sama seperti GAKU Reader lakukan di web.",
+    tutorialConversationDesc: "Cubalah sekarang: mainkan video berhampiran mikrofon anda dan biarkan GAKU mendengar dialog sebenar — ia akan membantu anda memahami setiap ayat dan mencadangkan cara untuk membalas.",
+    tutorialPronunciationDesc: "Cubalah sekarang: tampal teks Jepun, baca satu ayat dengan kuat, dan lihat sejauh mana sebutan anda hampir tepat.",
     tutorialCompleteTitle: "Selesai! 🎉",
     tutorialCompleteDesc: "Anda telah melihat kesemua 5 ciri utama GAKU Master. Anda boleh ulang tayang lawatan ini bila-bila masa melalui butang 🎓 Tutorial.",
     tutorialCompleteBtn: "Mula Belajar",
+    tutorialReaderCta: "📬 Dapatkan GAKU Reader melalui e-mel anda!",
     feedbackTitle: "💬 Maklum Balas & Pendapat",
     feedbackSubtitle: "Beritahu kami apa yang anda mahu diperbaiki atau apa-apa yang mengganggu anda tentang aplikasi ini. Kami membaca setiap mesej.",
     feedbackWarning: "Sekiranya anda menulis fitnah, bahasa kesat, atau istilah diskriminasi, akaun anda akan digantung serta-merta. Kami tidak bertanggungjawab walaupun tindakan undang-undang diambil.",
@@ -4807,9 +4851,13 @@ const UI_TRANSLATIONS = {
     tutorialSubtitlesDesc: "Tempel tautan video di bawah dan ubah subtitle atau audionya menjadi latihan mendengarkan dan kosakata Anda sendiri.",
     tutorialResourcesDesc: "Jelajahi sumber belajar pilihan sesuai level Anda di bawah, atau tempel konten untuk membuat latihan Anda sendiri.",
     tutorialMilestonesDesc: "Ini adalah peta jalan menuju tujuan bahasa Jepang Anda. Lihat apa yang akan datang berikutnya.",
+    tutorialContentDesc: "Coba sekarang: tempel teks bahasa Jepang di bawah (artikel, subtitle, keterangan) dan biarkan GAKU membuat aktivitas latihan darinya — sama seperti yang dilakukan GAKU Reader di web.",
+    tutorialConversationDesc: "Coba sekarang: putar video di dekat mikrofon Anda dan biarkan GAKU mendengarkan dialog aslinya — ini akan membantu Anda memahami setiap kalimat dan menyarankan cara merespons.",
+    tutorialPronunciationDesc: "Coba sekarang: tempel teks bahasa Jepang, baca satu kalimat dengan suara keras, dan lihat seberapa dekat pengucapan Anda.",
     tutorialCompleteTitle: "Selesai! 🎉",
     tutorialCompleteDesc: "Anda telah melihat semua 5 fitur utama GAKU Master. Anda bisa memutar ulang tur ini kapan saja lewat tombol 🎓 Tutorial.",
     tutorialCompleteBtn: "Mulai Belajar",
+    tutorialReaderCta: "📬 Dapatkan GAKU Reader lewat email Anda!",
     feedbackTitle: "💬 Masukan & Pendapat",
     feedbackSubtitle: "Beri tahu kami apa yang ingin Anda tingkatkan atau apa yang mengganggu Anda tentang aplikasi ini. Kami membaca setiap pesan.",
     feedbackWarning: "Jika Anda menulis fitnah, bahasa kasar, atau istilah diskriminatif, akun Anda akan langsung ditangguhkan. Kami tidak bertanggung jawab meskipun terjadi tuntutan hukum.",
@@ -5203,9 +5251,13 @@ const UI_TRANSLATIONS = {
     tutorialSubtitlesDesc: "Dán liên kết video bên dưới và biến phụ đề hoặc âm thanh của nó thành bài luyện nghe và từ vựng của riêng bạn.",
     tutorialResourcesDesc: "Xem qua các tài nguyên được chọn lọc phù hợp với trình độ của bạn bên dưới, hoặc dán nội dung để tạo bài luyện tập của riêng bạn.",
     tutorialMilestonesDesc: "Đây là lộ trình đến mục tiêu tiếng Nhật của bạn. Hãy xem điều gì sẽ đến tiếp theo.",
+    tutorialContentDesc: "Thử ngay bây giờ: dán một đoạn văn bản tiếng Nhật bên dưới (bài báo, phụ đề, chú thích) và để GAKU tạo hoạt động luyện tập từ đó — giống như GAKU Reader làm trên web.",
+    tutorialConversationDesc: "Thử ngay bây giờ: phát một video gần micro của bạn và để GAKU lắng nghe đoạn hội thoại thật — nó sẽ giúp bạn hiểu từng câu và gợi ý cách trả lời.",
+    tutorialPronunciationDesc: "Thử ngay bây giờ: dán một đoạn văn bản tiếng Nhật, đọc to một câu, và xem phát âm của bạn gần đúng đến mức nào.",
     tutorialCompleteTitle: "Xong rồi! 🎉",
     tutorialCompleteDesc: "Bạn đã xem qua cả 5 tính năng chính của GAKU Master. Bạn có thể xem lại chuyến tham quan này bất cứ lúc nào qua nút 🎓 Hướng dẫn.",
     tutorialCompleteBtn: "Bắt đầu học",
+    tutorialReaderCta: "📬 Nhận GAKU Reader qua email của bạn!",
     feedbackTitle: "💬 Phản hồi & Ý kiến",
     feedbackSubtitle: "Hãy cho chúng tôi biết bạn muốn cải thiện điều gì hoặc điều gì đang làm bạn khó chịu về ứng dụng. Chúng tôi đọc mọi tin nhắn.",
     feedbackWarning: "Nếu bạn viết nội dung phỉ báng, ngôn từ lăng mạ hoặc phân biệt đối xử, tài khoản của bạn sẽ bị đình chỉ ngay lập tức. Chúng tôi không chịu bất kỳ trách nhiệm nào kể cả khi có kiện tụng xảy ra.",
@@ -5599,9 +5651,13 @@ const UI_TRANSLATIONS = {
     tutorialSubtitlesDesc: "नीचे किसी वीडियो का लिंक पेस्ट करें और उसकी सबटाइटल या ऑडियो को अपनी खुद की लिसनिंग और वोकैबुलरी प्रैक्टिस में बदलें।",
     tutorialResourcesDesc: "नीचे अपने स्तर के लिए चुने गए संसाधन देखें, या अभ्यास बनाने के लिए कोई कंटेंट पेस्ट करें।",
     tutorialMilestonesDesc: "यह आपके जापानी लक्ष्य तक का रोडमैप है। देखें आगे क्या आने वाला है।",
+    tutorialContentDesc: "अभी आज़माएं: नीचे कोई जापानी टेक्स्ट पेस्ट करें (कोई लेख, सबटाइटल, कैप्शन) और GAKU को उससे अभ्यास गतिविधियां बनाने दें — बिल्कुल वैसे ही जैसे GAKU Reader वेब पर करता है।",
+    tutorialConversationDesc: "अभी आज़माएं: अपने माइक के पास कोई वीडियो चलाएं और GAKU को असली संवाद सुनने दें — यह आपको हर लाइन समझने में मदद करेगा और जवाब देने के तरीके सुझाएगा।",
+    tutorialPronunciationDesc: "अभी आज़माएं: कोई जापानी टेक्स्ट पेस्ट करें, एक वाक्य ज़ोर से पढ़ें, और देखें आपका उच्चारण कितना करीब था।",
     tutorialCompleteTitle: "सब हो गया! 🎉",
     tutorialCompleteDesc: "आपने GAKU Master के सभी 5 मुख्य फीचर्स देख लिए हैं। आप 🎓 ट्यूटोरियल बटन से कभी भी यह टूर दोबारा देख सकते हैं।",
     tutorialCompleteBtn: "पढ़ाई शुरू करें",
+    tutorialReaderCta: "📬 ईमेल से GAKU Reader प्राप्त करें!",
     feedbackTitle: "💬 प्रतिक्रिया और राय",
     feedbackSubtitle: "हमें बताएं कि आप ऐप में क्या सुधार चाहते हैं या आपको क्या परेशान कर रहा है। हम हर संदेश पढ़ते हैं।",
     feedbackWarning: "यदि आप मानहानि, अपमानजनक भाषा या भेदभावपूर्ण शब्दों का उपयोग करते हैं, तो आपका खाता तुरंत निलंबित कर दिया जाएगा। कानूनी कार्रवाई होने पर भी हम कोई ज़िम्मेदारी नहीं लेंगे।",
@@ -5995,9 +6051,13 @@ const UI_TRANSLATIONS = {
     tutorialSubtitlesDesc: "下に動画のリンクを貼り付けて、その字幕や音声を自分だけのリスニング・単語練習に変えてみましょう。",
     tutorialResourcesDesc: "下のあなたのレベルに合わせて厳選されたリソースを見てみるか、内容を貼り付けて自分の練習問題を作ってみましょう。",
     tutorialMilestonesDesc: "これは日本語の目標までのロードマップです。この先どんな道のりが待っているか見てみましょう。",
+    tutorialContentDesc: "早速試してみましょう: 下に日本語のテキスト(記事・字幕・キャプションなど)を貼り付けて、GAKUに練習アクティビティを作ってもらいましょう — WebのGAKU Readerと同じ仕組みです。",
+    tutorialConversationDesc: "早速試してみましょう: マイクの近くで動画を再生し、GAKUに実際の会話を聞き取らせてみましょう — 一文ずつ理解を助け、返し方も提案してくれます。",
+    tutorialPronunciationDesc: "早速試してみましょう: 日本語のテキストを貼り付けて、一文を声に出して読んでみましょう。発音がどれだけ近かったか確認できます。",
     tutorialCompleteTitle: "完了しました！🎉",
     tutorialCompleteDesc: "GAKU Masterの5つの主な機能をすべて見てもらいました。🎓チュートリアルボタンからいつでもこのツアーをもう一度見られます。",
     tutorialCompleteBtn: "勉強を始める",
+    tutorialReaderCta: "📬 メールからGAKU Master Readerを受け取ろう！",
     feedbackTitle: "💬 フィードバック・ご意見",
     feedbackSubtitle: "アプリで改善してほしい点や気になる点を教えてください。すべてのメッセージに目を通しています。",
     feedbackWarning: "万が一誹謗中傷、暴言、差別用語などを書いた場合は直ちにアカウント停止。訴訟が起こっても一切の責任は負いません。",
@@ -6391,9 +6451,13 @@ const UI_TRANSLATIONS = {
     tutorialSubtitlesDesc: "Aşağıya bir video bağlantısı yapıştırın ve altyazısını veya sesini kendi dinleme ve kelime alıştırmanıza dönüştürün.",
     tutorialResourcesDesc: "Aşağıda seviyenize özel seçilmiş kaynaklara göz atın veya kendi alıştırmanızı oluşturmak için bir içerik yapıştırın.",
     tutorialMilestonesDesc: "Bu, Japonca hedefinize giden yol haritanız. Sırada ne olduğuna bir göz atın.",
+    tutorialContentDesc: "Hemen deneyin: aşağıya bir Japonca metin yapıştırın (bir makale, altyazı, bir başlık) ve GAKU'nun bundan alıştırma etkinlikleri oluşturmasına izin verin — tıpkı GAKU Reader'ın web'de yaptığı gibi.",
+    tutorialConversationDesc: "Hemen deneyin: mikrofonunuzun yakınında bir video oynatın ve GAKU'nun gerçek diyaloğu dinlemesine izin verin — her cümleyi anlamanıza yardımcı olacak ve nasıl cevap verebileceğinizi önerecek.",
+    tutorialPronunciationDesc: "Hemen deneyin: bir Japonca metin yapıştırın, bir cümleyi yüksek sesle okuyun ve telaffuzunuzun ne kadar yakın olduğunu görün.",
     tutorialCompleteTitle: "Tamamlandı! 🎉",
     tutorialCompleteDesc: "GAKU Master'ın 5 ana özelliğinin tamamını gördünüz. Bu turu istediğiniz zaman 🎓 Eğitim düğmesinden tekrar izleyebilirsiniz.",
     tutorialCompleteBtn: "Çalışmaya Başla",
+    tutorialReaderCta: "📬 GAKU Reader'ı e-postanızdan alın!",
     feedbackTitle: "💬 Geri Bildirim ve Görüş",
     feedbackSubtitle: "Neyi iyileştirmemizi istediğinizi veya uygulamayla ilgili sizi rahatsız eden bir şeyi bize bildirin. Her mesajı okuyoruz.",
     feedbackWarning: "İftira, hakaret içeren dil veya ayrımcı ifadeler yazmanız durumunda hesabınız derhal askıya alınacaktır. Dava açılsa dahi hiçbir sorumluluk kabul etmiyoruz.",
@@ -6787,9 +6851,13 @@ const UI_TRANSLATIONS = {
     tutorialSubtitlesDesc: "तल कुनै भिडियोको लिंक टाँस्नुहोस् र यसको सबटाइटल वा अडियोलाई आफ्नै सुनाइ र शब्दावली अभ्यासमा बदल्नुहोस्।",
     tutorialResourcesDesc: "तल तपाईंको स्तरका लागि छानिएका स्रोतहरू हेर्नुहोस्, वा आफ्नै अभ्यास बनाउन कुनै सामग्री टाँस्नुहोस्।",
     tutorialMilestonesDesc: "यो तपाईंको जापानी लक्ष्यसम्मको रोडम्याप हो। अब के आउँदैछ हेर्नुहोस्।",
+    tutorialContentDesc: "अहिले नै प्रयास गर्नुहोस्: तल कुनै जापानी पाठ टाँस्नुहोस् (लेख, सबटाइटल, क्याप्सन) र GAKUलाई त्यसबाट अभ्यास गतिविधिहरू बनाउन दिनुहोस् — ठ्याक्कै GAKU Readerले वेबमा गरेजस्तै।",
+    tutorialConversationDesc: "अहिले नै प्रयास गर्नुहोस्: आफ्नो माइकको नजिकमा भिडियो बजाउनुहोस् र GAKUलाई वास्तविक संवाद सुन्न दिनुहोस् — यसले तपाईंलाई हरेक हरफ बुझ्न मद्दत गर्नेछ र कसरी जवाफ दिने सुझाव दिनेछ।",
+    tutorialPronunciationDesc: "अहिले नै प्रयास गर्नुहोस्: जापानी पाठ टाँस्नुहोस्, एउटा वाक्य ठूलो स्वरमा पढ्नुहोस्, र तपाईंको उच्चारण कति नजिक थियो हेर्नुहोस्।",
     tutorialCompleteTitle: "सबै पूरा भयो! 🎉",
     tutorialCompleteDesc: "तपाईंले GAKU Master का सबै ५ मुख्य सुविधाहरू हेर्नुभयो। तपाईं जुनसुकै बेला 🎓 ट्युटोरियल बटनबाट यो भ्रमण फेरि हेर्न सक्नुहुन्छ।",
     tutorialCompleteBtn: "अध्ययन सुरु गर्नुहोस्",
+    tutorialReaderCta: "📬 इमेलबाट GAKU Reader प्राप्त गर्नुहोस्!",
     feedbackTitle: "💬 प्रतिक्रिया र विचार",
     feedbackSubtitle: "एपमा के सुधार गरिदिए हुन्थ्यो वा के कुराले तपाईंलाई अप्ठ्यारो पारिरहेको छ भनी हामीलाई बताउनुहोस्। हामी हरेक सन्देश पढ्छौं।",
     feedbackWarning: "यदि तपाईंले मानहानि, अपमानजनक भाषा वा भेदभावपूर्ण शब्द लेख्नुभयो भने तपाईंको खाता तुरुन्तै निलम्बन गरिनेछ। मुद्दा परे पनि हामी कुनै जिम्मेवारी लिने छैनौं।",
@@ -7183,9 +7251,13 @@ const UI_TRANSLATIONS = {
     tutorialSubtitlesDesc: "I-paste ang link ng isang video sa ibaba at gawing sarili mong listening at vocabulary practice ang subtitle o audio nito.",
     tutorialResourcesDesc: "Tingnan ang mga hand-picked na resource para sa iyong level sa ibaba, o mag-paste ng content para gumawa ng sarili mong practice.",
     tutorialMilestonesDesc: "Ito ang iyong roadmap patungo sa iyong layunin sa Nihongo. Tingnan kung ano ang susunod.",
+    tutorialContentDesc: "Subukan na ngayon: mag-paste ng Japanese text sa ibaba (isang artikulo, subtitle, caption) at hayaang gumawa ang GAKU ng mga practice activity mula dito — tulad ng ginagawa ng GAKU Reader sa web.",
+    tutorialConversationDesc: "Subukan na ngayon: mag-play ng video malapit sa iyong mikropono at hayaang pakinggan ng GAKU ang tunay na diyalogo — tutulungan ka nitong maintindihan ang bawat linya at magmumungkahi kung paano sasagot.",
+    tutorialPronunciationDesc: "Subukan na ngayon: mag-paste ng Japanese text, basahin nang malakas ang isang pangungusap, at tingnan kung gaano kalapit ang iyong pagbigkas.",
     tutorialCompleteTitle: "Tapos na! 🎉",
     tutorialCompleteDesc: "Nakita mo na ang lahat ng 5 pangunahing feature ng GAKU Master. Puwede mong ulitin ang tour na ito anumang oras gamit ang 🎓 Tutorial button.",
     tutorialCompleteBtn: "Simulan ang Pag-aaral",
+    tutorialReaderCta: "📬 Kunin ang GAKU Reader mula sa iyong email!",
     feedbackTitle: "💬 Puna at Opinyon",
     feedbackSubtitle: "Sabihin sa amin kung ano ang gusto mong pagbutihin o anumang bagay na nakakaabala sa iyo tungkol sa app. Binabasa namin ang bawat mensahe.",
     feedbackWarning: "Kung magsulat ka ng paninirang-puri, mapanlait na wika, o mga diskriminasyong termino, agad na sususpindihin ang iyong account. Wala kaming pananagutan kahit magkaroon ng legal na aksyon.",
@@ -11974,21 +12046,37 @@ function LevelUpOffer({ T, currentLevel, onConfirm, onDismiss }) {
 }
 
 // ─── DASHBOARD ──────────────────────────────────────────────────────────────────
-// ─── TUTORIAL (guided tour of the 5 main GAKU Master tabs) ────────────────────
-// Steps: 0 = welcome modal, 1-5 = one per tab in TUTORIAL_TAB_IDS order
-// (the student must actually tap into the real tab to unlock its explanation
-// and the "Next" button — this is intentional so they *use* each feature, not
-// just read about it), 6 = completion modal.
-const TUTORIAL_TAB_IDS = ["schedule", "vocabulary", "subtitles", "resources", "milestones"];
+// ─── TUTORIAL (guided tour of the main GAKU Master tabs) ───────────────────────
+// Steps: 0 = welcome modal, 1..TUTORIAL_STEPS.length = one per entry below (the
+// student must actually tap into the real tab — and, for a Resources sub-step,
+// the real sub-tab — to unlock its explanation and the "Next" button; this is
+// intentional so they *use* each feature, not just read about it),
+// TUTORIAL_STEPS.length+1 = completion modal. The 3 Resources sub-features
+// (Create From Content, Conversation Practice, Pronunciation Practice) each
+// get their own step since they're easy to miss otherwise and are some of the
+// most valuable features to show off.
+const TUTORIAL_STEPS = [
+  { tab: "schedule" },
+  { tab: "vocabulary" },
+  { tab: "subtitles" },
+  { tab: "resources", subTab: "links" },
+  { tab: "resources", subTab: "content" },
+  { tab: "resources", subTab: "conversation" },
+  { tab: "resources", subTab: "pronunciation" },
+  { tab: "milestones" },
+];
 const TUTORIAL_DESC_KEYS = {
-  schedule: "tutorialScheduleDesc",
-  vocabulary: "tutorialVocabularyDesc",
-  subtitles: "tutorialSubtitlesDesc",
-  resources: "tutorialResourcesDesc",
-  milestones: "tutorialMilestonesDesc",
+  "schedule:": "tutorialScheduleDesc",
+  "vocabulary:": "tutorialVocabularyDesc",
+  "subtitles:": "tutorialSubtitlesDesc",
+  "resources:links": "tutorialResourcesDesc",
+  "resources:content": "tutorialContentDesc",
+  "resources:conversation": "tutorialConversationDesc",
+  "resources:pronunciation": "tutorialPronunciationDesc",
+  "milestones:": "tutorialMilestonesDesc",
 };
 
-function TutorialOverlay({ T, step, tab, tabsMeta, onStart, onSkip, onAdvance, onFinish }) {
+function TutorialOverlay({ T, step, tab, resourceSubTab, tabsMeta, resourceSubTabsMeta, onStart, onSkip, onAdvance, onFinish }) {
   if (step === 0) {
     return (
       <div style={{ position:"fixed", inset:0, background:"rgba(0,0,0,0.75)", display:"flex", alignItems:"center", justifyContent:"center", zIndex:1000, padding:16 }}>
@@ -12005,13 +12093,15 @@ function TutorialOverlay({ T, step, tab, tabsMeta, onStart, onSkip, onAdvance, o
     );
   }
 
-  if (step >= 1 && step <= 5) {
-    const targetId = TUTORIAL_TAB_IDS[step - 1];
-    const reached = tab === targetId;
-    const targetLabel = tabsMeta.find(t => t.id === targetId)?.label || targetId;
-    const descKey = TUTORIAL_DESC_KEYS[targetId];
+  if (step >= 1 && step <= TUTORIAL_STEPS.length) {
+    const target = TUTORIAL_STEPS[step - 1];
+    const reached = tab === target.tab && (!target.subTab || resourceSubTab === target.subTab);
+    const targetLabel = target.subTab
+      ? (resourceSubTabsMeta.find(st => st.id === target.subTab)?.label || target.subTab)
+      : (tabsMeta.find(t => t.id === target.tab)?.label || target.tab);
+    const descKey = TUTORIAL_DESC_KEYS[`${target.tab}:${target.subTab || ""}`];
     const stepOfText = (T.tutorialStepOf || "Step {current} of {total}")
-      .replace("{current}", String(step)).replace("{total}", "5");
+      .replace("{current}", String(step)).replace("{total}", String(TUTORIAL_STEPS.length));
     return (
       <div style={{ position:"fixed", left:16, right:16, bottom:16, maxWidth:480, margin:"0 auto", zIndex:150, background:"#0f172a", border:`1.5px solid ${C.purpleLight}`, borderRadius:16, padding:"16px 18px", boxShadow:"0 8px 30px rgba(0,0,0,0.5)" }}>
         <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:8 }}>
@@ -12023,7 +12113,7 @@ function TutorialOverlay({ T, step, tab, tabsMeta, onStart, onSkip, onAdvance, o
           <>
             <p style={{ color:"#94a3b8", fontSize:13, lineHeight:1.6, margin:"0 0 14px" }}>{T[descKey]}</p>
             <button onClick={onAdvance} style={{ ...S.btn, width:"100%", background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff" }}>
-              {step === 5 ? T.tutorialCompleteBtn : T.tutorialNextBtn}
+              {step === TUTORIAL_STEPS.length ? T.tutorialCompleteBtn : T.tutorialNextBtn}
             </button>
           </>
         ) : (
@@ -12033,13 +12123,14 @@ function TutorialOverlay({ T, step, tab, tabsMeta, onStart, onSkip, onAdvance, o
     );
   }
 
-  if (step === 6) {
+  if (step === TUTORIAL_STEPS.length + 1) {
     return (
       <div style={{ position:"fixed", inset:0, background:"rgba(0,0,0,0.75)", display:"flex", alignItems:"center", justifyContent:"center", zIndex:1000, padding:16 }}>
         <div style={{ ...S.card, width:"100%", maxWidth:400, textAlign:"center" }}>
           <div style={{ fontSize:40, marginBottom:10 }}>🎉</div>
           <p style={{ color:"#f1f5f9", fontSize:16, fontWeight:800, margin:"0 0 10px" }}>{T.tutorialCompleteTitle}</p>
-          <p style={{ color:"#94a3b8", fontSize:13, lineHeight:1.6, margin:"0 0 20px" }}>{T.tutorialCompleteDesc}</p>
+          <p style={{ color:"#94a3b8", fontSize:13, lineHeight:1.6, margin:"0 0 16px" }}>{T.tutorialCompleteDesc}</p>
+          <p style={{ color:C.purpleLight, fontSize:12, fontWeight:700, margin:"0 0 20px", padding:"10px 12px", background:"rgba(168,85,247,0.1)", border:`1px solid rgba(168,85,247,0.3)`, borderRadius:10 }}>{T.tutorialReaderCta}</p>
           <button onClick={onFinish} style={{ ...S.btn, width:"100%", background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff" }}>{T.tutorialCompleteBtn}</button>
         </div>
       </div>
@@ -12300,7 +12391,7 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
   const handleTutorialAdvance = useCallback(() => {
     setTutorialStep(s => {
       const next = s + 1;
-      if (next === 6) markTutorialDone();
+      if (next === TUTORIAL_STEPS.length + 1) markTutorialDone();
       return next;
     });
   }, [markTutorialDone]);
@@ -12346,7 +12437,9 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
           T={T}
           step={tutorialStep}
           tab={tab}
+          resourceSubTab={resourceSubTab}
           tabsMeta={TABS}
+          resourceSubTabsMeta={RESOURCE_SUBTABS}
           onStart={() => setTutorialStep(1)}
           onSkip={handleTutorialSkip}
           onAdvance={handleTutorialAdvance}
@@ -12493,7 +12586,8 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
 
         <div style={{ display:"flex", gap:6, marginBottom:16, overflowX:"auto", paddingBottom:4 }}>
           {TABS.map(t => {
-            const isTutorialTarget = tutorialActive && tutorialStep>=1 && tutorialStep<=5 && TUTORIAL_TAB_IDS[tutorialStep-1] === t.id;
+            const tutorialTarget = (tutorialActive && tutorialStep>=1 && tutorialStep<=TUTORIAL_STEPS.length) ? TUTORIAL_STEPS[tutorialStep-1] : null;
+            const isTutorialTarget = tutorialTarget?.tab === t.id;
             return (
               <button key={t.id} onClick={()=>setTab(t.id)} style={{ padding:"8px 14px", borderRadius:20, border:`1.5px solid ${isTutorialTarget?C.purpleLight:(tab===t.id?C.purpleLight:C.border)}`, background:tab===t.id?"rgba(168,85,247,0.15)":C.card, color:tab===t.id?C.purpleLight:"#64748b", fontSize:12, fontWeight:700, cursor:"pointer", whiteSpace:"nowrap", boxShadow:isTutorialTarget?"0 0 0 3px rgba(168,85,247,0.35)":"none" }}>
                 {t.label}
@@ -12595,11 +12689,15 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
         {tab==="resources" && (
           <div>
             <div style={{ display:"flex", gap:6, marginBottom:16, overflowX:"auto", paddingBottom:4 }}>
-              {RESOURCE_SUBTABS.map(st => (
-                <button key={st.id} onClick={()=>setResourceSubTab(st.id)} style={{ padding:"7px 12px", borderRadius:20, border:`1.5px solid ${resourceSubTab===st.id?C.teal:C.border}`, background:resourceSubTab===st.id?"rgba(6,182,212,0.12)":C.card, color:resourceSubTab===st.id?C.teal:"#64748b", fontSize:11, fontWeight:700, cursor:"pointer", whiteSpace:"nowrap" }}>
-                  {st.label}
-                </button>
-              ))}
+              {RESOURCE_SUBTABS.map(st => {
+                const tutorialTarget = (tutorialActive && tutorialStep>=1 && tutorialStep<=TUTORIAL_STEPS.length) ? TUTORIAL_STEPS[tutorialStep-1] : null;
+                const isTutorialTarget = tutorialTarget?.tab === "resources" && tutorialTarget?.subTab === st.id;
+                return (
+                  <button key={st.id} onClick={()=>setResourceSubTab(st.id)} style={{ padding:"7px 12px", borderRadius:20, border:`1.5px solid ${isTutorialTarget?C.purpleLight:(resourceSubTab===st.id?C.teal:C.border)}`, background:resourceSubTab===st.id?"rgba(6,182,212,0.12)":C.card, color:resourceSubTab===st.id?C.teal:"#64748b", fontSize:11, fontWeight:700, cursor:"pointer", whiteSpace:"nowrap", boxShadow:isTutorialTarget?"0 0 0 3px rgba(168,85,247,0.35)":"none" }}>
+                    {st.label}
+                  </button>
+                );
+              })}
             </div>
 
             {resourceSubTab==="content" && <ContentAnalyzer form={form} onLevelUp={onLevelUp} />}
