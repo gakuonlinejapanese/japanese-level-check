@@ -760,12 +760,8 @@ async function handleSendFreePlanWinback(req, res) {
     for (const [email, name] of targets) {
       const html = `
         <p>Hi ${name || "there"},</p>
-        <p>You looked into a GAKU Master plan a while back — no pressure, it's still there whenever you're ready.</p>
-        <p>Quick reminder there are actually two ways to keep using GAKU Master:</p>
-        <ul>
-          <li><strong>App Only</strong> — from $14.99/month, cancel anytime.</li>
-          <li><strong>Free</strong> — GAKU lesson students (lessons from $35/hr) get the app included at no extra cost. If you'd rather take lessons than pay for the app on its own, <a href="https://app.seitojapanese.online/book-lesson.html">book a lesson here</a> and you'll get a free-plan invite code.</li>
-        </ul>
+        <p>You looked into GAKU Master a while back — no pressure, it's still there whenever you're ready.</p>
+        <p>Before deciding anything, the easiest way to see what actually fits you best is to try a free trial lesson: <a href="https://app.seitojapanese.online/trial-lesson.html">book your free trial lesson here</a>. Afterward you'll have a much clearer sense of whether taking regular lessons (which includes the app at no extra cost) or just keeping the app on its own makes more sense for you.</p>
         <p>Either way, your progress is waiting for you.</p>
         <p>— Seito, GAKU Online Japanese</p>
       `;
@@ -853,8 +849,8 @@ async function handleSendTrialEndedNotice(req, res) {
         </ul>
         <p><strong>How to keep learning:</strong></p>
         <ol>
-          <li><strong>Become an official GAKU student.</strong> GAKU Master is free for GAKU students. Lessons start at $35 per hour.<br/><a href="https://app.seitojapanese.online/book-lesson.html">https://app.seitojapanese.online/book-lesson.html</a></li>
-          <li><strong>If lessons don't fit your budget or your schedule, choose the lowest-priced GAKU Master plan.</strong> You can see the plans after you log in:<br/><a href="https://app.seitojapanese.online/app">https://app.seitojapanese.online/app</a></li>
+          <li><strong>Not sure which way is best for you?</strong> The easiest way to decide is to try a free trial lesson first: <a href="https://app.seitojapanese.online/trial-lesson.html">book your free trial lesson here</a>. If it's a good fit, becoming an official GAKU student means GAKU Master is included at no extra cost.</li>
+          <li><strong>If lessons don't fit your budget or your schedule</strong>, you can also keep just the app on its own — you'll see the lowest-priced plan after you log in:<br/><a href="https://app.seitojapanese.online/app">https://app.seitojapanese.online/app</a></li>
         </ol>
         <p>If you have any questions, just reply to this email.</p>
         <p>Seito<br/>GAKU Online Japanese</p>
@@ -943,11 +939,7 @@ async function handleSendTutorialAnnouncement(req, res) {
         <p>We just added a <strong>Tutorial</strong> to GAKU Master — a quick guided tour of the 5 main features (Schedule, Vocabulary, Subtitles, Resources, and Milestones) so it's easier to see how everything fits together.</p>
         <p>To make sure you get to try it, we've unlocked your account for <strong>one more week</strong>, starting the next time you log in. During that week you'll have full access again, no restrictions.</p>
         <p><a href="https://app.seitojapanese.online/app">Log back in here to get started</a>.</p>
-        <p>At the end of that week, you'll be asked how you'd like to continue:</p>
-        <ul>
-          <li><strong>Free</strong> — become an official GAKU student (lessons from $35/hr) and GAKU Master is included at no extra cost.</li>
-          <li><strong>Paid</strong> — keep using the app on its own, plans start at $14.99/month.</li>
-        </ul>
+        <p>At the end of that week, you'll be asked how you'd like to continue. Not sure which way is best for you? The easiest way to decide is to try a free trial lesson first: <a href="https://app.seitojapanese.online/trial-lesson.html">book your free trial lesson here</a>. If it's a good fit, becoming an official GAKU student means GAKU Master is included at no extra cost. If lessons don't fit your budget or schedule, you can also keep just the app on its own — you'll see the plans after you log in.</p>
         <p>We hope the Tutorial makes it click. If you have any questions, just reply to this email.</p>
         <p>— Seito, GAKU Online Japanese</p>
       `;
