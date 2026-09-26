@@ -73,6 +73,20 @@
     </div>
     <div id="msg2"></div>
   </div>
+
+  <div class="card" style="margin-top:20px;">
+    <h1>🎓 Tutorial機能追加+もう1週間無料のお知らせ</h1>
+    <p class="sub">
+      トライアルが終了して未払い・GAKU生徒でもない生徒全員に送ります(上の2つのメールを既に受け取った方も対象に含まれます — これは新しい方針についてのお知らせのためです)。<br />
+      内容: ①GAKU Masterに新しくTutorial機能が追加された ②次回ログイン時からもう1週間、アプリを無料で使えるようになる ③その1週間が終わったら、Free Plan(GAKU公式生徒)か有料プランかを選んでもらう。<br /><br />
+      同じメールアドレスには一度しか送信されません。必ず「プレビュー」で送信先一覧を確認してから送信してください。上の管理者パスワード欄を使います。
+    </p>
+    <div class="row">
+      <button id="previewBtn3">プレビュー(送信先一覧)</button>
+      <button id="sendBtn3">送信する</button>
+    </div>
+    <div id="msg3"></div>
+  </div>
 </div>
 <script>
 const secretEl = document.getElementById('secret');
@@ -82,6 +96,9 @@ const msgEl = document.getElementById('msg');
 const previewBtn2 = document.getElementById('previewBtn2');
 const sendBtn2 = document.getElementById('sendBtn2');
 const msgEl2 = document.getElementById('msg2');
+const previewBtn3 = document.getElementById('previewBtn3');
+const sendBtn3 = document.getElementById('sendBtn3');
+const msgEl3 = document.getElementById('msg3');
 
 async function run(action, dryRun, btn, msgEl) {
   const secret = secretEl.value.trim();
@@ -125,6 +142,10 @@ sendBtn.addEventListener('click', () => {
 previewBtn2.addEventListener('click', () => run('send_trial_ended_notice_emails', true, previewBtn2, msgEl2));
 sendBtn2.addEventListener('click', () => {
   if (confirm('トライアル終了のお知らせメールを、プレビューで確認した対象者全員に送信しますか？(送信は取り消せません)')) run('send_trial_ended_notice_emails', false, sendBtn2, msgEl2);
+});
+previewBtn3.addEventListener('click', () => run('send_tutorial_announcement_emails', true, previewBtn3, msgEl3));
+sendBtn3.addEventListener('click', () => {
+  if (confirm('Tutorial機能+もう1週間無料のお知らせメールを、プレビューで確認した対象者全員に送信しますか？(送信は取り消せません)')) run('send_tutorial_announcement_emails', false, sendBtn3, msgEl3);
 });
 </script>
 </body>

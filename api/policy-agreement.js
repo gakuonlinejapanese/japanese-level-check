@@ -187,6 +187,7 @@ export default async function handler(req, res) {
     if (action === "check_feedback_submitted") return handleCheckFeedbackSubmitted(req, res);
     if (action === "send_free_plan_winback_emails") return handleSendFreePlanWinback(req, res);
     if (action === "send_trial_ended_notice_emails") return handleSendTrialEndedNotice(req, res);
+    if (action === "send_tutorial_announcement_emails") return handleSendTutorialAnnouncement(req, res);
     if (action === "jlpt_scan_consent") {
       res.setHeader("Access-Control-Allow-Origin", "*");
       return handleJlptScanConsent(req, res);
@@ -875,6 +876,94 @@ async function handleSendTrialEndedNotice(req, res) {
 
 function checkAdminSecret(req) {
   return req.body?.secret && req.body.secret === process.env.ADMIN_SECRET;
+}
+
+// ---- Tutorial-announcement campaign: one-off, admin-triggered email to every
+// trial-expired, non-paid, non-GAKU-student account, telling them about the
+// new Tutorial feature (see GakuApp.jsx TutorialOverlay) and the one-time
+// bonus week that now comes with it (api/account-status.js
+// tutorial_grace_started_at) — the next time they log in, they're unlocked
+// again for 7 days to actually try the app with the Tutorial's guidance,
+// then asked to choose Free Plan (become a GAKU student) or a paid plan.
+// This deliberately has its OWN dedup table (tutorial_announcement_emails_sent),
+// separate from winback_emails_sent, because this is new information about a
+// policy change — someone who already got the older "your data will be
+// deleted" trial-ended-notice email still needs to hear that they now get
+// another week, so they must not be skipped just for having gotten that
+// earlier email. Targeting mirrors handleSendTrialEndedNotice's trial-expired
+// query. Pass { dryRun: true } to preview the recipient list without sending.
+async function handleSendTutorialAnnouncement(req, res) {
+  if (!checkAdminSecret(req)) return res.status(401).json({ error: "Invalid admin secret" });
+  try {
+    const { dryRun } = req.body || {};
+    const supabase = getAdminClient();
+
+    const { data: profiles, error: profilesErr } = await supabase
+      .from("profiles")
+      .select("email, name, is_paid, is_gaku_student, enrollment_status, trial_started_at")
+      .not("trial_started_at", "is", null);
+    if (profilesErr) return res.status(500).json({ error: profilesErr.message });
+
+    const { data: officials, error: officialsErr } = await supabase.from("official_students").select("email");
+    if (officialsErr) return res.status(500).json({ error: officialsErr.message });
+    const officialSet = new Set((officials || []).map(r => (r.email || "").trim().toLowerCase()));
+
+    const { data: alreadySent, error: sentErr } = await supabase.from("tutorial_announcement_emails_sent").select("email");
+    if (sentErr) return res.status(500).json({ error: sentErr.message });
+    const sentSet = new Set((alreadySent || []).map(r => (r.email || "").trim().toLowerCase()));
+
+    const now = Date.now();
+    const seen = new Set();
+    const targets = [];
+    for (const p of profiles || []) {
+      const email = (p.email || "").trim().toLowerCase();
+      if (!email || seen.has(email)) continue;
+      if (p.is_paid || p.is_gaku_student) continue;
+      if (officialSet.has(email) || sentSet.has(email)) continue;
+      if (p.enrollment_status && p.enrollment_status !== "active") continue;
+      const daysSince = (now - new Date(p.trial_started_at).getTime()) / 86400000;
+      if (!(daysSince >= TRIAL_ENDED_DAYS)) continue;
+      seen.add(email);
+      targets.push({ email, name: p.name || "", daysSince: Math.floor(daysSince) });
+    }
+    targets.sort((a, b) => b.daysSince - a.daysSince);
+
+    if (dryRun) {
+      return res.status(200).json({
+        ok: true, dryRun: true, wouldSend: targets.length,
+        recipients: targets.map(t => ({ email: t.email, daysSince: t.daysSince })),
+      });
+    }
+
+    let sentCount = 0;
+    const failed = [];
+    for (const t of targets) {
+      const html = `
+        <p>Hi ${escapeHtml(t.name) || "there"},</p>
+        <p>We just added a <strong>Tutorial</strong> to GAKU Master — a quick guided tour of the 5 main features (Schedule, Vocabulary, Subtitles, Resources, and Milestones) so it's easier to see how everything fits together.</p>
+        <p>To make sure you get to try it, we've unlocked your account for <strong>one more week</strong>, starting the next time you log in. During that week you'll have full access again, no restrictions.</p>
+        <p><a href="https://app.seitojapanese.online/app">Log back in here to get started</a>.</p>
+        <p>At the end of that week, you'll be asked how you'd like to continue:</p>
+        <ul>
+          <li><strong>Free</strong> — become an official GAKU student (lessons from $35/hr) and GAKU Master is included at no extra cost.</li>
+          <li><strong>Paid</strong> — keep using the app on its own, plans start at $14.99/month.</li>
+        </ul>
+        <p>We hope the Tutorial makes it click. If you have any questions, just reply to this email.</p>
+        <p>— Seito, GAKU Online Japanese</p>
+      `;
+      try {
+        await sendEmail({ to: t.email, subject: "New: a guided Tutorial for GAKU Master (plus one more free week)", html });
+        await supabase.from("tutorial_announcement_emails_sent").insert({ email: t.email });
+        sentCount++;
+      } catch (e) {
+        failed.push({ email: t.email, error: e.message });
+      }
+    }
+
+    return res.status(200).json({ ok: true, sent: sentCount, failed, totalCandidates: targets.length });
+  } catch (e) {
+    return res.status(500).json({ error: e.message });
+  }
 }
 
 async function handleAdminListTrialLessons(req, res) {
