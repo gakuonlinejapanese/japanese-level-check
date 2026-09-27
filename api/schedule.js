@@ -413,18 +413,43 @@ async function handleSendLessonReminders(supabase, res) {
   if (error) return res.status(500).json({ error: error.message });
 
   const now = Date.now();
-  // 25〜40分後にレッスンが始まる予約だけを対象にする（外部cronは10分おき想定なので幅を持たせて取りこぼしを防ぐ）
+  // レッスン開始45分前〜開始10分後までを対象にする。
+  // 下限を無くしたのは、Zoomリンクの登録が遅れた場合や外部cronの実行タイミングが
+  // ずれた場合に「対象外になって二度と送られない」ことを防ぐため（バグ修正: 以前は
+  // 20〜40分の狭い枠だけを対象にしており、この枠を逃した予約はリマインドメールが
+  // 永久に届かなくなっていた＝「リンクだけ生徒に届いていない」の原因）。
   const due = (candidates || []).filter((s) => {
     const startMs = jstSlotToUtcMs(s.lesson_date, s.start_time);
     const minutesUntil = (startMs - now) / 60000;
-    return minutesUntil >= 20 && minutesUntil <= 40;
+    return minutesUntil <= 45 && minutesUntil >= -10;
   });
 
   if (due.length === 0) return res.status(200).json({ ok: true, sent: 0 });
 
-  const officialIds = [...new Set(due.filter((s) => s.official_student_id).map((s) => s.official_student_id))];
-  const waitlistIds = [...new Set(due.filter((s) => s.waitlist_request_id).map((s) => s.waitlist_request_id))];
-  const trialIds = [...new Set(due.filter((s) => s.trial_lesson_request_id).map((s) => s.trial_lesson_request_id))];
+  // ここで先に reminder_sent_at を条件付き（まだnullの行だけ）でセットし、
+  // 「この呼び出しがこの予約の送信権を確保した」ことを原子的（atomic）に記録する。
+  // バグ修正: 以前はメール送信が全て終わった後にまとめてマークしていたため、
+  // 外部cronが（タイムアウト後の自動リトライ等で）同時に2〜3回この関数を呼ぶと、
+  // どの呼び出しもまだ reminder_sent_at が null に見えて、同じ生徒に2〜3通の
+  // リマインドメールを重複送信してしまっていた（「一回しか送ってないのに三回届く」の原因）。
+  // .is("reminder_sent_at", null) 付きのUPDATEなら、先に確保した呼び出し以外は
+  // 対象から外れるため、同じ予約を二重に確保することがなくなる。
+  const dueIds = due.map((s) => s.id);
+  const claimedAt = new Date().toISOString();
+  const { data: claimed, error: claimErr } = await supabase
+    .from("teacher_availability")
+    .update({ reminder_sent_at: claimedAt })
+    .in("id", dueIds)
+    .is("reminder_sent_at", null)
+    .select("*");
+  if (claimErr) return res.status(500).json({ error: claimErr.message });
+
+  const toSend = claimed || [];
+  if (toSend.length === 0) return res.status(200).json({ ok: true, sent: 0 });
+
+  const officialIds = [...new Set(toSend.filter((s) => s.official_student_id).map((s) => s.official_student_id))];
+  const waitlistIds = [...new Set(toSend.filter((s) => s.waitlist_request_id).map((s) => s.waitlist_request_id))];
+  const trialIds = [...new Set(toSend.filter((s) => s.trial_lesson_request_id).map((s) => s.trial_lesson_request_id))];
 
   const officialMap = {};
   if (officialIds.length > 0) {
@@ -443,7 +468,8 @@ async function handleSendLessonReminders(supabase, res) {
   }
 
   const sentIds = [];
-  for (const slot of due) {
+  const failedIds = [];
+  for (const slot of toSend) {
     let name = slot.label || "there";
     let email = null;
     let tz = null;
@@ -460,7 +486,7 @@ async function handleSendLessonReminders(supabase, res) {
       email = trialMap[slot.trial_lesson_request_id].email;
       tz = trialMap[slot.trial_lesson_request_id].timezone_used;
     }
-    if (!email) continue; // メール不明な枠はスキップ（手動追加された枠等）
+    if (!email) continue; // メール不明な枠はスキップ（手動追加された枠等）— 送信権はそのまま確保済みでOK
 
     try {
       await sendEmail({
@@ -477,14 +503,18 @@ async function handleSendLessonReminders(supabase, res) {
       sentIds.push(slot.id);
     } catch (e) {
       console.error(`Failed to send reminder for slot ${slot.id}:`, e.message);
+      failedIds.push(slot.id);
     }
   }
 
-  if (sentIds.length > 0) {
-    await supabase.from("teacher_availability").update({ reminder_sent_at: new Date().toISOString() }).in("id", sentIds);
+  // 送信に失敗した分だけ送信権を解放（reminder_sent_atをnullに戻す）し、次回の呼び出しで再送を試みられるようにする。
+  // これをしないと、Brevo側の一時的なエラーで送信に失敗した回だけ「確保はしたが送れなかった」状態のまま
+  // 二度と再送されなくなってしまう（これも「リンクだけ届かない」の一因になり得る）。
+  if (failedIds.length > 0) {
+    await supabase.from("teacher_availability").update({ reminder_sent_at: null }).in("id", failedIds);
   }
 
-  return res.status(200).json({ ok: true, sent: sentIds.length, checked: due.length });
+  return res.status(200).json({ ok: true, sent: sentIds.length, failed: failedIds.length, checked: toSend.length });
 }
 
 export default async function handler(req, res) {
