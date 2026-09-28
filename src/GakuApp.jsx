@@ -7910,6 +7910,63 @@ async function syncAssignedVocab(userId) {
   } catch {}
 }
 
+// ─── MISSING-MEANING REPAIR ─────────────────────────────────────────────────────
+// Every vocab card must show a meaning in the student's own language. Cards that
+// arrived without one (older teacher-sent words, or words saved from GAKU Reader
+// before the lookup returned a meaning) are filled in here: first from the
+// teacher-assigned row (same id, already back-filled server-side), then by AI in the
+// student's preferred language. Runs a bounded number of cards per call.
+let _repairRunning = false;
+async function repairMissingMeanings(userId) {
+  if (_repairRunning) return;
+  _repairRunning = true;
+  try {
+    const vocabData = loadVocabData();
+    let missing = vocabData.cards.filter(c => c && c.word && !String(c.meaning || "").trim());
+    if (!missing.length) return;
+    let changed = false;
+
+    if (supabase && userId) {
+      try {
+        const { data: rows } = await supabase.from("assigned_vocab").select("id, meaning").eq("student_id", userId).in("id", missing.map(c => c.id).filter(Boolean));
+        const byId = new Map((rows || []).filter(r => String(r.meaning || "").trim()).map(r => [r.id, r.meaning]));
+        for (const c of missing) if (byId.has(c.id)) { c.meaning = byId.get(c.id); changed = true; }
+      } catch {}
+      missing = missing.filter(c => !String(c.meaning || "").trim());
+    }
+
+    let lang = "English";
+    try {
+      const f = JSON.parse(localStorage.getItem(scopedKey("gaku_form")) || "null");
+      if (f && f.preferredLang) lang = f.preferredLang;
+    } catch {}
+
+    const targets = missing.slice(0, 60);
+    for (let i = 0; i < targets.length; i += 15) {
+      const chunk = targets.slice(i, i + 15);
+      const list = chunk.map((c, n) => `${n + 1}. ${c.word}${c.reading ? ` (${c.reading})` : ""}`).join("\n");
+      try {
+        const res = await fetch("/api/claude", {
+          method: "POST", headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ provider: "fast", max_tokens: 1800, messages: [{ role: "user", content:
+            `For each numbered Japanese word or grammar pattern below, write a short, clear meaning in ${lang} (max 15 words each). Respond ONLY with a raw JSON array of strings, in the same order and with the same number of items as the list. No markdown, no extra text.\n\n${list}` }] }),
+        });
+        const data = await res.json();
+        const txt = (data?.content?.[0]?.text || "").replace(/```json|```/g, "").trim();
+        const arr = JSON.parse(txt.slice(txt.indexOf("["), txt.lastIndexOf("]") + 1));
+        if (Array.isArray(arr) && arr.length === chunk.length) {
+          chunk.forEach((c, n) => { const m = String(arr[n] || "").trim(); if (m) { c.meaning = m; changed = true; } });
+        }
+      } catch {}
+    }
+
+    if (changed) {
+      saveVocabData(vocabData);
+      try { window.dispatchEvent(new Event("gaku_vocab_updated")); } catch {}
+    }
+  } catch {} finally { _repairRunning = false; }
+}
+
 // ─── JLPT RESULTS (teacher-entered, login-gated) ───────────────────────────────
 // Fetches this student's own rows from `jlpt_results` — RLS restricts SELECT to
 // `student_id = auth.uid()`, so this only ever returns results belonging to whoever is
@@ -8091,7 +8148,7 @@ function WordDetailCard({ card: cardProp, onSave, onBack, form, prefLang }) {
     "Chinese (Simplified)":"cmn", "Chinese (Traditional)":"cmn", "Italian":"ita",
     "Korean":"kor", "Thai":"tha", "Malay":"zsm", "Indonesian":"ind",
     "Vietnamese":"vie", "Hindi":"hin", "Japanese":"jpn", "Turkish":"tur",
-    "Nepali":"nep", "Filipino":"tgl", "Portuguese":"por", "Mizo":"lus",
+    "Nepali":"nep", "Filipino":"tgl", "Portuguese":"por", "Mizo":"lus", "Bengali":"ben",
   };
 
   // Fetch real, existing example sentences containing this word from Tatoeba's
@@ -11362,7 +11419,7 @@ Warm, under 100 words, English.` }]
 const LANGUAGES = [
   "English","Spanish","French","German","Chinese (Simplified)","Chinese (Traditional)",
   "Italian","Korean","Thai","Malay","Indonesian","Vietnamese","Hindi",
-  "Japanese","Turkish","Nepali","Filipino","Mizo",
+  "Japanese","Turkish","Nepali","Filipino","Mizo","Bengali",
 ];
 
 // Native-script display names for the 🌐 language badge (shown regardless of UI language)
@@ -11371,7 +11428,7 @@ const NATIVE_LANG_NAMES = {
   "Chinese (Simplified)":"简体中文","Chinese (Traditional)":"繁體中文","Italian":"Italiano",
   "Korean":"한국어","Thai":"ไทย","Malay":"Bahasa Melayu","Indonesian":"Bahasa Indonesia",
   "Vietnamese":"Tiếng Việt","Hindi":"हिन्दी","Japanese":"日本語","Turkish":"Türkçe",
-  "Nepali":"नेपाली","Filipino":"Filipino","Mizo":"Mizo ṭawng",
+  "Nepali":"नेपाली","Filipino":"Filipino","Mizo":"Mizo ṭawng","Bengali":"বাংলা",
 };
 
 // QuickStartForm runs before the student has picked a preferredLang (that question is
@@ -12337,6 +12394,7 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
       }
       setTab("vocabulary");
       window.dispatchEvent(new CustomEvent("gaku_vocab_updated"));
+      if (!String(meaning || "").trim()) setTimeout(() => repairMissingMeanings(null), 300);
     };
     window.addEventListener("message", handleExtMessage);
     return () => window.removeEventListener("message", handleExtMessage);
@@ -13296,7 +13354,7 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
     "Korean": "ko", "Thai": "th", "Malay": "ms", "Indonesian": "id",
     "Vietnamese": "vi", "Japanese": "ja", "Turkish": "tr", "Filipino": "fil",
     // Not supported by Stripe — let Stripe auto-detect from the browser instead
-    "Hindi": "auto", "Nepali": "auto", "Mizo": "auto",
+    "Hindi": "auto", "Nepali": "auto", "Mizo": "auto", "Bengali": "auto",
   };
 
   // Attaches the logged-in student's Supabase user id to the Stripe Payment Link
@@ -13530,7 +13588,7 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
       try { setInteractionCount(parseInt(localStorage.getItem(scopedKey("gaku_interaction_count")) || "0", 10) || 0); } catch { setInteractionCount(0); }
       try { window.dispatchEvent(new Event("gaku_vocab_updated")); } catch {}
       if (!authUser) { setDeviceStatus(null); setIsGakuStudent(false); setIsPaid(false); return; }
-      syncAssignedVocab(authUser.id);
+      syncAssignedVocab(authUser.id).then(() => repairMissingMeanings(authUser.id)).catch(() => {});
       setDeviceStatus("checking");
       // Self-heal: if the paywall was already showing (e.g. from an earlier trial
       // session, or right after login/payment), this dismisses it the moment we
