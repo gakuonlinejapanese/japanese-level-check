@@ -9114,22 +9114,28 @@ function VocabBuilder({ form }) {
     const idiomPicks = isIdiomSearch ? pickRandomIdioms(8) : null;
     const lang = form.preferredLang || "English";
     const body = isIdiomSearch
-      ? { model:"claude-sonnet-4-20250514", max_tokens:1500, provider:"fast",
+      ? { model:"claude-sonnet-4-20250514", max_tokens:1500, provider:"content",
           messages:[
             { role:"system", content:`You are a Japanese language expert. For each 慣用句 (idiom) below you are given its EXACT phrase and its authoritative Japanese meaning — do NOT change, reinterpret, or invent a different meaning. You MUST write "meaning", "example_translated", and "tip" EXCLUSIVELY in ${lang}.` },
             { role:"user", content:`Here are 8 Japanese idioms with their verified meanings:\n${idiomPicks.map((p, i) => `${i+1}. "${p[0]}" — authoritative meaning: 「${p[1]}」`).join("\n")}\n\nFor EACH idiom in the SAME ORDER, return an object with these keys:\n- reading: hiragana reading of the full idiom phrase\n- meaning: a faithful translation of the given authoritative meaning into ${lang} — do not add new information or reinterpret it\n- example: a natural Japanese example sentence that uses the idiom correctly\n- example_translated: translation of that example sentence in ${lang}\n- tip: a short usage tip in ${lang}\n- imageQuery: 2-3 English words for image search\n- imageDesc: brief English image description\n\nOutput ONLY a raw JSON array of exactly 8 objects, in the same order as the list above. No markdown, no backticks, no explanation.` }
           ]
         }
-      : { model:"claude-sonnet-4-20250514", max_tokens:1500, provider:"fast",
+      : { model:"claude-sonnet-4-20250514", max_tokens:1500, provider:"content",
           messages:[
             { role:"system", content:`You are a multilingual Japanese dictionary expert. You MUST write the "meaning", "example_translated", and "tip" fields EXCLUSIVELY in ${lang}. Never use English for these fields unless the student native language IS English.` },
             { role:"user", content:`Generate 8 authentic Japanese dictionary words related to the topic: "${search}"\n\nThe student native language is: ${lang}\nALL translations must be in ${lang} — NOT in English unless that is the native language.\n\nReturn a JSON array of exactly 8 objects with these keys:\n- word: Japanese word in kanji/kana\n- reading: hiragana reading\n- jlpt: JLPT level (N5/N4/N3/N2/N1) or ""\n- partOfSpeech: part of speech in English\n- meaning: translation in ${lang}\n- meaningNative: simple Japanese definition (e.g. 「食べ物を料理すること」)\n- example: natural Japanese example sentence\n- example_translated: translation of example in ${lang}\n- tip: usage tip in ${lang}\n- imageQuery: 2-3 English words for image search\n- imageDesc: brief English image description\n\nOutput ONLY a raw JSON array. No markdown, no backticks, no explanation.` }
           ]
         };
     try {
-      const res = await fetch("/api/claude", {
-        method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify(body)
-      });
+      // Hard 10-second cap so the student never waits on a stuck request.
+      const ac = new AbortController();
+      const abortTimer = setTimeout(() => ac.abort(), 10000);
+      let res;
+      try {
+        res = await fetch("/api/claude", {
+          method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify(body), signal: ac.signal
+        });
+      } finally { clearTimeout(abortTimer); }
       if (res.status === 429 || res.status === 503) {
         if (retryCount < 2) {
           const delay = (retryCount + 1) * 3000;
@@ -9180,7 +9186,7 @@ function VocabBuilder({ form }) {
           else { setWords([]); setFindError("検索結果の解析に失敗しました。もう一度お試しください。"); }
         }
       }
-    } catch(e) { console.error("findWords error:", e); setWords([]); setFindError("検索に失敗しました。もう一度お試しください。"); }
+    } catch(e) { console.error("findWords error:", e); setWords([]); setFindError(e?.name==="AbortError" ? "⏱ 10秒以内に結果が出ませんでした。もう一度お試しください。" : "検索に失敗しました。もう一度お試しください。"); }
     setLoading(false);
   };
 
@@ -13849,8 +13855,8 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
   // trial).
   if (authUser && trialLocked && (previewPaywall || (!isPaid && !isGakuStudent))) {
     return (
-      <div style={{ minHeight:"100vh", background:"linear-gradient(160deg,#0a0f1e 0%,#0f172a 60%,#0a0f1e 100%)", display:"flex", alignItems:"center", justifyContent:"center", padding:24 }}>
-        <div style={{ background:"linear-gradient(135deg,#1e1b4b,#0f172a)", border:"1.5px solid rgba(139,92,246,0.4)", borderRadius:20, padding:"36px 32px", maxWidth:420, width:"90%", textAlign:"center", boxShadow:"0 8px 40px rgba(139,92,246,0.25)" }}>
+      <div style={{ minHeight:"100vh", background:"linear-gradient(160deg,#0a0f1e 0%,#0f172a 60%,#0a0f1e 100%)", display:"flex", alignItems:"flex-start", justifyContent:"center", padding:24, boxSizing:"border-box" }}>
+        <div style={{ background:"linear-gradient(135deg,#1e1b4b,#0f172a)", border:"1.5px solid rgba(139,92,246,0.4)", borderRadius:20, padding:"36px 32px", maxWidth:420, width:"90%", margin:"auto", textAlign:"center", boxShadow:"0 8px 40px rgba(139,92,246,0.25)" }}>
           <p style={{ fontSize:28, margin:"0 0 6px" }}>⏳</p>
           <h2 style={{ color:"#f1f5f9", fontSize:20, fontWeight:900, margin:"0 0 8px" }}>{T?.trialEndedTitle || "Your 7-day free trial has ended"}</h2>
           <p style={{ color:"#94a3b8", fontSize:13, margin:"0 0 14px", lineHeight:1.6 }}>
@@ -14065,8 +14071,8 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
         count: {interactionCount}/21 {skipTrialPaywall ? "(skip)" : ""} {authUser && isGakuStudent ? "(gaku)" : ""} {authUser && isPaid ? "(paid)" : ""}
       </div>
       {showPaywall && (
-        <div style={{ position:"fixed", inset:0, zIndex:9999, display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", background:"rgba(10,15,30,0.85)", backdropFilter:"blur(12px)" }}>
-          <div style={{ background:"linear-gradient(135deg,#1e1b4b,#0f172a)", border:"1.5px solid rgba(139,92,246,0.4)", borderRadius:20, padding:"36px 32px", maxWidth:420, width:"90%", textAlign:"center", boxShadow:"0 8px 40px rgba(139,92,246,0.25)" }}>
+        <div style={{ position:"fixed", inset:0, zIndex:9999, display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"flex-start", overflowY:"auto", WebkitOverflowScrolling:"touch", padding:"16px 0", boxSizing:"border-box", background:"rgba(10,15,30,0.85)", backdropFilter:"blur(12px)" }}>
+          <div style={{ background:"linear-gradient(135deg,#1e1b4b,#0f172a)", border:"1.5px solid rgba(139,92,246,0.4)", borderRadius:20, padding:"36px 32px", maxWidth:420, width:"90%", margin:"auto", textAlign:"center", boxShadow:"0 8px 40px rgba(139,92,246,0.25)" }}>
             <p style={{ fontSize:28, margin:"0 0 6px" }}>🎌</p>
             <h2 style={{ color:"#f1f5f9", fontSize:20, fontWeight:900, margin:"0 0 8px" }}>{T.studyPlanReadyTitle}</h2>
             <p style={{ color:"#94a3b8", fontSize:13, margin:"0 0 20px", lineHeight:1.6 }}>{T.studyPlanReadyDesc}</p>
