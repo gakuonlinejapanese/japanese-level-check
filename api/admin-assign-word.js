@@ -11,6 +11,24 @@ import { sendEmail } from "./_resend.js";
 // browser picks it up automatically next time they open the app (see the
 // syncAssignedVocab logic in GakuApp.jsx) and it's removed from the queue
 // once delivered.
+// Writes a short meaning of a Japanese word/grammar pattern in the student's language.
+// Uses the app's own /api/claude proxy (provider:"fast"). Returns "" on any failure.
+async function generateMeaning(word, reading, studentLang, teacherMeaning, teacherLang) {
+  try {
+    const hint = teacherMeaning ? ` A reference meaning written in ${teacherLang || "another language"} is: "${teacherMeaning}". Translate/adapt it into ${studentLang}.` : "";
+    const r = await fetch("https://japanese-level-check.vercel.app/api/claude", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        provider: "fast", max_tokens: 200,
+        messages: [{ role: "user", content: `Give the meaning of the Japanese word or grammar pattern "${word}"${reading ? ` (reading: ${reading})` : ""} in ${studentLang}, in at most 15 words.${hint} Output ONLY the meaning text in ${studentLang}. No quotes, no markdown, no explanation.` }],
+      }),
+    });
+    const d = await r.json();
+    return String(d?.content?.[0]?.text || "").replace(/^["'`\s]+|["'`\s]+$/g, "").slice(0, 300);
+  } catch { return ""; }
+}
+
 export default async function handler(req, res) {
   // The GAKU Reader Chrome extension calls this endpoint cross-origin, so the
   // browser sends a CORS preflight (OPTIONS) request first. Without these
@@ -209,7 +227,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { secret, studentEmail, word, reading, jlpt, partOfSpeech, meaning, example, folder } = req.body || {};
+    const { secret, studentEmail, word, reading, jlpt, partOfSpeech, meaning, example, folder, lang: teacherLang } = req.body || {};
     if (!secret || secret !== process.env.ADMIN_SECRET) {
       return res.status(401).json({ error: "Unauthorized" });
     }
@@ -221,7 +239,7 @@ export default async function handler(req, res) {
 
     const { data: profile, error: profileErr } = await supabase
       .from("profiles")
-      .select("id, email")
+      .select("id, email, native_language")
       .ilike("email", studentEmail.trim())
       .maybeSingle();
     if (profileErr) return res.status(500).json({ error: profileErr.message });
@@ -235,13 +253,28 @@ export default async function handler(req, res) {
     // coerces everything to a string first so any value type is safe.
     const toStr = (v) => (v === undefined || v === null ? "" : String(v).trim());
 
+    // Every word sent to a student MUST carry a meaning written in that student's own
+    // language (profiles.native_language). If the teacher's lookup language differs from
+    // the student's, or the meaning came through empty, it is (re)generated here. If no
+    // meaning can be produced at all, the send is refused instead of delivering a blank card.
+    const studentLang = toStr(profile.native_language) || "English";
+    let finalMeaning = toStr(meaning);
+    const sameLang = toStr(teacherLang).toLowerCase() === studentLang.toLowerCase();
+    if (!finalMeaning || !sameLang) {
+      const generated = await generateMeaning(toStr(word), toStr(reading), studentLang, finalMeaning, toStr(teacherLang));
+      if (generated) finalMeaning = generated;
+    }
+    if (!finalMeaning) {
+      return res.status(502).json({ error: "Could not write a meaning for this word, so it was not sent. Please try again." });
+    }
+
     const { error: insertErr } = await supabase.from("assigned_vocab").insert({
       student_id: profile.id,
       word: toStr(word),
       reading: toStr(reading),
       jlpt: toStr(jlpt),
       part_of_speech: toStr(partOfSpeech),
-      meaning: toStr(meaning),
+      meaning: finalMeaning,
       example: toStr(example),
       folder: toStr(folder) || "Your Vocabulary",
     });
