@@ -10202,6 +10202,24 @@ ${original}`;
   return out;
 }
 
+// Guard for AI romaji/translation output: catches empty replies and runaway loops such as the
+// word "romaji" repeated hundreds of times (a looping model), which used to be shown as-is.
+function isRunawayOutput(original, out, mode) {
+  if (!out || !out.trim()) return true;
+  const o = out.trim();
+  if (o.length > (original || "").length * 8 + 80) return true; // far longer than any legit result
+  const lines = o.split(/\n+/).map(l => l.trim()).filter(Boolean);
+  if (lines.length > (original || "").split(/\n+/).filter(Boolean).length + 3) return true; // far more lines than the input has
+  const words = o.toLowerCase().split(/\s+/).filter(Boolean);
+  if (words.length >= 4) {
+    const freq = {};
+    for (const w of words) freq[w] = (freq[w] || 0) + 1;
+    if (Math.max(...Object.values(freq)) >= 4 && Math.max(...Object.values(freq)) / words.length > 0.5) return true; // one word dominates
+  }
+  if (mode === "romaji" && /^(romaji[\s:：]*)+$/i.test(o)) return true; // only echoed the label
+  return false;
+}
+
 function JLineTools({ text, lang, T }) {
   const [furigana, setFurigana] = useState("");
   const [romaji, setRomaji] = useState("");
@@ -10222,17 +10240,27 @@ function JLineTools({ text, lang, T }) {
         setFurigana(await getFuriganaText(text));
       } else {
         const instruction = mode === "romaji"
-          ? `Convert this Japanese text to romaji (Hepburn romanization). Return ONLY the romaji text, no explanation:\n\n${text}`
-          : `Translate this Japanese text into ${lang || "English"}. Return ONLY the translation, no explanation:\n\n${text}`;
-        const res = await fetch("/api/claude", {
-          method:"POST", headers:{"Content-Type":"application/json"},
-          body: JSON.stringify({ model:"claude-sonnet-4-20250514", max_tokens:500,
-            messages:[{ role:"user", content: instruction }]
-          })
-        });
-        const d = await res.json();
-        const out = d.content?.map(c=>c.text||"").join("").trim() || "";
-        if (mode === "romaji") setRomaji(applyJapaneseReadingCorrections(out));
+          ? `Convert this Japanese text to romaji (Hepburn romanization). Return ONLY the romaji reading of the text itself, once, on a single line. Do not repeat anything and never output the word "romaji". Text:\n\n${text}`
+          : `Translate this Japanese text into ${lang || "English"}. Return ONLY the translation, once, no explanation:\n\n${text}`;
+        // Cap output length to the input size so a looping model can never flood the screen,
+        // and validate the result. If the first attempt is a runaway/garbled loop, retry once
+        // on a different model; if that also fails, show nothing rather than garbage.
+        const askAI = async (extra) => {
+          const res = await fetch("/api/claude", {
+            method:"POST", headers:{"Content-Type":"application/json"},
+            body: JSON.stringify({ model:"claude-sonnet-4-20250514",
+              max_tokens: Math.min(500, Math.max(80, text.length * 8 + 60)),
+              messages:[{ role:"user", content: instruction }], ...extra
+            })
+          });
+          const d = await res.json();
+          return d.content?.map(c=>c.text||"").join("").trim() || "";
+        };
+        let out = await askAI({ frequency_penalty: 0.6 });
+        if (isRunawayOutput(text, out, mode)) out = await askAI({ provider:"content", frequency_penalty: 0.6 });
+        if (isRunawayOutput(text, out, mode)) {
+          setVisible(v=>({ ...v, [mode]:false })); // failed twice: hide, so tapping the button retries
+        } else if (mode === "romaji") setRomaji(applyJapaneseReadingCorrections(out));
         else setTranslation(out);
       }
     } catch {}
