@@ -13362,6 +13362,11 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
   // trial interaction paywall.
   const [isGakuStudent, setIsGakuStudent] = useState(false);
   const [isPaid, setIsPaid] = useState(false);
+  // True once api/account-status.js has actually answered for the logged-in account.
+  // Until then we do NOT know whether this is a GAKU (invite-code) student or a payer, so
+  // the 21-interaction soft paywall must not count/fire (it used to, because isGakuStudent
+  // starts as false on every app open and stays false if the status call is slow or fails).
+  const [accountStatusLoaded, setAccountStatusLoaded] = useState(false);
   // True once api/account-status.js reports the 7-day trial has expired for
   // this account (tracked server-side by trial_started_at, not by local
   // device state — so it can't be reset by uninstalling/reinstalling).
@@ -13547,6 +13552,7 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
       const data = await res.json();
       if (data?.isGakuStudent) setIsGakuStudent(true);
       if (data?.isPaid) setIsPaid(true);
+      if (res.ok && data && typeof data.isGakuStudent === "boolean") setAccountStatusLoaded(true);
       // Mirror the server's trial verdict into a fixed (non-scoped) localStorage
       // key so the GAKU Reader extension — which has no knowledge of Supabase
       // auth or userId — can read it whenever this app's tab is open, the same
@@ -13645,6 +13651,7 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
     // 21-interaction counter and get sent back to the paywall despite having
     // already unlocked the app.
     if (skipTrialPaywall || (authUser && (isGakuStudent || isPaid))) return;
+    if (authUser && !accountStatusLoaded) return; // status unknown yet: never risk paywalling a GAKU student
     setInteractionCount(c => {
       const next = c + 1;
       try { localStorage.setItem(scopedKey("gaku_interaction_count"), String(next)); } catch {}
@@ -13712,7 +13719,17 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
       } catch { setForm(null); }
       try { setInteractionCount(parseInt(localStorage.getItem(scopedKey("gaku_interaction_count")) || "0", 10) || 0); } catch { setInteractionCount(0); }
       try { window.dispatchEvent(new Event("gaku_vocab_updated")); } catch {}
-      if (!authUser) { setDeviceStatus(null); setIsGakuStudent(false); setIsPaid(false); return; }
+      if (!authUser) { setDeviceStatus(null); setIsGakuStudent(false); setIsPaid(false); setAccountStatusLoaded(false); return; }
+      // Seed from the last server-verified status for THIS account, so an invite-code/paid
+      // student is never treated as a trial user during the moments before (or if) the
+      // status call fails. The server result below still overrides trial/lock decisions.
+      try {
+        const cached = JSON.parse(localStorage.getItem("gaku_trial_status") || "null");
+        if (cached && cached.userId === authUser.id) {
+          if (cached.isGakuStudent) setIsGakuStudent(true);
+          if (cached.isPaid) setIsPaid(true);
+        }
+      } catch {}
       syncAssignedVocab(authUser.id).then(() => repairMissingMeanings(authUser.id)).catch(() => {});
       setDeviceStatus("checking");
       // Self-heal: if the paywall was already showing (e.g. from an earlier trial
@@ -14189,7 +14206,7 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
       <div style={{ position:"fixed", bottom:12, right:12, zIndex:99999, background:"rgba(0,0,0,0.75)", color:"#4ade80", fontSize:11, fontFamily:"monospace", padding:"4px 8px", borderRadius:6 }}>
         count: {interactionCount}/21 {skipTrialPaywall ? "(skip)" : ""} {authUser && isGakuStudent ? "(gaku)" : ""} {authUser && isPaid ? "(paid)" : ""}
       </div>
-      {showPaywall && (
+      {showPaywall && !(authUser && (isGakuStudent || isPaid)) && (
         <div style={{ position:"fixed", inset:0, zIndex:9999, display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"flex-start", overflowY:"auto", WebkitOverflowScrolling:"touch", padding:"16px 0", boxSizing:"border-box", background:"rgba(10,15,30,0.85)", backdropFilter:"blur(12px)" }}>
           <div style={{ background:"linear-gradient(135deg,#1e1b4b,#0f172a)", border:"1.5px solid rgba(139,92,246,0.4)", borderRadius:20, padding:"36px 32px", maxWidth:420, width:"90%", margin:"auto", textAlign:"center", boxShadow:"0 8px 40px rgba(139,92,246,0.25)" }}>
             <p style={{ fontSize:28, margin:"0 0 6px" }}>🎌</p>

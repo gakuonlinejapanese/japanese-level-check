@@ -97,11 +97,13 @@ export default async function handler(req, res) {
     // forward and grants extra free days.
     const { data: existing } = await supabase
       .from("profiles")
-      .select("trial_started_at")
+      .select("trial_started_at, is_gaku_student")
       .eq("id", userId)
       .maybeSingle();
 
-    const payload = { id: userId, email: normalizedEmail, is_gaku_student: !!isGakuStudent };
+    // Never downgrade: a repeat call without an invite code (retried/re-run signup) must not
+    // flip an already-verified GAKU student back to false and bring the paywall back.
+    const payload = { id: userId, email: normalizedEmail, is_gaku_student: !!isGakuStudent || !!existing?.is_gaku_student };
     const isFirstTrialGrant = !existing?.trial_started_at;
     let priorTrialAt = null;
 
