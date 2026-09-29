@@ -623,6 +623,10 @@ const UI_TRANSLATIONS = {
     completeLangQuestion: "What's your native language?",
     profileNudgeText: "Finish setting up your profile to get study content matched to your schedule and goals.",
     profileNudgeCta: "Finish now",
+    readerCardTitle: "Save words as you read with GAKU Reader",
+    readerCardDesc: "Add the free Chrome extension, click any Japanese word on any website to see its reading and meaning, and save it to your GAKU Master.",
+    readerCardCta: "Add to Chrome (free)",
+    readerCardLater: "Not now",
     // How to use
     howToTitle: "How to use this app",
     howToSchedule: "Your weekly study plan, broken into daily tasks. Tap a task to mark it done and track your weekly progress.",
@@ -1037,6 +1041,10 @@ const UI_TRANSLATIONS = {
     completeLangQuestion: "Quelle est votre langue maternelle ?",
     profileNudgeText: "Terminez votre profil pour obtenir un contenu d'étude adapté à votre emploi du temps et à vos objectifs.",
     profileNudgeCta: "Terminer maintenant",
+    readerCardTitle: "Enregistrez des mots pendant vos lectures avec GAKU Reader",
+    readerCardDesc: "Ajoutez l'extension Chrome gratuite, cliquez sur n'importe quel mot japonais d'un site pour voir sa lecture et son sens, et enregistrez-le dans votre GAKU Master.",
+    readerCardCta: "Ajouter à Chrome (gratuit)",
+    readerCardLater: "Plus tard",
     howToTitle: "Comment utiliser cette application",
     howToSchedule: "Votre plan d'étude hebdomadaire, divisé en tâches quotidiennes. Appuyez sur une tâche pour la marquer comme faite.",
     howToPractice: "Exercices générés par l'IA à partir du texte japonais que vous collez (articles, sous-titres, légendes) — vocabulaire, kanji, grammaire, lecture, écoute, conversation et prononciation. Appuyez sur « Voir la réponse » pour vous corriger.",
@@ -1437,6 +1445,10 @@ const UI_TRANSLATIONS = {
     completeLangQuestion: "¿Cuál es tu idioma nativo?",
     profileNudgeText: "Termina de configurar tu perfil para obtener contenido de estudio adaptado a tu horario y objetivos.",
     profileNudgeCta: "Terminar ahora",
+    readerCardTitle: "Guarda palabras mientras lees con GAKU Reader",
+    readerCardDesc: "Añade la extensión gratuita de Chrome, haz clic en cualquier palabra japonesa de cualquier web para ver su lectura y significado, y guárdala en tu GAKU Master.",
+    readerCardCta: "Añadir a Chrome (gratis)",
+    readerCardLater: "Ahora no",
     howToTitle: "Cómo usar esta aplicación",
     howToSchedule: "Tu plan de estudio semanal, dividido en tareas diarias. Toca una tarea para marcarla como completada.",
     howToPractice: "Ejercicios generados por IA a partir del texto japonés que pegas (artículos, subtítulos, leyendas) — vocabulario, kanji, gramática, lectura, escucha, conversación y pronunciación. Toca 'Ver respuesta' para comprobar.",
@@ -1837,6 +1849,10 @@ const UI_TRANSLATIONS = {
     completeLangQuestion: "Qual é a sua língua nativa?",
     profileNudgeText: "Termine de configurar seu perfil para obter conteúdo de estudo adaptado à sua agenda e objetivos.",
     profileNudgeCta: "Terminar agora",
+    readerCardTitle: "Salve palavras enquanto lê com o GAKU Reader",
+    readerCardDesc: "Adicione a extensão gratuita do Chrome, clique em qualquer palavra japonesa em qualquer site para ver a leitura e o significado, e salve-a no seu GAKU Master.",
+    readerCardCta: "Adicionar ao Chrome (grátis)",
+    readerCardLater: "Agora não",
     howToTitle: "Como usar este aplicativo",
     howToSchedule: "Seu plano de estudo semanal, dividido em tarefas diárias.",
     howToPractice: "Exercícios gerados por IA a partir do texto japonês que você cola (artigos, legendas, descrições) — vocabulário, kanji, gramática, leitura, escuta, conversação e pronúncia. Toque em 'Ver resposta' para conferir.",
@@ -2237,6 +2253,10 @@ const UI_TRANSLATIONS = {
     completeLangQuestion: "Was ist deine Muttersprache?",
     profileNudgeText: "Vervollständige dein Profil, um Lerninhalte zu erhalten, die zu deinem Zeitplan und deinen Zielen passen.",
     profileNudgeCta: "Jetzt fertigstellen",
+    readerCardTitle: "Speichere Wörter beim Lesen mit GAKU Reader",
+    readerCardDesc: "Füge die kostenlose Chrome-Erweiterung hinzu, klicke auf ein beliebiges japanisches Wort auf jeder Website, um Lesung und Bedeutung zu sehen, und speichere es in deinem GAKU Master.",
+    readerCardCta: "Zu Chrome hinzufügen (kostenlos)",
+    readerCardLater: "Später",
     howToTitle: "Wie man diese App benutzt",
     howToSchedule: "Ihr wöchentlicher Lernplan, aufgeteilt in tägliche Aufgaben.",
     howToPractice: "KI-generierte Übungen aus dem japanischen Text, den Sie einfügen (Artikel, Untertitel, Bildunterschriften) — Wortschatz, Kanji, Grammatik, Lesen, Hören, Konversation und Aussprache. Tippen Sie auf 'Antwort anzeigen', um sich selbst zu überprüfen.",
@@ -2637,6 +2657,10 @@ const UI_TRANSLATIONS = {
     completeLangQuestion: "Qual è la tua lingua madre?",
     profileNudgeText: "Completa il tuo profilo per ottenere contenuti di studio adatti al tuo programma e ai tuoi obiettivi.",
     profileNudgeCta: "Completa ora",
+    readerCardTitle: "Salva le parole mentre leggi con GAKU Reader",
+    readerCardDesc: "Aggiungi l'estensione gratuita di Chrome, clicca su qualsiasi parola giapponese in qualsiasi sito per vederne lettura e significato, e salvala nel tuo GAKU Master.",
+    readerCardCta: "Aggiungi a Chrome (gratis)",
+    readerCardLater: "Non ora",
     howToTitle: "Come usare questa app",
     howToSchedule: "Il tuo piano di studio settimanale, suddiviso in attività giornaliere. Tocca un'attività per contrassegnarla come completata.",
     howToPractice: "Esercizi generati dall'IA a partire dal testo giapponese che incolli (articoli, sottotitoli, didascalie) — vocabolario, kanji, grammatica, lettura, ascolto, conversazione e pronuncia. Tocca 'Mostra risposta' per verificare.",
@@ -3037,6 +3061,10 @@ const UI_TRANSLATIONS = {
     completeLangQuestion: "你的母语是什么？",
     profileNudgeText: "完成个人资料设置，获取与你的日程和目标相匹配的学习内容。",
     profileNudgeCta: "立即完成",
+    readerCardTitle: "用 GAKU Reader 边阅读边收藏单词",
+    readerCardDesc: "添加免费的 Chrome 扩展程序，点击任意网站上的日语单词即可查看读音和释义，并保存到你的 GAKU Master。",
+    readerCardCta: "添加到 Chrome（免费）",
+    readerCardLater: "以后再说",
     howToTitle: "如何使用此应用",
     howToSchedule: "你的每周学习计划，分为每日任务。点击任务以标记完成并跟踪每周进度。",
     howToPractice: "根据你粘贴的日语文本（文章、字幕、说明）由AI生成的练习——涵盖词汇、汉字、语法、阅读、听力、会话和发音。点击「显示答案」自我检查。",
@@ -3437,6 +3465,10 @@ const UI_TRANSLATIONS = {
     completeLangQuestion: "你的母語是什麼？",
     profileNudgeText: "完成個人資料設定，取得符合你的行程與目標的學習內容。",
     profileNudgeCta: "立即完成",
+    readerCardTitle: "用 GAKU Reader 邊閱讀邊收藏單字",
+    readerCardDesc: "加入免費的 Chrome 擴充功能，點擊任何網站上的日文單字即可查看讀音與釋義，並儲存到你的 GAKU Master。",
+    readerCardCta: "加入 Chrome（免費）",
+    readerCardLater: "以後再說",
     howToTitle: "如何使用此應用",
     howToSchedule: "你的每週學習計劃，分為每日任務。點擊任務以標記完成並跟踪每週進度。",
     howToPractice: "根據你貼上的日語文本（文章、字幕、說明）由AI生成的練習——涵蓋詞彙、漢字、文法、閱讀、聽力、會話和發音。點擊「顯示答案」自我檢查。",
@@ -3837,6 +3869,10 @@ const UI_TRANSLATIONS = {
     completeLangQuestion: "모국어가 무엇인가요?",
     profileNudgeText: "프로필을 완성하면 일정과 목표에 맞는 학습 콘텐츠를 받을 수 있어요.",
     profileNudgeCta: "지금 완료하기",
+    readerCardTitle: "GAKU Reader로 읽으면서 단어를 저장하세요",
+    readerCardDesc: "무료 Chrome 확장 프로그램을 추가하고, 어떤 웹사이트에서든 일본어 단어를 클릭해 읽는 법과 뜻을 확인한 뒤 GAKU Master에 저장하세요.",
+    readerCardCta: "Chrome에 추가 (무료)",
+    readerCardLater: "나중에",
     howToTitle: "이 앱 사용 방법",
     howToSchedule: "주간 학습 계획, 일별 과제로 나뉩니다. 과제를 눌러 완료 표시하고 주간 진도를 추적하세요.",
     howToPractice: "붙여넣은 일본어 텍스트(기사, 자막, 캡션)를 기반으로 AI가 생성한 연습문제 — 어휘, 한자, 문법, 독해, 듣기, 회화, 발음을 다룹니다. '답 보기'를 눌러 확인하세요.",
@@ -4237,6 +4273,10 @@ const UI_TRANSLATIONS = {
     completeLangQuestion: "ภาษาแม่ของคุณคืออะไร?",
     profileNudgeText: "กรอกโปรไฟล์ให้เสร็จสมบูรณ์เพื่อรับเนื้อหาการเรียนที่เหมาะกับตารางเวลาและเป้าหมายของคุณ",
     profileNudgeCta: "ทำให้เสร็จตอนนี้",
+    readerCardTitle: "บันทึกคำศัพท์ระหว่างอ่านด้วย GAKU Reader",
+    readerCardDesc: "เพิ่มส่วนขยาย Chrome ฟรี แล้วคลิกคำภาษาญี่ปุ่นบนเว็บไซต์ใดก็ได้เพื่อดูคำอ่านและความหมาย จากนั้นบันทึกลงใน GAKU Master ของคุณ",
+    readerCardCta: "เพิ่มใน Chrome (ฟรี)",
+    readerCardLater: "ไว้ก่อน",
     howToTitle: "วิธีใช้แอปนี้",
     howToSchedule: "แผนการเรียนรายสัปดาห์ แบ่งเป็นงานรายวัน แตะงานเพื่อทำเครื่องหมายว่าเสร็จแล้วและติดตามความคืบหน้า",
     howToPractice: "แบบฝึกหัดที่สร้างโดย AI จากข้อความภาษาญี่ปุ่นที่คุณวาง (บทความ คำบรรยาย แคปชั่น) — ครอบคลุมคำศัพท์ คันจิ ไวยากรณ์ การอ่าน การฟัง การสนทนา และการออกเสียง แตะ 'ดูคำตอบ' เพื่อตรวจสอบ",
@@ -4637,6 +4677,10 @@ const UI_TRANSLATIONS = {
     completeLangQuestion: "Apakah bahasa ibunda anda?",
     profileNudgeText: "Lengkapkan profil anda untuk mendapatkan kandungan pembelajaran yang sesuai dengan jadual dan matlamat anda.",
     profileNudgeCta: "Selesaikan sekarang",
+    readerCardTitle: "Simpan perkataan semasa membaca dengan GAKU Reader",
+    readerCardDesc: "Tambah sambungan Chrome percuma, klik mana-mana perkataan Jepun di mana-mana laman web untuk melihat bacaan dan maksudnya, kemudian simpan ke GAKU Master anda.",
+    readerCardCta: "Tambah ke Chrome (percuma)",
+    readerCardLater: "Bukan sekarang",
     howToTitle: "Cara menggunakan apl ini",
     howToSchedule: "Pelan belajar mingguan anda, dibahagikan kepada tugasan harian. Ketik tugasan untuk tandai selesai.",
     howToPractice: "Latihan yang dijana AI daripada teks Jepun yang anda tampal (artikel, sari kata, kapsyen) — merangkumi kosa kata, kanji, tatabahasa, bacaan, pendengaran, perbualan dan sebutan. Ketik 'Tunjuk jawapan' untuk semak.",
@@ -5037,6 +5081,10 @@ const UI_TRANSLATIONS = {
     completeLangQuestion: "Apa bahasa ibu Anda?",
     profileNudgeText: "Selesaikan profil Anda untuk mendapatkan konten belajar yang sesuai dengan jadwal dan tujuan Anda.",
     profileNudgeCta: "Selesaikan sekarang",
+    readerCardTitle: "Simpan kata saat membaca dengan GAKU Reader",
+    readerCardDesc: "Tambahkan ekstensi Chrome gratis, klik kata Jepang mana pun di situs web mana pun untuk melihat cara baca dan artinya, lalu simpan ke GAKU Master Anda.",
+    readerCardCta: "Tambahkan ke Chrome (gratis)",
+    readerCardLater: "Nanti saja",
     howToTitle: "Cara menggunakan aplikasi ini",
     howToSchedule: "Rencana belajar mingguan Anda, dibagi menjadi tugas harian. Ketuk tugas untuk menandainya selesai.",
     howToPractice: "Latihan yang dihasilkan AI dari teks Jepang yang Anda tempel (artikel, subtitle, keterangan) — mencakup kosakata, kanji, tata bahasa, membaca, mendengarkan, percakapan, dan pengucapan. Ketuk 'Tampilkan jawaban' untuk memeriksa.",
@@ -5437,6 +5485,10 @@ const UI_TRANSLATIONS = {
     completeLangQuestion: "Tiếng mẹ đẻ của bạn là gì?",
     profileNudgeText: "Hoàn tất hồ sơ của bạn để nhận nội dung học phù hợp với lịch trình và mục tiêu của bạn.",
     profileNudgeCta: "Hoàn tất ngay",
+    readerCardTitle: "Lưu từ vựng khi đọc với GAKU Reader",
+    readerCardDesc: "Thêm tiện ích Chrome miễn phí, nhấp vào bất kỳ từ tiếng Nhật nào trên mọi trang web để xem cách đọc và nghĩa, rồi lưu vào GAKU Master của bạn.",
+    readerCardCta: "Thêm vào Chrome (miễn phí)",
+    readerCardLater: "Để sau",
     howToTitle: "Cách sử dụng ứng dụng này",
     howToSchedule: "Kế hoạch học hàng tuần của bạn, chia thành các nhiệm vụ hàng ngày. Nhấn nhiệm vụ để đánh dấu hoàn thành.",
     howToPractice: "Bài tập do AI tạo từ văn bản tiếng Nhật bạn dán vào (bài viết, phụ đề, chú thích) — bao gồm từ vựng, kanji, ngữ pháp, đọc hiểu, nghe, hội thoại và phát âm. Nhấn 'Hiện đáp án' để kiểm tra.",
@@ -5837,6 +5889,10 @@ const UI_TRANSLATIONS = {
     completeLangQuestion: "आपकी मातृभाषा क्या है?",
     profileNudgeText: "अपनी समयसारिणी और लक्ष्यों के अनुरूप अध्ययन सामग्री पाने के लिए अपनी प्रोफ़ाइल पूरी करें।",
     profileNudgeCta: "अभी पूरा करें",
+    readerCardTitle: "GAKU Reader के साथ पढ़ते हुए शब्द सहेजें",
+    readerCardDesc: "मुफ़्त Chrome एक्सटेंशन जोड़ें, किसी भी वेबसाइट पर किसी भी जापानी शब्द पर क्लिक करके उसका उच्चारण और अर्थ देखें, और उसे अपने GAKU Master में सहेजें।",
+    readerCardCta: "Chrome में जोड़ें (मुफ़्त)",
+    readerCardLater: "अभी नहीं",
     howToTitle: "इस ऐप का उपयोग कैसे करें",
     howToSchedule: "आपकी साप्ताहिक अध्ययन योजना, दैनिक कार्यों में विभाजित। साप्ताहिक प्रगति ट्रैक करने के लिए कार्य टैप करें।",
     howToPractice: "आपके द्वारा पेस्ट किए गए जापानी टेक्स्ट (लेख, सबटाइटल, कैप्शन) से AI-जनित अभ्यास — शब्दावली, कांजी, व्याकरण, पठन, श्रवण, बातचीत और उच्चारण को कवर करता है। जांचने के लिए 'उत्तर दिखाएं' टैप करें।",
@@ -6237,6 +6293,10 @@ const UI_TRANSLATIONS = {
     completeLangQuestion: "母国語は何ですか？",
     profileNudgeText: "プロフィールを完成させると、あなたのスケジュールと目標に合った学習コンテンツが表示されます。",
     profileNudgeCta: "今すぐ完成させる",
+    readerCardTitle: "GAKU Readerで、読みながら単語を保存しよう",
+    readerCardDesc: "無料のChrome拡張機能を追加すると、どのサイトでも日本語の単語をクリックして読みと意味を確認し、GAKU Masterに保存できます。",
+    readerCardCta: "Chromeに追加(無料)",
+    readerCardLater: "あとで",
     howToTitle: "このアプリの使い方",
     howToSchedule: "週間学習プランを日々のタスクに分割しています。タスクをタップして完了をマークし、週間進捗を追跡します。",
     howToPractice: "貼り付けた日本語テキスト（記事・字幕・キャプション）から生成されるAI練習問題です。語彙・漢字・文法・読解・リスニング・会話・発音をカバーします。「答えを見る」をタップして確認できます。",
@@ -6637,6 +6697,10 @@ const UI_TRANSLATIONS = {
     completeLangQuestion: "Ana diliniz nedir?",
     profileNudgeText: "Programınıza ve hedeflerinize uygun çalışma içeriği almak için profilinizi tamamlayın.",
     profileNudgeCta: "Şimdi tamamla",
+    readerCardTitle: "GAKU Reader ile okurken kelimeleri kaydedin",
+    readerCardDesc: "Ücretsiz Chrome uzantısını ekleyin, herhangi bir sitedeki Japonca kelimeye tıklayarak okunuşunu ve anlamını görün ve GAKU Master'ınıza kaydedin.",
+    readerCardCta: "Chrome'a ekle (ücretsiz)",
+    readerCardLater: "Şimdi değil",
     howToTitle: "Bu uygulama nasıl kullanılır",
     howToSchedule: "Günlük görevlere bölünmüş haftalık çalışma planınız. Tamamlandı olarak işaretlemek için bir göreve dokunun.",
     howToPractice: "Yapıştırdığınız Japonca metinden (makale, altyazı, açıklama) AI tarafından oluşturulan alıştırmalar — kelime, kanji, dilbilgisi, okuma, dinleme, konuşma ve telaffuzu kapsar. Kontrol etmek için 'Cevabı göster'e dokunun.",
@@ -7037,6 +7101,10 @@ const UI_TRANSLATIONS = {
     completeLangQuestion: "तपाईंको मातृभाषा के हो?",
     profileNudgeText: "तपाईंको तालिका र लक्ष्यसँग मिल्ने अध्ययन सामग्री पाउन आफ्नो प्रोफाइल पूरा गर्नुहोस्।",
     profileNudgeCta: "अहिले पूरा गर्नुहोस्",
+    readerCardTitle: "GAKU Reader सँग पढ्दै गर्दा शब्दहरू सुरक्षित गर्नुहोस्",
+    readerCardDesc: "निःशुल्क Chrome एक्सटेन्सन थप्नुहोस्, कुनै पनि वेबसाइटमा कुनै पनि जापानी शब्दमा क्लिक गरेर पढाइ र अर्थ हेर्नुहोस्, अनि आफ्नो GAKU Master मा सुरक्षित गर्नुहोस्।",
+    readerCardCta: "Chrome मा थप्नुहोस् (निःशुल्क)",
+    readerCardLater: "अहिले होइन",
     howToTitle: "यो एप कसरी प्रयोग गर्ने",
     howToSchedule: "तपाईंको साप्ताहिक अध्ययन योजना, दैनिक कार्यहरूमा विभाजित। साप्ताहिक प्रगति ट्र्याक गर्न कार्यलाई ट्याप गर्नुहोस्।",
     howToPractice: "तपाईंले टाँस्नुभएको जापानी पाठ (लेख, उपशीर्षक, क्याप्शन) बाट AI-उत्पन्न अभ्यास — शब्दावली, कांजी, व्याकरण, पठन, सुनाइ, कुराकानी र उच्चारण समेट्छ। जाँच गर्न 'जवाफ देखाउनुहोस्' ट्याप गर्नुहोस्।",
@@ -7437,6 +7505,10 @@ const UI_TRANSLATIONS = {
     completeLangQuestion: "Ano ang iyong katutubong wika?",
     profileNudgeText: "Kumpletuhin ang iyong profile para makakuha ng study content na akma sa iyong iskedyul at layunin.",
     profileNudgeCta: "Kumpletuhin ngayon",
+    readerCardTitle: "I-save ang mga salita habang nagbabasa gamit ang GAKU Reader",
+    readerCardDesc: "Idagdag ang libreng Chrome extension, i-click ang anumang salitang Hapon sa anumang website para makita ang basa at kahulugan, at i-save ito sa iyong GAKU Master.",
+    readerCardCta: "Idagdag sa Chrome (libre)",
+    readerCardLater: "Huwag muna",
     howToTitle: "Paano gamitin ang app na ito",
     howToSchedule: "Ang iyong lingguhang study plan, nahahati sa araw-araw na gawain. I-tap ang gawain upang markahan itong tapos na.",
     howToPractice: "Mga pagsasanay na ginawa ng AI mula sa Japanese text na iyong idinikit (artikulo, subtitle, caption) — sinasaklaw ang bokabularyo, kanji, gramatika, pagbasa, pakikinig, pag-uusap, at pagbigkas. I-tap ang 'Ipakita ang sagot' upang suriin.",
@@ -12203,8 +12275,15 @@ function TutorialOverlay({ T, step, tab, resourceSubTab, tabsMeta, resourceSubTa
   return null;
 }
 
-function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteAccountBusy, userId, streakDays, daysUntilTrialEnds, tutorialGraceDaysLeft, isTrialAccount, isGakuStudent, onCompleteProfile }) {
+function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteAccountBusy, userId, streakDays, daysUntilTrialEnds, tutorialGraceDaysLeft, isTrialAccount, isGakuStudent, onCompleteProfile, readerInstalled }) {
   const T = useUITranslations(form?.preferredLang || "English");
+  // GAKU Reader promo card: shown on desktop Chrome/Edge to accounts that have
+  // never used the extension (server says readerInstalled=false); dismissible
+  // for 5 days. Reader is the tool students actually open daily, so this is
+  // the bridge from a one-day visit to a habit.
+  const [readerCardHiddenAt, setReaderCardHiddenAt] = useState(() => { try { return Number(localStorage.getItem(scopedKey("gaku_reader_card_hidden_at")) || 0); } catch { return 0; } });
+  const canUseReaderExt = typeof navigator !== "undefined" && /Chrome\/|Edg\//.test(navigator.userAgent) && !/Mobile|Android|iPhone|iPad|OPR\//.test(navigator.userAgent);
+  const showReaderCard = readerInstalled === false && canUseReaderExt && (Date.now() - readerCardHiddenAt) > 5 * 86400000;
   const [schedule, setSchedule] = useState(() => buildSchedule(form, getT(form?.preferredLang || "English")));
   const [milestones, setMilestones] = useState(() => buildMilestones(form));
   const [msDone, setMsDone] = useState([]);
@@ -12578,6 +12657,16 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
         </div>
       )}
       <div style={{ maxWidth:600, margin:"0 auto", padding:"20px 16px" }}>
+        {showReaderCard && (
+          <div style={{ ...S.card, marginBottom:16, border:"1.5px solid rgba(139,92,246,0.45)", background:"linear-gradient(135deg,#1e1b4b,#0f172a)" }}>
+            <p style={{ color:"#f1f5f9", fontSize:14, fontWeight:800, margin:"0 0 6px" }}>🧩 {T.readerCardTitle}</p>
+            <p style={{ color:"#94a3b8", fontSize:12, lineHeight:1.6, margin:"0 0 12px" }}>{T.readerCardDesc}</p>
+            <div style={{ display:"flex", gap:10, alignItems:"center", flexWrap:"wrap" }}>
+              <a href="https://chromewebstore.google.com/detail/eambfoiipilfnedcofindninaachibge" target="_blank" rel="noopener noreferrer" style={{ padding:"8px 16px", borderRadius:10, background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff", fontSize:13, fontWeight:800, textDecoration:"none" }}>{T.readerCardCta}</a>
+              <button onClick={()=>{ const now=Date.now(); setReaderCardHiddenAt(now); try { localStorage.setItem(scopedKey("gaku_reader_card_hidden_at"), String(now)); } catch {} }} style={{ background:"none", border:"none", color:"#64748b", fontSize:12, cursor:"pointer" }}>{T.readerCardLater}</button>
+            </div>
+          </div>
+        )}
         <div style={{ ...S.card, marginBottom:16 }}>
           <div style={{ display:"flex", justifyContent:"space-between", marginBottom:8 }}>
             <p style={{ color:"#f1f5f9", fontSize:13, fontWeight:700, margin:0 }}>{T.weeklyProgress}</p>
@@ -13258,6 +13347,7 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
   // daysUntilTrialEnds, just for this second countdown.
   const [tutorialGraceDaysLeft, setTutorialGraceDaysLeft] = useState(null);
   const [streakDays, setStreakDays] = useState(0);
+  const [readerInstalled, setReaderInstalled] = useState(null);
   // Post-signup onboarding: right after a brand-new profile is saved (never
   // for profile edits), walk the student through one quick "first win"
   // activity, then (if applicable) an install-to-home-screen prompt, before
@@ -13450,6 +13540,7 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
       // before the early-return below, which only short-circuits the
       // trial-specific paywall checks.
       setStreakDays(typeof data?.streakDays === "number" ? data.streakDays : 0);
+      setReaderInstalled(typeof data?.readerInstalled === "boolean" ? data.readerInstalled : null);
       if ((data?.isGakuStudent || data?.isPaid) && !previewPaywall) {
         setShowPaywall(false);
         setAwaitingUnlock(false);
@@ -14065,7 +14156,7 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
   }
   return (
     <div style={{ position:"relative" }} onClickCapture={handleDashboardInteraction}>
-      <Dashboard form={form} onEdit={handleEdit} onLevelUp={(lvl)=>handleSubmit({ ...form, jlpt: lvl })} onLogout={authUser ? handleLogout : undefined} onDeleteAccount={authUser ? handleDeleteAccount : undefined} deleteAccountBusy={deleteAccountBusy} userId={authUser?.id} streakDays={streakDays} daysUntilTrialEnds={daysUntilTrialEnds} tutorialGraceDaysLeft={tutorialGraceDaysLeft} isTrialAccount={!isGakuStudent && !isPaid} isGakuStudent={isGakuStudent} onCompleteProfile={form?.profileComplete === false ? () => setOnboardingStep("completeProfile") : undefined} />
+      <Dashboard form={form} onEdit={handleEdit} onLevelUp={(lvl)=>handleSubmit({ ...form, jlpt: lvl })} onLogout={authUser ? handleLogout : undefined} onDeleteAccount={authUser ? handleDeleteAccount : undefined} deleteAccountBusy={deleteAccountBusy} userId={authUser?.id} streakDays={streakDays} readerInstalled={readerInstalled} daysUntilTrialEnds={daysUntilTrialEnds} tutorialGraceDaysLeft={tutorialGraceDaysLeft} isTrialAccount={!isGakuStudent && !isPaid} isGakuStudent={isGakuStudent} onCompleteProfile={form?.profileComplete === false ? () => setOnboardingStep("completeProfile") : undefined} />
       {/* TEMP DEBUG — remove after confirming the counter works */}
       <div style={{ position:"fixed", bottom:12, right:12, zIndex:99999, background:"rgba(0,0,0,0.75)", color:"#4ade80", fontSize:11, fontFamily:"monospace", padding:"4px 8px", borderRadius:6 }}>
         count: {interactionCount}/21 {skipTrialPaywall ? "(skip)" : ""} {authUser && isGakuStudent ? "(gaku)" : ""} {authUser && isPaid ? "(paid)" : ""}

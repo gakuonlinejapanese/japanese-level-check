@@ -154,6 +154,21 @@ export default async function handler(req, res) {
       console.error("[account-status] streak calculation failed:", streakErr.message);
     }
 
+    // Has this account ever used the GAKU Reader Chrome extension? (Reader
+    // logs user_id into reader_install_log once the student logs in there.)
+    // The dashboard uses this to decide whether to promote the extension.
+    let readerInstalled = false;
+    try {
+      const { data: readerRows } = await supabase
+        .from("reader_install_log")
+        .select("instance_id")
+        .eq("user_id", userId)
+        .limit(1);
+      readerInstalled = !!(readerRows && readerRows.length > 0);
+    } catch (readerErr) {
+      console.error("[account-status] reader lookup failed:", readerErr.message);
+    }
+
     let dataWasReset = false;
     // Wipe once GRACE_DAYS have passed since the payment screen actually
     // started showing (i.e. since the bonus Tutorial week ended) — not since
@@ -186,6 +201,7 @@ export default async function handler(req, res) {
       tutorialGraceDaysLeft,
       dataWasReset,
       streakDays,
+      readerInstalled,
     });
   } catch (e) {
     return res.status(500).json({ error: e.message });
