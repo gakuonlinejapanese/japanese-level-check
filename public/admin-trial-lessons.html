@@ -19,6 +19,9 @@
   .badge.pending { background:#fef3c7; color:var(--amber); }
   .badge.accepted { background:#dcfce7; color:var(--green); }
   .badge.declined { background:#fee2e2; color:var(--red); }
+  .badge.rejected_country, .badge.blocked_repeat { background:#e2e8f0; color:#475569; }
+  .badge.notify-ok { background:#dcfce7; color:var(--green); }
+  .badge.notify-fail { background:#dc2626; color:#fff; }
   .details { font-size:13px; color:#475569; margin:8px 0; line-height:1.7; }
   .details b { color:var(--ink); }
   .row { display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-top:10px; }
@@ -46,6 +49,11 @@
   <section>
     <h2>📋 未対応のリクエスト</h2>
     <div id="pending-list"><p class="empty">読み込み中…</p></div>
+  </section>
+
+  <section>
+    <h2>🚫 自動お断り（対象国外・再申込）直近30件</h2>
+    <div id="auto-declined-list"><p class="empty">読み込み中…</p></div>
   </section>
 
   <section>
@@ -211,6 +219,11 @@ function detailsHtml(r) {
   `;
 }
 
+function notifyBadge(r) {
+  if (r.notify_status === "failed") return `<span class="badge notify-fail" title="${esc(r.notify_error)}">⚠️ 通知メール未送信</span>`;
+  if (r.notify_status === "sent") return '<span class="badge notify-ok">通知メール送信済</span>';
+  return "";
+}
 let pendingRequestsCache = {};
 
 async function loadList() {
@@ -224,7 +237,7 @@ async function loadList() {
       <div class="req-card" id="req-${r.id}">
         <div class="req-head">
           <span>${esc(r.full_name)}</span>
-          <span class="badge pending">pending</span>
+          <span class="badge pending">pending</span> ${notifyBadge(r)}
         </div>
         <div class="details">${detailsHtml(r)}</div>
         <label style="font-size:12px;color:#64748b;">確定日時（承諾する場合。<b>生徒の現地時間</b>で入力してください。参考: 生徒の希望「${esc(r.preferred_datetime) || '未記入'}」）</label>
@@ -238,6 +251,22 @@ async function loadList() {
         <div class="row">
           <button class="btn accept" onclick="respond('${r.id}','accept')">承諾して送信</button>
           <button class="btn decline" onclick="respond('${r.id}','decline')">お断りして送信</button>
+        </div>
+      </div>
+    `).join("");
+
+  const autoEl = document.getElementById("auto-declined-list");
+  const auto = data.autoDeclined || [];
+  autoEl.innerHTML = auto.length === 0 ? '<p class="empty">自動お断りはありません。</p>' :
+    auto.map(r => `
+      <div class="req-card">
+        <div class="req-head">
+          <span>${esc(r.full_name)}</span>
+          <span><span class="badge ${r.status}">${r.status}</span> ${notifyBadge(r)}</span>
+        </div>
+        <div class="details">
+          ${detailsHtml(r)}<br/>
+          <b>申込日時:</b> ${r.submitted_at ? new Date(r.submitted_at).toLocaleString() : "—"}
         </div>
       </div>
     `).join("");

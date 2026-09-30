@@ -554,6 +554,36 @@ async function handleSchoolMatching(req, res) {
 // entirely — those applicants are accepted no matter where they live. It does NOT apply to
 // applicants who are blocked for having already been declined once before (that check happens
 // before this function is ever called for that case, via handleCheckTrialLessonRepeat).
+// Sends the admin notification for a free-trial-lesson submission. Never throws: retries up to
+// 3 times (the last attempt drops Reply-To, since a malformed applicant email there makes Brevo
+// reject the whole message), and returns the outcome so it can be stored on the request row.
+async function sendTrialNotification({ subject, html, replyTo }) {
+  const waits = [0, 800, 2500];
+  let lastErr = null;
+  for (let i = 0; i < waits.length; i++) {
+    if (waits[i]) await new Promise((r) => setTimeout(r, waits[i]));
+    try {
+      await sendEmail({ to: ADMIN_EMAIL, subject, html, replyTo: i < 2 ? replyTo : undefined });
+      return { ok: true, attempts: i + 1, error: null };
+    } catch (e) {
+      lastErr = e;
+      console.error(`Trial-lesson notification attempt ${i + 1} failed:`, e && e.message);
+    }
+  }
+  return { ok: false, attempts: waits.length, error: String((lastErr && lastErr.message) || lastErr).slice(0, 500) };
+}
+
+async function recordTrialNotifyResult(supabase, id, result) {
+  if (!id) return;
+  const { error } = await supabase.from("trial_lesson_requests").update({
+    notify_status: result.ok ? "sent" : "failed",
+    notify_attempts: result.attempts,
+    notify_error: result.error,
+    notified_at: result.ok ? new Date().toISOString() : null,
+  }).eq("id", id);
+  if (error) console.error("recordTrialNotifyResult failed:", error.message);
+}
+
 async function handleTrialLesson(req, res) {
   try {
     const {
@@ -570,7 +600,7 @@ async function handleTrialLesson(req, res) {
       // Just a record of a blocked repeat attempt — no email, no policy step involved.
       const supabase = getAdminClient();
       const submittedAt = new Date().toISOString();
-      const { error: insertErr } = await supabase.from("trial_lesson_requests").insert({
+      const { data: blockedRow, error: insertErr } = await supabase.from("trial_lesson_requests").insert({
         full_name: fullName,
         email: email.trim().toLowerCase(),
         location: location || null,
@@ -583,10 +613,24 @@ async function handleTrialLesson(req, res) {
         weekly_trial_done: !!weeklyTrialDone,
         agreed_at: null,
         submitted_at: submittedAt,
-      });
+      }).select("id").single();
       if (insertErr) {
         console.error("trial_lesson_requests insert failed (blocked_repeat):", insertErr.message);
       }
+      // Always notify, even for blocked repeat attempts.
+      const blockedHtml = `
+        <p style="color:#c8382b;"><strong>Outcome: Blocked — this email had already been declined once before. The applicant was shown the blocked screen.</strong></p>
+        <p><strong>Name:</strong> ${fullName}<br/>
+           <strong>Email:</strong> ${email}<br/>
+           <strong>Where they live:</strong> ${location || "(not provided)"}<br/>
+           ${originCountry ? `<strong>Origin country:</strong> ${originCountry}<br/>` : ""}
+           <strong>Submitted at:</strong> ${submittedAt}</p>`;
+      const blockedResult = await sendTrialNotification({
+        subject: `[GAKU] Free Trial Lesson — blocked (repeat) — ${fullName}`,
+        html: blockedHtml,
+        replyTo: email,
+      });
+      await recordTrialNotifyResult(supabase, blockedRow && blockedRow.id, blockedResult);
       return res.status(200).json({ ok: true });
     }
 
@@ -606,7 +650,7 @@ async function handleTrialLesson(req, res) {
     const supabase = getAdminClient();
     const submittedAt = new Date().toISOString();
 
-    const { error: insertErr } = await supabase.from("trial_lesson_requests").insert({
+    const { data: insertedRow, error: insertErr } = await supabase.from("trial_lesson_requests").insert({
       full_name: fullName,
       email: email.trim().toLowerCase(),
       location: location || null,
@@ -628,7 +672,7 @@ async function handleTrialLesson(req, res) {
       exact_time_jst: exactTimeJst || null,
       agreed_at: isRejected ? null : submittedAt,
       submitted_at: submittedAt,
-    });
+    }).select("id").single();
     if (insertErr) {
       console.error("trial_lesson_requests insert failed:", insertErr.message, insertErr.details || "", insertErr.hint || "");
       return res.status(500).json({ error: insertErr.message });
@@ -656,13 +700,11 @@ async function handleTrialLesson(req, res) {
          <strong>Submitted at:</strong> ${submittedAt}</p>
       ${!isRejected ? `<p>Please check your schedule against the preferred date/time above, then accept or decline (with an optional note) from the admin page: <a href="https://app.seitojapanese.online/admin-trial-lessons.html">admin-trial-lessons.html</a>.</p>` : ""}
     `;
-    try {
-      await sendEmail({ to: ADMIN_EMAIL, subject: `${subjectPrefix} — ${fullName}`, html, replyTo: email });
-    } catch (e) {
-      // Don't block the student's submission just because the notification email failed —
-      // the request is already durably recorded in trial_lesson_requests above.
-      console.error("Failed to send trial-lesson notification email:", e.message);
-    }
+    // Don't block the student's submission if the notification fails — the request is already
+    // durably recorded above, and the result (sent/failed) is stored on the row so the admin page
+    // can flag any submission whose email never went out.
+    const notifyResult = await sendTrialNotification({ subject: `${subjectPrefix} — ${fullName}`, html, replyTo: email });
+    await recordTrialNotifyResult(supabase, insertedRow && insertedRow.id, notifyResult);
 
     return res.status(200).json({ ok: true });
   } catch (e) {
@@ -977,7 +1019,17 @@ async function handleAdminListTrialLessons(req, res) {
       .limit(30);
     if (processedErr) return res.status(500).json({ error: processedErr.message });
 
-    return res.status(200).json({ pending: pending || [], processed: processed || [] });
+    // Auto-declined (country / repeat) submissions — shown so they are visible here even if the
+    // notification email was lost.
+    const { data: autoDeclined, error: autoErr } = await supabase
+      .from("trial_lesson_requests")
+      .select("*")
+      .in("status", ["rejected_country", "blocked_repeat"])
+      .order("submitted_at", { ascending: false })
+      .limit(30);
+    if (autoErr) return res.status(500).json({ error: autoErr.message });
+
+    return res.status(200).json({ pending: pending || [], processed: processed || [], autoDeclined: autoDeclined || [] });
   } catch (e) {
     console.error("handleAdminListTrialLessons failed:", e.message);
     return res.status(500).json({ error: e.message });
