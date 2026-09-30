@@ -443,6 +443,12 @@ const UI_TRANSLATIONS = {
     tutorialCompleteDesc: "You've seen all 5 main features of GAKU Master. You can replay this tour anytime from the 🎓 Tutorial button.",
     tutorialCompleteBtn: "Start Studying",
     tutorialReaderCta: "📬 Get the GAKU Reader from your email!",
+    featurePickerTitle: "Choose the features you want",
+    featurePickerDesc: "Pick only the features you'll use. The rest will be hidden so your screen stays simple. You can change this anytime.",
+    featurePickerAlways: "Vocabulary and Feedback are always shown.",
+    featureShowOnly: "Show only these",
+    featureKeepAll: "Keep everything",
+    featureCustomizeBtn: "Customize",
     feedbackTitle: "💬 Feedback & Opinion",
     feedbackSubtitle: "Tell us what you'd like improved or anything that's bothering you about the app. We read every message.",
     feedbackWarning: "If you post slander, abusive language, or discriminatory terms, your account will be suspended immediately. We accept no responsibility even if legal action results.",
@@ -862,6 +868,12 @@ const UI_TRANSLATIONS = {
     tutorialCompleteDesc: "Vous avez découvert les 5 fonctionnalités principales de GAKU Master. Vous pouvez revoir cette visite à tout moment via le bouton 🎓 Tutoriel.",
     tutorialCompleteBtn: "Commencer à étudier",
     tutorialReaderCta: "📬 Recevez GAKU Reader par e-mail !",
+    featurePickerTitle: "Choisissez les fonctionnalités que vous voulez",
+    featurePickerDesc: "Sélectionnez uniquement celles que vous utiliserez. Les autres seront masquées pour garder un écran simple. Vous pouvez modifier ce choix à tout moment.",
+    featurePickerAlways: "Vocabulaire et Feedback restent toujours affichés.",
+    featureShowOnly: "Afficher seulement celles-ci",
+    featureKeepAll: "Tout garder",
+    featureCustomizeBtn: "Personnaliser",
     feedbackTitle: "💬 Retour & Avis",
     feedbackSubtitle: "Dites-nous ce que vous aimeriez voir amélioré ou ce qui vous dérange dans l'application. Nous lisons chaque message.",
     feedbackWarning: "En cas de diffamation, propos injurieux ou termes discriminatoires, votre compte sera immédiatement suspendu. Nous déclinons toute responsabilité, même en cas de poursuites judiciaires.",
@@ -1266,6 +1278,12 @@ const UI_TRANSLATIONS = {
     tutorialCompleteDesc: "Has visto las 5 funciones principales de GAKU Master. Puedes repetir este recorrido cuando quieras desde el botón 🎓 Tutorial.",
     tutorialCompleteBtn: "Empezar a estudiar",
     tutorialReaderCta: "📬 ¡Recibe GAKU Reader por correo!",
+    featurePickerTitle: "Elige las funciones que quieres",
+    featurePickerDesc: "Elige solo las funciones que usarás. El resto se ocultará para mantener la pantalla simple. Puedes cambiarlo cuando quieras.",
+    featurePickerAlways: "Vocabulario y Feedback siempre se muestran.",
+    featureShowOnly: "Mostrar solo estas",
+    featureKeepAll: "Mantener todo",
+    featureCustomizeBtn: "Personalizar",
     feedbackTitle: "💬 Comentarios y Opinión",
     feedbackSubtitle: "Cuéntanos qué te gustaría que mejoráramos o qué te molesta de la app. Leemos todos los mensajes.",
     feedbackWarning: "Si publicas difamación, lenguaje abusivo o términos discriminatorios, tu cuenta será suspendida de inmediato. No asumimos ninguna responsabilidad aunque se inicien acciones legales.",
@@ -1670,6 +1688,12 @@ const UI_TRANSLATIONS = {
     tutorialCompleteDesc: "Você conheceu as 5 principais funções do GAKU Master. Você pode rever este tour a qualquer momento pelo botão 🎓 Tutorial.",
     tutorialCompleteBtn: "Começar a estudar",
     tutorialReaderCta: "📬 Receba o GAKU Reader pelo e-mail!",
+    featurePickerTitle: "Escolha os recursos que você quer",
+    featurePickerDesc: "Escolha apenas os recursos que você vai usar. O resto ficará oculto para manter a tela simples. Você pode mudar isso a qualquer momento.",
+    featurePickerAlways: "Vocabulário e Feedback são sempre exibidos.",
+    featureShowOnly: "Mostrar somente estes",
+    featureKeepAll: "Manter tudo",
+    featureCustomizeBtn: "Personalizar",
     feedbackTitle: "💬 Feedback e Opinião",
     feedbackSubtitle: "Conte-nos o que você gostaria que melhorássemos ou o que está incomodando você no app. Lemos todas as mensagens.",
     feedbackWarning: "Se você publicar difamação, linguagem abusiva ou termos discriminatórios, sua conta será suspensa imediatamente. Não assumimos nenhuma responsabilidade mesmo que haja ação judicial.",
@@ -2074,6 +2098,12 @@ const UI_TRANSLATIONS = {
     tutorialCompleteDesc: "Du hast alle 5 Hauptfunktionen von GAKU Master kennengelernt. Du kannst diese Tour jederzeit über den 🎓 Tutorial-Button wiederholen.",
     tutorialCompleteBtn: "Mit dem Lernen beginnen",
     tutorialReaderCta: "📬 Hol dir GAKU Reader per E-Mail!",
+    featurePickerTitle: "Wähle die Funktionen, die du willst",
+    featurePickerDesc: "Wähle nur die Funktionen, die du nutzen wirst. Der Rest wird ausgeblendet, damit dein Bildschirm übersichtlich bleibt. Du kannst das jederzeit ändern.",
+    featurePickerAlways: "Vokabeln und Feedback werden immer angezeigt.",
+    featureShowOnly: "Nur diese anzeigen",
+    featureKeepAll: "Alles behalten",
+    featureCustomizeBtn: "Anpassen",
     feedbackTitle: "💬 Feedback & Meinung",
     feedbackSubtitle: "Sag uns, was wir verbessern sollen oder was dich an der App stört. Wir lesen jede Nachricht.",
     feedbackWarning: "Bei Verleumdung, beleidigender Sprache oder diskriminierenden Begriffen wird dein Konto sofort gesperrt. Wir übernehmen keine Verantwortung, selbst wenn rechtliche Schritte eingeleitet werden.",
@@ -2478,6 +2508,12 @@ const UI_TRANSLATIONS = {
     tutorialCompleteDesc: "Hai visto tutte le 5 funzioni principali di GAKU Master. Puoi rivedere questo tour in qualsiasi momento dal pulsante 🎓 Tutorial.",
     tutorialCompleteBtn: "Inizia a studiare",
     tutorialReaderCta: "📬 Ricevi GAKU Reader via e-mail!",
+    featurePickerTitle: "Scegli le funzioni che vuoi",
+    featurePickerDesc: "Scegli solo le funzioni che userai. Le altre verranno nascoste per mantenere lo schermo semplice. Puoi cambiare questa scelta in qualsiasi momento.",
+    featurePickerAlways: "Vocabolario e Feedback sono sempre visibili.",
+    featureShowOnly: "Mostra solo queste",
+    featureKeepAll: "Mantieni tutto",
+    featureCustomizeBtn: "Personalizza",
     feedbackTitle: "💬 Feedback e Opinioni",
     feedbackSubtitle: "Dicci cosa vorresti che migliorassimo o cosa ti disturba dell'app. Leggiamo ogni messaggio.",
     feedbackWarning: "In caso di diffamazione, linguaggio offensivo o termini discriminatori, il tuo account verrà sospeso immediatamente. Non ci assumiamo alcuna responsabilità anche in caso di azioni legali.",
@@ -2882,6 +2918,12 @@ const UI_TRANSLATIONS = {
     tutorialCompleteDesc: "你已经了解了GAKU Master的全部5个主要功能。随时可以通过🎓教程按钮重新观看导览。",
     tutorialCompleteBtn: "开始学习",
     tutorialReaderCta: "📬 通过邮件领取GAKU Reader！",
+    featurePickerTitle: "选择你想要的功能",
+    featurePickerDesc: "只选择你会用到的功能，其余的会被隐藏，让界面保持简洁。你可以随时更改。",
+    featurePickerAlways: "“词汇”和“反馈”始终显示。",
+    featureShowOnly: "只显示这些",
+    featureKeepAll: "全部保留",
+    featureCustomizeBtn: "自定义",
     feedbackTitle: "💬 反馈与意见",
     feedbackSubtitle: "告诉我们你希望我们改进什么，或者对这个应用有什么不满意的地方。我们会阅读每一条留言。",
     feedbackWarning: "万一发布诽谤、辱骂或歧视性言论，账号将立即被停用。即使因此产生诉讼，我们也概不负责。",
@@ -3286,6 +3328,12 @@ const UI_TRANSLATIONS = {
     tutorialCompleteDesc: "你已經了解了GAKU Master的全部5個主要功能。隨時可以透過🎓教學按鈕重新觀看導覽。",
     tutorialCompleteBtn: "開始學習",
     tutorialReaderCta: "📬 透過電子郵件領取GAKU Reader！",
+    featurePickerTitle: "選擇你想要的功能",
+    featurePickerDesc: "只選擇你會用到的功能，其餘的會被隱藏，讓介面保持簡潔。你可以隨時更改。",
+    featurePickerAlways: "「詞彙」和「意見回饋」一律顯示。",
+    featureShowOnly: "只顯示這些",
+    featureKeepAll: "全部保留",
+    featureCustomizeBtn: "自訂",
     feedbackTitle: "💬 意見回饋與想法",
     feedbackSubtitle: "告訴我們你希望我們改進什麼，或是對這個應用程式有什麼不滿意的地方。我們會閱讀每一則留言。",
     feedbackWarning: "萬一發布誹謗、辱罵或歧視性言論，帳號將立即被停用。即使因此產生訴訟，我們也概不負責。",
@@ -3690,6 +3738,12 @@ const UI_TRANSLATIONS = {
     tutorialCompleteDesc: "GAKU Master의 5가지 주요 기능을 모두 살펴보셨습니다. 🎓 튜토리얼 버튼을 통해 언제든 다시 볼 수 있어요.",
     tutorialCompleteBtn: "학습 시작하기",
     tutorialReaderCta: "📬 이메일에서 GAKU Reader를 받아보세요!",
+    featurePickerTitle: "원하는 기능을 선택하세요",
+    featurePickerDesc: "사용할 기능만 선택하세요. 나머지는 숨겨져 화면이 간단해집니다. 언제든지 바꿀 수 있어요.",
+    featurePickerAlways: "어휘와 피드백은 항상 표시됩니다.",
+    featureShowOnly: "이것만 표시",
+    featureKeepAll: "모두 유지",
+    featureCustomizeBtn: "맞춤 설정",
     feedbackTitle: "💬 피드백 및 의견",
     feedbackSubtitle: "개선했으면 하는 점이나 앱에서 불편한 점을 알려주세요. 모든 메시지를 읽습니다.",
     feedbackWarning: "만약 명예훼손, 욕설, 차별적 표현을 작성할 경우 계정이 즉시 정지됩니다. 소송이 발생하더라도 일체의 책임을 지지 않습니다.",
@@ -4094,6 +4148,12 @@ const UI_TRANSLATIONS = {
     tutorialCompleteDesc: "คุณได้ชมฟีเจอร์หลักทั้ง 5 ของ GAKU Master แล้ว สามารถดูทัวร์นี้ซ้ำได้ทุกเมื่อผ่านปุ่ม 🎓 บทแนะนำ",
     tutorialCompleteBtn: "เริ่มเรียนเลย",
     tutorialReaderCta: "📬 รับ GAKU Reader ทางอีเมล!",
+    featurePickerTitle: "เลือกฟีเจอร์ที่คุณต้องการ",
+    featurePickerDesc: "เลือกเฉพาะฟีเจอร์ที่คุณจะใช้ ส่วนที่เหลือจะถูกซ่อนเพื่อให้หน้าจอเรียบง่าย คุณเปลี่ยนได้ทุกเมื่อ",
+    featurePickerAlways: "คำศัพท์และ Feedback จะแสดงเสมอ",
+    featureShowOnly: "แสดงเฉพาะที่เลือก",
+    featureKeepAll: "เก็บทั้งหมดไว้",
+    featureCustomizeBtn: "ปรับแต่ง",
     feedbackTitle: "💬 ความคิดเห็นและข้อเสนอแนะ",
     feedbackSubtitle: "บอกเราว่าคุณอยากให้ปรับปรุงอะไร หรือมีอะไรที่กวนใจคุณเกี่ยวกับแอปนี้ เราจะอ่านทุกข้อความ",
     feedbackWarning: "หากคุณโพสต์ข้อความหมิ่นประมาท คำหยาบคาย หรือถ้อยคำเลือกปฏิบัติ บัญชีของคุณจะถูกระงับทันที เราจะไม่รับผิดชอบใด ๆ แม้จะเกิดการฟ้องร้อง",
@@ -4498,6 +4558,12 @@ const UI_TRANSLATIONS = {
     tutorialCompleteDesc: "Anda telah melihat kesemua 5 ciri utama GAKU Master. Anda boleh ulang tayang lawatan ini bila-bila masa melalui butang 🎓 Tutorial.",
     tutorialCompleteBtn: "Mula Belajar",
     tutorialReaderCta: "📬 Dapatkan GAKU Reader melalui e-mel anda!",
+    featurePickerTitle: "Pilih ciri yang anda mahu",
+    featurePickerDesc: "Pilih hanya ciri yang akan anda gunakan. Selebihnya akan disembunyikan supaya skrin kekal ringkas. Anda boleh mengubahnya bila-bila masa.",
+    featurePickerAlways: "Perbendaharaan kata dan Feedback sentiasa dipaparkan.",
+    featureShowOnly: "Papar yang ini sahaja",
+    featureKeepAll: "Kekalkan semua",
+    featureCustomizeBtn: "Suaikan",
     feedbackTitle: "💬 Maklum Balas & Pendapat",
     feedbackSubtitle: "Beritahu kami apa yang anda mahu diperbaiki atau apa-apa yang mengganggu anda tentang aplikasi ini. Kami membaca setiap mesej.",
     feedbackWarning: "Sekiranya anda menulis fitnah, bahasa kesat, atau istilah diskriminasi, akaun anda akan digantung serta-merta. Kami tidak bertanggungjawab walaupun tindakan undang-undang diambil.",
@@ -4902,6 +4968,12 @@ const UI_TRANSLATIONS = {
     tutorialCompleteDesc: "Anda telah melihat semua 5 fitur utama GAKU Master. Anda bisa memutar ulang tur ini kapan saja lewat tombol 🎓 Tutorial.",
     tutorialCompleteBtn: "Mulai Belajar",
     tutorialReaderCta: "📬 Dapatkan GAKU Reader lewat email Anda!",
+    featurePickerTitle: "Pilih fitur yang kamu inginkan",
+    featurePickerDesc: "Pilih hanya fitur yang akan kamu gunakan. Sisanya akan disembunyikan agar layar tetap sederhana. Kamu bisa mengubahnya kapan saja.",
+    featurePickerAlways: "Kosakata dan Feedback selalu ditampilkan.",
+    featureShowOnly: "Tampilkan yang ini saja",
+    featureKeepAll: "Pertahankan semua",
+    featureCustomizeBtn: "Sesuaikan",
     feedbackTitle: "💬 Masukan & Pendapat",
     feedbackSubtitle: "Beri tahu kami apa yang ingin Anda tingkatkan atau apa yang mengganggu Anda tentang aplikasi ini. Kami membaca setiap pesan.",
     feedbackWarning: "Jika Anda menulis fitnah, bahasa kasar, atau istilah diskriminatif, akun Anda akan langsung ditangguhkan. Kami tidak bertanggung jawab meskipun terjadi tuntutan hukum.",
@@ -5306,6 +5378,12 @@ const UI_TRANSLATIONS = {
     tutorialCompleteDesc: "Bạn đã xem qua cả 5 tính năng chính của GAKU Master. Bạn có thể xem lại chuyến tham quan này bất cứ lúc nào qua nút 🎓 Hướng dẫn.",
     tutorialCompleteBtn: "Bắt đầu học",
     tutorialReaderCta: "📬 Nhận GAKU Reader qua email của bạn!",
+    featurePickerTitle: "Chọn các tính năng bạn muốn",
+    featurePickerDesc: "Chỉ chọn những tính năng bạn sẽ dùng. Phần còn lại sẽ được ẩn để màn hình gọn gàng. Bạn có thể thay đổi bất cứ lúc nào.",
+    featurePickerAlways: "Từ vựng và Feedback luôn được hiển thị.",
+    featureShowOnly: "Chỉ hiện những mục này",
+    featureKeepAll: "Giữ tất cả",
+    featureCustomizeBtn: "Tùy chỉnh",
     feedbackTitle: "💬 Phản hồi & Ý kiến",
     feedbackSubtitle: "Hãy cho chúng tôi biết bạn muốn cải thiện điều gì hoặc điều gì đang làm bạn khó chịu về ứng dụng. Chúng tôi đọc mọi tin nhắn.",
     feedbackWarning: "Nếu bạn viết nội dung phỉ báng, ngôn từ lăng mạ hoặc phân biệt đối xử, tài khoản của bạn sẽ bị đình chỉ ngay lập tức. Chúng tôi không chịu bất kỳ trách nhiệm nào kể cả khi có kiện tụng xảy ra.",
@@ -5710,6 +5788,12 @@ const UI_TRANSLATIONS = {
     tutorialCompleteDesc: "आपने GAKU Master के सभी 5 मुख्य फीचर्स देख लिए हैं। आप 🎓 ट्यूटोरियल बटन से कभी भी यह टूर दोबारा देख सकते हैं।",
     tutorialCompleteBtn: "पढ़ाई शुरू करें",
     tutorialReaderCta: "📬 ईमेल से GAKU Reader प्राप्त करें!",
+    featurePickerTitle: "अपनी पसंद की सुविधाएँ चुनें",
+    featurePickerDesc: "सिर्फ़ वही सुविधाएँ चुनें जिनका आप उपयोग करेंगे। बाकी छिपा दी जाएँगी ताकि स्क्रीन सरल रहे। आप इसे कभी भी बदल सकते हैं।",
+    featurePickerAlways: "शब्दावली और Feedback हमेशा दिखाई देते हैं।",
+    featureShowOnly: "सिर्फ़ ये दिखाएँ",
+    featureKeepAll: "सब कुछ रखें",
+    featureCustomizeBtn: "अनुकूलित करें",
     feedbackTitle: "💬 प्रतिक्रिया और राय",
     feedbackSubtitle: "हमें बताएं कि आप ऐप में क्या सुधार चाहते हैं या आपको क्या परेशान कर रहा है। हम हर संदेश पढ़ते हैं।",
     feedbackWarning: "यदि आप मानहानि, अपमानजनक भाषा या भेदभावपूर्ण शब्दों का उपयोग करते हैं, तो आपका खाता तुरंत निलंबित कर दिया जाएगा। कानूनी कार्रवाई होने पर भी हम कोई ज़िम्मेदारी नहीं लेंगे।",
@@ -6114,6 +6198,12 @@ const UI_TRANSLATIONS = {
     tutorialCompleteDesc: "GAKU Masterの5つの主な機能をすべて見てもらいました。🎓チュートリアルボタンからいつでもこのツアーをもう一度見られます。",
     tutorialCompleteBtn: "勉強を始める",
     tutorialReaderCta: "📬 メールからGAKU Master Readerを受け取ろう！",
+    featurePickerTitle: "使いたい機能を選んでください",
+    featurePickerDesc: "使う機能だけを選んでください。残りは非表示になり、画面がすっきりします。いつでも変更できます。",
+    featurePickerAlways: "「単語帳」と「フィードバック」は常に表示されます。",
+    featureShowOnly: "選んだものだけ表示",
+    featureKeepAll: "すべて表示のまま",
+    featureCustomizeBtn: "カスタマイズ",
     feedbackTitle: "💬 フィードバック・ご意見",
     feedbackSubtitle: "アプリで改善してほしい点や気になる点を教えてください。すべてのメッセージに目を通しています。",
     feedbackWarning: "万が一誹謗中傷、暴言、差別用語などを書いた場合は直ちにアカウント停止。訴訟が起こっても一切の責任は負いません。",
@@ -6518,6 +6608,12 @@ const UI_TRANSLATIONS = {
     tutorialCompleteDesc: "GAKU Master'ın 5 ana özelliğinin tamamını gördünüz. Bu turu istediğiniz zaman 🎓 Eğitim düğmesinden tekrar izleyebilirsiniz.",
     tutorialCompleteBtn: "Çalışmaya Başla",
     tutorialReaderCta: "📬 GAKU Reader'ı e-postanızdan alın!",
+    featurePickerTitle: "İstediğin özellikleri seç",
+    featurePickerDesc: "Yalnızca kullanacağın özellikleri seç. Geri kalanı gizlenir ve ekranın sade kalır. Bunu istediğin zaman değiştirebilirsin.",
+    featurePickerAlways: "Kelime ve Feedback her zaman gösterilir.",
+    featureShowOnly: "Sadece bunları göster",
+    featureKeepAll: "Hepsini koru",
+    featureCustomizeBtn: "Özelleştir",
     feedbackTitle: "💬 Geri Bildirim ve Görüş",
     feedbackSubtitle: "Neyi iyileştirmemizi istediğinizi veya uygulamayla ilgili sizi rahatsız eden bir şeyi bize bildirin. Her mesajı okuyoruz.",
     feedbackWarning: "İftira, hakaret içeren dil veya ayrımcı ifadeler yazmanız durumunda hesabınız derhal askıya alınacaktır. Dava açılsa dahi hiçbir sorumluluk kabul etmiyoruz.",
@@ -6922,6 +7018,12 @@ const UI_TRANSLATIONS = {
     tutorialCompleteDesc: "तपाईंले GAKU Master का सबै ५ मुख्य सुविधाहरू हेर्नुभयो। तपाईं जुनसुकै बेला 🎓 ट्युटोरियल बटनबाट यो भ्रमण फेरि हेर्न सक्नुहुन्छ।",
     tutorialCompleteBtn: "अध्ययन सुरु गर्नुहोस्",
     tutorialReaderCta: "📬 इमेलबाट GAKU Reader प्राप्त गर्नुहोस्!",
+    featurePickerTitle: "आफूलाई चाहिने सुविधाहरू छान्नुहोस्",
+    featurePickerDesc: "तपाईंले प्रयोग गर्ने सुविधाहरू मात्र छान्नुहोस्। बाँकी लुकाइनेछन् ताकि स्क्रिन सरल रहोस्। तपाईं जुनसुकै बेला परिवर्तन गर्न सक्नुहुन्छ।",
+    featurePickerAlways: "शब्दावली र Feedback सधैं देखिन्छन्।",
+    featureShowOnly: "यी मात्र देखाउनुहोस्",
+    featureKeepAll: "सबै राख्नुहोस्",
+    featureCustomizeBtn: "अनुकूलन गर्नुहोस्",
     feedbackTitle: "💬 प्रतिक्रिया र विचार",
     feedbackSubtitle: "एपमा के सुधार गरिदिए हुन्थ्यो वा के कुराले तपाईंलाई अप्ठ्यारो पारिरहेको छ भनी हामीलाई बताउनुहोस्। हामी हरेक सन्देश पढ्छौं।",
     feedbackWarning: "यदि तपाईंले मानहानि, अपमानजनक भाषा वा भेदभावपूर्ण शब्द लेख्नुभयो भने तपाईंको खाता तुरुन्तै निलम्बन गरिनेछ। मुद्दा परे पनि हामी कुनै जिम्मेवारी लिने छैनौं।",
@@ -7326,6 +7428,12 @@ const UI_TRANSLATIONS = {
     tutorialCompleteDesc: "Nakita mo na ang lahat ng 5 pangunahing feature ng GAKU Master. Puwede mong ulitin ang tour na ito anumang oras gamit ang 🎓 Tutorial button.",
     tutorialCompleteBtn: "Simulan ang Pag-aaral",
     tutorialReaderCta: "📬 Kunin ang GAKU Reader mula sa iyong email!",
+    featurePickerTitle: "Piliin ang mga feature na gusto mo",
+    featurePickerDesc: "Piliin lang ang mga feature na gagamitin mo. Itatago ang iba para manatiling simple ang screen. Puwede mo itong baguhin anumang oras.",
+    featurePickerAlways: "Palaging ipinapakita ang Bokabularyo at Feedback.",
+    featureShowOnly: "Ipakita lang ang mga ito",
+    featureKeepAll: "Panatilihin lahat",
+    featureCustomizeBtn: "I-customize",
     feedbackTitle: "💬 Puna at Opinyon",
     feedbackSubtitle: "Sabihin sa amin kung ano ang gusto mong pagbutihin o anumang bagay na nakakaabala sa iyo tungkol sa app. Binabasa namin ang bawat mensahe.",
     feedbackWarning: "Kung magsulat ka ng paninirang-puri, mapanlait na wika, o mga diskriminasyong termino, agad na sususpindihin ang iyong account. Wala kaming pananagutan kahit magkaroon ng legal na aksyon.",
@@ -12320,6 +12428,51 @@ function TutorialOverlay({ T, step, tab, resourceSubTab, tabsMeta, resourceSubTa
   return null;
 }
 
+// ---- Feature picker (after the tutorial): the student chooses which optional
+// tabs stay on their dashboard. Vocabulary + Feedback are always shown.
+// Stored per account in localStorage: JSON array of kept feature ids, or absent = show everything.
+const OPTIONAL_FEATURES = ["schedule","subtitles","links","content","conversation","pronunciation","milestones","jlpt"];
+const RESOURCE_FEATURES = ["links","content","conversation","pronunciation"];
+function readVisibleFeatures() {
+  try {
+    const v = JSON.parse(localStorage.getItem(scopedKey("gaku_visible_features")) || "null");
+    return Array.isArray(v) ? v.filter(x => OPTIONAL_FEATURES.includes(x)) : null;
+  } catch { return null; }
+}
+function FeaturePicker({ T, initial, onApply }) {
+  const [checked, setChecked] = useState(initial || []);
+  const labels = {
+    schedule: T.tabSchedule, subtitles: T.tabSubtitles || "Subtitles", links: T.tabResources,
+    content: T.tabPractice || "From Content", conversation: T.convTitle || "Conversation",
+    pronunciation: T.pronTitle || "Pronunciation", milestones: T.tabMilestones, jlpt: T.tabJlpt || "JLPT",
+  };
+  const toggle = id => setChecked(c => c.includes(id) ? c.filter(x => x !== id) : [...c, id]);
+  return (
+    <div style={{ position:"fixed", inset:0, background:"rgba(0,0,0,0.75)", display:"flex", alignItems:"center", justifyContent:"center", zIndex:1000, padding:16 }}>
+      <div style={{ ...S.card, width:"100%", maxWidth:420, maxHeight:"92vh", overflowY:"auto" }}>
+        <p style={{ color:"#f1f5f9", fontSize:16, fontWeight:800, margin:"0 0 8px", textAlign:"center" }}>{T.featurePickerTitle || "Choose the features you want"}</p>
+        <p style={{ color:"#94a3b8", fontSize:13, lineHeight:1.6, margin:"0 0 14px", textAlign:"center" }}>{T.featurePickerDesc || "Pick only the features you'll use. The rest will be hidden so your screen stays simple. You can change this anytime."}</p>
+        <div style={{ display:"flex", flexDirection:"column", gap:8, marginBottom:12 }}>
+          {OPTIONAL_FEATURES.map(id => {
+            const on = checked.includes(id);
+            return (
+              <button key={id} onClick={() => toggle(id)} style={{ display:"flex", alignItems:"center", gap:10, padding:"10px 12px", borderRadius:10, cursor:"pointer", textAlign:"left", border:`1.5px solid ${on ? C.purpleLight : C.border}`, background:on ? "rgba(168,85,247,0.15)" : C.card, color:"#e2e8f0", fontSize:13, fontWeight:700 }}>
+                <span style={{ width:18, height:18, borderRadius:5, border:`2px solid ${on ? C.purpleLight : "#64748b"}`, background:on ? C.purpleLight : "transparent", color:"#1e1033", fontSize:12, lineHeight:"14px", textAlign:"center", flexShrink:0 }}>{on ? "\u2713" : ""}</span>
+                {labels[id]}
+              </button>
+            );
+          })}
+        </div>
+        <p style={{ color:"#64748b", fontSize:11, margin:"0 0 14px", textAlign:"center" }}>{T.featurePickerAlways || "Vocabulary and Feedback are always shown."}</p>
+        <div style={{ display:"flex", flexDirection:"column", gap:8 }}>
+          <button disabled={checked.length === 0} onClick={() => onApply(OPTIONAL_FEATURES.filter(x => checked.includes(x)))} style={{ ...S.btn, width:"100%", background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff", opacity:checked.length === 0 ? 0.4 : 1, cursor:checked.length === 0 ? "not-allowed" : "pointer" }}>{T.featureShowOnly || "Show only these"}</button>
+          <button onClick={() => onApply(null)} style={{ ...S.btn, width:"100%", background:"transparent", border:`1px solid ${C.border}`, color:"#94a3b8" }}>{T.featureKeepAll || "Keep everything"}</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteAccountBusy, userId, streakDays, daysUntilTrialEnds, tutorialGraceDaysLeft, isTrialAccount, isGakuStudent, onCompleteProfile, readerInstalled }) {
   const T = useUITranslations(form?.preferredLang || "English");
   // GAKU Reader promo card: shown on desktop Chrome/Edge to accounts that have
@@ -12333,8 +12486,11 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
   const [milestones, setMilestones] = useState(() => buildMilestones(form));
   const [msDone, setMsDone] = useState([]);
   const [showHelp, setShowHelp] = useState(false);
-  const [tab, setTab] = useState("schedule");
-  const [resourceSubTab, setResourceSubTab] = useState("links");
+  const [visibleFeatures, setVisibleFeatures] = useState(readVisibleFeatures);
+  const [showFeaturePicker, setShowFeaturePicker] = useState(false);
+  const [featurePickerInitial, setFeaturePickerInitial] = useState([]);
+  const [tab, setTab] = useState(() => { const v = readVisibleFeatures(); return (v === null || v.includes("schedule")) ? "schedule" : "vocabulary"; });
+  const [resourceSubTab, setResourceSubTab] = useState(() => { const v = readVisibleFeatures(); return (v === null || v.includes("links")) ? "links" : (RESOURCE_FEATURES.find(x => v.includes(x)) || "links"); });
   // Tutorial (guided tour) — see TutorialOverlay above. Auto-launches once per
   // account (localStorage flag, scoped like other per-student flags) unless
   // already completed or skipped; always replayable via the header button.
@@ -12583,6 +12739,17 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
 
   const handleTutorialFinish = useCallback(() => {
     setTutorialActive(false);
+    setFeaturePickerInitial(visibleFeatures || []);
+    setShowFeaturePicker(true);
+  }, [visibleFeatures]);
+
+  const applyFeatureChoice = useCallback((list) => {
+    setVisibleFeatures(list);
+    try {
+      if (list === null) localStorage.removeItem(scopedKey("gaku_visible_features"));
+      else localStorage.setItem(scopedKey("gaku_visible_features"), JSON.stringify(list));
+    } catch {}
+    setShowFeaturePicker(false);
   }, []);
 
   const toggleTask = useCallback((day, idx) => {
@@ -12598,6 +12765,16 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
   const WEEKDAY_EN = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
   const isTranslating = T._loading;
 
+  // A feature is shown when the student kept it (or never chose); the tutorial always shows everything.
+  const featureShown = (id) => tutorialActive || visibleFeatures === null || visibleFeatures.includes(id);
+  const tabShown = (id) => id === "resources" ? RESOURCE_FEATURES.some(featureShown) : (OPTIONAL_FEATURES.includes(id) ? featureShown(id) : true);
+  useEffect(() => {
+    if (!tabShown(tab)) { setTab("vocabulary"); return; }
+    if (tab === "resources" && !featureShown(resourceSubTab)) {
+      const f = RESOURCE_FEATURES.find(featureShown);
+      if (f) setResourceSubTab(f);
+    }
+  }, [visibleFeatures, tutorialActive, tab, resourceSubTab]);
   const TABS = [
     { id:"schedule",   label: T.tabSchedule },
     { id:"vocabulary", label: T.tabVocabulary },
@@ -12617,6 +12794,7 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
   return (
     <div style={{ ...S.page, paddingBottom:60 }}>
       {showHelp && <HelpModal onClose={()=>setShowHelp(false)} form={form} />}
+      {showFeaturePicker && <FeaturePicker key={featurePickerInitial.join(",")} T={T} initial={featurePickerInitial} onApply={applyFeatureChoice} />}
       {tutorialActive && (
         <TutorialOverlay
           T={T}
@@ -12645,6 +12823,7 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
           </div>
         </div>
         <div style={{ display:"flex", gap:8 }}>
+          <button onClick={()=>{ setFeaturePickerInitial(visibleFeatures || OPTIONAL_FEATURES); setShowFeaturePicker(true); }} style={{ ...S.btn, padding:"8px 14px", background:C.card, color:"#94a3b8", border:`1px solid ${C.border}`, fontSize:12 }}>{"\u2699\uFE0F"} {T.featureCustomizeBtn || "Customize"}</button>
           <button onClick={()=>{ setTutorialStep(0); setTutorialActive(true); }} style={{ ...S.btn, padding:"8px 14px", background:"transparent", border:`1px solid ${C.purpleLight}`, color:C.purpleLight, fontSize:12 }}>{T.tutorialBtn}</button>
           <button onClick={()=>setShowHelp(true)} style={{ ...S.btn, padding:"8px 14px", background:`linear-gradient(135deg,${C.amber},#d97706)`, color:"#fff", fontSize:12 }}>{T.help}</button>
           <button onClick={onEdit} style={{ ...S.btn, padding:"8px 14px", background:C.card, color:"#94a3b8", border:`1px solid ${C.border}`, fontSize:12 }}>{T.editProfile}</button>
@@ -12780,7 +12959,7 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
         )}
 
         <div style={{ display:"flex", gap:6, marginBottom:16, overflowX:"auto", paddingBottom:4 }}>
-          {TABS.map(t => {
+          {TABS.filter(t => tabShown(t.id)).map(t => {
             const tutorialTarget = (tutorialActive && tutorialStep>=1 && tutorialStep<=TUTORIAL_STEPS.length) ? TUTORIAL_STEPS[tutorialStep-1] : null;
             const isTutorialTarget = tutorialTarget?.tab === t.id;
             return (
@@ -12854,7 +13033,7 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
                                       🔗 {res.name}
                                     </a>
                                   )}
-                                  {nav && (
+                                  {nav && tabShown(nav.tab) && (nav.tab !== "resources" || featureShown(nav.resourceSubTab || "links")) && (
                                     <button onClick={e=>{ e.stopPropagation(); setTab(nav.tab); if (nav.resourceSubTab) setResourceSubTab(nav.resourceSubTab); }}
                                        style={{ fontSize:11, color:C.purpleLight, border:"1px solid rgba(139,92,246,0.3)", borderRadius:8, padding:"3px 8px", background:"rgba(139,92,246,0.06)", cursor:"pointer" }}>
                                       ▶ {T[nav.labelKey]}
@@ -12884,7 +13063,7 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
         {tab==="resources" && (
           <div>
             <div style={{ display:"flex", gap:6, marginBottom:16, overflowX:"auto", paddingBottom:4 }}>
-              {RESOURCE_SUBTABS.map(st => {
+              {RESOURCE_SUBTABS.filter(st => featureShown(st.id)).map(st => {
                 const tutorialTarget = (tutorialActive && tutorialStep>=1 && tutorialStep<=TUTORIAL_STEPS.length) ? TUTORIAL_STEPS[tutorialStep-1] : null;
                 const isTutorialTarget = tutorialTarget?.tab === "resources" && tutorialTarget?.subTab === st.id;
                 return (
