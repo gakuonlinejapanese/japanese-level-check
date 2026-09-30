@@ -13848,6 +13848,10 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
     // isGakuStudent was checked here, so a paid student could still hit the
     // 21-interaction counter and get sent back to the paywall despite having
     // already unlocked the app.
+    // The soft 21-interaction payment screen was retired (2026-09-30, owner request):
+    // the only payment screen left is the forced one after the trial + bonus week (trialLocked).
+    return;
+    // eslint-disable-next-line no-unreachable
     if (skipTrialPaywall || (authUser && (isGakuStudent || isPaid))) return;
     if (authUser && !accountStatusLoaded) return; // status unknown yet: never risk paywalling a GAKU student
     setInteractionCount(c => {
@@ -14008,12 +14012,6 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
     // sending the student back to onboarding every single time. Pushing here
     // closes that gap: the profile reaches Supabase the moment it's saved.
     if (authUser) { syncMigrationBridge(authUser.id); }
-    // If this email already used up their free interactions before, go straight
-    // to the payment screen instead of letting them browse the dashboard again.
-    if (!skipTrialPaywall && !(authUser && (isGakuStudent || isPaid)) && getPaywalledEmails().includes(saved.email)) {
-      setShowPaywall(true);
-      return;
-    }
     // First-ever signup (not an edit, not a re-save after the paywall):
     // give them one quick win before the full dashboard. Most trial
     // students who ever bounce do so after their very first session, so
@@ -14405,10 +14403,6 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
   return (
     <div style={{ position:"relative" }} onClickCapture={handleDashboardInteraction}>
       <Dashboard form={form} onEdit={handleEdit} onLevelUp={(lvl)=>handleSubmit({ ...form, jlpt: lvl })} onLogout={authUser ? handleLogout : undefined} onDeleteAccount={authUser ? handleDeleteAccount : undefined} deleteAccountBusy={deleteAccountBusy} userId={authUser?.id} streakDays={streakDays} readerInstalled={readerInstalled} daysUntilTrialEnds={daysUntilTrialEnds} tutorialGraceDaysLeft={tutorialGraceDaysLeft} isTrialAccount={!isGakuStudent && !isPaid} isGakuStudent={isGakuStudent} onCompleteProfile={form?.profileComplete === false ? () => setOnboardingStep("completeProfile") : undefined} />
-      {/* TEMP DEBUG — remove after confirming the counter works */}
-      <div style={{ position:"fixed", bottom:12, right:12, zIndex:99999, background:"rgba(0,0,0,0.75)", color:"#4ade80", fontSize:11, fontFamily:"monospace", padding:"4px 8px", borderRadius:6 }}>
-        count: {interactionCount}/21 {skipTrialPaywall ? "(skip)" : ""} {authUser && isGakuStudent ? "(gaku)" : ""} {authUser && isPaid ? "(paid)" : ""}
-      </div>
       {showPaywall && !(authUser && (isGakuStudent || isPaid)) && (
         <div style={{ position:"fixed", inset:0, zIndex:9999, display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"flex-start", overflowY:"auto", WebkitOverflowScrolling:"touch", padding:"16px 0", boxSizing:"border-box", background:"rgba(10,15,30,0.85)", backdropFilter:"blur(12px)" }}>
           <div style={{ background:"linear-gradient(135deg,#1e1b4b,#0f172a)", border:"1.5px solid rgba(139,92,246,0.4)", borderRadius:20, padding:"36px 32px", maxWidth:420, width:"90%", margin:"auto", textAlign:"center", boxShadow:"0 8px 40px rgba(139,92,246,0.25)" }}>
