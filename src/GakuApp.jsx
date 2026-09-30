@@ -13395,6 +13395,10 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
   const [tutorialGraceDaysLeft, setTutorialGraceDaysLeft] = useState(null);
   const [streakDays, setStreakDays] = useState(0);
   const [readerInstalled, setReaderInstalled] = useState(null);
+  // Paid plans on the forced payment screen stay hidden until the server reports
+  // plansUnlocked (student answered "Yes" to "Would like to choose the cheaper plan for GAKU?"
+  // on trial-lesson.html after being declined a free trial lesson).
+  const [plansUnlocked, setPlansUnlocked] = useState(false);
   // Post-signup onboarding: right after a brand-new profile is saved (never
   // for profile edits), walk the student through one quick "first win"
   // activity, then (if applicable) an install-to-home-screen prompt, before
@@ -13589,6 +13593,7 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
       // trial-specific paywall checks.
       setStreakDays(typeof data?.streakDays === "number" ? data.streakDays : 0);
       setReaderInstalled(typeof data?.readerInstalled === "boolean" ? data.readerInstalled : null);
+      if (typeof data?.plansUnlocked === "boolean") setPlansUnlocked(data.plansUnlocked);
       if ((data?.isGakuStudent || data?.isPaid) && !previewPaywall) {
         setShowPaywall(false);
         setAwaitingUnlock(false);
@@ -14023,6 +14028,22 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
             </p>
           </div>
 
+          <div style={{ background:"rgba(74,222,128,0.06)", border:"1px solid rgba(74,222,128,0.3)", borderRadius:10, padding:"12px 14px", marginBottom:18, textAlign:"left" }}>
+            <p style={{ color:"#4ade80", fontSize:11, fontWeight:800, letterSpacing:0.5, margin:"0 0 8px" }}>🎓 {T?.freePlanGakuStudent || "FREE Plan (Only GAKU students)"}</p>
+            <div style={{ display:"flex", gap:6 }}>
+              <input value={lockedInviteCode} onChange={e=>setLockedInviteCode(e.target.value)} placeholder={T?.inviteCodePlaceholder || "Enter invite code..."} style={{ flex:1, background:"rgba(255,255,255,0.05)", border:`1px solid ${C.border}`, borderRadius:8, color:"#f1f5f9", fontSize:12, padding:"8px 10px" }} />
+              <button onClick={handleLockedInviteRedeem} disabled={lockedInviteBusy || !lockedInviteCode.trim()} style={{ padding:"8px 14px", borderRadius:8, background:"linear-gradient(135deg,#22c55e,#16a34a)", border:"none", color:"#fff", fontSize:12, fontWeight:700, cursor:"pointer", whiteSpace:"nowrap" }}>
+                {lockedInviteBusy ? "⏳" : (T?.unlockBtn || "Unlock")}
+              </button>
+            </div>
+            {lockedInviteErr && <p style={{ color:C.red, fontSize:11, margin:"8px 0 0" }}>{lockedInviteErr}</p>}
+            <a href="https://app.seitojapanese.online/trial-lesson.html" target="_blank" rel="noopener noreferrer" style={{ display:"block", color:"#86efac", fontSize:11, fontWeight:600, margin:"8px 0 0", textDecoration:"underline" }}>
+              {T?.freePlanGakuStudentHint || "GAKU lesson students get the app included free. No code? Book a lesson to become one →"}
+            </a>
+          </div>
+
+          {plansUnlocked && (
+          <>
           <div style={{ background:"rgba(255,255,255,0.03)", border:"1px solid rgba(255,255,255,0.08)", borderRadius:10, padding:"10px 12px", marginBottom:18, textAlign:"left" }}>
             <p style={{ color:"#94a3b8", fontSize:10, fontWeight:800, letterSpacing:1, margin:"0 0 8px" }}>💱 {T?.convertCurrencyLabel || "SEE PRICES IN YOUR CURRENCY"}</p>
             <div style={{ display:"flex", gap:6 }}>
@@ -14039,20 +14060,6 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
               </p>
             )}
             {paywallRateError && <p style={{ color:C.red, fontSize:11, margin:"8px 0 0" }}>{paywallRateError}</p>}
-          </div>
-
-          <div style={{ background:"rgba(74,222,128,0.06)", border:"1px solid rgba(74,222,128,0.3)", borderRadius:10, padding:"12px 14px", marginBottom:18, textAlign:"left" }}>
-            <p style={{ color:"#4ade80", fontSize:11, fontWeight:800, letterSpacing:0.5, margin:"0 0 8px" }}>🎓 {T?.freePlanGakuStudent || "FREE Plan (Only GAKU students)"}</p>
-            <div style={{ display:"flex", gap:6 }}>
-              <input value={lockedInviteCode} onChange={e=>setLockedInviteCode(e.target.value)} placeholder={T?.inviteCodePlaceholder || "Enter invite code..."} style={{ flex:1, background:"rgba(255,255,255,0.05)", border:`1px solid ${C.border}`, borderRadius:8, color:"#f1f5f9", fontSize:12, padding:"8px 10px" }} />
-              <button onClick={handleLockedInviteRedeem} disabled={lockedInviteBusy || !lockedInviteCode.trim()} style={{ padding:"8px 14px", borderRadius:8, background:"linear-gradient(135deg,#22c55e,#16a34a)", border:"none", color:"#fff", fontSize:12, fontWeight:700, cursor:"pointer", whiteSpace:"nowrap" }}>
-                {lockedInviteBusy ? "⏳" : (T?.unlockBtn || "Unlock")}
-              </button>
-            </div>
-            {lockedInviteErr && <p style={{ color:C.red, fontSize:11, margin:"8px 0 0" }}>{lockedInviteErr}</p>}
-            <a href="https://app.seitojapanese.online/trial-lesson.html" target="_blank" rel="noopener noreferrer" style={{ display:"block", color:"#86efac", fontSize:11, fontWeight:600, margin:"8px 0 0", textDecoration:"underline" }}>
-              {T?.freePlanGakuStudentHint || "GAKU lesson students get the app included free. No code? Book a lesson to become one →"}
-            </a>
           </div>
 
           <p style={{ color:"#a855f7", fontSize:10, fontWeight:800, margin:"0 0 6px", textAlign:"left", letterSpacing:1 }}>{T?.appOnlyLabel}</p>
@@ -14089,6 +14096,9 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
               💳 $185.95 <span style={{ color:"#64748b", fontSize:10, fontWeight:400 }}>($30.99/mo)</span> {formatConverted(185.95) && <span style={{ color:"#67e8f9", fontWeight:400 }}>(≈ {formatConverted(185.95)} {paywallCurrency})</span>}
             </button>
           </div>
+          </>
+          )}
+
           <button onClick={authUser ? handleDeleteAccount : undefined} disabled={deleteAccountBusy} style={{ background:"none", border:"none", color:"#475569", fontSize:11, cursor:"pointer", textDecoration:"underline" }}>
             {T?.deleteAccountLink || "Delete my account instead"}
           </button>

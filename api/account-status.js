@@ -75,6 +75,22 @@ export default async function handler(req, res) {
       }
     }
 
+    // Paid plans stay hidden on the payment screen until the student has answered "Yes" to
+    // "Would like to choose the cheaper plan for GAKU?" on trial-lesson.html (recorded by
+    // policy-agreement.js action unlock_paid_plans, keyed by email).
+    let plansUnlocked = false;
+    try {
+      const { data: uData } = await supabase.auth.admin.getUserById(userId);
+      const uEmail = uData?.user?.email?.trim().toLowerCase();
+      if (uEmail) {
+        const { data: unlockRows } = await supabase
+          .from("paid_plans_unlock").select("email").eq("email", uEmail).limit(1);
+        plansUnlocked = !!(unlockRows && unlockRows.length > 0);
+      }
+    } catch (unlockErr) {
+      console.error("[account-status] plans unlock lookup failed:", unlockErr.message);
+    }
+
     const trialStartedAt = data?.trial_started_at ? new Date(data.trial_started_at) : null;
     const daysSinceTrial = trialStartedAt ? (Date.now() - trialStartedAt.getTime()) / 86400000 : null;
     const pastTrial = daysSinceTrial !== null && daysSinceTrial >= TRIAL_DAYS;
@@ -202,6 +218,7 @@ export default async function handler(req, res) {
       dataWasReset,
       streakDays,
       readerInstalled,
+      plansUnlocked,
     });
   } catch (e) {
     return res.status(500).json({ error: e.message });

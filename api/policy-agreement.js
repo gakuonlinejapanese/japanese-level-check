@@ -179,6 +179,7 @@ export default async function handler(req, res) {
     if (action === "school_matching") return handleSchoolMatching(req, res);
     if (action === "trial_lesson") return handleTrialLesson(req, res);
     if (action === "check_trial_lesson_repeat") return handleCheckTrialLessonRepeat(req, res);
+    if (action === "unlock_paid_plans") return handleUnlockPaidPlans(req, res);
     if (action === "admin_list_trial_lessons") return handleAdminListTrialLessons(req, res);
     if (action === "admin_respond_trial_lesson") return handleAdminRespondTrialLesson(req, res);
     if (action === "request_jlpt_mock_test") return handleRequestJlptMockTest(req, res);
@@ -737,6 +738,31 @@ async function handleCheckTrialLessonRepeat(req, res) {
   } catch (e) {
     console.error("handleCheckTrialLessonRepeat failed:", e.message);
     return res.status(200).json({ blocked: false });
+  }
+}
+
+// POST { action: "unlock_paid_plans", email } — called from trial-lesson.html when a
+// non-registered-country applicant who was declined the free trial lesson answers "Yes" to
+// "Would like to choose the cheaper plan for GAKU?". Records the email so account-status.js
+// reports plansUnlocked=true and GAKU Master finally shows the paid plans on the payment screen
+// (until then only the Official Student / Free Plan card is visible).
+async function handleUnlockPaidPlans(req, res) {
+  try {
+    const { email } = req.body || {};
+    const clean = (email || "").trim().toLowerCase();
+    if (!clean || !clean.includes("@")) return res.status(400).json({ error: "email is required" });
+    const supabase = getAdminClient();
+    const { error } = await supabase
+      .from("paid_plans_unlock")
+      .upsert({ email: clean, source: "trial_lesson_declined_cheaper_plan" }, { onConflict: "email" });
+    if (error) {
+      console.error("unlock_paid_plans upsert failed:", error.message);
+      return res.status(500).json({ error: error.message });
+    }
+    return res.status(200).json({ ok: true });
+  } catch (e) {
+    console.error("handleUnlockPaidPlans failed:", e.message);
+    return res.status(500).json({ error: e.message });
   }
 }
 
