@@ -154,6 +154,11 @@
       <p style="margin:0 0 16px;">Unfortunately your application was rejected once time. So your application was blocked in this moment. First, please download GAKU Master and generate your Japanese study guide.</p>
       <button class="btn" id="btn-blocked-gaku-master" style="margin-top:0; width:auto; padding:12px 30px;">Go to GAKU Master</button>
     </div>
+    <div class="msgbox center" style="margin-top:14px;">
+      <p style="font-size:16.5px; font-weight:700; margin:0 0 16px; line-height:1.5;">Would like to chose the cheaper plan for GAKU？</p>
+      <button class="btn" id="btn-cheaper-yes-blocked" style="margin-top:0; width:auto; padding:12px 30px;">Yes</button>
+      <div class="error-msg" id="cheaper-error-blocked"></div>
+    </div>
   </div>
 
   <!-- STEP 1d: 対象国外の応募者向けスクリーニング質問（3問） -->
@@ -605,7 +610,7 @@ async function proceedAfterExactSlotConfirmed() {
   // trial lesson regardless of country — the country restriction below only applies to No.
   const weeklyTrialDone = submittedWeeklyTrial === "Yes";
 
-  if (!weeklyTrialDone && !TRIAL_ALLOWED_SET.has(analysis.canonical)) {
+  if (!TRIAL_ALLOWED_SET.has(analysis.canonical)) {
     // Non-registered-country applicants who already got the decline screen once before (same
     // email) are blocked immediately on any further attempt, without re-showing the normal
     // decline+free-study-guide flow.
@@ -689,7 +694,7 @@ screeningBtn.addEventListener("click", async () => {
     document.getElementById("p-name").value = submittedName;
     document.getElementById("p-email").value = submittedEmail;
     showStep("step-policy");
-    initPolicy();
+    initPolicy(submittedWeeklyTrial === "Yes");
     return;
   }
 
@@ -701,7 +706,7 @@ screeningBtn.addEventListener("click", async () => {
         action: "trial_lesson", fullName: submittedName, email: submittedEmail,
         location: submittedLocation, originCountry: submittedOriginCountry, preferredDateTime: submittedDateTime,
         course: submittedCourse, japaneseLevel: submittedLevel.join(", "), lessonDuration: submittedDuration,
-        weeklyTrialDone: false, outcome: "rejected_country",
+        weeklyTrialDone: submittedWeeklyTrial === "Yes", outcome: "rejected_country",
         screeningQ1: submittedScreeningQ1, screeningQ2: submittedScreeningQ2, screeningQ3: submittedScreeningQ3,
         countryScreeningPassed: false,
       }),
@@ -712,9 +717,9 @@ screeningBtn.addEventListener("click", async () => {
 
 // ---- STEP 1b: 体験授業を断られた非登録国の生徒向け「安いプランを選びますか？」 ----
 // Yes = 有料プランをGAKU Master側の支払い画面に表示してよい、という記録をメール単位で残す。
-document.getElementById("btn-cheaper-yes").addEventListener("click", async () => {
-  const btn = document.getElementById("btn-cheaper-yes");
-  const err = document.getElementById("cheaper-error");
+async function unlockCheaperPlans(btnId, errId) {
+  const btn = document.getElementById(btnId);
+  const err = document.getElementById(errId);
   btn.disabled = true;
   setError(err, "");
   try {
@@ -722,6 +727,16 @@ document.getElementById("btn-cheaper-yes").addEventListener("click", async () =>
       method: "POST", headers: { "Content-Type":"application/json" },
       body: JSON.stringify({ action: "unlock_paid_plans", email: submittedEmail }),
     });
+    if (!r.ok) throw new Error("failed");
+  } catch (e) {
+    btn.disabled = false;
+    setError(err, "Sorry, something went wrong. Please try again.");
+    return;
+  }
+  window.location.href = "https://app.seitojapanese.online/app";
+}
+document.getElementById("btn-cheaper-yes").addEventListener("click", () => unlockCheaperPlans("btn-cheaper-yes", "cheaper-error"));
+document.getElementById("btn-cheaper-yes-blocked").addEventListener("click", () => unlockCheaperPlans("btn-cheaper-yes-blocked", "cheaper-error-blocked"));
     if (!r.ok) throw new Error("failed");
   } catch (e) {
     btn.disabled = false;

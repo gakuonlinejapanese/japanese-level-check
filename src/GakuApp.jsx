@@ -13364,7 +13364,7 @@ function DeviceSuspendedGate({ T, suspendedUntil }) {
 }
 
 
-export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail, skipTrialPaywall, previewPaywall }) {
+export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail, skipTrialPaywall, previewPaywall, previewPlans }) {
   const [authUser, setAuthUser] = useState(null);
   const [authChecked, setAuthChecked] = useState(!supabase);
   const [showAuthScreen, setShowAuthScreen] = useState(false);
@@ -14042,7 +14042,7 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
             </a>
           </div>
 
-          {plansUnlocked && (
+          {(plansUnlocked || (previewPaywall && previewPlans)) && (
           <>
           <div style={{ background:"rgba(255,255,255,0.03)", border:"1px solid rgba(255,255,255,0.08)", borderRadius:10, padding:"10px 12px", marginBottom:18, textAlign:"left" }}>
             <p style={{ color:"#94a3b8", fontSize:10, fontWeight:800, letterSpacing:1, margin:"0 0 8px" }}>💱 {T?.convertCurrencyLabel || "SEE PRICES IN YOUR CURRENCY"}</p>
@@ -14244,7 +14244,7 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
               {T.haveAccount || "Already have an account? Log in"}
             </button>
 
-            {plansUnlocked && (
+            {(plansUnlocked || (previewPaywall && previewPlans)) && (
             <>
             <div style={{ background:"rgba(255,255,255,0.03)", border:"1px solid rgba(255,255,255,0.08)", borderRadius:10, padding:"10px 12px", marginBottom:18, textAlign:"left" }}>
               <p style={{ color:"#94a3b8", fontSize:10, fontWeight:800, letterSpacing:1, margin:"0 0 8px" }}>💱 {T.convertCurrencyLabel || "SEE PRICES IN YOUR CURRENCY"}</p>
