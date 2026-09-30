@@ -7894,6 +7894,30 @@ async function syncMigrationBridge(userId) {
   }
 }
 
+// ─── FOLDER LIST → GAKU READER ────────────────────────────────────────────────
+// GAKU Reader (Chrome extension) needs the student's folder names so it can
+// offer them in its "Choose folder" list. A normal web page has NO access to
+// chrome.storage (only extension code does), so the old direct chrome.storage
+// writes silently did nothing and folders created in GAKU Master never showed
+// up in Reader. This publishes the list through channels a content script CAN
+// read: an unscoped localStorage key, a DOM attribute, and a window message.
+function getFolderNamesForReader(folders) {
+  const names = ["Your Vocabulary", ...(folders || []).map(f => typeof f === "string" ? f : (f && f.name)).filter(Boolean)];
+  return [...new Set(names)];
+}
+function publishFoldersForReader(folders) {
+  try {
+    const folderNames = getFolderNamesForReader(folders);
+    try { if (window.chrome?.storage?.local) window.chrome.storage.local.set({ gaku_folders: folderNames }); } catch {}
+    try { if (window.chrome?.storage?.sync) window.chrome.storage.sync.set({ gaku_folders: folderNames }); } catch {}
+    try {
+      localStorage.setItem("gaku_folders_for_reader", JSON.stringify({ uid: ACTIVE_USER_ID || null, folders: folderNames, updatedAt: Date.now() }));
+    } catch {}
+    try { document.documentElement.setAttribute("data-gaku-folders", JSON.stringify(folderNames)); } catch {}
+    try { window.postMessage({ type: "GAKU_FOLDERS_SYNC", folders: folderNames }, "*"); } catch {}
+  } catch {}
+}
+
 // ─── VOCAB STORAGE (localStorage) ─────────────────────────────────────────────
 function loadVocabData() {
   try { return JSON.parse(localStorage.getItem(scopedKey("gaku_vocab")) || "null") || { folders:[], cards:[] }; } catch { return { folders:[], cards:[] }; }
@@ -7912,22 +7936,15 @@ function saveVocabData(data) {
   try {
     const lean = { folders: data.folders, cards: data.cards.map(trimCard) };
     localStorage.setItem(scopedKey("gaku_vocab"), JSON.stringify(lean));
-    // Sync folder names to chrome.storage for GAKU Reader extension
-    try {
-      const folderNames = ["Your Vocabulary", ...data.folders.map(f => typeof f === "string" ? f : f.name).filter(Boolean)];
-      if (window.chrome?.storage?.local) {
-        window.chrome.storage.local.set({ gaku_folders: folderNames });
-      }
-      if (window.chrome?.storage?.sync) {
-        window.chrome.storage.sync.set({ gaku_folders: folderNames });
-      }
-    } catch {}
+    publishFoldersForReader(data.folders);
   } catch(e) {
     // If quota exceeded, remove oldest 20 cards and retry
     try {
       const trimmed = { folders: data.folders, cards: data.cards.slice(-80).map(trimCard) };
       localStorage.setItem(scopedKey("gaku_vocab"), JSON.stringify(trimmed));
     } catch {}
+    // Folder list must still reach GAKU Reader even if the card save hit quota
+    publishFoldersForReader(data.folders);
   }
 }
 
@@ -12474,20 +12491,14 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
 
   // ── GAKU Extension: listen for words sent from Chrome extension ───────────────────────
   useEffect(() => {
-    // Sync current folders to chrome.storage for GAKU Reader extension
-    try {
-      const vocabInit = loadVocabData();
-      const folderNames = ["Your Vocabulary", ...vocabInit.folders.map(f => typeof f === "string" ? f : f.name).filter(Boolean)];
-      if (window.chrome?.storage?.local) {
-        window.chrome.storage.local.set({ gaku_folders: folderNames });
-      }
-      if (window.chrome?.storage?.sync) {
-        window.chrome.storage.sync.set({ gaku_folders: folderNames });
-      }
-    } catch {}
+    // Publish current folders for GAKU Reader (see publishFoldersForReader)
+    try { publishFoldersForReader(loadVocabData().folders); } catch {}
+    const republishFolders = () => { try { publishFoldersForReader(loadVocabData().folders); } catch {} };
+    window.addEventListener("gaku_vocab_updated", republishFolders);
 
     const handleExtMessage = (e) => {
       if (e.source !== window) return;
+      if (e.data && e.data.type === "GAKU_REQUEST_FOLDERS") { republishFolders(); return; }
       if (!e.data || e.data.type !== "GAKU_ADD_WORD") return;
       const { word, reading, meaning, partOfSpeech, jlpt, example, example_translated, tip } = e.data.payload || {};
       if (!word) return;
@@ -12510,7 +12521,10 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
       if (!String(meaning || "").trim()) setTimeout(() => repairMissingMeanings(null), 300);
     };
     window.addEventListener("message", handleExtMessage);
-    return () => window.removeEventListener("message", handleExtMessage);
+    return () => {
+      window.removeEventListener("message", handleExtMessage);
+      window.removeEventListener("gaku_vocab_updated", republishFolders);
+    };
   }, []);
 
   // Re-build schedule & translate milestones when T loads (for non-static languages)
