@@ -14302,7 +14302,7 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
             )}
             <div style={{ marginBottom:14, textAlign:"center" }}>
               <p style={{ color:"#64748b", fontSize:11, margin:"0 0 8px" }}>{T.wantToJoinGaku}</p>
-              <a href="https://www.seitojapanese.online/" target="_blank" rel="noopener noreferrer" style={{ display:"inline-block", padding:"9px 28px", background:"linear-gradient(135deg,#22c55e,#16a34a)", color:"#fff", borderRadius:10, fontSize:13, fontWeight:800, textDecoration:"none" }}>{T.yes}</a>
+              <a href="https://app.seitojapanese.online/trial-lesson.html" target="_blank" rel="noopener noreferrer" style={{ display:"inline-block", padding:"9px 28px", background:"linear-gradient(135deg,#22c55e,#16a34a)", color:"#fff", borderRadius:10, fontSize:13, fontWeight:800, textDecoration:"none" }}>{T.yes}</a>
             </div>
             <button onClick={()=>setShowPaywall(false)} style={{ background:"none", border:"none", color:"#475569", fontSize:11, cursor:"pointer" }}>{T.checkLater}</button>
           </div>
