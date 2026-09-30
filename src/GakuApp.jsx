@@ -14244,6 +14244,8 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
               {T.haveAccount || "Already have an account? Log in"}
             </button>
 
+            {plansUnlocked && (
+            <>
             <div style={{ background:"rgba(255,255,255,0.03)", border:"1px solid rgba(255,255,255,0.08)", borderRadius:10, padding:"10px 12px", marginBottom:18, textAlign:"left" }}>
               <p style={{ color:"#94a3b8", fontSize:10, fontWeight:800, letterSpacing:1, margin:"0 0 8px" }}>💱 {T.convertCurrencyLabel || "SEE PRICES IN YOUR CURRENCY"}</p>
               <div style={{ display:"flex", gap:6 }}>
@@ -14296,6 +14298,8 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
                 💳 $185.95 <span style={{ color:"#64748b", fontSize:10, fontWeight:400 }}>($30.99/mo)</span> {formatConverted(185.95) && <span style={{ color:"#67e8f9", fontWeight:400 }}>(≈ {formatConverted(185.95)} {paywallCurrency})</span>}
               </button>
             </div>
+            </>
+            )}
             <div style={{ marginBottom:14, textAlign:"center" }}>
               <p style={{ color:"#64748b", fontSize:11, margin:"0 0 8px" }}>{T.wantToJoinGaku}</p>
               <a href="https://www.seitojapanese.online/" target="_blank" rel="noopener noreferrer" style={{ display:"inline-block", padding:"9px 28px", background:"linear-gradient(135deg,#22c55e,#16a34a)", color:"#fff", borderRadius:10, fontSize:13, fontWeight:800, textDecoration:"none" }}>{T.yes}</a>
