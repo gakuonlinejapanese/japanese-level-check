@@ -413,6 +413,14 @@ const UI_TRANSLATIONS = {
     installPromptCta: "Add to Home Screen",
     installPromptSkip: "Maybe later",
     installPromptIosSteps: "Tap the Share button, then \"Add to Home Screen\"",
+    remindTitle: "When will you review tomorrow?",
+    remindDesc: "Just 5 minutes a day is enough. Pick a time and we'll add a daily reminder to your calendar.",
+    remindMorning: "🌅 Morning · 8:00",
+    remindLunch: "🍱 Lunch · 12:30",
+    remindEvening: "🌆 Evening · 19:00",
+    remindNight: "🌙 Night · 21:30",
+    remindSkip: "Skip",
+    remindEventTitle: "GAKU Master — 5-min Japanese review",
     weeklyProgress: "Weekly Progress",
     // Tab labels
     tabSchedule: "📅 Schedule",
@@ -839,6 +847,14 @@ const UI_TRANSLATIONS = {
     installPromptCta: "Ajouter à l'écran d'accueil",
     installPromptSkip: "Plus tard",
     installPromptIosSteps: "Appuyez sur Partager, puis « Sur l'écran d'accueil »",
+    remindTitle: "Quand réviserez-vous demain ?",
+    remindDesc: "5 minutes par jour suffisent. Choisissez un horaire et nous ajouterons un rappel quotidien à votre calendrier.",
+    remindMorning: "🌅 Matin · 8:00",
+    remindLunch: "🍱 Midi · 12:30",
+    remindEvening: "🌆 Soir · 19:00",
+    remindNight: "🌙 Nuit · 21:30",
+    remindSkip: "Passer",
+    remindEventTitle: "GAKU Master — révision de japonais en 5 min",
     weeklyProgress: "Progression hebdomadaire",
     tabSchedule: "📅 Planning",
     tabPractice: "✨ À partir du contenu",
@@ -1249,6 +1265,14 @@ const UI_TRANSLATIONS = {
     installPromptCta: "Añadir a pantalla de inicio",
     installPromptSkip: "Más tarde",
     installPromptIosSteps: "Toca Compartir y luego \"Añadir a pantalla de inicio\"",
+    remindTitle: "¿Cuándo repasarás mañana?",
+    remindDesc: "Con 5 minutos al día basta. Elige una hora y añadiremos un recordatorio diario a tu calendario.",
+    remindMorning: "🌅 Mañana · 8:00",
+    remindLunch: "🍱 Mediodía · 12:30",
+    remindEvening: "🌆 Tarde · 19:00",
+    remindNight: "🌙 Noche · 21:30",
+    remindSkip: "Omitir",
+    remindEventTitle: "GAKU Master — repaso de japonés de 5 min",
     weeklyProgress: "Progreso semanal",
     tabSchedule: "📅 Horario",
     tabPractice: "✨ Desde el contenido",
@@ -1659,6 +1683,14 @@ const UI_TRANSLATIONS = {
     installPromptCta: "Adicionar à tela inicial",
     installPromptSkip: "Mais tarde",
     installPromptIosSteps: "Toque em Compartilhar e depois em \"Adicionar à Tela de Início\"",
+    remindTitle: "Quando você vai revisar amanhã?",
+    remindDesc: "Apenas 5 minutos por dia bastam. Escolha um horário e adicionaremos um lembrete diário ao seu calendário.",
+    remindMorning: "🌅 Manhã · 8:00",
+    remindLunch: "🍱 Almoço · 12:30",
+    remindEvening: "🌆 Fim de tarde · 19:00",
+    remindNight: "🌙 Noite · 21:30",
+    remindSkip: "Pular",
+    remindEventTitle: "GAKU Master — revisão de japonês de 5 min",
     weeklyProgress: "Progresso semanal",
     tabSchedule: "📅 Agenda",
     tabPractice: "✨ A partir do conteúdo",
@@ -2069,6 +2101,14 @@ const UI_TRANSLATIONS = {
     installPromptCta: "Zum Startbildschirm hinzufügen",
     installPromptSkip: "Vielleicht später",
     installPromptIosSteps: "Tippe auf Teilen, dann auf „Zum Home-Bildschirm\"",
+    remindTitle: "Wann wiederholst du morgen?",
+    remindDesc: "5 Minuten pro Tag reichen. Wähle eine Uhrzeit und wir fügen eine tägliche Erinnerung zu deinem Kalender hinzu.",
+    remindMorning: "🌅 Morgens · 8:00",
+    remindLunch: "🍱 Mittags · 12:30",
+    remindEvening: "🌆 Abends · 19:00",
+    remindNight: "🌙 Spätabends · 21:30",
+    remindSkip: "Überspringen",
+    remindEventTitle: "GAKU Master — 5 Min. Japanisch wiederholen",
     weeklyProgress: "Wöchentlicher Fortschritt",
     tabSchedule: "📅 Zeitplan",
     tabPractice: "✨ Aus Inhalt",
@@ -2479,6 +2519,14 @@ const UI_TRANSLATIONS = {
     installPromptCta: "Aggiungi a Home",
     installPromptSkip: "Più tardi",
     installPromptIosSteps: "Tocca Condividi, poi \"Aggiungi a Home\"",
+    remindTitle: "Quando ripasserai domani?",
+    remindDesc: "Bastano 5 minuti al giorno. Scegli un orario e aggiungeremo un promemoria giornaliero al tuo calendario.",
+    remindMorning: "🌅 Mattina · 8:00",
+    remindLunch: "🍱 Pranzo · 12:30",
+    remindEvening: "🌆 Sera · 19:00",
+    remindNight: "🌙 Notte · 21:30",
+    remindSkip: "Salta",
+    remindEventTitle: "GAKU Master — ripasso di giapponese di 5 min",
     weeklyProgress: "Progressi settimanali",
     tabSchedule: "📅 Programma",
     tabPractice: "✨ Dal contenuto",
@@ -2889,6 +2937,14 @@ const UI_TRANSLATIONS = {
     installPromptCta: "添加到主屏幕",
     installPromptSkip: "以后再说",
     installPromptIosSteps: "点击分享按钮，然后选择\"添加到主屏幕\"",
+    remindTitle: "明天几点复习？",
+    remindDesc: "每天只需5分钟。选择一个时间，我们会在你的日历中添加每日提醒。",
+    remindMorning: "🌅 早上 · 8:00",
+    remindLunch: "🍱 午休 · 12:30",
+    remindEvening: "🌆 傍晚 · 19:00",
+    remindNight: "🌙 晚上 · 21:30",
+    remindSkip: "跳过",
+    remindEventTitle: "GAKU Master — 5分钟日语复习",
     weeklyProgress: "每周进度",
     tabSchedule: "📅 日程",
     tabPractice: "✨ 来自内容",
@@ -3299,6 +3355,14 @@ const UI_TRANSLATIONS = {
     installPromptCta: "加入主畫面",
     installPromptSkip: "稍後再說",
     installPromptIosSteps: "點擊分享按鈕，然後選擇「加入主畫面」",
+    remindTitle: "明天幾點複習？",
+    remindDesc: "每天只需5分鐘。選擇一個時間，我們會在你的行事曆中新增每日提醒。",
+    remindMorning: "🌅 早上 · 8:00",
+    remindLunch: "🍱 午休 · 12:30",
+    remindEvening: "🌆 傍晚 · 19:00",
+    remindNight: "🌙 晚上 · 21:30",
+    remindSkip: "略過",
+    remindEventTitle: "GAKU Master — 5分鐘日語複習",
     weeklyProgress: "每週進度",
     tabSchedule: "📅 日程",
     tabPractice: "✨ 來自內容",
@@ -3709,6 +3773,14 @@ const UI_TRANSLATIONS = {
     installPromptCta: "홈 화면에 추가",
     installPromptSkip: "나중에",
     installPromptIosSteps: "공유 버튼을 탭한 후 \"홈 화면에 추가\"를 선택하세요",
+    remindTitle: "내일은 언제 복습할까요?",
+    remindDesc: "하루 5분이면 충분해요. 시간을 고르면 캘린더에 매일 알림을 추가해 드려요.",
+    remindMorning: "🌅 아침 · 8:00",
+    remindLunch: "🍱 점심 · 12:30",
+    remindEvening: "🌆 저녁 · 19:00",
+    remindNight: "🌙 밤 · 21:30",
+    remindSkip: "건너뛰기",
+    remindEventTitle: "GAKU Master — 5분 일본어 복습",
     weeklyProgress: "주간 진도",
     tabSchedule: "📅 일정",
     tabPractice: "✨ 콘텐츠에서",
@@ -4119,6 +4191,14 @@ const UI_TRANSLATIONS = {
     installPromptCta: "เพิ่มไปยังหน้าจอหลัก",
     installPromptSkip: "ไว้ทีหลัง",
     installPromptIosSteps: "แตะปุ่มแชร์ แล้วเลือก \"เพิ่มไปยังหน้าจอหลัก\"",
+    remindTitle: "พรุ่งนี้จะทบทวนตอนไหน?",
+    remindDesc: "แค่วันละ 5 นาทีก็พอ เลือกเวลา แล้วเราจะเพิ่มการเตือนรายวันลงในปฏิทินของคุณ",
+    remindMorning: "🌅 เช้า · 8:00",
+    remindLunch: "🍱 เที่ยง · 12:30",
+    remindEvening: "🌆 เย็น · 19:00",
+    remindNight: "🌙 ดึก · 21:30",
+    remindSkip: "ข้าม",
+    remindEventTitle: "GAKU Master — ทบทวนภาษาญี่ปุ่น 5 นาที",
     weeklyProgress: "ความคืบหน้ารายสัปดาห์",
     tabSchedule: "📅 ตารางเรียน",
     tabPractice: "✨ จากเนื้อหา",
@@ -4529,6 +4609,14 @@ const UI_TRANSLATIONS = {
     installPromptCta: "Tambah ke Skrin Utama",
     installPromptSkip: "Mungkin nanti",
     installPromptIosSteps: "Ketik butang Kongsi, kemudian \"Tambah ke Skrin Utama\"",
+    remindTitle: "Bila anda akan mengulang kaji esok?",
+    remindDesc: "5 minit sehari sudah cukup. Pilih masa dan kami akan menambah peringatan harian ke kalendar anda.",
+    remindMorning: "🌅 Pagi · 8:00",
+    remindLunch: "🍱 Tengah hari · 12:30",
+    remindEvening: "🌆 Petang · 19:00",
+    remindNight: "🌙 Malam · 21:30",
+    remindSkip: "Langkau",
+    remindEventTitle: "GAKU Master — ulang kaji bahasa Jepun 5 minit",
     weeklyProgress: "Kemajuan mingguan",
     tabSchedule: "📅 Jadual",
     tabPractice: "✨ Dari Kandungan",
@@ -4939,6 +5027,14 @@ const UI_TRANSLATIONS = {
     installPromptCta: "Tambah ke Layar Utama",
     installPromptSkip: "Nanti saja",
     installPromptIosSteps: "Ketuk tombol Bagikan, lalu \"Tambah ke Layar Utama\"",
+    remindTitle: "Kapan kamu akan belajar ulang besok?",
+    remindDesc: "Cukup 5 menit sehari. Pilih waktu dan kami akan menambahkan pengingat harian ke kalendermu.",
+    remindMorning: "🌅 Pagi · 8:00",
+    remindLunch: "🍱 Siang · 12:30",
+    remindEvening: "🌆 Sore · 19:00",
+    remindNight: "🌙 Malam · 21:30",
+    remindSkip: "Lewati",
+    remindEventTitle: "GAKU Master — review bahasa Jepang 5 menit",
     weeklyProgress: "Kemajuan mingguan",
     tabSchedule: "📅 Jadwal",
     tabPractice: "✨ Dari Konten",
@@ -5349,6 +5445,14 @@ const UI_TRANSLATIONS = {
     installPromptCta: "Thêm vào màn hình chính",
     installPromptSkip: "Để sau",
     installPromptIosSteps: "Chạm nút Chia sẻ, sau đó chọn \"Thêm vào MH chính\"",
+    remindTitle: "Ngày mai bạn sẽ ôn bài lúc nào?",
+    remindDesc: "Chỉ cần 5 phút mỗi ngày. Hãy chọn giờ và chúng tôi sẽ thêm lời nhắc hằng ngày vào lịch của bạn.",
+    remindMorning: "🌅 Sáng · 8:00",
+    remindLunch: "🍱 Trưa · 12:30",
+    remindEvening: "🌆 Tối · 19:00",
+    remindNight: "🌙 Đêm · 21:30",
+    remindSkip: "Bỏ qua",
+    remindEventTitle: "GAKU Master — ôn tiếng Nhật 5 phút",
     weeklyProgress: "Tiến độ hàng tuần",
     tabSchedule: "📅 Lịch học",
     tabPractice: "✨ Từ nội dung",
@@ -5759,6 +5863,14 @@ const UI_TRANSLATIONS = {
     installPromptCta: "होम स्क्रीन पर जोड़ें",
     installPromptSkip: "बाद में",
     installPromptIosSteps: "शेयर बटन टैप करें, फिर \"होम स्क्रीन पर जोड़ें\" चुनें",
+    remindTitle: "कल आप कब दोहराएँगे?",
+    remindDesc: "रोज़ सिर्फ़ 5 मिनट काफ़ी हैं। समय चुनें और हम आपके कैलेंडर में रोज़ाना रिमाइंडर जोड़ देंगे।",
+    remindMorning: "🌅 सुबह · 8:00",
+    remindLunch: "🍱 दोपहर · 12:30",
+    remindEvening: "🌆 शाम · 19:00",
+    remindNight: "🌙 रात · 21:30",
+    remindSkip: "छोड़ें",
+    remindEventTitle: "GAKU Master — 5 मिनट जापानी दोहराव",
     weeklyProgress: "साप्ताहिक प्रगति",
     tabSchedule: "📅 समय-सारणी",
     tabPractice: "✨ सामग्री से",
@@ -6169,6 +6281,14 @@ const UI_TRANSLATIONS = {
     installPromptCta: "ホーム画面に追加",
     installPromptSkip: "あとで",
     installPromptIosSteps: "共有ボタンをタップし、「ホーム画面に追加」を選んでください",
+    remindTitle: "明日はいつ復習しますか？",
+    remindDesc: "1日たった5分で十分です。時間を選ぶと、カレンダーに毎日のリマインダーを追加します。",
+    remindMorning: "🌅 朝 · 8:00",
+    remindLunch: "🍱 昼 · 12:30",
+    remindEvening: "🌆 夕方 · 19:00",
+    remindNight: "🌙 夜 · 21:30",
+    remindSkip: "スキップ",
+    remindEventTitle: "GAKU Master — 5分日本語復習",
     weeklyProgress: "週間進捗",
     tabSchedule: "📅 スケジュール",
     tabPractice: "✨ コンテンツから",
@@ -6579,6 +6699,14 @@ const UI_TRANSLATIONS = {
     installPromptCta: "Ana Ekrana Ekle",
     installPromptSkip: "Belki sonra",
     installPromptIosSteps: "Paylaş düğmesine, ardından \"Ana Ekrana Ekle\"ye dokunun",
+    remindTitle: "Yarın ne zaman tekrar yapacaksın?",
+    remindDesc: "Günde sadece 5 dakika yeterli. Bir saat seç, takvimine günlük bir hatırlatma ekleyelim.",
+    remindMorning: "🌅 Sabah · 8:00",
+    remindLunch: "🍱 Öğle · 12:30",
+    remindEvening: "🌆 Akşam · 19:00",
+    remindNight: "🌙 Gece · 21:30",
+    remindSkip: "Atla",
+    remindEventTitle: "GAKU Master — 5 dakikalık Japonca tekrar",
     weeklyProgress: "Haftalık ilerleme",
     tabSchedule: "📅 Program",
     tabPractice: "✨ İçerikten",
@@ -6989,6 +7117,14 @@ const UI_TRANSLATIONS = {
     installPromptCta: "होम स्क्रिनमा थप्नुहोस्",
     installPromptSkip: "पछि",
     installPromptIosSteps: "सेयर बटन ट्याप गर्नुहोस्, त्यसपछि \"होम स्क्रिनमा थप्नुहोस्\" छान्नुहोस्",
+    remindTitle: "भोलि कति बजे दोहोर्याउनुहुन्छ?",
+    remindDesc: "दिनमा ५ मिनेट मात्र पर्याप्त छ। समय छान्नुहोस्, हामी तपाईंको क्यालेन्डरमा दैनिक रिमाइन्डर थप्छौं।",
+    remindMorning: "🌅 बिहान · 8:00",
+    remindLunch: "🍱 दिउँसो · 12:30",
+    remindEvening: "🌆 साँझ · 19:00",
+    remindNight: "🌙 राति · 21:30",
+    remindSkip: "छोड्नुहोस्",
+    remindEventTitle: "GAKU Master — ५ मिनेट जापानी दोहोर्याइ",
     weeklyProgress: "साप्ताहिक प्रगति",
     tabSchedule: "📅 तालिका",
     tabPractice: "✨ सामग्रीबाट",
@@ -7399,6 +7535,14 @@ const UI_TRANSLATIONS = {
     installPromptCta: "Idagdag sa Home Screen",
     installPromptSkip: "Sa ibang pagkakataon",
     installPromptIosSteps: "I-tap ang Share, pagkatapos ay \"Idagdag sa Home Screen\"",
+    remindTitle: "Kailan ka magre-review bukas?",
+    remindDesc: "Sapat na ang 5 minuto kada araw. Pumili ng oras at magdaragdag kami ng pang-araw-araw na paalala sa iyong kalendaryo.",
+    remindMorning: "🌅 Umaga · 8:00",
+    remindLunch: "🍱 Tanghali · 12:30",
+    remindEvening: "🌆 Gabi · 19:00",
+    remindNight: "🌙 Late gabi · 21:30",
+    remindSkip: "Laktawan",
+    remindEventTitle: "GAKU Master — 5-min Japanese review",
     weeklyProgress: "Lingguhang progreso",
     tabSchedule: "📅 Iskedyul",
     tabPractice: "✨ Mula sa Nilalaman",
@@ -13583,8 +13727,40 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
   // activity, then (if applicable) an install-to-home-screen prompt, before
   // ever showing the full dashboard. See completeProfileSave below, which
   // sets this to "firstwin" only when `form` was null before the save.
-  const [onboardingStep, setOnboardingStep] = useState(null); // null | "firstwin" | "install"
+  const [onboardingStep, setOnboardingStep] = useState(null); // null | "firstwin" | "remind" | "install" | "completeProfile"
   const [firstWinRevealed, setFirstWinRevealed] = useState(false);
+  // Daily-review reminder step (shown right after First Win): downloads a
+  // calendar event so a phone notification — not an email — brings them back.
+  const addReviewToCalendar = (hour, minute) => {
+    try {
+      const pad = (n) => String(n).padStart(2, "0");
+      const start = new Date();
+      start.setDate(start.getDate() + 1);
+      start.setHours(hour, minute, 0, 0);
+      const end = new Date(start.getTime() + 10 * 60000);
+      const fmt = (d) => `${d.getFullYear()}${pad(d.getMonth()+1)}${pad(d.getDate())}T${pad(d.getHours())}${pad(d.getMinutes())}00`;
+      const stamp = new Date().toISOString().replace(/[-:]/g, "").split(".")[0] + "Z";
+      const title = T.remindEventTitle;
+      const ics = [
+        "BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//GAKU Master//Review//EN", "BEGIN:VEVENT",
+        `UID:gaku-review-${Date.now()}@app.seitojapanese.online`,
+        `DTSTAMP:${stamp}`, `DTSTART:${fmt(start)}`, `DTEND:${fmt(end)}`,
+        "RRULE:FREQ=DAILY;COUNT=7",
+        `SUMMARY:${title}`,
+        "DESCRIPTION:https://app.seitojapanese.online/app",
+        "URL:https://app.seitojapanese.online/app",
+        "BEGIN:VALARM", "ACTION:DISPLAY", `DESCRIPTION:${title}`, "TRIGGER:PT0M", "END:VALARM",
+        "END:VEVENT", "END:VCALENDAR",
+      ].join("\r\n");
+      const blob = new Blob([ics], { type: "text/calendar;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url; a.download = "gaku-master-review.ics";
+      document.body.appendChild(a); a.click(); document.body.removeChild(a);
+      setTimeout(() => URL.revokeObjectURL(url), 5000);
+      try { localStorage.setItem(scopedKey("gaku_review_reminder"), `${pad(hour)}:${pad(minute)}`); } catch {}
+    } catch {}
+  };
   // Captured globally (not inside the install screen itself) because the
   // 'beforeinstallprompt' event can fire before that screen ever mounts —
   // Chrome/Android fire it once, early, per page load.
@@ -14342,13 +14518,39 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
               // never fires it, but has its own manual "Share > Add to Home
               // Screen" steps worth showing). Otherwise skip straight to the dashboard.
               const canShowInstallStep = !alreadyStandalone && (canInstallPwa || isIOSNow);
-              setOnboardingStep(canShowInstallStep ? "install" : nextStepAfterOnboarding);
+              setOnboardingStep("remind");
             }} style={{ ...S.btn, width:"100%", background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff" }}>
               🎉 {T.firstWinDoneBtn}
             </button>
           ) : (
             <p style={{ color:"#64748b", fontSize:11, margin:0 }}>{T.firstWinHint}</p>
           )}
+        </div>
+      </div>
+    );
+  }
+  if (onboardingStep === "remind") {
+    const afterRemind = () => {
+      const alreadyStandalone = (typeof window !== "undefined") && (
+        window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true
+      );
+      const isIOSNow = typeof navigator !== "undefined" && /iphone|ipad|ipod/i.test(navigator.userAgent);
+      const canShowInstallStep = !alreadyStandalone && (canInstallPwa || isIOSNow);
+      setOnboardingStep(canShowInstallStep ? "install" : nextStepAfterOnboarding);
+    };
+    const slots = [
+      [T.remindMorning, 8, 0], [T.remindLunch, 12, 30], [T.remindEvening, 19, 0], [T.remindNight, 21, 30],
+    ];
+    return (
+      <div style={{ minHeight:"100vh", background:C.bg, display:"flex", alignItems:"center", justifyContent:"center", padding:24 }}>
+        <div style={{ background:"linear-gradient(135deg,#1e1b4b,#0f172a)", border:"1.5px solid rgba(139,92,246,0.4)", borderRadius:20, padding:"36px 32px", maxWidth:420, width:"90%", textAlign:"center", boxShadow:"0 8px 40px rgba(139,92,246,0.25)" }}>
+          <p style={{ fontSize:32, margin:"0 0 6px" }}>⏰</p>
+          <h2 style={{ color:"#f1f5f9", fontSize:19, fontWeight:900, margin:"0 0 8px" }}>{T.remindTitle}</h2>
+          <p style={{ color:"#94a3b8", fontSize:13, margin:"0 0 20px", lineHeight:1.6 }}>{T.remindDesc}</p>
+          {slots.map(([label, h, m]) => (
+            <button key={label} onClick={() => { addReviewToCalendar(h, m); afterRemind(); }} style={{ ...S.btn, width:"100%", marginBottom:10, background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff" }}>{label}</button>
+          ))}
+          <button onClick={afterRemind} style={{ ...S.btn, width:"100%", background:"none", border:"none", color:"#64748b" }}>{T.remindSkip}</button>
         </div>
       </div>
     );
