@@ -421,6 +421,18 @@ const UI_TRANSLATIONS = {
     remindNight: "🌙 Night · 21:30",
     remindSkip: "Skip",
     remindEventTitle: "GAKU Master — 5-min Japanese review",
+    fqTitle: "Make your own quiz",
+    fqDesc: "Paste any Japanese you like (a caption, lyrics line, news sentence) and get a 3-question quiz in seconds.",
+    fqPlaceholder: "Paste Japanese text here…",
+    fqSample: "Use a sample",
+    fqStart: "Make my quiz",
+    fqLoading: "Making your quiz…",
+    fqErr: "Couldn't make a quiz this time. You can skip and try later from the dashboard.",
+    fqCorrect: "✅ Correct!",
+    fqWrong: "❌ Not quite. Answer:",
+    fqNext: "Next",
+    fqDone: "Finish",
+    fqSkip: "Skip",
     weeklyProgress: "Weekly Progress",
     // Tab labels
     tabSchedule: "📅 Schedule",
@@ -855,6 +867,18 @@ const UI_TRANSLATIONS = {
     remindNight: "🌙 Nuit · 21:30",
     remindSkip: "Passer",
     remindEventTitle: "GAKU Master — révision de japonais en 5 min",
+    fqTitle: "Créez votre propre quiz",
+    fqDesc: "Collez n'importe quel texte japonais (légende, paroles, phrase d'actualité) et obtenez un quiz de 3 questions en quelques secondes.",
+    fqPlaceholder: "Collez le texte japonais ici…",
+    fqSample: "Utiliser un exemple",
+    fqStart: "Créer mon quiz",
+    fqLoading: "Création du quiz…",
+    fqErr: "Impossible de créer un quiz cette fois. Vous pouvez passer et réessayer depuis le tableau de bord.",
+    fqCorrect: "✅ Correct !",
+    fqWrong: "❌ Pas tout à fait. Réponse :",
+    fqNext: "Suivant",
+    fqDone: "Terminer",
+    fqSkip: "Passer",
     weeklyProgress: "Progression hebdomadaire",
     tabSchedule: "📅 Planning",
     tabPractice: "✨ À partir du contenu",
@@ -1273,6 +1297,18 @@ const UI_TRANSLATIONS = {
     remindNight: "🌙 Noche · 21:30",
     remindSkip: "Omitir",
     remindEventTitle: "GAKU Master — repaso de japonés de 5 min",
+    fqTitle: "Crea tu propio quiz",
+    fqDesc: "Pega cualquier texto en japonés (un pie de foto, una letra, una frase de noticias) y obtén un quiz de 3 preguntas en segundos.",
+    fqPlaceholder: "Pega aquí el texto en japonés…",
+    fqSample: "Usar un ejemplo",
+    fqStart: "Crear mi quiz",
+    fqLoading: "Creando tu quiz…",
+    fqErr: "No se pudo crear el quiz esta vez. Puedes omitir e intentarlo luego desde el panel.",
+    fqCorrect: "✅ ¡Correcto!",
+    fqWrong: "❌ No exactamente. Respuesta:",
+    fqNext: "Siguiente",
+    fqDone: "Terminar",
+    fqSkip: "Omitir",
     weeklyProgress: "Progreso semanal",
     tabSchedule: "📅 Horario",
     tabPractice: "✨ Desde el contenido",
@@ -1691,6 +1727,18 @@ const UI_TRANSLATIONS = {
     remindNight: "🌙 Noite · 21:30",
     remindSkip: "Pular",
     remindEventTitle: "GAKU Master — revisão de japonês de 5 min",
+    fqTitle: "Crie seu próprio quiz",
+    fqDesc: "Cole qualquer texto em japonês (legenda, trecho de música, frase de notícia) e receba um quiz de 3 perguntas em segundos.",
+    fqPlaceholder: "Cole o texto em japonês aqui…",
+    fqSample: "Usar um exemplo",
+    fqStart: "Criar meu quiz",
+    fqLoading: "Criando seu quiz…",
+    fqErr: "Não foi possível criar o quiz desta vez. Você pode pular e tentar depois pelo painel.",
+    fqCorrect: "✅ Correto!",
+    fqWrong: "❌ Não exatamente. Resposta:",
+    fqNext: "Próxima",
+    fqDone: "Concluir",
+    fqSkip: "Pular",
     weeklyProgress: "Progresso semanal",
     tabSchedule: "📅 Agenda",
     tabPractice: "✨ A partir do conteúdo",
@@ -2109,6 +2157,18 @@ const UI_TRANSLATIONS = {
     remindNight: "🌙 Spätabends · 21:30",
     remindSkip: "Überspringen",
     remindEventTitle: "GAKU Master — 5 Min. Japanisch wiederholen",
+    fqTitle: "Erstelle dein eigenes Quiz",
+    fqDesc: "Füge beliebigen japanischen Text ein (Bildunterschrift, Songzeile, Nachrichtensatz) und erhalte in Sekunden ein Quiz mit 3 Fragen.",
+    fqPlaceholder: "Japanischen Text hier einfügen…",
+    fqSample: "Beispiel verwenden",
+    fqStart: "Mein Quiz erstellen",
+    fqLoading: "Quiz wird erstellt…",
+    fqErr: "Das Quiz konnte diesmal nicht erstellt werden. Du kannst überspringen und es später im Dashboard versuchen.",
+    fqCorrect: "✅ Richtig!",
+    fqWrong: "❌ Nicht ganz. Antwort:",
+    fqNext: "Weiter",
+    fqDone: "Fertig",
+    fqSkip: "Überspringen",
     weeklyProgress: "Wöchentlicher Fortschritt",
     tabSchedule: "📅 Zeitplan",
     tabPractice: "✨ Aus Inhalt",
@@ -2527,6 +2587,18 @@ const UI_TRANSLATIONS = {
     remindNight: "🌙 Notte · 21:30",
     remindSkip: "Salta",
     remindEventTitle: "GAKU Master — ripasso di giapponese di 5 min",
+    fqTitle: "Crea il tuo quiz",
+    fqDesc: "Incolla qualsiasi testo giapponese (didascalia, verso di una canzone, frase di notizia) e ottieni un quiz di 3 domande in pochi secondi.",
+    fqPlaceholder: "Incolla qui il testo giapponese…",
+    fqSample: "Usa un esempio",
+    fqStart: "Crea il mio quiz",
+    fqLoading: "Creazione del quiz…",
+    fqErr: "Impossibile creare il quiz questa volta. Puoi saltare e riprovare dalla dashboard.",
+    fqCorrect: "✅ Corretto!",
+    fqWrong: "❌ Non proprio. Risposta:",
+    fqNext: "Avanti",
+    fqDone: "Fine",
+    fqSkip: "Salta",
     weeklyProgress: "Progressi settimanali",
     tabSchedule: "📅 Programma",
     tabPractice: "✨ Dal contenuto",
@@ -2945,6 +3017,18 @@ const UI_TRANSLATIONS = {
     remindNight: "🌙 晚上 · 21:30",
     remindSkip: "跳过",
     remindEventTitle: "GAKU Master — 5分钟日语复习",
+    fqTitle: "制作你自己的测验",
+    fqDesc: "粘贴任何你喜欢的日语（字幕、歌词、新闻句子），几秒钟内生成3道题的小测验。",
+    fqPlaceholder: "在此粘贴日语文本…",
+    fqSample: "使用示例",
+    fqStart: "生成我的测验",
+    fqLoading: "正在生成测验…",
+    fqErr: "这次没能生成测验。你可以跳过，之后在主页再试。",
+    fqCorrect: "✅ 正确！",
+    fqWrong: "❌ 不太对。答案：",
+    fqNext: "下一题",
+    fqDone: "完成",
+    fqSkip: "跳过",
     weeklyProgress: "每周进度",
     tabSchedule: "📅 日程",
     tabPractice: "✨ 来自内容",
@@ -3363,6 +3447,18 @@ const UI_TRANSLATIONS = {
     remindNight: "🌙 晚上 · 21:30",
     remindSkip: "略過",
     remindEventTitle: "GAKU Master — 5分鐘日語複習",
+    fqTitle: "製作你自己的測驗",
+    fqDesc: "貼上任何你喜歡的日語（字幕、歌詞、新聞句子），幾秒內產生3題的小測驗。",
+    fqPlaceholder: "在此貼上日語文字…",
+    fqSample: "使用範例",
+    fqStart: "產生我的測驗",
+    fqLoading: "正在產生測驗…",
+    fqErr: "這次沒能產生測驗。你可以略過，之後在主頁再試。",
+    fqCorrect: "✅ 正確！",
+    fqWrong: "❌ 不太對。答案：",
+    fqNext: "下一題",
+    fqDone: "完成",
+    fqSkip: "略過",
     weeklyProgress: "每週進度",
     tabSchedule: "📅 日程",
     tabPractice: "✨ 來自內容",
@@ -3781,6 +3877,18 @@ const UI_TRANSLATIONS = {
     remindNight: "🌙 밤 · 21:30",
     remindSkip: "건너뛰기",
     remindEventTitle: "GAKU Master — 5분 일본어 복습",
+    fqTitle: "나만의 퀴즈 만들기",
+    fqDesc: "좋아하는 일본어(자막, 가사, 뉴스 문장 등)를 붙여넣으면 몇 초 만에 3문제 퀴즈가 만들어져요.",
+    fqPlaceholder: "여기에 일본어 텍스트를 붙여넣으세요…",
+    fqSample: "예시 사용",
+    fqStart: "퀴즈 만들기",
+    fqLoading: "퀴즈를 만드는 중…",
+    fqErr: "이번에는 퀴즈를 만들지 못했어요. 건너뛰고 나중에 대시보드에서 다시 시도할 수 있어요.",
+    fqCorrect: "✅ 정답!",
+    fqWrong: "❌ 아쉬워요. 정답:",
+    fqNext: "다음",
+    fqDone: "완료",
+    fqSkip: "건너뛰기",
     weeklyProgress: "주간 진도",
     tabSchedule: "📅 일정",
     tabPractice: "✨ 콘텐츠에서",
@@ -4199,6 +4307,18 @@ const UI_TRANSLATIONS = {
     remindNight: "🌙 ดึก · 21:30",
     remindSkip: "ข้าม",
     remindEventTitle: "GAKU Master — ทบทวนภาษาญี่ปุ่น 5 นาที",
+    fqTitle: "สร้างแบบทดสอบของคุณเอง",
+    fqDesc: "วางประโยคภาษาญี่ปุ่นที่ชอบ (แคปชัน เนื้อเพลง ข่าว) แล้วรับแบบทดสอบ 3 ข้อในไม่กี่วินาที",
+    fqPlaceholder: "วางข้อความภาษาญี่ปุ่นที่นี่…",
+    fqSample: "ใช้ตัวอย่าง",
+    fqStart: "สร้างแบบทดสอบ",
+    fqLoading: "กำลังสร้างแบบทดสอบ…",
+    fqErr: "ครั้งนี้สร้างแบบทดสอบไม่สำเร็จ คุณข้ามไปก่อนแล้วลองใหม่จากแดชบอร์ดได้",
+    fqCorrect: "✅ ถูกต้อง!",
+    fqWrong: "❌ ยังไม่ถูก คำตอบ:",
+    fqNext: "ถัดไป",
+    fqDone: "เสร็จสิ้น",
+    fqSkip: "ข้าม",
     weeklyProgress: "ความคืบหน้ารายสัปดาห์",
     tabSchedule: "📅 ตารางเรียน",
     tabPractice: "✨ จากเนื้อหา",
@@ -4617,6 +4737,18 @@ const UI_TRANSLATIONS = {
     remindNight: "🌙 Malam · 21:30",
     remindSkip: "Langkau",
     remindEventTitle: "GAKU Master — ulang kaji bahasa Jepun 5 minit",
+    fqTitle: "Cipta kuiz anda sendiri",
+    fqDesc: "Tampal mana-mana teks Jepun yang anda suka (kapsyen, lirik, ayat berita) dan dapatkan kuiz 3 soalan dalam beberapa saat.",
+    fqPlaceholder: "Tampal teks Jepun di sini…",
+    fqSample: "Guna contoh",
+    fqStart: "Cipta kuiz saya",
+    fqLoading: "Mencipta kuiz…",
+    fqErr: "Kuiz tidak dapat dicipta kali ini. Anda boleh langkau dan cuba lagi dari papan pemuka.",
+    fqCorrect: "✅ Betul!",
+    fqWrong: "❌ Belum tepat. Jawapan:",
+    fqNext: "Seterusnya",
+    fqDone: "Selesai",
+    fqSkip: "Langkau",
     weeklyProgress: "Kemajuan mingguan",
     tabSchedule: "📅 Jadual",
     tabPractice: "✨ Dari Kandungan",
@@ -5035,6 +5167,18 @@ const UI_TRANSLATIONS = {
     remindNight: "🌙 Malam · 21:30",
     remindSkip: "Lewati",
     remindEventTitle: "GAKU Master — review bahasa Jepang 5 menit",
+    fqTitle: "Buat kuismu sendiri",
+    fqDesc: "Tempel teks Jepang apa pun yang kamu suka (keterangan, lirik, kalimat berita) dan dapatkan kuis 3 soal dalam hitungan detik.",
+    fqPlaceholder: "Tempel teks Jepang di sini…",
+    fqSample: "Pakai contoh",
+    fqStart: "Buat kuisku",
+    fqLoading: "Membuat kuis…",
+    fqErr: "Kuis tidak bisa dibuat kali ini. Kamu bisa lewati dan coba lagi dari dasbor.",
+    fqCorrect: "✅ Benar!",
+    fqWrong: "❌ Belum tepat. Jawaban:",
+    fqNext: "Berikutnya",
+    fqDone: "Selesai",
+    fqSkip: "Lewati",
     weeklyProgress: "Kemajuan mingguan",
     tabSchedule: "📅 Jadwal",
     tabPractice: "✨ Dari Konten",
@@ -5453,6 +5597,18 @@ const UI_TRANSLATIONS = {
     remindNight: "🌙 Đêm · 21:30",
     remindSkip: "Bỏ qua",
     remindEventTitle: "GAKU Master — ôn tiếng Nhật 5 phút",
+    fqTitle: "Tạo bài kiểm tra của riêng bạn",
+    fqDesc: "Dán bất kỳ đoạn tiếng Nhật nào bạn thích (chú thích, lời bài hát, câu tin tức) và nhận bài kiểm tra 3 câu trong vài giây.",
+    fqPlaceholder: "Dán văn bản tiếng Nhật vào đây…",
+    fqSample: "Dùng ví dụ",
+    fqStart: "Tạo bài kiểm tra",
+    fqLoading: "Đang tạo bài kiểm tra…",
+    fqErr: "Lần này chưa tạo được bài kiểm tra. Bạn có thể bỏ qua và thử lại từ bảng điều khiển.",
+    fqCorrect: "✅ Chính xác!",
+    fqWrong: "❌ Chưa đúng. Đáp án:",
+    fqNext: "Tiếp",
+    fqDone: "Hoàn thành",
+    fqSkip: "Bỏ qua",
     weeklyProgress: "Tiến độ hàng tuần",
     tabSchedule: "📅 Lịch học",
     tabPractice: "✨ Từ nội dung",
@@ -5871,6 +6027,18 @@ const UI_TRANSLATIONS = {
     remindNight: "🌙 रात · 21:30",
     remindSkip: "छोड़ें",
     remindEventTitle: "GAKU Master — 5 मिनट जापानी दोहराव",
+    fqTitle: "अपना खुद का क्विज़ बनाएँ",
+    fqDesc: "अपनी पसंद का कोई भी जापानी टेक्स्ट (कैप्शन, गाने की पंक्ति, समाचार वाक्य) चिपकाएँ और कुछ सेकंड में 3 सवालों का क्विज़ पाएँ।",
+    fqPlaceholder: "जापानी टेक्स्ट यहाँ चिपकाएँ…",
+    fqSample: "नमूना इस्तेमाल करें",
+    fqStart: "मेरा क्विज़ बनाएँ",
+    fqLoading: "क्विज़ बन रहा है…",
+    fqErr: "इस बार क्विज़ नहीं बन पाया। आप छोड़कर बाद में डैशबोर्ड से कोशिश कर सकते हैं।",
+    fqCorrect: "✅ सही!",
+    fqWrong: "❌ बिल्कुल सही नहीं। उत्तर:",
+    fqNext: "अगला",
+    fqDone: "पूरा करें",
+    fqSkip: "छोड़ें",
     weeklyProgress: "साप्ताहिक प्रगति",
     tabSchedule: "📅 समय-सारणी",
     tabPractice: "✨ सामग्री से",
@@ -6289,6 +6457,18 @@ const UI_TRANSLATIONS = {
     remindNight: "🌙 夜 · 21:30",
     remindSkip: "スキップ",
     remindEventTitle: "GAKU Master — 5分日本語復習",
+    fqTitle: "自分だけのクイズを作ろう",
+    fqDesc: "好きな日本語(キャプション、歌詞の一行、ニュースの一文など)を貼ると、数秒で3問のクイズができます。",
+    fqPlaceholder: "ここに日本語を貼り付け…",
+    fqSample: "サンプルを使う",
+    fqStart: "クイズを作る",
+    fqLoading: "クイズを作成中…",
+    fqErr: "今回はクイズを作れませんでした。スキップして、あとでダッシュボードから試せます。",
+    fqCorrect: "✅ 正解!",
+    fqWrong: "❌ おしい!答え:",
+    fqNext: "次へ",
+    fqDone: "完了",
+    fqSkip: "スキップ",
     weeklyProgress: "週間進捗",
     tabSchedule: "📅 スケジュール",
     tabPractice: "✨ コンテンツから",
@@ -6707,6 +6887,18 @@ const UI_TRANSLATIONS = {
     remindNight: "🌙 Gece · 21:30",
     remindSkip: "Atla",
     remindEventTitle: "GAKU Master — 5 dakikalık Japonca tekrar",
+    fqTitle: "Kendi quizini oluştur",
+    fqDesc: "Beğendiğin herhangi bir Japonca metni (altyazı, şarkı sözü, haber cümlesi) yapıştır, saniyeler içinde 3 soruluk bir quiz al.",
+    fqPlaceholder: "Japonca metni buraya yapıştır…",
+    fqSample: "Örnek kullan",
+    fqStart: "Quizimi oluştur",
+    fqLoading: "Quiz hazırlanıyor…",
+    fqErr: "Bu sefer quiz oluşturulamadı. Atlayıp daha sonra panodan deneyebilirsin.",
+    fqCorrect: "✅ Doğru!",
+    fqWrong: "❌ Tam değil. Cevap:",
+    fqNext: "Sonraki",
+    fqDone: "Bitir",
+    fqSkip: "Atla",
     weeklyProgress: "Haftalık ilerleme",
     tabSchedule: "📅 Program",
     tabPractice: "✨ İçerikten",
@@ -7125,6 +7317,18 @@ const UI_TRANSLATIONS = {
     remindNight: "🌙 राति · 21:30",
     remindSkip: "छोड्नुहोस्",
     remindEventTitle: "GAKU Master — ५ मिनेट जापानी दोहोर्याइ",
+    fqTitle: "आफ्नै क्विज बनाउनुहोस्",
+    fqDesc: "मनपर्ने कुनै पनि जापानी पाठ (क्याप्सन, गीतको हरफ, समाचार वाक्य) टाँस्नुहोस् र केही सेकेन्डमै ३ प्रश्नको क्विज पाउनुहोस्।",
+    fqPlaceholder: "जापानी पाठ यहाँ टाँस्नुहोस्…",
+    fqSample: "नमुना प्रयोग गर्नुहोस्",
+    fqStart: "मेरो क्विज बनाउनुहोस्",
+    fqLoading: "क्विज बन्दै छ…",
+    fqErr: "यसपटक क्विज बन्न सकेन। तपाईं छोडेर पछि ड्यासबोर्डबाट प्रयास गर्न सक्नुहुन्छ।",
+    fqCorrect: "✅ सही!",
+    fqWrong: "❌ ठीक भएन। उत्तर:",
+    fqNext: "अर्को",
+    fqDone: "सक्नुहोस्",
+    fqSkip: "छोड्नुहोस्",
     weeklyProgress: "साप्ताहिक प्रगति",
     tabSchedule: "📅 तालिका",
     tabPractice: "✨ सामग्रीबाट",
@@ -7543,6 +7747,18 @@ const UI_TRANSLATIONS = {
     remindNight: "🌙 Late gabi · 21:30",
     remindSkip: "Laktawan",
     remindEventTitle: "GAKU Master — 5-min Japanese review",
+    fqTitle: "Gumawa ng sarili mong quiz",
+    fqDesc: "Mag-paste ng anumang Japanese na gusto mo (caption, lyrics, balita) at makakuha ng 3-tanong na quiz sa ilang segundo.",
+    fqPlaceholder: "I-paste dito ang Japanese text…",
+    fqSample: "Gumamit ng sample",
+    fqStart: "Gawin ang quiz ko",
+    fqLoading: "Ginagawa ang quiz…",
+    fqErr: "Hindi nakagawa ng quiz ngayon. Maaari mong laktawan at subukan ulit sa dashboard.",
+    fqCorrect: "✅ Tama!",
+    fqWrong: "❌ Hindi pa tama. Sagot:",
+    fqNext: "Susunod",
+    fqDone: "Tapusin",
+    fqSkip: "Laktawan",
     weeklyProgress: "Lingguhang progreso",
     tabSchedule: "📅 Iskedyul",
     tabPractice: "✨ Mula sa Nilalaman",
@@ -13727,8 +13943,45 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
   // activity, then (if applicable) an install-to-home-screen prompt, before
   // ever showing the full dashboard. See completeProfileSave below, which
   // sets this to "firstwin" only when `form` was null before the save.
-  const [onboardingStep, setOnboardingStep] = useState(null); // null | "firstwin" | "remind" | "install" | "completeProfile"
+  const [onboardingStep, setOnboardingStep] = useState(null); // null | "firstwin" | "firstquiz" | "remind" | "install" | "completeProfile"
   const [firstWinRevealed, setFirstWinRevealed] = useState(false);
+  // "Make your own quiz" step (right after First Win): paste any Japanese,
+  // get a 3-question quiz at once — the fastest way to a real first session.
+  const [fqText, setFqText] = useState("");
+  const [fqLoading, setFqLoading] = useState(false);
+  const [fqError, setFqError] = useState(false);
+  const [fqQuestions, setFqQuestions] = useState([]);
+  const [fqIdx, setFqIdx] = useState(0);
+  const [fqPicked, setFqPicked] = useState(null);
+  const FQ_SAMPLE = "今日は友達と一緒に新しいカフェに行きました。コーヒーがとてもおいしかったので、また来週も行きたいです。";
+  const makeFirstQuiz = async (text) => {
+    const trimmed = (text || "").trim();
+    if (!trimmed) return;
+    setFqLoading(true); setFqError(false);
+    try {
+      const res = await fetch("/api/claude", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ model: "claude-sonnet-4-20250514", max_tokens: 1500, provider: "content",
+          messages: [{ role: "user", content: `You are a Japanese teacher. The student's level is ${form?.jlpt || "Beginner"}. Make EXACTLY 3 multiple-choice questions (meaning, reading, or fill-in-the-blank) grounded in real words or sentences from the text below. Each question has 4 options, exactly one correct. Write question text in Japanese with a short ${form?.preferredLang || "English"} hint if helpful. Keep it easy and encouraging.
+
+TEXT:
+"""
+${trimmed.slice(0, 1200)}
+"""
+
+Respond ONLY with a valid JSON array, no markdown, no backticks:
+[{"q":"","options":["","","",""],"answer":0}]
+"answer" is the 0-based index of the correct option.` }] })
+      });
+      const d = await res.json();
+      const raw = d.content?.map(c => c.text || "").join("") || "[]";
+      const parsed = JSON.parse(raw.replace(/```json|```/g, "").trim());
+      const ok = Array.isArray(parsed) ? parsed.filter(x => x && x.q && Array.isArray(x.options) && x.options.length >= 2 && Number.isInteger(x.answer) && x.options[x.answer] != null).slice(0, 3) : [];
+      if (!ok.length) throw new Error("empty");
+      setFqQuestions(ok); setFqIdx(0); setFqPicked(null);
+    } catch { setFqError(true); }
+    setFqLoading(false);
+  };
   // Daily-review reminder step (shown right after First Win): downloads a
   // calendar event so a phone notification — not an email — brings them back.
   const addReviewToCalendar = (hour, minute) => {
@@ -14518,12 +14771,65 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
               // never fires it, but has its own manual "Share > Add to Home
               // Screen" steps worth showing). Otherwise skip straight to the dashboard.
               const canShowInstallStep = !alreadyStandalone && (canInstallPwa || isIOSNow);
-              setOnboardingStep("remind");
+              setOnboardingStep("firstquiz");
             }} style={{ ...S.btn, width:"100%", background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff" }}>
               🎉 {T.firstWinDoneBtn}
             </button>
           ) : (
             <p style={{ color:"#64748b", fontSize:11, margin:0 }}>{T.firstWinHint}</p>
+          )}
+        </div>
+      </div>
+    );
+  }
+  if (onboardingStep === "firstquiz") {
+    const q = fqQuestions[fqIdx];
+    const last = fqIdx >= fqQuestions.length - 1;
+    const card = { background:"linear-gradient(135deg,#1e1b4b,#0f172a)", border:"1.5px solid rgba(139,92,246,0.4)", borderRadius:20, padding:"32px 28px", maxWidth:440, width:"90%", textAlign:"center", boxShadow:"0 8px 40px rgba(139,92,246,0.25)" };
+    return (
+      <div style={{ minHeight:"100vh", background:C.bg, display:"flex", alignItems:"center", justifyContent:"center", padding:24 }}>
+        <div style={card}>
+          {!q ? (
+            <>
+              <p style={{ fontSize:30, margin:"0 0 6px" }}>✍️</p>
+              <h2 style={{ color:"#f1f5f9", fontSize:19, fontWeight:900, margin:"0 0 8px" }}>{T.fqTitle}</h2>
+              <p style={{ color:"#94a3b8", fontSize:13, margin:"0 0 14px", lineHeight:1.6 }}>{T.fqDesc}</p>
+              <textarea value={fqText} onChange={e=>setFqText(e.target.value)} placeholder={T.fqPlaceholder} rows={4}
+                style={{ width:"100%", boxSizing:"border-box", background:"rgba(255,255,255,0.04)", border:`1.5px solid ${C.border}`, borderRadius:12, padding:12, color:"#f1f5f9", fontSize:14, resize:"vertical", marginBottom:10 }} />
+              {fqError && <p style={{ color:C.red, fontSize:12, margin:"0 0 10px" }}>{T.fqErr}</p>}
+              <button onClick={()=>makeFirstQuiz(fqText)} disabled={fqLoading || !fqText.trim()} style={{ ...S.btn, width:"100%", marginBottom:8, background:(fqLoading||!fqText.trim())?"rgba(139,92,246,0.15)":`linear-gradient(135deg,${C.purple},#9333ea)`, color:(fqLoading||!fqText.trim())?"#64748b":"#fff" }}>
+                {fqLoading ? `⏳ ${T.fqLoading}` : T.fqStart}
+              </button>
+              <button onClick={()=>{ setFqText(FQ_SAMPLE); makeFirstQuiz(FQ_SAMPLE); }} disabled={fqLoading} style={{ ...S.btn, width:"100%", marginBottom:6, background:C.card, border:`1px solid ${C.border}`, color:"#cbd5e1" }}>{T.fqSample}</button>
+              <button onClick={()=>setOnboardingStep("remind")} style={{ ...S.btn, width:"100%", background:"none", border:"none", color:"#64748b" }}>{T.fqSkip}</button>
+            </>
+          ) : (
+            <>
+              <p style={{ color:C.purpleLight, fontSize:11, fontWeight:800, letterSpacing:1, margin:"0 0 10px" }}>{fqIdx + 1} / {fqQuestions.length}</p>
+              <p style={{ color:"#f1f5f9", fontSize:16, fontWeight:700, lineHeight:1.7, margin:"0 0 16px", whiteSpace:"pre-wrap" }}>{q.q}</p>
+              {q.options.map((opt, oi) => {
+                const picked = fqPicked !== null;
+                const isRight = oi === q.answer;
+                const isPick = oi === fqPicked;
+                const bg = !picked ? C.card : isRight ? "rgba(34,197,94,0.18)" : isPick ? "rgba(239,68,68,0.18)" : C.card;
+                const bd = !picked ? C.border : isRight ? "rgba(34,197,94,0.6)" : isPick ? "rgba(239,68,68,0.6)" : C.border;
+                return (
+                  <button key={oi} disabled={picked} onClick={()=>setFqPicked(oi)} style={{ ...S.btn, width:"100%", marginBottom:8, textAlign:"left", background:bg, border:`1.5px solid ${bd}`, color:"#f1f5f9" }}>
+                    {["①","②","③","④"][oi] || ""} {opt}
+                  </button>
+                );
+              })}
+              {fqPicked !== null && (
+                <>
+                  <p style={{ color: fqPicked === q.answer ? C.green : "#fbbf24", fontSize:13, fontWeight:700, margin:"4px 0 12px" }}>
+                    {fqPicked === q.answer ? T.fqCorrect : `${T.fqWrong} ${q.options[q.answer]}`}
+                  </p>
+                  <button onClick={()=>{ if (last) { setOnboardingStep("remind"); } else { setFqIdx(fqIdx + 1); setFqPicked(null); } }} style={{ ...S.btn, width:"100%", background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff" }}>
+                    {last ? T.fqDone : T.fqNext}
+                  </button>
+                </>
+              )}
+            </>
           )}
         </div>
       </div>
