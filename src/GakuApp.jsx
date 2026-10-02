@@ -772,6 +772,9 @@ const UI_TRANSLATIONS = {
     convListening: "Listening…",
     convListenUnsupported: "Live listening isn't supported in this browser — try Chrome on desktop or Android.",
     pronTitle: "Pronunciation Practice",
+    pronListenDesc: "Play a YouTube, Netflix or any video with the sound on near your mic. GAKU listens, writes down what it hears line by line, and helps you understand it with furigana, romaji and translation.",
+    pronSlowTip: "Can't catch it? Slow the video down (for example YouTube speed 0.5× or 0.75×) and listen again. Your teacher is the video — GAKU just writes it down.",
+    pronSlowNo: "No problem. Slow the video down and listen to that part again — GAKU will write it down once more.",
     pronDesc: "Paste any Japanese text — an article, video subtitles, a song, your own notes — just like Create From Content. GAKU will pull out natural sentences and phrases for you to read aloud (or listen and repeat), then check how close your spoken attempt was.",
     pronPasteLabel: "Paste Japanese text here",
     pronGenerating: "Building pronunciation practice...",
@@ -1158,6 +1161,9 @@ const UI_TRANSLATIONS = {
     convModelAnswer: "Réponse modèle",
     convAltResponses: "Autres façons de le dire",
     pronTitle: "Pratique de prononciation",
+    pronListenDesc: "Lancez YouTube, Netflix ou n'importe quelle vidéo avec le son près de votre micro. GAKU écoute, note ce qu'il entend ligne par ligne et vous aide à comprendre avec les furigana, le romaji et la traduction.",
+    pronSlowTip: "Vous n'arrivez pas à saisir ? Ralentissez la vidéo (par exemple vitesse 0,5× ou 0,75× sur YouTube) et écoutez à nouveau. Le professeur, c'est la vidéo — GAKU se contente de transcrire.",
+    pronSlowNo: "Pas de souci. Ralentissez la vidéo et réécoutez ce passage — GAKU le transcrira de nouveau.",
     pronDesc: "Collez n'importe quel texte japonais — un article, des sous-titres de vidéo, une chanson, vos propres notes — comme dans Créer à partir du contenu. GAKU en extraira des phrases naturelles à lire à voix haute (ou à écouter et répéter), puis vérifiera à quel point votre prononciation s'en est approchée.",
     pronPasteLabel: "Collez le texte japonais ici",
     pronGenerating: "Création de l'exercice de prononciation...",
@@ -1588,6 +1594,9 @@ const UI_TRANSLATIONS = {
     convModelAnswer: "Respuesta modelo",
     convAltResponses: "Otras formas de decirlo",
     pronTitle: "Práctica de pronunciación",
+    pronListenDesc: "Reproduce YouTube, Netflix o cualquier video con el sonido cerca de tu micrófono. GAKU escucha, escribe lo que oye línea por línea y te ayuda a entenderlo con furigana, romaji y traducción.",
+    pronSlowTip: "¿No lo captas? Ralentiza el video (por ejemplo, velocidad 0,5× o 0,75× en YouTube) y vuelve a escuchar. El maestro es el video — GAKU solo lo transcribe.",
+    pronSlowNo: "No hay problema. Ralentiza el video y escucha esa parte otra vez — GAKU la transcribirá de nuevo.",
     pronDesc: "Pega cualquier texto en japonés — un artículo, subtítulos de video, una canción, tus propias notas — igual que en Crear desde contenido. GAKU extraerá oraciones y frases naturales para que las leas en voz alta (o las escuches y repitas), y luego comprobará qué tan cerca estuvo tu intento hablado.",
     pronPasteLabel: "Pega aquí el texto en japonés",
     pronGenerating: "Creando práctica de pronunciación...",
@@ -2018,6 +2027,9 @@ const UI_TRANSLATIONS = {
     convModelAnswer: "Resposta modelo",
     convAltResponses: "Outras formas de dizer isso",
     pronTitle: "Prática de pronúncia",
+    pronListenDesc: "Reproduza YouTube, Netflix ou qualquer vídeo com o som perto do seu microfone. O GAKU escuta, anota o que ouve linha por linha e ajuda você a entender com furigana, romaji e tradução.",
+    pronSlowTip: "Não conseguiu entender? Diminua a velocidade do vídeo (por exemplo, 0,5× ou 0,75× no YouTube) e ouça de novo. O professor é o vídeo — o GAKU apenas transcreve.",
+    pronSlowNo: "Sem problema. Diminua a velocidade do vídeo e ouça esse trecho novamente — o GAKU vai transcrever mais uma vez.",
     pronDesc: "Cole qualquer texto em japonês — um artigo, legendas de vídeo, uma música, suas próprias anotações — assim como em Criar a partir de conteúdo. O GAKU extrairá frases naturais para você ler em voz alta (ou ouvir e repetir), e depois verificará o quão próxima sua tentativa falada esteve.",
     pronPasteLabel: "Cole o texto em japonês aqui",
     pronGenerating: "Criando prática de pronúncia...",
@@ -2448,6 +2460,9 @@ const UI_TRANSLATIONS = {
     convModelAnswer: "Musterantwort",
     convAltResponses: "Andere Möglichkeiten, es zu sagen",
     pronTitle: "Ausspracheübung",
+    pronListenDesc: "Spiele YouTube, Netflix oder ein beliebiges Video mit eingeschaltetem Ton in der Nähe deines Mikrofons ab. GAKU hört zu, schreibt Zeile für Zeile mit und hilft dir mit Furigana, Romaji und Übersetzung beim Verstehen.",
+    pronSlowTip: "Nicht verstanden? Verlangsame das Video (z. B. YouTube-Geschwindigkeit 0,5× oder 0,75×) und höre noch einmal zu. Das Video ist dein Lehrer — GAKU schreibt nur mit.",
+    pronSlowNo: "Kein Problem. Verlangsame das Video und höre diese Stelle noch einmal — GAKU schreibt sie erneut mit.",
     pronDesc: "Füge beliebigen japanischen Text ein — einen Artikel, Videountertitel, ein Lied, deine eigenen Notizen — genau wie bei „Aus Inhalt erstellen“. GAKU extrahiert daraus natürliche Sätze und Ausdrücke zum lauten Vorlesen (oder Hören und Nachsprechen) und prüft dann, wie nah dein gesprochener Versuch war.",
     pronPasteLabel: "Japanischen Text hier einfügen",
     pronGenerating: "Ausspracheübung wird erstellt...",
@@ -2878,6 +2893,9 @@ const UI_TRANSLATIONS = {
     convModelAnswer: "Risposta modello",
     convAltResponses: "Altri modi per dirlo",
     pronTitle: "Pratica di pronuncia",
+    pronListenDesc: "Riproduci YouTube, Netflix o qualsiasi video con l'audio vicino al microfono. GAKU ascolta, trascrive ciò che sente riga per riga e ti aiuta a capire con furigana, romaji e traduzione.",
+    pronSlowTip: "Non riesci a capire? Rallenta il video (ad esempio velocità 0,5× o 0,75× su YouTube) e ascolta di nuovo. L'insegnante è il video — GAKU si limita a trascrivere.",
+    pronSlowNo: "Nessun problema. Rallenta il video e riascolta quella parte — GAKU la trascriverà ancora una volta.",
     pronDesc: "Incolla qualsiasi testo in giapponese — un articolo, sottotitoli di un video, una canzone, i tuoi appunti — proprio come in Crea dal contenuto. GAKU estrarrà frasi naturali da leggere ad alta voce (o ascoltare e ripetere), poi verificherà quanto il tuo tentativo parlato si sia avvicinato.",
     pronPasteLabel: "Incolla qui il testo in giapponese",
     pronGenerating: "Creazione della pratica di pronuncia...",
@@ -3308,6 +3326,9 @@ const UI_TRANSLATIONS = {
     convModelAnswer: "参考答案",
     convAltResponses: "其他说法",
     pronTitle: "发音练习",
+    pronListenDesc: "在麦克风附近播放YouTube、Netflix或任何视频。GAKU会倾听并逐行记录听到的内容,并通过注音假名、罗马字和翻译帮助你理解。",
+    pronSlowTip: "听不清楚?请把视频放慢(例如YouTube的0.5倍或0.75倍速)再听一遍。老师就是视频本身——GAKU只负责把内容记录下来。",
+    pronSlowNo: "没关系。请把视频放慢,再听一遍这一段——GAKU会再次为你记录。",
     pronDesc: "粘贴任意日语文本——文章、视频字幕、歌曲、你自己的笔记——就像“从内容创建”一样。GAKU会提取出自然的句子和短语供你朗读(或听后跟读),然后检查你的发音有多接近。",
     pronPasteLabel: "在此粘贴日语文本",
     pronGenerating: "正在生成发音练习...",
@@ -3738,6 +3759,9 @@ const UI_TRANSLATIONS = {
     convModelAnswer: "參考答案",
     convAltResponses: "其他說法",
     pronTitle: "發音練習",
+    pronListenDesc: "在麥克風附近播放YouTube、Netflix或任何影片。GAKU會聆聽並逐行記錄聽到的內容,並透過注音假名、羅馬字和翻譯幫助你理解。",
+    pronSlowTip: "聽不清楚?請把影片放慢(例如YouTube的0.5倍或0.75倍速)再聽一遍。老師就是影片本身——GAKU只負責把內容記錄下來。",
+    pronSlowNo: "沒關係。請把影片放慢,再聽一遍這一段——GAKU會再次為你記錄。",
     pronDesc: "貼上任意日語文本——文章、影片字幕、歌曲、你自己的筆記——就像「從內容建立」一樣。GAKU會提取出自然的句子和片語供你朗讀(或聽後跟讀),然後檢查你的發音有多接近。",
     pronPasteLabel: "在此貼上日語文本",
     pronGenerating: "正在生成發音練習...",
@@ -4168,6 +4192,9 @@ const UI_TRANSLATIONS = {
     convModelAnswer: "모범 답안",
     convAltResponses: "다른 말하는 방법",
     pronTitle: "발음 연습",
+    pronListenDesc: "마이크 가까이에서 YouTube, Netflix 등 아무 영상이나 소리를 켜고 재생하세요. GAKU가 듣고 들리는 내용을 한 줄씩 적어 주며, 후리가나·로마자·번역으로 이해를 도와줍니다.",
+    pronSlowTip: "잘 안 들리나요? 영상을 느리게(예: YouTube 재생 속도 0.5배 또는 0.75배) 재생해서 다시 들어보세요. 선생님은 영상이고, GAKU는 받아 적기만 합니다.",
+    pronSlowNo: "괜찮아요. 영상을 느리게 재생해서 그 부분을 다시 들어보세요. GAKU가 다시 받아 적어 드립니다.",
     pronDesc: "기사, 동영상 자막, 노래, 직접 작성한 메모 등 어떤 일본어 텍스트든 붙여넣으세요 — 콘텐츠로 만들기와 동일합니다. GAKU가 자연스러운 문장과 구문을 추출해 소리 내어 읽거나(또는 듣고 따라 말하기) 연습할 수 있게 해주고, 발음이 얼마나 가까운지 확인해 줍니다.",
     pronPasteLabel: "여기에 일본어 텍스트를 붙여넣으세요",
     pronGenerating: "발음 연습 만드는 중...",
@@ -4598,6 +4625,9 @@ const UI_TRANSLATIONS = {
     convModelAnswer: "คำตอบตัวอย่าง",
     convAltResponses: "วิธีพูดอื่นๆ",
     pronTitle: "การฝึกออกเสียง",
+    pronListenDesc: "เปิด YouTube, Netflix หรือวิดีโอใดก็ได้โดยให้เสียงอยู่ใกล้ไมค์ GAKU จะฟังและจดสิ่งที่ได้ยินทีละบรรทัด พร้อมช่วยให้เข้าใจด้วยฟุริงานะ โรมาจิ และคำแปล",
+    pronSlowTip: "ฟังไม่ทัน? ลองเปิดวิดีโอให้ช้าลง (เช่น ความเร็ว 0.5× หรือ 0.75× ใน YouTube) แล้วฟังอีกครั้ง ครูคือวิดีโอ ส่วน GAKU ทำหน้าที่จดให้เท่านั้น",
+    pronSlowNo: "ไม่เป็นไร ลองเปิดวิดีโอให้ช้าลงแล้วฟังช่วงนั้นอีกครั้ง GAKU จะจดให้ใหม่",
     pronDesc: "วางข้อความภาษาญี่ปุ่นใดก็ได้ — บทความ คำบรรยายวิดีโอ เพลง หรือบันทึกของคุณเอง — เหมือนกับ Create From Content GAKU จะดึงประโยคและวลีที่เป็นธรรมชาติมาให้คุณอ่านออกเสียง (หรือฟังแล้วพูดตาม) จากนั้นตรวจสอบว่าการออกเสียงของคุณใกล้เคียงแค่ไหน",
     pronPasteLabel: "วางข้อความภาษาญี่ปุ่นที่นี่",
     pronGenerating: "กำลังสร้างแบบฝึกออกเสียง...",
@@ -5028,6 +5058,9 @@ const UI_TRANSLATIONS = {
     convModelAnswer: "Jawapan model",
     convAltResponses: "Cara lain untuk mengatakannya",
     pronTitle: "Latihan Sebutan",
+    pronListenDesc: "Mainkan YouTube, Netflix atau mana-mana video dengan bunyi hampir dengan mikrofon anda. GAKU mendengar, menulis apa yang didengar baris demi baris dan membantu anda memahaminya dengan furigana, romaji dan terjemahan.",
+    pronSlowTip: "Tidak dapat menangkap? Perlahankan video (contohnya kelajuan 0.5× atau 0.75× di YouTube) dan dengar semula. Guru anda ialah video itu — GAKU hanya menulisnya.",
+    pronSlowNo: "Tidak mengapa. Perlahankan video dan dengar bahagian itu sekali lagi — GAKU akan menulisnya semula.",
     pronDesc: "Tampal mana-mana teks Jepun — artikel, sari kata video, lagu, nota anda sendiri — sama seperti Cipta Daripada Kandungan. GAKU akan mengekstrak ayat dan frasa semula jadi untuk anda baca dengan kuat (atau dengar dan ulang), kemudian menyemak sedekat mana percubaan lisan anda.",
     pronPasteLabel: "Tampal teks Jepun di sini",
     pronGenerating: "Membina latihan sebutan...",
@@ -5458,6 +5491,9 @@ const UI_TRANSLATIONS = {
     convModelAnswer: "Jawaban model",
     convAltResponses: "Cara lain untuk mengatakannya",
     pronTitle: "Latihan Pengucapan",
+    pronListenDesc: "Putar YouTube, Netflix, atau video apa pun dengan suara dekat mikrofon Anda. GAKU mendengarkan, menuliskan apa yang terdengar baris demi baris, dan membantu Anda memahaminya dengan furigana, romaji, dan terjemahan.",
+    pronSlowTip: "Tidak tertangkap? Perlambat video (misalnya kecepatan 0,5× atau 0,75× di YouTube) lalu dengarkan lagi. Gurunya adalah video itu — GAKU hanya menuliskannya.",
+    pronSlowNo: "Tidak apa-apa. Perlambat videonya dan dengarkan bagian itu sekali lagi — GAKU akan menuliskannya lagi.",
     pronDesc: "Tempel teks bahasa Jepang apa pun — artikel, subtitle video, lagu, catatan Anda sendiri — sama seperti Buat dari Konten. GAKU akan mengambil kalimat dan frasa alami untuk Anda baca dengan lantang (atau dengarkan lalu ulangi), lalu memeriksa seberapa dekat ucapan Anda.",
     pronPasteLabel: "Tempel teks bahasa Jepang di sini",
     pronGenerating: "Membuat latihan pengucapan...",
@@ -5888,6 +5924,9 @@ const UI_TRANSLATIONS = {
     convModelAnswer: "Câu trả lời mẫu",
     convAltResponses: "Các cách nói khác",
     pronTitle: "Luyện phát âm",
+    pronListenDesc: "Hãy phát YouTube, Netflix hoặc bất kỳ video nào với âm thanh gần micro. GAKU sẽ lắng nghe, ghi lại từng dòng những gì nghe được và giúp bạn hiểu bằng furigana, romaji và bản dịch.",
+    pronSlowTip: "Nghe không kịp? Hãy làm chậm video (ví dụ tốc độ 0,5× hoặc 0,75× trên YouTube) rồi nghe lại. Giáo viên chính là video — GAKU chỉ ghi lại thôi.",
+    pronSlowNo: "Không sao. Hãy làm chậm video và nghe lại đoạn đó — GAKU sẽ ghi lại một lần nữa.",
     pronDesc: "Dán bất kỳ văn bản tiếng Nhật nào — bài báo, phụ đề video, bài hát, ghi chú của riêng bạn — giống như Tạo từ nội dung. GAKU sẽ trích xuất các câu và cụm từ tự nhiên để bạn đọc to (hoặc nghe rồi lặp lại), sau đó kiểm tra xem phần bạn nói gần đúng đến mức nào.",
     pronPasteLabel: "Dán văn bản tiếng Nhật vào đây",
     pronGenerating: "Đang tạo bài luyện phát âm...",
@@ -6318,6 +6357,9 @@ const UI_TRANSLATIONS = {
     convModelAnswer: "मॉडल उत्तर",
     convAltResponses: "इसे कहने के अन्य तरीके",
     pronTitle: "उच्चारण अभ्यास",
+    pronListenDesc: "माइक के पास YouTube, Netflix या कोई भी वीडियो आवाज़ के साथ चलाएँ। GAKU सुनता है, जो सुनाई देता है उसे पंक्ति-दर-पंक्ति लिखता है और फुरिगाना, रोमाजी और अनुवाद के साथ समझने में मदद करता है।",
+    pronSlowTip: "समझ नहीं आया? वीडियो को धीमा करें (जैसे YouTube में 0.5× या 0.75× गति) और फिर से सुनें। शिक्षक वीडियो है — GAKU सिर्फ़ उसे लिख देता है।",
+    pronSlowNo: "कोई बात नहीं। वीडियो को धीमा करके उस हिस्से को फिर से सुनें — GAKU उसे दोबारा लिख देगा।",
     pronDesc: "कोई भी जापानी टेक्स्ट पेस्ट करें — कोई लेख, वीडियो सबटाइटल, गाना, या आपके अपने नोट्स — बिल्कुल Create From Content की तरह। GAKU स्वाभाविक वाक्य और वाक्यांश निकालेगा जिन्हें आप ज़ोर से पढ़ सकते हैं (या सुनकर दोहरा सकते हैं), फिर जांचेगा कि आपकी बोली गई कोशिश कितनी करीब थी।",
     pronPasteLabel: "यहां जापानी टेक्स्ट पेस्ट करें",
     pronGenerating: "उच्चारण अभ्यास बन रहा है...",
@@ -6748,6 +6790,9 @@ const UI_TRANSLATIONS = {
     convModelAnswer: "模範回答",
     convAltResponses: "他の言い方",
     pronTitle: "発音練習",
+    pronListenDesc: "マイクの近くでYouTubeやNetflixなどの動画を音声ありで再生してください。GAKUが聞き取って1行ずつ文字に起こし、ふりがな・ローマ字・翻訳で理解をサポートします。",
+    pronSlowTip: "聞き取れない場合は、動画をスロー再生(YouTubeなら再生速度0.5倍や0.75倍)して、もう一度聞き取ってください。先生は動画です。GAKUは文字起こしでサポートします。",
+    pronSlowNo: "大丈夫です。動画をスロー再生して、その部分をもう一度聞き取ってください。GAKUがもう一度文字に起こします。",
     pronDesc: "記事、動画の字幕、歌詞、自分のメモなど、好きな日本語のテキストを貼り付けてください — Create From Contentと同じです。GAKUが自然な文やフレーズを抽出し、声に出して読んだり(または聞いて繰り返したり)できるようにします。その後、発話がどれだけ正確だったかを確認します。",
     pronPasteLabel: "ここに日本語のテキストを貼り付けてください",
     pronGenerating: "発音練習を作成中...",
@@ -7178,6 +7223,9 @@ const UI_TRANSLATIONS = {
     convModelAnswer: "Model cevap",
     convAltResponses: "Söylemenin diğer yolları",
     pronTitle: "Telaffuz Alıştırması",
+    pronListenDesc: "YouTube, Netflix veya herhangi bir videoyu sesi mikrofonunuza yakın olacak şekilde oynatın. GAKU dinler, duyduklarını satır satır yazar ve furigana, romaji ve çeviriyle anlamanıza yardım eder.",
+    pronSlowTip: "Anlayamadınız mı? Videoyu yavaşlatın (örneğin YouTube'da 0,5× veya 0,75× hız) ve tekrar dinleyin. Öğretmeniniz video — GAKU yalnızca yazıya döker.",
+    pronSlowNo: "Sorun değil. Videoyu yavaşlatıp o bölümü tekrar dinleyin — GAKU onu yeniden yazacak.",
     pronDesc: "Herhangi bir Japonca metni yapıştırın — bir makale, video altyazıları, bir şarkı, kendi notlarınız — tıpkı İçerikten Oluştur'da olduğu gibi. GAKU, yüksek sesle okumanız (veya dinleyip tekrar etmeniz) için doğal cümleler ve ifadeler çıkaracak, ardından telaffuz denemenizin ne kadar yakın olduğunu kontrol edecek.",
     pronPasteLabel: "Japonca metni buraya yapıştırın",
     pronGenerating: "Telaffuz alıştırması oluşturuluyor...",
@@ -7608,6 +7656,9 @@ const UI_TRANSLATIONS = {
     convModelAnswer: "मॉडल जवाफ",
     convAltResponses: "भन्ने अन्य तरिकाहरू",
     pronTitle: "उच्चारण अभ्यास",
+    pronListenDesc: "माइक नजिकै YouTube, Netflix वा कुनै पनि भिडियो आवाजसहित चलाउनुहोस्। GAKUले सुन्छ, सुनिएको कुरा लाइन-लाइनमा लेख्छ र फुरिगाना, रोमाजी र अनुवादमार्फत बुझ्न मद्दत गर्छ।",
+    pronSlowTip: "बुझ्न गाह्रो भयो? भिडियो ढिलो गर्नुहोस् (जस्तै YouTube मा 0.5× वा 0.75× गति) र फेरि सुन्नुहोस्। शिक्षक भिडियो नै हो — GAKUले मात्र लेखिदिन्छ।",
+    pronSlowNo: "ठीक छ। भिडियो ढिलो गरेर त्यो भाग फेरि सुन्नुहोस् — GAKUले फेरि लेखिदिनेछ।",
     pronDesc: "कुनै पनि जापानी पाठ टाँस्नुहोस् — लेख, भिडियो उपशीर्षक, गीत, वा आफ्नै नोटहरू — Create From Content जस्तै। GAKUले स्वाभाविक वाक्य र वाक्यांशहरू निकाल्नेछ जुन तपाईंले ठूलो स्वरमा पढ्न सक्नुहुन्छ (वा सुनेर दोहोर्याउन सक्नुहुन्छ), त्यसपछि तपाईंको बोलिएको प्रयास कति नजिक थियो जाँच गर्नेछ।",
     pronPasteLabel: "यहाँ जापानी पाठ टाँस्नुहोस्",
     pronGenerating: "उच्चारण अभ्यास तयार गर्दै...",
@@ -8038,6 +8089,9 @@ const UI_TRANSLATIONS = {
     convModelAnswer: "Huwarang sagot",
     convAltResponses: "Ibang paraan ng pagsasabi",
     pronTitle: "Pagsasanay sa Pagbigkas",
+    pronListenDesc: "I-play ang YouTube, Netflix, o anumang video nang may tunog malapit sa mikropono mo. Nakikinig ang GAKU, isinusulat ang naririnig nito linya por linya, at tinutulungan kang umintindi gamit ang furigana, romaji, at salin.",
+    pronSlowTip: "Hindi maintindihan? Pabagalin ang video (halimbawa, 0.5× o 0.75× na bilis sa YouTube) at pakinggan muli. Ang video ang guro mo — isinusulat lang ito ng GAKU.",
+    pronSlowNo: "Okay lang. Pabagalin ang video at pakinggan muli ang bahaging iyon — isusulat ito muli ng GAKU.",
     pronDesc: "I-paste ang anumang tekstong Hapon — isang artikulo, subtitle ng video, kanta, o sarili mong mga tala — tulad ng Create From Content. Kukunin ng GAKU ang natural na mga pangungusap at parirala para basahin mo nang malakas (o pakinggan at ulitin), pagkatapos ay susuriin kung gaano kalapit ang iyong sinabi.",
     pronPasteLabel: "I-paste ang tekstong Hapon dito",
     pronGenerating: "Gumagawa ng pagsasanay sa pagbigkas...",
@@ -11358,6 +11412,159 @@ function AddPronunciationItem({ onAdd, T, jlpt }) {
   );
 }
 
+// ─── Pronunciation Practice (listen-along) ───────────────────────────────────
+// The student plays a native-speaker video (YouTube, Netflix, ...) themselves. GAKU does NOT
+// speak (no AI voice): it only listens through the mic, writes down each line, and supports
+// understanding (furigana / romaji / translation). If a line isn't understood, the student is
+// told to slow the video down and listen again — the video is the teacher.
+function PronunciationHeardLineCard({ line, T, lang, checkins, onRecord }) {
+  const itemId = `pronheard-${line.id}`;
+  const notUnderstood = checkins[itemId] === false;
+  return (
+    <div style={{ ...S.card, borderLeft:`3px solid ${C.teal}` }}>
+      <div style={{ display:"flex", alignItems:"flex-start", gap:8, marginBottom:10 }}>
+        <span style={{ color:C.teal, fontSize:13, flexShrink:0 }}>🎧</span>
+        <p style={{ color:"#f1f5f9", fontSize:14, lineHeight:1.8, margin:0, flex:1 }}>{line.text}</p>
+      </div>
+      <JLineTools text={line.text} lang={lang} T={T} />
+      <ComprehensionCheck itemId={itemId} checkins={checkins} onRecord={onRecord} T={T} />
+      {notUnderstood && (
+        <p style={{ color:C.amber, fontSize:12, lineHeight:1.7, margin:"8px 0 0" }}>🐢 {T.pronSlowNo || "No problem. Slow the video down and listen to that part again — GAKU will write it down once more."}</p>
+      )}
+    </div>
+  );
+}
+
+function PronunciationListenAlong({ form, onLevelUp }) {
+  const T = useUITranslations(form?.preferredLang || "English");
+  const [heardLines, setHeardLines] = useState([]); // [{id, text}]
+  const [listening, setListening] = useState(false);
+  const [interimText, setInterimText] = useState("");
+  const [recogSupported, setRecogSupported] = useState(true);
+  const recognitionRef = useRef(null);
+  const shouldListenRef = useRef(false);
+  const pronunciationCheck = useComprehensionCheck("pronunciation");
+
+  const HEARD_STORAGE_KEY = "gaku_pron_heard_lines";
+
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem(scopedKey(HEARD_STORAGE_KEY));
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (Array.isArray(parsed) && parsed.length) setHeardLines(parsed);
+      }
+    } catch {}
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    try { localStorage.setItem(scopedKey(HEARD_STORAGE_KEY), JSON.stringify(heardLines)); } catch {}
+  }, [heardLines]);
+
+  const startRecognition = () => {
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SR) { setRecogSupported(false); shouldListenRef.current = false; setListening(false); return; }
+    const recognition = new SR();
+    recognition.lang = "ja-JP";
+    recognition.interimResults = true;
+    recognition.continuous = true;
+    recognition.onresult = (e) => {
+      let finalChunk = "", interimChunk = "";
+      for (let i = e.resultIndex; i < e.results.length; i++) {
+        const t = e.results[i][0].transcript;
+        if (e.results[i].isFinal) finalChunk += t; else interimChunk += t;
+      }
+      if (finalChunk.trim()) {
+        setHeardLines(prev => [...prev, { id:`${Date.now()}_${Math.random().toString(36).slice(2,7)}`, text: finalChunk.trim() }]);
+        setInterimText("");
+      } else {
+        setInterimText(interimChunk);
+      }
+    };
+    recognition.onend = () => {
+      if (shouldListenRef.current) {
+        try { recognition.start(); } catch {}
+      } else {
+        setListening(false); setInterimText("");
+      }
+    };
+    recognition.onerror = (e) => {
+      if (e.error === "no-speech" || e.error === "aborted") return; // onend will restart it
+      shouldListenRef.current = false; setListening(false); setInterimText("");
+    };
+    recognitionRef.current = recognition;
+    recognition.start();
+  };
+
+  const toggleListening = () => {
+    if (listening) {
+      shouldListenRef.current = false;
+      recognitionRef.current?.stop();
+      setListening(false); setInterimText("");
+      return;
+    }
+    shouldListenRef.current = true;
+    setListening(true);
+    startRecognition();
+  };
+
+  useEffect(() => {
+    return () => { shouldListenRef.current = false; try { recognitionRef.current?.stop(); } catch {} };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const handleClear = () => {
+    if (listening) toggleListening();
+    setHeardLines([]);
+    try { localStorage.removeItem(scopedKey(HEARD_STORAGE_KEY)); } catch {}
+  };
+
+  return (
+    <div>
+      <div style={{ ...S.card, marginBottom:16 }}>
+        <p style={{ color:C.teal, fontSize:12, fontWeight:700, letterSpacing:1, marginBottom:6 }}>🗣️ {T.pronTitle || "Pronunciation Practice"}</p>
+        <p style={{ color:"#39ff14", fontSize:12, lineHeight:1.7, marginBottom:10 }}>
+          {T.pronListenDesc || "Play a YouTube, Netflix or any video with the sound on near your mic. GAKU listens, writes down what it hears line by line, and helps you understand it with furigana, romaji and translation."}
+        </p>
+        <p style={{ color:C.amber, fontSize:12, lineHeight:1.7, marginBottom:14 }}>
+          🐢 {T.pronSlowTip || "Can't catch it? Slow the video down (for example YouTube speed 0.5× or 0.75×) and listen again. Your teacher is the video — GAKU just writes it down."}
+        </p>
+        <button onClick={toggleListening} style={{ display:"flex", alignItems:"center", justifyContent:"center", gap:8, width:"100%", padding:"12px 12px", borderRadius:10, border:`1px solid ${listening?"rgba(239,68,68,0.4)":"rgba(6,182,212,0.35)"}`, background:listening?"rgba(239,68,68,0.12)":"rgba(6,182,212,0.1)", color:listening?"#f87171":C.teal, fontSize:14, fontWeight:700, cursor:"pointer" }}>
+          {listening ? `⏺ ${T.convListenStop || "Stop listening"}` : `🎤 ${T.convListenStart || "Start listening"}`}
+        </button>
+        {!recogSupported && <p style={{ color:C.red, fontSize:11, marginTop:8 }}>{T.convListenUnsupported || "Live listening isn't supported in this browser — try Chrome on desktop or Android."}</p>}
+        {listening && (
+          <p style={{ color:"#94a3b8", fontSize:12, marginTop:10, fontStyle:"italic", minHeight:16 }}>
+            {interimText || (T.convListening || "Listening…")}
+          </p>
+        )}
+      </div>
+
+      {heardLines.length > 0 && (
+        <>
+          <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:12 }}>
+            <p style={{ color:C.teal, fontSize:12, fontWeight:700, letterSpacing:1, margin:0 }}>
+              {T.convHeardTitle || "What GAKU heard"}
+            </p>
+            <button onClick={handleClear} style={{ ...S.btn, padding:"6px 12px", fontSize:11, background:C.card, border:`1px solid ${C.border}`, color:"#94a3b8" }}>
+              {T.convClearBtn || "🗑 Clear"}
+            </button>
+          </div>
+          {pronunciationCheck.eligible && <LevelUpOffer T={T} currentLevel={form.jlpt} onConfirm={onLevelUp} onDismiss={pronunciationCheck.dismiss} />}
+          <div style={{ display:"flex", flexDirection:"column", gap:12 }}>
+            {heardLines.map((line) => (
+              <PronunciationHeardLineCard key={line.id} line={line} T={T} lang={form?.preferredLang || "English"} checkins={pronunciationCheck.checkins} onRecord={pronunciationCheck.record} />
+            ))}
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
+
+// (Legacy paste-text version — no longer shown in the Resources tab; kept for reference.)
+// eslint-disable-next-line no-unused-vars
 function PronunciationPredictor({ form, onLevelUp }) {
   const T = useUITranslations(form?.preferredLang || "English");
   const [raw, setRaw] = useState("");
@@ -13438,7 +13645,7 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
 
             {resourceSubTab==="conversation" && <ConversationPredictor form={form} onLevelUp={onLevelUp} />}
 
-            {resourceSubTab==="pronunciation" && <PronunciationPredictor form={form} onLevelUp={onLevelUp} />}
+            {resourceSubTab==="pronunciation" && <PronunciationListenAlong form={form} onLevelUp={onLevelUp} />}
 
             {resourceSubTab==="links" && (() => {
             // When the student's goal is understanding anime/manga, surface the
