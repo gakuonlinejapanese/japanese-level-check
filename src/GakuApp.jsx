@@ -13943,7 +13943,7 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
   // activity, then (if applicable) an install-to-home-screen prompt, before
   // ever showing the full dashboard. See completeProfileSave below, which
   // sets this to "firstwin" only when `form` was null before the save.
-  const [onboardingStep, setOnboardingStep] = useState(null); // null | "firstwin" | "firstquiz" | "remind" | "install" | "completeProfile"
+  const [onboardingStep, setOnboardingStep] = useState(null); // null | "firstwin" | "firstquiz" | "readerstep" | "remind" | "install" | "completeProfile"
   const [firstWinRevealed, setFirstWinRevealed] = useState(false);
   // "Make your own quiz" step (right after First Win): paste any Japanese,
   // get a 3-question quiz at once — the fastest way to a real first session.
@@ -14783,6 +14783,14 @@ Respond ONLY with a valid JSON array, no markdown, no backticks:
     );
   }
   if (onboardingStep === "firstquiz") {
+  // After the first quiz: on desktop Chrome/Edge (where the extension works) and
+  // for anyone who hasn't used GAKU Reader yet, show one optional Reader card
+  // before the reminder step. Mobile / already-installed accounts skip it.
+  const goAfterQuiz = () => {
+    const ua = typeof navigator !== "undefined" ? navigator.userAgent : "";
+    const canUseReaderExtNow = /Chrome\/|Edg\//.test(ua) && !/Mobile|Android|iPhone|iPad|OPR\//.test(ua);
+    setOnboardingStep(canUseReaderExtNow && readerInstalled !== true ? "readerstep" : "remind");
+  };
     const q = fqQuestions[fqIdx];
     const last = fqIdx >= fqQuestions.length - 1;
     const card = { background:"linear-gradient(135deg,#1e1b4b,#0f172a)", border:"1.5px solid rgba(139,92,246,0.4)", borderRadius:20, padding:"32px 28px", maxWidth:440, width:"90%", textAlign:"center", boxShadow:"0 8px 40px rgba(139,92,246,0.25)" };
@@ -14801,7 +14809,7 @@ Respond ONLY with a valid JSON array, no markdown, no backticks:
                 {fqLoading ? `⏳ ${T.fqLoading}` : T.fqStart}
               </button>
               <button onClick={()=>{ setFqText(FQ_SAMPLE); makeFirstQuiz(FQ_SAMPLE); }} disabled={fqLoading} style={{ ...S.btn, width:"100%", marginBottom:6, background:C.card, border:`1px solid ${C.border}`, color:"#cbd5e1" }}>{T.fqSample}</button>
-              <button onClick={()=>setOnboardingStep("remind")} style={{ ...S.btn, width:"100%", background:"none", border:"none", color:"#64748b" }}>{T.fqSkip}</button>
+              <button onClick={()=>goAfterQuiz()} style={{ ...S.btn, width:"100%", background:"none", border:"none", color:"#64748b" }}>{T.fqSkip}</button>
             </>
           ) : (
             <>
@@ -14824,13 +14832,29 @@ Respond ONLY with a valid JSON array, no markdown, no backticks:
                   <p style={{ color: fqPicked === q.answer ? C.green : "#fbbf24", fontSize:13, fontWeight:700, margin:"4px 0 12px" }}>
                     {fqPicked === q.answer ? T.fqCorrect : `${T.fqWrong} ${q.options[q.answer]}`}
                   </p>
-                  <button onClick={()=>{ if (last) { setOnboardingStep("remind"); } else { setFqIdx(fqIdx + 1); setFqPicked(null); } }} style={{ ...S.btn, width:"100%", background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff" }}>
+                  <button onClick={()=>{ if (last) { goAfterQuiz(); } else { setFqIdx(fqIdx + 1); setFqPicked(null); } }} style={{ ...S.btn, width:"100%", background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff" }}>
                     {last ? T.fqDone : T.fqNext}
                   </button>
                 </>
               )}
             </>
           )}
+        </div>
+      </div>
+    );
+  }
+  if (onboardingStep === "readerstep") {
+    const hideCard = () => { const now = Date.now(); try { localStorage.setItem(scopedKey("gaku_reader_card_hidden_at"), String(now)); } catch {} };
+    return (
+      <div style={{ minHeight:"100vh", background:C.bg, display:"flex", alignItems:"center", justifyContent:"center", padding:24 }}>
+        <div style={{ background:"linear-gradient(135deg,#1e1b4b,#0f172a)", border:"1.5px solid rgba(139,92,246,0.4)", borderRadius:20, padding:"34px 28px", maxWidth:420, width:"90%", textAlign:"center", boxShadow:"0 8px 40px rgba(139,92,246,0.25)" }}>
+          <p style={{ fontSize:32, margin:"0 0 6px" }}>📖</p>
+          <h2 style={{ color:"#f1f5f9", fontSize:19, fontWeight:900, margin:"0 0 8px" }}>{T.readerCardTitle}</h2>
+          <p style={{ color:"#94a3b8", fontSize:13, margin:"0 0 20px", lineHeight:1.6 }}>{T.readerCardDesc}</p>
+          <a href="https://chromewebstore.google.com/detail/eambfoiipilfnedcofindninaachibge" target="_blank" rel="noopener noreferrer"
+            onClick={()=>{ hideCard(); setOnboardingStep("remind"); }}
+            style={{ display:"block", padding:"13px 16px", borderRadius:12, background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff", fontSize:14, fontWeight:800, textDecoration:"none", marginBottom:10 }}>{T.readerCardCta}</a>
+          <button onClick={()=>{ hideCard(); setOnboardingStep("remind"); }} style={{ ...S.btn, width:"100%", background:"none", border:"none", color:"#64748b" }}>{T.readerCardLater}</button>
         </div>
       </div>
     );
