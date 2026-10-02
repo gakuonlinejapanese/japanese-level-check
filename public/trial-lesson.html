@@ -750,14 +750,6 @@ async function unlockCheaperPlans(btnId, errId) {
 }
 document.getElementById("btn-cheaper-yes").addEventListener("click", () => unlockCheaperPlans("btn-cheaper-yes", "cheaper-error"));
 document.getElementById("btn-cheaper-yes-blocked").addEventListener("click", () => unlockCheaperPlans("btn-cheaper-yes-blocked", "cheaper-error-blocked"));
-    if (!r.ok) throw new Error("failed");
-  } catch (e) {
-    btn.disabled = false;
-    setError(err, "Sorry, something went wrong. Please try again.");
-    return;
-  }
-  window.location.href = "https://app.seitojapanese.online/app";
-});
 
 // ---- STEP 1b: 対象国外の場合の「無料スタディガイド」代替オファー ----
 document.getElementById("btn-guide-yes").addEventListener("click", async () => {
