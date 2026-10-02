@@ -190,6 +190,30 @@ async function callGroqWhisper(groqKeys, audioBuffer, mimeType) {
   return { text: null, lastError: `All Groq keys rate limited or failed for transcription. ${lastError}` };
 }
 
+// DeepInfra's OpenAI-compatible Whisper endpoint — fallback when every Groq key is
+// rate-limited or errors out (e.g. many students using tab-audio listening at once).
+async function callDeepInfraWhisper(deepInfraKey, audioBuffer, mimeType) {
+  if (!deepInfraKey) return { text: null, lastError: "No DeepInfra key configured" };
+  try {
+    const form = new FormData();
+    form.append("file", new Blob([audioBuffer], { type: mimeType || "audio/webm" }), "audio.webm");
+    form.append("model", "openai/whisper-large-v3-turbo");
+    form.append("language", "ja");
+    const response = await fetch("https://api.deepinfra.com/v1/openai/audio/transcriptions", {
+      method: "POST",
+      headers: { "Authorization": `Bearer ${deepInfraKey}` },
+      body: form,
+    });
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok) {
+      return { text: null, lastError: data.error?.message || data.detail || "DeepInfra transcription error" };
+    }
+    return { text: data.text || "" };
+  } catch (e) {
+    return { text: null, lastError: e.message };
+  }
+}
+
 export default async function handler(req, res) {
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
@@ -222,6 +246,12 @@ export default async function handler(req, res) {
         return res.status(200).json({ text: whisperResult.text });
       }
       console.error("provider=whisper: Groq FAILED —", whisperResult.lastError);
+      const diResult = await callDeepInfraWhisper(process.env.DEEPINFRA_API_KEY, audioBuffer, mimeType);
+      if (diResult.text !== null) {
+        console.log("provider=whisper: DeepInfra fallback OK");
+        return res.status(200).json({ text: diResult.text });
+      }
+      console.error("provider=whisper: DeepInfra FAILED —", diResult.lastError);
       return res.status(whisperResult.status || 429).json({ error: whisperResult.lastError || "Transcription failed" });
     }
 
