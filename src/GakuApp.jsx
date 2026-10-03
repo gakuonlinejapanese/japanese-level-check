@@ -458,7 +458,7 @@ const UI_TRANSLATIONS = {
     tutorialMilestonesDesc: "This is your roadmap to your Japanese goal. Take a look at what's coming next on your journey.",
     tutorialContentDesc: "Try it now: paste some Japanese text below (an article, subtitles, a caption) and let GAKU build practice activities from it — just like GAKU Reader does on the web.",
     tutorialConversationDesc: "Try it now: play a video, tap “Listen to a video tab” (or the mic) and let GAKU listen to the real dialogue — it'll help you understand each line and suggest how you could respond.",
-    tutorialPronunciationDesc: "Try it now: play a video of native speakers, tap “Listen to a video tab” (or the mic), and GAKU writes down each line. Can't catch it? Slow the video down and listen again — you're learning from the real thing.",
+    tutorialPronunciationDesc: "Try it now: play a video of native speakers, tap “Listen to a video tab” and GAKU writes down each line. Then say the sentence out loud on a card and see how close you were. Can't catch it? Slow the video down and listen again.",
     tutorialCompleteTitle: "All done! 🎉",
     tutorialCompleteDesc: "You've seen all 5 main features of GAKU Master. You can replay this tour anytime from the 🎓 Tutorial button.",
     tutorialCompleteBtn: "Start Studying",
@@ -775,6 +775,9 @@ const UI_TRANSLATIONS = {
     pronListenDesc: "Play a YouTube, Netflix or any video with the sound on near your mic. GAKU listens, writes down what it hears line by line, and helps you understand it with furigana, romaji and translation.",
     pronSlowTip: "Can't catch it? Slow the video down (for example YouTube speed 0.5× or 0.75×) and listen again. Your teacher is the video — GAKU just writes it down.",
     pronSlowNo: "No problem. Slow the video down and listen to that part again — GAKU will write it down once more.",
+    pronBestScore: "Best score",
+    pronSayAgainHint: "Slow the video down, listen to the model once more, then try saying it again.",
+    pronPauseVideoHint: "Pause the video first so only your voice is picked up.",
     tabListenBtn: "Listen to a video tab (recommended)",
     tabListenStop: "Stop listening to the tab",
     tabListenHelp: "Choose the tab that is playing your video and tick “Share tab audio”. GAKU hears the video directly — no echo or background noise. (Chrome / Edge on a computer only)",
@@ -912,7 +915,7 @@ const UI_TRANSLATIONS = {
     tutorialMilestonesDesc: "Voici votre feuille de route vers votre objectif en japonais. Jetez un œil à ce qui vous attend ensuite.",
     tutorialContentDesc: "Essayez maintenant : collez un texte japonais ci-dessous (un article, des sous-titres, une légende) et laissez GAKU en créer des exercices — comme le fait GAKU Reader sur le web.",
     tutorialConversationDesc: "Essayez maintenant : lancez une vidéo, appuyez sur « Écouter un onglet vidéo » (ou sur le micro) et laissez GAKU écouter le vrai dialogue — il vous aidera à comprendre chaque réplique et vous suggérera comment répondre.",
-    tutorialPronunciationDesc: "Essayez maintenant : lancez une vidéo de locuteurs natifs, appuyez sur « Écouter un onglet vidéo » (ou sur le micro) et GAKU note chaque phrase. Vous n'arrivez pas à saisir ? Ralentissez la vidéo et réécoutez — vous apprenez avec le vrai japonais.",
+    tutorialPronunciationDesc: "Essayez maintenant : lancez une vidéo de locuteurs natifs, appuyez sur « Écouter un onglet vidéo » et GAKU note chaque phrase. Ensuite, sur une carte, dites la phrase à voix haute et voyez à quel point vous étiez proche. Vous n'arrivez pas à saisir ? Ralentissez la vidéo et réécoutez.",
     tutorialCompleteTitle: "Terminé ! 🎉",
     tutorialCompleteDesc: "Vous avez découvert les 5 fonctionnalités principales de GAKU Master. Vous pouvez revoir cette visite à tout moment via le bouton 🎓 Tutoriel.",
     tutorialCompleteBtn: "Commencer à étudier",
@@ -1170,6 +1173,9 @@ const UI_TRANSLATIONS = {
     pronListenDesc: "Lancez YouTube, Netflix ou n'importe quelle vidéo avec le son près de votre micro. GAKU écoute, note ce qu'il entend ligne par ligne et vous aide à comprendre avec les furigana, le romaji et la traduction.",
     pronSlowTip: "Vous n'arrivez pas à saisir ? Ralentissez la vidéo (par exemple vitesse 0,5× ou 0,75× sur YouTube) et écoutez à nouveau. Le professeur, c'est la vidéo — GAKU se contente de transcrire.",
     pronSlowNo: "Pas de souci. Ralentissez la vidéo et réécoutez ce passage — GAKU le transcrira de nouveau.",
+    pronBestScore: "Meilleur score",
+    pronSayAgainHint: "Ralentissez la vidéo, réécoutez le modèle, puis réessayez de le dire.",
+    pronPauseVideoHint: "Mettez d'abord la vidéo en pause pour que seule votre voix soit captée.",
     tabListenBtn: "Écouter un onglet vidéo (recommandé)",
     tabListenStop: "Arrêter l'écoute de l'onglet",
     tabListenHelp: "Choisissez l'onglet qui lit votre vidéo et cochez « Partager l'audio de l'onglet ». GAKU entend directement la vidéo — sans écho ni bruit de fond. (Chrome / Edge sur ordinateur uniquement)",
@@ -1351,7 +1357,7 @@ const UI_TRANSLATIONS = {
     tutorialMilestonesDesc: "Esta es tu hoja de ruta hacia tu objetivo en japonés. Echa un vistazo a lo que viene a continuación.",
     tutorialContentDesc: "Pruébalo ahora: pega un texto en japonés abajo (un artículo, subtítulos, una leyenda) y deja que GAKU cree ejercicios a partir de él, igual que hace GAKU Reader en la web.",
     tutorialConversationDesc: "Pruébalo ahora: reproduce un video, pulsa «Escuchar una pestaña de video» (o el micrófono) y deja que GAKU escuche el diálogo real — te ayudará a entender cada línea y te sugerirá cómo responder.",
-    tutorialPronunciationDesc: "Pruébalo ahora: reproduce un video de hablantes nativos, pulsa «Escuchar una pestaña de video» (o el micrófono) y GAKU escribirá cada línea. ¿No la captas? Ralentiza el video y vuelve a escuchar: aprendes con el japonés real.",
+    tutorialPronunciationDesc: "Pruébalo ahora: reproduce un video de hablantes nativos, pulsa «Escuchar una pestaña de video» y GAKU escribirá cada línea. Luego, en una tarjeta, di la frase en voz alta y comprueba qué tan cerca estuviste. ¿No la captas? Ralentiza el video y vuelve a escuchar.",
     tutorialCompleteTitle: "¡Listo! 🎉",
     tutorialCompleteDesc: "Has visto las 5 funciones principales de GAKU Master. Puedes repetir este recorrido cuando quieras desde el botón 🎓 Tutorial.",
     tutorialCompleteBtn: "Empezar a estudiar",
@@ -1609,6 +1615,9 @@ const UI_TRANSLATIONS = {
     pronListenDesc: "Reproduce YouTube, Netflix o cualquier video con el sonido cerca de tu micrófono. GAKU escucha, escribe lo que oye línea por línea y te ayuda a entenderlo con furigana, romaji y traducción.",
     pronSlowTip: "¿No lo captas? Ralentiza el video (por ejemplo, velocidad 0,5× o 0,75× en YouTube) y vuelve a escuchar. El maestro es el video — GAKU solo lo transcribe.",
     pronSlowNo: "No hay problema. Ralentiza el video y escucha esa parte otra vez — GAKU la transcribirá de nuevo.",
+    pronBestScore: "Mejor puntuación",
+    pronSayAgainHint: "Ralentiza el video, escucha el modelo otra vez y vuelve a intentar decirlo.",
+    pronPauseVideoHint: "Pausa primero el video para que solo se capte tu voz.",
     tabListenBtn: "Escuchar una pestaña de video (recomendado)",
     tabListenStop: "Dejar de escuchar la pestaña",
     tabListenHelp: "Elige la pestaña que reproduce tu video y marca «Compartir audio de la pestaña». GAKU oye el video directamente, sin eco ni ruido de fondo. (Solo Chrome / Edge en computadora)",
@@ -1790,7 +1799,7 @@ const UI_TRANSLATIONS = {
     tutorialMilestonesDesc: "Este é o seu roteiro rumo ao seu objetivo em japonês. Dê uma olhada no que vem a seguir.",
     tutorialContentDesc: "Experimente agora: cole um texto em japonês abaixo (um artigo, legendas, uma legenda de foto) e deixe o GAKU criar atividades a partir dele, assim como o GAKU Reader faz na web.",
     tutorialConversationDesc: "Experimente agora: reproduza um vídeo, toque em “Ouvir uma aba de vídeo” (ou no microfone) e deixe o GAKU ouvir o diálogo real — ele vai te ajudar a entender cada fala e sugerir como responder.",
-    tutorialPronunciationDesc: "Experimente agora: reproduza um vídeo de falantes nativos, toque em “Ouvir uma aba de vídeo” (ou no microfone) e o GAKU anota cada fala. Não entendeu? Diminua a velocidade do vídeo e ouça de novo — você aprende com o japonês de verdade.",
+    tutorialPronunciationDesc: "Experimente agora: reproduza um vídeo de falantes nativos, toque em “Ouvir uma aba de vídeo” e o GAKU anota cada fala. Depois, em um cartão, diga a frase em voz alta e veja o quão perto você chegou. Não entendeu? Diminua a velocidade do vídeo e ouça de novo.",
     tutorialCompleteTitle: "Tudo pronto! 🎉",
     tutorialCompleteDesc: "Você conheceu as 5 principais funções do GAKU Master. Você pode rever este tour a qualquer momento pelo botão 🎓 Tutorial.",
     tutorialCompleteBtn: "Começar a estudar",
@@ -2048,6 +2057,9 @@ const UI_TRANSLATIONS = {
     pronListenDesc: "Reproduza YouTube, Netflix ou qualquer vídeo com o som perto do seu microfone. O GAKU escuta, anota o que ouve linha por linha e ajuda você a entender com furigana, romaji e tradução.",
     pronSlowTip: "Não conseguiu entender? Diminua a velocidade do vídeo (por exemplo, 0,5× ou 0,75× no YouTube) e ouça de novo. O professor é o vídeo — o GAKU apenas transcreve.",
     pronSlowNo: "Sem problema. Diminua a velocidade do vídeo e ouça esse trecho novamente — o GAKU vai transcrever mais uma vez.",
+    pronBestScore: "Melhor pontuação",
+    pronSayAgainHint: "Diminua a velocidade do vídeo, ouça o modelo mais uma vez e tente falar de novo.",
+    pronPauseVideoHint: "Pause o vídeo primeiro para que apenas a sua voz seja captada.",
     tabListenBtn: "Ouvir uma aba de vídeo (recomendado)",
     tabListenStop: "Parar de ouvir a aba",
     tabListenHelp: "Escolha a aba que está reproduzindo seu vídeo e marque “Compartilhar áudio da aba”. O GAKU ouve o vídeo diretamente, sem eco nem ruído de fundo. (Somente Chrome / Edge no computador)",
@@ -2229,7 +2241,7 @@ const UI_TRANSLATIONS = {
     tutorialMilestonesDesc: "Das ist deine Roadmap zu deinem Japanisch-Ziel. Wirf einen Blick darauf, was als Nächstes kommt.",
     tutorialContentDesc: "Probier's gleich aus: Füge unten einen japanischen Text ein (einen Artikel, Untertitel, eine Bildunterschrift) und lass GAKU daraus Übungen erstellen — genau wie GAKU Reader es im Web tut.",
     tutorialConversationDesc: "Probier's gleich aus: Spiele ein Video ab, tippe auf „Video-Tab abhören“ (oder auf das Mikrofon) und lass GAKU dem echten Dialog zuhören – es hilft dir, jede Zeile zu verstehen, und schlägt dir Antworten vor.",
-    tutorialPronunciationDesc: "Probier's gleich aus: Spiele ein Video mit Muttersprachlern ab, tippe auf „Video-Tab abhören“ (oder auf das Mikrofon), und GAKU schreibt jede Zeile mit. Nicht verstanden? Verlangsame das Video und höre noch einmal zu – so lernst du vom echten Japanisch.",
+    tutorialPronunciationDesc: "Probier's gleich aus: Spiele ein Video mit Muttersprachlern ab, tippe auf „Video-Tab abhören“, und GAKU schreibt jede Zeile mit. Sprich dann auf einer Karte den Satz laut nach und sieh, wie nah du dran warst. Nicht verstanden? Verlangsame das Video und höre noch einmal zu.",
     tutorialCompleteTitle: "Fertig! 🎉",
     tutorialCompleteDesc: "Du hast alle 5 Hauptfunktionen von GAKU Master kennengelernt. Du kannst diese Tour jederzeit über den 🎓 Tutorial-Button wiederholen.",
     tutorialCompleteBtn: "Mit dem Lernen beginnen",
@@ -2487,6 +2499,9 @@ const UI_TRANSLATIONS = {
     pronListenDesc: "Spiele YouTube, Netflix oder ein beliebiges Video mit eingeschaltetem Ton in der Nähe deines Mikrofons ab. GAKU hört zu, schreibt Zeile für Zeile mit und hilft dir mit Furigana, Romaji und Übersetzung beim Verstehen.",
     pronSlowTip: "Nicht verstanden? Verlangsame das Video (z. B. YouTube-Geschwindigkeit 0,5× oder 0,75×) und höre noch einmal zu. Das Video ist dein Lehrer — GAKU schreibt nur mit.",
     pronSlowNo: "Kein Problem. Verlangsame das Video und höre diese Stelle noch einmal — GAKU schreibt sie erneut mit.",
+    pronBestScore: "Beste Punktzahl",
+    pronSayAgainHint: "Verlangsame das Video, höre das Vorbild noch einmal und versuche es erneut.",
+    pronPauseVideoHint: "Pausiere zuerst das Video, damit nur deine Stimme aufgenommen wird.",
     tabListenBtn: "Video-Tab abhören (empfohlen)",
     tabListenStop: "Tab-Abhören beenden",
     tabListenHelp: "Wähle den Tab, in dem dein Video läuft, und setze den Haken bei „Tab-Audio teilen“. GAKU hört das Video direkt – ohne Echo und Hintergrundgeräusche. (Nur Chrome / Edge am Computer)",
@@ -2668,7 +2683,7 @@ const UI_TRANSLATIONS = {
     tutorialMilestonesDesc: "Questa è la tua roadmap verso il tuo obiettivo in giapponese. Dai un'occhiata a cosa ti aspetta.",
     tutorialContentDesc: "Provalo subito: incolla un testo giapponese qui sotto (un articolo, sottotitoli, una didascalia) e lascia che GAKU crei attività a partire da esso, proprio come fa GAKU Reader sul web.",
     tutorialConversationDesc: "Provalo subito: riproduci un video, tocca «Ascolta una scheda video» (o il microfono) e lascia che GAKU ascolti il dialogo reale — ti aiuterà a capire ogni battuta e ti suggerirà come rispondere.",
-    tutorialPronunciationDesc: "Provalo subito: riproduci un video di madrelingua, tocca «Ascolta una scheda video» (o il microfono) e GAKU trascrive ogni frase. Non capisci? Rallenta il video e riascolta: impari dal giapponese vero.",
+    tutorialPronunciationDesc: "Provalo subito: riproduci un video di madrelingua, tocca «Ascolta una scheda video» e GAKU trascrive ogni frase. Poi, su una scheda, ripeti la frase ad alta voce e guarda quanto ti sei avvicinato. Non capisci? Rallenta il video e riascolta.",
     tutorialCompleteTitle: "Fatto! 🎉",
     tutorialCompleteDesc: "Hai visto tutte le 5 funzioni principali di GAKU Master. Puoi rivedere questo tour in qualsiasi momento dal pulsante 🎓 Tutorial.",
     tutorialCompleteBtn: "Inizia a studiare",
@@ -2926,6 +2941,9 @@ const UI_TRANSLATIONS = {
     pronListenDesc: "Riproduci YouTube, Netflix o qualsiasi video con l'audio vicino al microfono. GAKU ascolta, trascrive ciò che sente riga per riga e ti aiuta a capire con furigana, romaji e traduzione.",
     pronSlowTip: "Non riesci a capire? Rallenta il video (ad esempio velocità 0,5× o 0,75× su YouTube) e ascolta di nuovo. L'insegnante è il video — GAKU si limita a trascrivere.",
     pronSlowNo: "Nessun problema. Rallenta il video e riascolta quella parte — GAKU la trascriverà ancora una volta.",
+    pronBestScore: "Punteggio migliore",
+    pronSayAgainHint: "Rallenta il video, riascolta il modello e riprova a dirlo.",
+    pronPauseVideoHint: "Metti prima in pausa il video, così si sente solo la tua voce.",
     tabListenBtn: "Ascolta una scheda video (consigliato)",
     tabListenStop: "Smetti di ascoltare la scheda",
     tabListenHelp: "Scegli la scheda che riproduce il video e spunta «Condividi audio scheda». GAKU sente il video direttamente, senza eco né rumori di fondo. (Solo Chrome / Edge su computer)",
@@ -3107,7 +3125,7 @@ const UI_TRANSLATIONS = {
     tutorialMilestonesDesc: "这是通往你日语目标的路线图。看看接下来会遇到什么。",
     tutorialContentDesc: "现在就试试：在下面粘贴一段日语文本(文章、字幕、说明文字)，让GAKU据此生成练习活动——就像GAKU Reader在网页上做的那样。",
     tutorialConversationDesc: "现在就试试：播放一段视频，点击“收听视频标签页”（或麦克风），让GAKU聆听真实对话——它会帮你理解每一句话，并给出回应建议。",
-    tutorialPronunciationDesc: "现在就试试：播放母语者的视频，点击“收听视频标签页”（或麦克风），GAKU会把每句话记录下来。听不清？把视频放慢再听一遍——你学的是真实的日语。",
+    tutorialPronunciationDesc: "现在就试试：播放母语者的视频，点击“收听视频标签页”，GAKU会把每句话记录下来。然后在卡片上大声说出这句话，看看你有多接近。听不清？把视频放慢再听一遍。",
     tutorialCompleteTitle: "全部完成！🎉",
     tutorialCompleteDesc: "你已经了解了GAKU Master的全部5个主要功能。随时可以通过🎓教程按钮重新观看导览。",
     tutorialCompleteBtn: "开始学习",
@@ -3365,6 +3383,9 @@ const UI_TRANSLATIONS = {
     pronListenDesc: "在麦克风附近播放YouTube、Netflix或任何视频。GAKU会倾听并逐行记录听到的内容,并通过注音假名、罗马字和翻译帮助你理解。",
     pronSlowTip: "听不清楚?请把视频放慢(例如YouTube的0.5倍或0.75倍速)再听一遍。老师就是视频本身——GAKU只负责把内容记录下来。",
     pronSlowNo: "没关系。请把视频放慢,再听一遍这一段——GAKU会再次为你记录。",
+    pronBestScore: "最高得分",
+    pronSayAgainHint: "把视频放慢，再听一遍示范，然后再试着说一次。",
+    pronPauseVideoHint: "请先暂停视频，这样只会收录你的声音。",
     tabListenBtn: "收听视频标签页（推荐）",
     tabListenStop: "停止收听标签页",
     tabListenHelp: "选择正在播放视频的标签页，并勾选“共享标签页音频”。GAKU直接听取视频的声音，没有回音和背景噪音。（仅限电脑上的Chrome / Edge）",
@@ -3546,7 +3567,7 @@ const UI_TRANSLATIONS = {
     tutorialMilestonesDesc: "這是通往你日文目標的路線圖。看看接下來會遇到什麼。",
     tutorialContentDesc: "現在就試試：在下面貼上一段日語文字(文章、字幕、說明文字)，讓GAKU據此生成練習活動——就像GAKU Reader在網頁上做的那樣。",
     tutorialConversationDesc: "現在就試試：播放一段影片，點擊「收聽影片分頁」（或麥克風），讓GAKU聆聽真實對話——它會幫你理解每一句話，並給出回應建議。",
-    tutorialPronunciationDesc: "現在就試試：播放母語者的影片，點擊「收聽影片分頁」（或麥克風），GAKU會把每句話記錄下來。聽不清？把影片放慢再聽一遍——你學的是真實的日語。",
+    tutorialPronunciationDesc: "現在就試試：播放母語者的影片，點擊「收聽影片分頁」，GAKU會把每句話記錄下來。然後在卡片上大聲說出這句話，看看你有多接近。聽不清？把影片放慢再聽一遍。",
     tutorialCompleteTitle: "全部完成！🎉",
     tutorialCompleteDesc: "你已經了解了GAKU Master的全部5個主要功能。隨時可以透過🎓教學按鈕重新觀看導覽。",
     tutorialCompleteBtn: "開始學習",
@@ -3804,6 +3825,9 @@ const UI_TRANSLATIONS = {
     pronListenDesc: "在麥克風附近播放YouTube、Netflix或任何影片。GAKU會聆聽並逐行記錄聽到的內容,並透過注音假名、羅馬字和翻譯幫助你理解。",
     pronSlowTip: "聽不清楚?請把影片放慢(例如YouTube的0.5倍或0.75倍速)再聽一遍。老師就是影片本身——GAKU只負責把內容記錄下來。",
     pronSlowNo: "沒關係。請把影片放慢,再聽一遍這一段——GAKU會再次為你記錄。",
+    pronBestScore: "最高得分",
+    pronSayAgainHint: "把影片放慢，再聽一遍示範，然後再試著說一次。",
+    pronPauseVideoHint: "請先暫停影片，這樣只會收錄你的聲音。",
     tabListenBtn: "收聽影片分頁（推薦）",
     tabListenStop: "停止收聽分頁",
     tabListenHelp: "選擇正在播放影片的分頁，並勾選「分享分頁音訊」。GAKU直接聽取影片的聲音，沒有回音和背景噪音。（僅限電腦上的Chrome / Edge）",
@@ -3985,7 +4009,7 @@ const UI_TRANSLATIONS = {
     tutorialMilestonesDesc: "이것은 당신의 일본어 목표까지의 로드맵입니다. 다음에 무엇이 있는지 살펴보세요.",
     tutorialContentDesc: "지금 해보세요: 아래에 일본어 텍스트(기사, 자막, 캡션 등)를 붙여넣으면 GAKU가 그걸로 연습 활동을 만들어줍니다 — 웹의 GAKU Reader와 똑같이요.",
     tutorialConversationDesc: "지금 해보세요: 영상을 재생하고 '영상 탭 듣기'(또는 마이크)를 누르면 GAKU가 실제 대화를 듣습니다 — 한 줄씩 이해를 돕고 어떻게 대답할지 제안해줘요.",
-    tutorialPronunciationDesc: "지금 해보세요: 원어민이 나오는 영상을 재생하고 '영상 탭 듣기'(또는 마이크)를 누르면 GAKU가 한 줄씩 받아 적습니다. 잘 안 들리나요? 영상을 느리게 재생해서 다시 들어보세요 — 진짜 일본어로 배우는 거예요.",
+    tutorialPronunciationDesc: "지금 해보세요: 원어민이 나오는 영상을 재생하고 '영상 탭 듣기'를 누르면 GAKU가 한 줄씩 받아 적습니다. 그다음 카드에서 문장을 소리 내어 말하고 얼마나 가까웠는지 확인하세요. 잘 안 들리나요? 영상을 느리게 재생해서 다시 들어보세요.",
     tutorialCompleteTitle: "완료! 🎉",
     tutorialCompleteDesc: "GAKU Master의 5가지 주요 기능을 모두 살펴보셨습니다. 🎓 튜토리얼 버튼을 통해 언제든 다시 볼 수 있어요.",
     tutorialCompleteBtn: "학습 시작하기",
@@ -4243,6 +4267,9 @@ const UI_TRANSLATIONS = {
     pronListenDesc: "마이크 가까이에서 YouTube, Netflix 등 아무 영상이나 소리를 켜고 재생하세요. GAKU가 듣고 들리는 내용을 한 줄씩 적어 주며, 후리가나·로마자·번역으로 이해를 도와줍니다.",
     pronSlowTip: "잘 안 들리나요? 영상을 느리게(예: YouTube 재생 속도 0.5배 또는 0.75배) 재생해서 다시 들어보세요. 선생님은 영상이고, GAKU는 받아 적기만 합니다.",
     pronSlowNo: "괜찮아요. 영상을 느리게 재생해서 그 부분을 다시 들어보세요. GAKU가 다시 받아 적어 드립니다.",
+    pronBestScore: "최고 점수",
+    pronSayAgainHint: "영상을 느리게 재생해서 원어민의 발음을 다시 듣고, 한 번 더 말해 보세요.",
+    pronPauseVideoHint: "영상을 먼저 일시정지해서 내 목소리만 인식되게 하세요.",
     tabListenBtn: "영상 탭 듣기 (추천)",
     tabListenStop: "탭 듣기 중지",
     tabListenHelp: "영상이 재생 중인 탭을 선택하고 '탭 오디오 공유'를 체크하세요. GAKU가 영상의 소리를 직접 듣기 때문에 울림이나 배경 소음이 없습니다. (컴퓨터의 Chrome / Edge 전용)",
@@ -4424,7 +4451,7 @@ const UI_TRANSLATIONS = {
     tutorialMilestonesDesc: "นี่คือแผนที่นำทางสู่เป้าหมายภาษาญี่ปุ่นของคุณ ลองดูว่าอะไรจะตามมาต่อไป",
     tutorialContentDesc: "ลองเลย: วางข้อความภาษาญี่ปุ่นด้านล่าง (บทความ คำบรรยาย หรือคำอธิบายภาพ) แล้วให้ GAKU สร้างกิจกรรมฝึกฝนจากมัน เหมือนที่ GAKU Reader ทำบนเว็บ",
     tutorialConversationDesc: "ลองเลย: เปิดวิดีโอ แล้วกด “ฟังแท็บวิดีโอ” (หรือไมโครโฟน) ให้ GAKU ฟังบทสนทนาจริง — มันจะช่วยให้คุณเข้าใจแต่ละประโยคและแนะนำวิธีตอบกลับ",
-    tutorialPronunciationDesc: "ลองเลย: เปิดวิดีโอของเจ้าของภาษา แล้วกด “ฟังแท็บวิดีโอ” (หรือไมโครโฟน) GAKU จะจดทีละประโยคให้ ฟังไม่ทัน? ลองเปิดวิดีโอให้ช้าลงแล้วฟังอีกครั้ง — คุณกำลังเรียนจากภาษาญี่ปุ่นของจริง",
+    tutorialPronunciationDesc: "ลองเลย: เปิดวิดีโอของเจ้าของภาษา แล้วกด “ฟังแท็บวิดีโอ” GAKU จะจดทีละประโยคให้ จากนั้นในการ์ดให้พูดประโยคออกเสียง แล้วดูว่าใกล้เคียงแค่ไหน ฟังไม่ทัน? ลองเปิดวิดีโอให้ช้าลงแล้วฟังอีกครั้ง",
     tutorialCompleteTitle: "เสร็จเรียบร้อย! 🎉",
     tutorialCompleteDesc: "คุณได้ชมฟีเจอร์หลักทั้ง 5 ของ GAKU Master แล้ว สามารถดูทัวร์นี้ซ้ำได้ทุกเมื่อผ่านปุ่ม 🎓 บทแนะนำ",
     tutorialCompleteBtn: "เริ่มเรียนเลย",
@@ -4682,6 +4709,9 @@ const UI_TRANSLATIONS = {
     pronListenDesc: "เปิด YouTube, Netflix หรือวิดีโอใดก็ได้โดยให้เสียงอยู่ใกล้ไมค์ GAKU จะฟังและจดสิ่งที่ได้ยินทีละบรรทัด พร้อมช่วยให้เข้าใจด้วยฟุริงานะ โรมาจิ และคำแปล",
     pronSlowTip: "ฟังไม่ทัน? ลองเปิดวิดีโอให้ช้าลง (เช่น ความเร็ว 0.5× หรือ 0.75× ใน YouTube) แล้วฟังอีกครั้ง ครูคือวิดีโอ ส่วน GAKU ทำหน้าที่จดให้เท่านั้น",
     pronSlowNo: "ไม่เป็นไร ลองเปิดวิดีโอให้ช้าลงแล้วฟังช่วงนั้นอีกครั้ง GAKU จะจดให้ใหม่",
+    pronBestScore: "คะแนนสูงสุด",
+    pronSayAgainHint: "ลองเปิดวิดีโอให้ช้าลง ฟังต้นฉบับอีกครั้ง แล้วลองพูดอีกรอบ",
+    pronPauseVideoHint: "หยุดวิดีโอชั่วคราวก่อน เพื่อให้ระบบได้ยินเฉพาะเสียงของคุณ",
     tabListenBtn: "ฟังแท็บวิดีโอ (แนะนำ)",
     tabListenStop: "หยุดฟังแท็บ",
     tabListenHelp: "เลือกแท็บที่กำลังเล่นวิดีโอ แล้วติ๊ก “แชร์เสียงของแท็บ” GAKU จะได้ยินเสียงวิดีโอโดยตรง ไม่มีเสียงสะท้อนหรือเสียงรบกวน (ใช้ได้เฉพาะ Chrome / Edge บนคอมพิวเตอร์)",
@@ -4863,7 +4893,7 @@ const UI_TRANSLATIONS = {
     tutorialMilestonesDesc: "Ini ialah pelan hala tuju anda ke arah matlamat bahasa Jepun anda. Lihat apa yang akan datang seterusnya.",
     tutorialContentDesc: "Cubalah sekarang: tampal teks Jepun di bawah (artikel, sari kata, kapsyen) dan biarkan GAKU membina aktiviti latihan daripadanya — sama seperti GAKU Reader lakukan di web.",
     tutorialConversationDesc: "Cuba sekarang: mainkan video, tekan “Dengar tab video” (atau mikrofon) dan biarkan GAKU mendengar dialog sebenar — ia akan membantu anda memahami setiap baris dan mencadangkan cara membalas.",
-    tutorialPronunciationDesc: "Cuba sekarang: mainkan video penutur asli, tekan “Dengar tab video” (atau mikrofon) dan GAKU akan menulis setiap baris. Tidak dapat menangkap? Perlahankan video dan dengar semula — anda belajar daripada bahasa Jepun yang sebenar.",
+    tutorialPronunciationDesc: "Cuba sekarang: mainkan video penutur asli, tekan “Dengar tab video” dan GAKU akan menulis setiap baris. Kemudian, pada kad, sebut ayat itu dengan kuat dan lihat sejauh mana anda hampir betul. Tidak dapat menangkap? Perlahankan video dan dengar semula.",
     tutorialCompleteTitle: "Selesai! 🎉",
     tutorialCompleteDesc: "Anda telah melihat kesemua 5 ciri utama GAKU Master. Anda boleh ulang tayang lawatan ini bila-bila masa melalui butang 🎓 Tutorial.",
     tutorialCompleteBtn: "Mula Belajar",
@@ -5121,6 +5151,9 @@ const UI_TRANSLATIONS = {
     pronListenDesc: "Mainkan YouTube, Netflix atau mana-mana video dengan bunyi hampir dengan mikrofon anda. GAKU mendengar, menulis apa yang didengar baris demi baris dan membantu anda memahaminya dengan furigana, romaji dan terjemahan.",
     pronSlowTip: "Tidak dapat menangkap? Perlahankan video (contohnya kelajuan 0.5× atau 0.75× di YouTube) dan dengar semula. Guru anda ialah video itu — GAKU hanya menulisnya.",
     pronSlowNo: "Tidak mengapa. Perlahankan video dan dengar bahagian itu sekali lagi — GAKU akan menulisnya semula.",
+    pronBestScore: "Skor terbaik",
+    pronSayAgainHint: "Perlahankan video, dengar contoh sekali lagi, kemudian cuba sebutnya semula.",
+    pronPauseVideoHint: "Jeda video dahulu supaya hanya suara anda dirakam.",
     tabListenBtn: "Dengar tab video (disyorkan)",
     tabListenStop: "Berhenti mendengar tab",
     tabListenHelp: "Pilih tab yang memainkan video anda dan tandakan “Kongsi audio tab”. GAKU mendengar video terus — tiada gema atau bunyi latar. (Chrome / Edge pada komputer sahaja)",
@@ -5302,7 +5335,7 @@ const UI_TRANSLATIONS = {
     tutorialMilestonesDesc: "Ini adalah peta jalan menuju tujuan bahasa Jepang Anda. Lihat apa yang akan datang berikutnya.",
     tutorialContentDesc: "Coba sekarang: tempel teks bahasa Jepang di bawah (artikel, subtitle, keterangan) dan biarkan GAKU membuat aktivitas latihan darinya — sama seperti yang dilakukan GAKU Reader di web.",
     tutorialConversationDesc: "Coba sekarang: putar video, ketuk “Dengarkan tab video” (atau mikrofon) dan biarkan GAKU mendengarkan dialog asli — GAKU akan membantu Anda memahami tiap baris dan menyarankan cara membalas.",
-    tutorialPronunciationDesc: "Coba sekarang: putar video penutur asli, ketuk “Dengarkan tab video” (atau mikrofon), dan GAKU akan menuliskan setiap baris. Tidak tertangkap? Perlambat videonya dan dengarkan lagi — Anda belajar dari bahasa Jepang yang asli.",
+    tutorialPronunciationDesc: "Coba sekarang: putar video penutur asli, ketuk “Dengarkan tab video”, dan GAKU akan menuliskan setiap baris. Lalu, pada kartu, ucapkan kalimatnya dengan lantang dan lihat seberapa dekat Anda. Tidak tertangkap? Perlambat videonya dan dengarkan lagi.",
     tutorialCompleteTitle: "Selesai! 🎉",
     tutorialCompleteDesc: "Anda telah melihat semua 5 fitur utama GAKU Master. Anda bisa memutar ulang tur ini kapan saja lewat tombol 🎓 Tutorial.",
     tutorialCompleteBtn: "Mulai Belajar",
@@ -5560,6 +5593,9 @@ const UI_TRANSLATIONS = {
     pronListenDesc: "Putar YouTube, Netflix, atau video apa pun dengan suara dekat mikrofon Anda. GAKU mendengarkan, menuliskan apa yang terdengar baris demi baris, dan membantu Anda memahaminya dengan furigana, romaji, dan terjemahan.",
     pronSlowTip: "Tidak tertangkap? Perlambat video (misalnya kecepatan 0,5× atau 0,75× di YouTube) lalu dengarkan lagi. Gurunya adalah video itu — GAKU hanya menuliskannya.",
     pronSlowNo: "Tidak apa-apa. Perlambat videonya dan dengarkan bagian itu sekali lagi — GAKU akan menuliskannya lagi.",
+    pronBestScore: "Skor terbaik",
+    pronSayAgainHint: "Perlambat video, dengarkan contohnya sekali lagi, lalu coba ucapkan lagi.",
+    pronPauseVideoHint: "Jeda video dulu agar hanya suara Anda yang terekam.",
     tabListenBtn: "Dengarkan tab video (disarankan)",
     tabListenStop: "Berhenti mendengarkan tab",
     tabListenHelp: "Pilih tab yang memutar video Anda dan centang “Bagikan audio tab”. GAKU mendengar video secara langsung — tanpa gema atau kebisingan latar. (Hanya Chrome / Edge di komputer)",
@@ -5741,7 +5777,7 @@ const UI_TRANSLATIONS = {
     tutorialMilestonesDesc: "Đây là lộ trình đến mục tiêu tiếng Nhật của bạn. Hãy xem điều gì sẽ đến tiếp theo.",
     tutorialContentDesc: "Thử ngay bây giờ: dán một đoạn văn bản tiếng Nhật bên dưới (bài báo, phụ đề, chú thích) và để GAKU tạo hoạt động luyện tập từ đó — giống như GAKU Reader làm trên web.",
     tutorialConversationDesc: "Hãy thử ngay: phát một video, nhấn “Nghe tab video” (hoặc micro) và để GAKU nghe đoạn hội thoại thật — GAKU sẽ giúp bạn hiểu từng câu và gợi ý cách trả lời.",
-    tutorialPronunciationDesc: "Hãy thử ngay: phát video của người bản xứ, nhấn “Nghe tab video” (hoặc micro), GAKU sẽ ghi lại từng câu. Nghe không kịp? Hãy làm chậm video và nghe lại — bạn đang học từ tiếng Nhật thật.",
+    tutorialPronunciationDesc: "Hãy thử ngay: phát video của người bản xứ, nhấn “Nghe tab video”, GAKU sẽ ghi lại từng câu. Sau đó, trên thẻ, hãy nói to câu đó và xem bạn nói gần đúng đến đâu. Nghe không kịp? Hãy làm chậm video và nghe lại.",
     tutorialCompleteTitle: "Xong rồi! 🎉",
     tutorialCompleteDesc: "Bạn đã xem qua cả 5 tính năng chính của GAKU Master. Bạn có thể xem lại chuyến tham quan này bất cứ lúc nào qua nút 🎓 Hướng dẫn.",
     tutorialCompleteBtn: "Bắt đầu học",
@@ -5999,6 +6035,9 @@ const UI_TRANSLATIONS = {
     pronListenDesc: "Hãy phát YouTube, Netflix hoặc bất kỳ video nào với âm thanh gần micro. GAKU sẽ lắng nghe, ghi lại từng dòng những gì nghe được và giúp bạn hiểu bằng furigana, romaji và bản dịch.",
     pronSlowTip: "Nghe không kịp? Hãy làm chậm video (ví dụ tốc độ 0,5× hoặc 0,75× trên YouTube) rồi nghe lại. Giáo viên chính là video — GAKU chỉ ghi lại thôi.",
     pronSlowNo: "Không sao. Hãy làm chậm video và nghe lại đoạn đó — GAKU sẽ ghi lại một lần nữa.",
+    pronBestScore: "Điểm cao nhất",
+    pronSayAgainHint: "Hãy làm chậm video, nghe lại bản mẫu một lần nữa rồi thử nói lại.",
+    pronPauseVideoHint: "Hãy tạm dừng video trước để chỉ ghi nhận giọng của bạn.",
     tabListenBtn: "Nghe tab video (khuyên dùng)",
     tabListenStop: "Dừng nghe tab",
     tabListenHelp: "Chọn tab đang phát video và đánh dấu “Chia sẻ âm thanh tab”. GAKU nghe trực tiếp video — không có tiếng vang hay tạp âm. (Chỉ Chrome / Edge trên máy tính)",
@@ -6180,7 +6219,7 @@ const UI_TRANSLATIONS = {
     tutorialMilestonesDesc: "यह आपके जापानी लक्ष्य तक का रोडमैप है। देखें आगे क्या आने वाला है।",
     tutorialContentDesc: "अभी आज़माएं: नीचे कोई जापानी टेक्स्ट पेस्ट करें (कोई लेख, सबटाइटल, कैप्शन) और GAKU को उससे अभ्यास गतिविधियां बनाने दें — बिल्कुल वैसे ही जैसे GAKU Reader वेब पर करता है।",
     tutorialConversationDesc: "अभी आज़माएँ: कोई वीडियो चलाएँ, “वीडियो टैब सुनें” (या माइक) दबाएँ और GAKU को असली बातचीत सुनने दें — यह हर पंक्ति समझने में मदद करेगा और जवाब देने के सुझाव देगा।",
-    tutorialPronunciationDesc: "अभी आज़माएँ: मूल भाषा बोलने वालों का वीडियो चलाएँ, “वीडियो टैब सुनें” (या माइक) दबाएँ, और GAKU हर पंक्ति लिख देगा। समझ नहीं आया? वीडियो को धीमा करके फिर से सुनें — आप असली जापानी से सीख रहे हैं।",
+    tutorialPronunciationDesc: "अभी आज़माएँ: मूल भाषा बोलने वालों का वीडियो चलाएँ, “वीडियो टैब सुनें” दबाएँ, और GAKU हर पंक्ति लिख देगा। फिर कार्ड पर वाक्य को ज़ोर से बोलें और देखें कि आप कितने करीब थे। समझ नहीं आया? वीडियो को धीमा करके फिर से सुनें।",
     tutorialCompleteTitle: "सब हो गया! 🎉",
     tutorialCompleteDesc: "आपने GAKU Master के सभी 5 मुख्य फीचर्स देख लिए हैं। आप 🎓 ट्यूटोरियल बटन से कभी भी यह टूर दोबारा देख सकते हैं।",
     tutorialCompleteBtn: "पढ़ाई शुरू करें",
@@ -6438,6 +6477,9 @@ const UI_TRANSLATIONS = {
     pronListenDesc: "माइक के पास YouTube, Netflix या कोई भी वीडियो आवाज़ के साथ चलाएँ। GAKU सुनता है, जो सुनाई देता है उसे पंक्ति-दर-पंक्ति लिखता है और फुरिगाना, रोमाजी और अनुवाद के साथ समझने में मदद करता है।",
     pronSlowTip: "समझ नहीं आया? वीडियो को धीमा करें (जैसे YouTube में 0.5× या 0.75× गति) और फिर से सुनें। शिक्षक वीडियो है — GAKU सिर्फ़ उसे लिख देता है।",
     pronSlowNo: "कोई बात नहीं। वीडियो को धीमा करके उस हिस्से को फिर से सुनें — GAKU उसे दोबारा लिख देगा।",
+    pronBestScore: "सर्वश्रेष्ठ स्कोर",
+    pronSayAgainHint: "वीडियो को धीमा करें, आदर्श उच्चारण को एक बार फिर सुनें, फिर दोबारा बोलकर देखें।",
+    pronPauseVideoHint: "पहले वीडियो को रोकें ताकि केवल आपकी आवाज़ रिकॉर्ड हो।",
     tabListenBtn: "वीडियो टैब सुनें (अनुशंसित)",
     tabListenStop: "टैब सुनना बंद करें",
     tabListenHelp: "जिस टैब में वीडियो चल रहा है उसे चुनें और “टैब ऑडियो शेयर करें” पर टिक करें। GAKU वीडियो की आवाज़ सीधे सुनता है — न गूंज, न बैकग्राउंड शोर। (केवल कंप्यूटर पर Chrome / Edge)",
@@ -6619,7 +6661,7 @@ const UI_TRANSLATIONS = {
     tutorialMilestonesDesc: "これは日本語の目標までのロードマップです。この先どんな道のりが待っているか見てみましょう。",
     tutorialContentDesc: "早速試してみましょう: 下に日本語のテキスト(記事・字幕・キャプションなど)を貼り付けて、GAKUに練習アクティビティを作ってもらいましょう — WebのGAKU Readerと同じ仕組みです。",
     tutorialConversationDesc: "今すぐ試してみましょう：動画を再生して「動画のタブを聞き取る」（またはマイク）を押すと、GAKUが実際の会話を聞き取ります。1行ずつ理解を助け、どう返事するかのヒントも出します。",
-    tutorialPronunciationDesc: "今すぐ試してみましょう：ネイティブが話す動画を再生して「動画のタブを聞き取る」（またはマイク）を押すと、GAKUが1行ずつ文字に起こします。聞き取れないときは、動画をスロー再生してもう一度聞いてみましょう。本物の日本語で学べます。",
+    tutorialPronunciationDesc: "今すぐ試してみましょう：ネイティブが話す動画を再生して「動画のタブを聞き取る」を押すと、GAKUが1行ずつ文字に起こします。次に、カードの文を声に出して言い、どれだけ近かったか確認しましょう。聞き取れないときは、動画をスロー再生してもう一度聞いてみましょう。",
     tutorialCompleteTitle: "完了しました！🎉",
     tutorialCompleteDesc: "GAKU Masterの5つの主な機能をすべて見てもらいました。🎓チュートリアルボタンからいつでもこのツアーをもう一度見られます。",
     tutorialCompleteBtn: "勉強を始める",
@@ -6877,6 +6919,9 @@ const UI_TRANSLATIONS = {
     pronListenDesc: "マイクの近くでYouTubeやNetflixなどの動画を音声ありで再生してください。GAKUが聞き取って1行ずつ文字に起こし、ふりがな・ローマ字・翻訳で理解をサポートします。",
     pronSlowTip: "聞き取れない場合は、動画をスロー再生(YouTubeなら再生速度0.5倍や0.75倍)して、もう一度聞き取ってください。先生は動画です。GAKUは文字起こしでサポートします。",
     pronSlowNo: "大丈夫です。動画をスロー再生して、その部分をもう一度聞き取ってください。GAKUがもう一度文字に起こします。",
+    pronBestScore: "ベストスコア",
+    pronSayAgainHint: "動画をスロー再生してお手本をもう一度聞き、もう一度言ってみましょう。",
+    pronPauseVideoHint: "先に動画を一時停止して、自分の声だけが認識されるようにしましょう。",
     tabListenBtn: "動画のタブを聞き取る（おすすめ）",
     tabListenStop: "タブの聞き取りを停止",
     tabListenHelp: "動画を再生しているタブを選び、「タブの音声も共有」にチェックを入れてください。GAKUが動画の音声を直接聞き取るので、反響や雑音が入りません。（PCのChrome・Edgeのみ）",
@@ -7058,7 +7103,7 @@ const UI_TRANSLATIONS = {
     tutorialMilestonesDesc: "Bu, Japonca hedefinize giden yol haritanız. Sırada ne olduğuna bir göz atın.",
     tutorialContentDesc: "Hemen deneyin: aşağıya bir Japonca metin yapıştırın (bir makale, altyazı, bir başlık) ve GAKU'nun bundan alıştırma etkinlikleri oluşturmasına izin verin — tıpkı GAKU Reader'ın web'de yaptığı gibi.",
     tutorialConversationDesc: "Hemen deneyin: bir video oynatın, “Video sekmesini dinle”ye (veya mikrofona) dokunun ve GAKU'nun gerçek diyaloğu dinlemesine izin verin — her satırı anlamanıza yardımcı olur ve nasıl cevap verebileceğinizi önerir.",
-    tutorialPronunciationDesc: "Hemen deneyin: ana dili konuşanların olduğu bir video oynatın, “Video sekmesini dinle”ye (veya mikrofona) dokunun; GAKU her satırı yazıya döker. Anlayamadınız mı? Videoyu yavaşlatıp tekrar dinleyin — gerçek Japoncadan öğreniyorsunuz.",
+    tutorialPronunciationDesc: "Hemen deneyin: ana dili konuşanların olduğu bir video oynatın, “Video sekmesini dinle”ye dokunun; GAKU her satırı yazıya döker. Sonra kartta cümleyi yüksek sesle söyleyin ve ne kadar yaklaştığınıza bakın. Anlayamadınız mı? Videoyu yavaşlatıp tekrar dinleyin.",
     tutorialCompleteTitle: "Tamamlandı! 🎉",
     tutorialCompleteDesc: "GAKU Master'ın 5 ana özelliğinin tamamını gördünüz. Bu turu istediğiniz zaman 🎓 Eğitim düğmesinden tekrar izleyebilirsiniz.",
     tutorialCompleteBtn: "Çalışmaya Başla",
@@ -7316,6 +7361,9 @@ const UI_TRANSLATIONS = {
     pronListenDesc: "YouTube, Netflix veya herhangi bir videoyu sesi mikrofonunuza yakın olacak şekilde oynatın. GAKU dinler, duyduklarını satır satır yazar ve furigana, romaji ve çeviriyle anlamanıza yardım eder.",
     pronSlowTip: "Anlayamadınız mı? Videoyu yavaşlatın (örneğin YouTube'da 0,5× veya 0,75× hız) ve tekrar dinleyin. Öğretmeniniz video — GAKU yalnızca yazıya döker.",
     pronSlowNo: "Sorun değil. Videoyu yavaşlatıp o bölümü tekrar dinleyin — GAKU onu yeniden yazacak.",
+    pronBestScore: "En iyi puan",
+    pronSayAgainHint: "Videoyu yavaşlatın, örneği bir kez daha dinleyin ve tekrar söylemeyi deneyin.",
+    pronPauseVideoHint: "Yalnızca sesiniz algılansın diye önce videoyu duraklatın.",
     tabListenBtn: "Video sekmesini dinle (önerilir)",
     tabListenStop: "Sekmeyi dinlemeyi durdur",
     tabListenHelp: "Videonuzu oynatan sekmeyi seçin ve “Sekme sesini paylaş” kutusunu işaretleyin. GAKU videoyu doğrudan duyar — yankı veya arka plan gürültüsü olmaz. (Yalnızca bilgisayarda Chrome / Edge)",
@@ -7497,7 +7545,7 @@ const UI_TRANSLATIONS = {
     tutorialMilestonesDesc: "यो तपाईंको जापानी लक्ष्यसम्मको रोडम्याप हो। अब के आउँदैछ हेर्नुहोस्।",
     tutorialContentDesc: "अहिले नै प्रयास गर्नुहोस्: तल कुनै जापानी पाठ टाँस्नुहोस् (लेख, सबटाइटल, क्याप्सन) र GAKUलाई त्यसबाट अभ्यास गतिविधिहरू बनाउन दिनुहोस् — ठ्याक्कै GAKU Readerले वेबमा गरेजस्तै।",
     tutorialConversationDesc: "अहिले प्रयास गर्नुहोस्: कुनै भिडियो चलाउनुहोस्, “भिडियो ट्याब सुन्नुहोस्” (वा माइक) थिच्नुहोस् र GAKUलाई वास्तविक कुराकानी सुन्न दिनुहोस् — यसले हरेक पङ्क्ति बुझ्न मद्दत गर्नेछ र कसरी जवाफ दिने सुझाव दिनेछ।",
-    tutorialPronunciationDesc: "अहिले प्रयास गर्नुहोस्: मातृभाषीहरूको भिडियो चलाउनुहोस्, “भिडियो ट्याब सुन्नुहोस्” (वा माइक) थिच्नुहोस्, र GAKUले हरेक पङ्क्ति लेखिदिनेछ। बुझ्न गाह्रो भयो? भिडियो ढिलो गरेर फेरि सुन्नुहोस् — तपाईं वास्तविक जापानीबाट सिक्दै हुनुहुन्छ।",
+    tutorialPronunciationDesc: "अहिले प्रयास गर्नुहोस्: मातृभाषीहरूको भिडियो चलाउनुहोस्, “भिडियो ट्याब सुन्नुहोस्” थिच्नुहोस्, र GAKUले हरेक पङ्क्ति लेखिदिनेछ। त्यसपछि कार्डमा वाक्य ठूलो स्वरमा बोल्नुहोस् र कति नजिक हुनुभयो हेर्नुहोस्। बुझ्न गाह्रो भयो? भिडियो ढिलो गरेर फेरि सुन्नुहोस्।",
     tutorialCompleteTitle: "सबै पूरा भयो! 🎉",
     tutorialCompleteDesc: "तपाईंले GAKU Master का सबै ५ मुख्य सुविधाहरू हेर्नुभयो। तपाईं जुनसुकै बेला 🎓 ट्युटोरियल बटनबाट यो भ्रमण फेरि हेर्न सक्नुहुन्छ।",
     tutorialCompleteBtn: "अध्ययन सुरु गर्नुहोस्",
@@ -7755,6 +7803,9 @@ const UI_TRANSLATIONS = {
     pronListenDesc: "माइक नजिकै YouTube, Netflix वा कुनै पनि भिडियो आवाजसहित चलाउनुहोस्। GAKUले सुन्छ, सुनिएको कुरा लाइन-लाइनमा लेख्छ र फुरिगाना, रोमाजी र अनुवादमार्फत बुझ्न मद्दत गर्छ।",
     pronSlowTip: "बुझ्न गाह्रो भयो? भिडियो ढिलो गर्नुहोस् (जस्तै YouTube मा 0.5× वा 0.75× गति) र फेरि सुन्नुहोस्। शिक्षक भिडियो नै हो — GAKUले मात्र लेखिदिन्छ।",
     pronSlowNo: "ठीक छ। भिडियो ढिलो गरेर त्यो भाग फेरि सुन्नुहोस् — GAKUले फेरि लेखिदिनेछ।",
+    pronBestScore: "उत्कृष्ट स्कोर",
+    pronSayAgainHint: "भिडियो ढिलो गर्नुहोस्, नमुना फेरि एकपटक सुन्नुहोस्, अनि फेरि बोल्ने प्रयास गर्नुहोस्।",
+    pronPauseVideoHint: "पहिले भिडियो रोक्नुहोस् ताकि तपाईंको आवाज मात्र रेकर्ड होस्।",
     tabListenBtn: "भिडियो ट्याब सुन्नुहोस् (सिफारिस गरिएको)",
     tabListenStop: "ट्याब सुन्न रोक्नुहोस्",
     tabListenHelp: "भिडियो चलिरहेको ट्याब छान्नुहोस् र “ट्याब अडियो सेयर गर्नुहोस्” मा टिक लगाउनुहोस्। GAKUले भिडियोको आवाज सिधै सुन्छ — इको वा पृष्ठभूमि आवाज हुँदैन। (कम्प्युटरमा Chrome / Edge मात्र)",
@@ -7936,7 +7987,7 @@ const UI_TRANSLATIONS = {
     tutorialMilestonesDesc: "Ito ang iyong roadmap patungo sa iyong layunin sa Nihongo. Tingnan kung ano ang susunod.",
     tutorialContentDesc: "Subukan na ngayon: mag-paste ng Japanese text sa ibaba (isang artikulo, subtitle, caption) at hayaang gumawa ang GAKU ng mga practice activity mula dito — tulad ng ginagawa ng GAKU Reader sa web.",
     tutorialConversationDesc: "Subukan ngayon: mag-play ng video, i-tap ang “Pakinggan ang tab ng video” (o ang mikropono) at hayaang pakinggan ng GAKU ang totoong usapan — tutulungan ka nitong maintindihan ang bawat linya at magmumungkahi kung paano sumagot.",
-    tutorialPronunciationDesc: "Subukan ngayon: mag-play ng video ng mga native speaker, i-tap ang “Pakinggan ang tab ng video” (o ang mikropono), at isusulat ng GAKU ang bawat linya. Hindi maintindihan? Pabagalin ang video at pakinggan muli — natututo ka mula sa totoong Hapon.",
+    tutorialPronunciationDesc: "Subukan ngayon: mag-play ng video ng mga native speaker, i-tap ang “Pakinggan ang tab ng video”, at isusulat ng GAKU ang bawat linya. Pagkatapos, sa card, sabihin nang malakas ang pangungusap at tingnan kung gaano ka kalapit. Hindi maintindihan? Pabagalin ang video at pakinggan muli.",
     tutorialCompleteTitle: "Tapos na! 🎉",
     tutorialCompleteDesc: "Nakita mo na ang lahat ng 5 pangunahing feature ng GAKU Master. Puwede mong ulitin ang tour na ito anumang oras gamit ang 🎓 Tutorial button.",
     tutorialCompleteBtn: "Simulan ang Pag-aaral",
@@ -8194,6 +8245,9 @@ const UI_TRANSLATIONS = {
     pronListenDesc: "I-play ang YouTube, Netflix, o anumang video nang may tunog malapit sa mikropono mo. Nakikinig ang GAKU, isinusulat ang naririnig nito linya por linya, at tinutulungan kang umintindi gamit ang furigana, romaji, at salin.",
     pronSlowTip: "Hindi maintindihan? Pabagalin ang video (halimbawa, 0.5× o 0.75× na bilis sa YouTube) at pakinggan muli. Ang video ang guro mo — isinusulat lang ito ng GAKU.",
     pronSlowNo: "Okay lang. Pabagalin ang video at pakinggan muli ang bahaging iyon — isusulat ito muli ng GAKU.",
+    pronBestScore: "Pinakamataas na score",
+    pronSayAgainHint: "Pabagalin ang video, pakinggan muli ang halimbawa, at subukang sabihin itong muli.",
+    pronPauseVideoHint: "I-pause muna ang video para boses mo lang ang marinig.",
     tabListenBtn: "Pakinggan ang tab ng video (inirerekomenda)",
     tabListenStop: "Itigil ang pakikinig sa tab",
     tabListenHelp: "Piliin ang tab na nagpe-play ng video mo at lagyan ng tsek ang “Ibahagi ang audio ng tab”. Direktang naririnig ng GAKU ang video — walang echo o ingay sa paligid. (Chrome / Edge lang sa computer)",
@@ -11695,6 +11749,107 @@ function AddPronunciationItem({ onAdd, T, jlpt }) {
 // speak (no AI voice): it only listens through the mic, writes down each line, and supports
 // understanding (furigana / romaji / translation). If a line isn't understood, the student is
 // told to slow the video down and listen again — the video is the teacher.
+// ─── "Say it" — the student's own pronunciation attempt for one heard line ────
+// Character-level match (longest common subsequence) between the target sentence and what the
+// speech recogniser heard the student say. Returns which target characters were matched so the
+// card can show exactly which parts were said and which were missed.
+function pronMatchMap(target, attempt) {
+  const a = Array.from(normalizeJapaneseForCompare(target));
+  const b = Array.from(normalizeJapaneseForCompare(attempt));
+  const m = a.length, n = b.length;
+  const dp = Array.from({ length: m + 1 }, () => new Array(n + 1).fill(0));
+  for (let i = 1; i <= m; i++) {
+    for (let j = 1; j <= n; j++) {
+      dp[i][j] = a[i-1] === b[j-1] ? dp[i-1][j-1] + 1 : Math.max(dp[i-1][j], dp[i][j-1]);
+    }
+  }
+  const hit = new Array(m).fill(false);
+  let i = m, j = n;
+  while (i > 0 && j > 0) {
+    if (a[i-1] === b[j-1]) { hit[i-1] = true; i--; j--; }
+    else if (dp[i-1][j] >= dp[i][j-1]) i--;
+    else j--;
+  }
+  const score = m ? Math.round(100 * dp[m][n] / Math.max(m, n)) : 0;
+  return { chars: a, hit, score };
+}
+
+function PronunciationSayIt({ target, T }) {
+  const [recording, setRecording] = useState(false);
+  const [transcript, setTranscript] = useState("");
+  const [match, setMatch] = useState(null);
+  const [best, setBest] = useState(null);
+  const [supported, setSupported] = useState(true);
+  const recRef = useRef(null);
+  const lastRef = useRef("");
+
+  useEffect(() => () => { try { recRef.current?.stop(); } catch {} }, []);
+
+  const toggle = () => {
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SR) { setSupported(false); return; }
+    if (recording) { recRef.current?.stop(); return; }
+    const r = new SR();
+    r.lang = "ja-JP";
+    r.interimResults = true;
+    r.continuous = false;
+    r.onresult = (e) => {
+      const t = Array.from(e.results).map(x => x[0].transcript).join("");
+      setTranscript(t); lastRef.current = t;
+    };
+    r.onend = () => {
+      setRecording(false);
+      const said = lastRef.current.trim();
+      if (said) {
+        const mm = pronMatchMap(target, said);
+        setMatch(mm);
+        setBest(b => (b === null ? mm.score : Math.max(b, mm.score)));
+      }
+    };
+    r.onerror = () => setRecording(false);
+    recRef.current = r;
+    lastRef.current = ""; setTranscript(""); setMatch(null); setRecording(true);
+    try { r.start(); } catch { setRecording(false); }
+  };
+
+  const good = match && match.score >= 80;
+  const scoreColor = !match ? "#94a3b8" : match.score >= 80 ? C.green : match.score >= 60 ? C.amber : "#f87171";
+
+  return (
+    <div style={{ marginTop:12, paddingTop:12, borderTop:`1px solid ${C.border}` }}>
+      <p style={{ color:C.purpleLight, fontSize:12, fontWeight:700, margin:"0 0 4px" }}>🎤 {T.pronRecordPrompt || "Now say it out loud"}</p>
+      <p style={{ color:"#64748b", fontSize:11, lineHeight:1.6, margin:"0 0 8px" }}>{T.pronPauseVideoHint || "Pause the video first so only your voice is picked up."}</p>
+      <button onClick={toggle} style={{ display:"flex", alignItems:"center", gap:6, padding:"8px 14px", borderRadius:8, background:recording?"rgba(239,68,68,0.15)":"rgba(168,85,247,0.12)", border:`1px solid ${recording?"rgba(239,68,68,0.4)":"rgba(168,85,247,0.3)"}`, color:recording?"#f87171":C.purpleLight, fontSize:13, fontWeight:700, cursor:"pointer" }}>
+        {recording ? `⏺ ${T.recordingInProgress || "Recording..."}` : `🎤 ${T.recordVoice || "Record"}`}
+      </button>
+      {recording && transcript && <p style={{ color:"#94a3b8", fontSize:12, fontStyle:"italic", margin:"8px 0 0" }}>{transcript}</p>}
+      {!supported && <p style={{ color:C.red, fontSize:11, marginTop:6 }}>Voice input isn't supported in this browser — try Chrome.</p>}
+
+      {match && !recording && (
+        <div style={{ background:good?"rgba(34,197,94,0.06)":"rgba(239,68,68,0.06)", border:`1px solid ${good?"rgba(34,197,94,0.2)":"rgba(239,68,68,0.2)"}`, borderRadius:8, padding:"10px 12px", marginTop:10 }}>
+          <div style={{ display:"flex", alignItems:"baseline", justifyContent:"space-between", gap:8, marginBottom:8 }}>
+            <p style={{ color:scoreColor, fontSize:20, fontWeight:800, margin:0 }}>{good ? "✅ " : ""}{match.score}%</p>
+            {best !== null && <p style={{ color:"#94a3b8", fontSize:11, margin:0 }}>{T.pronBestScore || "Best score"}: {best}%</p>}
+          </div>
+          {good && <p style={{ color:C.green, fontSize:13, fontWeight:700, margin:"0 0 8px" }}>{T.pronCorrect || "Correct! 🎉"}</p>}
+          <p style={{ color:C.amber, fontSize:11, fontWeight:700, margin:"0 0 3px" }}>{T.pronTargetLabel || "Target:"}</p>
+          <p style={{ fontSize:15, lineHeight:1.9, margin:"0 0 8px", letterSpacing:1 }}>
+            {match.chars.map((ch, i) => (
+              <span key={i} style={{ color:match.hit[i] ? C.green : "#f87171", textDecoration:match.hit[i] ? "none" : "underline" }}>{ch}</span>
+            ))}
+          </p>
+          <p style={{ color:C.amber, fontSize:11, fontWeight:700, margin:"0 0 3px" }}>{T.pronYourAttempt || "You said:"}</p>
+          <p style={{ color:"#e2e8f0", fontSize:13, margin:"0 0 8px" }}>{transcript}</p>
+          {!good && <p style={{ color:C.amber, fontSize:12, lineHeight:1.7, margin:"0 0 8px" }}>🐢 {T.pronSayAgainHint || "Slow the video down, listen to the model once more, then try saying it again."}</p>}
+          <button onClick={toggle} style={{ padding:"5px 12px", borderRadius:8, background:C.card, border:`1px solid ${C.border}`, color:"#94a3b8", fontSize:11, cursor:"pointer" }}>
+            {T.pronTryAgain || "Try again"}
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
 function PronunciationHeardLineCard({ line, T, lang, checkins, onRecord }) {
   const itemId = `pronheard-${line.id}`;
   const notUnderstood = checkins[itemId] === false;
@@ -11705,6 +11860,7 @@ function PronunciationHeardLineCard({ line, T, lang, checkins, onRecord }) {
         <p style={{ color:"#f1f5f9", fontSize:14, lineHeight:1.8, margin:0, flex:1 }}>{line.text}</p>
       </div>
       <JLineTools text={line.text} lang={lang} T={T} />
+      <PronunciationSayIt target={line.text} T={T} />
       <ComprehensionCheck itemId={itemId} checkins={checkins} onRecord={onRecord} T={T} />
       {notUnderstood && (
         <p style={{ color:C.amber, fontSize:12, lineHeight:1.7, margin:"8px 0 0" }}>🐢 {T.pronSlowNo || "No problem. Slow the video down and listen to that part again — GAKU will write it down once more."}</p>
