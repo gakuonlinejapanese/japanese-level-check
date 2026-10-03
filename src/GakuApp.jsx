@@ -11448,8 +11448,11 @@ function ConversationPredictor({ form, onLevelUp }) {
     <div>
       <div style={{ ...S.card, marginBottom:16 }}>
         <p style={{ color:C.purpleLight, fontSize:12, fontWeight:700, letterSpacing:1, marginBottom:6 }}>🎙️ {T.convTitle || "Conversation Practice"}</p>
-        <p style={{ color:"#39ff14", fontSize:12, lineHeight:1.7, marginBottom:14 }}>
+        <p style={{ color:"#39ff14", fontSize:12, lineHeight:1.7, marginBottom:10 }}>
           {T.convDescLive || "Play a YouTube/video with the sound on near your mic. GAKU listens to the real dialogue and, line by line, helps you understand it and hints at how you could respond."}
+        </p>
+        <p style={{ color:C.amber, fontSize:12, lineHeight:1.7, marginBottom:14 }}>
+          🐢 {T.pronSlowTip || "Can't catch it? Slow the video down (for example YouTube speed 0.5× or 0.75×) and listen again. Your teacher is the video — GAKU just writes it down."}
         </p>
         <TabAudioListenBlock tab={tab} T={T} onBeforeStart={() => { if (listening) toggleListening(); }} />
         <button onClick={toggleListening} style={{ display:"flex", alignItems:"center", justifyContent:"center", gap:8, width:"100%", padding:"12px 12px", borderRadius:10, border:`1px solid ${listening?"rgba(239,68,68,0.4)":"rgba(6,182,212,0.35)"}`, background:listening?"rgba(239,68,68,0.12)":"rgba(6,182,212,0.1)", color:listening?"#f87171":C.teal, fontSize:14, fontWeight:700, cursor:"pointer" }}>
@@ -11479,6 +11482,9 @@ function ConversationPredictor({ form, onLevelUp }) {
               <div key={line.id}>
                 <LiveHeardLineCard line={line} T={T} lang={form?.preferredLang || "English"} jlpt={form?.jlpt} />
                 <ComprehensionCheck itemId={`heard-${line.id}`} checkins={conversationCheck.checkins} onRecord={conversationCheck.record} T={T} />
+                {conversationCheck.checkins[`heard-${line.id}`] === false && (
+                  <p style={{ color:C.amber, fontSize:12, lineHeight:1.7, margin:"8px 0 0" }}>🐢 {T.pronSlowNo || "No problem. Slow the video down and listen to that part again — GAKU will write it down once more."}</p>
+                )}
               </div>
             ))}
           </div>
