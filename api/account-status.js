@@ -34,13 +34,44 @@ const TRIAL_DAYS = 7;
 const TUTORIAL_GRACE_DAYS = 7; // one-time bonus week granted right when the 7-day trial ends
 const GRACE_DAYS = 7; // additional 7 days after the tutorial-grace week ends before data is wiped
 
+// First-session funnel logging (see logFunnel in GakuApp.jsx). Each step is
+// recorded at most once per account in trial_funnel_events (first_at = when
+// the student first reached it), so "where do they stop on day 1" can be read
+// straight from SQL. Whitelisted so a client can't fill the table with
+// arbitrary strings. Kept in this file because the Vercel function limit
+// (12) is already reached.
+const FUNNEL_STEPS = new Set([
+  "firstwin_shown", "first_win_revealed", "first_win_done",
+  "firstquiz_shown", "quiz_sample_clicked", "quiz_generated", "quiz_answered", "quiz_finished", "quiz_skipped",
+  "readerstep_shown", "reader_clicked", "reader_later",
+  "remind_shown", "remind_set", "remind_skipped",
+  "install_shown", "install_clicked", "install_skipped",
+  "completeProfile_shown", "profile_completed", "profile_skipped",
+  "dashboard_shown",
+  "tutorial_shown", "tutorial_skipped", "tutorial_finished",
+  "tab_schedule", "tab_vocabulary", "tab_subtitles", "tab_resources", "tab_milestones",
+]);
+
 export default async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed" });
   try {
-    const { userId } = req.body || {};
+    const { userId, funnelStep, device } = req.body || {};
     if (!userId) return res.status(400).json({ error: "userId is required" });
 
     const supabase = getAdminClient();
+
+    // Funnel-step log call: record once and return — no status work needed.
+    if (funnelStep !== undefined) {
+      if (!FUNNEL_STEPS.has(String(funnelStep))) return res.status(400).json({ error: "unknown step" });
+      const { error: funnelErr } = await supabase
+        .from("trial_funnel_events")
+        .upsert(
+          { user_id: userId, step: String(funnelStep), device: device === "mobile" || device === "desktop" ? device : null },
+          { onConflict: "user_id,step", ignoreDuplicates: true }
+        );
+      if (funnelErr) console.error("[account-status] funnel log failed:", funnelErr.message);
+      return res.status(200).json({ ok: !funnelErr });
+    }
     const { data, error } = await supabase
       .from("profiles")
       .select("is_gaku_student, is_paid, paid_plan, suspended_until, trial_started_at, data_reset_at, tutorial_grace_started_at")

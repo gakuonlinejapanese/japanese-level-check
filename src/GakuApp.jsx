@@ -13728,6 +13728,7 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
       if (localStorage.getItem(scopedKey("gaku_tutorial_done")) !== "1") {
         setTutorialActive(true);
         setTutorialStep(0);
+        logFunnel(userId, "tutorial_shown");
       }
     } catch {}
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -13738,9 +13739,10 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
   }, []);
 
   const handleTutorialSkip = useCallback(() => {
+    logFunnel(userId, "tutorial_skipped");
     markTutorialDone();
     setTutorialActive(false);
-  }, [markTutorialDone]);
+  }, [markTutorialDone, userId]);
 
   const handleTutorialAdvance = useCallback(() => {
     setTutorialStep(s => {
@@ -13751,10 +13753,11 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
   }, [markTutorialDone]);
 
   const handleTutorialFinish = useCallback(() => {
+    logFunnel(userId, "tutorial_finished");
     setTutorialActive(false);
     setFeaturePickerInitial(visibleFeatures || []);
     setShowFeaturePicker(true);
-  }, [visibleFeatures]);
+  }, [visibleFeatures, userId]);
 
   const applyFeatureChoice = useCallback((list) => {
     setVisibleFeatures(list);
@@ -13976,7 +13979,7 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
             const tutorialTarget = (tutorialActive && tutorialStep>=1 && tutorialStep<=TUTORIAL_STEPS.length) ? TUTORIAL_STEPS[tutorialStep-1] : null;
             const isTutorialTarget = tutorialTarget?.tab === t.id;
             return (
-              <button key={t.id} onClick={()=>setTab(t.id)} style={{ padding:"8px 14px", borderRadius:20, border:`1.5px solid ${isTutorialTarget?C.purpleLight:(tab===t.id?C.purpleLight:C.border)}`, background:tab===t.id?"rgba(168,85,247,0.15)":C.card, color:tab===t.id?C.purpleLight:"#64748b", fontSize:12, fontWeight:700, cursor:"pointer", whiteSpace:"nowrap", boxShadow:isTutorialTarget?"0 0 0 3px rgba(168,85,247,0.35)":"none" }}>
+              <button key={t.id} onClick={()=>{ setTab(t.id); logFunnel(userId, "tab_" + t.id); }} style={{ padding:"8px 14px", borderRadius:20, border:`1.5px solid ${isTutorialTarget?C.purpleLight:(tab===t.id?C.purpleLight:C.border)}`, background:tab===t.id?"rgba(168,85,247,0.15)":C.card, color:tab===t.id?C.purpleLight:"#64748b", fontSize:12, fontWeight:700, cursor:"pointer", whiteSpace:"nowrap", boxShadow:isTutorialTarget?"0 0 0 3px rgba(168,85,247,0.35)":"none" }}>
                 {t.label}
               </button>
             );
@@ -14556,6 +14559,24 @@ function DeviceSuspendedGate({ T, suspendedUntil }) {
 }
 
 
+// First-session funnel logging: records (once per account per step) how far a
+// student got — see FUNNEL_STEPS in api/account-status.js and the
+// trial_funnel_events table. Fire-and-forget; never blocks or breaks the UI.
+const _funnelSeen = new Set();
+function logFunnel(userId, step) {
+  if (!userId || !step) return;
+  const key = userId + ":" + step;
+  if (_funnelSeen.has(key)) return;
+  _funnelSeen.add(key);
+  try {
+    const ua = typeof navigator !== "undefined" ? navigator.userAgent : "";
+    fetch("/api/account-status", {
+      method: "POST", headers: { "Content-Type": "application/json" }, keepalive: true,
+      body: JSON.stringify({ userId, funnelStep: step, device: /Mobile|Android|iPhone|iPad/i.test(ua) ? "mobile" : "desktop" }),
+    }).catch(() => {});
+  } catch {}
+}
+
 export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail, skipTrialPaywall, previewPaywall, previewPlans }) {
   const [authUser, setAuthUser] = useState(null);
   const [authChecked, setAuthChecked] = useState(!supabase);
@@ -14632,6 +14653,7 @@ Respond ONLY with a valid JSON array, no markdown, no backticks:
       const ok = Array.isArray(parsed) ? parsed.filter(x => x && x.q && Array.isArray(x.options) && x.options.length >= 2 && Number.isInteger(x.answer) && x.options[x.answer] != null).slice(0, 3) : [];
       if (!ok.length) throw new Error("empty");
       setFqQuestions(ok); setFqIdx(0); setFqPicked(null);
+      logFunnel(authUser?.id, "quiz_generated");
     } catch { setFqError(true); }
     setFqLoading(false);
   };
@@ -15186,6 +15208,13 @@ Respond ONLY with a valid JSON array, no markdown, no backticks:
     ? { ...form, name: initialName || form.name, email: initialEmail || form.email, jlpt: toEstimationLevel(initialJlpt) || form.jlpt }
     : prefilledForm;
   const T = useUITranslations(form?.preferredLang || "English");
+  // First-session funnel: log each onboarding screen the moment it's shown, and
+  // the first time the dashboard is reached (see logFunnel / trial_funnel_events).
+  useEffect(() => {
+    if (!authUser?.id) return;
+    if (onboardingStep) logFunnel(authUser.id, onboardingStep + "_shown");
+    else if (form) logFunnel(authUser.id, "dashboard_shown");
+  }, [authUser?.id, onboardingStep, form]);
   // Block all rendering until we know for sure whether someone is logged in (and
   // who). This closes the race condition where the dashboard/vocab UI could mount
   // for a moment with ACTIVE_USER_ID still null (before Supabase's async
@@ -15402,7 +15431,7 @@ Respond ONLY with a valid JSON array, no markdown, no backticks:
         <div style={{ background:"linear-gradient(135deg,#1e1b4b,#0f172a)", border:"1.5px solid rgba(139,92,246,0.4)", borderRadius:20, padding:"36px 32px", maxWidth:420, width:"90%", textAlign:"center", boxShadow:"0 8px 40px rgba(139,92,246,0.25)" }}>
           <p style={{ color:C.purpleLight, fontSize:11, fontWeight:800, letterSpacing:1, margin:"0 0 8px" }}>{T.firstWinKicker}</p>
           <h2 style={{ color:"#f1f5f9", fontSize:20, fontWeight:900, margin:"0 0 20px" }}>{T.firstWinTitle}</h2>
-          <div onClick={()=>setFirstWinRevealed(true)} style={{ background:"rgba(255,255,255,0.04)", border:`1.5px solid ${C.border}`, borderRadius:14, padding:"30px 16px", marginBottom:20, cursor:"pointer" }}>
+          <div onClick={()=>{ setFirstWinRevealed(true); logFunnel(authUser?.id, "first_win_revealed"); }} style={{ background:"rgba(255,255,255,0.04)", border:`1.5px solid ${C.border}`, borderRadius:14, padding:"30px 16px", marginBottom:20, cursor:"pointer" }}>
             <p style={{ color:"#f1f5f9", fontSize:34, fontWeight:900, margin:"0 0 10px" }}>{item.word}</p>
             {firstWinRevealed ? (
               <>
@@ -15424,6 +15453,7 @@ Respond ONLY with a valid JSON array, no markdown, no backticks:
               // never fires it, but has its own manual "Share > Add to Home
               // Screen" steps worth showing). Otherwise skip straight to the dashboard.
               const canShowInstallStep = !alreadyStandalone && (canInstallPwa || isIOSNow);
+              logFunnel(authUser?.id, "first_win_done");
               setOnboardingStep("firstquiz");
             }} style={{ ...S.btn, width:"100%", background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff" }}>
               🎉 {T.firstWinDoneBtn}
@@ -15461,8 +15491,8 @@ Respond ONLY with a valid JSON array, no markdown, no backticks:
               <button onClick={()=>makeFirstQuiz(fqText)} disabled={fqLoading || !fqText.trim()} style={{ ...S.btn, width:"100%", marginBottom:8, background:(fqLoading||!fqText.trim())?"rgba(139,92,246,0.15)":`linear-gradient(135deg,${C.purple},#9333ea)`, color:(fqLoading||!fqText.trim())?"#64748b":"#fff" }}>
                 {fqLoading ? `⏳ ${T.fqLoading}` : T.fqStart}
               </button>
-              <button onClick={()=>{ setFqText(FQ_SAMPLE); makeFirstQuiz(FQ_SAMPLE); }} disabled={fqLoading} style={{ ...S.btn, width:"100%", marginBottom:6, background:C.card, border:`1px solid ${C.border}`, color:"#cbd5e1" }}>{T.fqSample}</button>
-              <button onClick={()=>goAfterQuiz()} style={{ ...S.btn, width:"100%", background:"none", border:"none", color:"#64748b" }}>{T.fqSkip}</button>
+              <button onClick={()=>{ logFunnel(authUser?.id, "quiz_sample_clicked"); setFqText(FQ_SAMPLE); makeFirstQuiz(FQ_SAMPLE); }} disabled={fqLoading} style={{ ...S.btn, width:"100%", marginBottom:6, background:C.card, border:`1px solid ${C.border}`, color:"#cbd5e1" }}>{T.fqSample}</button>
+              <button onClick={()=>{ logFunnel(authUser?.id, "quiz_skipped"); goAfterQuiz(); }} style={{ ...S.btn, width:"100%", background:"none", border:"none", color:"#64748b" }}>{T.fqSkip}</button>
             </>
           ) : (
             <>
@@ -15475,7 +15505,7 @@ Respond ONLY with a valid JSON array, no markdown, no backticks:
                 const bg = !picked ? C.card : isRight ? "rgba(34,197,94,0.18)" : isPick ? "rgba(239,68,68,0.18)" : C.card;
                 const bd = !picked ? C.border : isRight ? "rgba(34,197,94,0.6)" : isPick ? "rgba(239,68,68,0.6)" : C.border;
                 return (
-                  <button key={oi} disabled={picked} onClick={()=>setFqPicked(oi)} style={{ ...S.btn, width:"100%", marginBottom:8, textAlign:"left", background:bg, border:`1.5px solid ${bd}`, color:"#f1f5f9" }}>
+                  <button key={oi} disabled={picked} onClick={()=>{ setFqPicked(oi); logFunnel(authUser?.id, "quiz_answered"); }} style={{ ...S.btn, width:"100%", marginBottom:8, textAlign:"left", background:bg, border:`1.5px solid ${bd}`, color:"#f1f5f9" }}>
                     {["①","②","③","④"][oi] || ""} {opt}
                   </button>
                 );
@@ -15485,7 +15515,7 @@ Respond ONLY with a valid JSON array, no markdown, no backticks:
                   <p style={{ color: fqPicked === q.answer ? C.green : "#fbbf24", fontSize:13, fontWeight:700, margin:"4px 0 12px" }}>
                     {fqPicked === q.answer ? T.fqCorrect : `${T.fqWrong} ${q.options[q.answer]}`}
                   </p>
-                  <button onClick={()=>{ if (last) { goAfterQuiz(); } else { setFqIdx(fqIdx + 1); setFqPicked(null); } }} style={{ ...S.btn, width:"100%", background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff" }}>
+                  <button onClick={()=>{ if (last) { logFunnel(authUser?.id, "quiz_finished"); goAfterQuiz(); } else { setFqIdx(fqIdx + 1); setFqPicked(null); } }} style={{ ...S.btn, width:"100%", background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff" }}>
                     {last ? T.fqDone : T.fqNext}
                   </button>
                 </>
@@ -15505,9 +15535,9 @@ Respond ONLY with a valid JSON array, no markdown, no backticks:
           <h2 style={{ color:"#f1f5f9", fontSize:19, fontWeight:900, margin:"0 0 8px" }}>{T.readerCardTitle}</h2>
           <p style={{ color:"#94a3b8", fontSize:13, margin:"0 0 20px", lineHeight:1.6 }}>{T.readerCardDesc}</p>
           <a href="https://chromewebstore.google.com/detail/eambfoiipilfnedcofindninaachibge" target="_blank" rel="noopener noreferrer"
-            onClick={()=>{ hideCard(); setOnboardingStep("remind"); }}
+            onClick={()=>{ logFunnel(authUser?.id, "reader_clicked"); hideCard(); setOnboardingStep("remind"); }}
             style={{ display:"block", padding:"13px 16px", borderRadius:12, background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff", fontSize:14, fontWeight:800, textDecoration:"none", marginBottom:10 }}>{T.readerCardCta}</a>
-          <button onClick={()=>{ hideCard(); setOnboardingStep("remind"); }} style={{ ...S.btn, width:"100%", background:"none", border:"none", color:"#64748b" }}>{T.readerCardLater}</button>
+          <button onClick={()=>{ logFunnel(authUser?.id, "reader_later"); hideCard(); setOnboardingStep("remind"); }} style={{ ...S.btn, width:"100%", background:"none", border:"none", color:"#64748b" }}>{T.readerCardLater}</button>
         </div>
       </div>
     );
@@ -15531,9 +15561,9 @@ Respond ONLY with a valid JSON array, no markdown, no backticks:
           <h2 style={{ color:"#f1f5f9", fontSize:19, fontWeight:900, margin:"0 0 8px" }}>{T.remindTitle}</h2>
           <p style={{ color:"#94a3b8", fontSize:13, margin:"0 0 20px", lineHeight:1.6 }}>{T.remindDesc}</p>
           {slots.map(([label, h, m]) => (
-            <button key={label} onClick={() => { addReviewToCalendar(h, m); afterRemind(); }} style={{ ...S.btn, width:"100%", marginBottom:10, background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff" }}>{label}</button>
+            <button key={label} onClick={() => { logFunnel(authUser?.id, "remind_set"); addReviewToCalendar(h, m); afterRemind(); }} style={{ ...S.btn, width:"100%", marginBottom:10, background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff" }}>{label}</button>
           ))}
-          <button onClick={afterRemind} style={{ ...S.btn, width:"100%", background:"none", border:"none", color:"#64748b" }}>{T.remindSkip}</button>
+          <button onClick={() => { logFunnel(authUser?.id, "remind_skipped"); afterRemind(); }} style={{ ...S.btn, width:"100%", background:"none", border:"none", color:"#64748b" }}>{T.remindSkip}</button>
         </div>
       </div>
     );
@@ -15541,6 +15571,7 @@ Respond ONLY with a valid JSON array, no markdown, no backticks:
   if (onboardingStep === "install") {
     const isIOS = typeof navigator !== "undefined" && /iphone|ipad|ipod/i.test(navigator.userAgent);
     const handleInstallClick = async () => {
+      logFunnel(authUser?.id, "install_clicked");
       const evt = deferredInstallPromptRef.current;
       if (evt) {
         evt.prompt();
@@ -15558,12 +15589,12 @@ Respond ONLY with a valid JSON array, no markdown, no backticks:
           {isIOS ? (
             <>
               <p style={{ color:"#cbd5e1", fontSize:12, margin:"0 0 18px", lineHeight:1.6 }}>{T.installPromptIosSteps}</p>
-              <button onClick={()=>setOnboardingStep(nextStepAfterOnboarding)} style={{ ...S.btn, width:"100%", background:C.card, color:"#94a3b8", border:`1px solid ${C.border}` }}>{T.installPromptSkip}</button>
+              <button onClick={()=>{ logFunnel(authUser?.id, "install_skipped"); setOnboardingStep(nextStepAfterOnboarding); }} style={{ ...S.btn, width:"100%", background:C.card, color:"#94a3b8", border:`1px solid ${C.border}` }}>{T.installPromptSkip}</button>
             </>
           ) : (
             <>
               <button onClick={handleInstallClick} style={{ ...S.btn, width:"100%", marginBottom:10, background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff" }}>{T.installPromptCta}</button>
-              <button onClick={()=>setOnboardingStep(nextStepAfterOnboarding)} style={{ ...S.btn, width:"100%", background:"none", border:"none", color:"#64748b" }}>{T.installPromptSkip}</button>
+              <button onClick={()=>{ logFunnel(authUser?.id, "install_skipped"); setOnboardingStep(nextStepAfterOnboarding); }} style={{ ...S.btn, width:"100%", background:"none", border:"none", color:"#64748b" }}>{T.installPromptSkip}</button>
             </>
           )}
         </div>
@@ -15575,13 +15606,14 @@ Respond ONLY with a valid JSON array, no markdown, no backticks:
       <CompleteProfileScreen
         initialForm={form}
         onFinish={(extra) => {
+          logFunnel(authUser?.id, "profile_completed");
           const saved = { ...form, ...extra, profileComplete: true };
           setForm(saved);
           try { localStorage.setItem(scopedKey("gaku_form"), JSON.stringify(saved)); } catch {}
           if (authUser) { syncMigrationBridge(authUser.id); }
           setOnboardingStep(null);
         }}
-        onSkip={() => setOnboardingStep(null)}
+        onSkip={() => { logFunnel(authUser?.id, "profile_skipped"); setOnboardingStep(null); }}
       />
     );
   }
