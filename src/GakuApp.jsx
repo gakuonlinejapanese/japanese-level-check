@@ -123,6 +123,7 @@ function findTaskResourceLink(taskText, taskMode) {
 // covers that kind of practice, so a task like "単語復習" can link straight into GAKU's own
 // Vocabulary/Subtitles/Create-From-Content/Conversation-Practice screens.
 const TASK_APP_NAV = [
+  { test: /GAKU Writing|writing practice|ライティング練習|書き写し|copying down/i, tab: "resources", resourceSubTab: "writing", labelKey: "navGoWriting" },
   { test: /発音|pronunciation/i, tab: "resources", resourceSubTab: "pronunciation", labelKey: "navGoPronunciation" },
   { test: /会話|conversation|speak/i, tab: "resources", resourceSubTab: "conversation", labelKey: "navGoConversation" },
   { test: /字幕|subtitle/i, tab: "subtitles", labelKey: "navGoSubtitles" },
@@ -333,7 +334,7 @@ Object.values(JLPT_EXAM_RESOURCES).forEach(levelData => Object.values(levelData)
 
 const SKILL_LABELS = {
   pronunciation:"🔊 Pronunciation", listening:"👂 Listening", conversation:"💬 Conversation",
-  jlpt:"🎯 JLPT Prep", reading:"📖 Reading", kanji:"🈳 Kanji", grammar:"📝 Grammar",
+  jlpt:"🎯 JLPT Prep", reading:"📖 Reading", kanji:"🈳 Kanji", grammar:"📝 Grammar", writing:"✍️ Writing/Typing",
   onlyHiragana:"あ Only Hiragana", onlyKatakana:"ア Only Katakana",
 };
 // Selecting one of these switches Create From Content generation into a kana-only mode —
@@ -630,6 +631,10 @@ const UI_TRANSLATIONS = {
     goalJob: "Get a job in Japan", goalTravel: "Travel to Japan",
     goalStudyAbroad: "Study abroad in Japan", goalConversation: "Daily conversation",
     goalOther: "Other",
+    skillWriting: "✍️ Writing/Typing",
+    taskWriting: "GAKU Writing Practice — copy sentences or answer a writing question",
+    goalWrite: "Be able to write in Japanese",
+    navGoWriting: "✍️ Go to Writing Practice",
     goalAnime: "Be able to understand Anime/Manga",
     whatDoYouWantToStudy: "WHAT DO YOU WANT TO STUDY?",
     customGoalPlaceholder: "Tell us what you'd like to study or achieve...",
@@ -1121,6 +1126,10 @@ const UI_TRANSLATIONS = {
     goalJob: "Trouver un emploi au Japon", goalTravel: "Voyager au Japon",
     goalStudyAbroad: "Étudier au Japon", goalConversation: "Conversation quotidienne",
     goalOther: "Autre",
+    skillWriting: "✍️ Écriture/Saisie",
+    taskWriting: "GAKU Writing Practice — recopier des phrases ou répondre à une question d'écriture",
+    goalWrite: "Être capable d'écrire en japonais",
+    navGoWriting: "✍️ Aller à la pratique d'écriture",
     goalAnime: "Être capable de comprendre les anime/mangas",
     whatDoYouWantToStudy: "QUE SOUHAITEZ-VOUS ÉTUDIER ?",
     customGoalPlaceholder: "Dites-nous ce que vous souhaitez étudier ou accomplir...",
@@ -1607,6 +1616,10 @@ const UI_TRANSLATIONS = {
     goalJob: "Conseguir trabajo en Japón", goalTravel: "Viajar a Japón",
     goalStudyAbroad: "Estudiar en Japón", goalConversation: "Conversación diaria",
     goalOther: "Otro",
+    skillWriting: "✍️ Escritura/Tipeo",
+    taskWriting: "GAKU Writing Practice — copiar frases o responder una pregunta de escritura",
+    goalWrite: "Poder escribir en japonés",
+    navGoWriting: "✍️ Ir a la práctica de escritura",
     goalAnime: "Poder entender anime/manga",
     whatDoYouWantToStudy: "¿QUÉ QUIERES ESTUDIAR?",
     customGoalPlaceholder: "Cuéntanos qué te gustaría estudiar o lograr...",
@@ -2093,6 +2106,10 @@ const UI_TRANSLATIONS = {
     goalJob: "Conseguir emprego no Japão", goalTravel: "Viajar ao Japão",
     goalStudyAbroad: "Estudar no Japão", goalConversation: "Conversação diária",
     goalOther: "Outro",
+    skillWriting: "✍️ Escrita/Digitação",
+    taskWriting: "GAKU Writing Practice — copiar frases ou responder a uma pergunta de escrita",
+    goalWrite: "Conseguir escrever em japonês",
+    navGoWriting: "✍️ Ir para a prática de escrita",
     goalAnime: "Conseguir entender anime/mangá",
     whatDoYouWantToStudy: "O QUE VOCÊ QUER ESTUDAR?",
     customGoalPlaceholder: "Conta-nos o que você gostaria de estudar ou alcançar...",
@@ -2579,6 +2596,10 @@ const UI_TRANSLATIONS = {
     goalJob: "Arbeit in Japan finden", goalTravel: "Japan bereisen",
     goalStudyAbroad: "In Japan studieren", goalConversation: "Alltagsgespräch",
     goalOther: "Sonstiges",
+    skillWriting: "✍️ Schreiben/Tippen",
+    taskWriting: "GAKU Writing Practice — Sätze abschreiben oder eine Schreibaufgabe beantworten",
+    goalWrite: "Auf Japanisch schreiben können",
+    navGoWriting: "✍️ Zur Schreibübung",
     goalAnime: "Anime/Manga verstehen können",
     whatDoYouWantToStudy: "WAS MÖCHTEN SIE LERNEN?",
     customGoalPlaceholder: "Erzählen Sie uns, was Sie lernen oder erreichen möchten...",
@@ -3065,6 +3086,10 @@ const UI_TRANSLATIONS = {
     goalJob: "Trovare lavoro in Giappone", goalTravel: "Viaggiare in Giappone",
     goalStudyAbroad: "Studiare in Giappone", goalConversation: "Conversazione quotidiana",
     goalOther: "Altro",
+    skillWriting: "✍️ Scrittura/Digitazione",
+    taskWriting: "GAKU Writing Practice — copiare frasi o rispondere a una domanda di scrittura",
+    goalWrite: "Essere in grado di scrivere in giapponese",
+    navGoWriting: "✍️ Vai alla pratica di scrittura",
     goalAnime: "Essere in grado di capire anime/manga",
     whatDoYouWantToStudy: "COSA VUOI STUDIARE?",
     customGoalPlaceholder: "Dicci cosa vorresti studiare o raggiungere...",
@@ -3551,6 +3576,10 @@ const UI_TRANSLATIONS = {
     goalJob: "在日本找工作", goalTravel: "去日本旅行",
     goalStudyAbroad: "去日本留学", goalConversation: "日常对话",
     goalOther: "其他",
+    skillWriting: "✍️ 书写/打字",
+    taskWriting: "GAKU Writing Practice——抄写句子或回答写作题",
+    goalWrite: "能够用日语写作",
+    navGoWriting: "✍️ 前往写作练习",
     goalAnime: "能够看懂动漫/漫画",
     whatDoYouWantToStudy: "你想学什么？",
     customGoalPlaceholder: "告诉我们你想学习或实现什么...",
@@ -4037,6 +4066,10 @@ const UI_TRANSLATIONS = {
     goalJob: "在日本找工作", goalTravel: "去日本旅行",
     goalStudyAbroad: "去日本留學", goalConversation: "日常對話",
     goalOther: "其他",
+    skillWriting: "✍️ 書寫/打字",
+    taskWriting: "GAKU Writing Practice——抄寫句子或回答寫作題",
+    goalWrite: "能夠用日語寫作",
+    navGoWriting: "✍️ 前往寫作練習",
     goalAnime: "能夠看懂動漫/漫畫",
     whatDoYouWantToStudy: "你想學什麼？",
     customGoalPlaceholder: "告訴我們你想學習或實現什麼...",
@@ -4523,6 +4556,10 @@ const UI_TRANSLATIONS = {
     goalJob: "일본에서 취업", goalTravel: "일본 여행",
     goalStudyAbroad: "일본 유학", goalConversation: "일상 회화",
     goalOther: "기타",
+    skillWriting: "✍️ 쓰기/타이핑",
+    taskWriting: "GAKU Writing Practice — 문장 따라 쓰기 또는 쓰기 문제 답하기",
+    goalWrite: "일본어로 글을 쓸 수 있게 되기",
+    navGoWriting: "✍️ 쓰기 연습으로 이동",
     goalAnime: "애니메이션/만화 이해하기",
     whatDoYouWantToStudy: "무엇을 공부하고 싶으세요?",
     customGoalPlaceholder: "공부하거나 달성하고 싶은 것을 알려주세요...",
@@ -5009,6 +5046,10 @@ const UI_TRANSLATIONS = {
     goalJob: "หางานในญี่ปุ่น", goalTravel: "ท่องเที่ยวญี่ปุ่น",
     goalStudyAbroad: "เรียนต่อที่ญี่ปุ่น", goalConversation: "สนทนาประจำวัน",
     goalOther: "อื่น ๆ",
+    skillWriting: "✍️ การเขียน/พิมพ์",
+    taskWriting: "GAKU Writing Practice — คัดลอกประโยคหรือตอบโจทย์การเขียน",
+    goalWrite: "สามารถเขียนภาษาญี่ปุ่นได้",
+    navGoWriting: "✍️ ไปที่ฝึกเขียน",
     goalAnime: "สามารถเข้าใจอนิเมะ/มังงะได้",
     whatDoYouWantToStudy: "คุณอยากเรียนอะไร?",
     customGoalPlaceholder: "บอกเราว่าคุณอยากเรียนหรือบรรลุอะไร...",
@@ -5495,6 +5536,10 @@ const UI_TRANSLATIONS = {
     goalJob: "Cari kerja di Jepun", goalTravel: "Melancong ke Jepun",
     goalStudyAbroad: "Belajar di Jepun", goalConversation: "Perbualan harian",
     goalOther: "Lain-lain",
+    skillWriting: "✍️ Menulis/Menaip",
+    taskWriting: "GAKU Writing Practice — salin ayat atau jawab soalan menulis",
+    goalWrite: "Dapat menulis dalam bahasa Jepun",
+    navGoWriting: "✍️ Pergi ke Latihan Menulis",
     goalAnime: "Dapat memahami anime/manga",
     whatDoYouWantToStudy: "APA YANG INGIN ANDA PELAJARI?",
     customGoalPlaceholder: "Beritahu kami apa yang ingin anda pelajari atau capai...",
@@ -5981,6 +6026,10 @@ const UI_TRANSLATIONS = {
     goalJob: "Mendapat pekerjaan di Jepang", goalTravel: "Perjalanan ke Jepang",
     goalStudyAbroad: "Belajar di Jepang", goalConversation: "Percakapan sehari-hari",
     goalOther: "Lainnya",
+    skillWriting: "✍️ Menulis/Mengetik",
+    taskWriting: "GAKU Writing Practice — salin kalimat atau jawab soal menulis",
+    goalWrite: "Dapat menulis dalam bahasa Jepang",
+    navGoWriting: "✍️ Buka Latihan Menulis",
     goalAnime: "Dapat memahami anime/manga",
     whatDoYouWantToStudy: "APA YANG INGIN ANDA PELAJARI?",
     customGoalPlaceholder: "Ceritakan apa yang ingin Anda pelajari atau capai...",
@@ -6467,6 +6516,10 @@ const UI_TRANSLATIONS = {
     goalJob: "Tìm việc ở Nhật", goalTravel: "Du lịch Nhật Bản",
     goalStudyAbroad: "Du học Nhật Bản", goalConversation: "Giao tiếp hàng ngày",
     goalOther: "Khác",
+    skillWriting: "✍️ Viết/Gõ",
+    taskWriting: "GAKU Writing Practice — chép câu hoặc trả lời đề bài viết",
+    goalWrite: "Có thể viết bằng tiếng Nhật",
+    navGoWriting: "✍️ Đến Luyện viết",
     goalAnime: "Có thể hiểu anime/manga",
     whatDoYouWantToStudy: "BẠN MUỐN HỌC GÌ?",
     customGoalPlaceholder: "Cho chúng tôi biết bạn muốn học hoặc đạt được gì...",
@@ -6953,6 +7006,10 @@ const UI_TRANSLATIONS = {
     goalJob: "जापान में नौकरी पाएं", goalTravel: "जापान यात्रा करें",
     goalStudyAbroad: "जापान में पढ़ाई करें", goalConversation: "दैनिक बातचीत",
     goalOther: "अन्य",
+    skillWriting: "✍️ लेखन/टाइपिंग",
+    taskWriting: "GAKU Writing Practice — वाक्य नकल करें या लेखन प्रश्न का उत्तर दें",
+    goalWrite: "जापानी में लिखने में सक्षम होना",
+    navGoWriting: "✍️ लेखन अभ्यास पर जाएँ",
     goalAnime: "एनीमे/मंगा समझने में सक्षम होना",
     whatDoYouWantToStudy: "आप क्या पढ़ना चाहते हैं?",
     customGoalPlaceholder: "हमें बताएं कि आप क्या सीखना या हासिल करना चाहते हैं...",
@@ -7439,6 +7496,10 @@ const UI_TRANSLATIONS = {
     goalJob: "日本で仕事を見つける", goalTravel: "日本を旅行する",
     goalStudyAbroad: "日本に留学する", goalConversation: "日常会話",
     goalOther: "その他",
+    skillWriting: "✍️ ライティング/タイピング",
+    taskWriting: "GAKU Writing Practice — 文の書き写し、または作文の問題に答える",
+    goalWrite: "日本語で書けるようになる",
+    navGoWriting: "✍️ ライティング練習へ",
     goalAnime: "アニメ・漫画を理解できるようになる",
     whatDoYouWantToStudy: "何を勉強したいですか？",
     customGoalPlaceholder: "勉強したいことや達成したいことを教えてください...",
@@ -7925,6 +7986,10 @@ const UI_TRANSLATIONS = {
     goalJob: "Japonya'da iş bul", goalTravel: "Japonya'ya seyahat et",
     goalStudyAbroad: "Japonya'da okuyun", goalConversation: "Günlük konuşma",
     goalOther: "Diğer",
+    skillWriting: "✍️ Yazma/Yazı yazma",
+    taskWriting: "GAKU Writing Practice — cümleleri kopyala veya bir yazma sorusunu yanıtla",
+    goalWrite: "Japonca yazabilmek",
+    navGoWriting: "✍️ Yazma Alıştırmasına git",
     goalAnime: "Anime/Manga anlayabilmek",
     whatDoYouWantToStudy: "NE ÇALIŞMAK İSTİYORSUNUZ?",
     customGoalPlaceholder: "Ne öğrenmek veya başarmak istediğinizi söyleyin...",
@@ -8411,6 +8476,10 @@ const UI_TRANSLATIONS = {
     goalJob: "जापानमा जागिर खोज्ने", goalTravel: "जापान भ्रमण गर्ने",
     goalStudyAbroad: "जापानमा अध्ययन गर्ने", goalConversation: "दैनिक कुराकानी",
     goalOther: "अन्य",
+    skillWriting: "✍️ लेखन/टाइपिङ",
+    taskWriting: "GAKU Writing Practice — वाक्य नक्कल गर्नुहोस् वा लेखन प्रश्नको उत्तर दिनुहोस्",
+    goalWrite: "जापानीमा लेख्न सक्षम हुनु",
+    navGoWriting: "✍️ लेखन अभ्यासमा जानुहोस्",
     goalAnime: "एनिमे/मंगा बुझ्न सक्षम हुनु",
     whatDoYouWantToStudy: "तपाईं के अध्ययन गर्न चाहनुहुन्छ?",
     customGoalPlaceholder: "तपाईं के सिक्न वा हासिल गर्न चाहनुहुन्छ भन्नुहोस्...",
@@ -8897,6 +8966,10 @@ const UI_TRANSLATIONS = {
     goalJob: "Maghanap ng trabaho sa Japan", goalTravel: "Magbiyahe sa Japan",
     goalStudyAbroad: "Mag-aral sa Japan", goalConversation: "Pang-araw-araw na pag-uusap",
     goalOther: "Iba pa",
+    skillWriting: "✍️ Pagsulat/Pag-type",
+    taskWriting: "GAKU Writing Practice — kopyahin ang mga pangungusap o sagutin ang tanong sa pagsulat",
+    goalWrite: "Makapagsulat sa Japanese",
+    navGoWriting: "✍️ Pumunta sa Pagsasanay sa Pagsulat",
     goalAnime: "Maunawaan ang Anime/Manga",
     whatDoYouWantToStudy: "ANO ANG GUSTO MONG PAG-ARALAN?",
     customGoalPlaceholder: "Sabihin sa amin kung ano ang gusto mong pag-aralan o makamit...",
@@ -11285,7 +11358,7 @@ function ContentAnalyzer({ form, onLevelUp }) {
   // Only build activities for the skills the student picked in "WHAT DO YOU WANT TO STUDY?".
   // Falls back to all skills if the student hasn't selected any yet.
   const ALL_SKILLS = ["pronunciation","listening","conversation","jlpt","reading","kanji","grammar"];
-  const allowedSkills = (form.skills && form.skills.length) ? form.skills.filter(s => ALL_SKILLS.includes(s)) : ALL_SKILLS;
+  const allowedSkills = (() => { const f = (form.skills && form.skills.length) ? form.skills.filter(s => ALL_SKILLS.includes(s)) : []; return f.length ? f : ALL_SKILLS; })();
 
   // "Only Hiragana" / "Only Katakana" are notation-mode toggles, not activity types themselves —
   // when picked, every generated activity below is rendered using ONLY that script (no kanji,
@@ -13319,13 +13392,14 @@ const SKILL_NOTE_KEY = {
   kanji:        "taskKanji",
   jlpt:         "taskJlpt",
   pronunciation:"taskPronunciation",
+  writing:      "taskWriting",
 };
 
 // Skill label T-keys
 const SKILL_LABEL_KEY = {
   pronunciation:"skillPronunciation", listening:"skillListening",
   conversation:"skillConversation", jlpt:"skillJlpt",
-  reading:"skillReading", kanji:"skillKanji", grammar:"skillGrammar",
+  reading:"skillReading", kanji:"skillKanji", grammar:"skillGrammar", writing:"skillWriting",
   onlyHiragana:"skillOnlyHiragana", onlyKatakana:"skillOnlyKatakana",
 };
 
@@ -13333,7 +13407,7 @@ const SKILL_LABEL_KEY = {
 // 4 modes a resource link can actually match: reading / listening / speaking / writing.
 const SKILL_TO_MODE = {
   conversation:"speaking", listening:"listening", reading:"reading",
-  grammar:"writing", kanji:"writing", jlpt:"reading", pronunciation:"speaking",
+  grammar:"writing", kanji:"writing", jlpt:"reading", pronunciation:"speaking", writing:"writing",
 };
 
 function buildSchedule(form, T) {
@@ -13352,6 +13426,7 @@ function buildSchedule(form, T) {
     { skill:"kanji",        mins:Math.round(mins*0.1) },
     { skill:"jlpt",         mins:Math.round(mins*0.2) },
     { skill:"pronunciation",mins:Math.round(mins*0.1) },
+    { skill:"writing",      mins:Math.round(mins*0.15) },
   ].filter(b => skills.includes(b.skill));
 
   if (allBlocks.length === 0) {
@@ -13486,6 +13561,12 @@ async function buildAIWeeklySchedule(form, weekNum, totalWeeks) {
     jlptOnlyInstruction = `\nSTRICT RULE: only create tasks for the skills the student selected below. Do not add tasks for any other skill area, even if it seems generally useful — if they only selected Grammar, every task this week must be Grammar.\n`;
   }
 
+  const goalsArr = Array.isArray(form.goal) ? form.goal : (form.goal ? [form.goal] : []);
+  const isWriteGoal = goalsArr.includes("Write in Japanese") || (form.displayGoal || "").includes("Write in Japanese");
+  const wantsWriting = selectedSkills.includes("writing") || isWriteGoal;
+  const writingToolInstruction = wantsWriting
+    ? `\nIN-APP WRITING TOOL: GAKU Master has a built-in "Writing" tab (Resources → Writing) with two modes — "Copying down" (the student pastes Japanese text and copies it character by character with stroke-order feedback) and "Questions" (the student pastes a writing question, types an answer in Japanese, and gets it checked with a model answer). ${isWriteGoal ? "This student's final goal is being able to write in Japanese, so " : ""}Whenever a day's focus is writing or typing in Japanese, make at least one task use this tool by the exact name "GAKU Writing Practice" (e.g. "GAKU Writing Practice — Copying down mode: copy 5 sentences from this week's reading (15 min)"). This in-app tool is an allowed exception to any source restrictions above; do not invent external writing sites for it.\n`
+    : "";
   const prompt = `You are an expert Japanese language teacher using CLT (Communicative Language Teaching) methodology.
 ${langInstruction}
 Student profile:
@@ -13497,7 +13578,7 @@ Student profile:
 - Study time per day: ${minsPerDay} minutes
 - Study days per week: ${studyDays} days (${activeDays.join(", ")})
 - Skills to focus on: ${selectedSkills.join(", ")}
-${animeInstruction}${jlptOnlyInstruction}
+${animeInstruction}${jlptOnlyInstruction}${writingToolInstruction}
 Working backwards from the goal:
 - Week ${weekNum} of ${totalWeeks}: ${progressPct < 25 ? "Foundation building phase — establish core habits and basics" : progressPct < 50 ? "Development phase — expanding knowledge and skills" : progressPct < 75 ? "Consolidation phase — deepening understanding and fluency" : "Mastery phase — polishing, testing, and refining"}
 
@@ -13850,7 +13931,7 @@ const GOAL_KEY_MAP = {
   "Pass JLPT N5":"goalN5", "Pass JLPT N4":"goalN4", "Pass JLPT N3":"goalN3",
   "Pass JLPT N2":"goalN2", "Pass JLPT N1":"goalN1", "Get a job in Japan":"goalJob",
   "Travel to Japan":"goalTravel", "Study abroad in Japan":"goalStudyAbroad",
-  "Daily conversation":"goalConversation", "Understand Anime/Manga":"goalAnime", "Other":"goalOther",
+  "Daily conversation":"goalConversation", "Understand Anime/Manga":"goalAnime", "Write in Japanese":"goalWrite", "Other":"goalOther",
 };
 const TIMELINE_KEY_MAP = {
   "Less than 6 months":"lessThan6", "Within 1 year":"within1",
@@ -14330,7 +14411,6 @@ function FormScreen({ onSubmit, onBack, onCancel, initialJlpt, initialForm, onLo
                 </button>
               ))}
             </div>
-            <p style={{ color:"#475569", fontSize:11, marginTop:6 }}>{T.writingNote}</p>
             {(form.skills.includes("onlyHiragana") || form.skills.includes("onlyKatakana") || form.jlpt === "Beginner") && (
               <div style={{ marginTop:10, background:"rgba(6,182,212,0.06)", border:`1px solid rgba(6,182,212,0.2)`, borderRadius:10, padding:"12px 14px" }}>
                 <p style={{ color:C.teal, fontSize:12, fontWeight:700, margin:"0 0 4px" }}>{T.kanaResourcesTitle}</p>
