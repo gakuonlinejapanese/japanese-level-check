@@ -87,6 +87,12 @@
     <div class="cal-grid" id="cal-grid" style="margin-top:14px;"></div>
   </section>
 
+  <section id="reschedule-section">
+    <h2>🔁 予約の日時変更（Free Trial・Official Student共通）</h2>
+    <p style="font-size:12px;color:#64748b;margin:0 0 8px;">今後の確定済み予約すべてが対象です。新しい日付・時間を選んで「変更」を押してください。Zoomリンクはそのまま引き継がれます。</p>
+    <div id="reschedule-list"><p>読み込み中…</p></div>
+  </section>
+
   <section>
     <h2>🔗 Zoomリンク一括登録（レッスン30分前リマインドメール用）</h2>
     <div class="row">
@@ -246,6 +252,7 @@ function enterAdmin() {
   loadOfficialStudents();
   loadTrialLessonList();
   loadCancellationRequests();
+  loadRescheduleList();
 }
 
 async function api(action, extra = {}) {
@@ -305,7 +312,7 @@ async function confirmBooking(waitlistId, chosenOption) {
   const req = (await api("list-waitlist")).requests.find(r => r.id === waitlistId);
   const planInfo = req ? PLAN_LINKS[req.plan_key] : null;
   await api("confirm-booking", { waitlistId, chosenOption, stripeLink: planInfo ? planInfo.url : "" });
-  loadWaitlist(); loadAvailabilityGrid();
+  loadWaitlist(); loadAvailabilityGrid(); loadRescheduleList();
 }
 
 async function rejectWaitlist(waitlistId) {
@@ -379,7 +386,15 @@ async function toggleSlot(date, time, status) {
   } else if (status === "blocked") {
     await api("unblock-slot", { date, time });
   } else {
-    alert("予約済みの枠です。ウェイトリスト一覧またはOfficial Students欄から管理してください。");
+    const slot = availabilityMap[`${date}_${time}`];
+    const row = slot && document.getElementById("rs-row-" + slot.id);
+    if (row) {
+      row.scrollIntoView({ behavior: "smooth", block: "center" });
+      row.style.outline = "2px solid #2563eb";
+      setTimeout(() => { row.style.outline = ""; }, 2500);
+    } else {
+      alert("予約済みの枠です。「予約の日時変更」欄から日時を変更できます。");
+    }
     return;
   }
   loadAvailabilityGrid();
@@ -462,6 +477,7 @@ async function applyZoomLink() {
   alert(`${checked.length}件の予約にZoomリンクを登録しました。`);
   loadZoomDaySlots();
   loadTrialLessonList();
+  loadRescheduleList();
 }
 
 async function loadOfficialStudents() {
@@ -484,6 +500,46 @@ async function loadOfficialStudents() {
   if (sel) {
     sel.innerHTML = (data.students || []).map(s => `<option value="${s.id}">${s.name} (${s.email})</option>`).join("");
   }
+}
+
+// ---------- 予約の日時変更（予約の種類を問わない） ----------
+const RS_SOURCE_LABEL = { trial_lesson: "🆓 Free Trial", official: "⭐ Official", waitlist: "📝 Waitlist" };
+
+async function loadRescheduleList() {
+  const el = document.getElementById("reschedule-list");
+  const todayStr = new Date().toISOString().slice(0, 10);
+  const data = await api("list-availability", { fromDate: todayStr });
+  const booked = (data.slots || []).filter(s => s.status === "booked")
+    .sort((a, b) => (a.lesson_date + a.start_time).localeCompare(b.lesson_date + b.start_time));
+
+  if (booked.length === 0) { el.innerHTML = "<p>今後の確定済み予約はありません。</p>"; return; }
+
+  el.innerHTML = booked.map(s => {
+    const src = RS_SOURCE_LABEL[s.source] || "";
+    const name = s.student_name || s.label || "(名前なし)";
+    return `<div class="req-card" id="rs-row-${s.id}" style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;">
+      <span style="min-width:200px;"><strong>${name}</strong> ${src ? `<span style="font-size:11px;color:#2563eb;">${src}</span>` : ""}<br/>
+        <span style="font-size:12px;color:#64748b;">現在: ${s.lesson_date} ${s.start_time.slice(0,5)} (JST)</span></span>
+      <input type="date" id="rs-date-${s.id}" value="${s.lesson_date}" />
+      <input type="time" id="rs-time-${s.id}" step="1800" value="${s.start_time.slice(0,5)}" />
+      <label style="font-size:12px;display:flex;align-items:center;gap:4px;"><input type="checkbox" id="rs-notify-${s.id}" checked /> 生徒にメール通知</label>
+      <button class="btn confirm" onclick="rescheduleBooking('${s.id}')">変更</button>
+    </div>`;
+  }).join("");
+}
+
+async function rescheduleBooking(id) {
+  const newDate = document.getElementById("rs-date-" + id).value;
+  const newTime = document.getElementById("rs-time-" + id).value;
+  const notifyStudent = document.getElementById("rs-notify-" + id).checked;
+  if (!newDate || !newTime) return alert("新しい日付と時間を入力してください");
+  if (!confirm(`この予約を ${newDate} ${newTime} (JST) に変更しますか？${notifyStudent ? "\n生徒に変更通知メールが送られます。" : ""}`)) return;
+  const r = await api("reschedule-booking", { id, newDate, newTime, notifyStudent });
+  if (r.error) return alert(r.error);
+  alert("日時を変更しました。" + (r.emailed ? "\n生徒に通知メールを送りました。" : "") + (r.emailNote ? "\n" + r.emailNote : ""));
+  loadRescheduleList();
+  loadAvailabilityGrid();
+  loadTrialLessonList();
 }
 
 async function loadTrialLessonList() {
@@ -518,6 +574,7 @@ async function createOfficialBooking() {
   alert("予約を作成しました。続けてZoomリンクを登録できます。");
   document.getElementById("booking-label").value = "";
   loadAvailabilityGrid();
+  loadRescheduleList();
 }
 
 async function editOfficialStudentName(id, currentName) {

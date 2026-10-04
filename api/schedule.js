@@ -25,6 +25,7 @@ import { sendEmail } from "./_resend.js";
 // POST { secret, action: "add-official-student", name, email, notes }
 // POST { secret, action: "update-official-student", id, name, email?, notes? }
 //   → 既存のOfficial Studentの名前（・メール・メモ）を更新
+// POST { secret, action: "reschedule-booking", id, newDate, newTime, notifyStudent }  → 予約の種類(Free Trial/Official/Waitlist)を問わず日時変更
 // POST { secret, action: "set-zoom-link", ids: [teacher_availability.id, ...], zoomLink }
 //   → 選択した確定済み予約(複数可)に同じZoomリンクを一括登録
 // POST { secret, action: "send-lesson-reminders" }
@@ -361,6 +362,85 @@ async function handleAcknowledgeCancellationRequest(supabase, body, res) {
   return res.status(200).json({ ok: true });
 }
 
+async function handleRescheduleBooking(supabase, body, res) {
+  const { id, newDate, newTime, notifyStudent } = body;
+  if (!id || !newDate || !newTime) return res.status(400).json({ error: "id, newDate and newTime are required" });
+  const time = newTime.length === 5 ? newTime + ":00" : newTime;
+
+  const { data: slot, error: findErr } = await supabase.from("teacher_availability").select("*").eq("id", id).maybeSingle();
+  if (findErr) return res.status(500).json({ error: findErr.message });
+  if (!slot) return res.status(404).json({ error: "予約が見つかりません" });
+  if (slot.status !== "booked") return res.status(400).json({ error: "予約済みの枠ではありません" });
+
+  const unchanged = slot.lesson_date === newDate && slot.start_time.slice(0, 5) === time.slice(0, 5);
+  if (unchanged) return res.status(400).json({ error: "日時が変わっていません" });
+
+  // 変更先に既に予約/ブロックがある場合は上書きしない
+  const { data: clash, error: clashErr } = await supabase
+    .from("teacher_availability").select("id, status, label")
+    .eq("lesson_date", newDate).eq("start_time", time).maybeSingle();
+  if (clashErr) return res.status(500).json({ error: clashErr.message });
+  if (clash) {
+    return res.status(409).json({
+      error: `${newDate} ${time.slice(0, 5)} は既に${clash.status === "booked" ? "予約済み" : "ブロック済み"}です${clash.label ? `（${clash.label}）` : ""}。先にその枠を解除するか、別の日時を選んでください。`,
+    });
+  }
+
+  // 日時を更新。日時が変わったのでリマインド送信済みフラグはリセットする（Zoomリンクはそのまま維持）
+  const { error: updErr } = await supabase
+    .from("teacher_availability")
+    .update({ lesson_date: newDate, start_time: time, reminder_sent_at: null })
+    .eq("id", id);
+  if (updErr) return res.status(500).json({ error: updErr.message });
+
+  // ウェイトリスト経由の予約は、確定日時も同期しておく
+  if (slot.waitlist_request_id) {
+    await supabase.from("waitlist_requests")
+      .update({ confirmed_date: newDate, confirmed_time: time, updated_at: new Date().toISOString() })
+      .eq("id", slot.waitlist_request_id);
+  }
+
+  // 生徒への通知（任意）。種類ごとに宛先・名前・タイムゾーンを引く
+  let emailed = false;
+  let emailNote = null;
+  if (notifyStudent) {
+    let name = null, email = null, tz = null;
+    try {
+      if (slot.official_student_id) {
+        const { data } = await supabase.from("official_students").select("name, email, timezone").eq("id", slot.official_student_id).maybeSingle();
+        if (data) { name = data.name; email = data.email; tz = data.timezone; }
+      } else if (slot.waitlist_request_id) {
+        const { data } = await supabase.from("waitlist_requests").select("student_name, student_email, student_timezone").eq("id", slot.waitlist_request_id).maybeSingle();
+        if (data) { name = data.student_name; email = data.student_email; tz = data.student_timezone; }
+      } else if (slot.trial_lesson_request_id) {
+        const { data } = await supabase.from("trial_lesson_requests").select("full_name, email, timezone_used").eq("id", slot.trial_lesson_request_id).maybeSingle();
+        if (data) { name = data.full_name; email = data.email; tz = data.timezone_used; }
+      }
+      if (email) {
+        await sendEmail({
+          to: email,
+          subject: "Your GAKU lesson time has been changed",
+          html: `
+            <p>Hi ${name || ""},</p>
+            <p>Your lesson time has been changed. Your new lesson time is ${lessonTimeLine(newDate, time, tz)}.</p>
+            <p>(Previous time: ${slot.lesson_date} ${slot.start_time.slice(0, 5)} Japan Standard Time)</p>
+            <p>If this time doesn't work for you, please reply to this email.</p>
+            <p>See you then!<br/>GAKU Online Japanese</p>
+          `,
+        });
+        emailed = true;
+      } else {
+        emailNote = "この予約には生徒のメールアドレスが紐づいていないため、通知メールは送っていません。";
+      }
+    } catch (e) {
+      console.error("Failed to send reschedule email:", e.message);
+      emailNote = "日時は変更しましたが、通知メールの送信に失敗しました。";
+    }
+  }
+
+  return res.status(200).json({ ok: true, emailed, emailNote });
+}
+
 async function handleSetZoomLink(supabase, body, res) {
   const { ids, zoomLink } = body;
   if (!Array.isArray(ids) || ids.length === 0) return res.status(400).json({ error: "ids (array) is required" });
@@ -542,6 +622,7 @@ export default async function handler(req, res) {
     if (action === "list-official-students") return await handleListOfficialStudents(supabase, res);
     if (action === "add-official-student") return await handleAddOfficialStudent(supabase, body, res);
     if (action === "update-official-student") return await handleUpdateOfficialStudent(supabase, body, res);
+    if (action === "reschedule-booking") return await handleRescheduleBooking(supabase, body, res);
     if (action === "set-zoom-link") return await handleSetZoomLink(supabase, body, res);
     if (action === "send-lesson-reminders") return await handleSendLessonReminders(supabase, res);
     if (action === "list-cancellation-requests") return await handleListCancellationRequests(supabase, res);
