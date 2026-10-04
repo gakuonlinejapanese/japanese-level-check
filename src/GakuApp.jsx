@@ -459,6 +459,27 @@ const UI_TRANSLATIONS = {
     tutorialContentDesc: "Try it now: paste some Japanese text below (an article, subtitles, a caption) and let GAKU build practice activities from it — just like GAKU Reader does on the web.",
     tutorialConversationDesc: "Try it now: play a video, tap “Listen to a video tab” (or the mic) and let GAKU listen to the real dialogue — it'll help you understand each line and suggest how you could respond.",
     tutorialPronunciationDesc: "Try it now: play a video of native speakers, tap “Listen to a video tab” and GAKU writes down each line. Then say the sentence out loud on a card and see how close you were. Can't catch it? Slow the video down and listen again.",
+    writeTitle: "Writing Practice",
+    writeModeCopy: "Copying down",
+    writeModeQuestion: "Questions",
+    writeSoon: "Coming soon",
+    writeQDesc: "Paste a writing question you found online (an essay prompt, a JLPT-style question, an email task…). Write your answer in Japanese and GAKU checks it against the question.",
+    writeQLabel: "The question",
+    writeQPlaceholder: "Paste the question here…",
+    writeALabel: "Your answer",
+    writeAPlaceholder: "Type your answer in Japanese…",
+    writeCheckBtn: "Check my answer",
+    writeChecking: "Checking…",
+    writeCorrect: "✅ Your answer fits the question!",
+    writeNotQuite: "Not quite — your answer doesn't match the question yet.",
+    writeFeedbackLabel: "Feedback",
+    writeModelLabel: "Model answer",
+    writeTryAgain: "Edit and try again",
+    writeNewQ: "New question",
+    writeErrEmpty: "Paste a question and type your answer first.",
+    writeErrNotJa: "Please write your answer in Japanese.",
+    writeErrFail: "Couldn't check your answer. Please try again.",
+    tutorialWritingDesc: "Try it now: paste a writing question from the internet, type your answer in Japanese, and tap “Check my answer”. GAKU tells you if it fits the question — and shows a model answer if it doesn't.",
     tutorialCompleteTitle: "All done! 🎉",
     tutorialCompleteDesc: "You've seen all 5 main features of GAKU Master. You can replay this tour anytime from the 🎓 Tutorial button.",
     tutorialCompleteBtn: "Start Studying",
@@ -916,6 +937,27 @@ const UI_TRANSLATIONS = {
     tutorialContentDesc: "Essayez maintenant : collez un texte japonais ci-dessous (un article, des sous-titres, une légende) et laissez GAKU en créer des exercices — comme le fait GAKU Reader sur le web.",
     tutorialConversationDesc: "Essayez maintenant : lancez une vidéo, appuyez sur « Écouter un onglet vidéo » (ou sur le micro) et laissez GAKU écouter le vrai dialogue — il vous aidera à comprendre chaque réplique et vous suggérera comment répondre.",
     tutorialPronunciationDesc: "Essayez maintenant : lancez une vidéo de locuteurs natifs, appuyez sur « Écouter un onglet vidéo » et GAKU note chaque phrase. Ensuite, sur une carte, dites la phrase à voix haute et voyez à quel point vous étiez proche. Vous n'arrivez pas à saisir ? Ralentissez la vidéo et réécoutez.",
+    writeTitle: "Pratique d'écriture",
+    writeModeCopy: "Copie",
+    writeModeQuestion: "Questions",
+    writeSoon: "Bientôt disponible",
+    writeQDesc: "Collez une question d'écriture trouvée en ligne (sujet de rédaction, question de type JLPT, e-mail à rédiger…). Écrivez votre réponse en japonais et GAKU la vérifie par rapport à la question.",
+    writeQLabel: "La question",
+    writeQPlaceholder: "Collez la question ici…",
+    writeALabel: "Votre réponse",
+    writeAPlaceholder: "Tapez votre réponse en japonais…",
+    writeCheckBtn: "Vérifier ma réponse",
+    writeChecking: "Vérification…",
+    writeCorrect: "✅ Votre réponse correspond à la question !",
+    writeNotQuite: "Pas tout à fait — votre réponse ne correspond pas encore à la question.",
+    writeFeedbackLabel: "Commentaires",
+    writeModelLabel: "Réponse modèle",
+    writeTryAgain: "Modifier et réessayer",
+    writeNewQ: "Nouvelle question",
+    writeErrEmpty: "Collez d'abord une question et tapez votre réponse.",
+    writeErrNotJa: "Veuillez écrire votre réponse en japonais.",
+    writeErrFail: "Impossible de vérifier votre réponse. Veuillez réessayer.",
+    tutorialWritingDesc: "Essayez maintenant : collez une question d'écriture trouvée sur Internet, tapez votre réponse en japonais et appuyez sur « Vérifier ma réponse ». GAKU vous dit si elle correspond à la question — et montre une réponse modèle sinon.",
     tutorialCompleteTitle: "Terminé ! 🎉",
     tutorialCompleteDesc: "Vous avez découvert les 5 fonctionnalités principales de GAKU Master. Vous pouvez revoir cette visite à tout moment via le bouton 🎓 Tutoriel.",
     tutorialCompleteBtn: "Commencer à étudier",
@@ -1358,6 +1400,27 @@ const UI_TRANSLATIONS = {
     tutorialContentDesc: "Pruébalo ahora: pega un texto en japonés abajo (un artículo, subtítulos, una leyenda) y deja que GAKU cree ejercicios a partir de él, igual que hace GAKU Reader en la web.",
     tutorialConversationDesc: "Pruébalo ahora: reproduce un video, pulsa «Escuchar una pestaña de video» (o el micrófono) y deja que GAKU escuche el diálogo real — te ayudará a entender cada línea y te sugerirá cómo responder.",
     tutorialPronunciationDesc: "Pruébalo ahora: reproduce un video de hablantes nativos, pulsa «Escuchar una pestaña de video» y GAKU escribirá cada línea. Luego, en una tarjeta, di la frase en voz alta y comprueba qué tan cerca estuviste. ¿No la captas? Ralentiza el video y vuelve a escuchar.",
+    writeTitle: "Práctica de escritura",
+    writeModeCopy: "Copiar",
+    writeModeQuestion: "Preguntas",
+    writeSoon: "Próximamente",
+    writeQDesc: "Pega una pregunta de escritura que encontraste en línea (un tema de redacción, una pregunta tipo JLPT, un correo por escribir…). Escribe tu respuesta en japonés y GAKU la compara con la pregunta.",
+    writeQLabel: "La pregunta",
+    writeQPlaceholder: "Pega la pregunta aquí…",
+    writeALabel: "Tu respuesta",
+    writeAPlaceholder: "Escribe tu respuesta en japonés…",
+    writeCheckBtn: "Revisar mi respuesta",
+    writeChecking: "Revisando…",
+    writeCorrect: "✅ ¡Tu respuesta se ajusta a la pregunta!",
+    writeNotQuite: "No del todo — tu respuesta aún no coincide con la pregunta.",
+    writeFeedbackLabel: "Comentarios",
+    writeModelLabel: "Respuesta modelo",
+    writeTryAgain: "Editar y volver a intentar",
+    writeNewQ: "Nueva pregunta",
+    writeErrEmpty: "Primero pega una pregunta y escribe tu respuesta.",
+    writeErrNotJa: "Por favor, escribe tu respuesta en japonés.",
+    writeErrFail: "No se pudo revisar tu respuesta. Inténtalo de nuevo.",
+    tutorialWritingDesc: "Pruébalo ahora: pega una pregunta de escritura de internet, escribe tu respuesta en japonés y pulsa «Revisar mi respuesta». GAKU te dice si se ajusta a la pregunta y, si no, te muestra una respuesta modelo.",
     tutorialCompleteTitle: "¡Listo! 🎉",
     tutorialCompleteDesc: "Has visto las 5 funciones principales de GAKU Master. Puedes repetir este recorrido cuando quieras desde el botón 🎓 Tutorial.",
     tutorialCompleteBtn: "Empezar a estudiar",
@@ -1800,6 +1863,27 @@ const UI_TRANSLATIONS = {
     tutorialContentDesc: "Experimente agora: cole um texto em japonês abaixo (um artigo, legendas, uma legenda de foto) e deixe o GAKU criar atividades a partir dele, assim como o GAKU Reader faz na web.",
     tutorialConversationDesc: "Experimente agora: reproduza um vídeo, toque em “Ouvir uma aba de vídeo” (ou no microfone) e deixe o GAKU ouvir o diálogo real — ele vai te ajudar a entender cada fala e sugerir como responder.",
     tutorialPronunciationDesc: "Experimente agora: reproduza um vídeo de falantes nativos, toque em “Ouvir uma aba de vídeo” e o GAKU anota cada fala. Depois, em um cartão, diga a frase em voz alta e veja o quão perto você chegou. Não entendeu? Diminua a velocidade do vídeo e ouça de novo.",
+    writeTitle: "Prática de escrita",
+    writeModeCopy: "Copiar",
+    writeModeQuestion: "Perguntas",
+    writeSoon: "Em breve",
+    writeQDesc: "Cole uma pergunta de escrita que você encontrou online (um tema de redação, uma pergunta no estilo JLPT, um e-mail para escrever…). Escreva sua resposta em japonês e o GAKU confere com a pergunta.",
+    writeQLabel: "A pergunta",
+    writeQPlaceholder: "Cole a pergunta aqui…",
+    writeALabel: "Sua resposta",
+    writeAPlaceholder: "Digite sua resposta em japonês…",
+    writeCheckBtn: "Verificar minha resposta",
+    writeChecking: "Verificando…",
+    writeCorrect: "✅ Sua resposta combina com a pergunta!",
+    writeNotQuite: "Quase — sua resposta ainda não combina com a pergunta.",
+    writeFeedbackLabel: "Comentários",
+    writeModelLabel: "Resposta modelo",
+    writeTryAgain: "Editar e tentar de novo",
+    writeNewQ: "Nova pergunta",
+    writeErrEmpty: "Cole uma pergunta e digite sua resposta primeiro.",
+    writeErrNotJa: "Por favor, escreva sua resposta em japonês.",
+    writeErrFail: "Não foi possível verificar sua resposta. Tente novamente.",
+    tutorialWritingDesc: "Experimente agora: cole uma pergunta de escrita da internet, digite sua resposta em japonês e toque em “Verificar minha resposta”. O GAKU diz se ela combina com a pergunta — e mostra uma resposta modelo se não combinar.",
     tutorialCompleteTitle: "Tudo pronto! 🎉",
     tutorialCompleteDesc: "Você conheceu as 5 principais funções do GAKU Master. Você pode rever este tour a qualquer momento pelo botão 🎓 Tutorial.",
     tutorialCompleteBtn: "Começar a estudar",
@@ -2242,6 +2326,27 @@ const UI_TRANSLATIONS = {
     tutorialContentDesc: "Probier's gleich aus: Füge unten einen japanischen Text ein (einen Artikel, Untertitel, eine Bildunterschrift) und lass GAKU daraus Übungen erstellen — genau wie GAKU Reader es im Web tut.",
     tutorialConversationDesc: "Probier's gleich aus: Spiele ein Video ab, tippe auf „Video-Tab abhören“ (oder auf das Mikrofon) und lass GAKU dem echten Dialog zuhören – es hilft dir, jede Zeile zu verstehen, und schlägt dir Antworten vor.",
     tutorialPronunciationDesc: "Probier's gleich aus: Spiele ein Video mit Muttersprachlern ab, tippe auf „Video-Tab abhören“, und GAKU schreibt jede Zeile mit. Sprich dann auf einer Karte den Satz laut nach und sieh, wie nah du dran warst. Nicht verstanden? Verlangsame das Video und höre noch einmal zu.",
+    writeTitle: "Schreibübung",
+    writeModeCopy: "Abschreiben",
+    writeModeQuestion: "Fragen",
+    writeSoon: "Demnächst verfügbar",
+    writeQDesc: "Füge eine Schreibaufgabe ein, die du online gefunden hast (Aufsatzthema, Frage im JLPT-Stil, E-Mail-Aufgabe …). Schreibe deine Antwort auf Japanisch, und GAKU prüft sie anhand der Frage.",
+    writeQLabel: "Die Frage",
+    writeQPlaceholder: "Frage hier einfügen …",
+    writeALabel: "Deine Antwort",
+    writeAPlaceholder: "Antwort auf Japanisch eingeben …",
+    writeCheckBtn: "Meine Antwort prüfen",
+    writeChecking: "Prüfe …",
+    writeCorrect: "✅ Deine Antwort passt zur Frage!",
+    writeNotQuite: "Noch nicht ganz – deine Antwort passt noch nicht zur Frage.",
+    writeFeedbackLabel: "Feedback",
+    writeModelLabel: "Musterantwort",
+    writeTryAgain: "Bearbeiten und erneut versuchen",
+    writeNewQ: "Neue Frage",
+    writeErrEmpty: "Füge zuerst eine Frage ein und gib deine Antwort ein.",
+    writeErrNotJa: "Bitte schreibe deine Antwort auf Japanisch.",
+    writeErrFail: "Deine Antwort konnte nicht geprüft werden. Bitte versuche es erneut.",
+    tutorialWritingDesc: "Probier's gleich aus: Füge eine Schreibaufgabe aus dem Internet ein, tippe deine Antwort auf Japanisch und tippe auf „Meine Antwort prüfen“. GAKU sagt dir, ob sie zur Frage passt – und zeigt eine Musterantwort, falls nicht.",
     tutorialCompleteTitle: "Fertig! 🎉",
     tutorialCompleteDesc: "Du hast alle 5 Hauptfunktionen von GAKU Master kennengelernt. Du kannst diese Tour jederzeit über den 🎓 Tutorial-Button wiederholen.",
     tutorialCompleteBtn: "Mit dem Lernen beginnen",
@@ -2684,6 +2789,27 @@ const UI_TRANSLATIONS = {
     tutorialContentDesc: "Provalo subito: incolla un testo giapponese qui sotto (un articolo, sottotitoli, una didascalia) e lascia che GAKU crei attività a partire da esso, proprio come fa GAKU Reader sul web.",
     tutorialConversationDesc: "Provalo subito: riproduci un video, tocca «Ascolta una scheda video» (o il microfono) e lascia che GAKU ascolti il dialogo reale — ti aiuterà a capire ogni battuta e ti suggerirà come rispondere.",
     tutorialPronunciationDesc: "Provalo subito: riproduci un video di madrelingua, tocca «Ascolta una scheda video» e GAKU trascrive ogni frase. Poi, su una scheda, ripeti la frase ad alta voce e guarda quanto ti sei avvicinato. Non capisci? Rallenta il video e riascolta.",
+    writeTitle: "Pratica di scrittura",
+    writeModeCopy: "Copiatura",
+    writeModeQuestion: "Domande",
+    writeSoon: "Presto disponibile",
+    writeQDesc: "Incolla una domanda di scrittura trovata online (un tema, una domanda in stile JLPT, un'email da scrivere…). Scrivi la tua risposta in giapponese e GAKU la confronta con la domanda.",
+    writeQLabel: "La domanda",
+    writeQPlaceholder: "Incolla qui la domanda…",
+    writeALabel: "La tua risposta",
+    writeAPlaceholder: "Scrivi la tua risposta in giapponese…",
+    writeCheckBtn: "Controlla la mia risposta",
+    writeChecking: "Controllo…",
+    writeCorrect: "✅ La tua risposta è in linea con la domanda!",
+    writeNotQuite: "Quasi — la tua risposta non corrisponde ancora alla domanda.",
+    writeFeedbackLabel: "Feedback",
+    writeModelLabel: "Risposta modello",
+    writeTryAgain: "Modifica e riprova",
+    writeNewQ: "Nuova domanda",
+    writeErrEmpty: "Incolla prima una domanda e scrivi la tua risposta.",
+    writeErrNotJa: "Scrivi la tua risposta in giapponese.",
+    writeErrFail: "Impossibile controllare la tua risposta. Riprova.",
+    tutorialWritingDesc: "Provalo subito: incolla una domanda di scrittura da internet, scrivi la tua risposta in giapponese e tocca «Controlla la mia risposta». GAKU ti dice se è in linea con la domanda e, se non lo è, mostra una risposta modello.",
     tutorialCompleteTitle: "Fatto! 🎉",
     tutorialCompleteDesc: "Hai visto tutte le 5 funzioni principali di GAKU Master. Puoi rivedere questo tour in qualsiasi momento dal pulsante 🎓 Tutorial.",
     tutorialCompleteBtn: "Inizia a studiare",
@@ -3126,6 +3252,27 @@ const UI_TRANSLATIONS = {
     tutorialContentDesc: "现在就试试：在下面粘贴一段日语文本(文章、字幕、说明文字)，让GAKU据此生成练习活动——就像GAKU Reader在网页上做的那样。",
     tutorialConversationDesc: "现在就试试：播放一段视频，点击“收听视频标签页”（或麦克风），让GAKU聆听真实对话——它会帮你理解每一句话，并给出回应建议。",
     tutorialPronunciationDesc: "现在就试试：播放母语者的视频，点击“收听视频标签页”，GAKU会把每句话记录下来。然后在卡片上大声说出这句话，看看你有多接近。听不清？把视频放慢再听一遍。",
+    writeTitle: "写作练习",
+    writeModeCopy: "抄写",
+    writeModeQuestion: "提问",
+    writeSoon: "即将推出",
+    writeQDesc: "粘贴你在网上找到的写作题目（作文题、JLPT风格的题目、写邮件任务等）。用日语写出你的答案，GAKU会对照题目进行检查。",
+    writeQLabel: "题目",
+    writeQPlaceholder: "在此粘贴题目……",
+    writeALabel: "你的答案",
+    writeAPlaceholder: "用日语输入你的答案……",
+    writeCheckBtn: "检查我的答案",
+    writeChecking: "检查中……",
+    writeCorrect: "✅ 你的答案符合题目要求！",
+    writeNotQuite: "还不太对——你的答案与题目还不太吻合。",
+    writeFeedbackLabel: "反馈",
+    writeModelLabel: "参考答案",
+    writeTryAgain: "修改后再试",
+    writeNewQ: "新题目",
+    writeErrEmpty: "请先粘贴题目并输入你的答案。",
+    writeErrNotJa: "请用日语写出你的答案。",
+    writeErrFail: "无法检查你的答案，请重试。",
+    tutorialWritingDesc: "现在就试试：粘贴一道网上的写作题，用日语输入你的答案，然后点击“检查我的答案”。GAKU会告诉你答案是否符合题目——如果不符合，还会给出参考答案。",
     tutorialCompleteTitle: "全部完成！🎉",
     tutorialCompleteDesc: "你已经了解了GAKU Master的全部5个主要功能。随时可以通过🎓教程按钮重新观看导览。",
     tutorialCompleteBtn: "开始学习",
@@ -3568,6 +3715,27 @@ const UI_TRANSLATIONS = {
     tutorialContentDesc: "現在就試試：在下面貼上一段日語文字(文章、字幕、說明文字)，讓GAKU據此生成練習活動——就像GAKU Reader在網頁上做的那樣。",
     tutorialConversationDesc: "現在就試試：播放一段影片，點擊「收聽影片分頁」（或麥克風），讓GAKU聆聽真實對話——它會幫你理解每一句話，並給出回應建議。",
     tutorialPronunciationDesc: "現在就試試：播放母語者的影片，點擊「收聽影片分頁」，GAKU會把每句話記錄下來。然後在卡片上大聲說出這句話，看看你有多接近。聽不清？把影片放慢再聽一遍。",
+    writeTitle: "寫作練習",
+    writeModeCopy: "抄寫",
+    writeModeQuestion: "提問",
+    writeSoon: "即將推出",
+    writeQDesc: "貼上你在網路上找到的寫作題目（作文題、JLPT風格的題目、寫信任務等）。用日語寫出你的答案，GAKU會對照題目進行檢查。",
+    writeQLabel: "題目",
+    writeQPlaceholder: "在此貼上題目……",
+    writeALabel: "你的答案",
+    writeAPlaceholder: "用日語輸入你的答案……",
+    writeCheckBtn: "檢查我的答案",
+    writeChecking: "檢查中……",
+    writeCorrect: "✅ 你的答案符合題目要求！",
+    writeNotQuite: "還不太對——你的答案與題目還不太吻合。",
+    writeFeedbackLabel: "回饋",
+    writeModelLabel: "參考答案",
+    writeTryAgain: "修改後再試",
+    writeNewQ: "新題目",
+    writeErrEmpty: "請先貼上題目並輸入你的答案。",
+    writeErrNotJa: "請用日語寫出你的答案。",
+    writeErrFail: "無法檢查你的答案，請重試。",
+    tutorialWritingDesc: "現在就試試：貼上一道網路上的寫作題，用日語輸入你的答案，然後點擊「檢查我的答案」。GAKU會告訴你答案是否符合題目——如果不符合，還會給出參考答案。",
     tutorialCompleteTitle: "全部完成！🎉",
     tutorialCompleteDesc: "你已經了解了GAKU Master的全部5個主要功能。隨時可以透過🎓教學按鈕重新觀看導覽。",
     tutorialCompleteBtn: "開始學習",
@@ -4010,6 +4178,27 @@ const UI_TRANSLATIONS = {
     tutorialContentDesc: "지금 해보세요: 아래에 일본어 텍스트(기사, 자막, 캡션 등)를 붙여넣으면 GAKU가 그걸로 연습 활동을 만들어줍니다 — 웹의 GAKU Reader와 똑같이요.",
     tutorialConversationDesc: "지금 해보세요: 영상을 재생하고 '영상 탭 듣기'(또는 마이크)를 누르면 GAKU가 실제 대화를 듣습니다 — 한 줄씩 이해를 돕고 어떻게 대답할지 제안해줘요.",
     tutorialPronunciationDesc: "지금 해보세요: 원어민이 나오는 영상을 재생하고 '영상 탭 듣기'를 누르면 GAKU가 한 줄씩 받아 적습니다. 그다음 카드에서 문장을 소리 내어 말하고 얼마나 가까웠는지 확인하세요. 잘 안 들리나요? 영상을 느리게 재생해서 다시 들어보세요.",
+    writeTitle: "쓰기 연습",
+    writeModeCopy: "따라 쓰기",
+    writeModeQuestion: "질문",
+    writeSoon: "곧 출시",
+    writeQDesc: "인터넷에서 찾은 쓰기 문제(작문 주제, JLPT 형식 문제, 이메일 쓰기 과제 등)를 붙여넣으세요. 일본어로 답을 쓰면 GAKU가 문제에 맞는지 확인해 줍니다.",
+    writeQLabel: "문제",
+    writeQPlaceholder: "여기에 문제를 붙여넣으세요…",
+    writeALabel: "내 답안",
+    writeAPlaceholder: "일본어로 답안을 입력하세요…",
+    writeCheckBtn: "내 답안 확인",
+    writeChecking: "확인 중…",
+    writeCorrect: "✅ 답안이 문제에 맞아요!",
+    writeNotQuite: "아직 부족해요 — 답안이 문제와 아직 맞지 않습니다.",
+    writeFeedbackLabel: "피드백",
+    writeModelLabel: "모범 답안",
+    writeTryAgain: "수정하고 다시 시도",
+    writeNewQ: "새 문제",
+    writeErrEmpty: "먼저 문제를 붙여넣고 답안을 입력하세요.",
+    writeErrNotJa: "답안을 일본어로 작성해 주세요.",
+    writeErrFail: "답안을 확인하지 못했습니다. 다시 시도해 주세요.",
+    tutorialWritingDesc: "지금 해보세요: 인터넷에서 찾은 쓰기 문제를 붙여넣고, 일본어로 답을 입력한 다음 '내 답안 확인'을 누르세요. GAKU가 문제에 맞는지 알려 주고, 맞지 않으면 모범 답안을 보여 줍니다.",
     tutorialCompleteTitle: "완료! 🎉",
     tutorialCompleteDesc: "GAKU Master의 5가지 주요 기능을 모두 살펴보셨습니다. 🎓 튜토리얼 버튼을 통해 언제든 다시 볼 수 있어요.",
     tutorialCompleteBtn: "학습 시작하기",
@@ -4452,6 +4641,27 @@ const UI_TRANSLATIONS = {
     tutorialContentDesc: "ลองเลย: วางข้อความภาษาญี่ปุ่นด้านล่าง (บทความ คำบรรยาย หรือคำอธิบายภาพ) แล้วให้ GAKU สร้างกิจกรรมฝึกฝนจากมัน เหมือนที่ GAKU Reader ทำบนเว็บ",
     tutorialConversationDesc: "ลองเลย: เปิดวิดีโอ แล้วกด “ฟังแท็บวิดีโอ” (หรือไมโครโฟน) ให้ GAKU ฟังบทสนทนาจริง — มันจะช่วยให้คุณเข้าใจแต่ละประโยคและแนะนำวิธีตอบกลับ",
     tutorialPronunciationDesc: "ลองเลย: เปิดวิดีโอของเจ้าของภาษา แล้วกด “ฟังแท็บวิดีโอ” GAKU จะจดทีละประโยคให้ จากนั้นในการ์ดให้พูดประโยคออกเสียง แล้วดูว่าใกล้เคียงแค่ไหน ฟังไม่ทัน? ลองเปิดวิดีโอให้ช้าลงแล้วฟังอีกครั้ง",
+    writeTitle: "ฝึกเขียน",
+    writeModeCopy: "คัดลอกเขียน",
+    writeModeQuestion: "คำถาม",
+    writeSoon: "เร็วๆ นี้",
+    writeQDesc: "วางโจทย์การเขียนที่คุณพบทางอินเทอร์เน็ต (หัวข้อเรียงความ โจทย์แนว JLPT งานเขียนอีเมล ฯลฯ) แล้วเขียนคำตอบเป็นภาษาญี่ปุ่น GAKU จะตรวจว่าตรงกับโจทย์หรือไม่",
+    writeQLabel: "โจทย์",
+    writeQPlaceholder: "วางโจทย์ที่นี่…",
+    writeALabel: "คำตอบของคุณ",
+    writeAPlaceholder: "พิมพ์คำตอบเป็นภาษาญี่ปุ่น…",
+    writeCheckBtn: "ตรวจคำตอบของฉัน",
+    writeChecking: "กำลังตรวจ…",
+    writeCorrect: "✅ คำตอบของคุณตรงกับโจทย์!",
+    writeNotQuite: "ยังไม่ค่อยตรง — คำตอบของคุณยังไม่ตรงกับโจทย์",
+    writeFeedbackLabel: "ข้อเสนอแนะ",
+    writeModelLabel: "คำตอบตัวอย่าง",
+    writeTryAgain: "แก้ไขแล้วลองอีกครั้ง",
+    writeNewQ: "โจทย์ใหม่",
+    writeErrEmpty: "กรุณาวางโจทย์และพิมพ์คำตอบก่อน",
+    writeErrNotJa: "กรุณาเขียนคำตอบเป็นภาษาญี่ปุ่น",
+    writeErrFail: "ตรวจคำตอบไม่สำเร็จ กรุณาลองอีกครั้ง",
+    tutorialWritingDesc: "ลองเลย: วางโจทย์การเขียนจากอินเทอร์เน็ต พิมพ์คำตอบเป็นภาษาญี่ปุ่น แล้วกด “ตรวจคำตอบของฉัน” GAKU จะบอกว่าตรงกับโจทย์หรือไม่ และแสดงคำตอบตัวอย่างหากไม่ตรง",
     tutorialCompleteTitle: "เสร็จเรียบร้อย! 🎉",
     tutorialCompleteDesc: "คุณได้ชมฟีเจอร์หลักทั้ง 5 ของ GAKU Master แล้ว สามารถดูทัวร์นี้ซ้ำได้ทุกเมื่อผ่านปุ่ม 🎓 บทแนะนำ",
     tutorialCompleteBtn: "เริ่มเรียนเลย",
@@ -4894,6 +5104,27 @@ const UI_TRANSLATIONS = {
     tutorialContentDesc: "Cubalah sekarang: tampal teks Jepun di bawah (artikel, sari kata, kapsyen) dan biarkan GAKU membina aktiviti latihan daripadanya — sama seperti GAKU Reader lakukan di web.",
     tutorialConversationDesc: "Cuba sekarang: mainkan video, tekan “Dengar tab video” (atau mikrofon) dan biarkan GAKU mendengar dialog sebenar — ia akan membantu anda memahami setiap baris dan mencadangkan cara membalas.",
     tutorialPronunciationDesc: "Cuba sekarang: mainkan video penutur asli, tekan “Dengar tab video” dan GAKU akan menulis setiap baris. Kemudian, pada kad, sebut ayat itu dengan kuat dan lihat sejauh mana anda hampir betul. Tidak dapat menangkap? Perlahankan video dan dengar semula.",
+    writeTitle: "Latihan Menulis",
+    writeModeCopy: "Menyalin",
+    writeModeQuestion: "Soalan",
+    writeSoon: "Akan datang",
+    writeQDesc: "Tampal soalan menulis yang anda jumpa dalam talian (tajuk karangan, soalan gaya JLPT, tugasan e-mel…). Tulis jawapan anda dalam bahasa Jepun dan GAKU akan menyemaknya dengan soalan.",
+    writeQLabel: "Soalan",
+    writeQPlaceholder: "Tampal soalan di sini…",
+    writeALabel: "Jawapan anda",
+    writeAPlaceholder: "Taip jawapan anda dalam bahasa Jepun…",
+    writeCheckBtn: "Semak jawapan saya",
+    writeChecking: "Menyemak…",
+    writeCorrect: "✅ Jawapan anda sesuai dengan soalan!",
+    writeNotQuite: "Belum tepat — jawapan anda belum sepadan dengan soalan.",
+    writeFeedbackLabel: "Maklum balas",
+    writeModelLabel: "Jawapan contoh",
+    writeTryAgain: "Edit dan cuba lagi",
+    writeNewQ: "Soalan baharu",
+    writeErrEmpty: "Tampal soalan dan taip jawapan anda dahulu.",
+    writeErrNotJa: "Sila tulis jawapan anda dalam bahasa Jepun.",
+    writeErrFail: "Tidak dapat menyemak jawapan anda. Sila cuba lagi.",
+    tutorialWritingDesc: "Cuba sekarang: tampal soalan menulis dari internet, taip jawapan anda dalam bahasa Jepun, dan tekan “Semak jawapan saya”. GAKU akan memberitahu sama ada ia sesuai dengan soalan — dan menunjukkan jawapan contoh jika tidak.",
     tutorialCompleteTitle: "Selesai! 🎉",
     tutorialCompleteDesc: "Anda telah melihat kesemua 5 ciri utama GAKU Master. Anda boleh ulang tayang lawatan ini bila-bila masa melalui butang 🎓 Tutorial.",
     tutorialCompleteBtn: "Mula Belajar",
@@ -5336,6 +5567,27 @@ const UI_TRANSLATIONS = {
     tutorialContentDesc: "Coba sekarang: tempel teks bahasa Jepang di bawah (artikel, subtitle, keterangan) dan biarkan GAKU membuat aktivitas latihan darinya — sama seperti yang dilakukan GAKU Reader di web.",
     tutorialConversationDesc: "Coba sekarang: putar video, ketuk “Dengarkan tab video” (atau mikrofon) dan biarkan GAKU mendengarkan dialog asli — GAKU akan membantu Anda memahami tiap baris dan menyarankan cara membalas.",
     tutorialPronunciationDesc: "Coba sekarang: putar video penutur asli, ketuk “Dengarkan tab video”, dan GAKU akan menuliskan setiap baris. Lalu, pada kartu, ucapkan kalimatnya dengan lantang dan lihat seberapa dekat Anda. Tidak tertangkap? Perlambat videonya dan dengarkan lagi.",
+    writeTitle: "Latihan Menulis",
+    writeModeCopy: "Menyalin",
+    writeModeQuestion: "Pertanyaan",
+    writeSoon: "Segera hadir",
+    writeQDesc: "Tempel soal menulis yang kamu temukan di internet (tema esai, soal bergaya JLPT, tugas menulis email…). Tulis jawabanmu dalam bahasa Jepang dan GAKU akan memeriksanya dengan soal tersebut.",
+    writeQLabel: "Soal",
+    writeQPlaceholder: "Tempel soal di sini…",
+    writeALabel: "Jawabanmu",
+    writeAPlaceholder: "Ketik jawabanmu dalam bahasa Jepang…",
+    writeCheckBtn: "Periksa jawabanku",
+    writeChecking: "Memeriksa…",
+    writeCorrect: "✅ Jawabanmu sesuai dengan soal!",
+    writeNotQuite: "Belum tepat — jawabanmu belum sesuai dengan soal.",
+    writeFeedbackLabel: "Masukan",
+    writeModelLabel: "Jawaban contoh",
+    writeTryAgain: "Edit dan coba lagi",
+    writeNewQ: "Soal baru",
+    writeErrEmpty: "Tempel soal dan ketik jawabanmu terlebih dahulu.",
+    writeErrNotJa: "Tulis jawabanmu dalam bahasa Jepang.",
+    writeErrFail: "Jawabanmu tidak dapat diperiksa. Silakan coba lagi.",
+    tutorialWritingDesc: "Coba sekarang: tempel soal menulis dari internet, ketik jawabanmu dalam bahasa Jepang, lalu ketuk “Periksa jawabanku”. GAKU memberi tahu apakah jawabanmu sesuai dengan soal — dan menampilkan jawaban contoh jika tidak.",
     tutorialCompleteTitle: "Selesai! 🎉",
     tutorialCompleteDesc: "Anda telah melihat semua 5 fitur utama GAKU Master. Anda bisa memutar ulang tur ini kapan saja lewat tombol 🎓 Tutorial.",
     tutorialCompleteBtn: "Mulai Belajar",
@@ -5778,6 +6030,27 @@ const UI_TRANSLATIONS = {
     tutorialContentDesc: "Thử ngay bây giờ: dán một đoạn văn bản tiếng Nhật bên dưới (bài báo, phụ đề, chú thích) và để GAKU tạo hoạt động luyện tập từ đó — giống như GAKU Reader làm trên web.",
     tutorialConversationDesc: "Hãy thử ngay: phát một video, nhấn “Nghe tab video” (hoặc micro) và để GAKU nghe đoạn hội thoại thật — GAKU sẽ giúp bạn hiểu từng câu và gợi ý cách trả lời.",
     tutorialPronunciationDesc: "Hãy thử ngay: phát video của người bản xứ, nhấn “Nghe tab video”, GAKU sẽ ghi lại từng câu. Sau đó, trên thẻ, hãy nói to câu đó và xem bạn nói gần đúng đến đâu. Nghe không kịp? Hãy làm chậm video và nghe lại.",
+    writeTitle: "Luyện viết",
+    writeModeCopy: "Chép lại",
+    writeModeQuestion: "Câu hỏi",
+    writeSoon: "Sắp ra mắt",
+    writeQDesc: "Dán một đề bài viết bạn tìm thấy trên mạng (đề luận, câu hỏi kiểu JLPT, bài viết email…). Hãy viết câu trả lời bằng tiếng Nhật và GAKU sẽ kiểm tra xem có đúng với đề bài không.",
+    writeQLabel: "Đề bài",
+    writeQPlaceholder: "Dán đề bài vào đây…",
+    writeALabel: "Câu trả lời của bạn",
+    writeAPlaceholder: "Nhập câu trả lời bằng tiếng Nhật…",
+    writeCheckBtn: "Kiểm tra câu trả lời",
+    writeChecking: "Đang kiểm tra…",
+    writeCorrect: "✅ Câu trả lời của bạn phù hợp với đề bài!",
+    writeNotQuite: "Chưa đúng lắm — câu trả lời của bạn chưa khớp với đề bài.",
+    writeFeedbackLabel: "Nhận xét",
+    writeModelLabel: "Đáp án mẫu",
+    writeTryAgain: "Sửa và thử lại",
+    writeNewQ: "Đề bài mới",
+    writeErrEmpty: "Hãy dán đề bài và nhập câu trả lời trước.",
+    writeErrNotJa: "Vui lòng viết câu trả lời bằng tiếng Nhật.",
+    writeErrFail: "Không thể kiểm tra câu trả lời. Vui lòng thử lại.",
+    tutorialWritingDesc: "Hãy thử ngay: dán một đề bài viết từ internet, nhập câu trả lời bằng tiếng Nhật rồi nhấn “Kiểm tra câu trả lời”. GAKU sẽ cho bạn biết câu trả lời có phù hợp với đề bài không — và hiển thị đáp án mẫu nếu không.",
     tutorialCompleteTitle: "Xong rồi! 🎉",
     tutorialCompleteDesc: "Bạn đã xem qua cả 5 tính năng chính của GAKU Master. Bạn có thể xem lại chuyến tham quan này bất cứ lúc nào qua nút 🎓 Hướng dẫn.",
     tutorialCompleteBtn: "Bắt đầu học",
@@ -6220,6 +6493,27 @@ const UI_TRANSLATIONS = {
     tutorialContentDesc: "अभी आज़माएं: नीचे कोई जापानी टेक्स्ट पेस्ट करें (कोई लेख, सबटाइटल, कैप्शन) और GAKU को उससे अभ्यास गतिविधियां बनाने दें — बिल्कुल वैसे ही जैसे GAKU Reader वेब पर करता है।",
     tutorialConversationDesc: "अभी आज़माएँ: कोई वीडियो चलाएँ, “वीडियो टैब सुनें” (या माइक) दबाएँ और GAKU को असली बातचीत सुनने दें — यह हर पंक्ति समझने में मदद करेगा और जवाब देने के सुझाव देगा।",
     tutorialPronunciationDesc: "अभी आज़माएँ: मूल भाषा बोलने वालों का वीडियो चलाएँ, “वीडियो टैब सुनें” दबाएँ, और GAKU हर पंक्ति लिख देगा। फिर कार्ड पर वाक्य को ज़ोर से बोलें और देखें कि आप कितने करीब थे। समझ नहीं आया? वीडियो को धीमा करके फिर से सुनें।",
+    writeTitle: "लेखन अभ्यास",
+    writeModeCopy: "नकल करके लिखना",
+    writeModeQuestion: "प्रश्न",
+    writeSoon: "जल्द आ रहा है",
+    writeQDesc: "इंटरनेट पर मिला कोई लेखन प्रश्न (निबंध का विषय, JLPT शैली का प्रश्न, ईमेल लिखने का कार्य आदि) पेस्ट करें। अपना उत्तर जापानी में लिखें और GAKU उसे प्रश्न से मिलाकर जाँचेगा।",
+    writeQLabel: "प्रश्न",
+    writeQPlaceholder: "प्रश्न यहाँ पेस्ट करें…",
+    writeALabel: "आपका उत्तर",
+    writeAPlaceholder: "अपना उत्तर जापानी में लिखें…",
+    writeCheckBtn: "मेरा उत्तर जाँचें",
+    writeChecking: "जाँच हो रही है…",
+    writeCorrect: "✅ आपका उत्तर प्रश्न से मेल खाता है!",
+    writeNotQuite: "पूरी तरह नहीं — आपका उत्तर अभी प्रश्न से मेल नहीं खाता।",
+    writeFeedbackLabel: "प्रतिक्रिया",
+    writeModelLabel: "आदर्श उत्तर",
+    writeTryAgain: "बदलें और फिर कोशिश करें",
+    writeNewQ: "नया प्रश्न",
+    writeErrEmpty: "पहले प्रश्न पेस्ट करें और अपना उत्तर लिखें।",
+    writeErrNotJa: "कृपया अपना उत्तर जापानी में लिखें।",
+    writeErrFail: "आपका उत्तर जाँचा नहीं जा सका। कृपया फिर कोशिश करें।",
+    tutorialWritingDesc: "अभी आज़माएँ: इंटरनेट से कोई लेखन प्रश्न पेस्ट करें, अपना उत्तर जापानी में लिखें और “मेरा उत्तर जाँचें” दबाएँ। GAKU बताएगा कि उत्तर प्रश्न से मेल खाता है या नहीं — और न खाने पर आदर्श उत्तर दिखाएगा।",
     tutorialCompleteTitle: "सब हो गया! 🎉",
     tutorialCompleteDesc: "आपने GAKU Master के सभी 5 मुख्य फीचर्स देख लिए हैं। आप 🎓 ट्यूटोरियल बटन से कभी भी यह टूर दोबारा देख सकते हैं।",
     tutorialCompleteBtn: "पढ़ाई शुरू करें",
@@ -6662,6 +6956,27 @@ const UI_TRANSLATIONS = {
     tutorialContentDesc: "早速試してみましょう: 下に日本語のテキスト(記事・字幕・キャプションなど)を貼り付けて、GAKUに練習アクティビティを作ってもらいましょう — WebのGAKU Readerと同じ仕組みです。",
     tutorialConversationDesc: "今すぐ試してみましょう：動画を再生して「動画のタブを聞き取る」（またはマイク）を押すと、GAKUが実際の会話を聞き取ります。1行ずつ理解を助け、どう返事するかのヒントも出します。",
     tutorialPronunciationDesc: "今すぐ試してみましょう：ネイティブが話す動画を再生して「動画のタブを聞き取る」を押すと、GAKUが1行ずつ文字に起こします。次に、カードの文を声に出して言い、どれだけ近かったか確認しましょう。聞き取れないときは、動画をスロー再生してもう一度聞いてみましょう。",
+    writeTitle: "ライティング練習",
+    writeModeCopy: "書き写し",
+    writeModeQuestion: "質問",
+    writeSoon: "近日公開",
+    writeQDesc: "ネットで見つけた作文の問題（作文のテーマ、JLPT形式の問題、メールを書く課題など）を貼り付けてください。日本語で答えを書くと、GAKUが問題に合っているかチェックします。",
+    writeQLabel: "問題",
+    writeQPlaceholder: "ここに問題を貼り付け…",
+    writeALabel: "あなたの答え",
+    writeAPlaceholder: "日本語で答えを入力…",
+    writeCheckBtn: "答えをチェック",
+    writeChecking: "チェック中…",
+    writeCorrect: "✅ 答えは問題に合っています！",
+    writeNotQuite: "おしい — 答えがまだ問題に合っていません。",
+    writeFeedbackLabel: "フィードバック",
+    writeModelLabel: "模範解答",
+    writeTryAgain: "直してもう一度",
+    writeNewQ: "新しい問題",
+    writeErrEmpty: "先に問題を貼り付けて、答えを入力してください。",
+    writeErrNotJa: "答えは日本語で書いてください。",
+    writeErrFail: "答えをチェックできませんでした。もう一度お試しください。",
+    tutorialWritingDesc: "今すぐ試してみましょう：ネットで見つけた作文の問題を貼り付け、日本語で答えを入力して「答えをチェック」を押してください。GAKUが問題に合っているかを教え、合っていない場合は模範解答も表示します。",
     tutorialCompleteTitle: "完了しました！🎉",
     tutorialCompleteDesc: "GAKU Masterの5つの主な機能をすべて見てもらいました。🎓チュートリアルボタンからいつでもこのツアーをもう一度見られます。",
     tutorialCompleteBtn: "勉強を始める",
@@ -7104,6 +7419,27 @@ const UI_TRANSLATIONS = {
     tutorialContentDesc: "Hemen deneyin: aşağıya bir Japonca metin yapıştırın (bir makale, altyazı, bir başlık) ve GAKU'nun bundan alıştırma etkinlikleri oluşturmasına izin verin — tıpkı GAKU Reader'ın web'de yaptığı gibi.",
     tutorialConversationDesc: "Hemen deneyin: bir video oynatın, “Video sekmesini dinle”ye (veya mikrofona) dokunun ve GAKU'nun gerçek diyaloğu dinlemesine izin verin — her satırı anlamanıza yardımcı olur ve nasıl cevap verebileceğinizi önerir.",
     tutorialPronunciationDesc: "Hemen deneyin: ana dili konuşanların olduğu bir video oynatın, “Video sekmesini dinle”ye dokunun; GAKU her satırı yazıya döker. Sonra kartta cümleyi yüksek sesle söyleyin ve ne kadar yaklaştığınıza bakın. Anlayamadınız mı? Videoyu yavaşlatıp tekrar dinleyin.",
+    writeTitle: "Yazma Alıştırması",
+    writeModeCopy: "Kopyalayarak yazma",
+    writeModeQuestion: "Sorular",
+    writeSoon: "Yakında",
+    writeQDesc: "İnternette bulduğunuz bir yazma sorusunu (kompozisyon konusu, JLPT tarzı soru, e-posta yazma görevi…) yapıştırın. Cevabınızı Japonca yazın, GAKU soruya uygunluğunu kontrol etsin.",
+    writeQLabel: "Soru",
+    writeQPlaceholder: "Soruyu buraya yapıştırın…",
+    writeALabel: "Cevabınız",
+    writeAPlaceholder: "Cevabınızı Japonca yazın…",
+    writeCheckBtn: "Cevabımı kontrol et",
+    writeChecking: "Kontrol ediliyor…",
+    writeCorrect: "✅ Cevabınız soruya uygun!",
+    writeNotQuite: "Tam olmadı — cevabınız henüz soruyla uyuşmuyor.",
+    writeFeedbackLabel: "Geri bildirim",
+    writeModelLabel: "Örnek cevap",
+    writeTryAgain: "Düzenle ve tekrar dene",
+    writeNewQ: "Yeni soru",
+    writeErrEmpty: "Önce bir soru yapıştırın ve cevabınızı yazın.",
+    writeErrNotJa: "Lütfen cevabınızı Japonca yazın.",
+    writeErrFail: "Cevabınız kontrol edilemedi. Lütfen tekrar deneyin.",
+    tutorialWritingDesc: "Hemen deneyin: internetten bir yazma sorusu yapıştırın, cevabınızı Japonca yazın ve “Cevabımı kontrol et”e dokunun. GAKU cevabın soruya uygun olup olmadığını söyler — uygun değilse örnek bir cevap gösterir.",
     tutorialCompleteTitle: "Tamamlandı! 🎉",
     tutorialCompleteDesc: "GAKU Master'ın 5 ana özelliğinin tamamını gördünüz. Bu turu istediğiniz zaman 🎓 Eğitim düğmesinden tekrar izleyebilirsiniz.",
     tutorialCompleteBtn: "Çalışmaya Başla",
@@ -7546,6 +7882,27 @@ const UI_TRANSLATIONS = {
     tutorialContentDesc: "अहिले नै प्रयास गर्नुहोस्: तल कुनै जापानी पाठ टाँस्नुहोस् (लेख, सबटाइटल, क्याप्सन) र GAKUलाई त्यसबाट अभ्यास गतिविधिहरू बनाउन दिनुहोस् — ठ्याक्कै GAKU Readerले वेबमा गरेजस्तै।",
     tutorialConversationDesc: "अहिले प्रयास गर्नुहोस्: कुनै भिडियो चलाउनुहोस्, “भिडियो ट्याब सुन्नुहोस्” (वा माइक) थिच्नुहोस् र GAKUलाई वास्तविक कुराकानी सुन्न दिनुहोस् — यसले हरेक पङ्क्ति बुझ्न मद्दत गर्नेछ र कसरी जवाफ दिने सुझाव दिनेछ।",
     tutorialPronunciationDesc: "अहिले प्रयास गर्नुहोस्: मातृभाषीहरूको भिडियो चलाउनुहोस्, “भिडियो ट्याब सुन्नुहोस्” थिच्नुहोस्, र GAKUले हरेक पङ्क्ति लेखिदिनेछ। त्यसपछि कार्डमा वाक्य ठूलो स्वरमा बोल्नुहोस् र कति नजिक हुनुभयो हेर्नुहोस्। बुझ्न गाह्रो भयो? भिडियो ढिलो गरेर फेरि सुन्नुहोस्।",
+    writeTitle: "लेखन अभ्यास",
+    writeModeCopy: "नक्कल गरेर लेख्ने",
+    writeModeQuestion: "प्रश्नहरू",
+    writeSoon: "छिट्टै आउँदैछ",
+    writeQDesc: "इन्टरनेटमा भेटेको कुनै लेखन प्रश्न (निबन्धको विषय, JLPT शैलीको प्रश्न, इमेल लेख्ने कार्य आदि) पेस्ट गर्नुहोस्। आफ्नो उत्तर जापानीमा लेख्नुहोस् र GAKUले प्रश्नसँग मिलाएर जाँच्नेछ।",
+    writeQLabel: "प्रश्न",
+    writeQPlaceholder: "प्रश्न यहाँ पेस्ट गर्नुहोस्…",
+    writeALabel: "तपाईंको उत्तर",
+    writeAPlaceholder: "आफ्नो उत्तर जापानीमा लेख्नुहोस्…",
+    writeCheckBtn: "मेरो उत्तर जाँच्नुहोस्",
+    writeChecking: "जाँच हुँदैछ…",
+    writeCorrect: "✅ तपाईंको उत्तर प्रश्नसँग मिल्छ!",
+    writeNotQuite: "पूरै मिलेन — तपाईंको उत्तर अझै प्रश्नसँग मिलेको छैन।",
+    writeFeedbackLabel: "प्रतिक्रिया",
+    writeModelLabel: "नमूना उत्तर",
+    writeTryAgain: "सम्पादन गरेर फेरि प्रयास गर्नुहोस्",
+    writeNewQ: "नयाँ प्रश्न",
+    writeErrEmpty: "पहिले प्रश्न पेस्ट गर्नुहोस् र आफ्नो उत्तर लेख्नुहोस्।",
+    writeErrNotJa: "कृपया आफ्नो उत्तर जापानीमा लेख्नुहोस्।",
+    writeErrFail: "तपाईंको उत्तर जाँच्न सकिएन। कृपया फेरि प्रयास गर्नुहोस्।",
+    tutorialWritingDesc: "अहिले प्रयास गर्नुहोस्: इन्टरनेटबाट कुनै लेखन प्रश्न पेस्ट गर्नुहोस्, आफ्नो उत्तर जापानीमा लेख्नुहोस् र “मेरो उत्तर जाँच्नुहोस्” थिच्नुहोस्। GAKUले उत्तर प्रश्नसँग मिल्छ कि मिल्दैन भन्नेछ — नमिलेमा नमूना उत्तर देखाउनेछ।",
     tutorialCompleteTitle: "सबै पूरा भयो! 🎉",
     tutorialCompleteDesc: "तपाईंले GAKU Master का सबै ५ मुख्य सुविधाहरू हेर्नुभयो। तपाईं जुनसुकै बेला 🎓 ट्युटोरियल बटनबाट यो भ्रमण फेरि हेर्न सक्नुहुन्छ।",
     tutorialCompleteBtn: "अध्ययन सुरु गर्नुहोस्",
@@ -7988,6 +8345,27 @@ const UI_TRANSLATIONS = {
     tutorialContentDesc: "Subukan na ngayon: mag-paste ng Japanese text sa ibaba (isang artikulo, subtitle, caption) at hayaang gumawa ang GAKU ng mga practice activity mula dito — tulad ng ginagawa ng GAKU Reader sa web.",
     tutorialConversationDesc: "Subukan ngayon: mag-play ng video, i-tap ang “Pakinggan ang tab ng video” (o ang mikropono) at hayaang pakinggan ng GAKU ang totoong usapan — tutulungan ka nitong maintindihan ang bawat linya at magmumungkahi kung paano sumagot.",
     tutorialPronunciationDesc: "Subukan ngayon: mag-play ng video ng mga native speaker, i-tap ang “Pakinggan ang tab ng video”, at isusulat ng GAKU ang bawat linya. Pagkatapos, sa card, sabihin nang malakas ang pangungusap at tingnan kung gaano ka kalapit. Hindi maintindihan? Pabagalin ang video at pakinggan muli.",
+    writeTitle: "Pagsasanay sa Pagsulat",
+    writeModeCopy: "Pagkopya",
+    writeModeQuestion: "Mga Tanong",
+    writeSoon: "Malapit na",
+    writeQDesc: "I-paste ang tanong sa pagsulat na nakita mo online (paksa ng sanaysay, tanong na istilong JLPT, gawaing pagsulat ng email…). Isulat ang sagot mo sa Japanese at susuriin ito ng GAKU laban sa tanong.",
+    writeQLabel: "Ang tanong",
+    writeQPlaceholder: "I-paste ang tanong dito…",
+    writeALabel: "Ang sagot mo",
+    writeAPlaceholder: "I-type ang sagot mo sa Japanese…",
+    writeCheckBtn: "Suriin ang sagot ko",
+    writeChecking: "Sinusuri…",
+    writeCorrect: "✅ Angkop ang sagot mo sa tanong!",
+    writeNotQuite: "Malapit na — hindi pa tugma ang sagot mo sa tanong.",
+    writeFeedbackLabel: "Feedback",
+    writeModelLabel: "Halimbawang sagot",
+    writeTryAgain: "I-edit at subukan muli",
+    writeNewQ: "Bagong tanong",
+    writeErrEmpty: "Mag-paste muna ng tanong at i-type ang sagot mo.",
+    writeErrNotJa: "Pakisulat ang sagot mo sa Japanese.",
+    writeErrFail: "Hindi masuri ang sagot mo. Pakisubukan muli.",
+    tutorialWritingDesc: "Subukan ngayon: mag-paste ng tanong sa pagsulat mula sa internet, i-type ang sagot mo sa Japanese, at i-tap ang “Suriin ang sagot ko”. Sasabihin ng GAKU kung angkop ito sa tanong — at magpapakita ng halimbawang sagot kung hindi.",
     tutorialCompleteTitle: "Tapos na! 🎉",
     tutorialCompleteDesc: "Nakita mo na ang lahat ng 5 pangunahing feature ng GAKU Master. Puwede mong ulitin ang tour na ito anumang oras gamit ang 🎓 Tutorial button.",
     tutorialCompleteBtn: "Simulan ang Pag-aaral",
@@ -11875,6 +12253,154 @@ function PronunciationHeardLineCard({ line, T, lang, checkins, onRecord }) {
   );
 }
 
+// ─── WRITING PRACTICE ──────────────────────────────────────────────────────────
+// Questions mode: the student pastes a writing question found online, types an answer in
+// Japanese, and the AI checks whether the answer fits the question. If it fits: praise +
+// small tips. If not: feedback + a model answer. (Copying down mode is a separate, later build.)
+const WRITING_STORAGE_KEY = "gaku_writing_questions";
+function WritingPractice({ form }) {
+  const lang = form?.preferredLang || "English";
+  const T = useUITranslations(lang);
+  const [mode, setMode] = useState("question");
+  const [question, setQuestion] = useState("");
+  const [answer, setAnswer] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [result, setResult] = useState(null); // { fits, feedback, model }
+
+  useEffect(() => {
+    try {
+      const s = JSON.parse(localStorage.getItem(scopedKey(WRITING_STORAGE_KEY)) || "null");
+      if (s && typeof s === "object") { setQuestion(s.question || ""); setAnswer(s.answer || ""); }
+    } catch {}
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  useEffect(() => {
+    try { localStorage.setItem(scopedKey(WRITING_STORAGE_KEY), JSON.stringify({ question, answer })); } catch {}
+  }, [question, answer]);
+
+  const hasJapanese = (s) => /[\u3040-\u30FF\u4E00-\u9FFF]/.test(s || "");
+
+  const check = async () => {
+    const q = question.trim();
+    const a = answer.trim();
+    if (!q || !a) { setError(T.writeErrEmpty || "Paste a question and type your answer first."); return; }
+    if (!hasJapanese(a)) { setError(T.writeErrNotJa || "Please write your answer in Japanese."); return; }
+    setLoading(true); setError(""); setResult(null);
+    const prompt = `You are a kind, accurate Japanese writing teacher. The student's level is ${form?.jlpt || "Beginner"}.
+
+The student found this writing question online:
+"""
+${q.slice(0, 3000)}
+"""
+
+The student wrote this answer in Japanese:
+"""
+${a.slice(0, 1500)}
+"""
+
+Decide whether the answer FITS the question: does it address what the question asks (topic, required points, requested format, politeness level, length if specified)? Small grammar or spelling mistakes alone do NOT make it wrong unless they change or hide the meaning. If the question is not a clear writing task, judge as best you can from its content.
+
+Write "feedback" in ${lang}: 2-4 short sentences. Say what was good, name any content that was missing or off-topic, and point out the most important grammar or wording fixes with the corrected Japanese. Be encouraging and specific. Never invent requirements that are not in the question.
+Write "model" in natural Japanese at the student's level (similar length to what the question asks for). Always include it.
+
+Respond ONLY with valid JSON, no markdown, no backticks:
+{"fits":true,"feedback":"","model":""}`;
+    const ask = async () => {
+      const res = await fetch("/api/claude", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ model: "claude-sonnet-4-20250514", max_tokens: 1200, provider: "content", frequency_penalty: 0.3,
+          messages: [{ role: "user", content: prompt }] })
+      });
+      const d = await res.json();
+      const raw = (d.content?.map(c => c.text || "").join("") || "").replace(/```json|```/g, "").trim();
+      const m = raw.match(/\{[\s\S]*\}/);
+      const parsed = JSON.parse(m ? m[0] : raw);
+      if (typeof parsed.fits !== "boolean" || !String(parsed.feedback || "").trim()) throw new Error("bad");
+      return { fits: parsed.fits, feedback: String(parsed.feedback).trim(), model: String(parsed.model || "").trim() };
+    };
+    try {
+      let r;
+      try { r = await ask(); } catch { r = await ask(); }
+      setResult(r);
+    } catch {
+      setError(T.writeErrFail || "Couldn't check your answer. Please try again.");
+    }
+    setLoading(false);
+  };
+
+  const newQuestion = () => { setQuestion(""); setAnswer(""); setResult(null); setError(""); };
+
+  const modeBtn = (id, label, disabled) => (
+    <button key={id} disabled={disabled} onClick={() => !disabled && setMode(id)}
+      style={{ flex:1, padding:"10px 8px", borderRadius:10, fontSize:12, fontWeight:700, cursor:disabled?"not-allowed":"pointer",
+        border:`1.5px solid ${mode===id?C.teal:C.border}`, background:mode===id?"rgba(6,182,212,0.12)":C.card,
+        color:disabled?"#475569":(mode===id?C.teal:"#94a3b8"), opacity:disabled?0.7:1 }}>
+      {label}{disabled ? ` (${T.writeSoon || "Coming soon"})` : ""}
+    </button>
+  );
+
+  return (
+    <div>
+      <div style={{ ...S.card, marginBottom:16 }}>
+        <p style={{ color:C.teal, fontSize:12, fontWeight:700, letterSpacing:1, marginBottom:10 }}>✍️ {T.writeTitle || "Writing Practice"}</p>
+        <div style={{ display:"flex", gap:8, marginBottom:12 }}>
+          {modeBtn("copy", "📝 " + (T.writeModeCopy || "Copying down"), true)}
+          {modeBtn("question", "❓ " + (T.writeModeQuestion || "Questions"), false)}
+        </div>
+        <p style={{ color:"#39ff14", fontSize:12, lineHeight:1.7, marginBottom:12 }}>
+          {T.writeQDesc || "Paste a writing question you found online (an essay prompt, a JLPT-style question, an email task…). Write your answer in Japanese and GAKU checks it against the question."}
+        </p>
+
+        <label style={S.label}>{(T.writeQLabel || "THE QUESTION").toUpperCase()}</label>
+        <textarea value={question} onChange={e => { setQuestion(e.target.value.slice(0, 3000)); setResult(null); }}
+          placeholder={T.writeQPlaceholder || "Paste the question here…"} rows={4}
+          style={{ ...S.input, resize:"vertical", lineHeight:1.6, marginBottom:12, fontFamily:"inherit" }} />
+
+        <label style={S.label}>{(T.writeALabel || "YOUR ANSWER").toUpperCase()}</label>
+        <textarea value={answer} onChange={e => { setAnswer(e.target.value.slice(0, 1500)); setResult(null); }}
+          placeholder={T.writeAPlaceholder || "Type your answer in Japanese…"} rows={6}
+          style={{ ...S.input, resize:"vertical", lineHeight:1.7, marginBottom:12, fontFamily:"inherit" }} />
+
+        {error && <p style={{ color:"#f87171", fontSize:12, margin:"0 0 10px" }}>{error}</p>}
+        <div style={{ display:"flex", gap:8 }}>
+          <button onClick={check} disabled={loading}
+            style={{ ...S.btn, flex:1, background:`linear-gradient(135deg,${C.teal},#0891b2)`, color:"#fff", opacity:loading?0.7:1 }}>
+            {loading ? (T.writeChecking || "Checking…") : (T.writeCheckBtn || "Check my answer")}
+          </button>
+          {(question || answer || result) && (
+            <button onClick={newQuestion} disabled={loading}
+              style={{ ...S.btn, background:"transparent", border:`1px solid ${C.border}`, color:"#94a3b8" }}>
+              {T.writeNewQ || "New question"}
+            </button>
+          )}
+        </div>
+      </div>
+
+      {result && (
+        <div style={{ ...S.card, marginBottom:16, border:`1.5px solid ${result.fits ? "rgba(34,197,94,0.5)" : "rgba(251,191,36,0.5)"}` }}>
+          <p style={{ color:result.fits ? C.green : "#fbbf24", fontSize:14, fontWeight:800, margin:"0 0 10px" }}>
+            {result.fits ? (T.writeCorrect || "✅ Your answer fits the question!") : (T.writeNotQuite || "Not quite — your answer doesn't match the question yet.")}
+          </p>
+          <p style={{ color:"#64748b", fontSize:11, fontWeight:700, letterSpacing:1, margin:"0 0 4px" }}>{(T.writeFeedbackLabel || "Feedback").toUpperCase()}</p>
+          <p style={{ color:"#e2e8f0", fontSize:13, lineHeight:1.8, margin:"0 0 14px", whiteSpace:"pre-wrap" }}>{result.feedback}</p>
+          {!result.fits && result.model && (
+            <div style={{ background:"rgba(6,182,212,0.08)", border:`1px solid ${C.border}`, borderRadius:12, padding:"12px 14px" }}>
+              <p style={{ color:C.teal, fontSize:11, fontWeight:700, letterSpacing:1, margin:"0 0 6px" }}>{(T.writeModelLabel || "Model answer").toUpperCase()}</p>
+              <p style={{ color:"#f1f5f9", fontSize:15, lineHeight:1.9, margin:0, whiteSpace:"pre-wrap" }}>{result.model}</p>
+              <JLineTools text={result.model} lang={lang} T={T} />
+            </div>
+          )}
+          <button onClick={() => setResult(null)}
+            style={{ ...S.btn, marginTop:12, background:"transparent", border:`1px solid ${C.border}`, color:"#94a3b8", fontSize:12, padding:"9px 14px" }}>
+            {T.writeTryAgain || "Edit and try again"}
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
 function PronunciationListenAlong({ form, onLevelUp }) {
   const T = useUITranslations(form?.preferredLang || "English");
   const [heardLines, setHeardLines] = useState([]); // [{id, text}]
@@ -13364,6 +13890,7 @@ const TUTORIAL_STEPS = [
   { tab: "resources", subTab: "content" },
   { tab: "resources", subTab: "conversation" },
   { tab: "resources", subTab: "pronunciation" },
+  { tab: "resources", subTab: "writing" },
   { tab: "milestones" },
 ];
 const TUTORIAL_DESC_KEYS = {
@@ -13374,6 +13901,7 @@ const TUTORIAL_DESC_KEYS = {
   "resources:content": "tutorialContentDesc",
   "resources:conversation": "tutorialConversationDesc",
   "resources:pronunciation": "tutorialPronunciationDesc",
+  "resources:writing": "tutorialWritingDesc",
   "milestones:": "tutorialMilestonesDesc",
 };
 
@@ -13444,8 +13972,8 @@ function TutorialOverlay({ T, step, tab, resourceSubTab, tabsMeta, resourceSubTa
 // ---- Feature picker (after the tutorial): the student chooses which optional
 // tabs stay on their dashboard. Vocabulary + Feedback are always shown.
 // Stored per account in localStorage: JSON array of kept feature ids, or absent = show everything.
-const OPTIONAL_FEATURES = ["schedule","subtitles","links","content","conversation","pronunciation","milestones","jlpt"];
-const RESOURCE_FEATURES = ["links","content","conversation","pronunciation"];
+const OPTIONAL_FEATURES = ["schedule","subtitles","links","content","conversation","pronunciation","writing","milestones","jlpt"];
+const RESOURCE_FEATURES = ["links","content","conversation","pronunciation","writing"];
 function readVisibleFeatures() {
   try {
     const v = JSON.parse(localStorage.getItem(scopedKey("gaku_visible_features")) || "null");
@@ -13457,7 +13985,7 @@ function FeaturePicker({ T, initial, onApply }) {
   const labels = {
     schedule: T.tabSchedule, subtitles: T.tabSubtitles || "Subtitles", links: T.tabResources,
     content: T.tabPractice || "From Content", conversation: T.convTitle || "Conversation",
-    pronunciation: T.pronTitle || "Pronunciation", milestones: T.tabMilestones, jlpt: T.tabJlpt || "JLPT",
+    pronunciation: T.pronTitle || "Pronunciation", writing: T.writeTitle || "Writing", milestones: T.tabMilestones, jlpt: T.tabJlpt || "JLPT",
   };
   const toggle = id => setChecked(c => c.includes(id) ? c.filter(x => x !== id) : [...c, id]);
   return (
@@ -13805,6 +14333,7 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
     { id:"content",  label: T.tabPractice || "✨ From Content" },
     { id:"conversation", label: "🎙️ " + (T.convTitle || "Conversation") },
     { id:"pronunciation", label: "🗣️ " + (T.pronTitle || "Pronunciation") },
+    { id:"writing", label: "✍️ " + (T.writeTitle || "Writing") },
   ];
 
   return (
@@ -14095,6 +14624,8 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
             {resourceSubTab==="conversation" && <ConversationPredictor form={form} onLevelUp={onLevelUp} />}
 
             {resourceSubTab==="pronunciation" && <PronunciationListenAlong form={form} onLevelUp={onLevelUp} />}
+
+            {resourceSubTab==="writing" && <WritingPractice form={form} />}
 
             {resourceSubTab==="links" && (() => {
             // When the student's goal is understanding anime/manga, surface the
