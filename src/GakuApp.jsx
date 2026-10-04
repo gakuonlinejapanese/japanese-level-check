@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useMemo, useRef } from "react";
 import { supabase, getDeviceId, getDeviceLabel } from "./supabaseClient";
+import HanziWriter from "hanzi-writer";
 
 const C = {
   bg: "linear-gradient(160deg,#0a0f1e 0%,#0f172a 60%,#0a0f1e 100%)",
@@ -479,7 +480,30 @@ const UI_TRANSLATIONS = {
     writeErrEmpty: "Paste a question and type your answer first.",
     writeErrNotJa: "Please write your answer in Japanese.",
     writeErrFail: "Couldn't check your answer. Please try again.",
-    tutorialWritingDesc: "Try it now: paste a writing question from the internet, type your answer in Japanese, and tap “Check my answer”. GAKU tells you if it fits the question — and shows a model answer if it doesn't.",
+    tutorialWritingDesc: "Try it now: pick “Copying down”, paste a Japanese sentence and write each character stroke by stroke — GAKU checks the stroke order. Or pick “Questions”, paste a writing question, type your answer, and GAKU tells you if it fits (with a model answer if not).",
+    copyDesc: "Paste a Japanese sentence and copy it one character at a time. Write each stroke with your finger or mouse — GAKU checks the stroke order and shape and shows you the correct way to write it.",
+    copyLabel: "Text to copy",
+    copyPlaceholder: "Paste Japanese text here (up to 30 characters are practiced at a time)…",
+    copyStartBtn: "Start writing",
+    copyTooLong: "Only the first {n} characters are practiced at a time.",
+    copyErrEmpty: "Paste some Japanese text (kana or kanji) first.",
+    copyCharOf: "Character {current} of {total}",
+    copyWatch: "Watch stroke order",
+    copyGuideHide: "Hide guide",
+    copyGuideShow: "Show guide",
+    copyTryAgain: "Try again",
+    copyNext: "Next",
+    copyPrev: "Back",
+    copyFinish: "Finish",
+    copyLoading: "Loading…",
+    copyNoData: "No stroke data for this character. Look at it carefully, copy it on paper, then tap Next.",
+    copyMistake: "Stroke {n} wasn't right. Check the order and shape — tap “Watch stroke order” if you need help.",
+    copyPerfect: "✅ Perfect! Correct stroke order and shape.",
+    copyResultN: "Finished with {n} mistake(s). Try again for a perfect score!",
+    copySummaryTitle: "🎉 Nice work!",
+    copySummaryScore: "{ok} of {total} characters with no mistakes",
+    copyWeak: "Practice these again",
+    copyNewText: "New text",
     tutorialCompleteTitle: "All done! 🎉",
     tutorialCompleteDesc: "You've seen all 5 main features of GAKU Master. You can replay this tour anytime from the 🎓 Tutorial button.",
     tutorialCompleteBtn: "Start Studying",
@@ -957,7 +981,30 @@ const UI_TRANSLATIONS = {
     writeErrEmpty: "Collez d'abord une question et tapez votre réponse.",
     writeErrNotJa: "Veuillez écrire votre réponse en japonais.",
     writeErrFail: "Impossible de vérifier votre réponse. Veuillez réessayer.",
-    tutorialWritingDesc: "Essayez maintenant : collez une question d'écriture trouvée sur Internet, tapez votre réponse en japonais et appuyez sur « Vérifier ma réponse ». GAKU vous dit si elle correspond à la question — et montre une réponse modèle sinon.",
+    tutorialWritingDesc: "Essayez maintenant : choisissez « Copie », collez une phrase japonaise et écrivez chaque caractère trait par trait — GAKU vérifie l'ordre des traits. Ou choisissez « Questions », collez une question d'écriture, tapez votre réponse, et GAKU vous dit si elle convient (avec une réponse modèle sinon).",
+    copyDesc: "Collez une phrase japonaise et recopiez-la caractère par caractère. Tracez chaque trait avec le doigt ou la souris — GAKU vérifie l'ordre et la forme des traits et vous montre la bonne façon de l'écrire.",
+    copyLabel: "Texte à copier",
+    copyPlaceholder: "Collez le texte japonais ici (30 caractères maximum par séance)…",
+    copyStartBtn: "Commencer à écrire",
+    copyTooLong: "Seuls les {n} premiers caractères sont pratiqués à la fois.",
+    copyErrEmpty: "Collez d'abord du texte japonais (kana ou kanji).",
+    copyCharOf: "Caractère {current} sur {total}",
+    copyWatch: "Voir l'ordre des traits",
+    copyGuideHide: "Masquer le guide",
+    copyGuideShow: "Afficher le guide",
+    copyTryAgain: "Réessayer",
+    copyNext: "Suivant",
+    copyPrev: "Retour",
+    copyFinish: "Terminer",
+    copyLoading: "Chargement…",
+    copyNoData: "Pas de données de traits pour ce caractère. Observez-le bien, recopiez-le sur papier, puis appuyez sur Suivant.",
+    copyMistake: "Le trait {n} n'était pas correct. Vérifiez l'ordre et la forme — appuyez sur « Voir l'ordre des traits » si besoin.",
+    copyPerfect: "✅ Parfait ! Bon ordre et bonne forme des traits.",
+    copyResultN: "Terminé avec {n} erreur(s). Réessayez pour un sans-faute !",
+    copySummaryTitle: "🎉 Bien joué !",
+    copySummaryScore: "{ok} caractères sur {total} sans erreur",
+    copyWeak: "À retravailler",
+    copyNewText: "Nouveau texte",
     tutorialCompleteTitle: "Terminé ! 🎉",
     tutorialCompleteDesc: "Vous avez découvert les 5 fonctionnalités principales de GAKU Master. Vous pouvez revoir cette visite à tout moment via le bouton 🎓 Tutoriel.",
     tutorialCompleteBtn: "Commencer à étudier",
@@ -1420,7 +1467,30 @@ const UI_TRANSLATIONS = {
     writeErrEmpty: "Primero pega una pregunta y escribe tu respuesta.",
     writeErrNotJa: "Por favor, escribe tu respuesta en japonés.",
     writeErrFail: "No se pudo revisar tu respuesta. Inténtalo de nuevo.",
-    tutorialWritingDesc: "Pruébalo ahora: pega una pregunta de escritura de internet, escribe tu respuesta en japonés y pulsa «Revisar mi respuesta». GAKU te dice si se ajusta a la pregunta y, si no, te muestra una respuesta modelo.",
+    tutorialWritingDesc: "Pruébalo ahora: elige «Copiar», pega una frase en japonés y escribe cada carácter trazo a trazo — GAKU comprueba el orden de los trazos. O elige «Preguntas», pega una pregunta de escritura, escribe tu respuesta y GAKU te dice si se ajusta (con una respuesta modelo si no).",
+    copyDesc: "Pega una frase en japonés y cópiala carácter por carácter. Escribe cada trazo con el dedo o el ratón — GAKU comprueba el orden y la forma de los trazos y te muestra la manera correcta de escribirlo.",
+    copyLabel: "Texto para copiar",
+    copyPlaceholder: "Pega aquí el texto en japonés (se practican hasta 30 caracteres cada vez)…",
+    copyStartBtn: "Empezar a escribir",
+    copyTooLong: "Solo se practican los primeros {n} caracteres cada vez.",
+    copyErrEmpty: "Primero pega texto en japonés (kana o kanji).",
+    copyCharOf: "Carácter {current} de {total}",
+    copyWatch: "Ver el orden de los trazos",
+    copyGuideHide: "Ocultar guía",
+    copyGuideShow: "Mostrar guía",
+    copyTryAgain: "Reintentar",
+    copyNext: "Siguiente",
+    copyPrev: "Atrás",
+    copyFinish: "Terminar",
+    copyLoading: "Cargando…",
+    copyNoData: "No hay datos de trazos para este carácter. Obsérvalo bien, cópialo en papel y pulsa Siguiente.",
+    copyMistake: "El trazo {n} no fue correcto. Revisa el orden y la forma — pulsa «Ver el orden de los trazos» si necesitas ayuda.",
+    copyPerfect: "✅ ¡Perfecto! Orden y forma de los trazos correctos.",
+    copyResultN: "Terminado con {n} error(es). ¡Inténtalo de nuevo para una puntuación perfecta!",
+    copySummaryTitle: "🎉 ¡Buen trabajo!",
+    copySummaryScore: "{ok} de {total} caracteres sin errores",
+    copyWeak: "Practica estos de nuevo",
+    copyNewText: "Texto nuevo",
     tutorialCompleteTitle: "¡Listo! 🎉",
     tutorialCompleteDesc: "Has visto las 5 funciones principales de GAKU Master. Puedes repetir este recorrido cuando quieras desde el botón 🎓 Tutorial.",
     tutorialCompleteBtn: "Empezar a estudiar",
@@ -1883,7 +1953,30 @@ const UI_TRANSLATIONS = {
     writeErrEmpty: "Cole uma pergunta e digite sua resposta primeiro.",
     writeErrNotJa: "Por favor, escreva sua resposta em japonês.",
     writeErrFail: "Não foi possível verificar sua resposta. Tente novamente.",
-    tutorialWritingDesc: "Experimente agora: cole uma pergunta de escrita da internet, digite sua resposta em japonês e toque em “Verificar minha resposta”. O GAKU diz se ela combina com a pergunta — e mostra uma resposta modelo se não combinar.",
+    tutorialWritingDesc: "Experimente agora: escolha “Copiar”, cole uma frase em japonês e escreva cada caractere traço a traço — o GAKU confere a ordem dos traços. Ou escolha “Perguntas”, cole uma pergunta de escrita, digite sua resposta e o GAKU diz se ela combina (com uma resposta modelo se não combinar).",
+    copyDesc: "Cole uma frase em japonês e copie-a caractere por caractere. Escreva cada traço com o dedo ou o mouse — o GAKU confere a ordem e a forma dos traços e mostra a maneira correta de escrever.",
+    copyLabel: "Texto para copiar",
+    copyPlaceholder: "Cole o texto em japonês aqui (até 30 caracteres são praticados por vez)…",
+    copyStartBtn: "Começar a escrever",
+    copyTooLong: "Somente os primeiros {n} caracteres são praticados por vez.",
+    copyErrEmpty: "Cole primeiro um texto em japonês (kana ou kanji).",
+    copyCharOf: "Caractere {current} de {total}",
+    copyWatch: "Ver a ordem dos traços",
+    copyGuideHide: "Ocultar guia",
+    copyGuideShow: "Mostrar guia",
+    copyTryAgain: "Tentar de novo",
+    copyNext: "Próximo",
+    copyPrev: "Voltar",
+    copyFinish: "Concluir",
+    copyLoading: "Carregando…",
+    copyNoData: "Não há dados de traços para este caractere. Observe bem, copie no papel e toque em Próximo.",
+    copyMistake: "O traço {n} não estava certo. Confira a ordem e a forma — toque em “Ver a ordem dos traços” se precisar de ajuda.",
+    copyPerfect: "✅ Perfeito! Ordem e forma dos traços corretas.",
+    copyResultN: "Concluído com {n} erro(s). Tente de novo para uma pontuação perfeita!",
+    copySummaryTitle: "🎉 Bom trabalho!",
+    copySummaryScore: "{ok} de {total} caracteres sem erros",
+    copyWeak: "Pratique estes de novo",
+    copyNewText: "Novo texto",
     tutorialCompleteTitle: "Tudo pronto! 🎉",
     tutorialCompleteDesc: "Você conheceu as 5 principais funções do GAKU Master. Você pode rever este tour a qualquer momento pelo botão 🎓 Tutorial.",
     tutorialCompleteBtn: "Começar a estudar",
@@ -2346,7 +2439,30 @@ const UI_TRANSLATIONS = {
     writeErrEmpty: "Füge zuerst eine Frage ein und gib deine Antwort ein.",
     writeErrNotJa: "Bitte schreibe deine Antwort auf Japanisch.",
     writeErrFail: "Deine Antwort konnte nicht geprüft werden. Bitte versuche es erneut.",
-    tutorialWritingDesc: "Probier's gleich aus: Füge eine Schreibaufgabe aus dem Internet ein, tippe deine Antwort auf Japanisch und tippe auf „Meine Antwort prüfen“. GAKU sagt dir, ob sie zur Frage passt – und zeigt eine Musterantwort, falls nicht.",
+    tutorialWritingDesc: "Probier's gleich aus: Wähle „Abschreiben“, füge einen japanischen Satz ein und schreibe jedes Zeichen Strich für Strich – GAKU prüft die Strichreihenfolge. Oder wähle „Fragen“, füge eine Schreibaufgabe ein, tippe deine Antwort, und GAKU sagt dir, ob sie passt (mit Musterantwort, falls nicht).",
+    copyDesc: "Füge einen japanischen Satz ein und schreibe ihn Zeichen für Zeichen ab. Schreibe jeden Strich mit dem Finger oder der Maus – GAKU prüft Reihenfolge und Form der Striche und zeigt dir die richtige Schreibweise.",
+    copyLabel: "Text zum Abschreiben",
+    copyPlaceholder: "Japanischen Text hier einfügen (pro Durchgang werden bis zu 30 Zeichen geübt) …",
+    copyStartBtn: "Schreiben starten",
+    copyTooLong: "Es werden jeweils nur die ersten {n} Zeichen geübt.",
+    copyErrEmpty: "Füge zuerst japanischen Text (Kana oder Kanji) ein.",
+    copyCharOf: "Zeichen {current} von {total}",
+    copyWatch: "Strichreihenfolge ansehen",
+    copyGuideHide: "Hilfslinien ausblenden",
+    copyGuideShow: "Hilfslinien einblenden",
+    copyTryAgain: "Nochmal",
+    copyNext: "Weiter",
+    copyPrev: "Zurück",
+    copyFinish: "Fertig",
+    copyLoading: "Lädt …",
+    copyNoData: "Für dieses Zeichen gibt es keine Strichdaten. Sieh es dir genau an, schreibe es auf Papier ab und tippe auf Weiter.",
+    copyMistake: "Strich {n} war nicht richtig. Prüfe Reihenfolge und Form – tippe auf „Strichreihenfolge ansehen“, wenn du Hilfe brauchst.",
+    copyPerfect: "✅ Perfekt! Richtige Strichreihenfolge und Form.",
+    copyResultN: "Fertig mit {n} Fehler(n). Versuche es nochmal für die volle Punktzahl!",
+    copySummaryTitle: "🎉 Gut gemacht!",
+    copySummaryScore: "{ok} von {total} Zeichen ohne Fehler",
+    copyWeak: "Diese nochmal üben",
+    copyNewText: "Neuer Text",
     tutorialCompleteTitle: "Fertig! 🎉",
     tutorialCompleteDesc: "Du hast alle 5 Hauptfunktionen von GAKU Master kennengelernt. Du kannst diese Tour jederzeit über den 🎓 Tutorial-Button wiederholen.",
     tutorialCompleteBtn: "Mit dem Lernen beginnen",
@@ -2809,7 +2925,30 @@ const UI_TRANSLATIONS = {
     writeErrEmpty: "Incolla prima una domanda e scrivi la tua risposta.",
     writeErrNotJa: "Scrivi la tua risposta in giapponese.",
     writeErrFail: "Impossibile controllare la tua risposta. Riprova.",
-    tutorialWritingDesc: "Provalo subito: incolla una domanda di scrittura da internet, scrivi la tua risposta in giapponese e tocca «Controlla la mia risposta». GAKU ti dice se è in linea con la domanda e, se non lo è, mostra una risposta modello.",
+    tutorialWritingDesc: "Provalo subito: scegli «Copiatura», incolla una frase giapponese e scrivi ogni carattere tratto per tratto — GAKU controlla l'ordine dei tratti. Oppure scegli «Domande», incolla una domanda di scrittura, scrivi la risposta e GAKU ti dice se è in linea (con una risposta modello se non lo è).",
+    copyDesc: "Incolla una frase giapponese e copiala un carattere alla volta. Scrivi ogni tratto con il dito o con il mouse — GAKU controlla ordine e forma dei tratti e ti mostra il modo corretto di scriverlo.",
+    copyLabel: "Testo da copiare",
+    copyPlaceholder: "Incolla qui il testo giapponese (si esercitano fino a 30 caratteri alla volta)…",
+    copyStartBtn: "Inizia a scrivere",
+    copyTooLong: "Si esercitano solo i primi {n} caratteri alla volta.",
+    copyErrEmpty: "Incolla prima del testo giapponese (kana o kanji).",
+    copyCharOf: "Carattere {current} di {total}",
+    copyWatch: "Guarda l'ordine dei tratti",
+    copyGuideHide: "Nascondi guida",
+    copyGuideShow: "Mostra guida",
+    copyTryAgain: "Riprova",
+    copyNext: "Avanti",
+    copyPrev: "Indietro",
+    copyFinish: "Fine",
+    copyLoading: "Caricamento…",
+    copyNoData: "Nessun dato sui tratti per questo carattere. Osservalo bene, copialo su carta e tocca Avanti.",
+    copyMistake: "Il tratto {n} non era corretto. Controlla ordine e forma — tocca «Guarda l'ordine dei tratti» se ti serve aiuto.",
+    copyPerfect: "✅ Perfetto! Ordine e forma dei tratti corretti.",
+    copyResultN: "Finito con {n} errore/i. Riprova per un punteggio perfetto!",
+    copySummaryTitle: "🎉 Ottimo lavoro!",
+    copySummaryScore: "{ok} caratteri su {total} senza errori",
+    copyWeak: "Esercitati di nuovo su questi",
+    copyNewText: "Nuovo testo",
     tutorialCompleteTitle: "Fatto! 🎉",
     tutorialCompleteDesc: "Hai visto tutte le 5 funzioni principali di GAKU Master. Puoi rivedere questo tour in qualsiasi momento dal pulsante 🎓 Tutorial.",
     tutorialCompleteBtn: "Inizia a studiare",
@@ -3272,7 +3411,30 @@ const UI_TRANSLATIONS = {
     writeErrEmpty: "请先粘贴题目并输入你的答案。",
     writeErrNotJa: "请用日语写出你的答案。",
     writeErrFail: "无法检查你的答案，请重试。",
-    tutorialWritingDesc: "现在就试试：粘贴一道网上的写作题，用日语输入你的答案，然后点击“检查我的答案”。GAKU会告诉你答案是否符合题目——如果不符合，还会给出参考答案。",
+    tutorialWritingDesc: "现在就试试：选择“抄写”，粘贴一句日语，逐笔写出每个字——GAKU会检查笔顺。或者选择“提问”，粘贴一道写作题，输入你的答案，GAKU会告诉你是否符合题目（不符合时会给出参考答案）。",
+    copyDesc: "粘贴一句日语，逐字抄写。用手指或鼠标写出每一笔——GAKU会检查笔顺和笔画形状，并告诉你正确的写法。",
+    copyLabel: "要抄写的文字",
+    copyPlaceholder: "在此粘贴日语文字（每次练习最多30个字）……",
+    copyStartBtn: "开始书写",
+    copyTooLong: "每次只练习前{n}个字。",
+    copyErrEmpty: "请先粘贴日语文字（假名或汉字）。",
+    copyCharOf: "第 {current} / {total} 个字",
+    copyWatch: "查看笔顺",
+    copyGuideHide: "隐藏提示",
+    copyGuideShow: "显示提示",
+    copyTryAgain: "重试",
+    copyNext: "下一个",
+    copyPrev: "返回",
+    copyFinish: "完成",
+    copyLoading: "加载中……",
+    copyNoData: "这个字没有笔顺数据。请仔细观察，在纸上抄写，然后点击“下一个”。",
+    copyMistake: "第{n}笔不正确。请检查笔顺和形状——需要帮助时点击“查看笔顺”。",
+    copyPerfect: "✅ 完美！笔顺和形状都正确。",
+    copyResultN: "完成，共错了{n}次。再试一次，争取零错误！",
+    copySummaryTitle: "🎉 做得好！",
+    copySummaryScore: "{total}个字中有{ok}个没有出错",
+    copyWeak: "再练习这些字",
+    copyNewText: "新文字",
     tutorialCompleteTitle: "全部完成！🎉",
     tutorialCompleteDesc: "你已经了解了GAKU Master的全部5个主要功能。随时可以通过🎓教程按钮重新观看导览。",
     tutorialCompleteBtn: "开始学习",
@@ -3735,7 +3897,30 @@ const UI_TRANSLATIONS = {
     writeErrEmpty: "請先貼上題目並輸入你的答案。",
     writeErrNotJa: "請用日語寫出你的答案。",
     writeErrFail: "無法檢查你的答案，請重試。",
-    tutorialWritingDesc: "現在就試試：貼上一道網路上的寫作題，用日語輸入你的答案，然後點擊「檢查我的答案」。GAKU會告訴你答案是否符合題目——如果不符合，還會給出參考答案。",
+    tutorialWritingDesc: "現在就試試：選擇「抄寫」，貼上一句日語，逐筆寫出每個字——GAKU會檢查筆順。或者選擇「提問」，貼上一道寫作題，輸入你的答案，GAKU會告訴你是否符合題目（不符合時會給出參考答案）。",
+    copyDesc: "貼上一句日語，逐字抄寫。用手指或滑鼠寫出每一筆——GAKU會檢查筆順和筆畫形狀，並告訴你正確的寫法。",
+    copyLabel: "要抄寫的文字",
+    copyPlaceholder: "在此貼上日語文字（每次練習最多30個字）……",
+    copyStartBtn: "開始書寫",
+    copyTooLong: "每次只練習前{n}個字。",
+    copyErrEmpty: "請先貼上日語文字（假名或漢字）。",
+    copyCharOf: "第 {current} / {total} 個字",
+    copyWatch: "查看筆順",
+    copyGuideHide: "隱藏提示",
+    copyGuideShow: "顯示提示",
+    copyTryAgain: "重試",
+    copyNext: "下一個",
+    copyPrev: "返回",
+    copyFinish: "完成",
+    copyLoading: "載入中……",
+    copyNoData: "這個字沒有筆順資料。請仔細觀察，在紙上抄寫，然後點擊「下一個」。",
+    copyMistake: "第{n}筆不正確。請檢查筆順和形狀——需要協助時點擊「查看筆順」。",
+    copyPerfect: "✅ 完美！筆順和形狀都正確。",
+    copyResultN: "完成，共錯了{n}次。再試一次，爭取零錯誤！",
+    copySummaryTitle: "🎉 做得好！",
+    copySummaryScore: "{total}個字中有{ok}個沒有出錯",
+    copyWeak: "再練習這些字",
+    copyNewText: "新文字",
     tutorialCompleteTitle: "全部完成！🎉",
     tutorialCompleteDesc: "你已經了解了GAKU Master的全部5個主要功能。隨時可以透過🎓教學按鈕重新觀看導覽。",
     tutorialCompleteBtn: "開始學習",
@@ -4198,7 +4383,30 @@ const UI_TRANSLATIONS = {
     writeErrEmpty: "먼저 문제를 붙여넣고 답안을 입력하세요.",
     writeErrNotJa: "답안을 일본어로 작성해 주세요.",
     writeErrFail: "답안을 확인하지 못했습니다. 다시 시도해 주세요.",
-    tutorialWritingDesc: "지금 해보세요: 인터넷에서 찾은 쓰기 문제를 붙여넣고, 일본어로 답을 입력한 다음 '내 답안 확인'을 누르세요. GAKU가 문제에 맞는지 알려 주고, 맞지 않으면 모범 답안을 보여 줍니다.",
+    tutorialWritingDesc: "지금 해보세요: '따라 쓰기'를 고르고 일본어 문장을 붙여넣은 뒤 글자를 한 획씩 쓰세요. GAKU가 획순을 확인합니다. 또는 '질문'을 고르고 쓰기 문제를 붙여넣어 답을 입력하면, GAKU가 문제에 맞는지 알려 주고 맞지 않으면 모범 답안을 보여 줍니다.",
+    copyDesc: "일본어 문장을 붙여넣고 한 글자씩 따라 쓰세요. 손가락이나 마우스로 한 획씩 쓰면 GAKU가 획순과 모양을 확인하고 올바른 쓰는 법을 알려 줍니다.",
+    copyLabel: "따라 쓸 글",
+    copyPlaceholder: "여기에 일본어 글을 붙여넣으세요 (한 번에 최대 30자 연습)…",
+    copyStartBtn: "쓰기 시작",
+    copyTooLong: "한 번에 처음 {n}자만 연습합니다.",
+    copyErrEmpty: "먼저 일본어 글(가나 또는 한자)을 붙여넣으세요.",
+    copyCharOf: "{current} / {total}번째 글자",
+    copyWatch: "획순 보기",
+    copyGuideHide: "가이드 숨기기",
+    copyGuideShow: "가이드 보기",
+    copyTryAgain: "다시 시도",
+    copyNext: "다음",
+    copyPrev: "뒤로",
+    copyFinish: "완료",
+    copyLoading: "불러오는 중…",
+    copyNoData: "이 글자는 획순 데이터가 없습니다. 잘 보고 종이에 따라 쓴 다음 '다음'을 누르세요.",
+    copyMistake: "{n}번째 획이 맞지 않아요. 순서와 모양을 확인하세요. 도움이 필요하면 '획순 보기'를 누르세요.",
+    copyPerfect: "✅ 완벽해요! 획순과 모양이 모두 정확합니다.",
+    copyResultN: "실수 {n}번으로 완료했어요. 다시 해서 완벽하게 도전해 보세요!",
+    copySummaryTitle: "🎉 잘했어요!",
+    copySummaryScore: "{total}자 중 {ok}자를 실수 없이 썼어요",
+    copyWeak: "다시 연습하기",
+    copyNewText: "새 글",
     tutorialCompleteTitle: "완료! 🎉",
     tutorialCompleteDesc: "GAKU Master의 5가지 주요 기능을 모두 살펴보셨습니다. 🎓 튜토리얼 버튼을 통해 언제든 다시 볼 수 있어요.",
     tutorialCompleteBtn: "학습 시작하기",
@@ -4661,7 +4869,30 @@ const UI_TRANSLATIONS = {
     writeErrEmpty: "กรุณาวางโจทย์และพิมพ์คำตอบก่อน",
     writeErrNotJa: "กรุณาเขียนคำตอบเป็นภาษาญี่ปุ่น",
     writeErrFail: "ตรวจคำตอบไม่สำเร็จ กรุณาลองอีกครั้ง",
-    tutorialWritingDesc: "ลองเลย: วางโจทย์การเขียนจากอินเทอร์เน็ต พิมพ์คำตอบเป็นภาษาญี่ปุ่น แล้วกด “ตรวจคำตอบของฉัน” GAKU จะบอกว่าตรงกับโจทย์หรือไม่ และแสดงคำตอบตัวอย่างหากไม่ตรง",
+    tutorialWritingDesc: "ลองเลย: เลือก “คัดลอกเขียน” วางประโยคภาษาญี่ปุ่น แล้วเขียนทีละตัวอักษรทีละขีด GAKU จะตรวจลำดับขีดให้ หรือเลือก “คำถาม” วางโจทย์การเขียน พิมพ์คำตอบ แล้ว GAKU จะบอกว่าตรงกับโจทย์หรือไม่ (ถ้าไม่ตรงจะแสดงคำตอบตัวอย่าง)",
+    copyDesc: "วางประโยคภาษาญี่ปุ่นแล้วคัดลอกทีละตัวอักษร เขียนแต่ละขีดด้วยนิ้วหรือเมาส์ GAKU จะตรวจลำดับขีดและรูปทรง และแสดงวิธีเขียนที่ถูกต้อง",
+    copyLabel: "ข้อความที่จะคัดลอก",
+    copyPlaceholder: "วางข้อความภาษาญี่ปุ่นที่นี่ (ฝึกครั้งละไม่เกิน 30 ตัวอักษร)…",
+    copyStartBtn: "เริ่มเขียน",
+    copyTooLong: "ฝึกครั้งละ {n} ตัวอักษรแรกเท่านั้น",
+    copyErrEmpty: "กรุณาวางข้อความภาษาญี่ปุ่น (คานะหรือคันจิ) ก่อน",
+    copyCharOf: "ตัวอักษรที่ {current} จาก {total}",
+    copyWatch: "ดูลำดับขีด",
+    copyGuideHide: "ซ่อนเส้นนำ",
+    copyGuideShow: "แสดงเส้นนำ",
+    copyTryAgain: "ลองอีกครั้ง",
+    copyNext: "ถัดไป",
+    copyPrev: "ย้อนกลับ",
+    copyFinish: "เสร็จสิ้น",
+    copyLoading: "กำลังโหลด…",
+    copyNoData: "ตัวอักษรนี้ไม่มีข้อมูลลำดับขีด ดูให้ละเอียด คัดลอกลงบนกระดาษ แล้วกดถัดไป",
+    copyMistake: "ขีดที่ {n} ยังไม่ถูกต้อง ตรวจลำดับและรูปทรง กด “ดูลำดับขีด” หากต้องการความช่วยเหลือ",
+    copyPerfect: "✅ สมบูรณ์แบบ! ลำดับขีดและรูปทรงถูกต้อง",
+    copyResultN: "เสร็จแล้ว พลาด {n} ครั้ง ลองอีกครั้งเพื่อให้ได้คะแนนเต็ม!",
+    copySummaryTitle: "🎉 ทำได้ดีมาก!",
+    copySummaryScore: "{ok} จาก {total} ตัวอักษรไม่พลาดเลย",
+    copyWeak: "ฝึกตัวเหล่านี้อีกครั้ง",
+    copyNewText: "ข้อความใหม่",
     tutorialCompleteTitle: "เสร็จเรียบร้อย! 🎉",
     tutorialCompleteDesc: "คุณได้ชมฟีเจอร์หลักทั้ง 5 ของ GAKU Master แล้ว สามารถดูทัวร์นี้ซ้ำได้ทุกเมื่อผ่านปุ่ม 🎓 บทแนะนำ",
     tutorialCompleteBtn: "เริ่มเรียนเลย",
@@ -5124,7 +5355,30 @@ const UI_TRANSLATIONS = {
     writeErrEmpty: "Tampal soalan dan taip jawapan anda dahulu.",
     writeErrNotJa: "Sila tulis jawapan anda dalam bahasa Jepun.",
     writeErrFail: "Tidak dapat menyemak jawapan anda. Sila cuba lagi.",
-    tutorialWritingDesc: "Cuba sekarang: tampal soalan menulis dari internet, taip jawapan anda dalam bahasa Jepun, dan tekan “Semak jawapan saya”. GAKU akan memberitahu sama ada ia sesuai dengan soalan — dan menunjukkan jawapan contoh jika tidak.",
+    tutorialWritingDesc: "Cuba sekarang: pilih “Menyalin”, tampal ayat bahasa Jepun dan tulis setiap aksara goresan demi goresan — GAKU menyemak susunan goresan. Atau pilih “Soalan”, tampal soalan menulis, taip jawapan anda, dan GAKU akan memberitahu sama ada ia sesuai (dengan jawapan contoh jika tidak).",
+    copyDesc: "Tampal ayat bahasa Jepun dan salin satu aksara pada satu masa. Tulis setiap goresan dengan jari atau tetikus — GAKU menyemak susunan dan bentuk goresan serta menunjukkan cara penulisan yang betul.",
+    copyLabel: "Teks untuk disalin",
+    copyPlaceholder: "Tampal teks bahasa Jepun di sini (sehingga 30 aksara dilatih pada satu masa)…",
+    copyStartBtn: "Mula menulis",
+    copyTooLong: "Hanya {n} aksara pertama dilatih pada satu masa.",
+    copyErrEmpty: "Tampal teks bahasa Jepun (kana atau kanji) dahulu.",
+    copyCharOf: "Aksara {current} daripada {total}",
+    copyWatch: "Lihat susunan goresan",
+    copyGuideHide: "Sembunyikan panduan",
+    copyGuideShow: "Tunjukkan panduan",
+    copyTryAgain: "Cuba lagi",
+    copyNext: "Seterusnya",
+    copyPrev: "Kembali",
+    copyFinish: "Selesai",
+    copyLoading: "Memuatkan…",
+    copyNoData: "Tiada data goresan untuk aksara ini. Perhatikan dengan teliti, salin di atas kertas, kemudian tekan Seterusnya.",
+    copyMistake: "Goresan {n} tidak betul. Semak susunan dan bentuk — tekan “Lihat susunan goresan” jika perlu bantuan.",
+    copyPerfect: "✅ Sempurna! Susunan dan bentuk goresan betul.",
+    copyResultN: "Selesai dengan {n} kesilapan. Cuba lagi untuk markah penuh!",
+    copySummaryTitle: "🎉 Syabas!",
+    copySummaryScore: "{ok} daripada {total} aksara tanpa kesilapan",
+    copyWeak: "Latih semula ini",
+    copyNewText: "Teks baharu",
     tutorialCompleteTitle: "Selesai! 🎉",
     tutorialCompleteDesc: "Anda telah melihat kesemua 5 ciri utama GAKU Master. Anda boleh ulang tayang lawatan ini bila-bila masa melalui butang 🎓 Tutorial.",
     tutorialCompleteBtn: "Mula Belajar",
@@ -5587,7 +5841,30 @@ const UI_TRANSLATIONS = {
     writeErrEmpty: "Tempel soal dan ketik jawabanmu terlebih dahulu.",
     writeErrNotJa: "Tulis jawabanmu dalam bahasa Jepang.",
     writeErrFail: "Jawabanmu tidak dapat diperiksa. Silakan coba lagi.",
-    tutorialWritingDesc: "Coba sekarang: tempel soal menulis dari internet, ketik jawabanmu dalam bahasa Jepang, lalu ketuk “Periksa jawabanku”. GAKU memberi tahu apakah jawabanmu sesuai dengan soal — dan menampilkan jawaban contoh jika tidak.",
+    tutorialWritingDesc: "Coba sekarang: pilih “Menyalin”, tempel kalimat bahasa Jepang, dan tulis setiap karakter goresan demi goresan — GAKU memeriksa urutan goresan. Atau pilih “Pertanyaan”, tempel soal menulis, ketik jawabanmu, dan GAKU memberi tahu apakah sesuai (dengan jawaban contoh jika tidak).",
+    copyDesc: "Tempel kalimat bahasa Jepang dan salin satu karakter demi satu. Tulis setiap goresan dengan jari atau mouse — GAKU memeriksa urutan dan bentuk goresan serta menunjukkan cara menulis yang benar.",
+    copyLabel: "Teks yang disalin",
+    copyPlaceholder: "Tempel teks bahasa Jepang di sini (maksimal 30 karakter dilatih sekaligus)…",
+    copyStartBtn: "Mulai menulis",
+    copyTooLong: "Hanya {n} karakter pertama yang dilatih sekaligus.",
+    copyErrEmpty: "Tempel teks bahasa Jepang (kana atau kanji) terlebih dahulu.",
+    copyCharOf: "Karakter {current} dari {total}",
+    copyWatch: "Lihat urutan goresan",
+    copyGuideHide: "Sembunyikan panduan",
+    copyGuideShow: "Tampilkan panduan",
+    copyTryAgain: "Coba lagi",
+    copyNext: "Berikutnya",
+    copyPrev: "Kembali",
+    copyFinish: "Selesai",
+    copyLoading: "Memuat…",
+    copyNoData: "Tidak ada data goresan untuk karakter ini. Perhatikan baik-baik, salin di kertas, lalu ketuk Berikutnya.",
+    copyMistake: "Goresan {n} belum tepat. Periksa urutan dan bentuknya — ketuk “Lihat urutan goresan” jika perlu bantuan.",
+    copyPerfect: "✅ Sempurna! Urutan dan bentuk goresan benar.",
+    copyResultN: "Selesai dengan {n} kesalahan. Coba lagi untuk nilai sempurna!",
+    copySummaryTitle: "🎉 Kerja bagus!",
+    copySummaryScore: "{ok} dari {total} karakter tanpa kesalahan",
+    copyWeak: "Latih lagi yang ini",
+    copyNewText: "Teks baru",
     tutorialCompleteTitle: "Selesai! 🎉",
     tutorialCompleteDesc: "Anda telah melihat semua 5 fitur utama GAKU Master. Anda bisa memutar ulang tur ini kapan saja lewat tombol 🎓 Tutorial.",
     tutorialCompleteBtn: "Mulai Belajar",
@@ -6050,7 +6327,30 @@ const UI_TRANSLATIONS = {
     writeErrEmpty: "Hãy dán đề bài và nhập câu trả lời trước.",
     writeErrNotJa: "Vui lòng viết câu trả lời bằng tiếng Nhật.",
     writeErrFail: "Không thể kiểm tra câu trả lời. Vui lòng thử lại.",
-    tutorialWritingDesc: "Hãy thử ngay: dán một đề bài viết từ internet, nhập câu trả lời bằng tiếng Nhật rồi nhấn “Kiểm tra câu trả lời”. GAKU sẽ cho bạn biết câu trả lời có phù hợp với đề bài không — và hiển thị đáp án mẫu nếu không.",
+    tutorialWritingDesc: "Hãy thử ngay: chọn “Chép lại”, dán một câu tiếng Nhật và viết từng chữ theo từng nét — GAKU kiểm tra thứ tự nét. Hoặc chọn “Câu hỏi”, dán một đề bài viết, nhập câu trả lời và GAKU cho bạn biết có phù hợp không (kèm đáp án mẫu nếu không).",
+    copyDesc: "Dán một câu tiếng Nhật và chép từng chữ một. Viết từng nét bằng ngón tay hoặc chuột — GAKU kiểm tra thứ tự và hình dạng nét, đồng thời chỉ cho bạn cách viết đúng.",
+    copyLabel: "Văn bản cần chép",
+    copyPlaceholder: "Dán văn bản tiếng Nhật vào đây (mỗi lần luyện tối đa 30 chữ)…",
+    copyStartBtn: "Bắt đầu viết",
+    copyTooLong: "Mỗi lần chỉ luyện {n} chữ đầu tiên.",
+    copyErrEmpty: "Hãy dán văn bản tiếng Nhật (kana hoặc kanji) trước.",
+    copyCharOf: "Chữ {current} / {total}",
+    copyWatch: "Xem thứ tự nét",
+    copyGuideHide: "Ẩn nét gợi ý",
+    copyGuideShow: "Hiện nét gợi ý",
+    copyTryAgain: "Thử lại",
+    copyNext: "Tiếp theo",
+    copyPrev: "Quay lại",
+    copyFinish: "Hoàn thành",
+    copyLoading: "Đang tải…",
+    copyNoData: "Chữ này không có dữ liệu nét. Hãy quan sát kỹ, chép ra giấy rồi nhấn Tiếp theo.",
+    copyMistake: "Nét {n} chưa đúng. Hãy kiểm tra thứ tự và hình dạng — nhấn “Xem thứ tự nét” nếu cần trợ giúp.",
+    copyPerfect: "✅ Hoàn hảo! Thứ tự và hình dạng nét đều đúng.",
+    copyResultN: "Hoàn thành với {n} lỗi. Hãy thử lại để đạt điểm tối đa!",
+    copySummaryTitle: "🎉 Làm tốt lắm!",
+    copySummaryScore: "{ok} / {total} chữ không có lỗi",
+    copyWeak: "Luyện lại những chữ này",
+    copyNewText: "Văn bản mới",
     tutorialCompleteTitle: "Xong rồi! 🎉",
     tutorialCompleteDesc: "Bạn đã xem qua cả 5 tính năng chính của GAKU Master. Bạn có thể xem lại chuyến tham quan này bất cứ lúc nào qua nút 🎓 Hướng dẫn.",
     tutorialCompleteBtn: "Bắt đầu học",
@@ -6513,7 +6813,30 @@ const UI_TRANSLATIONS = {
     writeErrEmpty: "पहले प्रश्न पेस्ट करें और अपना उत्तर लिखें।",
     writeErrNotJa: "कृपया अपना उत्तर जापानी में लिखें।",
     writeErrFail: "आपका उत्तर जाँचा नहीं जा सका। कृपया फिर कोशिश करें।",
-    tutorialWritingDesc: "अभी आज़माएँ: इंटरनेट से कोई लेखन प्रश्न पेस्ट करें, अपना उत्तर जापानी में लिखें और “मेरा उत्तर जाँचें” दबाएँ। GAKU बताएगा कि उत्तर प्रश्न से मेल खाता है या नहीं — और न खाने पर आदर्श उत्तर दिखाएगा।",
+    tutorialWritingDesc: "अभी आज़माएँ: “नकल करके लिखना” चुनें, जापानी वाक्य पेस्ट करें और हर अक्षर को स्ट्रोक-दर-स्ट्रोक लिखें — GAKU स्ट्रोक का क्रम जाँचेगा। या “प्रश्न” चुनें, कोई लेखन प्रश्न पेस्ट करें, अपना उत्तर लिखें, और GAKU बताएगा कि वह मेल खाता है या नहीं (न खाने पर आदर्श उत्तर के साथ)।",
+    copyDesc: "जापानी वाक्य पेस्ट करें और उसे एक-एक अक्षर करके नकल करें। उँगली या माउस से हर स्ट्रोक लिखें — GAKU स्ट्रोक का क्रम और आकार जाँचता है और लिखने का सही तरीका दिखाता है।",
+    copyLabel: "नकल करने का पाठ",
+    copyPlaceholder: "जापानी पाठ यहाँ पेस्ट करें (एक बार में अधिकतम 30 अक्षरों का अभ्यास)…",
+    copyStartBtn: "लिखना शुरू करें",
+    copyTooLong: "एक बार में केवल पहले {n} अक्षरों का अभ्यास होता है।",
+    copyErrEmpty: "पहले जापानी पाठ (काना या कांजी) पेस्ट करें।",
+    copyCharOf: "अक्षर {current} / {total}",
+    copyWatch: "स्ट्रोक का क्रम देखें",
+    copyGuideHide: "गाइड छिपाएँ",
+    copyGuideShow: "गाइड दिखाएँ",
+    copyTryAgain: "फिर कोशिश करें",
+    copyNext: "अगला",
+    copyPrev: "वापस",
+    copyFinish: "समाप्त",
+    copyLoading: "लोड हो रहा है…",
+    copyNoData: "इस अक्षर के लिए स्ट्रोक डेटा उपलब्ध नहीं है। इसे ध्यान से देखें, कागज़ पर नकल करें, फिर अगला दबाएँ।",
+    copyMistake: "स्ट्रोक {n} सही नहीं था। क्रम और आकार जाँचें — मदद चाहिए तो “स्ट्रोक का क्रम देखें” दबाएँ।",
+    copyPerfect: "✅ बिल्कुल सही! स्ट्रोक का क्रम और आकार सही हैं।",
+    copyResultN: "{n} गलती(यों) के साथ पूरा हुआ। पूरे अंक पाने के लिए फिर कोशिश करें!",
+    copySummaryTitle: "🎉 बहुत बढ़िया!",
+    copySummaryScore: "{total} में से {ok} अक्षर बिना गलती के",
+    copyWeak: "इन्हें फिर से अभ्यास करें",
+    copyNewText: "नया पाठ",
     tutorialCompleteTitle: "सब हो गया! 🎉",
     tutorialCompleteDesc: "आपने GAKU Master के सभी 5 मुख्य फीचर्स देख लिए हैं। आप 🎓 ट्यूटोरियल बटन से कभी भी यह टूर दोबारा देख सकते हैं।",
     tutorialCompleteBtn: "पढ़ाई शुरू करें",
@@ -6976,7 +7299,30 @@ const UI_TRANSLATIONS = {
     writeErrEmpty: "先に問題を貼り付けて、答えを入力してください。",
     writeErrNotJa: "答えは日本語で書いてください。",
     writeErrFail: "答えをチェックできませんでした。もう一度お試しください。",
-    tutorialWritingDesc: "今すぐ試してみましょう：ネットで見つけた作文の問題を貼り付け、日本語で答えを入力して「答えをチェック」を押してください。GAKUが問題に合っているかを教え、合っていない場合は模範解答も表示します。",
+    tutorialWritingDesc: "今すぐ試してみましょう：「書き写し」を選び、日本語の文を貼り付けて、1文字ずつ筆順どおりに書いてみてください。GAKUが筆順をチェックします。または「質問」を選び、作文の問題を貼り付けて答えを入力すると、問題に合っているかを教え、合っていない場合は模範解答も表示します。",
+    copyDesc: "日本語の文を貼り付けて、1文字ずつ書き写しましょう。指またはマウスで1画ずつ書くと、GAKUが筆順と形をチェックし、正しい書き方を教えます。",
+    copyLabel: "書き写す文",
+    copyPlaceholder: "ここに日本語の文を貼り付け（1回に最大30文字まで練習できます）…",
+    copyStartBtn: "書き始める",
+    copyTooLong: "1回に練習できるのは最初の{n}文字までです。",
+    copyErrEmpty: "先に日本語の文（かな・漢字）を貼り付けてください。",
+    copyCharOf: "{total}文字中 {current}文字目",
+    copyWatch: "筆順を見る",
+    copyGuideHide: "ガイドを隠す",
+    copyGuideShow: "ガイドを表示",
+    copyTryAgain: "もう一度",
+    copyNext: "次へ",
+    copyPrev: "戻る",
+    copyFinish: "終了",
+    copyLoading: "読み込み中…",
+    copyNoData: "この文字には筆順データがありません。よく見て紙に書き写してから「次へ」を押してください。",
+    copyMistake: "{n}画目が違っています。順番と形を確認してください。困ったら「筆順を見る」を押してください。",
+    copyPerfect: "✅ 完璧です！筆順も形も正しいです。",
+    copyResultN: "間違い{n}回で終了しました。もう一度やって満点を目指しましょう！",
+    copySummaryTitle: "🎉 よくできました！",
+    copySummaryScore: "{total}文字中 {ok}文字がミスなし",
+    copyWeak: "もう一度練習する文字",
+    copyNewText: "新しい文",
     tutorialCompleteTitle: "完了しました！🎉",
     tutorialCompleteDesc: "GAKU Masterの5つの主な機能をすべて見てもらいました。🎓チュートリアルボタンからいつでもこのツアーをもう一度見られます。",
     tutorialCompleteBtn: "勉強を始める",
@@ -7439,7 +7785,30 @@ const UI_TRANSLATIONS = {
     writeErrEmpty: "Önce bir soru yapıştırın ve cevabınızı yazın.",
     writeErrNotJa: "Lütfen cevabınızı Japonca yazın.",
     writeErrFail: "Cevabınız kontrol edilemedi. Lütfen tekrar deneyin.",
-    tutorialWritingDesc: "Hemen deneyin: internetten bir yazma sorusu yapıştırın, cevabınızı Japonca yazın ve “Cevabımı kontrol et”e dokunun. GAKU cevabın soruya uygun olup olmadığını söyler — uygun değilse örnek bir cevap gösterir.",
+    tutorialWritingDesc: "Hemen deneyin: “Kopyalayarak yazma”yı seçin, bir Japonca cümle yapıştırın ve her karakteri vuruş vuruş yazın — GAKU vuruş sırasını kontrol eder. Ya da “Sorular”ı seçin, bir yazma sorusu yapıştırın, cevabınızı yazın; GAKU uygun olup olmadığını söyler (değilse örnek cevap gösterir).",
+    copyDesc: "Bir Japonca cümle yapıştırın ve karakter karakter kopyalayın. Her vuruşu parmağınız veya fareyle yazın — GAKU vuruş sırasını ve şeklini kontrol eder ve doğru yazım şeklini gösterir.",
+    copyLabel: "Kopyalanacak metin",
+    copyPlaceholder: "Japonca metni buraya yapıştırın (her seferde en fazla 30 karakter çalışılır)…",
+    copyStartBtn: "Yazmaya başla",
+    copyTooLong: "Her seferde yalnızca ilk {n} karakter çalışılır.",
+    copyErrEmpty: "Önce Japonca metin (kana veya kanji) yapıştırın.",
+    copyCharOf: "Karakter {current} / {total}",
+    copyWatch: "Vuruş sırasını izle",
+    copyGuideHide: "Kılavuzu gizle",
+    copyGuideShow: "Kılavuzu göster",
+    copyTryAgain: "Tekrar dene",
+    copyNext: "İleri",
+    copyPrev: "Geri",
+    copyFinish: "Bitir",
+    copyLoading: "Yükleniyor…",
+    copyNoData: "Bu karakter için vuruş verisi yok. İyice bakın, kâğıda kopyalayın, sonra İleri'ye dokunun.",
+    copyMistake: "{n}. vuruş doğru değildi. Sırayı ve şekli kontrol edin — yardım için “Vuruş sırasını izle”ye dokunun.",
+    copyPerfect: "✅ Mükemmel! Vuruş sırası ve şekli doğru.",
+    copyResultN: "{n} hatayla bitti. Tam puan için tekrar deneyin!",
+    copySummaryTitle: "🎉 Harika iş!",
+    copySummaryScore: "{total} karakterin {ok} tanesi hatasız",
+    copyWeak: "Bunları tekrar çalışın",
+    copyNewText: "Yeni metin",
     tutorialCompleteTitle: "Tamamlandı! 🎉",
     tutorialCompleteDesc: "GAKU Master'ın 5 ana özelliğinin tamamını gördünüz. Bu turu istediğiniz zaman 🎓 Eğitim düğmesinden tekrar izleyebilirsiniz.",
     tutorialCompleteBtn: "Çalışmaya Başla",
@@ -7902,7 +8271,30 @@ const UI_TRANSLATIONS = {
     writeErrEmpty: "पहिले प्रश्न पेस्ट गर्नुहोस् र आफ्नो उत्तर लेख्नुहोस्।",
     writeErrNotJa: "कृपया आफ्नो उत्तर जापानीमा लेख्नुहोस्।",
     writeErrFail: "तपाईंको उत्तर जाँच्न सकिएन। कृपया फेरि प्रयास गर्नुहोस्।",
-    tutorialWritingDesc: "अहिले प्रयास गर्नुहोस्: इन्टरनेटबाट कुनै लेखन प्रश्न पेस्ट गर्नुहोस्, आफ्नो उत्तर जापानीमा लेख्नुहोस् र “मेरो उत्तर जाँच्नुहोस्” थिच्नुहोस्। GAKUले उत्तर प्रश्नसँग मिल्छ कि मिल्दैन भन्नेछ — नमिलेमा नमूना उत्तर देखाउनेछ।",
+    tutorialWritingDesc: "अहिले प्रयास गर्नुहोस्: “नक्कल गरेर लेख्ने” छान्नुहोस्, जापानी वाक्य पेस्ट गर्नुहोस् र हरेक अक्षर स्ट्रोक-स्ट्रोक गरेर लेख्नुहोस् — GAKUले स्ट्रोकको क्रम जाँच्नेछ। वा “प्रश्नहरू” छान्नुहोस्, लेखन प्रश्न पेस्ट गर्नुहोस्, उत्तर लेख्नुहोस्, र GAKUले मिल्छ कि मिल्दैन भन्नेछ (नमिले नमूना उत्तर सहित)।",
+    copyDesc: "जापानी वाक्य पेस्ट गर्नुहोस् र एक-एक अक्षर गरेर नक्कल गर्नुहोस्। औँला वा माउसले हरेक स्ट्रोक लेख्नुहोस् — GAKUले स्ट्रोकको क्रम र आकार जाँच्छ र लेख्ने सही तरिका देखाउँछ।",
+    copyLabel: "नक्कल गर्ने पाठ",
+    copyPlaceholder: "जापानी पाठ यहाँ पेस्ट गर्नुहोस् (एक पटकमा बढीमा ३० अक्षरको अभ्यास)…",
+    copyStartBtn: "लेख्न सुरु गर्नुहोस्",
+    copyTooLong: "एक पटकमा पहिलो {n} अक्षरको मात्र अभ्यास हुन्छ।",
+    copyErrEmpty: "पहिले जापानी पाठ (काना वा कान्जी) पेस्ट गर्नुहोस्।",
+    copyCharOf: "अक्षर {current} / {total}",
+    copyWatch: "स्ट्रोकको क्रम हेर्नुहोस्",
+    copyGuideHide: "गाइड लुकाउनुहोस्",
+    copyGuideShow: "गाइड देखाउनुहोस्",
+    copyTryAgain: "फेरि प्रयास गर्नुहोस्",
+    copyNext: "अर्को",
+    copyPrev: "पछाडि",
+    copyFinish: "सकियो",
+    copyLoading: "लोड हुँदैछ…",
+    copyNoData: "यो अक्षरको लागि स्ट्रोक डेटा छैन। ध्यानपूर्वक हेर्नुहोस्, कागजमा नक्कल गर्नुहोस्, अनि अर्को थिच्नुहोस्।",
+    copyMistake: "स्ट्रोक {n} सही थिएन। क्रम र आकार जाँच्नुहोस् — मद्दत चाहिए “स्ट्रोकको क्रम हेर्नुहोस्” थिच्नुहोस्।",
+    copyPerfect: "✅ उत्कृष्ट! स्ट्रोकको क्रम र आकार सही छ।",
+    copyResultN: "{n} गल्तीसहित सकियो। पूरा अंकका लागि फेरि प्रयास गर्नुहोस्!",
+    copySummaryTitle: "🎉 राम्रो काम!",
+    copySummaryScore: "{total} मध्ये {ok} अक्षर गल्ती बिना",
+    copyWeak: "यी फेरि अभ्यास गर्नुहोस्",
+    copyNewText: "नयाँ पाठ",
     tutorialCompleteTitle: "सबै पूरा भयो! 🎉",
     tutorialCompleteDesc: "तपाईंले GAKU Master का सबै ५ मुख्य सुविधाहरू हेर्नुभयो। तपाईं जुनसुकै बेला 🎓 ट्युटोरियल बटनबाट यो भ्रमण फेरि हेर्न सक्नुहुन्छ।",
     tutorialCompleteBtn: "अध्ययन सुरु गर्नुहोस्",
@@ -8365,7 +8757,30 @@ const UI_TRANSLATIONS = {
     writeErrEmpty: "Mag-paste muna ng tanong at i-type ang sagot mo.",
     writeErrNotJa: "Pakisulat ang sagot mo sa Japanese.",
     writeErrFail: "Hindi masuri ang sagot mo. Pakisubukan muli.",
-    tutorialWritingDesc: "Subukan ngayon: mag-paste ng tanong sa pagsulat mula sa internet, i-type ang sagot mo sa Japanese, at i-tap ang “Suriin ang sagot ko”. Sasabihin ng GAKU kung angkop ito sa tanong — at magpapakita ng halimbawang sagot kung hindi.",
+    tutorialWritingDesc: "Subukan ngayon: piliin ang “Pagkopya”, mag-paste ng pangungusap sa Japanese at isulat ang bawat karakter guhit-por-guhit — susuriin ng GAKU ang pagkakasunod-sunod ng mga guhit. O piliin ang “Mga Tanong”, mag-paste ng tanong sa pagsulat, i-type ang sagot mo, at sasabihin ng GAKU kung angkop ito (may halimbawang sagot kung hindi).",
+    copyDesc: "Mag-paste ng pangungusap sa Japanese at kopyahin ito isa-isang karakter. Isulat ang bawat guhit gamit ang daliri o mouse — susuriin ng GAKU ang pagkakasunod-sunod at hugis ng mga guhit at ipapakita ang tamang paraan ng pagsulat.",
+    copyLabel: "Tekstong kokopyahin",
+    copyPlaceholder: "I-paste dito ang tekstong Japanese (hanggang 30 karakter ang sinasanay bawat beses)…",
+    copyStartBtn: "Simulan ang pagsulat",
+    copyTooLong: "Ang unang {n} karakter lang ang sinasanay bawat beses.",
+    copyErrEmpty: "Mag-paste muna ng tekstong Japanese (kana o kanji).",
+    copyCharOf: "Karakter {current} sa {total}",
+    copyWatch: "Panoorin ang pagkakasunod-sunod ng guhit",
+    copyGuideHide: "Itago ang gabay",
+    copyGuideShow: "Ipakita ang gabay",
+    copyTryAgain: "Subukan muli",
+    copyNext: "Susunod",
+    copyPrev: "Bumalik",
+    copyFinish: "Tapos na",
+    copyLoading: "Naglo-load…",
+    copyNoData: "Walang datos ng guhit para sa karakter na ito. Tingnang mabuti, kopyahin sa papel, pagkatapos i-tap ang Susunod.",
+    copyMistake: "Hindi tama ang guhit {n}. Suriin ang pagkakasunod-sunod at hugis — i-tap ang “Panoorin ang pagkakasunod-sunod ng guhit” kung kailangan ng tulong.",
+    copyPerfect: "✅ Perpekto! Tama ang pagkakasunod-sunod at hugis ng mga guhit.",
+    copyResultN: "Natapos na may {n} pagkakamali. Subukan muli para sa perpektong marka!",
+    copySummaryTitle: "🎉 Magaling!",
+    copySummaryScore: "{ok} sa {total} karakter ang walang mali",
+    copyWeak: "Sanayin muli ang mga ito",
+    copyNewText: "Bagong teksto",
     tutorialCompleteTitle: "Tapos na! 🎉",
     tutorialCompleteDesc: "Nakita mo na ang lahat ng 5 pangunahing feature ng GAKU Master. Puwede mong ulitin ang tour na ito anumang oras gamit ang 🎓 Tutorial button.",
     tutorialCompleteBtn: "Simulan ang Pag-aaral",
@@ -12253,6 +12668,202 @@ function PronunciationHeardLineCard({ line, T, lang, checkins, onRecord }) {
   );
 }
 
+// ─── WRITING PRACTICE: COPYING DOWN MODE ───────────────────────────────────────
+// The student pastes Japanese text and copies it one character at a time on a handwriting
+// box. Hanzi Writer checks every stroke (order + shape) and shows the correct way to write it.
+// Kanji data: hanzi-writer-data-jp (loaded from jsDelivr). Kana data: /public/kana-data (converted
+// from animCJK). Data derived from animCJK / Make Me a Hanzi (LGPL / Arphic Public License).
+const COPY_STORAGE_KEY = "gaku_writing_copy_text";
+const COPY_MAX_CHARS = 30;
+const isKanaCh = (c) => /[\u3041-\u3096\u30A1-\u30FA\u30FC]/.test(c);
+const isWritableCh = (c) => isKanaCh(c) || /[\u3400-\u4DBF\u4E00-\u9FFF\u3005]/.test(c);
+function copyCharLoader(char, onLoad, onError) {
+  const url = isKanaCh(char)
+    ? `/kana-data/${char.codePointAt(0)}.json`
+    : `https://cdn.jsdelivr.net/npm/hanzi-writer-data-jp@0/${encodeURIComponent(char)}.json`;
+  fetch(url)
+    .then(r => { if (!r.ok) throw new Error("nf"); return r.json(); })
+    .then(d => { if (!d || !Array.isArray(d.strokes) || !d.strokes.length) throw new Error("bad"); onLoad(d); })
+    .catch(onError);
+}
+function CopyingDown({ T }) {
+  const [raw, setRaw] = useState(() => { try { return localStorage.getItem(scopedKey(COPY_STORAGE_KEY)) || ""; } catch { return ""; } });
+  const [error, setError] = useState("");
+  const [session, setSession] = useState(null); // { tokens:[{ch,w}], chars:[], truncated }
+  const [idx, setIdx] = useState(0);
+  const [results, setResults] = useState({}); // charIndex -> mistakes (number) | "skip"
+  const [phase, setPhase] = useState("write"); // write | summary
+  const [status, setStatus] = useState("loading"); // loading | ready | nodata
+  const [mistakeStroke, setMistakeStroke] = useState("");
+  const [guide, setGuide] = useState(true);
+  const [doneMistakes, setDoneMistakes] = useState(null);
+  const boxRef = useRef(null);
+  const writerRef = useRef(null);
+  const size = Math.max(200, Math.min(300, (typeof window !== "undefined" ? window.innerWidth : 360) - 90));
+
+  useEffect(() => {
+    try { localStorage.setItem(scopedKey(COPY_STORAGE_KEY), raw); } catch {}
+  }, [raw]);
+
+  const startQuiz = (w, withGuide) => {
+    setMistakeStroke(""); setDoneMistakes(null);
+    w.quiz({
+      showOutline: withGuide, leniency: 1.2, highlightOnComplete: true,
+      onMistake: (d) => setMistakeStroke(String((d.strokeNum || 0) + 1)),
+      onCorrectStroke: () => setMistakeStroke(""),
+      onComplete: (d) => { setDoneMistakes(d.totalMistakes); setResults(r => ({ ...r, [idx]: d.totalMistakes })); },
+    });
+  };
+
+  useEffect(() => {
+    if (!session || phase !== "write") return undefined;
+    const el = boxRef.current;
+    if (!el) return undefined;
+    el.innerHTML = "";
+    let cancelled = false;
+    setStatus("loading"); setMistakeStroke(""); setDoneMistakes(null); setGuide(true);
+    const w = HanziWriter.create(el, session.chars[idx], {
+      width: size, height: size, padding: 12, showCharacter: false, showOutline: true,
+      strokeAnimationSpeed: 1, delayBetweenStrokes: 250, showHintAfterMisses: 3,
+      strokeColor: "#f1f5f9", outlineColor: "#475569", drawingColor: "#06b6d4", highlightColor: "#a855f7", drawingWidth: 10,
+      charDataLoader: copyCharLoader,
+      onLoadCharDataSuccess: () => { if (cancelled) return; setStatus("ready"); startQuiz(w, true); },
+      onLoadCharDataError: () => { if (!cancelled) setStatus("nodata"); },
+    });
+    writerRef.current = w;
+    return () => { cancelled = true; try { w.cancelQuiz(); } catch {} writerRef.current = null; };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [session, idx, phase, size]);
+
+  const begin = () => {
+    const text = raw.trim();
+    const tokens = []; const chars = []; let truncated = false;
+    for (const ch of Array.from(text.replace(/\s+/g, " "))) {
+      if (isWritableCh(ch)) {
+        if (chars.length >= COPY_MAX_CHARS) { truncated = true; break; }
+        tokens.push({ ch, w: chars.length }); chars.push(ch);
+      } else tokens.push({ ch, w: null });
+    }
+    if (!chars.length) { setError(T.copyErrEmpty || "Paste some Japanese text (kana or kanji) first."); return; }
+    setError(""); setResults({}); setIdx(0); setPhase("write"); setSession({ tokens, chars, truncated });
+  };
+  const reset = () => { setSession(null); setResults({}); setIdx(0); setPhase("write"); setError(""); };
+
+  const watch = () => {
+    const w = writerRef.current; if (!w || status !== "ready") return;
+    try { w.cancelQuiz(); } catch {}
+    setMistakeStroke(""); setDoneMistakes(null);
+    w.showOutline();
+    w.animateCharacter({ onComplete: () => startQuiz(w, guide) });
+  };
+  const retry = () => { const w = writerRef.current; if (w && status === "ready") startQuiz(w, guide); };
+  const toggleGuide = () => {
+    const w = writerRef.current; const next = !guide; setGuide(next);
+    if (w && status === "ready") startQuiz(w, next);
+  };
+  const goNext = () => {
+    if (status === "nodata") setResults(r => ({ ...r, [idx]: "skip" }));
+    if (idx < session.chars.length - 1) setIdx(idx + 1); else setPhase("summary");
+  };
+  const goPrev = () => { if (idx > 0) setIdx(idx - 1); };
+
+  const btn = (extra) => ({ ...S.btn, padding:"10px 14px", fontSize:12, ...extra });
+  const ghost = { background:"transparent", border:`1px solid ${C.border}`, color:"#94a3b8" };
+  const fill = (s, vars) => Object.keys(vars).reduce((acc, k) => acc.split("{" + k + "}").join(String(vars[k])), s);
+
+  if (!session) {
+    return (
+      <div>
+        <p style={{ color:"#39ff14", fontSize:12, lineHeight:1.7, marginBottom:12 }}>
+          {T.copyDesc || "Paste a Japanese sentence and copy it one character at a time. Write each stroke with your finger or mouse — GAKU checks the stroke order and shape and shows you the correct way to write it."}
+        </p>
+        <label style={S.label}>{(T.copyLabel || "Text to copy").toUpperCase()}</label>
+        <textarea value={raw} onChange={e => { setRaw(e.target.value.slice(0, 600)); setError(""); }}
+          placeholder={T.copyPlaceholder || "Paste Japanese text here (up to 30 characters are practiced at a time)…"} rows={4}
+          style={{ ...S.input, resize:"vertical", lineHeight:1.7, marginBottom:12, fontFamily:"inherit" }} />
+        {error && <p style={{ color:"#f87171", fontSize:12, margin:"0 0 10px" }}>{error}</p>}
+        <button onClick={begin} style={{ ...S.btn, width:"100%", background:`linear-gradient(135deg,${C.teal},#0891b2)`, color:"#fff" }}>
+          ✍️ {T.copyStartBtn || "Start writing"}
+        </button>
+      </div>
+    );
+  }
+
+  if (phase === "summary") {
+    const total = session.chars.length;
+    const okCount = session.chars.filter((_, i) => results[i] === 0).length;
+    const weak = session.chars.map((ch, i) => ({ ch, i })).filter(x => typeof results[x.i] === "number" && results[x.i] > 0);
+    return (
+      <div style={{ textAlign:"center" }}>
+        <p style={{ color:"#f1f5f9", fontSize:18, fontWeight:800, margin:"4px 0 8px" }}>{T.copySummaryTitle || "🎉 Nice work!"}</p>
+        <p style={{ color:C.green, fontSize:14, fontWeight:700, margin:"0 0 14px" }}>{fill(T.copySummaryScore || "{ok} of {total} characters with no mistakes", { ok: okCount, total })}</p>
+        {weak.length > 0 && (
+          <div style={{ marginBottom:14 }}>
+            <p style={{ color:"#64748b", fontSize:11, fontWeight:700, letterSpacing:1, margin:"0 0 8px" }}>{(T.copyWeak || "Practice these again").toUpperCase()}</p>
+            <div style={{ display:"flex", gap:8, justifyContent:"center", flexWrap:"wrap" }}>
+              {weak.map(x => (
+                <button key={x.i} onClick={() => { setIdx(x.i); setPhase("write"); }}
+                  style={{ width:48, height:48, fontSize:24, borderRadius:10, border:"1.5px solid rgba(251,191,36,0.6)", background:"rgba(251,191,36,0.1)", color:"#fbbf24", cursor:"pointer" }}>{x.ch}</button>
+              ))}
+            </div>
+          </div>
+        )}
+        <div style={{ display:"flex", gap:8, justifyContent:"center" }}>
+          <button onClick={() => { setResults({}); setIdx(0); setPhase("write"); }} style={btn({ background:`linear-gradient(135deg,${C.teal},#0891b2)`, color:"#fff" })}>{T.copyTryAgain || "Try again"}</button>
+          <button onClick={reset} style={btn(ghost)}>{T.copyNewText || "New text"}</button>
+        </div>
+      </div>
+    );
+  }
+
+  const cur = session.chars[idx];
+  const isLast = idx === session.chars.length - 1;
+  const gridLine = (dir) => `linear-gradient(${dir}, transparent calc(50% - 0.5px), rgba(255,255,255,0.12) calc(50% - 0.5px), rgba(255,255,255,0.12) calc(50% + 0.5px), transparent calc(50% + 0.5px))`;
+  return (
+    <div>
+      <div style={{ background:"#0f172a", border:`1px solid ${C.border}`, borderRadius:12, padding:"10px 12px", marginBottom:10, lineHeight:2, wordBreak:"break-all" }}>
+        {session.tokens.map((t, i) => (
+          <span key={i} style={t.w === null ? { color:"#64748b", fontSize:16 } :
+            { fontSize:20, padding:"0 1px", borderRadius:4,
+              color: t.w === idx ? "#0f172a" : (results[t.w] === 0 ? C.green : (typeof results[t.w] === "number" ? "#fbbf24" : "#cbd5e1")),
+              background: t.w === idx ? C.teal : "transparent", fontWeight: t.w === idx ? 800 : 400 }}>{t.ch}</span>
+        ))}
+      </div>
+      {session.truncated && <p style={{ color:"#94a3b8", fontSize:11, margin:"0 0 8px" }}>{fill(T.copyTooLong || "Only the first {n} characters are practiced at a time.", { n: COPY_MAX_CHARS })}</p>}
+      <p style={{ color:"#94a3b8", fontSize:12, fontWeight:700, margin:"0 0 8px", textAlign:"center" }}>{fill(T.copyCharOf || "Character {current} of {total}", { current: idx + 1, total: session.chars.length })}</p>
+
+      <div style={{ display:"flex", justifyContent:"center", marginBottom:10 }}>
+        <div style={{ position:"relative", width:size, height:size, borderRadius:12, border:`1.5px solid ${C.border}`, background:"#0f172a", backgroundImage:`${gridLine("to right")}, ${gridLine("to bottom")}`, touchAction:"none", userSelect:"none", WebkitUserSelect:"none" }}>
+          <div ref={boxRef} style={{ width:size, height:size, display: status === "nodata" ? "none" : "block", touchAction:"none" }} />
+          {status === "loading" && <p style={{ position:"absolute", inset:0, display:"flex", alignItems:"center", justifyContent:"center", color:"#64748b", fontSize:12, margin:0, pointerEvents:"none" }}>{T.copyLoading || "Loading…"}</p>}
+          {status === "nodata" && <div style={{ position:"absolute", inset:0, display:"flex", alignItems:"center", justifyContent:"center", fontSize:Math.round(size * 0.6), color:"#f1f5f9", fontFamily:"'Noto Serif JP','Noto Sans JP',serif" }}>{cur}</div>}
+        </div>
+      </div>
+
+      <div style={{ minHeight:44, textAlign:"center", marginBottom:10 }}>
+        {status === "nodata" && <p style={{ color:"#fbbf24", fontSize:12, lineHeight:1.6, margin:0 }}>{T.copyNoData || "No stroke data for this character. Look at it carefully, copy it on paper, then tap Next."}</p>}
+        {status === "ready" && doneMistakes === 0 && <p style={{ color:C.green, fontSize:13, fontWeight:700, margin:0 }}>{T.copyPerfect || "✅ Perfect! Correct stroke order and shape."}</p>}
+        {status === "ready" && doneMistakes !== null && doneMistakes > 0 && <p style={{ color:"#fbbf24", fontSize:13, lineHeight:1.6, margin:0 }}>{fill(T.copyResultN || "Finished with {n} mistake(s). Try again for a perfect score!", { n: doneMistakes })}</p>}
+        {status === "ready" && doneMistakes === null && mistakeStroke && <p style={{ color:"#f87171", fontSize:12, lineHeight:1.6, margin:0 }}>{fill(T.copyMistake || "Stroke {n} wasn't right. Check the order and shape — tap “Watch stroke order” if you need help.", { n: mistakeStroke })}</p>}
+      </div>
+
+      {status !== "nodata" && (
+        <div style={{ display:"flex", gap:8, justifyContent:"center", flexWrap:"wrap", marginBottom:10 }}>
+          <button onClick={watch} disabled={status !== "ready"} style={btn({ background:"rgba(168,85,247,0.15)", border:"1px solid rgba(168,85,247,0.5)", color:C.purpleLight || "#c084fc", opacity:status==="ready"?1:0.5 })}>▶ {T.copyWatch || "Watch stroke order"}</button>
+          <button onClick={toggleGuide} disabled={status !== "ready"} style={btn({ ...ghost, opacity:status==="ready"?1:0.5 })}>{guide ? "🙈 " + (T.copyGuideHide || "Hide guide") : "👁 " + (T.copyGuideShow || "Show guide")}</button>
+          <button onClick={retry} disabled={status !== "ready"} style={btn({ ...ghost, opacity:status==="ready"?1:0.5 })}>↺ {T.copyTryAgain || "Try again"}</button>
+        </div>
+      )}
+      <div style={{ display:"flex", gap:8, justifyContent:"center" }}>
+        <button onClick={goPrev} disabled={idx === 0} style={btn({ ...ghost, opacity: idx === 0 ? 0.4 : 1 })}>◀ {T.copyPrev || "Back"}</button>
+        <button onClick={goNext} style={btn({ background:`linear-gradient(135deg,${C.teal},#0891b2)`, color:"#fff" })}>{isLast ? (T.copyFinish || "Finish") : (T.copyNext || "Next") + " ▶"}</button>
+        <button onClick={reset} style={btn(ghost)}>{T.copyNewText || "New text"}</button>
+      </div>
+      <p style={{ color:"#475569", fontSize:10, textAlign:"center", margin:"14px 0 0" }}>Stroke data: animCJK / Make Me a Hanzi (Arphic Public License, LGPL)</p>
+    </div>
+  );
+}
+
 // ─── WRITING PRACTICE ──────────────────────────────────────────────────────────
 // Questions mode: the student pastes a writing question found online, types an answer in
 // Japanese, and the AI checks whether the answer fits the question. If it fits: praise +
@@ -12345,9 +12956,11 @@ Respond ONLY with valid JSON, no markdown, no backticks:
       <div style={{ ...S.card, marginBottom:16 }}>
         <p style={{ color:C.teal, fontSize:12, fontWeight:700, letterSpacing:1, marginBottom:10 }}>✍️ {T.writeTitle || "Writing Practice"}</p>
         <div style={{ display:"flex", gap:8, marginBottom:12 }}>
-          {modeBtn("copy", "📝 " + (T.writeModeCopy || "Copying down"), true)}
+          {modeBtn("copy", "📝 " + (T.writeModeCopy || "Copying down"), false)}
           {modeBtn("question", "❓ " + (T.writeModeQuestion || "Questions"), false)}
         </div>
+        {mode === "copy" && <CopyingDown T={T} />}
+        {mode === "question" && (<>
         <p style={{ color:"#39ff14", fontSize:12, lineHeight:1.7, marginBottom:12 }}>
           {T.writeQDesc || "Paste a writing question you found online (an essay prompt, a JLPT-style question, an email task…). Write your answer in Japanese and GAKU checks it against the question."}
         </p>
@@ -12375,9 +12988,10 @@ Respond ONLY with valid JSON, no markdown, no backticks:
             </button>
           )}
         </div>
+        </>)}
       </div>
 
-      {result && (
+      {mode === "question" && result && (
         <div style={{ ...S.card, marginBottom:16, border:`1.5px solid ${result.fits ? "rgba(34,197,94,0.5)" : "rgba(251,191,36,0.5)"}` }}>
           <p style={{ color:result.fits ? C.green : "#fbbf24", fontSize:14, fontWeight:800, margin:"0 0 10px" }}>
             {result.fits ? (T.writeCorrect || "✅ Your answer fits the question!") : (T.writeNotQuite || "Not quite — your answer doesn't match the question yet.")}
