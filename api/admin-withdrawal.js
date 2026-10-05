@@ -1,5 +1,6 @@
-import { getAdminClient } from "./_supabaseAdmin.js";
+import { getAdminClient, ADMIN_EMAIL } from "./_supabaseAdmin.js";
 import { sendEmail } from "./_resend.js";
+import { SUSPEND_EMAIL_SUBJECT, suspendEmailHtml } from "./_absence.js";
 
 // Consolidates what used to be 4 separate serverless functions
 // (admin-withdraw-student, admin-cancel-withdrawal, admin-list-withdrawn,
@@ -481,34 +482,44 @@ async function handleReaderStats(supabase, body, res) {
   });
 }
 
-// scheduled_emails に登録された「日付指定メール」を、予定日になったら送る(毎日のcronから呼ばれる)。
-// 送信に失敗した行はpendingのまま残し、翌日また試す。skip_if_paid=true で、送る時点ですでに
-// 有料プランに入っている生徒には送らず skipped にする。
+// scheduled_emails に登録された「日付指定の処理」を、予定日になったら実行する(毎日のcronから呼ばれる)。
+//   action = 'email'   : 指定のメールを送る
+//   action = 'suspend' : GAKU Masterを一時停止し、英文の停止通知メールを送る(Seito承認済みの予約)
+// 失敗した行はpendingのまま残して翌日また試す。skip_if_paid=true の行は、実行時点ですでに
+// 有料プランに入っている生徒なら何もせず skipped にする。
 async function handleScheduledEmails(supabase) {
   const today = new Date().toISOString().slice(0, 10);
   const { data: due, error } = await supabase
     .from("scheduled_emails").select("*").eq("status", "pending").lte("send_on", today).limit(50);
   if (error) return { error: error.message };
-  let sent = 0, skipped = 0, failed = 0;
+  let sent = 0, suspended = 0, skipped = 0, failed = 0;
+  const finish = (id, status) =>
+    supabase.from("scheduled_emails").update({ status, processed_at: new Date().toISOString() }).eq("id", id);
   for (const row of due || []) {
     try {
-      if (row.skip_if_paid) {
-        const { data: prof } = await supabase.from("profiles").select("is_paid").ilike("email", row.to_email).maybeSingle();
-        if (prof?.is_paid) {
-          await supabase.from("scheduled_emails").update({ status: "skipped", processed_at: new Date().toISOString() }).eq("id", row.id);
-          skipped++;
-          continue;
-        }
+      const { data: prof } = await supabase.from("profiles").select("id, name, is_paid").ilike("email", row.to_email).maybeSingle();
+      if (row.skip_if_paid && prof?.is_paid) { await finish(row.id, "skipped"); skipped++; continue; }
+
+      if (row.action === "suspend") {
+        if (!prof) { await finish(row.id, "skipped"); skipped++; continue; }
+        const { error: updErr } = await supabase.from("profiles")
+          .update({ absence_suspended_at: new Date().toISOString() }).eq("id", prof.id);
+        if (updErr) throw new Error(updErr.message);
+        await sendEmail({ to: row.to_email, subject: row.subject || SUSPEND_EMAIL_SUBJECT, html: row.html || suspendEmailHtml(prof.name), replyTo: ADMIN_EMAIL });
+        await finish(row.id, "sent");
+        suspended++;
+        continue;
       }
-      await sendEmail({ to: row.to_email, subject: row.subject, html: row.html });
-      await supabase.from("scheduled_emails").update({ status: "sent", processed_at: new Date().toISOString() }).eq("id", row.id);
+
+      await sendEmail({ to: row.to_email, subject: row.subject, html: row.html, replyTo: ADMIN_EMAIL });
+      await finish(row.id, "sent");
       sent++;
     } catch (e) {
-      console.error("Scheduled email failed:", row.id, e.message);
+      console.error("Scheduled action failed:", row.id, e.message);
       failed++;
     }
   }
-  return { sent, skipped, failed };
+  return { sent, suspended, skipped, failed };
 }
 
 export default async function handler(req, res) {

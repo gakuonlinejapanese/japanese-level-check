@@ -407,7 +407,7 @@ async function handleSuspendGakuMaster(supabase, body, res) {
 
   let emailed = false;
   try {
-    await sendEmail({ to: email, subject: SUSPEND_EMAIL_SUBJECT, html: suspendEmailHtml(profile.name) });
+    await sendEmail({ to: email, subject: SUSPEND_EMAIL_SUBJECT, html: suspendEmailHtml(profile.name), replyTo: ADMIN_EMAIL });
     emailed = true;
   } catch (e) {
     console.error("Failed to send GAKU Master suspension email:", e.message);
@@ -484,6 +484,7 @@ async function handleRescheduleBooking(supabase, body, res) {
       if (email) {
         await sendEmail({
           to: email,
+          replyTo: ADMIN_EMAIL,
           subject: "Your GAKU lesson time has been changed",
           html: `
             <p>Hi ${name || ""},</p>
