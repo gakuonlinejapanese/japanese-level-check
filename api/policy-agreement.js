@@ -1,4 +1,5 @@
 import { getAdminClient } from "./_supabaseAdmin.js";
+import { assessLongAbsence } from "./_absence.js";
 import { sendEmail } from "./_resend.js";
 import { ADMIN_EMAIL } from "./_supabaseAdmin.js";
 
@@ -410,11 +411,29 @@ async function handleCancellationRequest(req, res) {
     if (insertErr) return res.status(500).json({ error: insertErr.message });
 
     const isCancel = requestType === "cancel";
+
+    // 1ヶ月以上の欠席(申告 or すでに欠席)かどうかを判定し、該当すれば先生に承認依頼を出す。
+    // 判定が失敗してもフォーム送信自体は止めない。
+    let absence = null;
+    try {
+      absence = await assessLongAbsence(supabase, { email: normalizedEmail, requestType, cancelDate, returnDate, rescheduleDate });
+    } catch (e) {
+      console.error("Long-absence assessment failed:", e.message);
+    }
+    const absenceFlagged = !!(absence && absence.flagged);
+    const absenceBlock = absenceFlagged
+      ? `<div style="border:2px solid #dc2626;border-radius:8px;padding:12px 14px;margin:12px 0;background:#fef2f2;">
+           <p style="margin:0 0 6px;color:#b91c1c;"><strong>⚠️ ACTION NEEDED — absence of 1 month or more (Official Student)</strong></p>
+           <ul style="margin:0 0 8px 18px;padding:0;">${absence.reasons.map((r) => `<li>${r}</li>`).join("")}</ul>
+           <p style="margin:0;">Under the new rule, GAKU Master use is suspended after a month or more of continuous absence — but only once you approve it. To approve, open admin-schedule.html and press "GAKU Master を一時停止（承認）" on this request. The student will then be emailed the rule and how to continue.</p>
+         </div>`
+      : "";
     const matchLine = autoOpened
       ? `<p style="color:#16a34a;"><strong>✅ Matched and automatically freed the ${matchedSlot.start_time.slice(0, 5)} slot on ${cancelDate}.</strong></p>`
       : `<p style="color:#dc2626;"><strong>⚠️ Could not automatically match this to a booked slot — please free it manually in admin-schedule.html.</strong></p>`;
     const html = `
       <p>A student submitted a ${isCancel ? "cancellation" : "reschedule"} request.</p>
+      ${absenceBlock}
       ${matchLine}
       <p><strong>Type:</strong> ${isCancel ? "Cancel" : "Reschedule"}<br/>
          <strong>Name:</strong> ${studentName}<br/>
@@ -429,7 +448,7 @@ async function handleCancellationRequest(req, res) {
     try {
       await sendEmail({
         to: ADMIN_EMAIL,
-        subject: `[GAKU] ${isCancel ? "Cancellation" : "Reschedule"} request — ${studentName}${autoOpened ? " (slot auto-freed)" : " (needs manual check)"}`,
+        subject: `${absenceFlagged ? "[ACTION NEEDED] " : ""}[GAKU] ${isCancel ? "Cancellation" : "Reschedule"} request — ${studentName}${autoOpened ? " (slot auto-freed)" : " (needs manual check)"}${absenceFlagged ? " — 1+ month absence" : ""}`,
         html,
       });
     } catch (e) {

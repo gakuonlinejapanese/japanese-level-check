@@ -1,5 +1,6 @@
 import { getAdminClient, ADMIN_EMAIL } from "./_supabaseAdmin.js";
 import { sendEmail } from "./_resend.js";
+import { assessLongAbsence, SUSPEND_EMAIL_SUBJECT, suspendEmailHtml } from "./_absence.js";
 
 // api/schedule.js — レッスン予約・ウェイトリスト機能を1ファイルに集約
 // (admin-withdrawal.js と同じ理由: Vercel Hobbyプランの12関数制限を超えないため)
@@ -25,6 +26,8 @@ import { sendEmail } from "./_resend.js";
 // POST { secret, action: "add-official-student", name, email, notes }
 // POST { secret, action: "update-official-student", id, name, email?, notes? }
 //   → 既存のOfficial Studentの名前（・メール・メモ）を更新
+// POST { secret, action: "suspend-gaku-master", email, requestId? }  → 1ヶ月以上の欠席でSeitoが承認した生徒のGAKU Master利用を一時停止し、英文メールで通知
+// POST { secret, action: "resume-gaku-master", email }  → 停止を解除(正規プラン加入、または3回授業を再受講した場合)
 // POST { secret, action: "reschedule-booking", id, newDate, newTime, notifyStudent }  → 予約の種類(Free Trial/Official/Waitlist)を問わず日時変更
 // POST { secret, action: "set-zoom-link", ids: [teacher_availability.id, ...], zoomLink }
 //   → 選択した確定済み予約(複数可)に同じZoomリンクを一括登録
@@ -348,7 +351,24 @@ async function handleListCancellationRequests(supabase, res) {
     .select("*")
     .order("created_at", { ascending: false });
   if (error) return res.status(500).json({ error: error.message });
-  return res.status(200).json({ requests: data || [] });
+  const requests = data || [];
+
+  // 未確認の申請だけ、1ヶ月以上の欠席に当たるか・すでにGAKU Master停止中かを付ける
+  await Promise.all(requests.filter((r) => !r.acknowledged).map(async (r) => {
+    try {
+      r.longAbsence = await assessLongAbsence(supabase, {
+        email: r.student_email, requestType: r.request_type,
+        cancelDate: r.cancel_date, returnDate: r.return_date, rescheduleDate: r.reschedule_date,
+      });
+    } catch (e) { r.longAbsence = null; }
+    try {
+      const { data: prof, error: pErr } = await supabase.from("profiles").select("absence_suspended_at")
+        .eq("email", (r.student_email || "").toLowerCase()).maybeSingle();
+      r.masterSuspended = !pErr && !!prof?.absence_suspended_at;
+    } catch (e) { r.masterSuspended = false; }
+  }));
+
+  return res.status(200).json({ requests });
 }
 
 async function handleAcknowledgeCancellationRequest(supabase, body, res) {
@@ -359,6 +379,51 @@ async function handleAcknowledgeCancellationRequest(supabase, body, res) {
     .update({ acknowledged: true, acknowledged_at: new Date().toISOString() })
     .eq("id", id);
   if (error) return res.status(500).json({ error: error.message });
+  return res.status(200).json({ ok: true });
+}
+
+async function handleSuspendGakuMaster(supabase, body, res) {
+  const email = (body.email || "").trim().toLowerCase();
+  if (!email) return res.status(400).json({ error: "email is required" });
+
+  const { data: profile, error: findErr } = await supabase
+    .from("profiles").select("id, name, email, is_paid").eq("email", email).maybeSingle();
+  if (findErr) return res.status(500).json({ error: findErr.message });
+  if (!profile) return res.status(404).json({ error: "この生徒のGAKU Masterアカウントが見つかりません（登録メールが違う可能性があります）" });
+  if (profile.is_paid) return res.status(400).json({ error: "この生徒はすでに有料プランに加入しているため、停止の対象外です" });
+
+  const { error: updErr } = await supabase
+    .from("profiles").update({ absence_suspended_at: new Date().toISOString() }).eq("id", profile.id);
+  if (updErr) {
+    const hint = /absence_suspended_at/.test(updErr.message || "")
+      ? "（profilesテーブルに absence_suspended_at 列がありません。Supabaseで追加のSQLを実行してください）" : "";
+    return res.status(500).json({ error: updErr.message + hint });
+  }
+
+  if (body.requestId) {
+    await supabase.from("cancellation_requests")
+      .update({ acknowledged: true, acknowledged_at: new Date().toISOString() }).eq("id", body.requestId);
+  }
+
+  let emailed = false;
+  try {
+    await sendEmail({ to: email, subject: SUSPEND_EMAIL_SUBJECT, html: suspendEmailHtml(profile.name) });
+    emailed = true;
+  } catch (e) {
+    console.error("Failed to send GAKU Master suspension email:", e.message);
+  }
+  return res.status(200).json({ ok: true, emailed });
+}
+
+async function handleResumeGakuMaster(supabase, body, res) {
+  const email = (body.email || "").trim().toLowerCase();
+  if (!email) return res.status(400).json({ error: "email is required" });
+  const { data: profile, error: findErr } = await supabase
+    .from("profiles").select("id").eq("email", email).maybeSingle();
+  if (findErr) return res.status(500).json({ error: findErr.message });
+  if (!profile) return res.status(404).json({ error: "この生徒のGAKU Masterアカウントが見つかりません" });
+  const { error: updErr } = await supabase.from("profiles").update({ absence_suspended_at: null }).eq("id", profile.id);
+  if (updErr) return res.status(500).json({ error: updErr.message });
   return res.status(200).json({ ok: true });
 }
 
@@ -622,6 +687,8 @@ export default async function handler(req, res) {
     if (action === "list-official-students") return await handleListOfficialStudents(supabase, res);
     if (action === "add-official-student") return await handleAddOfficialStudent(supabase, body, res);
     if (action === "update-official-student") return await handleUpdateOfficialStudent(supabase, body, res);
+    if (action === "suspend-gaku-master") return await handleSuspendGakuMaster(supabase, body, res);
+    if (action === "resume-gaku-master") return await handleResumeGakuMaster(supabase, body, res);
     if (action === "reschedule-booking") return await handleRescheduleBooking(supabase, body, res);
     if (action === "set-zoom-link") return await handleSetZoomLink(supabase, body, res);
     if (action === "send-lesson-reminders") return await handleSendLessonReminders(supabase, res);

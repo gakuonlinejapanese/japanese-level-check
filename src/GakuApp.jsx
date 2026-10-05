@@ -15833,6 +15833,9 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
   const [tutorialGraceDaysLeft, setTutorialGraceDaysLeft] = useState(null);
   const [streakDays, setStreakDays] = useState(0);
   const [readerInstalled, setReaderInstalled] = useState(null);
+  // True when Seito approved a GAKU Master suspension for a 1+ month absence (Official Students)
+  // and the account has not since moved to a regular paid plan (see api/account-status.js).
+  const [absenceSuspended, setAbsenceSuspended] = useState(false);
   // Paid plans on the forced payment screen stay hidden until the server reports
   // plansUnlocked (student answered "Yes" to "Would like to choose the cheaper plan for GAKU?"
   // on trial-lesson.html after being declined a free trial lesson).
@@ -16087,7 +16090,7 @@ Respond ONLY with a valid JSON array, no markdown, no backticks:
       try {
         const isGakuStudentNow = !!data?.isGakuStudent;
         const isPaidNow = !!data?.isPaid;
-        const trialExpiredNow = !!(data?.trialExpired && !isGakuStudentNow && !isPaidNow);
+        const trialExpiredNow = !!(data?.trialExpired && !isGakuStudentNow && !isPaidNow) || !!data?.absenceSuspended;
         localStorage.setItem("gaku_trial_status", JSON.stringify({
           trialExpired: trialExpiredNow,
           isGakuStudent: isGakuStudentNow,
@@ -16099,6 +16102,7 @@ Respond ONLY with a valid JSON array, no markdown, no backticks:
       // Streak applies to everyone (paid/GAKU students included), so set it
       // before the early-return below, which only short-circuits the
       // trial-specific paywall checks.
+      setAbsenceSuspended(!!data?.absenceSuspended);
       setStreakDays(typeof data?.streakDays === "number" ? data.streakDays : 0);
       setReaderInstalled(typeof data?.readerInstalled === "boolean" ? data.readerInstalled : null);
       if (typeof data?.plansUnlocked === "boolean") setPlansUnlocked(data.plansUnlocked);
@@ -16521,16 +16525,17 @@ Respond ONLY with a valid JSON array, no markdown, no backticks:
   // this and reach the dashboard — the only ways out are paying or fully
   // deleting the account (self-service delete, which starts a real fresh
   // trial).
-  if (authUser && trialLocked && (previewPaywall || (!isPaid && !isGakuStudent))) {
+  if (authUser && (trialLocked || absenceSuspended) && (previewPaywall || (absenceSuspended ? !isPaid : (!isPaid && !isGakuStudent)))) {
     return (
       <div style={{ minHeight:"100vh", background:"linear-gradient(160deg,#0a0f1e 0%,#0f172a 60%,#0a0f1e 100%)", display:"flex", alignItems:"flex-start", justifyContent:"center", padding:24, boxSizing:"border-box" }}>
         <div style={{ background:"linear-gradient(135deg,#1e1b4b,#0f172a)", border:"1.5px solid rgba(139,92,246,0.4)", borderRadius:20, padding:"36px 32px", maxWidth:420, width:"90%", margin:"auto", textAlign:"center", boxShadow:"0 8px 40px rgba(139,92,246,0.25)" }}>
           <p style={{ fontSize:28, margin:"0 0 6px" }}>⏳</p>
-          <h2 style={{ color:"#f1f5f9", fontSize:20, fontWeight:900, margin:"0 0 8px" }}>{T?.trialEndedTitle || "Your 7-day free trial has ended"}</h2>
+          <h2 style={{ color:"#f1f5f9", fontSize:20, fontWeight:900, margin:"0 0 8px" }}>{absenceSuspended ? "GAKU Master is temporarily suspended" : (T?.trialEndedTitle || "Your 7-day free trial has ended")}</h2>
           <p style={{ color:"#94a3b8", fontSize:13, margin:"0 0 14px", lineHeight:1.6 }}>
-            {T?.trialEndedDesc || "Choose a plan below to keep your progress."}
+            {absenceSuspended ? "In accordance with our rules, if you are absent from lessons continuously for one month or more, your use of GAKU Master is temporarily suspended. To keep using it right away, choose a regular payment plan below, or take the three lessons required of Official Students again." : (T?.trialEndedDesc || "Choose a plan below to keep your progress.")}
           </p>
 
+          {!absenceSuspended && (<>
           {/* Data-reset urgency warning — matches the real 7-day grace period
               enforced server-side in api/account-status.js (GRACE_DAYS).
               Shown unconditionally on this screen, regardless of whether the
@@ -16554,8 +16559,9 @@ Respond ONLY with a valid JSON array, no markdown, no backticks:
               {T?.freePlanGakuStudentHint || "GAKU lesson students get the app included free. No code? Book a lesson to become one →"}
             </a>
           </div>
+          </>)}
 
-          {(plansUnlocked || (previewPaywall && previewPlans)) && (
+          {(plansUnlocked || absenceSuspended || (previewPaywall && previewPlans)) && (
           <>
           <div style={{ background:"rgba(255,255,255,0.03)", border:"1px solid rgba(255,255,255,0.08)", borderRadius:10, padding:"10px 12px", marginBottom:18, textAlign:"left" }}>
             <p style={{ color:"#94a3b8", fontSize:10, fontWeight:800, letterSpacing:1, margin:"0 0 8px" }}>💱 {T?.convertCurrencyLabel || "SEE PRICES IN YOUR CURRENCY"}</p>

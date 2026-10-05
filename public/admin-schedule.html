@@ -59,6 +59,11 @@
   <section>
     <h2>📋 キャンセル・リスケ申請</h2>
     <div id="cancellation-list"><p>読み込み中…</p></div>
+    <div style="margin-top:12px;padding-top:10px;border-top:1px dashed #cbd5e1;font-size:12px;">
+      <strong>⏸ GAKU Master停止の手動解除</strong>（正規プラン加入・3回授業の再受講が済んだ生徒用）<br/>
+      <input type="text" id="resume-email" placeholder="生徒の登録メールアドレス" style="width:260px;margin-top:6px;" />
+      <button class="btn" onclick="resumeGakuMaster(document.getElementById('resume-email').value.trim())">停止を解除</button>
+    </div>
   </section>
 
   <section>
@@ -332,6 +337,19 @@ async function loadCancellationRequests() {
     const statusBadge = r.auto_opened
       ? `<span class="badge auto">✅ 枠を自動解放済み${r.matched_start_time ? "（" + r.matched_start_time.slice(0,5) + "）" : ""}</span>`
       : `<span class="badge manual">⚠️ 要手動確認（自動一致せず）</span>`;
+    const la = r.longAbsence;
+    let absenceBlock = "";
+    if (r.masterSuspended) {
+      absenceBlock = `<div style="background:#f1f5f9;border:1px solid #cbd5e1;border-radius:8px;padding:8px 10px;margin:6px 0;font-size:12px;">
+        ⏸ この生徒のGAKU Masterは<strong>一時停止中</strong>です。正規プラン加入、または3回授業の再受講が済んだら
+        <button class="btn" style="margin-left:6px;" onclick="resumeGakuMaster('${r.student_email}')">停止を解除</button></div>`;
+    } else if (la && la.flagged) {
+      absenceBlock = `<div style="background:#fef2f2;border:2px solid #dc2626;border-radius:8px;padding:8px 10px;margin:6px 0;font-size:12px;">
+        <strong style="color:#b91c1c;">⚠️ 1ヶ月以上の欠席（Official Student）— GAKU Master停止の承認待ち</strong>
+        <ul style="margin:4px 0 6px 18px;padding:0;">${la.reasons.map(x => `<li>${x}</li>`).join("")}</ul>
+        <button class="btn reject" onclick="suspendGakuMaster('${r.student_email}', '${r.id}', '${(r.student_name || "").replace(/'/g, "")}')">GAKU Master を一時停止（承認）</button>
+        <span style="color:#64748b;"> 押すと生徒に英文メールが届きます。見送る場合は「確認済みにする」だけ押してください。</span></div>`;
+    }
     return `<div class="req-card">
       <div class="req-head">
         <span>${r.student_name} (${r.student_email || "メール未登録"}) — ${isCancel ? "キャンセル" : "リスケ"}</span>
@@ -343,11 +361,29 @@ async function loadCancellationRequests() {
         ${r.reschedule_date ? ` / 希望リスケ日: ${r.reschedule_date}` : ""}
         ${r.location ? ` / 現在地: ${r.location}` : ""}
       </div>
+      ${absenceBlock}
       <div class="row">
         <button class="btn confirm" onclick="acknowledgeCancellationRequest('${r.id}')">確認済みにする</button>
       </div>
     </div>`;
   }).join("");
+}
+
+async function suspendGakuMaster(email, requestId, name) {
+  if (!confirm(`${name || email} さんのGAKU Master利用を一時停止しますか？\n生徒に英文の停止通知メールが送られます。`)) return;
+  const r = await api("suspend-gaku-master", { email, requestId: requestId || null });
+  if (r.error) return alert(r.error);
+  alert("GAKU Masterを一時停止しました。" + (r.emailed ? "\n生徒に英文メールを送りました。" : "\n※通知メールの送信に失敗しました。手動で連絡してください。"));
+  loadCancellationRequests();
+}
+
+async function resumeGakuMaster(email) {
+  if (!email) return alert("メールアドレスを入力してください");
+  if (!confirm(`${email} のGAKU Master停止を解除しますか？`)) return;
+  const r = await api("resume-gaku-master", { email });
+  if (r.error) return alert(r.error);
+  alert("停止を解除しました。");
+  loadCancellationRequests();
 }
 
 async function acknowledgeCancellationRequest(id) {

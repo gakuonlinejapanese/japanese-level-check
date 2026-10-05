@@ -237,7 +237,16 @@ export default async function handler(req, res) {
       }
     }
 
+    // 1ヶ月以上の欠席でSeitoが承認した一時停止。通常の有料プランに入れば解除扱い。
+    // 列がまだ無くてもアプリ全体が止まらないよう、別クエリ+try/catchで読む。
+    let absenceSuspended = false;
+    try {
+      const { data: abs, error: absErr } = await supabase.from("profiles").select("absence_suspended_at").eq("id", userId).maybeSingle();
+      if (!absErr && abs?.absence_suspended_at && !isPaid) absenceSuspended = true;
+    } catch {}
+
     return res.status(200).json({
+      absenceSuspended,
       isGakuStudent,
       isPaid,
       paidPlan: data?.paid_plan || null,
