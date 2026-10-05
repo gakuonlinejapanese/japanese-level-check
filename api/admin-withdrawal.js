@@ -431,6 +431,13 @@ async function handleReaderStats(supabase, body, res) {
   if (ids.length > 0) {
     const { data: profs } = await supabase.from("profiles").select("id, email").in("id", ids);
     (profs || []).forEach((p) => { emailById[p.id] = (p.email || "").toLowerCase(); });
+    // profiles に行がない(作成処理が途中で失敗した等)アカウントは、ログイン情報(auth.users)からメールを補う
+    await Promise.all(ids.filter((id) => !emailById[id]).map(async (id) => {
+      try {
+        const { data } = await supabase.auth.admin.getUserById(id);
+        if (data?.user?.email) emailById[id] = data.user.email.toLowerCase();
+      } catch (e) { /* 見つからなければ空のまま */ }
+    }));
   }
 
   const now = Date.now();
