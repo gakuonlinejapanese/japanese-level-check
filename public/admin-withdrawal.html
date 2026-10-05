@@ -87,6 +87,15 @@
   </div>
 
   <div class="card">
+    <h2>📊 GAKU Reader 利用状況（アカウント単位）</h2>
+    <p class="sub">Chromeストアの数字（インストール数・週間ユーザー数）とは別に、GAKU Masterのアカウントで人数を数え直します。同じ人の再インストールは1人として数えます。</p>
+    <label>集計から除外するメール（自分のテスト用。カンマ区切り・空欄でも可）</label>
+    <input id="reader-exclude" placeholder="例: me@gmail.com, test@gmail.com" />
+    <button onclick="loadReaderStats()">集計する</button>
+    <div id="reader-stats" style="margin-top:14px;font-size:13px;line-height:1.7;"></div>
+  </div>
+
+  <div class="card">
     <h2>⏳ 削除待ちの生徒一覧</h2>
     <button class="refresh-btn" onclick="loadPending()">🔄 一覧を更新</button>
     <div id="pendingList"><p class="empty">「一覧を更新」を押してください</p></div>
@@ -132,6 +141,37 @@ async function withdraw() {
   } finally {
     btn.disabled = false;
   }
+}
+
+async function loadReaderStats() {
+  const secret = getSecret();
+  const el = document.getElementById('reader-stats');
+  if (!secret) { el.innerHTML = '<p class="empty">先に管理者パスワードを入力してください</p>'; return; }
+  el.textContent = '集計中…';
+  const excludeEmails = document.getElementById('reader-exclude').value.split(',').map(x => x.trim()).filter(Boolean);
+  try {
+    const r = await fetch('/api/admin-withdrawal', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ secret, action: 'reader_stats', excludeEmails })
+    });
+    const d = await r.json();
+    if (!r.ok) { el.textContent = d.error || 'エラー'; return; }
+    const esc = (t) => String(t || '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+    const day = (t) => (t || '').slice(0, 10);
+    const rows = d.people.map(p => `<tr>
+      <td style="padding:4px 6px;">${esc(p.email) || '(メール不明)'}</td>
+      <td style="padding:4px 6px;text-align:center;">${p.instances}</td>
+      <td style="padding:4px 6px;">${day(p.lastSeen)}</td>
+      <td style="padding:4px 6px;">${p.isPaid ? '有料' : (p.isGakuStudent ? 'GAKU生徒' : 'トライアル等')}</td></tr>`).join('');
+    el.innerHTML = `
+      <div>アカウントを特定できた人数: <strong>${d.identifiedPeople}人</strong>（直近7日に利用: ${d.identifiedActive7d}人 / 30日: ${d.identifiedActive30d}人）</div>
+      <div>アカウント不明（メール未入力など）: ${d.anonymousInstances}件（直近7日に利用: ${d.anonymousActive7d}件）</div>
+      <div style="color:#94a3b8;">記録されている識別ID: 全${d.totalInstances}件${d.excludedInstances ? ` / 除外 ${d.excludedInstances}件` : ''} ／ 初日だけで途絶えた識別ID: ${d.neverReturnedInstances}件</div>
+      <table style="width:100%;margin-top:10px;border-collapse:collapse;font-size:12px;">
+        <tr style="color:#64748b;text-align:left;"><th style="padding:4px 6px;">メール</th><th style="padding:4px 6px;">識別ID数</th><th style="padding:4px 6px;">最終利用</th><th style="padding:4px 6px;">区分</th></tr>
+        ${rows}
+      </table>`;
+  } catch (e) { el.textContent = 'エラー: ' + e.message; }
 }
 
 async function loadPending() {

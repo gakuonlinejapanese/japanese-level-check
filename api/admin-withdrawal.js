@@ -412,6 +412,68 @@ async function handleTestMarkPaid(supabase, body, res) {
   return res.status(200).json({ ok: true });
 }
 
+// GAKU Reader(Chrome拡張)の利用状況を「識別ID」ではなく「GAKU Masterアカウント」単位で集計する。
+// reader_install_logは拡張の再インストール・別プロファイルのたびに識別IDが増えるため、
+// 行数=人数にならない。user_id(なければメール)で人をまとめ直す。
+async function handleReaderStats(supabase, body, res) {
+  const exclude = new Set(
+    (Array.isArray(body.excludeEmails) ? body.excludeEmails : [])
+      .map((e) => String(e).trim().toLowerCase()).filter(Boolean)
+  );
+  const { data: rows, error } = await supabase
+    .from("reader_install_log")
+    .select("instance_id, user_id, email, is_gaku_student, is_paid, first_seen, last_seen")
+    .limit(10000);
+  if (error) return res.status(500).json({ error: error.message });
+
+  const ids = [...new Set((rows || []).map((r) => r.user_id).filter(Boolean))];
+  const emailById = {};
+  if (ids.length > 0) {
+    const { data: profs } = await supabase.from("profiles").select("id, email").in("id", ids);
+    (profs || []).forEach((p) => { emailById[p.id] = (p.email || "").toLowerCase(); });
+  }
+
+  const now = Date.now();
+  const DAY = 86400000;
+  const people = new Map();
+  let anonymous = 0, anonymousActive7d = 0, excludedInstances = 0, neverReturned = 0;
+  (rows || []).forEach((r) => {
+    const email = (r.email || emailById[r.user_id] || "").toLowerCase();
+    if (email && exclude.has(email)) { excludedInstances++; return; }
+    const first = new Date(r.first_seen).getTime(), last = new Date(r.last_seen).getTime();
+    if (last - first < DAY) neverReturned++;
+    const key = r.user_id || email;
+    if (!key) {
+      anonymous++;
+      if (now - last <= 7 * DAY) anonymousActive7d++;
+      return;
+    }
+    const p = people.get(key) || { email, instances: 0, isGakuStudent: false, isPaid: false, firstSeen: r.first_seen, lastSeen: r.last_seen };
+    p.instances++;
+    p.isGakuStudent = p.isGakuStudent || !!r.is_gaku_student;
+    p.isPaid = p.isPaid || !!r.is_paid;
+    if (!p.email && email) p.email = email;
+    if (r.first_seen < p.firstSeen) p.firstSeen = r.first_seen;
+    if (r.last_seen > p.lastSeen) p.lastSeen = r.last_seen;
+    people.set(key, p);
+  });
+
+  const list = [...people.values()].sort((a, b) => (a.lastSeen < b.lastSeen ? 1 : -1));
+  const active7d = list.filter((p) => now - new Date(p.lastSeen).getTime() <= 7 * DAY).length;
+  const active30d = list.filter((p) => now - new Date(p.lastSeen).getTime() <= 30 * DAY).length;
+  return res.status(200).json({
+    totalInstances: (rows || []).length,
+    excludedInstances,
+    anonymousInstances: anonymous,
+    anonymousActive7d,
+    identifiedPeople: list.length,
+    identifiedActive7d: active7d,
+    identifiedActive30d: active30d,
+    neverReturnedInstances: neverReturned,
+    people: list,
+  });
+}
+
 export default async function handler(req, res) {
   const supabase = getAdminClient();
 
@@ -456,6 +518,7 @@ export default async function handler(req, res) {
     if (action === "cancel") return await handleCancel(supabase, body, res);
     if (action === "list") return await handleList(supabase, res);
     if (action === "test_mark_paid") return await handleTestMarkPaid(supabase, body, res);
+    if (action === "reader_stats") return await handleReaderStats(supabase, body, res);
     return res.status(400).json({ error: "Unknown action" });
   } catch (e) {
     return res.status(500).json({ error: e.message });
