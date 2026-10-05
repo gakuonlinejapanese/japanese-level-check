@@ -402,7 +402,7 @@ const UI_TRANSLATIONS = {
     trialEndsTomorrow: "Your free trial ends tomorrow!",
     tutorialGraceEndsToday: "Your bonus Tutorial week ends today!",
     tutorialGraceEndsTomorrow: "Your bonus Tutorial week ends tomorrow!",
-    dataResetWarning: "If payment isn't completed within 1 week, all your saved study data (vocabulary, progress, and settings) will be permanently reset. Subscribe now to keep everything you've built so far.",
+    dataResetWarning: "If payment isn't completed within 1 week, or you don't become an official student of GAKU, all your saved study data (vocabulary, progress, and settings) will be permanently reset. Subscribe now to keep everything you've built so far.",
     dataResetWarningShort: "Reminder: if you don't finish payment within 1 week, your saved data will be reset.",
     viewPlansCta: "View plans",
     firstWinKicker: "QUICK START",
@@ -908,7 +908,7 @@ const UI_TRANSLATIONS = {
     trialEndsTomorrow: "Votre essai gratuit se termine demain !",
     tutorialGraceEndsToday: "Votre semaine bonus Tutoriel se termine aujourd'hui !",
     tutorialGraceEndsTomorrow: "Votre semaine bonus Tutoriel se termine demain !",
-    dataResetWarning: "Si le paiement n'est pas effectué sous 1 semaine, toutes vos données d'étude enregistrées (vocabulaire, progression et paramètres) seront définitivement réinitialisées. Abonnez-vous maintenant pour conserver tout ce que vous avez accompli.",
+    dataResetWarning: "Si le paiement n'est pas effectué sous 1 semaine, ou si vous ne devenez pas élève officiel de GAKU, toutes vos données d'étude enregistrées (vocabulaire, progression et paramètres) seront définitivement réinitialisées. Abonnez-vous maintenant pour conserver tout ce que vous avez accompli.",
     dataResetWarningShort: "Rappel : si le paiement n'est pas finalisé sous 1 semaine, vos données enregistrées seront réinitialisées.",
     viewPlansCta: "Voir les formules",
     firstWinKicker: "DÉMARRAGE RAPIDE",
@@ -1398,7 +1398,7 @@ const UI_TRANSLATIONS = {
     trialEndsTomorrow: "¡Tu prueba gratuita termina mañana!",
     tutorialGraceEndsToday: "¡Tu semana extra de Tutorial termina hoy!",
     tutorialGraceEndsTomorrow: "¡Tu semana extra de Tutorial termina mañana!",
-    dataResetWarning: "Si no completas el pago en 1 semana, todos tus datos de estudio guardados (vocabulario, progreso y configuración) se restablecerán de forma permanente. Suscríbete ahora para conservar todo lo que has logrado.",
+    dataResetWarning: "Si no completas el pago en 1 semana, o no te conviertes en estudiante oficial de GAKU, todos tus datos de estudio guardados (vocabulario, progreso y configuración) se restablecerán de forma permanente. Suscríbete ahora para conservar todo lo que has logrado.",
     dataResetWarningShort: "Recordatorio: si no completas el pago en 1 semana, tus datos guardados se restablecerán.",
     viewPlansCta: "Ver planes",
     firstWinKicker: "INICIO RÁPIDO",
@@ -1888,7 +1888,7 @@ const UI_TRANSLATIONS = {
     trialEndsTomorrow: "Seu teste grátis termina amanhã!",
     tutorialGraceEndsToday: "Sua semana bônus de Tutorial termina hoje!",
     tutorialGraceEndsTomorrow: "Sua semana bônus de Tutorial termina amanhã!",
-    dataResetWarning: "Se o pagamento não for concluído em 1 semana, todos os seus dados de estudo salvos (vocabulário, progresso e configurações) serão permanentemente apagados. Assine agora para manter tudo o que você já construiu.",
+    dataResetWarning: "Se o pagamento não for concluído em 1 semana, ou se você não se tornar aluno oficial da GAKU, todos os seus dados de estudo salvos (vocabulário, progresso e configurações) serão permanentemente apagados. Assine agora para manter tudo o que você já construiu.",
     dataResetWarningShort: "Lembrete: se você não concluir o pagamento em 1 semana, seus dados salvos serão apagados.",
     viewPlansCta: "Ver planos",
     firstWinKicker: "INÍCIO RÁPIDO",
@@ -2378,7 +2378,7 @@ const UI_TRANSLATIONS = {
     trialEndsTomorrow: "Deine kostenlose Testphase endet morgen!",
     tutorialGraceEndsToday: "Deine Bonus-Tutorial-Woche endet heute!",
     tutorialGraceEndsTomorrow: "Deine Bonus-Tutorial-Woche endet morgen!",
-    dataResetWarning: "Wenn die Zahlung nicht innerhalb von 1 Woche abgeschlossen wird, werden alle deine gespeicherten Lerndaten (Vokabeln, Fortschritt und Einstellungen) dauerhaft zurückgesetzt. Abonniere jetzt, um alles zu behalten, was du bisher aufgebaut hast.",
+    dataResetWarning: "Wenn die Zahlung nicht innerhalb von 1 Woche abgeschlossen wird oder du nicht offizieller GAKU-Schüler wirst, werden alle deine gespeicherten Lerndaten (Vokabeln, Fortschritt und Einstellungen) dauerhaft zurückgesetzt. Abonniere jetzt, um alles zu behalten, was du bisher aufgebaut hast.",
     dataResetWarningShort: "Erinnerung: Wenn die Zahlung nicht innerhalb von 1 Woche abgeschlossen wird, werden deine gespeicherten Daten zurückgesetzt.",
     viewPlansCta: "Pläne ansehen",
     firstWinKicker: "SCHNELLSTART",
@@ -2868,7 +2868,7 @@ const UI_TRANSLATIONS = {
     trialEndsTomorrow: "La tua prova gratuita termina domani!",
     tutorialGraceEndsToday: "La tua settimana bonus del Tutorial termina oggi!",
     tutorialGraceEndsTomorrow: "La tua settimana bonus del Tutorial termina domani!",
-    dataResetWarning: "Se il pagamento non viene completato entro 1 settimana, tutti i tuoi dati di studio salvati (vocabolario, progressi e impostazioni) verranno azzerati permanentemente. Abbonati ora per conservare tutto ciò che hai costruito finora.",
+    dataResetWarning: "Se il pagamento non viene completato entro 1 settimana, o se non diventi uno studente ufficiale di GAKU, tutti i tuoi dati di studio salvati (vocabolario, progressi e impostazioni) verranno azzerati permanentemente. Abbonati ora per conservare tutto ciò che hai costruito finora.",
     dataResetWarningShort: "Promemoria: se non completi il pagamento entro 1 settimana, i tuoi dati salvati verranno azzerati.",
     viewPlansCta: "Vedi i piani",
     firstWinKicker: "INIZIO RAPIDO",
@@ -3358,7 +3358,7 @@ const UI_TRANSLATIONS = {
     trialEndsTomorrow: "你的免费试用明天到期！",
     tutorialGraceEndsToday: "你的额外教程周今天结束！",
     tutorialGraceEndsTomorrow: "你的额外教程周明天结束！",
-    dataResetWarning: "如果未在1周内完成付款，您保存的所有学习数据（词汇、进度和设置）将被永久重置。立即订阅以保留您已建立的一切。",
+    dataResetWarning: "如果未在1周内完成付款，或未成为GAKU正式学员，您保存的所有学习数据（词汇、进度和设置）将被永久重置。立即订阅以保留您已建立的一切。",
     dataResetWarningShort: "提醒：如果未在1周内完成付款，您保存的数据将被重置。",
     viewPlansCta: "查看方案",
     firstWinKicker: "快速开始",
@@ -3848,7 +3848,7 @@ const UI_TRANSLATIONS = {
     trialEndsTomorrow: "你的免費試用明天到期！",
     tutorialGraceEndsToday: "你的額外教學週今天結束！",
     tutorialGraceEndsTomorrow: "你的額外教學週明天結束！",
-    dataResetWarning: "如果未在1週內完成付款，您保存的所有學習資料（詞彙、進度和設定）將被永久重置。立即訂閱以保留您已建立的一切。",
+    dataResetWarning: "如果未在1週內完成付款，或未成為GAKU正式學員，您保存的所有學習資料（詞彙、進度和設定）將被永久重置。立即訂閱以保留您已建立的一切。",
     dataResetWarningShort: "提醒：如果未在1週內完成付款，您保存的資料將被重置。",
     viewPlansCta: "查看方案",
     firstWinKicker: "快速開始",
@@ -4338,7 +4338,7 @@ const UI_TRANSLATIONS = {
     trialEndsTomorrow: "무료 체험이 내일 종료됩니다!",
     tutorialGraceEndsToday: "보너스 튜토리얼 주간이 오늘 종료됩니다!",
     tutorialGraceEndsTomorrow: "보너스 튜토리얼 주간이 내일 종료됩니다!",
-    dataResetWarning: "1주일 이내에 결제를 완료하지 않으면 저장된 모든 학습 데이터(단어, 진행 상황, 설정)가 영구적으로 초기화됩니다. 지금까지 쌓아온 것을 지키려면 지금 구독하세요.",
+    dataResetWarning: "1주일 이내에 결제를 완료하지 않거나 GAKU 정식 학생이 되지 않으면 저장된 모든 학습 데이터(단어, 진행 상황, 설정)가 영구적으로 초기화됩니다. 지금까지 쌓아온 것을 지키려면 지금 구독하세요.",
     dataResetWarningShort: "알림: 1주일 이내에 결제를 완료하지 않으면 저장된 데이터가 초기화됩니다.",
     viewPlansCta: "요금제 보기",
     firstWinKicker: "빠른 시작",
@@ -4828,7 +4828,7 @@ const UI_TRANSLATIONS = {
     trialEndsTomorrow: "ทดลองใช้ฟรีของคุณจะหมดอายุพรุ่งนี้!",
     tutorialGraceEndsToday: "สัปดาห์โบนัสบทแนะนำของคุณจะสิ้นสุดวันนี้!",
     tutorialGraceEndsTomorrow: "สัปดาห์โบนัสบทแนะนำของคุณจะสิ้นสุดพรุ่งนี้!",
-    dataResetWarning: "หากไม่ชำระเงินภายใน 1 สัปดาห์ ข้อมูลการเรียนที่บันทึกไว้ทั้งหมด (คำศัพท์ ความคืบหน้า และการตั้งค่า) จะถูกรีเซ็ตอย่างถาวร สมัครสมาชิกตอนนี้เพื่อรักษาสิ่งที่คุณสร้างมาทั้งหมด",
+    dataResetWarning: "หากไม่ชำระเงินภายใน 1 สัปดาห์ หรือไม่ได้เป็นนักเรียนอย่างเป็นทางการของ GAKU ข้อมูลการเรียนที่บันทึกไว้ทั้งหมด (คำศัพท์ ความคืบหน้า และการตั้งค่า) จะถูกรีเซ็ตอย่างถาวร สมัครสมาชิกตอนนี้เพื่อรักษาสิ่งที่คุณสร้างมาทั้งหมด",
     dataResetWarningShort: "เตือนความจำ: หากไม่ชำระเงินให้เสร็จภายใน 1 สัปดาห์ ข้อมูลที่บันทึกไว้ของคุณจะถูกรีเซ็ต",
     viewPlansCta: "ดูแพ็กเกจ",
     firstWinKicker: "เริ่มต้นอย่างรวดเร็ว",
@@ -16542,27 +16542,12 @@ Respond ONLY with a valid JSON array, no markdown, no backticks:
               student goes on to agree to the policy or just closes the tab. */}
           <div style={{ background:"rgba(239,68,68,0.08)", border:"1px solid rgba(239,68,68,0.35)", borderRadius:10, padding:"10px 12px", marginBottom:18, textAlign:"left" }}>
             <p style={{ color:"#fca5a5", fontSize:12, fontWeight:700, margin:0, lineHeight:1.6 }}>
-              ⚠️ {T?.dataResetWarning || "If payment isn't completed within 1 week, all your saved study data (vocabulary, progress, and settings) will be permanently reset. Subscribe now to keep everything you've built so far."}
+              ⚠️ {T?.dataResetWarning || "If payment isn't completed within 1 week, or you don't become an official student of GAKU, all your saved study data (vocabulary, progress, and settings) will be permanently reset. Subscribe now to keep everything you've built so far."}
             </p>
           </div>
 
-          <div style={{ background:"rgba(74,222,128,0.06)", border:"1px solid rgba(74,222,128,0.3)", borderRadius:10, padding:"12px 14px", marginBottom:18, textAlign:"left" }}>
-            <p style={{ color:"#4ade80", fontSize:11, fontWeight:800, letterSpacing:0.5, margin:"0 0 8px" }}>🎓 {T?.freePlanGakuStudent || "FREE Plan (Only GAKU students)"}</p>
-            <div style={{ display:"flex", gap:6 }}>
-              <input value={lockedInviteCode} onChange={e=>setLockedInviteCode(e.target.value)} placeholder={T?.inviteCodePlaceholder || "Enter invite code..."} style={{ flex:1, background:"rgba(255,255,255,0.05)", border:`1px solid ${C.border}`, borderRadius:8, color:"#f1f5f9", fontSize:12, padding:"8px 10px" }} />
-              <button onClick={handleLockedInviteRedeem} disabled={lockedInviteBusy || !lockedInviteCode.trim()} style={{ padding:"8px 14px", borderRadius:8, background:"linear-gradient(135deg,#22c55e,#16a34a)", border:"none", color:"#fff", fontSize:12, fontWeight:700, cursor:"pointer", whiteSpace:"nowrap" }}>
-                {lockedInviteBusy ? "⏳" : (T?.unlockBtn || "Unlock")}
-              </button>
-            </div>
-            {lockedInviteErr && <p style={{ color:C.red, fontSize:11, margin:"8px 0 0" }}>{lockedInviteErr}</p>}
-            <a href="https://app.seitojapanese.online/trial-lesson.html" target="_blank" rel="noopener noreferrer" style={{ display:"block", color:"#86efac", fontSize:11, fontWeight:600, margin:"8px 0 0", textDecoration:"underline" }}>
-              {T?.freePlanGakuStudentHint || "GAKU lesson students get the app included free. No code? Book a lesson to become one →"}
-            </a>
-          </div>
           </>)}
 
-          {(plansUnlocked || absenceSuspended || (previewPaywall && previewPlans)) && (
-          <>
           <div style={{ background:"rgba(255,255,255,0.03)", border:"1px solid rgba(255,255,255,0.08)", borderRadius:10, padding:"10px 12px", marginBottom:18, textAlign:"left" }}>
             <p style={{ color:"#94a3b8", fontSize:10, fontWeight:800, letterSpacing:1, margin:"0 0 8px" }}>💱 {T?.convertCurrencyLabel || "SEE PRICES IN YOUR CURRENCY"}</p>
             <div style={{ display:"flex", gap:6 }}>
@@ -16580,6 +16565,22 @@ Respond ONLY with a valid JSON array, no markdown, no backticks:
             )}
             {paywallRateError && <p style={{ color:C.red, fontSize:11, margin:"8px 0 0" }}>{paywallRateError}</p>}
           </div>
+
+          {!absenceSuspended && (<>
+          <div style={{ background:"rgba(74,222,128,0.06)", border:"1px solid rgba(74,222,128,0.3)", borderRadius:10, padding:"12px 14px", marginBottom:18, textAlign:"left" }}>
+            <p style={{ color:"#4ade80", fontSize:11, fontWeight:800, letterSpacing:0.5, margin:"0 0 8px" }}>🎓 {T?.freePlanGakuStudent || "FREE Plan (Only GAKU students)"}</p>
+            <div style={{ display:"flex", gap:6 }}>
+              <input value={lockedInviteCode} onChange={e=>setLockedInviteCode(e.target.value)} placeholder={T?.inviteCodePlaceholder || "Enter invite code..."} style={{ flex:1, background:"rgba(255,255,255,0.05)", border:`1px solid ${C.border}`, borderRadius:8, color:"#f1f5f9", fontSize:12, padding:"8px 10px" }} />
+              <button onClick={handleLockedInviteRedeem} disabled={lockedInviteBusy || !lockedInviteCode.trim()} style={{ padding:"8px 14px", borderRadius:8, background:"linear-gradient(135deg,#22c55e,#16a34a)", border:"none", color:"#fff", fontSize:12, fontWeight:700, cursor:"pointer", whiteSpace:"nowrap" }}>
+                {lockedInviteBusy ? "⏳" : (T?.unlockBtn || "Unlock")}
+              </button>
+            </div>
+            {lockedInviteErr && <p style={{ color:C.red, fontSize:11, margin:"8px 0 0" }}>{lockedInviteErr}</p>}
+            <a href="https://app.seitojapanese.online/trial-lesson.html" target="_blank" rel="noopener noreferrer" style={{ display:"block", color:"#86efac", fontSize:11, fontWeight:600, margin:"8px 0 0", textDecoration:"underline" }}>
+              {T?.freePlanGakuStudentHint || "GAKU lesson students get the app included free. No code? Book a lesson to become one →"}
+            </a>
+          </div>
+          </>)}
 
           <p style={{ color:"#a855f7", fontSize:10, fontWeight:800, margin:"0 0 6px", textAlign:"left", letterSpacing:1 }}>{T?.appOnlyLabel}</p>
           <div style={{ display:"flex", flexDirection:"column", gap:8, marginBottom:14 }}>
@@ -16615,8 +16616,6 @@ Respond ONLY with a valid JSON array, no markdown, no backticks:
               💳 $185.95 <span style={{ color:"#64748b", fontSize:10, fontWeight:400 }}>($30.99/mo)</span> {formatConverted(185.95) && <span style={{ color:"#67e8f9", fontWeight:400 }}>(≈ {formatConverted(185.95)} {paywallCurrency})</span>}
             </button>
           </div>
-          </>
-          )}
 
           <button onClick={authUser ? handleDeleteAccount : undefined} disabled={deleteAccountBusy} style={{ background:"none", border:"none", color:"#475569", fontSize:11, cursor:"pointer", textDecoration:"underline" }}>
             {T?.deleteAccountLink || "Delete my account instead"}
