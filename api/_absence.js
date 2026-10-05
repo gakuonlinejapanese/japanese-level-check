@@ -1,6 +1,10 @@
 // api/_absence.js — 長期欠席(1ヶ月以上)の判定と、GAKU Master一時停止の共通処理。
 // 先頭が _ のファイルはVercelのサーバーレス関数として数えられない(12関数制限の対象外)。
 
+// 新ルールの適用開始日。欠席期間のカウントはこの日から始める(2026年10月分はノーカウント)。
+export const RULE_START_DATE = "2026-11-01";
+const countFrom = (d) => (d < RULE_START_DATE ? RULE_START_DATE : d);
+
 // "YYYY-MM-DD" に暦の1ヶ月を足す(31日→翌月末日などは月末に丸める)
 export function addOneMonth(dateStr) {
   const [y, m, d] = dateStr.split("-").map(Number);
@@ -30,12 +34,15 @@ export async function assessLongAbsence(supabase, { email, requestType, cancelDa
   if (!isOfficial || profile?.is_paid) return result;
   result.applicable = true;
 
-  const oneMonthAfterCancel = addOneMonth(cancelDate);
-  if (requestType === "cancel" && returnDate && returnDate >= oneMonthAfterCancel) {
-    result.reasons.push(`Declared absence: canceling on ${cancelDate} and returning on ${returnDate} (1 month or more).`);
+  // 欠席の数え始め: キャンセル日が11月より前なら11月1日から数える(10月分はノーカウント)
+  const absenceStart = countFrom(cancelDate);
+  const oneMonthAfterStart = addOneMonth(absenceStart);
+  const countNote = cancelDate < RULE_START_DATE ? ` (counted from ${RULE_START_DATE}; October is not counted)` : "";
+  if (requestType === "cancel" && returnDate && returnDate >= oneMonthAfterStart) {
+    result.reasons.push(`Declared absence: canceling on ${cancelDate} and returning on ${returnDate} (1 month or more)${countNote}.`);
   }
-  if (requestType === "reschedule" && rescheduleDate && rescheduleDate >= oneMonthAfterCancel) {
-    result.reasons.push(`Reschedule request: canceling on ${cancelDate} and asking for ${rescheduleDate} (1 month or more away).`);
+  if (requestType === "reschedule" && rescheduleDate && rescheduleDate >= oneMonthAfterStart) {
+    result.reasons.push(`Reschedule request: canceling on ${cancelDate} and asking for ${rescheduleDate} (1 month or more away)${countNote}.`);
   }
 
   if (officialIds.length > 0) {
@@ -49,8 +56,8 @@ export async function assessLongAbsence(supabase, { email, requestType, cancelDa
       .limit(1);
     const last = lastRows && lastRows[0] ? lastRows[0].lesson_date : null;
     result.lastLessonDate = last;
-    if (last && cancelDate >= addOneMonth(last)) {
-      result.reasons.push(`Already absent: the last lesson on record was ${last}, 1 month or more before ${cancelDate}.`);
+    if (last && cancelDate >= addOneMonth(countFrom(last))) {
+      result.reasons.push(`Already absent: the last lesson on record was ${last}, and ${cancelDate} is 1 month or more after that (counting from ${RULE_START_DATE} at the earliest).`);
     }
   }
 
