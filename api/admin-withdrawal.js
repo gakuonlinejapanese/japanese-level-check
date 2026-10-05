@@ -481,6 +481,36 @@ async function handleReaderStats(supabase, body, res) {
   });
 }
 
+// scheduled_emails に登録された「日付指定メール」を、予定日になったら送る(毎日のcronから呼ばれる)。
+// 送信に失敗した行はpendingのまま残し、翌日また試す。skip_if_paid=true で、送る時点ですでに
+// 有料プランに入っている生徒には送らず skipped にする。
+async function handleScheduledEmails(supabase) {
+  const today = new Date().toISOString().slice(0, 10);
+  const { data: due, error } = await supabase
+    .from("scheduled_emails").select("*").eq("status", "pending").lte("send_on", today).limit(50);
+  if (error) return { error: error.message };
+  let sent = 0, skipped = 0, failed = 0;
+  for (const row of due || []) {
+    try {
+      if (row.skip_if_paid) {
+        const { data: prof } = await supabase.from("profiles").select("is_paid").ilike("email", row.to_email).maybeSingle();
+        if (prof?.is_paid) {
+          await supabase.from("scheduled_emails").update({ status: "skipped", processed_at: new Date().toISOString() }).eq("id", row.id);
+          skipped++;
+          continue;
+        }
+      }
+      await sendEmail({ to: row.to_email, subject: row.subject, html: row.html });
+      await supabase.from("scheduled_emails").update({ status: "sent", processed_at: new Date().toISOString() }).eq("id", row.id);
+      sent++;
+    } catch (e) {
+      console.error("Scheduled email failed:", row.id, e.message);
+      failed++;
+    }
+  }
+  return { sent, skipped, failed };
+}
+
 export default async function handler(req, res) {
   const supabase = getAdminClient();
 
@@ -490,12 +520,13 @@ export default async function handler(req, res) {
       return res.status(401).json({ error: "Unauthorized" });
     }
     try {
-      const [deleteResult, engagementResult, lowEngagementResult, trialEndingResult, unpaidReminderResult] = await Promise.all([
+      const [deleteResult, engagementResult, lowEngagementResult, trialEndingResult, unpaidReminderResult, scheduledEmailResult] = await Promise.all([
         runCronDelete(supabase).catch((e) => ({ ok: false, error: e.message })),
         handleTrialEngagementCheck(supabase).catch((e) => ({ error: e.message })),
         handleLowEngagementReminder(supabase).catch((e) => ({ error: e.message })),
         handleTrialEndingWarning(supabase).catch((e) => ({ error: e.message })),
         handleUnpaidCheckoutReminder(supabase).catch((e) => ({ error: e.message })),
+        handleScheduledEmails(supabase).catch((e) => ({ error: e.message })),
       ]);
       return res.status(200).json({
         ...deleteResult,
@@ -503,6 +534,7 @@ export default async function handler(req, res) {
         lowEngagementReminder: lowEngagementResult,
         trialEndingWarning: trialEndingResult,
         unpaidCheckoutReminder: unpaidReminderResult,
+        scheduledEmails: scheduledEmailResult,
       });
     } catch (e) {
       return res.status(500).json({ error: e.message });
