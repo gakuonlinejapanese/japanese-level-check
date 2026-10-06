@@ -15591,6 +15591,7 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
             {[F[3],F[4],F[5]].map((t,i)=>(
               <p key={i} style={{ color:"#e2e8f0", fontSize:13, margin:"0 0 6px" }}>{"\u2705"} {t}</p>
             ))}
+            <img src="/founder-chico.jpg" alt="California State University, Chico" style={{ display:"block", width:"100%", borderRadius:12, marginTop:12, border:`1px solid ${C.border}` }} />
             <div style={{ color:"#cbd5e1", fontSize:13, lineHeight:1.75, marginTop:16 }}>
               <p style={{ margin:"0 0 12px" }}>{F[6]}</p>
               <div style={{ margin:"0 0 12px", paddingLeft:12, borderLeft:`3px solid ${C.purpleLight}` }}>
