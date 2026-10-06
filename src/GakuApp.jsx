@@ -386,6 +386,550 @@ function isTravelGoal(goal, displayGoal) {
 
 // ─── UI TRANSLATIONS ────────────────────────────────────────────────────────────
 // Static translations for all major UI strings across all 6 tabs + form
+const FOUNDER_TEXT = {
+ "English": [
+  "About a founder",
+  "an online Japanese teacher, GAKU!",
+  "My background",
+  "MA in Teaching International Languages",
+  "5 years teaching Japanese",
+  "1,000+ students taught (3000+ hours of lessons)",
+  "I have been working as a Japanese teacher for five years, including working at Chico State's Student Learning Center as a Japanese tutor, and I have been working as an Online Japanese tutor at GAKU for three years. I have seen countless students say:",
+  [
+   "I want to learn Japanese, but I don’t have time to take lessons.",
+   "I am afraid of talking with native Japanese speakers.",
+   "I have financial problems that make it difficult to take Japanese lessons.",
+   "I have been learning Japanese with AI, but I don’t think I can improve.",
+   "I need somebody who can evaluate my Japanese, but nobody is here.",
+   "I don’t know what I should start with."
+  ],
+  "To be honest, it’s really hard for me as a teacher to solve these problems at the same time—but GAKU Master is not.",
+  "With my knowledge from my Master’s degree in Teaching International Languages, as well as having taught over 1,000 students in five years, I created this app so you can experience what it feels like to become a native Japanese speaker.",
+  [
+   "I can learn actual Japanese even if I don’t have enough time.",
+   "I can talk with my favorite anime characters.",
+   "My study guide in GAKU Master is very efficient and practical.",
+   "I get perfect feedback when I speak and write here."
+  ],
+  "Thanks for giving me lots of feedback. Now it is your turn.",
+  "Enjoy learning Japanese with GAKU Master, and I believe you will enjoy this app as you improve your Japanese.",
+  "If you have any concerns about using this app or any questions, feel free to ask me here:",
+  "Email:",
+  "(Due to scam calls, I would like to avoid putting my phone number here.)"
+ ],
+ "French": [
+  "À propos du fondateur",
+  "professeur de japonais en ligne, GAKU !",
+  "Mon parcours",
+  "Master en enseignement des langues internationales",
+  "5 ans d’enseignement du japonais",
+  "Plus de 1 000 élèves (plus de 3 000 heures de cours)",
+  "Je suis professeur de japonais depuis cinq ans, notamment comme tuteur de japonais au Student Learning Center de Chico State, et je suis tuteur de japonais en ligne chez GAKU depuis trois ans. J’ai entendu d’innombrables élèves dire :",
+  [
+   "Je veux apprendre le japonais, mais je n’ai pas le temps de suivre des cours.",
+   "J’ai peur de parler avec des locuteurs natifs du japonais.",
+   "J’ai des difficultés financières qui rendent les cours de japonais compliqués.",
+   "J’apprends le japonais avec l’IA, mais je ne pense pas progresser.",
+   "J’ai besoin de quelqu’un pour évaluer mon japonais, mais il n’y a personne.",
+   "Je ne sais pas par où commencer."
+  ],
+  "Honnêtement, il est très difficile pour moi, en tant que professeur, de résoudre tous ces problèmes à la fois — mais pas pour GAKU Master.",
+  "Grâce à mes connaissances issues de mon master en enseignement des langues internationales et à plus de 1 000 élèves enseignés en cinq ans, j’ai créé cette application pour que vous puissiez ressentir ce que c’est que de devenir un locuteur natif du japonais.",
+  [
+   "Je peux apprendre le vrai japonais même sans beaucoup de temps.",
+   "Je peux parler avec mes personnages d’anime préférés.",
+   "Mon guide d’étude dans GAKU Master est très efficace et pratique.",
+   "J’obtiens des retours parfaits quand je parle et j’écris ici."
+  ],
+  "Merci de m’avoir donné tant de retours. C’est maintenant à votre tour.",
+  "Profitez de l’apprentissage du japonais avec GAKU Master, et je suis sûr que vous apprécierez cette application au fil de vos progrès.",
+  "Si vous avez des inquiétudes ou des questions sur l’utilisation de cette application, n’hésitez pas à me les poser ici :",
+  "E-mail :",
+  "(En raison des appels frauduleux, je préfère ne pas indiquer mon numéro de téléphone ici.)"
+ ],
+ "Spanish": [
+  "Sobre el fundador",
+  "profesor de japonés en línea, ¡GAKU!",
+  "Mi trayectoria",
+  "Máster en Enseñanza de Lenguas Internacionales",
+  "5 años enseñando japonés",
+  "Más de 1.000 estudiantes (más de 3.000 horas de clases)",
+  "Llevo cinco años trabajando como profesor de japonés, incluyendo mi trabajo como tutor de japonés en el Student Learning Center de Chico State, y tres años como tutor de japonés en línea en GAKU. He escuchado a incontables estudiantes decir:",
+  [
+   "Quiero aprender japonés, pero no tengo tiempo para tomar clases.",
+   "Me da miedo hablar con hablantes nativos de japonés.",
+   "Tengo problemas económicos que me dificultan tomar clases de japonés.",
+   "He estado aprendiendo japonés con IA, pero no creo que esté mejorando.",
+   "Necesito a alguien que evalúe mi japonés, pero no hay nadie.",
+   "No sé por dónde empezar."
+  ],
+  "Siendo sincero, como profesor me resulta muy difícil resolver todos estos problemas a la vez, pero GAKU Master sí puede.",
+  "Con los conocimientos de mi máster en Enseñanza de Lenguas Internacionales y habiendo enseñado a más de 1.000 estudiantes en cinco años, creé esta aplicación para que puedas experimentar lo que se siente al convertirte en hablante nativo de japonés.",
+  [
+   "Puedo aprender japonés real aunque no tenga mucho tiempo.",
+   "Puedo hablar con mis personajes de anime favoritos.",
+   "Mi guía de estudio en GAKU Master es muy eficiente y práctica.",
+   "Recibo comentarios perfectos cuando hablo y escribo aquí."
+  ],
+  "Gracias por darme tantos comentarios. Ahora es tu turno.",
+  "Disfruta aprendiendo japonés con GAKU Master; creo que disfrutarás esta aplicación a medida que mejores tu japonés.",
+  "Si tienes dudas sobre el uso de esta aplicación o cualquier pregunta, no dudes en escribirme aquí:",
+  "Correo:",
+  "(Debido a las llamadas fraudulentas, prefiero no poner mi número de teléfono aquí.)"
+ ],
+ "Portuguese": [
+  "Sobre o fundador",
+  "professor de japonês online, GAKU!",
+  "Minha trajetória",
+  "Mestrado em Ensino de Línguas Internacionais",
+  "5 anos ensinando japonês",
+  "Mais de 1.000 alunos (mais de 3.000 horas de aulas)",
+  "Trabalho como professor de japonês há cinco anos, incluindo como tutor de japonês no Student Learning Center da Chico State, e há três anos sou tutor de japonês online na GAKU. Já ouvi incontáveis alunos dizerem:",
+  [
+   "Quero aprender japonês, mas não tenho tempo para fazer aulas.",
+   "Tenho medo de conversar com falantes nativos de japonês.",
+   "Tenho problemas financeiros que dificultam fazer aulas de japonês.",
+   "Tenho aprendido japonês com IA, mas acho que não estou melhorando.",
+   "Preciso de alguém que avalie meu japonês, mas não há ninguém.",
+   "Não sei por onde começar."
+  ],
+  "Para ser sincero, como professor é muito difícil resolver todos esses problemas ao mesmo tempo — mas o GAKU Master consegue.",
+  "Com o conhecimento do meu mestrado em Ensino de Línguas Internacionais e tendo ensinado mais de 1.000 alunos em cinco anos, criei este aplicativo para que você possa sentir como é se tornar um falante nativo de japonês.",
+  [
+   "Consigo aprender japonês de verdade mesmo sem muito tempo.",
+   "Posso conversar com meus personagens de anime favoritos.",
+   "Meu guia de estudos no GAKU Master é muito eficiente e prático.",
+   "Recebo feedback perfeito quando falo e escrevo aqui."
+  ],
+  "Obrigado por me dar tantos comentários. Agora é a sua vez.",
+  "Divirta-se aprendendo japonês com o GAKU Master; acredito que você vai gostar deste aplicativo à medida que seu japonês melhorar.",
+  "Se tiver qualquer preocupação sobre o uso do aplicativo ou alguma dúvida, fale comigo aqui:",
+  "E-mail:",
+  "(Por causa de golpes por telefone, prefiro não colocar meu número de telefone aqui.)"
+ ],
+ "German": [
+  "Über den Gründer",
+  "Online-Japanischlehrer, GAKU!",
+  "Mein Hintergrund",
+  "Master in Teaching International Languages",
+  "5 Jahre Japanischunterricht",
+  "Über 1.000 Lernende unterrichtet (über 3.000 Unterrichtsstunden)",
+  "Ich arbeite seit fünf Jahren als Japanischlehrer, unter anderem als Japanisch-Tutor im Student Learning Center der Chico State, und seit drei Jahren als Online-Japanischtutor bei GAKU. Ich habe unzählige Lernende sagen hören:",
+  [
+   "Ich möchte Japanisch lernen, habe aber keine Zeit für Unterricht.",
+   "Ich habe Angst, mit Muttersprachlern zu sprechen.",
+   "Ich habe finanzielle Probleme, die Japanischunterricht schwierig machen.",
+   "Ich lerne Japanisch mit KI, glaube aber nicht, dass ich besser werde.",
+   "Ich brauche jemanden, der mein Japanisch bewertet, aber niemand ist da.",
+   "Ich weiß nicht, womit ich anfangen soll."
+  ],
+  "Ehrlich gesagt ist es für mich als Lehrer sehr schwer, diese Probleme alle gleichzeitig zu lösen – aber GAKU Master schafft das.",
+  "Mit meinem Wissen aus meinem Masterstudium und über 1.000 Lernenden in fünf Jahren habe ich diese App entwickelt, damit du erleben kannst, wie es sich anfühlt, Japanisch wie ein Muttersprachler zu beherrschen.",
+  [
+   "Ich kann echtes Japanisch lernen, auch wenn ich wenig Zeit habe.",
+   "Ich kann mit meinen Lieblings-Anime-Figuren sprechen.",
+   "Mein Lernplan in GAKU Master ist sehr effizient und praxisnah.",
+   "Ich bekomme perfektes Feedback, wenn ich hier spreche und schreibe."
+  ],
+  "Danke für das viele Feedback. Jetzt bist du an der Reihe.",
+  "Viel Freude beim Japanischlernen mit GAKU Master – ich glaube, diese App wird dir gefallen, während du dich verbesserst.",
+  "Wenn du Bedenken oder Fragen zur Nutzung dieser App hast, schreib mir gern hier:",
+  "E-Mail:",
+  "(Wegen Betrugsanrufen möchte ich meine Telefonnummer hier nicht angeben.)"
+ ],
+ "Italian": [
+  "Sul fondatore",
+  "insegnante di giapponese online, GAKU!",
+  "Il mio percorso",
+  "Master in Insegnamento delle Lingue Internazionali",
+  "5 anni di insegnamento del giapponese",
+  "Oltre 1.000 studenti (oltre 3.000 ore di lezione)",
+  "Insegno giapponese da cinque anni, anche come tutor di giapponese allo Student Learning Center della Chico State, e da tre anni sono tutor di giapponese online presso GAKU. Ho sentito innumerevoli studenti dire:",
+  [
+   "Voglio imparare il giapponese, ma non ho tempo per seguire lezioni.",
+   "Ho paura di parlare con madrelingua giapponesi.",
+   "Ho problemi economici che rendono difficile seguire lezioni di giapponese.",
+   "Sto imparando il giapponese con l’IA, ma non credo di migliorare.",
+   "Ho bisogno di qualcuno che valuti il mio giapponese, ma non c’è nessuno.",
+   "Non so da dove iniziare."
+  ],
+  "Sinceramente, per me come insegnante è molto difficile risolvere tutti questi problemi insieme — ma GAKU Master ci riesce.",
+  "Con le conoscenze del mio master in Insegnamento delle Lingue Internazionali e più di 1.000 studenti seguiti in cinque anni, ho creato questa app per farti provare cosa significa diventare un madrelingua giapponese.",
+  [
+   "Posso imparare il vero giapponese anche se ho poco tempo.",
+   "Posso parlare con i miei personaggi anime preferiti.",
+   "La mia guida di studio in GAKU Master è molto efficiente e pratica.",
+   "Ricevo feedback perfetti quando parlo e scrivo qui."
+  ],
+  "Grazie per i tanti feedback. Ora tocca a te.",
+  "Divertiti a imparare il giapponese con GAKU Master; credo che questa app ti piacerà man mano che migliori.",
+  "Se hai dubbi sull’uso dell’app o domande, scrivimi pure qui:",
+  "E-mail:",
+  "(A causa delle telefonate truffa, preferisco non indicare qui il mio numero di telefono.)"
+ ],
+ "Chinese (Simplified)": [
+  "关于创始人",
+  "在线日语老师，GAKU！",
+  "我的背景",
+  "国际语言教学硕士",
+  "5年日语教学经验",
+  "教授过1,000多名学生（3,000多小时课程）",
+  "我做日语老师已经五年了，其中包括在奇科州立大学学生学习中心担任日语辅导老师，并在GAKU担任在线日语老师三年。我听过无数学生这样说：",
+  [
+   "我想学日语，但没有时间上课。",
+   "我害怕和日语母语者交谈。",
+   "我有经济困难，很难上日语课。",
+   "我一直用AI学日语，但觉得没有进步。",
+   "我需要有人评估我的日语，但身边没有人。",
+   "我不知道该从哪里开始。"
+  ],
+  "说实话，作为老师，我很难同时解决这些问题——但GAKU Master可以。",
+  "凭借我在国际语言教学硕士阶段学到的知识，以及五年里教过的1,000多名学生的经验，我开发了这个应用，让你体验成为日语母语者是什么感觉。",
+  [
+   "即使没有太多时间，我也能学到真正的日语。",
+   "我可以和我喜欢的动漫角色聊天。",
+   "GAKU Master里的学习指南非常高效实用。",
+   "我在这里说和写都能得到完美的反馈。"
+  ],
+  "感谢大家给我很多反馈。现在轮到你了。",
+  "祝你用GAKU Master愉快地学习日语，相信随着日语的进步，你会喜欢上这个应用。",
+  "如果你对使用这个应用有任何顾虑或问题，欢迎在这里联系我：",
+  "邮箱：",
+  "（由于诈骗电话，我不想在这里公开电话号码。）"
+ ],
+ "Chinese (Traditional)": [
+  "關於創辦人",
+  "線上日語老師，GAKU！",
+  "我的背景",
+  "國際語言教學碩士",
+  "5年日語教學經驗",
+  "教過1,000多名學生（3,000多小時課程）",
+  "我擔任日語老師已經五年了，其中包括在奇科州立大學學生學習中心擔任日語輔導老師，並在GAKU擔任線上日語老師三年。我聽過無數學生這樣說：",
+  [
+   "我想學日語，但沒有時間上課。",
+   "我害怕和日語母語者交談。",
+   "我有經濟困難，很難上日語課。",
+   "我一直用AI學日語，但覺得沒有進步。",
+   "我需要有人評估我的日語，但身邊沒有人。",
+   "我不知道該從哪裡開始。"
+  ],
+  "老實說，身為老師，我很難同時解決這些問題——但GAKU Master可以。",
+  "憑藉我在國際語言教學碩士階段學到的知識，以及五年來教過1,000多名學生的經驗，我開發了這個應用程式，讓你體驗成為日語母語者是什麼感覺。",
+  [
+   "即使沒有太多時間，我也能學到真正的日語。",
+   "我可以和我喜歡的動漫角色聊天。",
+   "GAKU Master裡的學習指南非常有效率又實用。",
+   "我在這裡說和寫都能得到完美的回饋。"
+  ],
+  "感謝大家給我很多回饋。現在輪到你了。",
+  "祝你用GAKU Master愉快地學習日語，相信隨著日語進步，你會喜歡上這個應用程式。",
+  "如果你對使用這個應用程式有任何疑慮或問題，歡迎在這裡聯絡我：",
+  "電子郵件：",
+  "（由於詐騙電話，我不想在這裡公開電話號碼。）"
+ ],
+ "Korean": [
+  "창립자 소개",
+  "온라인 일본어 선생님, GAKU!",
+  "저의 배경",
+  "국제 언어 교육 석사",
+  "일본어 교육 5년",
+  "1,000명 이상의 학생 지도 (3,000시간 이상의 수업)",
+  "저는 5년 동안 일본어 교사로 일해 왔으며, 치코 주립대학 학생학습센터에서 일본어 튜터로 일한 경험과 GAKU에서 3년간 온라인 일본어 튜터로 일한 경험이 있습니다. 저는 수많은 학생들이 이렇게 말하는 것을 들었습니다:",
+  [
+   "일본어를 배우고 싶지만 수업을 들을 시간이 없어요.",
+   "일본어 원어민과 이야기하는 게 무서워요.",
+   "경제적인 문제로 일본어 수업을 듣기 어려워요.",
+   "AI로 일본어를 공부하고 있지만 실력이 늘지 않는 것 같아요.",
+   "내 일본어를 평가해 줄 사람이 필요한데 주변에 아무도 없어요.",
+   "무엇부터 시작해야 할지 모르겠어요."
+  ],
+  "솔직히 선생님으로서 이 문제들을 한꺼번에 해결하기는 정말 어렵습니다. 하지만 GAKU Master는 가능합니다.",
+  "국제 언어 교육 석사 과정에서 얻은 지식과 5년간 1,000명 이상의 학생을 가르친 경험을 바탕으로, 일본어 원어민이 되는 느낌을 경험할 수 있도록 이 앱을 만들었습니다.",
+  [
+   "시간이 많지 않아도 진짜 일본어를 배울 수 있어요.",
+   "좋아하는 애니메이션 캐릭터와 대화할 수 있어요.",
+   "GAKU Master의 학습 가이드는 매우 효율적이고 실용적이에요.",
+   "여기서 말하고 쓰면 완벽한 피드백을 받을 수 있어요."
+  ],
+  "많은 피드백을 주셔서 감사합니다. 이제 여러분 차례입니다.",
+  "GAKU Master와 함께 즐겁게 일본어를 배우세요. 일본어가 늘면서 이 앱도 마음에 드실 거라 믿습니다.",
+  "앱 사용에 대한 걱정이나 질문이 있으시면 언제든지 여기로 문의해 주세요:",
+  "이메일:",
+  "(스팸 전화 때문에 전화번호는 여기에 올리지 않겠습니다.)"
+ ],
+ "Thai": [
+  "เกี่ยวกับผู้ก่อตั้ง",
+  "ครูสอนภาษาญี่ปุ่นออนไลน์ GAKU!",
+  "ประวัติของฉัน",
+  "ปริญญาโทด้านการสอนภาษานานาชาติ",
+  "สอนภาษาญี่ปุ่นมา 5 ปี",
+  "สอนนักเรียนมากกว่า 1,000 คน (มากกว่า 3,000 ชั่วโมง)",
+  "ฉันเป็นครูสอนภาษาญี่ปุ่นมาห้าปี รวมถึงทำงานเป็นติวเตอร์ภาษาญี่ปุ่นที่ Student Learning Center ของ Chico State และเป็นติวเตอร์ภาษาญี่ปุ่นออนไลน์ที่ GAKU มาสามปี ฉันได้ยินนักเรียนมากมายพูดว่า:",
+  [
+   "อยากเรียนภาษาญี่ปุ่น แต่ไม่มีเวลาเรียน",
+   "กลัวที่จะคุยกับเจ้าของภาษาญี่ปุ่น",
+   "มีปัญหาด้านการเงินจึงเรียนภาษาญี่ปุ่นได้ยาก",
+   "เรียนภาษาญี่ปุ่นกับ AI มาตลอด แต่รู้สึกว่าไม่พัฒนา",
+   "ต้องการคนประเมินภาษาญี่ปุ่นของฉัน แต่ไม่มีใครเลย",
+   "ไม่รู้ว่าควรเริ่มจากตรงไหน"
+  ],
+  "พูดตามตรง ในฐานะครู มันยากมากที่จะแก้ปัญหาเหล่านี้พร้อมกัน แต่ GAKU Master ทำได้",
+  "ด้วยความรู้จากปริญญาโทด้านการสอนภาษานานาชาติ และประสบการณ์สอนนักเรียนกว่า 1,000 คนในห้าปี ฉันสร้างแอปนี้ขึ้นมาเพื่อให้คุณได้สัมผัสความรู้สึกของการเป็นเจ้าของภาษาญี่ปุ่น",
+  [
+   "ฉันเรียนภาษาญี่ปุ่นจริง ๆ ได้ แม้มีเวลาไม่มาก",
+   "ฉันคุยกับตัวละครอนิเมะที่ชอบได้",
+   "แผนการเรียนใน GAKU Master มีประสิทธิภาพและใช้ได้จริงมาก",
+   "ฉันได้รับฟีดแบ็กที่สมบูรณ์แบบเมื่อพูดและเขียนที่นี่"
+  ],
+  "ขอบคุณที่ให้ฟีดแบ็กมากมาย ตอนนี้ถึงตาคุณแล้ว",
+  "สนุกกับการเรียนภาษาญี่ปุ่นกับ GAKU Master และฉันเชื่อว่าคุณจะชอบแอปนี้เมื่อภาษาญี่ปุ่นของคุณพัฒนาขึ้น",
+  "หากมีข้อกังวลหรือคำถามเกี่ยวกับการใช้แอปนี้ ถามฉันได้ที่นี่:",
+  "อีเมล:",
+  "(เนื่องจากมีสายหลอกลวง ฉันจึงไม่ขอใส่เบอร์โทรศัพท์ไว้ที่นี่)"
+ ],
+ "Malay": [
+  "Tentang pengasas",
+  "guru bahasa Jepun dalam talian, GAKU!",
+  "Latar belakang saya",
+  "Sarjana dalam Pengajaran Bahasa Antarabangsa",
+  "5 tahun mengajar bahasa Jepun",
+  "Lebih 1,000 pelajar diajar (lebih 3,000 jam pelajaran)",
+  "Saya telah bekerja sebagai guru bahasa Jepun selama lima tahun, termasuk sebagai tutor bahasa Jepun di Student Learning Center Chico State, dan sebagai tutor bahasa Jepun dalam talian di GAKU selama tiga tahun. Saya telah mendengar ramai pelajar berkata:",
+  [
+   "Saya mahu belajar bahasa Jepun, tetapi tiada masa untuk mengambil kelas.",
+   "Saya takut bercakap dengan penutur asli bahasa Jepun.",
+   "Saya ada masalah kewangan yang menyukarkan saya mengambil kelas bahasa Jepun.",
+   "Saya belajar bahasa Jepun dengan AI, tetapi rasa tidak bertambah baik.",
+   "Saya perlukan seseorang untuk menilai bahasa Jepun saya, tetapi tiada sesiapa.",
+   "Saya tidak tahu dari mana hendak bermula."
+  ],
+  "Sejujurnya, sebagai guru, amat sukar bagi saya menyelesaikan semua masalah ini serentak — tetapi GAKU Master boleh.",
+  "Dengan pengetahuan daripada ijazah Sarjana saya dan pengalaman mengajar lebih 1,000 pelajar dalam lima tahun, saya mencipta aplikasi ini supaya anda dapat merasai bagaimana rasanya menjadi penutur asli bahasa Jepun.",
+  [
+   "Saya boleh belajar bahasa Jepun sebenar walaupun tidak banyak masa.",
+   "Saya boleh bercakap dengan watak anime kegemaran saya.",
+   "Panduan belajar saya dalam GAKU Master sangat cekap dan praktikal.",
+   "Saya mendapat maklum balas yang sempurna apabila bercakap dan menulis di sini."
+  ],
+  "Terima kasih kerana memberi banyak maklum balas. Sekarang giliran anda.",
+  "Nikmati pembelajaran bahasa Jepun bersama GAKU Master, dan saya percaya anda akan menyukai aplikasi ini apabila bahasa Jepun anda bertambah baik.",
+  "Jika anda ada kebimbangan atau soalan tentang penggunaan aplikasi ini, jangan segan bertanya di sini:",
+  "E-mel:",
+  "(Disebabkan panggilan penipuan, saya tidak mahu meletakkan nombor telefon saya di sini.)"
+ ],
+ "Indonesian": [
+  "Tentang pendiri",
+  "guru bahasa Jepang online, GAKU!",
+  "Latar belakang saya",
+  "Magister Pengajaran Bahasa Internasional",
+  "5 tahun mengajar bahasa Jepang",
+  "Lebih dari 1.000 siswa (lebih dari 3.000 jam pelajaran)",
+  "Saya sudah lima tahun menjadi guru bahasa Jepang, termasuk sebagai tutor bahasa Jepang di Student Learning Center Chico State, dan tiga tahun sebagai tutor bahasa Jepang online di GAKU. Saya sudah mendengar banyak siswa berkata:",
+  [
+   "Saya ingin belajar bahasa Jepang, tetapi tidak punya waktu untuk ikut kelas.",
+   "Saya takut berbicara dengan penutur asli bahasa Jepang.",
+   "Saya punya masalah keuangan sehingga sulit ikut kelas bahasa Jepang.",
+   "Saya belajar bahasa Jepang dengan AI, tetapi merasa tidak ada kemajuan.",
+   "Saya butuh seseorang yang menilai bahasa Jepang saya, tetapi tidak ada siapa pun.",
+   "Saya tidak tahu harus mulai dari mana."
+  ],
+  "Jujur saja, sebagai guru sangat sulit bagi saya menyelesaikan semua masalah ini sekaligus — tetapi GAKU Master bisa.",
+  "Dengan pengetahuan dari gelar Magister saya dan pengalaman mengajar lebih dari 1.000 siswa selama lima tahun, saya membuat aplikasi ini agar Anda bisa merasakan bagaimana rasanya menjadi penutur asli bahasa Jepang.",
+  [
+   "Saya bisa belajar bahasa Jepang yang sebenarnya meski waktu saya terbatas.",
+   "Saya bisa berbicara dengan karakter anime favorit saya.",
+   "Panduan belajar di GAKU Master sangat efisien dan praktis.",
+   "Saya mendapat umpan balik yang sempurna saat berbicara dan menulis di sini."
+  ],
+  "Terima kasih sudah memberi banyak umpan balik. Sekarang giliran Anda.",
+  "Selamat belajar bahasa Jepang bersama GAKU Master, dan saya yakin Anda akan menyukai aplikasi ini seiring kemajuan bahasa Jepang Anda.",
+  "Jika Anda punya kekhawatiran atau pertanyaan tentang penggunaan aplikasi ini, silakan tanyakan kepada saya di sini:",
+  "Email:",
+  "(Karena banyaknya telepon penipuan, saya tidak mencantumkan nomor telepon saya di sini.)"
+ ],
+ "Vietnamese": [
+  "Về người sáng lập",
+  "giáo viên tiếng Nhật trực tuyến, GAKU!",
+  "Quá trình của tôi",
+  "Thạc sĩ Giảng dạy Ngôn ngữ Quốc tế",
+  "5 năm dạy tiếng Nhật",
+  "Đã dạy hơn 1.000 học viên (hơn 3.000 giờ học)",
+  "Tôi đã làm giáo viên tiếng Nhật được năm năm, bao gồm làm gia sư tiếng Nhật tại Student Learning Center của Chico State, và làm gia sư tiếng Nhật trực tuyến tại GAKU được ba năm. Tôi đã nghe vô số học viên nói:",
+  [
+   "Tôi muốn học tiếng Nhật nhưng không có thời gian đi học.",
+   "Tôi sợ nói chuyện với người bản xứ Nhật.",
+   "Tôi gặp khó khăn tài chính nên khó theo học tiếng Nhật.",
+   "Tôi học tiếng Nhật bằng AI nhưng thấy mình không tiến bộ.",
+   "Tôi cần ai đó đánh giá tiếng Nhật của mình nhưng không có ai.",
+   "Tôi không biết nên bắt đầu từ đâu."
+  ],
+  "Thành thật mà nói, với tư cách giáo viên, tôi rất khó giải quyết tất cả những vấn đề này cùng lúc — nhưng GAKU Master thì làm được.",
+  "Với kiến thức từ bằng Thạc sĩ và kinh nghiệm dạy hơn 1.000 học viên trong năm năm, tôi đã tạo ra ứng dụng này để bạn trải nghiệm cảm giác trở thành người nói tiếng Nhật bản xứ.",
+  [
+   "Tôi có thể học tiếng Nhật thực tế dù không có nhiều thời gian.",
+   "Tôi có thể trò chuyện với nhân vật anime yêu thích.",
+   "Hướng dẫn học trong GAKU Master rất hiệu quả và thực tế.",
+   "Tôi nhận được phản hồi hoàn hảo khi nói và viết ở đây."
+  ],
+  "Cảm ơn các bạn đã góp rất nhiều phản hồi. Giờ đến lượt bạn.",
+  "Chúc bạn học tiếng Nhật vui vẻ với GAKU Master, và tôi tin bạn sẽ yêu thích ứng dụng này khi tiếng Nhật của bạn tiến bộ.",
+  "Nếu bạn có bất kỳ lo ngại hay câu hỏi nào về việc sử dụng ứng dụng, cứ hỏi tôi tại đây:",
+  "Email:",
+  "(Vì có nhiều cuộc gọi lừa đảo, tôi không muốn ghi số điện thoại ở đây.)"
+ ],
+ "Hindi": [
+  "संस्थापक के बारे में",
+  "ऑनलाइन जापानी शिक्षक, GAKU!",
+  "मेरी पृष्ठभूमि",
+  "अंतरराष्ट्रीय भाषा शिक्षण में एमए",
+  "5 साल से जापानी पढ़ा रहा हूँ",
+  "1,000+ छात्रों को पढ़ाया (3,000+ घंटे की कक्षाएँ)",
+  "मैं पाँच साल से जापानी शिक्षक के रूप में काम कर रहा हूँ, जिसमें चीको स्टेट के स्टूडेंट लर्निंग सेंटर में जापानी ट्यूटर के रूप में काम करना भी शामिल है, और तीन साल से GAKU में ऑनलाइन जापानी ट्यूटर हूँ। मैंने अनगिनत छात्रों को यह कहते सुना है:",
+  [
+   "मैं जापानी सीखना चाहता/चाहती हूँ, लेकिन क्लास लेने का समय नहीं है।",
+   "मुझे जापानी मूल भाषियों से बात करने में डर लगता है।",
+   "मेरी आर्थिक समस्याओं के कारण जापानी क्लास लेना मुश्किल है।",
+   "मैं AI से जापानी सीख रहा/रही हूँ, पर लगता नहीं कि सुधार हो रहा है।",
+   "मुझे कोई चाहिए जो मेरी जापानी का मूल्यांकन करे, पर यहाँ कोई नहीं है।",
+   "मुझे नहीं पता कि कहाँ से शुरू करूँ।"
+  ],
+  "सच कहूँ तो एक शिक्षक के रूप में इन सभी समस्याओं को एक साथ हल करना बहुत कठिन है — लेकिन GAKU Master के लिए यह संभव है।",
+  "अंतरराष्ट्रीय भाषा शिक्षण में अपनी मास्टर डिग्री के ज्ञान और पाँच वर्षों में 1,000 से अधिक छात्रों को पढ़ाने के अनुभव से मैंने यह ऐप बनाया, ताकि आप जापानी मूल भाषी बनने का अनुभव कर सकें।",
+  [
+   "समय कम होने पर भी मैं असली जापानी सीख सकता/सकती हूँ।",
+   "मैं अपने पसंदीदा एनीमे किरदारों से बात कर सकता/सकती हूँ।",
+   "GAKU Master में मेरा स्टडी गाइड बहुत कारगर और व्यावहारिक है।",
+   "यहाँ बोलने और लिखने पर मुझे बेहतरीन फीडबैक मिलता है।"
+  ],
+  "इतना फीडबैक देने के लिए धन्यवाद। अब आपकी बारी है।",
+  "GAKU Master के साथ जापानी सीखने का आनंद लें, और मुझे विश्वास है कि जैसे-जैसे आपकी जापानी सुधरेगी, आपको यह ऐप पसंद आएगा।",
+  "इस ऐप के उपयोग को लेकर कोई चिंता या प्रश्न हो तो यहाँ मुझसे पूछें:",
+  "ईमेल:",
+  "(स्कैम कॉल्स के कारण मैं अपना फ़ोन नंबर यहाँ नहीं देना चाहता।)"
+ ],
+ "Japanese": [
+  "創設者について",
+  "オンライン日本語教師、GAKU!",
+  "私の経歴",
+  "国際言語教育の修士号(MA)",
+  "日本語教師歴5年",
+  "1,000人以上の生徒を指導(授業3,000時間以上)",
+  "私は5年間日本語教師として働いてきました。チコ州立大学のStudent Learning Centerで日本語チューターを務めたほか、GAKUでは3年間オンライン日本語チューターをしています。これまで、数えきれないほどの生徒がこう話すのを聞いてきました:",
+  [
+   "日本語を学びたいけれど、レッスンを受ける時間がない。",
+   "日本語のネイティブと話すのが怖い。",
+   "経済的な事情で日本語のレッスンを受けるのが難しい。",
+   "AIで日本語を勉強しているけれど、上達している気がしない。",
+   "自分の日本語を評価してくれる人が必要なのに、周りにいない。",
+   "何から始めたらいいかわからない。"
+  ],
+  "正直に言って、教師としてこれらの悩みを同時に解決するのはとても難しいことです。でも、GAKU Masterならできます。",
+  "国際言語教育の修士号で得た知識と、5年間で1,000人以上を教えた経験をもとに、日本語ネイティブになる感覚を体験できるようにこのアプリを作りました。",
+  [
+   "時間がなくても、本物の日本語が学べる。",
+   "大好きなアニメのキャラクターと話せる。",
+   "GAKU Masterの学習ガイドはとても効率的で実用的。",
+   "ここで話したり書いたりすると、完璧なフィードバックがもらえる。"
+  ],
+  "たくさんのフィードバックをありがとうございます。次はあなたの番です。",
+  "GAKU Masterで楽しく日本語を学んでください。日本語が上達するにつれて、このアプリも気に入っていただけると信じています。",
+  "アプリの使い方について不安なことや質問があれば、こちらまで気軽にご連絡ください:",
+  "メール:",
+  "(詐欺電話が多いため、電話番号はここに載せないことにしています。)"
+ ],
+ "Turkish": [
+  "Kurucu hakkında",
+  "çevrim içi Japonca öğretmeni, GAKU!",
+  "Geçmişim",
+  "Uluslararası Dil Öğretimi Yüksek Lisansı",
+  "5 yıllık Japonca öğretmenliği",
+  "1.000'den fazla öğrenci (3.000+ saat ders)",
+  "Beş yıldır Japonca öğretmeni olarak çalışıyorum; bunun içinde Chico State Student Learning Center'da Japonca öğretmen yardımcılığı da var, ayrıca üç yıldır GAKU'da çevrim içi Japonca eğitmeniyim. Sayısız öğrencinin şunu söylediğini duydum:",
+  [
+   "Japonca öğrenmek istiyorum ama ders almaya vaktim yok.",
+   "Japonca ana dili konuşanlarla konuşmaktan korkuyorum.",
+   "Maddi sorunlarım yüzünden Japonca ders almak zor.",
+   "Yapay zekayla Japonca öğreniyorum ama ilerlediğimi sanmıyorum.",
+   "Japoncamı değerlendirecek birine ihtiyacım var ama kimse yok.",
+   "Nereden başlayacağımı bilmiyorum."
+  ],
+  "Dürüst olmak gerekirse, bir öğretmen olarak bu sorunların hepsini aynı anda çözmek çok zor — ama GAKU Master bunu başarıyor.",
+  "Yüksek lisansımdan edindiğim bilgi ve beş yılda 1.000'den fazla öğrenciye ders verme deneyimimle, Japonca ana dili konuşuru olmanın nasıl bir his olduğunu yaşayabilmeniz için bu uygulamayı yaptım.",
+  [
+   "Vaktim az olsa bile gerçek Japonca öğrenebiliyorum.",
+   "Sevdiğim anime karakterleriyle konuşabiliyorum.",
+   "GAKU Master'daki çalışma rehberim çok verimli ve pratik.",
+   "Burada konuştuğumda ve yazdığımda mükemmel geri bildirim alıyorum."
+  ],
+  "Çok sayıda geri bildirim verdiğiniz için teşekkürler. Şimdi sıra sizde.",
+  "GAKU Master ile Japonca öğrenmenin keyfini çıkarın; Japoncanız geliştikçe bu uygulamayı seveceğinize inanıyorum.",
+  "Uygulamayı kullanmakla ilgili endişeleriniz veya sorularınız varsa buradan bana ulaşabilirsiniz:",
+  "E-posta:",
+  "(Dolandırıcılık aramaları nedeniyle telefon numaramı buraya yazmak istemiyorum.)"
+ ],
+ "Nepali": [
+  "संस्थापकको बारेमा",
+  "अनलाइन जापानी भाषा शिक्षक, GAKU!",
+  "मेरो पृष्ठभूमि",
+  "अन्तर्राष्ट्रिय भाषा शिक्षणमा एमए",
+  "५ वर्षदेखि जापानी भाषा सिकाउँदै",
+  "१,०००+ विद्यार्थीलाई सिकाएँ (३,०००+ घण्टाको कक्षा)",
+  "म पाँच वर्षदेखि जापानी भाषा शिक्षकको रूपमा काम गरिरहेको छु, जसमा चिको स्टेटको Student Learning Center मा जापानी ट्यूटरको रूपमा काम गर्नु पनि पर्छ, र तीन वर्षदेखि GAKU मा अनलाइन जापानी ट्यूटर छु। मैले अनगिन्ती विद्यार्थीले यस्तो भनेको सुनेको छु:",
+  [
+   "म जापानी सिक्न चाहन्छु, तर कक्षा लिने समय छैन।",
+   "मलाई जापानी मातृभाषीसँग बोल्न डर लाग्छ।",
+   "आर्थिक समस्याका कारण जापानी कक्षा लिन गाह्रो छ।",
+   "म AI बाट जापानी सिकिरहेको छु, तर सुधार भइरहेको जस्तो लाग्दैन।",
+   "मेरो जापानीको मूल्याङ्कन गरिदिने कोही चाहिन्छ, तर यहाँ कोही छैन।",
+   "कहाँबाट सुरु गर्ने मलाई थाहा छैन।"
+  ],
+  "इमानदारीपूर्वक भन्दा, शिक्षकको रूपमा यी सबै समस्या एकैचोटि समाधान गर्न धेरै गाह्रो छ — तर GAKU Master ले सक्छ।",
+  "मेरो मास्टर डिग्रीको ज्ञान र पाँच वर्षमा १,००० भन्दा बढी विद्यार्थीलाई सिकाएको अनुभवबाट, जापानी मातृभाषी बन्दा कस्तो महसुस हुन्छ भन्ने अनुभव गर्न सकियोस् भनेर मैले यो एप बनाएँ।",
+  [
+   "समय कम भए पनि म वास्तविक जापानी सिक्न सक्छु।",
+   "म मेरा मनपर्ने एनिमे पात्रहरूसँग कुरा गर्न सक्छु।",
+   "GAKU Master मा मेरो अध्ययन गाइड धेरै प्रभावकारी र व्यावहारिक छ।",
+   "यहाँ बोल्दा र लेख्दा मलाई उत्कृष्ट प्रतिक्रिया मिल्छ।"
+  ],
+  "धेरै प्रतिक्रिया दिनुभएकोमा धन्यवाद। अब तपाईंको पालो हो।",
+  "GAKU Master सँग जापानी सिक्ने आनन्द लिनुहोस्, र तपाईंको जापानी सुध्रिँदै जाँदा यो एप तपाईंलाई मन पर्नेछ भन्ने मलाई विश्वास छ।",
+  "यो एप प्रयोग गर्ने बारे कुनै चिन्ता वा प्रश्न भए यहाँ मलाई सोध्न नहिचकिचाउनुहोस्:",
+  "इमेल:",
+  "(ठगी फोनका कारण म यहाँ मेरो फोन नम्बर राख्न चाहन्न।)"
+ ],
+ "Filipino": [
+  "Tungkol sa tagapagtatag",
+  "online na guro ng Hapon, GAKU!",
+  "Ang aking background",
+  "MA in Teaching International Languages",
+  "5 taon ng pagtuturo ng Hapon",
+  "1,000+ estudyante ang naturuan (3,000+ oras ng aralin)",
+  "Limang taon na akong guro ng Hapon, kasama ang pagtatrabaho bilang Japanese tutor sa Student Learning Center ng Chico State, at tatlong taon na akong online Japanese tutor sa GAKU. Nakarinig na ako ng napakaraming estudyanteng nagsabi ng:",
+  [
+   "Gusto kong mag-aral ng Hapon, pero wala akong oras para kumuha ng aralin.",
+   "Takot akong makipag-usap sa mga katutubong nagsasalita ng Hapon.",
+   "May mga problema ako sa pera kaya mahirap kumuha ng aralin sa Hapon.",
+   "Nag-aaral ako ng Hapon gamit ang AI, pero parang hindi ako gumagaling.",
+   "Kailangan ko ng taong magsusuri ng Hapon ko, pero walang available.",
+   "Hindi ko alam kung saan ako magsisimula."
+  ],
+  "Sa totoo lang, napakahirap para sa isang guro na lutasin ang lahat ng problemang ito nang sabay-sabay — pero kaya ito ng GAKU Master.",
+  "Sa kaalaman ko mula sa aking Master’s degree at sa pagtuturo sa mahigit 1,000 estudyante sa loob ng limang taon, ginawa ko ang app na ito para maranasan mo kung ano ang pakiramdam ng maging native speaker ng Hapon.",
+  [
+   "Natututo ako ng totoong Hapon kahit kulang ako sa oras.",
+   "Nakakausap ko ang mga paborito kong anime character.",
+   "Napaka-epektibo at praktikal ng study guide ko sa GAKU Master.",
+   "Nakakakuha ako ng perpektong feedback kapag nagsasalita at nagsusulat dito."
+  ],
+  "Salamat sa napakaraming feedback. Ikaw naman ngayon.",
+  "Mag-enjoy sa pag-aaral ng Hapon gamit ang GAKU Master, at naniniwala akong magugustuhan mo ang app na ito habang gumagaling ang Hapon mo.",
+  "Kung may alalahanin o tanong ka tungkol sa paggamit ng app na ito, huwag mag-atubiling magtanong dito:",
+  "Email:",
+  "(Dahil sa mga scam call, ayaw kong ilagay dito ang numero ng telepono ko.)"
+ ]
+};
+// order: btn, role, background, b1, b2, b3, intro, q1[6], mid1, mid2, q2[4], thanks, enjoy, contact, emailLabel, phoneNote
+
 const UI_TRANSLATIONS = {
   "English": {
     // Header / common
@@ -14723,6 +15267,7 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
   const [showHelp, setShowHelp] = useState(false);
   const [visibleFeatures, setVisibleFeatures] = useState(readVisibleFeatures);
   const [showFeaturePicker, setShowFeaturePicker] = useState(false);
+  const [showFounder, setShowFounder] = useState(false);
   const [featurePickerInitial, setFeaturePickerInitial] = useState([]);
   const [tab, setTab] = useState(() => { const v = readVisibleFeatures(); return (v === null || v.includes("schedule")) ? "schedule" : "vocabulary"; });
   const [resourceSubTab, setResourceSubTab] = useState(() => { const v = readVisibleFeatures(); return (v === null || v.includes("links")) ? "links" : (RESOURCE_FEATURES.find(x => v.includes(x)) || "links"); });
@@ -15033,6 +15578,39 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
   return (
     <div style={{ ...S.page, paddingBottom:60 }}>
       {showHelp && <HelpModal onClose={()=>setShowHelp(false)} form={form} />}
+      {showFounder && (() => { const F = FOUNDER_TEXT[form?.preferredLang] || FOUNDER_TEXT["English"]; return (
+        <div onClick={()=>setShowFounder(false)} style={{ position:"fixed", inset:0, background:"rgba(0,0,0,0.75)", zIndex:1000, overflowY:"auto", padding:"24px 14px" }}>
+          <div onClick={e=>e.stopPropagation()} style={{ maxWidth:560, margin:"0 auto", background:C.card, border:`1px solid ${C.border}`, borderRadius:16, padding:"24px 22px", position:"relative" }}>
+            <button onClick={()=>setShowFounder(false)} aria-label="Close" style={{ position:"absolute", top:10, right:12, background:"transparent", border:"none", color:"#94a3b8", fontSize:22, cursor:"pointer" }}>{"\u00D7"}</button>
+            <div style={{ textAlign:"center" }}>
+              <img src="/founder-seito.jpg" alt="Seito Sakamoto" style={{ width:130, height:130, borderRadius:"50%", objectFit:"cover", objectPosition:"center 30%", border:`2px solid ${C.purpleLight}` }} />
+              <p style={{ color:"#f1f5f9", fontSize:18, fontWeight:800, margin:"12px 0 2px" }}>Seito Sakamoto</p>
+              <p style={{ color:C.purpleLight, fontSize:13, fontWeight:700, margin:0 }}>{F[1]}</p>
+            </div>
+            <p style={{ color:"#f1f5f9", fontSize:14, fontWeight:800, margin:"18px 0 8px" }}>{F[2]}</p>
+            {[F[3],F[4],F[5]].map((t,i)=>(
+              <p key={i} style={{ color:"#e2e8f0", fontSize:13, margin:"0 0 6px" }}>{"\u2705"} {t}</p>
+            ))}
+            <div style={{ color:"#cbd5e1", fontSize:13, lineHeight:1.75, marginTop:16 }}>
+              <p style={{ margin:"0 0 12px" }}>{F[6]}</p>
+              <div style={{ margin:"0 0 12px", paddingLeft:12, borderLeft:`3px solid ${C.purpleLight}` }}>
+                {F[7].map((t,i)=>(<p key={i} style={{ margin:"0 0 6px", fontStyle:"italic" }}>{"\u201C"}{t}{"\u201D"}</p>))}
+              </div>
+              <p style={{ margin:"0 0 12px" }}>{F[8]}</p>
+              <p style={{ margin:"0 0 12px" }}>{F[9]}</p>
+              <div style={{ margin:"0 0 12px", paddingLeft:12, borderLeft:"3px solid #34d399" }}>
+                {F[10].map((t,i)=>(<p key={i} style={{ margin:"0 0 6px", fontStyle:"italic" }}>{"\u201C"}{t}{"\u201D"}</p>))}
+              </div>
+              <p style={{ margin:"0 0 12px" }}>{F[11]}</p>
+              <p style={{ margin:"0 0 12px" }}>{F[12]}</p>
+              <p style={{ margin:"0 0 12px" }}>{F[13]}</p>
+              <p style={{ margin:"0 0 4px", color:"#f1f5f9", fontWeight:700 }}>Seito Sakamoto</p>
+              <p style={{ margin:"0 0 8px" }}>{F[14]} <a href="mailto:seitojapanese.online@gmail.com" style={{ color:C.purpleLight }}>seitojapanese.online@gmail.com</a></p>
+              <p style={{ margin:0, fontSize:11, color:"#94a3b8" }}>{F[15]}</p>
+            </div>
+          </div>
+        </div>
+      ); })()}
       {showFeaturePicker && <FeaturePicker key={featurePickerInitial.join(",")} T={T} initial={featurePickerInitial} onApply={applyFeatureChoice} />}
       {tutorialActive && (
         <TutorialOverlay
@@ -15062,6 +15640,7 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
           </div>
         </div>
         <div style={{ display:"flex", gap:8 }}>
+          <button onClick={()=>setShowFounder(true)} style={{ ...S.btn, padding:"8px 14px", background:C.card, color:"#94a3b8", border:`1px solid ${C.border}`, fontSize:12 }}>{"\u{1F464}"} {(FOUNDER_TEXT[form?.preferredLang] || FOUNDER_TEXT["English"])[0]}</button>
           <button onClick={()=>{ setFeaturePickerInitial(visibleFeatures || OPTIONAL_FEATURES); setShowFeaturePicker(true); }} style={{ ...S.btn, padding:"8px 14px", background:C.card, color:"#94a3b8", border:`1px solid ${C.border}`, fontSize:12 }}>{"\u2699\uFE0F"} {T.featureCustomizeBtn || "Customize"}</button>
           <button onClick={()=>{ setTutorialStep(0); setTutorialActive(true); }} style={{ ...S.btn, padding:"8px 14px", background:"transparent", border:`1px solid ${C.purpleLight}`, color:C.purpleLight, fontSize:12 }}>{T.tutorialBtn}</button>
           <button onClick={()=>setShowHelp(true)} style={{ ...S.btn, padding:"8px 14px", background:`linear-gradient(135deg,${C.amber},#d97706)`, color:"#fff", fontSize:12 }}>{T.help}</button>
