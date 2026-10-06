@@ -51,6 +51,25 @@
     background: rgba(255,255,255,0.08); overflow: hidden;
   }
   #progressBarFill { height: 100%; width: 0%; background: linear-gradient(135deg,#06b6d4,#0891b2); transition: width 0.15s; }
+  #dupOverlay {
+    display: none; position: fixed; inset: 0; z-index: 50; background: rgba(2,6,23,0.75);
+    align-items: center; justify-content: center; padding: 16px;
+  }
+  #dupOverlay.show { display: flex; }
+  #dupBox {
+    width: 100%; max-width: 440px; max-height: 85vh; overflow-y: auto; background: #0f172a;
+    border: 1px solid rgba(251,191,36,0.4); border-radius: 14px; padding: 20px;
+  }
+  #dupBox h2 { font-size: 16px; margin: 0 0 8px; color: #fbbf24; }
+  #dupBox p { font-size: 13px; color: #cbd5e1; margin: 0 0 10px; line-height: 1.6; }
+  #dupBox .dupList {
+    font-size: 13px; line-height: 1.9; background: rgba(251,191,36,0.08);
+    border: 1px solid rgba(251,191,36,0.25); border-radius: 8px; padding: 8px 10px; margin: 0 0 12px;
+    word-break: break-all;
+  }
+  #dupBox .dupLabel { font-size: 11px; font-weight: 700; color: #94a3b8; margin: 10px 0 4px; }
+  #dupBox button { margin-top: 10px; }
+  #dupBox button.secondary { background: rgba(255,255,255,0.08); color: #cbd5e1; }
 </style>
 </head>
 <body>
@@ -104,6 +123,24 @@
     <div id="progressBarWrap"><div id="progressBarFill"></div></div>
     <div id="result"></div>
     <div id="bulkLog"></div>
+  </div>
+
+  <div id="dupOverlay">
+    <div id="dupBox">
+      <h2>⚠️ 重複している単語があります</h2>
+      <p id="dupIntro"></p>
+      <div id="dupExistingWrap">
+        <div class="dupLabel">すでにこの生徒に送信済みの単語</div>
+        <div class="dupList" id="dupExistingList"></div>
+      </div>
+      <div id="dupInListWrap">
+        <div class="dupLabel">貼り付けた中で重複している単語</div>
+        <div class="dupList" id="dupInListList"></div>
+      </div>
+      <p id="dupSummary" style="color:#94a3b8; font-size:12.5px;"></p>
+      <button id="dupProceedBtn" type="button">重複を除いて送る</button>
+      <button id="dupCancelBtn" type="button" class="secondary">キャンセル(内容を直す)</button>
+    </div>
   </div>
 
 <script>
@@ -185,6 +222,64 @@ async function assignWord(secret, studentEmail, folder, word, info) {
   if (!res.ok) throw new Error(data.error || '送信に失敗しました。');
 }
 
+// Fetches every headword already sent to this student (delivered or pending)
+// from the existing GET endpoint, so we can warn before sending duplicates.
+async function fetchExistingWords(secret, studentEmail) {
+  const url = '/api/admin-assign-word?secret=' + encodeURIComponent(secret) +
+    '&studentEmail=' + encodeURIComponent(studentEmail);
+  const res = await fetch(url);
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(data.error || '送信済みの単語を確認できませんでした。');
+  return new Set((data.words || []).map(w => String(w).trim()).filter(Boolean));
+}
+
+// Shows the duplicate-confirmation modal. Resolves to true (send without the
+// duplicates) or false (cancel). When nothing would be left to send, the
+// "send" button is hidden and only cancel is offered.
+function confirmDuplicates(existingDupes, inListDupes, remainingCount) {
+  return new Promise(resolve => {
+    const overlay = document.getElementById('dupOverlay');
+    const proceed = document.getElementById('dupProceedBtn');
+    const cancel = document.getElementById('dupCancelBtn');
+    const exWrap = document.getElementById('dupExistingWrap');
+    const ilWrap = document.getElementById('dupInListWrap');
+    document.getElementById('dupExistingList').textContent = existingDupes.join('、');
+    document.getElementById('dupInListList').textContent = inListDupes.join('、');
+    exWrap.style.display = existingDupes.length ? 'block' : 'none';
+    ilWrap.style.display = inListDupes.length ? 'block' : 'none';
+    document.getElementById('dupIntro').textContent =
+      '同じ単語を重ねて送らないよう、送信前に確認します。';
+    if (remainingCount > 0) {
+      document.getElementById('dupSummary').textContent =
+        '「重複を除いて送る」を押すと、重複を除いた ' + remainingCount + ' 件だけを送信します。';
+      proceed.style.display = 'block';
+      proceed.textContent = '重複を除いて ' + remainingCount + ' 件を送る';
+    } else {
+      document.getElementById('dupSummary').textContent =
+        '送れる単語が残っていないため、送信は行いません。';
+      proceed.style.display = 'none';
+    }
+    const done = (val) => {
+      overlay.classList.remove('show');
+      proceed.onclick = null; cancel.onclick = null;
+      resolve(val);
+    };
+    proceed.onclick = () => done(true);
+    cancel.onclick = () => done(false);
+    overlay.classList.add('show');
+  });
+}
+
+function logSkip(text) {
+  const log = document.getElementById('bulkLog');
+  log.style.display = 'block';
+  const line = document.createElement('div');
+  line.textContent = '⏭ ' + text;
+  line.style.color = '#fbbf24';
+  log.appendChild(line);
+  log.scrollTop = log.scrollHeight;
+}
+
 function logLine(text, ok) {
   const log = document.getElementById('bulkLog');
   log.style.display = 'block';
@@ -195,7 +290,7 @@ function logLine(text, ok) {
   log.scrollTop = log.scrollHeight;
 }
 
-async function sendWordsBulk(secret, studentEmail, folder, words) {
+async function sendWordsBulk(secret, studentEmail, folder, words, skipped) {
   const resultEl = document.getElementById('result');
   const progWrap = document.getElementById('progressBarWrap');
   const progFill = document.getElementById('progressBarFill');
@@ -205,6 +300,7 @@ async function sendWordsBulk(secret, studentEmail, folder, words) {
 
   let okCount = 0;
   const failed = [];
+  (skipped || []).forEach(w => logSkip(w + ' — 重複のため送信しませんでした'));
 
   for (let i = 0; i < words.length; i++) {
     const word = words[i];
@@ -224,10 +320,11 @@ async function sendWordsBulk(secret, studentEmail, folder, words) {
     await new Promise(r => setTimeout(r, 120));
   }
 
+  const skipNote = (skipped && skipped.length) ? '(重複 ' + skipped.length + ' 件は送信せず)' : '';
   if (failed.length === 0) {
-    resultEl.innerHTML = '<div class="msg ok">✅ 全 ' + okCount + ' 件を ' + studentEmail + ' さんに送りました。次回ログイン時に単語帳に反映されます。</div>';
+    resultEl.innerHTML = '<div class="msg ok">✅ ' + okCount + ' 件を ' + studentEmail + ' さんに送りました' + skipNote + '。次回ログイン時に単語帳に反映されます。</div>';
   } else {
-    resultEl.innerHTML = '<div class="msg err">✅ ' + okCount + ' 件成功 / ❌ ' + failed.length + ' 件失敗<br>失敗した単語: ' + failed.join('、') + '<br>失敗分だけ上の欄に貼り直して再送信できます。</div>';
+    resultEl.innerHTML = '<div class="msg err">✅ ' + okCount + ' 件成功 / ❌ ' + failed.length + ' 件失敗' + skipNote + '<br>失敗した単語: ' + failed.join('、') + '<br>失敗分だけ上の欄に貼り直して再送信できます。</div>';
   }
 }
 
@@ -252,6 +349,27 @@ async function sendWord() {
   btn.disabled = true; btn.textContent = '送信中...';
 
   try {
+    // Duplicate check (confirmation screen): compare against every word already
+    // sent to this student, plus repeats inside the pasted list itself.
+    const existing = await fetchExistingWords(secret, studentEmail);
+    const seen = new Set();
+    const inListDupes = [];
+    const uniqueWords = [];
+    words.forEach(w => {
+      if (seen.has(w)) { if (!inListDupes.includes(w)) inListDupes.push(w); return; }
+      seen.add(w); uniqueWords.push(w);
+    });
+    const existingDupes = uniqueWords.filter(w => existing.has(w));
+    const toSend = uniqueWords.filter(w => !existing.has(w));
+    if (existingDupes.length || inListDupes.length) {
+      const proceed = await confirmDuplicates(existingDupes, inListDupes, toSend.length);
+      if (!proceed) {
+        resultEl.innerHTML = '<div class="msg info">送信をキャンセルしました。内容を直してからもう一度送ってください。</div>';
+        btn.disabled = false; btn.textContent = '生徒に送る ✨';
+        return;
+      }
+    }
+
     if (words.length === 1) {
       // Single word: use whatever is in the detail fields (auto-filled by
       // "調べる" and/or manually edited) so teachers can still correct a
@@ -271,7 +389,7 @@ async function sendWord() {
     } else {
       // Multiple words pasted at once: look each one up automatically and
       // send them one by one as separate vocabulary entries.
-      await sendWordsBulk(secret, studentEmail, folder, words);
+      await sendWordsBulk(secret, studentEmail, folder, toSend, existingDupes);
       document.getElementById('word').value = '';
       updateSingleFieldsState();
     }
