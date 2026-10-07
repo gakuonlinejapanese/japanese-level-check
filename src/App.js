@@ -46,7 +46,7 @@ function BrandFooter() {
 }
 
 export default function App() {
-  const [current, setCurrent] = useState(window.location.pathname === '/app' ? 'gaku-app' : null);
+  const [current, setCurrent] = useState((window.location.pathname === '/app' || (window.Capacitor && typeof window.Capacitor.isNativePlatform === 'function' && window.Capacitor.isNativePlatform())) ? 'gaku-app' : null);
   const goSelfStudy = (section, level) => setCurrent(`self-study|${section}|${level}`);
   window.__ss = (level) => goSelfStudy(current || 'general', level);
 
