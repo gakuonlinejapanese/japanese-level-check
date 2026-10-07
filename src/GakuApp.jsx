@@ -143,11 +143,9 @@ const LEVEL_RESOURCES = {
     { name:"Moji Ninja (Kana Challenge)", desc:"Gamified hiragana/katakana recognition challenge.", url:"https://moji.ninja/challenge", free:true, levelKey:"resLevelN5N4", mode:"reading", skills:{ vocab:2, grammar:0, reading:5, speaking:0, listening:0 } },
     { name:"Hirakata (Kana Practice)", desc:"Quick drills for mastering hiragana and katakana recognition.", url:"https://hirakata.io/", free:true, levelKey:"resLevelN5N4", mode:"reading", skills:{ vocab:2, grammar:0, reading:5, speaking:0, listening:0 } },
     { name:"StudyHiragana.com", desc:"Structured hiragana practice with quizzes and stroke order.", url:"https://www.studyhiragana.com/", free:true, levelKey:"resLevelN5N4", mode:"reading", skills:{ vocab:2, grammar:0, reading:5, speaking:0, listening:0 } },
-    { name:"TMS Anime (with GAKU Reader)", desc:"Easy anime clips for comprehensible-input listening and vocabulary; use with GAKU Reader for on-screen lookups.", url:"https://www.youtube.com/@TMSanimeJP", free:true, levelKey:"resLevelN5N4", mode:"listening", skills:{ vocab:4, grammar:0, reading:0, speaking:0, listening:5 } },
-    { name:"Toei Anime (with GAKU Reader)", desc:"Beginner-friendly anime clips for listening and vocabulary; use with GAKU Reader for on-screen lookups.", url:"https://www.youtube.com/@toeianime_MC", free:true, levelKey:"resLevelN5N4", mode:"listening", skills:{ vocab:4, grammar:0, reading:0, speaking:0, listening:5 } },
+    { name:"TMS Anime (with GAKU Reader)", desc:"Easy anime clips for comprehensible-input listening and vocabulary; official channel, opens YouTube in a new tab.", url:"https://www.youtube.com/@TMSanimeJP", free:true, levelKey:"resLevelN5N4", mode:"listening", skills:{ vocab:4, grammar:0, reading:0, speaking:0, listening:5 } },
+    { name:"Toei Anime (with GAKU Reader)", desc:"Beginner-friendly anime clips for listening and vocabulary; official channel, opens YouTube in a new tab.", url:"https://www.youtube.com/@toeianime_MC", free:true, levelKey:"resLevelN5N4", mode:"listening", skills:{ vocab:4, grammar:0, reading:0, speaking:0, listening:5 } },
     { name:"Pokemon Kids TV (with GAKU Reader)", desc:"Simple, slow Japanese aimed at children — great early listening and vocabulary input.", url:"https://www.pokemon.jp/special/Pokemon-KidsTV/", free:true, levelKey:"resLevelN5N4", mode:"listening", skills:{ vocab:3, grammar:0, reading:0, speaking:0, listening:5 } },
-    { name:"Doraemon the Movie (with GAKU Reader)", desc:"Beginner-accessible anime movie content for listening and vocabulary.", url:"https://www.youtube.com/DoraemonTheMovie", free:true, levelKey:"resLevelN5N4", mode:"listening", skills:{ vocab:3, grammar:0, reading:0, speaking:0, listening:5 } },
-      { name:"キルアオ Anime (YouTube検索)", desc:"YouTube search results for anime clips — listening and vocabulary input; use with GAKU Reader for on-screen lookups.", url:"https://www.youtube.com/results?search_query=%E3%82%AD%E3%83%AB%E3%82%A2%E3%82%AA", free:true, levelKey:"resLevelN5N4", mode:"listening", skills:{ vocab:4, grammar:0, reading:0, speaking:0, listening:5 } },
   ],
   "N5": [
     { name:"Japanese with Shun", descKey:"resShunDesc", url:"https://www.youtube.com/channel/UCu6sZrHyl4hSS2PvlUo2XZA", free:true, levelKey:"resLevelN5N4", mode:"listening", skills:{ vocab:4, grammar:2, reading:0, speaking:3, listening:5 } },
@@ -155,11 +153,9 @@ const LEVEL_RESOURCES = {
     { name:"Onomappu", descKey:"resOnomappuDesc", url:"https://www.youtube.com/@Onomappu", free:true, levelKey:"resLevelN4N3", mode:"listening", skills:{ vocab:5, grammar:3, reading:0, speaking:4, listening:5 } },
     { name:"Nihongoplay (Flashcard Decks)", desc:"Ready-made JLPT-graded vocabulary decks to review by reading.", url:"https://nihongoplay.com/decks", free:true, levelKey:"resLevelN5N4", mode:"reading", skills:{ vocab:5, grammar:1, reading:3, speaking:0, listening:0 } },
     { name:"MLC N5-N4 Katakana Quiz", desc:"Katakana recognition quiz pitched at N5-N4 level.", url:"https://www.mlcjapanese.co.jp/n5n4_jlpt_katakana_quiz_01.html", free:true, levelKey:"resLevelN5N4", mode:"reading", skills:{ vocab:2, grammar:2, reading:5, speaking:0, listening:0 } },
-    { name:"Anime Reading (with GAKU Reader)", desc:"Read manga/anime scripts with the GAKU Reader extension for instant furigana and lookups.", url:"https://jyosiki.com/manga/danmachi/2_2.html", free:true, levelKey:"resLevelN5N4", mode:"reading", skills:{ vocab:4, grammar:2, reading:5, speaking:0, listening:1 } },
-    { name:"TMS Anime (with GAKU Reader)", desc:"Anime clips for comprehensible-input listening and vocabulary; use with GAKU Reader for on-screen lookups.", url:"https://www.youtube.com/@TMSanimeJP", free:true, levelKey:"resLevelN5N4", mode:"listening", skills:{ vocab:4, grammar:0, reading:0, speaking:0, listening:5 } },
-    { name:"Toei Anime (with GAKU Reader)", desc:"Anime clips for listening and vocabulary; use with GAKU Reader for on-screen lookups.", url:"https://www.youtube.com/@toeianime_MC", free:true, levelKey:"resLevelN5N4", mode:"listening", skills:{ vocab:4, grammar:0, reading:0, speaking:0, listening:5 } },
+    { name:"TMS Anime (with GAKU Reader)", desc:"Anime clips for comprehensible-input listening and vocabulary; official channel, opens YouTube in a new tab.", url:"https://www.youtube.com/@TMSanimeJP", free:true, levelKey:"resLevelN5N4", mode:"listening", skills:{ vocab:4, grammar:0, reading:0, speaking:0, listening:5 } },
+    { name:"Toei Anime (with GAKU Reader)", desc:"Anime clips for listening and vocabulary; official channel, opens YouTube in a new tab.", url:"https://www.youtube.com/@toeianime_MC", free:true, levelKey:"resLevelN5N4", mode:"listening", skills:{ vocab:4, grammar:0, reading:0, speaking:0, listening:5 } },
     { name:"Pokemon Kids TV (with GAKU Reader)", desc:"Simple, slow Japanese aimed at children — listening, vocabulary, and light reading with GAKU Reader.", url:"https://www.pokemon.jp/special/Pokemon-KidsTV/", free:true, levelKey:"resLevelN5N4", mode:"listening", skills:{ vocab:3, grammar:0, reading:2, speaking:0, listening:5 } },
-      { name:"キルアオ Anime (YouTube検索)", desc:"YouTube search results for anime clips — listening and vocabulary input; use with GAKU Reader for on-screen lookups.", url:"https://www.youtube.com/results?search_query=%E3%82%AD%E3%83%AB%E3%82%A2%E3%82%AA", free:true, levelKey:"resLevelN5N4", mode:"listening", skills:{ vocab:4, grammar:0, reading:0, speaking:0, listening:5 } },
   ],
   "N4": [
     { name:"Marugoto Web", descKey:"resMarugotoDesc", url:"https://marugotoweb.jp/ja/", free:true, levelKey:"resLevelN4N3", mode:"speaking", skills:{ vocab:4, grammar:4, reading:3, speaking:5, listening:5 } },
@@ -167,10 +163,8 @@ const LEVEL_RESOURCES = {
     { name:"Nihongo con Teppei", descKey:"resTeppeiDesc", url:"https://nihongoconteppei.com", free:true, levelKey:"resLevelN3N2", mode:"listening", skills:{ vocab:5, grammar:2, reading:0, speaking:3, listening:5 } },
     { name:"Nihongoplay (Flashcard Decks)", desc:"Ready-made JLPT-graded vocabulary decks to review by reading.", url:"https://nihongoplay.com/decks", free:true, levelKey:"resLevelN3N2", mode:"reading", skills:{ vocab:5, grammar:1, reading:3, speaking:0, listening:0 } },
     { name:"MLC N4 Grammar Quiz", desc:"N4-level grammar comprehension quiz.", url:"https://www.mlcjapanese.co.jp/n4_jlpt_grammar_quiz_01.html", free:true, levelKey:"resLevelN3N2", mode:"reading", skills:{ vocab:2, grammar:5, reading:4, speaking:0, listening:0 } },
-    { name:"Anime Reading (with GAKU Reader)", desc:"Read manga/anime scripts with the GAKU Reader extension for instant furigana and lookups.", url:"https://jyosiki.com/manga/danmachi/2_2.html", free:true, levelKey:"resLevelN3N2", mode:"reading", skills:{ vocab:4, grammar:2, reading:5, speaking:0, listening:1 } },
-    { name:"TMS Anime (with GAKU Reader)", desc:"Anime clips for comprehensible-input listening and vocabulary; use with GAKU Reader for on-screen lookups.", url:"https://www.youtube.com/@TMSanimeJP", free:true, levelKey:"resLevelN3N2", mode:"listening", skills:{ vocab:4, grammar:0, reading:0, speaking:0, listening:5 } },
-    { name:"Toei Anime (with GAKU Reader)", desc:"Anime clips for listening and vocabulary; use with GAKU Reader for on-screen lookups.", url:"https://www.youtube.com/@toeianime_MC", free:true, levelKey:"resLevelN3N2", mode:"listening", skills:{ vocab:4, grammar:0, reading:0, speaking:0, listening:5 } },
-      { name:"キルアオ Anime (YouTube検索)", desc:"YouTube search results for anime clips — listening and vocabulary input; use with GAKU Reader for on-screen lookups.", url:"https://www.youtube.com/results?search_query=%E3%82%AD%E3%83%AB%E3%82%A2%E3%82%AA", free:true, levelKey:"resLevelN3N2", mode:"listening", skills:{ vocab:4, grammar:0, reading:0, speaking:0, listening:5 } },
+    { name:"TMS Anime (with GAKU Reader)", desc:"Anime clips for comprehensible-input listening and vocabulary; official channel, opens YouTube in a new tab.", url:"https://www.youtube.com/@TMSanimeJP", free:true, levelKey:"resLevelN3N2", mode:"listening", skills:{ vocab:4, grammar:0, reading:0, speaking:0, listening:5 } },
+    { name:"Toei Anime (with GAKU Reader)", desc:"Anime clips for listening and vocabulary; official channel, opens YouTube in a new tab.", url:"https://www.youtube.com/@toeianime_MC", free:true, levelKey:"resLevelN3N2", mode:"listening", skills:{ vocab:4, grammar:0, reading:0, speaking:0, listening:5 } },
   ],
   "N3": [
     { name:"Nihongo con Teppei", descKey:"resTeppeiDesc", url:"https://nihongoconteppei.com", free:true, levelKey:"resLevelN3N2", mode:"listening", skills:{ vocab:5, grammar:2, reading:0, speaking:3, listening:5 } },
@@ -178,27 +172,21 @@ const LEVEL_RESOURCES = {
     { name:"Sambon Juku", descKey:"resSambonDesc", url:"https://www.youtube.com/@SambonJuku", free:true, levelKey:"resLevelN2N1", mode:"listening", skills:{ vocab:5, grammar:5, reading:3, speaking:3, listening:4 } },
     { name:"Nihongoplay (Flashcard Decks)", desc:"Ready-made JLPT-graded vocabulary decks to review by reading.", url:"https://nihongoplay.com/decks", free:true, levelKey:"resLevelN2N1", mode:"reading", skills:{ vocab:5, grammar:1, reading:3, speaking:0, listening:0 } },
     { name:"MLC N3 Grammar Quiz", desc:"N3-level grammar comprehension quiz.", url:"https://www.mlcjapanese.co.jp/n3_jlpt_grammar_quiz_01.html", free:true, levelKey:"resLevelN2N1", mode:"reading", skills:{ vocab:2, grammar:5, reading:4, speaking:0, listening:0 } },
-    { name:"Anime Reading (with GAKU Reader)", desc:"Read manga/anime scripts with the GAKU Reader extension for instant furigana and lookups.", url:"https://jyosiki.com/manga/danmachi/2_2.html", free:true, levelKey:"resLevelN2N1", mode:"reading", skills:{ vocab:4, grammar:2, reading:5, speaking:0, listening:1 } },
     { name:"TMS Anime", desc:"Anime clips for listening and vocabulary practice.", url:"https://www.youtube.com/@TMSanimeJP", free:true, levelKey:"resLevelN2N1", mode:"listening", skills:{ vocab:4, grammar:0, reading:0, speaking:0, listening:5 } },
     { name:"Toei Anime", desc:"Anime clips for listening and vocabulary practice.", url:"https://www.youtube.com/@toeianime_MC", free:true, levelKey:"resLevelN2N1", mode:"listening", skills:{ vocab:4, grammar:0, reading:0, speaking:0, listening:5 } },
-      { name:"キルアオ Anime (YouTube検索)", desc:"YouTube search results for anime clips — listening and vocabulary input; use with GAKU Reader for on-screen lookups.", url:"https://www.youtube.com/results?search_query=%E3%82%AD%E3%83%AB%E3%82%A2%E3%82%AA", free:true, levelKey:"resLevelN2N1", mode:"listening", skills:{ vocab:4, grammar:0, reading:0, speaking:0, listening:5 } },
   ],
   "N2": [
     { name:"Sambon Juku", descKey:"resSambonDesc", url:"https://www.youtube.com/@SambonJuku", free:true, levelKey:"resLevelN2N1", mode:"listening", skills:{ vocab:5, grammar:5, reading:3, speaking:3, listening:4 } },
     { name:"YUYU Japanese Podcast", descKey:"resYuyuDesc", url:"https://www.youtube.com/@yuyunihongopodcast", free:true, levelKey:"resLevelN3N2", mode:"listening", skills:{ vocab:5, grammar:2, reading:0, speaking:3, listening:5 } },
     { name:"MLC N2 Grammar Quiz", desc:"N2-level grammar comprehension quiz.", url:"https://www.mlcjapanese.co.jp/n2_jlpt_grammar_quiz_01.html", free:true, levelKey:"resLevelN2N1", mode:"reading", skills:{ vocab:2, grammar:5, reading:4, speaking:0, listening:0 } },
-    { name:"Anime Reading (with GAKU Reader)", desc:"Read manga/anime scripts with the GAKU Reader extension for instant furigana and lookups.", url:"https://jyosiki.com/manga/danmachi/2_2.html", free:true, levelKey:"resLevelN2N1", mode:"reading", skills:{ vocab:4, grammar:2, reading:5, speaking:0, listening:1 } },
     { name:"TMS Anime", desc:"Anime clips for listening and vocabulary practice.", url:"https://www.youtube.com/@TMSanimeJP", free:true, levelKey:"resLevelN2N1", mode:"listening", skills:{ vocab:4, grammar:0, reading:0, speaking:0, listening:5 } },
     { name:"Toei Anime", desc:"Anime clips for listening and vocabulary practice.", url:"https://www.youtube.com/@toeianime_MC", free:true, levelKey:"resLevelN2N1", mode:"listening", skills:{ vocab:4, grammar:0, reading:0, speaking:0, listening:5 } },
-      { name:"キルアオ Anime (YouTube検索)", desc:"YouTube search results for anime clips — listening and vocabulary input; use with GAKU Reader for on-screen lookups.", url:"https://www.youtube.com/results?search_query=%E3%82%AD%E3%83%AB%E3%82%A2%E3%82%AA", free:true, levelKey:"resLevelN2N1", mode:"listening", skills:{ vocab:4, grammar:0, reading:0, speaking:0, listening:5 } },
   ],
   "N1": [
     { name:"Sambon Juku", descKey:"resSambonDesc", url:"https://www.youtube.com/@SambonJuku", free:true, levelKey:"resLevelN2N1", mode:"listening", skills:{ vocab:5, grammar:5, reading:3, speaking:3, listening:4 } },
     { name:"MLC N1 Grammar Quiz", desc:"N1-level grammar comprehension quiz.", url:"https://www.mlcjapanese.co.jp/n1_jlpt_grammar_quiz_01.html", free:true, levelKey:"resLevelN2N1", mode:"reading", skills:{ vocab:2, grammar:5, reading:4, speaking:0, listening:0 } },
-    { name:"Anime Reading (with GAKU Reader)", desc:"Read manga/anime scripts with the GAKU Reader extension for instant furigana and lookups.", url:"https://jyosiki.com/manga/danmachi/2_2.html", free:true, levelKey:"resLevelN2N1", mode:"reading", skills:{ vocab:4, grammar:2, reading:5, speaking:0, listening:1 } },
     { name:"TMS Anime", desc:"Anime clips for listening and vocabulary practice.", url:"https://www.youtube.com/@TMSanimeJP", free:true, levelKey:"resLevelN2N1", mode:"listening", skills:{ vocab:4, grammar:0, reading:0, speaking:0, listening:5 } },
     { name:"Toei Anime", desc:"Anime clips for listening and vocabulary practice.", url:"https://www.youtube.com/@toeianime_MC", free:true, levelKey:"resLevelN2N1", mode:"listening", skills:{ vocab:4, grammar:0, reading:0, speaking:0, listening:5 } },
-      { name:"キルアオ Anime (YouTube検索)", desc:"YouTube search results for anime clips — listening and vocabulary input; use with GAKU Reader for on-screen lookups.", url:"https://www.youtube.com/results?search_query=%E3%82%AD%E3%83%AB%E3%82%A2%E3%82%AA", free:true, levelKey:"resLevelN2N1", mode:"listening", skills:{ vocab:4, grammar:0, reading:0, speaking:0, listening:5 } },
   ],
 };
 // Aliases so the new self-estimation scale (Beginner–Mastery) resolves to the same curated
@@ -1366,7 +1354,7 @@ const UI_TRANSLATIONS = {
     convListening: "Listening…",
     convListenUnsupported: "Live listening isn't supported in this browser — try Chrome on desktop or Android.",
     pronTitle: "Pronunciation Practice",
-    pronListenDesc: "Play a YouTube, Netflix or any video with the sound on near your mic. GAKU listens, writes down what it hears line by line, and helps you understand it with furigana, romaji and translation.",
+    pronListenDesc: "Play a YouTube or any video with the sound on near your mic. GAKU listens, writes down what it hears line by line, and helps you understand it with furigana, romaji and translation.",
     pronSlowTip: "Can't catch it? Slow the video down (for example YouTube speed 0.5× or 0.75×) and listen again. Your teacher is the video — GAKU just writes it down.",
     pronSlowNo: "No problem. Slow the video down and listen to that part again — GAKU will write it down once more.",
     pronBestScore: "Best score",
@@ -1812,7 +1800,7 @@ const UI_TRANSLATIONS = {
     convModelAnswer: "Réponse modèle",
     convAltResponses: "Autres façons de le dire",
     pronTitle: "Pratique de prononciation",
-    pronListenDesc: "Lancez YouTube, Netflix ou n'importe quelle vidéo avec le son près de votre micro. GAKU écoute, note ce qu'il entend ligne par ligne et vous aide à comprendre avec les furigana, le romaji et la traduction.",
+    pronListenDesc: "Lancez YouTube ou n'importe quelle vidéo avec le son près de votre micro. GAKU écoute, note ce qu'il entend ligne par ligne et vous aide à comprendre avec les furigana, le romaji et la traduction.",
     pronSlowTip: "Vous n'arrivez pas à saisir ? Ralentissez la vidéo (par exemple vitesse 0,5× ou 0,75× sur YouTube) et écoutez à nouveau. Le professeur, c'est la vidéo — GAKU se contente de transcrire.",
     pronSlowNo: "Pas de souci. Ralentissez la vidéo et réécoutez ce passage — GAKU le transcrira de nouveau.",
     pronBestScore: "Meilleur score",
@@ -2302,7 +2290,7 @@ const UI_TRANSLATIONS = {
     convModelAnswer: "Respuesta modelo",
     convAltResponses: "Otras formas de decirlo",
     pronTitle: "Práctica de pronunciación",
-    pronListenDesc: "Reproduce YouTube, Netflix o cualquier video con el sonido cerca de tu micrófono. GAKU escucha, escribe lo que oye línea por línea y te ayuda a entenderlo con furigana, romaji y traducción.",
+    pronListenDesc: "Reproduce YouTube o cualquier video con el sonido cerca de tu micrófono. GAKU escucha, escribe lo que oye línea por línea y te ayuda a entenderlo con furigana, romaji y traducción.",
     pronSlowTip: "¿No lo captas? Ralentiza el video (por ejemplo, velocidad 0,5× o 0,75× en YouTube) y vuelve a escuchar. El maestro es el video — GAKU solo lo transcribe.",
     pronSlowNo: "No hay problema. Ralentiza el video y escucha esa parte otra vez — GAKU la transcribirá de nuevo.",
     pronBestScore: "Mejor puntuación",
@@ -2792,7 +2780,7 @@ const UI_TRANSLATIONS = {
     convModelAnswer: "Resposta modelo",
     convAltResponses: "Outras formas de dizer isso",
     pronTitle: "Prática de pronúncia",
-    pronListenDesc: "Reproduza YouTube, Netflix ou qualquer vídeo com o som perto do seu microfone. O GAKU escuta, anota o que ouve linha por linha e ajuda você a entender com furigana, romaji e tradução.",
+    pronListenDesc: "Reproduza YouTube ou qualquer vídeo com o som perto do seu microfone. O GAKU escuta, anota o que ouve linha por linha e ajuda você a entender com furigana, romaji e tradução.",
     pronSlowTip: "Não conseguiu entender? Diminua a velocidade do vídeo (por exemplo, 0,5× ou 0,75× no YouTube) e ouça de novo. O professor é o vídeo — o GAKU apenas transcreve.",
     pronSlowNo: "Sem problema. Diminua a velocidade do vídeo e ouça esse trecho novamente — o GAKU vai transcrever mais uma vez.",
     pronBestScore: "Melhor pontuação",
@@ -3282,7 +3270,7 @@ const UI_TRANSLATIONS = {
     convModelAnswer: "Musterantwort",
     convAltResponses: "Andere Möglichkeiten, es zu sagen",
     pronTitle: "Ausspracheübung",
-    pronListenDesc: "Spiele YouTube, Netflix oder ein beliebiges Video mit eingeschaltetem Ton in der Nähe deines Mikrofons ab. GAKU hört zu, schreibt Zeile für Zeile mit und hilft dir mit Furigana, Romaji und Übersetzung beim Verstehen.",
+    pronListenDesc: "Spiele YouTube oder ein beliebiges Video mit eingeschaltetem Ton in der Nähe deines Mikrofons ab. GAKU hört zu, schreibt Zeile für Zeile mit und hilft dir mit Furigana, Romaji und Übersetzung beim Verstehen.",
     pronSlowTip: "Nicht verstanden? Verlangsame das Video (z. B. YouTube-Geschwindigkeit 0,5× oder 0,75×) und höre noch einmal zu. Das Video ist dein Lehrer — GAKU schreibt nur mit.",
     pronSlowNo: "Kein Problem. Verlangsame das Video und höre diese Stelle noch einmal — GAKU schreibt sie erneut mit.",
     pronBestScore: "Beste Punktzahl",
@@ -3772,7 +3760,7 @@ const UI_TRANSLATIONS = {
     convModelAnswer: "Risposta modello",
     convAltResponses: "Altri modi per dirlo",
     pronTitle: "Pratica di pronuncia",
-    pronListenDesc: "Riproduci YouTube, Netflix o qualsiasi video con l'audio vicino al microfono. GAKU ascolta, trascrive ciò che sente riga per riga e ti aiuta a capire con furigana, romaji e traduzione.",
+    pronListenDesc: "Riproduci YouTube o qualsiasi video con l'audio vicino al microfono. GAKU ascolta, trascrive ciò che sente riga per riga e ti aiuta a capire con furigana, romaji e traduzione.",
     pronSlowTip: "Non riesci a capire? Rallenta il video (ad esempio velocità 0,5× o 0,75× su YouTube) e ascolta di nuovo. L'insegnante è il video — GAKU si limita a trascrivere.",
     pronSlowNo: "Nessun problema. Rallenta il video e riascolta quella parte — GAKU la trascriverà ancora una volta.",
     pronBestScore: "Punteggio migliore",
@@ -4262,7 +4250,7 @@ const UI_TRANSLATIONS = {
     convModelAnswer: "参考答案",
     convAltResponses: "其他说法",
     pronTitle: "发音练习",
-    pronListenDesc: "在麦克风附近播放YouTube、Netflix或任何视频。GAKU会倾听并逐行记录听到的内容,并通过注音假名、罗马字和翻译帮助你理解。",
+    pronListenDesc: "在麦克风附近播放YouTube或任何视频。GAKU会倾听并逐行记录听到的内容,并通过注音假名、罗马字和翻译帮助你理解。",
     pronSlowTip: "听不清楚?请把视频放慢(例如YouTube的0.5倍或0.75倍速)再听一遍。老师就是视频本身——GAKU只负责把内容记录下来。",
     pronSlowNo: "没关系。请把视频放慢,再听一遍这一段——GAKU会再次为你记录。",
     pronBestScore: "最高得分",
@@ -4752,7 +4740,7 @@ const UI_TRANSLATIONS = {
     convModelAnswer: "參考答案",
     convAltResponses: "其他說法",
     pronTitle: "發音練習",
-    pronListenDesc: "在麥克風附近播放YouTube、Netflix或任何影片。GAKU會聆聽並逐行記錄聽到的內容,並透過注音假名、羅馬字和翻譯幫助你理解。",
+    pronListenDesc: "在麥克風附近播放YouTube或任何影片。GAKU會聆聽並逐行記錄聽到的內容,並透過注音假名、羅馬字和翻譯幫助你理解。",
     pronSlowTip: "聽不清楚?請把影片放慢(例如YouTube的0.5倍或0.75倍速)再聽一遍。老師就是影片本身——GAKU只負責把內容記錄下來。",
     pronSlowNo: "沒關係。請把影片放慢,再聽一遍這一段——GAKU會再次為你記錄。",
     pronBestScore: "最高得分",
@@ -5242,7 +5230,7 @@ const UI_TRANSLATIONS = {
     convModelAnswer: "모범 답안",
     convAltResponses: "다른 말하는 방법",
     pronTitle: "발음 연습",
-    pronListenDesc: "마이크 가까이에서 YouTube, Netflix 등 아무 영상이나 소리를 켜고 재생하세요. GAKU가 듣고 들리는 내용을 한 줄씩 적어 주며, 후리가나·로마자·번역으로 이해를 도와줍니다.",
+    pronListenDesc: "마이크 가까이에서 YouTube 등 아무 영상이나 소리를 켜고 재생하세요. GAKU가 듣고 들리는 내용을 한 줄씩 적어 주며, 후리가나·로마자·번역으로 이해를 도와줍니다.",
     pronSlowTip: "잘 안 들리나요? 영상을 느리게(예: YouTube 재생 속도 0.5배 또는 0.75배) 재생해서 다시 들어보세요. 선생님은 영상이고, GAKU는 받아 적기만 합니다.",
     pronSlowNo: "괜찮아요. 영상을 느리게 재생해서 그 부분을 다시 들어보세요. GAKU가 다시 받아 적어 드립니다.",
     pronBestScore: "최고 점수",
@@ -5732,7 +5720,7 @@ const UI_TRANSLATIONS = {
     convModelAnswer: "คำตอบตัวอย่าง",
     convAltResponses: "วิธีพูดอื่นๆ",
     pronTitle: "การฝึกออกเสียง",
-    pronListenDesc: "เปิด YouTube, Netflix หรือวิดีโอใดก็ได้โดยให้เสียงอยู่ใกล้ไมค์ GAKU จะฟังและจดสิ่งที่ได้ยินทีละบรรทัด พร้อมช่วยให้เข้าใจด้วยฟุริงานะ โรมาจิ และคำแปล",
+    pronListenDesc: "เปิด YouTube หรือวิดีโอใดก็ได้โดยให้เสียงอยู่ใกล้ไมค์ GAKU จะฟังและจดสิ่งที่ได้ยินทีละบรรทัด พร้อมช่วยให้เข้าใจด้วยฟุริงานะ โรมาจิ และคำแปล",
     pronSlowTip: "ฟังไม่ทัน? ลองเปิดวิดีโอให้ช้าลง (เช่น ความเร็ว 0.5× หรือ 0.75× ใน YouTube) แล้วฟังอีกครั้ง ครูคือวิดีโอ ส่วน GAKU ทำหน้าที่จดให้เท่านั้น",
     pronSlowNo: "ไม่เป็นไร ลองเปิดวิดีโอให้ช้าลงแล้วฟังช่วงนั้นอีกครั้ง GAKU จะจดให้ใหม่",
     pronBestScore: "คะแนนสูงสุด",
@@ -6222,7 +6210,7 @@ const UI_TRANSLATIONS = {
     convModelAnswer: "Jawapan model",
     convAltResponses: "Cara lain untuk mengatakannya",
     pronTitle: "Latihan Sebutan",
-    pronListenDesc: "Mainkan YouTube, Netflix atau mana-mana video dengan bunyi hampir dengan mikrofon anda. GAKU mendengar, menulis apa yang didengar baris demi baris dan membantu anda memahaminya dengan furigana, romaji dan terjemahan.",
+    pronListenDesc: "Mainkan YouTube atau mana-mana video dengan bunyi hampir dengan mikrofon anda. GAKU mendengar, menulis apa yang didengar baris demi baris dan membantu anda memahaminya dengan furigana, romaji dan terjemahan.",
     pronSlowTip: "Tidak dapat menangkap? Perlahankan video (contohnya kelajuan 0.5× atau 0.75× di YouTube) dan dengar semula. Guru anda ialah video itu — GAKU hanya menulisnya.",
     pronSlowNo: "Tidak mengapa. Perlahankan video dan dengar bahagian itu sekali lagi — GAKU akan menulisnya semula.",
     pronBestScore: "Skor terbaik",
@@ -6712,7 +6700,7 @@ const UI_TRANSLATIONS = {
     convModelAnswer: "Jawaban model",
     convAltResponses: "Cara lain untuk mengatakannya",
     pronTitle: "Latihan Pengucapan",
-    pronListenDesc: "Putar YouTube, Netflix, atau video apa pun dengan suara dekat mikrofon Anda. GAKU mendengarkan, menuliskan apa yang terdengar baris demi baris, dan membantu Anda memahaminya dengan furigana, romaji, dan terjemahan.",
+    pronListenDesc: "Putar YouTube atau video apa pun dengan suara dekat mikrofon Anda. GAKU mendengarkan, menuliskan apa yang terdengar baris demi baris, dan membantu Anda memahaminya dengan furigana, romaji, dan terjemahan.",
     pronSlowTip: "Tidak tertangkap? Perlambat video (misalnya kecepatan 0,5× atau 0,75× di YouTube) lalu dengarkan lagi. Gurunya adalah video itu — GAKU hanya menuliskannya.",
     pronSlowNo: "Tidak apa-apa. Perlambat videonya dan dengarkan bagian itu sekali lagi — GAKU akan menuliskannya lagi.",
     pronBestScore: "Skor terbaik",
@@ -7202,7 +7190,7 @@ const UI_TRANSLATIONS = {
     convModelAnswer: "Câu trả lời mẫu",
     convAltResponses: "Các cách nói khác",
     pronTitle: "Luyện phát âm",
-    pronListenDesc: "Hãy phát YouTube, Netflix hoặc bất kỳ video nào với âm thanh gần micro. GAKU sẽ lắng nghe, ghi lại từng dòng những gì nghe được và giúp bạn hiểu bằng furigana, romaji và bản dịch.",
+    pronListenDesc: "Hãy phát YouTube hoặc bất kỳ video nào với âm thanh gần micro. GAKU sẽ lắng nghe, ghi lại từng dòng những gì nghe được và giúp bạn hiểu bằng furigana, romaji và bản dịch.",
     pronSlowTip: "Nghe không kịp? Hãy làm chậm video (ví dụ tốc độ 0,5× hoặc 0,75× trên YouTube) rồi nghe lại. Giáo viên chính là video — GAKU chỉ ghi lại thôi.",
     pronSlowNo: "Không sao. Hãy làm chậm video và nghe lại đoạn đó — GAKU sẽ ghi lại một lần nữa.",
     pronBestScore: "Điểm cao nhất",
@@ -7692,7 +7680,7 @@ const UI_TRANSLATIONS = {
     convModelAnswer: "मॉडल उत्तर",
     convAltResponses: "इसे कहने के अन्य तरीके",
     pronTitle: "उच्चारण अभ्यास",
-    pronListenDesc: "माइक के पास YouTube, Netflix या कोई भी वीडियो आवाज़ के साथ चलाएँ। GAKU सुनता है, जो सुनाई देता है उसे पंक्ति-दर-पंक्ति लिखता है और फुरिगाना, रोमाजी और अनुवाद के साथ समझने में मदद करता है।",
+    pronListenDesc: "माइक के पास YouTube या कोई भी वीडियो आवाज़ के साथ चलाएँ। GAKU सुनता है, जो सुनाई देता है उसे पंक्ति-दर-पंक्ति लिखता है और फुरिगाना, रोमाजी और अनुवाद के साथ समझने में मदद करता है।",
     pronSlowTip: "समझ नहीं आया? वीडियो को धीमा करें (जैसे YouTube में 0.5× या 0.75× गति) और फिर से सुनें। शिक्षक वीडियो है — GAKU सिर्फ़ उसे लिख देता है।",
     pronSlowNo: "कोई बात नहीं। वीडियो को धीमा करके उस हिस्से को फिर से सुनें — GAKU उसे दोबारा लिख देगा।",
     pronBestScore: "सर्वश्रेष्ठ स्कोर",
@@ -8182,7 +8170,7 @@ const UI_TRANSLATIONS = {
     convModelAnswer: "模範回答",
     convAltResponses: "他の言い方",
     pronTitle: "発音練習",
-    pronListenDesc: "マイクの近くでYouTubeやNetflixなどの動画を音声ありで再生してください。GAKUが聞き取って1行ずつ文字に起こし、ふりがな・ローマ字・翻訳で理解をサポートします。",
+    pronListenDesc: "マイクの近くでYouTubeなどの動画を音声ありで再生してください。GAKUが聞き取って1行ずつ文字に起こし、ふりがな・ローマ字・翻訳で理解をサポートします。",
     pronSlowTip: "聞き取れない場合は、動画をスロー再生(YouTubeなら再生速度0.5倍や0.75倍)して、もう一度聞き取ってください。先生は動画です。GAKUは文字起こしでサポートします。",
     pronSlowNo: "大丈夫です。動画をスロー再生して、その部分をもう一度聞き取ってください。GAKUがもう一度文字に起こします。",
     pronBestScore: "ベストスコア",
@@ -8672,7 +8660,7 @@ const UI_TRANSLATIONS = {
     convModelAnswer: "Model cevap",
     convAltResponses: "Söylemenin diğer yolları",
     pronTitle: "Telaffuz Alıştırması",
-    pronListenDesc: "YouTube, Netflix veya herhangi bir videoyu sesi mikrofonunuza yakın olacak şekilde oynatın. GAKU dinler, duyduklarını satır satır yazar ve furigana, romaji ve çeviriyle anlamanıza yardım eder.",
+    pronListenDesc: "YouTube veya herhangi bir videoyu sesi mikrofonunuza yakın olacak şekilde oynatın. GAKU dinler, duyduklarını satır satır yazar ve furigana, romaji ve çeviriyle anlamanıza yardım eder.",
     pronSlowTip: "Anlayamadınız mı? Videoyu yavaşlatın (örneğin YouTube'da 0,5× veya 0,75× hız) ve tekrar dinleyin. Öğretmeniniz video — GAKU yalnızca yazıya döker.",
     pronSlowNo: "Sorun değil. Videoyu yavaşlatıp o bölümü tekrar dinleyin — GAKU onu yeniden yazacak.",
     pronBestScore: "En iyi puan",
@@ -9162,7 +9150,7 @@ const UI_TRANSLATIONS = {
     convModelAnswer: "मॉडल जवाफ",
     convAltResponses: "भन्ने अन्य तरिकाहरू",
     pronTitle: "उच्चारण अभ्यास",
-    pronListenDesc: "माइक नजिकै YouTube, Netflix वा कुनै पनि भिडियो आवाजसहित चलाउनुहोस्। GAKUले सुन्छ, सुनिएको कुरा लाइन-लाइनमा लेख्छ र फुरिगाना, रोमाजी र अनुवादमार्फत बुझ्न मद्दत गर्छ।",
+    pronListenDesc: "माइक नजिकै YouTube वा कुनै पनि भिडियो आवाजसहित चलाउनुहोस्। GAKUले सुन्छ, सुनिएको कुरा लाइन-लाइनमा लेख्छ र फुरिगाना, रोमाजी र अनुवादमार्फत बुझ्न मद्दत गर्छ।",
     pronSlowTip: "बुझ्न गाह्रो भयो? भिडियो ढिलो गर्नुहोस् (जस्तै YouTube मा 0.5× वा 0.75× गति) र फेरि सुन्नुहोस्। शिक्षक भिडियो नै हो — GAKUले मात्र लेखिदिन्छ।",
     pronSlowNo: "ठीक छ। भिडियो ढिलो गरेर त्यो भाग फेरि सुन्नुहोस् — GAKUले फेरि लेखिदिनेछ।",
     pronBestScore: "उत्कृष्ट स्कोर",
@@ -9652,7 +9640,7 @@ const UI_TRANSLATIONS = {
     convModelAnswer: "Huwarang sagot",
     convAltResponses: "Ibang paraan ng pagsasabi",
     pronTitle: "Pagsasanay sa Pagbigkas",
-    pronListenDesc: "I-play ang YouTube, Netflix, o anumang video nang may tunog malapit sa mikropono mo. Nakikinig ang GAKU, isinusulat ang naririnig nito linya por linya, at tinutulungan kang umintindi gamit ang furigana, romaji, at salin.",
+    pronListenDesc: "I-play ang YouTube o anumang video nang may tunog malapit sa mikropono mo. Nakikinig ang GAKU, isinusulat ang naririnig nito linya por linya, at tinutulungan kang umintindi gamit ang furigana, romaji, at salin.",
     pronSlowTip: "Hindi maintindihan? Pabagalin ang video (halimbawa, 0.5× o 0.75× na bilis sa YouTube) at pakinggan muli. Ang video ang guro mo — isinusulat lang ito ng GAKU.",
     pronSlowNo: "Okay lang. Pabagalin ang video at pakinggan muli ang bahaging iyon — isusulat ito muli ng GAKU.",
     pronBestScore: "Pinakamataas na score",
@@ -13161,7 +13149,7 @@ function AddPronunciationItem({ onAdd, T, jlpt }) {
 }
 
 // ─── Pronunciation Practice (listen-along) ───────────────────────────────────
-// The student plays a native-speaker video (YouTube, Netflix, ...) themselves. GAKU does NOT
+// The student plays a native-speaker video (YouTube, ...) themselves. GAKU does NOT
 // speak (no AI voice): it only listens through the mic, writes down each line, and supports
 // understanding (furigana / romaji / translation). If a line isn't understood, the student is
 // told to slow the video down and listen again — the video is the teacher.
@@ -13727,7 +13715,7 @@ function PronunciationListenAlong({ form, onLevelUp }) {
       <div style={{ ...S.card, marginBottom:16 }}>
         <p style={{ color:C.teal, fontSize:12, fontWeight:700, letterSpacing:1, marginBottom:6 }}>🗣️ {T.pronTitle || "Pronunciation Practice"}</p>
         <p style={{ color:"#39ff14", fontSize:12, lineHeight:1.7, marginBottom:10 }}>
-          {T.pronListenDesc || "Play a YouTube, Netflix or any video with the sound on near your mic. GAKU listens, writes down what it hears line by line, and helps you understand it with furigana, romaji and translation."}
+          {T.pronListenDesc || "Play a YouTube or any video with the sound on near your mic. GAKU listens, writes down what it hears line by line, and helps you understand it with furigana, romaji and translation."}
         </p>
         <TabAudioListenBlock tab={tab} T={T} onBeforeStart={() => { if (listening) toggleListening(); }} />
         <button onClick={toggleListening} style={{ display:"flex", alignItems:"center", justifyContent:"center", gap:8, width:"100%", padding:"12px 12px", borderRadius:10, border:`1px solid ${listening?"rgba(239,68,68,0.4)":"rgba(6,182,212,0.35)"}`, background:listening?"rgba(239,68,68,0.12)":"rgba(6,182,212,0.1)", color:listening?"#f87171":C.teal, fontSize:14, fontWeight:700, cursor:"pointer" }}>
@@ -15881,6 +15869,7 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
 
         {tab==="resources" && (
           <div>
+            <p style={{ color:"#64748b", fontSize:10.5, lineHeight:1.6, margin:"0 0 10px" }}>Links in Resources lead to independent outside websites and official channels. GAKU is not affiliated with them and does not host or copy their content.</p>
             <div style={{ display:"flex", gap:6, marginBottom:16, overflowX:"auto", paddingBottom:4 }}>
               {RESOURCE_SUBTABS.filter(st => featureShown(st.id)).map(st => {
                 const tutorialTarget = (tutorialActive && tutorialStep>=1 && tutorialStep<=TUTORIAL_STEPS.length) ? TUTORIAL_STEPS[tutorialStep-1] : null;
@@ -17200,6 +17189,17 @@ Respond ONLY with a valid JSON array, no markdown, no backticks:
           <button onClick={authUser ? handleDeleteAccount : undefined} disabled={deleteAccountBusy} style={{ background:"none", border:"none", color:"#475569", fontSize:11, cursor:"pointer", textDecoration:"underline" }}>
             {T?.deleteAccountLink || "Delete my account instead"}
           </button>
+
+          <div style={{ marginTop:18, paddingTop:14, borderTop:"1px solid rgba(148,163,184,0.15)", textAlign:"center" }}>
+            <p style={{ color:"#94a3b8", fontSize:10.5, lineHeight:1.7, margin:"0 0 8px" }}>
+              Plans renew automatically at the price shown until cancelled. Payments on the web are processed securely by Stripe. Links to outside websites open in a new tab; those sites are independent and not affiliated with GAKU.
+            </p>
+            <p style={{ color:"#94a3b8", fontSize:11, margin:0 }}>
+              <a href="/terms.html" target="_blank" rel="noopener noreferrer" style={{ color:"#a78bfa" }}>Terms of Use</a>
+              {" \u00b7 "}
+              <a href="/privacy.html" target="_blank" rel="noopener noreferrer" style={{ color:"#a78bfa" }}>Privacy Policy</a>
+            </p>
+          </div>
         </div>
       </div>
     );
