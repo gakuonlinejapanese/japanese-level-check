@@ -185,6 +185,7 @@ export default async function handler(req, res) {
     if (action === "admin_respond_trial_lesson") return handleAdminRespondTrialLesson(req, res);
     if (action === "request_jlpt_mock_test") return handleRequestJlptMockTest(req, res);
     if (action === "check_jlpt_mock_applied") return handleCheckJlptMockApplied(req, res);
+    if (action === "request_invitation_code") return handleRequestInvitationCode(req, res);
     if (action === "submit_feedback") return handleSubmitFeedback(req, res);
     if (action === "check_feedback_submitted") return handleCheckFeedbackSubmitted(req, res);
     if (action === "send_free_plan_winback_emails") return handleSendFreePlanWinback(req, res);
@@ -1656,5 +1657,31 @@ async function handleSubmitFeedback(req, res) {
   } catch (e) {
     console.error("handleSubmitFeedback failed:", e.message);
     return res.status(500).json({ error: e.message });
+  }
+}
+
+
+// Store apps: a trial-ended student asks for an invitation code. Notifies the admin by email only
+// (replyTo = the student). No payment or lesson wording here on purpose.
+async function handleRequestInvitationCode(req, res) {
+  try {
+    const { email, name, message } = req.body || {};
+    const e = (email || "").trim().toLowerCase();
+    if (!e || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(e)) return res.status(400).json({ error: "valid email is required" });
+    const msg = (message || "").toString().trim().slice(0, 1000);
+    await sendEmail({
+      to: ADMIN_EMAIL,
+      subject: `[GAKU] Invitation code request from ${(name || e).toString().slice(0, 80)}`,
+      replyTo: e,
+      html: `<p>A student asked for an invitation code from the store app.</p>
+             <p><strong>Name:</strong> ${escapeHtmlForFeedback((name || "(not provided)").toString().slice(0, 120))}<br/>
+                <strong>Email:</strong> ${escapeHtmlForFeedback(e)}</p>
+             <p><strong>Message:</strong></p>
+             <p style="white-space:pre-wrap;">${escapeHtmlForFeedback(msg || "(none)")}</p>`,
+    });
+    return res.status(200).json({ ok: true });
+  } catch (err) {
+    console.error("handleRequestInvitationCode failed:", err.message);
+    return res.status(500).json({ error: "failed" });
   }
 }

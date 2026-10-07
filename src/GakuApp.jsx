@@ -2,6 +2,16 @@ import { useState, useEffect, useCallback, useMemo, useRef } from "react";
 import { supabase, getDeviceId, getDeviceLabel } from "./supabaseClient";
 import HanziWriter from "hanzi-writer";
 
+// True inside the iOS/Android store apps (Capacitor shell). Also forceable with ?store=1 for previews.
+// Store builds never show prices, purchase buttons, or links to outside purchase/lesson pages.
+const IS_STORE_APP = (() => {
+  try {
+    if (typeof window === "undefined") return false;
+    if (window.Capacitor && typeof window.Capacitor.isNativePlatform === "function" && window.Capacitor.isNativePlatform()) return true;
+    return new URLSearchParams(window.location.search).get("store") === "1";
+  } catch { return false; }
+})();
+
 const C = {
   bg: "linear-gradient(160deg,#0a0f1e 0%,#0f172a 60%,#0a0f1e 100%)",
   purple: "#7c3aed", purpleLight: "#a855f7",
@@ -15343,7 +15353,7 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
     setJlptMockStep("done");
     dismissJlptMockOffer();
   };
-  const showJlptMockOffer = (form.skills||[]).includes("jlpt") && !jlptMockDismissed;
+  const showJlptMockOffer = !IS_STORE_APP && (form.skills||[]).includes("jlpt") && !jlptMockDismissed;
 
   // "💬 Feedback" tab — students can report bugs/improvement ideas any time. Invite-code (GAKU)
   // students can submit any number of times; non-invite (trial) students get exactly one
@@ -16927,6 +16937,25 @@ Respond ONLY with a valid JSON array, no markdown, no backticks:
   const [lockedInviteBusy, setLockedInviteBusy] = useState(false);
   const [lockedInviteErr, setLockedInviteErr] = useState("");
 
+  const [reqOpen, setReqOpen] = useState(false);
+  const [reqMsg, setReqMsg] = useState("");
+  const [reqBusy, setReqBusy] = useState(false);
+  const [reqDone, setReqDone] = useState(false);
+  const [reqErr, setReqErr] = useState("");
+  const submitInviteRequest = async () => {
+    if (!authUser || reqBusy) return;
+    setReqBusy(true); setReqErr("");
+    try {
+      const res = await fetch("/api/policy-agreement", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "request_invitation_code", email: authUser.email, name: (authUser.user_metadata && authUser.user_metadata.name) || "", message: reqMsg.trim() }),
+      });
+      if (!res.ok) throw new Error("failed");
+      setReqDone(true);
+    } catch { setReqErr("Could not send. Please try again."); }
+    setReqBusy(false);
+  };
+
   // Lets an already-logged-in trial-locked student redeem a GAKU invite code
   // they never entered at signup, so they don't have to pay if they're
   // actually a GAKU student. Mirrors the redeem step in AuthScreen's signup.
@@ -17094,6 +17123,38 @@ Respond ONLY with a valid JSON array, no markdown, no backticks:
   // this and reach the dashboard — the only ways out are paying or fully
   // deleting the account (self-service delete, which starts a real fresh
   // trial).
+  if (IS_STORE_APP && authUser && (trialLocked || absenceSuspended) && (previewPaywall || (absenceSuspended ? !isPaid : (!isPaid && !isGakuStudent)))) {
+    return (
+      <div style={{ minHeight:"100vh", background:"linear-gradient(160deg,#0a0f1e 0%,#0f172a 60%,#0a0f1e 100%)", display:"flex", alignItems:"flex-start", justifyContent:"center", padding:24, boxSizing:"border-box" }}>
+        <div style={{ background:"linear-gradient(135deg,#1e1b4b,#0f172a)", border:"1.5px solid rgba(139,92,246,0.4)", borderRadius:20, padding:"32px 26px", maxWidth:420, width:"92%", margin:"auto", textAlign:"center" }}>
+          <h2 style={{ color:"#f1f5f9", fontSize:20, fontWeight:900, margin:"0 0 10px" }}>{absenceSuspended ? "GAKU Master is temporarily suspended" : (T?.trialEndedTitle || "Your free trial has ended")}</h2>
+          <p style={{ color:"#94a3b8", fontSize:13, margin:"0 0 16px", lineHeight:1.6 }}>If you have an invitation code, enter it below to continue.</p>
+          <div style={{ display:"flex", gap:6, marginBottom:8 }}>
+            <input value={lockedInviteCode} onChange={e=>setLockedInviteCode(e.target.value)} placeholder={T?.inviteCodePlaceholder || "Enter invite code..."} style={{ flex:1, padding:"9px 10px", borderRadius:8, border:"1px solid rgba(148,163,184,0.3)", background:"rgba(2,6,23,0.5)", color:"#f1f5f9", fontSize:13 }} />
+            <button onClick={handleLockedInviteRedeem} disabled={lockedInviteBusy || !lockedInviteCode.trim()} style={{ padding:"9px 14px", borderRadius:8, border:"none", background:"linear-gradient(135deg,#7c3aed,#a855f7)", color:"#fff", fontWeight:800, fontSize:12.5, cursor:"pointer" }}>{lockedInviteBusy ? "\u2026" : (T?.unlockBtn || "Unlock")}</button>
+          </div>
+          {lockedInviteErr && <p style={{ color:"#f87171", fontSize:11, margin:"0 0 8px" }}>{lockedInviteErr}</p>}
+          {!reqOpen && !reqDone && (
+            <button onClick={()=>setReqOpen(true)} style={{ background:"none", border:"none", color:"#a78bfa", fontSize:12.5, textDecoration:"underline", cursor:"pointer", margin:"6px 0 12px" }}>Request an invitation code</button>
+          )}
+          {reqOpen && !reqDone && (
+            <div style={{ textAlign:"left", margin:"8px 0 12px" }}>
+              <p style={{ color:"#94a3b8", fontSize:12, margin:"0 0 6px" }}>We will reply to {authUser.email}.</p>
+              <textarea value={reqMsg} onChange={e=>setReqMsg(e.target.value.slice(0,1000))} placeholder="Message (optional)" rows={3} style={{ width:"100%", boxSizing:"border-box", padding:"8px 10px", borderRadius:8, border:"1px solid rgba(148,163,184,0.3)", background:"rgba(2,6,23,0.5)", color:"#f1f5f9", fontSize:13 }} />
+              {reqErr && <p style={{ color:"#f87171", fontSize:11, margin:"6px 0 0" }}>{reqErr}</p>}
+              <button onClick={submitInviteRequest} disabled={reqBusy} style={{ marginTop:8, width:"100%", padding:"10px", borderRadius:8, border:"none", background:"linear-gradient(135deg,#7c3aed,#a855f7)", color:"#fff", fontWeight:800, fontSize:13, cursor:"pointer" }}>{reqBusy ? "\u2026" : "Send request"}</button>
+            </div>
+          )}
+          {reqDone && <p style={{ color:"#86efac", fontSize:12.5, margin:"8px 0 12px" }}>Thank you. We will reply by email.</p>}
+          <p style={{ color:"#64748b", fontSize:11, margin:"4px 0 12px", lineHeight:1.6 }}>Your saved study data is kept for a limited time.</p>
+          <button onClick={authUser ? handleDeleteAccount : undefined} disabled={deleteAccountBusy} style={{ background:"none", border:"none", color:"#64748b", fontSize:11, textDecoration:"underline", cursor:"pointer" }}>{T?.deleteAccountLink || "Delete my account instead"}</button>
+          <p style={{ color:"#64748b", fontSize:11, margin:"12px 0 0" }}>
+            <a href="/terms.html" target="_blank" rel="noopener noreferrer" style={{ color:"#a78bfa" }}>Terms of Use</a>{" \u00b7 "}<a href="/privacy.html" target="_blank" rel="noopener noreferrer" style={{ color:"#a78bfa" }}>Privacy Policy</a>
+          </p>
+        </div>
+      </div>
+    );
+  }
   if (authUser && (trialLocked || absenceSuspended) && (previewPaywall || (absenceSuspended ? !isPaid : (!isPaid && !isGakuStudent)))) {
     return (
       <div style={{ minHeight:"100vh", background:"linear-gradient(160deg,#0a0f1e 0%,#0f172a 60%,#0a0f1e 100%)", display:"flex", alignItems:"flex-start", justifyContent:"center", padding:24, boxSizing:"border-box" }}>
@@ -17430,7 +17491,7 @@ Respond ONLY with a valid JSON array, no markdown, no backticks:
   return (
     <div style={{ position:"relative" }} onClickCapture={handleDashboardInteraction}>
       <Dashboard form={form} onEdit={handleEdit} onLevelUp={(lvl)=>handleSubmit({ ...form, jlpt: lvl })} onLogout={authUser ? handleLogout : undefined} onDeleteAccount={authUser ? handleDeleteAccount : undefined} deleteAccountBusy={deleteAccountBusy} userId={authUser?.id} streakDays={streakDays} readerInstalled={readerInstalled} daysUntilTrialEnds={daysUntilTrialEnds} tutorialGraceDaysLeft={tutorialGraceDaysLeft} isTrialAccount={!isGakuStudent && !isPaid} isGakuStudent={isGakuStudent} onCompleteProfile={form?.profileComplete === false ? () => setOnboardingStep("completeProfile") : undefined} />
-      {showPaywall && !(authUser && (isGakuStudent || isPaid)) && (
+      {showPaywall && !IS_STORE_APP && !(authUser && (isGakuStudent || isPaid)) && (
         <div style={{ position:"fixed", inset:0, zIndex:9999, display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"flex-start", overflowY:"auto", WebkitOverflowScrolling:"touch", padding:"16px 0", boxSizing:"border-box", background:"rgba(10,15,30,0.85)", backdropFilter:"blur(12px)" }}>
           <div style={{ background:"linear-gradient(135deg,#1e1b4b,#0f172a)", border:"1.5px solid rgba(139,92,246,0.4)", borderRadius:20, padding:"36px 32px", maxWidth:420, width:"90%", margin:"auto", textAlign:"center", boxShadow:"0 8px 40px rgba(139,92,246,0.25)" }}>
             <p style={{ fontSize:28, margin:"0 0 6px" }}>🎌</p>
