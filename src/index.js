@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import './nativeSpeech';
 
 // Store apps (Capacitor) bundle the web files locally, so relative "/api/..." calls must
 // go to the live server. CapacitorHttp (enabled in capacitor.config.json) sends these
