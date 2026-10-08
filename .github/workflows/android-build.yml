@@ -30,3 +30,37 @@ jobs:
         with:
           name: gaku-master-debug-apk
           path: android/app/build/outputs/apk/debug/*.apk
+
+  release-aab:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+      - name: Build web app
+        run: CI=false DISABLE_ESLINT_PLUGIN=true npm run build
+      - name: Sync Capacitor
+        run: npx cap sync android
+      - name: Restore upload keystore
+        run: echo "${{ secrets.ANDROID_KEYSTORE_B64 }}" | base64 -d > "$RUNNER_TEMP/upload.jks"
+      - name: Build signed release bundle (AAB)
+        working-directory: android
+        env:
+          ANDROID_KEYSTORE_PATH: ${{ runner.temp }}/upload.jks
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+          VERSION_CODE: ${{ github.run_number }}
+        run: ./gradlew bundleRelease
+      - uses: actions/upload-artifact@v4
+        with:
+          name: gaku-master-release-aab
+          path: android/app/build/outputs/bundle/release/*.aab
