@@ -30,6 +30,8 @@ import { getAdminClient } from "./_supabaseAdmin.js";
 // data resets" (see trialEndedDesc / PolicyGate copy in GakuApp.jsx), so
 // GRACE_DAYS must stay in sync with that "1 week" wording.
 // The wipe only ever runs once per account (guarded by data_reset_at).
+// Accounts given to Apple / Google reviewers (see /areas notes). Never expire, never trial-locked.
+const REVIEW_ACCOUNT_EMAILS = ["store.review@seitojapanese.online"];
 const TRIAL_DAYS = 7;
 const TUTORIAL_GRACE_DAYS = 7; // one-time bonus week granted right when the 7-day trial ends
 const GRACE_DAYS = 7; // additional 7 days after the tutorial-grace week ends before data is wiped
@@ -93,7 +95,11 @@ export default async function handler(req, res) {
     if (!isGakuStudent) {
       const { data: userData } = await supabase.auth.admin.getUserById(userId);
       const userEmail = userData?.user?.email?.trim().toLowerCase();
-      if (userEmail) {
+      // App Store / Google Play reviewer accounts: always full access, never locked by the trial.
+      if (userEmail && REVIEW_ACCOUNT_EMAILS.includes(userEmail)) {
+        isGakuStudent = true;
+        await supabase.from("profiles").upsert({ id: userId, is_gaku_student: true });
+      } else if (userEmail) {
         const { data: invites } = await supabase
           .from("invite_codes")
           .select("id")

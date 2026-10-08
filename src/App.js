@@ -57,7 +57,7 @@ export default function App() {
   const urlPreviewPaywall = params.get('preview') === 'paywall';
   const urlPreviewPlans = params.get('plans') === '1';
 
-  if (current === 'gaku-app') return <div><GakuApp onBack={() => setCurrent(null)} initialName={urlName} initialEmail={urlEmail} initialJlpt={urlJlpt} previewPaywall={urlPreviewPaywall} previewPlans={urlPreviewPlans} /><BrandFooter /></div>;
+  if (current === 'gaku-app') return <div><GakuApp onBack={() => { if (!(window.Capacitor && typeof window.Capacitor.isNativePlatform === 'function' && window.Capacitor.isNativePlatform())) setCurrent(null); }} initialName={urlName} initialEmail={urlEmail} initialJlpt={urlJlpt} previewPaywall={urlPreviewPaywall} previewPlans={urlPreviewPlans} /><BrandFooter /></div>;
 
   if (!current) return <><Home onSelect={setCurrent} /><BrandFooter /></>;
 

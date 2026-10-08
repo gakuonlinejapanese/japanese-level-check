@@ -1365,6 +1365,19 @@ const UI_TRANSLATIONS = {
     convListenUnsupported: "Live listening isn't supported in this browser — try Chrome on desktop or Android.",
     pronTitle: "Pronunciation Practice",
     pronListenDesc: "Play a YouTube or any video with the sound on near your mic. GAKU listens, writes down what it hears line by line, and helps you understand it with furigana, romaji and translation.",
+    storeSuspendedTitle: "GAKU Master is temporarily suspended",
+    storeInviteHint: "If you have an invitation code, enter it below to continue.",
+    storeRequestCode: "Request an invitation code",
+    storeReplyTo: "We will reply to {email}.",
+    storeMessagePh: "Message (optional)",
+    storeSendFailed: "Could not send. Please try again.",
+    storeThanks: "Thank you. We will reply by email.",
+    storeSendRequest: "Send request",
+    storeDataKept: "Your saved study data is kept for a limited time.",
+    termsOfUseLabel: "Terms of Use",
+    privacyPolicyLabel: "Privacy Policy",
+    resExternalNote: "Links in Resources lead to independent outside websites and official channels. GAKU is not affiliated with them and does not host or copy their content.",
+    paywallRenewNote: "Plans renew automatically at the price shown until cancelled. Payments on the web are processed securely by Stripe. Links to outside websites open in a new tab; those sites are independent and not affiliated with GAKU.",
     pronSlowTip: "Can't catch it? Slow the video down (for example YouTube speed 0.5× or 0.75×) and listen again. Your teacher is the video — GAKU just writes it down.",
     pronSlowNo: "No problem. Slow the video down and listen to that part again — GAKU will write it down once more.",
     pronBestScore: "Best score",
@@ -1811,6 +1824,19 @@ const UI_TRANSLATIONS = {
     convAltResponses: "Autres façons de le dire",
     pronTitle: "Pratique de prononciation",
     pronListenDesc: "Lancez YouTube ou n'importe quelle vidéo avec le son près de votre micro. GAKU écoute, note ce qu'il entend ligne par ligne et vous aide à comprendre avec les furigana, le romaji et la traduction.",
+    storeSuspendedTitle: "GAKU Master est temporairement suspendu",
+    storeInviteHint: "Si vous avez un code d'invitation, saisissez-le ci-dessous pour continuer.",
+    storeRequestCode: "Demander un code d'invitation",
+    storeReplyTo: "Nous répondrons à {email}.",
+    storeMessagePh: "Message (facultatif)",
+    storeSendFailed: "Envoi impossible. Veuillez réessayer.",
+    storeThanks: "Merci. Nous vous répondrons par e-mail.",
+    storeSendRequest: "Envoyer la demande",
+    storeDataKept: "Vos données d'étude enregistrées sont conservées pendant une durée limitée.",
+    termsOfUseLabel: "Conditions d'utilisation",
+    privacyPolicyLabel: "Politique de confidentialité",
+    resExternalNote: "Les liens de la section Ressources mènent à des sites externes indépendants et à des chaînes officielles. GAKU n'est pas affilié à ces derniers et n'héberge ni ne copie leur contenu.",
+    paywallRenewNote: "Les abonnements se renouvellent automatiquement au prix affiché jusqu'à leur résiliation. Les paiements sur le web sont traités de manière sécurisée par Stripe. Les liens vers des sites externes s'ouvrent dans un nouvel onglet ; ces sites sont indépendants et non affiliés à GAKU.",
     pronSlowTip: "Vous n'arrivez pas à saisir ? Ralentissez la vidéo (par exemple vitesse 0,5× ou 0,75× sur YouTube) et écoutez à nouveau. Le professeur, c'est la vidéo — GAKU se contente de transcrire.",
     pronSlowNo: "Pas de souci. Ralentissez la vidéo et réécoutez ce passage — GAKU le transcrira de nouveau.",
     pronBestScore: "Meilleur score",
@@ -2301,6 +2327,19 @@ const UI_TRANSLATIONS = {
     convAltResponses: "Otras formas de decirlo",
     pronTitle: "Práctica de pronunciación",
     pronListenDesc: "Reproduce YouTube o cualquier video con el sonido cerca de tu micrófono. GAKU escucha, escribe lo que oye línea por línea y te ayuda a entenderlo con furigana, romaji y traducción.",
+    storeSuspendedTitle: "GAKU Master está suspendido temporalmente",
+    storeInviteHint: "Si tienes un código de invitación, introdúcelo abajo para continuar.",
+    storeRequestCode: "Solicitar un código de invitación",
+    storeReplyTo: "Responderemos a {email}.",
+    storeMessagePh: "Mensaje (opcional)",
+    storeSendFailed: "No se pudo enviar. Inténtalo de nuevo.",
+    storeThanks: "Gracias. Te responderemos por correo electrónico.",
+    storeSendRequest: "Enviar solicitud",
+    storeDataKept: "Tus datos de estudio guardados se conservan durante un tiempo limitado.",
+    termsOfUseLabel: "Términos de uso",
+    privacyPolicyLabel: "Política de privacidad",
+    resExternalNote: "Los enlaces de Recursos llevan a sitios web externos independientes y a canales oficiales. GAKU no está afiliado a ellos y no aloja ni copia su contenido.",
+    paywallRenewNote: "Los planes se renuevan automáticamente al precio indicado hasta que se cancelen. Los pagos en la web los procesa de forma segura Stripe. Los enlaces a sitios externos se abren en una pestaña nueva; esos sitios son independientes y no están afiliados a GAKU.",
     pronSlowTip: "¿No lo captas? Ralentiza el video (por ejemplo, velocidad 0,5× o 0,75× en YouTube) y vuelve a escuchar. El maestro es el video — GAKU solo lo transcribe.",
     pronSlowNo: "No hay problema. Ralentiza el video y escucha esa parte otra vez — GAKU la transcribirá de nuevo.",
     pronBestScore: "Mejor puntuación",
@@ -2791,6 +2830,19 @@ const UI_TRANSLATIONS = {
     convAltResponses: "Outras formas de dizer isso",
     pronTitle: "Prática de pronúncia",
     pronListenDesc: "Reproduza YouTube ou qualquer vídeo com o som perto do seu microfone. O GAKU escuta, anota o que ouve linha por linha e ajuda você a entender com furigana, romaji e tradução.",
+    storeSuspendedTitle: "O GAKU Master está temporariamente suspenso",
+    storeInviteHint: "Se você tem um código de convite, digite-o abaixo para continuar.",
+    storeRequestCode: "Solicitar um código de convite",
+    storeReplyTo: "Responderemos para {email}.",
+    storeMessagePh: "Mensagem (opcional)",
+    storeSendFailed: "Não foi possível enviar. Tente novamente.",
+    storeThanks: "Obrigado. Responderemos por e-mail.",
+    storeSendRequest: "Enviar solicitação",
+    storeDataKept: "Seus dados de estudo salvos são mantidos por tempo limitado.",
+    termsOfUseLabel: "Termos de Uso",
+    privacyPolicyLabel: "Política de Privacidade",
+    resExternalNote: "Os links em Recursos levam a sites externos independentes e a canais oficiais. O GAKU não é afiliado a eles e não hospeda nem copia o conteúdo deles.",
+    paywallRenewNote: "Os planos são renovados automaticamente pelo preço exibido até o cancelamento. Os pagamentos na web são processados com segurança pelo Stripe. Os links para sites externos abrem em uma nova aba; esses sites são independentes e não afiliados ao GAKU.",
     pronSlowTip: "Não conseguiu entender? Diminua a velocidade do vídeo (por exemplo, 0,5× ou 0,75× no YouTube) e ouça de novo. O professor é o vídeo — o GAKU apenas transcreve.",
     pronSlowNo: "Sem problema. Diminua a velocidade do vídeo e ouça esse trecho novamente — o GAKU vai transcrever mais uma vez.",
     pronBestScore: "Melhor pontuação",
@@ -3281,6 +3333,19 @@ const UI_TRANSLATIONS = {
     convAltResponses: "Andere Möglichkeiten, es zu sagen",
     pronTitle: "Ausspracheübung",
     pronListenDesc: "Spiele YouTube oder ein beliebiges Video mit eingeschaltetem Ton in der Nähe deines Mikrofons ab. GAKU hört zu, schreibt Zeile für Zeile mit und hilft dir mit Furigana, Romaji und Übersetzung beim Verstehen.",
+    storeSuspendedTitle: "GAKU Master ist vorübergehend gesperrt",
+    storeInviteHint: "Wenn du einen Einladungscode hast, gib ihn unten ein, um fortzufahren.",
+    storeRequestCode: "Einladungscode anfordern",
+    storeReplyTo: "Wir antworten an {email}.",
+    storeMessagePh: "Nachricht (optional)",
+    storeSendFailed: "Senden fehlgeschlagen. Bitte versuche es erneut.",
+    storeThanks: "Danke. Wir antworten per E-Mail.",
+    storeSendRequest: "Anfrage senden",
+    storeDataKept: "Deine gespeicherten Lerndaten werden für begrenzte Zeit aufbewahrt.",
+    termsOfUseLabel: "Nutzungsbedingungen",
+    privacyPolicyLabel: "Datenschutzerklärung",
+    resExternalNote: "Links unter „Ressourcen“ führen zu unabhängigen externen Websites und offiziellen Kanälen. GAKU ist nicht mit ihnen verbunden und hostet oder kopiert deren Inhalte nicht.",
+    paywallRenewNote: "Tarife verlängern sich automatisch zum angezeigten Preis, bis sie gekündigt werden. Zahlungen im Web werden sicher von Stripe abgewickelt. Links zu externen Websites öffnen sich in einem neuen Tab; diese Seiten sind unabhängig und nicht mit GAKU verbunden.",
     pronSlowTip: "Nicht verstanden? Verlangsame das Video (z. B. YouTube-Geschwindigkeit 0,5× oder 0,75×) und höre noch einmal zu. Das Video ist dein Lehrer — GAKU schreibt nur mit.",
     pronSlowNo: "Kein Problem. Verlangsame das Video und höre diese Stelle noch einmal — GAKU schreibt sie erneut mit.",
     pronBestScore: "Beste Punktzahl",
@@ -3771,6 +3836,19 @@ const UI_TRANSLATIONS = {
     convAltResponses: "Altri modi per dirlo",
     pronTitle: "Pratica di pronuncia",
     pronListenDesc: "Riproduci YouTube o qualsiasi video con l'audio vicino al microfono. GAKU ascolta, trascrive ciò che sente riga per riga e ti aiuta a capire con furigana, romaji e traduzione.",
+    storeSuspendedTitle: "GAKU Master è temporaneamente sospeso",
+    storeInviteHint: "Se hai un codice d'invito, inseriscilo qui sotto per continuare.",
+    storeRequestCode: "Richiedi un codice d'invito",
+    storeReplyTo: "Risponderemo a {email}.",
+    storeMessagePh: "Messaggio (facoltativo)",
+    storeSendFailed: "Invio non riuscito. Riprova.",
+    storeThanks: "Grazie. Ti risponderemo via e-mail.",
+    storeSendRequest: "Invia richiesta",
+    storeDataKept: "I tuoi dati di studio salvati vengono conservati per un periodo limitato.",
+    termsOfUseLabel: "Termini di utilizzo",
+    privacyPolicyLabel: "Informativa sulla privacy",
+    resExternalNote: "I link in Risorse portano a siti esterni indipendenti e a canali ufficiali. GAKU non è affiliato a essi e non ospita né copia i loro contenuti.",
+    paywallRenewNote: "I piani si rinnovano automaticamente al prezzo indicato fino alla cancellazione. I pagamenti sul web sono elaborati in modo sicuro da Stripe. I link a siti esterni si aprono in una nuova scheda; tali siti sono indipendenti e non affiliati a GAKU.",
     pronSlowTip: "Non riesci a capire? Rallenta il video (ad esempio velocità 0,5× o 0,75× su YouTube) e ascolta di nuovo. L'insegnante è il video — GAKU si limita a trascrivere.",
     pronSlowNo: "Nessun problema. Rallenta il video e riascolta quella parte — GAKU la trascriverà ancora una volta.",
     pronBestScore: "Punteggio migliore",
@@ -4261,6 +4339,19 @@ const UI_TRANSLATIONS = {
     convAltResponses: "其他说法",
     pronTitle: "发音练习",
     pronListenDesc: "在麦克风附近播放YouTube或任何视频。GAKU会倾听并逐行记录听到的内容,并通过注音假名、罗马字和翻译帮助你理解。",
+    storeSuspendedTitle: "GAKU Master 已暂时停用",
+    storeInviteHint: "如果您有邀请码,请在下方输入以继续使用。",
+    storeRequestCode: "申请邀请码",
+    storeReplyTo: "我们将回复到 {email}。",
+    storeMessagePh: "留言(选填)",
+    storeSendFailed: "发送失败,请重试。",
+    storeThanks: "谢谢。我们将通过电子邮件回复您。",
+    storeSendRequest: "发送申请",
+    storeDataKept: "您保存的学习数据将保留一段有限的时间。",
+    termsOfUseLabel: "使用条款",
+    privacyPolicyLabel: "隐私政策",
+    resExternalNote: "“资源”中的链接指向独立的外部网站和官方频道。GAKU 与它们没有关联,也不托管或复制它们的内容。",
+    paywallRenewNote: "套餐将按所示价格自动续订,直至取消。网页端的付款由 Stripe 安全处理。外部网站的链接会在新标签页中打开;这些网站相互独立,与 GAKU 无关联。",
     pronSlowTip: "听不清楚?请把视频放慢(例如YouTube的0.5倍或0.75倍速)再听一遍。老师就是视频本身——GAKU只负责把内容记录下来。",
     pronSlowNo: "没关系。请把视频放慢,再听一遍这一段——GAKU会再次为你记录。",
     pronBestScore: "最高得分",
@@ -4751,6 +4842,19 @@ const UI_TRANSLATIONS = {
     convAltResponses: "其他說法",
     pronTitle: "發音練習",
     pronListenDesc: "在麥克風附近播放YouTube或任何影片。GAKU會聆聽並逐行記錄聽到的內容,並透過注音假名、羅馬字和翻譯幫助你理解。",
+    storeSuspendedTitle: "GAKU Master 已暫時停用",
+    storeInviteHint: "如果您有邀請碼,請在下方輸入以繼續使用。",
+    storeRequestCode: "申請邀請碼",
+    storeReplyTo: "我們將回覆至 {email}。",
+    storeMessagePh: "留言(選填)",
+    storeSendFailed: "傳送失敗,請再試一次。",
+    storeThanks: "謝謝。我們將透過電子郵件回覆您。",
+    storeSendRequest: "送出申請",
+    storeDataKept: "您儲存的學習資料將保留一段有限的時間。",
+    termsOfUseLabel: "使用條款",
+    privacyPolicyLabel: "隱私權政策",
+    resExternalNote: "「資源」中的連結會前往獨立的外部網站與官方頻道。GAKU 與它們沒有關聯,也不代管或複製它們的內容。",
+    paywallRenewNote: "方案會依所示價格自動續訂,直到取消為止。網頁上的付款由 Stripe 安全處理。外部網站的連結會在新分頁中開啟;這些網站各自獨立,與 GAKU 無關聯。",
     pronSlowTip: "聽不清楚?請把影片放慢(例如YouTube的0.5倍或0.75倍速)再聽一遍。老師就是影片本身——GAKU只負責把內容記錄下來。",
     pronSlowNo: "沒關係。請把影片放慢,再聽一遍這一段——GAKU會再次為你記錄。",
     pronBestScore: "最高得分",
@@ -5241,6 +5345,19 @@ const UI_TRANSLATIONS = {
     convAltResponses: "다른 말하는 방법",
     pronTitle: "발음 연습",
     pronListenDesc: "마이크 가까이에서 YouTube 등 아무 영상이나 소리를 켜고 재생하세요. GAKU가 듣고 들리는 내용을 한 줄씩 적어 주며, 후리가나·로마자·번역으로 이해를 도와줍니다.",
+    storeSuspendedTitle: "GAKU Master가 일시적으로 중지되었습니다",
+    storeInviteHint: "초대 코드가 있다면 아래에 입력하고 계속하세요.",
+    storeRequestCode: "초대 코드 요청하기",
+    storeReplyTo: "{email}(으)로 답변드리겠습니다.",
+    storeMessagePh: "메시지(선택)",
+    storeSendFailed: "전송하지 못했습니다. 다시 시도해 주세요.",
+    storeThanks: "감사합니다. 이메일로 답변드리겠습니다.",
+    storeSendRequest: "요청 보내기",
+    storeDataKept: "저장된 학습 데이터는 일정 기간 동안만 보관됩니다.",
+    termsOfUseLabel: "이용약관",
+    privacyPolicyLabel: "개인정보 처리방침",
+    resExternalNote: "리소스의 링크는 독립된 외부 웹사이트와 공식 채널로 연결됩니다. GAKU는 이들과 제휴 관계가 아니며, 해당 콘텐츠를 호스팅하거나 복사하지 않습니다.",
+    paywallRenewNote: "플랜은 취소하기 전까지 표시된 가격으로 자동 갱신됩니다. 웹에서의 결제는 Stripe가 안전하게 처리합니다. 외부 웹사이트 링크는 새 탭에서 열리며, 해당 사이트들은 독립적이고 GAKU와 제휴 관계가 아닙니다.",
     pronSlowTip: "잘 안 들리나요? 영상을 느리게(예: YouTube 재생 속도 0.5배 또는 0.75배) 재생해서 다시 들어보세요. 선생님은 영상이고, GAKU는 받아 적기만 합니다.",
     pronSlowNo: "괜찮아요. 영상을 느리게 재생해서 그 부분을 다시 들어보세요. GAKU가 다시 받아 적어 드립니다.",
     pronBestScore: "최고 점수",
@@ -5731,6 +5848,19 @@ const UI_TRANSLATIONS = {
     convAltResponses: "วิธีพูดอื่นๆ",
     pronTitle: "การฝึกออกเสียง",
     pronListenDesc: "เปิด YouTube หรือวิดีโอใดก็ได้โดยให้เสียงอยู่ใกล้ไมค์ GAKU จะฟังและจดสิ่งที่ได้ยินทีละบรรทัด พร้อมช่วยให้เข้าใจด้วยฟุริงานะ โรมาจิ และคำแปล",
+    storeSuspendedTitle: "GAKU Master ถูกระงับชั่วคราว",
+    storeInviteHint: "หากคุณมีรหัสเชิญ ให้ป้อนด้านล่างเพื่อใช้งานต่อ",
+    storeRequestCode: "ขอรหัสเชิญ",
+    storeReplyTo: "เราจะตอบกลับไปที่ {email}",
+    storeMessagePh: "ข้อความ (ไม่บังคับ)",
+    storeSendFailed: "ส่งไม่สำเร็จ โปรดลองอีกครั้ง",
+    storeThanks: "ขอบคุณ เราจะตอบกลับทางอีเมล",
+    storeSendRequest: "ส่งคำขอ",
+    storeDataKept: "ข้อมูลการเรียนที่บันทึกไว้จะถูกเก็บไว้ในระยะเวลาที่จำกัด",
+    termsOfUseLabel: "ข้อกำหนดการใช้งาน",
+    privacyPolicyLabel: "นโยบายความเป็นส่วนตัว",
+    resExternalNote: "ลิงก์ในส่วนแหล่งเรียนรู้นำไปยังเว็บไซต์ภายนอกที่เป็นอิสระและช่องทางทางการ GAKU ไม่มีส่วนเกี่ยวข้องกับเว็บไซต์เหล่านั้น และไม่ได้โฮสต์หรือคัดลอกเนื้อหาของพวกเขา",
+    paywallRenewNote: "แพ็กเกจจะต่ออายุอัตโนมัติตามราคาที่แสดงจนกว่าจะยกเลิก การชำระเงินบนเว็บดำเนินการอย่างปลอดภัยโดย Stripe ลิงก์ไปยังเว็บไซต์ภายนอกจะเปิดในแท็บใหม่ เว็บไซต์เหล่านั้นเป็นอิสระและไม่เกี่ยวข้องกับ GAKU",
     pronSlowTip: "ฟังไม่ทัน? ลองเปิดวิดีโอให้ช้าลง (เช่น ความเร็ว 0.5× หรือ 0.75× ใน YouTube) แล้วฟังอีกครั้ง ครูคือวิดีโอ ส่วน GAKU ทำหน้าที่จดให้เท่านั้น",
     pronSlowNo: "ไม่เป็นไร ลองเปิดวิดีโอให้ช้าลงแล้วฟังช่วงนั้นอีกครั้ง GAKU จะจดให้ใหม่",
     pronBestScore: "คะแนนสูงสุด",
@@ -6221,6 +6351,19 @@ const UI_TRANSLATIONS = {
     convAltResponses: "Cara lain untuk mengatakannya",
     pronTitle: "Latihan Sebutan",
     pronListenDesc: "Mainkan YouTube atau mana-mana video dengan bunyi hampir dengan mikrofon anda. GAKU mendengar, menulis apa yang didengar baris demi baris dan membantu anda memahaminya dengan furigana, romaji dan terjemahan.",
+    storeSuspendedTitle: "GAKU Master digantung buat sementara waktu",
+    storeInviteHint: "Jika anda mempunyai kod jemputan, masukkan di bawah untuk meneruskan.",
+    storeRequestCode: "Minta kod jemputan",
+    storeReplyTo: "Kami akan membalas kepada {email}.",
+    storeMessagePh: "Mesej (pilihan)",
+    storeSendFailed: "Tidak dapat dihantar. Sila cuba lagi.",
+    storeThanks: "Terima kasih. Kami akan membalas melalui e-mel.",
+    storeSendRequest: "Hantar permintaan",
+    storeDataKept: "Data pembelajaran anda yang disimpan akan dikekalkan untuk tempoh yang terhad.",
+    termsOfUseLabel: "Terma Penggunaan",
+    privacyPolicyLabel: "Dasar Privasi",
+    resExternalNote: "Pautan dalam Sumber membawa anda ke laman web luar yang bebas dan saluran rasmi. GAKU tidak berafiliasi dengan mereka dan tidak menganjurkan atau menyalin kandungan mereka.",
+    paywallRenewNote: "Pelan diperbaharui secara automatik pada harga yang ditunjukkan sehingga dibatalkan. Pembayaran di web diproses dengan selamat oleh Stripe. Pautan ke laman web luar dibuka dalam tab baharu; laman web tersebut adalah bebas dan tidak berafiliasi dengan GAKU.",
     pronSlowTip: "Tidak dapat menangkap? Perlahankan video (contohnya kelajuan 0.5× atau 0.75× di YouTube) dan dengar semula. Guru anda ialah video itu — GAKU hanya menulisnya.",
     pronSlowNo: "Tidak mengapa. Perlahankan video dan dengar bahagian itu sekali lagi — GAKU akan menulisnya semula.",
     pronBestScore: "Skor terbaik",
@@ -6711,6 +6854,19 @@ const UI_TRANSLATIONS = {
     convAltResponses: "Cara lain untuk mengatakannya",
     pronTitle: "Latihan Pengucapan",
     pronListenDesc: "Putar YouTube atau video apa pun dengan suara dekat mikrofon Anda. GAKU mendengarkan, menuliskan apa yang terdengar baris demi baris, dan membantu Anda memahaminya dengan furigana, romaji, dan terjemahan.",
+    storeSuspendedTitle: "GAKU Master dihentikan sementara",
+    storeInviteHint: "Jika Anda punya kode undangan, masukkan di bawah untuk melanjutkan.",
+    storeRequestCode: "Minta kode undangan",
+    storeReplyTo: "Kami akan membalas ke {email}.",
+    storeMessagePh: "Pesan (opsional)",
+    storeSendFailed: "Gagal mengirim. Silakan coba lagi.",
+    storeThanks: "Terima kasih. Kami akan membalas lewat email.",
+    storeSendRequest: "Kirim permintaan",
+    storeDataKept: "Data belajar Anda yang tersimpan disimpan untuk waktu yang terbatas.",
+    termsOfUseLabel: "Ketentuan Penggunaan",
+    privacyPolicyLabel: "Kebijakan Privasi",
+    resExternalNote: "Tautan di Sumber Belajar mengarah ke situs web luar yang independen dan kanal resmi. GAKU tidak berafiliasi dengan mereka dan tidak menghosting atau menyalin konten mereka.",
+    paywallRenewNote: "Paket diperpanjang otomatis dengan harga yang tertera hingga dibatalkan. Pembayaran di web diproses dengan aman oleh Stripe. Tautan ke situs luar dibuka di tab baru; situs-situs tersebut independen dan tidak berafiliasi dengan GAKU.",
     pronSlowTip: "Tidak tertangkap? Perlambat video (misalnya kecepatan 0,5× atau 0,75× di YouTube) lalu dengarkan lagi. Gurunya adalah video itu — GAKU hanya menuliskannya.",
     pronSlowNo: "Tidak apa-apa. Perlambat videonya dan dengarkan bagian itu sekali lagi — GAKU akan menuliskannya lagi.",
     pronBestScore: "Skor terbaik",
@@ -7201,6 +7357,19 @@ const UI_TRANSLATIONS = {
     convAltResponses: "Các cách nói khác",
     pronTitle: "Luyện phát âm",
     pronListenDesc: "Hãy phát YouTube hoặc bất kỳ video nào với âm thanh gần micro. GAKU sẽ lắng nghe, ghi lại từng dòng những gì nghe được và giúp bạn hiểu bằng furigana, romaji và bản dịch.",
+    storeSuspendedTitle: "GAKU Master đang tạm ngưng",
+    storeInviteHint: "Nếu bạn có mã mời, hãy nhập bên dưới để tiếp tục.",
+    storeRequestCode: "Yêu cầu mã mời",
+    storeReplyTo: "Chúng tôi sẽ trả lời tới {email}.",
+    storeMessagePh: "Tin nhắn (không bắt buộc)",
+    storeSendFailed: "Không gửi được. Vui lòng thử lại.",
+    storeThanks: "Cảm ơn bạn. Chúng tôi sẽ trả lời qua email.",
+    storeSendRequest: "Gửi yêu cầu",
+    storeDataKept: "Dữ liệu học đã lưu của bạn được giữ trong một thời gian có hạn.",
+    termsOfUseLabel: "Điều khoản sử dụng",
+    privacyPolicyLabel: "Chính sách quyền riêng tư",
+    resExternalNote: "Các liên kết trong Tài nguyên dẫn đến các trang web bên ngoài độc lập và kênh chính thức. GAKU không liên kết với họ và không lưu trữ hay sao chép nội dung của họ.",
+    paywallRenewNote: "Các gói tự động gia hạn theo mức giá hiển thị cho đến khi hủy. Thanh toán trên web được Stripe xử lý an toàn. Liên kết đến trang web bên ngoài sẽ mở trong tab mới; các trang đó độc lập và không liên kết với GAKU.",
     pronSlowTip: "Nghe không kịp? Hãy làm chậm video (ví dụ tốc độ 0,5× hoặc 0,75× trên YouTube) rồi nghe lại. Giáo viên chính là video — GAKU chỉ ghi lại thôi.",
     pronSlowNo: "Không sao. Hãy làm chậm video và nghe lại đoạn đó — GAKU sẽ ghi lại một lần nữa.",
     pronBestScore: "Điểm cao nhất",
@@ -7691,6 +7860,19 @@ const UI_TRANSLATIONS = {
     convAltResponses: "इसे कहने के अन्य तरीके",
     pronTitle: "उच्चारण अभ्यास",
     pronListenDesc: "माइक के पास YouTube या कोई भी वीडियो आवाज़ के साथ चलाएँ। GAKU सुनता है, जो सुनाई देता है उसे पंक्ति-दर-पंक्ति लिखता है और फुरिगाना, रोमाजी और अनुवाद के साथ समझने में मदद करता है।",
+    storeSuspendedTitle: "GAKU Master अस्थायी रूप से निलंबित है",
+    storeInviteHint: "अगर आपके पास आमंत्रण कोड है, तो जारी रखने के लिए उसे नीचे दर्ज करें।",
+    storeRequestCode: "आमंत्रण कोड का अनुरोध करें",
+    storeReplyTo: "हम {email} पर जवाब देंगे।",
+    storeMessagePh: "संदेश (वैकल्पिक)",
+    storeSendFailed: "भेजा नहीं जा सका। कृपया फिर से कोशिश करें।",
+    storeThanks: "धन्यवाद। हम ईमेल से जवाब देंगे।",
+    storeSendRequest: "अनुरोध भेजें",
+    storeDataKept: "आपका सहेजा हुआ अध्ययन डेटा सीमित समय के लिए रखा जाता है।",
+    termsOfUseLabel: "उपयोग की शर्तें",
+    privacyPolicyLabel: "गोपनीयता नीति",
+    resExternalNote: "संसाधन में दिए गए लिंक स्वतंत्र बाहरी वेबसाइटों और आधिकारिक चैनलों पर ले जाते हैं। GAKU का उनसे कोई संबंध नहीं है और वह उनकी सामग्री को होस्ट या कॉपी नहीं करता।",
+    paywallRenewNote: "प्लान रद्द किए जाने तक दिखाई गई कीमत पर अपने-आप नवीनीकृत होते हैं। वेब पर भुगतान Stripe द्वारा सुरक्षित रूप से प्रोसेस किए जाते हैं। बाहरी वेबसाइटों के लिंक नए टैब में खुलते हैं; वे साइटें स्वतंत्र हैं और GAKU से संबद्ध नहीं हैं।",
     pronSlowTip: "समझ नहीं आया? वीडियो को धीमा करें (जैसे YouTube में 0.5× या 0.75× गति) और फिर से सुनें। शिक्षक वीडियो है — GAKU सिर्फ़ उसे लिख देता है।",
     pronSlowNo: "कोई बात नहीं। वीडियो को धीमा करके उस हिस्से को फिर से सुनें — GAKU उसे दोबारा लिख देगा।",
     pronBestScore: "सर्वश्रेष्ठ स्कोर",
@@ -8181,6 +8363,19 @@ const UI_TRANSLATIONS = {
     convAltResponses: "他の言い方",
     pronTitle: "発音練習",
     pronListenDesc: "マイクの近くでYouTubeなどの動画を音声ありで再生してください。GAKUが聞き取って1行ずつ文字に起こし、ふりがな・ローマ字・翻訳で理解をサポートします。",
+    storeSuspendedTitle: "GAKU Masterは一時停止中です",
+    storeInviteHint: "招待コードをお持ちの方は、下に入力して続けてください。",
+    storeRequestCode: "招待コードをリクエストする",
+    storeReplyTo: "{email} に返信します。",
+    storeMessagePh: "メッセージ(任意)",
+    storeSendFailed: "送信できませんでした。もう一度お試しください。",
+    storeThanks: "ありがとうございます。メールでご返信します。",
+    storeSendRequest: "リクエストを送信",
+    storeDataKept: "保存された学習データは、一定期間のみ保管されます。",
+    termsOfUseLabel: "利用規約",
+    privacyPolicyLabel: "プライバシーポリシー",
+    resExternalNote: "Resourcesのリンクは、独立した外部サイトや公式チャンネルへつながります。GAKUはそれらと提携しておらず、その内容をホスティングまたは複製していません。",
+    paywallRenewNote: "プランは、解約するまで表示された価格で自動更新されます。Web上での支払いはStripeが安全に処理します。外部サイトへのリンクは新しいタブで開きます。それらのサイトは独立しており、GAKUとは提携していません。",
     pronSlowTip: "聞き取れない場合は、動画をスロー再生(YouTubeなら再生速度0.5倍や0.75倍)して、もう一度聞き取ってください。先生は動画です。GAKUは文字起こしでサポートします。",
     pronSlowNo: "大丈夫です。動画をスロー再生して、その部分をもう一度聞き取ってください。GAKUがもう一度文字に起こします。",
     pronBestScore: "ベストスコア",
@@ -8671,6 +8866,19 @@ const UI_TRANSLATIONS = {
     convAltResponses: "Söylemenin diğer yolları",
     pronTitle: "Telaffuz Alıştırması",
     pronListenDesc: "YouTube veya herhangi bir videoyu sesi mikrofonunuza yakın olacak şekilde oynatın. GAKU dinler, duyduklarını satır satır yazar ve furigana, romaji ve çeviriyle anlamanıza yardım eder.",
+    storeSuspendedTitle: "GAKU Master geçici olarak askıya alındı",
+    storeInviteHint: "Davet kodunuz varsa devam etmek için aşağıya girin.",
+    storeRequestCode: "Davet kodu iste",
+    storeReplyTo: "{email} adresine yanıt vereceğiz.",
+    storeMessagePh: "Mesaj (isteğe bağlı)",
+    storeSendFailed: "Gönderilemedi. Lütfen tekrar deneyin.",
+    storeThanks: "Teşekkürler. E-posta ile yanıt vereceğiz.",
+    storeSendRequest: "Talebi gönder",
+    storeDataKept: "Kayıtlı çalışma verileriniz sınırlı bir süre saklanır.",
+    termsOfUseLabel: "Kullanım Koşulları",
+    privacyPolicyLabel: "Gizlilik Politikası",
+    resExternalNote: "Kaynaklar bölümündeki bağlantılar bağımsız dış web sitelerine ve resmî kanallara yönlendirir. GAKU bunlarla bağlantılı değildir ve içeriklerini barındırmaz veya kopyalamaz.",
+    paywallRenewNote: "Planlar, iptal edilene kadar gösterilen fiyattan otomatik olarak yenilenir. Web'deki ödemeler Stripe tarafından güvenli şekilde işlenir. Dış sitelere giden bağlantılar yeni sekmede açılır; bu siteler bağımsızdır ve GAKU ile bağlantılı değildir.",
     pronSlowTip: "Anlayamadınız mı? Videoyu yavaşlatın (örneğin YouTube'da 0,5× veya 0,75× hız) ve tekrar dinleyin. Öğretmeniniz video — GAKU yalnızca yazıya döker.",
     pronSlowNo: "Sorun değil. Videoyu yavaşlatıp o bölümü tekrar dinleyin — GAKU onu yeniden yazacak.",
     pronBestScore: "En iyi puan",
@@ -9161,6 +9369,19 @@ const UI_TRANSLATIONS = {
     convAltResponses: "भन्ने अन्य तरिकाहरू",
     pronTitle: "उच्चारण अभ्यास",
     pronListenDesc: "माइक नजिकै YouTube वा कुनै पनि भिडियो आवाजसहित चलाउनुहोस्। GAKUले सुन्छ, सुनिएको कुरा लाइन-लाइनमा लेख्छ र फुरिगाना, रोमाजी र अनुवादमार्फत बुझ्न मद्दत गर्छ।",
+    storeSuspendedTitle: "GAKU Master अस्थायी रूपमा निलम्बित छ",
+    storeInviteHint: "तपाईंसँग निमन्त्रणा कोड छ भने, जारी राख्न तल प्रविष्ट गर्नुहोस्।",
+    storeRequestCode: "निमन्त्रणा कोड अनुरोध गर्नुहोस्",
+    storeReplyTo: "हामी {email} मा जवाफ दिनेछौं।",
+    storeMessagePh: "सन्देश (ऐच्छिक)",
+    storeSendFailed: "पठाउन सकिएन। कृपया फेरि प्रयास गर्नुहोस्।",
+    storeThanks: "धन्यवाद। हामी इमेलमार्फत जवाफ दिनेछौं।",
+    storeSendRequest: "अनुरोध पठाउनुहोस्",
+    storeDataKept: "तपाईंको सुरक्षित गरिएको अध्ययन डेटा सीमित समयका लागि राखिन्छ।",
+    termsOfUseLabel: "प्रयोगका सर्तहरू",
+    privacyPolicyLabel: "गोपनीयता नीति",
+    resExternalNote: "स्रोतहरूमा रहेका लिङ्कहरूले स्वतन्त्र बाहिरी वेबसाइट र आधिकारिक च्यानलहरूमा पुर्‍याउँछन्। GAKU को तिनीहरूसँग कुनै सम्बन्ध छैन र यसले तिनको सामग्री होस्ट वा कपी गर्दैन।",
+    paywallRenewNote: "प्लानहरू रद्द नगरेसम्म देखाइएको मूल्यमा स्वतः नवीकरण हुन्छन्। वेबमा भुक्तानी Stripe द्वारा सुरक्षित रूपमा प्रशोधन गरिन्छ। बाहिरी वेबसाइटका लिङ्कहरू नयाँ ट्याबमा खुल्छन्; ती साइटहरू स्वतन्त्र छन् र GAKU सँग सम्बन्धित छैनन्।",
     pronSlowTip: "बुझ्न गाह्रो भयो? भिडियो ढिलो गर्नुहोस् (जस्तै YouTube मा 0.5× वा 0.75× गति) र फेरि सुन्नुहोस्। शिक्षक भिडियो नै हो — GAKUले मात्र लेखिदिन्छ।",
     pronSlowNo: "ठीक छ। भिडियो ढिलो गरेर त्यो भाग फेरि सुन्नुहोस् — GAKUले फेरि लेखिदिनेछ।",
     pronBestScore: "उत्कृष्ट स्कोर",
@@ -9651,6 +9872,19 @@ const UI_TRANSLATIONS = {
     convAltResponses: "Ibang paraan ng pagsasabi",
     pronTitle: "Pagsasanay sa Pagbigkas",
     pronListenDesc: "I-play ang YouTube o anumang video nang may tunog malapit sa mikropono mo. Nakikinig ang GAKU, isinusulat ang naririnig nito linya por linya, at tinutulungan kang umintindi gamit ang furigana, romaji, at salin.",
+    storeSuspendedTitle: "Pansamantalang nakahinto ang GAKU Master",
+    storeInviteHint: "Kung may invitation code ka, ilagay ito sa ibaba para magpatuloy.",
+    storeRequestCode: "Humiling ng invitation code",
+    storeReplyTo: "Sasagot kami sa {email}.",
+    storeMessagePh: "Mensahe (opsyonal)",
+    storeSendFailed: "Hindi naipadala. Pakisubukan ulit.",
+    storeThanks: "Salamat. Sasagot kami sa pamamagitan ng email.",
+    storeSendRequest: "Ipadala ang kahilingan",
+    storeDataKept: "Ang mga na-save mong data sa pag-aaral ay iniingatan sa limitadong panahon.",
+    termsOfUseLabel: "Mga Tuntunin ng Paggamit",
+    privacyPolicyLabel: "Patakaran sa Privacy",
+    resExternalNote: "Ang mga link sa Resources ay patungo sa mga independiyenteng panlabas na website at opisyal na channel. Hindi kaakibat ng GAKU ang mga ito at hindi nito iniho-host o kinokopya ang nilalaman nila.",
+    paywallRenewNote: "Awtomatikong nagre-renew ang mga plano sa presyong ipinapakita hanggang kanselahin. Ligtas na pinoproseso ng Stripe ang mga bayad sa web. Ang mga link sa panlabas na website ay bubukas sa bagong tab; ang mga site na iyon ay independiyente at hindi kaakibat ng GAKU.",
     pronSlowTip: "Hindi maintindihan? Pabagalin ang video (halimbawa, 0.5× o 0.75× na bilis sa YouTube) at pakinggan muli. Ang video ang guro mo — isinusulat lang ito ng GAKU.",
     pronSlowNo: "Okay lang. Pabagalin ang video at pakinggan muli ang bahaging iyon — isusulat ito muli ng GAKU.",
     pronBestScore: "Pinakamataas na score",
@@ -15879,7 +16113,7 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
 
         {tab==="resources" && (
           <div>
-            <p style={{ color:"#64748b", fontSize:10.5, lineHeight:1.6, margin:"0 0 10px" }}>Links in Resources lead to independent outside websites and official channels. GAKU is not affiliated with them and does not host or copy their content.</p>
+            <p style={{ color:"#64748b", fontSize:10.5, lineHeight:1.6, margin:"0 0 10px" }}>{T?.resExternalNote || "Links in Resources lead to independent outside websites and official channels. GAKU is not affiliated with them and does not host or copy their content."}</p>
             <div style={{ display:"flex", gap:6, marginBottom:16, overflowX:"auto", paddingBottom:4 }}>
               {RESOURCE_SUBTABS.filter(st => featureShown(st.id)).map(st => {
                 const tutorialTarget = (tutorialActive && tutorialStep>=1 && tutorialStep<=TUTORIAL_STEPS.length) ? TUTORIAL_STEPS[tutorialStep-1] : null;
@@ -16952,7 +17186,7 @@ Respond ONLY with a valid JSON array, no markdown, no backticks:
       });
       if (!res.ok) throw new Error("failed");
       setReqDone(true);
-    } catch { setReqErr("Could not send. Please try again."); }
+    } catch { setReqErr(T?.storeSendFailed || "Could not send. Please try again."); }
     setReqBusy(false);
   };
 
@@ -17127,29 +17361,29 @@ Respond ONLY with a valid JSON array, no markdown, no backticks:
     return (
       <div style={{ minHeight:"100vh", background:"linear-gradient(160deg,#0a0f1e 0%,#0f172a 60%,#0a0f1e 100%)", display:"flex", alignItems:"flex-start", justifyContent:"center", padding:24, boxSizing:"border-box" }}>
         <div style={{ background:"linear-gradient(135deg,#1e1b4b,#0f172a)", border:"1.5px solid rgba(139,92,246,0.4)", borderRadius:20, padding:"32px 26px", maxWidth:420, width:"92%", margin:"auto", textAlign:"center" }}>
-          <h2 style={{ color:"#f1f5f9", fontSize:20, fontWeight:900, margin:"0 0 10px" }}>{absenceSuspended ? "GAKU Master is temporarily suspended" : (T?.trialEndedTitle || "Your free trial has ended")}</h2>
-          <p style={{ color:"#94a3b8", fontSize:13, margin:"0 0 16px", lineHeight:1.6 }}>If you have an invitation code, enter it below to continue.</p>
+          <h2 style={{ color:"#f1f5f9", fontSize:20, fontWeight:900, margin:"0 0 10px" }}>{absenceSuspended ? (T?.storeSuspendedTitle || "GAKU Master is temporarily suspended") : (T?.trialEndedTitle || "Your free trial has ended")}</h2>
+          <p style={{ color:"#94a3b8", fontSize:13, margin:"0 0 16px", lineHeight:1.6 }}>{T?.storeInviteHint || "If you have an invitation code, enter it below to continue."}</p>
           <div style={{ display:"flex", gap:6, marginBottom:8 }}>
             <input value={lockedInviteCode} onChange={e=>setLockedInviteCode(e.target.value)} placeholder={T?.inviteCodePlaceholder || "Enter invite code..."} style={{ flex:1, padding:"9px 10px", borderRadius:8, border:"1px solid rgba(148,163,184,0.3)", background:"rgba(2,6,23,0.5)", color:"#f1f5f9", fontSize:13 }} />
             <button onClick={handleLockedInviteRedeem} disabled={lockedInviteBusy || !lockedInviteCode.trim()} style={{ padding:"9px 14px", borderRadius:8, border:"none", background:"linear-gradient(135deg,#7c3aed,#a855f7)", color:"#fff", fontWeight:800, fontSize:12.5, cursor:"pointer" }}>{lockedInviteBusy ? "\u2026" : (T?.unlockBtn || "Unlock")}</button>
           </div>
           {lockedInviteErr && <p style={{ color:"#f87171", fontSize:11, margin:"0 0 8px" }}>{lockedInviteErr}</p>}
           {!reqOpen && !reqDone && (
-            <button onClick={()=>setReqOpen(true)} style={{ background:"none", border:"none", color:"#a78bfa", fontSize:12.5, textDecoration:"underline", cursor:"pointer", margin:"6px 0 12px" }}>Request an invitation code</button>
+            <button onClick={()=>setReqOpen(true)} style={{ background:"none", border:"none", color:"#a78bfa", fontSize:12.5, textDecoration:"underline", cursor:"pointer", margin:"6px 0 12px" }}>{T?.storeRequestCode || "Request an invitation code"}</button>
           )}
           {reqOpen && !reqDone && (
             <div style={{ textAlign:"left", margin:"8px 0 12px" }}>
-              <p style={{ color:"#94a3b8", fontSize:12, margin:"0 0 6px" }}>We will reply to {authUser.email}.</p>
-              <textarea value={reqMsg} onChange={e=>setReqMsg(e.target.value.slice(0,1000))} placeholder="Message (optional)" rows={3} style={{ width:"100%", boxSizing:"border-box", padding:"8px 10px", borderRadius:8, border:"1px solid rgba(148,163,184,0.3)", background:"rgba(2,6,23,0.5)", color:"#f1f5f9", fontSize:13 }} />
+              <p style={{ color:"#94a3b8", fontSize:12, margin:"0 0 6px" }}>{(T?.storeReplyTo || "We will reply to {email}.").replace("{email}", authUser.email)}</p>
+              <textarea value={reqMsg} onChange={e=>setReqMsg(e.target.value.slice(0,1000))} placeholder={T?.storeMessagePh || "Message (optional)"} rows={3} style={{ width:"100%", boxSizing:"border-box", padding:"8px 10px", borderRadius:8, border:"1px solid rgba(148,163,184,0.3)", background:"rgba(2,6,23,0.5)", color:"#f1f5f9", fontSize:13 }} />
               {reqErr && <p style={{ color:"#f87171", fontSize:11, margin:"6px 0 0" }}>{reqErr}</p>}
-              <button onClick={submitInviteRequest} disabled={reqBusy} style={{ marginTop:8, width:"100%", padding:"10px", borderRadius:8, border:"none", background:"linear-gradient(135deg,#7c3aed,#a855f7)", color:"#fff", fontWeight:800, fontSize:13, cursor:"pointer" }}>{reqBusy ? "\u2026" : "Send request"}</button>
+              <button onClick={submitInviteRequest} disabled={reqBusy} style={{ marginTop:8, width:"100%", padding:"10px", borderRadius:8, border:"none", background:"linear-gradient(135deg,#7c3aed,#a855f7)", color:"#fff", fontWeight:800, fontSize:13, cursor:"pointer" }}>{reqBusy ? "\u2026" : (T?.storeSendRequest || "Send request")}</button>
             </div>
           )}
-          {reqDone && <p style={{ color:"#86efac", fontSize:12.5, margin:"8px 0 12px" }}>Thank you. We will reply by email.</p>}
-          <p style={{ color:"#64748b", fontSize:11, margin:"4px 0 12px", lineHeight:1.6 }}>Your saved study data is kept for a limited time.</p>
+          {reqDone && <p style={{ color:"#86efac", fontSize:12.5, margin:"8px 0 12px" }}>{T?.storeThanks || "Thank you. We will reply by email."}</p>}
+          <p style={{ color:"#64748b", fontSize:11, margin:"4px 0 12px", lineHeight:1.6 }}>{T?.storeDataKept || "Your saved study data is kept for a limited time."}</p>
           <button onClick={authUser ? handleDeleteAccount : undefined} disabled={deleteAccountBusy} style={{ background:"none", border:"none", color:"#64748b", fontSize:11, textDecoration:"underline", cursor:"pointer" }}>{T?.deleteAccountLink || "Delete my account instead"}</button>
           <p style={{ color:"#64748b", fontSize:11, margin:"12px 0 0" }}>
-            <a href="/terms.html" target="_blank" rel="noopener noreferrer" style={{ color:"#a78bfa" }}>Terms of Use</a>{" \u00b7 "}<a href="/privacy.html" target="_blank" rel="noopener noreferrer" style={{ color:"#a78bfa" }}>Privacy Policy</a>
+            <a href="/terms.html" target="_blank" rel="noopener noreferrer" style={{ color:"#a78bfa" }}>{T?.termsOfUseLabel || "Terms of Use"}</a>{" \u00b7 "}<a href="/privacy.html" target="_blank" rel="noopener noreferrer" style={{ color:"#a78bfa" }}>{T?.privacyPolicyLabel || "Privacy Policy"}</a>
           </p>
         </div>
       </div>
@@ -17253,12 +17487,12 @@ Respond ONLY with a valid JSON array, no markdown, no backticks:
 
           <div style={{ marginTop:18, paddingTop:14, borderTop:"1px solid rgba(148,163,184,0.15)", textAlign:"center" }}>
             <p style={{ color:"#94a3b8", fontSize:10.5, lineHeight:1.7, margin:"0 0 8px" }}>
-              Plans renew automatically at the price shown until cancelled. Payments on the web are processed securely by Stripe. Links to outside websites open in a new tab; those sites are independent and not affiliated with GAKU.
+              {T?.paywallRenewNote || "Plans renew automatically at the price shown until cancelled. Payments on the web are processed securely by Stripe. Links to outside websites open in a new tab; those sites are independent and not affiliated with GAKU."}
             </p>
             <p style={{ color:"#94a3b8", fontSize:11, margin:0 }}>
-              <a href="/terms.html" target="_blank" rel="noopener noreferrer" style={{ color:"#a78bfa" }}>Terms of Use</a>
+              <a href="/terms.html" target="_blank" rel="noopener noreferrer" style={{ color:"#a78bfa" }}>{T?.termsOfUseLabel || "Terms of Use"}</a>
               {" \u00b7 "}
-              <a href="/privacy.html" target="_blank" rel="noopener noreferrer" style={{ color:"#a78bfa" }}>Privacy Policy</a>
+              <a href="/privacy.html" target="_blank" rel="noopener noreferrer" style={{ color:"#a78bfa" }}>{T?.privacyPolicyLabel || "Privacy Policy"}</a>
             </p>
           </div>
         </div>
