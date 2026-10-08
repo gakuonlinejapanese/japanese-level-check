@@ -9,6 +9,7 @@
     "@capacitor/core": "^8.5.3",
     "@capacitor/splash-screen": "^8.0.2",
     "@capacitor/status-bar": "^8.0.4",
+    "@revenuecat/purchases-capacitor": "^13.7.1",
     "@supabase/supabase-js": "^2.109.0",
     "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "^6.9.1",

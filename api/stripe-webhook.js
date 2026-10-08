@@ -28,8 +28,49 @@ async function readRawBody(req) {
   return Buffer.concat(chunks);
 }
 
+// App Store / Google Play subscriptions arrive through RevenueCat's webhook (same URL as Stripe's,
+// kept in this file because the Vercel function limit is reached). RevenueCat sends the shared secret
+// we configure as the Authorization header; Stripe always sends a stripe-signature header instead.
+const RC_GRANT_EVENTS = new Set(["INITIAL_PURCHASE", "RENEWAL", "PRODUCT_CHANGE", "UNCANCELLATION", "NON_RENEWING_PURCHASE"]);
+async function handleRevenueCat(req, res) {
+  const expected = process.env.REVENUECAT_WEBHOOK_AUTH;
+  const got = String(req.headers.authorization || "");
+  if (!expected || (got !== expected && got !== `Bearer ${expected}`)) {
+    return res.status(401).json({ error: "Unauthorized" });
+  }
+  try {
+    const body = JSON.parse((await readRawBody(req)).toString("utf8") || "{}");
+    const ev = body.event || {};
+    const userId = String(ev.app_user_id || "");
+    // Anonymous RevenueCat ids ("$RCAnonymousID:...") cannot be linked to an account.
+    if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(userId)) {
+      return res.status(200).json({ ignored: "anonymous user" });
+    }
+    const supabase = getAdminClient();
+    if (RC_GRANT_EVENTS.has(ev.type)) {
+      const { error } = await supabase
+        .from("profiles")
+        .update({ is_paid: true, paid_plan: `store:${ev.product_id || "subscription"}`, paid_at: new Date().toISOString() })
+        .eq("id", userId);
+      if (error) console.error("[revenuecat] failed to mark paid:", error.message);
+    } else if (ev.type === "EXPIRATION") {
+      // Only revoke access that came from a store subscription (never a Stripe payment).
+      const { data: prof } = await supabase.from("profiles").select("paid_plan").eq("id", userId).maybeSingle();
+      if (prof && typeof prof.paid_plan === "string" && prof.paid_plan.startsWith("store:")) {
+        const { error } = await supabase.from("profiles").update({ is_paid: false }).eq("id", userId);
+        if (error) console.error("[revenuecat] failed to revoke:", error.message);
+      }
+    }
+    return res.status(200).json({ received: true });
+  } catch (e) {
+    console.error("[revenuecat] webhook error:", e.message);
+    return res.status(500).json({ error: "webhook error" });
+  }
+}
+
 export default async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed" });
+  if (!req.headers["stripe-signature"] && req.headers.authorization) return handleRevenueCat(req, res);
 
   const stripeSecret = process.env.STRIPE_SECRET_KEY;
   const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
