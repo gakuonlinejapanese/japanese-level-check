@@ -1,0 +1,32 @@
+name: Android build
+
+# 手動で実行(GitHub の Actions タブ → Android build → Run workflow)
+on:
+  workflow_dispatch:
+
+jobs:
+  debug-apk:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+      - name: Build web app
+        run: CI=false DISABLE_ESLINT_PLUGIN=true npm run build
+      - name: Sync Capacitor
+        run: npx cap sync android
+      - name: Build debug APK
+        working-directory: android
+        run: ./gradlew assembleDebug
+      - uses: actions/upload-artifact@v4
+        with:
+          name: gaku-master-debug-apk
+          path: android/app/build/outputs/apk/debug/*.apk
