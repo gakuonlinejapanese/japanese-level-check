@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Free Trial Lesson — GAKU Online Japanese</title>
+<style>
+  :root { --blue:#2f5da8; --green:#22c55e; --red:#ef4444; --ink:#1e293b; }
+  * { box-sizing: border-box; }
+  body { margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif; background:var(--blue); color:#fff; }
+  .wrap { max-width:640px; margin:0 auto; padding:40px 24px 80px; }
+  h1 { font-size:24px; line-height:1.3; margin:0 0 6px; }
+  .sub { font-size:13px; opacity:.85; margin:0 0 26px; line-height:1.6; }
+  label { display:block; font-size:14px; margin:20px 0 6px; opacity:.95; }
+  input[type=text], input[type=email] {
+    width:100%; padding:10px 4px; background:transparent; border:none; border-bottom:1px solid rgba(255,255,255,.6);
+    color:#fff; font-size:15px; outline:none;
+  }
+  input.invalid { border-bottom:2px solid #ff3b3b; }
+  input::placeholder { color:rgba(255,255,255,.6); }
+  .hint { font-size:12px; opacity:.75; margin-top:4px; }
+  .radio-group, .check-group { margin-top:8px; display:flex; flex-direction:column; gap:10px; padding:8px; border-radius:8px; border:2px solid transparent; }
+  .radio-group.invalid, .check-group.invalid { border-color:#ff3b3b; }
+  .radio-row, .check-row { display:flex; align-items:center; gap:10px; font-size:14.5px; cursor:pointer; }
+  .radio-row input, .check-row input { width:18px; height:18px; flex-shrink:0; }
+  .card { background:rgba(255,255,255,.08); border-radius:12px; padding:16px; margin-top:14px; }
+  .btn { display:block; width:100%; margin-top:26px; padding:14px; border:none; border-radius:10px; background:#fff; color:var(--blue); font-weight:800; font-size:15px; cursor:pointer; }
+  .btn:disabled { opacity:.5; cursor:not-allowed; }
+  .btn.secondary { background:transparent; border:1.5px solid #fff; color:#fff; margin-top:12px; }
+  .step { display:none; }
+  .step.active { display:block; }
+  .msgbox { background:rgba(255,255,255,.1); border-radius:12px; padding:20px; font-size:14px; line-height:1.6; }
+  .center { text-align:center; }
+  .agree-row { display:flex; align-items:flex-start; gap:10px; margin-top:16px; }
+  .error-msg { background:#ff3b3b; color:#fff; font-weight:700; font-size:13px; padding:10px 14px; border-radius:8px; margin-top:14px; text-align:center; display:none; }
+  .error-msg.show { display:block; }
+  /* Policy — single continuous scroll box */
+  .policy-scrollbox { background:rgba(0,0,0,.18); border-radius:10px; padding:18px; font-size:13.5px; line-height:1.8; max-height:52vh; overflow-y:auto; margin-top:10px; }
+  .policy-scrollbox h2 { font-size:16px; margin:22px 0 10px; }
+  .policy-scrollbox h2:first-child { margin-top:0; }
+  .policy-scrollbox p { margin:0 0 12px; }
+  .policy-scrollbox p:last-child { margin-bottom:0; }
+  .scroll-hint { font-size:12px; opacity:.85; margin-top:8px; display:flex; align-items:center; gap:6px; }
+  .scroll-hint .arrow { animation: bounce 1.2s infinite; }
+  @keyframes bounce { 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(4px); } }
+  .cal-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(92px,1fr)); gap:6px; margin-top:10px; max-height:280px; overflow-y:auto; }
+  .slot { padding:8px 4px; border-radius:8px; font-size:12px; text-align:center; cursor:pointer; user-select:none; }
+  .slot.green { background:var(--green); color:#04331a; font-weight:700; }
+  .slot.red { background:var(--red); color:#3a0a0a; opacity:.55; cursor:not-allowed; }
+  input[type=date], select { color-scheme: dark; }
+  .brand-bar { display:flex; align-items:center; justify-content:center; gap:10px; text-decoration:none; color:#fff; opacity:.9; padding:0 0 22px; }
+  .brand-bar.bottom { padding:30px 0 0; }
+  .brand-bar img { width:34px; height:34px; border-radius:50%; flex-shrink:0; }
+  .brand-bar span { font-size:11px; line-height:1.4; text-align:left; max-width:420px; }
+  .brand-bar:hover { opacity:1; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="brand-bar" href="https://www.seitojapanese.online/" target="_blank" rel="noopener noreferrer">
+    <img src="/logo192.png" alt="GAKU logo" />
+    <span>By Seito Sakamoto, Online Japanese Tutor GAKU, Master degree of teaching international languages</span>
+  </a>
+
+  <!-- STEP 1: 申し込みフォーム（既存サイトのBook a Lessonフォームと同じ質問構成） -->
+  <div class="step active" id="step-form">
+    <h1>🌸 Free Trial Lesson</h1>
+    <p class="sub">Tell us a bit about you — we'll check the teacher's schedule and confirm your exact lesson time by email.</p>
+
+    <label>Your Name *</label>
+    <input type="text" id="f-name" placeholder="" />
+
+    <label>Email *</label>
+    <input type="email" id="f-email" placeholder="" />
+
+    <label>Where do you live now? *</label>
+    <input type="text" id="f-location" placeholder="e.g. Los Angeles, United States" />
+    <div class="hint">Please include both your town/city and your country. Free trial lessons are currently only available to residents of a specific list of countries.</div>
+
+    <label>Your Origin Country *</label>
+    <input type="text" id="f-origin" placeholder="e.g. Japan" />
+    <div class="hint">The country you're originally from (if different from where you live now, that's okay).</div>
+
+    <label>Preferred Lesson Date/Time (your local time) *</label>
+    <input type="text" id="f-datetime" placeholder="e.g. April 6, 11AM" />
+    <div class="error-msg" id="datetime-error"></div>
+
+    <label>Exact Date &amp; Time (your local time) *</label>
+    <div style="display:flex;gap:10px;">
+      <input type="date" id="f-exact-date" style="flex:1;" />
+      <select id="f-exact-time" style="flex:1;padding:10px 4px;background:transparent;border:none;border-bottom:1px solid rgba(255,255,255,.6);color:#fff;font-size:15px;" disabled><option value="" style="color:#000;">Select a date first</option></select>
+    </div>
+    <div class="hint">We'll check the teacher's real schedule using this exact time and let you know right away if it's available.</div>
+    <div class="error-msg" id="exact-time-error"></div>
+    <div id="exact-slot-fallback" style="display:none;margin-top:14px;">
+      <div class="hint" style="margin-bottom:6px;">Please pick an open time below (shown in your local time):</div>
+      <div class="cal-grid" id="fallback-cal-grid"></div>
+    </div>
+
+    <label>Which course do you want to select? *</label>
+    <div class="radio-group" id="course-group">
+      <label class="radio-row"><input type="radio" name="course" value="Customized Course" />Customized Course</label>
+      <label class="radio-row"><input type="radio" name="course" value="Travel Preparation Course" />Travel Preparation Course</label>
+      <label class="radio-row"><input type="radio" name="course" value="JLPT Course" />JLPT Course</label>
+      <label class="radio-row"><input type="radio" name="course" value="Specialized Knowledge Course" />Specialized Knowledge Course</label>
+      <label class="radio-row"><input type="radio" name="course" value="Music Lyrics Understanding Course" />Music Lyrics Understanding Course</label>
+      <label class="radio-row"><input type="radio" name="course" value="Basic Academic Skills Course" />Basic Academic Skills Course</label>
+      <label class="radio-row"><input type="radio" name="course" value="Media Learning Course" />Media Learning Course</label>
+    </div>
+
+    <label>Your current Japanese level</label>
+    <div class="check-group" id="level-group">
+      <label class="check-row"><input type="checkbox" name="level" value="Beginner" />Beginner</label>
+      <label class="check-row"><input type="checkbox" name="level" value="Intermediate" />Intermediate</label>
+      <label class="check-row"><input type="checkbox" name="level" value="Advance" />Advance</label>
+    </div>
+
+    <label>Do you want a 30-minute or 1-hour lesson? *</label>
+    <div class="radio-group" id="duration-group">
+      <label class="radio-row"><input type="radio" name="duration" value="1 hour" />1 hour</label>
+      <label class="radio-row"><input type="radio" name="duration" value="30 minute" />30 minute</label>
+    </div>
+
+    <label>Have you done a weekly trial for GAKU Master? *</label>
+    <div class="radio-group" id="weeklytrial-group">
+      <label class="radio-row"><input type="radio" name="weeklytrial" value="Yes" />Yes</label>
+      <label class="radio-row"><input type="radio" name="weeklytrial" value="No" />No</label>
+    </div>
+
+    <button class="btn" id="btn-step1-next" disabled>Next</button>
+    <div class="error-msg" id="form-error"></div>
+  </div>
+
+  <!-- STEP 1b: 対象国外 -->
+  <div class="step" id="step-rejected">
+    <div class="msgbox center">
+      <h2 style="margin-top:0;">We're sorry</h2>
+      <p>Unfortunately, free trial lessons are currently only available to residents of a specific list of countries, and we're not able to offer one to you at this time.</p>
+      <p class="hint" style="color:#fff;opacity:.85;">Thank you for your interest in GAKU Online Japanese — you're still very welcome to explore GAKU Master or reach out about paid lessons.</p>
+    </div>
+    <div class="msgbox center" id="rejected-cheaper-offer" style="margin-top:14px;">
+      <p style="font-size:16.5px; font-weight:700; margin:0 0 16px; line-height:1.5;">Would like to chose the cheaper plan for GAKU？</p>
+      <div style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap;">
+        <button class="btn" id="btn-cheaper-yes" style="margin-top:0; width:auto; padding:12px 30px;">Yes</button>
+      </div>
+      <div class="error-msg" id="cheaper-error"></div>
+    </div>
+    <div class="msgbox center" id="rejected-guide-offer" style="margin-top:14px;">
+      <p style="font-size:16.5px; font-weight:700; margin:0 0 16px; line-height:1.5;">To show my apology, I would like to give you a chance to make a Japanese study guide for you for free. Would you like to take one?</p>
+      <div style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap;">
+        <button class="btn" id="btn-guide-yes" style="margin-top:0; width:auto; padding:12px 30px;">Yes</button>
+        <button class="btn secondary" id="btn-guide-no" style="margin-top:0; width:auto; padding:12px 30px;">No, thank you</button>
+      </div>
+    </div>
+    <div class="msgbox center" id="rejected-guide-thanks" style="display:none; margin-top:14px;">
+      <p style="margin:0;">No problem at all — thank you again for your interest in GAKU Online Japanese!</p>
+    </div>
+  </div>
+
+  <!-- STEP 1c: 対象国外で過去に一度お断り済み → メール一致で即ブロック -->
+  <div class="step" id="step-blocked">
+    <div class="msgbox center">
+      <p style="margin:0 0 16px;">Unfortunately your application was rejected once time. So your application was blocked in this moment. First, please download GAKU Master and generate your Japanese study guide.</p>
+      <button class="btn" id="btn-blocked-gaku-master" style="margin-top:0; width:auto; padding:12px 30px;">Go to GAKU Master</button>
+    </div>
+    <div class="msgbox center" style="margin-top:14px;">
+      <p style="font-size:16.5px; font-weight:700; margin:0 0 16px; line-height:1.5;">Would like to chose the cheaper plan for GAKU？</p>
+      <button class="btn" id="btn-cheaper-yes-blocked" style="margin-top:0; width:auto; padding:12px 30px;">Yes</button>
+      <div class="error-msg" id="cheaper-error-blocked"></div>
+    </div>
+  </div>
+
+  <!-- STEP 1d: 対象国外の応募者向けスクリーニング質問（3問） -->
+  <div class="step" id="step-screening">
+    <h1 style="font-size:19px;">A few quick questions</h1>
+    <p class="sub">Free trial lessons are normally limited to a specific list of countries. Since you're outside that list, please answer these questions before we can continue.</p>
+
+    <label style="margin-top:0;">1. This free trial lesson is not for regular free lessons. *</label>
+    <div class="radio-group" id="screen-q1-group">
+      <label class="radio-row"><input type="radio" name="screen-q1" value="agree" />I agree</label>
+      <label class="radio-row"><input type="radio" name="screen-q1" value="disagree" />I disagree</label>
+    </div>
+
+    <label>2. Are you affordable for $35 USD for an hour? *</label>
+    <div class="radio-group" id="screen-q2-group">
+      <label class="radio-row"><input type="radio" name="screen-q2" value="yes" />Yes</label>
+      <label class="radio-row"><input type="radio" name="screen-q2" value="no" />No</label>
+    </div>
+
+    <label>3. Are you affordable to pay $17.5 USD for 30 minutes? *</label>
+    <div class="radio-group" id="screen-q3-group">
+      <label class="radio-row"><input type="radio" name="screen-q3" value="yes" />Yes</label>
+      <label class="radio-row"><input type="radio" name="screen-q3" value="no" />No</label>
+    </div>
+
+    <button class="btn" id="btn-screening-next" disabled>Next</button>
+    <div class="error-msg" id="screening-error"></div>
+  </div>
+
+  <!-- STEP 2: ポリシー（一つのスクロールボックス。最後まで読まないと同意できない） -->
+  <div class="step" id="step-policy">
+    <h1 style="font-size:19px;">Please review our trial lesson policy</h1>
+
+    <label style="margin-top:0;">Full Name *</label>
+    <input type="text" id="p-name" placeholder="" />
+    <label>Email *</label>
+    <input type="email" id="p-email" placeholder="" />
+
+    <div class="policy-scrollbox" id="policy-scrollbox"></div>
+    <div class="scroll-hint" id="scroll-hint"><span class="arrow">↓</span> Please scroll down to read the entire policy before you can agree.</div>
+
+    <div id="policy-agree-area" style="display:none;">
+      <div class="agree-row">
+        <input type="checkbox" id="f-agree" />
+        <label style="margin:0;" for="f-agree">I hereby agree to follow all of the policies stated here.</label>
+      </div>
+    </div>
+
+    <button class="btn" id="btn-final-submit" disabled>Submit</button>
+    <div class="error-msg" id="policy-error"></div>
+  </div>
+
+  <!-- STEP 3: 完了 -->
+  <div class="step" id="step-done">
+    <div class="msgbox center">
+      <h2 style="margin-top:0;">🎉 Request received!</h2>
+      <p>Thank you — your free trial lesson request has been sent.</p>
+      <p class="hint" style="color:#fff;opacity:.85;">We'll check the teacher's schedule against your preferred date/time and email you at the address you provided once your exact lesson time is confirmed.</p>
+    </div>
+  </div>
+
+  <a class="brand-bar bottom" href="https://www.seitojapanese.online/" target="_blank" rel="noopener noreferrer">
+    <img src="/logo192.png" alt="GAKU logo" />
+    <span>By Seito Sakamoto, Online Japanese Tutor GAKU, Master degree of teaching international languages</span>
+  </a>
+</div>
+
+<script>
+// ---- Country/city validation on the free-text "Where do you live now?" answer.
+// Server re-checks this too — never rely on the client alone. ----
+const WORLD_COUNTRIES = [
+  "afghanistan", "albania", "algeria", "andorra", "angola", "antigua and barbuda",
+  "argentina", "armenia", "australia", "austria", "azerbaijan", "bahamas",
+  "bahrain", "bangladesh", "barbados", "belarus", "belgium", "belize",
+  "benin", "bhutan", "bolivia", "bosnia and herzegovina", "botswana", "brazil",
+  "brunei", "bulgaria", "burkina faso", "burundi", "cambodia", "cameroon",
+  "canada", "cape verde", "central african republic", "chad", "chile", "china",
+  "colombia", "comoros", "costa rica", "croatia", "cuba", "cyprus",
+  "czech republic", "democratic republic of the congo", "denmark", "djibouti", "dominica", "dominican republic",
+  "ecuador", "egypt", "el salvador", "equatorial guinea", "eritrea", "estonia",
+  "eswatini", "ethiopia", "fiji", "finland", "france", "gabon",
+  "gambia", "georgia", "germany", "ghana", "greece", "grenada",
+  "guatemala", "guinea", "guinea-bissau", "guyana", "haiti", "honduras",
+  "hong kong", "hungary", "iceland", "india", "indonesia", "iran",
+  "iraq", "ireland", "israel", "italy", "ivory coast", "jamaica",
+  "japan", "jordan", "kazakhstan", "kenya", "kiribati", "kosovo",
+  "kuwait", "kyrgyzstan", "laos", "latvia", "lebanon", "lesotho",
+  "liberia", "libya", "liechtenstein", "lithuania", "luxembourg", "macau",
+  "madagascar", "malawi", "malaysia", "maldives", "mali", "malta",
+  "marshall islands", "mauritania", "mauritius", "mexico", "micronesia", "moldova",
+  "monaco", "mongolia", "montenegro", "morocco", "mozambique", "myanmar",
+  "namibia", "nauru", "nepal", "netherlands", "new zealand", "nicaragua",
+  "niger", "nigeria", "north korea", "north macedonia", "norway", "oman",
+  "pakistan", "palau", "palestine", "panama", "papua new guinea", "paraguay",
+  "peru", "philippines", "poland", "portugal", "qatar", "republic of the congo",
+  "romania", "russia", "rwanda", "saint kitts and nevis", "saint lucia", "saint vincent and the grenadines",
+  "samoa", "san marino", "sao tome and principe", "saudi arabia", "senegal", "serbia",
+  "seychelles", "sierra leone", "singapore", "slovakia", "slovenia", "solomon islands",
+  "somalia", "south africa", "south korea", "south sudan", "spain", "sri lanka",
+  "sudan", "suriname", "sweden", "switzerland", "syria", "taiwan",
+  "tajikistan", "tanzania", "thailand", "timor-leste", "togo", "tonga",
+  "trinidad and tobago", "tunisia", "turkey", "turkmenistan", "tuvalu", "uganda",
+  "ukraine", "united arab emirates", "united kingdom", "united states", "uruguay", "uzbekistan",
+  "vanuatu", "vatican city", "venezuela", "vietnam", "yemen", "zambia",
+  "zimbabwe",
+];
+
+const WORLD_COUNTRY_ALIASES = {
+  "usa":"united states", "us":"united states", "u s a":"united states",
+  "america":"united states", "united states of america":"united states", "uk":"united kingdom",
+  "england":"united kingdom", "great britain":"united kingdom", "britain":"united kingdom",
+  "scotland":"united kingdom", "wales":"united kingdom", "northern ireland":"united kingdom",
+  "uae":"united arab emirates", "emirates":"united arab emirates", "korea":"south korea",
+  "republic of korea":"south korea", "rok":"south korea", "hongkong":"hong kong",
+  "hong kong sar":"hong kong", "macao":"macau", "czechia":"czech republic",
+  "turkiye":"turkey", "nz":"new zealand", "holland":"netherlands",
+  "cote d ivoire":"ivory coast", "cote divoire":"ivory coast", "drc":"democratic republic of the congo",
+  "dr congo":"democratic republic of the congo", "congo kinshasa":"democratic republic of the congo", "congo brazzaville":"republic of the congo",
+  "burma":"myanmar", "swaziland":"eswatini", "russian federation":"russia",
+};
+
+const TRIAL_ALLOWED_LIST = [
+  "united states", "canada", "united kingdom", "australia", "new zealand", "ireland",
+  "singapore", "switzerland", "netherlands", "germany", "denmark", "sweden",
+  "norway", "finland", "austria", "belgium", "france", "italy",
+  "spain", "portugal", "israel", "luxembourg", "iceland", "czech republic",
+  "poland", "slovenia", "estonia", "hong kong", "united arab emirates", "qatar",
+  "kuwait", "bahrain", "oman",
+];
+
+function normalizeLocationText(s) {
+  return (s || "").toLowerCase().replace(/&/g, "and").replace(/[.,]/g, " ").replace(/\s+/g, " ").trim();
+}
+// All searchable phrases (country names + aliases), longest first so multi-word matches
+// (e.g. "south korea") are tried before shorter ones (e.g. "korea") — order barely matters
+// for correctness here since they resolve to the same canonical country, but longest-first
+// keeps the matched phrase (used to detect leftover "city" text) as specific as possible.
+const COUNTRY_LOOKUP = [
+  ...WORLD_COUNTRIES.map(c => [c, c]),
+  ...Object.entries(WORLD_COUNTRY_ALIASES),
+].sort((a, b) => b[0].length - a[0].length);
+const TRIAL_ALLOWED_SET = new Set(TRIAL_ALLOWED_LIST);
+
+// Finds a country mention anywhere in the free-text location answer. Returns
+// { canonical, matchedPhrase, hasCityText } or null if no country name is found at all.
+function analyzeLocation(raw) {
+  const norm = normalizeLocationText(raw);
+  const padded = " " + norm + " ";
+  for (const [phrase, canonical] of COUNTRY_LOOKUP) {
+    const needle = " " + phrase + " ";
+    if (padded.includes(needle)) {
+      const remainder = (padded.split(needle).join(" ")).trim();
+      return { canonical, matchedPhrase: phrase, hasCityText: remainder.length > 0 };
+    }
+  }
+  return null;
+}
+
+// ---- Preferred Lesson Date/Time free-text check: catches an answer that only has a date
+// ("April 6") or only a time ("11AM") but not both. ----
+const DATE_PATTERNS = [
+  /\b(jan|feb|mar|apr|may|jun|jul|aug|sep|sept|oct|nov|dec)[a-z]*\s*\d{0,2}\b/i, // month name (+ optional day)
+  /\b\d{1,2}\s*(jan|feb|mar|apr|may|jun|jul|aug|sep|sept|oct|nov|dec)[a-z]*\b/i, // day + month name
+  /\b\d{1,2}(st|nd|rd|th)\b/i, // ordinal day, e.g. "6th"
+  /\b\d{1,2}[\/\-]\d{1,2}([\/\-]\d{2,4})?\b/, // 4/6, 04-06-2026
+  /\b(mon|tue|wed|thu|fri|sat|sun)[a-z]*\b/i, // weekday name
+  /\b(today|tomorrow)\b/i,
+];
+const TIME_PATTERNS = [
+  /\b\d{1,2}(:\d{2})?\s*(am|pm)\b/i, // 11am, 11:30 pm
+  /\b\d{1,2}:\d{2}\b/, // 14:00
+  /\b(noon|midnight|morning|afternoon|evening)\b/i,
+];
+function hasDatePart(text) { return DATE_PATTERNS.some(re => re.test(text)); }
+function hasTimePart(text) { return TIME_PATTERNS.some(re => re.test(text)); }
+
+
+let submittedName = "", submittedEmail = "", submittedLocation = "", submittedOriginCountry = "", submittedDateTime = "", submittedCourse = "", submittedLevel = [], submittedDuration = "", submittedWeeklyTrial = "";
+
+function showStep(id) {
+  document.querySelectorAll(".step").forEach(s => s.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+}
+
+function setError(el, msg) {
+  el.textContent = msg || "";
+  el.classList.toggle("show", !!msg);
+}
+
+// ---- STEP 1 ----
+const nameInput = document.getElementById("f-name");
+const emailInput = document.getElementById("f-email");
+const locationInput = document.getElementById("f-location");
+const originInput = document.getElementById("f-origin");
+const datetimeInput = document.getElementById("f-datetime");
+const courseGroup = document.getElementById("course-group");
+const levelGroup = document.getElementById("level-group");
+const durationGroup = document.getElementById("duration-group");
+const exactDateInput = document.getElementById("f-exact-date");
+const exactTimeSelect = document.getElementById("f-exact-time");
+
+// ---- Exact Date/Time availability check ----
+// Detects the visitor's own browser timezone (no manual selection needed) and uses it to
+// convert between the fixed JST hourly lesson slots (matching admin-schedule.html's grid) and
+// the student's local wall-clock time, so we can check their choice against the real schedule.
+const detectedTz = Intl.DateTimeFormat().resolvedOptions().timeZone || "Asia/Tokyo";
+const EXACT_HOURS = ["08:00","09:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00","18:00","19:00","20:00","21:00","22:00"];
+let exactSlotCheckAttempts = 0;
+let finalExactDateJst = "", finalExactTimeJst = "", finalExactDateLocal = "", finalExactTimeLocal = "", finalExactTimezone = "";
+
+function setFinalExactSlot(jstDate, jstTime) {
+  const jstDt = new Date(`${jstDate}T${jstTime}:00+09:00`);
+  finalExactDateJst = jstDate;
+  finalExactTimeJst = jstTime;
+  finalExactTimezone = detectedTz;
+  finalExactDateLocal = jstDt.toLocaleDateString("en-CA", { timeZone: detectedTz }); // YYYY-MM-DD
+  finalExactTimeLocal = jstDt.toLocaleTimeString("en-GB", { timeZone: detectedTz, hour: "2-digit", minute: "2-digit", hour12: false }); // HH:MM
+}
+
+// For a given LOCAL calendar date, finds which of the fixed JST hourly slots (checking a day
+// on either side, since JST and local dates can differ) fall on that local date.
+function getLocalTimeOptionsForDate(localDateStr) {
+  if (!localDateStr) return [];
+  const base = new Date(localDateStr + "T12:00:00");
+  const options = [];
+  for (let dOffset = -1; dOffset <= 1; dOffset++) {
+    const probe = new Date(base.getTime() + dOffset * 86400000);
+    const jstDateStr = `${probe.getFullYear()}-${String(probe.getMonth() + 1).padStart(2, "0")}-${String(probe.getDate()).padStart(2, "0")}`;
+    EXACT_HOURS.forEach(t => {
+      const jstDt = new Date(`${jstDateStr}T${t}:00+09:00`);
+      const localDateOfSlot = jstDt.toLocaleDateString("en-CA", { timeZone: detectedTz });
+      if (localDateOfSlot === localDateStr) {
+        const timeLabel = jstDt.toLocaleTimeString("en-US", { timeZone: detectedTz, hour: "numeric", minute: "2-digit" });
+        options.push({ jstDate: jstDateStr, jstTime: t, localLabel: timeLabel });
+      }
+    });
+  }
+  options.sort((a, b) => new Date(`${a.jstDate}T${a.jstTime}:00+09:00`) - new Date(`${b.jstDate}T${b.jstTime}:00+09:00`));
+  return options;
+}
+
+exactDateInput.addEventListener("change", () => {
+  const opts = getLocalTimeOptionsForDate(exactDateInput.value);
+  exactSlotCheckAttempts = 0;
+  finalExactDateJst = "";
+  document.getElementById("exact-slot-fallback").style.display = "none";
+  setError(document.getElementById("exact-time-error"), "");
+  if (opts.length === 0) {
+    exactTimeSelect.innerHTML = `<option value="" style="color:#000;">No lesson times that day</option>`;
+    exactTimeSelect.disabled = true;
+  } else {
+    exactTimeSelect.disabled = false;
+    exactTimeSelect.innerHTML = `<option value="" style="color:#000;">Select a time</option>` +
+      opts.map(o => `<option value="${o.jstDate}|${o.jstTime}" style="color:#000;">${o.localLabel}</option>`).join("");
+  }
+  refreshStep1Btn();
+});
+exactTimeSelect.addEventListener("change", () => {
+  exactSlotCheckAttempts = 0;
+  finalExactDateJst = "";
+  document.getElementById("exact-slot-fallback").style.display = "none";
+  setError(document.getElementById("exact-time-error"), "");
+  refreshStep1Btn();
+});
+
+async function isExactSlotAvailable(jstDate, jstTime) {
+  const resp = await fetch("/api/schedule", {
+    method: "POST", headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ action: "public-availability", fromDate: jstDate, toDate: jstDate }),
+  });
+  const data = await resp.json();
+  const match = (data.slots || []).find(s => s.date === jstDate && s.time.slice(0, 5) === jstTime);
+  return !match || (match.status !== "booked" && match.status !== "blocked");
+}
+
+async function loadFallbackCalendar() {
+  const grid = document.getElementById("fallback-cal-grid");
+  grid.innerHTML = "<p>Loading…</p>";
+  const from = new Date();
+  const to = new Date(Date.now() + 14 * 86400000);
+  const fmt = d => d.toISOString().slice(0, 10);
+  const resp = await fetch("/api/schedule", {
+    method: "POST", headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ action: "public-availability", fromDate: fmt(from), toDate: fmt(to) }),
+  });
+  const data = await resp.json();
+  const takenSet = new Set((data.slots || []).map(s => `${s.date}_${s.time.slice(0, 5)}`));
+  grid.innerHTML = "";
+  for (let i = 1; i <= 14; i++) {
+    const d = new Date(Date.now() + i * 86400000);
+    const dateStr = d.toISOString().slice(0, 10);
+    EXACT_HOURS.forEach(time => {
+      const isTaken = takenSet.has(`${dateStr}_${time}`);
+      const el = document.createElement("div");
+      el.className = "slot " + (isTaken ? "red" : "green");
+      const jstDt = new Date(`${dateStr}T${time}:00+09:00`);
+      el.textContent = jstDt.toLocaleString("en-US", { timeZone: detectedTz, month: "short", day: "numeric", hour: "numeric", minute: "2-digit" });
+      if (!isTaken) el.onclick = () => {
+        setFinalExactSlot(dateStr, time);
+        document.getElementById("exact-slot-fallback").style.display = "none";
+        setError(document.getElementById("exact-time-error"), "");
+        proceedAfterExactSlotConfirmed();
+      };
+      grid.appendChild(el);
+    });
+  }
+}
+
+
+function selectedRadio(name) {
+  const el = document.querySelector(`input[name="${name}"]:checked`);
+  return el ? el.value : "";
+}
+function selectedChecks(name) {
+  return Array.from(document.querySelectorAll(`input[name="${name}"]:checked`)).map(el => el.value);
+}
+
+const weeklyTrialGroup = document.getElementById("weeklytrial-group");
+
+function step1Valid() {
+  return nameInput.value.trim() && emailInput.value.trim() && locationInput.value.trim()
+    && originInput.value.trim() && datetimeInput.value.trim() && selectedRadio("course") && selectedRadio("duration")
+    && selectedRadio("weeklytrial") && exactDateInput.value && exactTimeSelect.value;
+}
+function refreshStep1Btn() {
+  document.getElementById("btn-step1-next").disabled = !step1Valid();
+  // Clear the red highlight on any field the student has now filled in, without waiting
+  // for them to press Next again.
+  if (nameInput.value.trim()) nameInput.classList.remove("invalid");
+  if (emailInput.value.trim()) emailInput.classList.remove("invalid");
+  if (locationInput.value.trim()) locationInput.classList.remove("invalid");
+  if (originInput.value.trim()) originInput.classList.remove("invalid");
+  if (datetimeInput.value.trim()) datetimeInput.classList.remove("invalid");
+  if (selectedRadio("course")) courseGroup.classList.remove("invalid");
+  if (selectedRadio("duration")) durationGroup.classList.remove("invalid");
+  if (selectedRadio("weeklytrial")) weeklyTrialGroup.classList.remove("invalid");
+  if (exactDateInput.value) exactDateInput.classList.remove("invalid");
+  if (exactTimeSelect.value) exactTimeSelect.classList.remove("invalid");
+  const dtValue = datetimeInput.value.trim();
+  if (hasDatePart(dtValue) && hasTimePart(dtValue)) setError(document.getElementById("datetime-error"), "");
+}
+[nameInput, emailInput, locationInput, originInput, datetimeInput].forEach(el => el.addEventListener("input", refreshStep1Btn));
+document.querySelectorAll('input[name="course"], input[name="duration"], input[name="level"], input[name="weeklytrial"]').forEach(el => el.addEventListener("change", refreshStep1Btn));
+
+document.getElementById("btn-step1-next").addEventListener("click", async () => {
+  const err = document.getElementById("form-error");
+
+  const missingName = !nameInput.value.trim();
+  const missingEmail = !emailInput.value.trim();
+  const missingLocation = !locationInput.value.trim();
+  const missingOrigin = !originInput.value.trim();
+  const missingDatetime = !datetimeInput.value.trim();
+  const missingCourse = !selectedRadio("course");
+  const missingDuration = !selectedRadio("duration");
+  const missingWeeklyTrial = !selectedRadio("weeklytrial");
+
+  nameInput.classList.toggle("invalid", missingName);
+  emailInput.classList.toggle("invalid", missingEmail);
+  locationInput.classList.toggle("invalid", missingLocation);
+  originInput.classList.toggle("invalid", missingOrigin);
+  datetimeInput.classList.toggle("invalid", missingDatetime);
+  courseGroup.classList.toggle("invalid", missingCourse);
+  durationGroup.classList.toggle("invalid", missingDuration);
+  weeklyTrialGroup.classList.toggle("invalid", missingWeeklyTrial);
+
+  if (missingName || missingEmail || missingLocation || missingOrigin || missingDatetime || missingCourse || missingDuration || missingWeeklyTrial) {
+    setError(err, "Please fill in all fields highlighted in red.");
+    return;
+  }
+
+  const dtErr = document.getElementById("datetime-error");
+  const dtValue = datetimeInput.value.trim();
+  const dtHasDate = hasDatePart(dtValue);
+  const dtHasTime = hasTimePart(dtValue);
+  if (!dtHasDate || !dtHasTime) {
+    datetimeInput.classList.add("invalid");
+    setError(dtErr, !dtHasDate && !dtHasTime
+      ? "Please include both a date and a time (e.g. April 6, 11AM)."
+      : !dtHasDate
+        ? "Please also include a date (e.g. April 6)."
+        : "Please also include a time (e.g. 11AM).");
+    return;
+  }
+  setError(dtErr, "");
+
+  const missingExactDate = !exactDateInput.value;
+  const missingExactTime = !exactTimeSelect.value;
+  exactDateInput.classList.toggle("invalid", missingExactDate);
+  exactTimeSelect.classList.toggle("invalid", missingExactTime);
+  if (missingExactDate || missingExactTime) {
+    setError(err, "Please fill in all fields highlighted in red.");
+    return;
+  }
+
+  submittedName = nameInput.value.trim();
+  submittedEmail = emailInput.value.trim();
+  submittedLocation = locationInput.value.trim();
+  submittedOriginCountry = originInput.value.trim();
+  submittedDateTime = dtValue;
+  submittedCourse = selectedRadio("course");
+  submittedLevel = selectedChecks("level");
+  submittedDuration = selectedRadio("duration");
+  submittedWeeklyTrial = selectedRadio("weeklytrial");
+
+  // If a slot hasn't already been locked in via the fallback calendar (2nd conflict), check
+  // whatever the student currently has typed in Exact Date/Time against the real schedule.
+  const exactTimeErr = document.getElementById("exact-time-error");
+  if (!finalExactDateJst) {
+    const [jstDate, jstTime] = exactTimeSelect.value.split("|");
+    const btn = document.getElementById("btn-step1-next");
+    btn.disabled = true; const originalLabel = btn.textContent; btn.textContent = "Checking availability…";
+    let available = true;
+    try { available = await isExactSlotAvailable(jstDate, jstTime); } catch (e) { /* if the check itself fails, don't block the student — proceed and let Seito verify manually */ }
+    btn.textContent = originalLabel; btn.disabled = false;
+
+    if (!available) {
+      exactSlotCheckAttempts++;
+      exactDateInput.classList.add("invalid");
+      exactTimeSelect.classList.add("invalid");
+      if (exactSlotCheckAttempts >= 2) {
+        setError(exactTimeErr, "Unfortunately, that time is already booked by another student. Please choose an open time from the schedule below.");
+        document.getElementById("exact-slot-fallback").style.display = "block";
+        loadFallbackCalendar();
+      } else {
+        setError(exactTimeErr, "Unfortunately, the time you selected is already booked by another student. Please choose a different date and time.");
+      }
+      return;
+    }
+    setFinalExactSlot(jstDate, jstTime);
+  }
+  setError(exactTimeErr, "");
+
+  await proceedAfterExactSlotConfirmed();
+});
+
+async function proceedAfterExactSlotConfirmed() {
+  const err = document.getElementById("form-error");
+
+  const analysis = analyzeLocation(submittedLocation);
+  if (!analysis) {
+    locationInput.classList.add("invalid");
+    setError(err, "Please make sure to include your country name (e.g. Japan, United States, France…).");
+    return;
+  }
+  if (!analysis.hasCityText) {
+    locationInput.classList.add("invalid");
+    setError(err, "Please also write your town or city name, not just the country.");
+    return;
+  }
+  setError(err, "");
+
+  // "Have you done a weekly trial for GAKU Master?" = Yes means we accept them for the free
+  // trial lesson regardless of country — the country restriction below only applies to No.
+  const weeklyTrialDone = submittedWeeklyTrial === "Yes";
+
+  if (!TRIAL_ALLOWED_SET.has(analysis.canonical)) {
+    // Non-registered-country applicants who already got the decline screen once before (same
+    // email) are blocked immediately on any further attempt, without re-showing the normal
+    // decline+free-study-guide flow.
+    let alreadyRejectedBefore = false;
+    try {
+      const checkRes = await fetch("/api/policy-agreement", {
+        method: "POST", headers: { "Content-Type":"application/json" },
+        body: JSON.stringify({ action: "check_trial_lesson_repeat", email: submittedEmail }),
+      });
+      const checkData = await checkRes.json();
+      alreadyRejectedBefore = !!(checkData && checkData.blocked);
+    } catch (e) { /* if the check fails, fall back to the normal decline flow below */ }
+
+    if (alreadyRejectedBefore) {
+      try {
+        await fetch("/api/policy-agreement", {
+          method: "POST", headers: { "Content-Type":"application/json" },
+          body: JSON.stringify({
+            action: "trial_lesson", fullName: submittedName, email: submittedEmail,
+            location: submittedLocation, originCountry: submittedOriginCountry, preferredDateTime: submittedDateTime,
+            course: submittedCourse, japaneseLevel: submittedLevel.join(", "), lessonDuration: submittedDuration,
+            weeklyTrialDone, outcome: "blocked_repeat_rejection",
+          }),
+        });
+      } catch (e) { /* still show the blocked screen even if the notification failed */ }
+      showStep("step-blocked");
+      return;
+    }
+
+    // Not blocked outright — give them a short screening instead of an immediate decline.
+    resetScreeningStep();
+    showStep("step-screening");
+    return;
+  }
+
+  document.getElementById("p-name").value = submittedName;
+  document.getElementById("p-email").value = submittedEmail;
+  showStep("step-policy");
+  initPolicy(weeklyTrialDone);
+}
+
+document.getElementById("btn-blocked-gaku-master").addEventListener("click", () => {
+  window.location.href = "https://app.seitojapanese.online/gaku-master/";
+});
+
+// ---- STEP 1d: 対象国外の応募者向けスクリーニング（3問） ----
+// Passes only when Q1 = "I agree" AND at least one of Q2/Q3 = "Yes". If Q1 is "I disagree",
+// or Q1 is "I agree" but both price questions are "No", the applicant is declined exactly as
+// before (decline screen + free-study-guide offer, one-time-only via the repeat-block check).
+let submittedScreeningPassed = null, submittedScreeningQ1 = "", submittedScreeningQ2 = "", submittedScreeningQ3 = "";
+const screeningBtn = document.getElementById("btn-screening-next");
+function resetScreeningStep() {
+  document.querySelectorAll('input[name="screen-q1"], input[name="screen-q2"], input[name="screen-q3"]').forEach(el => el.checked = false);
+  document.getElementById("screen-q1-group").classList.remove("invalid");
+  document.getElementById("screen-q2-group").classList.remove("invalid");
+  document.getElementById("screen-q3-group").classList.remove("invalid");
+  setError(document.getElementById("screening-error"), "");
+  screeningBtn.disabled = true;
+}
+document.querySelectorAll('input[name="screen-q1"], input[name="screen-q2"], input[name="screen-q3"]').forEach(el => el.addEventListener("change", () => {
+  screeningBtn.disabled = !(selectedRadio("screen-q1") && selectedRadio("screen-q2") && selectedRadio("screen-q3"));
+  document.getElementById("screen-q1-group").classList.remove("invalid");
+  document.getElementById("screen-q2-group").classList.remove("invalid");
+  document.getElementById("screen-q3-group").classList.remove("invalid");
+}));
+
+screeningBtn.addEventListener("click", async () => {
+  const err = document.getElementById("screening-error");
+  const q1 = selectedRadio("screen-q1"), q2 = selectedRadio("screen-q2"), q3 = selectedRadio("screen-q3");
+  const missingQ1 = !q1, missingQ2 = !q2, missingQ3 = !q3;
+  document.getElementById("screen-q1-group").classList.toggle("invalid", missingQ1);
+  document.getElementById("screen-q2-group").classList.toggle("invalid", missingQ2);
+  document.getElementById("screen-q3-group").classList.toggle("invalid", missingQ3);
+  if (missingQ1 || missingQ2 || missingQ3) { setError(err, "Please answer all three questions."); return; }
+  setError(err, "");
+
+  submittedScreeningQ1 = q1; submittedScreeningQ2 = q2; submittedScreeningQ3 = q3;
+  submittedScreeningPassed = q1 === "agree" && (q2 === "yes" || q3 === "yes");
+
+  if (submittedScreeningPassed) {
+    document.getElementById("p-name").value = submittedName;
+    document.getElementById("p-email").value = submittedEmail;
+    showStep("step-policy");
+    initPolicy(submittedWeeklyTrial === "Yes");
+    return;
+  }
+
+  // Record + notify even though this applicant is declined, then show the decline screen.
+  try {
+    await fetch("/api/policy-agreement", {
+      method: "POST", headers: { "Content-Type":"application/json" },
+      body: JSON.stringify({
+        action: "trial_lesson", fullName: submittedName, email: submittedEmail,
+        location: submittedLocation, originCountry: submittedOriginCountry, preferredDateTime: submittedDateTime,
+        course: submittedCourse, japaneseLevel: submittedLevel.join(", "), lessonDuration: submittedDuration,
+        weeklyTrialDone: submittedWeeklyTrial === "Yes", outcome: "rejected_country",
+        screeningQ1: submittedScreeningQ1, screeningQ2: submittedScreeningQ2, screeningQ3: submittedScreeningQ3,
+        countryScreeningPassed: false,
+      }),
+    });
+  } catch (e) { /* still show the decline screen even if the notification failed */ }
+  showStep("step-rejected");
+});
+
+// ---- STEP 1b: 体験授業を断られた非登録国の生徒向け「安いプランを選びますか？」 ----
+// Yes = 有料プランをGAKU Master側の支払い画面に表示してよい、という記録をメール単位で残す。
+async function unlockCheaperPlans(btnId, errId) {
+  const btn = document.getElementById(btnId);
+  const err = document.getElementById(errId);
+  btn.disabled = true;
+  setError(err, "");
+  try {
+    const r = await fetch("/api/policy-agreement", {
+      method: "POST", headers: { "Content-Type":"application/json" },
+      body: JSON.stringify({ action: "unlock_paid_plans", email: submittedEmail }),
+    });
+    if (!r.ok) throw new Error("failed");
+  } catch (e) {
+    btn.disabled = false;
+    setError(err, "Sorry, something went wrong. Please try again.");
+    return;
+  }
+  window.location.href = "https://app.seitojapanese.online/app";
+}
+document.getElementById("btn-cheaper-yes").addEventListener("click", () => unlockCheaperPlans("btn-cheaper-yes", "cheaper-error"));
+document.getElementById("btn-cheaper-yes-blocked").addEventListener("click", () => unlockCheaperPlans("btn-cheaper-yes-blocked", "cheaper-error-blocked"));
+
+// ---- STEP 1b: 対象国外の場合の「無料スタディガイド」代替オファー ----
+document.getElementById("btn-guide-yes").addEventListener("click", async () => {
+  try {
+    await fetch("/api/policy-agreement", {
+      method: "POST", headers: { "Content-Type":"application/json" },
+      body: JSON.stringify({
+        action: "trial_lesson", fullName: submittedName, email: submittedEmail,
+        location: submittedLocation, originCountry: submittedOriginCountry,
+        outcome: "accepted_free_study_guide_offer",
+      }),
+    });
+  } catch (e) { /* still send them to the marketing page even if the notification failed */ }
+  window.location.href = "https://app.seitojapanese.online/gaku-master/";
+});
+document.getElementById("btn-guide-no").addEventListener("click", () => {
+  document.getElementById("rejected-guide-offer").style.display = "none";
+  document.getElementById("rejected-guide-thanks").style.display = "block";
+});
+
+// ---- STEP 2: ポリシー（全ページ閲覧必須。最終ページでのみチェックボックス表示）----
+const POLICY_PAGES = [
+  {
+    title: "Language Requirement",
+    body: [
+      "USE TRANSLATION IF YOU DO NOT UNDERSTAND.",
+      "Warning: The teacher speaks <strong>ONLY English and Japanese</strong>. Therefore, you must be proficient in either English or Japanese. If you find it difficult to speak either language, the teacher will communicate using a translation device.",
+      "If you cannot agree to this condition, GAKU sincerely apologizes, but cannot guarantee the same fair service to you as to other students. Therefore, please make sure in advance that you are proficient in either Japanese or English.",
+      "Your free trial lesson itself is free of charge — you do not have to worry about any payment for this lesson.",
+    ],
+  },
+  {
+    title: "Purpose of the Free Trial Lesson",
+    body: [
+      "The purpose of the free trial lesson is to determine if you actually want to take the lesson officially, assess your level, and understand what you want to focus on studying.",
+      "If you are looking for traditional \"regular free lessons,\" this trial lesson is NOT RECOMMENDED for you. Eventually you will need to pay for lessons, so please consider in advance whether you actually want to take lessons with payment.",
+      "Please do not send any payment until the free trial lesson has been completed. Payment is required only after the lesson, and only if you decide to continue and are satisfied with the service.",
+    ],
+  },
+  {
+    title: "GAKU Master — Free Plan Eligibility",
+    body: [
+      "If you're taking a lesson with the goal of qualifying for GAKU Master's free plan, please note: to become an official student and receive an invitation code, you must complete at least 3 lessons within a calendar month.",
+      "The Free Trial Lesson does NOT count toward this total. You'll need to complete a minimum of 3 paid lessons to qualify for the GAKU Master free plan.",
+      "If you have any questions about your eligibility or lesson count, feel free to reach out anytime.",
+    ],
+  },
+  {
+    title: "1. Late Arrivals & No-Shows",
+    body: [
+      "If you do not show up within 15 minutes, the teacher will NOT conduct the lesson for that day.",
+      "If you will be late, please inform the teacher at least one day before the lesson.",
+      "If you arrive within 15 minutes, you can still take the class. However, your lesson time will be deducted accordingly. For example, if your lesson starts at 18:00 and you join at 18:10, your total lesson time will be reduced to 50 minutes.",
+      "In the event of internet connectivity issues, a delay of up to 15 minutes will be considered '15 minutes late.' If the issue cannot be resolved within 15 minutes, that time will no longer be suitable for the free trial lesson, and the opportunity to take the lesson at that time will be forfeited.",
+    ],
+  },
+  {
+    title: "2. During the Class",
+    body: [
+      "Please turn your camera ON and try to respond to the teacher.",
+      "If there is a special reason you want to keep your camera off, please say so at the beginning of the lesson.",
+      "If you do not respond for more than 1 minute after the teacher speaks to you, the lesson will end.",
+      "If you don't provide a reason, the teacher will end the lesson.",
+    ],
+  },
+  {
+    title: "3. Rescheduling After No-Shows or Repeated Lateness",
+    body: [
+      "If you miss a lesson without notice, the teacher will assume you are no longer interested and will NOT invite you to future lessons unless you contact them.",
+      "If you are more than 15 minutes late twice, the teacher will not invite you to future lessons. The first instance will be forgiven, but if you are late again by more than 15 minutes, no further lessons will be scheduled for you.",
+      "If you are a no-show, don't send the written agreement to this policy, or arrive more than 15 minutes late — and this happens twice — you will permanently lose your eligibility for a free trial lesson. After this occurs twice, if you apply for another lesson, no lessons will be conducted unless the lesson fee is paid in advance. This rule is strictly enforced.",
+    ],
+  },
+  {
+    title: "4. Confirming Your Interest",
+    body: [
+      "If you want to take a lesson, please let the teacher know within 3 days, or specify a deadline for when you will confirm.",
+      "If more than 3 days pass, or the deadline you mentioned has passed, the teacher will assume you are no longer interested and will not contact you again. However, if you later decide to take lessons, you may contact them.",
+    ],
+  },
+  {
+    title: "5. Policy for Students Under 18",
+    body: [
+      "For students under 18 years of age, or if you want a student under 18 to take the lesson, a parent or legal guardian must be present in the same location during the lesson.",
+      "If a parent or guardian is not present, the lesson will not be conducted.",
+    ],
+  },
+  {
+    title: "6. In-Person Lesson Policy",
+    body: [
+      "In-person lessons are available only under the following conditions:",
+      "<strong>Student travels to the teacher's area</strong> — limited to Osaka or Hyogo Prefecture (within the range from Umeda to Takarazuka). You must pay the transportation fare from the teacher's house to the destination, and any location fee (such as a café or restaurant), in advance before the lesson starts — this is entirely separate from the lesson fee. If you can't agree to this, an online lesson is recommended instead.",
+      "<strong>The teacher travels to the student's city for other purposes</strong> — an in-person lesson may be arranged if the teacher happens to visit the student's city for reasons unrelated to teaching. The teacher will not travel to a city solely to conduct a lesson.",
+      "<strong>The teacher visits the student's city or country</strong> — if the location is reasonably close to the teacher's travel destination, an in-person lesson may be possible.",
+      "For an in-person free trial lesson, please arrive 30 minutes before the lesson starts. Canceling without early notice after the teacher has already traveled to the location is seriously disrespectful — if this happens, the teacher will not accept you as a student for any future lessons, for any reason.",
+    ],
+  },
+  {
+    title: "7. Group Lessons",
+    body: [
+      "Group lessons are NOT ACCEPTABLE. If you bring other people, the teacher will not conduct any lesson.",
+    ],
+  },
+  {
+    title: "8. JLPT Free Trial Lesson Policy (Important)",
+    body: [
+      "If you choose to take the JLPT exam as your free trial lesson, you must strictly follow the rules below.",
+      "You may choose EITHER 60 minutes OR 30 minutes for the trial. Once the selected time is over, the lesson will end immediately, regardless of whether you are still answering questions. No extensions will be given under any circumstances — the full JLPT exam is a privilege reserved exclusively for GAKU students.",
+      "This session is counted as ONE \"free trial lesson.\" You are allowed to take a free trial lesson ONLY ONCE — you cannot take another free trial lesson even under a different course (JLPT, travel preparation, basic academic, or any other course). Once you have taken, or are scheduled to take, any free trial lesson, you are NOT eligible to take the Free JLPT as a separate free trial lesson.",
+    ],
+  },
+  {
+    title: "Warning 1 — Permanent Loss of Eligibility",
+    body: [
+      "If any of the following occurs even once, you will never again be eligible for any free trial lesson, and any future lessons must be taken as paid lessons only, without exception:",
+      "• You miss the lesson without providing prior notice or obtaining permission in advance.",
+      "• You arrive more than 15 minutes late without notifying the teacher beforehand, or your internet connection remains unstable for more than 15 minutes.",
+      "• You do not provide a clear written agreement to this policy after it has been sent to you.",
+      "• You fail to explain the reason you cannot agree to the policy, or you do not ask questions about any part you are unsure of.",
+      "• You do not respond to a request to provide missing date and/or time information when it was not included in your message.",
+      "• You do not turn on your camera and do not respond for more than 1 minute after the teacher speaks to you.",
+    ],
+  },
+  {
+    title: "9–10. Spam & Conduct",
+    body: [
+      "<strong>Spam Policy:</strong> if you call or text the teacher continuously without receiving a response, you will be considered \"spam\" and blocked, to protect the teacher's social media and privacy. If you can't attend a class, are told to join the next lesson, but repeatedly call or text without a response, this will also be considered spam and the teacher will never contact you again.",
+      "<strong>Name-calling:</strong> if you complain to the teacher and use abusive words to hurt them, you will be removed from the lesson and blocked on all social media accounts. If you have complaints about the contents of this policy itself, please do not proceed — you will not be considered a GAKU student for the rest of your life.",
+    ],
+  },
+  {
+    title: "11. Fraudulent Use & Closing",
+    body: [
+      "<strong>Fraudulent use:</strong> if you cancel or fail to attend a lesson and then attempt to receive an additional free trial lesson under a different name, this will be treated as fraudulent use. If this occurs, the teacher will immediately refuse to provide any future lessons, and reserves the full right to take legal action — including contacting an attorney to pursue compensation for damages and lost time.",
+      "GAKU provides professional teaching and services. Manners and politeness are very important, just as they would be in a workplace.",
+      "If you are a student who cannot adhere to the expectations outlined in this policy, please do not take the lesson. Thank you for understanding.",
+    ],
+  },
+];
+
+function initPolicy(weeklyTrialDone) {
+  const container = document.getElementById("policy-scrollbox");
+  container.innerHTML = POLICY_PAGES.map(p => `
+    <h2>${p.title}</h2>
+    ${p.body.map(t => `<p>${t}</p>`).join("")}
+  `).join("") + (weeklyTrialDone ? `
+    <h2>🎓 GAKU Master, included free</h2>
+    <p>Once you're a GAKU lesson student, GAKU Master (the self-study app you already tried) is included at no extra cost — no separate subscription needed.</p>
+    <p>If you'd rather not book a lesson yet, GAKU Master is also available on its own starting at just $14.99/month — see all app plans at <a href="https://app.seitojapanese.online/app" target="_blank" rel="noopener noreferrer" style="color:#86efac;text-decoration:underline;">app.seitojapanese.online</a>.</p>
+  ` : "");
+  document.getElementById("policy-agree-area").style.display = "none";
+  document.getElementById("scroll-hint").style.display = "flex";
+  document.getElementById("f-agree").checked = false;
+  document.getElementById("btn-final-submit").disabled = true;
+  setError(document.getElementById("policy-error"), "");
+  container.scrollTop = 0;
+  checkPolicyScrolled();
+}
+
+// Reveals the agreement checkbox only once the student has scrolled the policy box to
+// (near) the bottom — this is the "must read everything before you can agree" gate.
+function checkPolicyScrolled() {
+  const box = document.getElementById("policy-scrollbox");
+  const reachedBottom = box.scrollTop + box.clientHeight >= box.scrollHeight - 24;
+  if (reachedBottom) {
+    document.getElementById("policy-agree-area").style.display = "block";
+    document.getElementById("scroll-hint").style.display = "none";
+  }
+}
+document.getElementById("policy-scrollbox").addEventListener("scroll", checkPolicyScrolled);
+
+document.getElementById("f-agree").addEventListener("change", (e) => {
+  document.getElementById("btn-final-submit").disabled = !e.target.checked;
+});
+document.getElementById("p-name").addEventListener("input", (e) => { if (e.target.value.trim()) e.target.classList.remove("invalid"); });
+document.getElementById("p-email").addEventListener("input", (e) => { if (e.target.value.trim()) e.target.classList.remove("invalid"); });
+
+document.getElementById("btn-final-submit").addEventListener("click", async () => {
+  const err = document.getElementById("policy-error");
+  const pNameEl = document.getElementById("p-name");
+  const pEmailEl = document.getElementById("p-email");
+  const pName = pNameEl.value.trim();
+  const pEmail = pEmailEl.value.trim();
+  pNameEl.classList.toggle("invalid", !pName);
+  pEmailEl.classList.toggle("invalid", !pEmail);
+  if (!pName || !pEmail) { setError(err, "Please fill in your full name and email."); return; }
+  if (!document.getElementById("f-agree").checked) { setError(err, "Please check the box to agree before submitting."); return; }
+  setError(err, "");
+
+  const btn = document.getElementById("btn-final-submit");
+  btn.disabled = true; btn.textContent = "Submitting…";
+
+  const payload = {
+    action: "trial_lesson",
+    fullName: pName,
+    email: pEmail,
+    location: submittedLocation,
+    originCountry: submittedOriginCountry,
+    preferredDateTime: submittedDateTime,
+    course: submittedCourse,
+    japaneseLevel: submittedLevel.join(", "),
+    lessonDuration: submittedDuration,
+    weeklyTrialDone: submittedWeeklyTrial === "Yes",
+    agreed: true,
+    exactDateLocal: finalExactDateLocal, exactTimeLocal: finalExactTimeLocal,
+    exactTimezone: finalExactTimezone, exactDateJst: finalExactDateJst, exactTimeJst: finalExactTimeJst,
+  };
+  if (submittedScreeningPassed !== null) {
+    payload.countryScreeningPassed = submittedScreeningPassed;
+    payload.screeningQ1 = submittedScreeningQ1;
+    payload.screeningQ2 = submittedScreeningQ2;
+    payload.screeningQ3 = submittedScreeningQ3;
+  }
+
+  try {
+    const resp = await fetch("/api/policy-agreement", { method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify(payload) });
+    if (!resp.ok) throw new Error("submit failed");
+    showStep("step-done");
+  } catch (e) {
+    btn.disabled = false; btn.textContent = "Submit";
+    setError(err, "Something went wrong. Please try again.");
+  }
+});
+</script>
+</body>
+</html>

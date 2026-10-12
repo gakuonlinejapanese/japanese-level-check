@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>GAKU 無料体験レッスン管理</title>
+<style>
+  :root { --ink:#1e293b; --green:#16a34a; --red:#dc2626; --amber:#d97706; }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Segoe UI",sans-serif; background:#f8fafc; color:var(--ink); }
+  header { background:#1e293b; color:#fff; padding:18px 24px; }
+  header h1 { margin:0; font-size:18px; }
+  .wrap { max-width:900px; margin:0 auto; padding:24px; }
+  section { background:#fff; border:1px solid #e2e8f0; border-radius:12px; padding:18px; margin-bottom:22px; }
+  h2 { font-size:15px; margin:0 0 14px; }
+  .req-card { border:1px solid #e2e8f0; border-radius:10px; padding:14px 16px; margin-bottom:12px; }
+  .req-head { display:flex; justify-content:space-between; align-items:flex-start; font-size:14px; font-weight:700; gap:10px; }
+  .badge { padding:2px 8px; border-radius:6px; font-size:11px; font-weight:700; white-space:nowrap; }
+  .badge.pending { background:#fef3c7; color:var(--amber); }
+  .badge.accepted { background:#dcfce7; color:var(--green); }
+  .badge.declined { background:#fee2e2; color:var(--red); }
+  .badge.rejected_country, .badge.blocked_repeat { background:#e2e8f0; color:#475569; }
+  .badge.notify-ok { background:#dcfce7; color:var(--green); }
+  .badge.notify-fail { background:#dc2626; color:#fff; }
+  .details { font-size:13px; color:#475569; margin:8px 0; line-height:1.7; }
+  .details b { color:var(--ink); }
+  .row { display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-top:10px; }
+  textarea, input[type=text] { padding:8px; border:1px solid #cbd5e1; border-radius:6px; font-size:13px; font-family:inherit; }
+  textarea { width:100%; min-height:60px; resize:vertical; }
+  .btn { padding:8px 14px; border:none; border-radius:8px; font-size:13px; font-weight:700; cursor:pointer; }
+  .btn.accept { background:var(--green); color:#fff; }
+  .btn.decline { background:var(--red); color:#fff; }
+  .gate { max-width:360px; margin:80px auto; text-align:center; }
+  .empty { color:#94a3b8; font-size:13px; }
+</style>
+</head>
+<body>
+
+<div id="gate" class="gate">
+  <h2>管理者パスワード</h2>
+  <input type="password" id="gate-secret" placeholder="ADMIN_SECRET" style="width:100%;padding:10px;margin-top:10px;" />
+  <button class="btn accept" style="margin-top:10px;width:100%;" onclick="enterAdmin()">入る</button>
+</div>
+
+<div id="app" style="display:none;">
+<header><h1>GAKU 無料体験レッスン管理</h1></header>
+<div class="wrap">
+
+  <section>
+    <h2>📋 未対応のリクエスト</h2>
+    <div id="pending-list"><p class="empty">読み込み中…</p></div>
+  </section>
+
+  <section>
+    <h2>🚫 自動お断り（対象国外・再申込）直近30件</h2>
+    <div id="auto-declined-list"><p class="empty">読み込み中…</p></div>
+  </section>
+
+  <section>
+    <h2>✅ 対応済み（直近30件）</h2>
+    <div id="processed-list"><p class="empty">読み込み中…</p></div>
+  </section>
+
+</div>
+</div>
+
+<script>
+let SECRET = "";
+
+// ---- 現地時間 → 日本時間 自動変換 ----
+// 生徒の自由記述「Where do you live now?」(都市名+国名) からIANAタイムゾーンを推測する。
+// 複数タイムゾーンを持つ国(アメリカ/カナダ/オーストラリア)は主要都市名を先にチェックし、
+// それ以外の登録国はほぼ単一タイムゾーンなので国名だけで判定する。
+const CITY_TZ_HINTS = [
+  // アメリカ
+  [/\b(new york|nyc|boston|miami|atlanta|washington|philadelphia|orlando)\b/, "America/New_York"],
+  [/\b(chicago|dallas|houston|austin|minneapolis|texas)\b/, "America/Chicago"],
+  [/\b(phoenix|arizona)\b/, "America/Phoenix"],
+  [/\b(denver|salt lake|colorado)\b/, "America/Denver"],
+  [/\b(los angeles|la|san francisco|seattle|portland|san diego|las vegas|california)\b/, "America/Los_Angeles"],
+  [/\b(anchorage|alaska)\b/, "America/Anchorage"],
+  [/\b(honolulu|hawaii)\b/, "Pacific/Honolulu"],
+  // カナダ
+  [/\b(vancouver)\b/, "America/Vancouver"],
+  [/\b(calgary|edmonton)\b/, "America/Edmonton"],
+  [/\b(winnipeg)\b/, "America/Winnipeg"],
+  [/\b(halifax)\b/, "America/Halifax"],
+  [/\b(toronto|ottawa|montreal|montréal)\b/, "America/Toronto"],
+  // オーストラリア
+  [/\b(perth)\b/, "Australia/Perth"],
+  [/\b(adelaide)\b/, "Australia/Adelaide"],
+  [/\b(brisbane|queensland)\b/, "Australia/Brisbane"],
+  [/\b(sydney|melbourne|canberra)\b/, "Australia/Sydney"],
+];
+const COUNTRY_TZ = {
+  "united states": "America/New_York", "usa": "America/New_York", "u.s.": "America/New_York", "us": "America/New_York",
+  "canada": "America/Toronto",
+  "united kingdom": "Europe/London", "uk": "Europe/London", "england": "Europe/London", "scotland": "Europe/London", "wales": "Europe/London",
+  "ireland": "Europe/Dublin",
+  "australia": "Australia/Sydney",
+  "new zealand": "Pacific/Auckland",
+  "singapore": "Asia/Singapore",
+  "switzerland": "Europe/Zurich",
+  "netherlands": "Europe/Amsterdam", "holland": "Europe/Amsterdam",
+  "germany": "Europe/Berlin",
+  "denmark": "Europe/Copenhagen",
+  "sweden": "Europe/Stockholm",
+  "norway": "Europe/Oslo",
+  "finland": "Europe/Helsinki",
+  "austria": "Europe/Vienna",
+  "belgium": "Europe/Brussels",
+  "france": "Europe/Paris",
+  "italy": "Europe/Rome",
+  "spain": "Europe/Madrid",
+  "portugal": "Europe/Lisbon",
+  "israel": "Asia/Jerusalem",
+  "luxembourg": "Europe/Luxembourg",
+  "iceland": "Atlantic/Reykjavik",
+  "czech": "Europe/Prague", "czechia": "Europe/Prague",
+  "poland": "Europe/Warsaw",
+  "slovenia": "Europe/Ljubljana",
+  "estonia": "Europe/Tallinn",
+  "hong kong": "Asia/Hong_Kong",
+  "uae": "Asia/Dubai", "united arab emirates": "Asia/Dubai",
+  "qatar": "Asia/Qatar",
+  "kuwait": "Asia/Kuwait",
+  "bahrain": "Asia/Bahrain",
+  "oman": "Asia/Muscat",
+};
+
+// 生徒が入力した自由記述(location優先、なければoriginCountry)からタイムゾーンを推測する。
+// 判定できない場合はnullを返す(その場合は自動変換せず、日本時間欄を手入力にする)。
+function guessTimezone(text) {
+  const s = (text || "").toLowerCase();
+  if (!s) return null;
+  for (const [re, tz] of CITY_TZ_HINTS) if (re.test(s)) return tz;
+  for (const country in COUNTRY_TZ) if (s.includes(country)) return COUNTRY_TZ[country];
+  return null;
+}
+
+// 指定タイムゾーンでの「壁時計時刻」→ UTCミリ秒への変換(標準的な近似アルゴリズム。
+// DST切替の前後1〜2時間だけごく稀にズレる可能性があるため、常にJST側の表示をSeitoが確認する前提)
+function zoneWallTimeToUtcMs(y, mo, d, h, mi, timeZone) {
+  const guess = Date.UTC(y, mo - 1, d, h, mi);
+  const dtf = new Intl.DateTimeFormat("en-US", {
+    timeZone, hour12: false, year: "numeric", month: "2-digit", day: "2-digit",
+    hour: "2-digit", minute: "2-digit", second: "2-digit",
+  });
+  const parts = dtf.formatToParts(new Date(guess)).reduce((acc, p) => { acc[p.type] = p.value; return acc; }, {});
+  const asIfUtc = Date.UTC(parts.year, Number(parts.month) - 1, parts.day, parts.hour === "24" ? 0 : parts.hour, parts.minute, parts.second);
+  const offsetMs = asIfUtc - guess;
+  return guess - offsetMs;
+}
+
+// 生徒の現地時間(date, time文字列, タイムゾーン) → 日本時間のdate/time文字列に変換
+function localToJst(dateStr, timeStr, timeZone) {
+  const [y, mo, d] = dateStr.split("-").map(Number);
+  const [h, mi] = timeStr.split(":").map(Number);
+  const utcMs = zoneWallTimeToUtcMs(y, mo, d, h, mi, timeZone);
+  const jstMs = utcMs + 9 * 3600 * 1000;
+  const jst = new Date(jstMs);
+  const jstDate = `${jst.getUTCFullYear()}-${String(jst.getUTCMonth() + 1).padStart(2, "0")}-${String(jst.getUTCDate()).padStart(2, "0")}`;
+  const jstTime = `${String(jst.getUTCHours()).padStart(2, "0")}:${String(jst.getUTCMinutes()).padStart(2, "0")}`;
+  return { jstDate, jstTime };
+}
+
+function updateJstPreview(id) {
+  const dateEl = document.getElementById(`confirm-date-${id}`);
+  const timeEl = document.getElementById(`confirm-time-${id}`);
+  const previewEl = document.getElementById(`jst-preview-${id}`);
+  const tz = previewEl.dataset.tz;
+  if (!dateEl.value || !timeEl.value) { previewEl.textContent = ""; return; }
+  if (previewEl.dataset.alreadyJst === "true") {
+    previewEl.innerHTML = `この日時はすでに日本時間として入力されています（生徒が空き確認した時点のもの）。現地時間に戻して変換する必要はありません。`;
+    return;
+  }
+  if (!tz) {
+    previewEl.innerHTML = `⚠️ この生徒のタイムゾーンを自動判定できませんでした。入力した日時をそのまま日本時間として登録します（確認してください）。`;
+    return;
+  }
+  const { jstDate, jstTime } = localToJst(dateEl.value, timeEl.value, tz);
+  previewEl.innerHTML = `→ <b>日本時間: ${jstDate} ${jstTime}</b>（推定タイムゾーン: ${tz}。違う場合は下の日時をタイムゾーン分ずらして入力してください）`;
+}
+
+function enterAdmin() {
+  SECRET = document.getElementById("gate-secret").value.trim();
+  if (!SECRET) return;
+  document.getElementById("gate").style.display = "none";
+  document.getElementById("app").style.display = "block";
+  loadList();
+}
+
+async function api(action, extra = {}) {
+  const resp = await fetch("/api/policy-agreement", {
+    method: "POST", headers: {"Content-Type":"application/json"},
+    body: JSON.stringify({ secret: SECRET, action, ...extra })
+  });
+  if (resp.status === 401) { alert("パスワードが違います"); location.reload(); }
+  return resp.json();
+}
+
+function esc(s) {
+  return (s || "").replace(/[&<>"']/g, c => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[c]));
+}
+
+function detailsHtml(r) {
+  return `
+    <b>Email:</b> ${esc(r.email)}<br/>
+    <b>Where they live:</b> ${esc(r.location) || "—"}<br/>
+    <b>Origin country:</b> ${esc(r.origin_country) || "—"}<br/>
+    <b>Preferred date/time:</b> ${esc(r.preferred_datetime) || "—"}<br/>
+    ${r.exact_date_jst ? `<b>✅ 空き確認済みの正確な時間（生徒がフォームで直接チェック済み）:</b> ${esc(r.exact_date_local)} ${esc((r.exact_time_local||"").slice(0,5))} (${esc(r.exact_timezone)||"local"}) = <b>${esc(r.exact_date_jst)} ${esc((r.exact_time_jst||"").slice(0,5))} JST</b><br/>` : ""}
+    <b>Course:</b> ${esc(r.course) || "—"}<br/>
+    <b>Level:</b> ${esc(r.japanese_level) || "—"}<br/>
+    <b>Duration:</b> ${esc(r.lesson_duration) || "—"}<br/>
+    <b>Weekly GAKU Master trial done:</b> ${r.weekly_trial_done ? "Yes" : "No"}<br/>
+    ${r.screening_q1 ? `<b>Non-approved-country screening:</b> Q1(not regular free lesson)=${esc(r.screening_q1)}, Q2($35/hr)=${esc(r.screening_q2) || "—"}, Q3($17.5/30min)=${esc(r.screening_q3) || "—"} → ${r.screening_passed ? "Passed" : "Failed"}<br/>` : ""}
+    <b>Submitted:</b> ${r.submitted_at ? new Date(r.submitted_at).toLocaleString() : "—"}
+  `;
+}
+
+function notifyBadge(r) {
+  if (r.notify_status === "failed") return `<span class="badge notify-fail" title="${esc(r.notify_error)}">⚠️ 通知メール未送信</span>`;
+  if (r.notify_status === "sent") return '<span class="badge notify-ok">通知メール送信済</span>';
+  return "";
+}
+let pendingRequestsCache = {};
+
+async function loadList() {
+  const data = await api("admin_list_trial_lessons");
+  (data.pending || []).forEach(r => { pendingRequestsCache[r.id] = r; });
+
+  const pendingEl = document.getElementById("pending-list");
+  const pending = data.pending || [];
+  pendingEl.innerHTML = pending.length === 0 ? '<p class="empty">現在、未対応のリクエストはありません。</p>' :
+    pending.map(r => `
+      <div class="req-card" id="req-${r.id}">
+        <div class="req-head">
+          <span>${esc(r.full_name)}</span>
+          <span class="badge pending">pending</span> ${notifyBadge(r)}
+        </div>
+        <div class="details">${detailsHtml(r)}</div>
+        <label style="font-size:12px;color:#64748b;">確定日時（承諾する場合。<b>生徒の現地時間</b>で入力してください。参考: 生徒の希望「${esc(r.preferred_datetime) || '未記入'}」）</label>
+        <div class="row" style="margin-top:4px;">
+          <input type="date" id="confirm-date-${r.id}" value="${esc(r.exact_date_jst) || ""}" oninput="updateJstPreview('${r.id}')" />
+          <input type="time" id="confirm-time-${r.id}" value="${esc((r.exact_time_jst||"").slice(0,5))}" oninput="updateJstPreview('${r.id}')" />
+        </div>
+        <p id="jst-preview-${r.id}" data-tz="${r.exact_timezone || guessTimezone(r.location) || guessTimezone(r.origin_country) || ""}" data-already-jst="${r.exact_date_jst ? "true" : "false"}" style="font-size:12px;color:#2563eb;margin:6px 0 0;">${r.exact_date_jst ? "生徒が入力時点で空き確認済みのため、上の日付欄はすでに日本時間で入力されています（そのまま承諾できます）。" : ""}</p>
+        <label style="font-size:12px;color:#64748b;margin-top:8px;display:block;">生徒へのひとこと（任意）</label>
+        <textarea id="note-${r.id}" placeholder="任意のメッセージ"></textarea>
+        <div class="row">
+          <button class="btn accept" onclick="respond('${r.id}','accept')">承諾して送信</button>
+          <button class="btn decline" onclick="respond('${r.id}','decline')">お断りして送信</button>
+        </div>
+      </div>
+    `).join("");
+
+  const autoEl = document.getElementById("auto-declined-list");
+  const auto = data.autoDeclined || [];
+  autoEl.innerHTML = auto.length === 0 ? '<p class="empty">自動お断りはありません。</p>' :
+    auto.map(r => `
+      <div class="req-card">
+        <div class="req-head">
+          <span>${esc(r.full_name)}</span>
+          <span><span class="badge ${r.status}">${r.status}</span> ${notifyBadge(r)}</span>
+        </div>
+        <div class="details">
+          ${detailsHtml(r)}<br/>
+          <b>申込日時:</b> ${r.submitted_at ? new Date(r.submitted_at).toLocaleString() : "—"}
+        </div>
+      </div>
+    `).join("");
+
+  const processedEl = document.getElementById("processed-list");
+  const processed = data.processed || [];
+  processedEl.innerHTML = processed.length === 0 ? '<p class="empty">対応済みのリクエストはまだありません。</p>' :
+    processed.map(r => `
+      <div class="req-card">
+        <div class="req-head">
+          <span>${esc(r.full_name)}</span>
+          <span class="badge ${r.status}">${r.status}</span>
+        </div>
+        <div class="details">
+          ${detailsHtml(r)}<br/>
+          ${r.status === "accepted" ? `<b>確定日時:</b> ${esc(r.confirmed_datetime) || "—"}${r.confirmed_date_jst ? ` （日本時間: ${esc(r.confirmed_date_jst)} ${esc((r.confirmed_time_jst || "").slice(0,5))}）` : ""}<br/>` : ""}
+          ${r.admin_note ? `<b>ひとこと:</b> ${esc(r.admin_note)}<br/>` : ""}
+          <b>対応日時:</b> ${r.responded_at ? new Date(r.responded_at).toLocaleString() : "—"}
+        </div>
+      </div>
+    `).join("");
+}
+
+async function respond(id, decision) {
+  const note = document.getElementById(`note-${id}`).value.trim();
+  const verb = decision === "accept" ? "承諾" : "お断り";
+
+  let payload = { requestId: id, decision, note };
+
+  if (decision === "accept") {
+    const dateEl = document.getElementById(`confirm-date-${id}`);
+    const timeEl = document.getElementById(`confirm-time-${id}`);
+    const dateLocal = dateEl.value;
+    const timeLocal = timeEl.value;
+    if (!dateLocal || !timeLocal) return alert("承諾する場合は、生徒の現地時間での日付と時間を入力してください。");
+
+    const previewEl = document.getElementById(`jst-preview-${id}`);
+    const tz = previewEl.dataset.tz;
+    let dateJst = dateLocal, timeJst = timeLocal; // タイムゾーン不明な場合はそのまま日本時間として扱う(要確認)
+    if (previewEl.dataset.alreadyJst === "true") {
+      // 生徒がフォーム送信時点で空き確認済み → すでに日本時間なので変換不要
+    } else if (tz) {
+      const { jstDate, jstTime } = localToJst(dateLocal, timeLocal, tz);
+      dateJst = jstDate; timeJst = jstTime;
+    }
+    const confirmedDateTime = previewEl.dataset.alreadyJst === "true"
+      ? `${pendingRequestsCache[id]?.exact_date_local || ""} ${(pendingRequestsCache[id]?.exact_time_local || "").slice(0,5)} (${pendingRequestsCache[id]?.exact_timezone || "student's local time"})`
+      : `${dateLocal} ${timeLocal} (student's local time)`;
+    if (!confirm(`生徒の現地時間 ${dateLocal} ${timeLocal} → 日本時間 ${dateJst} ${timeJst} で確定し、スケジュールに登録します。生徒にもメールが送信されます。よろしいですか？`)) return;
+    payload = { ...payload, confirmedDateTime, confirmedDateLocal: dateLocal, confirmedTimeLocal: timeLocal, confirmedDateJst: dateJst, confirmedTimeJst: timeJst, timezoneUsed: tz || null };
+  } else {
+    if (!confirm(`この生徒に「${verb}」の連絡メールを送信します。よろしいですか？`)) return;
+  }
+
+  const result = await api("admin_respond_trial_lesson", payload);
+  if (result.error) { alert("エラー: " + result.error); return; }
+  if (result.emailFailed) alert("記録は保存されましたが、メール送信に失敗しました。手動でご連絡ください。");
+  loadList();
+}
+</script>
+</body>
+</html>

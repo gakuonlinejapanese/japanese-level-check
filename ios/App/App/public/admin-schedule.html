@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>GAKU 先生用スケジュール管理</title>
+<style>
+  :root { --ink:#1e293b; --green:#16a34a; --red:#dc2626; --amber:#d97706; }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Segoe UI",sans-serif; background:#f8fafc; color:var(--ink); }
+  header { background:#1e293b; color:#fff; padding:18px 24px; }
+  header h1 { margin:0; font-size:18px; }
+  .wrap { max-width:1000px; margin:0 auto; padding:24px; }
+  section { background:#fff; border:1px solid #e2e8f0; border-radius:12px; padding:18px; margin-bottom:22px; }
+  h2 { font-size:15px; margin:0 0 14px; }
+  .req-card { border:1px solid #e2e8f0; border-radius:10px; padding:12px 14px; margin-bottom:10px; }
+  .req-head { display:flex; justify-content:space-between; align-items:center; font-size:14px; font-weight:700; }
+  .opt-row { display:flex; align-items:center; gap:10px; margin:6px 0; font-size:13px; }
+  .badge { padding:2px 8px; border-radius:6px; font-size:11px; font-weight:700; }
+  .badge.pending { background:#fef3c7; color:var(--amber); }
+  .badge.confirmed { background:#dcfce7; color:var(--green); }
+  .badge.no_availability { background:#fee2e2; color:var(--red); }
+  .badge.auto { background:#dcfce7; color:var(--green); }
+  .badge.manual { background:#fee2e2; color:var(--red); }
+  .opt-btn { padding:5px 10px; border-radius:6px; border:none; font-size:12px; font-weight:700; cursor:pointer; }
+  .opt-btn.avail { background:var(--green); color:#fff; }
+  .opt-btn.taken { background:#e2e8f0; color:#94a3b8; cursor:not-allowed; }
+  select, input { padding:6px 8px; border:1px solid #cbd5e1; border-radius:6px; font-size:13px; }
+  .row { display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-top:10px; }
+  .btn { padding:8px 14px; border:none; border-radius:8px; font-size:13px; font-weight:700; cursor:pointer; }
+  .btn.reject { background:#fee2e2; color:var(--red); }
+  .btn.confirm { background:var(--green); color:#fff; }
+  .cal-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(96px,1fr)); gap:6px; max-height:320px; overflow-y:auto; }
+  .slot { padding:8px 4px; border-radius:8px; font-size:11px; text-align:center; cursor:pointer; }
+  .slot.open { background:#f1f5f9; color:#475569; }
+  .slot.booked { background:#dcfce7; color:var(--green); }
+  .slot.booked.trial { background:#dbeafe; color:#2563eb; }
+  .slot.blocked { background:#fee2e2; color:var(--red); }
+  .gate { max-width:360px; margin:80px auto; text-align:center; }
+</style>
+</head>
+<body>
+
+<div id="gate" class="gate">
+  <h2>管理者パスワード</h2>
+  <input type="password" id="gate-secret" placeholder="ADMIN_SECRET" style="width:100%;padding:10px;margin-top:10px;" />
+  <button class="btn confirm" style="margin-top:10px;width:100%;" onclick="enterAdmin()">入る</button>
+</div>
+
+<div id="app" style="display:none;">
+<header><h1>GAKU 先生用スケジュール管理</h1></header>
+<div class="wrap">
+
+  <section>
+    <h2>📋 ウェイトリスト（未確定の予約希望）</h2>
+    <div id="waitlist-list"><p>読み込み中…</p></div>
+  </section>
+
+  <section>
+    <h2>📋 キャンセル・リスケ申請</h2>
+    <div id="cancellation-list"><p>読み込み中…</p></div>
+    <div style="margin-top:12px;padding-top:10px;border-top:1px dashed #cbd5e1;font-size:12px;">
+      <strong>⏸ GAKU Master停止の手動解除</strong>（正規プラン加入・3回授業の再受講が済んだ生徒用）<br/>
+      <input type="text" id="resume-email" placeholder="生徒の登録メールアドレス" style="width:260px;margin-top:6px;" />
+      <button class="btn" onclick="resumeGakuMaster(document.getElementById('resume-email').value.trim())">停止を解除</button>
+    </div>
+  </section>
+
+  <section>
+    <h2>📅 空き状況カレンダー（今後14日・JST）</h2>
+    <div class="row">
+      <input type="date" id="block-date" />
+      <input type="time" id="block-time" step="1800" />
+      <input type="text" id="block-label" placeholder="メモ（任意）" />
+      <button class="btn reject" onclick="blockSlot()">この枠をブロック</button>
+    </div>
+    <div class="row" style="margin-top:10px;align-items:center;">
+      <strong style="font-size:13px;color:#475569;">🔴 まとめてブロック：</strong>
+      <input type="date" id="bulk-block-from-date" />
+      <span style="font-size:12px;color:#64748b;">〜</span>
+      <input type="date" id="bulk-block-to-date" placeholder="終了日（空欄なら開始日と同じ）" />
+      <select id="bulk-block-start-time"></select>
+      <span style="font-size:12px;color:#64748b;">から</span>
+      <select id="bulk-block-end-time"></select>
+      <span style="font-size:12px;color:#64748b;">まで（両方含む）</span>
+      <input type="text" id="bulk-block-label" placeholder="メモ（任意）" />
+      <button class="btn reject" onclick="bulkBlockRange()">まとめてブロック</button>
+    </div>
+    <p style="font-size:12px;color:#64748b;margin:4px 0 0;">
+      すでに予約が入っている枠はスキップされます（ブロックされません）。
+    </p>
+    <div class="cal-grid" id="cal-grid" style="margin-top:14px;"></div>
+  </section>
+
+  <section id="reschedule-section">
+    <h2>🔁 予約の日時変更（Free Trial・Official Student共通）</h2>
+    <p style="font-size:12px;color:#64748b;margin:0 0 8px;">今後の確定済み予約すべてが対象です。新しい日付・時間を選んで「変更」を押してください。Zoomリンクはそのまま引き継がれます。</p>
+    <div id="reschedule-list"><p>読み込み中…</p></div>
+  </section>
+
+  <section>
+    <h2>🔗 Zoomリンク一括登録（レッスン30分前リマインドメール用）</h2>
+    <div class="row">
+      <input type="date" id="zoom-date" />
+      <button class="btn confirm" onclick="loadZoomDaySlots()">この日の予約を読み込む</button>
+    </div>
+    <div id="zoom-slot-list" style="margin-top:10px;"></div>
+    <div class="row">
+      <input type="text" id="zoom-link-input" placeholder="Zoomリンク（例: https://zoom.us/j/...）" style="flex:1;min-width:260px;" />
+      <button class="btn confirm" onclick="applyZoomLink()">選択した予約に一括登録</button>
+    </div>
+    <p style="font-size:12px;color:#64748b;margin-top:8px;">
+      登録すると、レッスン開始の約30分前（20〜40分の間で外部cronが検知したタイミング）に生徒へ自動でリマインドメールが送信されます。
+    </p>
+  </section>
+
+  <section>
+    <h2>🎓 Official Students 名簿</h2>
+    <div id="official-list"></div>
+    <div class="row">
+      <input type="text" id="off-name" placeholder="名前" />
+      <input type="email" id="off-email" placeholder="メール" />
+      <input type="text" id="off-notes" placeholder="メモ（固定スケジュール等）" />
+      <select id="off-country"></select>
+      <select id="off-state" style="display:none;"></select>
+      <select id="off-timezone-other" style="display:none;"></select>
+      <button class="btn confirm" onclick="addOfficialStudent()">追加</button>
+    </div>
+    <p style="font-size:12px;color:#64748b;margin-top:4px;">
+      生徒から聞いた「国」（アメリカ・カナダ・オーストラリアなど複数タイムゾーンがある国は「州・地域」も）を選んでください。予約確定メールやレッスン30分前リマインドメールに、日本時間と一緒にその方の現地時間が自動で記載されます。
+    </p>
+  </section>
+
+  <section>
+    <h2>🆓 Free Trial Lesson 予約一覧（Official Studentとは別枠）</h2>
+    <div id="trial-lesson-list"><p>読み込み中…</p></div>
+    <p style="font-size:12px;color:#64748b;margin-top:8px;">
+      admin-trial-lessons.htmlで「承諾して送信」を押すと、生徒の現地時間から自動で日本時間に変換されてここに追加されます。あとは上の「Zoomリンク一括登録」からリンクを登録するだけです。
+    </p>
+  </section>
+
+  <section>
+    <h2>📌 生徒との予約を作成（確定済み予約として登録）</h2>
+    <div class="row">
+      <select id="booking-student"></select>
+      <input type="date" id="booking-date" />
+      <input type="time" id="booking-time" />
+      <select id="booking-duration">
+        <option value="30">30分</option>
+        <option value="60" selected>60分</option>
+      </select>
+      <input type="text" id="booking-label" placeholder="メモ（任意）" style="flex:1;min-width:160px;" />
+      <button class="btn confirm" onclick="createOfficialBooking()">予約を作成</button>
+    </div>
+    <p style="font-size:12px;color:#64748b;margin-top:8px;">
+      作成後、この日付を上の「Zoomリンク一括登録」で選べば、すぐにリンクを紐付けられます。
+    </p>
+  </section>
+
+</div>
+</div>
+
+<script>
+let SECRET = "";
+const HOURS = ["08:00","09:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00","18:00","19:00","20:00","21:00","22:00"];
+let availabilityMap = {};
+(function populateBulkBlockTimeSelects() {
+  const startSel = document.getElementById("bulk-block-start-time");
+  const endSel = document.getElementById("bulk-block-end-time");
+  const opts = HOURS.map(t => `<option value="${t}">${t}</option>`).join("");
+  startSel.innerHTML = opts;
+  endSel.innerHTML = opts;
+  endSel.value = HOURS[HOURS.length - 1];
+})();
+// 国 → タイムゾーン。複数タイムゾーンを持つ国は states で「州・地域 → タイムゾーン」を持つ
+const COUNTRY_TZ = {
+  "日本": { tz: "Asia/Tokyo" },
+  "アメリカ合衆国": { states: {
+    "東部 (NY・FL・GAなど)": "America/New_York",
+    "中部 (TX・ILなど)": "America/Chicago",
+    "山岳部 (CO・UTなど)": "America/Denver",
+    "アリゾナ州（サマータイムなし）": "America/Phoenix",
+    "太平洋部 (CA・WAなど)": "America/Los_Angeles",
+  }},
+  "カナダ": { states: {
+    "東部 (オンタリオ・ケベックなど)": "America/Toronto",
+    "太平洋部 (ブリティッシュコロンビア)": "America/Vancouver",
+  }},
+  "イギリス": { tz: "Europe/London" },
+  "アイルランド": { tz: "Europe/Dublin" },
+  "フランス": { tz: "Europe/Paris" },
+  "ドイツ": { tz: "Europe/Berlin" },
+  "スペイン": { tz: "Europe/Madrid" },
+  "イタリア": { tz: "Europe/Rome" },
+  "オランダ": { tz: "Europe/Amsterdam" },
+  "スイス": { tz: "Europe/Zurich" },
+  "オーストラリア": { states: {
+    "東部 (NSW・VIC・QLDなど)": "Australia/Sydney",
+    "西オーストラリア州": "Australia/Perth",
+  }},
+  "中国": { tz: "Asia/Shanghai" },
+  "韓国": { tz: "Asia/Seoul" },
+  "シンガポール": { tz: "Asia/Singapore" },
+  "香港": { tz: "Asia/Hong_Kong" },
+  "タイ": { tz: "Asia/Bangkok" },
+  "アラブ首長国連邦": { tz: "Asia/Dubai" },
+  "ニュージーランド": { tz: "Pacific/Auckland" },
+  "ブラジル": { tz: "America/Sao_Paulo" },
+  "メキシコ": { tz: "America/Mexico_City" },
+  "インド": { tz: "Asia/Kolkata" },
+  "その他（一覧にない国）": { other: true },
+};
+const OTHER_TIMEZONES = ["Asia/Tokyo","America/New_York","America/Chicago","America/Denver","America/Los_Angeles","America/Phoenix","America/Toronto","America/Vancouver","Europe/London","Europe/Dublin","Europe/Paris","Europe/Berlin","Europe/Madrid","Europe/Rome","Europe/Amsterdam","Europe/Zurich","Australia/Sydney","Australia/Perth","Asia/Shanghai","Asia/Seoul","Asia/Singapore","Asia/Hong_Kong","Asia/Bangkok","Asia/Dubai","Pacific/Auckland","America/Sao_Paulo","America/Mexico_City","Asia/Kolkata"];
+
+function populateCountrySelect(selectEl) {
+  selectEl.innerHTML = `<option value="">国（任意）</option>` +
+    Object.keys(COUNTRY_TZ).map(c => `<option value="${c}">${c}</option>`).join("");
+}
+function populateStateSelectFor(country, stateSelectEl, otherSelectEl) {
+  const entry = COUNTRY_TZ[country];
+  if (entry && entry.states) {
+    stateSelectEl.innerHTML = `<option value="">州・地域を選択</option>` +
+      Object.entries(entry.states).map(([label, tz]) => `<option value="${tz}">${label}</option>`).join("");
+    stateSelectEl.style.display = "";
+    otherSelectEl.style.display = "none";
+  } else if (entry && entry.other) {
+    otherSelectEl.innerHTML = `<option value="">タイムゾーンを選択</option>` +
+      OTHER_TIMEZONES.map(tz => `<option value="${tz}">${tz}</option>`).join("");
+    otherSelectEl.style.display = "";
+    stateSelectEl.style.display = "none";
+  } else {
+    stateSelectEl.style.display = "none";
+    otherSelectEl.style.display = "none";
+  }
+}
+(function initOfficialCountrySelects() {
+  const countrySel = document.getElementById("off-country");
+  const stateSel = document.getElementById("off-state");
+  const otherSel = document.getElementById("off-timezone-other");
+  populateCountrySelect(countrySel);
+  countrySel.addEventListener("change", () => populateStateSelectFor(countrySel.value, stateSel, otherSel));
+})();
+const PLAN_LINKS = {
+  "3mo_30min": { label: "3 MONTHS · 30min/mo — $68.95", url: "https://buy.stripe.com/7sYcN53aGf3y9F3ct4bMQ06" },
+  "3mo_1hr":   { label: "3 MONTHS · 1hr/mo — $95.20",   url: "https://buy.stripe.com/6oU8wP6mS6x23gF8cObMQ07" },
+  "6mo_30min": { label: "6 MONTHS · 30min/mo — $133.45", url: "https://buy.stripe.com/dRm3cvaD8f3y18x0KmbMQ04" },
+  "6mo_1hr":   { label: "6 MONTHS · 1hr/mo — $185.95",   url: "https://buy.stripe.com/9B628rcLg7B6eZn0KmbMQ05" },
+};
+
+function enterAdmin() {
+  SECRET = document.getElementById("gate-secret").value.trim();
+  if (!SECRET) return;
+  document.getElementById("gate").style.display = "none";
+  document.getElementById("app").style.display = "block";
+  loadWaitlist();
+  loadAvailabilityGrid();
+  loadOfficialStudents();
+  loadTrialLessonList();
+  loadCancellationRequests();
+  loadRescheduleList();
+}
+
+async function api(action, extra = {}) {
+  const resp = await fetch("/api/schedule", {
+    method: "POST", headers: {"Content-Type":"application/json"},
+    body: JSON.stringify({ secret: SECRET, action, ...extra })
+  });
+  if (resp.status === 401) { alert("パスワードが違います"); location.reload(); }
+  return resp.json();
+}
+
+function fmtDT(dateStr, timeStr) {
+  return `${dateStr} ${timeStr.slice(0,5)} (JST)`;
+}
+
+async function loadWaitlist() {
+  const data = await api("list-waitlist");
+  const el = document.getElementById("waitlist-list");
+  const pending = (data.requests || []).filter(r => r.status === "pending");
+  if (pending.length === 0) { el.innerHTML = "<p>現在、保留中のリクエストはありません。</p>"; return; }
+
+  // 空き状況を先に取得して〇✕判定に使う
+  const avail = await api("list-availability");
+  const takenSet = new Set((avail.slots || []).map(s => `${s.lesson_date}_${s.start_time.slice(0,5)}`));
+
+  el.innerHTML = pending.map(r => {
+    const opts = [1,2,3].map(n => {
+      const d = r[`option${n}_date`], t = r[`option${n}_time`];
+      if (!d || !t) return "";
+      const isTaken = takenSet.has(`${d}_${t.slice(0,5)}`);
+      const label = ["First option:","Second option:","Third option:"][n-1];
+      return `<div class="opt-row">
+        <span>${label}</span>
+        <button class="opt-btn ${isTaken ? "taken" : "avail"}" ${isTaken ? "disabled" : ""}
+          onclick="confirmBooking('${r.id}', ${n})">${fmtDT(d,t)}</button>
+      </div>`;
+    }).join("");
+
+    const planInfo = PLAN_LINKS[r.plan_key];
+    return `<div class="req-card">
+      <div class="req-head">
+        <span>${r.student_name} (${r.student_email})</span>
+        <span class="badge pending">pending</span>
+      </div>
+      <div style="font-size:12px;color:#64748b;margin:4px 0;">プラン: ${planInfo ? planInfo.label : (r.plan_key || "不明")}</div>
+      ${opts}
+      <div class="row">
+        <button class="btn reject" onclick="rejectWaitlist('${r.id}')">空き枠なし（お断り）</button>
+      </div>
+    </div>`;
+  }).join("");
+}
+
+async function confirmBooking(waitlistId, chosenOption) {
+  if (!confirm("この日時で確定してよいですか？生徒にメールが送信されます。")) return;
+  // planKeyから対応するStripeリンクを探す（見つからなければ空欄でOK、後で手動送付）
+  const req = (await api("list-waitlist")).requests.find(r => r.id === waitlistId);
+  const planInfo = req ? PLAN_LINKS[req.plan_key] : null;
+  await api("confirm-booking", { waitlistId, chosenOption, stripeLink: planInfo ? planInfo.url : "" });
+  loadWaitlist(); loadAvailabilityGrid(); loadRescheduleList();
+}
+
+async function rejectWaitlist(waitlistId) {
+  if (!confirm("このリクエストをお断りしてよいですか？生徒に案内メールが送信されます。")) return;
+  await api("reject-waitlist", { waitlistId });
+  loadWaitlist();
+}
+
+async function loadCancellationRequests() {
+  const data = await api("list-cancellation-requests");
+  const el = document.getElementById("cancellation-list");
+  const pending = (data.requests || []).filter(r => !r.acknowledged);
+  if (pending.length === 0) { el.innerHTML = "<p>現在、未確認のキャンセル・リスケ申請はありません。</p>"; return; }
+
+  el.innerHTML = pending.map(r => {
+    const isCancel = r.request_type === "cancel";
+    const statusBadge = r.auto_opened
+      ? `<span class="badge auto">✅ 枠を自動解放済み${r.matched_start_time ? "（" + r.matched_start_time.slice(0,5) + "）" : ""}</span>`
+      : `<span class="badge manual">⚠️ 要手動確認（自動一致せず）</span>`;
+    const la = r.longAbsence;
+    let absenceBlock = "";
+    if (r.masterSuspended) {
+      absenceBlock = `<div style="background:#f1f5f9;border:1px solid #cbd5e1;border-radius:8px;padding:8px 10px;margin:6px 0;font-size:12px;">
+        ⏸ この生徒のGAKU Masterは<strong>一時停止中</strong>です。正規プラン加入、または3回授業の再受講が済んだら
+        <button class="btn" style="margin-left:6px;" onclick="resumeGakuMaster('${r.student_email}')">停止を解除</button></div>`;
+    } else if (la && la.flagged) {
+      absenceBlock = `<div style="background:#fef2f2;border:2px solid #dc2626;border-radius:8px;padding:8px 10px;margin:6px 0;font-size:12px;">
+        <strong style="color:#b91c1c;">⚠️ 1ヶ月以上の欠席（Official Student）— GAKU Master停止の承認待ち</strong>
+        <ul style="margin:4px 0 6px 18px;padding:0;">${la.reasons.map(x => `<li>${x}</li>`).join("")}</ul>
+        <button class="btn reject" onclick="suspendGakuMaster('${r.student_email}', '${r.id}', '${(r.student_name || "").replace(/'/g, "")}')">GAKU Master を一時停止（承認）</button>
+        <span style="color:#64748b;"> 押すと生徒に英文メールが届きます。見送る場合は「確認済みにする」だけ押してください。</span></div>`;
+    }
+    return `<div class="req-card">
+      <div class="req-head">
+        <span>${r.student_name} (${r.student_email || "メール未登録"}) — ${isCancel ? "キャンセル" : "リスケ"}</span>
+        ${statusBadge}
+      </div>
+      <div style="font-size:12px;color:#64748b;margin:6px 0;">
+        キャンセル対象日: ${r.cancel_date}
+        ${r.return_date ? ` / 復帰予定日: ${r.return_date}` : ""}
+        ${r.reschedule_date ? ` / 希望リスケ日: ${r.reschedule_date}` : ""}
+        ${r.location ? ` / 現在地: ${r.location}` : ""}
+      </div>
+      ${absenceBlock}
+      <div class="row">
+        <button class="btn confirm" onclick="acknowledgeCancellationRequest('${r.id}')">確認済みにする</button>
+      </div>
+    </div>`;
+  }).join("");
+}
+
+async function suspendGakuMaster(email, requestId, name) {
+  if (!confirm(`${name || email} さんのGAKU Master利用を一時停止しますか？\n生徒に英文の停止通知メールが送られます。`)) return;
+  const r = await api("suspend-gaku-master", { email, requestId: requestId || null });
+  if (r.error) return alert(r.error);
+  alert("GAKU Masterを一時停止しました。" + (r.emailed ? "\n生徒に英文メールを送りました。" : "\n※通知メールの送信に失敗しました。手動で連絡してください。"));
+  loadCancellationRequests();
+}
+
+async function resumeGakuMaster(email) {
+  if (!email) return alert("メールアドレスを入力してください");
+  if (!confirm(`${email} のGAKU Master停止を解除しますか？`)) return;
+  const r = await api("resume-gaku-master", { email });
+  if (r.error) return alert(r.error);
+  alert("停止を解除しました。");
+  loadCancellationRequests();
+}
+
+async function acknowledgeCancellationRequest(id) {
+  await api("acknowledge-cancellation-request", { id });
+  loadCancellationRequests();
+  loadAvailabilityGrid();
+}
+
+async function loadAvailabilityGrid() {
+  const data = await api("list-availability");
+  const grid = document.getElementById("cal-grid");
+  const map = {};
+  (data.slots || []).forEach(s => { map[`${s.lesson_date}_${s.start_time.slice(0,5)}`] = s; });
+  availabilityMap = map;
+
+  let html = "";
+  for (let i = 0; i < 14; i++) {
+    const d = new Date(Date.now() + i * 86400000);
+    const dateStr = d.toISOString().slice(0,10);
+    HOURS.forEach(time => {
+      const key = `${dateStr}_${time}`;
+      const slot = map[key];
+      const status = slot ? slot.status : "open";
+      const isTrial = slot && slot.source === "trial_lesson";
+      const labelExtra = slot && slot.label ? ` — ${isTrial ? "🆓 " : ""}${slot.label}` : "";
+      html += `<div class="slot ${status}${isTrial ? " trial" : ""}" title="クリックでブロック解除/ブロック"
+        onclick="toggleSlot('${dateStr}','${time}','${status}')">${dateStr.slice(5)} ${time}${labelExtra}</div>`;
+    });
+  }
+  grid.innerHTML = html;
+}
+
+async function toggleSlot(date, time, status) {
+  if (status === "open") {
+    await api("block-slot", { date, time, durationMinutes: 60, label: "" });
+  } else if (status === "blocked") {
+    await api("unblock-slot", { date, time });
+  } else {
+    const slot = availabilityMap[`${date}_${time}`];
+    const row = slot && document.getElementById("rs-row-" + slot.id);
+    if (row) {
+      row.scrollIntoView({ behavior: "smooth", block: "center" });
+      row.style.outline = "2px solid #2563eb";
+      setTimeout(() => { row.style.outline = ""; }, 2500);
+    } else {
+      alert("予約済みの枠です。「予約の日時変更」欄から日時を変更できます。");
+    }
+    return;
+  }
+  loadAvailabilityGrid();
+}
+
+async function blockSlot() {
+  const date = document.getElementById("block-date").value;
+  const time = document.getElementById("block-time").value;
+  const label = document.getElementById("block-label").value;
+  if (!date || !time) return alert("日付と時間を入力してください");
+  await api("block-slot", { date, time: time + ":00", durationMinutes: 60, label });
+  loadAvailabilityGrid();
+}
+
+async function bulkBlockRange() {
+  const fromDate = document.getElementById("bulk-block-from-date").value;
+  const toDate = document.getElementById("bulk-block-to-date").value || fromDate;
+  const startTime = document.getElementById("bulk-block-start-time").value;
+  const endTime = document.getElementById("bulk-block-end-time").value;
+  const label = document.getElementById("bulk-block-label").value;
+  if (!fromDate) return alert("開始日を入力してください");
+  if (toDate < fromDate) return alert("終了日は開始日より後にしてください");
+  if (endTime < startTime) return alert("終了時刻は開始時刻より後にしてください");
+
+  const targets = [];
+  for (let d = new Date(fromDate + "T00:00:00"); d <= new Date(toDate + "T00:00:00"); d.setDate(d.getDate() + 1)) {
+    const dateStr = d.toISOString().slice(0, 10);
+    HOURS.forEach(time => {
+      if (time < startTime || time > endTime) return;
+      const existing = availabilityMap[`${dateStr}_${time}`];
+      if (existing && existing.status === "booked") return; // 予約済みはスキップ
+      targets.push({ dateStr, time });
+    });
+  }
+  if (targets.length === 0) return alert("対象の枠がありません。");
+  if (!confirm(`${fromDate}〜${toDate}の${startTime}〜${endTime}の間で、${targets.length}件の枠をブロックします。よろしいですか？`)) return;
+
+  let done = 0;
+  for (let i = 0; i < targets.length; i += 8) {
+    const chunk = targets.slice(i, i + 8);
+    await Promise.all(chunk.map(t => api("block-slot", { date: t.dateStr, time: t.time + ":00", durationMinutes: 60, label })));
+    done += chunk.length;
+  }
+  alert(`${done}件の枠をブロックしました。`);
+  loadAvailabilityGrid();
+}
+
+let zoomDaySlots = [];
+
+async function loadZoomDaySlots() {
+  const date = document.getElementById("zoom-date").value;
+  const el = document.getElementById("zoom-slot-list");
+  if (!date) { alert("日付を選択してください"); return; }
+
+  const data = await api("list-availability", { fromDate: date, toDate: date });
+  zoomDaySlots = (data.slots || []).filter(s => s.status === "booked");
+
+  if (zoomDaySlots.length === 0) {
+    el.innerHTML = "<p>この日に確定済みの予約はありません。</p>";
+    return;
+  }
+
+  el.innerHTML = zoomDaySlots.map(s => {
+    const already = s.zoom_link ? ` <span style="color:${'var(--green)'};font-size:11px;">✓登録済み</span>` : "";
+    const trialTag = s.source === "trial_lesson" ? ` <span style="color:#2563eb;font-size:11px;">🆓 Free Trial</span>` : "";
+    const nameTag = s.student_name ? ` <strong>${s.student_name}</strong>` : "";
+    return `<label style="display:flex;align-items:center;gap:8px;font-size:13px;padding:4px 0;">
+      <input type="checkbox" class="zoom-slot-cb" value="${s.id}" />
+      ${s.start_time.slice(0,5)}${nameTag}${s.label ? " — " + s.label : ""}${trialTag}${already}
+    </label>`;
+  }).join("");
+}
+
+async function applyZoomLink() {
+  const checked = Array.from(document.querySelectorAll(".zoom-slot-cb:checked")).map(cb => cb.value);
+  const zoomLink = document.getElementById("zoom-link-input").value.trim();
+  if (checked.length === 0) return alert("予約を1つ以上選択してください");
+  if (!zoomLink) return alert("Zoomリンクを入力してください");
+  await api("set-zoom-link", { ids: checked, zoomLink });
+  alert(`${checked.length}件の予約にZoomリンクを登録しました。`);
+  loadZoomDaySlots();
+  loadTrialLessonList();
+  loadRescheduleList();
+}
+
+async function loadOfficialStudents() {
+  const data = await api("list-official-students");
+  const el = document.getElementById("official-list");
+  el.innerHTML = (data.students || []).map(s => {
+    const locationLabel = s.country
+      ? `${s.country}${s.state ? " – " + s.state : ""}`
+      : "住まい未登録";
+    return `<div class="req-card" style="display:flex;justify-content:space-between;align-items:center;gap:8px;">
+      <span><strong>${s.name}</strong> — ${s.email}${s.notes ? " — " + s.notes : ""} — 📍${locationLabel}${s.timezone ? " (" + s.timezone + ")" : ""}</span>
+      <span style="flex-shrink:0;display:flex;gap:4px;">
+        <button class="opt-btn avail" onclick="editOfficialStudentName('${s.id}','${s.name.replace(/'/g, "\\'")}')">✏️ 名前</button>
+        <button class="opt-btn avail" onclick="editOfficialStudentLocation('${s.id}')">📍 住まい</button>
+      </span>
+    </div>`;
+  }).join("") || "<p>まだ登録されていません。</p>";
+
+  const sel = document.getElementById("booking-student");
+  if (sel) {
+    sel.innerHTML = (data.students || []).map(s => `<option value="${s.id}">${s.name} (${s.email})</option>`).join("");
+  }
+}
+
+// ---------- 予約の日時変更（予約の種類を問わない） ----------
+const RS_SOURCE_LABEL = { trial_lesson: "🆓 Free Trial", official: "⭐ Official", waitlist: "📝 Waitlist" };
+
+async function loadRescheduleList() {
+  const el = document.getElementById("reschedule-list");
+  const todayStr = new Date().toISOString().slice(0, 10);
+  const data = await api("list-availability", { fromDate: todayStr });
+  const booked = (data.slots || []).filter(s => s.status === "booked")
+    .sort((a, b) => (a.lesson_date + a.start_time).localeCompare(b.lesson_date + b.start_time));
+
+  if (booked.length === 0) { el.innerHTML = "<p>今後の確定済み予約はありません。</p>"; return; }
+
+  el.innerHTML = booked.map(s => {
+    const src = RS_SOURCE_LABEL[s.source] || "";
+    const name = s.student_name || s.label || "(名前なし)";
+    return `<div class="req-card" id="rs-row-${s.id}" style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;">
+      <span style="min-width:200px;"><strong>${name}</strong> ${src ? `<span style="font-size:11px;color:#2563eb;">${src}</span>` : ""}<br/>
+        <span style="font-size:12px;color:#64748b;">現在: ${s.lesson_date} ${s.start_time.slice(0,5)} (JST)</span></span>
+      <input type="date" id="rs-date-${s.id}" value="${s.lesson_date}" />
+      <input type="time" id="rs-time-${s.id}" step="1800" value="${s.start_time.slice(0,5)}" />
+      <label style="font-size:12px;display:flex;align-items:center;gap:4px;"><input type="checkbox" id="rs-notify-${s.id}" checked /> 生徒にメール通知</label>
+      <button class="btn confirm" onclick="rescheduleBooking('${s.id}')">変更</button>
+    </div>`;
+  }).join("");
+}
+
+async function rescheduleBooking(id) {
+  const newDate = document.getElementById("rs-date-" + id).value;
+  const newTime = document.getElementById("rs-time-" + id).value;
+  const notifyStudent = document.getElementById("rs-notify-" + id).checked;
+  if (!newDate || !newTime) return alert("新しい日付と時間を入力してください");
+  if (!confirm(`この予約を ${newDate} ${newTime} (JST) に変更しますか？${notifyStudent ? "\n生徒に変更通知メールが送られます。" : ""}`)) return;
+  const r = await api("reschedule-booking", { id, newDate, newTime, notifyStudent });
+  if (r.error) return alert(r.error);
+  alert("日時を変更しました。" + (r.emailed ? "\n生徒に通知メールを送りました。" : "") + (r.emailNote ? "\n" + r.emailNote : ""));
+  loadRescheduleList();
+  loadAvailabilityGrid();
+  loadTrialLessonList();
+}
+
+async function loadTrialLessonList() {
+  const el = document.getElementById("trial-lesson-list");
+  const todayStr = new Date().toISOString().slice(0, 10);
+  const data = await api("list-availability", { fromDate: todayStr });
+  const trials = (data.slots || []).filter(s => s.source === "trial_lesson")
+    .sort((a, b) => (a.lesson_date + a.start_time).localeCompare(b.lesson_date + b.start_time));
+
+  if (trials.length === 0) { el.innerHTML = "<p>今後の予定に無料体験レッスンはありません。</p>"; return; }
+
+  el.innerHTML = trials.map(s => {
+    const zoomTag = s.zoom_link
+      ? `<span style="color:var(--green);font-size:12px;">✓ Zoom登録済み</span>`
+      : `<span style="color:var(--amber);font-size:12px;">Zoom未登録</span>`;
+    return `<div class="req-card" style="display:flex;justify-content:space-between;align-items:center;gap:8px;">
+      <span>${s.lesson_date} ${s.start_time.slice(0,5)} (JST) — ${s.label || ""}</span>
+      ${zoomTag}
+    </div>`;
+  }).join("");
+}
+
+async function createOfficialBooking() {
+  const officialStudentId = document.getElementById("booking-student").value;
+  const date = document.getElementById("booking-date").value;
+  const time = document.getElementById("booking-time").value;
+  const durationMinutes = Number(document.getElementById("booking-duration").value);
+  const label = document.getElementById("booking-label").value.trim();
+  if (!officialStudentId) return alert("生徒を選択してください（Official Studentsに未登録なら先に登録してください）");
+  if (!date || !time) return alert("日付と時間を入力してください");
+  await api("add-official-booking", { date, time: time + ":00", durationMinutes, officialStudentId, label });
+  alert("予約を作成しました。続けてZoomリンクを登録できます。");
+  document.getElementById("booking-label").value = "";
+  loadAvailabilityGrid();
+  loadRescheduleList();
+}
+
+async function editOfficialStudentName(id, currentName) {
+  const newName = prompt("新しい名前を入力してください：", currentName);
+  if (newName === null) return; // キャンセル
+  const trimmed = newName.trim();
+  if (!trimmed) return alert("名前を入力してください");
+  if (trimmed === currentName) return;
+  await api("update-official-student", { id, name: trimmed });
+  loadOfficialStudents();
+}
+
+async function editOfficialStudentLocation(id) {
+  const student = (await api("list-official-students")).students.find(s => s.id === id);
+  if (!student) return;
+  const countries = Object.keys(COUNTRY_TZ);
+  const list = countries.map((c, i) => `${i + 1}: ${c}`).join("\n");
+  const input = prompt(`国を番号で選んでください（現在: ${student.country || "未設定"}${student.state ? " – " + student.state : ""}）\n\n${list}`, "");
+  if (input === null) return; // キャンセル
+  const idx = Number(input.trim());
+  const country = countries[idx - 1];
+  if (!country) return alert("番号が正しくありません");
+
+  const entry = COUNTRY_TZ[country];
+  let timezone = null, state = null;
+  if (entry.tz) {
+    timezone = entry.tz;
+  } else if (entry.states) {
+    const stateEntries = Object.entries(entry.states);
+    const stateList = stateEntries.map(([label], i) => `${i + 1}: ${label}`).join("\n");
+    const stateInput = prompt(`州・地域を番号で選んでください\n\n${stateList}`, "");
+    if (stateInput === null) return;
+    const chosen = stateEntries[Number(stateInput.trim()) - 1];
+    if (!chosen) return alert("番号が正しくありません");
+    state = chosen[0];
+    timezone = chosen[1];
+  } else if (entry.other) {
+    const tzList = OTHER_TIMEZONES.map((tz, i) => `${i + 1}: ${tz}`).join("\n");
+    const tzInput = prompt(`タイムゾーンを番号で選んでください\n\n${tzList}`, "");
+    if (tzInput === null) return;
+    timezone = OTHER_TIMEZONES[Number(tzInput.trim()) - 1];
+    if (!timezone) return alert("番号が正しくありません");
+    state = timezone;
+  }
+
+  await api("update-official-student", { id, name: student.name, country, state, timezone });
+  loadOfficialStudents();
+}
+
+async function addOfficialStudent() {
+  const name = document.getElementById("off-name").value.trim();
+  const email = document.getElementById("off-email").value.trim();
+  const notes = document.getElementById("off-notes").value.trim();
+  const country = document.getElementById("off-country").value;
+  const stateSel = document.getElementById("off-state");
+  const otherSel = document.getElementById("off-timezone-other");
+  if (!name || !email) return alert("名前とメールを入力してください");
+
+  let timezone = null, state = null;
+  const entry = COUNTRY_TZ[country];
+  if (entry) {
+    if (entry.tz) {
+      timezone = entry.tz;
+    } else if (entry.states) {
+      if (!stateSel.value) return alert("州・地域を選択してください");
+      timezone = stateSel.value;
+      state = stateSel.options[stateSel.selectedIndex].text;
+    } else if (entry.other) {
+      if (!otherSel.value) return alert("タイムゾーンを選択してください");
+      timezone = otherSel.value;
+      state = otherSel.value;
+    }
+  }
+
+  await api("add-official-student", { name, email, notes, country: country || null, state, timezone });
+  document.getElementById("off-name").value = "";
+  document.getElementById("off-email").value = "";
+  document.getElementById("off-notes").value = "";
+  document.getElementById("off-country").value = "";
+  stateSel.style.display = "none"; stateSel.innerHTML = "";
+  otherSel.style.display = "none"; otherSel.innerHTML = "";
+  loadOfficialStudents();
+}
+</script>
+</body>
+</html>
