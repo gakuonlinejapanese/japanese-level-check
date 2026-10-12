@@ -940,6 +940,12 @@ const UI_TRANSLATIONS = {
     skillsChangeDesc: "You changed your study skills. Would you like new content generated for these skills, or keep the study content you already have?",
     skillsChangeUpdateBtn: "Yes, update my study content",
     skillsChangeKeepBtn: "No, keep my previous study content",
+    updateStudyGuideBtn: "🔄 Update my study guide",
+    updateStudyGuideNote: "Your current study guide never changes on its own. It is only rebuilt when you press this button.",
+    updateStudyGuideConfirmTitle: "Update your study guide?",
+    updateStudyGuideConfirmDesc: "This saves your profile and replaces your current study guide with a new one. The old guide cannot be restored.",
+    updateStudyGuideConfirmYes: "Yes, update my study guide",
+    updateStudyGuideConfirmNo: "No, keep my current study guide",
     streakUnit: "day streak",
     trialEndsToday: "Your free trial ends today!",
     trialEndsTomorrow: "Your free trial ends tomorrow!",
@@ -1467,6 +1473,12 @@ const UI_TRANSLATIONS = {
     skillsChangeDesc: "Vous avez changé vos compétences d'étude. Voulez-vous générer un nouveau contenu pour ces compétences, ou conserver le contenu que vous avez déjà ?",
     skillsChangeUpdateBtn: "Oui, modifier mon contenu d'étude",
     skillsChangeKeepBtn: "Non, garder mon contenu précédent",
+    updateStudyGuideBtn: "🔄 Mettre à jour mon guide d'étude",
+    updateStudyGuideNote: "Votre guide d'étude actuel ne change jamais tout seul. Il n'est reconstruit que lorsque vous appuyez sur ce bouton.",
+    updateStudyGuideConfirmTitle: "Mettre à jour votre guide d'étude ?",
+    updateStudyGuideConfirmDesc: "Votre profil sera enregistré et votre guide d'étude actuel sera remplacé par un nouveau. L'ancien guide ne pourra pas être restauré.",
+    updateStudyGuideConfirmYes: "Oui, mettre à jour mon guide d'étude",
+    updateStudyGuideConfirmNo: "Non, garder mon guide d'étude actuel",
     streakUnit: "jours de suite",
     trialEndsToday: "Votre essai gratuit se termine aujourd'hui !",
     trialEndsTomorrow: "Votre essai gratuit se termine demain !",
@@ -1978,6 +1990,12 @@ const UI_TRANSLATIONS = {
     skillsChangeDesc: "Has cambiado tus habilidades de estudio. ¿Quieres generar contenido nuevo para estas habilidades, o mantener el contenido que ya tienes?",
     skillsChangeUpdateBtn: "Sí, actualizar mi contenido de estudio",
     skillsChangeKeepBtn: "No, mantener mi contenido anterior",
+    updateStudyGuideBtn: "🔄 Actualizar mi guía de estudio",
+    updateStudyGuideNote: "Tu guía de estudio actual nunca cambia por sí sola. Solo se reconstruye cuando pulsas este botón.",
+    updateStudyGuideConfirmTitle: "¿Actualizar tu guía de estudio?",
+    updateStudyGuideConfirmDesc: "Se guardará tu perfil y tu guía de estudio actual se reemplazará por una nueva. La guía anterior no se podrá recuperar.",
+    updateStudyGuideConfirmYes: "Sí, actualizar mi guía de estudio",
+    updateStudyGuideConfirmNo: "No, mantener mi guía de estudio actual",
     streakUnit: "días seguidos",
     trialEndsToday: "¡Tu prueba gratuita termina hoy!",
     trialEndsTomorrow: "¡Tu prueba gratuita termina mañana!",
@@ -2489,6 +2507,12 @@ const UI_TRANSLATIONS = {
     skillsChangeDesc: "Você alterou suas habilidades de estudo. Deseja gerar novo conteúdo para essas habilidades ou manter o conteúdo que você já possui?",
     skillsChangeUpdateBtn: "Sim, atualizar meu conteúdo de estudo",
     skillsChangeKeepBtn: "Não, manter meu conteúdo anterior",
+    updateStudyGuideBtn: "🔄 Atualizar meu guia de estudo",
+    updateStudyGuideNote: "Seu guia de estudo atual nunca muda sozinho. Ele só é refeito quando você toca neste botão.",
+    updateStudyGuideConfirmTitle: "Atualizar seu guia de estudo?",
+    updateStudyGuideConfirmDesc: "Seu perfil será salvo e o guia de estudo atual será substituído por um novo. O guia anterior não poderá ser restaurado.",
+    updateStudyGuideConfirmYes: "Sim, atualizar meu guia de estudo",
+    updateStudyGuideConfirmNo: "Não, manter meu guia de estudo atual",
     streakUnit: "dias seguidos",
     trialEndsToday: "Seu teste grátis termina hoje!",
     trialEndsTomorrow: "Seu teste grátis termina amanhã!",
@@ -3000,6 +3024,12 @@ const UI_TRANSLATIONS = {
     skillsChangeDesc: "Du hast deine Lernfähigkeiten geändert. Möchtest du neue Inhalte für diese Fähigkeiten erstellen lassen oder deine bisherigen Lerninhalte behalten?",
     skillsChangeUpdateBtn: "Ja, Lerninhalte aktualisieren",
     skillsChangeKeepBtn: "Nein, bisherige Lerninhalte behalten",
+    updateStudyGuideBtn: "🔄 Meinen Lernleitfaden aktualisieren",
+    updateStudyGuideNote: "Dein aktueller Lernleitfaden ändert sich nie von selbst. Er wird nur neu erstellt, wenn du diese Schaltfläche drückst.",
+    updateStudyGuideConfirmTitle: "Lernleitfaden aktualisieren?",
+    updateStudyGuideConfirmDesc: "Dein Profil wird gespeichert und dein aktueller Lernleitfaden durch einen neuen ersetzt. Der alte Leitfaden kann nicht wiederhergestellt werden.",
+    updateStudyGuideConfirmYes: "Ja, Lernleitfaden aktualisieren",
+    updateStudyGuideConfirmNo: "Nein, aktuellen Lernleitfaden behalten",
     streakUnit: "Tage in Folge",
     trialEndsToday: "Deine kostenlose Testphase endet heute!",
     trialEndsTomorrow: "Deine kostenlose Testphase endet morgen!",
@@ -3511,6 +3541,12 @@ const UI_TRANSLATIONS = {
     skillsChangeDesc: "Hai modificato le tue competenze di studio. Vuoi generare nuovi contenuti per queste competenze o mantenere quelli che hai già?",
     skillsChangeUpdateBtn: "Sì, aggiorna i miei contenuti",
     skillsChangeKeepBtn: "No, mantieni i contenuti precedenti",
+    updateStudyGuideBtn: "🔄 Aggiorna la mia guida di studio",
+    updateStudyGuideNote: "La tua guida di studio attuale non cambia mai da sola. Viene ricreata solo quando premi questo pulsante.",
+    updateStudyGuideConfirmTitle: "Aggiornare la tua guida di studio?",
+    updateStudyGuideConfirmDesc: "Il tuo profilo verrà salvato e la guida di studio attuale sarà sostituita da una nuova. La guida precedente non potrà essere ripristinata.",
+    updateStudyGuideConfirmYes: "Sì, aggiorna la mia guida di studio",
+    updateStudyGuideConfirmNo: "No, mantieni la mia guida di studio attuale",
     streakUnit: "giorni di fila",
     trialEndsToday: "La tua prova gratuita termina oggi!",
     trialEndsTomorrow: "La tua prova gratuita termina domani!",
@@ -4022,6 +4058,12 @@ const UI_TRANSLATIONS = {
     skillsChangeDesc: "你更改了学习技能。是要为这些技能生成新的学习内容，还是保留之前的学习内容？",
     skillsChangeUpdateBtn: "是，更新我的学习内容",
     skillsChangeKeepBtn: "否，保留之前的学习内容",
+    updateStudyGuideBtn: "🔄 更新我的学习指南",
+    updateStudyGuideNote: "你当前的学习指南不会自动改变，只有在你点击此按钮时才会重新生成。",
+    updateStudyGuideConfirmTitle: "要更新学习指南吗？",
+    updateStudyGuideConfirmDesc: "这将保存你的个人资料，并用新的学习指南替换当前的学习指南。旧的指南无法恢复。",
+    updateStudyGuideConfirmYes: "是，更新我的学习指南",
+    updateStudyGuideConfirmNo: "否，保留当前的学习指南",
     streakUnit: "天连续",
     trialEndsToday: "你的免费试用今天到期！",
     trialEndsTomorrow: "你的免费试用明天到期！",
@@ -4533,6 +4575,12 @@ const UI_TRANSLATIONS = {
     skillsChangeDesc: "你更改了學習技能。要為這些技能產生新的學習內容，還是保留之前的學習內容？",
     skillsChangeUpdateBtn: "是，更新我的學習內容",
     skillsChangeKeepBtn: "否，保留之前的學習內容",
+    updateStudyGuideBtn: "🔄 更新我的學習指南",
+    updateStudyGuideNote: "你目前的學習指南不會自動改變，只有在你按下此按鈕時才會重新產生。",
+    updateStudyGuideConfirmTitle: "要更新學習指南嗎？",
+    updateStudyGuideConfirmDesc: "這將儲存你的個人資料，並用新的學習指南取代目前的學習指南。舊的指南無法復原。",
+    updateStudyGuideConfirmYes: "是，更新我的學習指南",
+    updateStudyGuideConfirmNo: "否，保留目前的學習指南",
     streakUnit: "天連續",
     trialEndsToday: "你的免費試用今天到期！",
     trialEndsTomorrow: "你的免費試用明天到期！",
@@ -5044,6 +5092,12 @@ const UI_TRANSLATIONS = {
     skillsChangeDesc: "학습 스킬을 변경하셨습니다. 이 스킬에 맞춰 새로운 학습 내용을 만들까요, 아니면 이전에 만든 학습 내용을 그대로 유지할까요?",
     skillsChangeUpdateBtn: "네, 학습 내용을 변경합니다",
     skillsChangeKeepBtn: "아니요, 이전 학습 내용을 유지합니다",
+    updateStudyGuideBtn: "🔄 내 학습 가이드 업데이트",
+    updateStudyGuideNote: "현재 학습 가이드는 저절로 바뀌지 않습니다. 이 버튼을 눌렀을 때만 새로 만들어집니다.",
+    updateStudyGuideConfirmTitle: "학습 가이드를 업데이트하시겠습니까?",
+    updateStudyGuideConfirmDesc: "프로필이 저장되고 현재 학습 가이드가 새 가이드로 바뀝니다. 이전 가이드는 복원할 수 없습니다.",
+    updateStudyGuideConfirmYes: "네, 학습 가이드를 업데이트합니다",
+    updateStudyGuideConfirmNo: "아니요, 현재 학습 가이드를 유지합니다",
     streakUnit: "일 연속",
     trialEndsToday: "무료 체험이 오늘 종료됩니다!",
     trialEndsTomorrow: "무료 체험이 내일 종료됩니다!",
@@ -5555,6 +5609,12 @@ const UI_TRANSLATIONS = {
     skillsChangeDesc: "คุณเปลี่ยนทักษะการเรียนแล้ว ต้องการให้สร้างเนื้อหาใหม่ตามทักษะนี้ หรือเก็บเนื้อหาการเรียนเดิมไว้?",
     skillsChangeUpdateBtn: "ใช่ อัปเดตเนื้อหาการเรียนของฉัน",
     skillsChangeKeepBtn: "ไม่ เก็บเนื้อหาการเรียนเดิมไว้",
+    updateStudyGuideBtn: "🔄 อัปเดตคู่มือการเรียนของฉัน",
+    updateStudyGuideNote: "คู่มือการเรียนปัจจุบันของคุณจะไม่เปลี่ยนเอง จะสร้างใหม่ก็ต่อเมื่อคุณกดปุ่มนี้เท่านั้น",
+    updateStudyGuideConfirmTitle: "ต้องการอัปเดตคู่มือการเรียนหรือไม่?",
+    updateStudyGuideConfirmDesc: "ระบบจะบันทึกโปรไฟล์ของคุณและแทนที่คู่มือการเรียนปัจจุบันด้วยคู่มือใหม่ ไม่สามารถกู้คืนคู่มือเดิมได้",
+    updateStudyGuideConfirmYes: "ใช่ อัปเดตคู่มือการเรียนของฉัน",
+    updateStudyGuideConfirmNo: "ไม่ เก็บคู่มือการเรียนปัจจุบันไว้",
     streakUnit: "วันติดต่อกัน",
     trialEndsToday: "ทดลองใช้ฟรีของคุณจะหมดอายุวันนี้!",
     trialEndsTomorrow: "ทดลองใช้ฟรีของคุณจะหมดอายุพรุ่งนี้!",
@@ -6066,6 +6126,12 @@ const UI_TRANSLATIONS = {
     skillsChangeDesc: "Anda telah menukar kemahiran pembelajaran anda. Adakah anda mahu kandungan baharu dijana untuk kemahiran ini, atau kekalkan kandungan pembelajaran sedia ada?",
     skillsChangeUpdateBtn: "Ya, kemaskini kandungan pembelajaran saya",
     skillsChangeKeepBtn: "Tidak, kekalkan kandungan pembelajaran sebelumnya",
+    updateStudyGuideBtn: "🔄 Kemas kini panduan belajar saya",
+    updateStudyGuideNote: "Panduan belajar semasa anda tidak akan berubah dengan sendirinya. Ia hanya dibina semula apabila anda menekan butang ini.",
+    updateStudyGuideConfirmTitle: "Kemas kini panduan belajar anda?",
+    updateStudyGuideConfirmDesc: "Profil anda akan disimpan dan panduan belajar semasa akan diganti dengan yang baharu. Panduan lama tidak boleh dipulihkan.",
+    updateStudyGuideConfirmYes: "Ya, kemas kini panduan belajar saya",
+    updateStudyGuideConfirmNo: "Tidak, kekalkan panduan belajar semasa saya",
     streakUnit: "hari berturut-turut",
     trialEndsToday: "Percubaan percuma anda tamat hari ini!",
     trialEndsTomorrow: "Percubaan percuma anda tamat esok!",
@@ -6577,6 +6643,12 @@ const UI_TRANSLATIONS = {
     skillsChangeDesc: "Anda telah mengubah keterampilan belajar Anda. Apakah Anda ingin konten baru dibuat untuk keterampilan ini, atau tetap menggunakan konten belajar yang sudah ada?",
     skillsChangeUpdateBtn: "Ya, perbarui konten belajar saya",
     skillsChangeKeepBtn: "Tidak, pertahankan konten belajar sebelumnya",
+    updateStudyGuideBtn: "🔄 Perbarui panduan belajar saya",
+    updateStudyGuideNote: "Panduan belajar Anda saat ini tidak pernah berubah dengan sendirinya. Panduan hanya dibuat ulang saat Anda menekan tombol ini.",
+    updateStudyGuideConfirmTitle: "Perbarui panduan belajar Anda?",
+    updateStudyGuideConfirmDesc: "Profil Anda akan disimpan dan panduan belajar saat ini akan diganti dengan yang baru. Panduan lama tidak dapat dipulihkan.",
+    updateStudyGuideConfirmYes: "Ya, perbarui panduan belajar saya",
+    updateStudyGuideConfirmNo: "Tidak, pertahankan panduan belajar saya saat ini",
     streakUnit: "hari berturut-turut",
     trialEndsToday: "Uji coba gratis Anda berakhir hari ini!",
     trialEndsTomorrow: "Uji coba gratis Anda berakhir besok!",
@@ -7088,6 +7160,12 @@ const UI_TRANSLATIONS = {
     skillsChangeDesc: "Bạn đã thay đổi kỹ năng học tập. Bạn có muốn tạo nội dung mới cho các kỹ năng này, hay giữ nguyên nội dung học tập trước đó?",
     skillsChangeUpdateBtn: "Có, cập nhật nội dung học tập của tôi",
     skillsChangeKeepBtn: "Không, giữ nội dung học tập trước đó",
+    updateStudyGuideBtn: "🔄 Cập nhật hướng dẫn học của tôi",
+    updateStudyGuideNote: "Hướng dẫn học hiện tại của bạn không bao giờ tự thay đổi. Nó chỉ được tạo lại khi bạn nhấn nút này.",
+    updateStudyGuideConfirmTitle: "Cập nhật hướng dẫn học của bạn?",
+    updateStudyGuideConfirmDesc: "Hồ sơ của bạn sẽ được lưu và hướng dẫn học hiện tại sẽ được thay bằng một hướng dẫn mới. Không thể khôi phục hướng dẫn cũ.",
+    updateStudyGuideConfirmYes: "Có, cập nhật hướng dẫn học của tôi",
+    updateStudyGuideConfirmNo: "Không, giữ hướng dẫn học hiện tại",
     streakUnit: "ngày liên tiếp",
     trialEndsToday: "Bản dùng thử miễn phí của bạn kết thúc hôm nay!",
     trialEndsTomorrow: "Bản dùng thử miễn phí của bạn kết thúc vào ngày mai!",
@@ -7599,6 +7677,12 @@ const UI_TRANSLATIONS = {
     skillsChangeDesc: "आपने अपने अध्ययन कौशल बदल दिए हैं। क्या आप इन कौशलों के लिए नई सामग्री बनवाना चाहते हैं, या पहले से बनाई गई अध्ययन सामग्री को वैसे ही रखना चाहते हैं?",
     skillsChangeUpdateBtn: "हाँ, मेरी अध्ययन सामग्री अपडेट करें",
     skillsChangeKeepBtn: "नहीं, पिछली अध्ययन सामग्री रखें",
+    updateStudyGuideBtn: "🔄 मेरी अध्ययन गाइड अपडेट करें",
+    updateStudyGuideNote: "आपकी मौजूदा अध्ययन गाइड अपने आप कभी नहीं बदलती। यह केवल तब दोबारा बनती है जब आप यह बटन दबाते हैं।",
+    updateStudyGuideConfirmTitle: "क्या आप अपनी अध्ययन गाइड अपडेट करना चाहते हैं?",
+    updateStudyGuideConfirmDesc: "आपकी प्रोफ़ाइल सहेजी जाएगी और मौजूदा अध्ययन गाइड की जगह नई गाइड बन जाएगी। पुरानी गाइड वापस नहीं लाई जा सकती।",
+    updateStudyGuideConfirmYes: "हाँ, मेरी अध्ययन गाइड अपडेट करें",
+    updateStudyGuideConfirmNo: "नहीं, मौजूदा अध्ययन गाइड रखें",
     streakUnit: "दिन लगातार",
     trialEndsToday: "आपका मुफ़्त ट्रायल आज समाप्त हो रहा है!",
     trialEndsTomorrow: "आपका मुफ़्त ट्रायल कल समाप्त हो रहा है!",
@@ -8110,6 +8194,12 @@ const UI_TRANSLATIONS = {
     skillsChangeDesc: "学習スキルの選択が変わりました。この内容に合わせて新しい勉強内容を作成しますか？それとも、以前作成した勉強内容をそのまま引き継ぎますか？",
     skillsChangeUpdateBtn: "勉強内容を変更する",
     skillsChangeKeepBtn: "以前の勉強内容をそのまま引き継ぐ",
+    updateStudyGuideBtn: "🔄 勉強ガイドを更新する(Update my study guide)",
+    updateStudyGuideNote: "今の勉強ガイドは、自動で変わることはありません。このボタンを押したときだけ作り直されます。",
+    updateStudyGuideConfirmTitle: "勉強ガイドを更新しますか？",
+    updateStudyGuideConfirmDesc: "プロフィールを保存し、今の勉強ガイドを新しいものに置き換えます。以前のガイドは元に戻せません。",
+    updateStudyGuideConfirmYes: "はい、勉強ガイドを更新する",
+    updateStudyGuideConfirmNo: "いいえ、今の勉強ガイドのままにする",
     streakUnit: "日連続",
     trialEndsToday: "無料トライアルは今日で終了します！",
     trialEndsTomorrow: "無料トライアルは明日で終了します！",
@@ -8621,6 +8711,12 @@ const UI_TRANSLATIONS = {
     skillsChangeDesc: "Çalışma becerilerinizi değiştirdiniz. Bu beceriler için yeni içerik oluşturulmasını mı istersiniz, yoksa önceki çalışma içeriğinizi mi korumak istersiniz?",
     skillsChangeUpdateBtn: "Evet, çalışma içeriğimi güncelle",
     skillsChangeKeepBtn: "Hayır, önceki çalışma içeriğimi koru",
+    updateStudyGuideBtn: "🔄 Çalışma rehberimi güncelle",
+    updateStudyGuideNote: "Mevcut çalışma rehberiniz kendiliğinden asla değişmez. Yalnızca bu düğmeye bastığınızda yeniden oluşturulur.",
+    updateStudyGuideConfirmTitle: "Çalışma rehberiniz güncellensin mi?",
+    updateStudyGuideConfirmDesc: "Profiliniz kaydedilecek ve mevcut çalışma rehberiniz yenisiyle değiştirilecek. Eski rehber geri getirilemez.",
+    updateStudyGuideConfirmYes: "Evet, çalışma rehberimi güncelle",
+    updateStudyGuideConfirmNo: "Hayır, mevcut çalışma rehberimi koru",
     streakUnit: "gün üst üste",
     trialEndsToday: "Ücretsiz deneme süreniz bugün sona eriyor!",
     trialEndsTomorrow: "Ücretsiz deneme süreniz yarın sona eriyor!",
@@ -9132,6 +9228,12 @@ const UI_TRANSLATIONS = {
     skillsChangeDesc: "तपाईंले आफ्नो अध्ययन सीपहरू परिवर्तन गर्नुभयो। के तपाईं यी सीपहरूका लागि नयाँ सामग्री बनाउन चाहनुहुन्छ, वा पहिले बनाइएको अध्ययन सामग्री त्यसै राख्न चाहनुहुन्छ?",
     skillsChangeUpdateBtn: "हो, मेरो अध्ययन सामग्री अपडेट गर्नुहोस्",
     skillsChangeKeepBtn: "होइन, अघिल्लो अध्ययन सामग्री राख्नुहोस्",
+    updateStudyGuideBtn: "🔄 मेरो अध्ययन गाइड अपडेट गर्नुहोस्",
+    updateStudyGuideNote: "तपाईंको हालको अध्ययन गाइड आफैं कहिल्यै बदलिँदैन। यो बटन थिच्दा मात्र फेरि बनाइन्छ।",
+    updateStudyGuideConfirmTitle: "अध्ययन गाइड अपडेट गर्ने?",
+    updateStudyGuideConfirmDesc: "तपाईंको प्रोफाइल सुरक्षित गरिनेछ र हालको अध्ययन गाइडको ठाउँमा नयाँ गाइड बनाइनेछ। पुरानो गाइड फिर्ता ल्याउन सकिँदैन।",
+    updateStudyGuideConfirmYes: "हो, मेरो अध्ययन गाइड अपडेट गर्नुहोस्",
+    updateStudyGuideConfirmNo: "होइन, हालको अध्ययन गाइड राख्नुहोस्",
     streakUnit: "दिन लगातार",
     trialEndsToday: "तपाईंको निःशुल्क ट्रायल आज सकिन्छ!",
     trialEndsTomorrow: "तपाईंको निःशुल्क ट्रायल भोलि सकिन्छ!",
@@ -9643,6 +9745,12 @@ const UI_TRANSLATIONS = {
     skillsChangeDesc: "Binago mo ang iyong study skills. Gusto mo bang gumawa ng bagong content para sa mga skill na ito, o panatilihin na lang ang dati mong study content?",
     skillsChangeUpdateBtn: "Oo, i-update ang aking study content",
     skillsChangeKeepBtn: "Hindi, panatilihin ang dating study content",
+    updateStudyGuideBtn: "🔄 I-update ang aking study guide",
+    updateStudyGuideNote: "Hindi kailanman nagbabago nang kusa ang kasalukuyan mong study guide. Nire-rebuild lang ito kapag pinindot mo ang button na ito.",
+    updateStudyGuideConfirmTitle: "I-update ang iyong study guide?",
+    updateStudyGuideConfirmDesc: "Ise-save ang iyong profile at papalitan ng bago ang kasalukuyan mong study guide. Hindi na maibabalik ang lumang guide.",
+    updateStudyGuideConfirmYes: "Oo, i-update ang aking study guide",
+    updateStudyGuideConfirmNo: "Hindi, panatilihin ang kasalukuyan kong study guide",
     streakUnit: "araw sunod-sunod",
     trialEndsToday: "Magtatapos na ngayong araw ang iyong libreng trial!",
     trialEndsTomorrow: "Magtatapos bukas ang iyong libreng trial!",
@@ -10401,6 +10509,8 @@ function trimCard(card) {
     meaning: card.meaning || "", example: card.example || "",
     folder: card.folder || "Your Vocabulary", savedAt: card.savedAt || new Date().toISOString(),
     addedAt: card.addedAt || Date.now(),
+    // Set once repairVocabReadings() has verified this word's (音読み/訓読み) reading, so it isn't re-checked.
+    ...(card.readingChecked ? { readingChecked: true } : {}),
   };
 }
 function saveVocabData(data) {
@@ -10621,15 +10731,200 @@ function JlptResultsPanel({ userId, T }) {
 }
 
 // ─── SPEAK helper ──────────────────────────────────────────────────────────────
+// Picks the best installed Japanese voice (some devices list several, or tag the language as
+// "ja_JP" / "ja-jp"), preferring the natural-sounding ones when present.
+function pickJapaneseVoice() {
+  try {
+    const voices = (window.speechSynthesis.getVoices() || []).filter(v => /^ja([-_]|$)/i.test(v.lang || ""));
+    if (!voices.length) return null;
+    const preferred = /Google.*日本語|Kyoko|O-?Ren|Nanami|Haruka|Ayumi|Hattori|Otoya|Siri/i;
+    return voices.find(v => preferred.test(v.name)) || voices[0];
+  } catch { return null; }
+}
 function speakJapanese(text, rate = 0.85) {
   if (!window.speechSynthesis) return;
   window.speechSynthesis.cancel();
   const u = new SpeechSynthesisUtterance(text);
   u.lang = "ja-JP"; u.rate = rate;
-  const voices = window.speechSynthesis.getVoices();
-  const jpVoice = voices.find(v => v.lang === "ja-JP" || v.lang === "ja_JP");
+  const jpVoice = pickJapaneseVoice();
   if (jpVoice) u.voice = jpVoice;
   window.speechSynthesis.speak(u);
+}
+
+// ─── VOCAB WORD READINGS (FURIGANA) & PRONUNCIATION ─────────────────────────────
+// Browsers' text-to-speech often misreads a bare kanji word (e.g. picks the wrong 音読み/訓読み),
+// which is why a word's audio sometimes didn't match its reading. A saved word's `reading`
+// (hiragana) is the single source of truth: it is what we show as furigana and what we speak.
+const KANJI_RE = /[一-鿿㐀-䶿々〻]/;
+const KANA_ONLY_RE = /^[ぁ-ゖァ-ヺー゛゜ゝゞヽヾ]+$/;
+function hasKanji(s) { return KANJI_RE.test(s || ""); }
+function toHiragana(s) { return String(s || "").replace(/[ァ-ヶ]/g, ch => String.fromCharCode(ch.charCodeAt(0) - 0x60)); }
+function isKanaChar(ch) { return /[ぁ-ゖァ-ヺー]/.test(ch); }
+// Normalizes a stored reading into ONE kana string ("" when unusable: romaji, kanji, empty…).
+function cleanReading(reading, word) {
+  let r = String(reading || "").trim();
+  if (!r) return "";
+  r = r.replace(/[（(][^）)]*[）)]/g, "");              // drop bracketed notes
+  r = r.split(/[\/／、,;；|]/)[0];                        // several alternates → the first one
+  if (!String(word || "").includes("・")) r = r.split("・")[0]; // "にほん・にっぽん" → first
+  r = r.replace(/\s+/g, "");
+  return KANA_ONLY_RE.test(r) ? r : "";
+}
+// A reading is only trustworthy for a word if it also spells out the kana already in the word
+// (e.g. 食べる must read たべる, not just the stem た) — otherwise speaking/showing it would be wrong.
+function readingCoversWord(word, reading) {
+  const rd = toHiragana(cleanReading(reading, word));
+  if (!rd) return false;
+  const w = [...String(word || "")];
+  let pre = 0; while (pre < w.length && isKanaChar(w[pre])) pre++;
+  let suf = 0; while (suf < w.length - pre && isKanaChar(w[w.length - 1 - suf])) suf++;
+  const prefix = toHiragana(w.slice(0, pre).join(""));
+  const suffix = toHiragana(w.slice(w.length - suf).join(""));
+  if (prefix && !rd.startsWith(prefix)) return false;
+  if (suffix && !rd.endsWith(suffix)) return false;
+  return rd.length >= pre + suf + (hasKanji(word) ? 1 : 0);
+}
+// What to actually say for a saved word: its hiragana reading when it has kanji (exact pronunciation),
+// otherwise the word itself (already kana).
+function speechTextForWord(card) {
+  const w = String((card && card.word) || "").trim();
+  if (!hasKanji(w)) return w;
+  return readingCoversWord(w, card && card.reading) ? cleanReading(card.reading, w) : w;
+}
+function speakVocabWord(card, rate) { speakJapanese(speechTextForWord(card), rate); }
+// Splits a word into ruby segments so furigana sits only over the kanji (食べる → [食|た][べる]).
+function buildRubySegments(word, reading) {
+  if (!hasKanji(word) || !readingCoversWord(word, reading)) return null;
+  const rd = cleanReading(reading, word);
+  const rdn = toHiragana(rd);
+  const w = [...word];
+  let pre = 0;
+  while (pre < w.length && isKanaChar(w[pre]) && toHiragana(w[pre]) === rdn[pre]) pre++;
+  let suf = 0;
+  while (suf < w.length - pre && isKanaChar(w[w.length - 1 - suf]) && toHiragana(w[w.length - 1 - suf]) === rdn[rdn.length - 1 - suf] && (rdn.length - 1 - suf) >= pre) suf++;
+  const core = w.slice(pre, w.length - suf).join("");
+  const coreReading = rdn.slice(pre, rdn.length - suf);
+  if (!core || !coreReading) return [{ text: word, rt: rdn }];
+  const segs = [];
+  if (pre) segs.push({ text: w.slice(0, pre).join("") });
+  segs.push({ text: core, rt: coreReading });
+  if (suf) segs.push({ text: w.slice(w.length - suf).join("") });
+  return segs;
+}
+// A vocab word with furigana always shown above its kanji ("…" while a missing reading is being filled in).
+function FuriganaWord({ word, reading, size = 22, color = "#f1f5f9" }) {
+  const base = { fontSize: size, fontWeight: 900, color };
+  if (!hasKanji(word)) return <span style={base}>{word}</span>;
+  const rtStyle = { fontSize: Math.max(9, Math.round(size * 0.48)), color: C.teal, fontWeight: 700, letterSpacing: 0 };
+  const segs = buildRubySegments(word, reading) || [{ text: word, rt: "…" }];
+  return (
+    <span style={{ ...base, lineHeight: 1.9 }}>
+      {segs.map((s, i) => s.rt
+        ? <ruby key={i}>{s.text}<rp>(</rp><rt style={rtStyle}>{s.rt}</rt><rp>)</rp></ruby>
+        : <span key={i}>{s.text}</span>)}
+    </span>
+  );
+}
+
+// Fills in every missing reading and double-checks the rest ONCE (音読み/訓読み chosen per word using its
+// meaning and example sentence), bounded per run. Cards arrive without a reading from older teacher-sent
+// words, bulk imports and GAKU Reader; AI-made readings can also pick the wrong on/kun reading, so each
+// kanji word's reading is verified a single time (`readingChecked`) and corrected when it differs.
+let _readingRepairRunning = false;
+let _lastReadingRepairAt = 0;
+async function repairVocabReadings(force = false) {
+  if (_readingRepairRunning) return;
+  if (!force && Date.now() - _lastReadingRepairAt < 20000) return;
+  _readingRepairRunning = true;
+  _lastReadingRepairAt = Date.now();
+  try {
+    const snapshot = loadVocabData();
+    const kanjiCards = snapshot.cards.filter(c => c && c.word && hasKanji(c.word));
+    const needsFill = kanjiCards.filter(c => !readingCoversWord(c.word, c.reading));
+    const needsCheck = kanjiCards.filter(c => readingCoversWord(c.word, c.reading) && !c.readingChecked);
+    const targets = [...needsFill, ...needsCheck].slice(0, 150);
+    if (!targets.length) return;
+    const keyOf = (c) => `${c.folder || "Your Vocabulary"}\u0000${c.word}`;
+    for (let i = 0; i < targets.length; i += 15) {
+      const chunk = targets.slice(i, i + 15);
+      const list = chunk.map((c, n) => {
+        const bits = [`${n + 1}. ${c.word}`];
+        if (readingCoversWord(c.word, c.reading)) bits.push(`current: ${cleanReading(c.reading, c.word)}`);
+        if (c.meaning) bits.push(`meaning: ${String(c.meaning).slice(0, 60)}`);
+        if (c.example) bits.push(`example: ${String(c.example).slice(0, 60)}`);
+        return bits.join(" | ");
+      }).join("\n");
+      const prompt = `You are an expert Japanese lexicographer. For each numbered entry give the ONE correct reading of the WORD, in HIRAGANA, exactly as a standard dictionary (大辞林 / 広辞苑) gives it.\n\nChoose correctly between 音読み (on'yomi) and 訓読み (kun'yomi) for THIS word: most compounds of 2+ kanji use 音読み (勉強=べんきょう, 電話=でんわ), words written with okurigana use 訓読み (食べる=たべる, 大きい=おおきい, 思い出す=おもいだす), and mixed or special readings (重箱読み・湯桶読み・熟字訓・当て字) must follow the dictionary (今日=きょう, 大人=おとな, 景色=けしき, 一人=ひとり, 二十歳=はたち, 場所=ばしょ, 本棚=ほんだな). When a word has several readings, use the meaning and example sentence to pick the right one (e.g. 生物, 人気, 上手, 一日, 大事, 行った).\n\nWrite the reading of the WHOLE word, including its okurigana and any kana already in the word (お願い=おねがい). If an entry already has a "current" reading that is correct for this word and meaning, return it unchanged. Output hiragana only — never romaji, katakana, kanji, spaces or explanations.\n\nOutput ONLY lines in the form number=reading, one per entry:\n\n${list}`;
+      let fixes = null;
+      try {
+        const res = await fetch("/api/claude", {
+          method: "POST", headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ provider: "content", max_tokens: 700, messages: [{ role: "user", content: prompt }] }),
+        });
+        const data = await res.json();
+        const txt = (data?.content || []).map(c => c.text || "").join("");
+        fixes = new Map();
+        txt.split("\n").forEach(line => {
+          const m = line.trim().match(/^(\d+)\s*[=＝:：]\s*(.+)$/);
+          if (!m) return;
+          const idx = parseInt(m[1], 10) - 1;
+          const r = toHiragana(m[2].replace(/[\s「」『』()（）]/g, ""));
+          if (chunk[idx] && KANA_ONLY_RE.test(r) && readingCoversWord(chunk[idx].word, r)) fixes.set(keyOf(chunk[idx]), r);
+        });
+      } catch { fixes = null; }
+      if (!fixes) continue; // network/AI failure — leave these cards for a later run
+      // Re-read storage right before saving so words added/removed while the AI was working aren't lost.
+      const fresh = loadVocabData();
+      let changed = false;
+      const answered = new Set(chunk.map(keyOf));
+      fresh.cards.forEach(c => {
+        const k = keyOf(c);
+        if (!answered.has(k)) return;
+        const newReading = fixes.get(k);
+        if (newReading) {
+          if (!readingCoversWord(c.word, c.reading) || toHiragana(cleanReading(c.reading, c.word)) !== newReading) c.reading = newReading;
+          c.readingChecked = true; changed = true;
+        } else if (readingCoversWord(c.word, c.reading)) {
+          c.readingChecked = true; changed = true; // AI gave nothing usable but the stored reading is valid — don't re-ask
+        }
+      });
+      if (changed) {
+        saveVocabData(fresh);
+        try { window.dispatchEvent(new Event("gaku_vocab_updated")); } catch {}
+      }
+    }
+  } catch {} finally { _readingRepairRunning = false; }
+}
+
+// Plays a list of saved words one after another (used by the per-folder 🔊 buttons in the Library).
+let _folderPlayToken = 0;
+function stopFolderPlayback() {
+  _folderPlayToken++;
+  try { if (window.speechSynthesis) window.speechSynthesis.cancel(); } catch {}
+}
+function playWordsSequentially(cards, { rate = 0.85, gapMs = 600, onIndex, onDone } = {}) {
+  if (!window.speechSynthesis || !cards.length) { if (onDone) onDone(); return; }
+  const token = ++_folderPlayToken;
+  let i = 0;
+  const next = () => {
+    if (token !== _folderPlayToken) return; // stopped, or another playback took over
+    if (i >= cards.length) { if (onDone) onDone(); return; }
+    const card = cards[i];
+    if (onIndex) onIndex(i);
+    i++;
+    const text = speechTextForWord(card);
+    if (!text) { next(); return; }
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = "ja-JP"; u.rate = rate;
+    const v = pickJapaneseVoice();
+    if (v) u.voice = v;
+    let advanced = false;
+    const advance = () => { if (advanced) return; advanced = true; setTimeout(next, gapMs); };
+    u.onend = advance; u.onerror = advance;
+    window.speechSynthesis.speak(u);
+  };
+  window.speechSynthesis.cancel();
+  setTimeout(next, 80);
 }
 
 // Small "0.8x / 0.5x" slow-playback buttons shown next to a Listen button in
@@ -10867,7 +11162,7 @@ function WordDetailCard({ card: cardProp, onSave, onBack, form, prefLang }) {
               {card.partOfSpeech && <span style={{ background:"rgba(6,182,212,0.15)", color:C.teal, fontSize:11, fontWeight:600, padding:"2px 8px", borderRadius:99 }}>{card.partOfSpeech}</span>}
             </div>
           </div>
-          <button onClick={()=>speakJapanese(card.word)} style={{ width:44, height:44, borderRadius:12, background:`rgba(6,182,212,0.15)`, border:`1px solid rgba(6,182,212,0.3)`, color:C.teal, fontSize:20, cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0 }}>
+          <button onClick={()=>speakVocabWord(card)} style={{ width:44, height:44, borderRadius:12, background:`rgba(6,182,212,0.15)`, border:`1px solid rgba(6,182,212,0.3)`, color:C.teal, fontSize:20, cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0 }}>
             🔊
           </button>
         </div>
@@ -11252,7 +11547,7 @@ Only output the JSON object.` }
             )}
           </div>
           <div style={{ display:"flex", gap:10, marginBottom:8 }}>
-            <button onClick={()=>speakJapanese(card.word)} style={{ flex:1, ...S.btn, background:"rgba(6,182,212,0.1)", border:`1px solid rgba(6,182,212,0.3)`, color:C.teal }}>🔊 Listen</button>
+            <button onClick={()=>speakVocabWord(card)} style={{ flex:1, ...S.btn, background:"rgba(6,182,212,0.1)", border:`1px solid rgba(6,182,212,0.3)`, color:C.teal }}>🔊 Listen</button>
             <button onClick={e=>{e.stopPropagation();setShowHint(h=>!h);}} style={{ ...S.btn, padding:"13px 18px", background:showHint?"rgba(251,191,36,0.15)":C.card, border:`1px solid ${showHint?"rgba(251,191,36,0.5)":C.border}`, color:showHint?C.amber:"#94a3b8" }}>💡 Hint</button>
             <button onClick={()=>{ setFlipped(false); setShowHint(false); setIdx(i=>(i-1+displayCards.length)%displayCards.length); }} style={{ ...S.btn, padding:"13px 18px", background:C.card, border:`1px solid ${C.border}`, color:"#94a3b8" }}>←</button>
             <button onClick={()=>{ setFlipped(false); setShowHint(false); setIdx(i=>(i+1)%displayCards.length); }} style={{ ...S.btn, padding:"13px 18px", background:C.card, border:`1px solid ${C.border}`, color:"#94a3b8" }}>→</button>
@@ -11271,11 +11566,22 @@ function LibraryView({ onBack, onSelectFolder, onCreateCard }) {
   const [confirmDelete, setConfirmDelete] = useState(null); // folder name to delete
 
   const refresh = () => setData(loadVocabData());
+  // Which folder's words are currently being read aloud (the 🔊 button on each folder row).
+  const [playingFolder, setPlayingFolder] = useState(null);
   useEffect(() => {
     const handler = () => setData(loadVocabData());
     window.addEventListener("gaku_vocab_updated", handler);
-    return () => window.removeEventListener("gaku_vocab_updated", handler);
+    // Fill in any missing/wrong readings for every folder as soon as the Library opens.
+    repairVocabReadings();
+    return () => { window.removeEventListener("gaku_vocab_updated", handler); stopFolderPlayback(); };
   }, []);
+  const toggleFolderPlayback = (name) => {
+    if (playingFolder === name) { stopFolderPlayback(); setPlayingFolder(null); return; }
+    const words = data.cards.filter(c => c.folder === name);
+    if (!words.length) return;
+    setPlayingFolder(name);
+    playWordsSequentially(words, { onDone: () => setPlayingFolder(p => (p === name ? null : p)) });
+  };
 
   const allFolders = [{ name:"Your Vocabulary" }, ...data.folders];
 
@@ -11324,6 +11630,15 @@ function LibraryView({ onBack, onSelectFolder, onCreateCard }) {
                 </div>
               </div>
               <div style={{ display:"flex", alignItems:"center", gap:8 }}>
+                {/* Pronunciation for the whole word book: reads every word in this folder aloud, one after another */}
+                <button
+                  onClick={e=>{e.stopPropagation();toggleFolderPlayback(f.name);}}
+                  disabled={count===0}
+                  title={playingFolder===f.name ? "Stop" : "Play all words in this folder"}
+                  aria-label={playingFolder===f.name ? "Stop" : "Play all words in this folder"}
+                  style={{ width:36, height:36, borderRadius:10, background:playingFolder===f.name?"rgba(6,182,212,0.3)":"rgba(6,182,212,0.1)", border:`1px solid rgba(6,182,212,${playingFolder===f.name?0.6:0.25})`, color:C.teal, fontSize:16, cursor:count===0?"not-allowed":"pointer", opacity:count===0?0.4:1, display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0 }}>
+                  {playingFolder===f.name ? "⏹" : "🔊"}
+                </button>
                 {f.name !== "Your Vocabulary" && (
                   <button onClick={e=>{e.stopPropagation();setConfirmDelete(f.name);}} style={{ padding:"4px 10px", borderRadius:6, background:"rgba(239,68,68,0.1)", border:`1px solid rgba(239,68,68,0.2)`, color:"#ef4444", fontSize:11, cursor:"pointer", fontWeight:600 }}>🗑 削除</button>
                 )}
@@ -11357,17 +11672,43 @@ function LibraryView({ onBack, onSelectFolder, onCreateCard }) {
 function FolderDetailView({ folderName, onBack, onViewCard }) {
   const [data, setData] = useState(loadVocabData);
   const cards = data.cards.filter(c=>c.folder===folderName);
+  const [playingIdx, setPlayingIdx] = useState(-1); // -1 = not playing; otherwise the word being read aloud
+
+  // Every word in a folder must show furigana: fill in missing readings (and verify 音読み/訓読み) in the
+  // background, and refresh as soon as they arrive.
+  useEffect(() => {
+    const handler = () => setData(loadVocabData());
+    window.addEventListener("gaku_vocab_updated", handler);
+    repairVocabReadings();
+    return () => { window.removeEventListener("gaku_vocab_updated", handler); stopFolderPlayback(); };
+  }, []);
 
   const removeCard = (id) => {
     const updated = { ...data, cards: data.cards.filter(c=>c.id!==id) };
     saveVocabData(updated); setData(updated);
   };
+  const togglePlayAll = () => {
+    if (playingIdx >= 0) { stopFolderPlayback(); setPlayingIdx(-1); return; }
+    if (!cards.length) return;
+    setPlayingIdx(0);
+    playWordsSequentially(cards, { onIndex: setPlayingIdx, onDone: () => setPlayingIdx(-1) });
+  };
 
   return (
     <div>
-      <button onClick={onBack} style={{ background:"none", border:"none", color:"#64748b", fontSize:13, cursor:"pointer", padding:0, marginBottom:14 }}>← Library</button>
-      <p style={{ color:"#f1f5f9", fontSize:15, fontWeight:800, margin:"0 0 4px" }}>📁 {folderName}</p>
-      <p style={{ color:"#64748b", fontSize:12, margin:"0 0 16px" }}>{cards.length} {cards.length===1?"word":"words"}</p>
+      <button onClick={()=>{ stopFolderPlayback(); onBack(); }} style={{ background:"none", border:"none", color:"#64748b", fontSize:13, cursor:"pointer", padding:0, marginBottom:14 }}>← Library</button>
+      <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", gap:10, marginBottom:16 }}>
+        <div>
+          <p style={{ color:"#f1f5f9", fontSize:15, fontWeight:800, margin:"0 0 4px" }}>📁 {folderName}</p>
+          <p style={{ color:"#64748b", fontSize:12, margin:0 }}>{cards.length} {cards.length===1?"word":"words"}</p>
+        </div>
+        {cards.length > 0 && (
+          <button onClick={togglePlayAll} title={playingIdx>=0 ? "Stop" : "Play all words"} aria-label={playingIdx>=0 ? "Stop" : "Play all words"}
+            style={{ padding:"8px 14px", borderRadius:10, background:playingIdx>=0?"rgba(6,182,212,0.3)":"rgba(6,182,212,0.1)", border:`1px solid rgba(6,182,212,${playingIdx>=0?0.6:0.3})`, color:C.teal, fontSize:13, fontWeight:700, cursor:"pointer", whiteSpace:"nowrap", flexShrink:0 }}>
+            {playingIdx>=0 ? "⏹ Stop" : "🔊 ▶ All"}
+          </button>
+        )}
+      </div>
 
       {cards.length === 0 && (
         <div style={{ ...S.card, textAlign:"center", padding:"40px 20px" }}>
@@ -11377,16 +11718,15 @@ function FolderDetailView({ folderName, onBack, onViewCard }) {
       )}
 
       <div style={{ display:"flex", flexDirection:"column", gap:10 }}>
-        {cards.map(c => (
-          <div key={c.id} style={{ ...S.card, borderLeft:`3px solid ${C.teal}` }}>
+        {cards.map((c, idx) => (
+          <div key={c.id || `${c.word}-${idx}`} style={{ ...S.card, borderLeft:`3px solid ${C.teal}`, background: playingIdx===idx ? "rgba(6,182,212,0.12)" : S.card.background }}>
             <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start" }}>
               <div style={{ cursor:"pointer", flex:1 }} onClick={()=>onViewCard(c)}>
-                <p style={{ color:"#f1f5f9", fontSize:20, fontWeight:900, margin:"0 0 2px" }}>{c.word}</p>
-                <p style={{ color:C.teal, fontSize:13, margin:"0 0 2px" }}>{c.reading}</p>
+                <p style={{ margin:"0 0 2px" }}><FuriganaWord word={c.word} reading={c.reading} size={22} /></p>
                 <p style={{ color:"#94a3b8", fontSize:12, margin:0 }}>{c.meaning}</p>
               </div>
               <div style={{ display:"flex", gap:6, flexShrink:0 }}>
-                <button onClick={()=>speakJapanese(c.word)} style={{ padding:"6px 10px", borderRadius:8, background:"rgba(6,182,212,0.1)", border:`1px solid rgba(6,182,212,0.2)`, color:C.teal, fontSize:14, cursor:"pointer" }}>🔊</button>
+                <button onClick={()=>speakVocabWord(c)} style={{ padding:"6px 10px", borderRadius:8, background:"rgba(6,182,212,0.1)", border:`1px solid rgba(6,182,212,0.2)`, color:C.teal, fontSize:14, cursor:"pointer" }}>🔊</button>
                 <button onClick={()=>removeCard(c.id)} style={{ padding:"6px 10px", borderRadius:8, background:"rgba(239,68,68,0.08)", border:`1px solid rgba(239,68,68,0.2)`, color:"#ef4444", fontSize:14, cursor:"pointer" }}>🗑</button>
               </div>
             </div>
@@ -11494,7 +11834,7 @@ Respond ONLY in valid JSON array format (no markdown, no backticks, no preamble)
                   </div>
                   <p style={{ color:"#94a3b8", fontSize:13, margin:0, lineHeight:1.5 }}>{w.meaning}</p>
                 </div>
-                <button onClick={e=>{e.stopPropagation();speakJapanese(w.word);}} style={{ width:36, height:36, borderRadius:10, background:`rgba(6,182,212,0.1)`, border:`1px solid rgba(6,182,212,0.2)`, color:C.teal, fontSize:16, cursor:"pointer", flexShrink:0, display:"flex", alignItems:"center", justifyContent:"center" }}>
+                <button onClick={e=>{e.stopPropagation();speakVocabWord(w);}} style={{ width:36, height:36, borderRadius:10, background:`rgba(6,182,212,0.1)`, border:`1px solid rgba(6,182,212,0.2)`, color:C.teal, fontSize:16, cursor:"pointer", flexShrink:0, display:"flex", alignItems:"center", justifyContent:"center" }}>
                   🔊
                 </button>
               </div>
@@ -11822,7 +12162,7 @@ function VocabBuilder({ form }) {
                   <p style={{ color:"#94a3b8", fontSize:13, margin:0 }}>{w.meaning}</p>
                 </div>
                 {/* 単語音声ボタン */}
-                <button onClick={e=>{e.stopPropagation();speakJapanese(w.word);}} title={T.speakWord} style={{ width:40, height:40, borderRadius:10, background:"rgba(6,182,212,0.1)", border:`1px solid rgba(6,182,212,0.2)`, color:C.teal, fontSize:18, cursor:"pointer", flexShrink:0, marginLeft:8, display:"flex", alignItems:"center", justifyContent:"center" }}>🔊</button>
+                <button onClick={e=>{e.stopPropagation();speakVocabWord(w);}} title={T.speakWord} style={{ width:40, height:40, borderRadius:10, background:"rgba(6,182,212,0.1)", border:`1px solid rgba(6,182,212,0.2)`, color:C.teal, fontSize:18, cursor:"pointer", flexShrink:0, marginLeft:8, display:"flex", alignItems:"center", justifyContent:"center" }}>🔊</button>
               </div>
 
               {/* ── Japanese Definition ── */}
@@ -14392,15 +14732,92 @@ function getWeekInfo(form) {
 
 const AI_SCHEDULE_CACHE = {};
 
-async function buildAIWeeklySchedule(form, weekNum, totalWeeks) {
+// ─── PERSISTED STUDY GUIDE ─────────────────────────────────────────────────────
+// A student's weekly study guide is generated ONCE and then stored per account
+// (scopedKey → `gaku_study_guide_<userId>`, which the migration bridge also carries
+// across devices/domains). It is NEVER rebuilt automatically — not when a new week
+// starts, not when the profile/language/level changes, not on a new device, not when
+// browser storage is cleared and restored. It is only rebuilt when the student
+// explicitly presses "Update my study guide" in their profile (or answers "Yes, update
+// my study content" after changing their study skills), which calls
+// requestStudyGuideRegeneration() below.
+//
+// (The old behaviour keyed an unscoped, device-local cache on the current week number +
+// level + goal + skills + language, so every new week, every settings change and every
+// new device silently produced a different AI-generated plan.)
+const STUDY_GUIDE_KEY = "gaku_study_guide";
+const STUDY_GUIDE_REGEN_KEY = "gaku_study_guide_regen";
+const SCHEDULE_WEEKDAYS = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
+
+function normalizeGuideSchedule(schedule, T) {
+  const out = {};
+  SCHEDULE_WEEKDAYS.forEach(day => {
+    out[day] = (schedule && Array.isArray(schedule[day]) && schedule[day].length)
+      ? schedule[day]
+      : [{ task: (T && T.restDay) || "Rest day 🌸", done: false, rest: true }];
+  });
+  return out;
+}
+function loadSavedStudyGuide() {
+  try {
+    const raw = localStorage.getItem(scopedKey(STUDY_GUIDE_KEY));
+    if (!raw) return null;
+    const parsed = JSON.parse(raw);
+    return parsed && parsed.schedule && typeof parsed.schedule === "object" ? parsed : null;
+  } catch { return null; }
+}
+function saveStudyGuide(result) {
+  try {
+    localStorage.setItem(scopedKey(STUDY_GUIDE_KEY), JSON.stringify({
+      schedule: result.schedule, weekTheme: result.weekTheme || "", savedAt: Date.now(),
+    }));
+  } catch {}
+}
+function requestStudyGuideRegeneration() {
+  try { localStorage.setItem(scopedKey(STUDY_GUIDE_REGEN_KEY), "1"); } catch {}
+}
+function isStudyGuideRegenerationRequested() {
+  try { return localStorage.getItem(scopedKey(STUDY_GUIDE_REGEN_KEY)) === "1"; } catch { return false; }
+}
+function clearStudyGuideRegenerationRequest() {
+  try { localStorage.removeItem(scopedKey(STUDY_GUIDE_REGEN_KEY)); } catch {}
+}
+// Students who already had a guide before this change have it sitting in the old device-local
+// cache (`gaku_sched_<email>_w<week>_<jlpt>_<goal>_<skills>_<lang>`). Adopt the closest match
+// as their permanent guide so what they see today is exactly what they keep — never replaced.
+function findLegacyScheduleGuide(form) {
+  try {
+    const goalStr = (Array.isArray(form.goal) ? form.goal : (form.goal ? [form.goal] : [])).join("");
+    const prefix = `gaku_sched_${form.email || form.name}_w`;
+    const suffix = `_${form.jlpt}_${goalStr}_${(form.skills || []).join("")}_${form.preferredLang || "English"}`;
+    let best = null; // { week, exact, value }
+    for (let i = 0; i < localStorage.length; i++) {
+      const k = localStorage.key(i);
+      if (!k || !k.startsWith(prefix)) continue;
+      const m = k.slice(prefix.length).match(/^(\d+)(.*)$/);
+      if (!m) continue;
+      let value;
+      try { value = JSON.parse(localStorage.getItem(k)); } catch { continue; }
+      if (!value || !value.schedule) continue;
+      const week = parseInt(m[1], 10);
+      const exact = m[2] === suffix;
+      if (!best || (exact && !best.exact) || (exact === best.exact && week > best.week)) best = { week, exact, value };
+    }
+    return best ? best.value : null;
+  } catch { return null; }
+}
+
+async function buildAIWeeklySchedule(form, weekNum, totalWeeks, forceFresh = false) {
   const lang = form.preferredLang || "English";
   const cacheKey = `${form.email || form.name}_w${weekNum}_${form.jlpt}_${(Array.isArray(form.goal)?form.goal:(form.goal?[form.goal]:[])).join("")}_${(form.skills||[]).join("")}_${lang}`;
-  // Check localStorage first
-  try {
-    const stored = localStorage.getItem(`gaku_sched_${cacheKey}`);
-    if (stored) return JSON.parse(stored);
-  } catch {}
-  if (AI_SCHEDULE_CACHE[cacheKey]) return AI_SCHEDULE_CACHE[cacheKey];
+  // Check localStorage first (skipped when the student explicitly asked for a fresh guide)
+  if (!forceFresh) {
+    try {
+      const stored = localStorage.getItem(`gaku_sched_${cacheKey}`);
+      if (stored) return JSON.parse(stored);
+    } catch {}
+    if (AI_SCHEDULE_CACHE[cacheKey]) return AI_SCHEDULE_CACHE[cacheKey];
+  }
 
   const hoursMap = { "Less than 1 hour": 45, "1–2 hours": 90, "2–3 hours": 150, "3+ hours": 180 };
   const daysMap  = { "1–2 days": 2, "3–4 days": 4, "5–6 days": 5, "Every day": 7 };
@@ -15202,7 +15619,21 @@ function FormScreen({ onSubmit, onBack, onCancel, initialJlpt, initialForm, onLo
   const confirmUpdateStudyContent = () => {
     const f = pendingSubmitForm;
     setPendingSubmitForm(null);
-    onSubmit(f);
+    // The student explicitly chose to get new study content → rebuild their study guide.
+    onSubmit(f, { regenerateGuide: true });
+  };
+  // "Update my study guide" — the ONLY other way (besides answering "Yes" above) that a student's
+  // saved study guide is ever rebuilt. Saves the profile as edited and builds a fresh guide.
+  const [confirmGuideUpdate, setConfirmGuideUpdate] = useState(null);
+  const attemptUpdateGuide = () => {
+    if (!valid) { setErr(T.fillRequired); return; }
+    const displayGoal = form.goal.map(g => g === "Other" ? form.customGoal : g).join(", ");
+    setConfirmGuideUpdate({ ...form, displayGoal });
+  };
+  const confirmUpdateGuideYes = () => {
+    const f = confirmGuideUpdate;
+    setConfirmGuideUpdate(null);
+    onSubmit(f, { regenerateGuide: true });
   };
   const confirmKeepStudyContent = () => {
     const f = pendingSubmitForm;
@@ -15362,7 +15793,31 @@ function FormScreen({ onSubmit, onBack, onCancel, initialJlpt, initialForm, onLo
         <button onClick={attemptSubmit} style={{ ...S.btn, width:"100%", marginTop:20, background:valid?`linear-gradient(135deg,${C.purple},#9333ea)`:"#1e293b", color:valid?"#fff":"#475569" }}>
           {initialForm ? T.saveChanges : T.buildPlan}
         </button>
+        {initialForm && (
+          <div style={{ marginTop:14, paddingTop:14, borderTop:`1px solid ${C.border}` }}>
+            <button onClick={attemptUpdateGuide} style={{ ...S.btn, width:"100%", background:"transparent", border:`1.5px solid ${C.purpleLight}`, color:C.purpleLight }}>
+              {T.updateStudyGuideBtn}
+            </button>
+            <p style={{ color:"#64748b", fontSize:11, margin:"8px 0 0", textAlign:"center", lineHeight:1.5 }}>{T.updateStudyGuideNote}</p>
+          </div>
+        )}
       </div>
+      {confirmGuideUpdate && (
+        <div style={{ position:"fixed", inset:0, background:"rgba(0,0,0,0.6)", display:"flex", alignItems:"center", justifyContent:"center", padding:16, zIndex:1000 }}>
+          <div style={{ background:C.card, border:`1px solid ${C.border}`, borderRadius:14, padding:24, maxWidth:420, width:"100%" }}>
+            <p style={{ color:"#fff", fontSize:16, fontWeight:700, margin:"0 0 10px" }}>{T.updateStudyGuideConfirmTitle}</p>
+            <p style={{ color:"#94a3b8", fontSize:13, margin:"0 0 20px", lineHeight:1.5 }}>{T.updateStudyGuideConfirmDesc}</p>
+            <div style={{ display:"flex", flexDirection:"column", gap:10 }}>
+              <button onClick={confirmUpdateGuideYes} style={{ ...S.btn, width:"100%", background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff" }}>
+                {T.updateStudyGuideConfirmYes}
+              </button>
+              <button onClick={()=>setConfirmGuideUpdate(null)} style={{ ...S.btn, width:"100%", background:"transparent", border:`1px solid ${C.border}`, color:"#94a3b8" }}>
+                {T.updateStudyGuideConfirmNo}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
       {pendingSubmitForm && (
         <div style={{ position:"fixed", inset:0, background:"rgba(0,0,0,0.6)", display:"flex", alignItems:"center", justifyContent:"center", padding:16, zIndex:1000 }}>
           <div style={{ background:C.card, border:`1px solid ${C.border}`, borderRadius:14, padding:24, maxWidth:420, width:"100%" }}>
@@ -15638,7 +16093,12 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
   const [readerCardHiddenAt, setReaderCardHiddenAt] = useState(() => { try { return Number(localStorage.getItem(scopedKey("gaku_reader_card_hidden_at")) || 0); } catch { return 0; } });
   const canUseReaderExt = typeof navigator !== "undefined" && /Chrome\/|Edg\//.test(navigator.userAgent) && !/Mobile|Android|iPhone|iPad|OPR\//.test(navigator.userAgent);
   const showReaderCard = readerInstalled === false && canUseReaderExt && (Date.now() - readerCardHiddenAt) > 5 * 86400000;
-  const [schedule, setSchedule] = useState(() => buildSchedule(form, getT(form?.preferredLang || "English")));
+  // If this student already has a saved study guide, show it immediately (and keep it) instead
+  // of the static placeholder — see "PERSISTED STUDY GUIDE" above.
+  const [schedule, setSchedule] = useState(() => {
+    const saved = isStudyGuideRegenerationRequested() ? null : loadSavedStudyGuide();
+    return saved ? normalizeGuideSchedule(saved.schedule, getT(form?.preferredLang || "English")) : buildSchedule(form, getT(form?.preferredLang || "English"));
+  });
   const [milestones, setMilestones] = useState(() => buildMilestones(form));
   const [msDone, setMsDone] = useState([]);
   const [showHelp, setShowHelp] = useState(false);
@@ -15653,8 +16113,9 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
   // already completed or skipped; always replayable via the header button.
   const [tutorialActive, setTutorialActive] = useState(false);
   const [tutorialStep, setTutorialStep] = useState(0);
-  const [weekTheme, setWeekTheme] = useState("");
+  const [weekTheme, setWeekTheme] = useState(() => (isStudyGuideRegenerationRequested() ? "" : (loadSavedStudyGuide()?.weekTheme || "")));
   const [aiScheduleLoading, setAiScheduleLoading] = useState(false);
+  const guideGenInFlight = useRef(false);
   const { currentWeek, totalWeeks } = getWeekInfo(form);
   const scheduleCheck = useComprehensionCheck("schedule");
   // "Take a free JLPT mock test?" offer — shown on the Dashboard (after registration/onboarding
@@ -15778,29 +16239,53 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
     }
   };
 
-  const loadAISchedule = useCallback(async (forceRegen = false) => {
-    setAiScheduleLoading(true);
-    if (forceRegen) {
-      // Clear cache for this week
-      const hoursMap = { "Less than 1 hour": 45, "1–2 hours": 90, "2–3 hours": 150, "3+ hours": 180 };
-      const daysMap  = { "1–2 days": 2, "3–4 days": 4, "5–6 days": 5, "Every day": 7 };
-      const cacheKey = `${form.email || form.name}_w${currentWeek}_${form.jlpt}_${(Array.isArray(form.goal)?form.goal:(form.goal?[form.goal]:[])).join("")}_${(form.skills||[]).join("")}_${form.preferredLang || "English"}`;
-      try { localStorage.removeItem(`gaku_sched_${cacheKey}`); } catch {}
-      delete AI_SCHEDULE_CACHE[cacheKey];
-    }
-    const result = await buildAIWeeklySchedule(form, currentWeek, totalWeeks);
-    if (result && result.schedule) {
-      // Merge done state from current schedule
-      const merged = {};
-      const WEEKDAYS = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
-      WEEKDAYS.forEach(day => {
-        merged[day] = (result.schedule[day] || [{ task: T.restDay || "Rest day 🌸", done: false, rest: true }]);
-      });
-      setSchedule(merged);
+  // The study guide is built ONCE per student and then kept exactly as it is. This only ever
+  // generates a new one when (a) the student has never had one, or (b) they explicitly asked for
+  // a fresh one via "Update my study guide" (flag set by requestStudyGuideRegeneration()). A new
+  // week, a changed profile/language/level, a new device or cleared browser storage must never
+  // cause the guide to change by itself.
+  const loadAISchedule = useCallback(async () => {
+    const regenRequested = isStudyGuideRegenerationRequested();
+    const showGuide = (result) => {
+      setSchedule(normalizeGuideSchedule(result.schedule, T));
       setWeekTheme(result.weekTheme || "");
+    };
+
+    if (!regenRequested) {
+      // 1) The student's saved guide — show it as-is, never regenerate.
+      const saved = loadSavedStudyGuide();
+      if (saved) { showGuide(saved); return; }
+      // 2) A guide from the old device-local cache — adopt it so it stays exactly as they know it.
+      const legacy = findLegacyScheduleGuide(form);
+      if (legacy) {
+        saveStudyGuide(legacy);
+        showGuide(legacy);
+        if (userId) syncMigrationBridge(userId);
+        return;
+      }
     }
-    setAiScheduleLoading(false);
-  }, [form, currentWeek, totalWeeks, T]);
+
+    // 3) No guide yet (first time) or an explicit "Update my study guide" request → build it now.
+    if (guideGenInFlight.current) return;
+    guideGenInFlight.current = true;
+    setAiScheduleLoading(true);
+    try {
+      const result = await buildAIWeeklySchedule(form, currentWeek, totalWeeks, regenRequested);
+      if (result && result.schedule) {
+        saveStudyGuide(result);
+        clearStudyGuideRegenerationRequest();
+        showGuide(result);
+        // Back the new guide up to the account right away so it follows the student to any
+        // other device/domain instead of being rebuilt there.
+        if (userId) syncMigrationBridge(userId);
+      }
+      // If generation failed, keep whatever is on screen (and any saved guide) untouched; the
+      // request flag stays set so the student's explicit update is retried next time.
+    } finally {
+      guideGenInFlight.current = false;
+      setAiScheduleLoading(false);
+    }
+  }, [form, currentWeek, totalWeeks, T, userId]);
 
   // ── GAKU Extension: listen for words sent from Chrome extension ───────────────────────
   useEffect(() => {
@@ -15840,9 +16325,11 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
     };
   }, []);
 
-  // Re-build schedule & translate milestones when T loads (for non-static languages)
+  // Load the student's saved study guide (generating one only if they have never had it, or they
+  // explicitly asked for an update). Re-running this when `form` changes is safe: with a saved
+  // guide it just re-displays the same guide.
   useEffect(() => {
-    loadAISchedule(false);
+    loadAISchedule();
   }, [form]);
 
   // Fallback: also rebuild static schedule while AI loads
@@ -16176,12 +16663,11 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
                   <p style={{ color:C.purpleLight, fontSize:11, fontWeight:700, letterSpacing:1, margin:0 }}>📅 WEEK {currentWeek} / {totalWeeks}</p>
                   <p style={{ color:"#ffffff", fontSize:11, margin:"2px 0 0" }}>{totalWeeks - currentWeek} {T.weeksRemaining} · {Math.round((currentWeek/totalWeeks)*100)}{T.percentComplete}</p>
                 </div>
-                <button
-                  onClick={() => loadAISchedule(true)}
-                  disabled={aiScheduleLoading}
-                  style={{ ...S.btn, padding:"7px 12px", background:aiScheduleLoading?"rgba(139,92,246,0.1)":`linear-gradient(135deg,${C.purple},#9333ea)`, color:aiScheduleLoading?"#64748b":"#fff", border:`1px solid rgba(139,92,246,0.3)`, fontSize:11, cursor:aiScheduleLoading?"not-allowed":"pointer" }}>
-                  {aiScheduleLoading ? "⏳ " + (T.generating || "Generating...") : T.refresh}
-                </button>
+                {/* The old one-tap "Refresh" button that rebuilt the whole guide was removed on purpose:
+                    the guide changes ONLY when the student presses "Update my study guide" in Edit Profile. */}
+                {aiScheduleLoading && (
+                  <span style={{ color:"#64748b", fontSize:11, fontWeight:700 }}>{"⏳ " + (T.generating || "Generating...")}</span>
+                )}
               </div>
               {/* Progress bar */}
               <div style={{ height:4, background:"rgba(255,255,255,0.06)", borderRadius:99, overflow:"hidden" }}>
@@ -17223,7 +17709,7 @@ Respond ONLY with a valid JSON array, no markdown, no backticks:
           if (cached.isPaid) setIsPaid(true);
         }
       } catch {}
-      syncAssignedVocab(authUser.id).then(() => repairMissingMeanings(authUser.id)).catch(() => {});
+      syncAssignedVocab(authUser.id).then(() => repairMissingMeanings(authUser.id)).then(() => repairVocabReadings()).catch(() => {});
       setDeviceStatus("checking");
       // Self-heal: if the paywall was already showing (e.g. from an earlier trial
       // session, or right after login/payment), this dismisses it the moment we
@@ -17262,7 +17748,7 @@ Respond ONLY with a valid JSON array, no markdown, no backticks:
       window.removeEventListener("pagehide", pushOnHide);
     };
   }, [authUser]);
-  const handleSubmit = (f) => {
+  const handleSubmit = (f, opts) => {
     // Require an account before a profile is ever committed. If we let a
     // logged-out visitor save straight to localStorage, their entire study
     // plan/progress exists in exactly one browser with no server backup —
@@ -17274,12 +17760,16 @@ Respond ONLY with a valid JSON array, no markdown, no backticks:
       setShowAuthScreen(true);
       return;
     }
-    completeProfileSave(f);
+    completeProfileSave(f, opts);
   };
-  const completeProfileSave = (f) => {
+  const completeProfileSave = (f, opts) => {
     // Capture before setForm below overwrites it: a brand-new signup has no
     // prior form at all, whereas an edit always has one already.
     const isBrandNewProfile = !form;
+    // The ONLY time a saved study guide is rebuilt: the student explicitly pressed
+    // "Update my study guide" (or answered "Yes, update my study content"). A plain
+    // "Save changes" leaves their existing study guide exactly as it is.
+    if (opts && opts.regenerateGuide) requestStudyGuideRegeneration();
     // Preserve planStartDate from existing form (only set it once, on first save)
     const startDate = (form && form.planStartDate) ? form.planStartDate : new Date().toISOString();
     const saved = { ...f, planStartDate: startDate };
@@ -17289,6 +17779,11 @@ Respond ONLY with a valid JSON array, no markdown, no backticks:
     if (saved.country && saved.timeline && saved.hoursPerDay && saved.daysPerWeek && saved.skills?.length > 0) {
       saved.profileComplete = true;
     }
+    // A brand-new account that skipped the second onboarding step got a placeholder guide built from
+    // the quick-start defaults. When they finish filling in their real profile (skills, study time…),
+    // that completion is their request for their first real guide — so build it from the real answers.
+    // (Accounts that were never "incomplete" are unaffected: their guide never changes here.)
+    if (form && form.profileComplete === false && saved.profileComplete) requestStudyGuideRegeneration();
     setForm(saved);
     setEditing(false);
     setForceForm(false);
