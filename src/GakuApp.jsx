@@ -134,15 +134,20 @@ function findTaskResourceLink(taskText, taskMode) {
 // covers that kind of practice, so a task like "単語復習" can link straight into GAKU's own
 // Vocabulary/Subtitles/Create-From-Content/Conversation-Practice screens.
 const TASK_APP_NAV = [
-  { test: /GAKU Writing|writing practice|ライティング練習|書き写し|copying down/i, tab: "resources", resourceSubTab: "writing", labelKey: "navGoWriting" },
+  // Any task that mentions writing/typing (e.g. "Write your name", "Writing practice", 書く, 作文) jumps to Writing.
+  { test: /GAKU Writing|\bwrit(e|ing|ten)\b|\btyp(e|ing)\b|copying down|ライティング|書き写し|書き取り|書く|書き|書いて|作文|タイピング|入力練習/i, tab: "resources", resourceSubTab: "writing", labelKey: "navGoWriting", alwaysShow: true },
   { test: /発音|pronunciation/i, tab: "resources", resourceSubTab: "pronunciation", labelKey: "navGoPronunciation" },
   { test: /会話|conversation|speak/i, tab: "resources", resourceSubTab: "conversation", labelKey: "navGoConversation" },
   { test: /字幕|subtitle/i, tab: "subtitles", labelKey: "navGoSubtitles" },
   { test: /音読|要約|shadowing|シャドーイング|read aloud|summarize/i, tab: "resources", resourceSubTab: "content", labelKey: "navGoContent" },
   { test: /単語|vocab|anki|flashcard/i, tab: "vocabulary", labelKey: "navGoVocabulary" },
 ];
-function findTaskAppNav(taskText) {
-  return TASK_APP_NAV.find(n => n.test.test(taskText || "")) || null;
+function findTaskAppNav(taskText, taskSkill) {
+  const hit = TASK_APP_NAV.find(n => n.test.test(taskText || ""));
+  if (hit) return hit;
+  // A task the plan tagged as "writing" always gets the Writing shortcut, whatever its wording.
+  if (taskSkill === "writing") return TASK_APP_NAV[0];
+  return null;
 }
 
 // Level-based recommended resources
@@ -17500,7 +17505,7 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
                             <p style={{ color:task.done?"#64748b":"#cbd5e1", fontSize:13, margin:0, lineHeight:1.6, textDecoration:task.done?"line-through":"none" }}>{task.task}</p>
                             {(() => {
                               const res = findTaskResourceLink(task.task, task.skill);
-                              const nav = findTaskAppNav(task.task);
+                              const nav = findTaskAppNav(task.task, task.skill);
                               if (!res && !nav) return null;
                               return (
                                 <div style={{ display:"flex", gap:8, flexWrap:"wrap", marginTop:8 }}>
@@ -17510,7 +17515,7 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
                                       🔗 {res.name}
                                     </a>
                                   )}
-                                  {nav && tabShown(nav.tab) && (nav.tab !== "resources" || featureShown(nav.resourceSubTab || "links")) && (
+                                  {nav && (nav.alwaysShow || (tabShown(nav.tab) && (nav.tab !== "resources" || featureShown(nav.resourceSubTab || "links")))) && (
                                     <button onClick={e=>{ e.stopPropagation(); setTab(nav.tab); if (nav.resourceSubTab) setResourceSubTab(nav.resourceSubTab); }}
                                        style={{ fontSize:11, color:C.purpleLight, border:"1px solid rgba(139,92,246,0.3)", borderRadius:8, padding:"3px 8px", background:"rgba(139,92,246,0.06)", cursor:"pointer" }}>
                                       ▶ {T[nav.labelKey]}
