@@ -10748,6 +10748,31 @@ function renameVocabFolder(oldName, newNameRaw) {
   return { ok: true, name: newName };
 }
 
+// Copy words into another folder (existing or brand new) WITHOUT removing them from the original.
+// Words already in the target (same word) are skipped. Returns { ok, added, skipped, name } or { ok:false, error }.
+function copyVocabCardsToFolder(cardIds, targetRaw) {
+  const target = String(targetRaw || "").trim().slice(0, 60);
+  if (!target) return { ok: false, error: "Please choose or enter a folder. / フォルダを選んでください。" };
+  const data = loadVocabData();
+  const nameOf = f => (typeof f === "string" ? f : f && f.name);
+  const existing = ["Your Vocabulary", ...data.folders.map(nameOf)].find(n => n && n.toLowerCase() === target.toLowerCase());
+  const folderName = existing || target;
+  const folders = existing ? data.folders : [...data.folders, { name: folderName, createdAt: new Date().toISOString() }];
+  const idSet = new Set(cardIds.map(String));
+  const sources = data.cards.filter((c, i) => idSet.has(String(c.id || `${c.word}-${i}`)));
+  const have = new Set(data.cards.filter(c => c.folder === folderName).map(c => c.word));
+  const added = [];
+  let skipped = 0;
+  sources.forEach((c, i) => {
+    if (c.folder === folderName || have.has(c.word)) { skipped++; return; }
+    have.add(c.word);
+    added.push({ ...c, id: Date.now() + i + Math.floor(Math.random() * 1000) / 1000, folder: folderName, savedAt: new Date().toISOString() });
+  });
+  saveVocabData({ folders, cards: [...data.cards, ...added] });
+  try { window.dispatchEvent(new Event("gaku_vocab_updated")); } catch {}
+  return { ok: true, added: added.length, skipped, name: folderName };
+}
+
 // ─── TEACHER-ASSIGNED VOCAB SYNC ───────────────────────────────────────────────
 // Seito can push a word directly into a student's account (via the admin-only
 // api/admin-assign-word endpoint — no student password needed). This pulls any
@@ -11921,6 +11946,23 @@ function FolderDetailView({ folderName, onBack, onViewCard, onRenamed }) {
   const [renaming, setRenaming] = useState(false);
   const [renameValue, setRenameValue] = useState("");
   const [renameError, setRenameError] = useState("");
+  // ── copy words to another folder (originals stay where they are) ──
+  const [selecting, setSelecting] = useState(false);
+  const [sel, setSel] = useState({});
+  const [copyOpen, setCopyOpen] = useState(false);
+  const [targetFolder, setTargetFolder] = useState("");
+  const [newTarget, setNewTarget] = useState("");
+  const [copyMsg, setCopyMsg] = useState("");
+  const [copyErr, setCopyErr] = useState("");
+  const doCopy = () => {
+    const ids = Object.keys(sel).filter(k => sel[k]);
+    const res = copyVocabCardsToFolder(ids, newTarget.trim() || targetFolder);
+    if (!res.ok) { setCopyErr(res.error); return; }
+    setCopyOpen(false); setSelecting(false); setSel({}); setTargetFolder(""); setNewTarget(""); setCopyErr("");
+    setData(loadVocabData());
+    setCopyMsg(`✓ 「${res.name}」に${res.added}語コピーしました${res.skipped ? `(${res.skipped}語は既にあるためスキップ)` : ""} / Copied ${res.added} word(s) to "${res.name}"${res.skipped ? ` (${res.skipped} already there)` : ""}`);
+    setTimeout(() => setCopyMsg(""), 5000);
+  };
   const submitRename = () => {
     const res = renameVocabFolder(folderName, renameValue);
     if (!res.ok) { setRenameError(res.error); return; }
@@ -11987,11 +12029,27 @@ function FolderDetailView({ folderName, onBack, onViewCard, onRenamed }) {
         </div>
       )}
 
+      {copyMsg && <p style={{ color:C.green, fontSize:12, margin:"0 0 10px", lineHeight:1.6 }}>{copyMsg}</p>}
+      {cards.length > 0 && (
+        <div style={{ display:"flex", gap:8, alignItems:"center", flexWrap:"wrap", marginBottom:12 }}>
+          <button onClick={()=>{ setSelecting(v=>!v); setSel({}); }} style={{ padding:"7px 12px", borderRadius:10, fontSize:12, fontWeight:700, cursor:"pointer", background:selecting?"rgba(168,85,247,0.15)":"transparent", border:`1px solid ${selecting?"rgba(168,85,247,0.5)":C.border}`, color:selecting?"#c084fc":"#94a3b8" }}>
+            {selecting ? "✕ 選択をやめる" : "📋 別のフォルダへコピー / Copy to folder"}
+          </button>
+          {selecting && (<>
+            <button onClick={()=>{ const all={}; cards.forEach((c,i)=>{all[String(c.id||`${c.word}-${i}`)]=true;}); setSel(all); }} style={{ padding:"7px 10px", borderRadius:10, fontSize:11, fontWeight:700, cursor:"pointer", background:"transparent", border:`1px solid ${C.border}`, color:"#94a3b8" }}>すべて選択</button>
+            <button onClick={()=>{ setCopyErr(""); setCopyOpen(true); }} disabled={!Object.values(sel).some(Boolean)} style={{ padding:"7px 12px", borderRadius:10, fontSize:12, fontWeight:700, cursor:"pointer", border:"none", background:Object.values(sel).some(Boolean)?`linear-gradient(135deg,${C.teal},#0891b2)`:"#1e293b", color:Object.values(sel).some(Boolean)?"#fff":"#475569" }}>
+              コピー先を選ぶ ({Object.values(sel).filter(Boolean).length})
+            </button>
+          </>)}
+        </div>
+      )}
+
       <div style={{ display:"flex", flexDirection:"column", gap:10 }}>
         {cards.map((c, idx) => (
-          <div key={c.id || `${c.word}-${idx}`} style={{ ...S.card, borderLeft:`3px solid ${C.teal}`, background: playingIdx===idx ? "rgba(6,182,212,0.12)" : S.card.background }}>
-            <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start" }}>
-              <div style={{ cursor:"pointer", flex:1 }} onClick={()=>onViewCard(c)}>
+          <div key={c.id || `${c.word}-${idx}`} onClick={selecting ? ()=>{ const k=String(c.id||`${c.word}-${idx}`); setSel(p=>({ ...p, [k]: !p[k] })); } : undefined} style={{ ...S.card, borderLeft:`3px solid ${C.teal}`, cursor:selecting?"pointer":"default", outline: selecting && sel[String(c.id||`${c.word}-${idx}`)] ? `2px solid ${C.teal}` : "none", background: playingIdx===idx ? "rgba(6,182,212,0.12)" : S.card.background }}>
+            <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", gap:10 }}>
+              {selecting && <span style={{ color: sel[String(c.id||`${c.word}-${idx}`)] ? C.teal : "#475569", fontSize:20, lineHeight:1 }}>{sel[String(c.id||`${c.word}-${idx}`)] ? "☑" : "☐"}</span>}
+              <div style={{ cursor:"pointer", flex:1 }} onClick={selecting ? undefined : ()=>onViewCard(c)}>
                 <p style={{ margin:"0 0 2px" }}><FuriganaWord word={c.word} reading={c.reading} size={22} /></p>
                 <p style={{ color:"#94a3b8", fontSize:12, margin:0 }}>{c.meaning}</p>
               </div>
@@ -12003,6 +12061,33 @@ function FolderDetailView({ folderName, onBack, onViewCard, onRenamed }) {
           </div>
         ))}
       </div>
+
+      {/* ── COPY TO FOLDER MODAL ── */}
+      {copyOpen && (() => {
+        const others = ["Your Vocabulary", ...data.folders.map(f => (typeof f === "string" ? f : f && f.name)).filter(Boolean)].filter(n => n !== folderName);
+        const n = Object.values(sel).filter(Boolean).length;
+        return (
+          <div style={{ position:"fixed", inset:0, background:"rgba(0,0,0,0.7)", display:"flex", alignItems:"center", justifyContent:"center", zIndex:1000 }}>
+            <div style={{ ...S.card, maxWidth:360, width:"92%", maxHeight:"85vh", overflowY:"auto" }}>
+              <p style={{ color:"#f1f5f9", fontSize:15, fontWeight:700, margin:"0 0 4px", textAlign:"center" }}>📋 {n}語をコピー / Copy {n} word(s)</p>
+              <p style={{ color:"#64748b", fontSize:12, margin:"0 0 12px", textAlign:"center" }}>「{folderName}」の単語はそのまま残ります / Originals stay in this folder.</p>
+              <p style={{ color:"#94a3b8", fontSize:11, fontWeight:700, letterSpacing:1, margin:"0 0 6px" }}>既存のフォルダ / EXISTING FOLDER</p>
+              {others.map(name => (
+                <button key={name} onClick={()=>{ setTargetFolder(name); setNewTarget(""); setCopyErr(""); }} style={{ display:"block", width:"100%", textAlign:"left", padding:"10px 12px", marginBottom:6, borderRadius:10, cursor:"pointer", fontSize:13, color:"#f1f5f9", border:`1.5px solid ${targetFolder===name&&!newTarget.trim()?C.teal:C.border}`, background:targetFolder===name&&!newTarget.trim()?"rgba(6,182,212,0.12)":C.card }}>
+                  {name==="Your Vocabulary"?"📚":"📁"} {name}
+                </button>
+              ))}
+              <p style={{ color:"#94a3b8", fontSize:11, fontWeight:700, letterSpacing:1, margin:"10px 0 6px" }}>新しいフォルダ / NEW FOLDER</p>
+              <input value={newTarget} maxLength={60} onChange={e=>{ setNewTarget(e.target.value); setCopyErr(""); }} placeholder="e.g. かおりさん 授業" style={{ ...S.input, width:"100%", boxSizing:"border-box" }} />
+              {copyErr && <p style={{ color:"#f87171", fontSize:12, margin:"8px 0 0" }}>{copyErr}</p>}
+              <div style={{ display:"flex", gap:10, marginTop:14 }}>
+                <button onClick={()=>{ setCopyOpen(false); setCopyErr(""); }} style={{ flex:1, ...S.btn, background:C.card, border:`1px solid ${C.border}`, color:"#94a3b8", fontSize:13 }}>キャンセル</button>
+                <button onClick={doCopy} disabled={!newTarget.trim() && !targetFolder} style={{ flex:1, ...S.btn, background:(newTarget.trim()||targetFolder)?`linear-gradient(135deg,${C.teal},#0891b2)`:"#1e293b", color:(newTarget.trim()||targetFolder)?"#fff":"#475569", fontSize:13, fontWeight:700 }}>コピーする</button>
+              </div>
+            </div>
+          </div>
+        );
+      })()}
     </div>
   );
 }
