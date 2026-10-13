@@ -1012,6 +1012,15 @@ const UI_TRANSLATIONS = {
     tutorialPronunciationDesc: "Try it now: play a video of native speakers, tap “Listen to a video tab” and GAKU writes down each line. Then say the sentence out loud on a card and see how close you were. Can't catch it? Slow the video down and listen again.",
     writeTitle: "Writing Practice",
     writeModeCopy: "Copying down",
+    writeVocabTitle: "Choose words from my Vocabulary",
+    writeVocabFolder: "Folder",
+    writeVocabEmpty: "No words in this folder yet. Save words to it from the Vocabulary tab first.",
+    writeVocabAll: "Select all",
+    writeVocabClear: "Clear",
+    writeVocabCount: "{n} selected",
+    writeVocabUseCopy: "Use these words for Copying down",
+    writeVocabUseQ: "Use these words in a writing question",
+    writeVocabQPrompt: "Write a short text in Japanese using these words: {words}",
     writeModeQuestion: "Questions",
     writeSoon: "Coming soon",
     writeQDesc: "Paste a writing question you found online (an essay prompt, a JLPT-style question, an email task…). Write your answer in Japanese and GAKU checks it against the question.",
@@ -1544,6 +1553,15 @@ const UI_TRANSLATIONS = {
     tutorialPronunciationDesc: "Essayez maintenant : lancez une vidéo de locuteurs natifs, appuyez sur « Écouter un onglet vidéo » et GAKU note chaque phrase. Ensuite, sur une carte, dites la phrase à voix haute et voyez à quel point vous étiez proche. Vous n'arrivez pas à saisir ? Ralentissez la vidéo et réécoutez.",
     writeTitle: "Pratique d'écriture",
     writeModeCopy: "Copie",
+    writeVocabTitle: "Choisir des mots dans mon vocabulaire",
+    writeVocabFolder: "Dossier",
+    writeVocabEmpty: "Aucun mot dans ce dossier. Enregistrez d'abord des mots depuis l'onglet Vocabulaire.",
+    writeVocabAll: "Tout sélectionner",
+    writeVocabClear: "Effacer",
+    writeVocabCount: "{n} sélectionné(s)",
+    writeVocabUseCopy: "Utiliser ces mots pour la copie",
+    writeVocabUseQ: "Utiliser ces mots dans une question d'écriture",
+    writeVocabQPrompt: "Écris un court texte en japonais en utilisant ces mots : {words}",
     writeModeQuestion: "Questions",
     writeSoon: "Bientôt disponible",
     writeQDesc: "Collez une question d'écriture trouvée en ligne (sujet de rédaction, question de type JLPT, e-mail à rédiger…). Écrivez votre réponse en japonais et GAKU la vérifie par rapport à la question.",
@@ -2061,6 +2079,15 @@ const UI_TRANSLATIONS = {
     tutorialPronunciationDesc: "Pruébalo ahora: reproduce un video de hablantes nativos, pulsa «Escuchar una pestaña de video» y GAKU escribirá cada línea. Luego, en una tarjeta, di la frase en voz alta y comprueba qué tan cerca estuviste. ¿No la captas? Ralentiza el video y vuelve a escuchar.",
     writeTitle: "Práctica de escritura",
     writeModeCopy: "Copiar",
+    writeVocabTitle: "Elegir palabras de mi vocabulario",
+    writeVocabFolder: "Carpeta",
+    writeVocabEmpty: "Aún no hay palabras en esta carpeta. Guarda palabras primero desde la pestaña Vocabulario.",
+    writeVocabAll: "Seleccionar todo",
+    writeVocabClear: "Borrar",
+    writeVocabCount: "{n} seleccionadas",
+    writeVocabUseCopy: "Usar estas palabras para copiar",
+    writeVocabUseQ: "Usar estas palabras en una pregunta de escritura",
+    writeVocabQPrompt: "Escribe un texto corto en japonés usando estas palabras: {words}",
     writeModeQuestion: "Preguntas",
     writeSoon: "Próximamente",
     writeQDesc: "Pega una pregunta de escritura que encontraste en línea (un tema de redacción, una pregunta tipo JLPT, un correo por escribir…). Escribe tu respuesta en japonés y GAKU la compara con la pregunta.",
@@ -2578,6 +2605,15 @@ const UI_TRANSLATIONS = {
     tutorialPronunciationDesc: "Experimente agora: reproduza um vídeo de falantes nativos, toque em “Ouvir uma aba de vídeo” e o GAKU anota cada fala. Depois, em um cartão, diga a frase em voz alta e veja o quão perto você chegou. Não entendeu? Diminua a velocidade do vídeo e ouça de novo.",
     writeTitle: "Prática de escrita",
     writeModeCopy: "Copiar",
+    writeVocabTitle: "Escolher palavras do meu vocabulário",
+    writeVocabFolder: "Pasta",
+    writeVocabEmpty: "Ainda não há palavras nesta pasta. Salve palavras primeiro na aba Vocabulário.",
+    writeVocabAll: "Selecionar tudo",
+    writeVocabClear: "Limpar",
+    writeVocabCount: "{n} selecionadas",
+    writeVocabUseCopy: "Usar estas palavras para copiar",
+    writeVocabUseQ: "Usar estas palavras numa pergunta de escrita",
+    writeVocabQPrompt: "Escreva um texto curto em japonês usando estas palavras: {words}",
     writeModeQuestion: "Perguntas",
     writeSoon: "Em breve",
     writeQDesc: "Cole uma pergunta de escrita que você encontrou online (um tema de redação, uma pergunta no estilo JLPT, um e-mail para escrever…). Escreva sua resposta em japonês e o GAKU confere com a pergunta.",
@@ -3095,6 +3131,15 @@ const UI_TRANSLATIONS = {
     tutorialPronunciationDesc: "Probier's gleich aus: Spiele ein Video mit Muttersprachlern ab, tippe auf „Video-Tab abhören“, und GAKU schreibt jede Zeile mit. Sprich dann auf einer Karte den Satz laut nach und sieh, wie nah du dran warst. Nicht verstanden? Verlangsame das Video und höre noch einmal zu.",
     writeTitle: "Schreibübung",
     writeModeCopy: "Abschreiben",
+    writeVocabTitle: "Wörter aus meinem Vokabular wählen",
+    writeVocabFolder: "Ordner",
+    writeVocabEmpty: "In diesem Ordner sind noch keine Wörter. Speichere zuerst Wörter im Tab Vokabular.",
+    writeVocabAll: "Alle auswählen",
+    writeVocabClear: "Leeren",
+    writeVocabCount: "{n} ausgewählt",
+    writeVocabUseCopy: "Diese Wörter zum Abschreiben verwenden",
+    writeVocabUseQ: "Diese Wörter in einer Schreibfrage verwenden",
+    writeVocabQPrompt: "Schreibe einen kurzen japanischen Text mit diesen Wörtern: {words}",
     writeModeQuestion: "Fragen",
     writeSoon: "Demnächst verfügbar",
     writeQDesc: "Füge eine Schreibaufgabe ein, die du online gefunden hast (Aufsatzthema, Frage im JLPT-Stil, E-Mail-Aufgabe …). Schreibe deine Antwort auf Japanisch, und GAKU prüft sie anhand der Frage.",
@@ -3612,6 +3657,15 @@ const UI_TRANSLATIONS = {
     tutorialPronunciationDesc: "Provalo subito: riproduci un video di madrelingua, tocca «Ascolta una scheda video» e GAKU trascrive ogni frase. Poi, su una scheda, ripeti la frase ad alta voce e guarda quanto ti sei avvicinato. Non capisci? Rallenta il video e riascolta.",
     writeTitle: "Pratica di scrittura",
     writeModeCopy: "Copiatura",
+    writeVocabTitle: "Scegli parole dal mio vocabolario",
+    writeVocabFolder: "Cartella",
+    writeVocabEmpty: "Nessuna parola in questa cartella. Salva prima delle parole dalla scheda Vocabolario.",
+    writeVocabAll: "Seleziona tutto",
+    writeVocabClear: "Cancella",
+    writeVocabCount: "{n} selezionate",
+    writeVocabUseCopy: "Usa queste parole per la copiatura",
+    writeVocabUseQ: "Usa queste parole in una domanda di scrittura",
+    writeVocabQPrompt: "Scrivi un breve testo in giapponese usando queste parole: {words}",
     writeModeQuestion: "Domande",
     writeSoon: "Presto disponibile",
     writeQDesc: "Incolla una domanda di scrittura trovata online (un tema, una domanda in stile JLPT, un'email da scrivere…). Scrivi la tua risposta in giapponese e GAKU la confronta con la domanda.",
@@ -4129,6 +4183,15 @@ const UI_TRANSLATIONS = {
     tutorialPronunciationDesc: "现在就试试：播放母语者的视频，点击“收听视频标签页”，GAKU会把每句话记录下来。然后在卡片上大声说出这句话，看看你有多接近。听不清？把视频放慢再听一遍。",
     writeTitle: "写作练习",
     writeModeCopy: "抄写",
+    writeVocabTitle: "从我的词汇中选择单词",
+    writeVocabFolder: "文件夹",
+    writeVocabEmpty: "此文件夹中还没有单词。请先在“词汇”标签中保存单词。",
+    writeVocabAll: "全选",
+    writeVocabClear: "清除",
+    writeVocabCount: "已选 {n} 个",
+    writeVocabUseCopy: "用这些单词来抄写",
+    writeVocabUseQ: "在写作题中使用这些单词",
+    writeVocabQPrompt: "请用这些单词写一小段日语短文：{words}",
     writeModeQuestion: "提问",
     writeSoon: "即将推出",
     writeQDesc: "粘贴你在网上找到的写作题目（作文题、JLPT风格的题目、写邮件任务等）。用日语写出你的答案，GAKU会对照题目进行检查。",
@@ -4646,6 +4709,15 @@ const UI_TRANSLATIONS = {
     tutorialPronunciationDesc: "現在就試試：播放母語者的影片，點擊「收聽影片分頁」，GAKU會把每句話記錄下來。然後在卡片上大聲說出這句話，看看你有多接近。聽不清？把影片放慢再聽一遍。",
     writeTitle: "寫作練習",
     writeModeCopy: "抄寫",
+    writeVocabTitle: "從我的詞彙中選擇單字",
+    writeVocabFolder: "資料夾",
+    writeVocabEmpty: "此資料夾中還沒有單字。請先在「詞彙」分頁中儲存單字。",
+    writeVocabAll: "全選",
+    writeVocabClear: "清除",
+    writeVocabCount: "已選 {n} 個",
+    writeVocabUseCopy: "用這些單字來抄寫",
+    writeVocabUseQ: "在寫作題中使用這些單字",
+    writeVocabQPrompt: "請用這些單字寫一小段日語短文：{words}",
     writeModeQuestion: "提問",
     writeSoon: "即將推出",
     writeQDesc: "貼上你在網路上找到的寫作題目（作文題、JLPT風格的題目、寫信任務等）。用日語寫出你的答案，GAKU會對照題目進行檢查。",
@@ -5163,6 +5235,15 @@ const UI_TRANSLATIONS = {
     tutorialPronunciationDesc: "지금 해보세요: 원어민이 나오는 영상을 재생하고 '영상 탭 듣기'를 누르면 GAKU가 한 줄씩 받아 적습니다. 그다음 카드에서 문장을 소리 내어 말하고 얼마나 가까웠는지 확인하세요. 잘 안 들리나요? 영상을 느리게 재생해서 다시 들어보세요.",
     writeTitle: "쓰기 연습",
     writeModeCopy: "따라 쓰기",
+    writeVocabTitle: "내 어휘에서 단어 고르기",
+    writeVocabFolder: "폴더",
+    writeVocabEmpty: "이 폴더에 아직 단어가 없습니다. 먼저 어휘 탭에서 단어를 저장하세요.",
+    writeVocabAll: "모두 선택",
+    writeVocabClear: "지우기",
+    writeVocabCount: "{n}개 선택됨",
+    writeVocabUseCopy: "이 단어로 따라 쓰기",
+    writeVocabUseQ: "이 단어를 쓰기 문제에 사용",
+    writeVocabQPrompt: "이 단어들을 사용해 일본어로 짧은 글을 쓰세요: {words}",
     writeModeQuestion: "질문",
     writeSoon: "곧 출시",
     writeQDesc: "인터넷에서 찾은 쓰기 문제(작문 주제, JLPT 형식 문제, 이메일 쓰기 과제 등)를 붙여넣으세요. 일본어로 답을 쓰면 GAKU가 문제에 맞는지 확인해 줍니다.",
@@ -5680,6 +5761,15 @@ const UI_TRANSLATIONS = {
     tutorialPronunciationDesc: "ลองเลย: เปิดวิดีโอของเจ้าของภาษา แล้วกด “ฟังแท็บวิดีโอ” GAKU จะจดทีละประโยคให้ จากนั้นในการ์ดให้พูดประโยคออกเสียง แล้วดูว่าใกล้เคียงแค่ไหน ฟังไม่ทัน? ลองเปิดวิดีโอให้ช้าลงแล้วฟังอีกครั้ง",
     writeTitle: "ฝึกเขียน",
     writeModeCopy: "คัดลอกเขียน",
+    writeVocabTitle: "เลือกคำจากคำศัพท์ของฉัน",
+    writeVocabFolder: "โฟลเดอร์",
+    writeVocabEmpty: "ยังไม่มีคำในโฟลเดอร์นี้ โปรดบันทึกคำจากแท็บคำศัพท์ก่อน",
+    writeVocabAll: "เลือกทั้งหมด",
+    writeVocabClear: "ล้าง",
+    writeVocabCount: "เลือกแล้ว {n}",
+    writeVocabUseCopy: "ใช้คำเหล่านี้คัดลอกเขียน",
+    writeVocabUseQ: "ใช้คำเหล่านี้ในโจทย์การเขียน",
+    writeVocabQPrompt: "เขียนข้อความสั้นๆ เป็นภาษาญี่ปุ่นโดยใช้คำเหล่านี้: {words}",
     writeModeQuestion: "คำถาม",
     writeSoon: "เร็วๆ นี้",
     writeQDesc: "วางโจทย์การเขียนที่คุณพบทางอินเทอร์เน็ต (หัวข้อเรียงความ โจทย์แนว JLPT งานเขียนอีเมล ฯลฯ) แล้วเขียนคำตอบเป็นภาษาญี่ปุ่น GAKU จะตรวจว่าตรงกับโจทย์หรือไม่",
@@ -6197,6 +6287,15 @@ const UI_TRANSLATIONS = {
     tutorialPronunciationDesc: "Cuba sekarang: mainkan video penutur asli, tekan “Dengar tab video” dan GAKU akan menulis setiap baris. Kemudian, pada kad, sebut ayat itu dengan kuat dan lihat sejauh mana anda hampir betul. Tidak dapat menangkap? Perlahankan video dan dengar semula.",
     writeTitle: "Latihan Menulis",
     writeModeCopy: "Menyalin",
+    writeVocabTitle: "Pilih perkataan daripada Kosa Kata saya",
+    writeVocabFolder: "Folder",
+    writeVocabEmpty: "Belum ada perkataan dalam folder ini. Simpan perkataan dahulu dari tab Kosa Kata.",
+    writeVocabAll: "Pilih semua",
+    writeVocabClear: "Kosongkan",
+    writeVocabCount: "{n} dipilih",
+    writeVocabUseCopy: "Guna perkataan ini untuk menyalin",
+    writeVocabUseQ: "Guna perkataan ini dalam soalan menulis",
+    writeVocabQPrompt: "Tulis teks pendek dalam bahasa Jepun menggunakan perkataan ini: {words}",
     writeModeQuestion: "Soalan",
     writeSoon: "Akan datang",
     writeQDesc: "Tampal soalan menulis yang anda jumpa dalam talian (tajuk karangan, soalan gaya JLPT, tugasan e-mel…). Tulis jawapan anda dalam bahasa Jepun dan GAKU akan menyemaknya dengan soalan.",
@@ -6714,6 +6813,15 @@ const UI_TRANSLATIONS = {
     tutorialPronunciationDesc: "Coba sekarang: putar video penutur asli, ketuk “Dengarkan tab video”, dan GAKU akan menuliskan setiap baris. Lalu, pada kartu, ucapkan kalimatnya dengan lantang dan lihat seberapa dekat Anda. Tidak tertangkap? Perlambat videonya dan dengarkan lagi.",
     writeTitle: "Latihan Menulis",
     writeModeCopy: "Menyalin",
+    writeVocabTitle: "Pilih kata dari Kosakata saya",
+    writeVocabFolder: "Folder",
+    writeVocabEmpty: "Belum ada kata di folder ini. Simpan kata dulu dari tab Kosakata.",
+    writeVocabAll: "Pilih semua",
+    writeVocabClear: "Hapus",
+    writeVocabCount: "{n} dipilih",
+    writeVocabUseCopy: "Gunakan kata ini untuk menyalin",
+    writeVocabUseQ: "Gunakan kata ini dalam soal menulis",
+    writeVocabQPrompt: "Tulis teks pendek dalam bahasa Jepang dengan kata-kata ini: {words}",
     writeModeQuestion: "Pertanyaan",
     writeSoon: "Segera hadir",
     writeQDesc: "Tempel soal menulis yang kamu temukan di internet (tema esai, soal bergaya JLPT, tugas menulis email…). Tulis jawabanmu dalam bahasa Jepang dan GAKU akan memeriksanya dengan soal tersebut.",
@@ -7231,6 +7339,15 @@ const UI_TRANSLATIONS = {
     tutorialPronunciationDesc: "Hãy thử ngay: phát video của người bản xứ, nhấn “Nghe tab video”, GAKU sẽ ghi lại từng câu. Sau đó, trên thẻ, hãy nói to câu đó và xem bạn nói gần đúng đến đâu. Nghe không kịp? Hãy làm chậm video và nghe lại.",
     writeTitle: "Luyện viết",
     writeModeCopy: "Chép lại",
+    writeVocabTitle: "Chọn từ trong Từ vựng của tôi",
+    writeVocabFolder: "Thư mục",
+    writeVocabEmpty: "Thư mục này chưa có từ nào. Hãy lưu từ trước từ tab Từ vựng.",
+    writeVocabAll: "Chọn tất cả",
+    writeVocabClear: "Xóa",
+    writeVocabCount: "Đã chọn {n}",
+    writeVocabUseCopy: "Dùng các từ này để chép lại",
+    writeVocabUseQ: "Dùng các từ này trong câu hỏi viết",
+    writeVocabQPrompt: "Hãy viết một đoạn văn ngắn bằng tiếng Nhật dùng các từ này: {words}",
     writeModeQuestion: "Câu hỏi",
     writeSoon: "Sắp ra mắt",
     writeQDesc: "Dán một đề bài viết bạn tìm thấy trên mạng (đề luận, câu hỏi kiểu JLPT, bài viết email…). Hãy viết câu trả lời bằng tiếng Nhật và GAKU sẽ kiểm tra xem có đúng với đề bài không.",
@@ -7748,6 +7865,15 @@ const UI_TRANSLATIONS = {
     tutorialPronunciationDesc: "अभी आज़माएँ: मूल भाषा बोलने वालों का वीडियो चलाएँ, “वीडियो टैब सुनें” दबाएँ, और GAKU हर पंक्ति लिख देगा। फिर कार्ड पर वाक्य को ज़ोर से बोलें और देखें कि आप कितने करीब थे। समझ नहीं आया? वीडियो को धीमा करके फिर से सुनें।",
     writeTitle: "लेखन अभ्यास",
     writeModeCopy: "नकल करके लिखना",
+    writeVocabTitle: "मेरी शब्दावली से शब्द चुनें",
+    writeVocabFolder: "फ़ोल्डर",
+    writeVocabEmpty: "इस फ़ोल्डर में अभी कोई शब्द नहीं है। पहले शब्दावली टैब से शब्द सहेजें।",
+    writeVocabAll: "सभी चुनें",
+    writeVocabClear: "साफ़ करें",
+    writeVocabCount: "{n} चुने गए",
+    writeVocabUseCopy: "इन शब्दों से नकल करके लिखें",
+    writeVocabUseQ: "इन शब्दों को लेखन प्रश्न में उपयोग करें",
+    writeVocabQPrompt: "इन शब्दों का उपयोग करके जापानी में एक छोटा पाठ लिखें: {words}",
     writeModeQuestion: "प्रश्न",
     writeSoon: "जल्द आ रहा है",
     writeQDesc: "इंटरनेट पर मिला कोई लेखन प्रश्न (निबंध का विषय, JLPT शैली का प्रश्न, ईमेल लिखने का कार्य आदि) पेस्ट करें। अपना उत्तर जापानी में लिखें और GAKU उसे प्रश्न से मिलाकर जाँचेगा।",
@@ -8265,6 +8391,15 @@ const UI_TRANSLATIONS = {
     tutorialPronunciationDesc: "今すぐ試してみましょう：ネイティブが話す動画を再生して「動画のタブを聞き取る」を押すと、GAKUが1行ずつ文字に起こします。次に、カードの文を声に出して言い、どれだけ近かったか確認しましょう。聞き取れないときは、動画をスロー再生してもう一度聞いてみましょう。",
     writeTitle: "ライティング練習",
     writeModeCopy: "書き写し",
+    writeVocabTitle: "単語帳から単語を選ぶ",
+    writeVocabFolder: "フォルダ",
+    writeVocabEmpty: "このフォルダにはまだ単語がありません。先に「Vocabulary」タブで単語を保存してください。",
+    writeVocabAll: "すべて選択",
+    writeVocabClear: "クリア",
+    writeVocabCount: "{n}語選択中",
+    writeVocabUseCopy: "この単語で書き写し練習",
+    writeVocabUseQ: "この単語で書く問題を作る",
+    writeVocabQPrompt: "次の単語を使って、日本語で短い文章を書いてください：{words}",
     writeModeQuestion: "質問",
     writeSoon: "近日公開",
     writeQDesc: "ネットで見つけた作文の問題（作文のテーマ、JLPT形式の問題、メールを書く課題など）を貼り付けてください。日本語で答えを書くと、GAKUが問題に合っているかチェックします。",
@@ -8782,6 +8917,15 @@ const UI_TRANSLATIONS = {
     tutorialPronunciationDesc: "Hemen deneyin: ana dili konuşanların olduğu bir video oynatın, “Video sekmesini dinle”ye dokunun; GAKU her satırı yazıya döker. Sonra kartta cümleyi yüksek sesle söyleyin ve ne kadar yaklaştığınıza bakın. Anlayamadınız mı? Videoyu yavaşlatıp tekrar dinleyin.",
     writeTitle: "Yazma Alıştırması",
     writeModeCopy: "Kopyalayarak yazma",
+    writeVocabTitle: "Kelime dağarcığımdan kelime seç",
+    writeVocabFolder: "Klasör",
+    writeVocabEmpty: "Bu klasörde henüz kelime yok. Önce Kelime sekmesinden kelime kaydedin.",
+    writeVocabAll: "Tümünü seç",
+    writeVocabClear: "Temizle",
+    writeVocabCount: "{n} seçildi",
+    writeVocabUseCopy: "Bu kelimelerle kopyalama yap",
+    writeVocabUseQ: "Bu kelimeleri yazma sorusunda kullan",
+    writeVocabQPrompt: "Bu kelimeleri kullanarak Japonca kısa bir metin yaz: {words}",
     writeModeQuestion: "Sorular",
     writeSoon: "Yakında",
     writeQDesc: "İnternette bulduğunuz bir yazma sorusunu (kompozisyon konusu, JLPT tarzı soru, e-posta yazma görevi…) yapıştırın. Cevabınızı Japonca yazın, GAKU soruya uygunluğunu kontrol etsin.",
@@ -9299,6 +9443,15 @@ const UI_TRANSLATIONS = {
     tutorialPronunciationDesc: "अहिले प्रयास गर्नुहोस्: मातृभाषीहरूको भिडियो चलाउनुहोस्, “भिडियो ट्याब सुन्नुहोस्” थिच्नुहोस्, र GAKUले हरेक पङ्क्ति लेखिदिनेछ। त्यसपछि कार्डमा वाक्य ठूलो स्वरमा बोल्नुहोस् र कति नजिक हुनुभयो हेर्नुहोस्। बुझ्न गाह्रो भयो? भिडियो ढिलो गरेर फेरि सुन्नुहोस्।",
     writeTitle: "लेखन अभ्यास",
     writeModeCopy: "नक्कल गरेर लेख्ने",
+    writeVocabTitle: "मेरो शब्दावलीबाट शब्द छान्नुहोस्",
+    writeVocabFolder: "फोल्डर",
+    writeVocabEmpty: "यो फोल्डरमा अहिलेसम्म कुनै शब्द छैन। पहिले शब्दावली ट्याबबाट शब्द सुरक्षित गर्नुहोस्।",
+    writeVocabAll: "सबै छान्नुहोस्",
+    writeVocabClear: "खाली गर्नुहोस्",
+    writeVocabCount: "{n} छानियो",
+    writeVocabUseCopy: "यी शब्दहरूले नक्कल गरेर लेख्नुहोस्",
+    writeVocabUseQ: "यी शब्दहरू लेखन प्रश्नमा प्रयोग गर्नुहोस्",
+    writeVocabQPrompt: "यी शब्दहरू प्रयोग गरेर जापानीमा छोटो पाठ लेख्नुहोस्: {words}",
     writeModeQuestion: "प्रश्नहरू",
     writeSoon: "छिट्टै आउँदैछ",
     writeQDesc: "इन्टरनेटमा भेटेको कुनै लेखन प्रश्न (निबन्धको विषय, JLPT शैलीको प्रश्न, इमेल लेख्ने कार्य आदि) पेस्ट गर्नुहोस्। आफ्नो उत्तर जापानीमा लेख्नुहोस् र GAKUले प्रश्नसँग मिलाएर जाँच्नेछ।",
@@ -9816,6 +9969,15 @@ const UI_TRANSLATIONS = {
     tutorialPronunciationDesc: "Subukan ngayon: mag-play ng video ng mga native speaker, i-tap ang “Pakinggan ang tab ng video”, at isusulat ng GAKU ang bawat linya. Pagkatapos, sa card, sabihin nang malakas ang pangungusap at tingnan kung gaano ka kalapit. Hindi maintindihan? Pabagalin ang video at pakinggan muli.",
     writeTitle: "Pagsasanay sa Pagsulat",
     writeModeCopy: "Pagkopya",
+    writeVocabTitle: "Pumili ng mga salita mula sa aking Bokabularyo",
+    writeVocabFolder: "Folder",
+    writeVocabEmpty: "Wala pang salita sa folder na ito. Mag-save muna ng mga salita mula sa tab na Bokabularyo.",
+    writeVocabAll: "Piliin lahat",
+    writeVocabClear: "I-clear",
+    writeVocabCount: "{n} napili",
+    writeVocabUseCopy: "Gamitin ang mga salitang ito sa pagkopya",
+    writeVocabUseQ: "Gamitin ang mga salitang ito sa tanong sa pagsulat",
+    writeVocabQPrompt: "Sumulat ng maikling teksto sa Japanese gamit ang mga salitang ito: {words}",
     writeModeQuestion: "Mga Tanong",
     writeSoon: "Malapit na",
     writeQDesc: "I-paste ang tanong sa pagsulat na nakita mo online (paksa ng sanaysay, tanong na istilong JLPT, gawaing pagsulat ng email…). Isulat ang sagot mo sa Japanese at susuriin ito ng GAKU laban sa tanong.",
@@ -10527,6 +10689,27 @@ function saveVocabData(data) {
     // Folder list must still reach GAKU Reader even if the card save hit quota
     publishFoldersForReader(data.folders);
   }
+}
+
+// Rename a custom folder at any time. Moves every word in it to the new name, keeps the
+// "Your Vocabulary" default folder fixed, and refuses empty / duplicate names.
+function renameVocabFolder(oldName, newNameRaw) {
+  const newName = String(newNameRaw || "").trim().slice(0, 60);
+  if (!oldName || oldName === "Your Vocabulary") return { ok: false, error: "This folder can't be renamed." };
+  if (!newName) return { ok: false, error: "Please enter a name." };
+  if (newName === oldName) return { ok: true, name: oldName };
+  const data = loadVocabData();
+  const nameOf = f => (typeof f === "string" ? f : f && f.name);
+  const taken = ["Your Vocabulary", ...data.folders.map(nameOf)].some(n => n && n.toLowerCase() === newName.toLowerCase() && n !== oldName);
+  if (taken) return { ok: false, error: "A folder with this name already exists. / 同じ名前のフォルダがあります。" };
+  const updated = {
+    folders: data.folders.map(f => (nameOf(f) === oldName ? { ...(typeof f === "string" ? {} : f), name: newName } : f)),
+    cards: data.cards.map(c => (c.folder === oldName ? { ...c, folder: newName } : c)),
+  };
+  saveVocabData(updated);
+  // Keep the Flashcard "resume position" memory attached to the renamed folder if it exists.
+  try { window.dispatchEvent(new Event("gaku_vocab_updated")); } catch {}
+  return { ok: true, name: newName };
 }
 
 // ─── TEACHER-ASSIGNED VOCAB SYNC ───────────────────────────────────────────────
@@ -11564,6 +11747,9 @@ function LibraryView({ onBack, onSelectFolder, onCreateCard }) {
   const [newFolderName, setNewFolderName] = useState("");
   const [showNewFolder, setShowNewFolder] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(null); // folder name to delete
+  const [renaming, setRenaming] = useState(null); // folder name being renamed
+  const [renameValue, setRenameValue] = useState("");
+  const [renameError, setRenameError] = useState("");
 
   const refresh = () => setData(loadVocabData());
   // Which folder's words are currently being read aloud (the 🔊 button on each folder row).
@@ -11589,6 +11775,12 @@ function LibraryView({ onBack, onSelectFolder, onCreateCard }) {
     if (!newFolderName.trim()) return;
     const updated = { ...data, folders: [...data.folders, { name: newFolderName.trim(), createdAt: new Date().toISOString() }] };
     saveVocabData(updated); setData(updated); setNewFolderName(""); setShowNewFolder(false);
+  };
+
+  const submitRename = () => {
+    const res = renameVocabFolder(renaming, renameValue);
+    if (!res.ok) { setRenameError(res.error); return; }
+    setData(loadVocabData()); setRenaming(null); setRenameValue(""); setRenameError("");
   };
 
   const deleteFolder = (name) => {
@@ -11640,6 +11832,9 @@ function LibraryView({ onBack, onSelectFolder, onCreateCard }) {
                   {playingFolder===f.name ? "⏹" : "🔊"}
                 </button>
                 {f.name !== "Your Vocabulary" && (
+                  <button onClick={e=>{e.stopPropagation();setRenaming(f.name);setRenameValue(f.name);setRenameError("");}} title="Rename folder / フォルダ名を変更" aria-label="Rename folder" style={{ padding:"4px 10px", borderRadius:6, background:"rgba(6,182,212,0.1)", border:"1px solid rgba(6,182,212,0.25)", color:C.teal, fontSize:11, cursor:"pointer", fontWeight:600 }}>✏️ 名前</button>
+                )}
+                {f.name !== "Your Vocabulary" && (
                   <button onClick={e=>{e.stopPropagation();setConfirmDelete(f.name);}} style={{ padding:"4px 10px", borderRadius:6, background:"rgba(239,68,68,0.1)", border:`1px solid rgba(239,68,68,0.2)`, color:"#ef4444", fontSize:11, cursor:"pointer", fontWeight:600 }}>🗑 削除</button>
                 )}
                 <span style={{ color:"#475569", fontSize:16 }}>→</span>
@@ -11648,6 +11843,22 @@ function LibraryView({ onBack, onSelectFolder, onCreateCard }) {
           );
         })}
       </div>
+
+      {/* ── RENAME FOLDER MODAL ── */}
+      {renaming && (
+        <div style={{ position:"fixed", inset:0, background:"rgba(0,0,0,0.7)", display:"flex", alignItems:"center", justifyContent:"center", zIndex:1000 }}>
+          <div style={{ ...S.card, maxWidth:340, width:"90%" }}>
+            <p style={{ color:"#f1f5f9", fontSize:15, fontWeight:700, margin:"0 0 4px", textAlign:"center" }}>✏️ フォルダ名を変更 / Rename folder</p>
+            <p style={{ color:"#64748b", fontSize:12, margin:"0 0 12px", textAlign:"center" }}>単語はそのまま残ります / Your words stay in the folder.</p>
+            <input autoFocus value={renameValue} maxLength={60} onChange={e=>{setRenameValue(e.target.value);setRenameError("");}} onKeyDown={e=>e.key==="Enter"&&submitRename()} style={{ ...S.input, width:"100%", boxSizing:"border-box" }} />
+            {renameError && <p style={{ color:"#f87171", fontSize:12, margin:"8px 0 0" }}>{renameError}</p>}
+            <div style={{ display:"flex", gap:10, marginTop:14 }}>
+              <button onClick={()=>{setRenaming(null);setRenameError("");}} style={{ flex:1, ...S.btn, background:C.card, border:`1px solid ${C.border}`, color:"#94a3b8", fontSize:13 }}>キャンセル / Cancel</button>
+              <button onClick={submitRename} disabled={!renameValue.trim()} style={{ flex:1, ...S.btn, background:renameValue.trim()?`linear-gradient(135deg,${C.teal},#0891b2)`:"#1e293b", color:renameValue.trim()?"#fff":"#475569", fontSize:13, fontWeight:700 }}>保存 / Save</button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* ── DELETE CONFIRM MODAL ── */}
       {confirmDelete && (
@@ -11669,8 +11880,18 @@ function LibraryView({ onBack, onSelectFolder, onCreateCard }) {
 }
 
 // ─── FOLDER DETAIL VIEW ────────────────────────────────────────────────────────
-function FolderDetailView({ folderName, onBack, onViewCard }) {
+function FolderDetailView({ folderName, onBack, onViewCard, onRenamed }) {
   const [data, setData] = useState(loadVocabData);
+  const [renaming, setRenaming] = useState(false);
+  const [renameValue, setRenameValue] = useState("");
+  const [renameError, setRenameError] = useState("");
+  const submitRename = () => {
+    const res = renameVocabFolder(folderName, renameValue);
+    if (!res.ok) { setRenameError(res.error); return; }
+    setRenaming(false); setRenameError("");
+    setData(loadVocabData());
+    if (onRenamed) onRenamed(res.name);
+  };
   const cards = data.cards.filter(c=>c.folder===folderName);
   const [playingIdx, setPlayingIdx] = useState(-1); // -1 = not playing; otherwise the word being read aloud
 
@@ -11699,7 +11920,20 @@ function FolderDetailView({ folderName, onBack, onViewCard }) {
       <button onClick={()=>{ stopFolderPlayback(); onBack(); }} style={{ background:"none", border:"none", color:"#64748b", fontSize:13, cursor:"pointer", padding:0, marginBottom:14 }}>← Library</button>
       <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", gap:10, marginBottom:16 }}>
         <div>
-          <p style={{ color:"#f1f5f9", fontSize:15, fontWeight:800, margin:"0 0 4px" }}>📁 {folderName}</p>
+          {renaming ? (
+            <div>
+              <div style={{ display:"flex", gap:6 }}>
+                <input autoFocus value={renameValue} maxLength={60} onChange={e=>{setRenameValue(e.target.value);setRenameError("");}} onKeyDown={e=>e.key==="Enter"&&submitRename()} style={{ ...S.input, flex:1, padding:"8px 10px" }} />
+                <button onClick={submitRename} disabled={!renameValue.trim()} style={{ ...S.btn, padding:"8px 12px", fontSize:12, background:`linear-gradient(135deg,${C.teal},#0891b2)`, color:"#fff" }}>保存</button>
+                <button onClick={()=>{setRenaming(false);setRenameError("");}} style={{ ...S.btn, padding:"8px 12px", fontSize:12, background:C.card, border:`1px solid ${C.border}`, color:"#94a3b8" }}>✕</button>
+              </div>
+              {renameError && <p style={{ color:"#f87171", fontSize:12, margin:"6px 0 0" }}>{renameError}</p>}
+            </div>
+          ) : (
+            <p style={{ color:"#f1f5f9", fontSize:15, fontWeight:800, margin:"0 0 4px" }}>📁 {folderName}
+              {folderName !== "Your Vocabulary" && <button onClick={()=>{setRenaming(true);setRenameValue(folderName);setRenameError("");}} title="Rename folder / フォルダ名を変更" aria-label="Rename folder" style={{ marginLeft:8, padding:"2px 8px", borderRadius:6, background:"rgba(6,182,212,0.1)", border:"1px solid rgba(6,182,212,0.25)", color:C.teal, fontSize:11, cursor:"pointer", fontWeight:600, verticalAlign:"middle" }}>✏️ 名前を変更</button>}
+            </p>
+          )}
           <p style={{ color:"#64748b", fontSize:12, margin:0 }}>{cards.length} {cards.length===1?"word":"words"}</p>
         </div>
         {cards.length > 0 && (
@@ -12095,7 +12329,7 @@ function VocabBuilder({ form }) {
 
   // ── RENDER SUBVIEWS ──
   if (vocabView === "library") return <LibraryView onBack={()=>setVocabView("main")} onSelectFolder={name=>{setSelectedFolder(name);setVocabView("folderDetail");}} onCreateCard={()=>setVocabView("wordSearch")} />;
-  if (vocabView === "folderDetail") return <FolderDetailView folderName={selectedFolder} onBack={()=>setVocabView("library")} onViewCard={w=>{setSelectedWord(w);setVocabView("wordDetail");}} />;
+  if (vocabView === "folderDetail") return <FolderDetailView folderName={selectedFolder} onRenamed={setSelectedFolder} onBack={()=>setVocabView("library")} onViewCard={w=>{setSelectedWord(w);setVocabView("wordDetail");}} />;
   if (vocabView === "wordSearch") return <WordSearchScreen form={form} onBack={()=>setVocabView("main")} onSelectWord={w=>{setSelectedWord(w);setVocabView("wordDetail");}} />;
   if (vocabView === "wordDetail") return <WordDetailCard card={selectedWord} form={form} onBack={()=>setVocabView(selectedFolder?"wordSearch":"wordSearch")} onSave={refreshVocab} prefLang={form.preferredLang} />;
   if (vocabView === "flashcard") return <FlashcardView form={form} onBack={()=>setVocabView("main")} />;
@@ -14020,7 +14254,7 @@ function copyCharLoader(char, onLoad, onError) {
     .then(d => { if (!d || !Array.isArray(d.strokes) || !d.strokes.length) throw new Error("bad"); onLoad(d); })
     .catch(onError);
 }
-function CopyingDown({ T }) {
+function CopyingDown({ T, injected }) {
   const [raw, setRaw] = useState(() => { try { return localStorage.getItem(scopedKey(COPY_STORAGE_KEY)) || ""; } catch { return ""; } });
   const [error, setError] = useState("");
   const [session, setSession] = useState(null); // { tokens:[{ch,w}], chars:[], truncated }
@@ -14038,6 +14272,12 @@ function CopyingDown({ T }) {
   useEffect(() => {
     try { localStorage.setItem(scopedKey(COPY_STORAGE_KEY), raw); } catch {}
   }, [raw]);
+  // Words picked from the student's Vocabulary folder become the text to copy.
+  useEffect(() => {
+    if (!injected || !injected.text) return;
+    setRaw(injected.text.slice(0, 600)); setSession(null); setResults({}); setIdx(0); setPhase("write"); setError("");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [injected && injected.n]);
 
   const startQuiz = (w, withGuide) => {
     setMistakeStroke(""); setDoneMistakes(null);
@@ -14203,6 +14443,74 @@ function CopyingDown({ T }) {
 // Japanese, and the AI checks whether the answer fits the question. If it fits: praise +
 // small tips. If not: feedback + a model answer. (Copying down mode is a separate, later build.)
 const WRITING_STORAGE_KEY = "gaku_writing_questions";
+// ─── WRITING: PICK WORDS FROM MY VOCABULARY ───────────────────────────────────
+// Setting for the Writing section: choose a Vocabulary folder (any name, renamable in the Library)
+// and tick the words to practice. They then fill the "Copying down" text or the "Questions" prompt.
+const WRITING_VOCAB_FOLDER_KEY = "gaku_writing_vocab_folder";
+function WritingVocabPicker({ T, onUse, mode }) {
+  const [open, setOpen] = useState(false);
+  const [data, setData] = useState(loadVocabData);
+  const [folder, setFolder] = useState(() => { try { return localStorage.getItem(scopedKey(WRITING_VOCAB_FOLDER_KEY)) || "Your Vocabulary"; } catch { return "Your Vocabulary"; } });
+  const [picked, setPicked] = useState({}); // card id -> true
+  useEffect(() => {
+    const h = () => setData(loadVocabData());
+    window.addEventListener("gaku_vocab_updated", h);
+    return () => window.removeEventListener("gaku_vocab_updated", h);
+  }, []);
+  const nameOf = f => (typeof f === "string" ? f : f && f.name);
+  const folderNames = ["Your Vocabulary", ...data.folders.map(nameOf).filter(Boolean)];
+  const active = folderNames.includes(folder) ? folder : "Your Vocabulary"; // folder may have been renamed/deleted
+  const cards = data.cards.filter(c => c.folder === active);
+  const keyOf = (c, i) => String(c.id || `${c.word}-${i}`);
+  const chosen = cards.filter((c, i) => picked[keyOf(c, i)]);
+  const changeFolder = (name) => { setFolder(name); setPicked({}); try { localStorage.setItem(scopedKey(WRITING_VOCAB_FOLDER_KEY), name); } catch {} };
+  const fill = (str, vars) => Object.keys(vars).reduce((acc, k) => acc.split("{" + k + "}").join(String(vars[k])), str);
+  const useWords = () => { if (chosen.length) onUse(chosen.map(c => c.word)); };
+  const small = { padding:"6px 10px", borderRadius:8, fontSize:11, fontWeight:700, cursor:"pointer", background:"transparent", border:`1px solid ${C.border}`, color:"#94a3b8" };
+  return (
+    <div style={{ marginBottom:14, border:`1px solid ${C.border}`, borderRadius:12, background:"rgba(6,182,212,0.04)" }}>
+      <button onClick={() => setOpen(o => !o)} style={{ width:"100%", display:"flex", justifyContent:"space-between", alignItems:"center", padding:"11px 14px", background:"none", border:"none", color:C.teal, fontSize:13, fontWeight:700, cursor:"pointer", textAlign:"left" }}>
+        <span>📚 {T.writeVocabTitle || "Choose words from my Vocabulary"}</span><span>{open ? "▲" : "▼"}</span>
+      </button>
+      {open && (
+        <div style={{ padding:"0 14px 14px" }}>
+          <label style={S.label}>{(T.writeVocabFolder || "Folder").toUpperCase()}</label>
+          <select value={active} onChange={e => changeFolder(e.target.value)} style={{ ...S.input, marginBottom:10 }}>
+            {folderNames.map(n => <option key={n} value={n}>{(n === "Your Vocabulary" ? (T.yourVocabSaved || "Your Vocabulary") : n)} ({data.cards.filter(c => c.folder === n).length})</option>)}
+          </select>
+          {cards.length === 0 ? (
+            <p style={{ color:"#64748b", fontSize:12, margin:"4px 0 0" }}>{T.writeVocabEmpty || "No words in this folder yet. Save words to it from the Vocabulary tab first."}</p>
+          ) : (<>
+            <div style={{ display:"flex", gap:8, alignItems:"center", marginBottom:8, flexWrap:"wrap" }}>
+              <button onClick={() => { const all = {}; cards.forEach((c, i) => { all[keyOf(c, i)] = true; }); setPicked(all); }} style={small}>{T.writeVocabAll || "Select all"}</button>
+              <button onClick={() => setPicked({})} style={small}>{T.writeVocabClear || "Clear"}</button>
+              <span style={{ color:"#94a3b8", fontSize:11 }}>{fill(T.writeVocabCount || "{n} selected", { n: chosen.length })}</span>
+            </div>
+            <div style={{ maxHeight:200, overflowY:"auto", display:"flex", flexDirection:"column", gap:6, marginBottom:10 }}>
+              {cards.map((c, i) => {
+                const k = keyOf(c, i); const on = !!picked[k];
+                return (
+                  <button key={k} onClick={() => setPicked(p => ({ ...p, [k]: !p[k] }))}
+                    style={{ display:"flex", alignItems:"center", gap:10, padding:"8px 10px", borderRadius:10, textAlign:"left", cursor:"pointer",
+                      border:`1.5px solid ${on ? C.teal : C.border}`, background:on ? "rgba(6,182,212,0.12)" : C.card, color:"#f1f5f9" }}>
+                    <span style={{ color:on ? C.teal : "#475569", fontSize:15 }}>{on ? "☑" : "☐"}</span>
+                    <span style={{ fontSize:15, fontWeight:700 }}>{c.word}</span>
+                    {c.reading && c.reading !== c.word && <span style={{ color:"#94a3b8", fontSize:12 }}>{c.reading}</span>}
+                    {c.meaning && <span style={{ color:"#64748b", fontSize:11, marginLeft:"auto", maxWidth:"40%", overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>{c.meaning}</span>}
+                  </button>
+                );
+              })}
+            </div>
+            <button onClick={useWords} disabled={!chosen.length}
+              style={{ ...S.btn, width:"100%", background:chosen.length ? `linear-gradient(135deg,${C.teal},#0891b2)` : "#1e293b", color:chosen.length ? "#fff" : "#475569" }}>
+              {mode === "copy" ? (T.writeVocabUseCopy || "Use these words for Copying down") : (T.writeVocabUseQ || "Use these words in a writing question")}
+            </button>
+          </>)}
+        </div>
+      )}
+    </div>
+  );
+}
 function WritingPractice({ form }) {
   const lang = form?.preferredLang || "English";
   const T = useUITranslations(lang);
@@ -14212,6 +14520,13 @@ function WritingPractice({ form }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [result, setResult] = useState(null); // { fits, feedback, model }
+  const [injected, setInjected] = useState(null); // { text, n } words picked from Vocabulary for Copying down
+  const useVocabWords = (words) => {
+    if (mode === "copy") { setInjected({ text: words.join("、"), n: Date.now() }); return; }
+    const list = words.join("、");
+    setQuestion((T.writeVocabQPrompt || "Write a short text in Japanese using these words: {words}").split("{words}").join(list).slice(0, 3000));
+    setAnswer(""); setResult(null); setError("");
+  };
 
   useEffect(() => {
     try {
@@ -14293,7 +14608,8 @@ Respond ONLY with valid JSON, no markdown, no backticks:
           {modeBtn("copy", "📝 " + (T.writeModeCopy || "Copying down"), false)}
           {modeBtn("question", "❓ " + (T.writeModeQuestion || "Questions"), false)}
         </div>
-        {mode === "copy" && <CopyingDown T={T} />}
+        <WritingVocabPicker T={T} mode={mode} onUse={useVocabWords} />
+        {mode === "copy" && <CopyingDown T={T} injected={injected} />}
         {mode === "question" && (<>
         <p style={{ color:"#39ff14", fontSize:12, lineHeight:1.7, marginBottom:12 }}>
           {T.writeQDesc || "Paste a writing question you found online (an essay prompt, a JLPT-style question, an email task…). Write your answer in Japanese and GAKU checks it against the question."}
