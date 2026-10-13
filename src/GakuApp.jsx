@@ -1013,6 +1013,8 @@ const UI_TRANSLATIONS = {
     writeTitle: "Writing Practice",
     writeModeCopy: "Copying down",
     writeVocabTitle: "Choose words from my Vocabulary",
+    writeVocabCopy: "Copy",
+    writeVocabCopied: "✓ Copied!",
     writeVocabFolder: "Folder",
     writeVocabEmpty: "No words in this folder yet. Save words to it from the Vocabulary tab first.",
     writeVocabAll: "Select all",
@@ -1554,6 +1556,8 @@ const UI_TRANSLATIONS = {
     writeTitle: "Pratique d'écriture",
     writeModeCopy: "Copie",
     writeVocabTitle: "Choisir des mots dans mon vocabulaire",
+    writeVocabCopy: "Copier",
+    writeVocabCopied: "✓ Copié !",
     writeVocabFolder: "Dossier",
     writeVocabEmpty: "Aucun mot dans ce dossier. Enregistrez d'abord des mots depuis l'onglet Vocabulaire.",
     writeVocabAll: "Tout sélectionner",
@@ -2080,6 +2084,8 @@ const UI_TRANSLATIONS = {
     writeTitle: "Práctica de escritura",
     writeModeCopy: "Copiar",
     writeVocabTitle: "Elegir palabras de mi vocabulario",
+    writeVocabCopy: "Copiar",
+    writeVocabCopied: "✓ ¡Copiado!",
     writeVocabFolder: "Carpeta",
     writeVocabEmpty: "Aún no hay palabras en esta carpeta. Guarda palabras primero desde la pestaña Vocabulario.",
     writeVocabAll: "Seleccionar todo",
@@ -2606,6 +2612,8 @@ const UI_TRANSLATIONS = {
     writeTitle: "Prática de escrita",
     writeModeCopy: "Copiar",
     writeVocabTitle: "Escolher palavras do meu vocabulário",
+    writeVocabCopy: "Copiar",
+    writeVocabCopied: "✓ Copiado!",
     writeVocabFolder: "Pasta",
     writeVocabEmpty: "Ainda não há palavras nesta pasta. Salve palavras primeiro na aba Vocabulário.",
     writeVocabAll: "Selecionar tudo",
@@ -3132,6 +3140,8 @@ const UI_TRANSLATIONS = {
     writeTitle: "Schreibübung",
     writeModeCopy: "Abschreiben",
     writeVocabTitle: "Wörter aus meinem Vokabular wählen",
+    writeVocabCopy: "Kopieren",
+    writeVocabCopied: "✓ Kopiert!",
     writeVocabFolder: "Ordner",
     writeVocabEmpty: "In diesem Ordner sind noch keine Wörter. Speichere zuerst Wörter im Tab Vokabular.",
     writeVocabAll: "Alle auswählen",
@@ -3658,6 +3668,8 @@ const UI_TRANSLATIONS = {
     writeTitle: "Pratica di scrittura",
     writeModeCopy: "Copiatura",
     writeVocabTitle: "Scegli parole dal mio vocabolario",
+    writeVocabCopy: "Copia",
+    writeVocabCopied: "✓ Copiato!",
     writeVocabFolder: "Cartella",
     writeVocabEmpty: "Nessuna parola in questa cartella. Salva prima delle parole dalla scheda Vocabolario.",
     writeVocabAll: "Seleziona tutto",
@@ -4184,6 +4196,8 @@ const UI_TRANSLATIONS = {
     writeTitle: "写作练习",
     writeModeCopy: "抄写",
     writeVocabTitle: "从我的词汇中选择单词",
+    writeVocabCopy: "复制",
+    writeVocabCopied: "✓ 已复制！",
     writeVocabFolder: "文件夹",
     writeVocabEmpty: "此文件夹中还没有单词。请先在“词汇”标签中保存单词。",
     writeVocabAll: "全选",
@@ -4710,6 +4724,8 @@ const UI_TRANSLATIONS = {
     writeTitle: "寫作練習",
     writeModeCopy: "抄寫",
     writeVocabTitle: "從我的詞彙中選擇單字",
+    writeVocabCopy: "複製",
+    writeVocabCopied: "✓ 已複製！",
     writeVocabFolder: "資料夾",
     writeVocabEmpty: "此資料夾中還沒有單字。請先在「詞彙」分頁中儲存單字。",
     writeVocabAll: "全選",
@@ -5236,6 +5252,8 @@ const UI_TRANSLATIONS = {
     writeTitle: "쓰기 연습",
     writeModeCopy: "따라 쓰기",
     writeVocabTitle: "내 어휘에서 단어 고르기",
+    writeVocabCopy: "복사",
+    writeVocabCopied: "✓ 복사됨!",
     writeVocabFolder: "폴더",
     writeVocabEmpty: "이 폴더에 아직 단어가 없습니다. 먼저 어휘 탭에서 단어를 저장하세요.",
     writeVocabAll: "모두 선택",
@@ -5762,6 +5780,8 @@ const UI_TRANSLATIONS = {
     writeTitle: "ฝึกเขียน",
     writeModeCopy: "คัดลอกเขียน",
     writeVocabTitle: "เลือกคำจากคำศัพท์ของฉัน",
+    writeVocabCopy: "คัดลอก",
+    writeVocabCopied: "✓ คัดลอกแล้ว!",
     writeVocabFolder: "โฟลเดอร์",
     writeVocabEmpty: "ยังไม่มีคำในโฟลเดอร์นี้ โปรดบันทึกคำจากแท็บคำศัพท์ก่อน",
     writeVocabAll: "เลือกทั้งหมด",
@@ -6288,6 +6308,8 @@ const UI_TRANSLATIONS = {
     writeTitle: "Latihan Menulis",
     writeModeCopy: "Menyalin",
     writeVocabTitle: "Pilih perkataan daripada Kosa Kata saya",
+    writeVocabCopy: "Salin",
+    writeVocabCopied: "✓ Disalin!",
     writeVocabFolder: "Folder",
     writeVocabEmpty: "Belum ada perkataan dalam folder ini. Simpan perkataan dahulu dari tab Kosa Kata.",
     writeVocabAll: "Pilih semua",
@@ -6814,6 +6836,8 @@ const UI_TRANSLATIONS = {
     writeTitle: "Latihan Menulis",
     writeModeCopy: "Menyalin",
     writeVocabTitle: "Pilih kata dari Kosakata saya",
+    writeVocabCopy: "Salin",
+    writeVocabCopied: "✓ Tersalin!",
     writeVocabFolder: "Folder",
     writeVocabEmpty: "Belum ada kata di folder ini. Simpan kata dulu dari tab Kosakata.",
     writeVocabAll: "Pilih semua",
@@ -7340,6 +7364,8 @@ const UI_TRANSLATIONS = {
     writeTitle: "Luyện viết",
     writeModeCopy: "Chép lại",
     writeVocabTitle: "Chọn từ trong Từ vựng của tôi",
+    writeVocabCopy: "Sao chép",
+    writeVocabCopied: "✓ Đã sao chép!",
     writeVocabFolder: "Thư mục",
     writeVocabEmpty: "Thư mục này chưa có từ nào. Hãy lưu từ trước từ tab Từ vựng.",
     writeVocabAll: "Chọn tất cả",
@@ -7866,6 +7892,8 @@ const UI_TRANSLATIONS = {
     writeTitle: "लेखन अभ्यास",
     writeModeCopy: "नकल करके लिखना",
     writeVocabTitle: "मेरी शब्दावली से शब्द चुनें",
+    writeVocabCopy: "कॉपी करें",
+    writeVocabCopied: "✓ कॉपी हो गया!",
     writeVocabFolder: "फ़ोल्डर",
     writeVocabEmpty: "इस फ़ोल्डर में अभी कोई शब्द नहीं है। पहले शब्दावली टैब से शब्द सहेजें।",
     writeVocabAll: "सभी चुनें",
@@ -8392,6 +8420,8 @@ const UI_TRANSLATIONS = {
     writeTitle: "ライティング練習",
     writeModeCopy: "書き写し",
     writeVocabTitle: "単語帳から単語を選ぶ",
+    writeVocabCopy: "コピー",
+    writeVocabCopied: "✓ コピーしました！",
     writeVocabFolder: "フォルダ",
     writeVocabEmpty: "このフォルダにはまだ単語がありません。先に「Vocabulary」タブで単語を保存してください。",
     writeVocabAll: "すべて選択",
@@ -8918,6 +8948,8 @@ const UI_TRANSLATIONS = {
     writeTitle: "Yazma Alıştırması",
     writeModeCopy: "Kopyalayarak yazma",
     writeVocabTitle: "Kelime dağarcığımdan kelime seç",
+    writeVocabCopy: "Kopyala",
+    writeVocabCopied: "✓ Kopyalandı!",
     writeVocabFolder: "Klasör",
     writeVocabEmpty: "Bu klasörde henüz kelime yok. Önce Kelime sekmesinden kelime kaydedin.",
     writeVocabAll: "Tümünü seç",
@@ -9444,6 +9476,8 @@ const UI_TRANSLATIONS = {
     writeTitle: "लेखन अभ्यास",
     writeModeCopy: "नक्कल गरेर लेख्ने",
     writeVocabTitle: "मेरो शब्दावलीबाट शब्द छान्नुहोस्",
+    writeVocabCopy: "कपी गर्नुहोस्",
+    writeVocabCopied: "✓ कपी भयो!",
     writeVocabFolder: "फोल्डर",
     writeVocabEmpty: "यो फोल्डरमा अहिलेसम्म कुनै शब्द छैन। पहिले शब्दावली ट्याबबाट शब्द सुरक्षित गर्नुहोस्।",
     writeVocabAll: "सबै छान्नुहोस्",
@@ -9970,6 +10004,8 @@ const UI_TRANSLATIONS = {
     writeTitle: "Pagsasanay sa Pagsulat",
     writeModeCopy: "Pagkopya",
     writeVocabTitle: "Pumili ng mga salita mula sa aking Bokabularyo",
+    writeVocabCopy: "Kopyahin",
+    writeVocabCopied: "✓ Nakopya na!",
     writeVocabFolder: "Folder",
     writeVocabEmpty: "Wala pang salita sa folder na ito. Mag-save muna ng mga salita mula sa tab na Bokabularyo.",
     writeVocabAll: "Piliin lahat",
@@ -14465,6 +14501,17 @@ function WritingVocabPicker({ T, onUse, mode }) {
   const chosen = cards.filter((c, i) => picked[keyOf(c, i)]);
   const changeFolder = (name) => { setFolder(name); setPicked({}); try { localStorage.setItem(scopedKey(WRITING_VOCAB_FOLDER_KEY), name); } catch {} };
   const fill = (str, vars) => Object.keys(vars).reduce((acc, k) => acc.split("{" + k + "}").join(String(vars[k])), str);
+  const [copied, setCopied] = useState(false);
+  const copyWords = async () => {
+    const list = (chosen.length ? chosen : cards).map(c => c.word).join("、");
+    if (!list) return;
+    let ok = false;
+    try { await navigator.clipboard.writeText(list); ok = true; } catch {}
+    if (!ok) { // fallback for browsers without the async clipboard API
+      try { const ta = document.createElement("textarea"); ta.value = list; ta.style.position = "fixed"; ta.style.opacity = "0"; document.body.appendChild(ta); ta.select(); ok = document.execCommand("copy"); document.body.removeChild(ta); } catch {}
+    }
+    if (ok) { setCopied(true); setTimeout(() => setCopied(false), 1800); }
+  };
   const useWords = () => { if (chosen.length) onUse(chosen.map(c => c.word)); };
   const small = { padding:"6px 10px", borderRadius:8, fontSize:11, fontWeight:700, cursor:"pointer", background:"transparent", border:`1px solid ${C.border}`, color:"#94a3b8" };
   return (
@@ -14484,20 +14531,22 @@ function WritingVocabPicker({ T, onUse, mode }) {
             <div style={{ display:"flex", gap:8, alignItems:"center", marginBottom:8, flexWrap:"wrap" }}>
               <button onClick={() => { const all = {}; cards.forEach((c, i) => { all[keyOf(c, i)] = true; }); setPicked(all); }} style={small}>{T.writeVocabAll || "Select all"}</button>
               <button onClick={() => setPicked({})} style={small}>{T.writeVocabClear || "Clear"}</button>
+              <button onClick={copyWords} style={{ ...small, color:C.teal, borderColor:"rgba(6,182,212,0.4)" }}>{copied ? (T.writeVocabCopied || "✓ Copied!") : "📋 " + (T.writeVocabCopy || "Copy")}</button>
               <span style={{ color:"#94a3b8", fontSize:11 }}>{fill(T.writeVocabCount || "{n} selected", { n: chosen.length })}</span>
             </div>
             <div style={{ maxHeight:200, overflowY:"auto", display:"flex", flexDirection:"column", gap:6, marginBottom:10 }}>
               {cards.map((c, i) => {
                 const k = keyOf(c, i); const on = !!picked[k];
                 return (
-                  <button key={k} onClick={() => setPicked(p => ({ ...p, [k]: !p[k] }))}
+                  <div key={k} onClick={() => setPicked(p => ({ ...p, [k]: !p[k] }))}
                     style={{ display:"flex", alignItems:"center", gap:10, padding:"8px 10px", borderRadius:10, textAlign:"left", cursor:"pointer",
                       border:`1.5px solid ${on ? C.teal : C.border}`, background:on ? "rgba(6,182,212,0.12)" : C.card, color:"#f1f5f9" }}>
                     <span style={{ color:on ? C.teal : "#475569", fontSize:15 }}>{on ? "☑" : "☐"}</span>
-                    <span style={{ fontSize:15, fontWeight:700 }}>{c.word}</span>
-                    {c.reading && c.reading !== c.word && <span style={{ color:"#94a3b8", fontSize:12 }}>{c.reading}</span>}
+                    {/* Words are plain selectable text: long-press / drag to copy a single word */}
+                    <span onClick={e => { if (String(window.getSelection && window.getSelection()).length) e.stopPropagation(); }} style={{ fontSize:15, fontWeight:700, userSelect:"text", WebkitUserSelect:"text", cursor:"text" }}>{c.word}</span>
+                    {c.reading && c.reading !== c.word && <span style={{ color:"#94a3b8", fontSize:12, userSelect:"text", WebkitUserSelect:"text" }}>{c.reading}</span>}
                     {c.meaning && <span style={{ color:"#64748b", fontSize:11, marginLeft:"auto", maxWidth:"40%", overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>{c.meaning}</span>}
-                  </button>
+                  </div>
                 );
               })}
             </div>
