@@ -1013,6 +1013,10 @@ const UI_TRANSLATIONS = {
     writeTitle: "Writing Practice",
     writeModeCopy: "Copying down",
     writeVocabTitle: "Choose words from my Vocabulary",
+    flashUnderstand: "✅ Understand",
+    flashUnderstoodDone: "✅ Saved to the “Understood” folder",
+    flashNotYet: "↩ Not yet — back to my deck",
+    flashAllUnderstood: "🎉 You understood every card here! Check the “Understood” folder.",
     writeVocabCopy: "Copy",
     writeVocabCopied: "✓ Copied!",
     writeVocabFolder: "Folder",
@@ -1556,6 +1560,10 @@ const UI_TRANSLATIONS = {
     writeTitle: "Pratique d'écriture",
     writeModeCopy: "Copie",
     writeVocabTitle: "Choisir des mots dans mon vocabulaire",
+    flashUnderstand: "✅ Compris",
+    flashUnderstoodDone: "✅ Enregistré dans le dossier « Understood »",
+    flashNotYet: "↩ Pas encore — retour au paquet",
+    flashAllUnderstood: "🎉 Vous avez compris toutes les cartes ! Voir le dossier « Understood ».",
     writeVocabCopy: "Copier",
     writeVocabCopied: "✓ Copié !",
     writeVocabFolder: "Dossier",
@@ -2084,6 +2092,10 @@ const UI_TRANSLATIONS = {
     writeTitle: "Práctica de escritura",
     writeModeCopy: "Copiar",
     writeVocabTitle: "Elegir palabras de mi vocabulario",
+    flashUnderstand: "✅ Entendido",
+    flashUnderstoodDone: "✅ Guardado en la carpeta «Understood»",
+    flashNotYet: "↩ Aún no — volver a mi mazo",
+    flashAllUnderstood: "🎉 ¡Entendiste todas las tarjetas! Mira la carpeta «Understood».",
     writeVocabCopy: "Copiar",
     writeVocabCopied: "✓ ¡Copiado!",
     writeVocabFolder: "Carpeta",
@@ -2612,6 +2624,10 @@ const UI_TRANSLATIONS = {
     writeTitle: "Prática de escrita",
     writeModeCopy: "Copiar",
     writeVocabTitle: "Escolher palavras do meu vocabulário",
+    flashUnderstand: "✅ Entendi",
+    flashUnderstoodDone: "✅ Salvo na pasta «Understood»",
+    flashNotYet: "↩ Ainda não — voltar ao baralho",
+    flashAllUnderstood: "🎉 Você entendeu todos os cartões! Veja a pasta «Understood».",
     writeVocabCopy: "Copiar",
     writeVocabCopied: "✓ Copiado!",
     writeVocabFolder: "Pasta",
@@ -3140,6 +3156,10 @@ const UI_TRANSLATIONS = {
     writeTitle: "Schreibübung",
     writeModeCopy: "Abschreiben",
     writeVocabTitle: "Wörter aus meinem Vokabular wählen",
+    flashUnderstand: "✅ Verstanden",
+    flashUnderstoodDone: "✅ Im Ordner „Understood“ gespeichert",
+    flashNotYet: "↩ Noch nicht — zurück zum Stapel",
+    flashAllUnderstood: "🎉 Du hast alle Karten verstanden! Siehe Ordner „Understood“.",
     writeVocabCopy: "Kopieren",
     writeVocabCopied: "✓ Kopiert!",
     writeVocabFolder: "Ordner",
@@ -3668,6 +3688,10 @@ const UI_TRANSLATIONS = {
     writeTitle: "Pratica di scrittura",
     writeModeCopy: "Copiatura",
     writeVocabTitle: "Scegli parole dal mio vocabolario",
+    flashUnderstand: "✅ Capito",
+    flashUnderstoodDone: "✅ Salvato nella cartella «Understood»",
+    flashNotYet: "↩ Non ancora — torna al mazzo",
+    flashAllUnderstood: "🎉 Hai capito tutte le carte! Guarda la cartella «Understood».",
     writeVocabCopy: "Copia",
     writeVocabCopied: "✓ Copiato!",
     writeVocabFolder: "Cartella",
@@ -4196,6 +4220,10 @@ const UI_TRANSLATIONS = {
     writeTitle: "写作练习",
     writeModeCopy: "抄写",
     writeVocabTitle: "从我的词汇中选择单词",
+    flashUnderstand: "✅ 已理解",
+    flashUnderstoodDone: "✅ 已保存到“Understood”文件夹",
+    flashNotYet: "↩ 还没掌握 — 放回卡组",
+    flashAllUnderstood: "🎉 这里的卡片你都理解了！请查看“Understood”文件夹。",
     writeVocabCopy: "复制",
     writeVocabCopied: "✓ 已复制！",
     writeVocabFolder: "文件夹",
@@ -4724,6 +4752,10 @@ const UI_TRANSLATIONS = {
     writeTitle: "寫作練習",
     writeModeCopy: "抄寫",
     writeVocabTitle: "從我的詞彙中選擇單字",
+    flashUnderstand: "✅ 已理解",
+    flashUnderstoodDone: "✅ 已儲存到「Understood」資料夾",
+    flashNotYet: "↩ 還沒掌握 — 放回卡組",
+    flashAllUnderstood: "🎉 這裡的卡片你都理解了！請查看「Understood」資料夾。",
     writeVocabCopy: "複製",
     writeVocabCopied: "✓ 已複製！",
     writeVocabFolder: "資料夾",
@@ -5252,6 +5284,10 @@ const UI_TRANSLATIONS = {
     writeTitle: "쓰기 연습",
     writeModeCopy: "따라 쓰기",
     writeVocabTitle: "내 어휘에서 단어 고르기",
+    flashUnderstand: "✅ 이해했어요",
+    flashUnderstoodDone: "✅ “Understood” 폴더에 저장됨",
+    flashNotYet: "↩ 아직 — 덱으로 되돌리기",
+    flashAllUnderstood: "🎉 여기 있는 카드를 모두 이해했어요! “Understood” 폴더를 확인하세요.",
     writeVocabCopy: "복사",
     writeVocabCopied: "✓ 복사됨!",
     writeVocabFolder: "폴더",
@@ -5780,6 +5816,10 @@ const UI_TRANSLATIONS = {
     writeTitle: "ฝึกเขียน",
     writeModeCopy: "คัดลอกเขียน",
     writeVocabTitle: "เลือกคำจากคำศัพท์ของฉัน",
+    flashUnderstand: "✅ เข้าใจแล้ว",
+    flashUnderstoodDone: "✅ บันทึกไปยังโฟลเดอร์ “Understood” แล้ว",
+    flashNotYet: "↩ ยังไม่เข้าใจ — กลับไปที่ชุดการ์ด",
+    flashAllUnderstood: "🎉 คุณเข้าใจทุกการ์ดแล้ว! ดูที่โฟลเดอร์ “Understood”",
     writeVocabCopy: "คัดลอก",
     writeVocabCopied: "✓ คัดลอกแล้ว!",
     writeVocabFolder: "โฟลเดอร์",
@@ -6308,6 +6348,10 @@ const UI_TRANSLATIONS = {
     writeTitle: "Latihan Menulis",
     writeModeCopy: "Menyalin",
     writeVocabTitle: "Pilih perkataan daripada Kosa Kata saya",
+    flashUnderstand: "✅ Faham",
+    flashUnderstoodDone: "✅ Disimpan dalam folder “Understood”",
+    flashNotYet: "↩ Belum — kembali ke dek",
+    flashAllUnderstood: "🎉 Anda faham semua kad! Lihat folder “Understood”.",
     writeVocabCopy: "Salin",
     writeVocabCopied: "✓ Disalin!",
     writeVocabFolder: "Folder",
@@ -6836,6 +6880,10 @@ const UI_TRANSLATIONS = {
     writeTitle: "Latihan Menulis",
     writeModeCopy: "Menyalin",
     writeVocabTitle: "Pilih kata dari Kosakata saya",
+    flashUnderstand: "✅ Paham",
+    flashUnderstoodDone: "✅ Disimpan ke folder “Understood”",
+    flashNotYet: "↩ Belum — kembali ke dek",
+    flashAllUnderstood: "🎉 Kamu paham semua kartu! Lihat folder “Understood”.",
     writeVocabCopy: "Salin",
     writeVocabCopied: "✓ Tersalin!",
     writeVocabFolder: "Folder",
@@ -7364,6 +7412,10 @@ const UI_TRANSLATIONS = {
     writeTitle: "Luyện viết",
     writeModeCopy: "Chép lại",
     writeVocabTitle: "Chọn từ trong Từ vựng của tôi",
+    flashUnderstand: "✅ Đã hiểu",
+    flashUnderstoodDone: "✅ Đã lưu vào thư mục “Understood”",
+    flashNotYet: "↩ Chưa — quay lại bộ thẻ",
+    flashAllUnderstood: "🎉 Bạn đã hiểu hết các thẻ! Xem thư mục “Understood”.",
     writeVocabCopy: "Sao chép",
     writeVocabCopied: "✓ Đã sao chép!",
     writeVocabFolder: "Thư mục",
@@ -7892,6 +7944,10 @@ const UI_TRANSLATIONS = {
     writeTitle: "लेखन अभ्यास",
     writeModeCopy: "नकल करके लिखना",
     writeVocabTitle: "मेरी शब्दावली से शब्द चुनें",
+    flashUnderstand: "✅ समझ गया",
+    flashUnderstoodDone: "✅ “Understood” फ़ोल्डर में सहेजा गया",
+    flashNotYet: "↩ अभी नहीं — डेक में वापस",
+    flashAllUnderstood: "🎉 आपने सभी कार्ड समझ लिए! “Understood” फ़ोल्डर देखें।",
     writeVocabCopy: "कॉपी करें",
     writeVocabCopied: "✓ कॉपी हो गया!",
     writeVocabFolder: "फ़ोल्डर",
@@ -8420,6 +8476,10 @@ const UI_TRANSLATIONS = {
     writeTitle: "ライティング練習",
     writeModeCopy: "書き写し",
     writeVocabTitle: "単語帳から単語を選ぶ",
+    flashUnderstand: "✅ Understand(理解した)",
+    flashUnderstoodDone: "✅ 「Understood」フォルダに保存しました",
+    flashNotYet: "↩ まだ — 学習カードに戻す",
+    flashAllUnderstood: "🎉 このカードはすべて理解済みです！「Understood」フォルダを見てください。",
     writeVocabCopy: "コピー",
     writeVocabCopied: "✓ コピーしました！",
     writeVocabFolder: "フォルダ",
@@ -8948,6 +9008,10 @@ const UI_TRANSLATIONS = {
     writeTitle: "Yazma Alıştırması",
     writeModeCopy: "Kopyalayarak yazma",
     writeVocabTitle: "Kelime dağarcığımdan kelime seç",
+    flashUnderstand: "✅ Anladım",
+    flashUnderstoodDone: "✅ “Understood” klasörüne kaydedildi",
+    flashNotYet: "↩ Henüz değil — desteye geri dön",
+    flashAllUnderstood: "🎉 Buradaki tüm kartları anladın! “Understood” klasörüne bak.",
     writeVocabCopy: "Kopyala",
     writeVocabCopied: "✓ Kopyalandı!",
     writeVocabFolder: "Klasör",
@@ -9476,6 +9540,10 @@ const UI_TRANSLATIONS = {
     writeTitle: "लेखन अभ्यास",
     writeModeCopy: "नक्कल गरेर लेख्ने",
     writeVocabTitle: "मेरो शब्दावलीबाट शब्द छान्नुहोस्",
+    flashUnderstand: "✅ बुझें",
+    flashUnderstoodDone: "✅ “Understood” फोल्डरमा सुरक्षित गरियो",
+    flashNotYet: "↩ अझै होइन — डेकमा फर्कनुहोस्",
+    flashAllUnderstood: "🎉 तपाईंले सबै कार्ड बुझ्नुभयो! “Understood” फोल्डर हेर्नुहोस्।",
     writeVocabCopy: "कपी गर्नुहोस्",
     writeVocabCopied: "✓ कपी भयो!",
     writeVocabFolder: "फोल्डर",
@@ -10004,6 +10072,10 @@ const UI_TRANSLATIONS = {
     writeTitle: "Pagsasanay sa Pagsulat",
     writeModeCopy: "Pagkopya",
     writeVocabTitle: "Pumili ng mga salita mula sa aking Bokabularyo",
+    flashUnderstand: "✅ Naiintindihan",
+    flashUnderstoodDone: "✅ Na-save sa folder na “Understood”",
+    flashNotYet: "↩ Hindi pa — bumalik sa deck",
+    flashAllUnderstood: "🎉 Naunawaan mo ang lahat ng card! Tingnan ang folder na “Understood”.",
     writeVocabCopy: "Kopyahin",
     writeVocabCopied: "✓ Nakopya na!",
     writeVocabFolder: "Folder",
@@ -11622,9 +11694,42 @@ function FlashcardView({ form, onBack }) {
   const cards = allData.cards || [];
   const folderObjs = allData.folders || [];
   const allFolders = [{ name:"すべて" }, { name:"Your Vocabulary" }, ...folderObjs];
-  const filteredCards = selectedFolder === "すべて" ? cards : cards.filter(c => c.folder === selectedFolder);
+  // "Understood" folder: words the student pressed ✅ Understand on. They leave the study deck (the
+  // originals stay in their own folders in the Library); cards NOT marked stay in the deck.
+  const UNDERSTOOD = "Understood";
+  const understoodWords = new Set(cards.filter(c => c.folder === UNDERSTOOD).map(c => c.word));
+  const filteredCards = selectedFolder === "すべて"
+    ? cards.filter(c => c.folder !== UNDERSTOOD && !understoodWords.has(c.word))
+    : selectedFolder === UNDERSTOOD
+      ? cards.filter(c => c.folder === UNDERSTOOD)
+      : cards.filter(c => c.folder === selectedFolder && !understoodWords.has(c.word));
   const displayCards = filteredCards;
   const card = displayCards[idx] || null;
+  const [understoodMsg, setUnderstoodMsg] = useState("");
+  const markUnderstood = () => {
+    if (!card) return;
+    const data = loadVocabData();
+    const folders = data.folders.some(f => (typeof f === "string" ? f : f && f.name) === UNDERSTOOD)
+      ? data.folders : [...data.folders, { name: UNDERSTOOD, createdAt: new Date().toISOString() }];
+    if (!data.cards.some(c => c.folder === UNDERSTOOD && c.word === card.word)) {
+      data.cards.push({ ...card, id: Date.now(), folder: UNDERSTOOD, savedAt: new Date().toISOString() });
+    }
+    saveVocabData({ folders, cards: data.cards });
+    setAllData(loadVocabData());
+    setFlipped(false); setShowHint(false);
+    setIdx(i => (i >= displayCards.length - 1 ? 0 : i)); // the next card slides into this position
+    setUnderstoodMsg(T.flashUnderstoodDone || "✅ Saved to the “Understood” folder");
+    setTimeout(() => setUnderstoodMsg(""), 2500);
+  };
+  // Inside the Understood folder: put a word back into the study deck (original copies are untouched).
+  const markNotYet = () => {
+    if (!card || card.folder !== UNDERSTOOD) return;
+    const data = loadVocabData();
+    saveVocabData({ folders: data.folders, cards: data.cards.filter(c => !(c.folder === UNDERSTOOD && c.word === card.word)) });
+    setAllData(loadVocabData());
+    setFlipped(false); setShowHint(false);
+    setIdx(i => (i >= displayCards.length - 1 ? 0 : i));
+  };
 
   const posKey = (folder) => `gaku_flashcard_pos_${folder}`;
   const getSavedPos = (folder) => { try { return parseInt(localStorage.getItem(posKey(folder)) || "0", 10) || 0; } catch { return 0; } };
@@ -11757,7 +11862,7 @@ Only output the JSON object.` }
         </div>
       ) : !card ? (
         <div style={{ ...S.card, textAlign:"center", padding:"40px 20px" }}>
-          <p style={{ color:"#94a3b8", fontSize:14 }}>{T.flashcardNoWordsInFolder || "No words in this folder"}</p>
+          <p style={{ color:"#94a3b8", fontSize:14 }}>{selectedFolder !== UNDERSTOOD && understoodWords.size > 0 && cards.some(c => c.folder !== UNDERSTOOD) ? (T.flashAllUnderstood || "🎉 You understood every card here! Check the “Understood” folder.") : (T.flashcardNoWordsInFolder || "No words in this folder")}</p>
         </div>
       ) : (
         <>
@@ -11796,6 +11901,12 @@ Only output the JSON object.` }
             <button onClick={()=>{ setFlipped(false); setShowHint(false); setIdx(i=>(i-1+displayCards.length)%displayCards.length); }} style={{ ...S.btn, padding:"13px 18px", background:C.card, border:`1px solid ${C.border}`, color:"#94a3b8" }}>←</button>
             <button onClick={()=>{ setFlipped(false); setShowHint(false); setIdx(i=>(i+1)%displayCards.length); }} style={{ ...S.btn, padding:"13px 18px", background:C.card, border:`1px solid ${C.border}`, color:"#94a3b8" }}>→</button>
           </div>
+          {selectedFolder === UNDERSTOOD ? (
+            <button onClick={markNotYet} style={{ width:"100%", ...S.btn, background:C.card, border:`1px solid ${C.border}`, color:"#94a3b8" }}>{T.flashNotYet || "↩ Not yet — back to my deck"}</button>
+          ) : (
+            <button onClick={markUnderstood} style={{ width:"100%", ...S.btn, background:"rgba(34,197,94,0.12)", border:"1.5px solid rgba(34,197,94,0.5)", color:C.green, fontWeight:800 }}>{T.flashUnderstand || "✅ Understand"}</button>
+          )}
+          {understoodMsg && <p style={{ color:C.green, fontSize:12, textAlign:"center", margin:"10px 0 0" }}>{understoodMsg}</p>}
         </>
       )}
     </div>
