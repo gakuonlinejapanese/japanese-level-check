@@ -1013,6 +1013,15 @@ const UI_TRANSLATIONS = {
     writeTitle: "Writing Practice",
     writeModeCopy: "Copying down",
     writeVocabTitle: "Choose words from my Vocabulary",
+    imgAssocTitle: "Image association",
+    imgSaved: "✓ Image saved",
+    imgSave: "Save",
+    imgNext: "Next image",
+    imgSearchBtn: "SEARCH",
+    imgHelp: "Image {n} · tap “Next image” for another · “Save” keeps it on the word card",
+    imgSavedLabel: "✓ Saved",
+    imgSearchFor: "Search an image for “{word}”",
+    imgTapSearch: "Tap to search for an image",
     flashTapToCheck: "Tap to check",
     flashListenExample: "Listen to the example",
     flashGenRomaji: "Generating romaji…",
@@ -1564,6 +1573,15 @@ const UI_TRANSLATIONS = {
     writeTitle: "Pratique d'écriture",
     writeModeCopy: "Copie",
     writeVocabTitle: "Choisir des mots dans mon vocabulaire",
+    imgAssocTitle: "Association d'image",
+    imgSaved: "✓ Image enregistrée",
+    imgSave: "Enregistrer",
+    imgNext: "Image suivante",
+    imgSearchBtn: "RECHERCHER",
+    imgHelp: "Image {n} · touchez « Image suivante » pour une autre · « Enregistrer » la garde sur la carte",
+    imgSavedLabel: "✓ Enregistrée",
+    imgSearchFor: "Chercher une image pour « {word} »",
+    imgTapSearch: "Touchez pour chercher une image",
     flashTapToCheck: "Touchez pour vérifier",
     flashListenExample: "Écouter l'exemple",
     flashGenRomaji: "Génération du romaji…",
@@ -2100,6 +2118,15 @@ const UI_TRANSLATIONS = {
     writeTitle: "Práctica de escritura",
     writeModeCopy: "Copiar",
     writeVocabTitle: "Elegir palabras de mi vocabulario",
+    imgAssocTitle: "Asociación de imagen",
+    imgSaved: "✓ Imagen guardada",
+    imgSave: "Guardar",
+    imgNext: "Siguiente imagen",
+    imgSearchBtn: "BUSCAR",
+    imgHelp: "Imagen {n} · toca «Siguiente imagen» para otra · «Guardar» la conserva en la tarjeta",
+    imgSavedLabel: "✓ Guardada",
+    imgSearchFor: "Buscar una imagen para «{word}»",
+    imgTapSearch: "Toca para buscar una imagen",
     flashTapToCheck: "Toca para comprobar",
     flashListenExample: "Escuchar el ejemplo",
     flashGenRomaji: "Generando romaji…",
@@ -2636,6 +2663,15 @@ const UI_TRANSLATIONS = {
     writeTitle: "Prática de escrita",
     writeModeCopy: "Copiar",
     writeVocabTitle: "Escolher palavras do meu vocabulário",
+    imgAssocTitle: "Associação de imagem",
+    imgSaved: "✓ Imagem salva",
+    imgSave: "Salvar",
+    imgNext: "Próxima imagem",
+    imgSearchBtn: "BUSCAR",
+    imgHelp: "Imagem {n} · toque em «Próxima imagem» para outra · «Salvar» a mantém no cartão",
+    imgSavedLabel: "✓ Salva",
+    imgSearchFor: "Buscar uma imagem para «{word}»",
+    imgTapSearch: "Toque para buscar uma imagem",
     flashTapToCheck: "Toque para conferir",
     flashListenExample: "Ouvir o exemplo",
     flashGenRomaji: "Gerando romaji…",
@@ -3172,6 +3208,15 @@ const UI_TRANSLATIONS = {
     writeTitle: "Schreibübung",
     writeModeCopy: "Abschreiben",
     writeVocabTitle: "Wörter aus meinem Vokabular wählen",
+    imgAssocTitle: "Bildassoziation",
+    imgSaved: "✓ Bild gespeichert",
+    imgSave: "Speichern",
+    imgNext: "Nächstes Bild",
+    imgSearchBtn: "SUCHEN",
+    imgHelp: "Bild {n} · „Nächstes Bild“ zeigt ein anderes · „Speichern“ behält es auf der Wortkarte",
+    imgSavedLabel: "✓ Gespeichert",
+    imgSearchFor: "Bild für „{word}“ suchen",
+    imgTapSearch: "Tippen, um ein Bild zu suchen",
     flashTapToCheck: "Zum Prüfen tippen",
     flashListenExample: "Beispiel anhören",
     flashGenRomaji: "Romaji wird erstellt…",
@@ -3708,6 +3753,15 @@ const UI_TRANSLATIONS = {
     writeTitle: "Pratica di scrittura",
     writeModeCopy: "Copiatura",
     writeVocabTitle: "Scegli parole dal mio vocabolario",
+    imgAssocTitle: "Associazione di immagine",
+    imgSaved: "✓ Immagine salvata",
+    imgSave: "Salva",
+    imgNext: "Immagine successiva",
+    imgSearchBtn: "CERCA",
+    imgHelp: "Immagine {n} · tocca «Immagine successiva» per un'altra · «Salva» la tiene sulla scheda",
+    imgSavedLabel: "✓ Salvata",
+    imgSearchFor: "Cerca un'immagine per «{word}»",
+    imgTapSearch: "Tocca per cercare un'immagine",
     flashTapToCheck: "Tocca per controllare",
     flashListenExample: "Ascolta l'esempio",
     flashGenRomaji: "Generazione del romaji…",
@@ -4244,6 +4298,15 @@ const UI_TRANSLATIONS = {
     writeTitle: "写作练习",
     writeModeCopy: "抄写",
     writeVocabTitle: "从我的词汇中选择单词",
+    imgAssocTitle: "图像联想",
+    imgSaved: "✓ 图片已保存",
+    imgSave: "保存",
+    imgNext: "下一张图片",
+    imgSearchBtn: "搜索",
+    imgHelp: "第 {n} 张 · 点击“下一张图片”换一张 · 点击“保存”存到单词卡",
+    imgSavedLabel: "✓ 已保存",
+    imgSearchFor: "搜索“{word}”的图片",
+    imgTapSearch: "点击搜索图片",
     flashTapToCheck: "点击查看答案",
     flashListenExample: "听例句",
     flashGenRomaji: "正在生成罗马字…",
@@ -4780,6 +4843,15 @@ const UI_TRANSLATIONS = {
     writeTitle: "寫作練習",
     writeModeCopy: "抄寫",
     writeVocabTitle: "從我的詞彙中選擇單字",
+    imgAssocTitle: "圖像聯想",
+    imgSaved: "✓ 圖片已儲存",
+    imgSave: "儲存",
+    imgNext: "下一張圖片",
+    imgSearchBtn: "搜尋",
+    imgHelp: "第 {n} 張 · 點擊「下一張圖片」換一張 · 點擊「儲存」存到單字卡",
+    imgSavedLabel: "✓ 已儲存",
+    imgSearchFor: "搜尋「{word}」的圖片",
+    imgTapSearch: "點擊搜尋圖片",
     flashTapToCheck: "點擊查看答案",
     flashListenExample: "聽例句",
     flashGenRomaji: "正在產生羅馬字…",
@@ -5316,6 +5388,15 @@ const UI_TRANSLATIONS = {
     writeTitle: "쓰기 연습",
     writeModeCopy: "따라 쓰기",
     writeVocabTitle: "내 어휘에서 단어 고르기",
+    imgAssocTitle: "이미지 연상",
+    imgSaved: "✓ 이미지를 저장했어요",
+    imgSave: "저장",
+    imgNext: "다음 이미지",
+    imgSearchBtn: "검색",
+    imgHelp: "{n}번째 이미지 · “다음 이미지”로 다른 이미지 보기 · “저장”으로 단어 카드에 저장",
+    imgSavedLabel: "✓ 저장됨",
+    imgSearchFor: "“{word}” 이미지 검색",
+    imgTapSearch: "탭하여 이미지 검색",
     flashTapToCheck: "탭하여 확인",
     flashListenExample: "예문 듣기",
     flashGenRomaji: "로마자 생성 중…",
@@ -5852,6 +5933,15 @@ const UI_TRANSLATIONS = {
     writeTitle: "ฝึกเขียน",
     writeModeCopy: "คัดลอกเขียน",
     writeVocabTitle: "เลือกคำจากคำศัพท์ของฉัน",
+    imgAssocTitle: "การเชื่อมโยงด้วยภาพ",
+    imgSaved: "✓ บันทึกรูปแล้ว",
+    imgSave: "บันทึก",
+    imgNext: "รูปถัดไป",
+    imgSearchBtn: "ค้นหา",
+    imgHelp: "รูปที่ {n} · แตะ “รูปถัดไป” เพื่อดูรูปอื่น · “บันทึก” เพื่อเก็บไว้ในการ์ดคำศัพท์",
+    imgSavedLabel: "✓ บันทึกแล้ว",
+    imgSearchFor: "ค้นหารูปของ “{word}”",
+    imgTapSearch: "แตะเพื่อค้นหารูป",
     flashTapToCheck: "แตะเพื่อดูคำตอบ",
     flashListenExample: "ฟังประโยคตัวอย่าง",
     flashGenRomaji: "กำลังสร้างโรมะจิ…",
@@ -6388,6 +6478,15 @@ const UI_TRANSLATIONS = {
     writeTitle: "Latihan Menulis",
     writeModeCopy: "Menyalin",
     writeVocabTitle: "Pilih perkataan daripada Kosa Kata saya",
+    imgAssocTitle: "Perkaitan imej",
+    imgSaved: "✓ Imej disimpan",
+    imgSave: "Simpan",
+    imgNext: "Imej seterusnya",
+    imgSearchBtn: "CARI",
+    imgHelp: "Imej {n} · ketik “Imej seterusnya” untuk yang lain · “Simpan” untuk simpan pada kad perkataan",
+    imgSavedLabel: "✓ Disimpan",
+    imgSearchFor: "Cari imej untuk “{word}”",
+    imgTapSearch: "Ketik untuk mencari imej",
     flashTapToCheck: "Ketik untuk semak",
     flashListenExample: "Dengar ayat contoh",
     flashGenRomaji: "Menjana romaji…",
@@ -6924,6 +7023,15 @@ const UI_TRANSLATIONS = {
     writeTitle: "Latihan Menulis",
     writeModeCopy: "Menyalin",
     writeVocabTitle: "Pilih kata dari Kosakata saya",
+    imgAssocTitle: "Asosiasi gambar",
+    imgSaved: "✓ Gambar disimpan",
+    imgSave: "Simpan",
+    imgNext: "Gambar berikutnya",
+    imgSearchBtn: "CARI",
+    imgHelp: "Gambar {n} · ketuk “Gambar berikutnya” untuk yang lain · “Simpan” untuk menyimpan di kartu kata",
+    imgSavedLabel: "✓ Tersimpan",
+    imgSearchFor: "Cari gambar untuk “{word}”",
+    imgTapSearch: "Ketuk untuk mencari gambar",
     flashTapToCheck: "Ketuk untuk memeriksa",
     flashListenExample: "Dengarkan contoh kalimat",
     flashGenRomaji: "Membuat romaji…",
@@ -7460,6 +7568,15 @@ const UI_TRANSLATIONS = {
     writeTitle: "Luyện viết",
     writeModeCopy: "Chép lại",
     writeVocabTitle: "Chọn từ trong Từ vựng của tôi",
+    imgAssocTitle: "Liên tưởng bằng hình ảnh",
+    imgSaved: "✓ Đã lưu hình ảnh",
+    imgSave: "Lưu",
+    imgNext: "Ảnh tiếp theo",
+    imgSearchBtn: "TÌM",
+    imgHelp: "Ảnh {n} · chạm “Ảnh tiếp theo” để xem ảnh khác · “Lưu” để giữ trên thẻ từ",
+    imgSavedLabel: "✓ Đã lưu",
+    imgSearchFor: "Tìm ảnh cho “{word}”",
+    imgTapSearch: "Chạm để tìm ảnh",
     flashTapToCheck: "Chạm để kiểm tra",
     flashListenExample: "Nghe câu ví dụ",
     flashGenRomaji: "Đang tạo romaji…",
@@ -7996,6 +8113,15 @@ const UI_TRANSLATIONS = {
     writeTitle: "लेखन अभ्यास",
     writeModeCopy: "नकल करके लिखना",
     writeVocabTitle: "मेरी शब्दावली से शब्द चुनें",
+    imgAssocTitle: "छवि से जुड़ाव",
+    imgSaved: "✓ छवि सहेजी गई",
+    imgSave: "सहेजें",
+    imgNext: "अगली छवि",
+    imgSearchBtn: "खोजें",
+    imgHelp: "छवि {n} · दूसरी छवि के लिए “अगली छवि” दबाएँ · “सहेजें” से शब्द कार्ड पर रखें",
+    imgSavedLabel: "✓ सहेजा गया",
+    imgSearchFor: "“{word}” के लिए छवि खोजें",
+    imgTapSearch: "छवि खोजने के लिए टैप करें",
     flashTapToCheck: "जाँचने के लिए टैप करें",
     flashListenExample: "उदाहरण सुनें",
     flashGenRomaji: "रोमाजी बन रहा है…",
@@ -8532,6 +8658,15 @@ const UI_TRANSLATIONS = {
     writeTitle: "ライティング練習",
     writeModeCopy: "書き写し",
     writeVocabTitle: "単語帳から単語を選ぶ",
+    imgAssocTitle: "画像で覚える",
+    imgSaved: "✓ 画像を保存しました",
+    imgSave: "保存",
+    imgNext: "次の画像",
+    imgSearchBtn: "検索",
+    imgHelp: "{n}枚目 · 「次の画像」で別の画像を表示 · 「保存」で単語カードに保存",
+    imgSavedLabel: "✓ 保存済み",
+    imgSearchFor: "「{word}」の画像を検索",
+    imgTapSearch: "タップして画像を検索",
     flashTapToCheck: "タップして確認",
     flashListenExample: "例文を聞く",
     flashGenRomaji: "ローマ字を生成中…",
@@ -9068,6 +9203,15 @@ const UI_TRANSLATIONS = {
     writeTitle: "Yazma Alıştırması",
     writeModeCopy: "Kopyalayarak yazma",
     writeVocabTitle: "Kelime dağarcığımdan kelime seç",
+    imgAssocTitle: "Görsel çağrışım",
+    imgSaved: "✓ Görsel kaydedildi",
+    imgSave: "Kaydet",
+    imgNext: "Sonraki görsel",
+    imgSearchBtn: "ARA",
+    imgHelp: "Görsel {n} · başka görsel için “Sonraki görsel” · “Kaydet” kelime kartında tutar",
+    imgSavedLabel: "✓ Kaydedildi",
+    imgSearchFor: "“{word}” için görsel ara",
+    imgTapSearch: "Görsel aramak için dokun",
     flashTapToCheck: "Kontrol için dokun",
     flashListenExample: "Örneği dinle",
     flashGenRomaji: "Romaji oluşturuluyor…",
@@ -9604,6 +9748,15 @@ const UI_TRANSLATIONS = {
     writeTitle: "लेखन अभ्यास",
     writeModeCopy: "नक्कल गरेर लेख्ने",
     writeVocabTitle: "मेरो शब्दावलीबाट शब्द छान्नुहोस्",
+    imgAssocTitle: "तस्बिरसँग सम्बन्ध",
+    imgSaved: "✓ तस्बिर सुरक्षित भयो",
+    imgSave: "सुरक्षित गर्नुहोस्",
+    imgNext: "अर्को तस्बिर",
+    imgSearchBtn: "खोज्नुहोस्",
+    imgHelp: "तस्बिर {n} · अर्कोको लागि “अर्को तस्बिर” थिच्नुहोस् · “सुरक्षित गर्नुहोस्” ले शब्द कार्डमा राख्छ",
+    imgSavedLabel: "✓ सुरक्षित",
+    imgSearchFor: "“{word}” को तस्बिर खोज्नुहोस्",
+    imgTapSearch: "तस्बिर खोज्न ट्याप गर्नुहोस्",
     flashTapToCheck: "जाँच गर्न ट्याप गर्नुहोस्",
     flashListenExample: "उदाहरण सुन्नुहोस्",
     flashGenRomaji: "रोमाजी बन्दै छ…",
@@ -10140,6 +10293,15 @@ const UI_TRANSLATIONS = {
     writeTitle: "Pagsasanay sa Pagsulat",
     writeModeCopy: "Pagkopya",
     writeVocabTitle: "Pumili ng mga salita mula sa aking Bokabularyo",
+    imgAssocTitle: "Pag-uugnay sa larawan",
+    imgSaved: "✓ Na-save ang larawan",
+    imgSave: "I-save",
+    imgNext: "Susunod na larawan",
+    imgSearchBtn: "HANAPIN",
+    imgHelp: "Larawan {n} · pindutin ang “Susunod na larawan” para sa iba · “I-save” para itago sa word card",
+    imgSavedLabel: "✓ Na-save",
+    imgSearchFor: "Maghanap ng larawan para sa “{word}”",
+    imgTapSearch: "I-tap para maghanap ng larawan",
     flashTapToCheck: "I-tap para tingnan",
     flashListenExample: "Pakinggan ang halimbawa",
     flashGenRomaji: "Ginagawa ang romaji…",
@@ -11617,7 +11779,7 @@ function WordDetailCard({ card: cardProp, onSave, onBack, form, prefLang }) {
       {/* ── IMAGE ASSOCIATION ── */}
       <div style={{ ...S.card, marginBottom:12 }}>
         <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:10 }}>
-          <p style={{ color:"#64748b", fontSize:11, fontWeight:700, letterSpacing:1, margin:0 }}>🖼 IMAGE ASSOCIATION</p>
+          <p style={{ color:"#64748b", fontSize:11, fontWeight:700, letterSpacing:1, margin:0 }}>🖼 {(T.imgAssocTitle || "IMAGE ASSOCIATION").toUpperCase()}</p>
           <div style={{ display:"flex", gap:6 }}>
             {imgSrc && !imgError && (
               <button
@@ -11626,23 +11788,23 @@ function WordDetailCard({ card: cardProp, onSave, onBack, form, prefLang }) {
                   const idx = data.cards.findIndex(c=>c.word===card.word);
                   if(idx!==-1){ data.cards[idx].imageUrl=imgSrc; saveVocabData(data); }
                   setCard(prev=>({...prev, imageUrl:imgSrc}));
-                  showToast("✓ 画像を保存しました");
+                  showToast(T.imgSaved || "✓ Image saved");
                 }}
                 style={{ fontSize:11, color:"#22c55e", fontWeight:700, background:"rgba(34,197,94,0.1)", padding:"5px 10px", borderRadius:8, border:"1px solid rgba(34,197,94,0.3)", cursor:"pointer" }}
-              >💾 保存</button>
+              >💾 {T.imgSave || "Save"}</button>
             )}
             {imgSrc && !imgError && (
               <button
                 onClick={searchImage}
                 disabled={imgLoading}
                 style={{ fontSize:11, color:C.amber, fontWeight:700, background:"rgba(245,158,11,0.1)", padding:"5px 10px", borderRadius:8, border:"1px solid rgba(245,158,11,0.3)", cursor:"pointer" }}
-              >次の画像 →</button>
+              >{T.imgNext || "Next image"} →</button>
             )}
             <button
               onClick={searchImage}
               disabled={imgLoading}
               style={{ fontSize:11, color:C.teal, fontWeight:700, background:"rgba(6,182,212,0.1)", padding:"5px 12px", borderRadius:8, border:`1px solid rgba(6,182,212,0.2)`, cursor:"pointer" }}
-            >{imgLoading ? "..." : imgSrc ? "🔍" : "🔍 SEARCH"}</button>
+            >{imgLoading ? "..." : imgSrc ? "🔍" : "🔍 " + (T.imgSearchBtn || "SEARCH")}</button>
           </div>
         </div>
         {imgSrc && !imgError ? (
@@ -11653,12 +11815,12 @@ function WordDetailCard({ card: cardProp, onSave, onBack, form, prefLang }) {
               onError={()=>setImgError(true)}
               style={{ width:"100%", borderRadius:10, objectFit:"cover", maxHeight:220, display:"block" }}
             />
-            <p style={{ color:"#475569", fontSize:10, margin:"4px 0 0", textAlign:"center" }}>{imgIndex}枚目 · 「次の画像」で別の画像を表示 · 「💾 保存」で単語カードに保存</p>
+            <p style={{ color:"#475569", fontSize:10, margin:"4px 0 0", textAlign:"center" }}>{(T.imgHelp || "Image {n} · tap “Next image” for another · “Save” keeps it on the word card").split("{n}").join(imgIndex)}</p>
           </div>
         ) : card.imageUrl ? (
           <div>
             <img src={card.imageUrl} alt={card.word} style={{ width:"100%", borderRadius:10, objectFit:"cover", maxHeight:220, display:"block" }} />
-            <p style={{ color:"#22c55e", fontSize:10, margin:"4px 0 0", textAlign:"center" }}>✓ 保存済み</p>
+            <p style={{ color:"#22c55e", fontSize:10, margin:"4px 0 0", textAlign:"center" }}>{T.imgSavedLabel || "✓ Saved"}</p>
           </div>
         ) : (
           <div
@@ -11666,8 +11828,8 @@ function WordDetailCard({ card: cardProp, onSave, onBack, form, prefLang }) {
             style={{ width:"100%", height:160, borderRadius:10, background:"rgba(6,182,212,0.06)", display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", border:`1px dashed rgba(6,182,212,0.3)`, cursor:"pointer" }}
           >
             <span style={{ color:C.teal, fontSize:32, marginBottom:8 }}>🔍</span>
-            <span style={{ color:C.teal, fontSize:13, fontWeight:700 }}>「{card.word}」の画像を検索</span>
-            <span style={{ color:"#475569", fontSize:11, marginTop:4 }}>タップして画像を検索</span>
+            <span style={{ color:C.teal, fontSize:13, fontWeight:700 }}>{(T.imgSearchFor || "Search an image for “{word}”").split("{word}").join(card.word)}</span>
+            <span style={{ color:"#475569", fontSize:11, marginTop:4 }}>{T.imgTapSearch || "Tap to search for an image"}</span>
           </div>
         )}
         {card.imageDesc && <p style={{ color:"#94a3b8", fontSize:12, margin:"8px 0 0", lineHeight:1.6 }}>{card.imageDesc}</p>}
