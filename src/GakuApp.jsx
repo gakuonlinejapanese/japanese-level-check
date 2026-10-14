@@ -12168,8 +12168,39 @@ Only output the JSON object.` }
 }
 
 // ─── LIBRARY VIEW ──────────────────────────────────────────────────────────────
-function LibraryView({ onBack, onSelectFolder, onCreateCard }) {
+// Search saved words in English OR Japanese (word / reading / meaning in any language / Japanese
+// definition / example sentences). Katakana and hiragana are treated the same, case is ignored.
+const _vocabNorm = (s) => String(s || "")
+  .toLowerCase()
+  .replace(/[ァ-ヶ]/g, ch => String.fromCharCode(ch.charCodeAt(0) - 0x60))
+  .trim();
+function vocabCardMatches(card, query) {
+  const q = _vocabNorm(query);
+  if (!q) return true;
+  const hay = [card.word, card.reading, card.meaning, card.meaningNative, card.example, card.example_translated, card.partOfSpeech]
+    .map(_vocabNorm).join(" \n ");
+  return q.split(/\s+/).every(tok => hay.includes(tok));
+}
+
+function VocabSearchBox({ value, onChange, placeholder }) {
+  return (
+    <div style={{ position:"relative", marginBottom:14 }}>
+      <input
+        value={value}
+        onChange={e=>onChange(e.target.value)}
+        placeholder={placeholder || "🔍 単語を検索 / Search your words (English or 日本語)"}
+        style={{ ...S.input, width:"100%", boxSizing:"border-box", paddingRight:36 }}
+      />
+      {value && (
+        <button onClick={()=>onChange("")} aria-label="Clear search" style={{ position:"absolute", right:8, top:"50%", transform:"translateY(-50%)", background:"none", border:"none", color:"#94a3b8", fontSize:16, cursor:"pointer" }}>✕</button>
+      )}
+    </div>
+  );
+}
+
+function LibraryView({ onBack, onSelectFolder, onCreateCard, onViewCard }) {
   const [data, setData] = useState(loadVocabData);
+  const [librarySearch, setLibrarySearch] = useState("");
   const [newFolderName, setNewFolderName] = useState("");
   const [showNewFolder, setShowNewFolder] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(null); // folder name to delete
@@ -12235,7 +12266,35 @@ function LibraryView({ onBack, onSelectFolder, onCreateCard }) {
         </div>
       )}
 
-      <div style={{ display:"flex", flexDirection:"column", gap:10 }}>
+      <VocabSearchBox value={librarySearch} onChange={setLibrarySearch} />
+
+      {librarySearch.trim() && (() => {
+        const found = data.cards.filter(c => vocabCardMatches(c, librarySearch));
+        return (
+          <div style={{ display:"flex", flexDirection:"column", gap:10 }}>
+            <p style={{ color:"#64748b", fontSize:12, margin:"0 0 2px" }}>{found.length} {found.length===1?"word":"words"} found / 見つかった単語</p>
+            {found.length === 0 && (
+              <div style={{ ...S.card, textAlign:"center", padding:"30px 20px" }}>
+                <p style={{ color:"#94a3b8", fontSize:14, margin:0 }}>該当する単語がありません / No matching words.</p>
+              </div>
+            )}
+            {found.map((c, idx) => (
+              <div key={c.id || `${c.word}-${idx}`} style={{ ...S.card, borderLeft:`3px solid ${C.teal}` }}>
+                <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", gap:10 }}>
+                  <div style={{ cursor:onViewCard?"pointer":"default", flex:1 }} onClick={()=>onViewCard && onViewCard(c)}>
+                    <p style={{ margin:"0 0 2px" }}><FuriganaWord word={c.word} reading={c.reading} size={22} /></p>
+                    <p style={{ color:"#94a3b8", fontSize:12, margin:0 }}>{c.meaning}</p>
+                    <p style={{ color:"#475569", fontSize:11, margin:"4px 0 0" }}>{c.folder==="Your Vocabulary"?"📚":"📁"} {c.folder}</p>
+                  </div>
+                  <button onClick={()=>speakVocabWord(c)} style={{ padding:"6px 10px", borderRadius:8, background:"rgba(6,182,212,0.1)", border:`1px solid rgba(6,182,212,0.2)`, color:C.teal, fontSize:14, cursor:"pointer", flexShrink:0 }}>🔊</button>
+                </div>
+              </div>
+            ))}
+          </div>
+        );
+      })()}
+
+      {!librarySearch.trim() && <div style={{ display:"flex", flexDirection:"column", gap:10 }}>
         {allFolders.map(f => {
           const count = data.cards.filter(c=>c.folder===f.name).length;
           return (
@@ -12268,7 +12327,7 @@ function LibraryView({ onBack, onSelectFolder, onCreateCard }) {
             </div>
           );
         })}
-      </div>
+      </div>}
 
       {/* ── RENAME FOLDER MODAL ── */}
       {renaming && (
@@ -12335,7 +12394,9 @@ function FolderDetailView({ folderName, onBack, onViewCard, onRenamed }) {
     setData(loadVocabData());
     if (onRenamed) onRenamed(res.name);
   };
-  const cards = data.cards.filter(c=>c.folder===folderName);
+  const [folderSearch, setFolderSearch] = useState("");
+  const allFolderCards = data.cards.filter(c=>c.folder===folderName);
+  const cards = folderSearch.trim() ? allFolderCards.filter(c => vocabCardMatches(c, folderSearch)) : allFolderCards;
   const [playingIdx, setPlayingIdx] = useState(-1); // -1 = not playing; otherwise the word being read aloud
 
   // Every word in a folder must show furigana: fill in missing readings (and verify 音読み/訓読み) in the
@@ -12387,10 +12448,17 @@ function FolderDetailView({ folderName, onBack, onViewCard, onRenamed }) {
         )}
       </div>
 
-      {cards.length === 0 && (
+      {allFolderCards.length > 0 && <VocabSearchBox value={folderSearch} onChange={setFolderSearch} />}
+
+      {allFolderCards.length === 0 && (
         <div style={{ ...S.card, textAlign:"center", padding:"40px 20px" }}>
           <p style={{ color:"#64748b", fontSize:32, margin:"0 0 12px" }}>📭</p>
           <p style={{ color:"#94a3b8", fontSize:14 }}>This folder is empty. Search and save words!</p>
+        </div>
+      )}
+      {allFolderCards.length > 0 && cards.length === 0 && (
+        <div style={{ ...S.card, textAlign:"center", padding:"30px 20px" }}>
+          <p style={{ color:"#94a3b8", fontSize:14, margin:0 }}>該当する単語がありません / No matching words.</p>
         </div>
       )}
 
@@ -12814,7 +12882,7 @@ function VocabBuilder({ form }) {
   const totalSaved = vocabData.cards.length;
 
   // ── RENDER SUBVIEWS ──
-  if (vocabView === "library") return <LibraryView onBack={()=>setVocabView("main")} onSelectFolder={name=>{setSelectedFolder(name);setVocabView("folderDetail");}} onCreateCard={()=>setVocabView("wordSearch")} />;
+  if (vocabView === "library") return <LibraryView onBack={()=>setVocabView("main")} onSelectFolder={name=>{setSelectedFolder(name);setVocabView("folderDetail");}} onCreateCard={()=>setVocabView("wordSearch")} onViewCard={w=>{setSelectedWord(w);setVocabView("wordDetail");}} />;
   if (vocabView === "folderDetail") return <FolderDetailView folderName={selectedFolder} onRenamed={setSelectedFolder} onBack={()=>setVocabView("library")} onViewCard={w=>{setSelectedWord(w);setVocabView("wordDetail");}} />;
   if (vocabView === "wordSearch") return <WordSearchScreen form={form} onBack={()=>setVocabView("main")} onSelectWord={w=>{setSelectedWord(w);setVocabView("wordDetail");}} />;
   if (vocabView === "wordDetail") return <WordDetailCard card={selectedWord} form={form} onBack={()=>setVocabView(selectedFolder?"wordSearch":"wordSearch")} onSave={refreshVocab} prefLang={form.preferredLang} />;
