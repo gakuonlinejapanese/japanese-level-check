@@ -39,6 +39,7 @@ jobs:
 
       - name: Archive (cloud-managed signing)
         run: |
+          set -o pipefail
           xcodebuild archive \
             -project ios/App/App.xcodeproj \
             -scheme App \
@@ -50,7 +51,8 @@ jobs:
             -authenticationKeyID "$ASC_KEY_ID" \
             -authenticationKeyIssuerID "$ASC_ISSUER_ID" \
             DEVELOPMENT_TEAM="$TEAM_ID" \
-            CURRENT_PROJECT_VERSION="${{ github.run_number }}"
+            CURRENT_PROJECT_VERSION="${{ github.run_number }}" \
+            2>&1 | tee "$RUNNER_TEMP/archive.log"
 
       - name: Export and upload to App Store Connect
         run: |
@@ -67,6 +69,7 @@ jobs:
           </dict>
           </plist>
           EOF
+          set -o pipefail
           xcodebuild -exportArchive \
             -archivePath "$RUNNER_TEMP/App.xcarchive" \
             -exportOptionsPlist "$RUNNER_TEMP/ExportOptions.plist" \
@@ -74,7 +77,35 @@ jobs:
             -allowProvisioningUpdates \
             -authenticationKeyPath "$RUNNER_TEMP/AuthKey.p8" \
             -authenticationKeyID "$ASC_KEY_ID" \
-            -authenticationKeyIssuerID "$ASC_ISSUER_ID"
+            -authenticationKeyIssuerID "$ASC_ISSUER_ID" \
+            2>&1 | tee "$RUNNER_TEMP/export.log"
+
+      - name: Show errors (only when a step failed)
+        if: failure()
+        run: |
+          {
+            echo "## ビルドエラーの要点(この内容をClaudeに貼ってください)"
+            for f in archive export; do
+              if [ -f "$RUNNER_TEMP/$f.log" ]; then
+                echo "### $f.log"
+                echo '```'
+                grep -nE "error:|warning: .*(sign|profile|provision)|\*\* .* FAILED \*\*|Could not|No profile|requires a development team|Cannot" "$RUNNER_TEMP/$f.log" | head -40
+                echo '```'
+              fi
+            done
+          } >> "$GITHUB_STEP_SUMMARY"
+          for f in archive export; do
+            [ -f "$RUNNER_TEMP/$f.log" ] && grep -m5 -E "error:" "$RUNNER_TEMP/$f.log" | while read -r line; do echo "::error::$line"; done
+          done || true
+
+      - name: Upload build logs
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: xcodebuild-logs
+          path: |
+            ${{ runner.temp }}/archive.log
+            ${{ runner.temp }}/export.log
 
       - name: Remove API key file
         if: always()
