@@ -18853,7 +18853,7 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
           {!absenceSuspended && <StorePlans T={T} userId={authUser.id} onPurchased={() => setIsPaid(true)} />}
           <p style={{ color:"#94a3b8", fontSize:13, margin:"0 0 16px", lineHeight:1.6 }}>{T?.storeInviteHint || "If you have an invitation code, enter it below to continue."}</p>
           <div style={{ display:"flex", gap:6, marginBottom:8 }}>
-            <input value={lockedInviteCode} onChange={e=>setLockedInviteCode(e.target.value)} placeholder={T?.inviteCodePlaceholder || "Enter invite code..."} style={{ flex:1, padding:"9px 10px", borderRadius:8, border:"1px solid rgba(148,163,184,0.3)", background:"rgba(2,6,23,0.5)", color:"#f1f5f9", fontSize:13 }} />
+            <input value={lockedInviteCode} onChange={e=>setLockedInviteCode(e.target.value)} placeholder={T?.inviteCodePlaceholder || "Enter invite code..."} style={{ flex:1, minWidth:0, padding:"9px 10px", borderRadius:8, border:"1px solid rgba(148,163,184,0.3)", background:"rgba(2,6,23,0.5)", color:"#f1f5f9", fontSize:13 }} />
             <button onClick={handleLockedInviteRedeem} disabled={lockedInviteBusy || !lockedInviteCode.trim()} style={{ padding:"9px 14px", borderRadius:8, border:"none", background:"linear-gradient(135deg,#7c3aed,#a855f7)", color:"#fff", fontWeight:800, fontSize:12.5, cursor:"pointer" }}>{lockedInviteBusy ? "\u2026" : (T?.unlockBtn || "Unlock")}</button>
           </div>
           {lockedInviteErr && <p style={{ color:"#f87171", fontSize:11, margin:"0 0 8px" }}>{lockedInviteErr}</p>}
