@@ -24,6 +24,25 @@ jobs:
         with:
           ref: ${{ github.event.inputs.ref }}
 
+      # config.xml と capacitor.config.json は Git に入らない自動生成ファイルのため、
+      # Web アプリをビルド → cap sync で生成し、プラグインを ios/vendor に取り込み直します。
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: Build web app
+        run: CI=false DISABLE_ESLINT_PLUGIN=true npm run build
+
+      - name: Sync Capacitor (generates config files)
+        run: |
+          npx cap sync ios
+          sh scripts/vendor-ios-plugins.sh
+          ls -l ios/App/App/capacitor.config.json ios/App/App/config.xml
+
       - name: Select newest Xcode
         run: |
           latest=$(ls -d /Applications/Xcode_*.app 2>/dev/null | sort -V | tail -1)
