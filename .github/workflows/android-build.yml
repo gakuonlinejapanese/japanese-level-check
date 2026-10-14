@@ -20,6 +20,10 @@ jobs:
       - name: Install dependencies
         run: npm ci --legacy-peer-deps
       - name: Build web app
+        env:
+          REACT_APP_SUPABASE_URL: https://hsulsdgrnaxueiwcflyk.supabase.co
+          REACT_APP_SUPABASE_ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhzdWxzZGdybmF4dWVpd2NmbHlrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA3NTYxMzQsImV4cCI6MjA5NjMzMjEzNH0.dYhEtkkB1STVqYL7edihqt0o3-avpmeWC8qGFpZbZyA
+          REACT_APP_RC_ANDROID_KEY: ${{ secrets.REACT_APP_RC_ANDROID_KEY }}
         run: CI=false DISABLE_ESLINT_PLUGIN=true npm run build
       - name: Sync Capacitor
         run: npx cap sync android
@@ -46,6 +50,10 @@ jobs:
       - name: Install dependencies
         run: npm ci --legacy-peer-deps
       - name: Build web app
+        env:
+          REACT_APP_SUPABASE_URL: https://hsulsdgrnaxueiwcflyk.supabase.co
+          REACT_APP_SUPABASE_ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhzdWxzZGdybmF4dWVpd2NmbHlrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA3NTYxMzQsImV4cCI6MjA5NjMzMjEzNH0.dYhEtkkB1STVqYL7edihqt0o3-avpmeWC8qGFpZbZyA
+          REACT_APP_RC_ANDROID_KEY: ${{ secrets.REACT_APP_RC_ANDROID_KEY }}
         run: CI=false DISABLE_ESLINT_PLUGIN=true npm run build
       - name: Sync Capacitor
         run: npx cap sync android
