@@ -134,15 +134,20 @@ function findTaskResourceLink(taskText, taskMode) {
 // covers that kind of practice, so a task like "単語復習" can link straight into GAKU's own
 // Vocabulary/Subtitles/Create-From-Content/Conversation-Practice screens.
 const TASK_APP_NAV = [
-  { test: /GAKU Writing|writing practice|ライティング練習|書き写し|copying down/i, tab: "resources", resourceSubTab: "writing", labelKey: "navGoWriting" },
+  // Any task that mentions writing/typing (e.g. "Write your name", "Writing practice", 書く, 作文) jumps to Writing.
+  { test: /GAKU Writing|\bwrit(e|ing|ten)\b|\btyp(e|ing)\b|copying down|ライティング|書き写し|書き取り|書く|書き|書いて|作文|タイピング|入力練習/i, tab: "resources", resourceSubTab: "writing", labelKey: "navGoWriting", alwaysShow: true },
   { test: /発音|pronunciation/i, tab: "resources", resourceSubTab: "pronunciation", labelKey: "navGoPronunciation" },
   { test: /会話|conversation|speak/i, tab: "resources", resourceSubTab: "conversation", labelKey: "navGoConversation" },
   { test: /字幕|subtitle/i, tab: "subtitles", labelKey: "navGoSubtitles" },
   { test: /音読|要約|shadowing|シャドーイング|read aloud|summarize/i, tab: "resources", resourceSubTab: "content", labelKey: "navGoContent" },
   { test: /単語|vocab|anki|flashcard/i, tab: "vocabulary", labelKey: "navGoVocabulary" },
 ];
-function findTaskAppNav(taskText) {
-  return TASK_APP_NAV.find(n => n.test.test(taskText || "")) || null;
+function findTaskAppNav(taskText, taskSkill) {
+  const hit = TASK_APP_NAV.find(n => n.test.test(taskText || ""));
+  if (hit) return hit;
+  // A task the plan tagged as "writing" always gets the Writing shortcut, whatever its wording.
+  if (taskSkill === "writing") return TASK_APP_NAV[0];
+  return null;
 }
 
 // Level-based recommended resources
@@ -940,6 +945,12 @@ const UI_TRANSLATIONS = {
     skillsChangeDesc: "You changed your study skills. Would you like new content generated for these skills, or keep the study content you already have?",
     skillsChangeUpdateBtn: "Yes, update my study content",
     skillsChangeKeepBtn: "No, keep my previous study content",
+    updateStudyGuideBtn: "🔄 Update my study guide",
+    updateStudyGuideNote: "Your current study guide never changes on its own. It is only rebuilt when you press this button.",
+    updateStudyGuideConfirmTitle: "Update your study guide?",
+    updateStudyGuideConfirmDesc: "This saves your profile and replaces your current study guide with a new one. The old guide cannot be restored.",
+    updateStudyGuideConfirmYes: "Yes, update my study guide",
+    updateStudyGuideConfirmNo: "No, keep my current study guide",
     streakUnit: "day streak",
     trialEndsToday: "Your free trial ends today!",
     trialEndsTomorrow: "Your free trial ends tomorrow!",
@@ -1006,6 +1017,34 @@ const UI_TRANSLATIONS = {
     tutorialPronunciationDesc: "Try it now: play a video of native speakers, tap “Listen to a video tab” and GAKU writes down each line. Then say the sentence out loud on a card and see how close you were. Can't catch it? Slow the video down and listen again.",
     writeTitle: "Writing Practice",
     writeModeCopy: "Copying down",
+    writeVocabTitle: "Choose words from my Vocabulary",
+    imgAssocTitle: "Image association",
+    imgSaved: "✓ Image saved",
+    imgSave: "Save",
+    imgNext: "Next image",
+    imgSearchBtn: "SEARCH",
+    imgHelp: "Image {n} · tap “Next image” for another · “Save” keeps it on the word card",
+    imgSavedLabel: "✓ Saved",
+    imgSearchFor: "Search an image for “{word}”",
+    imgTapSearch: "Tap to search for an image",
+    flashTapToCheck: "Tap to check",
+    flashListenExample: "Listen to the example",
+    flashGenRomaji: "Generating romaji…",
+    flashGenTranslation: "Generating translation…",
+    flashUnderstand: "✅ Understand",
+    flashUnderstoodDone: "✅ Saved to the “Understood” folder",
+    flashNotYet: "↩ Not yet — back to my deck",
+    flashAllUnderstood: "🎉 You understood every card here! Check the “Understood” folder.",
+    writeVocabCopy: "Copy",
+    writeVocabCopied: "✓ Copied!",
+    writeVocabFolder: "Folder",
+    writeVocabEmpty: "No words in this folder yet. Save words to it from the Vocabulary tab first.",
+    writeVocabAll: "Select all",
+    writeVocabClear: "Clear",
+    writeVocabCount: "{n} selected",
+    writeVocabUseCopy: "Use these words for Copying down",
+    writeVocabUseQ: "Use these words in a writing question",
+    writeVocabQPrompt: "Write a short text in Japanese using these words: {words}",
     writeModeQuestion: "Questions",
     writeSoon: "Coming soon",
     writeQDesc: "Paste a writing question you found online (an essay prompt, a JLPT-style question, an email task…). Write your answer in Japanese and GAKU checks it against the question.",
@@ -1467,6 +1506,12 @@ const UI_TRANSLATIONS = {
     skillsChangeDesc: "Vous avez changé vos compétences d'étude. Voulez-vous générer un nouveau contenu pour ces compétences, ou conserver le contenu que vous avez déjà ?",
     skillsChangeUpdateBtn: "Oui, modifier mon contenu d'étude",
     skillsChangeKeepBtn: "Non, garder mon contenu précédent",
+    updateStudyGuideBtn: "🔄 Mettre à jour mon guide d'étude",
+    updateStudyGuideNote: "Votre guide d'étude actuel ne change jamais tout seul. Il n'est reconstruit que lorsque vous appuyez sur ce bouton.",
+    updateStudyGuideConfirmTitle: "Mettre à jour votre guide d'étude ?",
+    updateStudyGuideConfirmDesc: "Votre profil sera enregistré et votre guide d'étude actuel sera remplacé par un nouveau. L'ancien guide ne pourra pas être restauré.",
+    updateStudyGuideConfirmYes: "Oui, mettre à jour mon guide d'étude",
+    updateStudyGuideConfirmNo: "Non, garder mon guide d'étude actuel",
     streakUnit: "jours de suite",
     trialEndsToday: "Votre essai gratuit se termine aujourd'hui !",
     trialEndsTomorrow: "Votre essai gratuit se termine demain !",
@@ -1532,6 +1577,34 @@ const UI_TRANSLATIONS = {
     tutorialPronunciationDesc: "Essayez maintenant : lancez une vidéo de locuteurs natifs, appuyez sur « Écouter un onglet vidéo » et GAKU note chaque phrase. Ensuite, sur une carte, dites la phrase à voix haute et voyez à quel point vous étiez proche. Vous n'arrivez pas à saisir ? Ralentissez la vidéo et réécoutez.",
     writeTitle: "Pratique d'écriture",
     writeModeCopy: "Copie",
+    writeVocabTitle: "Choisir des mots dans mon vocabulaire",
+    imgAssocTitle: "Association d'image",
+    imgSaved: "✓ Image enregistrée",
+    imgSave: "Enregistrer",
+    imgNext: "Image suivante",
+    imgSearchBtn: "RECHERCHER",
+    imgHelp: "Image {n} · touchez « Image suivante » pour une autre · « Enregistrer » la garde sur la carte",
+    imgSavedLabel: "✓ Enregistrée",
+    imgSearchFor: "Chercher une image pour « {word} »",
+    imgTapSearch: "Touchez pour chercher une image",
+    flashTapToCheck: "Touchez pour vérifier",
+    flashListenExample: "Écouter l'exemple",
+    flashGenRomaji: "Génération du romaji…",
+    flashGenTranslation: "Génération de la traduction…",
+    flashUnderstand: "✅ Compris",
+    flashUnderstoodDone: "✅ Enregistré dans le dossier « Understood »",
+    flashNotYet: "↩ Pas encore — retour au paquet",
+    flashAllUnderstood: "🎉 Vous avez compris toutes les cartes ! Voir le dossier « Understood ».",
+    writeVocabCopy: "Copier",
+    writeVocabCopied: "✓ Copié !",
+    writeVocabFolder: "Dossier",
+    writeVocabEmpty: "Aucun mot dans ce dossier. Enregistrez d'abord des mots depuis l'onglet Vocabulaire.",
+    writeVocabAll: "Tout sélectionner",
+    writeVocabClear: "Effacer",
+    writeVocabCount: "{n} sélectionné(s)",
+    writeVocabUseCopy: "Utiliser ces mots pour la copie",
+    writeVocabUseQ: "Utiliser ces mots dans une question d'écriture",
+    writeVocabQPrompt: "Écris un court texte en japonais en utilisant ces mots : {words}",
     writeModeQuestion: "Questions",
     writeSoon: "Bientôt disponible",
     writeQDesc: "Collez une question d'écriture trouvée en ligne (sujet de rédaction, question de type JLPT, e-mail à rédiger…). Écrivez votre réponse en japonais et GAKU la vérifie par rapport à la question.",
@@ -1978,6 +2051,12 @@ const UI_TRANSLATIONS = {
     skillsChangeDesc: "Has cambiado tus habilidades de estudio. ¿Quieres generar contenido nuevo para estas habilidades, o mantener el contenido que ya tienes?",
     skillsChangeUpdateBtn: "Sí, actualizar mi contenido de estudio",
     skillsChangeKeepBtn: "No, mantener mi contenido anterior",
+    updateStudyGuideBtn: "🔄 Actualizar mi guía de estudio",
+    updateStudyGuideNote: "Tu guía de estudio actual nunca cambia por sí sola. Solo se reconstruye cuando pulsas este botón.",
+    updateStudyGuideConfirmTitle: "¿Actualizar tu guía de estudio?",
+    updateStudyGuideConfirmDesc: "Se guardará tu perfil y tu guía de estudio actual se reemplazará por una nueva. La guía anterior no se podrá recuperar.",
+    updateStudyGuideConfirmYes: "Sí, actualizar mi guía de estudio",
+    updateStudyGuideConfirmNo: "No, mantener mi guía de estudio actual",
     streakUnit: "días seguidos",
     trialEndsToday: "¡Tu prueba gratuita termina hoy!",
     trialEndsTomorrow: "¡Tu prueba gratuita termina mañana!",
@@ -2043,6 +2122,34 @@ const UI_TRANSLATIONS = {
     tutorialPronunciationDesc: "Pruébalo ahora: reproduce un video de hablantes nativos, pulsa «Escuchar una pestaña de video» y GAKU escribirá cada línea. Luego, en una tarjeta, di la frase en voz alta y comprueba qué tan cerca estuviste. ¿No la captas? Ralentiza el video y vuelve a escuchar.",
     writeTitle: "Práctica de escritura",
     writeModeCopy: "Copiar",
+    writeVocabTitle: "Elegir palabras de mi vocabulario",
+    imgAssocTitle: "Asociación de imagen",
+    imgSaved: "✓ Imagen guardada",
+    imgSave: "Guardar",
+    imgNext: "Siguiente imagen",
+    imgSearchBtn: "BUSCAR",
+    imgHelp: "Imagen {n} · toca «Siguiente imagen» para otra · «Guardar» la conserva en la tarjeta",
+    imgSavedLabel: "✓ Guardada",
+    imgSearchFor: "Buscar una imagen para «{word}»",
+    imgTapSearch: "Toca para buscar una imagen",
+    flashTapToCheck: "Toca para comprobar",
+    flashListenExample: "Escuchar el ejemplo",
+    flashGenRomaji: "Generando romaji…",
+    flashGenTranslation: "Generando traducción…",
+    flashUnderstand: "✅ Entendido",
+    flashUnderstoodDone: "✅ Guardado en la carpeta «Understood»",
+    flashNotYet: "↩ Aún no — volver a mi mazo",
+    flashAllUnderstood: "🎉 ¡Entendiste todas las tarjetas! Mira la carpeta «Understood».",
+    writeVocabCopy: "Copiar",
+    writeVocabCopied: "✓ ¡Copiado!",
+    writeVocabFolder: "Carpeta",
+    writeVocabEmpty: "Aún no hay palabras en esta carpeta. Guarda palabras primero desde la pestaña Vocabulario.",
+    writeVocabAll: "Seleccionar todo",
+    writeVocabClear: "Borrar",
+    writeVocabCount: "{n} seleccionadas",
+    writeVocabUseCopy: "Usar estas palabras para copiar",
+    writeVocabUseQ: "Usar estas palabras en una pregunta de escritura",
+    writeVocabQPrompt: "Escribe un texto corto en japonés usando estas palabras: {words}",
     writeModeQuestion: "Preguntas",
     writeSoon: "Próximamente",
     writeQDesc: "Pega una pregunta de escritura que encontraste en línea (un tema de redacción, una pregunta tipo JLPT, un correo por escribir…). Escribe tu respuesta en japonés y GAKU la compara con la pregunta.",
@@ -2489,6 +2596,12 @@ const UI_TRANSLATIONS = {
     skillsChangeDesc: "Você alterou suas habilidades de estudo. Deseja gerar novo conteúdo para essas habilidades ou manter o conteúdo que você já possui?",
     skillsChangeUpdateBtn: "Sim, atualizar meu conteúdo de estudo",
     skillsChangeKeepBtn: "Não, manter meu conteúdo anterior",
+    updateStudyGuideBtn: "🔄 Atualizar meu guia de estudo",
+    updateStudyGuideNote: "Seu guia de estudo atual nunca muda sozinho. Ele só é refeito quando você toca neste botão.",
+    updateStudyGuideConfirmTitle: "Atualizar seu guia de estudo?",
+    updateStudyGuideConfirmDesc: "Seu perfil será salvo e o guia de estudo atual será substituído por um novo. O guia anterior não poderá ser restaurado.",
+    updateStudyGuideConfirmYes: "Sim, atualizar meu guia de estudo",
+    updateStudyGuideConfirmNo: "Não, manter meu guia de estudo atual",
     streakUnit: "dias seguidos",
     trialEndsToday: "Seu teste grátis termina hoje!",
     trialEndsTomorrow: "Seu teste grátis termina amanhã!",
@@ -2554,6 +2667,34 @@ const UI_TRANSLATIONS = {
     tutorialPronunciationDesc: "Experimente agora: reproduza um vídeo de falantes nativos, toque em “Ouvir uma aba de vídeo” e o GAKU anota cada fala. Depois, em um cartão, diga a frase em voz alta e veja o quão perto você chegou. Não entendeu? Diminua a velocidade do vídeo e ouça de novo.",
     writeTitle: "Prática de escrita",
     writeModeCopy: "Copiar",
+    writeVocabTitle: "Escolher palavras do meu vocabulário",
+    imgAssocTitle: "Associação de imagem",
+    imgSaved: "✓ Imagem salva",
+    imgSave: "Salvar",
+    imgNext: "Próxima imagem",
+    imgSearchBtn: "BUSCAR",
+    imgHelp: "Imagem {n} · toque em «Próxima imagem» para outra · «Salvar» a mantém no cartão",
+    imgSavedLabel: "✓ Salva",
+    imgSearchFor: "Buscar uma imagem para «{word}»",
+    imgTapSearch: "Toque para buscar uma imagem",
+    flashTapToCheck: "Toque para conferir",
+    flashListenExample: "Ouvir o exemplo",
+    flashGenRomaji: "Gerando romaji…",
+    flashGenTranslation: "Gerando tradução…",
+    flashUnderstand: "✅ Entendi",
+    flashUnderstoodDone: "✅ Salvo na pasta «Understood»",
+    flashNotYet: "↩ Ainda não — voltar ao baralho",
+    flashAllUnderstood: "🎉 Você entendeu todos os cartões! Veja a pasta «Understood».",
+    writeVocabCopy: "Copiar",
+    writeVocabCopied: "✓ Copiado!",
+    writeVocabFolder: "Pasta",
+    writeVocabEmpty: "Ainda não há palavras nesta pasta. Salve palavras primeiro na aba Vocabulário.",
+    writeVocabAll: "Selecionar tudo",
+    writeVocabClear: "Limpar",
+    writeVocabCount: "{n} selecionadas",
+    writeVocabUseCopy: "Usar estas palavras para copiar",
+    writeVocabUseQ: "Usar estas palavras numa pergunta de escrita",
+    writeVocabQPrompt: "Escreva um texto curto em japonês usando estas palavras: {words}",
     writeModeQuestion: "Perguntas",
     writeSoon: "Em breve",
     writeQDesc: "Cole uma pergunta de escrita que você encontrou online (um tema de redação, uma pergunta no estilo JLPT, um e-mail para escrever…). Escreva sua resposta em japonês e o GAKU confere com a pergunta.",
@@ -3000,6 +3141,12 @@ const UI_TRANSLATIONS = {
     skillsChangeDesc: "Du hast deine Lernfähigkeiten geändert. Möchtest du neue Inhalte für diese Fähigkeiten erstellen lassen oder deine bisherigen Lerninhalte behalten?",
     skillsChangeUpdateBtn: "Ja, Lerninhalte aktualisieren",
     skillsChangeKeepBtn: "Nein, bisherige Lerninhalte behalten",
+    updateStudyGuideBtn: "🔄 Meinen Lernleitfaden aktualisieren",
+    updateStudyGuideNote: "Dein aktueller Lernleitfaden ändert sich nie von selbst. Er wird nur neu erstellt, wenn du diese Schaltfläche drückst.",
+    updateStudyGuideConfirmTitle: "Lernleitfaden aktualisieren?",
+    updateStudyGuideConfirmDesc: "Dein Profil wird gespeichert und dein aktueller Lernleitfaden durch einen neuen ersetzt. Der alte Leitfaden kann nicht wiederhergestellt werden.",
+    updateStudyGuideConfirmYes: "Ja, Lernleitfaden aktualisieren",
+    updateStudyGuideConfirmNo: "Nein, aktuellen Lernleitfaden behalten",
     streakUnit: "Tage in Folge",
     trialEndsToday: "Deine kostenlose Testphase endet heute!",
     trialEndsTomorrow: "Deine kostenlose Testphase endet morgen!",
@@ -3065,6 +3212,34 @@ const UI_TRANSLATIONS = {
     tutorialPronunciationDesc: "Probier's gleich aus: Spiele ein Video mit Muttersprachlern ab, tippe auf „Video-Tab abhören“, und GAKU schreibt jede Zeile mit. Sprich dann auf einer Karte den Satz laut nach und sieh, wie nah du dran warst. Nicht verstanden? Verlangsame das Video und höre noch einmal zu.",
     writeTitle: "Schreibübung",
     writeModeCopy: "Abschreiben",
+    writeVocabTitle: "Wörter aus meinem Vokabular wählen",
+    imgAssocTitle: "Bildassoziation",
+    imgSaved: "✓ Bild gespeichert",
+    imgSave: "Speichern",
+    imgNext: "Nächstes Bild",
+    imgSearchBtn: "SUCHEN",
+    imgHelp: "Bild {n} · „Nächstes Bild“ zeigt ein anderes · „Speichern“ behält es auf der Wortkarte",
+    imgSavedLabel: "✓ Gespeichert",
+    imgSearchFor: "Bild für „{word}“ suchen",
+    imgTapSearch: "Tippen, um ein Bild zu suchen",
+    flashTapToCheck: "Zum Prüfen tippen",
+    flashListenExample: "Beispiel anhören",
+    flashGenRomaji: "Romaji wird erstellt…",
+    flashGenTranslation: "Übersetzung wird erstellt…",
+    flashUnderstand: "✅ Verstanden",
+    flashUnderstoodDone: "✅ Im Ordner „Understood“ gespeichert",
+    flashNotYet: "↩ Noch nicht — zurück zum Stapel",
+    flashAllUnderstood: "🎉 Du hast alle Karten verstanden! Siehe Ordner „Understood“.",
+    writeVocabCopy: "Kopieren",
+    writeVocabCopied: "✓ Kopiert!",
+    writeVocabFolder: "Ordner",
+    writeVocabEmpty: "In diesem Ordner sind noch keine Wörter. Speichere zuerst Wörter im Tab Vokabular.",
+    writeVocabAll: "Alle auswählen",
+    writeVocabClear: "Leeren",
+    writeVocabCount: "{n} ausgewählt",
+    writeVocabUseCopy: "Diese Wörter zum Abschreiben verwenden",
+    writeVocabUseQ: "Diese Wörter in einer Schreibfrage verwenden",
+    writeVocabQPrompt: "Schreibe einen kurzen japanischen Text mit diesen Wörtern: {words}",
     writeModeQuestion: "Fragen",
     writeSoon: "Demnächst verfügbar",
     writeQDesc: "Füge eine Schreibaufgabe ein, die du online gefunden hast (Aufsatzthema, Frage im JLPT-Stil, E-Mail-Aufgabe …). Schreibe deine Antwort auf Japanisch, und GAKU prüft sie anhand der Frage.",
@@ -3511,6 +3686,12 @@ const UI_TRANSLATIONS = {
     skillsChangeDesc: "Hai modificato le tue competenze di studio. Vuoi generare nuovi contenuti per queste competenze o mantenere quelli che hai già?",
     skillsChangeUpdateBtn: "Sì, aggiorna i miei contenuti",
     skillsChangeKeepBtn: "No, mantieni i contenuti precedenti",
+    updateStudyGuideBtn: "🔄 Aggiorna la mia guida di studio",
+    updateStudyGuideNote: "La tua guida di studio attuale non cambia mai da sola. Viene ricreata solo quando premi questo pulsante.",
+    updateStudyGuideConfirmTitle: "Aggiornare la tua guida di studio?",
+    updateStudyGuideConfirmDesc: "Il tuo profilo verrà salvato e la guida di studio attuale sarà sostituita da una nuova. La guida precedente non potrà essere ripristinata.",
+    updateStudyGuideConfirmYes: "Sì, aggiorna la mia guida di studio",
+    updateStudyGuideConfirmNo: "No, mantieni la mia guida di studio attuale",
     streakUnit: "giorni di fila",
     trialEndsToday: "La tua prova gratuita termina oggi!",
     trialEndsTomorrow: "La tua prova gratuita termina domani!",
@@ -3576,6 +3757,34 @@ const UI_TRANSLATIONS = {
     tutorialPronunciationDesc: "Provalo subito: riproduci un video di madrelingua, tocca «Ascolta una scheda video» e GAKU trascrive ogni frase. Poi, su una scheda, ripeti la frase ad alta voce e guarda quanto ti sei avvicinato. Non capisci? Rallenta il video e riascolta.",
     writeTitle: "Pratica di scrittura",
     writeModeCopy: "Copiatura",
+    writeVocabTitle: "Scegli parole dal mio vocabolario",
+    imgAssocTitle: "Associazione di immagine",
+    imgSaved: "✓ Immagine salvata",
+    imgSave: "Salva",
+    imgNext: "Immagine successiva",
+    imgSearchBtn: "CERCA",
+    imgHelp: "Immagine {n} · tocca «Immagine successiva» per un'altra · «Salva» la tiene sulla scheda",
+    imgSavedLabel: "✓ Salvata",
+    imgSearchFor: "Cerca un'immagine per «{word}»",
+    imgTapSearch: "Tocca per cercare un'immagine",
+    flashTapToCheck: "Tocca per controllare",
+    flashListenExample: "Ascolta l'esempio",
+    flashGenRomaji: "Generazione del romaji…",
+    flashGenTranslation: "Generazione della traduzione…",
+    flashUnderstand: "✅ Capito",
+    flashUnderstoodDone: "✅ Salvato nella cartella «Understood»",
+    flashNotYet: "↩ Non ancora — torna al mazzo",
+    flashAllUnderstood: "🎉 Hai capito tutte le carte! Guarda la cartella «Understood».",
+    writeVocabCopy: "Copia",
+    writeVocabCopied: "✓ Copiato!",
+    writeVocabFolder: "Cartella",
+    writeVocabEmpty: "Nessuna parola in questa cartella. Salva prima delle parole dalla scheda Vocabolario.",
+    writeVocabAll: "Seleziona tutto",
+    writeVocabClear: "Cancella",
+    writeVocabCount: "{n} selezionate",
+    writeVocabUseCopy: "Usa queste parole per la copiatura",
+    writeVocabUseQ: "Usa queste parole in una domanda di scrittura",
+    writeVocabQPrompt: "Scrivi un breve testo in giapponese usando queste parole: {words}",
     writeModeQuestion: "Domande",
     writeSoon: "Presto disponibile",
     writeQDesc: "Incolla una domanda di scrittura trovata online (un tema, una domanda in stile JLPT, un'email da scrivere…). Scrivi la tua risposta in giapponese e GAKU la confronta con la domanda.",
@@ -4022,6 +4231,12 @@ const UI_TRANSLATIONS = {
     skillsChangeDesc: "你更改了学习技能。是要为这些技能生成新的学习内容，还是保留之前的学习内容？",
     skillsChangeUpdateBtn: "是，更新我的学习内容",
     skillsChangeKeepBtn: "否，保留之前的学习内容",
+    updateStudyGuideBtn: "🔄 更新我的学习指南",
+    updateStudyGuideNote: "你当前的学习指南不会自动改变，只有在你点击此按钮时才会重新生成。",
+    updateStudyGuideConfirmTitle: "要更新学习指南吗？",
+    updateStudyGuideConfirmDesc: "这将保存你的个人资料，并用新的学习指南替换当前的学习指南。旧的指南无法恢复。",
+    updateStudyGuideConfirmYes: "是，更新我的学习指南",
+    updateStudyGuideConfirmNo: "否，保留当前的学习指南",
     streakUnit: "天连续",
     trialEndsToday: "你的免费试用今天到期！",
     trialEndsTomorrow: "你的免费试用明天到期！",
@@ -4087,6 +4302,34 @@ const UI_TRANSLATIONS = {
     tutorialPronunciationDesc: "现在就试试：播放母语者的视频，点击“收听视频标签页”，GAKU会把每句话记录下来。然后在卡片上大声说出这句话，看看你有多接近。听不清？把视频放慢再听一遍。",
     writeTitle: "写作练习",
     writeModeCopy: "抄写",
+    writeVocabTitle: "从我的词汇中选择单词",
+    imgAssocTitle: "图像联想",
+    imgSaved: "✓ 图片已保存",
+    imgSave: "保存",
+    imgNext: "下一张图片",
+    imgSearchBtn: "搜索",
+    imgHelp: "第 {n} 张 · 点击“下一张图片”换一张 · 点击“保存”存到单词卡",
+    imgSavedLabel: "✓ 已保存",
+    imgSearchFor: "搜索“{word}”的图片",
+    imgTapSearch: "点击搜索图片",
+    flashTapToCheck: "点击查看答案",
+    flashListenExample: "听例句",
+    flashGenRomaji: "正在生成罗马字…",
+    flashGenTranslation: "正在生成翻译…",
+    flashUnderstand: "✅ 已理解",
+    flashUnderstoodDone: "✅ 已保存到“Understood”文件夹",
+    flashNotYet: "↩ 还没掌握 — 放回卡组",
+    flashAllUnderstood: "🎉 这里的卡片你都理解了！请查看“Understood”文件夹。",
+    writeVocabCopy: "复制",
+    writeVocabCopied: "✓ 已复制！",
+    writeVocabFolder: "文件夹",
+    writeVocabEmpty: "此文件夹中还没有单词。请先在“词汇”标签中保存单词。",
+    writeVocabAll: "全选",
+    writeVocabClear: "清除",
+    writeVocabCount: "已选 {n} 个",
+    writeVocabUseCopy: "用这些单词来抄写",
+    writeVocabUseQ: "在写作题中使用这些单词",
+    writeVocabQPrompt: "请用这些单词写一小段日语短文：{words}",
     writeModeQuestion: "提问",
     writeSoon: "即将推出",
     writeQDesc: "粘贴你在网上找到的写作题目（作文题、JLPT风格的题目、写邮件任务等）。用日语写出你的答案，GAKU会对照题目进行检查。",
@@ -4533,6 +4776,12 @@ const UI_TRANSLATIONS = {
     skillsChangeDesc: "你更改了學習技能。要為這些技能產生新的學習內容，還是保留之前的學習內容？",
     skillsChangeUpdateBtn: "是，更新我的學習內容",
     skillsChangeKeepBtn: "否，保留之前的學習內容",
+    updateStudyGuideBtn: "🔄 更新我的學習指南",
+    updateStudyGuideNote: "你目前的學習指南不會自動改變，只有在你按下此按鈕時才會重新產生。",
+    updateStudyGuideConfirmTitle: "要更新學習指南嗎？",
+    updateStudyGuideConfirmDesc: "這將儲存你的個人資料，並用新的學習指南取代目前的學習指南。舊的指南無法復原。",
+    updateStudyGuideConfirmYes: "是，更新我的學習指南",
+    updateStudyGuideConfirmNo: "否，保留目前的學習指南",
     streakUnit: "天連續",
     trialEndsToday: "你的免費試用今天到期！",
     trialEndsTomorrow: "你的免費試用明天到期！",
@@ -4598,6 +4847,34 @@ const UI_TRANSLATIONS = {
     tutorialPronunciationDesc: "現在就試試：播放母語者的影片，點擊「收聽影片分頁」，GAKU會把每句話記錄下來。然後在卡片上大聲說出這句話，看看你有多接近。聽不清？把影片放慢再聽一遍。",
     writeTitle: "寫作練習",
     writeModeCopy: "抄寫",
+    writeVocabTitle: "從我的詞彙中選擇單字",
+    imgAssocTitle: "圖像聯想",
+    imgSaved: "✓ 圖片已儲存",
+    imgSave: "儲存",
+    imgNext: "下一張圖片",
+    imgSearchBtn: "搜尋",
+    imgHelp: "第 {n} 張 · 點擊「下一張圖片」換一張 · 點擊「儲存」存到單字卡",
+    imgSavedLabel: "✓ 已儲存",
+    imgSearchFor: "搜尋「{word}」的圖片",
+    imgTapSearch: "點擊搜尋圖片",
+    flashTapToCheck: "點擊查看答案",
+    flashListenExample: "聽例句",
+    flashGenRomaji: "正在產生羅馬字…",
+    flashGenTranslation: "正在產生翻譯…",
+    flashUnderstand: "✅ 已理解",
+    flashUnderstoodDone: "✅ 已儲存到「Understood」資料夾",
+    flashNotYet: "↩ 還沒掌握 — 放回卡組",
+    flashAllUnderstood: "🎉 這裡的卡片你都理解了！請查看「Understood」資料夾。",
+    writeVocabCopy: "複製",
+    writeVocabCopied: "✓ 已複製！",
+    writeVocabFolder: "資料夾",
+    writeVocabEmpty: "此資料夾中還沒有單字。請先在「詞彙」分頁中儲存單字。",
+    writeVocabAll: "全選",
+    writeVocabClear: "清除",
+    writeVocabCount: "已選 {n} 個",
+    writeVocabUseCopy: "用這些單字來抄寫",
+    writeVocabUseQ: "在寫作題中使用這些單字",
+    writeVocabQPrompt: "請用這些單字寫一小段日語短文：{words}",
     writeModeQuestion: "提問",
     writeSoon: "即將推出",
     writeQDesc: "貼上你在網路上找到的寫作題目（作文題、JLPT風格的題目、寫信任務等）。用日語寫出你的答案，GAKU會對照題目進行檢查。",
@@ -5044,6 +5321,12 @@ const UI_TRANSLATIONS = {
     skillsChangeDesc: "학습 스킬을 변경하셨습니다. 이 스킬에 맞춰 새로운 학습 내용을 만들까요, 아니면 이전에 만든 학습 내용을 그대로 유지할까요?",
     skillsChangeUpdateBtn: "네, 학습 내용을 변경합니다",
     skillsChangeKeepBtn: "아니요, 이전 학습 내용을 유지합니다",
+    updateStudyGuideBtn: "🔄 내 학습 가이드 업데이트",
+    updateStudyGuideNote: "현재 학습 가이드는 저절로 바뀌지 않습니다. 이 버튼을 눌렀을 때만 새로 만들어집니다.",
+    updateStudyGuideConfirmTitle: "학습 가이드를 업데이트하시겠습니까?",
+    updateStudyGuideConfirmDesc: "프로필이 저장되고 현재 학습 가이드가 새 가이드로 바뀝니다. 이전 가이드는 복원할 수 없습니다.",
+    updateStudyGuideConfirmYes: "네, 학습 가이드를 업데이트합니다",
+    updateStudyGuideConfirmNo: "아니요, 현재 학습 가이드를 유지합니다",
     streakUnit: "일 연속",
     trialEndsToday: "무료 체험이 오늘 종료됩니다!",
     trialEndsTomorrow: "무료 체험이 내일 종료됩니다!",
@@ -5109,6 +5392,34 @@ const UI_TRANSLATIONS = {
     tutorialPronunciationDesc: "지금 해보세요: 원어민이 나오는 영상을 재생하고 '영상 탭 듣기'를 누르면 GAKU가 한 줄씩 받아 적습니다. 그다음 카드에서 문장을 소리 내어 말하고 얼마나 가까웠는지 확인하세요. 잘 안 들리나요? 영상을 느리게 재생해서 다시 들어보세요.",
     writeTitle: "쓰기 연습",
     writeModeCopy: "따라 쓰기",
+    writeVocabTitle: "내 어휘에서 단어 고르기",
+    imgAssocTitle: "이미지 연상",
+    imgSaved: "✓ 이미지를 저장했어요",
+    imgSave: "저장",
+    imgNext: "다음 이미지",
+    imgSearchBtn: "검색",
+    imgHelp: "{n}번째 이미지 · “다음 이미지”로 다른 이미지 보기 · “저장”으로 단어 카드에 저장",
+    imgSavedLabel: "✓ 저장됨",
+    imgSearchFor: "“{word}” 이미지 검색",
+    imgTapSearch: "탭하여 이미지 검색",
+    flashTapToCheck: "탭하여 확인",
+    flashListenExample: "예문 듣기",
+    flashGenRomaji: "로마자 생성 중…",
+    flashGenTranslation: "번역 생성 중…",
+    flashUnderstand: "✅ 이해했어요",
+    flashUnderstoodDone: "✅ “Understood” 폴더에 저장됨",
+    flashNotYet: "↩ 아직 — 덱으로 되돌리기",
+    flashAllUnderstood: "🎉 여기 있는 카드를 모두 이해했어요! “Understood” 폴더를 확인하세요.",
+    writeVocabCopy: "복사",
+    writeVocabCopied: "✓ 복사됨!",
+    writeVocabFolder: "폴더",
+    writeVocabEmpty: "이 폴더에 아직 단어가 없습니다. 먼저 어휘 탭에서 단어를 저장하세요.",
+    writeVocabAll: "모두 선택",
+    writeVocabClear: "지우기",
+    writeVocabCount: "{n}개 선택됨",
+    writeVocabUseCopy: "이 단어로 따라 쓰기",
+    writeVocabUseQ: "이 단어를 쓰기 문제에 사용",
+    writeVocabQPrompt: "이 단어들을 사용해 일본어로 짧은 글을 쓰세요: {words}",
     writeModeQuestion: "질문",
     writeSoon: "곧 출시",
     writeQDesc: "인터넷에서 찾은 쓰기 문제(작문 주제, JLPT 형식 문제, 이메일 쓰기 과제 등)를 붙여넣으세요. 일본어로 답을 쓰면 GAKU가 문제에 맞는지 확인해 줍니다.",
@@ -5555,6 +5866,12 @@ const UI_TRANSLATIONS = {
     skillsChangeDesc: "คุณเปลี่ยนทักษะการเรียนแล้ว ต้องการให้สร้างเนื้อหาใหม่ตามทักษะนี้ หรือเก็บเนื้อหาการเรียนเดิมไว้?",
     skillsChangeUpdateBtn: "ใช่ อัปเดตเนื้อหาการเรียนของฉัน",
     skillsChangeKeepBtn: "ไม่ เก็บเนื้อหาการเรียนเดิมไว้",
+    updateStudyGuideBtn: "🔄 อัปเดตคู่มือการเรียนของฉัน",
+    updateStudyGuideNote: "คู่มือการเรียนปัจจุบันของคุณจะไม่เปลี่ยนเอง จะสร้างใหม่ก็ต่อเมื่อคุณกดปุ่มนี้เท่านั้น",
+    updateStudyGuideConfirmTitle: "ต้องการอัปเดตคู่มือการเรียนหรือไม่?",
+    updateStudyGuideConfirmDesc: "ระบบจะบันทึกโปรไฟล์ของคุณและแทนที่คู่มือการเรียนปัจจุบันด้วยคู่มือใหม่ ไม่สามารถกู้คืนคู่มือเดิมได้",
+    updateStudyGuideConfirmYes: "ใช่ อัปเดตคู่มือการเรียนของฉัน",
+    updateStudyGuideConfirmNo: "ไม่ เก็บคู่มือการเรียนปัจจุบันไว้",
     streakUnit: "วันติดต่อกัน",
     trialEndsToday: "ทดลองใช้ฟรีของคุณจะหมดอายุวันนี้!",
     trialEndsTomorrow: "ทดลองใช้ฟรีของคุณจะหมดอายุพรุ่งนี้!",
@@ -5620,6 +5937,34 @@ const UI_TRANSLATIONS = {
     tutorialPronunciationDesc: "ลองเลย: เปิดวิดีโอของเจ้าของภาษา แล้วกด “ฟังแท็บวิดีโอ” GAKU จะจดทีละประโยคให้ จากนั้นในการ์ดให้พูดประโยคออกเสียง แล้วดูว่าใกล้เคียงแค่ไหน ฟังไม่ทัน? ลองเปิดวิดีโอให้ช้าลงแล้วฟังอีกครั้ง",
     writeTitle: "ฝึกเขียน",
     writeModeCopy: "คัดลอกเขียน",
+    writeVocabTitle: "เลือกคำจากคำศัพท์ของฉัน",
+    imgAssocTitle: "การเชื่อมโยงด้วยภาพ",
+    imgSaved: "✓ บันทึกรูปแล้ว",
+    imgSave: "บันทึก",
+    imgNext: "รูปถัดไป",
+    imgSearchBtn: "ค้นหา",
+    imgHelp: "รูปที่ {n} · แตะ “รูปถัดไป” เพื่อดูรูปอื่น · “บันทึก” เพื่อเก็บไว้ในการ์ดคำศัพท์",
+    imgSavedLabel: "✓ บันทึกแล้ว",
+    imgSearchFor: "ค้นหารูปของ “{word}”",
+    imgTapSearch: "แตะเพื่อค้นหารูป",
+    flashTapToCheck: "แตะเพื่อดูคำตอบ",
+    flashListenExample: "ฟังประโยคตัวอย่าง",
+    flashGenRomaji: "กำลังสร้างโรมะจิ…",
+    flashGenTranslation: "กำลังสร้างคำแปล…",
+    flashUnderstand: "✅ เข้าใจแล้ว",
+    flashUnderstoodDone: "✅ บันทึกไปยังโฟลเดอร์ “Understood” แล้ว",
+    flashNotYet: "↩ ยังไม่เข้าใจ — กลับไปที่ชุดการ์ด",
+    flashAllUnderstood: "🎉 คุณเข้าใจทุกการ์ดแล้ว! ดูที่โฟลเดอร์ “Understood”",
+    writeVocabCopy: "คัดลอก",
+    writeVocabCopied: "✓ คัดลอกแล้ว!",
+    writeVocabFolder: "โฟลเดอร์",
+    writeVocabEmpty: "ยังไม่มีคำในโฟลเดอร์นี้ โปรดบันทึกคำจากแท็บคำศัพท์ก่อน",
+    writeVocabAll: "เลือกทั้งหมด",
+    writeVocabClear: "ล้าง",
+    writeVocabCount: "เลือกแล้ว {n}",
+    writeVocabUseCopy: "ใช้คำเหล่านี้คัดลอกเขียน",
+    writeVocabUseQ: "ใช้คำเหล่านี้ในโจทย์การเขียน",
+    writeVocabQPrompt: "เขียนข้อความสั้นๆ เป็นภาษาญี่ปุ่นโดยใช้คำเหล่านี้: {words}",
     writeModeQuestion: "คำถาม",
     writeSoon: "เร็วๆ นี้",
     writeQDesc: "วางโจทย์การเขียนที่คุณพบทางอินเทอร์เน็ต (หัวข้อเรียงความ โจทย์แนว JLPT งานเขียนอีเมล ฯลฯ) แล้วเขียนคำตอบเป็นภาษาญี่ปุ่น GAKU จะตรวจว่าตรงกับโจทย์หรือไม่",
@@ -6066,6 +6411,12 @@ const UI_TRANSLATIONS = {
     skillsChangeDesc: "Anda telah menukar kemahiran pembelajaran anda. Adakah anda mahu kandungan baharu dijana untuk kemahiran ini, atau kekalkan kandungan pembelajaran sedia ada?",
     skillsChangeUpdateBtn: "Ya, kemaskini kandungan pembelajaran saya",
     skillsChangeKeepBtn: "Tidak, kekalkan kandungan pembelajaran sebelumnya",
+    updateStudyGuideBtn: "🔄 Kemas kini panduan belajar saya",
+    updateStudyGuideNote: "Panduan belajar semasa anda tidak akan berubah dengan sendirinya. Ia hanya dibina semula apabila anda menekan butang ini.",
+    updateStudyGuideConfirmTitle: "Kemas kini panduan belajar anda?",
+    updateStudyGuideConfirmDesc: "Profil anda akan disimpan dan panduan belajar semasa akan diganti dengan yang baharu. Panduan lama tidak boleh dipulihkan.",
+    updateStudyGuideConfirmYes: "Ya, kemas kini panduan belajar saya",
+    updateStudyGuideConfirmNo: "Tidak, kekalkan panduan belajar semasa saya",
     streakUnit: "hari berturut-turut",
     trialEndsToday: "Percubaan percuma anda tamat hari ini!",
     trialEndsTomorrow: "Percubaan percuma anda tamat esok!",
@@ -6131,6 +6482,34 @@ const UI_TRANSLATIONS = {
     tutorialPronunciationDesc: "Cuba sekarang: mainkan video penutur asli, tekan “Dengar tab video” dan GAKU akan menulis setiap baris. Kemudian, pada kad, sebut ayat itu dengan kuat dan lihat sejauh mana anda hampir betul. Tidak dapat menangkap? Perlahankan video dan dengar semula.",
     writeTitle: "Latihan Menulis",
     writeModeCopy: "Menyalin",
+    writeVocabTitle: "Pilih perkataan daripada Kosa Kata saya",
+    imgAssocTitle: "Perkaitan imej",
+    imgSaved: "✓ Imej disimpan",
+    imgSave: "Simpan",
+    imgNext: "Imej seterusnya",
+    imgSearchBtn: "CARI",
+    imgHelp: "Imej {n} · ketik “Imej seterusnya” untuk yang lain · “Simpan” untuk simpan pada kad perkataan",
+    imgSavedLabel: "✓ Disimpan",
+    imgSearchFor: "Cari imej untuk “{word}”",
+    imgTapSearch: "Ketik untuk mencari imej",
+    flashTapToCheck: "Ketik untuk semak",
+    flashListenExample: "Dengar ayat contoh",
+    flashGenRomaji: "Menjana romaji…",
+    flashGenTranslation: "Menjana terjemahan…",
+    flashUnderstand: "✅ Faham",
+    flashUnderstoodDone: "✅ Disimpan dalam folder “Understood”",
+    flashNotYet: "↩ Belum — kembali ke dek",
+    flashAllUnderstood: "🎉 Anda faham semua kad! Lihat folder “Understood”.",
+    writeVocabCopy: "Salin",
+    writeVocabCopied: "✓ Disalin!",
+    writeVocabFolder: "Folder",
+    writeVocabEmpty: "Belum ada perkataan dalam folder ini. Simpan perkataan dahulu dari tab Kosa Kata.",
+    writeVocabAll: "Pilih semua",
+    writeVocabClear: "Kosongkan",
+    writeVocabCount: "{n} dipilih",
+    writeVocabUseCopy: "Guna perkataan ini untuk menyalin",
+    writeVocabUseQ: "Guna perkataan ini dalam soalan menulis",
+    writeVocabQPrompt: "Tulis teks pendek dalam bahasa Jepun menggunakan perkataan ini: {words}",
     writeModeQuestion: "Soalan",
     writeSoon: "Akan datang",
     writeQDesc: "Tampal soalan menulis yang anda jumpa dalam talian (tajuk karangan, soalan gaya JLPT, tugasan e-mel…). Tulis jawapan anda dalam bahasa Jepun dan GAKU akan menyemaknya dengan soalan.",
@@ -6577,6 +6956,12 @@ const UI_TRANSLATIONS = {
     skillsChangeDesc: "Anda telah mengubah keterampilan belajar Anda. Apakah Anda ingin konten baru dibuat untuk keterampilan ini, atau tetap menggunakan konten belajar yang sudah ada?",
     skillsChangeUpdateBtn: "Ya, perbarui konten belajar saya",
     skillsChangeKeepBtn: "Tidak, pertahankan konten belajar sebelumnya",
+    updateStudyGuideBtn: "🔄 Perbarui panduan belajar saya",
+    updateStudyGuideNote: "Panduan belajar Anda saat ini tidak pernah berubah dengan sendirinya. Panduan hanya dibuat ulang saat Anda menekan tombol ini.",
+    updateStudyGuideConfirmTitle: "Perbarui panduan belajar Anda?",
+    updateStudyGuideConfirmDesc: "Profil Anda akan disimpan dan panduan belajar saat ini akan diganti dengan yang baru. Panduan lama tidak dapat dipulihkan.",
+    updateStudyGuideConfirmYes: "Ya, perbarui panduan belajar saya",
+    updateStudyGuideConfirmNo: "Tidak, pertahankan panduan belajar saya saat ini",
     streakUnit: "hari berturut-turut",
     trialEndsToday: "Uji coba gratis Anda berakhir hari ini!",
     trialEndsTomorrow: "Uji coba gratis Anda berakhir besok!",
@@ -6642,6 +7027,34 @@ const UI_TRANSLATIONS = {
     tutorialPronunciationDesc: "Coba sekarang: putar video penutur asli, ketuk “Dengarkan tab video”, dan GAKU akan menuliskan setiap baris. Lalu, pada kartu, ucapkan kalimatnya dengan lantang dan lihat seberapa dekat Anda. Tidak tertangkap? Perlambat videonya dan dengarkan lagi.",
     writeTitle: "Latihan Menulis",
     writeModeCopy: "Menyalin",
+    writeVocabTitle: "Pilih kata dari Kosakata saya",
+    imgAssocTitle: "Asosiasi gambar",
+    imgSaved: "✓ Gambar disimpan",
+    imgSave: "Simpan",
+    imgNext: "Gambar berikutnya",
+    imgSearchBtn: "CARI",
+    imgHelp: "Gambar {n} · ketuk “Gambar berikutnya” untuk yang lain · “Simpan” untuk menyimpan di kartu kata",
+    imgSavedLabel: "✓ Tersimpan",
+    imgSearchFor: "Cari gambar untuk “{word}”",
+    imgTapSearch: "Ketuk untuk mencari gambar",
+    flashTapToCheck: "Ketuk untuk memeriksa",
+    flashListenExample: "Dengarkan contoh kalimat",
+    flashGenRomaji: "Membuat romaji…",
+    flashGenTranslation: "Membuat terjemahan…",
+    flashUnderstand: "✅ Paham",
+    flashUnderstoodDone: "✅ Disimpan ke folder “Understood”",
+    flashNotYet: "↩ Belum — kembali ke dek",
+    flashAllUnderstood: "🎉 Kamu paham semua kartu! Lihat folder “Understood”.",
+    writeVocabCopy: "Salin",
+    writeVocabCopied: "✓ Tersalin!",
+    writeVocabFolder: "Folder",
+    writeVocabEmpty: "Belum ada kata di folder ini. Simpan kata dulu dari tab Kosakata.",
+    writeVocabAll: "Pilih semua",
+    writeVocabClear: "Hapus",
+    writeVocabCount: "{n} dipilih",
+    writeVocabUseCopy: "Gunakan kata ini untuk menyalin",
+    writeVocabUseQ: "Gunakan kata ini dalam soal menulis",
+    writeVocabQPrompt: "Tulis teks pendek dalam bahasa Jepang dengan kata-kata ini: {words}",
     writeModeQuestion: "Pertanyaan",
     writeSoon: "Segera hadir",
     writeQDesc: "Tempel soal menulis yang kamu temukan di internet (tema esai, soal bergaya JLPT, tugas menulis email…). Tulis jawabanmu dalam bahasa Jepang dan GAKU akan memeriksanya dengan soal tersebut.",
@@ -7088,6 +7501,12 @@ const UI_TRANSLATIONS = {
     skillsChangeDesc: "Bạn đã thay đổi kỹ năng học tập. Bạn có muốn tạo nội dung mới cho các kỹ năng này, hay giữ nguyên nội dung học tập trước đó?",
     skillsChangeUpdateBtn: "Có, cập nhật nội dung học tập của tôi",
     skillsChangeKeepBtn: "Không, giữ nội dung học tập trước đó",
+    updateStudyGuideBtn: "🔄 Cập nhật hướng dẫn học của tôi",
+    updateStudyGuideNote: "Hướng dẫn học hiện tại của bạn không bao giờ tự thay đổi. Nó chỉ được tạo lại khi bạn nhấn nút này.",
+    updateStudyGuideConfirmTitle: "Cập nhật hướng dẫn học của bạn?",
+    updateStudyGuideConfirmDesc: "Hồ sơ của bạn sẽ được lưu và hướng dẫn học hiện tại sẽ được thay bằng một hướng dẫn mới. Không thể khôi phục hướng dẫn cũ.",
+    updateStudyGuideConfirmYes: "Có, cập nhật hướng dẫn học của tôi",
+    updateStudyGuideConfirmNo: "Không, giữ hướng dẫn học hiện tại",
     streakUnit: "ngày liên tiếp",
     trialEndsToday: "Bản dùng thử miễn phí của bạn kết thúc hôm nay!",
     trialEndsTomorrow: "Bản dùng thử miễn phí của bạn kết thúc vào ngày mai!",
@@ -7153,6 +7572,34 @@ const UI_TRANSLATIONS = {
     tutorialPronunciationDesc: "Hãy thử ngay: phát video của người bản xứ, nhấn “Nghe tab video”, GAKU sẽ ghi lại từng câu. Sau đó, trên thẻ, hãy nói to câu đó và xem bạn nói gần đúng đến đâu. Nghe không kịp? Hãy làm chậm video và nghe lại.",
     writeTitle: "Luyện viết",
     writeModeCopy: "Chép lại",
+    writeVocabTitle: "Chọn từ trong Từ vựng của tôi",
+    imgAssocTitle: "Liên tưởng bằng hình ảnh",
+    imgSaved: "✓ Đã lưu hình ảnh",
+    imgSave: "Lưu",
+    imgNext: "Ảnh tiếp theo",
+    imgSearchBtn: "TÌM",
+    imgHelp: "Ảnh {n} · chạm “Ảnh tiếp theo” để xem ảnh khác · “Lưu” để giữ trên thẻ từ",
+    imgSavedLabel: "✓ Đã lưu",
+    imgSearchFor: "Tìm ảnh cho “{word}”",
+    imgTapSearch: "Chạm để tìm ảnh",
+    flashTapToCheck: "Chạm để kiểm tra",
+    flashListenExample: "Nghe câu ví dụ",
+    flashGenRomaji: "Đang tạo romaji…",
+    flashGenTranslation: "Đang tạo bản dịch…",
+    flashUnderstand: "✅ Đã hiểu",
+    flashUnderstoodDone: "✅ Đã lưu vào thư mục “Understood”",
+    flashNotYet: "↩ Chưa — quay lại bộ thẻ",
+    flashAllUnderstood: "🎉 Bạn đã hiểu hết các thẻ! Xem thư mục “Understood”.",
+    writeVocabCopy: "Sao chép",
+    writeVocabCopied: "✓ Đã sao chép!",
+    writeVocabFolder: "Thư mục",
+    writeVocabEmpty: "Thư mục này chưa có từ nào. Hãy lưu từ trước từ tab Từ vựng.",
+    writeVocabAll: "Chọn tất cả",
+    writeVocabClear: "Xóa",
+    writeVocabCount: "Đã chọn {n}",
+    writeVocabUseCopy: "Dùng các từ này để chép lại",
+    writeVocabUseQ: "Dùng các từ này trong câu hỏi viết",
+    writeVocabQPrompt: "Hãy viết một đoạn văn ngắn bằng tiếng Nhật dùng các từ này: {words}",
     writeModeQuestion: "Câu hỏi",
     writeSoon: "Sắp ra mắt",
     writeQDesc: "Dán một đề bài viết bạn tìm thấy trên mạng (đề luận, câu hỏi kiểu JLPT, bài viết email…). Hãy viết câu trả lời bằng tiếng Nhật và GAKU sẽ kiểm tra xem có đúng với đề bài không.",
@@ -7599,6 +8046,12 @@ const UI_TRANSLATIONS = {
     skillsChangeDesc: "आपने अपने अध्ययन कौशल बदल दिए हैं। क्या आप इन कौशलों के लिए नई सामग्री बनवाना चाहते हैं, या पहले से बनाई गई अध्ययन सामग्री को वैसे ही रखना चाहते हैं?",
     skillsChangeUpdateBtn: "हाँ, मेरी अध्ययन सामग्री अपडेट करें",
     skillsChangeKeepBtn: "नहीं, पिछली अध्ययन सामग्री रखें",
+    updateStudyGuideBtn: "🔄 मेरी अध्ययन गाइड अपडेट करें",
+    updateStudyGuideNote: "आपकी मौजूदा अध्ययन गाइड अपने आप कभी नहीं बदलती। यह केवल तब दोबारा बनती है जब आप यह बटन दबाते हैं।",
+    updateStudyGuideConfirmTitle: "क्या आप अपनी अध्ययन गाइड अपडेट करना चाहते हैं?",
+    updateStudyGuideConfirmDesc: "आपकी प्रोफ़ाइल सहेजी जाएगी और मौजूदा अध्ययन गाइड की जगह नई गाइड बन जाएगी। पुरानी गाइड वापस नहीं लाई जा सकती।",
+    updateStudyGuideConfirmYes: "हाँ, मेरी अध्ययन गाइड अपडेट करें",
+    updateStudyGuideConfirmNo: "नहीं, मौजूदा अध्ययन गाइड रखें",
     streakUnit: "दिन लगातार",
     trialEndsToday: "आपका मुफ़्त ट्रायल आज समाप्त हो रहा है!",
     trialEndsTomorrow: "आपका मुफ़्त ट्रायल कल समाप्त हो रहा है!",
@@ -7664,6 +8117,34 @@ const UI_TRANSLATIONS = {
     tutorialPronunciationDesc: "अभी आज़माएँ: मूल भाषा बोलने वालों का वीडियो चलाएँ, “वीडियो टैब सुनें” दबाएँ, और GAKU हर पंक्ति लिख देगा। फिर कार्ड पर वाक्य को ज़ोर से बोलें और देखें कि आप कितने करीब थे। समझ नहीं आया? वीडियो को धीमा करके फिर से सुनें।",
     writeTitle: "लेखन अभ्यास",
     writeModeCopy: "नकल करके लिखना",
+    writeVocabTitle: "मेरी शब्दावली से शब्द चुनें",
+    imgAssocTitle: "छवि से जुड़ाव",
+    imgSaved: "✓ छवि सहेजी गई",
+    imgSave: "सहेजें",
+    imgNext: "अगली छवि",
+    imgSearchBtn: "खोजें",
+    imgHelp: "छवि {n} · दूसरी छवि के लिए “अगली छवि” दबाएँ · “सहेजें” से शब्द कार्ड पर रखें",
+    imgSavedLabel: "✓ सहेजा गया",
+    imgSearchFor: "“{word}” के लिए छवि खोजें",
+    imgTapSearch: "छवि खोजने के लिए टैप करें",
+    flashTapToCheck: "जाँचने के लिए टैप करें",
+    flashListenExample: "उदाहरण सुनें",
+    flashGenRomaji: "रोमाजी बन रहा है…",
+    flashGenTranslation: "अनुवाद बन रहा है…",
+    flashUnderstand: "✅ समझ गया",
+    flashUnderstoodDone: "✅ “Understood” फ़ोल्डर में सहेजा गया",
+    flashNotYet: "↩ अभी नहीं — डेक में वापस",
+    flashAllUnderstood: "🎉 आपने सभी कार्ड समझ लिए! “Understood” फ़ोल्डर देखें।",
+    writeVocabCopy: "कॉपी करें",
+    writeVocabCopied: "✓ कॉपी हो गया!",
+    writeVocabFolder: "फ़ोल्डर",
+    writeVocabEmpty: "इस फ़ोल्डर में अभी कोई शब्द नहीं है। पहले शब्दावली टैब से शब्द सहेजें।",
+    writeVocabAll: "सभी चुनें",
+    writeVocabClear: "साफ़ करें",
+    writeVocabCount: "{n} चुने गए",
+    writeVocabUseCopy: "इन शब्दों से नकल करके लिखें",
+    writeVocabUseQ: "इन शब्दों को लेखन प्रश्न में उपयोग करें",
+    writeVocabQPrompt: "इन शब्दों का उपयोग करके जापानी में एक छोटा पाठ लिखें: {words}",
     writeModeQuestion: "प्रश्न",
     writeSoon: "जल्द आ रहा है",
     writeQDesc: "इंटरनेट पर मिला कोई लेखन प्रश्न (निबंध का विषय, JLPT शैली का प्रश्न, ईमेल लिखने का कार्य आदि) पेस्ट करें। अपना उत्तर जापानी में लिखें और GAKU उसे प्रश्न से मिलाकर जाँचेगा।",
@@ -8110,6 +8591,12 @@ const UI_TRANSLATIONS = {
     skillsChangeDesc: "学習スキルの選択が変わりました。この内容に合わせて新しい勉強内容を作成しますか？それとも、以前作成した勉強内容をそのまま引き継ぎますか？",
     skillsChangeUpdateBtn: "勉強内容を変更する",
     skillsChangeKeepBtn: "以前の勉強内容をそのまま引き継ぐ",
+    updateStudyGuideBtn: "🔄 勉強ガイドを更新する(Update my study guide)",
+    updateStudyGuideNote: "今の勉強ガイドは、自動で変わることはありません。このボタンを押したときだけ作り直されます。",
+    updateStudyGuideConfirmTitle: "勉強ガイドを更新しますか？",
+    updateStudyGuideConfirmDesc: "プロフィールを保存し、今の勉強ガイドを新しいものに置き換えます。以前のガイドは元に戻せません。",
+    updateStudyGuideConfirmYes: "はい、勉強ガイドを更新する",
+    updateStudyGuideConfirmNo: "いいえ、今の勉強ガイドのままにする",
     streakUnit: "日連続",
     trialEndsToday: "無料トライアルは今日で終了します！",
     trialEndsTomorrow: "無料トライアルは明日で終了します！",
@@ -8175,6 +8662,34 @@ const UI_TRANSLATIONS = {
     tutorialPronunciationDesc: "今すぐ試してみましょう：ネイティブが話す動画を再生して「動画のタブを聞き取る」を押すと、GAKUが1行ずつ文字に起こします。次に、カードの文を声に出して言い、どれだけ近かったか確認しましょう。聞き取れないときは、動画をスロー再生してもう一度聞いてみましょう。",
     writeTitle: "ライティング練習",
     writeModeCopy: "書き写し",
+    writeVocabTitle: "単語帳から単語を選ぶ",
+    imgAssocTitle: "画像で覚える",
+    imgSaved: "✓ 画像を保存しました",
+    imgSave: "保存",
+    imgNext: "次の画像",
+    imgSearchBtn: "検索",
+    imgHelp: "{n}枚目 · 「次の画像」で別の画像を表示 · 「保存」で単語カードに保存",
+    imgSavedLabel: "✓ 保存済み",
+    imgSearchFor: "「{word}」の画像を検索",
+    imgTapSearch: "タップして画像を検索",
+    flashTapToCheck: "タップして確認",
+    flashListenExample: "例文を聞く",
+    flashGenRomaji: "ローマ字を生成中…",
+    flashGenTranslation: "翻訳を生成中…",
+    flashUnderstand: "✅ Understand(理解した)",
+    flashUnderstoodDone: "✅ 「Understood」フォルダに保存しました",
+    flashNotYet: "↩ まだ — 学習カードに戻す",
+    flashAllUnderstood: "🎉 このカードはすべて理解済みです！「Understood」フォルダを見てください。",
+    writeVocabCopy: "コピー",
+    writeVocabCopied: "✓ コピーしました！",
+    writeVocabFolder: "フォルダ",
+    writeVocabEmpty: "このフォルダにはまだ単語がありません。先に「Vocabulary」タブで単語を保存してください。",
+    writeVocabAll: "すべて選択",
+    writeVocabClear: "クリア",
+    writeVocabCount: "{n}語選択中",
+    writeVocabUseCopy: "この単語で書き写し練習",
+    writeVocabUseQ: "この単語で書く問題を作る",
+    writeVocabQPrompt: "次の単語を使って、日本語で短い文章を書いてください：{words}",
     writeModeQuestion: "質問",
     writeSoon: "近日公開",
     writeQDesc: "ネットで見つけた作文の問題（作文のテーマ、JLPT形式の問題、メールを書く課題など）を貼り付けてください。日本語で答えを書くと、GAKUが問題に合っているかチェックします。",
@@ -8621,6 +9136,12 @@ const UI_TRANSLATIONS = {
     skillsChangeDesc: "Çalışma becerilerinizi değiştirdiniz. Bu beceriler için yeni içerik oluşturulmasını mı istersiniz, yoksa önceki çalışma içeriğinizi mi korumak istersiniz?",
     skillsChangeUpdateBtn: "Evet, çalışma içeriğimi güncelle",
     skillsChangeKeepBtn: "Hayır, önceki çalışma içeriğimi koru",
+    updateStudyGuideBtn: "🔄 Çalışma rehberimi güncelle",
+    updateStudyGuideNote: "Mevcut çalışma rehberiniz kendiliğinden asla değişmez. Yalnızca bu düğmeye bastığınızda yeniden oluşturulur.",
+    updateStudyGuideConfirmTitle: "Çalışma rehberiniz güncellensin mi?",
+    updateStudyGuideConfirmDesc: "Profiliniz kaydedilecek ve mevcut çalışma rehberiniz yenisiyle değiştirilecek. Eski rehber geri getirilemez.",
+    updateStudyGuideConfirmYes: "Evet, çalışma rehberimi güncelle",
+    updateStudyGuideConfirmNo: "Hayır, mevcut çalışma rehberimi koru",
     streakUnit: "gün üst üste",
     trialEndsToday: "Ücretsiz deneme süreniz bugün sona eriyor!",
     trialEndsTomorrow: "Ücretsiz deneme süreniz yarın sona eriyor!",
@@ -8686,6 +9207,34 @@ const UI_TRANSLATIONS = {
     tutorialPronunciationDesc: "Hemen deneyin: ana dili konuşanların olduğu bir video oynatın, “Video sekmesini dinle”ye dokunun; GAKU her satırı yazıya döker. Sonra kartta cümleyi yüksek sesle söyleyin ve ne kadar yaklaştığınıza bakın. Anlayamadınız mı? Videoyu yavaşlatıp tekrar dinleyin.",
     writeTitle: "Yazma Alıştırması",
     writeModeCopy: "Kopyalayarak yazma",
+    writeVocabTitle: "Kelime dağarcığımdan kelime seç",
+    imgAssocTitle: "Görsel çağrışım",
+    imgSaved: "✓ Görsel kaydedildi",
+    imgSave: "Kaydet",
+    imgNext: "Sonraki görsel",
+    imgSearchBtn: "ARA",
+    imgHelp: "Görsel {n} · başka görsel için “Sonraki görsel” · “Kaydet” kelime kartında tutar",
+    imgSavedLabel: "✓ Kaydedildi",
+    imgSearchFor: "“{word}” için görsel ara",
+    imgTapSearch: "Görsel aramak için dokun",
+    flashTapToCheck: "Kontrol için dokun",
+    flashListenExample: "Örneği dinle",
+    flashGenRomaji: "Romaji oluşturuluyor…",
+    flashGenTranslation: "Çeviri oluşturuluyor…",
+    flashUnderstand: "✅ Anladım",
+    flashUnderstoodDone: "✅ “Understood” klasörüne kaydedildi",
+    flashNotYet: "↩ Henüz değil — desteye geri dön",
+    flashAllUnderstood: "🎉 Buradaki tüm kartları anladın! “Understood” klasörüne bak.",
+    writeVocabCopy: "Kopyala",
+    writeVocabCopied: "✓ Kopyalandı!",
+    writeVocabFolder: "Klasör",
+    writeVocabEmpty: "Bu klasörde henüz kelime yok. Önce Kelime sekmesinden kelime kaydedin.",
+    writeVocabAll: "Tümünü seç",
+    writeVocabClear: "Temizle",
+    writeVocabCount: "{n} seçildi",
+    writeVocabUseCopy: "Bu kelimelerle kopyalama yap",
+    writeVocabUseQ: "Bu kelimeleri yazma sorusunda kullan",
+    writeVocabQPrompt: "Bu kelimeleri kullanarak Japonca kısa bir metin yaz: {words}",
     writeModeQuestion: "Sorular",
     writeSoon: "Yakında",
     writeQDesc: "İnternette bulduğunuz bir yazma sorusunu (kompozisyon konusu, JLPT tarzı soru, e-posta yazma görevi…) yapıştırın. Cevabınızı Japonca yazın, GAKU soruya uygunluğunu kontrol etsin.",
@@ -9132,6 +9681,12 @@ const UI_TRANSLATIONS = {
     skillsChangeDesc: "तपाईंले आफ्नो अध्ययन सीपहरू परिवर्तन गर्नुभयो। के तपाईं यी सीपहरूका लागि नयाँ सामग्री बनाउन चाहनुहुन्छ, वा पहिले बनाइएको अध्ययन सामग्री त्यसै राख्न चाहनुहुन्छ?",
     skillsChangeUpdateBtn: "हो, मेरो अध्ययन सामग्री अपडेट गर्नुहोस्",
     skillsChangeKeepBtn: "होइन, अघिल्लो अध्ययन सामग्री राख्नुहोस्",
+    updateStudyGuideBtn: "🔄 मेरो अध्ययन गाइड अपडेट गर्नुहोस्",
+    updateStudyGuideNote: "तपाईंको हालको अध्ययन गाइड आफैं कहिल्यै बदलिँदैन। यो बटन थिच्दा मात्र फेरि बनाइन्छ।",
+    updateStudyGuideConfirmTitle: "अध्ययन गाइड अपडेट गर्ने?",
+    updateStudyGuideConfirmDesc: "तपाईंको प्रोफाइल सुरक्षित गरिनेछ र हालको अध्ययन गाइडको ठाउँमा नयाँ गाइड बनाइनेछ। पुरानो गाइड फिर्ता ल्याउन सकिँदैन।",
+    updateStudyGuideConfirmYes: "हो, मेरो अध्ययन गाइड अपडेट गर्नुहोस्",
+    updateStudyGuideConfirmNo: "होइन, हालको अध्ययन गाइड राख्नुहोस्",
     streakUnit: "दिन लगातार",
     trialEndsToday: "तपाईंको निःशुल्क ट्रायल आज सकिन्छ!",
     trialEndsTomorrow: "तपाईंको निःशुल्क ट्रायल भोलि सकिन्छ!",
@@ -9197,6 +9752,34 @@ const UI_TRANSLATIONS = {
     tutorialPronunciationDesc: "अहिले प्रयास गर्नुहोस्: मातृभाषीहरूको भिडियो चलाउनुहोस्, “भिडियो ट्याब सुन्नुहोस्” थिच्नुहोस्, र GAKUले हरेक पङ्क्ति लेखिदिनेछ। त्यसपछि कार्डमा वाक्य ठूलो स्वरमा बोल्नुहोस् र कति नजिक हुनुभयो हेर्नुहोस्। बुझ्न गाह्रो भयो? भिडियो ढिलो गरेर फेरि सुन्नुहोस्।",
     writeTitle: "लेखन अभ्यास",
     writeModeCopy: "नक्कल गरेर लेख्ने",
+    writeVocabTitle: "मेरो शब्दावलीबाट शब्द छान्नुहोस्",
+    imgAssocTitle: "तस्बिरसँग सम्बन्ध",
+    imgSaved: "✓ तस्बिर सुरक्षित भयो",
+    imgSave: "सुरक्षित गर्नुहोस्",
+    imgNext: "अर्को तस्बिर",
+    imgSearchBtn: "खोज्नुहोस्",
+    imgHelp: "तस्बिर {n} · अर्कोको लागि “अर्को तस्बिर” थिच्नुहोस् · “सुरक्षित गर्नुहोस्” ले शब्द कार्डमा राख्छ",
+    imgSavedLabel: "✓ सुरक्षित",
+    imgSearchFor: "“{word}” को तस्बिर खोज्नुहोस्",
+    imgTapSearch: "तस्बिर खोज्न ट्याप गर्नुहोस्",
+    flashTapToCheck: "जाँच गर्न ट्याप गर्नुहोस्",
+    flashListenExample: "उदाहरण सुन्नुहोस्",
+    flashGenRomaji: "रोमाजी बन्दै छ…",
+    flashGenTranslation: "अनुवाद बन्दै छ…",
+    flashUnderstand: "✅ बुझें",
+    flashUnderstoodDone: "✅ “Understood” फोल्डरमा सुरक्षित गरियो",
+    flashNotYet: "↩ अझै होइन — डेकमा फर्कनुहोस्",
+    flashAllUnderstood: "🎉 तपाईंले सबै कार्ड बुझ्नुभयो! “Understood” फोल्डर हेर्नुहोस्।",
+    writeVocabCopy: "कपी गर्नुहोस्",
+    writeVocabCopied: "✓ कपी भयो!",
+    writeVocabFolder: "फोल्डर",
+    writeVocabEmpty: "यो फोल्डरमा अहिलेसम्म कुनै शब्द छैन। पहिले शब्दावली ट्याबबाट शब्द सुरक्षित गर्नुहोस्।",
+    writeVocabAll: "सबै छान्नुहोस्",
+    writeVocabClear: "खाली गर्नुहोस्",
+    writeVocabCount: "{n} छानियो",
+    writeVocabUseCopy: "यी शब्दहरूले नक्कल गरेर लेख्नुहोस्",
+    writeVocabUseQ: "यी शब्दहरू लेखन प्रश्नमा प्रयोग गर्नुहोस्",
+    writeVocabQPrompt: "यी शब्दहरू प्रयोग गरेर जापानीमा छोटो पाठ लेख्नुहोस्: {words}",
     writeModeQuestion: "प्रश्नहरू",
     writeSoon: "छिट्टै आउँदैछ",
     writeQDesc: "इन्टरनेटमा भेटेको कुनै लेखन प्रश्न (निबन्धको विषय, JLPT शैलीको प्रश्न, इमेल लेख्ने कार्य आदि) पेस्ट गर्नुहोस्। आफ्नो उत्तर जापानीमा लेख्नुहोस् र GAKUले प्रश्नसँग मिलाएर जाँच्नेछ।",
@@ -9643,6 +10226,12 @@ const UI_TRANSLATIONS = {
     skillsChangeDesc: "Binago mo ang iyong study skills. Gusto mo bang gumawa ng bagong content para sa mga skill na ito, o panatilihin na lang ang dati mong study content?",
     skillsChangeUpdateBtn: "Oo, i-update ang aking study content",
     skillsChangeKeepBtn: "Hindi, panatilihin ang dating study content",
+    updateStudyGuideBtn: "🔄 I-update ang aking study guide",
+    updateStudyGuideNote: "Hindi kailanman nagbabago nang kusa ang kasalukuyan mong study guide. Nire-rebuild lang ito kapag pinindot mo ang button na ito.",
+    updateStudyGuideConfirmTitle: "I-update ang iyong study guide?",
+    updateStudyGuideConfirmDesc: "Ise-save ang iyong profile at papalitan ng bago ang kasalukuyan mong study guide. Hindi na maibabalik ang lumang guide.",
+    updateStudyGuideConfirmYes: "Oo, i-update ang aking study guide",
+    updateStudyGuideConfirmNo: "Hindi, panatilihin ang kasalukuyan kong study guide",
     streakUnit: "araw sunod-sunod",
     trialEndsToday: "Magtatapos na ngayong araw ang iyong libreng trial!",
     trialEndsTomorrow: "Magtatapos bukas ang iyong libreng trial!",
@@ -9708,6 +10297,34 @@ const UI_TRANSLATIONS = {
     tutorialPronunciationDesc: "Subukan ngayon: mag-play ng video ng mga native speaker, i-tap ang “Pakinggan ang tab ng video”, at isusulat ng GAKU ang bawat linya. Pagkatapos, sa card, sabihin nang malakas ang pangungusap at tingnan kung gaano ka kalapit. Hindi maintindihan? Pabagalin ang video at pakinggan muli.",
     writeTitle: "Pagsasanay sa Pagsulat",
     writeModeCopy: "Pagkopya",
+    writeVocabTitle: "Pumili ng mga salita mula sa aking Bokabularyo",
+    imgAssocTitle: "Pag-uugnay sa larawan",
+    imgSaved: "✓ Na-save ang larawan",
+    imgSave: "I-save",
+    imgNext: "Susunod na larawan",
+    imgSearchBtn: "HANAPIN",
+    imgHelp: "Larawan {n} · pindutin ang “Susunod na larawan” para sa iba · “I-save” para itago sa word card",
+    imgSavedLabel: "✓ Na-save",
+    imgSearchFor: "Maghanap ng larawan para sa “{word}”",
+    imgTapSearch: "I-tap para maghanap ng larawan",
+    flashTapToCheck: "I-tap para tingnan",
+    flashListenExample: "Pakinggan ang halimbawa",
+    flashGenRomaji: "Ginagawa ang romaji…",
+    flashGenTranslation: "Ginagawa ang salin…",
+    flashUnderstand: "✅ Naiintindihan",
+    flashUnderstoodDone: "✅ Na-save sa folder na “Understood”",
+    flashNotYet: "↩ Hindi pa — bumalik sa deck",
+    flashAllUnderstood: "🎉 Naunawaan mo ang lahat ng card! Tingnan ang folder na “Understood”.",
+    writeVocabCopy: "Kopyahin",
+    writeVocabCopied: "✓ Nakopya na!",
+    writeVocabFolder: "Folder",
+    writeVocabEmpty: "Wala pang salita sa folder na ito. Mag-save muna ng mga salita mula sa tab na Bokabularyo.",
+    writeVocabAll: "Piliin lahat",
+    writeVocabClear: "I-clear",
+    writeVocabCount: "{n} napili",
+    writeVocabUseCopy: "Gamitin ang mga salitang ito sa pagkopya",
+    writeVocabUseQ: "Gamitin ang mga salitang ito sa tanong sa pagsulat",
+    writeVocabQPrompt: "Sumulat ng maikling teksto sa Japanese gamit ang mga salitang ito: {words}",
     writeModeQuestion: "Mga Tanong",
     writeSoon: "Malapit na",
     writeQDesc: "I-paste ang tanong sa pagsulat na nakita mo online (paksa ng sanaysay, tanong na istilong JLPT, gawaing pagsulat ng email…). Isulat ang sagot mo sa Japanese at susuriin ito ng GAKU laban sa tanong.",
@@ -10401,6 +11018,8 @@ function trimCard(card) {
     meaning: card.meaning || "", example: card.example || "",
     folder: card.folder || "Your Vocabulary", savedAt: card.savedAt || new Date().toISOString(),
     addedAt: card.addedAt || Date.now(),
+    // Set once repairVocabReadings() has verified this word's (音読み/訓読み) reading, so it isn't re-checked.
+    ...(card.readingChecked ? { readingChecked: true } : {}),
   };
 }
 function saveVocabData(data) {
@@ -10417,6 +11036,52 @@ function saveVocabData(data) {
     // Folder list must still reach GAKU Reader even if the card save hit quota
     publishFoldersForReader(data.folders);
   }
+}
+
+// Rename a custom folder at any time. Moves every word in it to the new name, keeps the
+// "Your Vocabulary" default folder fixed, and refuses empty / duplicate names.
+function renameVocabFolder(oldName, newNameRaw) {
+  const newName = String(newNameRaw || "").trim().slice(0, 60);
+  if (!oldName || oldName === "Your Vocabulary") return { ok: false, error: "This folder can't be renamed." };
+  if (!newName) return { ok: false, error: "Please enter a name." };
+  if (newName === oldName) return { ok: true, name: oldName };
+  const data = loadVocabData();
+  const nameOf = f => (typeof f === "string" ? f : f && f.name);
+  const taken = ["Your Vocabulary", ...data.folders.map(nameOf)].some(n => n && n.toLowerCase() === newName.toLowerCase() && n !== oldName);
+  if (taken) return { ok: false, error: "A folder with this name already exists. / 同じ名前のフォルダがあります。" };
+  const updated = {
+    folders: data.folders.map(f => (nameOf(f) === oldName ? { ...(typeof f === "string" ? {} : f), name: newName } : f)),
+    cards: data.cards.map(c => (c.folder === oldName ? { ...c, folder: newName } : c)),
+  };
+  saveVocabData(updated);
+  // Keep the Flashcard "resume position" memory attached to the renamed folder if it exists.
+  try { window.dispatchEvent(new Event("gaku_vocab_updated")); } catch {}
+  return { ok: true, name: newName };
+}
+
+// Copy words into another folder (existing or brand new) WITHOUT removing them from the original.
+// Words already in the target (same word) are skipped. Returns { ok, added, skipped, name } or { ok:false, error }.
+function copyVocabCardsToFolder(cardIds, targetRaw) {
+  const target = String(targetRaw || "").trim().slice(0, 60);
+  if (!target) return { ok: false, error: "Please choose or enter a folder. / フォルダを選んでください。" };
+  const data = loadVocabData();
+  const nameOf = f => (typeof f === "string" ? f : f && f.name);
+  const existing = ["Your Vocabulary", ...data.folders.map(nameOf)].find(n => n && n.toLowerCase() === target.toLowerCase());
+  const folderName = existing || target;
+  const folders = existing ? data.folders : [...data.folders, { name: folderName, createdAt: new Date().toISOString() }];
+  const idSet = new Set(cardIds.map(String));
+  const sources = data.cards.filter((c, i) => idSet.has(String(c.id || `${c.word}-${i}`)));
+  const have = new Set(data.cards.filter(c => c.folder === folderName).map(c => c.word));
+  const added = [];
+  let skipped = 0;
+  sources.forEach((c, i) => {
+    if (c.folder === folderName || have.has(c.word)) { skipped++; return; }
+    have.add(c.word);
+    added.push({ ...c, id: Date.now() + i + Math.floor(Math.random() * 1000) / 1000, folder: folderName, savedAt: new Date().toISOString() });
+  });
+  saveVocabData({ folders, cards: [...data.cards, ...added] });
+  try { window.dispatchEvent(new Event("gaku_vocab_updated")); } catch {}
+  return { ok: true, added: added.length, skipped, name: folderName };
 }
 
 // ─── TEACHER-ASSIGNED VOCAB SYNC ───────────────────────────────────────────────
@@ -10621,15 +11286,215 @@ function JlptResultsPanel({ userId, T }) {
 }
 
 // ─── SPEAK helper ──────────────────────────────────────────────────────────────
+// Picks the best installed Japanese voice (some devices list several, or tag the language as
+// "ja_JP" / "ja-jp"), preferring the natural-sounding ones when present.
+function pickJapaneseVoice() {
+  try {
+    const voices = (window.speechSynthesis.getVoices() || []).filter(v => /^ja([-_]|$)/i.test(v.lang || ""));
+    if (!voices.length) return null;
+    const preferred = /Google.*日本語|Kyoko|O-?Ren|Nanami|Haruka|Ayumi|Hattori|Otoya|Siri/i;
+    return voices.find(v => preferred.test(v.name)) || voices[0];
+  } catch { return null; }
+}
 function speakJapanese(text, rate = 0.85) {
   if (!window.speechSynthesis) return;
   window.speechSynthesis.cancel();
   const u = new SpeechSynthesisUtterance(text);
   u.lang = "ja-JP"; u.rate = rate;
-  const voices = window.speechSynthesis.getVoices();
-  const jpVoice = voices.find(v => v.lang === "ja-JP" || v.lang === "ja_JP");
+  const jpVoice = pickJapaneseVoice();
   if (jpVoice) u.voice = jpVoice;
   window.speechSynthesis.speak(u);
+}
+
+// ─── VOCAB WORD READINGS (FURIGANA) & PRONUNCIATION ─────────────────────────────
+// Browsers' text-to-speech often misreads a bare kanji word (e.g. picks the wrong 音読み/訓読み),
+// which is why a word's audio sometimes didn't match its reading. A saved word's `reading`
+// (hiragana) is the single source of truth: it is what we show as furigana and what we speak.
+const KANJI_RE = /[一-鿿㐀-䶿々〻]/;
+const KANA_ONLY_RE = /^[ぁ-ゖァ-ヺー゛゜ゝゞヽヾ]+$/;
+function hasKanji(s) { return KANJI_RE.test(s || ""); }
+function toHiragana(s) { return String(s || "").replace(/[ァ-ヶ]/g, ch => String.fromCharCode(ch.charCodeAt(0) - 0x60)); }
+function isKanaChar(ch) { return /[ぁ-ゖァ-ヺー]/.test(ch); }
+// Normalizes a stored reading into ONE kana string ("" when unusable: romaji, kanji, empty…).
+function cleanReading(reading, word) {
+  let r = String(reading || "").trim();
+  if (!r) return "";
+  r = r.replace(/[（(][^）)]*[）)]/g, "");              // drop bracketed notes
+  r = r.split(/[\/／、,;；|]/)[0];                        // several alternates → the first one
+  if (!String(word || "").includes("・")) r = r.split("・")[0]; // "にほん・にっぽん" → first
+  r = r.replace(/\s+/g, "");
+  return KANA_ONLY_RE.test(r) ? r : "";
+}
+// A reading is only trustworthy for a word if it also spells out the kana already in the word
+// (e.g. 食べる must read たべる, not just the stem た) — otherwise speaking/showing it would be wrong.
+function readingCoversWord(word, reading) {
+  const rd = toHiragana(cleanReading(reading, word));
+  if (!rd) return false;
+  const w = [...String(word || "")];
+  let pre = 0; while (pre < w.length && isKanaChar(w[pre])) pre++;
+  let suf = 0; while (suf < w.length - pre && isKanaChar(w[w.length - 1 - suf])) suf++;
+  const prefix = toHiragana(w.slice(0, pre).join(""));
+  const suffix = toHiragana(w.slice(w.length - suf).join(""));
+  if (prefix && !rd.startsWith(prefix)) return false;
+  if (suffix && !rd.endsWith(suffix)) return false;
+  return rd.length >= pre + suf + (hasKanji(word) ? 1 : 0);
+}
+// What to actually say for a saved word: its hiragana reading when it has kanji (exact pronunciation),
+// otherwise the word itself (already kana).
+function speechTextForWord(card) {
+  const w = String((card && card.word) || "").trim();
+  if (!hasKanji(w)) return w;
+  return readingCoversWord(w, card && card.reading) ? cleanReading(card.reading, w) : w;
+}
+function speakVocabWord(card, rate) { speakJapanese(speechTextForWord(card), rate); }
+// Splits a word into ruby segments so furigana sits only over the kanji (食べる → [食|た][べる]).
+function buildRubySegments(word, reading) {
+  if (!hasKanji(word) || !readingCoversWord(word, reading)) return null;
+  const rd = cleanReading(reading, word);
+  const rdn = toHiragana(rd);
+  const w = [...word];
+  let pre = 0;
+  while (pre < w.length && isKanaChar(w[pre]) && toHiragana(w[pre]) === rdn[pre]) pre++;
+  let suf = 0;
+  while (suf < w.length - pre && isKanaChar(w[w.length - 1 - suf]) && toHiragana(w[w.length - 1 - suf]) === rdn[rdn.length - 1 - suf] && (rdn.length - 1 - suf) >= pre) suf++;
+  const core = w.slice(pre, w.length - suf).join("");
+  const coreReading = rdn.slice(pre, rdn.length - suf);
+  if (!core || !coreReading) return [{ text: word, rt: rdn }];
+  const segs = [];
+  if (pre) segs.push({ text: w.slice(0, pre).join("") });
+  segs.push({ text: core, rt: coreReading });
+  if (suf) segs.push({ text: w.slice(w.length - suf).join("") });
+  return segs;
+}
+// A vocab word with furigana always shown above its kanji ("…" while a missing reading is being filled in).
+function FuriganaWord({ word, reading, size = 22, color = "#f1f5f9" }) {
+  const base = { fontSize: size, fontWeight: 900, color };
+  if (!hasKanji(word)) return <span style={base}>{word}</span>;
+  const rtStyle = { fontSize: Math.max(9, Math.round(size * 0.48)), color: C.teal, fontWeight: 700, letterSpacing: 0 };
+  const segs = buildRubySegments(word, reading) || [{ text: word, rt: "…" }];
+  return (
+    <span style={{ ...base, lineHeight: 1.9 }}>
+      {segs.map((s, i) => s.rt
+        ? <ruby key={i}>{s.text}<rp>(</rp><rt style={rtStyle}>{s.rt}</rt><rp>)</rp></ruby>
+        : <span key={i}>{s.text}</span>)}
+    </span>
+  );
+}
+
+// Fills in every missing reading and double-checks the rest ONCE (音読み/訓読み chosen per word using its
+// meaning and example sentence), bounded per run. Cards arrive without a reading from older teacher-sent
+// words, bulk imports and GAKU Reader; AI-made readings can also pick the wrong on/kun reading, so each
+// kanji word's reading is verified a single time (`readingChecked`) and corrected when it differs.
+// Readings Seito has fixed by hand: these always win over anything the AI or an old save has. Add more
+// "word": "reading" pairs here whenever a wrong reading is reported.
+const FORCED_VOCAB_READINGS = { "知って": "しって" };
+function applyForcedVocabReadings() {
+  try {
+    const data = loadVocabData();
+    let changed = false;
+    data.cards.forEach(c => {
+      const forced = c && FORCED_VOCAB_READINGS[c.word];
+      if (forced && (c.reading !== forced || !c.readingChecked)) { c.reading = forced; c.readingChecked = true; changed = true; }
+    });
+    if (changed) { saveVocabData(data); try { window.dispatchEvent(new Event("gaku_vocab_updated")); } catch {} }
+  } catch {}
+}
+let _readingRepairRunning = false;
+let _lastReadingRepairAt = 0;
+async function repairVocabReadings(force = false) {
+  if (_readingRepairRunning) return;
+  if (!force && Date.now() - _lastReadingRepairAt < 20000) return;
+  _readingRepairRunning = true;
+  _lastReadingRepairAt = Date.now();
+  try {
+    applyForcedVocabReadings();
+    const snapshot = loadVocabData();
+    const kanjiCards = snapshot.cards.filter(c => c && c.word && hasKanji(c.word));
+    const needsFill = kanjiCards.filter(c => !readingCoversWord(c.word, c.reading));
+    const needsCheck = kanjiCards.filter(c => readingCoversWord(c.word, c.reading) && !c.readingChecked);
+    const targets = [...needsFill, ...needsCheck].slice(0, 150);
+    if (!targets.length) return;
+    const keyOf = (c) => `${c.folder || "Your Vocabulary"}\u0000${c.word}`;
+    for (let i = 0; i < targets.length; i += 15) {
+      const chunk = targets.slice(i, i + 15);
+      const list = chunk.map((c, n) => {
+        const bits = [`${n + 1}. ${c.word}`];
+        if (readingCoversWord(c.word, c.reading)) bits.push(`current: ${cleanReading(c.reading, c.word)}`);
+        if (c.meaning) bits.push(`meaning: ${String(c.meaning).slice(0, 60)}`);
+        if (c.example) bits.push(`example: ${String(c.example).slice(0, 60)}`);
+        return bits.join(" | ");
+      }).join("\n");
+      const prompt = `You are an expert Japanese lexicographer. For each numbered entry give the ONE correct reading of the WORD, in HIRAGANA, exactly as a standard dictionary (大辞林 / 広辞苑) gives it.\n\nChoose correctly between 音読み (on'yomi) and 訓読み (kun'yomi) for THIS word: most compounds of 2+ kanji use 音読み (勉強=べんきょう, 電話=でんわ), words written with okurigana use 訓読み (食べる=たべる, 大きい=おおきい, 思い出す=おもいだす), and mixed or special readings (重箱読み・湯桶読み・熟字訓・当て字) must follow the dictionary (今日=きょう, 大人=おとな, 景色=けしき, 一人=ひとり, 二十歳=はたち, 場所=ばしょ, 本棚=ほんだな). When a word has several readings, use the meaning and example sentence to pick the right one (e.g. 生物, 人気, 上手, 一日, 大事, 行った).\n\nWrite the reading of the WHOLE word, including its okurigana and any kana already in the word (お願い=おねがい). If an entry already has a "current" reading that is correct for this word and meaning, return it unchanged. Output hiragana only — never romaji, katakana, kanji, spaces or explanations.\n\nOutput ONLY lines in the form number=reading, one per entry:\n\n${list}`;
+      let fixes = null;
+      try {
+        const res = await fetch("/api/claude", {
+          method: "POST", headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ provider: "content", max_tokens: 700, messages: [{ role: "user", content: prompt }] }),
+        });
+        const data = await res.json();
+        const txt = (data?.content || []).map(c => c.text || "").join("");
+        fixes = new Map();
+        txt.split("\n").forEach(line => {
+          const m = line.trim().match(/^(\d+)\s*[=＝:：]\s*(.+)$/);
+          if (!m) return;
+          const idx = parseInt(m[1], 10) - 1;
+          const r = toHiragana(m[2].replace(/[\s「」『』()（）]/g, ""));
+          if (chunk[idx] && KANA_ONLY_RE.test(r) && readingCoversWord(chunk[idx].word, r)) fixes.set(keyOf(chunk[idx]), r);
+        });
+      } catch { fixes = null; }
+      if (!fixes) continue; // network/AI failure — leave these cards for a later run
+      // Re-read storage right before saving so words added/removed while the AI was working aren't lost.
+      const fresh = loadVocabData();
+      let changed = false;
+      const answered = new Set(chunk.map(keyOf));
+      fresh.cards.forEach(c => {
+        const k = keyOf(c);
+        if (!answered.has(k)) return;
+        const newReading = fixes.get(k);
+        if (newReading) {
+          if (!readingCoversWord(c.word, c.reading) || toHiragana(cleanReading(c.reading, c.word)) !== newReading) c.reading = newReading;
+          c.readingChecked = true; changed = true;
+        } else if (readingCoversWord(c.word, c.reading)) {
+          c.readingChecked = true; changed = true; // AI gave nothing usable but the stored reading is valid — don't re-ask
+        }
+      });
+      if (changed) {
+        saveVocabData(fresh);
+        try { window.dispatchEvent(new Event("gaku_vocab_updated")); } catch {}
+      }
+    }
+  } catch {} finally { _readingRepairRunning = false; }
+}
+
+// Plays a list of saved words one after another (used by the per-folder 🔊 buttons in the Library).
+let _folderPlayToken = 0;
+function stopFolderPlayback() {
+  _folderPlayToken++;
+  try { if (window.speechSynthesis) window.speechSynthesis.cancel(); } catch {}
+}
+function playWordsSequentially(cards, { rate = 0.85, gapMs = 600, onIndex, onDone } = {}) {
+  if (!window.speechSynthesis || !cards.length) { if (onDone) onDone(); return; }
+  const token = ++_folderPlayToken;
+  let i = 0;
+  const next = () => {
+    if (token !== _folderPlayToken) return; // stopped, or another playback took over
+    if (i >= cards.length) { if (onDone) onDone(); return; }
+    const card = cards[i];
+    if (onIndex) onIndex(i);
+    i++;
+    const text = speechTextForWord(card);
+    if (!text) { next(); return; }
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = "ja-JP"; u.rate = rate;
+    const v = pickJapaneseVoice();
+    if (v) u.voice = v;
+    let advanced = false;
+    const advance = () => { if (advanced) return; advanced = true; setTimeout(next, gapMs); };
+    u.onend = advance; u.onerror = advance;
+    window.speechSynthesis.speak(u);
+  };
+  window.speechSynthesis.cancel();
+  setTimeout(next, 80);
 }
 
 // Small "0.8x / 0.5x" slow-playback buttons shown next to a Listen button in
@@ -10867,7 +11732,7 @@ function WordDetailCard({ card: cardProp, onSave, onBack, form, prefLang }) {
               {card.partOfSpeech && <span style={{ background:"rgba(6,182,212,0.15)", color:C.teal, fontSize:11, fontWeight:600, padding:"2px 8px", borderRadius:99 }}>{card.partOfSpeech}</span>}
             </div>
           </div>
-          <button onClick={()=>speakJapanese(card.word)} style={{ width:44, height:44, borderRadius:12, background:`rgba(6,182,212,0.15)`, border:`1px solid rgba(6,182,212,0.3)`, color:C.teal, fontSize:20, cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0 }}>
+          <button onClick={()=>speakVocabWord(card)} style={{ width:44, height:44, borderRadius:12, background:`rgba(6,182,212,0.15)`, border:`1px solid rgba(6,182,212,0.3)`, color:C.teal, fontSize:20, cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0 }}>
             🔊
           </button>
         </div>
@@ -10934,7 +11799,7 @@ function WordDetailCard({ card: cardProp, onSave, onBack, form, prefLang }) {
       {/* ── IMAGE ASSOCIATION ── */}
       <div style={{ ...S.card, marginBottom:12 }}>
         <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:10 }}>
-          <p style={{ color:"#64748b", fontSize:11, fontWeight:700, letterSpacing:1, margin:0 }}>🖼 IMAGE ASSOCIATION</p>
+          <p style={{ color:"#64748b", fontSize:11, fontWeight:700, letterSpacing:1, margin:0 }}>🖼 {(T.imgAssocTitle || "IMAGE ASSOCIATION").toUpperCase()}</p>
           <div style={{ display:"flex", gap:6 }}>
             {imgSrc && !imgError && (
               <button
@@ -10943,23 +11808,23 @@ function WordDetailCard({ card: cardProp, onSave, onBack, form, prefLang }) {
                   const idx = data.cards.findIndex(c=>c.word===card.word);
                   if(idx!==-1){ data.cards[idx].imageUrl=imgSrc; saveVocabData(data); }
                   setCard(prev=>({...prev, imageUrl:imgSrc}));
-                  showToast("✓ 画像を保存しました");
+                  showToast(T.imgSaved || "✓ Image saved");
                 }}
                 style={{ fontSize:11, color:"#22c55e", fontWeight:700, background:"rgba(34,197,94,0.1)", padding:"5px 10px", borderRadius:8, border:"1px solid rgba(34,197,94,0.3)", cursor:"pointer" }}
-              >💾 保存</button>
+              >💾 {T.imgSave || "Save"}</button>
             )}
             {imgSrc && !imgError && (
               <button
                 onClick={searchImage}
                 disabled={imgLoading}
                 style={{ fontSize:11, color:C.amber, fontWeight:700, background:"rgba(245,158,11,0.1)", padding:"5px 10px", borderRadius:8, border:"1px solid rgba(245,158,11,0.3)", cursor:"pointer" }}
-              >次の画像 →</button>
+              >{T.imgNext || "Next image"} →</button>
             )}
             <button
               onClick={searchImage}
               disabled={imgLoading}
               style={{ fontSize:11, color:C.teal, fontWeight:700, background:"rgba(6,182,212,0.1)", padding:"5px 12px", borderRadius:8, border:`1px solid rgba(6,182,212,0.2)`, cursor:"pointer" }}
-            >{imgLoading ? "..." : imgSrc ? "🔍" : "🔍 SEARCH"}</button>
+            >{imgLoading ? "..." : imgSrc ? "🔍" : "🔍 " + (T.imgSearchBtn || "SEARCH")}</button>
           </div>
         </div>
         {imgSrc && !imgError ? (
@@ -10970,12 +11835,12 @@ function WordDetailCard({ card: cardProp, onSave, onBack, form, prefLang }) {
               onError={()=>setImgError(true)}
               style={{ width:"100%", borderRadius:10, objectFit:"cover", maxHeight:220, display:"block" }}
             />
-            <p style={{ color:"#475569", fontSize:10, margin:"4px 0 0", textAlign:"center" }}>{imgIndex}枚目 · 「次の画像」で別の画像を表示 · 「💾 保存」で単語カードに保存</p>
+            <p style={{ color:"#475569", fontSize:10, margin:"4px 0 0", textAlign:"center" }}>{(T.imgHelp || "Image {n} · tap “Next image” for another · “Save” keeps it on the word card").split("{n}").join(imgIndex)}</p>
           </div>
         ) : card.imageUrl ? (
           <div>
             <img src={card.imageUrl} alt={card.word} style={{ width:"100%", borderRadius:10, objectFit:"cover", maxHeight:220, display:"block" }} />
-            <p style={{ color:"#22c55e", fontSize:10, margin:"4px 0 0", textAlign:"center" }}>✓ 保存済み</p>
+            <p style={{ color:"#22c55e", fontSize:10, margin:"4px 0 0", textAlign:"center" }}>{T.imgSavedLabel || "✓ Saved"}</p>
           </div>
         ) : (
           <div
@@ -10983,8 +11848,8 @@ function WordDetailCard({ card: cardProp, onSave, onBack, form, prefLang }) {
             style={{ width:"100%", height:160, borderRadius:10, background:"rgba(6,182,212,0.06)", display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", border:`1px dashed rgba(6,182,212,0.3)`, cursor:"pointer" }}
           >
             <span style={{ color:C.teal, fontSize:32, marginBottom:8 }}>🔍</span>
-            <span style={{ color:C.teal, fontSize:13, fontWeight:700 }}>「{card.word}」の画像を検索</span>
-            <span style={{ color:"#475569", fontSize:11, marginTop:4 }}>タップして画像を検索</span>
+            <span style={{ color:C.teal, fontSize:13, fontWeight:700 }}>{(T.imgSearchFor || "Search an image for “{word}”").split("{word}").join(card.word)}</span>
+            <span style={{ color:"#475569", fontSize:11, marginTop:4 }}>{T.imgTapSearch || "Tap to search for an image"}</span>
           </div>
         )}
         {card.imageDesc && <p style={{ color:"#94a3b8", fontSize:12, margin:"8px 0 0", lineHeight:1.6 }}>{card.imageDesc}</p>}
@@ -11083,9 +11948,42 @@ function FlashcardView({ form, onBack }) {
   const cards = allData.cards || [];
   const folderObjs = allData.folders || [];
   const allFolders = [{ name:"すべて" }, { name:"Your Vocabulary" }, ...folderObjs];
-  const filteredCards = selectedFolder === "すべて" ? cards : cards.filter(c => c.folder === selectedFolder);
+  // "Understood" folder: words the student pressed ✅ Understand on. They leave the study deck (the
+  // originals stay in their own folders in the Library); cards NOT marked stay in the deck.
+  const UNDERSTOOD = "Understood";
+  const understoodWords = new Set(cards.filter(c => c.folder === UNDERSTOOD).map(c => c.word));
+  const filteredCards = selectedFolder === "すべて"
+    ? cards.filter(c => c.folder !== UNDERSTOOD && !understoodWords.has(c.word))
+    : selectedFolder === UNDERSTOOD
+      ? cards.filter(c => c.folder === UNDERSTOOD)
+      : cards.filter(c => c.folder === selectedFolder && !understoodWords.has(c.word));
   const displayCards = filteredCards;
   const card = displayCards[idx] || null;
+  const [understoodMsg, setUnderstoodMsg] = useState("");
+  const markUnderstood = () => {
+    if (!card) return;
+    const data = loadVocabData();
+    const folders = data.folders.some(f => (typeof f === "string" ? f : f && f.name) === UNDERSTOOD)
+      ? data.folders : [...data.folders, { name: UNDERSTOOD, createdAt: new Date().toISOString() }];
+    if (!data.cards.some(c => c.folder === UNDERSTOOD && c.word === card.word)) {
+      data.cards.push({ ...card, id: Date.now(), folder: UNDERSTOOD, savedAt: new Date().toISOString() });
+    }
+    saveVocabData({ folders, cards: data.cards });
+    setAllData(loadVocabData());
+    setFlipped(false); setShowHint(false);
+    setIdx(i => (i >= displayCards.length - 1 ? 0 : i)); // the next card slides into this position
+    setUnderstoodMsg(T.flashUnderstoodDone || "✅ Saved to the “Understood” folder");
+    setTimeout(() => setUnderstoodMsg(""), 2500);
+  };
+  // Inside the Understood folder: put a word back into the study deck (original copies are untouched).
+  const markNotYet = () => {
+    if (!card || card.folder !== UNDERSTOOD) return;
+    const data = loadVocabData();
+    saveVocabData({ folders: data.folders, cards: data.cards.filter(c => !(c.folder === UNDERSTOOD && c.word === card.word)) });
+    setAllData(loadVocabData());
+    setFlipped(false); setShowHint(false);
+    setIdx(i => (i >= displayCards.length - 1 ? 0 : i));
+  };
 
   const posKey = (folder) => `gaku_flashcard_pos_${folder}`;
   const getSavedPos = (folder) => { try { return parseInt(localStorage.getItem(posKey(folder)) || "0", 10) || 0; } catch { return 0; } };
@@ -11218,7 +12116,7 @@ Only output the JSON object.` }
         </div>
       ) : !card ? (
         <div style={{ ...S.card, textAlign:"center", padding:"40px 20px" }}>
-          <p style={{ color:"#94a3b8", fontSize:14 }}>{T.flashcardNoWordsInFolder || "No words in this folder"}</p>
+          <p style={{ color:"#94a3b8", fontSize:14 }}>{selectedFolder !== UNDERSTOOD && understoodWords.size > 0 && cards.some(c => c.folder !== UNDERSTOOD) ? (T.flashAllUnderstood || "🎉 You understood every card here! Check the “Understood” folder.") : (T.flashcardNoWordsInFolder || "No words in this folder")}</p>
         </div>
       ) : (
         <>
@@ -11229,7 +12127,7 @@ Only output the JSON object.` }
                 <p style={{ color:"#f1f5f9", fontSize:44, fontWeight:900, margin:"0 0 6px", letterSpacing:2 }}>{card.word}</p>
                 {showHint && card.reading && <p style={{ color:C.teal, fontSize:20, margin:"0 0 2px", fontWeight:700 }}>{card.reading}</p>}
                 {showHint && card.reading && <p style={{ color:"#67e8f9", fontSize:13, margin:"0 0 6px", fontStyle:"italic" }}>{card.reading.split("").map(c=>{const hMap={"あ":"a","い":"i","う":"u","え":"e","お":"o","か":"ka","き":"ki","く":"ku","け":"ke","こ":"ko","さ":"sa","し":"shi","す":"su","せ":"se","そ":"so","た":"ta","ち":"chi","つ":"tsu","て":"te","と":"to","な":"na","に":"ni","ぬ":"nu","ね":"ne","の":"no","は":"ha","ひ":"hi","ふ":"fu","へ":"he","ほ":"ho","ま":"ma","み":"mi","む":"mu","め":"me","も":"mo","や":"ya","ゆ":"yu","よ":"yo","ら":"ra","り":"ri","る":"ru","れ":"re","ろ":"ro","わ":"wa","を":"wo","ん":"n","が":"ga","ぎ":"gi","ぐ":"gu","げ":"ge","ご":"go","ざ":"za","じ":"ji","ず":"zu","ぜ":"ze","ぞ":"zo","だ":"da","ぢ":"di","づ":"du","で":"de","ど":"do","ば":"ba","び":"bi","ぶ":"bu","べ":"be","ぼ":"bo","ぱ":"pa","ぴ":"pi","ぷ":"pu","ぺ":"pe","ぽ":"po","きゃ":"kya","きゅ":"kyu","きょ":"kyo","しゃ":"sha","しゅ":"shu","しょ":"sho","ちゃ":"cha","ちゅ":"chu","ちょ":"cho","にゃ":"nya","にゅ":"nyu","にょ":"nyo","ひゃ":"hya","ひゅ":"hyu","ひょ":"hyo","みゃ":"mya","みゅ":"myu","みょ":"myo","りゃ":"rya","りゅ":"ryu","りょ":"ryo","ぎゃ":"gya","ぎゅ":"gyu","ぎょ":"gyo","じゃ":"ja","じゅ":"ju","じょ":"jo","びゃ":"bya","びゅ":"byu","びょ":"byo","ぴゃ":"pya","ぴゅ":"pyu","ぴょ":"pyo","っ":"(t)","ー":"-","、":""," ":"","　":""};return hMap[c]||c;}).join("")}</p>}
-                <p style={{ color:"#ff0844", fontSize:11, fontWeight:700 }}>タップして確認</p>
+                <p style={{ color:"#ff0844", fontSize:11, fontWeight:700 }}>{T.flashTapToCheck || "Tap to check"}</p>
               </>
             ) : (
               <>
@@ -11243,20 +12141,26 @@ Only output the JSON object.` }
                 {card.example && <p style={{ color:"#cbd5e1", fontSize:13, lineHeight:1.7, maxWidth:280, margin:"0 0 2px" }}>{card.example}</p>}
                 {card.reading_example
                   ? <p style={{ color:"#67e8f9", fontSize:11, fontStyle:"italic", maxWidth:280, margin:"0 0 2px" }}>{card.reading_example}</p>
-                  : fillingCard ? <p style={{ color:"#475569", fontSize:11, margin:"0 0 2px" }}>✨ ローマ字生成中...</p> : null}
+                  : fillingCard ? <p style={{ color:"#475569", fontSize:11, margin:"0 0 2px" }}>✨ {T.flashGenRomaji || "Generating romaji…"}</p> : null}
                 {card.example_translated
                   ? <p style={{ color:"#64748b", fontSize:11, fontStyle:"italic", maxWidth:280, margin:"0 0 10px" }}>{card.example_translated}</p>
-                  : fillingCard ? <p style={{ color:"#475569", fontSize:11, margin:"0 0 10px" }}>✨ 翻訳生成中...</p> : null}
-                <button onClick={e=>{e.stopPropagation();speakJapanese(card.example);}} style={{ background:"rgba(245,158,11,0.1)", border:"1px solid rgba(245,158,11,0.3)", borderRadius:8, color:C.amber, fontSize:12, padding:"4px 12px", cursor:"pointer" }}>🔊 例文を聞く</button>
+                  : fillingCard ? <p style={{ color:"#475569", fontSize:11, margin:"0 0 10px" }}>✨ {T.flashGenTranslation || "Generating translation…"}</p> : null}
+                <button onClick={e=>{e.stopPropagation();speakJapanese(card.example);}} style={{ background:"rgba(245,158,11,0.1)", border:"1px solid rgba(245,158,11,0.3)", borderRadius:8, color:C.amber, fontSize:12, padding:"4px 12px", cursor:"pointer" }}>🔊 {T.flashListenExample || "Listen to the example"}</button>
               </>
             )}
           </div>
           <div style={{ display:"flex", gap:10, marginBottom:8 }}>
-            <button onClick={()=>speakJapanese(card.word)} style={{ flex:1, ...S.btn, background:"rgba(6,182,212,0.1)", border:`1px solid rgba(6,182,212,0.3)`, color:C.teal }}>🔊 Listen</button>
+            <button onClick={()=>speakVocabWord(card)} style={{ flex:1, ...S.btn, background:"rgba(6,182,212,0.1)", border:`1px solid rgba(6,182,212,0.3)`, color:C.teal }}>🔊 Listen</button>
             <button onClick={e=>{e.stopPropagation();setShowHint(h=>!h);}} style={{ ...S.btn, padding:"13px 18px", background:showHint?"rgba(251,191,36,0.15)":C.card, border:`1px solid ${showHint?"rgba(251,191,36,0.5)":C.border}`, color:showHint?C.amber:"#94a3b8" }}>💡 Hint</button>
             <button onClick={()=>{ setFlipped(false); setShowHint(false); setIdx(i=>(i-1+displayCards.length)%displayCards.length); }} style={{ ...S.btn, padding:"13px 18px", background:C.card, border:`1px solid ${C.border}`, color:"#94a3b8" }}>←</button>
             <button onClick={()=>{ setFlipped(false); setShowHint(false); setIdx(i=>(i+1)%displayCards.length); }} style={{ ...S.btn, padding:"13px 18px", background:C.card, border:`1px solid ${C.border}`, color:"#94a3b8" }}>→</button>
           </div>
+          {selectedFolder === UNDERSTOOD ? (
+            <button onClick={markNotYet} style={{ width:"100%", ...S.btn, background:C.card, border:`1px solid ${C.border}`, color:"#94a3b8" }}>{T.flashNotYet || "↩ Not yet — back to my deck"}</button>
+          ) : (
+            <button onClick={markUnderstood} style={{ width:"100%", ...S.btn, background:"rgba(34,197,94,0.12)", border:"1.5px solid rgba(34,197,94,0.5)", color:C.green, fontWeight:800 }}>{T.flashUnderstand || "✅ Understand"}</button>
+          )}
+          {understoodMsg && <p style={{ color:C.green, fontSize:12, textAlign:"center", margin:"10px 0 0" }}>{understoodMsg}</p>}
         </>
       )}
     </div>
@@ -11264,18 +12168,63 @@ Only output the JSON object.` }
 }
 
 // ─── LIBRARY VIEW ──────────────────────────────────────────────────────────────
-function LibraryView({ onBack, onSelectFolder, onCreateCard }) {
+// Search saved words in English OR Japanese (word / reading / meaning in any language / Japanese
+// definition / example sentences). Katakana and hiragana are treated the same, case is ignored.
+const _vocabNorm = (s) => String(s || "")
+  .toLowerCase()
+  .replace(/[ァ-ヶ]/g, ch => String.fromCharCode(ch.charCodeAt(0) - 0x60))
+  .trim();
+function vocabCardMatches(card, query) {
+  const q = _vocabNorm(query);
+  if (!q) return true;
+  const hay = [card.word, card.reading, card.meaning, card.meaningNative, card.example, card.example_translated, card.partOfSpeech]
+    .map(_vocabNorm).join(" \n ");
+  return q.split(/\s+/).every(tok => hay.includes(tok));
+}
+
+function VocabSearchBox({ value, onChange, placeholder }) {
+  return (
+    <div style={{ position:"relative", marginBottom:14 }}>
+      <input
+        value={value}
+        onChange={e=>onChange(e.target.value)}
+        placeholder={placeholder || "🔍 単語を検索 / Search your words (English or 日本語)"}
+        style={{ ...S.input, width:"100%", boxSizing:"border-box", paddingRight:36 }}
+      />
+      {value && (
+        <button onClick={()=>onChange("")} aria-label="Clear search" style={{ position:"absolute", right:8, top:"50%", transform:"translateY(-50%)", background:"none", border:"none", color:"#94a3b8", fontSize:16, cursor:"pointer" }}>✕</button>
+      )}
+    </div>
+  );
+}
+
+function LibraryView({ onBack, onSelectFolder, onCreateCard, onViewCard }) {
   const [data, setData] = useState(loadVocabData);
+  const [librarySearch, setLibrarySearch] = useState("");
   const [newFolderName, setNewFolderName] = useState("");
   const [showNewFolder, setShowNewFolder] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(null); // folder name to delete
+  const [renaming, setRenaming] = useState(null); // folder name being renamed
+  const [renameValue, setRenameValue] = useState("");
+  const [renameError, setRenameError] = useState("");
 
   const refresh = () => setData(loadVocabData());
+  // Which folder's words are currently being read aloud (the 🔊 button on each folder row).
+  const [playingFolder, setPlayingFolder] = useState(null);
   useEffect(() => {
     const handler = () => setData(loadVocabData());
     window.addEventListener("gaku_vocab_updated", handler);
-    return () => window.removeEventListener("gaku_vocab_updated", handler);
+    // Fill in any missing/wrong readings for every folder as soon as the Library opens.
+    repairVocabReadings();
+    return () => { window.removeEventListener("gaku_vocab_updated", handler); stopFolderPlayback(); };
   }, []);
+  const toggleFolderPlayback = (name) => {
+    if (playingFolder === name) { stopFolderPlayback(); setPlayingFolder(null); return; }
+    const words = data.cards.filter(c => c.folder === name);
+    if (!words.length) return;
+    setPlayingFolder(name);
+    playWordsSequentially(words, { onDone: () => setPlayingFolder(p => (p === name ? null : p)) });
+  };
 
   const allFolders = [{ name:"Your Vocabulary" }, ...data.folders];
 
@@ -11283,6 +12232,12 @@ function LibraryView({ onBack, onSelectFolder, onCreateCard }) {
     if (!newFolderName.trim()) return;
     const updated = { ...data, folders: [...data.folders, { name: newFolderName.trim(), createdAt: new Date().toISOString() }] };
     saveVocabData(updated); setData(updated); setNewFolderName(""); setShowNewFolder(false);
+  };
+
+  const submitRename = () => {
+    const res = renameVocabFolder(renaming, renameValue);
+    if (!res.ok) { setRenameError(res.error); return; }
+    setData(loadVocabData()); setRenaming(null); setRenameValue(""); setRenameError("");
   };
 
   const deleteFolder = (name) => {
@@ -11311,7 +12266,35 @@ function LibraryView({ onBack, onSelectFolder, onCreateCard }) {
         </div>
       )}
 
-      <div style={{ display:"flex", flexDirection:"column", gap:10 }}>
+      <VocabSearchBox value={librarySearch} onChange={setLibrarySearch} />
+
+      {librarySearch.trim() && (() => {
+        const found = data.cards.filter(c => vocabCardMatches(c, librarySearch));
+        return (
+          <div style={{ display:"flex", flexDirection:"column", gap:10 }}>
+            <p style={{ color:"#64748b", fontSize:12, margin:"0 0 2px" }}>{found.length} {found.length===1?"word":"words"} found / 見つかった単語</p>
+            {found.length === 0 && (
+              <div style={{ ...S.card, textAlign:"center", padding:"30px 20px" }}>
+                <p style={{ color:"#94a3b8", fontSize:14, margin:0 }}>該当する単語がありません / No matching words.</p>
+              </div>
+            )}
+            {found.map((c, idx) => (
+              <div key={c.id || `${c.word}-${idx}`} style={{ ...S.card, borderLeft:`3px solid ${C.teal}` }}>
+                <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", gap:10 }}>
+                  <div style={{ cursor:onViewCard?"pointer":"default", flex:1 }} onClick={()=>onViewCard && onViewCard(c)}>
+                    <p style={{ margin:"0 0 2px" }}><FuriganaWord word={c.word} reading={c.reading} size={22} /></p>
+                    <p style={{ color:"#94a3b8", fontSize:12, margin:0 }}>{c.meaning}</p>
+                    <p style={{ color:"#475569", fontSize:11, margin:"4px 0 0" }}>{c.folder==="Your Vocabulary"?"📚":"📁"} {c.folder}</p>
+                  </div>
+                  <button onClick={()=>speakVocabWord(c)} style={{ padding:"6px 10px", borderRadius:8, background:"rgba(6,182,212,0.1)", border:`1px solid rgba(6,182,212,0.2)`, color:C.teal, fontSize:14, cursor:"pointer", flexShrink:0 }}>🔊</button>
+                </div>
+              </div>
+            ))}
+          </div>
+        );
+      })()}
+
+      {!librarySearch.trim() && <div style={{ display:"flex", flexDirection:"column", gap:10 }}>
         {allFolders.map(f => {
           const count = data.cards.filter(c=>c.folder===f.name).length;
           return (
@@ -11324,6 +12307,18 @@ function LibraryView({ onBack, onSelectFolder, onCreateCard }) {
                 </div>
               </div>
               <div style={{ display:"flex", alignItems:"center", gap:8 }}>
+                {/* Pronunciation for the whole word book: reads every word in this folder aloud, one after another */}
+                <button
+                  onClick={e=>{e.stopPropagation();toggleFolderPlayback(f.name);}}
+                  disabled={count===0}
+                  title={playingFolder===f.name ? "Stop" : "Play all words in this folder"}
+                  aria-label={playingFolder===f.name ? "Stop" : "Play all words in this folder"}
+                  style={{ width:36, height:36, borderRadius:10, background:playingFolder===f.name?"rgba(6,182,212,0.3)":"rgba(6,182,212,0.1)", border:`1px solid rgba(6,182,212,${playingFolder===f.name?0.6:0.25})`, color:C.teal, fontSize:16, cursor:count===0?"not-allowed":"pointer", opacity:count===0?0.4:1, display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0 }}>
+                  {playingFolder===f.name ? "⏹" : "🔊"}
+                </button>
+                {f.name !== "Your Vocabulary" && (
+                  <button onClick={e=>{e.stopPropagation();setRenaming(f.name);setRenameValue(f.name);setRenameError("");}} title="Rename folder / フォルダ名を変更" aria-label="Rename folder" style={{ padding:"4px 10px", borderRadius:6, background:"rgba(6,182,212,0.1)", border:"1px solid rgba(6,182,212,0.25)", color:C.teal, fontSize:11, cursor:"pointer", fontWeight:600 }}>✏️ 名前</button>
+                )}
                 {f.name !== "Your Vocabulary" && (
                   <button onClick={e=>{e.stopPropagation();setConfirmDelete(f.name);}} style={{ padding:"4px 10px", borderRadius:6, background:"rgba(239,68,68,0.1)", border:`1px solid rgba(239,68,68,0.2)`, color:"#ef4444", fontSize:11, cursor:"pointer", fontWeight:600 }}>🗑 削除</button>
                 )}
@@ -11332,7 +12327,23 @@ function LibraryView({ onBack, onSelectFolder, onCreateCard }) {
             </div>
           );
         })}
-      </div>
+      </div>}
+
+      {/* ── RENAME FOLDER MODAL ── */}
+      {renaming && (
+        <div style={{ position:"fixed", inset:0, background:"rgba(0,0,0,0.7)", display:"flex", alignItems:"center", justifyContent:"center", zIndex:1000 }}>
+          <div style={{ ...S.card, maxWidth:340, width:"90%" }}>
+            <p style={{ color:"#f1f5f9", fontSize:15, fontWeight:700, margin:"0 0 4px", textAlign:"center" }}>✏️ フォルダ名を変更 / Rename folder</p>
+            <p style={{ color:"#64748b", fontSize:12, margin:"0 0 12px", textAlign:"center" }}>単語はそのまま残ります / Your words stay in the folder.</p>
+            <input autoFocus value={renameValue} maxLength={60} onChange={e=>{setRenameValue(e.target.value);setRenameError("");}} onKeyDown={e=>e.key==="Enter"&&submitRename()} style={{ ...S.input, width:"100%", boxSizing:"border-box" }} />
+            {renameError && <p style={{ color:"#f87171", fontSize:12, margin:"8px 0 0" }}>{renameError}</p>}
+            <div style={{ display:"flex", gap:10, marginTop:14 }}>
+              <button onClick={()=>{setRenaming(null);setRenameError("");}} style={{ flex:1, ...S.btn, background:C.card, border:`1px solid ${C.border}`, color:"#94a3b8", fontSize:13 }}>キャンセル / Cancel</button>
+              <button onClick={submitRename} disabled={!renameValue.trim()} style={{ flex:1, ...S.btn, background:renameValue.trim()?`linear-gradient(135deg,${C.teal},#0891b2)`:"#1e293b", color:renameValue.trim()?"#fff":"#475569", fontSize:13, fontWeight:700 }}>保存 / Save</button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* ── DELETE CONFIRM MODAL ── */}
       {confirmDelete && (
@@ -11354,45 +12365,162 @@ function LibraryView({ onBack, onSelectFolder, onCreateCard }) {
 }
 
 // ─── FOLDER DETAIL VIEW ────────────────────────────────────────────────────────
-function FolderDetailView({ folderName, onBack, onViewCard }) {
+function FolderDetailView({ folderName, onBack, onViewCard, onRenamed }) {
   const [data, setData] = useState(loadVocabData);
-  const cards = data.cards.filter(c=>c.folder===folderName);
+  const [renaming, setRenaming] = useState(false);
+  const [renameValue, setRenameValue] = useState("");
+  const [renameError, setRenameError] = useState("");
+  // ── copy words to another folder (originals stay where they are) ──
+  const [selecting, setSelecting] = useState(false);
+  const [sel, setSel] = useState({});
+  const [copyOpen, setCopyOpen] = useState(false);
+  const [targetFolder, setTargetFolder] = useState("");
+  const [newTarget, setNewTarget] = useState("");
+  const [copyMsg, setCopyMsg] = useState("");
+  const [copyErr, setCopyErr] = useState("");
+  const doCopy = () => {
+    const ids = Object.keys(sel).filter(k => sel[k]);
+    const res = copyVocabCardsToFolder(ids, newTarget.trim() || targetFolder);
+    if (!res.ok) { setCopyErr(res.error); return; }
+    setCopyOpen(false); setSelecting(false); setSel({}); setTargetFolder(""); setNewTarget(""); setCopyErr("");
+    setData(loadVocabData());
+    setCopyMsg(`✓ 「${res.name}」に${res.added}語コピーしました${res.skipped ? `(${res.skipped}語は既にあるためスキップ)` : ""} / Copied ${res.added} word(s) to "${res.name}"${res.skipped ? ` (${res.skipped} already there)` : ""}`);
+    setTimeout(() => setCopyMsg(""), 5000);
+  };
+  const submitRename = () => {
+    const res = renameVocabFolder(folderName, renameValue);
+    if (!res.ok) { setRenameError(res.error); return; }
+    setRenaming(false); setRenameError("");
+    setData(loadVocabData());
+    if (onRenamed) onRenamed(res.name);
+  };
+  const [folderSearch, setFolderSearch] = useState("");
+  const allFolderCards = data.cards.filter(c=>c.folder===folderName);
+  const cards = folderSearch.trim() ? allFolderCards.filter(c => vocabCardMatches(c, folderSearch)) : allFolderCards;
+  const [playingIdx, setPlayingIdx] = useState(-1); // -1 = not playing; otherwise the word being read aloud
+
+  // Every word in a folder must show furigana: fill in missing readings (and verify 音読み/訓読み) in the
+  // background, and refresh as soon as they arrive.
+  useEffect(() => {
+    const handler = () => setData(loadVocabData());
+    window.addEventListener("gaku_vocab_updated", handler);
+    repairVocabReadings();
+    return () => { window.removeEventListener("gaku_vocab_updated", handler); stopFolderPlayback(); };
+  }, []);
 
   const removeCard = (id) => {
     const updated = { ...data, cards: data.cards.filter(c=>c.id!==id) };
     saveVocabData(updated); setData(updated);
   };
+  const togglePlayAll = () => {
+    if (playingIdx >= 0) { stopFolderPlayback(); setPlayingIdx(-1); return; }
+    if (!cards.length) return;
+    setPlayingIdx(0);
+    playWordsSequentially(cards, { onIndex: setPlayingIdx, onDone: () => setPlayingIdx(-1) });
+  };
 
   return (
     <div>
-      <button onClick={onBack} style={{ background:"none", border:"none", color:"#64748b", fontSize:13, cursor:"pointer", padding:0, marginBottom:14 }}>← Library</button>
-      <p style={{ color:"#f1f5f9", fontSize:15, fontWeight:800, margin:"0 0 4px" }}>📁 {folderName}</p>
-      <p style={{ color:"#64748b", fontSize:12, margin:"0 0 16px" }}>{cards.length} {cards.length===1?"word":"words"}</p>
+      <button onClick={()=>{ stopFolderPlayback(); onBack(); }} style={{ background:"none", border:"none", color:"#64748b", fontSize:13, cursor:"pointer", padding:0, marginBottom:14 }}>← Library</button>
+      <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", gap:10, marginBottom:16 }}>
+        <div>
+          {renaming ? (
+            <div>
+              <div style={{ display:"flex", gap:6 }}>
+                <input autoFocus value={renameValue} maxLength={60} onChange={e=>{setRenameValue(e.target.value);setRenameError("");}} onKeyDown={e=>e.key==="Enter"&&submitRename()} style={{ ...S.input, flex:1, padding:"8px 10px" }} />
+                <button onClick={submitRename} disabled={!renameValue.trim()} style={{ ...S.btn, padding:"8px 12px", fontSize:12, background:`linear-gradient(135deg,${C.teal},#0891b2)`, color:"#fff" }}>保存</button>
+                <button onClick={()=>{setRenaming(false);setRenameError("");}} style={{ ...S.btn, padding:"8px 12px", fontSize:12, background:C.card, border:`1px solid ${C.border}`, color:"#94a3b8" }}>✕</button>
+              </div>
+              {renameError && <p style={{ color:"#f87171", fontSize:12, margin:"6px 0 0" }}>{renameError}</p>}
+            </div>
+          ) : (
+            <p style={{ color:"#f1f5f9", fontSize:15, fontWeight:800, margin:"0 0 4px" }}>📁 {folderName}
+              {folderName !== "Your Vocabulary" && <button onClick={()=>{setRenaming(true);setRenameValue(folderName);setRenameError("");}} title="Rename folder / フォルダ名を変更" aria-label="Rename folder" style={{ marginLeft:8, padding:"2px 8px", borderRadius:6, background:"rgba(6,182,212,0.1)", border:"1px solid rgba(6,182,212,0.25)", color:C.teal, fontSize:11, cursor:"pointer", fontWeight:600, verticalAlign:"middle" }}>✏️ 名前を変更</button>}
+            </p>
+          )}
+          <p style={{ color:"#64748b", fontSize:12, margin:0 }}>{cards.length} {cards.length===1?"word":"words"}</p>
+        </div>
+        {cards.length > 0 && (
+          <button onClick={togglePlayAll} title={playingIdx>=0 ? "Stop" : "Play all words"} aria-label={playingIdx>=0 ? "Stop" : "Play all words"}
+            style={{ padding:"8px 14px", borderRadius:10, background:playingIdx>=0?"rgba(6,182,212,0.3)":"rgba(6,182,212,0.1)", border:`1px solid rgba(6,182,212,${playingIdx>=0?0.6:0.3})`, color:C.teal, fontSize:13, fontWeight:700, cursor:"pointer", whiteSpace:"nowrap", flexShrink:0 }}>
+            {playingIdx>=0 ? "⏹ Stop" : "🔊 ▶ All"}
+          </button>
+        )}
+      </div>
 
-      {cards.length === 0 && (
+      {allFolderCards.length > 0 && <VocabSearchBox value={folderSearch} onChange={setFolderSearch} />}
+
+      {allFolderCards.length === 0 && (
         <div style={{ ...S.card, textAlign:"center", padding:"40px 20px" }}>
           <p style={{ color:"#64748b", fontSize:32, margin:"0 0 12px" }}>📭</p>
           <p style={{ color:"#94a3b8", fontSize:14 }}>This folder is empty. Search and save words!</p>
         </div>
       )}
+      {allFolderCards.length > 0 && cards.length === 0 && (
+        <div style={{ ...S.card, textAlign:"center", padding:"30px 20px" }}>
+          <p style={{ color:"#94a3b8", fontSize:14, margin:0 }}>該当する単語がありません / No matching words.</p>
+        </div>
+      )}
+
+      {copyMsg && <p style={{ color:C.green, fontSize:12, margin:"0 0 10px", lineHeight:1.6 }}>{copyMsg}</p>}
+      {cards.length > 0 && (
+        <div style={{ display:"flex", gap:8, alignItems:"center", flexWrap:"wrap", marginBottom:12 }}>
+          <button onClick={()=>{ setSelecting(v=>!v); setSel({}); }} style={{ padding:"7px 12px", borderRadius:10, fontSize:12, fontWeight:700, cursor:"pointer", background:selecting?"rgba(168,85,247,0.15)":"transparent", border:`1px solid ${selecting?"rgba(168,85,247,0.5)":C.border}`, color:selecting?"#c084fc":"#94a3b8" }}>
+            {selecting ? "✕ 選択をやめる" : "📋 別のフォルダへコピー / Copy to folder"}
+          </button>
+          {selecting && (<>
+            <button onClick={()=>{ const all={}; cards.forEach((c,i)=>{all[String(c.id||`${c.word}-${i}`)]=true;}); setSel(all); }} style={{ padding:"7px 10px", borderRadius:10, fontSize:11, fontWeight:700, cursor:"pointer", background:"transparent", border:`1px solid ${C.border}`, color:"#94a3b8" }}>すべて選択</button>
+            <button onClick={()=>{ setCopyErr(""); setCopyOpen(true); }} disabled={!Object.values(sel).some(Boolean)} style={{ padding:"7px 12px", borderRadius:10, fontSize:12, fontWeight:700, cursor:"pointer", border:"none", background:Object.values(sel).some(Boolean)?`linear-gradient(135deg,${C.teal},#0891b2)`:"#1e293b", color:Object.values(sel).some(Boolean)?"#fff":"#475569" }}>
+              コピー先を選ぶ ({Object.values(sel).filter(Boolean).length})
+            </button>
+          </>)}
+        </div>
+      )}
 
       <div style={{ display:"flex", flexDirection:"column", gap:10 }}>
-        {cards.map(c => (
-          <div key={c.id} style={{ ...S.card, borderLeft:`3px solid ${C.teal}` }}>
-            <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start" }}>
-              <div style={{ cursor:"pointer", flex:1 }} onClick={()=>onViewCard(c)}>
-                <p style={{ color:"#f1f5f9", fontSize:20, fontWeight:900, margin:"0 0 2px" }}>{c.word}</p>
-                <p style={{ color:C.teal, fontSize:13, margin:"0 0 2px" }}>{c.reading}</p>
+        {cards.map((c, idx) => (
+          <div key={c.id || `${c.word}-${idx}`} onClick={selecting ? ()=>{ const k=String(c.id||`${c.word}-${idx}`); setSel(p=>({ ...p, [k]: !p[k] })); } : undefined} style={{ ...S.card, borderLeft:`3px solid ${C.teal}`, cursor:selecting?"pointer":"default", outline: selecting && sel[String(c.id||`${c.word}-${idx}`)] ? `2px solid ${C.teal}` : "none", background: playingIdx===idx ? "rgba(6,182,212,0.12)" : S.card.background }}>
+            <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", gap:10 }}>
+              {selecting && <span style={{ color: sel[String(c.id||`${c.word}-${idx}`)] ? C.teal : "#475569", fontSize:20, lineHeight:1 }}>{sel[String(c.id||`${c.word}-${idx}`)] ? "☑" : "☐"}</span>}
+              <div style={{ cursor:"pointer", flex:1 }} onClick={selecting ? undefined : ()=>onViewCard(c)}>
+                <p style={{ margin:"0 0 2px" }}><FuriganaWord word={c.word} reading={c.reading} size={22} /></p>
                 <p style={{ color:"#94a3b8", fontSize:12, margin:0 }}>{c.meaning}</p>
               </div>
               <div style={{ display:"flex", gap:6, flexShrink:0 }}>
-                <button onClick={()=>speakJapanese(c.word)} style={{ padding:"6px 10px", borderRadius:8, background:"rgba(6,182,212,0.1)", border:`1px solid rgba(6,182,212,0.2)`, color:C.teal, fontSize:14, cursor:"pointer" }}>🔊</button>
+                <button onClick={()=>speakVocabWord(c)} style={{ padding:"6px 10px", borderRadius:8, background:"rgba(6,182,212,0.1)", border:`1px solid rgba(6,182,212,0.2)`, color:C.teal, fontSize:14, cursor:"pointer" }}>🔊</button>
                 <button onClick={()=>removeCard(c.id)} style={{ padding:"6px 10px", borderRadius:8, background:"rgba(239,68,68,0.08)", border:`1px solid rgba(239,68,68,0.2)`, color:"#ef4444", fontSize:14, cursor:"pointer" }}>🗑</button>
               </div>
             </div>
           </div>
         ))}
       </div>
+
+      {/* ── COPY TO FOLDER MODAL ── */}
+      {copyOpen && (() => {
+        const others = ["Your Vocabulary", ...data.folders.map(f => (typeof f === "string" ? f : f && f.name)).filter(Boolean)].filter(n => n !== folderName);
+        const n = Object.values(sel).filter(Boolean).length;
+        return (
+          <div style={{ position:"fixed", inset:0, background:"rgba(0,0,0,0.7)", display:"flex", alignItems:"center", justifyContent:"center", zIndex:1000 }}>
+            <div style={{ ...S.card, maxWidth:360, width:"92%", maxHeight:"85vh", overflowY:"auto" }}>
+              <p style={{ color:"#f1f5f9", fontSize:15, fontWeight:700, margin:"0 0 4px", textAlign:"center" }}>📋 {n}語をコピー / Copy {n} word(s)</p>
+              <p style={{ color:"#64748b", fontSize:12, margin:"0 0 12px", textAlign:"center" }}>「{folderName}」の単語はそのまま残ります / Originals stay in this folder.</p>
+              <p style={{ color:"#94a3b8", fontSize:11, fontWeight:700, letterSpacing:1, margin:"0 0 6px" }}>既存のフォルダ / EXISTING FOLDER</p>
+              {others.map(name => (
+                <button key={name} onClick={()=>{ setTargetFolder(name); setNewTarget(""); setCopyErr(""); }} style={{ display:"block", width:"100%", textAlign:"left", padding:"10px 12px", marginBottom:6, borderRadius:10, cursor:"pointer", fontSize:13, color:"#f1f5f9", border:`1.5px solid ${targetFolder===name&&!newTarget.trim()?C.teal:C.border}`, background:targetFolder===name&&!newTarget.trim()?"rgba(6,182,212,0.12)":C.card }}>
+                  {name==="Your Vocabulary"?"📚":"📁"} {name}
+                </button>
+              ))}
+              <p style={{ color:"#94a3b8", fontSize:11, fontWeight:700, letterSpacing:1, margin:"10px 0 6px" }}>新しいフォルダ / NEW FOLDER</p>
+              <input value={newTarget} maxLength={60} onChange={e=>{ setNewTarget(e.target.value); setCopyErr(""); }} placeholder="e.g. かおりさん 授業" style={{ ...S.input, width:"100%", boxSizing:"border-box" }} />
+              {copyErr && <p style={{ color:"#f87171", fontSize:12, margin:"8px 0 0" }}>{copyErr}</p>}
+              <div style={{ display:"flex", gap:10, marginTop:14 }}>
+                <button onClick={()=>{ setCopyOpen(false); setCopyErr(""); }} style={{ flex:1, ...S.btn, background:C.card, border:`1px solid ${C.border}`, color:"#94a3b8", fontSize:13 }}>キャンセル</button>
+                <button onClick={doCopy} disabled={!newTarget.trim() && !targetFolder} style={{ flex:1, ...S.btn, background:(newTarget.trim()||targetFolder)?`linear-gradient(135deg,${C.teal},#0891b2)`:"#1e293b", color:(newTarget.trim()||targetFolder)?"#fff":"#475569", fontSize:13, fontWeight:700 }}>コピーする</button>
+              </div>
+            </div>
+          </div>
+        );
+      })()}
     </div>
   );
 }
@@ -11494,7 +12622,7 @@ Respond ONLY in valid JSON array format (no markdown, no backticks, no preamble)
                   </div>
                   <p style={{ color:"#94a3b8", fontSize:13, margin:0, lineHeight:1.5 }}>{w.meaning}</p>
                 </div>
-                <button onClick={e=>{e.stopPropagation();speakJapanese(w.word);}} style={{ width:36, height:36, borderRadius:10, background:`rgba(6,182,212,0.1)`, border:`1px solid rgba(6,182,212,0.2)`, color:C.teal, fontSize:16, cursor:"pointer", flexShrink:0, display:"flex", alignItems:"center", justifyContent:"center" }}>
+                <button onClick={e=>{e.stopPropagation();speakVocabWord(w);}} style={{ width:36, height:36, borderRadius:10, background:`rgba(6,182,212,0.1)`, border:`1px solid rgba(6,182,212,0.2)`, color:C.teal, fontSize:16, cursor:"pointer", flexShrink:0, display:"flex", alignItems:"center", justifyContent:"center" }}>
                   🔊
                 </button>
               </div>
@@ -11754,8 +12882,8 @@ function VocabBuilder({ form }) {
   const totalSaved = vocabData.cards.length;
 
   // ── RENDER SUBVIEWS ──
-  if (vocabView === "library") return <LibraryView onBack={()=>setVocabView("main")} onSelectFolder={name=>{setSelectedFolder(name);setVocabView("folderDetail");}} onCreateCard={()=>setVocabView("wordSearch")} />;
-  if (vocabView === "folderDetail") return <FolderDetailView folderName={selectedFolder} onBack={()=>setVocabView("library")} onViewCard={w=>{setSelectedWord(w);setVocabView("wordDetail");}} />;
+  if (vocabView === "library") return <LibraryView onBack={()=>setVocabView("main")} onSelectFolder={name=>{setSelectedFolder(name);setVocabView("folderDetail");}} onCreateCard={()=>setVocabView("wordSearch")} onViewCard={w=>{setSelectedWord(w);setVocabView("wordDetail");}} />;
+  if (vocabView === "folderDetail") return <FolderDetailView folderName={selectedFolder} onRenamed={setSelectedFolder} onBack={()=>setVocabView("library")} onViewCard={w=>{setSelectedWord(w);setVocabView("wordDetail");}} />;
   if (vocabView === "wordSearch") return <WordSearchScreen form={form} onBack={()=>setVocabView("main")} onSelectWord={w=>{setSelectedWord(w);setVocabView("wordDetail");}} />;
   if (vocabView === "wordDetail") return <WordDetailCard card={selectedWord} form={form} onBack={()=>setVocabView(selectedFolder?"wordSearch":"wordSearch")} onSave={refreshVocab} prefLang={form.preferredLang} />;
   if (vocabView === "flashcard") return <FlashcardView form={form} onBack={()=>setVocabView("main")} />;
@@ -11822,7 +12950,7 @@ function VocabBuilder({ form }) {
                   <p style={{ color:"#94a3b8", fontSize:13, margin:0 }}>{w.meaning}</p>
                 </div>
                 {/* 単語音声ボタン */}
-                <button onClick={e=>{e.stopPropagation();speakJapanese(w.word);}} title={T.speakWord} style={{ width:40, height:40, borderRadius:10, background:"rgba(6,182,212,0.1)", border:`1px solid rgba(6,182,212,0.2)`, color:C.teal, fontSize:18, cursor:"pointer", flexShrink:0, marginLeft:8, display:"flex", alignItems:"center", justifyContent:"center" }}>🔊</button>
+                <button onClick={e=>{e.stopPropagation();speakVocabWord(w);}} title={T.speakWord} style={{ width:40, height:40, borderRadius:10, background:"rgba(6,182,212,0.1)", border:`1px solid rgba(6,182,212,0.2)`, color:C.teal, fontSize:18, cursor:"pointer", flexShrink:0, marginLeft:8, display:"flex", alignItems:"center", justifyContent:"center" }}>🔊</button>
               </div>
 
               {/* ── Japanese Definition ── */}
@@ -12590,6 +13718,9 @@ const JAPANESE_READING_CORRECTIONS = [
   [/私(\s*)\(わた\)/g, "私$1(わたし)"],
   [/節水(\s*)\((?!せっすい\))[^)]*\)/g, "節水$1(せっすい)"],
   [/意外(\s*)\((?!いがい\))[^)]*\)/g, "意外$1(いがい)"],
+  // 知って is read しって — force it, and insert it if the model left it with no reading.
+  [/知って(\s*)\((?!しって\))[^)]*\)/g, "知って$1(しって)"],
+  [/知って(?![\(\u4E00-\u9FFF\u3005])/g, "知って(しって)"],
   // Words/expressions the model sometimes leaves with NO furigana at all — insert if missing
   // (never touch if already followed by an opening paren, i.e. already has a reading).
   [/契約済み(?!\()/g, "契約済(けいやくず)み"],
@@ -12663,7 +13794,7 @@ async function getFuriganaText(original) {
   const prompt = `Add furigana in parentheses immediately after every single kanji word in the following Japanese text.
 This is critical: do not skip ANY kanji — including compound words, proper nouns, counters, and uncommon kanji. Every kanji character must be followed directly by its reading in parentheses, using this exact format: 漢字(かんじ)
 Never add furigana in parentheses after a hiragana or katakana word — parentheses are ONLY for kanji readings.
-Use standard, dictionary-correct readings — for example 反省 is read (はんせい), never (はんしょう); 今朝 is read (けさ), never (こんちょう); 案の定 is read (あんのじょう), never (あのさだめ); standalone 海 (as in 海が) is read (うみ), never (かい); 厳しい is read (きびしい), never (げんしい); 応えて is read (こたえて), never (おうえて); 各国 is read (かっこく); 一層 is read (いっそう); 私 is read (わたし), never just (わた); 節水 is read (せっすい), never (せつすい); 意外 is read (いがい), never (いご). Never skip furigana on verb stems like 探す, 見た, 合う, 並んで, 驚いた, 訪ねて, 加えて, 限られている, 守るべき, 受けた, 騒がしくしない, 決められた, 必ず従う, 引っ越し, 急いだ, 濡らして, 狭いだろう, 分かった, 出す, 誘われて.
+Use standard, dictionary-correct readings — for example 反省 is read (はんせい), never (はんしょう); 今朝 is read (けさ), never (こんちょう); 案の定 is read (あんのじょう), never (あのさだめ); standalone 海 (as in 海が) is read (うみ), never (かい); 厳しい is read (きびしい), never (げんしい); 応えて is read (こたえて), never (おうえて); 各国 is read (かっこく); 一層 is read (いっそう); 私 is read (わたし), never just (わた); 節水 is read (せっすい), never (せつすい); 意外 is read (いがい), never (いご); 知って is read (しって). Never skip furigana on verb stems like 探す, 見た, 合う, 並んで, 驚いた, 訪ねて, 加えて, 限られている, 守るべき, 受けた, 騒がしくしない, 決められた, 必ず従う, 引っ越し, 急いだ, 濡らして, 狭いだろう, 分かった, 出す, 誘われて.
 Always spell the word for "convenience store" as コンビニ (katakana), never コンヴィニ.
 When two or more kanji in a row form ONE compound word (e.g. 変化, 正確, 連濁, 卒業式), give the WHOLE compound a single reading placed after the LAST kanji — never split it into separate parenthetical readings after each individual kanji. For example, write 変化(へんか) — NEVER 変(へん)化(へんか). Write 正確(せいかく) — NEVER 正(ただ)確(せいき).
 Keep every hiragana character, katakana character, and all punctuation exactly as-is. Do not add extra spaces. Output the text ONCE — never repeat any part of it.
@@ -13680,7 +14811,7 @@ function copyCharLoader(char, onLoad, onError) {
     .then(d => { if (!d || !Array.isArray(d.strokes) || !d.strokes.length) throw new Error("bad"); onLoad(d); })
     .catch(onError);
 }
-function CopyingDown({ T }) {
+function CopyingDown({ T, injected }) {
   const [raw, setRaw] = useState(() => { try { return localStorage.getItem(scopedKey(COPY_STORAGE_KEY)) || ""; } catch { return ""; } });
   const [error, setError] = useState("");
   const [session, setSession] = useState(null); // { tokens:[{ch,w}], chars:[], truncated }
@@ -13698,6 +14829,12 @@ function CopyingDown({ T }) {
   useEffect(() => {
     try { localStorage.setItem(scopedKey(COPY_STORAGE_KEY), raw); } catch {}
   }, [raw]);
+  // Words picked from the student's Vocabulary folder become the text to copy.
+  useEffect(() => {
+    if (!injected || !injected.text) return;
+    setRaw(injected.text.slice(0, 600)); setSession(null); setResults({}); setIdx(0); setPhase("write"); setError("");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [injected && injected.n]);
 
   const startQuiz = (w, withGuide) => {
     setMistakeStroke(""); setDoneMistakes(null);
@@ -13863,6 +15000,87 @@ function CopyingDown({ T }) {
 // Japanese, and the AI checks whether the answer fits the question. If it fits: praise +
 // small tips. If not: feedback + a model answer. (Copying down mode is a separate, later build.)
 const WRITING_STORAGE_KEY = "gaku_writing_questions";
+// ─── WRITING: PICK WORDS FROM MY VOCABULARY ───────────────────────────────────
+// Setting for the Writing section: choose a Vocabulary folder (any name, renamable in the Library)
+// and tick the words to practice. They then fill the "Copying down" text or the "Questions" prompt.
+const WRITING_VOCAB_FOLDER_KEY = "gaku_writing_vocab_folder";
+function WritingVocabPicker({ T, onUse, mode }) {
+  const [open, setOpen] = useState(false);
+  const [data, setData] = useState(loadVocabData);
+  const [folder, setFolder] = useState(() => { try { return localStorage.getItem(scopedKey(WRITING_VOCAB_FOLDER_KEY)) || "Your Vocabulary"; } catch { return "Your Vocabulary"; } });
+  const [picked, setPicked] = useState({}); // card id -> true
+  useEffect(() => {
+    const h = () => setData(loadVocabData());
+    window.addEventListener("gaku_vocab_updated", h);
+    return () => window.removeEventListener("gaku_vocab_updated", h);
+  }, []);
+  const nameOf = f => (typeof f === "string" ? f : f && f.name);
+  const folderNames = ["Your Vocabulary", ...data.folders.map(nameOf).filter(Boolean)];
+  const active = folderNames.includes(folder) ? folder : "Your Vocabulary"; // folder may have been renamed/deleted
+  const cards = data.cards.filter(c => c.folder === active);
+  const keyOf = (c, i) => String(c.id || `${c.word}-${i}`);
+  const chosen = cards.filter((c, i) => picked[keyOf(c, i)]);
+  const changeFolder = (name) => { setFolder(name); setPicked({}); try { localStorage.setItem(scopedKey(WRITING_VOCAB_FOLDER_KEY), name); } catch {} };
+  const fill = (str, vars) => Object.keys(vars).reduce((acc, k) => acc.split("{" + k + "}").join(String(vars[k])), str);
+  const [copied, setCopied] = useState(false);
+  const copyWords = async () => {
+    const list = (chosen.length ? chosen : cards).map(c => c.word).join("、");
+    if (!list) return;
+    let ok = false;
+    try { await navigator.clipboard.writeText(list); ok = true; } catch {}
+    if (!ok) { // fallback for browsers without the async clipboard API
+      try { const ta = document.createElement("textarea"); ta.value = list; ta.style.position = "fixed"; ta.style.opacity = "0"; document.body.appendChild(ta); ta.select(); ok = document.execCommand("copy"); document.body.removeChild(ta); } catch {}
+    }
+    if (ok) { setCopied(true); setTimeout(() => setCopied(false), 1800); }
+  };
+  const useWords = () => { if (chosen.length) onUse(chosen.map(c => c.word)); };
+  const small = { padding:"6px 10px", borderRadius:8, fontSize:11, fontWeight:700, cursor:"pointer", background:"transparent", border:`1px solid ${C.border}`, color:"#94a3b8" };
+  return (
+    <div style={{ marginBottom:14, border:`1px solid ${C.border}`, borderRadius:12, background:"rgba(6,182,212,0.04)" }}>
+      <button onClick={() => setOpen(o => !o)} style={{ width:"100%", display:"flex", justifyContent:"space-between", alignItems:"center", padding:"11px 14px", background:"none", border:"none", color:C.teal, fontSize:13, fontWeight:700, cursor:"pointer", textAlign:"left" }}>
+        <span>📚 {T.writeVocabTitle || "Choose words from my Vocabulary"}</span><span>{open ? "▲" : "▼"}</span>
+      </button>
+      {open && (
+        <div style={{ padding:"0 14px 14px" }}>
+          <label style={S.label}>{(T.writeVocabFolder || "Folder").toUpperCase()}</label>
+          <select value={active} onChange={e => changeFolder(e.target.value)} style={{ ...S.input, marginBottom:10 }}>
+            {folderNames.map(n => <option key={n} value={n}>{(n === "Your Vocabulary" ? (T.yourVocabSaved || "Your Vocabulary") : n)} ({data.cards.filter(c => c.folder === n).length})</option>)}
+          </select>
+          {cards.length === 0 ? (
+            <p style={{ color:"#64748b", fontSize:12, margin:"4px 0 0" }}>{T.writeVocabEmpty || "No words in this folder yet. Save words to it from the Vocabulary tab first."}</p>
+          ) : (<>
+            <div style={{ display:"flex", gap:8, alignItems:"center", marginBottom:8, flexWrap:"wrap" }}>
+              <button onClick={() => { const all = {}; cards.forEach((c, i) => { all[keyOf(c, i)] = true; }); setPicked(all); }} style={small}>{T.writeVocabAll || "Select all"}</button>
+              <button onClick={() => setPicked({})} style={small}>{T.writeVocabClear || "Clear"}</button>
+              <button onClick={copyWords} style={{ ...small, color:C.teal, borderColor:"rgba(6,182,212,0.4)" }}>{copied ? (T.writeVocabCopied || "✓ Copied!") : "📋 " + (T.writeVocabCopy || "Copy")}</button>
+              <span style={{ color:"#94a3b8", fontSize:11 }}>{fill(T.writeVocabCount || "{n} selected", { n: chosen.length })}</span>
+            </div>
+            <div style={{ maxHeight:200, overflowY:"auto", display:"flex", flexDirection:"column", gap:6, marginBottom:10 }}>
+              {cards.map((c, i) => {
+                const k = keyOf(c, i); const on = !!picked[k];
+                return (
+                  <div key={k} onClick={() => setPicked(p => ({ ...p, [k]: !p[k] }))}
+                    style={{ display:"flex", alignItems:"center", gap:10, padding:"8px 10px", borderRadius:10, textAlign:"left", cursor:"pointer",
+                      border:`1.5px solid ${on ? C.teal : C.border}`, background:on ? "rgba(6,182,212,0.12)" : C.card, color:"#f1f5f9" }}>
+                    <span style={{ color:on ? C.teal : "#475569", fontSize:15 }}>{on ? "☑" : "☐"}</span>
+                    {/* Words are plain selectable text: long-press / drag to copy a single word */}
+                    <span onClick={e => { if (String(window.getSelection && window.getSelection()).length) e.stopPropagation(); }} style={{ fontSize:15, fontWeight:700, userSelect:"text", WebkitUserSelect:"text", cursor:"text" }}>{c.word}</span>
+                    {c.reading && c.reading !== c.word && <span style={{ color:"#94a3b8", fontSize:12, userSelect:"text", WebkitUserSelect:"text" }}>{c.reading}</span>}
+                    {c.meaning && <span style={{ color:"#64748b", fontSize:11, marginLeft:"auto", maxWidth:"40%", overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>{c.meaning}</span>}
+                  </div>
+                );
+              })}
+            </div>
+            <button onClick={useWords} disabled={!chosen.length}
+              style={{ ...S.btn, width:"100%", background:chosen.length ? `linear-gradient(135deg,${C.teal},#0891b2)` : "#1e293b", color:chosen.length ? "#fff" : "#475569" }}>
+              {mode === "copy" ? (T.writeVocabUseCopy || "Use these words for Copying down") : (T.writeVocabUseQ || "Use these words in a writing question")}
+            </button>
+          </>)}
+        </div>
+      )}
+    </div>
+  );
+}
 function WritingPractice({ form }) {
   const lang = form?.preferredLang || "English";
   const T = useUITranslations(lang);
@@ -13872,6 +15090,13 @@ function WritingPractice({ form }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [result, setResult] = useState(null); // { fits, feedback, model }
+  const [injected, setInjected] = useState(null); // { text, n } words picked from Vocabulary for Copying down
+  const useVocabWords = (words) => {
+    if (mode === "copy") { setInjected({ text: words.join("、"), n: Date.now() }); return; }
+    const list = words.join("、");
+    setQuestion((T.writeVocabQPrompt || "Write a short text in Japanese using these words: {words}").split("{words}").join(list).slice(0, 3000));
+    setAnswer(""); setResult(null); setError("");
+  };
 
   useEffect(() => {
     try {
@@ -13953,7 +15178,8 @@ Respond ONLY with valid JSON, no markdown, no backticks:
           {modeBtn("copy", "📝 " + (T.writeModeCopy || "Copying down"), false)}
           {modeBtn("question", "❓ " + (T.writeModeQuestion || "Questions"), false)}
         </div>
-        {mode === "copy" && <CopyingDown T={T} />}
+        <WritingVocabPicker T={T} mode={mode} onUse={useVocabWords} />
+        {mode === "copy" && <CopyingDown T={T} injected={injected} />}
         {mode === "question" && (<>
         <p style={{ color:"#39ff14", fontSize:12, lineHeight:1.7, marginBottom:12 }}>
           {T.writeQDesc || "Paste a writing question you found online (an essay prompt, a JLPT-style question, an email task…). Write your answer in Japanese and GAKU checks it against the question."}
@@ -14392,15 +15618,92 @@ function getWeekInfo(form) {
 
 const AI_SCHEDULE_CACHE = {};
 
-async function buildAIWeeklySchedule(form, weekNum, totalWeeks) {
+// ─── PERSISTED STUDY GUIDE ─────────────────────────────────────────────────────
+// A student's weekly study guide is generated ONCE and then stored per account
+// (scopedKey → `gaku_study_guide_<userId>`, which the migration bridge also carries
+// across devices/domains). It is NEVER rebuilt automatically — not when a new week
+// starts, not when the profile/language/level changes, not on a new device, not when
+// browser storage is cleared and restored. It is only rebuilt when the student
+// explicitly presses "Update my study guide" in their profile (or answers "Yes, update
+// my study content" after changing their study skills), which calls
+// requestStudyGuideRegeneration() below.
+//
+// (The old behaviour keyed an unscoped, device-local cache on the current week number +
+// level + goal + skills + language, so every new week, every settings change and every
+// new device silently produced a different AI-generated plan.)
+const STUDY_GUIDE_KEY = "gaku_study_guide";
+const STUDY_GUIDE_REGEN_KEY = "gaku_study_guide_regen";
+const SCHEDULE_WEEKDAYS = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
+
+function normalizeGuideSchedule(schedule, T) {
+  const out = {};
+  SCHEDULE_WEEKDAYS.forEach(day => {
+    out[day] = (schedule && Array.isArray(schedule[day]) && schedule[day].length)
+      ? schedule[day]
+      : [{ task: (T && T.restDay) || "Rest day 🌸", done: false, rest: true }];
+  });
+  return out;
+}
+function loadSavedStudyGuide() {
+  try {
+    const raw = localStorage.getItem(scopedKey(STUDY_GUIDE_KEY));
+    if (!raw) return null;
+    const parsed = JSON.parse(raw);
+    return parsed && parsed.schedule && typeof parsed.schedule === "object" ? parsed : null;
+  } catch { return null; }
+}
+function saveStudyGuide(result) {
+  try {
+    localStorage.setItem(scopedKey(STUDY_GUIDE_KEY), JSON.stringify({
+      schedule: result.schedule, weekTheme: result.weekTheme || "", savedAt: Date.now(),
+    }));
+  } catch {}
+}
+function requestStudyGuideRegeneration() {
+  try { localStorage.setItem(scopedKey(STUDY_GUIDE_REGEN_KEY), "1"); } catch {}
+}
+function isStudyGuideRegenerationRequested() {
+  try { return localStorage.getItem(scopedKey(STUDY_GUIDE_REGEN_KEY)) === "1"; } catch { return false; }
+}
+function clearStudyGuideRegenerationRequest() {
+  try { localStorage.removeItem(scopedKey(STUDY_GUIDE_REGEN_KEY)); } catch {}
+}
+// Students who already had a guide before this change have it sitting in the old device-local
+// cache (`gaku_sched_<email>_w<week>_<jlpt>_<goal>_<skills>_<lang>`). Adopt the closest match
+// as their permanent guide so what they see today is exactly what they keep — never replaced.
+function findLegacyScheduleGuide(form) {
+  try {
+    const goalStr = (Array.isArray(form.goal) ? form.goal : (form.goal ? [form.goal] : [])).join("");
+    const prefix = `gaku_sched_${form.email || form.name}_w`;
+    const suffix = `_${form.jlpt}_${goalStr}_${(form.skills || []).join("")}_${form.preferredLang || "English"}`;
+    let best = null; // { week, exact, value }
+    for (let i = 0; i < localStorage.length; i++) {
+      const k = localStorage.key(i);
+      if (!k || !k.startsWith(prefix)) continue;
+      const m = k.slice(prefix.length).match(/^(\d+)(.*)$/);
+      if (!m) continue;
+      let value;
+      try { value = JSON.parse(localStorage.getItem(k)); } catch { continue; }
+      if (!value || !value.schedule) continue;
+      const week = parseInt(m[1], 10);
+      const exact = m[2] === suffix;
+      if (!best || (exact && !best.exact) || (exact === best.exact && week > best.week)) best = { week, exact, value };
+    }
+    return best ? best.value : null;
+  } catch { return null; }
+}
+
+async function buildAIWeeklySchedule(form, weekNum, totalWeeks, forceFresh = false) {
   const lang = form.preferredLang || "English";
   const cacheKey = `${form.email || form.name}_w${weekNum}_${form.jlpt}_${(Array.isArray(form.goal)?form.goal:(form.goal?[form.goal]:[])).join("")}_${(form.skills||[]).join("")}_${lang}`;
-  // Check localStorage first
-  try {
-    const stored = localStorage.getItem(`gaku_sched_${cacheKey}`);
-    if (stored) return JSON.parse(stored);
-  } catch {}
-  if (AI_SCHEDULE_CACHE[cacheKey]) return AI_SCHEDULE_CACHE[cacheKey];
+  // Check localStorage first (skipped when the student explicitly asked for a fresh guide)
+  if (!forceFresh) {
+    try {
+      const stored = localStorage.getItem(`gaku_sched_${cacheKey}`);
+      if (stored) return JSON.parse(stored);
+    } catch {}
+    if (AI_SCHEDULE_CACHE[cacheKey]) return AI_SCHEDULE_CACHE[cacheKey];
+  }
 
   const hoursMap = { "Less than 1 hour": 45, "1–2 hours": 90, "2–3 hours": 150, "3+ hours": 180 };
   const daysMap  = { "1–2 days": 2, "3–4 days": 4, "5–6 days": 5, "Every day": 7 };
@@ -15202,7 +16505,21 @@ function FormScreen({ onSubmit, onBack, onCancel, initialJlpt, initialForm, onLo
   const confirmUpdateStudyContent = () => {
     const f = pendingSubmitForm;
     setPendingSubmitForm(null);
-    onSubmit(f);
+    // The student explicitly chose to get new study content → rebuild their study guide.
+    onSubmit(f, { regenerateGuide: true });
+  };
+  // "Update my study guide" — the ONLY other way (besides answering "Yes" above) that a student's
+  // saved study guide is ever rebuilt. Saves the profile as edited and builds a fresh guide.
+  const [confirmGuideUpdate, setConfirmGuideUpdate] = useState(null);
+  const attemptUpdateGuide = () => {
+    if (!valid) { setErr(T.fillRequired); return; }
+    const displayGoal = form.goal.map(g => g === "Other" ? form.customGoal : g).join(", ");
+    setConfirmGuideUpdate({ ...form, displayGoal });
+  };
+  const confirmUpdateGuideYes = () => {
+    const f = confirmGuideUpdate;
+    setConfirmGuideUpdate(null);
+    onSubmit(f, { regenerateGuide: true });
   };
   const confirmKeepStudyContent = () => {
     const f = pendingSubmitForm;
@@ -15362,7 +16679,31 @@ function FormScreen({ onSubmit, onBack, onCancel, initialJlpt, initialForm, onLo
         <button onClick={attemptSubmit} style={{ ...S.btn, width:"100%", marginTop:20, background:valid?`linear-gradient(135deg,${C.purple},#9333ea)`:"#1e293b", color:valid?"#fff":"#475569" }}>
           {initialForm ? T.saveChanges : T.buildPlan}
         </button>
+        {initialForm && (
+          <div style={{ marginTop:14, paddingTop:14, borderTop:`1px solid ${C.border}` }}>
+            <button onClick={attemptUpdateGuide} style={{ ...S.btn, width:"100%", background:"transparent", border:`1.5px solid ${C.purpleLight}`, color:C.purpleLight }}>
+              {T.updateStudyGuideBtn}
+            </button>
+            <p style={{ color:"#64748b", fontSize:11, margin:"8px 0 0", textAlign:"center", lineHeight:1.5 }}>{T.updateStudyGuideNote}</p>
+          </div>
+        )}
       </div>
+      {confirmGuideUpdate && (
+        <div style={{ position:"fixed", inset:0, background:"rgba(0,0,0,0.6)", display:"flex", alignItems:"center", justifyContent:"center", padding:16, zIndex:1000 }}>
+          <div style={{ background:C.card, border:`1px solid ${C.border}`, borderRadius:14, padding:24, maxWidth:420, width:"100%" }}>
+            <p style={{ color:"#fff", fontSize:16, fontWeight:700, margin:"0 0 10px" }}>{T.updateStudyGuideConfirmTitle}</p>
+            <p style={{ color:"#94a3b8", fontSize:13, margin:"0 0 20px", lineHeight:1.5 }}>{T.updateStudyGuideConfirmDesc}</p>
+            <div style={{ display:"flex", flexDirection:"column", gap:10 }}>
+              <button onClick={confirmUpdateGuideYes} style={{ ...S.btn, width:"100%", background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff" }}>
+                {T.updateStudyGuideConfirmYes}
+              </button>
+              <button onClick={()=>setConfirmGuideUpdate(null)} style={{ ...S.btn, width:"100%", background:"transparent", border:`1px solid ${C.border}`, color:"#94a3b8" }}>
+                {T.updateStudyGuideConfirmNo}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
       {pendingSubmitForm && (
         <div style={{ position:"fixed", inset:0, background:"rgba(0,0,0,0.6)", display:"flex", alignItems:"center", justifyContent:"center", padding:16, zIndex:1000 }}>
           <div style={{ background:C.card, border:`1px solid ${C.border}`, borderRadius:14, padding:24, maxWidth:420, width:"100%" }}>
@@ -15638,7 +16979,12 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
   const [readerCardHiddenAt, setReaderCardHiddenAt] = useState(() => { try { return Number(localStorage.getItem(scopedKey("gaku_reader_card_hidden_at")) || 0); } catch { return 0; } });
   const canUseReaderExt = typeof navigator !== "undefined" && /Chrome\/|Edg\//.test(navigator.userAgent) && !/Mobile|Android|iPhone|iPad|OPR\//.test(navigator.userAgent);
   const showReaderCard = readerInstalled === false && canUseReaderExt && (Date.now() - readerCardHiddenAt) > 5 * 86400000;
-  const [schedule, setSchedule] = useState(() => buildSchedule(form, getT(form?.preferredLang || "English")));
+  // If this student already has a saved study guide, show it immediately (and keep it) instead
+  // of the static placeholder — see "PERSISTED STUDY GUIDE" above.
+  const [schedule, setSchedule] = useState(() => {
+    const saved = isStudyGuideRegenerationRequested() ? null : loadSavedStudyGuide();
+    return saved ? normalizeGuideSchedule(saved.schedule, getT(form?.preferredLang || "English")) : buildSchedule(form, getT(form?.preferredLang || "English"));
+  });
   const [milestones, setMilestones] = useState(() => buildMilestones(form));
   const [msDone, setMsDone] = useState([]);
   const [showHelp, setShowHelp] = useState(false);
@@ -15653,8 +16999,9 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
   // already completed or skipped; always replayable via the header button.
   const [tutorialActive, setTutorialActive] = useState(false);
   const [tutorialStep, setTutorialStep] = useState(0);
-  const [weekTheme, setWeekTheme] = useState("");
+  const [weekTheme, setWeekTheme] = useState(() => (isStudyGuideRegenerationRequested() ? "" : (loadSavedStudyGuide()?.weekTheme || "")));
   const [aiScheduleLoading, setAiScheduleLoading] = useState(false);
+  const guideGenInFlight = useRef(false);
   const { currentWeek, totalWeeks } = getWeekInfo(form);
   const scheduleCheck = useComprehensionCheck("schedule");
   // "Take a free JLPT mock test?" offer — shown on the Dashboard (after registration/onboarding
@@ -15778,29 +17125,53 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
     }
   };
 
-  const loadAISchedule = useCallback(async (forceRegen = false) => {
-    setAiScheduleLoading(true);
-    if (forceRegen) {
-      // Clear cache for this week
-      const hoursMap = { "Less than 1 hour": 45, "1–2 hours": 90, "2–3 hours": 150, "3+ hours": 180 };
-      const daysMap  = { "1–2 days": 2, "3–4 days": 4, "5–6 days": 5, "Every day": 7 };
-      const cacheKey = `${form.email || form.name}_w${currentWeek}_${form.jlpt}_${(Array.isArray(form.goal)?form.goal:(form.goal?[form.goal]:[])).join("")}_${(form.skills||[]).join("")}_${form.preferredLang || "English"}`;
-      try { localStorage.removeItem(`gaku_sched_${cacheKey}`); } catch {}
-      delete AI_SCHEDULE_CACHE[cacheKey];
-    }
-    const result = await buildAIWeeklySchedule(form, currentWeek, totalWeeks);
-    if (result && result.schedule) {
-      // Merge done state from current schedule
-      const merged = {};
-      const WEEKDAYS = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
-      WEEKDAYS.forEach(day => {
-        merged[day] = (result.schedule[day] || [{ task: T.restDay || "Rest day 🌸", done: false, rest: true }]);
-      });
-      setSchedule(merged);
+  // The study guide is built ONCE per student and then kept exactly as it is. This only ever
+  // generates a new one when (a) the student has never had one, or (b) they explicitly asked for
+  // a fresh one via "Update my study guide" (flag set by requestStudyGuideRegeneration()). A new
+  // week, a changed profile/language/level, a new device or cleared browser storage must never
+  // cause the guide to change by itself.
+  const loadAISchedule = useCallback(async () => {
+    const regenRequested = isStudyGuideRegenerationRequested();
+    const showGuide = (result) => {
+      setSchedule(normalizeGuideSchedule(result.schedule, T));
       setWeekTheme(result.weekTheme || "");
+    };
+
+    if (!regenRequested) {
+      // 1) The student's saved guide — show it as-is, never regenerate.
+      const saved = loadSavedStudyGuide();
+      if (saved) { showGuide(saved); return; }
+      // 2) A guide from the old device-local cache — adopt it so it stays exactly as they know it.
+      const legacy = findLegacyScheduleGuide(form);
+      if (legacy) {
+        saveStudyGuide(legacy);
+        showGuide(legacy);
+        if (userId) syncMigrationBridge(userId);
+        return;
+      }
     }
-    setAiScheduleLoading(false);
-  }, [form, currentWeek, totalWeeks, T]);
+
+    // 3) No guide yet (first time) or an explicit "Update my study guide" request → build it now.
+    if (guideGenInFlight.current) return;
+    guideGenInFlight.current = true;
+    setAiScheduleLoading(true);
+    try {
+      const result = await buildAIWeeklySchedule(form, currentWeek, totalWeeks, regenRequested);
+      if (result && result.schedule) {
+        saveStudyGuide(result);
+        clearStudyGuideRegenerationRequest();
+        showGuide(result);
+        // Back the new guide up to the account right away so it follows the student to any
+        // other device/domain instead of being rebuilt there.
+        if (userId) syncMigrationBridge(userId);
+      }
+      // If generation failed, keep whatever is on screen (and any saved guide) untouched; the
+      // request flag stays set so the student's explicit update is retried next time.
+    } finally {
+      guideGenInFlight.current = false;
+      setAiScheduleLoading(false);
+    }
+  }, [form, currentWeek, totalWeeks, T, userId]);
 
   // ── GAKU Extension: listen for words sent from Chrome extension ───────────────────────
   useEffect(() => {
@@ -15840,9 +17211,11 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
     };
   }, []);
 
-  // Re-build schedule & translate milestones when T loads (for non-static languages)
+  // Load the student's saved study guide (generating one only if they have never had it, or they
+  // explicitly asked for an update). Re-running this when `form` changes is safe: with a saved
+  // guide it just re-displays the same guide.
   useEffect(() => {
-    loadAISchedule(false);
+    loadAISchedule();
   }, [form]);
 
   // Fallback: also rebuild static schedule while AI loads
@@ -16176,12 +17549,11 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
                   <p style={{ color:C.purpleLight, fontSize:11, fontWeight:700, letterSpacing:1, margin:0 }}>📅 WEEK {currentWeek} / {totalWeeks}</p>
                   <p style={{ color:"#ffffff", fontSize:11, margin:"2px 0 0" }}>{totalWeeks - currentWeek} {T.weeksRemaining} · {Math.round((currentWeek/totalWeeks)*100)}{T.percentComplete}</p>
                 </div>
-                <button
-                  onClick={() => loadAISchedule(true)}
-                  disabled={aiScheduleLoading}
-                  style={{ ...S.btn, padding:"7px 12px", background:aiScheduleLoading?"rgba(139,92,246,0.1)":`linear-gradient(135deg,${C.purple},#9333ea)`, color:aiScheduleLoading?"#64748b":"#fff", border:`1px solid rgba(139,92,246,0.3)`, fontSize:11, cursor:aiScheduleLoading?"not-allowed":"pointer" }}>
-                  {aiScheduleLoading ? "⏳ " + (T.generating || "Generating...") : T.refresh}
-                </button>
+                {/* The old one-tap "Refresh" button that rebuilt the whole guide was removed on purpose:
+                    the guide changes ONLY when the student presses "Update my study guide" in Edit Profile. */}
+                {aiScheduleLoading && (
+                  <span style={{ color:"#64748b", fontSize:11, fontWeight:700 }}>{"⏳ " + (T.generating || "Generating...")}</span>
+                )}
               </div>
               {/* Progress bar */}
               <div style={{ height:4, background:"rgba(255,255,255,0.06)", borderRadius:99, overflow:"hidden" }}>
@@ -16219,7 +17591,7 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
                             <p style={{ color:task.done?"#64748b":"#cbd5e1", fontSize:13, margin:0, lineHeight:1.6, textDecoration:task.done?"line-through":"none" }}>{task.task}</p>
                             {(() => {
                               const res = findTaskResourceLink(task.task, task.skill);
-                              const nav = findTaskAppNav(task.task);
+                              const nav = findTaskAppNav(task.task, task.skill);
                               if (!res && !nav) return null;
                               return (
                                 <div style={{ display:"flex", gap:8, flexWrap:"wrap", marginTop:8 }}>
@@ -16229,7 +17601,7 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
                                       🔗 {res.name}
                                     </a>
                                   )}
-                                  {nav && tabShown(nav.tab) && (nav.tab !== "resources" || featureShown(nav.resourceSubTab || "links")) && (
+                                  {nav && (nav.alwaysShow || (tabShown(nav.tab) && (nav.tab !== "resources" || featureShown(nav.resourceSubTab || "links")))) && (
                                     <button onClick={e=>{ e.stopPropagation(); setTab(nav.tab); if (nav.resourceSubTab) setResourceSubTab(nav.resourceSubTab); }}
                                        style={{ fontSize:11, color:C.purpleLight, border:"1px solid rgba(139,92,246,0.3)", borderRadius:8, padding:"3px 8px", background:"rgba(139,92,246,0.06)", cursor:"pointer" }}>
                                       ▶ {T[nav.labelKey]}
@@ -17223,7 +18595,7 @@ Respond ONLY with a valid JSON array, no markdown, no backticks:
           if (cached.isPaid) setIsPaid(true);
         }
       } catch {}
-      syncAssignedVocab(authUser.id).then(() => repairMissingMeanings(authUser.id)).catch(() => {});
+      syncAssignedVocab(authUser.id).then(() => repairMissingMeanings(authUser.id)).then(() => repairVocabReadings()).catch(() => {});
       setDeviceStatus("checking");
       // Self-heal: if the paywall was already showing (e.g. from an earlier trial
       // session, or right after login/payment), this dismisses it the moment we
@@ -17262,7 +18634,7 @@ Respond ONLY with a valid JSON array, no markdown, no backticks:
       window.removeEventListener("pagehide", pushOnHide);
     };
   }, [authUser]);
-  const handleSubmit = (f) => {
+  const handleSubmit = (f, opts) => {
     // Require an account before a profile is ever committed. If we let a
     // logged-out visitor save straight to localStorage, their entire study
     // plan/progress exists in exactly one browser with no server backup —
@@ -17274,12 +18646,16 @@ Respond ONLY with a valid JSON array, no markdown, no backticks:
       setShowAuthScreen(true);
       return;
     }
-    completeProfileSave(f);
+    completeProfileSave(f, opts);
   };
-  const completeProfileSave = (f) => {
+  const completeProfileSave = (f, opts) => {
     // Capture before setForm below overwrites it: a brand-new signup has no
     // prior form at all, whereas an edit always has one already.
     const isBrandNewProfile = !form;
+    // The ONLY time a saved study guide is rebuilt: the student explicitly pressed
+    // "Update my study guide" (or answered "Yes, update my study content"). A plain
+    // "Save changes" leaves their existing study guide exactly as it is.
+    if (opts && opts.regenerateGuide) requestStudyGuideRegeneration();
     // Preserve planStartDate from existing form (only set it once, on first save)
     const startDate = (form && form.planStartDate) ? form.planStartDate : new Date().toISOString();
     const saved = { ...f, planStartDate: startDate };
@@ -17289,6 +18665,11 @@ Respond ONLY with a valid JSON array, no markdown, no backticks:
     if (saved.country && saved.timeline && saved.hoursPerDay && saved.daysPerWeek && saved.skills?.length > 0) {
       saved.profileComplete = true;
     }
+    // A brand-new account that skipped the second onboarding step got a placeholder guide built from
+    // the quick-start defaults. When they finish filling in their real profile (skills, study time…),
+    // that completion is their request for their first real guide — so build it from the real answers.
+    // (Accounts that were never "incomplete" are unaffected: their guide never changes here.)
+    if (form && form.profileComplete === false && saved.profileComplete) requestStudyGuideRegeneration();
     setForm(saved);
     setEditing(false);
     setForceForm(false);
