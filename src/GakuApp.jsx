@@ -18175,46 +18175,8 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
   // activity, then (if applicable) an install-to-home-screen prompt, before
   // ever showing the full dashboard. See completeProfileSave below, which
   // sets this to "firstwin" only when `form` was null before the save.
-  const [onboardingStep, setOnboardingStep] = useState(null); // null | "firstwin" | "firstquiz" | "readerstep" | "remind" | "install" | "completeProfile"
+  const [onboardingStep, setOnboardingStep] = useState(null); // null | "firstwin" | "readerstep" | "remind" | "install" | "completeProfile"
   const [firstWinRevealed, setFirstWinRevealed] = useState(false);
-  // "Make your own quiz" step (right after First Win): paste any Japanese,
-  // get a 3-question quiz at once — the fastest way to a real first session.
-  const [fqText, setFqText] = useState("");
-  const [fqLoading, setFqLoading] = useState(false);
-  const [fqError, setFqError] = useState(false);
-  const [fqQuestions, setFqQuestions] = useState([]);
-  const [fqIdx, setFqIdx] = useState(0);
-  const [fqPicked, setFqPicked] = useState(null);
-  const FQ_SAMPLE = "今日は友達と一緒に新しいカフェに行きました。コーヒーがとてもおいしかったので、また来週も行きたいです。";
-  const makeFirstQuiz = async (text) => {
-    const trimmed = (text || "").trim();
-    if (!trimmed) return;
-    setFqLoading(true); setFqError(false);
-    try {
-      const res = await fetch("/api/claude", {
-        method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ model: "claude-sonnet-4-20250514", max_tokens: 1500, provider: "content",
-          messages: [{ role: "user", content: `You are a Japanese teacher. The student's level is ${form?.jlpt || "Beginner"}. Make EXACTLY 3 multiple-choice questions (meaning, reading, or fill-in-the-blank) grounded in real words or sentences from the text below. Each question has 4 options, exactly one correct. Write question text in Japanese with a short ${form?.preferredLang || "English"} hint if helpful. Keep it easy and encouraging.
-
-TEXT:
-"""
-${trimmed.slice(0, 1200)}
-"""
-
-Respond ONLY with a valid JSON array, no markdown, no backticks:
-[{"q":"","options":["","","",""],"answer":0}]
-"answer" is the 0-based index of the correct option.` }] })
-      });
-      const d = await res.json();
-      const raw = d.content?.map(c => c.text || "").join("") || "[]";
-      const parsed = JSON.parse(raw.replace(/```json|```/g, "").trim());
-      const ok = Array.isArray(parsed) ? parsed.filter(x => x && x.q && Array.isArray(x.options) && x.options.length >= 2 && Number.isInteger(x.answer) && x.options[x.answer] != null).slice(0, 3) : [];
-      if (!ok.length) throw new Error("empty");
-      setFqQuestions(ok); setFqIdx(0); setFqPicked(null);
-      logFunnel(authUser?.id, "quiz_generated");
-    } catch { setFqError(true); }
-    setFqLoading(false);
-  };
   // Daily-review reminder step (shown right after First Win): downloads a
   // calendar event so a phone notification — not an email — brings them back.
   const addReviewToCalendar = (hour, minute) => {
@@ -19086,73 +19048,17 @@ Respond ONLY with a valid JSON array, no markdown, no backticks:
               // Screen" steps worth showing). Otherwise skip straight to the dashboard.
               const canShowInstallStep = !alreadyStandalone && (canInstallPwa || isIOSNow);
               logFunnel(authUser?.id, "first_win_done");
-              setOnboardingStep("firstquiz");
+              // (The old "Make your own quiz" step was retired.) On desktop Chrome/Edge,
+              // for anyone who hasn't used GAKU Reader yet, show its one optional card
+              // before the reminder step. Mobile / already-installed accounts skip it.
+              const ua = typeof navigator !== "undefined" ? navigator.userAgent : "";
+              const canUseReaderExtNow = /Chrome\/|Edg\//.test(ua) && !/Mobile|Android|iPhone|iPad|OPR\//.test(ua);
+              setOnboardingStep(canUseReaderExtNow && readerInstalled !== true ? "readerstep" : "remind");
             }} style={{ ...S.btn, width:"100%", background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff" }}>
               🎉 {T.firstWinDoneBtn}
             </button>
           ) : (
             <p style={{ color:"#64748b", fontSize:11, margin:0 }}>{T.firstWinHint}</p>
-          )}
-        </div>
-      </div>
-    );
-  }
-  if (onboardingStep === "firstquiz") {
-  // After the first quiz: on desktop Chrome/Edge (where the extension works) and
-  // for anyone who hasn't used GAKU Reader yet, show one optional Reader card
-  // before the reminder step. Mobile / already-installed accounts skip it.
-  const goAfterQuiz = () => {
-    const ua = typeof navigator !== "undefined" ? navigator.userAgent : "";
-    const canUseReaderExtNow = /Chrome\/|Edg\//.test(ua) && !/Mobile|Android|iPhone|iPad|OPR\//.test(ua);
-    setOnboardingStep(canUseReaderExtNow && readerInstalled !== true ? "readerstep" : "remind");
-  };
-    const q = fqQuestions[fqIdx];
-    const last = fqIdx >= fqQuestions.length - 1;
-    const card = { background:"linear-gradient(135deg,#1e1b4b,#0f172a)", border:"1.5px solid rgba(139,92,246,0.4)", borderRadius:20, padding:"32px 28px", maxWidth:440, width:"90%", textAlign:"center", boxShadow:"0 8px 40px rgba(139,92,246,0.25)" };
-    return (
-      <div style={{ minHeight:"100vh", background:C.bg, display:"flex", alignItems:"center", justifyContent:"center", padding:24 }}>
-        <div style={card}>
-          {!q ? (
-            <>
-              <p style={{ fontSize:30, margin:"0 0 6px" }}>✍️</p>
-              <h2 style={{ color:"#f1f5f9", fontSize:19, fontWeight:900, margin:"0 0 8px" }}>{T.fqTitle}</h2>
-              <p style={{ color:"#94a3b8", fontSize:13, margin:"0 0 14px", lineHeight:1.6 }}>{T.fqDesc}</p>
-              <textarea value={fqText} onChange={e=>setFqText(e.target.value)} placeholder={T.fqPlaceholder} rows={4}
-                style={{ width:"100%", boxSizing:"border-box", background:"rgba(255,255,255,0.04)", border:`1.5px solid ${C.border}`, borderRadius:12, padding:12, color:"#f1f5f9", fontSize:14, resize:"vertical", marginBottom:10 }} />
-              {fqError && <p style={{ color:C.red, fontSize:12, margin:"0 0 10px" }}>{T.fqErr}</p>}
-              <button onClick={()=>makeFirstQuiz(fqText)} disabled={fqLoading || !fqText.trim()} style={{ ...S.btn, width:"100%", marginBottom:8, background:(fqLoading||!fqText.trim())?"rgba(139,92,246,0.15)":`linear-gradient(135deg,${C.purple},#9333ea)`, color:(fqLoading||!fqText.trim())?"#64748b":"#fff" }}>
-                {fqLoading ? `⏳ ${T.fqLoading}` : T.fqStart}
-              </button>
-              <button onClick={()=>{ logFunnel(authUser?.id, "quiz_sample_clicked"); setFqText(FQ_SAMPLE); makeFirstQuiz(FQ_SAMPLE); }} disabled={fqLoading} style={{ ...S.btn, width:"100%", marginBottom:6, background:C.card, border:`1px solid ${C.border}`, color:"#cbd5e1" }}>{T.fqSample}</button>
-              <button onClick={()=>{ logFunnel(authUser?.id, "quiz_skipped"); goAfterQuiz(); }} style={{ ...S.btn, width:"100%", background:"none", border:"none", color:"#64748b" }}>{T.fqSkip}</button>
-            </>
-          ) : (
-            <>
-              <p style={{ color:C.purpleLight, fontSize:11, fontWeight:800, letterSpacing:1, margin:"0 0 10px" }}>{fqIdx + 1} / {fqQuestions.length}</p>
-              <p style={{ color:"#f1f5f9", fontSize:16, fontWeight:700, lineHeight:1.7, margin:"0 0 16px", whiteSpace:"pre-wrap" }}>{q.q}</p>
-              {q.options.map((opt, oi) => {
-                const picked = fqPicked !== null;
-                const isRight = oi === q.answer;
-                const isPick = oi === fqPicked;
-                const bg = !picked ? C.card : isRight ? "rgba(34,197,94,0.18)" : isPick ? "rgba(239,68,68,0.18)" : C.card;
-                const bd = !picked ? C.border : isRight ? "rgba(34,197,94,0.6)" : isPick ? "rgba(239,68,68,0.6)" : C.border;
-                return (
-                  <button key={oi} disabled={picked} onClick={()=>{ setFqPicked(oi); logFunnel(authUser?.id, "quiz_answered"); }} style={{ ...S.btn, width:"100%", marginBottom:8, textAlign:"left", background:bg, border:`1.5px solid ${bd}`, color:"#f1f5f9" }}>
-                    {["①","②","③","④"][oi] || ""} {opt}
-                  </button>
-                );
-              })}
-              {fqPicked !== null && (
-                <>
-                  <p style={{ color: fqPicked === q.answer ? C.green : "#fbbf24", fontSize:13, fontWeight:700, margin:"4px 0 12px" }}>
-                    {fqPicked === q.answer ? T.fqCorrect : `${T.fqWrong} ${q.options[q.answer]}`}
-                  </p>
-                  <button onClick={()=>{ if (last) { logFunnel(authUser?.id, "quiz_finished"); goAfterQuiz(); } else { setFqIdx(fqIdx + 1); setFqPicked(null); } }} style={{ ...S.btn, width:"100%", background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff" }}>
-                    {last ? T.fqDone : T.fqNext}
-                  </button>
-                </>
-              )}
-            </>
           )}
         </div>
       </div>
