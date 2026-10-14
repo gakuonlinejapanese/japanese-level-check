@@ -3,7 +3,13 @@
   "appName": "GAKU Master",
   "webDir": "build",
   "plugins": {
-    "CapacitorHttp": { "enabled": true },
-    "SplashScreen": { "launchShowDuration": 1200, "backgroundColor": "#0a0f1e" }
-  }
+    "CapacitorHttp": {
+      "enabled": true
+    },
+    "SplashScreen": {
+      "launchShowDuration": 1200,
+      "backgroundColor": "#0a0f1e"
+    }
+  },
+  "zoomEnabled": true
 }
