@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { isStoreBillingAvailable, initBilling, loadPackages, buyPackage, restorePurchases } from './storeBilling';
+import { isStoreBillingAvailable, initBilling, loadPackages, buyPackage, restorePurchases, debugOfferings } from './storeBilling';
 
 // Subscription plans shown on the store-app "trial ended" screen.
 // Renders nothing until RevenueCat is configured, so the screen safely falls back to invitation-code only.
@@ -7,21 +7,22 @@ export default function StorePlans({ T, userId, onPurchased }) {
   const [pkgs, setPkgs] = useState(null); // null = loading, [] = none
   const [busy, setBusy] = useState('');
   const [msg, setMsg] = useState('');
+  const [diag, setDiag] = useState(''); // TEMPORARY: why plans are empty (remove once store billing works)
 
   useEffect(() => {
     let alive = true;
     (async () => {
       try {
-        if (!isStoreBillingAvailable() || !userId) { if (alive) setPkgs([]); return; }
+        if (!isStoreBillingAvailable() || !userId) { if (alive) { setDiag(!userId ? 'no user id' : 'no RevenueCat key in this build'); setPkgs([]); } return; }
         await initBilling(userId);
         const list = await loadPackages();
-        if (alive) setPkgs(list);
-      } catch (e) { if (alive) setPkgs([]); }
+        if (alive) { if (!list.length) { try { setDiag('no packages: ' + await debugOfferings()); } catch (e2) { setDiag('no packages'); } } setPkgs(list); }
+      } catch (e) { if (alive) { setDiag('error: ' + String((e && (e.message || e.code)) || e).slice(0, 300)); setPkgs([]); } }
     })();
     return () => { alive = false; };
   }, [userId]);
 
-  if (!pkgs || pkgs.length === 0) return null;
+  if (!pkgs || pkgs.length === 0) return diag ? <p style={{ color: '#fbbf24', fontSize: 10, lineHeight: 1.5, margin: '0 0 14px', wordBreak: 'break-word' }}>Plans unavailable ({diag})</p> : null;
 
   const label = (type) => (
     type === 'MONTHLY' ? (T?.storeMonthly || 'Monthly')

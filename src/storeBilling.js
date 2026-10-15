@@ -79,3 +79,13 @@ export async function restorePurchases() {
   const res = await Purchases.restorePurchases();
   return { active: isActive(res && res.customerInfo) };
 }
+
+// TEMPORARY diagnostic: summarises what RevenueCat returned (offering ids and their product ids).
+export async function debugOfferings() {
+  const Purchases = await getPurchases();
+  const o = await Purchases.getOfferings();
+  const all = Object.keys((o && o.all) || {});
+  const cur = o && o.current ? o.current.identifier : 'none';
+  const detail = all.map((k) => k + '[' + ((o.all[k].availablePackages || []).map((p) => (p.product && p.product.identifier) || '?').join(',')) + ']').join(' ');
+  return 'current=' + cur + ' offerings=' + (detail || 'none');
+}
