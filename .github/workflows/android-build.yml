@@ -93,6 +93,6 @@ jobs:
           git config user.email "github-actions@users.noreply.github.com"
           git add gaku-master-release.aab
           git commit -q -m "AAB from run ${{ github.run_number }} (versionCode ${{ github.run_number }})" 2>&1 || fail "git commit failed"
-          OUT=$(git push -f "https://x-access-token:${GH_TOKEN}@github.com/${{ github.repository }}.git" aab-drop 2>&1); RC=$?
+          OUT=$(git push -f "https://x-access-token:${GH_TOKEN}@github.com/${{ github.repository }}.git" aab-drop 2>&1) && RC=0 || RC=$?
           echo "$OUT"
           [ $RC -eq 0 ] || fail "git push failed (rc=$RC): $(echo "$OUT" | tr '\n' ' ' | cut -c1-400)"
