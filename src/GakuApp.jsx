@@ -15,7 +15,8 @@ const IS_STORE_APP = (() => {
 
 // TEMP diagnostic (remove after the trial-lock check on the store app is solved):
 // a thin, tap-through text bar at the bottom of the screen, store apps only.
-const storeDiagBar = (text) => {
+let _diagStatus = "", _diagState = "";
+const storeDiagRender = () => {
   try {
     if (!IS_STORE_APP || typeof document === "undefined") return;
     let el = document.getElementById("gaku-diag");
@@ -25,9 +26,11 @@ const storeDiagBar = (text) => {
       el.style.cssText = "position:fixed;left:0;right:0;bottom:0;z-index:2147483647;pointer-events:none;background:rgba(0,0,0,0.8);color:#fbbf24;font:10px/1.3 monospace;padding:3px 6px calc(3px + env(safe-area-inset-bottom,0px));word-break:break-all";
       document.body.appendChild(el);
     }
-    el.textContent = "[diag 10/15-b] " + text;
+    el.textContent = "[diag 10/15-c] " + _diagStatus + (_diagState ? " || " + _diagState : "");
   } catch {}
 };
+const storeDiagBar = (text) => { _diagStatus = text; storeDiagRender(); };
+const storeDiagState = (text) => { if (text !== _diagState) { _diagState = text; storeDiagRender(); } };
 storeDiagBar("app loaded");
 
 const C = {
@@ -18803,6 +18806,7 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
   // the correct account, with no one-frame window where it could still read
   // the previous user's (or nobody's) data.
   ACTIVE_USER_ID = authUser?.id || null;
+  storeDiagState("state: auth=" + !!authUser + " locked=" + trialLocked + " gaku=" + isGakuStudent + " paid=" + isPaid + " abs=" + absenceSuspended + " dev=" + deviceStatus + " ob=" + onboardingStep + " pw=" + !!previewPaywall);
   const handleAuthed = ({ userId, email } = {}) => {
     setShowAuthScreen(false);
     // A profile form was filled out but held back because the student wasn't
