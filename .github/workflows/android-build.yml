@@ -76,16 +76,23 @@ jobs:
           path: android/app/build/outputs/bundle/release/*.aab
       # zip を介さずに .aab を直接ダウンロードできるよう、専用ブランチ aab-drop に置く(一時的)
       - name: Publish AAB to aab-drop branch
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          set -e
-          AAB=$(ls android/app/build/outputs/bundle/release/*.aab | head -n 1)
+          set -u
+          fail() { echo "::error title=aab-drop::$1"; exit 1; }
+          AAB=$(ls android/app/build/outputs/bundle/release/*.aab 2>&1 | head -n 1)
+          [ -f "$AAB" ] || fail "AAB not found: $AAB"
           DROP="$RUNNER_TEMP/aabdrop"
           mkdir -p "$DROP"
-          cp "$AAB" "$DROP/gaku-master-release.aab"
+          cp "$AAB" "$DROP/gaku-master-release.aab" || fail "copy failed"
           cd "$DROP"
-          git init -q -b aab-drop
+          git init -q -b aab-drop 2>&1 || git init -q 2>&1 || fail "git init failed"
+          git checkout -q -B aab-drop 2>&1 || true
           git config user.name "github-actions"
           git config user.email "github-actions@users.noreply.github.com"
           git add gaku-master-release.aab
-          git commit -q -m "AAB from run ${{ github.run_number }} (versionCode ${{ github.run_number }})"
-          git push -f "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" aab-drop
+          git commit -q -m "AAB from run ${{ github.run_number }} (versionCode ${{ github.run_number }})" 2>&1 || fail "git commit failed"
+          OUT=$(git push -f "https://x-access-token:${GH_TOKEN}@github.com/${{ github.repository }}.git" aab-drop 2>&1); RC=$?
+          echo "$OUT"
+          [ $RC -eq 0 ] || fail "git push failed (rc=$RC): $(echo "$OUT" | tr '\n' ' ' | cut -c1-400)"
