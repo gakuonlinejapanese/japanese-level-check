@@ -15,15 +15,16 @@ export default function StorePlans({ T, userId, onPurchased }) {
 
   useEffect(() => {
     let alive = true;
+    let lastStep = 'start';
     (async () => {
       try {
         if (!isStoreBillingAvailable() || !userId) { if (alive) { setDiag(!userId ? 'no user id' : 'no RevenueCat key in this build'); setPkgs([]); } return; }
         setStep('configure');
-        await withTimeout(initBilling(userId), 20000, 'configure');
+        await withTimeout(initBilling(userId, (t) => { lastStep = t; setStep(t); }), 20000, 'init');
         setStep('offerings');
         const list = await withTimeout(loadPackages(), 20000, 'offerings');
         if (alive) { if (!list.length) { try { setDiag('no packages: ' + await debugOfferings()); } catch (e2) { setDiag('no packages'); } } setPkgs(list); }
-      } catch (e) { if (alive) { setDiag('error: ' + String((e && (e.message || e.code)) || e).slice(0, 300)); setPkgs([]); } }
+      } catch (e) { if (alive) { setDiag('error: ' + String((e && (e.message || e.code)) || e).slice(0, 200) + ' | last step: ' + lastStep); setPkgs([]); } }
     })();
     return () => { alive = false; };
   }, [userId]);

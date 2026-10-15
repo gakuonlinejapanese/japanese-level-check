@@ -35,15 +35,23 @@ async function getPurchases() {
 }
 
 // Links store purchases to the Supabase user id (the webhook uses it to mark the account paid).
-export async function initBilling(userId) {
+// TEMPORARY: onStep reports finer steps (and times out each one) so the diagnostic shows where it stalls.
+const stepTimeout = (promise, ms, label) => Promise.race([promise, new Promise((_, reject) => setTimeout(() => reject(new Error('timeout ' + (ms / 1000) + 's at ' + label)), ms))]);
+export async function initBilling(userId, onStep) {
+  const step = (t) => { try { onStep && onStep(t); } catch (e) {} };
   if (!isStoreBillingAvailable() || !userId) return false;
-  const Purchases = await getPurchases();
+  const k = platformKey();
+  step('key=' + k.slice(0, 5) + ' len=' + k.length + ' plugin=' + String(Capacitor.isPluginAvailable('Purchases')) + ' | import');
+  const Purchases = await stepTimeout(getPurchases(), 8000, 'import');
   if (configuredFor === null) {
-    await Purchases.configure({ apiKey: platformKey(), appUserID: userId });
+    step('configure');
+    await stepTimeout(Purchases.configure({ apiKey: platformKey(), appUserID: userId }), 8000, 'configure');
   } else if (configuredFor !== userId) {
-    await Purchases.logIn({ appUserID: userId });
+    step('logIn');
+    await stepTimeout(Purchases.logIn({ appUserID: userId }), 8000, 'logIn');
   }
   configuredFor = userId;
+  step('configured');
   return true;
 }
 
