@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { isStoreBillingAvailable, initBilling, loadPackages, buyPackage, restorePurchases, debugOfferings } from './storeBilling';
 
+// TEMPORARY: lets the diagnostic show where loading stalls instead of waiting forever.
+const withTimeout = (promise, ms, label) => Promise.race([promise, new Promise((_, reject) => setTimeout(() => reject(new Error('timeout after ' + (ms / 1000) + 's at ' + label)), ms))]);
+
 // Subscription plans shown on the store-app "trial ended" screen.
 // Renders nothing until RevenueCat is configured, so the screen safely falls back to invitation-code only.
 export default function StorePlans({ T, userId, onPurchased }) {
@@ -8,20 +11,24 @@ export default function StorePlans({ T, userId, onPurchased }) {
   const [busy, setBusy] = useState('');
   const [msg, setMsg] = useState('');
   const [diag, setDiag] = useState(''); // TEMPORARY: why plans are empty (remove once store billing works)
+  const [step, setStep] = useState('start'); // TEMPORARY: current loading step for the diagnostic
 
   useEffect(() => {
     let alive = true;
     (async () => {
       try {
         if (!isStoreBillingAvailable() || !userId) { if (alive) { setDiag(!userId ? 'no user id' : 'no RevenueCat key in this build'); setPkgs([]); } return; }
-        await initBilling(userId);
-        const list = await loadPackages();
+        setStep('configure');
+        await withTimeout(initBilling(userId), 20000, 'configure');
+        setStep('offerings');
+        const list = await withTimeout(loadPackages(), 20000, 'offerings');
         if (alive) { if (!list.length) { try { setDiag('no packages: ' + await debugOfferings()); } catch (e2) { setDiag('no packages'); } } setPkgs(list); }
       } catch (e) { if (alive) { setDiag('error: ' + String((e && (e.message || e.code)) || e).slice(0, 300)); setPkgs([]); } }
     })();
     return () => { alive = false; };
   }, [userId]);
 
+  if (pkgs === null) return <p style={{ color: '#fbbf24', fontSize: 10, lineHeight: 1.5, margin: '0 0 14px', wordBreak: 'break-word' }}>Plans loading… (step: {step})</p>;
   if (!pkgs || pkgs.length === 0) return diag ? <p style={{ color: '#fbbf24', fontSize: 10, lineHeight: 1.5, margin: '0 0 14px', wordBreak: 'break-word' }}>Plans unavailable ({diag})</p> : null;
 
   const label = (type) => (
