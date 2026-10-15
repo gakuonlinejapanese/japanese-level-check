@@ -37,6 +37,8 @@ jobs:
 
   release-aab:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -72,3 +74,18 @@ jobs:
         with:
           name: gaku-master-release-aab
           path: android/app/build/outputs/bundle/release/*.aab
+      # zip を介さずに .aab を直接ダウンロードできるよう、専用ブランチ aab-drop に置く(一時的)
+      - name: Publish AAB to aab-drop branch
+        run: |
+          set -e
+          AAB=$(ls android/app/build/outputs/bundle/release/*.aab | head -n 1)
+          DROP="$RUNNER_TEMP/aabdrop"
+          mkdir -p "$DROP"
+          cp "$AAB" "$DROP/gaku-master-release.aab"
+          cd "$DROP"
+          git init -q -b aab-drop
+          git config user.name "github-actions"
+          git config user.email "github-actions@users.noreply.github.com"
+          git add gaku-master-release.aab
+          git commit -q -m "AAB from run ${{ github.run_number }} (versionCode ${{ github.run_number }})"
+          git push -f "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" aab-drop
