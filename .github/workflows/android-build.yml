@@ -74,25 +74,22 @@ jobs:
         with:
           name: gaku-master-release-aab
           path: android/app/build/outputs/bundle/release/*.aab
-      # zip を介さずに .aab を直接ダウンロードできるよう、専用ブランチ aab-drop に置く(一時的)
-      - name: Publish AAB to aab-drop branch
+      # zip を介さずに .aab を直接ダウンロードできるよう、GitHub Release に添付する(一時的。使い終わったら削除)
+      - name: Publish AAB as GitHub Release asset
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
         run: |
           set -u
-          fail() { echo "::error title=aab-drop::$1"; exit 1; }
-          AAB=$(ls android/app/build/outputs/bundle/release/*.aab 2>&1 | head -n 1)
-          [ -f "$AAB" ] || fail "AAB not found: $AAB"
-          DROP="$RUNNER_TEMP/aabdrop"
-          mkdir -p "$DROP"
-          cp "$AAB" "$DROP/gaku-master-release.aab" || fail "copy failed"
-          cd "$DROP"
-          git init -q -b aab-drop 2>&1 || git init -q 2>&1 || fail "git init failed"
-          git checkout -q -B aab-drop 2>&1 || true
-          git config user.name "github-actions"
-          git config user.email "github-actions@users.noreply.github.com"
-          git add gaku-master-release.aab
-          git commit -q -m "AAB from run ${{ github.run_number }} (versionCode ${{ github.run_number }})" 2>&1 || fail "git commit failed"
-          OUT=$(git push -f "https://x-access-token:${GH_TOKEN}@github.com/${{ github.repository }}.git" aab-drop 2>&1) && RC=0 || RC=$?
+          AAB=$(ls android/app/build/outputs/bundle/release/*.aab | head -n 1)
+          [ -f "$AAB" ] || { echo "::error title=aab-release::AAB not found"; exit 1; }
+          cp "$AAB" "$RUNNER_TEMP/gaku-master-release.aab"
+          TAG="aab-${{ github.run_number }}"
+          OUT=$(gh release create "$TAG" "$RUNNER_TEMP/gaku-master-release.aab" \
+            --target "${{ github.sha }}" \
+            --title "AAB run ${{ github.run_number }} (versionCode ${{ github.run_number }})" \
+            --notes "Temporary release for manual Play Console upload. Delete after use." \
+            --prerelease 2>&1) && RC=0 || RC=$?
           echo "$OUT"
-          [ $RC -eq 0 ] || fail "git push failed (rc=$RC): $(echo "$OUT" | tr '\n' ' ' | cut -c1-400)"
+          [ $RC -eq 0 ] || { echo "::error title=aab-release::gh release failed (rc=$RC): $(echo "$OUT" | tr '\n' ' ' | cut -c1-400)"; exit 1; }
+          echo "Download: https://github.com/${{ github.repository }}/releases/download/$TAG/gaku-master-release.aab"
