@@ -57,6 +57,12 @@
   </section>
 
   <section>
+    <h2>⏸ GAKU Master 停止中の生徒</h2>
+    <p style="font-size:12px;color:#64748b;margin:0 0 6px;">授業を受けたら「利用再開」を押すと、データはそのままGAKU Masterが再び使えるようになります。</p>
+    <div id="suspended-list"><p>読み込み中…</p></div>
+  </section>
+
+  <section>
     <h2>📋 キャンセル・リスケ申請</h2>
     <div id="cancellation-list"><p>読み込み中…</p></div>
     <div style="margin-top:12px;padding-top:10px;border-top:1px dashed #cbd5e1;font-size:12px;">
@@ -253,6 +259,7 @@ function enterAdmin() {
   document.getElementById("gate").style.display = "none";
   document.getElementById("app").style.display = "block";
   loadWaitlist();
+  loadSuspendedStudents();
   loadAvailabilityGrid();
   loadOfficialStudents();
   loadTrialLessonList();
@@ -375,6 +382,20 @@ async function suspendGakuMaster(email, requestId, name) {
   if (r.error) return alert(r.error);
   alert("GAKU Masterを一時停止しました。" + (r.emailed ? "\n生徒に英文メールを送りました。" : "\n※通知メールの送信に失敗しました。手動で連絡してください。"));
   loadCancellationRequests();
+  loadSuspendedStudents();
+}
+
+async function loadSuspendedStudents() {
+  const el = document.getElementById("suspended-list");
+  const data = await api("list-suspended-gaku-master");
+  if (data.error) { el.innerHTML = "<p>読み込みに失敗しました: " + data.error + "</p>"; return; }
+  const list = data.students || [];
+  if (list.length === 0) { el.innerHTML = "<p>現在、停止中の生徒はいません。</p>"; return; }
+  el.innerHTML = list.map(st => {
+    const d = st.absence_suspended_at ? new Date(st.absence_suspended_at).toLocaleDateString("ja-JP", { timeZone: "Asia/Tokyo" }) : "";
+    return `<div class="req-card"><div class="req-head"><span>${st.name || "(名前未登録)"} (${st.email})</span><span class="badge manual">⏸ ${d}から停止中</span></div>
+      <div class="row"><button class="btn confirm" onclick="resumeGakuMaster('${st.email}')">▶ 利用再開</button></div></div>`;
+  }).join("");
 }
 
 async function resumeGakuMaster(email) {
@@ -384,6 +405,7 @@ async function resumeGakuMaster(email) {
   if (r.error) return alert(r.error);
   alert("停止を解除しました。");
   loadCancellationRequests();
+  loadSuspendedStudents();
 }
 
 async function acknowledgeCancellationRequest(id) {

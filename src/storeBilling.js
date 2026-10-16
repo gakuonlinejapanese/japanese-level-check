@@ -42,8 +42,7 @@ const stepTimeout = (promise, ms, label) => Promise.race([promise, new Promise((
 export async function initBilling(userId, onStep) {
   const step = (t) => { try { onStep && onStep(t); } catch (e) {} };
   if (!isStoreBillingAvailable() || !userId) return false;
-  const k = platformKey();
-  step('key=' + k.slice(0, 5) + ' len=' + k.length + ' plugin=' + String(Capacitor.isPluginAvailable('Purchases')) + ' | import');
+  step('import');
   const { Purchases } = await stepTimeout(getPurchases(), 8000, 'import');
   if (configuredFor === null) {
     step('configure');

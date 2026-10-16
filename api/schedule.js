@@ -27,6 +27,7 @@ import { assessLongAbsence, SUSPEND_EMAIL_SUBJECT, suspendEmailHtml } from "./_a
 // POST { secret, action: "update-official-student", id, name, email?, notes? }
 //   → 既存のOfficial Studentの名前（・メール・メモ）を更新
 // POST { secret, action: "suspend-gaku-master", email, requestId? }  → 1ヶ月以上の欠席でSeitoが承認した生徒のGAKU Master利用を一時停止し、英文メールで通知
+// POST { secret, action: "list-suspended-gaku-master" }  → 現在GAKU Master停止中の生徒一覧(管理画面の「利用再開」ボタン用)
 // POST { secret, action: "resume-gaku-master", email }  → 停止を解除(正規プラン加入、または3回授業を再受講した場合)
 // POST { secret, action: "reschedule-booking", id, newDate, newTime, notifyStudent }  → 予約の種類(Free Trial/Official/Waitlist)を問わず日時変更
 // POST { secret, action: "set-zoom-link", ids: [teacher_availability.id, ...], zoomLink }
@@ -415,6 +416,14 @@ async function handleSuspendGakuMaster(supabase, body, res) {
   return res.status(200).json({ ok: true, emailed });
 }
 
+async function handleListSuspendedGakuMaster(supabase, res) {
+  const { data, error } = await supabase
+    .from("profiles").select("id, name, email, absence_suspended_at")
+    .not("absence_suspended_at", "is", null).order("absence_suspended_at", { ascending: false });
+  if (error) return res.status(500).json({ error: error.message });
+  return res.status(200).json({ students: data || [] });
+}
+
 async function handleResumeGakuMaster(supabase, body, res) {
   const email = (body.email || "").trim().toLowerCase();
   if (!email) return res.status(400).json({ error: "email is required" });
@@ -689,6 +698,7 @@ export default async function handler(req, res) {
     if (action === "add-official-student") return await handleAddOfficialStudent(supabase, body, res);
     if (action === "update-official-student") return await handleUpdateOfficialStudent(supabase, body, res);
     if (action === "suspend-gaku-master") return await handleSuspendGakuMaster(supabase, body, res);
+    if (action === "list-suspended-gaku-master") return await handleListSuspendedGakuMaster(supabase, res);
     if (action === "resume-gaku-master") return await handleResumeGakuMaster(supabase, body, res);
     if (action === "reschedule-booking") return await handleRescheduleBooking(supabase, body, res);
     if (action === "set-zoom-link") return await handleSetZoomLink(supabase, body, res);

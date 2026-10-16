@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useMemo, useRef } from "react";
+import React, { useState, useEffect, useCallback, useMemo, useRef } from "react";
 import StorePlans from './StorePlans';
 import { supabase, getDeviceId, getDeviceLabel } from "./supabaseClient";
 import HanziWriter from "hanzi-writer";
@@ -331,6 +331,51 @@ function isJlptTargetGoal(goal) {
   const goals = Array.isArray(goal) ? goal : (goal ? [goal] : []);
   return goals.some(g => /^Pass JLPT (N[1-5])$/.test(g || ""));
 }
+// Saved profiles come from several generations of the app (older single-string goals, QuickStart
+// defaults, bridge restores from other devices…), so a stored profile can be missing fields or hold
+// them in an older shape. Screens that read `form.skills.includes(...)`, `form.goal.map(...)` or
+// `form.customGoal.trim()` throw on such a profile, and since nothing above them catches render
+// errors the whole app goes blank (this is what turned "Edit Profile" into a white screen).
+// Always pass a stored profile through this before a screen reads it.
+function normalizeProfileForm(f) {
+  if (!f || typeof f !== "object") return f;
+  const str = (v) => (typeof v === "string" ? v : "");
+  const arr = (v) => (Array.isArray(v) ? v.filter(x => typeof x === "string") : (typeof v === "string" && v ? [v] : []));
+  return {
+    ...f,
+    name: str(f.name), email: str(f.email), country: str(f.country),
+    preferredLang: str(f.preferredLang) || "English",
+    goal: arr(f.goal), customGoal: str(f.customGoal),
+    timeline: str(f.timeline), jlpt: str(f.jlpt),
+    hoursPerDay: str(f.hoursPerDay), daysPerWeek: str(f.daysPerWeek),
+    skills: arr(f.skills),
+  };
+}
+
+// Catches render errors in the subtree so one broken screen shows a recovery message instead of
+// unmounting the entire app (blank white page). `onReset` lets the student step back to their plan.
+class ScreenErrorBoundary extends React.Component {
+  constructor(props) { super(props); this.state = { failed: false }; }
+  static getDerivedStateFromError() { return { failed: true }; }
+  componentDidCatch(error, info) {
+    try { console.error("Screen crashed:", error, info && info.componentStack); } catch {}
+  }
+  render() {
+    if (!this.state.failed) return this.props.children;
+    return (
+      <div style={{ minHeight:"100vh", background:"#0a0f1e", display:"flex", alignItems:"center", justifyContent:"center", padding:24 }}>
+        <div style={{ maxWidth:380, width:"100%", textAlign:"center", color:"#e2e8f0", background:"#111827", border:"1px solid #1e293b", borderRadius:16, padding:"28px 22px" }}>
+          <p style={{ fontSize:30, margin:"0 0 8px" }}>⚠️</p>
+          <p style={{ fontSize:15, fontWeight:700, margin:"0 0 8px" }}>Something went wrong on this screen.</p>
+          <p style={{ fontSize:12, color:"#94a3b8", margin:"0 0 18px", lineHeight:1.6 }}>Your study data is safe. Please go back and try again.</p>
+          <button onClick={() => { this.setState({ failed:false }); if (this.props.onReset) this.props.onReset(); }} style={{ width:"100%", padding:"11px 14px", borderRadius:10, border:"none", background:"linear-gradient(135deg,#7c3aed,#9333ea)", color:"#fff", fontSize:13, fontWeight:700, cursor:"pointer", marginBottom:8 }}>Back to my plan</button>
+          <button onClick={() => window.location.reload()} style={{ width:"100%", padding:"10px 14px", borderRadius:10, border:"1px solid #334155", background:"transparent", color:"#94a3b8", fontSize:12, cursor:"pointer" }}>Reload</button>
+        </div>
+      </div>
+    );
+  }
+}
+
 function jlptTargetLevel(goal) {
   const goals = Array.isArray(goal) ? goal : (goal ? [goal] : []);
   for (const g of goals) {
@@ -16475,9 +16520,9 @@ function FormScreen({ onSubmit, onBack, onCancel, initialJlpt, initialForm, onLo
       jlpt: toEstimationLevel(initialJlpt) || "",
       hoursPerDay:"", daysPerWeek:"", skills:[]
     };
-    // `goal` used to be a single string; normalize any legacy value into an array
-    // so the multi-select buttons below always have an array to work with.
-    return { ...base, goal: Array.isArray(base.goal) ? base.goal : (base.goal ? [base.goal] : []) };
+    // Normalizes legacy/missing fields (goal as a string, no skills, no customGoal…) so the
+    // buttons and `.includes` / `.trim()` calls below always get the types they expect.
+    return normalizeProfileForm(base);
   });
   const [err, setErr] = useState("");
   const [convWarningDismissed, setConvWarningDismissed] = useState(false);
@@ -17700,7 +17745,7 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
                 </div>
               </div>
             )}
-            {(form.skills.includes("onlyHiragana") || form.skills.includes("onlyKatakana") || form.jlpt === "Beginner") && (
+            {((form.skills||[]).includes("onlyHiragana") || (form.skills||[]).includes("onlyKatakana") || form.jlpt === "Beginner") && (
               <div style={{ ...S.card, marginBottom:16, borderLeft:`3px solid ${C.teal}` }}>
                 <p style={{ color:C.teal, fontSize:12, fontWeight:700, letterSpacing:1, marginBottom:4 }}>{T.kanaResourcesTitle}</p>
                 <p style={{ color:"#ffffff", fontSize:12, marginBottom:14 }}>{T.kanaResourcesDesc}</p>
@@ -18558,7 +18603,9 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
         // `goal` used to be a single string (one goal); it's now an array so students
         // can select multiple goals. Wrap any legacy string value into a 1-item array.
         if (parsedForm && !Array.isArray(parsedForm.goal)) parsedForm.goal = parsedForm.goal ? [parsedForm.goal] : [];
-        setForm(parsedForm);
+        // Same for the other fields screens read directly (skills, customGoal…): a stored profile
+        // missing them used to crash the Edit Profile screen and the Dashboard (white screen).
+        setForm(parsedForm ? normalizeProfileForm(parsedForm) : parsedForm);
         // A student who already completed onboarding once must never be sent back
         // to the profile-setup screen automatically — this used to re-trigger on
         // every app reopen for anyone whose bookmarked/home-screen URL still carries
@@ -18910,7 +18957,7 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
           <p style={{ fontSize:28, margin:"0 0 6px" }}>⏳</p>
           <h2 style={{ color:"#f1f5f9", fontSize:20, fontWeight:900, margin:"0 0 8px" }}>{absenceSuspended ? "GAKU Master is temporarily suspended" : (T?.trialEndedTitle || "Your 7-day free trial has ended")}</h2>
           <p style={{ color:"#94a3b8", fontSize:13, margin:"0 0 14px", lineHeight:1.6 }}>
-            {absenceSuspended ? "In accordance with our rules, if you are absent from lessons continuously for one month or more, your use of GAKU Master is temporarily suspended. To keep using it right away, choose a regular payment plan below, or take the three lessons required of Official Students again." : (T?.trialEndedDesc || "Choose a plan below to keep your progress.")}
+            {absenceSuspended ? "Your GAKU Master is temporarily suspended because you have been absent from lessons for longer than the requirements allow. Please reopen your account by taking a lesson or by paying the normal fee for the app." : (T?.trialEndedDesc || "Choose a plan below to keep your progress.")}
           </p>
 
           {!absenceSuspended && (<>
@@ -19029,13 +19076,15 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
     />
   );
   if (editing || forceForm) return (
-    <FormScreen
-      onSubmit={handleSubmit}
-      onCancel={form ? handleCancelEdit : undefined}
-      initialJlpt={initialJlpt}
-      initialForm={formForEdit}
-      onLoginClick={!authUser ? () => { setAuthInitialMode("login"); setShowAuthScreen(true); } : undefined}
-    />
+    <ScreenErrorBoundary onReset={handleCancelEdit}>
+      <FormScreen
+        onSubmit={handleSubmit}
+        onCancel={form ? handleCancelEdit : undefined}
+        initialJlpt={initialJlpt}
+        initialForm={formForEdit}
+        onLoginClick={!authUser ? () => { setAuthInitialMode("login"); setShowAuthScreen(true); } : undefined}
+      />
+    </ScreenErrorBoundary>
   );
   // Where to go once First Win (and the install prompt, if shown) are done:
   // straight to the dashboard for a fully-filled-out profile, or to

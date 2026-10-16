@@ -1,0 +1,25 @@
+name: Cleanup AAB release
+
+# 一時的に作った aab-* リリース(Play Console 入れ替え用)を削除する。手動実行。
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "削除するリリースのタグ(例: aab-12)"
+        required: true
+        default: "aab-12"
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Delete release and tag
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+          TAG: ${{ inputs.tag }}
+        run: |
+          case "$TAG" in aab-*) ;; *) echo "::error::tag must start with aab-"; exit 1;; esac
+          gh release delete "$TAG" --cleanup-tag --yes
