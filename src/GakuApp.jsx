@@ -13,26 +13,6 @@ const IS_STORE_APP = (() => {
   } catch { return false; }
 })();
 
-// TEMP diagnostic (remove after the trial-lock check on the store app is solved):
-// a thin, tap-through text bar at the bottom of the screen, store apps only.
-let _diagStatus = "", _diagState = "";
-const storeDiagRender = () => {
-  try {
-    if (!IS_STORE_APP || typeof document === "undefined") return;
-    let el = document.getElementById("gaku-diag");
-    if (!el) {
-      el = document.createElement("div");
-      el.id = "gaku-diag";
-      el.style.cssText = "position:fixed;left:0;right:0;bottom:0;z-index:2147483647;pointer-events:none;background:rgba(0,0,0,0.8);color:#fbbf24;font:10px/1.3 monospace;padding:3px 6px calc(3px + env(safe-area-inset-bottom,0px));word-break:break-all";
-      document.body.appendChild(el);
-    }
-    el.textContent = "[diag 10/16-b] " + _diagStatus + (_diagState ? " || " + _diagState : "");
-  } catch {}
-};
-const storeDiagBar = (text) => { _diagStatus = text; storeDiagRender(); };
-const storeDiagState = (text) => { if (text !== _diagState) { _diagState = text; storeDiagRender(); } };
-storeDiagBar("app loaded");
-
 const C = {
   bg: "linear-gradient(160deg,#0a0f1e 0%,#0f172a 60%,#0a0f1e 100%)",
   purple: "#7c3aed", purpleLight: "#a855f7",
@@ -18431,13 +18411,11 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
   // lands straight back on their dashboard — no refresh needed.
   const checkAccountStatus = async (userId) => {
     try {
-      storeDiagBar("status: calling… uid=" + String(userId).slice(0, 8));
       const res = await fetch("/api/account-status", {
         method: "POST", headers: { "Content-Type":"application/json" },
         body: JSON.stringify({ userId }),
       });
       const data = await res.json();
-      storeDiagBar("status: http=" + res.status + " exp=" + data?.trialExpired + " gaku=" + data?.isGakuStudent + " paid=" + data?.isPaid + " grace=" + data?.tutorialGraceDaysLeft + " left=" + data?.daysUntilTrialEnds + " reset=" + data?.dataWasReset + (data?.error ? " err=" + data.error : ""));
       if (data?.isGakuStudent) setIsGakuStudent(true);
       if (data?.isPaid) setIsPaid(true);
       if (res.ok && data && typeof data.isGakuStudent === "boolean") setAccountStatusLoaded(true);
@@ -18488,7 +18466,7 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
         }
       }
     } catch (e) {
-      storeDiagBar("status: ERROR " + String((e && e.message) || e));
+      // ignore — caller treats a failed status check as "not upgraded"
     }
     return false;
   };
@@ -18853,7 +18831,6 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
   // the correct account, with no one-frame window where it could still read
   // the previous user's (or nobody's) data.
   ACTIVE_USER_ID = authUser?.id || null;
-  storeDiagState("state: auth=" + !!authUser + " locked=" + trialLocked + " gaku=" + isGakuStudent + " paid=" + isPaid + " abs=" + absenceSuspended + " dev=" + deviceStatus + " ob=" + onboardingStep + " pw=" + !!previewPaywall);
   const handleAuthed = ({ userId, email } = {}) => {
     setShowAuthScreen(false);
     // A profile form was filled out but held back because the student wasn't

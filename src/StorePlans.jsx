@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { isStoreBillingAvailable, initBilling, loadPackages, buyPackage, restorePurchases, debugOfferings } from './storeBilling';
+import { isStoreBillingAvailable, initBilling, loadPackages, buyPackage, restorePurchases } from './storeBilling';
 
-// TEMPORARY: lets the diagnostic show where loading stalls instead of waiting forever.
+// Guards against a native call that never settles, so the screen can fall back instead of waiting forever.
 const withTimeout = (promise, ms, label) => Promise.race([promise, new Promise((_, reject) => setTimeout(() => reject(new Error('timeout after ' + (ms / 1000) + 's at ' + label)), ms))]);
 
 // Subscription plans shown on the store-app "trial ended" screen.
@@ -10,27 +10,21 @@ export default function StorePlans({ T, userId, onPurchased }) {
   const [pkgs, setPkgs] = useState(null); // null = loading, [] = none
   const [busy, setBusy] = useState('');
   const [msg, setMsg] = useState('');
-  const [diag, setDiag] = useState(''); // TEMPORARY: why plans are empty (remove once store billing works)
-  const [step, setStep] = useState('start'); // TEMPORARY: current loading step for the diagnostic
 
   useEffect(() => {
     let alive = true;
-    let lastStep = 'start';
     (async () => {
       try {
-        if (!isStoreBillingAvailable() || !userId) { if (alive) { setDiag(!userId ? 'no user id' : 'no RevenueCat key in this build'); setPkgs([]); } return; }
-        setStep('configure');
-        await withTimeout(initBilling(userId, (t) => { lastStep = t; setStep(t); }), 20000, 'init');
-        setStep('offerings');
+        if (!isStoreBillingAvailable() || !userId) { if (alive) setPkgs([]); return; }
+        await withTimeout(initBilling(userId), 20000, 'init');
         const list = await withTimeout(loadPackages(), 20000, 'offerings');
-        if (alive) { if (!list.length) { try { setDiag('no packages: ' + await debugOfferings()); } catch (e2) { setDiag('no packages'); } } setPkgs(list); }
-      } catch (e) { if (alive) { setDiag('error: ' + String((e && (e.message || e.code)) || e).slice(0, 200) + ' | last step: ' + lastStep); setPkgs([]); } }
+        if (alive) setPkgs(list);
+      } catch (e) { if (alive) setPkgs([]); }
     })();
     return () => { alive = false; };
   }, [userId]);
 
-  if (pkgs === null) return <p style={{ color: '#fbbf24', fontSize: 10, lineHeight: 1.5, margin: '0 0 14px', wordBreak: 'break-word' }}>Plans loading… (step: {step})</p>;
-  if (!pkgs || pkgs.length === 0) return diag ? <p style={{ color: '#fbbf24', fontSize: 10, lineHeight: 1.5, margin: '0 0 14px', wordBreak: 'break-word' }}>Plans unavailable ({diag})</p> : null;
+  if (!pkgs || pkgs.length === 0) return null;
 
   const label = (type) => (
     type === 'MONTHLY' ? (T?.storeMonthly || 'Monthly')
