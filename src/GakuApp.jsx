@@ -18932,7 +18932,7 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
           <p style={{ fontSize:28, margin:"0 0 6px" }}>⏳</p>
           <h2 style={{ color:"#f1f5f9", fontSize:20, fontWeight:900, margin:"0 0 8px" }}>{absenceSuspended ? "GAKU Master is temporarily suspended" : (T?.trialEndedTitle || "Your 7-day free trial has ended")}</h2>
           <p style={{ color:"#94a3b8", fontSize:13, margin:"0 0 14px", lineHeight:1.6 }}>
-            {absenceSuspended ? "In accordance with our rules, if you are absent from lessons continuously for one month or more, your use of GAKU Master is temporarily suspended. To keep using it right away, choose a regular payment plan below, or take the three lessons required of Official Students again." : (T?.trialEndedDesc || "Choose a plan below to keep your progress.")}
+            {absenceSuspended ? "Your GAKU Master is temporarily suspended because you have been absent from lessons for longer than the requirements allow. Please reopen your account by taking a lesson or by paying the normal fee for the app." : (T?.trialEndedDesc || "Choose a plan below to keep your progress.")}
           </p>
 
           {!absenceSuspended && (<>
