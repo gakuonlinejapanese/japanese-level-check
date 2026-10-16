@@ -28,7 +28,8 @@ export function isStoreBillingAvailable() {
 
 async function getPurchases() {
   if (!PurchasesRef) {
-    const mod = await import('@revenuecat/purchases-capacitor');
+    // webpackMode "eager": bundle the plugin into the main chunk so the native app never has to load a separate chunk file (the lazy chunk load stalled on iOS).
+    const mod = await import(/* webpackMode: "eager" */ '@revenuecat/purchases-capacitor');
     PurchasesRef = mod.Purchases;
   }
   return PurchasesRef;
