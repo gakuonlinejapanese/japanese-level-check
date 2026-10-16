@@ -26,7 +26,7 @@ const storeDiagRender = () => {
       el.style.cssText = "position:fixed;left:0;right:0;bottom:0;z-index:2147483647;pointer-events:none;background:rgba(0,0,0,0.8);color:#fbbf24;font:10px/1.3 monospace;padding:3px 6px calc(3px + env(safe-area-inset-bottom,0px));word-break:break-all";
       document.body.appendChild(el);
     }
-    el.textContent = "[diag 10/16-a] " + _diagStatus + (_diagState ? " || " + _diagState : "");
+    el.textContent = "[diag 10/16-b] " + _diagStatus + (_diagState ? " || " + _diagState : "");
   } catch {}
 };
 const storeDiagBar = (text) => { _diagStatus = text; storeDiagRender(); };

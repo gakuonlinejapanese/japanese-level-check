@@ -26,13 +26,14 @@ export function isStoreBillingAvailable() {
   return Capacitor.isNativePlatform() && !!platformKey();
 }
 
+// NOTE: returns { Purchases } (a plain object), never the plugin itself. A Capacitor plugin is a Proxy whose
+// "then" looks like a method, so returning/awaiting it directly from an async function never settles.
 async function getPurchases() {
   if (!PurchasesRef) {
-    // webpackMode "eager": bundle the plugin into the main chunk so the native app never has to load a separate chunk file (the lazy chunk load stalled on iOS).
-    const mod = await import(/* webpackMode: "eager" */ '@revenuecat/purchases-capacitor');
+    const mod = await import('@revenuecat/purchases-capacitor');
     PurchasesRef = mod.Purchases;
   }
-  return PurchasesRef;
+  return { Purchases: PurchasesRef };
 }
 
 // Links store purchases to the Supabase user id (the webhook uses it to mark the account paid).
@@ -43,7 +44,7 @@ export async function initBilling(userId, onStep) {
   if (!isStoreBillingAvailable() || !userId) return false;
   const k = platformKey();
   step('key=' + k.slice(0, 5) + ' len=' + k.length + ' plugin=' + String(Capacitor.isPluginAvailable('Purchases')) + ' | import');
-  const Purchases = await stepTimeout(getPurchases(), 8000, 'import');
+  const { Purchases } = await stepTimeout(getPurchases(), 8000, 'import');
   if (configuredFor === null) {
     step('configure');
     await stepTimeout(Purchases.configure({ apiKey: platformKey(), appUserID: userId }), 8000, 'configure');
@@ -58,7 +59,7 @@ export async function initBilling(userId, onStep) {
 
 // Returns [{ id, type, priceString, raw }] sorted monthly -> 3 months -> 6 months.
 export async function loadPackages() {
-  const Purchases = await getPurchases();
+  const { Purchases } = await getPurchases();
   const offerings = await Purchases.getOfferings();
   const pkgs = (offerings && offerings.current && offerings.current.availablePackages) || [];
   const order = { MONTHLY: 1, THREE_MONTH: 2, SIX_MONTH: 3 };
@@ -73,7 +74,7 @@ function isActive(customerInfo) {
 
 // Resolves { active, cancelled }. Never throws for a user-cancelled purchase.
 export async function buyPackage(pkg) {
-  const Purchases = await getPurchases();
+  const { Purchases } = await getPurchases();
   try {
     const res = await Purchases.purchasePackage({ aPackage: pkg.raw });
     return { active: isActive(res && res.customerInfo), cancelled: false };
@@ -84,14 +85,14 @@ export async function buyPackage(pkg) {
 }
 
 export async function restorePurchases() {
-  const Purchases = await getPurchases();
+  const { Purchases } = await getPurchases();
   const res = await Purchases.restorePurchases();
   return { active: isActive(res && res.customerInfo) };
 }
 
 // TEMPORARY diagnostic: summarises what RevenueCat returned (offering ids and their product ids).
 export async function debugOfferings() {
-  const Purchases = await getPurchases();
+  const { Purchases } = await getPurchases();
   const o = await Purchases.getOfferings();
   const all = Object.keys((o && o.all) || {});
   const cur = o && o.current ? o.current.identifier : 'none';
