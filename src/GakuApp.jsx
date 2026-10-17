@@ -18048,16 +18048,18 @@ function AuthScreen({ onAuthed, T, prefillEmail, initialMode, quickStartStep }) 
           const vData = await vRes.json();
           if (!vRes.ok) throw new Error(vData.error || "Invalid invite code.");
         }
-        const { data, error } = await supabase.auth.signUp({ email, password });
-        if (error) throw error;
-        // Supabase silently no-ops signUp for an already-registered, confirmed email
-        // (anti-enumeration behavior) and returns a placeholder user with no real
-        // auth.users row — writing to profiles/invite_codes with that id would violate
-        // the profiles_id_fkey constraint. Catch it here and send them to Log In instead.
-        if (data?.user && Array.isArray(data.user.identities) && data.user.identities.length === 0) {
+        // Sign-up goes through our own /api/signup (confirmation email sent via Brevo)
+        // so it no longer depends on Supabase's rate-limited built-in email sender.
+        const sRes = await fetch("/api/signup", {
+          method: "POST", headers: { "Content-Type":"application/json" },
+          body: JSON.stringify({ email, password }),
+        });
+        const sData = await sRes.json().catch(() => ({}));
+        if (sData?.alreadyRegistered) {
           throw new Error(T?.emailAlreadyRegistered || "This email is already registered. Please log in instead.");
         }
-        const userId = data?.user?.id;
+        if (!sRes.ok) throw new Error(sData.error || "Could not create account.");
+        const userId = sData?.userId;
         if (userId && inviteCode.trim()) {
           await fetch("/api/invite", {
             method: "POST", headers: { "Content-Type":"application/json" },
