@@ -18022,6 +18022,54 @@ function PolicyGate({ T, name, email, plan, userId, onAgreed, onCancel }) {
 
 // ─── ROOT ────────────────────────────────────────────────────────────────────────
 // ─── ACCOUNT: login / signup with optional GAKU invite code ──────────────────
+// Shown when a student opens a Supabase password-recovery link (sent from the Supabase
+// dashboard "Send password recovery"). Lets them set a new password, then continues to GAKU Master.
+const RECOVERY_FROM_URL = (() => { try { return /type=recovery/.test(window.location.hash); } catch { return false; } })();
+function SetNewPasswordScreen({ hasSession, onDone }) {
+  const [pw, setPw] = useState("");
+  const [pw2, setPw2] = useState("");
+  const [err, setErr] = useState("");
+  const [busy, setBusy] = useState(false);
+  const submit = async (e) => {
+    e.preventDefault();
+    setErr("");
+    if (pw.length < 6) { setErr("Password must be at least 6 characters."); return; }
+    if (pw !== pw2) { setErr("The two passwords do not match."); return; }
+    setBusy(true);
+    try {
+      const { error } = await supabase.auth.updateUser({ password: pw });
+      if (error) throw error;
+      try { window.history.replaceState(null, "", window.location.pathname + window.location.search); } catch {}
+      onDone();
+    } catch (e2) {
+      setErr(e2.message || "Could not update the password.");
+    } finally { setBusy(false); }
+  };
+  const box = { width:"100%", boxSizing:"border-box", padding:"11px 14px", marginBottom:10, background:"#0f172a", border:"1.5px solid rgba(255,255,255,0.1)", borderRadius:10, color:"#f1f5f9", fontSize:14 };
+  return (
+    <div style={{ minHeight:"100vh", background:"linear-gradient(160deg,#0a0f1e 0%,#0f172a 60%,#0a0f1e 100%)", display:"flex", alignItems:"center", justifyContent:"center", padding:24 }}>
+      <form onSubmit={submit} style={{ width:"100%", maxWidth:380, background:"rgba(255,255,255,0.03)", border:"1.5px solid rgba(255,255,255,0.1)", borderRadius:20, padding:28 }}>
+        <h2 style={{ color:"#f1f5f9", fontSize:20, fontWeight:900, margin:"0 0 18px", textAlign:"center" }}>Set a new password</h2>
+        {hasSession ? (
+          <>
+            <input type="password" required minLength={6} placeholder="New password" value={pw} onChange={e=>setPw(e.target.value)} style={box} />
+            <input type="password" required minLength={6} placeholder="Confirm new password" value={pw2} onChange={e=>setPw2(e.target.value)} style={box} />
+            {err && <p style={{ color:"#f87171", fontSize:12, margin:"0 0 10px" }}>{err}</p>}
+            <button type="submit" disabled={busy} style={{ width:"100%", padding:"12px", background:"linear-gradient(135deg,#7c3aed,#a855f7)", border:"none", borderRadius:10, color:"#fff", fontSize:14, fontWeight:800, cursor:"pointer", opacity:busy?0.6:1 }}>
+              {busy ? "…" : "Save new password"}
+            </button>
+          </>
+        ) : (
+          <>
+            <p style={{ color:"#f87171", fontSize:13, margin:"0 0 14px", textAlign:"center" }}>This reset link has expired or was already used. Please ask your teacher to send a new one.</p>
+            <button type="button" onClick={onDone} style={{ width:"100%", padding:"12px", background:"linear-gradient(135deg,#7c3aed,#a855f7)", border:"none", borderRadius:10, color:"#fff", fontSize:14, fontWeight:800, cursor:"pointer" }}>Go to GAKU Master</button>
+          </>
+        )}
+      </form>
+    </div>
+  );
+}
+
 function AuthScreen({ onAuthed, T, prefillEmail, initialMode, quickStartStep }) {
   const [mode, setMode] = useState(initialMode || "login"); // login | signup
   const [rawEmail, setRawEmail] = useState(prefillEmail || "");
@@ -18183,6 +18231,7 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
   const [authUser, setAuthUser] = useState(null);
   const [authChecked, setAuthChecked] = useState(!supabase);
   const [showAuthScreen, setShowAuthScreen] = useState(false);
+  const [recoveryMode, setRecoveryMode] = useState(RECOVERY_FROM_URL);
   const [authInitialMode, setAuthInitialMode] = useState("login");
   const [deviceStatus, setDeviceStatus] = useState(null); // null | 'checking' | 'approved' | 'pending' | 'suspended'
   const [deviceSuspendedUntil, setDeviceSuspendedUntil] = useState(null);
@@ -18553,6 +18602,7 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
       setAuthChecked(true);
     });
     const { data: sub } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (_event === "PASSWORD_RECOVERY") setRecoveryMode(true);
       setAuthUser(session?.user || null);
       setShowAuthScreen(false);
     });
@@ -18824,6 +18874,9 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
         {T.loading || "Loading..."}
       </div>
     );
+  }
+  if (recoveryMode) {
+    return <SetNewPasswordScreen hasSession={!!authUser} onDone={() => setRecoveryMode(false)} />;
   }
   // Set synchronously (not only via the effect below) so that any child
   // component reading scoped storage during THIS render pass — e.g. a vocab

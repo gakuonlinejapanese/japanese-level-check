@@ -45,8 +45,16 @@ function BrandFooter() {
   );
 }
 
+// Password-recovery links (Supabase "Send password recovery") land on the Site URL, which is the
+// level-check home. Send them straight to GAKU Master on the app domain, keeping the token hash.
+const IS_RECOVERY_LINK = /type=recovery/.test(window.location.hash || '');
+if (IS_RECOVERY_LINK && !(window.Capacitor && typeof window.Capacitor.isNativePlatform === 'function' && window.Capacitor.isNativePlatform())
+    && /(^|\.)vercel\.app$/.test(window.location.hostname)) {
+  window.location.replace('https://app.seitojapanese.online/app' + window.location.hash);
+}
+
 export default function App() {
-  const [current, setCurrent] = useState((window.location.pathname === '/app' || (window.Capacitor && typeof window.Capacitor.isNativePlatform === 'function' && window.Capacitor.isNativePlatform())) ? 'gaku-app' : null);
+  const [current, setCurrent] = useState((IS_RECOVERY_LINK || window.location.pathname === '/app' || (window.Capacitor && typeof window.Capacitor.isNativePlatform === 'function' && window.Capacitor.isNativePlatform())) ? 'gaku-app' : null);
   const goSelfStudy = (section, level) => setCurrent(`self-study|${section}|${level}`);
   window.__ss = (level) => goSelfStudy(current || 'general', level);
 
