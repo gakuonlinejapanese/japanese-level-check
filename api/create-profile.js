@@ -1,5 +1,6 @@
 import { getAdminClient } from "./_supabaseAdmin.js";
 import { sendEmail } from "./_resend.js";
+import { handleSignup } from "./_signup.js";
 
 const APP_URL = "https://app.seitojapanese.online";
 const GAKU_READER_URL = "https://chromewebstore.google.com/detail/eambfoiipilfnedcofindninaachibge";
@@ -80,6 +81,8 @@ const TRIAL_DAYS = 7;
 const BACKDATE_DAYS = TRIAL_DAYS + 1; // just past the trial cutoff, safely under the 10-day wipe cutoff
 
 export default async function handler(req, res) {
+  // /api/signup is rewritten here (vercel.json) so we stay within the Hobby plan's 12-function limit.
+  if (req.query?.action === "signup") return handleSignup(req, res);
   if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed" });
   try {
     const { userId, email, isGakuStudent, deviceId } = req.body || {};

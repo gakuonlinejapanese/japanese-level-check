@@ -6,7 +6,7 @@ const APP_URL = "https://app.seitojapanese.online";
 // Sign-up that does NOT depend on Supabase's built-in email sender (which is
 // rate limited and was set to 0/hour). We create the unconfirmed user and get
 // the confirmation link from Supabase, then send the email ourselves via Brevo.
-export default async function handler(req, res) {
+export async function handleSignup(req, res) {
   if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed" });
   try {
     const { email: rawEmail, password } = req.body || {};
