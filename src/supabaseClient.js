@@ -27,7 +27,8 @@ export function getDeviceLabel() {
   try {
     const ua = navigator.userAgent;
     const browser = /Edg/.test(ua) ? "Edge" : /Chrome/.test(ua) ? "Chrome" : /Safari/.test(ua) ? "Safari" : /Firefox/.test(ua) ? "Firefox" : "Browser";
-    const os = /Mac/.test(ua) ? "Mac" : /Windows/.test(ua) ? "Windows" : /Android/.test(ua) ? "Android" : /iPhone|iPad/.test(ua) ? "iOS" : "device";
+    const isIpadOs = /Macintosh/.test(ua) && typeof navigator.maxTouchPoints === "number" && navigator.maxTouchPoints > 1;
+    const os = /iPhone|iPad|iPod/.test(ua) || isIpadOs ? "iOS" : /Mac/.test(ua) ? "Mac" : /Windows/.test(ua) ? "Windows" : /Android/.test(ua) ? "Android" : "device";
     return `${browser} on ${os}`;
   } catch {
     return "Unknown device";

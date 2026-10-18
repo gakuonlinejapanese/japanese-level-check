@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback, useMemo, useRef } from "react"
 import StorePlans from './StorePlans';
 import { supabase, getDeviceId, getDeviceLabel } from "./supabaseClient";
 import HanziWriter from "hanzi-writer";
+import { reportClientCrash } from "./crashReport";
 
 // True inside the iOS/Android store apps (Capacitor shell). Also forceable with ?store=1 for previews.
 // Store builds never show prices, purchase buttons, or links to outside purchase/lesson pages.
@@ -339,6 +340,7 @@ class ScreenErrorBoundary extends React.Component {
   static getDerivedStateFromError() { return { failed: true }; }
   componentDidCatch(error, info) {
     try { console.error("Screen crashed:", error, info && info.componentStack); } catch {}
+    reportClientCrash("screen-boundary", error, info);
   }
   render() {
     if (!this.state.failed) return this.props.children;

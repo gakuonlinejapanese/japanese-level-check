@@ -4,6 +4,8 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import './nativeSpeech';
+import { installGlobalCrashReporting } from './crashReport';
+installGlobalCrashReporting();
 
 // Store apps (Capacitor) bundle the web files locally, so relative "/api/..." calls must
 // go to the live server. CapacitorHttp (enabled in capacitor.config.json) sends these
