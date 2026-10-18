@@ -18192,6 +18192,20 @@ function DeviceApprovalGate({ T }) {
   );
 }
 
+// ─── ACCOUNT: shown when the device check could not reach the server ─────────
+function DeviceCheckErrorGate({ onRetry }) {
+  return (
+    <div style={{ minHeight:"100vh", background:"linear-gradient(160deg,#0a0f1e 0%,#0f172a 60%,#0a0f1e 100%)", display:"flex", alignItems:"center", justifyContent:"center", padding:24, textAlign:"center" }}>
+      <div style={{ maxWidth:380 }}>
+        <p style={{ fontSize:36, margin:"0 0 12px" }}>📡</p>
+        <h2 style={{ color:"#f1f5f9", fontSize:18, fontWeight:900, margin:"0 0 10px" }}>Connection problem</h2>
+        <p style={{ color:"#94a3b8", fontSize:13, lineHeight:1.6, margin:"0 0 16px" }}>We couldn't reach the GAKU server to check your device. Please check your internet connection (try switching between Wi-Fi and mobile data) and try again.</p>
+        <button type="button" onClick={onRetry} style={{ padding:"12px 28px", background:"linear-gradient(135deg,#7c3aed,#a855f7)", border:"none", borderRadius:10, color:"#fff", fontSize:14, fontWeight:800, cursor:"pointer" }}>Try again</button>
+      </div>
+    </div>
+  );
+}
+
 // ─── ACCOUNT: blocks the dashboard during a device-sharing-suspicion suspension ──
 function DeviceSuspendedGate({ T, suspendedUntil }) {
   const untilLabel = suspendedUntil ? new Date(suspendedUntil).toLocaleDateString(undefined, { year: "numeric", month: "long", day: "numeric" }) : "";
@@ -18670,9 +18684,11 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
         method: "POST", headers: { "Content-Type":"application/json" },
         body: JSON.stringify({ userId: authUser.id, email: authUser.email, deviceId: getDeviceId(), deviceLabel: getDeviceLabel(), isPwaStandalone }),
       })
-        .then(r => r.json())
+        .then(r => { if (!r.ok) throw new Error("device-check " + r.status); return r.json(); })
         .then(d => { setDeviceStatus(d.status || "pending"); setDeviceSuspendedUntil(d.suspendedUntil || null); })
-        .catch(() => setDeviceStatus("pending"));
+        // A network/server failure is NOT a new device: show a retry screen instead of
+        // the misleading "New Device Detected" approval screen.
+        .catch(() => setDeviceStatus("error"));
     })();
   }, [authUser]);
   // Safety net: iOS can evict a standalone PWA's localStorage (and with it,
@@ -18940,6 +18956,7 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
   if (policyGate) return <PolicyGate T={T} name={form?.name || authUser?.email} email={authUser?.email || form?.email} plan={policyGate.planLabel} userId={authUser?.id} onAgreed={handlePolicyAgreed} onCancel={()=>setPolicyGate(null)} />;
   if (authUser && deviceStatus === "suspended") return <DeviceSuspendedGate T={T} suspendedUntil={deviceSuspendedUntil} />;
   if (authUser && deviceStatus === "pending") return <DeviceApprovalGate T={T} />;
+  if (authUser && deviceStatus === "error") return <DeviceCheckErrorGate onRetry={() => window.location.reload()} />;
   // Hard, non-dismissible paywall: the server (api/account-status.js) has
   // confirmed the 7-day trial plus the one-time bonus Tutorial week are both
   // over, with no payment. Unlike the soft `showPaywall` interaction-count
