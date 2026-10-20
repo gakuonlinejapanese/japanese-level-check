@@ -12485,7 +12485,7 @@ function LibraryView({ onBack, onSelectFolder, onCreateCard, onViewCard, onQuick
 }
 
 // ─── FOLDER DETAIL VIEW ────────────────────────────────────────────────────────
-function FolderDetailView({ folderName, onBack, onViewCard, onRenamed }) {
+function FolderDetailView({ folderName, onBack, onViewCard, onRenamed, onReviewCard }) {
   const [data, setData] = useState(loadVocabData);
   const [renaming, setRenaming] = useState(false);
   const [renameValue, setRenameValue] = useState("");
@@ -12608,6 +12608,9 @@ function FolderDetailView({ folderName, onBack, onViewCard, onRenamed }) {
               </div>
               <div style={{ display:"flex", gap:6, flexShrink:0 }}>
                 <button onClick={()=>speakVocabWord(c)} style={{ padding:"6px 10px", borderRadius:8, background:"rgba(6,182,212,0.1)", border:`1px solid rgba(6,182,212,0.2)`, color:C.teal, fontSize:14, cursor:"pointer" }}>🔊</button>
+                {onReviewCard && !selecting && (
+                  <button onClick={e=>{ e.stopPropagation(); onReviewCard(c); }} title="Go Flashcard" aria-label="Go Flashcard" style={{ padding:"6px 8px", borderRadius:8, background:"rgba(34,197,94,0.1)", border:"1px solid rgba(34,197,94,0.35)", color:"#4ade80", fontSize:11, fontWeight:700, cursor:"pointer", whiteSpace:"nowrap" }}>🎴 Go Flashcard</button>
+                )}
                 <button onClick={()=>removeCard(c.id)} style={{ padding:"6px 10px", borderRadius:8, background:"rgba(239,68,68,0.08)", border:`1px solid rgba(239,68,68,0.2)`, color:"#ef4444", fontSize:14, cursor:"pointer" }}>🗑</button>
               </div>
             </div>
@@ -13006,7 +13009,7 @@ function VocabBuilder({ form }) {
 
   // ── RENDER SUBVIEWS ──
   if (vocabView === "library") return <LibraryView onBack={()=>setVocabView("main")} onSelectFolder={name=>{setSelectedFolder(name);setVocabView("folderDetail");}} onCreateCard={()=>setVocabView("wordSearch")} onViewCard={w=>{setSelectedWord(w);setWordFrom("library");setVocabView("wordDetail");}} onQuickReview={()=>{setFlashFocus(null);setFlashBack("library");setVocabView("flashcard");}} T={T} />;
-  if (vocabView === "folderDetail") return <FolderDetailView folderName={selectedFolder} onRenamed={setSelectedFolder} onBack={()=>setVocabView("library")} onViewCard={w=>{setSelectedWord(w);setWordFrom("folder");setVocabView("wordDetail");}} />;
+  if (vocabView === "folderDetail") return <FolderDetailView folderName={selectedFolder} onRenamed={setSelectedFolder} onBack={()=>setVocabView("library")} onViewCard={w=>{setSelectedWord(w);setWordFrom("folder");setVocabView("wordDetail");}} onReviewCard={c=>{ setFlashFocus(c); setFlashBack("folderDetail"); setVocabView("flashcard"); }} />;
   if (vocabView === "wordSearch") return <WordSearchScreen form={form} onBack={()=>setVocabView("main")} onSelectWord={w=>{setSelectedWord(w);setWordFrom("search");setVocabView("wordDetail");}} />;
   if (vocabView === "wordDetail") {
     const fromSaved = wordFrom === "library" || wordFrom === "folder";
