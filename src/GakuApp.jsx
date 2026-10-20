@@ -989,6 +989,15 @@ const UI_TRANSLATIONS = {
     help: "🆘 Help",
     editProfile: "✏️ Edit Profile",
     skillsChangeTitle: "Update your study content?",
+    confirmEmailTitle: "Check your email",
+    confirmEmailDesc: "We sent a confirmation email to {email}. Open it and tap “Confirm my email”, then come back here.",
+    confirmEmailSpam: "Can't find it? Check your spam or promotions folder.",
+    confirmEmailDone: "I've confirmed — log in",
+    confirmEmailResend: "Resend confirmation email",
+    confirmEmailResent: "Sent again! Please check your inbox and spam folder.",
+    confirmEmailNotYet: "Your email isn't confirmed yet. Open the email we sent and tap the confirm button first.",
+    confirmEmailAlready: "This email is already confirmed — you can log in now.",
+    confirmEmailBack: "← Back to log in",
     skillsChangeDesc: "You changed your study skills. Would you like new content generated for these skills, or keep the study content you already have?",
     skillsChangeUpdateBtn: "Yes, update my study content",
     skillsChangeKeepBtn: "No, keep my previous study content",
@@ -1553,6 +1562,15 @@ const UI_TRANSLATIONS = {
     help: "🆘 Aide",
     editProfile: "✏️ Modifier le profil",
     skillsChangeTitle: "Modifier votre contenu d'étude ?",
+    confirmEmailTitle: "Vérifiez votre e-mail",
+    confirmEmailDesc: "Nous avons envoyé un e-mail de confirmation à {email}. Ouvrez-le et appuyez sur « Confirm my email », puis revenez ici.",
+    confirmEmailSpam: "Introuvable ? Vérifiez vos spams ou l'onglet Promotions.",
+    confirmEmailDone: "J'ai confirmé — me connecter",
+    confirmEmailResend: "Renvoyer l'e-mail de confirmation",
+    confirmEmailResent: "Renvoyé ! Vérifiez votre boîte de réception et vos spams.",
+    confirmEmailNotYet: "Votre e-mail n'est pas encore confirmé. Ouvrez l'e-mail envoyé et appuyez d'abord sur le bouton de confirmation.",
+    confirmEmailAlready: "Cet e-mail est déjà confirmé — vous pouvez vous connecter.",
+    confirmEmailBack: "← Retour à la connexion",
     skillsChangeDesc: "Vous avez changé vos compétences d'étude. Voulez-vous générer un nouveau contenu pour ces compétences, ou conserver le contenu que vous avez déjà ?",
     skillsChangeUpdateBtn: "Oui, modifier mon contenu d'étude",
     skillsChangeKeepBtn: "Non, garder mon contenu précédent",
@@ -2101,6 +2119,15 @@ const UI_TRANSLATIONS = {
     help: "🆘 Ayuda",
     editProfile: "✏️ Editar perfil",
     skillsChangeTitle: "¿Actualizar tu contenido de estudio?",
+    confirmEmailTitle: "Revisa tu correo",
+    confirmEmailDesc: "Enviamos un correo de confirmación a {email}. Ábrelo, pulsa “Confirm my email” y vuelve aquí.",
+    confirmEmailSpam: "¿No lo encuentras? Revisa spam o promociones.",
+    confirmEmailDone: "Ya confirmé — iniciar sesión",
+    confirmEmailResend: "Reenviar correo de confirmación",
+    confirmEmailResent: "¡Enviado de nuevo! Revisa tu bandeja de entrada y spam.",
+    confirmEmailNotYet: "Tu correo aún no está confirmado. Abre el correo que enviamos y pulsa primero el botón de confirmar.",
+    confirmEmailAlready: "Este correo ya está confirmado — ya puedes iniciar sesión.",
+    confirmEmailBack: "← Volver a iniciar sesión",
     skillsChangeDesc: "Has cambiado tus habilidades de estudio. ¿Quieres generar contenido nuevo para estas habilidades, o mantener el contenido que ya tienes?",
     skillsChangeUpdateBtn: "Sí, actualizar mi contenido de estudio",
     skillsChangeKeepBtn: "No, mantener mi contenido anterior",
@@ -2649,6 +2676,15 @@ const UI_TRANSLATIONS = {
     help: "🆘 Ajuda",
     editProfile: "✏️ Editar perfil",
     skillsChangeTitle: "Atualizar seu conteúdo de estudo?",
+    confirmEmailTitle: "Verifique seu e-mail",
+    confirmEmailDesc: "Enviamos um e-mail de confirmação para {email}. Abra-o, toque em “Confirm my email” e volte aqui.",
+    confirmEmailSpam: "Não encontrou? Verifique o spam ou promoções.",
+    confirmEmailDone: "Já confirmei — entrar",
+    confirmEmailResend: "Reenviar e-mail de confirmação",
+    confirmEmailResent: "Enviado novamente! Verifique a caixa de entrada e o spam.",
+    confirmEmailNotYet: "Seu e-mail ainda não foi confirmado. Abra o e-mail enviado e toque primeiro no botão de confirmar.",
+    confirmEmailAlready: "Este e-mail já está confirmado — você já pode entrar.",
+    confirmEmailBack: "← Voltar ao login",
     skillsChangeDesc: "Você alterou suas habilidades de estudo. Deseja gerar novo conteúdo para essas habilidades ou manter o conteúdo que você já possui?",
     skillsChangeUpdateBtn: "Sim, atualizar meu conteúdo de estudo",
     skillsChangeKeepBtn: "Não, manter meu conteúdo anterior",
@@ -3197,6 +3233,15 @@ const UI_TRANSLATIONS = {
     help: "🆘 Hilfe",
     editProfile: "✏️ Profil bearbeiten",
     skillsChangeTitle: "Lerninhalte aktualisieren?",
+    confirmEmailTitle: "E-Mail prüfen",
+    confirmEmailDesc: "Wir haben eine Bestätigungs-E-Mail an {email} gesendet. Öffnen Sie sie, tippen Sie auf „Confirm my email“ und kehren Sie hierher zurück.",
+    confirmEmailSpam: "Nicht gefunden? Prüfen Sie Spam oder Werbung.",
+    confirmEmailDone: "Ich habe bestätigt — anmelden",
+    confirmEmailResend: "Bestätigungs-E-Mail erneut senden",
+    confirmEmailResent: "Erneut gesendet! Bitte Posteingang und Spam prüfen.",
+    confirmEmailNotYet: "Ihre E-Mail ist noch nicht bestätigt. Öffnen Sie die gesendete E-Mail und tippen Sie zuerst auf den Bestätigungsbutton.",
+    confirmEmailAlready: "Diese E-Mail ist bereits bestätigt — Sie können sich anmelden.",
+    confirmEmailBack: "← Zurück zur Anmeldung",
     skillsChangeDesc: "Du hast deine Lernfähigkeiten geändert. Möchtest du neue Inhalte für diese Fähigkeiten erstellen lassen oder deine bisherigen Lerninhalte behalten?",
     skillsChangeUpdateBtn: "Ja, Lerninhalte aktualisieren",
     skillsChangeKeepBtn: "Nein, bisherige Lerninhalte behalten",
@@ -3745,6 +3790,15 @@ const UI_TRANSLATIONS = {
     help: "🆘 Aiuto",
     editProfile: "✏️ Modifica profilo",
     skillsChangeTitle: "Aggiornare i tuoi contenuti di studio?",
+    confirmEmailTitle: "Controlla la tua email",
+    confirmEmailDesc: "Abbiamo inviato un'email di conferma a {email}. Aprila, tocca “Confirm my email” e torna qui.",
+    confirmEmailSpam: "Non la trovi? Controlla spam o promozioni.",
+    confirmEmailDone: "Ho confermato — accedi",
+    confirmEmailResend: "Invia di nuovo l'email di conferma",
+    confirmEmailResent: "Inviata di nuovo! Controlla posta in arrivo e spam.",
+    confirmEmailNotYet: "La tua email non è ancora confermata. Apri l'email inviata e tocca prima il pulsante di conferma.",
+    confirmEmailAlready: "Questa email è già confermata — puoi accedere.",
+    confirmEmailBack: "← Torna all'accesso",
     skillsChangeDesc: "Hai modificato le tue competenze di studio. Vuoi generare nuovi contenuti per queste competenze o mantenere quelli che hai già?",
     skillsChangeUpdateBtn: "Sì, aggiorna i miei contenuti",
     skillsChangeKeepBtn: "No, mantieni i contenuti precedenti",
@@ -4293,6 +4347,15 @@ const UI_TRANSLATIONS = {
     help: "🆘 帮助",
     editProfile: "✏️ 编辑资料",
     skillsChangeTitle: "要更新学习内容吗？",
+    confirmEmailTitle: "请查看邮箱",
+    confirmEmailDesc: "我们已向 {email} 发送确认邮件。请打开邮件，点击“Confirm my email”，然后返回这里。",
+    confirmEmailSpam: "找不到？请检查垃圾邮件或促销邮件文件夹。",
+    confirmEmailDone: "我已确认 — 登录",
+    confirmEmailResend: "重新发送确认邮件",
+    confirmEmailResent: "已重新发送！请检查收件箱和垃圾邮件。",
+    confirmEmailNotYet: "您的邮箱尚未确认。请先打开我们发送的邮件并点击确认按钮。",
+    confirmEmailAlready: "此邮箱已确认 — 现在可以登录。",
+    confirmEmailBack: "← 返回登录",
     skillsChangeDesc: "你更改了学习技能。是要为这些技能生成新的学习内容，还是保留之前的学习内容？",
     skillsChangeUpdateBtn: "是，更新我的学习内容",
     skillsChangeKeepBtn: "否，保留之前的学习内容",
@@ -4841,6 +4904,15 @@ const UI_TRANSLATIONS = {
     help: "🆘 幫助",
     editProfile: "✏️ 編輯資料",
     skillsChangeTitle: "要更新學習內容嗎？",
+    confirmEmailTitle: "請查看信箱",
+    confirmEmailDesc: "我們已寄出確認信到 {email}。請開啟信件，點擊「Confirm my email」，然後回到這裡。",
+    confirmEmailSpam: "找不到？請檢查垃圾郵件或促銷郵件資料夾。",
+    confirmEmailDone: "我已確認 — 登入",
+    confirmEmailResend: "重新寄送確認信",
+    confirmEmailResent: "已重新寄出！請檢查收件匣與垃圾郵件。",
+    confirmEmailNotYet: "您的信箱尚未確認。請先開啟我們寄出的信件並點擊確認按鈕。",
+    confirmEmailAlready: "此信箱已確認 — 現在可以登入。",
+    confirmEmailBack: "← 返回登入",
     skillsChangeDesc: "你更改了學習技能。要為這些技能產生新的學習內容，還是保留之前的學習內容？",
     skillsChangeUpdateBtn: "是，更新我的學習內容",
     skillsChangeKeepBtn: "否，保留之前的學習內容",
@@ -5389,6 +5461,15 @@ const UI_TRANSLATIONS = {
     help: "🆘 도움말",
     editProfile: "✏️ 프로필 편집",
     skillsChangeTitle: "학습 내용을 변경하시겠습니까?",
+    confirmEmailTitle: "이메일을 확인하세요",
+    confirmEmailDesc: "{email}(으)로 확인 메일을 보냈습니다. 메일을 열어 “Confirm my email”을 누른 뒤 여기로 돌아오세요.",
+    confirmEmailSpam: "메일이 보이지 않나요? 스팸함이나 프로모션함을 확인하세요.",
+    confirmEmailDone: "확인했어요 — 로그인",
+    confirmEmailResend: "확인 메일 다시 보내기",
+    confirmEmailResent: "다시 보냈습니다! 받은편지함과 스팸함을 확인하세요.",
+    confirmEmailNotYet: "아직 이메일이 확인되지 않았습니다. 보낸 메일을 열어 확인 버튼을 먼저 누르세요.",
+    confirmEmailAlready: "이미 확인된 이메일입니다 — 지금 로그인할 수 있어요.",
+    confirmEmailBack: "← 로그인으로 돌아가기",
     skillsChangeDesc: "학습 스킬을 변경하셨습니다. 이 스킬에 맞춰 새로운 학습 내용을 만들까요, 아니면 이전에 만든 학습 내용을 그대로 유지할까요?",
     skillsChangeUpdateBtn: "네, 학습 내용을 변경합니다",
     skillsChangeKeepBtn: "아니요, 이전 학습 내용을 유지합니다",
@@ -5937,6 +6018,15 @@ const UI_TRANSLATIONS = {
     help: "🆘 ช่วยเหลือ",
     editProfile: "✏️ แก้ไขโปรไฟล์",
     skillsChangeTitle: "ต้องการอัปเดตเนื้อหาการเรียนหรือไม่?",
+    confirmEmailTitle: "ตรวจสอบอีเมลของคุณ",
+    confirmEmailDesc: "เราส่งอีเมลยืนยันไปที่ {email} แล้ว เปิดอีเมลแล้วแตะ “Confirm my email” จากนั้นกลับมาที่นี่",
+    confirmEmailSpam: "หาไม่เจอ? ตรวจดูในสแปมหรือโปรโมชัน",
+    confirmEmailDone: "ฉันยืนยันแล้ว — เข้าสู่ระบบ",
+    confirmEmailResend: "ส่งอีเมลยืนยันอีกครั้ง",
+    confirmEmailResent: "ส่งอีกครั้งแล้ว! โปรดตรวจดูกล่องจดหมายและสแปม",
+    confirmEmailNotYet: "อีเมลของคุณยังไม่ได้รับการยืนยัน โปรดเปิดอีเมลที่เราส่งและแตะปุ่มยืนยันก่อน",
+    confirmEmailAlready: "อีเมลนี้ยืนยันแล้ว — เข้าสู่ระบบได้เลย",
+    confirmEmailBack: "← กลับไปหน้าเข้าสู่ระบบ",
     skillsChangeDesc: "คุณเปลี่ยนทักษะการเรียนแล้ว ต้องการให้สร้างเนื้อหาใหม่ตามทักษะนี้ หรือเก็บเนื้อหาการเรียนเดิมไว้?",
     skillsChangeUpdateBtn: "ใช่ อัปเดตเนื้อหาการเรียนของฉัน",
     skillsChangeKeepBtn: "ไม่ เก็บเนื้อหาการเรียนเดิมไว้",
@@ -6485,6 +6575,15 @@ const UI_TRANSLATIONS = {
     help: "🆘 Bantuan",
     editProfile: "✏️ Edit profil",
     skillsChangeTitle: "Kemaskini kandungan pembelajaran anda?",
+    confirmEmailTitle: "Semak e-mel anda",
+    confirmEmailDesc: "Kami telah menghantar e-mel pengesahan ke {email}. Buka e-mel itu, ketik “Confirm my email”, kemudian kembali ke sini.",
+    confirmEmailSpam: "Tidak jumpa? Semak folder spam atau promosi.",
+    confirmEmailDone: "Saya sudah mengesahkan — log masuk",
+    confirmEmailResend: "Hantar semula e-mel pengesahan",
+    confirmEmailResent: "Dihantar semula! Sila semak peti masuk dan spam.",
+    confirmEmailNotYet: "E-mel anda belum disahkan. Buka e-mel yang kami hantar dan ketik butang pengesahan dahulu.",
+    confirmEmailAlready: "E-mel ini sudah disahkan — anda boleh log masuk sekarang.",
+    confirmEmailBack: "← Kembali ke log masuk",
     skillsChangeDesc: "Anda telah menukar kemahiran pembelajaran anda. Adakah anda mahu kandungan baharu dijana untuk kemahiran ini, atau kekalkan kandungan pembelajaran sedia ada?",
     skillsChangeUpdateBtn: "Ya, kemaskini kandungan pembelajaran saya",
     skillsChangeKeepBtn: "Tidak, kekalkan kandungan pembelajaran sebelumnya",
@@ -7033,6 +7132,15 @@ const UI_TRANSLATIONS = {
     help: "🆘 Bantuan",
     editProfile: "✏️ Edit profil",
     skillsChangeTitle: "Perbarui konten belajar Anda?",
+    confirmEmailTitle: "Periksa email Anda",
+    confirmEmailDesc: "Kami telah mengirim email konfirmasi ke {email}. Buka email tersebut, ketuk “Confirm my email”, lalu kembali ke sini.",
+    confirmEmailSpam: "Tidak ketemu? Periksa folder spam atau promosi.",
+    confirmEmailDone: "Saya sudah konfirmasi — masuk",
+    confirmEmailResend: "Kirim ulang email konfirmasi",
+    confirmEmailResent: "Terkirim lagi! Periksa kotak masuk dan spam.",
+    confirmEmailNotYet: "Email Anda belum dikonfirmasi. Buka email yang kami kirim dan ketuk tombol konfirmasi terlebih dahulu.",
+    confirmEmailAlready: "Email ini sudah dikonfirmasi — Anda bisa masuk sekarang.",
+    confirmEmailBack: "← Kembali ke halaman masuk",
     skillsChangeDesc: "Anda telah mengubah keterampilan belajar Anda. Apakah Anda ingin konten baru dibuat untuk keterampilan ini, atau tetap menggunakan konten belajar yang sudah ada?",
     skillsChangeUpdateBtn: "Ya, perbarui konten belajar saya",
     skillsChangeKeepBtn: "Tidak, pertahankan konten belajar sebelumnya",
@@ -7581,6 +7689,15 @@ const UI_TRANSLATIONS = {
     help: "🆘 Trợ giúp",
     editProfile: "✏️ Chỉnh sửa hồ sơ",
     skillsChangeTitle: "Cập nhật nội dung học tập của bạn?",
+    confirmEmailTitle: "Hãy kiểm tra email",
+    confirmEmailDesc: "Chúng tôi đã gửi email xác nhận tới {email}. Hãy mở email, nhấn “Confirm my email” rồi quay lại đây.",
+    confirmEmailSpam: "Không thấy? Hãy kiểm tra thư rác hoặc mục Quảng cáo.",
+    confirmEmailDone: "Tôi đã xác nhận — đăng nhập",
+    confirmEmailResend: "Gửi lại email xác nhận",
+    confirmEmailResent: "Đã gửi lại! Hãy kiểm tra hộp thư đến và thư rác.",
+    confirmEmailNotYet: "Email của bạn chưa được xác nhận. Hãy mở email chúng tôi đã gửi và nhấn nút xác nhận trước.",
+    confirmEmailAlready: "Email này đã được xác nhận — bạn có thể đăng nhập ngay.",
+    confirmEmailBack: "← Quay lại đăng nhập",
     skillsChangeDesc: "Bạn đã thay đổi kỹ năng học tập. Bạn có muốn tạo nội dung mới cho các kỹ năng này, hay giữ nguyên nội dung học tập trước đó?",
     skillsChangeUpdateBtn: "Có, cập nhật nội dung học tập của tôi",
     skillsChangeKeepBtn: "Không, giữ nội dung học tập trước đó",
@@ -8129,6 +8246,15 @@ const UI_TRANSLATIONS = {
     help: "🆘 सहायता",
     editProfile: "✏️ प्रोफ़ाइल संपादित करें",
     skillsChangeTitle: "क्या आप अपनी अध्ययन सामग्री अपडेट करना चाहते हैं?",
+    confirmEmailTitle: "अपना ईमेल देखें",
+    confirmEmailDesc: "हमने {email} पर पुष्टि ईमेल भेजा है। उसे खोलें, “Confirm my email” दबाएँ और फिर यहाँ लौटें।",
+    confirmEmailSpam: "नहीं मिला? स्पैम या प्रमोशन फ़ोल्डर देखें।",
+    confirmEmailDone: "मैंने पुष्टि कर दी — लॉग इन करें",
+    confirmEmailResend: "पुष्टि ईमेल दोबारा भेजें",
+    confirmEmailResent: "फिर से भेज दिया! इनबॉक्स और स्पैम देखें।",
+    confirmEmailNotYet: "आपका ईमेल अभी पुष्ट नहीं हुआ है। भेजा गया ईमेल खोलकर पहले पुष्टि बटन दबाएँ।",
+    confirmEmailAlready: "यह ईमेल पहले से पुष्ट है — अब लॉग इन करें।",
+    confirmEmailBack: "← लॉग इन पर वापस जाएँ",
     skillsChangeDesc: "आपने अपने अध्ययन कौशल बदल दिए हैं। क्या आप इन कौशलों के लिए नई सामग्री बनवाना चाहते हैं, या पहले से बनाई गई अध्ययन सामग्री को वैसे ही रखना चाहते हैं?",
     skillsChangeUpdateBtn: "हाँ, मेरी अध्ययन सामग्री अपडेट करें",
     skillsChangeKeepBtn: "नहीं, पिछली अध्ययन सामग्री रखें",
@@ -8677,6 +8803,15 @@ const UI_TRANSLATIONS = {
     help: "🆘 ヘルプ",
     editProfile: "✏️ プロフィール編集",
     skillsChangeTitle: "勉強内容を変更しますか？",
+    confirmEmailTitle: "メールを確認してください",
+    confirmEmailDesc: "{email} に確認メールを送りました。メールを開いて「Confirm my email」をタップしてから、ここに戻ってください。",
+    confirmEmailSpam: "見つからない場合は、迷惑メールやプロモーションのフォルダを確認してください。",
+    confirmEmailDone: "確認しました — ログイン",
+    confirmEmailResend: "確認メールを再送する",
+    confirmEmailResent: "再送しました。受信箱と迷惑メールフォルダを確認してください。",
+    confirmEmailNotYet: "メールがまだ確認されていません。送信したメールを開いて、先に確認ボタンを押してください。",
+    confirmEmailAlready: "このメールはすでに確認済みです。ログインできます。",
+    confirmEmailBack: "← ログインに戻る",
     skillsChangeDesc: "学習スキルの選択が変わりました。この内容に合わせて新しい勉強内容を作成しますか？それとも、以前作成した勉強内容をそのまま引き継ぎますか？",
     skillsChangeUpdateBtn: "勉強内容を変更する",
     skillsChangeKeepBtn: "以前の勉強内容をそのまま引き継ぐ",
@@ -9225,6 +9360,15 @@ const UI_TRANSLATIONS = {
     help: "🆘 Yardım",
     editProfile: "✏️ Profili düzenle",
     skillsChangeTitle: "Çalışma içeriğinizi güncellemek ister misiniz?",
+    confirmEmailTitle: "E-postanızı kontrol edin",
+    confirmEmailDesc: "{email} adresine bir onay e-postası gönderdik. E-postayı açın, “Confirm my email” düğmesine dokunun ve buraya dönün.",
+    confirmEmailSpam: "Bulamıyor musunuz? Spam veya promosyonlar klasörüne bakın.",
+    confirmEmailDone: "Onayladım — giriş yap",
+    confirmEmailResend: "Onay e-postasını yeniden gönder",
+    confirmEmailResent: "Yeniden gönderildi! Gelen kutusu ve spam klasörünü kontrol edin.",
+    confirmEmailNotYet: "E-postanız henüz onaylanmadı. Gönderdiğimiz e-postayı açıp önce onay düğmesine dokunun.",
+    confirmEmailAlready: "Bu e-posta zaten onaylı — şimdi giriş yapabilirsiniz.",
+    confirmEmailBack: "← Girişe dön",
     skillsChangeDesc: "Çalışma becerilerinizi değiştirdiniz. Bu beceriler için yeni içerik oluşturulmasını mı istersiniz, yoksa önceki çalışma içeriğinizi mi korumak istersiniz?",
     skillsChangeUpdateBtn: "Evet, çalışma içeriğimi güncelle",
     skillsChangeKeepBtn: "Hayır, önceki çalışma içeriğimi koru",
@@ -9773,6 +9917,15 @@ const UI_TRANSLATIONS = {
     help: "🆘 मद्दत",
     editProfile: "✏️ प्रोफाइल सम्पादन गर्नुहोस्",
     skillsChangeTitle: "तपाईंको अध्ययन सामग्री अपडेट गर्ने?",
+    confirmEmailTitle: "आफ्नो इमेल हेर्नुहोस्",
+    confirmEmailDesc: "हामीले {email} मा पुष्टि इमेल पठायौं। इमेल खोलेर “Confirm my email” थिच्नुहोस् र यहाँ फर्कनुहोस्।",
+    confirmEmailSpam: "भेटिएन? स्प्याम वा प्रमोशन फोल्डर हेर्नुहोस्।",
+    confirmEmailDone: "मैले पुष्टि गरें — लगइन गर्नुहोस्",
+    confirmEmailResend: "पुष्टि इमेल फेरि पठाउनुहोस्",
+    confirmEmailResent: "फेरि पठाइयो! इनबक्स र स्प्याम हेर्नुहोस्।",
+    confirmEmailNotYet: "तपाईंको इमेल अझै पुष्टि भएको छैन। पठाइएको इमेल खोलेर पहिले पुष्टि बटन थिच्नुहोस्।",
+    confirmEmailAlready: "यो इमेल पहिले नै पुष्टि भइसकेको छ — अब लगइन गर्न सक्नुहुन्छ।",
+    confirmEmailBack: "← लगइनमा फर्कनुहोस्",
     skillsChangeDesc: "तपाईंले आफ्नो अध्ययन सीपहरू परिवर्तन गर्नुभयो। के तपाईं यी सीपहरूका लागि नयाँ सामग्री बनाउन चाहनुहुन्छ, वा पहिले बनाइएको अध्ययन सामग्री त्यसै राख्न चाहनुहुन्छ?",
     skillsChangeUpdateBtn: "हो, मेरो अध्ययन सामग्री अपडेट गर्नुहोस्",
     skillsChangeKeepBtn: "होइन, अघिल्लो अध्ययन सामग्री राख्नुहोस्",
@@ -10321,6 +10474,15 @@ const UI_TRANSLATIONS = {
     help: "🆘 Tulong",
     editProfile: "✏️ I-edit ang profile",
     skillsChangeTitle: "I-update ang iyong study content?",
+    confirmEmailTitle: "Tingnan ang iyong email",
+    confirmEmailDesc: "Nagpadala kami ng confirmation email sa {email}. Buksan ito, i-tap ang “Confirm my email”, at bumalik dito.",
+    confirmEmailSpam: "Hindi makita? Tingnan ang spam o promotions folder.",
+    confirmEmailDone: "Nakumpirma ko na — mag-log in",
+    confirmEmailResend: "Ipadala muli ang confirmation email",
+    confirmEmailResent: "Naipadala muli! Tingnan ang inbox at spam.",
+    confirmEmailNotYet: "Hindi pa nakukumpirma ang iyong email. Buksan muna ang ipinadala naming email at i-tap ang confirm button.",
+    confirmEmailAlready: "Nakumpirma na ang email na ito — maaari ka nang mag-log in.",
+    confirmEmailBack: "← Bumalik sa log in",
     skillsChangeDesc: "Binago mo ang iyong study skills. Gusto mo bang gumawa ng bagong content para sa mga skill na ito, o panatilihin na lang ang dati mong study content?",
     skillsChangeUpdateBtn: "Oo, i-update ang aking study content",
     skillsChangeKeepBtn: "Hindi, panatilihin ang dating study content",
@@ -16669,7 +16831,10 @@ function FormScreen({ onSubmit, onBack, onCancel, initialJlpt, initialForm, onLo
     const displayGoal = form.goal.map(g => g === "Other" ? form.customGoal : g).join(", ");
     const submitted = { ...form, displayGoal };
     const skillsDiffer = initialForm && JSON.stringify([...(initialForm.skills||[])].sort()) !== JSON.stringify([...(submitted.skills||[])].sort());
-    if (skillsDiffer) {
+    // Changing the FINAL GOAL (e.g. to "Pass JLPT N3") also changes what the study guide should
+    // contain, but a saved guide never rebuilds by itself — so ask, exactly like for study skills.
+    const goalDiffer = initialForm && JSON.stringify([...(initialForm.goal||[])].sort()) !== JSON.stringify([...(submitted.goal||[])].sort());
+    if (skillsDiffer || goalDiffer) {
       setPendingSubmitForm(submitted);
       return;
     }
@@ -16697,7 +16862,10 @@ function FormScreen({ onSubmit, onBack, onCancel, initialJlpt, initialForm, onLo
   const confirmKeepStudyContent = () => {
     const f = pendingSubmitForm;
     setPendingSubmitForm(null);
-    onSubmit({ ...f, skills: initialForm.skills });
+    // Keep the old study content: skills stay as they were (if they were changed); a changed goal
+    // is still saved, but the existing guide is not rebuilt.
+    const skillsWereChanged = JSON.stringify([...(initialForm.skills||[])].sort()) !== JSON.stringify([...(f.skills||[])].sort());
+    onSubmit(skillsWereChanged ? { ...f, skills: initialForm.skills } : f);
   };
 
   return (
@@ -18212,10 +18380,41 @@ function AuthScreen({ onAuthed, T, prefillEmail, initialMode, quickStartStep }) 
   const [inviteCode, setInviteCode] = useState("");
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState("");
+  // Email not confirmed yet: set to the address once signup succeeds (or a login is refused for
+  // being unconfirmed), which swaps the form for a "check your email" panel with a resend button.
+  const [confirmEmail, setConfirmEmail] = useState("");
+  const [confirmNote, setConfirmNote] = useState("");
+  const fillEmail = (str, email) => String(str).split("{email}").join(email);
 
   if (!supabase) {
     return <p style={{ color:"#f87171", fontSize:13 }}>Account features are not configured yet.</p>;
   }
+
+  const resendConfirmation = async () => {
+    setConfirmNote(""); setBusy(true);
+    try {
+      const r = await fetch("/api/signup", { method:"POST", headers:{ "Content-Type":"application/json" }, body: JSON.stringify({ email: confirmEmail, resend: true }) });
+      const d = await r.json().catch(() => ({}));
+      if (d?.alreadyConfirmed) setConfirmNote(T?.confirmEmailAlready || "This email is already confirmed — you can log in now.");
+      else if (r.ok) setConfirmNote(T?.confirmEmailResent || "Sent again! Please check your inbox and spam folder.");
+      else setConfirmNote(d?.error || "Could not send the email. Please try again.");
+    } catch { setConfirmNote("Could not send the email. Please try again."); }
+    setBusy(false);
+  };
+  // "I've confirmed" → try the password login for real; if it still says unconfirmed, say so.
+  const loginAfterConfirm = async () => {
+    setConfirmNote(""); setBusy(true);
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({ email: confirmEmail, password });
+      if (error) {
+        if (/not confirmed/i.test(error.message || "")) setConfirmNote(T?.confirmEmailNotYet || "Your email isn't confirmed yet. Open the email we sent and tap the confirm button first.");
+        else { setConfirmEmail(""); setMode("login"); setErr(error.message || "Something went wrong."); }
+      } else {
+        onAuthed({ userId: data?.user?.id || null, email: confirmEmail });
+      }
+    } catch (e3) { setConfirmNote(e3.message || "Something went wrong."); }
+    setBusy(false);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -18241,6 +18440,8 @@ function AuthScreen({ onAuthed, T, prefillEmail, initialMode, quickStartStep }) 
         if (sData?.alreadyRegistered) {
           throw new Error(T?.emailAlreadyRegistered || "This email is already registered. Please log in instead.");
         }
+        // (An account that exists but was never confirmed gets a fresh confirmation email from
+        // the server instead — sData.needsConfirmation — and continues below.)
         if (!sRes.ok) throw new Error(sData.error || "Could not create account.");
         const userId = sData?.userId;
         if (userId && inviteCode.trim()) {
@@ -18259,10 +18460,16 @@ function AuthScreen({ onAuthed, T, prefillEmail, initialMode, quickStartStep }) 
             throw new Error(pData.error || "Failed to save your profile.");
           }
         }
+        // New accounts must confirm their email before they can log in. Stop here with a clear
+        // "check your email" screen (instead of dropping them into an app they can't save in).
+        if (sData?.needsConfirmation) { setConfirmEmail(email); return; }
         onAuthed({ userId, email });
       } else {
         const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-        if (error) throw error;
+        if (error) {
+          if (/not confirmed/i.test(error.message || "")) { setConfirmEmail(email); return; }
+          throw error;
+        }
         onAuthed({ userId: data?.user?.id || null, email });
       }
     } catch (e2) {
@@ -18271,6 +18478,33 @@ function AuthScreen({ onAuthed, T, prefillEmail, initialMode, quickStartStep }) 
       setBusy(false);
     }
   };
+
+  if (confirmEmail) {
+    return (
+      <div style={{ minHeight:"100vh", background:"linear-gradient(160deg,#0a0f1e 0%,#0f172a 60%,#0a0f1e 100%)", display:"flex", alignItems:"center", justifyContent:"center", padding:24 }}>
+        <div style={{ width:"100%", maxWidth:380, background:"rgba(255,255,255,0.03)", border:"1.5px solid rgba(255,255,255,0.1)", borderRadius:20, padding:28, textAlign:"center" }}>
+          <p style={{ fontSize:34, margin:"0 0 8px" }}>📧</p>
+          <h2 style={{ color:"#f1f5f9", fontSize:20, fontWeight:900, margin:"0 0 12px" }}>{T?.confirmEmailTitle || "Check your email"}</h2>
+          <p style={{ color:"#cbd5e1", fontSize:13, lineHeight:1.7, margin:"0 0 8px" }}>
+            {fillEmail(T?.confirmEmailDesc || "We sent a confirmation email to {email}. Open it and tap “Confirm my email”, then come back here.", confirmEmail)}
+          </p>
+          <p style={{ color:"#94a3b8", fontSize:12, lineHeight:1.6, margin:"0 0 18px" }}>{T?.confirmEmailSpam || "Can't find it? Check your spam or promotions folder."}</p>
+          {confirmNote && <p style={{ color:"#fbbf24", fontSize:12, lineHeight:1.6, margin:"0 0 12px" }}>{confirmNote}</p>}
+          {password ? (
+            <button onClick={loginAfterConfirm} disabled={busy} style={{ width:"100%", padding:"12px", background:"linear-gradient(135deg,#7c3aed,#a855f7)", border:"none", borderRadius:10, color:"#fff", fontSize:14, fontWeight:800, cursor:"pointer", marginBottom:10 }}>
+              {busy ? "…" : (T?.confirmEmailDone || "I've confirmed — log in")}
+            </button>
+          ) : null}
+          <button onClick={resendConfirmation} disabled={busy} style={{ width:"100%", padding:"11px", background:"transparent", border:"1px solid rgba(255,255,255,0.15)", borderRadius:10, color:"#cbd5e1", fontSize:13, fontWeight:700, cursor:"pointer", marginBottom:10 }}>
+            {T?.confirmEmailResend || "Resend confirmation email"}
+          </button>
+          <button onClick={()=>{ setConfirmEmail(""); setConfirmNote(""); setMode("login"); }} style={{ background:"none", border:"none", color:"#94a3b8", fontSize:12, cursor:"pointer" }}>
+            {T?.confirmEmailBack || "← Back to log in"}
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div style={{ minHeight:"100vh", background:"linear-gradient(160deg,#0a0f1e 0%,#0f172a 60%,#0a0f1e 100%)", display:"flex", alignItems:"center", justifyContent:"center", padding:24 }}>
