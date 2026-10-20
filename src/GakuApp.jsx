@@ -1396,6 +1396,8 @@ const UI_TRANSLATIONS = {
     wordCardsLabel: "🃏 Word Cards",
     searchCreateCards: "Search & create cards",
     flashcardsLabel: "🎴 Flashcards",
+    quickReviewFlashcards: "🎴 Quick review with Flashcards",
+    reviewThisFlashcard: "🎴 Review this word with Flashcards",
     reviewSavedWords: "Review saved words",
     searchingDictionary: "Searching Japanese dictionary...",
     speakWord: "Pronounce word",
@@ -1911,6 +1913,8 @@ const UI_TRANSLATIONS = {
     wordCardsLabel: "🃏 Cartes de mots",
     searchCreateCards: "Rechercher et créer des cartes",
     flashcardsLabel: "🎴 Cartes mémo",
+    quickReviewFlashcards: "🎴 Révision rapide avec les cartes mémo",
+    reviewThisFlashcard: "🎴 Réviser ce mot avec les cartes mémo",
     reviewSavedWords: "Réviser les mots enregistrés",
     searchingDictionary: "Recherche dans le dictionnaire japonais...",
     speakWord: "Prononcer le mot",
@@ -2457,6 +2461,8 @@ const UI_TRANSLATIONS = {
     wordCardsLabel: "🃏 Tarjetas de palabras",
     searchCreateCards: "Buscar y crear tarjetas",
     flashcardsLabel: "🎴 Tarjetas didácticas",
+    quickReviewFlashcards: "🎴 Repaso rápido con tarjetas didácticas",
+    reviewThisFlashcard: "🎴 Repasar esta palabra con tarjetas didácticas",
     reviewSavedWords: "Repasar palabras guardadas",
     searchingDictionary: "Buscando en el diccionario japonés...",
     speakWord: "Pronunciar palabra",
@@ -3003,6 +3009,8 @@ const UI_TRANSLATIONS = {
     wordCardsLabel: "🃏 Cartões de palavras",
     searchCreateCards: "Buscar e criar cartões",
     flashcardsLabel: "🎴 Flashcards",
+    quickReviewFlashcards: "🎴 Revisão rápida com Flashcards",
+    reviewThisFlashcard: "🎴 Revisar esta palavra com Flashcards",
     reviewSavedWords: "Revisar palavras salvas",
     searchingDictionary: "Pesquisando no dicionário japonês...",
     speakWord: "Pronunciar palavra",
@@ -3549,6 +3557,8 @@ const UI_TRANSLATIONS = {
     wordCardsLabel: "🃏 Wortkarten",
     searchCreateCards: "Karten suchen & erstellen",
     flashcardsLabel: "🎴 Karteikarten",
+    quickReviewFlashcards: "🎴 Schnelle Wiederholung mit Karteikarten",
+    reviewThisFlashcard: "🎴 Dieses Wort mit Karteikarten wiederholen",
     reviewSavedWords: "Gespeicherte Wörter wiederholen",
     searchingDictionary: "Japanisches Wörterbuch wird durchsucht...",
     speakWord: "Wort aussprechen",
@@ -4095,6 +4105,8 @@ const UI_TRANSLATIONS = {
     wordCardsLabel: "🃏 Schede di parole",
     searchCreateCards: "Cerca e crea schede",
     flashcardsLabel: "🎴 Flashcard",
+    quickReviewFlashcards: "🎴 Ripasso rapido con le Flashcard",
+    reviewThisFlashcard: "🎴 Ripassa questa parola con le Flashcard",
     reviewSavedWords: "Rivedi le parole salvate",
     searchingDictionary: "Ricerca nel dizionario giapponese...",
     speakWord: "Pronuncia la parola",
@@ -4641,6 +4653,8 @@ const UI_TRANSLATIONS = {
     wordCardsLabel: "🃏 单词卡",
     searchCreateCards: "搜索并创建卡片",
     flashcardsLabel: "🎴 闪卡",
+    quickReviewFlashcards: "🎴 用闪卡快速复习",
+    reviewThisFlashcard: "🎴 用闪卡复习这个单词",
     reviewSavedWords: "复习已保存的单词",
     searchingDictionary: "正在搜索日语词典...",
     speakWord: "发音单词",
@@ -5187,6 +5201,8 @@ const UI_TRANSLATIONS = {
     wordCardsLabel: "🃏 單字卡",
     searchCreateCards: "搜尋並建立卡片",
     flashcardsLabel: "🎴 閃卡",
+    quickReviewFlashcards: "🎴 用閃卡快速複習",
+    reviewThisFlashcard: "🎴 用閃卡複習這個單字",
     reviewSavedWords: "複習已儲存的單字",
     searchingDictionary: "正在搜尋日語詞典...",
     speakWord: "發音單字",
@@ -5733,6 +5749,8 @@ const UI_TRANSLATIONS = {
     wordCardsLabel: "🃏 단어 카드",
     searchCreateCards: "카드 검색 및 생성",
     flashcardsLabel: "🎴 플래시카드",
+    quickReviewFlashcards: "🎴 플래시카드로 빠르게 복습하기",
+    reviewThisFlashcard: "🎴 이 단어를 플래시카드로 복습하기",
     reviewSavedWords: "저장된 단어 복습",
     searchingDictionary: "일본어 사전 검색 중...",
     speakWord: "단어 발음 듣기",
@@ -6279,6 +6297,8 @@ const UI_TRANSLATIONS = {
     wordCardsLabel: "🃏 การ์ดคำศัพท์",
     searchCreateCards: "ค้นหาและสร้างการ์ด",
     flashcardsLabel: "🎴 แฟลชการ์ด",
+    quickReviewFlashcards: "🎴 ทบทวนด่วนด้วยแฟลชการ์ด",
+    reviewThisFlashcard: "🎴 ทบทวนคำนี้ด้วยแฟลชการ์ด",
     reviewSavedWords: "ทบทวนคำที่บันทึกไว้",
     searchingDictionary: "กำลังค้นหาพจนานุกรมภาษาญี่ปุ่น...",
     speakWord: "ออกเสียงคำ",
@@ -6825,6 +6845,8 @@ const UI_TRANSLATIONS = {
     wordCardsLabel: "🃏 Kad perkataan",
     searchCreateCards: "Cari & cipta kad",
     flashcardsLabel: "🎴 Kad imbas",
+    quickReviewFlashcards: "🎴 Ulang kaji pantas dengan Kad imbas",
+    reviewThisFlashcard: "🎴 Ulang kaji perkataan ini dengan Kad imbas",
     reviewSavedWords: "Semak perkataan tersimpan",
     searchingDictionary: "Mencari dalam kamus Jepun...",
     speakWord: "Sebut perkataan",
@@ -7371,6 +7393,8 @@ const UI_TRANSLATIONS = {
     wordCardsLabel: "🃏 Kartu kata",
     searchCreateCards: "Cari & buat kartu",
     flashcardsLabel: "🎴 Kartu hafalan",
+    quickReviewFlashcards: "🎴 Tinjauan cepat dengan Kartu hafalan",
+    reviewThisFlashcard: "🎴 Tinjau kata ini dengan Kartu hafalan",
     reviewSavedWords: "Tinjau kata tersimpan",
     searchingDictionary: "Mencari dalam kamus Jepang...",
     speakWord: "Ucapkan kata",
@@ -7917,6 +7941,8 @@ const UI_TRANSLATIONS = {
     wordCardsLabel: "🃏 Thẻ từ",
     searchCreateCards: "Tìm kiếm & tạo thẻ",
     flashcardsLabel: "🎴 Thẻ ghi nhớ",
+    quickReviewFlashcards: "🎴 Ôn tập nhanh bằng Thẻ ghi nhớ",
+    reviewThisFlashcard: "🎴 Ôn từ này bằng Thẻ ghi nhớ",
     reviewSavedWords: "Ôn lại từ đã lưu",
     searchingDictionary: "Đang tìm trong từ điển tiếng Nhật...",
     speakWord: "Phát âm từ",
@@ -8463,6 +8489,8 @@ const UI_TRANSLATIONS = {
     wordCardsLabel: "🃏 शब्द कार्ड",
     searchCreateCards: "कार्ड खोजें और बनाएं",
     flashcardsLabel: "🎴 फ्लैशकार्ड",
+    quickReviewFlashcards: "🎴 फ्लैशकार्ड से त्वरित समीक्षा",
+    reviewThisFlashcard: "🎴 इस शब्द को फ्लैशकार्ड से दोहराएँ",
     reviewSavedWords: "सहेजे गए शब्दों की समीक्षा करें",
     searchingDictionary: "जापानी शब्दकोश खोज रहे हैं...",
     speakWord: "शब्द का उच्चारण करें",
@@ -9009,6 +9037,8 @@ const UI_TRANSLATIONS = {
     wordCardsLabel: "🃏 単語カード",
     searchCreateCards: "検索してカード作成",
     flashcardsLabel: "🎴 フラッシュカード",
+    quickReviewFlashcards: "🎴 フラッシュカードですぐ復習",
+    reviewThisFlashcard: "🎴 この単語をフラッシュカードで復習",
     reviewSavedWords: "保存した単語を復習",
     searchingDictionary: "日本語辞書を検索中...",
     speakWord: "単語を発音",
@@ -9555,6 +9585,8 @@ const UI_TRANSLATIONS = {
     wordCardsLabel: "🃏 Kelime kartları",
     searchCreateCards: "Kart ara ve oluştur",
     flashcardsLabel: "🎴 Bilgi kartları",
+    quickReviewFlashcards: "🎴 Bilgi kartlarıyla hızlı tekrar",
+    reviewThisFlashcard: "🎴 Bu kelimeyi bilgi kartlarıyla tekrar et",
     reviewSavedWords: "Kaydedilen kelimeleri gözden geçir",
     searchingDictionary: "Japonca sözlükte aranıyor...",
     speakWord: "Kelimeyi telaffuz et",
@@ -10101,6 +10133,8 @@ const UI_TRANSLATIONS = {
     wordCardsLabel: "🃏 शब्द कार्डहरू",
     searchCreateCards: "कार्डहरू खोज्नुहोस् र बनाउनुहोस्",
     flashcardsLabel: "🎴 फ्ल्यासकार्डहरू",
+    quickReviewFlashcards: "🎴 फ्ल्यासकार्डले छिटो दोहोर्याउनुहोस्",
+    reviewThisFlashcard: "🎴 यो शब्द फ्ल्यासकार्डले दोहोर्याउनुहोस्",
     reviewSavedWords: "सेभ गरिएका शब्दहरू समीक्षा गर्नुहोस्",
     searchingDictionary: "जापानी शब्दकोश खोजिँदै...",
     speakWord: "शब्द उच्चारण गर्नुहोस्",
@@ -10647,6 +10681,8 @@ const UI_TRANSLATIONS = {
     wordCardsLabel: "🃏 Word Cards",
     searchCreateCards: "Maghanap at gumawa ng mga card",
     flashcardsLabel: "🎴 Flashcards",
+    quickReviewFlashcards: "🎴 Mabilis na review gamit ang Flashcards",
+    reviewThisFlashcard: "🎴 I-review ang salitang ito gamit ang Flashcards",
     reviewSavedWords: "Repasuhin ang mga naka-save na salita",
     searchingDictionary: "Hinahanap sa diksyunaryong Japanese...",
     speakWord: "Bigkasin ang salita",
@@ -11616,7 +11652,7 @@ function getListeningAudioText(item) {
 }
 
 // ─── WORD DETAIL CARD ──────────────────────────────────────────────────────────
-function WordDetailCard({ card: cardProp, onSave, onBack, form, prefLang }) {
+function WordDetailCard({ card: cardProp, onSave, onBack, form, prefLang, onReviewFlashcard, backLabel }) {
   const T = useUITranslations(prefLang || form?.preferredLang || "English");
   const [card, setCard] = useState(cardProp);
   const [saveModal, setSaveModal] = useState(false);
@@ -11783,7 +11819,7 @@ function WordDetailCard({ card: cardProp, onSave, onBack, form, prefLang }) {
       )}
 
       <button onClick={onBack} style={{ background:"none", border:"none", color:"#64748b", fontSize:13, cursor:"pointer", padding:0, marginBottom:14, display:"flex", alignItems:"center", gap:4 }}>
-        ← Back to search
+        {backLabel || "← Back to search"}
       </button>
 
       {/* ── WORD HEADER ── */}
@@ -11802,6 +11838,12 @@ function WordDetailCard({ card: cardProp, onSave, onBack, form, prefLang }) {
           </button>
         </div>
       </div>
+
+      {onReviewFlashcard && (
+        <button onClick={()=>onReviewFlashcard(card)} style={{ width:"100%", ...S.btn, marginBottom:12, background:"linear-gradient(135deg,rgba(34,197,94,0.2),rgba(22,163,74,0.15))", border:"1.5px solid rgba(34,197,94,0.4)", color:"#f1f5f9", fontSize:13, fontWeight:700, padding:"11px 14px" }}>
+          {T.reviewThisFlashcard || "🎴 Review this word with Flashcards"}
+        </button>
+      )}
 
       {/* ── DEFINITION ── */}
       <div style={{ ...S.card, marginBottom:12 }}>
@@ -11999,7 +12041,7 @@ function WordDetailCard({ card: cardProp, onSave, onBack, form, prefLang }) {
 }
 
 // ─── FLASHCARD VIEW ────────────────────────────────────────────────────────────
-function FlashcardView({ form, onBack }) {
+function FlashcardView({ form, onBack, focusWord }) {
   const T = useUITranslations(form?.preferredLang || "English");
   const [allData, setAllData] = useState(() => loadVocabData());
   const [selectedFolder, setSelectedFolder] = useState("すべて");
@@ -12017,7 +12059,13 @@ function FlashcardView({ form, onBack }) {
   // originals stay in their own folders in the Library); cards NOT marked stay in the deck.
   const UNDERSTOOD = "Understood";
   const understoodWords = new Set(cards.filter(c => c.folder === UNDERSTOOD).map(c => c.word));
-  const filteredCards = selectedFolder === "すべて"
+  // focusWord: reviewing ONE word (opened from a word in the Library) — a deck of just that card.
+  const focusCards = focusWord ? (() => {
+    const same = cards.filter(c => c.word === focusWord.word && c.folder !== UNDERSTOOD);
+    const exact = same.find(c => c.folder === focusWord.folder) || same[0] || focusWord;
+    return [exact];
+  })() : null;
+  const filteredCards = focusCards ? focusCards : selectedFolder === "すべて"
     ? cards.filter(c => c.folder !== UNDERSTOOD && !understoodWords.has(c.word))
     : selectedFolder === UNDERSTOOD
       ? cards.filter(c => c.folder === UNDERSTOOD)
@@ -12057,6 +12105,7 @@ function FlashcardView({ form, onBack }) {
   // Whenever the folder becomes active, check for a saved position and ask Resume vs Start Again
   // instead of silently resetting to the first card.
   useEffect(() => {
+    if (focusWord) { setIdx(0); setResumeChoice("restart"); setFlipped(false); setShowHint(false); return; }
     const saved = getSavedPos(selectedFolder);
     if (saved > 0 && saved < filteredCards.length) {
       setResumeChoice(null);
@@ -12070,7 +12119,7 @@ function FlashcardView({ form, onBack }) {
 
   // Persist position as the student moves through the deck
   useEffect(() => {
-    if (resumeChoice) savePos(selectedFolder, idx);
+    if (resumeChoice && !focusWord) savePos(selectedFolder, idx);
   }, [idx, selectedFolder, resumeChoice]);
 
   // Fetch a supporting image for the back of the card (only when flipped, and only once per word).
@@ -12161,9 +12210,9 @@ Only output the JSON object.` }
   return (
     <div>
       <button onClick={onBack} style={{ background:"none", border:"none", color:"#64748b", fontSize:13, cursor:"pointer", padding:0, marginBottom:14 }}>← Back</button>
-      {/* Folder selector */}
+      {/* Folder selector (hidden when reviewing a single word) */}
       <div style={{ display:"flex", gap:6, flexWrap:"wrap", marginBottom:12 }}>
-        {allFolders.map(f => (
+        {!focusWord && allFolders.map(f => (
           <button key={f.name} onClick={()=>handleFolderChange(f.name)} style={{ padding:"5px 12px", borderRadius:20, fontSize:11, fontWeight:700, cursor:"pointer", border:`1px solid ${selectedFolder===f.name ? C.teal : C.border}`, background: selectedFolder===f.name ? `rgba(6,182,212,0.15)` : C.card, color: selectedFolder===f.name ? C.teal : "#64748b" }}>
             {f.name==="すべて" ? "📚 すべて" : f.name==="Your Vocabulary" ? "📚 Your Vocabulary" : "📁 "+f.name}
           </button>
@@ -12263,7 +12312,7 @@ function VocabSearchBox({ value, onChange, placeholder }) {
   );
 }
 
-function LibraryView({ onBack, onSelectFolder, onCreateCard, onViewCard }) {
+function LibraryView({ onBack, onSelectFolder, onCreateCard, onViewCard, onQuickReview, T }) {
   const [data, setData] = useState(loadVocabData);
   const [librarySearch, setLibrarySearch] = useState("");
   const [newFolderName, setNewFolderName] = useState("");
@@ -12320,6 +12369,12 @@ function LibraryView({ onBack, onSelectFolder, onCreateCard, onViewCard }) {
           + New Folder
         </button>
       </div>
+
+      {onQuickReview && (
+        <button onClick={onQuickReview} style={{ width:"100%", ...S.btn, marginBottom:14, background:"linear-gradient(135deg,rgba(34,197,94,0.2),rgba(22,163,74,0.15))", border:"1.5px solid rgba(34,197,94,0.4)", color:"#f1f5f9", fontSize:14, fontWeight:700, padding:"12px 14px" }}>
+          {(T && T.quickReviewFlashcards) || "🎴 Quick review with Flashcards"}
+        </button>
+      )}
 
       {showNewFolder && (
         <div style={{ ...S.card, marginBottom:14, borderLeft:`3px solid ${C.teal}` }}>
@@ -12841,6 +12896,9 @@ function VocabBuilder({ form }) {
   const [vocabView, setVocabView] = useState("main");
   const [selectedWord, setSelectedWord] = useState(null);
   const [selectedFolder, setSelectedFolder] = useState("Your Vocabulary");
+  const [wordFrom, setWordFrom] = useState("search"); // where the word detail was opened from: "search" | "library" | "folder"
+  const [flashFocus, setFlashFocus] = useState(null); // a single word to review in Flashcards (null = whole deck)
+  const [flashBack, setFlashBack] = useState("main"); // where Back in Flashcards returns to
   const [vocabData, setVocabData] = useState(loadVocabData);
   // Without this, data restored later by the cross-domain migration bridge
   // (which finishes after this component's first render) never reaches this
@@ -12947,11 +13005,18 @@ function VocabBuilder({ form }) {
   const totalSaved = vocabData.cards.length;
 
   // ── RENDER SUBVIEWS ──
-  if (vocabView === "library") return <LibraryView onBack={()=>setVocabView("main")} onSelectFolder={name=>{setSelectedFolder(name);setVocabView("folderDetail");}} onCreateCard={()=>setVocabView("wordSearch")} onViewCard={w=>{setSelectedWord(w);setVocabView("wordDetail");}} />;
-  if (vocabView === "folderDetail") return <FolderDetailView folderName={selectedFolder} onRenamed={setSelectedFolder} onBack={()=>setVocabView("library")} onViewCard={w=>{setSelectedWord(w);setVocabView("wordDetail");}} />;
-  if (vocabView === "wordSearch") return <WordSearchScreen form={form} onBack={()=>setVocabView("main")} onSelectWord={w=>{setSelectedWord(w);setVocabView("wordDetail");}} />;
-  if (vocabView === "wordDetail") return <WordDetailCard card={selectedWord} form={form} onBack={()=>setVocabView(selectedFolder?"wordSearch":"wordSearch")} onSave={refreshVocab} prefLang={form.preferredLang} />;
-  if (vocabView === "flashcard") return <FlashcardView form={form} onBack={()=>setVocabView("main")} />;
+  if (vocabView === "library") return <LibraryView onBack={()=>setVocabView("main")} onSelectFolder={name=>{setSelectedFolder(name);setVocabView("folderDetail");}} onCreateCard={()=>setVocabView("wordSearch")} onViewCard={w=>{setSelectedWord(w);setWordFrom("library");setVocabView("wordDetail");}} onQuickReview={()=>{setFlashFocus(null);setFlashBack("library");setVocabView("flashcard");}} T={T} />;
+  if (vocabView === "folderDetail") return <FolderDetailView folderName={selectedFolder} onRenamed={setSelectedFolder} onBack={()=>setVocabView("library")} onViewCard={w=>{setSelectedWord(w);setWordFrom("folder");setVocabView("wordDetail");}} />;
+  if (vocabView === "wordSearch") return <WordSearchScreen form={form} onBack={()=>setVocabView("main")} onSelectWord={w=>{setSelectedWord(w);setWordFrom("search");setVocabView("wordDetail");}} />;
+  if (vocabView === "wordDetail") {
+    const fromSaved = wordFrom === "library" || wordFrom === "folder";
+    return <WordDetailCard card={selectedWord} form={form}
+      onBack={()=>setVocabView(wordFrom === "library" ? "library" : wordFrom === "folder" ? "folderDetail" : "wordSearch")}
+      backLabel={wordFrom === "library" ? "← Back to Library" : wordFrom === "folder" ? "← Back to folder" : undefined}
+      onReviewFlashcard={fromSaved ? (c=>{ setFlashFocus(c); setFlashBack("wordDetail"); setVocabView("flashcard"); }) : undefined}
+      onSave={refreshVocab} prefLang={form.preferredLang} />;
+  }
+  if (vocabView === "flashcard") return <FlashcardView form={form} focusWord={flashFocus} onBack={()=>setVocabView(flashBack)} />;
 
   // ── MAIN VIEW ──
   return (
@@ -12966,7 +13031,7 @@ function VocabBuilder({ form }) {
           <p style={{ margin:0, fontSize:13, fontWeight:700 }}>{T.wordCardsLabel}</p>
           <p style={{ margin:"2px 0 0", fontSize:11, color:C.purpleLight }}>{T.searchCreateCards}</p>
         </button>
-        <button onClick={()=>setVocabView("flashcard")} style={{ flex:1, ...S.btn, background:`linear-gradient(135deg,rgba(34,197,94,0.15),rgba(22,163,74,0.1))`, border:`1.5px solid rgba(34,197,94,0.3)`, color:"#f1f5f9", textAlign:"left", padding:"12px 14px" }}>
+        <button onClick={()=>{setFlashFocus(null);setFlashBack("main");setVocabView("flashcard");}} style={{ flex:1, ...S.btn, background:`linear-gradient(135deg,rgba(34,197,94,0.15),rgba(22,163,74,0.1))`, border:`1.5px solid rgba(34,197,94,0.3)`, color:"#f1f5f9", textAlign:"left", padding:"12px 14px" }}>
           <p style={{ margin:0, fontSize:13, fontWeight:700 }}>{T.flashcardsLabel}</p>
           <p style={{ margin:"2px 0 0", fontSize:11, color:C.green }}>{T.reviewSavedWords}</p>
         </button>
@@ -13005,7 +13070,7 @@ function VocabBuilder({ form }) {
             <div key={i} style={{ ...S.card, borderLeft:`3px solid ${C.teal}` }}>
               {/* ── Word Header ── */}
               <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", marginBottom:8 }}>
-                <div style={{ flex:1, cursor:"pointer" }} onClick={()=>{setSelectedWord(w);setVocabView("wordDetail");}}>
+                <div style={{ flex:1, cursor:"pointer" }} onClick={()=>{setSelectedWord(w);setWordFrom("search");setVocabView("wordDetail");}}>
                   <div style={{ display:"flex", alignItems:"baseline", gap:8, marginBottom:4 }}>
                     <p style={{ color:"#f1f5f9", fontSize:22, fontWeight:900, margin:0 }}>{w.word}</p>
                     <p style={{ color:C.teal, fontSize:14, margin:0 }}>{w.reading}</p>
@@ -13054,7 +13119,7 @@ function VocabBuilder({ form }) {
                   {T.googleImages}
                 </a>
                 <button
-                  onClick={()=>{setSelectedWord(w);setVocabView("wordDetail");}}
+                  onClick={()=>{setSelectedWord(w);setWordFrom("search");setVocabView("wordDetail");}}
                   style={{ flex:1, display:"flex", alignItems:"center", justifyContent:"center", gap:4, padding:"7px 10px", borderRadius:8, background:"rgba(168,85,247,0.1)", border:"1px solid rgba(168,85,247,0.25)", color:C.purpleLight, fontSize:11, fontWeight:700, cursor:"pointer", whiteSpace:"nowrap" }}
                 >
                   {T.detailCard}
@@ -14876,6 +14941,19 @@ function copyCharLoader(char, onLoad, onError) {
     .then(d => { if (!d || !Array.isArray(d.strokes) || !d.strokes.length) throw new Error("bad"); onLoad(d); })
     .catch(onError);
 }
+// 音読み / 訓読み for one kanji, from the free kanjiapi.dev (KANJIDIC2) service. Cached per kanji for the
+// session so moving back and forth between characters doesn't re-fetch.
+const KANJI_READING_CACHE = {};
+function isKanjiCh(c) { return /[\u3400-\u4DBF\u4E00-\u9FFF]/.test(c || ""); }
+function fetchKanjiReadings(ch) {
+  if (KANJI_READING_CACHE[ch]) return KANJI_READING_CACHE[ch];
+  const p = fetch(`https://kanjiapi.dev/v1/kanji/${encodeURIComponent(ch)}`)
+    .then(r => { if (!r.ok) throw new Error("nf"); return r.json(); })
+    .then(d => ({ on: (d.on_readings || []).slice(0, 6), kun: (d.kun_readings || []).slice(0, 6), meanings: (d.meanings || []).slice(0, 3) }))
+    .catch(() => { delete KANJI_READING_CACHE[ch]; return null; });
+  KANJI_READING_CACHE[ch] = p;
+  return p;
+}
 function CopyingDown({ T, injected }) {
   const [raw, setRaw] = useState(() => { try { return localStorage.getItem(scopedKey(COPY_STORAGE_KEY)) || ""; } catch { return ""; } });
   const [error, setError] = useState("");
@@ -14889,6 +14967,7 @@ function CopyingDown({ T, injected }) {
   const [doneMistakes, setDoneMistakes] = useState(null);
   const boxRef = useRef(null);
   const writerRef = useRef(null);
+  const [kanjiInfo, setKanjiInfo] = useState(null); // { ch, on, kun, meanings } for the current kanji
   const size = Math.max(200, Math.min(300, (typeof window !== "undefined" ? window.innerWidth : 360) - 90));
 
   useEffect(() => {
@@ -14930,6 +15009,16 @@ function CopyingDown({ T, injected }) {
     return () => { cancelled = true; try { w.cancelQuiz(); } catch {} writerRef.current = null; };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session, idx, phase, size]);
+
+  // 音読み / 訓読み for the kanji being written (nothing is shown for kana).
+  const curChar = session && session.chars ? session.chars[idx] : null;
+  useEffect(() => {
+    if (!curChar || !isKanjiCh(curChar)) { setKanjiInfo(null); return undefined; }
+    let cancelled = false;
+    setKanjiInfo(null);
+    fetchKanjiReadings(curChar).then(info => { if (!cancelled && info) setKanjiInfo({ ch: curChar, ...info }); });
+    return () => { cancelled = true; };
+  }, [curChar]);
 
   const begin = () => {
     const text = raw.trim();
@@ -15035,6 +15124,22 @@ function CopyingDown({ T, injected }) {
           {status === "nodata" && <div style={{ position:"absolute", inset:0, display:"flex", alignItems:"center", justifyContent:"center", fontSize:Math.round(size * 0.6), color:"#f1f5f9", fontFamily:"'Noto Serif JP','Noto Sans JP',serif" }}>{cur}</div>}
         </div>
       </div>
+
+      {kanjiInfo && kanjiInfo.ch === cur && (kanjiInfo.on.length > 0 || kanjiInfo.kun.length > 0) && (
+        <div style={{ background:"rgba(6,182,212,0.07)", border:`1px solid ${C.border}`, borderRadius:12, padding:"10px 14px", marginBottom:10, textAlign:"left" }}>
+          {kanjiInfo.on.length > 0 && (
+            <p style={{ margin:"0 0 4px", fontSize:13, lineHeight:1.7, color:"#e2e8f0" }}>
+              <span style={{ color:C.teal, fontWeight:800 }}>音読み (On)</span>　{kanjiInfo.on.join("、")}
+            </p>
+          )}
+          {kanjiInfo.kun.length > 0 && (
+            <p style={{ margin:0, fontSize:13, lineHeight:1.7, color:"#e2e8f0" }}>
+              <span style={{ color:C.amber, fontWeight:800 }}>訓読み (Kun)</span>　{kanjiInfo.kun.join("、")}
+            </p>
+          )}
+          {kanjiInfo.meanings.length > 0 && <p style={{ margin:"4px 0 0", fontSize:11, color:"#64748b" }}>{kanjiInfo.meanings.join(", ")}</p>}
+        </div>
+      )}
 
       <div style={{ minHeight:44, textAlign:"center", marginBottom:10 }}>
         {status === "nodata" && <p style={{ color:"#fbbf24", fontSize:12, lineHeight:1.6, margin:0 }}>{T.copyNoData || "No stroke data for this character. Look at it carefully, copy it on paper, then tap Next."}</p>}
@@ -17279,7 +17384,14 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
   // Load the student's saved study guide (generating one only if they have never had it, or they
   // explicitly asked for an update). Re-running this when `form` changes is safe: with a saved
   // guide it just re-displays the same guide.
+  // Generation is attempted at most ONCE per mount (guideAutoTried). Coming back from an external
+  // link makes the auth layer hand us a fresh-but-identical `form` object; that must never kick off
+  // another "building your study guide" run. A new run only happens when the student explicitly
+  // asked for one (regeneration flag).
+  const guideAutoTried = useRef(false);
   useEffect(() => {
+    if (guideAutoTried.current && !isStudyGuideRegenerationRequested()) return;
+    guideAutoTried.current = true;
     loadAISchedule();
   }, [form]);
 
@@ -18264,7 +18376,10 @@ function logFunnel(userId, step) {
 export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail, skipTrialPaywall, previewPaywall, previewPlans }) {
   const [authUser, setAuthUser] = useState(null);
   const [authChecked, setAuthChecked] = useState(!supabase);
-  const [showAuthScreen, setShowAuthScreen] = useState(false);
+  // After the student taps "Log Out" the app reloads; this flag makes it land on the Log In screen
+  // instead of falling back to the (logged-out) dashboard/study guide. Cleared on the next login.
+  const justLoggedOut = (() => { try { return localStorage.getItem("gaku_just_logged_out") === "1"; } catch { return false; } })();
+  const [showAuthScreen, setShowAuthScreen] = useState(justLoggedOut);
   const [recoveryMode, setRecoveryMode] = useState(RECOVERY_FROM_URL);
   const [authInitialMode, setAuthInitialMode] = useState("login");
   const [deviceStatus, setDeviceStatus] = useState(null); // null | 'checking' | 'approved' | 'pending' | 'suspended'
@@ -18633,12 +18748,21 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
     if (!supabase) return;
     supabase.auth.getSession().then(({ data }) => {
       setAuthUser(data?.session?.user || null);
+      if (data?.session?.user) { try { localStorage.removeItem("gaku_just_logged_out"); } catch {} setShowAuthScreen(false); }
       setAuthChecked(true);
     });
     const { data: sub } = supabase.auth.onAuthStateChange((_event, session) => {
       if (_event === "PASSWORD_RECOVERY") setRecoveryMode(true);
-      setAuthUser(session?.user || null);
-      setShowAuthScreen(false);
+      // Token refreshes (which fire when the student returns from an external link / switches
+      // back to the app) hand us a new user object for the SAME account. Keep the existing object
+      // so the whole login flow (profile reload, device check, guide load) isn't re-run.
+      setAuthUser(prev => {
+        const next = session?.user || null;
+        return (prev && next && prev.id === next.id) ? prev : next;
+      });
+      // Only a real login closes the Log In screen (the INITIAL_SESSION/SIGNED_OUT events carry no
+      // user and must not dismiss it right after a logout).
+      if (session?.user) { setShowAuthScreen(false); try { localStorage.removeItem("gaku_just_logged_out"); } catch {} }
     });
     return () => sub?.subscription?.unsubscribe();
   }, []);
@@ -18847,6 +18971,7 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
   };
   const handleLogout = async () => {
     if (!supabase) return;
+    try { localStorage.setItem("gaku_just_logged_out", "1"); } catch {}
     try {
       await supabase.auth.signOut();
     } finally {
