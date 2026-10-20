@@ -15994,6 +15994,21 @@ function saveStudyGuide(result) {
     }));
   } catch {}
 }
+// Persist one task's done/undone state into the saved guide, so the check mark survives coming
+// back from an external link (page reload / remount re-reads the saved guide).
+function saveStudyGuideTaskDone(day, idx, done) {
+  try {
+    const key = scopedKey(STUDY_GUIDE_KEY);
+    const raw = localStorage.getItem(key);
+    if (!raw) return false;
+    const parsed = JSON.parse(raw);
+    const list = parsed && parsed.schedule && parsed.schedule[day];
+    if (!Array.isArray(list) || !list[idx]) return false;
+    list[idx] = { ...list[idx], done };
+    localStorage.setItem(key, JSON.stringify(parsed));
+    return true;
+  } catch { return false; }
+}
 function requestStudyGuideRegeneration() {
   try { localStorage.setItem(scopedKey(STUDY_GUIDE_REGEN_KEY), "1"); } catch {}
 }
@@ -17634,8 +17649,12 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
   }, []);
 
   const toggleTask = useCallback((day, idx) => {
-    setSchedule(prev => ({ ...prev, [day]: prev[day].map((t,i) => i===idx ? {...t,done:!t.done} : t) }));
-  }, []);
+    const nextDone = !(schedule[day] && schedule[day][idx] && schedule[day][idx].done);
+    setSchedule(prev => ({ ...prev, [day]: prev[day].map((t,i) => i===idx ? {...t,done:nextDone} : t) }));
+    // Save immediately: students tap an external study link right after checking a task, and the
+    // page can be reloaded when they come back.
+    if (saveStudyGuideTaskDone(day, idx, nextDone) && userId) syncMigrationBridge(userId);
+  }, [schedule, userId]);
 
   const totalTasks = Object.values(schedule).flat().filter(t=>!t.rest).length;
   const doneTasks = Object.values(schedule).flat().filter(t=>t.done&&!t.rest).length;
