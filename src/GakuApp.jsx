@@ -16485,10 +16485,12 @@ const BROWSER_LANG_MAP = {
 };
 function detectBrowserLanguage() {
   try {
-    const tags = (typeof navigator !== "undefined" && navigator.languages && navigator.languages.length)
-      ? navigator.languages
-      : [typeof navigator !== "undefined" ? navigator.language : ""];
-    for (const tag of tags) {
+    // Only the device's PRIMARY language counts. Scanning the whole preference list made a phone set
+    // to e.g. Croatian (unsupported) with Japanese as a secondary language start in Japanese.
+    const primaryTag = (typeof navigator !== "undefined")
+      ? ((navigator.languages && navigator.languages.length ? navigator.languages[0] : navigator.language) || "")
+      : "";
+    for (const tag of [primaryTag]) {
       if (!tag) continue;
       const lower = tag.toLowerCase();
       if (BROWSER_LANG_MAP[lower]) return BROWSER_LANG_MAP[lower];
@@ -16797,7 +16799,7 @@ function CompleteProfileScreen({ initialForm, onFinish, onSkip }) {
   );
 }
 
-function FormScreen({ onSubmit, onBack, onCancel, initialJlpt, initialForm, onLoginClick }) {
+function FormScreen({ onSubmit, onBack, onCancel, initialJlpt, initialForm, onLoginClick, onLangChange }) {
   const [form, setForm] = useState(() => {
     const base = initialForm || {
       name:"", email:"", country:"", preferredLang:"English",
@@ -16826,7 +16828,10 @@ function FormScreen({ onSubmit, onBack, onCancel, initialJlpt, initialForm, onLo
   const showConvJlptWarning = isJlptTargetGoal(form.goal) && form.skills.includes("conversation") && !convWarningDismissed;
   const T = useUITranslations(form.preferredLang);
   const isOther = form.goal.includes("Other");
-  const valid = form.name && form.email && form.country && form.goal.length > 0 && (isOther ? form.customGoal.trim() : true) && form.timeline && form.jlpt && form.hoursPerDay && form.daysPerWeek && form.skills.length > 0;
+  // A profile created through QuickStart (profileComplete === false) has no country/timeline yet, so
+  // requiring them here made EVERY edit (including changing the language) impossible to save.
+  const isIncompleteProfile = !!initialForm && initialForm.profileComplete === false;
+  const valid = form.name && form.email && (isIncompleteProfile || form.country) && form.goal.length > 0 && (isOther ? form.customGoal.trim() : true) && (isIncompleteProfile || form.timeline) && form.jlpt && form.hoursPerDay && form.daysPerWeek && form.skills.length > 0;
 
   // When editing an existing profile (initialForm present) and the student changes
   // their study skills (勉強内容), the daily study-set cache key includes `skills`
@@ -16922,7 +16927,7 @@ function FormScreen({ onSubmit, onBack, onCancel, initialJlpt, initialForm, onLo
           {/* Native Language — changing this instantly switches all UI */}
           <div>
             <label style={S.label}>{T.yourNativeLanguage}</label>
-            <select value={form.preferredLang} onChange={e=>set("preferredLang",e.target.value)} style={S.select}>
+            <select value={form.preferredLang} onChange={e=>{ set("preferredLang",e.target.value); if (initialForm && onLangChange) onLangChange(e.target.value); }} style={S.select}>
               {LANGUAGES.map(l => <option key={l}>{l}</option>)}
             </select>
           </div>
@@ -19530,6 +19535,14 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
         onCancel={form ? handleCancelEdit : undefined}
         initialJlpt={initialJlpt}
         initialForm={formForEdit}
+        onLangChange={form ? (lang) => {
+          // Persist a UI-language change the moment it is picked, independent of the rest of the
+          // edit form (which may be incomplete and unsavable) — otherwise it reverts on leaving.
+          const next = { ...form, preferredLang: lang };
+          setForm(next);
+          try { localStorage.setItem(scopedKey("gaku_form"), JSON.stringify(next)); } catch {}
+          if (authUser) { syncMigrationBridge(authUser.id); }
+        } : undefined}
         onLoginClick={!authUser ? () => { setAuthInitialMode("login"); setShowAuthScreen(true); } : undefined}
       />
     </ScreenErrorBoundary>
