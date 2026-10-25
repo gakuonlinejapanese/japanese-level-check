@@ -18397,7 +18397,7 @@ function SetNewPasswordScreen({ hasSession, onDone }) {
   );
 }
 
-function AuthScreen({ onAuthed, T, prefillEmail, initialMode, quickStartStep }) {
+function AuthScreen({ onAuthed, T, prefillEmail, initialMode, quickStartStep, linkError }) {
   const [mode, setMode] = useState(initialMode || "login"); // login | signup
   const [rawEmail, setRawEmail] = useState(prefillEmail || "");
   const [password, setPassword] = useState("");
@@ -18414,10 +18414,10 @@ function AuthScreen({ onAuthed, T, prefillEmail, initialMode, quickStartStep }) 
     return <p style={{ color:"#f87171", fontSize:13 }}>Account features are not configured yet.</p>;
   }
 
-  const resendConfirmation = async () => {
+  const resendConfirmation = async (emailArg) => {
     setConfirmNote(""); setBusy(true);
     try {
-      const r = await fetch("/api/signup", { method:"POST", headers:{ "Content-Type":"application/json" }, body: JSON.stringify({ email: confirmEmail, resend: true }) });
+      const r = await fetch("/api/signup", { method:"POST", headers:{ "Content-Type":"application/json" }, body: JSON.stringify({ email: typeof emailArg === "string" ? emailArg : confirmEmail, resend: true }) });
       const d = await r.json().catch(() => ({}));
       if (d?.alreadyConfirmed) setConfirmNote(T?.confirmEmailAlready || "This email is already confirmed — you can log in now.");
       else if (r.ok) setConfirmNote(T?.confirmEmailResent || "Sent again! Please check your inbox and spam folder.");
@@ -18519,7 +18519,7 @@ function AuthScreen({ onAuthed, T, prefillEmail, initialMode, quickStartStep }) 
               {busy ? "…" : (T?.confirmEmailDone || "I've confirmed — log in")}
             </button>
           ) : null}
-          <button onClick={resendConfirmation} disabled={busy} style={{ width:"100%", padding:"11px", background:"transparent", border:"1px solid rgba(255,255,255,0.15)", borderRadius:10, color:"#cbd5e1", fontSize:13, fontWeight:700, cursor:"pointer", marginBottom:10 }}>
+          <button onClick={() => resendConfirmation()} disabled={busy} style={{ width:"100%", padding:"11px", background:"transparent", border:"1px solid rgba(255,255,255,0.15)", borderRadius:10, color:"#cbd5e1", fontSize:13, fontWeight:700, cursor:"pointer", marginBottom:10 }}>
             {T?.confirmEmailResend || "Resend confirmation email"}
           </button>
           <button onClick={()=>{ setConfirmEmail(""); setConfirmNote(""); setMode("login"); }} style={{ background:"none", border:"none", color:"#94a3b8", fontSize:12, cursor:"pointer" }}>
@@ -18539,6 +18539,15 @@ function AuthScreen({ onAuthed, T, prefillEmail, initialMode, quickStartStep }) 
             what they were doing. Students reported this looked like a dead end
             / a different, unrelated page, and backed out of the browser
             entirely rather than realizing one more field would finish signup. */}
+        {linkError && (
+          <div style={{ background:"rgba(251,191,36,0.1)", border:"1px solid rgba(251,191,36,0.4)", borderRadius:10, padding:"10px 12px", marginBottom:14 }}>
+            <p style={{ color:"#fbbf24", fontSize:12, lineHeight:1.6, margin:"0 0 8px" }}>{T?.confirmLinkExpired || "That confirmation link is invalid or has expired. Enter your email below and tap the button to get a new one, then open it right away."}</p>
+            <button type="button" disabled={busy || !rawEmail.trim()} onClick={() => resendConfirmation(rawEmail.trim().toLowerCase())} style={{ padding:"8px 12px", borderRadius:8, border:"1px solid rgba(251,191,36,0.5)", background:"transparent", color:"#fbbf24", fontSize:12, fontWeight:700, cursor:"pointer" }}>
+              {T?.confirmEmailResend || "Resend confirmation email"}
+            </button>
+            {confirmNote && <p style={{ color:"#cbd5e1", fontSize:12, margin:"8px 0 0" }}>{confirmNote}</p>}
+          </div>
+        )}
         {quickStartStep && mode === "signup" && (
           <>
             <div style={{ display:"flex", gap:6, marginBottom:16 }}>
@@ -18640,7 +18649,7 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
   // After the student taps "Log Out" the app reloads; this flag makes it land on the Log In screen
   // instead of falling back to the (logged-out) dashboard/study guide. Cleared on the next login.
   const justLoggedOut = (() => { try { return localStorage.getItem("gaku_just_logged_out") === "1"; } catch { return false; } })();
-  const [showAuthScreen, setShowAuthScreen] = useState(justLoggedOut);
+  const [showAuthScreen, setShowAuthScreen] = useState(justLoggedOut || (() => { try { return /error_code=|error=access_denied/.test(window.location.hash || ""); } catch { return false; } })());
   const [recoveryMode, setRecoveryMode] = useState(RECOVERY_FROM_URL);
   const [authInitialMode, setAuthInitialMode] = useState("login");
   const [deviceStatus, setDeviceStatus] = useState(null); // null | 'checking' | 'approved' | 'pending' | 'suspended'
@@ -18746,7 +18755,26 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
   // back on a blank onboarding screen after already setting up their plan).
   // Requiring an account at save time guarantees every profile reaches the
   // migration_bridge table right away.
-  const [pendingProfileSave, setPendingProfileSave] = useState(null);
+  // Kept in localStorage too: a new account must open its confirmation email (often in another tab or
+  // app), and without this the 4 QuickStart answers were lost and the student saw the first screen again.
+  const [pendingProfileSave, setPendingProfileSaveRaw] = useState(() => {
+    try { return JSON.parse(localStorage.getItem("gaku_pending_profile") || "null"); } catch { return null; }
+  });
+  const setPendingProfileSave = (v) => {
+    setPendingProfileSaveRaw(v);
+    try { if (v) localStorage.setItem("gaku_pending_profile", JSON.stringify(v)); else localStorage.removeItem("gaku_pending_profile"); } catch {}
+  };
+  // Supabase sends a failed/expired email-confirmation link back with #error_code=... in the URL.
+  const [linkError] = useState(() => {
+    try {
+      const h = window.location.hash || "";
+      if (/error_code=|error=access_denied/.test(h)) {
+        try { window.history.replaceState(null, "", window.location.pathname + window.location.search); } catch {}
+        return true;
+      }
+    } catch {}
+    return false;
+  });
   // Shown as a full-screen step between "student clicked a paid plan" and
   // "student reaches the actual payment step" — see PolicyGate above.
   const [policyGate, setPolicyGate] = useState(null); // { type: 'stripe'|'lessons', url, planLabel }
@@ -19061,6 +19089,16 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
         // know for certain a saved profile exists, clear it unconditionally so they
         // land straight on their dashboard instead of looping back into this form.
         if (parsedForm) setForceForm(false);
+        else if (authUser) {
+          // New account that just confirmed its email: apply the answers saved before it left the app.
+          try {
+            const p = JSON.parse(localStorage.getItem("gaku_pending_profile") || "null");
+            if (p && String(p.email || "").toLowerCase() === String(authUser.email || "").toLowerCase()) {
+              setPendingProfileSave(null);
+              completeProfileSave(p);
+            }
+          } catch {}
+        }
       } catch { setForm(null); }
       try { setInteractionCount(parseInt(localStorage.getItem(scopedKey("gaku_interaction_count")) || "0", 10) || 0); } catch { setInteractionCount(0); }
       try { window.dispatchEvent(new Event("gaku_vocab_updated")); } catch {}
@@ -19357,6 +19395,7 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
       prefillEmail={pendingProfileSave?.email || form?.email}
       initialMode={authInitialMode}
       quickStartStep={!!pendingProfileSave}
+      linkError={linkError}
     />
   );
   if (policyGate) return <PolicyGate T={T} name={form?.name || authUser?.email} email={authUser?.email || form?.email} plan={policyGate.planLabel} userId={authUser?.id} onAgreed={handlePolicyAgreed} onCancel={()=>setPolicyGate(null)} />;
