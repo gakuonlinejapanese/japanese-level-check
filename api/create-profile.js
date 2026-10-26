@@ -80,12 +80,48 @@ function buildWelcomeEmailHtml() {
 const TRIAL_DAYS = 7;
 const BACKDATE_DAYS = TRIAL_DAYS + 1; // just past the trial cutoff, safely under the 10-day wipe cutoff
 
+
+const clip = (v, n) => (v == null || v === "" ? null : String(v).slice(0, n));
+
+async function saveProfileSummary(req, res) {
+  try {
+    const token = String(req.headers?.authorization || "").replace(/^Bearer\s+/i, "");
+    if (!token) return res.status(401).json({ error: "Not signed in" });
+    const supabase = getAdminClient();
+    const { data: u, error: uErr } = await supabase.auth.getUser(token);
+    if (uErr || !u?.user?.id) return res.status(401).json({ error: "Invalid session" });
+    const f = req.body?.form || {};
+    const goal = Array.isArray(f.goal) ? f.goal.join(", ") : f.goal;
+    const update = {
+      country: clip(f.country, 80),
+      goal: clip(goal, 300),
+      custom_goal: clip(f.customGoal, 300),
+      timeline: clip(f.timeline, 80),
+      jlpt_level: clip(f.jlpt, 60),
+      hours_per_day: clip(f.hoursPerDay, 40),
+      days_per_week: clip(f.daysPerWeek, 40),
+      skills: Array.isArray(f.skills) ? f.skills.slice(0, 20).map((x) => String(x).slice(0, 40)) : [],
+    };
+    // Only fill in what the student actually answered; never blank out an existing value.
+    for (const k of Object.keys(update)) if (update[k] === null) delete update[k];
+    if (Object.keys(update).length === 0) return res.status(200).json({ ok: true, skipped: true });
+    const { error } = await supabase.from("profiles").update(update).eq("id", u.user.id);
+    if (error) return res.status(500).json({ error: error.message });
+    return res.status(200).json({ ok: true });
+  } catch (e) {
+    return res.status(500).json({ error: e.message });
+  }
+}
+
 export default async function handler(req, res) {
   // /api/signup is rewritten here (vercel.json) so we stay within the Hobby plan's 12-function limit.
   if (req.query?.action === "signup") return handleSignup(req, res);
   if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed" });
+  // Logged-in student's own onboarding answers (country/goal/level…) saved server-side so they
+  // can be analysed. Verified with the student's access token, never trusts a userId from the body.
+  if (req.body?.action === "save_profile_summary") return saveProfileSummary(req, res);
   try {
-    const { userId, email, isGakuStudent, deviceId } = req.body || {};
+    const { userId, email, isGakuStudent, deviceId, signupSource, signupReferrer, signupPlatform } = req.body || {};
     if (!userId || !email) return res.status(400).json({ error: "userId and email are required" });
     const normalizedEmail = email.trim().toLowerCase();
     const normalizedDeviceId = (deviceId || "").trim() || null;
@@ -121,6 +157,10 @@ export default async function handler(req, res) {
         .limit(1);
       priorTrialAt = priorRows?.[0]?.first_trial_started_at || null;
 
+      // Where this signup came from (first touch). Only recorded on the genuine first grant.
+      payload.signup_source = clip(signupSource, 120);
+      payload.signup_referrer = clip(signupReferrer, 120);
+      payload.signup_platform = clip(signupPlatform, 40);
       payload.trial_started_at = priorTrialAt
         ? new Date(Date.now() - BACKDATE_DAYS * 86400000).toISOString()
         : new Date().toISOString();

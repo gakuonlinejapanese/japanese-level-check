@@ -34,3 +34,49 @@ export function getDeviceLabel() {
     return "Unknown device";
   }
 }
+
+// ---- Signup source tracking (first touch) ---------------------------------
+// Remembers where a visitor first came from (utm/ref params or the referring site) the
+// first time the app loads in this browser, so it can be saved with the account at signup.
+function cleanTag(v, max = 80) {
+  return String(v || "").trim().toLowerCase().replace(/[^a-z0-9._:\-\/ ]/g, "").slice(0, max);
+}
+function captureSignupSource() {
+  try {
+    if (localStorage.getItem("gaku_signup_source")) return;
+    const q = new URLSearchParams(window.location.search);
+    let refHost = "";
+    try { refHost = document.referrer ? new URL(document.referrer).hostname.replace(/^www\./, "") : ""; } catch {}
+    if (refHost && /(^|\.)seitojapanese\.online$|(^|\.)vercel\.app$/.test(refHost)) refHost = "";
+    const utm = q.get("utm_source") || q.get("ref") || q.get("src") || q.get("source");
+    const medium = q.get("utm_medium");
+    const campaign = q.get("utm_campaign");
+    let source = cleanTag(utm);
+    if (!source && q.get("fbclid")) source = "facebook";
+    if (!source && q.get("gclid")) source = "google-ads";
+    if (!source && refHost) source = cleanTag(refHost);
+    if (!source) source = "direct";
+    const detail = [medium && "m=" + cleanTag(medium, 30), campaign && "c=" + cleanTag(campaign, 40)].filter(Boolean).join(",");
+    localStorage.setItem("gaku_signup_source", JSON.stringify({
+      source, referrer: cleanTag(refHost, 100), detail, at: new Date().toISOString(),
+    }));
+  } catch {}
+}
+captureSignupSource();
+
+export function getSignupSource() {
+  try {
+    const s = JSON.parse(localStorage.getItem("gaku_signup_source") || "null");
+    let platform = "web";
+    const cap = typeof window !== "undefined" ? window.Capacitor : null;
+    if (cap && typeof cap.isNativePlatform === "function" && cap.isNativePlatform()) {
+      platform = (typeof cap.getPlatform === "function" ? cap.getPlatform() : "native") + "-app";
+    } else if (window.matchMedia && (window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true)) {
+      platform = "pwa";
+    }
+    const source = s ? (s.detail ? `${s.source} (${s.detail})` : s.source) : "unknown";
+    return { signupSource: source, signupReferrer: s?.referrer || null, signupPlatform: platform };
+  } catch {
+    return { signupSource: "unknown", signupReferrer: null, signupPlatform: "web" };
+  }
+}

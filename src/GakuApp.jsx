@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback, useMemo, useRef } from "react";
 import StorePlans from './StorePlans';
-import { supabase, getDeviceId, getDeviceLabel } from "./supabaseClient";
+import { supabase, getDeviceId, getDeviceLabel, getSignupSource } from "./supabaseClient";
 import HanziWriter from "hanzi-writer";
 import { reportClientCrash } from "./crashReport";
 
@@ -311,6 +311,25 @@ const SKILL_TO_JLPT_SECTIONS = {
 function isJlptTargetGoal(goal) {
   const goals = Array.isArray(goal) ? goal : (goal ? [goal] : []);
   return goals.some(g => /^Pass JLPT (N[1-5])$/.test(g || ""));
+}
+// Saves a copy of the student's onboarding answers (country/goal/level…) on the server so the
+// teacher can analyse who signs up and who keeps studying. Fire-and-forget; only re-sent when changed.
+async function pushProfileSummary(userId, f) {
+  try {
+    if (!supabase || !userId || !f) return;
+    const body = { country: f.country, goal: f.goal, customGoal: f.customGoal, timeline: f.timeline, jlpt: f.jlpt, hoursPerDay: f.hoursPerDay, daysPerWeek: f.daysPerWeek, skills: f.skills };
+    const sig = JSON.stringify(body);
+    const key = "gaku_profile_summary_sent_" + userId;
+    if (localStorage.getItem(key) === sig) return;
+    const { data } = await supabase.auth.getSession();
+    const token = data?.session?.access_token;
+    if (!token) return;
+    const r = await fetch("/api/create-profile", {
+      method: "POST", headers: { "Content-Type": "application/json", Authorization: "Bearer " + token },
+      body: JSON.stringify({ action: "save_profile_summary", form: body }),
+    });
+    if (r.ok) localStorage.setItem(key, sig);
+  } catch {}
 }
 // Saved profiles come from several generations of the app (older single-string goals, QuickStart
 // defaults, bridge restores from other devices…), so a stored profile can be missing fields or hold
@@ -18477,7 +18496,7 @@ function AuthScreen({ onAuthed, T, prefillEmail, initialMode, quickStartStep, li
         if (userId) {
           const pRes = await fetch("/api/create-profile", {
             method: "POST", headers: { "Content-Type":"application/json" },
-            body: JSON.stringify({ userId, email, isGakuStudent: !!inviteCode.trim(), deviceId: getDeviceId() }),
+            body: JSON.stringify({ userId, email, isGakuStudent: !!inviteCode.trim(), deviceId: getDeviceId(), ...getSignupSource() }),
           });
           if (!pRes.ok) {
             const pData = await pRes.json().catch(() => ({}));
@@ -19081,6 +19100,7 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
         // Same for the other fields screens read directly (skills, customGoal…): a stored profile
         // missing them used to crash the Edit Profile screen and the Dashboard (white screen).
         setForm(parsedForm ? normalizeProfileForm(parsedForm) : parsedForm);
+        if (authUser && parsedForm) pushProfileSummary(authUser.id, normalizeProfileForm(parsedForm));
         // A student who already completed onboarding once must never be sent back
         // to the profile-setup screen automatically — this used to re-trigger on
         // every app reopen for anyone whose bookmarked/home-screen URL still carries
@@ -19203,7 +19223,7 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
     // login, which pulled from a bridge that had never received this profile,
     // sending the student back to onboarding every single time. Pushing here
     // closes that gap: the profile reaches Supabase the moment it's saved.
-    if (authUser) { syncMigrationBridge(authUser.id); }
+    if (authUser) { syncMigrationBridge(authUser.id); pushProfileSummary(authUser.id, saved); }
     // First-ever signup (not an edit, not a re-save after the paywall):
     // give them one quick win before the full dashboard. Most trial
     // students who ever bounce do so after their very first session, so
