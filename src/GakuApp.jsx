@@ -1172,6 +1172,18 @@ const UI_TRANSLATIONS = {
     featurePickerAlways: "Vocabulary and Feedback are always shown.",
     featureShowOnly: "Show only these",
     featureKeepAll: "Keep everything",
+    modePickerTitle: "Which mode do you want to try?",
+    modeEnjoyableDesc: "Relaxed. Study at your own pace, with friendly suggestions.",
+    modeIntensiveDesc: "Strict. A daily quota, weak-area suggestions, and no skipping.",
+    modeTrialDesc: "Try Intensive mode for 3 days. After that you choose to keep it or go back.",
+    modeBtn: "Mode",
+    coachTitle: "Today's suggestion",
+    coachBoth: "You usually do well in {strong}, and {weak} seems a little hard. How about {weak} today?",
+    coachWeakOnly: "{weak} seems a little hard for you. How about practicing it today?",
+    coachGo: "Let's go",
+    quotaTitle: "Today's quota: {done}/{goal}",
+    quotaMissed: "You missed yesterday's quota. Finish today's quota first — no skipping.",
+    trialEndedTitle: "Your 3-day Intensive trial has ended. Which mode now?",
     featureCustomizeBtn: "Customize",
     feedbackTitle: "💬 Feedback & Opinion",
     feedbackSubtitle: "Tell us what you'd like improved or anything that's bothering you about the app. We read every message.",
@@ -1744,6 +1756,18 @@ const UI_TRANSLATIONS = {
     featurePickerAlways: "Vocabulaire et Feedback restent toujours affichés.",
     featureShowOnly: "Afficher seulement celles-ci",
     featureKeepAll: "Tout garder",
+    modePickerTitle: "Quel mode voulez-vous essayer ?",
+    modeEnjoyableDesc: "Détendu. Étudiez à votre rythme, avec des suggestions amicales.",
+    modeIntensiveDesc: "Strict. Un quota quotidien, des suggestions sur vos points faibles, sans relâche.",
+    modeTrialDesc: "Essayez le mode Intensive pendant 3 jours, puis choisissez de le garder ou de revenir en arrière.",
+    modeBtn: "Mode",
+    coachTitle: "Suggestion du jour",
+    coachBoth: "Vous réussissez généralement bien en {strong}, et {weak} semble un peu difficile. Et si on travaillait {weak} aujourd'hui ?",
+    coachWeakOnly: "{weak} semble un peu difficile pour vous. Et si vous le travailliez aujourd'hui ?",
+    coachGo: "C'est parti",
+    quotaTitle: "Quota du jour : {done}/{goal}",
+    quotaMissed: "Vous n'avez pas atteint le quota d'hier. Terminez d'abord le quota d'aujourd'hui, sans excuse.",
+    trialEndedTitle: "Votre essai de 3 jours du mode Intensive est terminé. Quel mode choisir maintenant ?",
     featureCustomizeBtn: "Personnaliser",
     feedbackTitle: "💬 Retour & Avis",
     feedbackSubtitle: "Dites-nous ce que vous aimeriez voir amélioré ou ce qui vous dérange dans l'application. Nous lisons chaque message.",
@@ -2301,6 +2325,18 @@ const UI_TRANSLATIONS = {
     featurePickerAlways: "Vocabulario y Feedback siempre se muestran.",
     featureShowOnly: "Mostrar solo estas",
     featureKeepAll: "Mantener todo",
+    modePickerTitle: "¿Qué modo quieres probar?",
+    modeEnjoyableDesc: "Relajado. Estudia a tu ritmo, con sugerencias amables.",
+    modeIntensiveDesc: "Estricto. Cuota diaria, sugerencias sobre tus puntos débiles y sin saltarse nada.",
+    modeTrialDesc: "Prueba el modo Intensive durante 3 días. Después elige si lo mantienes o vuelves atrás.",
+    modeBtn: "Modo",
+    coachTitle: "Sugerencia de hoy",
+    coachBoth: "Normalmente te va bien en {strong}, y {weak} parece un poco difícil. ¿Qué tal {weak} hoy?",
+    coachWeakOnly: "{weak} parece un poco difícil para ti. ¿Qué tal practicarlo hoy?",
+    coachGo: "Vamos",
+    quotaTitle: "Cuota de hoy: {done}/{goal}",
+    quotaMissed: "No cumpliste la cuota de ayer. Termina primero la cuota de hoy, sin excusas.",
+    trialEndedTitle: "Terminó tu prueba de 3 días del modo Intensive. ¿Qué modo eliges ahora?",
     featureCustomizeBtn: "Personalizar",
     feedbackTitle: "💬 Comentarios y Opinión",
     feedbackSubtitle: "Cuéntanos qué te gustaría que mejoráramos o qué te molesta de la app. Leemos todos los mensajes.",
@@ -2858,6 +2894,18 @@ const UI_TRANSLATIONS = {
     featurePickerAlways: "Vocabulário e Feedback são sempre exibidos.",
     featureShowOnly: "Mostrar somente estes",
     featureKeepAll: "Manter tudo",
+    modePickerTitle: "Qual modo você quer experimentar?",
+    modeEnjoyableDesc: "Tranquilo. Estude no seu ritmo, com sugestões amigáveis.",
+    modeIntensiveDesc: "Rigoroso. Meta diária, sugestões sobre seus pontos fracos e sem pular nada.",
+    modeTrialDesc: "Experimente o modo Intensive por 3 dias. Depois escolha se continua ou volta.",
+    modeBtn: "Modo",
+    coachTitle: "Sugestão de hoje",
+    coachBoth: "Você costuma ir bem em {strong}, e {weak} parece um pouco difícil. Que tal {weak} hoje?",
+    coachWeakOnly: "{weak} parece um pouco difícil para você. Que tal praticar hoje?",
+    coachGo: "Vamos lá",
+    quotaTitle: "Meta de hoje: {done}/{goal}",
+    quotaMissed: "Você não cumpriu a meta de ontem. Termine primeiro a meta de hoje, sem pular.",
+    trialEndedTitle: "Seu teste de 3 dias do modo Intensive acabou. Qual modo agora?",
     featureCustomizeBtn: "Personalizar",
     feedbackTitle: "💬 Feedback e Opinião",
     feedbackSubtitle: "Conte-nos o que você gostaria que melhorássemos ou o que está incomodando você no app. Lemos todas as mensagens.",
@@ -3415,6 +3463,18 @@ const UI_TRANSLATIONS = {
     featurePickerAlways: "Vokabeln und Feedback werden immer angezeigt.",
     featureShowOnly: "Nur diese anzeigen",
     featureKeepAll: "Alles behalten",
+    modePickerTitle: "Welchen Modus möchten Sie ausprobieren?",
+    modeEnjoyableDesc: "Entspannt. Lernen Sie in Ihrem Tempo, mit freundlichen Vorschlägen.",
+    modeIntensiveDesc: "Streng. Ein Tagesziel, Vorschläge für Ihre Schwächen und kein Auslassen.",
+    modeTrialDesc: "Testen Sie den Intensive-Modus 3 Tage lang. Danach entscheiden Sie, ob Sie ihn behalten.",
+    modeBtn: "Modus",
+    coachTitle: "Vorschlag für heute",
+    coachBoth: "Sie sind meist gut in {strong}, und {weak} scheint etwas schwer. Wie wäre es heute mit {weak}?",
+    coachWeakOnly: "{weak} scheint Ihnen etwas schwerzufallen. Wie wäre es, es heute zu üben?",
+    coachGo: "Los geht's",
+    quotaTitle: "Tagesziel: {done}/{goal}",
+    quotaMissed: "Das Tagesziel von gestern wurde verfehlt. Erledigen Sie zuerst das heutige Ziel – kein Auslassen.",
+    trialEndedTitle: "Ihre 3-tägige Intensive-Testphase ist vorbei. Welcher Modus jetzt?",
     featureCustomizeBtn: "Anpassen",
     feedbackTitle: "💬 Feedback & Meinung",
     feedbackSubtitle: "Sag uns, was wir verbessern sollen oder was dich an der App stört. Wir lesen jede Nachricht.",
@@ -3972,6 +4032,18 @@ const UI_TRANSLATIONS = {
     featurePickerAlways: "Vocabolario e Feedback sono sempre visibili.",
     featureShowOnly: "Mostra solo queste",
     featureKeepAll: "Mantieni tutto",
+    modePickerTitle: "Quale modalità vuoi provare?",
+    modeEnjoyableDesc: "Rilassata. Studia al tuo ritmo, con suggerimenti amichevoli.",
+    modeIntensiveDesc: "Rigorosa. Obiettivo giornaliero, suggerimenti sui punti deboli e niente salti.",
+    modeTrialDesc: "Prova la modalità Intensive per 3 giorni. Poi scegli se tenerla o tornare indietro.",
+    modeBtn: "Modalità",
+    coachTitle: "Suggerimento di oggi",
+    coachBoth: "Di solito vai bene in {strong}, e {weak} sembra un po' difficile. Che ne dici di {weak} oggi?",
+    coachWeakOnly: "{weak} sembra un po' difficile per te. Che ne dici di allenarlo oggi?",
+    coachGo: "Andiamo",
+    quotaTitle: "Obiettivo di oggi: {done}/{goal}",
+    quotaMissed: "Hai mancato l'obiettivo di ieri. Completa prima quello di oggi, senza saltare.",
+    trialEndedTitle: "La tua prova di 3 giorni della modalità Intensive è finita. Quale modalità ora?",
     featureCustomizeBtn: "Personalizza",
     feedbackTitle: "💬 Feedback e Opinioni",
     feedbackSubtitle: "Dicci cosa vorresti che migliorassimo o cosa ti disturba dell'app. Leggiamo ogni messaggio.",
@@ -4529,6 +4601,18 @@ const UI_TRANSLATIONS = {
     featurePickerAlways: "“词汇”和“反馈”始终显示。",
     featureShowOnly: "只显示这些",
     featureKeepAll: "全部保留",
+    modePickerTitle: "你想尝试哪种模式？",
+    modeEnjoyableDesc: "轻松模式。按自己的节奏学习，并给你友好的建议。",
+    modeIntensiveDesc: "严格模式。每日目标、针对薄弱项的建议，不允许偷懒。",
+    modeTrialDesc: "试用 Intensive 模式 3 天，之后可选择继续或返回。",
+    modeBtn: "模式",
+    coachTitle: "今日建议",
+    coachBoth: "你通常在{strong}方面表现不错，而{weak}似乎有点吃力。今天练习一下{weak}怎么样？",
+    coachWeakOnly: "{weak}对你来说似乎有点难。今天练习一下怎么样？",
+    coachGo: "开始吧",
+    quotaTitle: "今日目标：{done}/{goal}",
+    quotaMissed: "你没有完成昨天的目标。请先完成今天的目标，不要偷懒。",
+    trialEndedTitle: "你的 3 天 Intensive 试用已结束。现在选择哪种模式？",
     featureCustomizeBtn: "自定义",
     feedbackTitle: "💬 反馈与意见",
     feedbackSubtitle: "告诉我们你希望我们改进什么，或者对这个应用有什么不满意的地方。我们会阅读每一条留言。",
@@ -5086,6 +5170,18 @@ const UI_TRANSLATIONS = {
     featurePickerAlways: "「詞彙」和「意見回饋」一律顯示。",
     featureShowOnly: "只顯示這些",
     featureKeepAll: "全部保留",
+    modePickerTitle: "你想嘗試哪種模式？",
+    modeEnjoyableDesc: "輕鬆模式。依自己的步調學習，並給你友善的建議。",
+    modeIntensiveDesc: "嚴格模式。每日目標、針對弱項的建議，不允許偷懶。",
+    modeTrialDesc: "試用 Intensive 模式 3 天，之後可選擇繼續或返回。",
+    modeBtn: "模式",
+    coachTitle: "今日建議",
+    coachBoth: "你通常在{strong}方面表現不錯，而{weak}似乎有點吃力。今天練習一下{weak}如何？",
+    coachWeakOnly: "{weak}對你來說似乎有點難。今天練習一下如何？",
+    coachGo: "開始吧",
+    quotaTitle: "今日目標：{done}/{goal}",
+    quotaMissed: "你沒有完成昨天的目標。請先完成今天的目標，不要偷懶。",
+    trialEndedTitle: "你的 3 天 Intensive 試用已結束。現在選擇哪種模式？",
     featureCustomizeBtn: "自訂",
     feedbackTitle: "💬 意見回饋與想法",
     feedbackSubtitle: "告訴我們你希望我們改進什麼，或是對這個應用程式有什麼不滿意的地方。我們會閱讀每一則留言。",
@@ -5643,6 +5739,18 @@ const UI_TRANSLATIONS = {
     featurePickerAlways: "어휘와 피드백은 항상 표시됩니다.",
     featureShowOnly: "이것만 표시",
     featureKeepAll: "모두 유지",
+    modePickerTitle: "어떤 모드를 체험해 보시겠어요?",
+    modeEnjoyableDesc: "편안한 모드. 내 속도대로 공부하고, 친절한 제안을 받아요.",
+    modeIntensiveDesc: "엄격한 모드. 하루 목표량, 약점 보완 제안, 건너뛰기 없음.",
+    modeTrialDesc: "Intensive 모드를 3일간 체험해 보세요. 이후 계속할지 돌아갈지 선택할 수 있어요.",
+    modeBtn: "모드",
+    coachTitle: "오늘의 제안",
+    coachBoth: "{strong}은(는) 보통 잘하는데 {weak}은(는) 조금 어려워 보여요. 오늘은 {weak}은(는) 어떠세요?",
+    coachWeakOnly: "{weak}은(는) 조금 어려워 보여요. 오늘 연습해 보는 건 어떨까요?",
+    coachGo: "시작하기",
+    quotaTitle: "오늘의 목표: {done}/{goal}",
+    quotaMissed: "어제 목표를 채우지 못했어요. 오늘 목표부터 먼저 끝내세요. 건너뛰기 없음.",
+    trialEndedTitle: "Intensive 모드 3일 체험이 끝났어요. 이제 어떤 모드로 할까요?",
     featureCustomizeBtn: "맞춤 설정",
     feedbackTitle: "💬 피드백 및 의견",
     feedbackSubtitle: "개선했으면 하는 점이나 앱에서 불편한 점을 알려주세요. 모든 메시지를 읽습니다.",
@@ -6200,6 +6308,18 @@ const UI_TRANSLATIONS = {
     featurePickerAlways: "คำศัพท์และ Feedback จะแสดงเสมอ",
     featureShowOnly: "แสดงเฉพาะที่เลือก",
     featureKeepAll: "เก็บทั้งหมดไว้",
+    modePickerTitle: "คุณอยากลองโหมดไหน?",
+    modeEnjoyableDesc: "โหมดผ่อนคลาย เรียนตามจังหวะของคุณ พร้อมคำแนะนำเป็นกันเอง",
+    modeIntensiveDesc: "โหมดเข้มงวด มีเป้าหมายรายวัน คำแนะนำสำหรับจุดอ่อน และห้ามข้าม",
+    modeTrialDesc: "ลองโหมด Intensive 3 วัน จากนั้นเลือกว่าจะใช้ต่อหรือกลับไปโหมดเดิม",
+    modeBtn: "โหมด",
+    coachTitle: "คำแนะนำวันนี้",
+    coachBoth: "ปกติคุณทำ{strong}ได้ดี แต่{weak}ดูจะยากไปหน่อย วันนี้ลอง{weak}ไหม?",
+    coachWeakOnly: "{weak}ดูจะยากไปหน่อยสำหรับคุณ วันนี้ลองฝึกดูไหม?",
+    coachGo: "เริ่มเลย",
+    quotaTitle: "เป้าหมายวันนี้: {done}/{goal}",
+    quotaMissed: "เมื่อวานคุณทำเป้าหมายไม่ถึง กรุณาทำเป้าหมายของวันนี้ให้เสร็จก่อน ห้ามข้าม",
+    trialEndedTitle: "การทดลองโหมด Intensive 3 วันสิ้นสุดแล้ว ตอนนี้จะเลือกโหมดไหน?",
     featureCustomizeBtn: "ปรับแต่ง",
     feedbackTitle: "💬 ความคิดเห็นและข้อเสนอแนะ",
     feedbackSubtitle: "บอกเราว่าคุณอยากให้ปรับปรุงอะไร หรือมีอะไรที่กวนใจคุณเกี่ยวกับแอปนี้ เราจะอ่านทุกข้อความ",
@@ -6757,6 +6877,18 @@ const UI_TRANSLATIONS = {
     featurePickerAlways: "Perbendaharaan kata dan Feedback sentiasa dipaparkan.",
     featureShowOnly: "Papar yang ini sahaja",
     featureKeepAll: "Kekalkan semua",
+    modePickerTitle: "Mod mana yang anda mahu cuba?",
+    modeEnjoyableDesc: "Santai. Belajar mengikut rentak anda, dengan cadangan mesra.",
+    modeIntensiveDesc: "Tegas. Kuota harian, cadangan untuk kelemahan anda dan tiada langkau.",
+    modeTrialDesc: "Cuba mod Intensive selama 3 hari. Selepas itu pilih sama ada mahu teruskan atau kembali.",
+    modeBtn: "Mod",
+    coachTitle: "Cadangan hari ini",
+    coachBoth: "Anda biasanya baik dalam {strong}, dan {weak} nampaknya agak sukar. Bagaimana kalau {weak} hari ini?",
+    coachWeakOnly: "{weak} nampaknya agak sukar untuk anda. Bagaimana kalau berlatih hari ini?",
+    coachGo: "Jom mulakan",
+    quotaTitle: "Kuota hari ini: {done}/{goal}",
+    quotaMissed: "Anda terlepas kuota semalam. Siapkan kuota hari ini dahulu, tiada langkau.",
+    trialEndedTitle: "Percubaan 3 hari mod Intensive anda telah tamat. Mod mana sekarang?",
     featureCustomizeBtn: "Suaikan",
     feedbackTitle: "💬 Maklum Balas & Pendapat",
     feedbackSubtitle: "Beritahu kami apa yang anda mahu diperbaiki atau apa-apa yang mengganggu anda tentang aplikasi ini. Kami membaca setiap mesej.",
@@ -7314,6 +7446,18 @@ const UI_TRANSLATIONS = {
     featurePickerAlways: "Kosakata dan Feedback selalu ditampilkan.",
     featureShowOnly: "Tampilkan yang ini saja",
     featureKeepAll: "Pertahankan semua",
+    modePickerTitle: "Mode mana yang ingin Anda coba?",
+    modeEnjoyableDesc: "Santai. Belajar sesuai ritme Anda, dengan saran yang ramah.",
+    modeIntensiveDesc: "Ketat. Kuota harian, saran untuk kelemahan Anda, dan tanpa melewatkan.",
+    modeTrialDesc: "Coba mode Intensive selama 3 hari. Setelah itu pilih untuk melanjutkan atau kembali.",
+    modeBtn: "Mode",
+    coachTitle: "Saran hari ini",
+    coachBoth: "Anda biasanya bagus di {strong}, dan {weak} tampaknya agak sulit. Bagaimana kalau {weak} hari ini?",
+    coachWeakOnly: "{weak} tampaknya agak sulit bagi Anda. Bagaimana kalau berlatih hari ini?",
+    coachGo: "Ayo mulai",
+    quotaTitle: "Kuota hari ini: {done}/{goal}",
+    quotaMissed: "Anda tidak memenuhi kuota kemarin. Selesaikan dulu kuota hari ini, tanpa melewatkan.",
+    trialEndedTitle: "Uji coba mode Intensive 3 hari Anda telah berakhir. Mode mana sekarang?",
     featureCustomizeBtn: "Sesuaikan",
     feedbackTitle: "💬 Masukan & Pendapat",
     feedbackSubtitle: "Beri tahu kami apa yang ingin Anda tingkatkan atau apa yang mengganggu Anda tentang aplikasi ini. Kami membaca setiap pesan.",
@@ -7871,6 +8015,18 @@ const UI_TRANSLATIONS = {
     featurePickerAlways: "Từ vựng và Feedback luôn được hiển thị.",
     featureShowOnly: "Chỉ hiện những mục này",
     featureKeepAll: "Giữ tất cả",
+    modePickerTitle: "Bạn muốn thử chế độ nào?",
+    modeEnjoyableDesc: "Thoải mái. Học theo nhịp của bạn, kèm gợi ý thân thiện.",
+    modeIntensiveDesc: "Nghiêm khắc. Chỉ tiêu hằng ngày, gợi ý cho điểm yếu và không được bỏ qua.",
+    modeTrialDesc: "Thử chế độ Intensive trong 3 ngày. Sau đó bạn chọn giữ lại hoặc quay về.",
+    modeBtn: "Chế độ",
+    coachTitle: "Gợi ý hôm nay",
+    coachBoth: "Bạn thường làm tốt phần {strong}, còn {weak} có vẻ hơi khó. Hôm nay thử {weak} nhé?",
+    coachWeakOnly: "{weak} có vẻ hơi khó với bạn. Hôm nay luyện thử nhé?",
+    coachGo: "Bắt đầu thôi",
+    quotaTitle: "Chỉ tiêu hôm nay: {done}/{goal}",
+    quotaMissed: "Bạn chưa đạt chỉ tiêu hôm qua. Hãy hoàn thành chỉ tiêu hôm nay trước, không được bỏ qua.",
+    trialEndedTitle: "Thời gian dùng thử Intensive 3 ngày đã kết thúc. Bạn chọn chế độ nào?",
     featureCustomizeBtn: "Tùy chỉnh",
     feedbackTitle: "💬 Phản hồi & Ý kiến",
     feedbackSubtitle: "Hãy cho chúng tôi biết bạn muốn cải thiện điều gì hoặc điều gì đang làm bạn khó chịu về ứng dụng. Chúng tôi đọc mọi tin nhắn.",
@@ -8428,6 +8584,18 @@ const UI_TRANSLATIONS = {
     featurePickerAlways: "शब्दावली और Feedback हमेशा दिखाई देते हैं।",
     featureShowOnly: "सिर्फ़ ये दिखाएँ",
     featureKeepAll: "सब कुछ रखें",
+    modePickerTitle: "आप कौन-सा मोड आज़माना चाहते हैं?",
+    modeEnjoyableDesc: "आरामदायक। अपनी गति से पढ़ें, दोस्ताना सुझावों के साथ।",
+    modeIntensiveDesc: "सख़्त। रोज़ का लक्ष्य, कमज़ोर हिस्सों के सुझाव, और कोई छोड़ना नहीं।",
+    modeTrialDesc: "Intensive मोड को 3 दिन आज़माएँ। उसके बाद रखने या वापस जाने का चुनाव करें।",
+    modeBtn: "मोड",
+    coachTitle: "आज का सुझाव",
+    coachBoth: "आप आमतौर पर {strong} में अच्छे हैं, और {weak} थोड़ा कठिन लगता है। आज {weak} कैसा रहेगा?",
+    coachWeakOnly: "{weak} आपके लिए थोड़ा कठिन लगता है। आज इसका अभ्यास कैसा रहेगा?",
+    coachGo: "चलें",
+    quotaTitle: "आज का लक्ष्य: {done}/{goal}",
+    quotaMissed: "आपने कल का लक्ष्य पूरा नहीं किया। पहले आज का लक्ष्य पूरा करें, छोड़ना नहीं।",
+    trialEndedTitle: "आपका 3 दिन का Intensive ट्रायल ख़त्म हो गया। अब कौन-सा मोड चुनेंगे?",
     featureCustomizeBtn: "अनुकूलित करें",
     feedbackTitle: "💬 प्रतिक्रिया और राय",
     feedbackSubtitle: "हमें बताएं कि आप ऐप में क्या सुधार चाहते हैं या आपको क्या परेशान कर रहा है। हम हर संदेश पढ़ते हैं।",
@@ -8985,6 +9153,18 @@ const UI_TRANSLATIONS = {
     featurePickerAlways: "「単語帳」と「フィードバック」は常に表示されます。",
     featureShowOnly: "選んだものだけ表示",
     featureKeepAll: "すべて表示のまま",
+    modePickerTitle: "どのモードを試してみますか？",
+    modeEnjoyableDesc: "のんびりモード。自分のペースで学習し、やさしい提案を受けられます。",
+    modeIntensiveDesc: "きびしめモード。毎日のノルマ、苦手分野の提案があり、サボれません。",
+    modeTrialDesc: "Intensive modeを3日間お試しできます。その後、続けるか戻るかを選べます。",
+    modeBtn: "モード",
+    coachTitle: "今日のおすすめ",
+    coachBoth: "普段は{strong}が得意ですが、{weak}は少し苦手そうですね。今日は{weak}はいかがですか？",
+    coachWeakOnly: "{weak}が少し苦手そうですね。今日は練習してみませんか？",
+    coachGo: "やってみる",
+    quotaTitle: "今日のノルマ: {done}/{goal}",
+    quotaMissed: "昨日のノルマが未達でした。まず今日のノルマを終わらせましょう。サボりは禁止です。",
+    trialEndedTitle: "Intensive modeの3日間のお試しが終わりました。どちらのモードにしますか？",
     featureCustomizeBtn: "カスタマイズ",
     feedbackTitle: "💬 フィードバック・ご意見",
     feedbackSubtitle: "アプリで改善してほしい点や気になる点を教えてください。すべてのメッセージに目を通しています。",
@@ -9542,6 +9722,18 @@ const UI_TRANSLATIONS = {
     featurePickerAlways: "Kelime ve Feedback her zaman gösterilir.",
     featureShowOnly: "Sadece bunları göster",
     featureKeepAll: "Hepsini koru",
+    modePickerTitle: "Hangi modu denemek istersiniz?",
+    modeEnjoyableDesc: "Rahat. Kendi hızınızda, dostça önerilerle çalışın.",
+    modeIntensiveDesc: "Katı. Günlük hedef, zayıf alan önerileri ve atlamak yok.",
+    modeTrialDesc: "Intensive modunu 3 gün deneyin. Sonra kalmak veya geri dönmek arasında seçin.",
+    modeBtn: "Mod",
+    coachTitle: "Bugünün önerisi",
+    coachBoth: "Genellikle {strong} konusunda iyisiniz, {weak} ise biraz zor görünüyor. Bugün {weak} nasıl olur?",
+    coachWeakOnly: "{weak} sizin için biraz zor görünüyor. Bugün çalışmaya ne dersiniz?",
+    coachGo: "Hadi başlayalım",
+    quotaTitle: "Bugünün hedefi: {done}/{goal}",
+    quotaMissed: "Dünkü hedefi kaçırdınız. Önce bugünün hedefini tamamlayın, atlamak yok.",
+    trialEndedTitle: "3 günlük Intensive denemeniz sona erdi. Şimdi hangi mod?",
     featureCustomizeBtn: "Özelleştir",
     feedbackTitle: "💬 Geri Bildirim ve Görüş",
     feedbackSubtitle: "Neyi iyileştirmemizi istediğinizi veya uygulamayla ilgili sizi rahatsız eden bir şeyi bize bildirin. Her mesajı okuyoruz.",
@@ -10099,6 +10291,18 @@ const UI_TRANSLATIONS = {
     featurePickerAlways: "शब्दावली र Feedback सधैं देखिन्छन्।",
     featureShowOnly: "यी मात्र देखाउनुहोस्",
     featureKeepAll: "सबै राख्नुहोस्",
+    modePickerTitle: "तपाईं कुन मोड प्रयास गर्न चाहनुहुन्छ?",
+    modeEnjoyableDesc: "आरामदायी। आफ्नै गतिमा, मैत्रीपूर्ण सुझावसहित पढ्नुहोस्।",
+    modeIntensiveDesc: "कडा। दैनिक लक्ष्य, कमजोर क्षेत्रका सुझाव, र छोड्न मिल्दैन।",
+    modeTrialDesc: "Intensive मोड ३ दिन प्रयास गर्नुहोस्। त्यसपछि राख्ने वा फर्कने छनौट गर्नुहोस्।",
+    modeBtn: "मोड",
+    coachTitle: "आजको सुझाव",
+    coachBoth: "तपाईं सामान्यतया {strong} मा राम्रो हुनुहुन्छ, र {weak} अलि गाह्रो देखिन्छ। आज {weak} कस्तो होला?",
+    coachWeakOnly: "{weak} तपाईंलाई अलि गाह्रो देखिन्छ। आज अभ्यास गर्ने कसो?",
+    coachGo: "सुरु गरौं",
+    quotaTitle: "आजको लक्ष्य: {done}/{goal}",
+    quotaMissed: "तपाईंले हिजोको लक्ष्य पूरा गर्नुभएन। पहिले आजको लक्ष्य पूरा गर्नुहोस्, छोड्न मिल्दैन।",
+    trialEndedTitle: "तपाईंको ३ दिने Intensive परीक्षण सकियो। अब कुन मोड?",
     featureCustomizeBtn: "अनुकूलन गर्नुहोस्",
     feedbackTitle: "💬 प्रतिक्रिया र विचार",
     feedbackSubtitle: "एपमा के सुधार गरिदिए हुन्थ्यो वा के कुराले तपाईंलाई अप्ठ्यारो पारिरहेको छ भनी हामीलाई बताउनुहोस्। हामी हरेक सन्देश पढ्छौं।",
@@ -10656,6 +10860,18 @@ const UI_TRANSLATIONS = {
     featurePickerAlways: "Palaging ipinapakita ang Bokabularyo at Feedback.",
     featureShowOnly: "Ipakita lang ang mga ito",
     featureKeepAll: "Panatilihin lahat",
+    modePickerTitle: "Aling mode ang gusto mong subukan?",
+    modeEnjoyableDesc: "Relaks. Mag-aral sa sarili mong bilis, may mga magiliw na mungkahi.",
+    modeIntensiveDesc: "Mahigpit. May pang-araw-araw na quota, mungkahi sa mahihina mong bahagi, at bawal laktawan.",
+    modeTrialDesc: "Subukan ang Intensive mode sa loob ng 3 araw. Pagkatapos, piliin kung itutuloy o babalik.",
+    modeBtn: "Mode",
+    coachTitle: "Mungkahi ngayon",
+    coachBoth: "Karaniwan kang magaling sa {strong}, at mukhang medyo mahirap ang {weak}. Ano kung {weak} ngayon?",
+    coachWeakOnly: "Mukhang medyo mahirap sa iyo ang {weak}. Subukan mo itong praktisin ngayon?",
+    coachGo: "Simulan na",
+    quotaTitle: "Quota ngayon: {done}/{goal}",
+    quotaMissed: "Hindi mo naabot ang quota kahapon. Tapusin muna ang quota ngayon, bawal laktawan.",
+    trialEndedTitle: "Tapos na ang 3-araw mong Intensive trial. Aling mode na ngayon?",
     featureCustomizeBtn: "I-customize",
     feedbackTitle: "💬 Puna at Opinyon",
     feedbackSubtitle: "Sabihin sa amin kung ano ang gusto mong pagbutihin o anumang bagay na nakakaabala sa iyo tungkol sa app. Binabasa namin ang bawat mensahe.",
@@ -14836,7 +15052,7 @@ function PronunciationTurnCard({ item, T, lang, onBreak }) {
     recognition.onend = () => {
       setRecording(false);
       const said = lastTranscriptRef.current.trim();
-      if (said) setResult(isCloseEnough(item.text, said) ? "correct" : "incorrect");
+      if (said) { const okSaid = isCloseEnough(item.text, said); logLearningEvent("pronunciation", okSaid); setResult(okSaid ? "correct" : "incorrect"); }
     };
     recognition.onerror = () => setRecording(false);
     recognitionRef.current = recognition;
@@ -15040,6 +15256,7 @@ function PronunciationSayIt({ target, T }) {
       const said = lastRef.current.trim();
       if (said) {
         const mm = pronMatchMap(target, said);
+        logLearningEvent("pronunciation", mm.score >= 80);
         setMatch(mm);
         setBest(b => (b === null ? mm.score : Math.max(b, mm.score)));
       }
@@ -15506,6 +15723,7 @@ Respond ONLY with valid JSON, no markdown, no backticks:
     try {
       let r;
       try { r = await ask(); } catch { r = await ask(); }
+      logLearningEvent("writing", r.fits);
       setResult(r);
     } catch {
       setError(T.writeErrFail || "Couldn't check your answer. Please try again.");
@@ -17128,6 +17346,7 @@ function useComprehensionCheck(sectionId) {
   const [checkins, setCheckins] = useState(() => loadCheckins(sectionId));
   const [dismissed, setDismissed] = useState(() => loadDismissed(sectionId));
   const record = (itemId, understood) => {
+    logLearningEvent(sectionId, understood);
     setCheckins(prev => {
       const next = { ...prev, [itemId]: understood };
       saveCheckins(sectionId, next);
@@ -17316,6 +17535,75 @@ function readVisibleFeatures() {
     return Array.isArray(v) ? v.filter(x => OPTIONAL_FEATURES.includes(x)) : null;
   } catch { return null; }
 }
+// ─── STUDY MODE (Enjoyable / Intensive) + LEARNING COACH ──────────────────────────
+// Chosen after the Tutorial. "intensive" and "intensive_trial" switch on (1) a local analysis of the
+// student's own results (understood Yes/No, pronunciation score, writing fits/doesn't) that suggests
+// today's practice from their weak area, and (2) a strict daily quota. Everything is computed
+// on-device from a small event log — no extra AI calls. "intensive_trial" lasts 3 days, then asks.
+const STUDY_MODE_KEY = "gaku_study_mode";
+const LEARNING_LOG_KEY = "gaku_learning_log";
+const INTENSIVE_TRIAL_DAYS = 3;
+const INTENSIVE_DAILY_GOAL = 8;
+function loadStudyMode() {
+  try { const v = JSON.parse(localStorage.getItem(scopedKey(STUDY_MODE_KEY)) || "null"); return v && v.mode ? v : null; } catch { return null; }
+}
+function saveStudyMode(mode) {
+  try { localStorage.setItem(scopedKey(STUDY_MODE_KEY), JSON.stringify({ mode, since: Date.now() })); } catch {}
+}
+function effectiveStudyMode(sm) {
+  if (!sm) return "enjoyable";
+  if (sm.mode === "intensive_trial" && Date.now() - sm.since > INTENSIVE_TRIAL_DAYS * 86400000) return "trial_ended";
+  return sm.mode;
+}
+function loadLearningLog() {
+  try { const v = JSON.parse(localStorage.getItem(scopedKey(LEARNING_LOG_KEY)) || "[]"); return Array.isArray(v) ? v : []; } catch { return []; }
+}
+// area: "content" | "conversation" | "pronunciation" | "writing" | "schedule" (understood?) or "task" (a schedule task was checked)
+function logLearningEvent(area, ok) {
+  try {
+    const log = loadLearningLog();
+    log.push({ t: Date.now(), a: area, ok: !!ok });
+    localStorage.setItem(scopedKey(LEARNING_LOG_KEY), JSON.stringify(log.slice(-600)));
+    window.dispatchEvent(new CustomEvent("gaku_learning_updated"));
+  } catch {}
+}
+function dayStartMs(offsetDays) { const d = new Date(); d.setHours(0, 0, 0, 0); return d.getTime() - offsetDays * 86400000; }
+function countEventsOnDay(log, offsetDays) {
+  const s = dayStartMs(offsetDays), e = s + 86400000;
+  return log.filter(x => x.t >= s && x.t < e).length;
+}
+function analyzeLearning(log) {
+  const cutoff = Date.now() - 14 * 86400000;
+  const stats = {};
+  log.forEach(x => { if (x.t < cutoff || x.a === "task") return; const s = stats[x.a] || (stats[x.a] = { n: 0, ok: 0 }); s.n++; if (x.ok) s.ok++; });
+  const rows = Object.entries(stats).filter(([, s]) => s.n >= 3).map(([a, s]) => ({ a, rate: s.ok / s.n, n: s.n })).sort((x, y) => y.rate - x.rate);
+  const strong = rows.length && rows[0].rate >= 0.7 ? rows[0] : null;
+  const last = rows.length ? rows[rows.length - 1] : null;
+  const weak = last && last.rate < 0.7 && (!strong || last.a !== strong.a) ? last : null;
+  return { strong, weak };
+}
+
+function ModePicker({ T, trialEnded, onPick }) {
+  const opts = trialEnded
+    ? [["intensive", "Intensive mode", T.modeIntensiveDesc], ["enjoyable", "Enjoyable mode", T.modeEnjoyableDesc]]
+    : [["enjoyable", "Enjoyable mode", T.modeEnjoyableDesc], ["intensive", "Intensive mode", T.modeIntensiveDesc], ["intensive_trial", "Trial of Intensive mode", T.modeTrialDesc]];
+  return (
+    <div style={{ position:"fixed", inset:0, background:"rgba(0,0,0,0.78)", display:"flex", alignItems:"center", justifyContent:"center", zIndex:1100, padding:16 }}>
+      <div style={{ ...S.card, width:"100%", maxWidth:420, maxHeight:"92vh", overflowY:"auto" }}>
+        <p style={{ color:"#f1f5f9", fontSize:17, fontWeight:800, margin:"0 0 14px", textAlign:"center" }}>{trialEnded ? (T.trialEndedTitle || "Your 3-day Intensive trial has ended. Which mode now?") : (T.modePickerTitle || "Which mode do you want to try?")}</p>
+        <div style={{ display:"flex", flexDirection:"column", gap:10 }}>
+          {opts.map(([id, title, desc]) => (
+            <button key={id} onClick={() => onPick(id)} style={{ textAlign:"left", padding:"12px 14px", borderRadius:12, cursor:"pointer", border:`1.5px solid ${id === "enjoyable" ? C.border : C.purpleLight}`, background:id === "enjoyable" ? C.card : "rgba(168,85,247,0.12)", color:"#e2e8f0" }}>
+              <span style={{ display:"block", fontSize:14, fontWeight:800, marginBottom:4 }}>{id === "enjoyable" ? "😊 " : "🔥 "}{title}</span>
+              <span style={{ display:"block", fontSize:12, color:"#94a3b8", lineHeight:1.6 }}>{desc}</span>
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function FeaturePicker({ T, initial, onApply }) {
   const [checked, setChecked] = useState(initial || []);
   const labels = {
@@ -17370,6 +17658,19 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
   const [showHelp, setShowHelp] = useState(false);
   const [visibleFeatures, setVisibleFeatures] = useState(readVisibleFeatures);
   const [showFeaturePicker, setShowFeaturePicker] = useState(false);
+  // Study mode (Enjoyable / Intensive / Intensive trial) — chosen after the Tutorial, changeable via the Mode button.
+  const [studyMode, setStudyMode] = useState(loadStudyMode);
+  const [showModePicker, setShowModePicker] = useState(false);
+  const [, setLearnTick] = useState(0);
+  const effMode = effectiveStudyMode(studyMode);
+  const isIntensive = effMode === "intensive" || effMode === "intensive_trial";
+  useEffect(() => { if (effMode === "trial_ended") setShowModePicker(true); }, [effMode]);
+  useEffect(() => {
+    const h = () => setLearnTick(n => n + 1);
+    window.addEventListener("gaku_learning_updated", h);
+    return () => window.removeEventListener("gaku_learning_updated", h);
+  }, []);
+  const pickStudyMode = (m) => { saveStudyMode(m); setStudyMode(loadStudyMode()); setShowModePicker(false); };
   const [showFounder, setShowFounder] = useState(false);
   const [featurePickerInitial, setFeaturePickerInitial] = useState([]);
   const [tab, setTab] = useState(() => { const v = readVisibleFeatures(); return (v === null || v.includes("schedule")) ? "schedule" : "vocabulary"; });
@@ -17695,10 +17996,13 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
       else localStorage.setItem(scopedKey("gaku_visible_features"), JSON.stringify(list));
     } catch {}
     setShowFeaturePicker(false);
+    // Right after the Tutorial + feature choice: ask which study mode to try (only if never chosen).
+    if (!loadStudyMode()) setShowModePicker(true);
   }, []);
 
   const toggleTask = useCallback((day, idx) => {
     const nextDone = !(schedule[day] && schedule[day][idx] && schedule[day][idx].done);
+    if (nextDone) logLearningEvent("task", true);
     setSchedule(prev => ({ ...prev, [day]: prev[day].map((t,i) => i===idx ? {...t,done:nextDone} : t) }));
     // Save immediately: students tap an external study link right after checking a task, and the
     // page can be reloaded when they come back.
@@ -17779,6 +18083,7 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
         </div>
       ); })()}
       {showFeaturePicker && <FeaturePicker key={featurePickerInitial.join(",")} T={T} initial={featurePickerInitial} onApply={applyFeatureChoice} />}
+      {showModePicker && !showFeaturePicker && !tutorialActive && <ModePicker T={T} trialEnded={effMode === "trial_ended"} onPick={pickStudyMode} />}
       {tutorialActive && (
         <TutorialOverlay
           T={T}
@@ -17809,6 +18114,7 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
         <div style={{ display:"flex", gap:8, flexWrap:"wrap" }}>
           <button onClick={()=>setShowFounder(true)} style={{ ...S.btn, padding:"8px 14px", background:C.card, color:"#94a3b8", border:`1px solid ${C.border}`, fontSize:12 }}>{"\u{1F464}"} {(FOUNDER_TEXT[form?.preferredLang] || FOUNDER_TEXT["English"])[0]}</button>
           <button onClick={()=>{ setFeaturePickerInitial(visibleFeatures || OPTIONAL_FEATURES); setShowFeaturePicker(true); }} style={{ ...S.btn, padding:"8px 14px", background:C.card, color:"#94a3b8", border:`1px solid ${C.border}`, fontSize:12 }}>{"\u2699\uFE0F"} {T.featureCustomizeBtn || "Customize"}</button>
+          <button onClick={()=>setShowModePicker(true)} style={{ ...S.btn, padding:"8px 14px", background:isIntensive?"rgba(168,85,247,0.2)":C.card, color:isIntensive?C.purpleLight:"#94a3b8", border:`1px solid ${isIntensive?C.purpleLight:C.border}`, fontSize:12 }}>{isIntensive ? "🔥" : "😊"} {T.modeBtn || "Mode"}</button>
           <button onClick={()=>{ setTutorialStep(0); setTutorialActive(true); }} style={{ ...S.btn, padding:"8px 14px", background:"transparent", border:`1px solid ${C.purpleLight}`, color:C.purpleLight, fontSize:12 }}>{T.tutorialBtn}</button>
           <button onClick={()=>setShowHelp(true)} style={{ ...S.btn, padding:"8px 14px", background:`linear-gradient(135deg,${C.amber},#d97706)`, color:"#fff", fontSize:12 }}>{T.help}</button>
           <button onClick={onEdit} style={{ ...S.btn, padding:"8px 14px", background:C.card, color:"#94a3b8", border:`1px solid ${C.border}`, fontSize:12 }}>{T.editProfile}</button>
@@ -17957,7 +18263,36 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
 
         {tab==="schedule" && (
           <div>
-            {scheduleCheck.eligible && <LevelUpOffer T={T} currentLevel={form.jlpt} onConfirm={onLevelUp} onDismiss={scheduleCheck.dismiss} />}
+            {isIntensive && (() => {
+              const log = loadLearningLog();
+              const today = countEventsOnDay(log, 0);
+              const yest = countEventsOnDay(log, 1);
+              const doneQuota = today >= INTENSIVE_DAILY_GOAL;
+              const sinceMs = studyMode && studyMode.since;
+              const missedYesterday = !!sinceMs && sinceMs < dayStartMs(1) && yest < INTENSIVE_DAILY_GOAL && !doneQuota;
+              const { strong, weak } = analyzeLearning(log);
+              const areaLabel = (a) => ({ schedule: T.tabSchedule, content: T.tabPractice, conversation: T.convTitle, pronunciation: T.pronTitle, writing: T.writeTitle }[a] || a);
+              const goDrill = (a) => { if (a === "schedule") { setTab("schedule"); return; } setTab("resources"); setResourceSubTab(a); };
+              return (
+                <div style={{ ...S.card, marginBottom:12, background:"linear-gradient(135deg,rgba(239,68,68,0.10),rgba(168,85,247,0.10))", border:"1px solid rgba(239,68,68,0.3)" }}>
+                  <p style={{ color:"#fca5a5", fontSize:12, fontWeight:800, margin:"0 0 6px" }}>🔥 {(T.quotaTitle || "Today's quota: {done}/{goal}").replace("{done}", Math.min(today, INTENSIVE_DAILY_GOAL)).replace("{goal}", INTENSIVE_DAILY_GOAL)}{doneQuota ? " ✅" : ""}</p>
+                  <div style={{ height:6, borderRadius:3, background:"rgba(255,255,255,0.08)", overflow:"hidden", marginBottom:8 }}>
+                    <div style={{ width:`${Math.min(100, Math.round(today / INTENSIVE_DAILY_GOAL * 100))}%`, height:"100%", background:doneQuota ? C.green : "#f87171" }} />
+                  </div>
+                  {missedYesterday && <p style={{ color:"#fecaca", fontSize:12, fontWeight:700, lineHeight:1.6, margin:"0 0 8px" }}>⚠️ {T.quotaMissed || "You missed yesterday's quota. Finish today's quota first — no skipping."}</p>}
+                  {weak && (
+                    <div>
+                      <p style={{ color:C.purpleLight, fontSize:11, fontWeight:700, margin:"0 0 4px" }}>🎯 {T.coachTitle || "Today's suggestion"}</p>
+                      <p style={{ color:"#e2e8f0", fontSize:13, lineHeight:1.65, margin:"0 0 10px" }}>
+                        {(strong ? (T.coachBoth || "You usually do well in {strong}, and {weak} seems a little hard. How about {weak} today?") : (T.coachWeakOnly || "{weak} seems a little hard for you. How about practicing it today?")).split("{strong}").join(strong ? areaLabel(strong.a) : "").split("{weak}").join(areaLabel(weak.a))}
+                      </p>
+                      <button onClick={() => goDrill(weak.a)} style={{ ...S.btn, padding:"8px 16px", background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff", fontSize:12 }}>{T.coachGo || "Let's go"} →</button>
+                    </div>
+                  )}
+                </div>
+              );
+            })()}
+            {scheduleCheck.eligible &&<LevelUpOffer T={T} currentLevel={form.jlpt} onConfirm={onLevelUp} onDismiss={scheduleCheck.dismiss} />}
             {/* Week progress banner */}
             <div style={{ ...S.card, marginBottom:12, background:"linear-gradient(135deg,rgba(139,92,246,0.12),rgba(6,182,212,0.08))", border:`1px solid rgba(139,92,246,0.25)` }}>
               <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:8 }}>
