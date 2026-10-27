@@ -19,7 +19,7 @@ function confirmationHtml(link) {
 export async function handleSignup(req, res) {
   if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed" });
   try {
-    const { email: rawEmail, password, resend } = req.body || {};
+    const { email: rawEmail, password, resend, pendingForm } = req.body || {};
     const email = String(rawEmail || "").trim().toLowerCase();
     if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       return res.status(400).json({ error: "Please enter a valid email address." });
@@ -29,6 +29,17 @@ export async function handleSignup(req, res) {
     // Re-send the confirmation email for an account that exists but was never confirmed (the
     // original email didn't arrive / was missed). Only ever emails the address itself, and does
     // nothing for confirmed accounts. The password is never touched here.
+    // Keep the QuickStart answers with the ACCOUNT (not just the browser), so a confirmation link
+    // opened in another browser / in-app webview still lands the student on their dashboard
+    // instead of asking the same questions again.
+    const stashForm = async (userId) => {
+      try {
+        if (!userId || !pendingForm || typeof pendingForm !== "object") return;
+        const json = JSON.stringify(pendingForm);
+        if (json.length > 4000) return;
+        await admin.auth.admin.updateUserById(userId, { user_metadata: { pending_form: pendingForm } });
+      } catch (e) { console.error("[signup] stash form failed:", e.message); }
+    };
     const resendConfirmation = async () => {
       const { data: ml, error: mlErr } = await admin.auth.admin.generateLink({
         type: "magiclink", email, options: { redirectTo: APP_URL },
@@ -37,6 +48,7 @@ export async function handleSignup(req, res) {
       if (ml.user.email_confirmed_at) return { sent: false, confirmed: true, userId: ml.user.id };
       const link = ml.properties?.action_link;
       if (!link) return { sent: false, confirmed: false };
+      await stashForm(ml.user.id);
       await sendEmail({
         to: email,
         subject: "Confirm your GAKU Master account",
@@ -75,6 +87,7 @@ export async function handleSignup(req, res) {
     const link = data?.properties?.action_link;
     const userId = data?.user?.id;
     if (!link || !userId) return res.status(500).json({ error: "Could not create confirmation link." });
+    await stashForm(userId);
 
     await sendEmail({
       to: email,

@@ -18808,7 +18808,7 @@ function SetNewPasswordScreen({ hasSession, onDone }) {
   );
 }
 
-function AuthScreen({ onAuthed, T, prefillEmail, initialMode, quickStartStep, linkError }) {
+function AuthScreen({ onAuthed, T, prefillEmail, initialMode, quickStartStep, linkError, pendingForm }) {
   const [mode, setMode] = useState(initialMode || "login"); // login | signup
   const [rawEmail, setRawEmail] = useState(prefillEmail || "");
   const [password, setPassword] = useState("");
@@ -18869,7 +18869,7 @@ function AuthScreen({ onAuthed, T, prefillEmail, initialMode, quickStartStep, li
         // so it no longer depends on Supabase's rate-limited built-in email sender.
         const sRes = await fetch("/api/signup", {
           method: "POST", headers: { "Content-Type":"application/json" },
-          body: JSON.stringify({ email, password }),
+          body: JSON.stringify({ email, password, pendingForm: pendingForm || undefined }),
         });
         const sData = await sRes.json().catch(() => ({}));
         if (sData?.alreadyRegistered) {
@@ -19508,6 +19508,11 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
             if (p && String(p.email || "").toLowerCase() === String(authUser.email || "").toLowerCase()) {
               setPendingProfileSave(null);
               completeProfileSave(p);
+            } else {
+              // Confirmation link opened in a different browser/webview: the answers saved in the
+              // other browser's localStorage are gone, but they were also kept on the account.
+              const mf = authUser.user_metadata?.pending_form;
+              if (mf && typeof mf === "object") completeProfileSave({ ...mf, email: authUser.email });
             }
           } catch {}
         }
@@ -19806,6 +19811,7 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
       prefillEmail={pendingProfileSave?.email || form?.email}
       initialMode={authInitialMode}
       quickStartStep={!!pendingProfileSave}
+      pendingForm={pendingProfileSave}
       linkError={linkError}
     />
   );
