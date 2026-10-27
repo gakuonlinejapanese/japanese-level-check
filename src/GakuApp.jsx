@@ -1183,6 +1183,7 @@ const UI_TRANSLATIONS = {
     coachGo: "Let's go",
     quotaTitle: "Today's quota: {done}/{goal}",
     quotaMissed: "You missed yesterday's quota. Finish today's quota first — no skipping.",
+    quotaLocked: "Finish today's quota to unlock the other tabs.",
     trialEndedTitle: "Your 3-day Intensive trial has ended. Which mode now?",
     featureCustomizeBtn: "Customize",
     feedbackTitle: "💬 Feedback & Opinion",
@@ -1767,6 +1768,7 @@ const UI_TRANSLATIONS = {
     coachGo: "C'est parti",
     quotaTitle: "Quota du jour : {done}/{goal}",
     quotaMissed: "Vous n'avez pas atteint le quota d'hier. Terminez d'abord le quota d'aujourd'hui, sans excuse.",
+    quotaLocked: "Terminez le quota du jour pour débloquer les autres onglets.",
     trialEndedTitle: "Votre essai de 3 jours du mode Intensive est terminé. Quel mode choisir maintenant ?",
     featureCustomizeBtn: "Personnaliser",
     feedbackTitle: "💬 Retour & Avis",
@@ -2336,6 +2338,7 @@ const UI_TRANSLATIONS = {
     coachGo: "Vamos",
     quotaTitle: "Cuota de hoy: {done}/{goal}",
     quotaMissed: "No cumpliste la cuota de ayer. Termina primero la cuota de hoy, sin excusas.",
+    quotaLocked: "Termina la cuota de hoy para desbloquear las demás pestañas.",
     trialEndedTitle: "Terminó tu prueba de 3 días del modo Intensive. ¿Qué modo eliges ahora?",
     featureCustomizeBtn: "Personalizar",
     feedbackTitle: "💬 Comentarios y Opinión",
@@ -2905,6 +2908,7 @@ const UI_TRANSLATIONS = {
     coachGo: "Vamos lá",
     quotaTitle: "Meta de hoje: {done}/{goal}",
     quotaMissed: "Você não cumpriu a meta de ontem. Termine primeiro a meta de hoje, sem pular.",
+    quotaLocked: "Termine a meta de hoje para desbloquear as outras abas.",
     trialEndedTitle: "Seu teste de 3 dias do modo Intensive acabou. Qual modo agora?",
     featureCustomizeBtn: "Personalizar",
     feedbackTitle: "💬 Feedback e Opinião",
@@ -3474,6 +3478,7 @@ const UI_TRANSLATIONS = {
     coachGo: "Los geht's",
     quotaTitle: "Tagesziel: {done}/{goal}",
     quotaMissed: "Das Tagesziel von gestern wurde verfehlt. Erledigen Sie zuerst das heutige Ziel – kein Auslassen.",
+    quotaLocked: "Erledigen Sie das Tagesziel, um die anderen Tabs freizuschalten.",
     trialEndedTitle: "Ihre 3-tägige Intensive-Testphase ist vorbei. Welcher Modus jetzt?",
     featureCustomizeBtn: "Anpassen",
     feedbackTitle: "💬 Feedback & Meinung",
@@ -4043,6 +4048,7 @@ const UI_TRANSLATIONS = {
     coachGo: "Andiamo",
     quotaTitle: "Obiettivo di oggi: {done}/{goal}",
     quotaMissed: "Hai mancato l'obiettivo di ieri. Completa prima quello di oggi, senza saltare.",
+    quotaLocked: "Completa l'obiettivo di oggi per sbloccare le altre schede.",
     trialEndedTitle: "La tua prova di 3 giorni della modalità Intensive è finita. Quale modalità ora?",
     featureCustomizeBtn: "Personalizza",
     feedbackTitle: "💬 Feedback e Opinioni",
@@ -4612,6 +4618,7 @@ const UI_TRANSLATIONS = {
     coachGo: "开始吧",
     quotaTitle: "今日目标：{done}/{goal}",
     quotaMissed: "你没有完成昨天的目标。请先完成今天的目标，不要偷懒。",
+    quotaLocked: "完成今日目标即可解锁其他标签页。",
     trialEndedTitle: "你的 3 天 Intensive 试用已结束。现在选择哪种模式？",
     featureCustomizeBtn: "自定义",
     feedbackTitle: "💬 反馈与意见",
@@ -5181,6 +5188,7 @@ const UI_TRANSLATIONS = {
     coachGo: "開始吧",
     quotaTitle: "今日目標：{done}/{goal}",
     quotaMissed: "你沒有完成昨天的目標。請先完成今天的目標，不要偷懶。",
+    quotaLocked: "完成今日目標即可解鎖其他分頁。",
     trialEndedTitle: "你的 3 天 Intensive 試用已結束。現在選擇哪種模式？",
     featureCustomizeBtn: "自訂",
     feedbackTitle: "💬 意見回饋與想法",
@@ -5750,6 +5758,7 @@ const UI_TRANSLATIONS = {
     coachGo: "시작하기",
     quotaTitle: "오늘의 목표: {done}/{goal}",
     quotaMissed: "어제 목표를 채우지 못했어요. 오늘 목표부터 먼저 끝내세요. 건너뛰기 없음.",
+    quotaLocked: "오늘의 목표를 끝내면 다른 탭이 열립니다.",
     trialEndedTitle: "Intensive 모드 3일 체험이 끝났어요. 이제 어떤 모드로 할까요?",
     featureCustomizeBtn: "맞춤 설정",
     feedbackTitle: "💬 피드백 및 의견",
@@ -6319,6 +6328,7 @@ const UI_TRANSLATIONS = {
     coachGo: "เริ่มเลย",
     quotaTitle: "เป้าหมายวันนี้: {done}/{goal}",
     quotaMissed: "เมื่อวานคุณทำเป้าหมายไม่ถึง กรุณาทำเป้าหมายของวันนี้ให้เสร็จก่อน ห้ามข้าม",
+    quotaLocked: "ทำเป้าหมายวันนี้ให้เสร็จเพื่อปลดล็อกแท็บอื่น",
     trialEndedTitle: "การทดลองโหมด Intensive 3 วันสิ้นสุดแล้ว ตอนนี้จะเลือกโหมดไหน?",
     featureCustomizeBtn: "ปรับแต่ง",
     feedbackTitle: "💬 ความคิดเห็นและข้อเสนอแนะ",
@@ -6888,6 +6898,7 @@ const UI_TRANSLATIONS = {
     coachGo: "Jom mulakan",
     quotaTitle: "Kuota hari ini: {done}/{goal}",
     quotaMissed: "Anda terlepas kuota semalam. Siapkan kuota hari ini dahulu, tiada langkau.",
+    quotaLocked: "Siapkan kuota hari ini untuk membuka tab lain.",
     trialEndedTitle: "Percubaan 3 hari mod Intensive anda telah tamat. Mod mana sekarang?",
     featureCustomizeBtn: "Suaikan",
     feedbackTitle: "💬 Maklum Balas & Pendapat",
@@ -7457,6 +7468,7 @@ const UI_TRANSLATIONS = {
     coachGo: "Ayo mulai",
     quotaTitle: "Kuota hari ini: {done}/{goal}",
     quotaMissed: "Anda tidak memenuhi kuota kemarin. Selesaikan dulu kuota hari ini, tanpa melewatkan.",
+    quotaLocked: "Selesaikan kuota hari ini untuk membuka tab lain.",
     trialEndedTitle: "Uji coba mode Intensive 3 hari Anda telah berakhir. Mode mana sekarang?",
     featureCustomizeBtn: "Sesuaikan",
     feedbackTitle: "💬 Masukan & Pendapat",
@@ -8026,6 +8038,7 @@ const UI_TRANSLATIONS = {
     coachGo: "Bắt đầu thôi",
     quotaTitle: "Chỉ tiêu hôm nay: {done}/{goal}",
     quotaMissed: "Bạn chưa đạt chỉ tiêu hôm qua. Hãy hoàn thành chỉ tiêu hôm nay trước, không được bỏ qua.",
+    quotaLocked: "Hoàn thành chỉ tiêu hôm nay để mở khóa các tab khác.",
     trialEndedTitle: "Thời gian dùng thử Intensive 3 ngày đã kết thúc. Bạn chọn chế độ nào?",
     featureCustomizeBtn: "Tùy chỉnh",
     feedbackTitle: "💬 Phản hồi & Ý kiến",
@@ -8595,6 +8608,7 @@ const UI_TRANSLATIONS = {
     coachGo: "चलें",
     quotaTitle: "आज का लक्ष्य: {done}/{goal}",
     quotaMissed: "आपने कल का लक्ष्य पूरा नहीं किया। पहले आज का लक्ष्य पूरा करें, छोड़ना नहीं।",
+    quotaLocked: "आज का लक्ष्य पूरा करें, तब बाकी टैब खुलेंगे।",
     trialEndedTitle: "आपका 3 दिन का Intensive ट्रायल ख़त्म हो गया। अब कौन-सा मोड चुनेंगे?",
     featureCustomizeBtn: "अनुकूलित करें",
     feedbackTitle: "💬 प्रतिक्रिया और राय",
@@ -9164,6 +9178,7 @@ const UI_TRANSLATIONS = {
     coachGo: "やってみる",
     quotaTitle: "今日のノルマ: {done}/{goal}",
     quotaMissed: "昨日のノルマが未達でした。まず今日のノルマを終わらせましょう。サボりは禁止です。",
+    quotaLocked: "今日のノルマを終えると、ほかのタブが開きます。",
     trialEndedTitle: "Intensive modeの3日間のお試しが終わりました。どちらのモードにしますか？",
     featureCustomizeBtn: "カスタマイズ",
     feedbackTitle: "💬 フィードバック・ご意見",
@@ -9733,6 +9748,7 @@ const UI_TRANSLATIONS = {
     coachGo: "Hadi başlayalım",
     quotaTitle: "Bugünün hedefi: {done}/{goal}",
     quotaMissed: "Dünkü hedefi kaçırdınız. Önce bugünün hedefini tamamlayın, atlamak yok.",
+    quotaLocked: "Diğer sekmelerin kilidini açmak için bugünün hedefini tamamlayın.",
     trialEndedTitle: "3 günlük Intensive denemeniz sona erdi. Şimdi hangi mod?",
     featureCustomizeBtn: "Özelleştir",
     feedbackTitle: "💬 Geri Bildirim ve Görüş",
@@ -10302,6 +10318,7 @@ const UI_TRANSLATIONS = {
     coachGo: "सुरु गरौं",
     quotaTitle: "आजको लक्ष्य: {done}/{goal}",
     quotaMissed: "तपाईंले हिजोको लक्ष्य पूरा गर्नुभएन। पहिले आजको लक्ष्य पूरा गर्नुहोस्, छोड्न मिल्दैन।",
+    quotaLocked: "आजको लक्ष्य पूरा गरेपछि अन्य ट्याबहरू खुल्छन्।",
     trialEndedTitle: "तपाईंको ३ दिने Intensive परीक्षण सकियो। अब कुन मोड?",
     featureCustomizeBtn: "अनुकूलन गर्नुहोस्",
     feedbackTitle: "💬 प्रतिक्रिया र विचार",
@@ -10871,6 +10888,7 @@ const UI_TRANSLATIONS = {
     coachGo: "Simulan na",
     quotaTitle: "Quota ngayon: {done}/{goal}",
     quotaMissed: "Hindi mo naabot ang quota kahapon. Tapusin muna ang quota ngayon, bawal laktawan.",
+    quotaLocked: "Tapusin ang quota ngayon para mabuksan ang ibang tab.",
     trialEndedTitle: "Tapos na ang 3-araw mong Intensive trial. Aling mode na ngayon?",
     featureCustomizeBtn: "I-customize",
     feedbackTitle: "💬 Puna at Opinyon",
@@ -18021,6 +18039,12 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
   // A feature is shown when the student kept it (or never chose); the tutorial always shows everything.
   const featureShown = (id) => tutorialActive || visibleFeatures === null || visibleFeatures.includes(id);
   const tabShown = (id) => id === "resources" ? RESOURCE_FEATURES.some(featureShown) : (OPTIONAL_FEATURES.includes(id) ? featureShown(id) : true);
+  // Intensive mode: until today's quota is met only the schedule and practice (resources) tabs open.
+  // Feedback and the Mode button always stay available as an escape hatch.
+  const lockHome = tabShown("schedule") ? "schedule" : (tabShown("resources") ? "resources" : null);
+  const quotaLocked = isIntensive && !tutorialActive && !!lockHome && countEventsOnDay(loadLearningLog(), 0) < INTENSIVE_DAILY_GOAL;
+  const LOCKABLE_TABS = ["vocabulary", "subtitles", "milestones", "jlpt"];
+  useEffect(() => { if (quotaLocked && LOCKABLE_TABS.includes(tab)) setTab(lockHome); }, [quotaLocked, tab, lockHome]);
   useEffect(() => {
     if (!tabShown(tab)) { setTab("vocabulary"); return; }
     if (tab === "resources" && !featureShown(resourceSubTab)) {
@@ -18254,8 +18278,8 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
             const tutorialTarget = (tutorialActive && tutorialStep>=1 && tutorialStep<=TUTORIAL_STEPS.length) ? TUTORIAL_STEPS[tutorialStep-1] : null;
             const isTutorialTarget = tutorialTarget?.tab === t.id;
             return (
-              <button key={t.id} onClick={()=>{ setTab(t.id); logFunnel(userId, "tab_" + t.id); }} style={{ padding:"8px 14px", borderRadius:20, border:`1.5px solid ${isTutorialTarget?C.purpleLight:(tab===t.id?C.purpleLight:C.border)}`, background:tab===t.id?"rgba(168,85,247,0.15)":C.card, color:tab===t.id?C.purpleLight:"#64748b", fontSize:12, fontWeight:700, cursor:"pointer", whiteSpace:"nowrap", boxShadow:isTutorialTarget?"0 0 0 3px rgba(168,85,247,0.35)":"none" }}>
-                {t.label}
+              <button key={t.id} onClick={()=>{ if (quotaLocked && LOCKABLE_TABS.includes(t.id)) { setTab(lockHome); return; } setTab(t.id); logFunnel(userId, "tab_" + t.id); }} style={{ padding:"8px 14px", borderRadius:20, border:`1.5px solid ${isTutorialTarget?C.purpleLight:(tab===t.id?C.purpleLight:C.border)}`, background:tab===t.id?"rgba(168,85,247,0.15)":C.card, color:tab===t.id?C.purpleLight:"#64748b", fontSize:12, fontWeight:700, cursor:"pointer", whiteSpace:"nowrap", boxShadow:isTutorialTarget?"0 0 0 3px rgba(168,85,247,0.35)":"none", opacity:(quotaLocked && LOCKABLE_TABS.includes(t.id)) ? 0.45 : 1 }}>
+                {(quotaLocked && LOCKABLE_TABS.includes(t.id)) ? "🔒 " : ""}{t.label}
               </button>
             );
           })}
@@ -18263,7 +18287,7 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
 
         {tab==="schedule" && (
           <div>
-            {isIntensive && (() => {
+            {(() => {
               const log = loadLearningLog();
               const today = countEventsOnDay(log, 0);
               const yest = countEventsOnDay(log, 1);
@@ -18273,13 +18297,16 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
               const { strong, weak } = analyzeLearning(log);
               const areaLabel = (a) => ({ schedule: T.tabSchedule, content: T.tabPractice, conversation: T.convTitle, pronunciation: T.pronTitle, writing: T.writeTitle }[a] || a);
               const goDrill = (a) => { if (a === "schedule") { setTab("schedule"); return; } setTab("resources"); setResourceSubTab(a); };
+              // Enjoyable mode: only the gentle suggestion card (no quota, no warnings), and only when there is one.
+              if (!isIntensive && !weak) return null;
               return (
-                <div style={{ ...S.card, marginBottom:12, background:"linear-gradient(135deg,rgba(239,68,68,0.10),rgba(168,85,247,0.10))", border:"1px solid rgba(239,68,68,0.3)" }}>
-                  <p style={{ color:"#fca5a5", fontSize:12, fontWeight:800, margin:"0 0 6px" }}>🔥 {(T.quotaTitle || "Today's quota: {done}/{goal}").replace("{done}", Math.min(today, INTENSIVE_DAILY_GOAL)).replace("{goal}", INTENSIVE_DAILY_GOAL)}{doneQuota ? " ✅" : ""}</p>
-                  <div style={{ height:6, borderRadius:3, background:"rgba(255,255,255,0.08)", overflow:"hidden", marginBottom:8 }}>
+                <div style={{ ...S.card, marginBottom:12, background:isIntensive ? "linear-gradient(135deg,rgba(239,68,68,0.10),rgba(168,85,247,0.10))" : "rgba(168,85,247,0.08)", border:isIntensive ? "1px solid rgba(239,68,68,0.3)" : "1px solid rgba(168,85,247,0.25)" }}>
+                  {isIntensive && <p style={{ color:"#fca5a5", fontSize:12, fontWeight:800, margin:"0 0 6px" }}>🔥 {(T.quotaTitle || "Today's quota: {done}/{goal}").replace("{done}", Math.min(today, INTENSIVE_DAILY_GOAL)).replace("{goal}", INTENSIVE_DAILY_GOAL)}{doneQuota ? " ✅" : ""}</p>}
+                  {isIntensive && <div style={{ height:6, borderRadius:3, background:"rgba(255,255,255,0.08)", overflow:"hidden", marginBottom:8 }}>
                     <div style={{ width:`${Math.min(100, Math.round(today / INTENSIVE_DAILY_GOAL * 100))}%`, height:"100%", background:doneQuota ? C.green : "#f87171" }} />
-                  </div>
-                  {missedYesterday && <p style={{ color:"#fecaca", fontSize:12, fontWeight:700, lineHeight:1.6, margin:"0 0 8px" }}>⚠️ {T.quotaMissed || "You missed yesterday's quota. Finish today's quota first — no skipping."}</p>}
+                  </div>}
+                  {isIntensive && !doneQuota && <p style={{ color:"#fecaca", fontSize:11, lineHeight:1.6, margin:"0 0 8px" }}>🔒 {T.quotaLocked || "Finish today's quota to unlock the other tabs."}</p>}
+                  {isIntensive && missedYesterday && <p style={{ color:"#fecaca", fontSize:12, fontWeight:700, lineHeight:1.6, margin:"0 0 8px" }}>⚠️ {T.quotaMissed || "You missed yesterday's quota. Finish today's quota first — no skipping."}</p>}
                   {weak && (
                     <div>
                       <p style={{ color:C.purpleLight, fontSize:11, fontWeight:700, margin:"0 0 4px" }}>🎯 {T.coachTitle || "Today's suggestion"}</p>
