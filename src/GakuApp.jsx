@@ -1185,6 +1185,12 @@ const UI_TRANSLATIONS = {
     quotaMissed: "You missed yesterday's quota. Finish today's quota first — no skipping.",
     quotaLocked: "Finish today's quota to unlock the other tabs.",
     trialEndedTitle: "Your 3-day Intensive trial has ended. Which mode now?",
+    modeGuideTitle: "How the study modes work",
+    modeGuideIntensive: "🔥 Intensive mode: finish today's quota of 8 actions (checking a task, answering a check, practicing, saving words, etc.).",
+    modeGuideLock: "🔒 Until the quota is done, Subtitles, Milestones and JLPT are locked. Tap a locked tab and you'll come back to your Schedule. When you reach 8, everything unlocks.",
+    modeGuideEnjoyable: "😊 Enjoyable mode: no quota, no warnings. You only see a gentle suggestion like \"You're usually good at X, and Y seems a little hard. How about Y today?\" (after you have 3+ records).",
+    modeGuideEscape: "The Feedback tab and the Mode button are never locked. Want it easier? Switch to Enjoyable mode anytime from the Mode button.",
+    modeGuideOk: "Got it",
     featureCustomizeBtn: "Customize",
     feedbackTitle: "💬 Feedback & Opinion",
     feedbackSubtitle: "Tell us what you'd like improved or anything that's bothering you about the app. We read every message.",
@@ -1770,6 +1776,12 @@ const UI_TRANSLATIONS = {
     quotaMissed: "Vous n'avez pas atteint le quota d'hier. Terminez d'abord le quota d'aujourd'hui, sans excuse.",
     quotaLocked: "Terminez le quota du jour pour débloquer les autres onglets.",
     trialEndedTitle: "Votre essai de 3 jours du mode Intensive est terminé. Quel mode choisir maintenant ?",
+    modeGuideTitle: "Comment fonctionnent les modes",
+    modeGuideIntensive: "🔥 Mode Intensive : terminez le quota du jour de 8 actions (cocher une tâche, répondre à une vérification, s'entraîner, enregistrer des mots, etc.).",
+    modeGuideLock: "🔒 Tant que le quota n'est pas atteint, Sous-titres, Milestones et JLPT sont verrouillés. Touchez un onglet verrouillé pour revenir au Planning. À 8 actions, tout se débloque.",
+    modeGuideEnjoyable: "😊 Mode Enjoyable : ni quota ni avertissement. Seulement une suggestion douce, par ex. « Vous réussissez bien X, et Y semble un peu difficile. Et si on travaillait Y aujourd'hui ? » (à partir de 3 résultats enregistrés).",
+    modeGuideEscape: "L'onglet Feedback et le bouton Mode ne sont jamais verrouillés. Envie de plus léger ? Passez en mode Enjoyable à tout moment avec le bouton Mode.",
+    modeGuideOk: "Compris",
     featureCustomizeBtn: "Personnaliser",
     feedbackTitle: "💬 Retour & Avis",
     feedbackSubtitle: "Dites-nous ce que vous aimeriez voir amélioré ou ce qui vous dérange dans l'application. Nous lisons chaque message.",
@@ -2340,6 +2352,12 @@ const UI_TRANSLATIONS = {
     quotaMissed: "No cumpliste la cuota de ayer. Termina primero la cuota de hoy, sin excusas.",
     quotaLocked: "Termina la cuota de hoy para desbloquear las demás pestañas.",
     trialEndedTitle: "Terminó tu prueba de 3 días del modo Intensive. ¿Qué modo eliges ahora?",
+    modeGuideTitle: "Cómo funcionan los modos",
+    modeGuideIntensive: "🔥 Modo Intensive: completa la cuota de hoy de 8 acciones (marcar una tarea, responder una comprobación, practicar, guardar palabras, etc.).",
+    modeGuideLock: "🔒 Hasta cumplir la cuota, Subtítulos, Milestones y JLPT están bloqueados. Toca una pestaña bloqueada y volverás al Horario. Al llegar a 8, todo se desbloquea.",
+    modeGuideEnjoyable: "😊 Modo Enjoyable: sin cuota ni avisos. Solo verás una sugerencia amable como «Sueles ir bien en X, y Y parece un poco difícil. ¿Y si practicas Y hoy?» (cuando tengas 3 o más registros).",
+    modeGuideEscape: "La pestaña Feedback y el botón Mode nunca se bloquean. ¿Prefieres algo más suave? Cambia a Enjoyable cuando quieras con el botón Mode.",
+    modeGuideOk: "Entendido",
     featureCustomizeBtn: "Personalizar",
     feedbackTitle: "💬 Comentarios y Opinión",
     feedbackSubtitle: "Cuéntanos qué te gustaría que mejoráramos o qué te molesta de la app. Leemos todos los mensajes.",
@@ -2910,6 +2928,12 @@ const UI_TRANSLATIONS = {
     quotaMissed: "Você não cumpriu a meta de ontem. Termine primeiro a meta de hoje, sem pular.",
     quotaLocked: "Termine a meta de hoje para desbloquear as outras abas.",
     trialEndedTitle: "Seu teste de 3 dias do modo Intensive acabou. Qual modo agora?",
+    modeGuideTitle: "Como funcionam os modos",
+    modeGuideIntensive: "🔥 Modo Intensive: cumpra a meta de hoje de 8 ações (marcar uma tarefa, responder uma verificação, praticar, salvar palavras etc.).",
+    modeGuideLock: "🔒 Até cumprir a meta, Legendas, Milestones e JLPT ficam bloqueados. Toque numa aba bloqueada e você volta ao Cronograma. Ao chegar a 8, tudo é liberado.",
+    modeGuideEnjoyable: "😊 Modo Enjoyable: sem meta e sem avisos. Você só vê uma sugestão gentil, como \"Você costuma ir bem em X, e Y parece um pouco difícil. Que tal Y hoje?\" (com 3 ou mais registros).",
+    modeGuideEscape: "A aba Feedback e o botão Mode nunca são bloqueados. Quer algo mais leve? Mude para Enjoyable quando quiser pelo botão Mode.",
+    modeGuideOk: "Entendi",
     featureCustomizeBtn: "Personalizar",
     feedbackTitle: "💬 Feedback e Opinião",
     feedbackSubtitle: "Conte-nos o que você gostaria que melhorássemos ou o que está incomodando você no app. Lemos todas as mensagens.",
@@ -3480,6 +3504,12 @@ const UI_TRANSLATIONS = {
     quotaMissed: "Das Tagesziel von gestern wurde verfehlt. Erledigen Sie zuerst das heutige Ziel – kein Auslassen.",
     quotaLocked: "Erledigen Sie das Tagesziel, um die anderen Tabs freizuschalten.",
     trialEndedTitle: "Ihre 3-tägige Intensive-Testphase ist vorbei. Welcher Modus jetzt?",
+    modeGuideTitle: "So funktionieren die Modi",
+    modeGuideIntensive: "🔥 Intensive-Modus: Erreichen Sie das heutige Tagesziel von 8 Aktionen (Aufgabe abhaken, Verständnisfrage beantworten, üben, Wörter speichern usw.).",
+    modeGuideLock: "🔒 Bis das Ziel erreicht ist, sind Untertitel, Milestones und JLPT gesperrt. Tippen Sie auf einen gesperrten Tab, kehren Sie zum Zeitplan zurück. Bei 8 wird alles freigeschaltet.",
+    modeGuideEnjoyable: "😊 Enjoyable-Modus: kein Ziel, keine Warnungen. Nur ein sanfter Vorschlag wie „Sie sind meist gut in X, und Y scheint etwas schwer. Wie wäre es heute mit Y?“ (ab 3 Einträgen).",
+    modeGuideEscape: "Der Feedback-Tab und die Mode-Taste sind nie gesperrt. Lieber entspannter? Wechseln Sie jederzeit über die Mode-Taste zu Enjoyable.",
+    modeGuideOk: "Verstanden",
     featureCustomizeBtn: "Anpassen",
     feedbackTitle: "💬 Feedback & Meinung",
     feedbackSubtitle: "Sag uns, was wir verbessern sollen oder was dich an der App stört. Wir lesen jede Nachricht.",
@@ -4050,6 +4080,12 @@ const UI_TRANSLATIONS = {
     quotaMissed: "Hai mancato l'obiettivo di ieri. Completa prima quello di oggi, senza saltare.",
     quotaLocked: "Completa l'obiettivo di oggi per sbloccare le altre schede.",
     trialEndedTitle: "La tua prova di 3 giorni della modalità Intensive è finita. Quale modalità ora?",
+    modeGuideTitle: "Come funzionano le modalità",
+    modeGuideIntensive: "🔥 Modalità Intensive: completa l'obiettivo di oggi di 8 azioni (spuntare un compito, rispondere a una verifica, esercitarti, salvare parole, ecc.).",
+    modeGuideLock: "🔒 Finché non raggiungi l'obiettivo, Sottotitoli, Milestones e JLPT sono bloccati. Tocca una scheda bloccata e tornerai al Programma. Arrivato a 8, tutto si sblocca.",
+    modeGuideEnjoyable: "😊 Modalità Enjoyable: nessun obiettivo, nessun avviso. Vedi solo un suggerimento gentile come «Di solito vai bene in X, e Y sembra un po' difficile. Che ne dici di Y oggi?» (con 3 o più registrazioni).",
+    modeGuideEscape: "La scheda Feedback e il pulsante Mode non sono mai bloccati. Vuoi qualcosa di più leggero? Passa a Enjoyable quando vuoi dal pulsante Mode.",
+    modeGuideOk: "Capito",
     featureCustomizeBtn: "Personalizza",
     feedbackTitle: "💬 Feedback e Opinioni",
     feedbackSubtitle: "Dicci cosa vorresti che migliorassimo o cosa ti disturba dell'app. Leggiamo ogni messaggio.",
@@ -4620,6 +4656,12 @@ const UI_TRANSLATIONS = {
     quotaMissed: "你没有完成昨天的目标。请先完成今天的目标，不要偷懒。",
     quotaLocked: "完成今日目标即可解锁其他标签页。",
     trialEndedTitle: "你的 3 天 Intensive 试用已结束。现在选择哪种模式？",
+    modeGuideTitle: "学习模式的说明",
+    modeGuideIntensive: "🔥 Intensive 模式：完成今天 8 个动作的目标（勾选任务、回答理解检查、练习、保存单词等）。",
+    modeGuideLock: "🔒 完成目标之前，Subtitles、Milestones 和 JLPT 会被锁定。点击被锁定的标签会回到日程页面。达到 8 个后全部解锁。",
+    modeGuideEnjoyable: "😊 Enjoyable 模式：没有目标，也没有警告。只会显示温和的建议，例如“你通常擅长 X，Y 似乎有点难。今天练习 Y 怎么样？”（有 3 条以上记录时）。",
+    modeGuideEscape: "Feedback 标签和 Mode 按钮永远不会被锁定。想轻松一点？随时可通过 Mode 按钮切换到 Enjoyable 模式。",
+    modeGuideOk: "知道了",
     featureCustomizeBtn: "自定义",
     feedbackTitle: "💬 反馈与意见",
     feedbackSubtitle: "告诉我们你希望我们改进什么，或者对这个应用有什么不满意的地方。我们会阅读每一条留言。",
@@ -5190,6 +5232,12 @@ const UI_TRANSLATIONS = {
     quotaMissed: "你沒有完成昨天的目標。請先完成今天的目標，不要偷懶。",
     quotaLocked: "完成今日目標即可解鎖其他分頁。",
     trialEndedTitle: "你的 3 天 Intensive 試用已結束。現在選擇哪種模式？",
+    modeGuideTitle: "學習模式的說明",
+    modeGuideIntensive: "🔥 Intensive 模式：完成今天 8 個動作的目標（勾選任務、回答理解檢查、練習、儲存單字等）。",
+    modeGuideLock: "🔒 完成目標之前，Subtitles、Milestones 和 JLPT 會被鎖定。點選被鎖定的分頁會回到行程頁面。達到 8 個後全部解鎖。",
+    modeGuideEnjoyable: "😊 Enjoyable 模式：沒有目標，也沒有警告。只會顯示溫和的建議，例如「你通常擅長 X，Y 似乎有點難。今天練習 Y 如何？」（有 3 筆以上紀錄時）。",
+    modeGuideEscape: "Feedback 分頁和 Mode 按鈕永遠不會被鎖定。想輕鬆一點？隨時可透過 Mode 按鈕切換到 Enjoyable 模式。",
+    modeGuideOk: "知道了",
     featureCustomizeBtn: "自訂",
     feedbackTitle: "💬 意見回饋與想法",
     feedbackSubtitle: "告訴我們你希望我們改進什麼，或是對這個應用程式有什麼不滿意的地方。我們會閱讀每一則留言。",
@@ -5760,6 +5808,12 @@ const UI_TRANSLATIONS = {
     quotaMissed: "어제 목표를 채우지 못했어요. 오늘 목표부터 먼저 끝내세요. 건너뛰기 없음.",
     quotaLocked: "오늘의 목표를 끝내면 다른 탭이 열립니다.",
     trialEndedTitle: "Intensive 모드 3일 체험이 끝났어요. 이제 어떤 모드로 할까요?",
+    modeGuideTitle: "학습 모드 안내",
+    modeGuideIntensive: "🔥 Intensive 모드: 오늘의 목표 8회 활동(과제 체크, 이해 확인 답하기, 연습, 단어 저장 등)을 끝내세요.",
+    modeGuideLock: "🔒 목표를 달성할 때까지 Subtitles, Milestones, JLPT 탭은 잠깁니다. 잠긴 탭을 누르면 스케줄 화면으로 돌아갑니다. 8회를 채우면 모두 열립니다.",
+    modeGuideEnjoyable: "😊 Enjoyable 모드: 목표도 경고도 없습니다. \"보통 X는 잘하지만 Y는 조금 어려워 보여요. 오늘은 Y는 어때요?\" 같은 부드러운 제안만 보입니다(기록이 3회 이상일 때).",
+    modeGuideEscape: "Feedback 탭과 Mode 버튼은 절대 잠기지 않습니다. 더 편하게 하고 싶다면 Mode 버튼에서 언제든 Enjoyable 모드로 바꿀 수 있어요.",
+    modeGuideOk: "확인",
     featureCustomizeBtn: "맞춤 설정",
     feedbackTitle: "💬 피드백 및 의견",
     feedbackSubtitle: "개선했으면 하는 점이나 앱에서 불편한 점을 알려주세요. 모든 메시지를 읽습니다.",
@@ -6330,6 +6384,12 @@ const UI_TRANSLATIONS = {
     quotaMissed: "เมื่อวานคุณทำเป้าหมายไม่ถึง กรุณาทำเป้าหมายของวันนี้ให้เสร็จก่อน ห้ามข้าม",
     quotaLocked: "ทำเป้าหมายวันนี้ให้เสร็จเพื่อปลดล็อกแท็บอื่น",
     trialEndedTitle: "การทดลองโหมด Intensive 3 วันสิ้นสุดแล้ว ตอนนี้จะเลือกโหมดไหน?",
+    modeGuideTitle: "โหมดการเรียนทำงานอย่างไร",
+    modeGuideIntensive: "🔥 โหมด Intensive: ทำเป้าหมายวันนี้ให้ครบ 8 กิจกรรม (ติ๊กงาน ตอบแบบตรวจความเข้าใจ ฝึก บันทึกคำศัพท์ ฯลฯ)",
+    modeGuideLock: "🔒 จนกว่าจะทำเป้าหมายครบ แท็บ Subtitles, Milestones และ JLPT จะถูกล็อก แตะแท็บที่ล็อกแล้วจะกลับไปที่ตารางเรียน เมื่อครบ 8 ทุกอย่างจะปลดล็อก",
+    modeGuideEnjoyable: "😊 โหมด Enjoyable: ไม่มีเป้าหมายและไม่มีคำเตือน จะเห็นเพียงคำแนะนำเบา ๆ เช่น \"ปกติคุณเก่ง X แต่ Y ดูจะยากไปหน่อย วันนี้ลอง Y ไหม?\" (เมื่อมีบันทึกตั้งแต่ 3 ครั้งขึ้นไป)",
+    modeGuideEscape: "แท็บ Feedback และปุ่ม Mode จะไม่ถูกล็อกเลย อยากเรียนสบาย ๆ ขึ้น? สลับเป็นโหมด Enjoyable ได้ทุกเมื่อจากปุ่ม Mode",
+    modeGuideOk: "เข้าใจแล้ว",
     featureCustomizeBtn: "ปรับแต่ง",
     feedbackTitle: "💬 ความคิดเห็นและข้อเสนอแนะ",
     feedbackSubtitle: "บอกเราว่าคุณอยากให้ปรับปรุงอะไร หรือมีอะไรที่กวนใจคุณเกี่ยวกับแอปนี้ เราจะอ่านทุกข้อความ",
@@ -6900,6 +6960,12 @@ const UI_TRANSLATIONS = {
     quotaMissed: "Anda terlepas kuota semalam. Siapkan kuota hari ini dahulu, tiada langkau.",
     quotaLocked: "Siapkan kuota hari ini untuk membuka tab lain.",
     trialEndedTitle: "Percubaan 3 hari mod Intensive anda telah tamat. Mod mana sekarang?",
+    modeGuideTitle: "Cara mod pembelajaran berfungsi",
+    modeGuideIntensive: "🔥 Mod Intensive: selesaikan kuota hari ini sebanyak 8 tindakan (tandakan tugasan, jawab semakan, berlatih, simpan perkataan, dll.).",
+    modeGuideLock: "🔒 Selagi kuota belum siap, tab Subtitles, Milestones dan JLPT dikunci. Tekan tab yang dikunci dan anda akan kembali ke Jadual. Apabila mencapai 8, semuanya dibuka.",
+    modeGuideEnjoyable: "😊 Mod Enjoyable: tiada kuota, tiada amaran. Hanya cadangan lembut seperti \"Anda biasanya bagus dalam X, dan Y nampak agak sukar. Bagaimana kalau Y hari ini?\" (apabila ada 3 rekod atau lebih).",
+    modeGuideEscape: "Tab Feedback dan butang Mode tidak pernah dikunci. Mahu lebih santai? Tukar ke mod Enjoyable bila-bila masa melalui butang Mode.",
+    modeGuideOk: "Faham",
     featureCustomizeBtn: "Suaikan",
     feedbackTitle: "💬 Maklum Balas & Pendapat",
     feedbackSubtitle: "Beritahu kami apa yang anda mahu diperbaiki atau apa-apa yang mengganggu anda tentang aplikasi ini. Kami membaca setiap mesej.",
@@ -7470,6 +7536,12 @@ const UI_TRANSLATIONS = {
     quotaMissed: "Anda tidak memenuhi kuota kemarin. Selesaikan dulu kuota hari ini, tanpa melewatkan.",
     quotaLocked: "Selesaikan kuota hari ini untuk membuka tab lain.",
     trialEndedTitle: "Uji coba mode Intensive 3 hari Anda telah berakhir. Mode mana sekarang?",
+    modeGuideTitle: "Cara kerja mode belajar",
+    modeGuideIntensive: "🔥 Mode Intensive: selesaikan kuota hari ini sebanyak 8 aksi (mencentang tugas, menjawab pengecekan, berlatih, menyimpan kata, dll.).",
+    modeGuideLock: "🔒 Sebelum kuota selesai, tab Subtitles, Milestones, dan JLPT terkunci. Ketuk tab yang terkunci dan Anda kembali ke Jadwal. Setelah mencapai 8, semuanya terbuka.",
+    modeGuideEnjoyable: "😊 Mode Enjoyable: tanpa kuota dan tanpa peringatan. Hanya saran lembut seperti \"Anda biasanya bagus di X, dan Y tampak agak sulit. Bagaimana kalau Y hari ini?\" (jika ada 3 catatan atau lebih).",
+    modeGuideEscape: "Tab Feedback dan tombol Mode tidak pernah terkunci. Ingin lebih santai? Ganti ke mode Enjoyable kapan saja lewat tombol Mode.",
+    modeGuideOk: "Mengerti",
     featureCustomizeBtn: "Sesuaikan",
     feedbackTitle: "💬 Masukan & Pendapat",
     feedbackSubtitle: "Beri tahu kami apa yang ingin Anda tingkatkan atau apa yang mengganggu Anda tentang aplikasi ini. Kami membaca setiap pesan.",
@@ -8040,6 +8112,12 @@ const UI_TRANSLATIONS = {
     quotaMissed: "Bạn chưa đạt chỉ tiêu hôm qua. Hãy hoàn thành chỉ tiêu hôm nay trước, không được bỏ qua.",
     quotaLocked: "Hoàn thành chỉ tiêu hôm nay để mở khóa các tab khác.",
     trialEndedTitle: "Thời gian dùng thử Intensive 3 ngày đã kết thúc. Bạn chọn chế độ nào?",
+    modeGuideTitle: "Các chế độ học hoạt động thế nào",
+    modeGuideIntensive: "🔥 Chế độ Intensive: hoàn thành chỉ tiêu hôm nay gồm 8 hoạt động (tick nhiệm vụ, trả lời kiểm tra hiểu bài, luyện tập, lưu từ, v.v.).",
+    modeGuideLock: "🔒 Cho đến khi đạt chỉ tiêu, các tab Subtitles, Milestones và JLPT bị khoá. Chạm vào tab bị khoá sẽ quay về Lịch học. Đạt 8 là mở khoá tất cả.",
+    modeGuideEnjoyable: "😊 Chế độ Enjoyable: không chỉ tiêu, không cảnh báo. Chỉ có gợi ý nhẹ nhàng như \"Bạn thường làm tốt X, còn Y có vẻ hơi khó. Hôm nay thử Y nhé?\" (khi có từ 3 bản ghi trở lên).",
+    modeGuideEscape: "Tab Feedback và nút Mode không bao giờ bị khoá. Muốn nhẹ nhàng hơn? Bạn có thể đổi sang chế độ Enjoyable bất cứ lúc nào bằng nút Mode.",
+    modeGuideOk: "Đã hiểu",
     featureCustomizeBtn: "Tùy chỉnh",
     feedbackTitle: "💬 Phản hồi & Ý kiến",
     feedbackSubtitle: "Hãy cho chúng tôi biết bạn muốn cải thiện điều gì hoặc điều gì đang làm bạn khó chịu về ứng dụng. Chúng tôi đọc mọi tin nhắn.",
@@ -8610,6 +8688,12 @@ const UI_TRANSLATIONS = {
     quotaMissed: "आपने कल का लक्ष्य पूरा नहीं किया। पहले आज का लक्ष्य पूरा करें, छोड़ना नहीं।",
     quotaLocked: "आज का लक्ष्य पूरा करें, तब बाकी टैब खुलेंगे।",
     trialEndedTitle: "आपका 3 दिन का Intensive ट्रायल ख़त्म हो गया। अब कौन-सा मोड चुनेंगे?",
+    modeGuideTitle: "स्टडी मोड कैसे काम करते हैं",
+    modeGuideIntensive: "🔥 Intensive मोड: आज के 8 कामों का लक्ष्य पूरा करें (टास्क टिक करना, समझ की जाँच का जवाब देना, अभ्यास, शब्द सेव करना आदि)।",
+    modeGuideLock: "🔒 लक्ष्य पूरा होने तक Subtitles, Milestones और JLPT टैब लॉक रहते हैं। लॉक टैब दबाने पर आप शेड्यूल पर लौट आएँगे। 8 पूरे होते ही सब खुल जाता है।",
+    modeGuideEnjoyable: "😊 Enjoyable मोड: कोई लक्ष्य या चेतावनी नहीं। बस एक नरम सुझाव दिखता है, जैसे \"आप आम तौर पर X में अच्छे हैं, और Y थोड़ा कठिन लगता है। आज Y कैसा रहेगा?\" (3 या अधिक रिकॉर्ड होने पर)।",
+    modeGuideEscape: "Feedback टैब और Mode बटन कभी लॉक नहीं होते। आसान चाहिए? Mode बटन से कभी भी Enjoyable मोड में बदलें।",
+    modeGuideOk: "समझ गया",
     featureCustomizeBtn: "अनुकूलित करें",
     feedbackTitle: "💬 प्रतिक्रिया और राय",
     feedbackSubtitle: "हमें बताएं कि आप ऐप में क्या सुधार चाहते हैं या आपको क्या परेशान कर रहा है। हम हर संदेश पढ़ते हैं।",
@@ -9180,6 +9264,12 @@ const UI_TRANSLATIONS = {
     quotaMissed: "昨日のノルマが未達でした。まず今日のノルマを終わらせましょう。サボりは禁止です。",
     quotaLocked: "今日のノルマを終えると、ほかのタブが開きます。",
     trialEndedTitle: "Intensive modeの3日間のお試しが終わりました。どちらのモードにしますか？",
+    modeGuideTitle: "学習モードの説明",
+    modeGuideIntensive: "🔥 Intensive mode: 今日のノルマ(1日8アクション)を終わらせましょう。タスクのチェック、理解チェックへの回答、練習、単語の保存などが数えられます。",
+    modeGuideLock: "🔒 ノルマが終わるまでは、字幕帳・Milestones・JLPTのタブがロックされます。ロックされたタブを押すと、スケジュール画面に戻ります。8回に達するとロックは外れます。",
+    modeGuideEnjoyable: "😊 Enjoyable mode: ノルマも警告もありません。記録が3回以上たまると、「普段は○○が得意ですが、△△は少し苦手そうですね。今日は△△はいかがですか？」というやさしい提案だけが表示されます。",
+    modeGuideEscape: "FeedbackタブとModeボタンはロックされません。もっとゆるくしたいときは、Modeボタンからいつでも Enjoyable mode に変えられます。",
+    modeGuideOk: "わかりました",
     featureCustomizeBtn: "カスタマイズ",
     feedbackTitle: "💬 フィードバック・ご意見",
     feedbackSubtitle: "アプリで改善してほしい点や気になる点を教えてください。すべてのメッセージに目を通しています。",
@@ -9750,6 +9840,12 @@ const UI_TRANSLATIONS = {
     quotaMissed: "Dünkü hedefi kaçırdınız. Önce bugünün hedefini tamamlayın, atlamak yok.",
     quotaLocked: "Diğer sekmelerin kilidini açmak için bugünün hedefini tamamlayın.",
     trialEndedTitle: "3 günlük Intensive denemeniz sona erdi. Şimdi hangi mod?",
+    modeGuideTitle: "Çalışma modları nasıl işler",
+    modeGuideIntensive: "🔥 Intensive modu: bugünün 8 eylemlik hedefini tamamlayın (görevi işaretlemek, anlama kontrolünü yanıtlamak, pratik yapmak, kelime kaydetmek vb.).",
+    modeGuideLock: "🔒 Hedef tamamlanana kadar Subtitles, Milestones ve JLPT sekmeleri kilitlidir. Kilitli sekmeye dokunursanız Program ekranına dönersiniz. 8'e ulaşınca hepsi açılır.",
+    modeGuideEnjoyable: "😊 Enjoyable modu: hedef de uyarı da yok. Yalnızca \"Genelde X'te iyisiniz, Y biraz zor görünüyor. Bugün Y'ye ne dersiniz?\" gibi nazik bir öneri görürsünüz (3 veya daha fazla kayıt olunca).",
+    modeGuideEscape: "Feedback sekmesi ve Mode düğmesi asla kilitlenmez. Daha rahat mı istiyorsunuz? Mode düğmesinden istediğiniz zaman Enjoyable moduna geçebilirsiniz.",
+    modeGuideOk: "Anladım",
     featureCustomizeBtn: "Özelleştir",
     feedbackTitle: "💬 Geri Bildirim ve Görüş",
     feedbackSubtitle: "Neyi iyileştirmemizi istediğinizi veya uygulamayla ilgili sizi rahatsız eden bir şeyi bize bildirin. Her mesajı okuyoruz.",
@@ -10320,6 +10416,12 @@ const UI_TRANSLATIONS = {
     quotaMissed: "तपाईंले हिजोको लक्ष्य पूरा गर्नुभएन। पहिले आजको लक्ष्य पूरा गर्नुहोस्, छोड्न मिल्दैन।",
     quotaLocked: "आजको लक्ष्य पूरा गरेपछि अन्य ट्याबहरू खुल्छन्।",
     trialEndedTitle: "तपाईंको ३ दिने Intensive परीक्षण सकियो। अब कुन मोड?",
+    modeGuideTitle: "अध्ययन मोडले कसरी काम गर्छन्",
+    modeGuideIntensive: "🔥 Intensive मोड: आजको ८ कार्यको लक्ष्य पूरा गर्नुहोस् (टास्क टिक गर्ने, बुझाइ जाँचको उत्तर दिने, अभ्यास, शब्द सेभ गर्ने आदि)।",
+    modeGuideLock: "🔒 लक्ष्य पूरा नभएसम्म Subtitles, Milestones र JLPT ट्याब लक हुन्छन्। लक ट्याब थिच्दा तपाईं तालिकामा फर्कनुहुन्छ। ८ पुगेपछि सबै खुल्छ।",
+    modeGuideEnjoyable: "😊 Enjoyable मोड: कुनै लक्ष्य वा चेतावनी छैन। केवल नरम सुझाव देखिन्छ, जस्तै \"तपाईं सामान्यतया X मा राम्रो हुनुहुन्छ, Y अलि गाह्रो देखिन्छ। आज Y कस्तो होला?\" (३ वा बढी रेकर्ड भएपछि)।",
+    modeGuideEscape: "Feedback ट्याब र Mode बटन कहिल्यै लक हुँदैनन्। सजिलो चाहनुहुन्छ? Mode बटनबाट जुनसुकै बेला Enjoyable मोडमा बदल्नुहोस्।",
+    modeGuideOk: "बुझें",
     featureCustomizeBtn: "अनुकूलन गर्नुहोस्",
     feedbackTitle: "💬 प्रतिक्रिया र विचार",
     feedbackSubtitle: "एपमा के सुधार गरिदिए हुन्थ्यो वा के कुराले तपाईंलाई अप्ठ्यारो पारिरहेको छ भनी हामीलाई बताउनुहोस्। हामी हरेक सन्देश पढ्छौं।",
@@ -10890,6 +10992,12 @@ const UI_TRANSLATIONS = {
     quotaMissed: "Hindi mo naabot ang quota kahapon. Tapusin muna ang quota ngayon, bawal laktawan.",
     quotaLocked: "Tapusin ang quota ngayon para mabuksan ang ibang tab.",
     trialEndedTitle: "Tapos na ang 3-araw mong Intensive trial. Aling mode na ngayon?",
+    modeGuideTitle: "Paano gumagana ang mga study mode",
+    modeGuideIntensive: "🔥 Intensive mode: tapusin ang quota ngayong araw na 8 aksyon (pag-check ng task, pagsagot sa comprehension check, pagsasanay, pag-save ng salita, atbp.).",
+    modeGuideLock: "🔒 Hangga't hindi tapos ang quota, naka-lock ang Subtitles, Milestones at JLPT. Pindutin ang naka-lock na tab at babalik ka sa Schedule. Pag umabot ng 8, mabubuksan ang lahat.",
+    modeGuideEnjoyable: "😊 Enjoyable mode: walang quota, walang babala. Banayad na mungkahi lang ang makikita, tulad ng \"Karaniwan kang magaling sa X, at medyo mahirap ang Y. Subukan ang Y ngayon?\" (kapag may 3 o higit pang tala).",
+    modeGuideEscape: "Hindi kailanman nilo-lock ang Feedback tab at ang Mode button. Gusto ng mas magaan? Lumipat sa Enjoyable mode anumang oras gamit ang Mode button.",
+    modeGuideOk: "Sige",
     featureCustomizeBtn: "I-customize",
     feedbackTitle: "💬 Puna at Opinyon",
     feedbackSubtitle: "Sabihin sa amin kung ano ang gusto mong pagbutihin o anumang bagay na nakakaabala sa iyo tungkol sa app. Binabasa namin ang bawat mensahe.",
@@ -17627,6 +17735,23 @@ function ModePicker({ T, trialEnded, onPick }) {
   );
 }
 
+function ModeGuide({ T, onClose }) {
+  const items = [T.modeGuideIntensive, T.modeGuideLock, T.modeGuideEnjoyable, T.modeGuideEscape].filter(Boolean);
+  return (
+    <div style={{ position:"fixed", inset:0, background:"rgba(0,0,0,0.78)", display:"flex", alignItems:"center", justifyContent:"center", zIndex:1100, padding:16 }}>
+      <div style={{ ...S.card, width:"100%", maxWidth:420, maxHeight:"92vh", overflowY:"auto" }}>
+        <p style={{ color:"#f1f5f9", fontSize:17, fontWeight:800, margin:"0 0 14px", textAlign:"center" }}>{T.modeGuideTitle}</p>
+        <div style={{ display:"flex", flexDirection:"column", gap:10, marginBottom:14 }}>
+          {items.map((txt, i) => (
+            <p key={i} style={{ color:"#e2e8f0", fontSize:13, lineHeight:1.7, margin:0, padding:"10px 12px", borderRadius:10, background:"rgba(168,85,247,0.10)", border:`1px solid ${C.border}` }}>{txt}</p>
+          ))}
+        </div>
+        <button onClick={onClose} style={{ ...S.btn, width:"100%", background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff" }}>{T.modeGuideOk}</button>
+      </div>
+    </div>
+  );
+}
+
 function FeaturePicker({ T, initial, onApply }) {
   const [checked, setChecked] = useState(initial || []);
   const labels = {
@@ -17694,6 +17819,10 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
     return () => window.removeEventListener("gaku_learning_updated", h);
   }, []);
   const pickStudyMode = (m) => { saveStudyMode(m); setStudyMode(loadStudyMode()); setShowModePicker(false); };
+  // One-time explanation of the study modes (quota + tab lock). Shown once per account to everyone,
+  // including students who were already using the app, after the Tutorial/pickers are out of the way.
+  const [modeGuideSeen, setModeGuideSeen] = useState(() => { try { return localStorage.getItem(scopedKey("gaku_mode_guide_seen")) === "1"; } catch { return true; } });
+  const closeModeGuide = () => { setModeGuideSeen(true); try { localStorage.setItem(scopedKey("gaku_mode_guide_seen"), "1"); } catch {} };
   const [showFounder, setShowFounder] = useState(false);
   const [featurePickerInitial, setFeaturePickerInitial] = useState([]);
   const [tab, setTab] = useState(() => { const v = readVisibleFeatures(); return (v === null || v.includes("schedule")) ? "schedule" : "vocabulary"; });
@@ -18112,6 +18241,7 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
         </div>
       ); })()}
       {showFeaturePicker && <FeaturePicker key={featurePickerInitial.join(",")} T={T} initial={featurePickerInitial} onApply={applyFeatureChoice} />}
+      {!modeGuideSeen && !showModePicker && !showFeaturePicker && !tutorialActive && (() => { try { return localStorage.getItem(scopedKey("gaku_tutorial_done")) === "1"; } catch { return false; } })() && !T._loading && T.modeGuideTitle && <ModeGuide T={T} onClose={closeModeGuide} />}
       {showModePicker && !showFeaturePicker && !tutorialActive && <ModePicker T={T} trialEnded={effMode === "trial_ended"} onPick={pickStudyMode} />}
       {tutorialActive && (
         <TutorialOverlay
