@@ -12218,6 +12218,7 @@ function WordDetailCard({ card: cardProp, onSave, onBack, form, prefLang, onRevi
       data.cards.push(newCard);
     }
     saveVocabData(data);
+    logLearningEvent("vocab", true);
     if (onSave) onSave(data);
     setSaveModal(false); setSaveMode(""); setNewFolderName(""); setSelectedFolder("");
     showToast(`✓ "${card.word}" を "${folderName}" に保存しました`);
@@ -12497,6 +12498,7 @@ function FlashcardView({ form, onBack, focusWord }) {
       data.cards.push({ ...card, id: Date.now(), folder: UNDERSTOOD, savedAt: new Date().toISOString() });
     }
     saveVocabData({ folders, cards: data.cards });
+    logLearningEvent("vocab", true);
     setAllData(loadVocabData());
     setFlipped(false); setShowHint(false);
     setIdx(i => (i >= displayCards.length - 1 ? 0 : i)); // the next card slides into this position
@@ -12508,6 +12510,7 @@ function FlashcardView({ form, onBack, focusWord }) {
     if (!card || card.folder !== UNDERSTOOD) return;
     const data = loadVocabData();
     saveVocabData({ folders: data.folders, cards: data.cards.filter(c => !(c.folder === UNDERSTOOD && c.word === card.word)) });
+    logLearningEvent("vocab", false);
     setAllData(loadVocabData());
     setFlipped(false); setShowHint(false);
     setIdx(i => (i >= displayCards.length - 1 ? 0 : i));
@@ -17590,10 +17593,12 @@ function countEventsOnDay(log, offsetDays) {
   const s = dayStartMs(offsetDays), e = s + 86400000;
   return log.filter(x => x.t >= s && x.t < e).length;
 }
-function analyzeLearning(log) {
+// Only features the student actually uses are judged: an area needs recorded results (>= 3 in 14 days)
+// AND must still be a feature they keep visible (`allow(area)` — see featureShown in Dashboard).
+function analyzeLearning(log, allow) {
   const cutoff = Date.now() - 14 * 86400000;
   const stats = {};
-  log.forEach(x => { if (x.t < cutoff || x.a === "task") return; const s = stats[x.a] || (stats[x.a] = { n: 0, ok: 0 }); s.n++; if (x.ok) s.ok++; });
+  log.forEach(x => { if (x.t < cutoff || x.a === "task" || (allow && !allow(x.a))) return; const s = stats[x.a] || (stats[x.a] = { n: 0, ok: 0 }); s.n++; if (x.ok) s.ok++; });
   const rows = Object.entries(stats).filter(([, s]) => s.n >= 3).map(([a, s]) => ({ a, rate: s.ok / s.n, n: s.n })).sort((x, y) => y.rate - x.rate);
   const strong = rows.length && rows[0].rate >= 0.7 ? rows[0] : null;
   const last = rows.length ? rows[rows.length - 1] : null;
@@ -18043,7 +18048,7 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
   // Feedback and the Mode button always stay available as an escape hatch.
   const lockHome = tabShown("schedule") ? "schedule" : (tabShown("resources") ? "resources" : null);
   const quotaLocked = isIntensive && !tutorialActive && !!lockHome && countEventsOnDay(loadLearningLog(), 0) < INTENSIVE_DAILY_GOAL;
-  const LOCKABLE_TABS = ["vocabulary", "subtitles", "milestones", "jlpt"];
+  const LOCKABLE_TABS = ["subtitles", "milestones", "jlpt"]; // Vocabulary stays open: its use counts toward the quota
   useEffect(() => { if (quotaLocked && LOCKABLE_TABS.includes(tab)) setTab(lockHome); }, [quotaLocked, tab, lockHome]);
   useEffect(() => {
     if (!tabShown(tab)) { setTab("vocabulary"); return; }
@@ -18294,9 +18299,9 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
               const doneQuota = today >= INTENSIVE_DAILY_GOAL;
               const sinceMs = studyMode && studyMode.since;
               const missedYesterday = !!sinceMs && sinceMs < dayStartMs(1) && yest < INTENSIVE_DAILY_GOAL && !doneQuota;
-              const { strong, weak } = analyzeLearning(log);
-              const areaLabel = (a) => ({ schedule: T.tabSchedule, content: T.tabPractice, conversation: T.convTitle, pronunciation: T.pronTitle, writing: T.writeTitle }[a] || a);
-              const goDrill = (a) => { if (a === "schedule") { setTab("schedule"); return; } setTab("resources"); setResourceSubTab(a); };
+              const { strong, weak } = analyzeLearning(log, (a) => a === "vocab" || featureShown(a));
+              const areaLabel = (a) => ({ schedule: T.tabSchedule, vocab: T.tabVocabulary, content: T.tabPractice, conversation: T.convTitle, pronunciation: T.pronTitle, writing: T.writeTitle }[a] || a);
+              const goDrill = (a) => { if (a === "schedule" || a === "vocab") { setTab(a === "vocab" ? "vocabulary" : "schedule"); return; } setTab("resources"); setResourceSubTab(a); };
               // Enjoyable mode: only the gentle suggestion card (no quota, no warnings), and only when there is one.
               if (!isIntensive && !weak) return null;
               return (
