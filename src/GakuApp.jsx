@@ -18999,7 +18999,7 @@ function AuthScreen({ onAuthed, T, prefillEmail, initialMode, quickStartStep, li
         // so it no longer depends on Supabase's rate-limited built-in email sender.
         const sRes = await fetch("/api/signup", {
           method: "POST", headers: { "Content-Type":"application/json" },
-          body: JSON.stringify({ email, password, pendingForm: pendingForm || undefined }),
+          body: JSON.stringify({ email, password, pendingForm: pendingForm || undefined, verifyLater: true }),
         });
         const sData = await sRes.json().catch(() => ({}));
         if (sData?.alreadyRegistered) {
@@ -19025,10 +19025,14 @@ function AuthScreen({ onAuthed, T, prefillEmail, initialMode, quickStartStep, li
             throw new Error(pData.error || "Failed to save your profile.");
           }
         }
-        // New accounts must confirm their email before they can log in. Stop here with a clear
-        // "check your email" screen (instead of dropping them into an app they can't save in).
+        // Legacy path only: the server no longer asks new students to confirm first. If it ever
+        // does, stop here with the "check your email" screen.
         if (sData?.needsConfirmation) { setConfirmEmail(email); return; }
-        onAuthed({ userId, email });
+        // New accounts are usable immediately (the email is verified later, from the welcome email
+        // link) — so open a session right away and go straight into the app.
+        const { data: sess, error: sessErr } = await supabase.auth.signInWithPassword({ email, password });
+        if (sessErr) throw sessErr;
+        onAuthed({ userId: sess?.user?.id || userId, email });
       } else {
         const { data, error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) {
@@ -19596,6 +19600,40 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
     });
     return () => sub?.subscription?.unsubscribe();
   }, []);
+  // Email verification happens AFTER the student is already inside the app: the welcome email's
+  // button opens the app with ?vt=<token>. Keep the token (it may be opened in a browser where the
+  // student isn't logged in yet), then redeem it for the logged-in account.
+  useEffect(() => {
+    try {
+      const sp = new URLSearchParams(window.location.search);
+      const vt = sp.get("vt");
+      if (vt) {
+        localStorage.setItem("gaku_verify_token", vt.slice(0, 200));
+        sp.delete("vt");
+        const q = sp.toString();
+        window.history.replaceState(null, "", window.location.pathname + (q ? "?" + q : "") + window.location.hash);
+      }
+    } catch {}
+  }, []);
+  useEffect(() => {
+    if (!authUser?.id || !supabase) return;
+    let vt = null;
+    try { vt = localStorage.getItem("gaku_verify_token"); } catch {}
+    if (!vt) return;
+    (async () => {
+      try {
+        const { data } = await supabase.auth.getSession();
+        const jwt = data?.session?.access_token;
+        if (!jwt) return;
+        await fetch("/api/signup", {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Authorization: `Bearer ${jwt}` },
+          body: JSON.stringify({ action: "verify", token: vt }),
+        });
+      } catch {}
+      try { localStorage.removeItem("gaku_verify_token"); } catch {}
+    })();
+  }, [authUser?.id]);
   // Once logged in, verify this device against known devices for the account —
   // triggers the dual-approval email flow for unrecognized devices.
   useEffect(() => {
