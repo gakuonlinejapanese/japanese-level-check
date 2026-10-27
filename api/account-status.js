@@ -52,6 +52,7 @@ const FUNNEL_STEPS = new Set([
   "dashboard_shown",
   "tutorial_shown", "tutorial_skipped", "tutorial_finished",
   "tab_schedule", "tab_vocabulary", "tab_subtitles", "tab_resources", "tab_milestones",
+  "lesson_bridge_shown", "lesson_bridge_clicked",
 ]);
 
 export default async function handler(req, res) {

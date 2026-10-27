@@ -1180,6 +1180,9 @@ const UI_TRANSLATIONS = {
     coachTitle: "Today's suggestion",
     coachBoth: "You usually do well in {strong}, and {weak} seems a little hard. How about {weak} today?",
     coachWeakOnly: "{weak} seems a little hard for you. How about practicing it today?",
+    lessonBridgeAsk: "Want to practice this with a real teacher? Try a free trial lesson.",
+    lessonBridgeBtn: "Book a free trial lesson →",
+    lessonBridgeMissed: "Sounds to watch: {chars}",
     coachGo: "Let's go",
     quotaTitle: "Today's quota: {done}/{goal}",
     quotaMissed: "You missed yesterday's quota. Finish today's quota first — no skipping.",
@@ -1771,6 +1774,9 @@ const UI_TRANSLATIONS = {
     coachTitle: "Suggestion du jour",
     coachBoth: "Vous réussissez généralement bien en {strong}, et {weak} semble un peu difficile. Et si on travaillait {weak} aujourd'hui ?",
     coachWeakOnly: "{weak} semble un peu difficile pour vous. Et si vous le travailliez aujourd'hui ?",
+    lessonBridgeAsk: "Envie de travailler cela avec un vrai professeur ? Essayez un cours d'essai gratuit.",
+    lessonBridgeBtn: "Réserver un cours d'essai gratuit →",
+    lessonBridgeMissed: "Sons à surveiller : {chars}",
     coachGo: "C'est parti",
     quotaTitle: "Quota du jour : {done}/{goal}",
     quotaMissed: "Vous n'avez pas atteint le quota d'hier. Terminez d'abord le quota d'aujourd'hui, sans excuse.",
@@ -2347,6 +2353,9 @@ const UI_TRANSLATIONS = {
     coachTitle: "Sugerencia de hoy",
     coachBoth: "Normalmente te va bien en {strong}, y {weak} parece un poco difícil. ¿Qué tal {weak} hoy?",
     coachWeakOnly: "{weak} parece un poco difícil para ti. ¿Qué tal practicarlo hoy?",
+    lessonBridgeAsk: "¿Quieres practicar esto con un profesor de verdad? Prueba una clase de prueba gratuita.",
+    lessonBridgeBtn: "Reservar una clase de prueba gratis →",
+    lessonBridgeMissed: "Sonidos a vigilar: {chars}",
     coachGo: "Vamos",
     quotaTitle: "Cuota de hoy: {done}/{goal}",
     quotaMissed: "No cumpliste la cuota de ayer. Termina primero la cuota de hoy, sin excusas.",
@@ -2923,6 +2932,9 @@ const UI_TRANSLATIONS = {
     coachTitle: "Sugestão de hoje",
     coachBoth: "Você costuma ir bem em {strong}, e {weak} parece um pouco difícil. Que tal {weak} hoje?",
     coachWeakOnly: "{weak} parece um pouco difícil para você. Que tal praticar hoje?",
+    lessonBridgeAsk: "Quer praticar isso com um professor de verdade? Experimente uma aula experimental gratuita.",
+    lessonBridgeBtn: "Reservar uma aula experimental grátis →",
+    lessonBridgeMissed: "Sons para observar: {chars}",
     coachGo: "Vamos lá",
     quotaTitle: "Meta de hoje: {done}/{goal}",
     quotaMissed: "Você não cumpriu a meta de ontem. Termine primeiro a meta de hoje, sem pular.",
@@ -3499,6 +3511,9 @@ const UI_TRANSLATIONS = {
     coachTitle: "Vorschlag für heute",
     coachBoth: "Sie sind meist gut in {strong}, und {weak} scheint etwas schwer. Wie wäre es heute mit {weak}?",
     coachWeakOnly: "{weak} scheint Ihnen etwas schwerzufallen. Wie wäre es, es heute zu üben?",
+    lessonBridgeAsk: "Möchten Sie das mit einer echten Lehrkraft üben? Probieren Sie eine kostenlose Probestunde.",
+    lessonBridgeBtn: "Kostenlose Probestunde buchen →",
+    lessonBridgeMissed: "Laute, auf die Sie achten sollten: {chars}",
     coachGo: "Los geht's",
     quotaTitle: "Tagesziel: {done}/{goal}",
     quotaMissed: "Das Tagesziel von gestern wurde verfehlt. Erledigen Sie zuerst das heutige Ziel – kein Auslassen.",
@@ -4075,6 +4090,9 @@ const UI_TRANSLATIONS = {
     coachTitle: "Suggerimento di oggi",
     coachBoth: "Di solito vai bene in {strong}, e {weak} sembra un po' difficile. Che ne dici di {weak} oggi?",
     coachWeakOnly: "{weak} sembra un po' difficile per te. Che ne dici di allenarlo oggi?",
+    lessonBridgeAsk: "Vuoi esercitarti su questo con un vero insegnante? Prova una lezione di prova gratuita.",
+    lessonBridgeBtn: "Prenota una lezione di prova gratuita →",
+    lessonBridgeMissed: "Suoni da tenere d'occhio: {chars}",
     coachGo: "Andiamo",
     quotaTitle: "Obiettivo di oggi: {done}/{goal}",
     quotaMissed: "Hai mancato l'obiettivo di ieri. Completa prima quello di oggi, senza saltare.",
@@ -4651,6 +4669,9 @@ const UI_TRANSLATIONS = {
     coachTitle: "今日建议",
     coachBoth: "你通常在{strong}方面表现不错，而{weak}似乎有点吃力。今天练习一下{weak}怎么样？",
     coachWeakOnly: "{weak}对你来说似乎有点难。今天练习一下怎么样？",
+    lessonBridgeAsk: "想和真人老师一起练习这个吗？试试免费体验课吧。",
+    lessonBridgeBtn: "预约免费体验课 →",
+    lessonBridgeMissed: "需要留意的发音：{chars}",
     coachGo: "开始吧",
     quotaTitle: "今日目标：{done}/{goal}",
     quotaMissed: "你没有完成昨天的目标。请先完成今天的目标，不要偷懒。",
@@ -5227,6 +5248,9 @@ const UI_TRANSLATIONS = {
     coachTitle: "今日建議",
     coachBoth: "你通常在{strong}方面表現不錯，而{weak}似乎有點吃力。今天練習一下{weak}如何？",
     coachWeakOnly: "{weak}對你來說似乎有點難。今天練習一下如何？",
+    lessonBridgeAsk: "想和真人老師一起練習這個嗎？試試免費體驗課吧。",
+    lessonBridgeBtn: "預約免費體驗課 →",
+    lessonBridgeMissed: "需要留意的發音：{chars}",
     coachGo: "開始吧",
     quotaTitle: "今日目標：{done}/{goal}",
     quotaMissed: "你沒有完成昨天的目標。請先完成今天的目標，不要偷懶。",
@@ -5803,6 +5827,9 @@ const UI_TRANSLATIONS = {
     coachTitle: "오늘의 제안",
     coachBoth: "{strong}은(는) 보통 잘하는데 {weak}은(는) 조금 어려워 보여요. 오늘은 {weak}은(는) 어떠세요?",
     coachWeakOnly: "{weak}은(는) 조금 어려워 보여요. 오늘 연습해 보는 건 어떨까요?",
+    lessonBridgeAsk: "이 부분을 진짜 선생님과 함께 연습해 보시겠어요? 무료 체험 수업을 신청해 보세요.",
+    lessonBridgeBtn: "무료 체험 수업 신청하기 →",
+    lessonBridgeMissed: "주의해야 할 소리: {chars}",
     coachGo: "시작하기",
     quotaTitle: "오늘의 목표: {done}/{goal}",
     quotaMissed: "어제 목표를 채우지 못했어요. 오늘 목표부터 먼저 끝내세요. 건너뛰기 없음.",
@@ -6379,6 +6406,9 @@ const UI_TRANSLATIONS = {
     coachTitle: "คำแนะนำวันนี้",
     coachBoth: "ปกติคุณทำ{strong}ได้ดี แต่{weak}ดูจะยากไปหน่อย วันนี้ลอง{weak}ไหม?",
     coachWeakOnly: "{weak}ดูจะยากไปหน่อยสำหรับคุณ วันนี้ลองฝึกดูไหม?",
+    lessonBridgeAsk: "อยากฝึกเรื่องนี้กับครูตัวจริงไหม? ลองเรียนทดลองฟรีดูสิ",
+    lessonBridgeBtn: "จองเรียนทดลองฟรี →",
+    lessonBridgeMissed: "เสียงที่ควรระวัง: {chars}",
     coachGo: "เริ่มเลย",
     quotaTitle: "เป้าหมายวันนี้: {done}/{goal}",
     quotaMissed: "เมื่อวานคุณทำเป้าหมายไม่ถึง กรุณาทำเป้าหมายของวันนี้ให้เสร็จก่อน ห้ามข้าม",
@@ -6955,6 +6985,9 @@ const UI_TRANSLATIONS = {
     coachTitle: "Cadangan hari ini",
     coachBoth: "Anda biasanya baik dalam {strong}, dan {weak} nampaknya agak sukar. Bagaimana kalau {weak} hari ini?",
     coachWeakOnly: "{weak} nampaknya agak sukar untuk anda. Bagaimana kalau berlatih hari ini?",
+    lessonBridgeAsk: "Mahu berlatih perkara ini dengan guru sebenar? Cuba kelas percubaan percuma.",
+    lessonBridgeBtn: "Tempah kelas percubaan percuma →",
+    lessonBridgeMissed: "Bunyi yang perlu diberi perhatian: {chars}",
     coachGo: "Jom mulakan",
     quotaTitle: "Kuota hari ini: {done}/{goal}",
     quotaMissed: "Anda terlepas kuota semalam. Siapkan kuota hari ini dahulu, tiada langkau.",
@@ -7531,6 +7564,9 @@ const UI_TRANSLATIONS = {
     coachTitle: "Saran hari ini",
     coachBoth: "Anda biasanya bagus di {strong}, dan {weak} tampaknya agak sulit. Bagaimana kalau {weak} hari ini?",
     coachWeakOnly: "{weak} tampaknya agak sulit bagi Anda. Bagaimana kalau berlatih hari ini?",
+    lessonBridgeAsk: "Ingin berlatih ini dengan guru sungguhan? Coba kelas percobaan gratis.",
+    lessonBridgeBtn: "Pesan kelas percobaan gratis →",
+    lessonBridgeMissed: "Bunyi yang perlu diperhatikan: {chars}",
     coachGo: "Ayo mulai",
     quotaTitle: "Kuota hari ini: {done}/{goal}",
     quotaMissed: "Anda tidak memenuhi kuota kemarin. Selesaikan dulu kuota hari ini, tanpa melewatkan.",
@@ -8107,6 +8143,9 @@ const UI_TRANSLATIONS = {
     coachTitle: "Gợi ý hôm nay",
     coachBoth: "Bạn thường làm tốt phần {strong}, còn {weak} có vẻ hơi khó. Hôm nay thử {weak} nhé?",
     coachWeakOnly: "{weak} có vẻ hơi khó với bạn. Hôm nay luyện thử nhé?",
+    lessonBridgeAsk: "Bạn muốn luyện phần này với giáo viên thật không? Hãy thử một buổi học thử miễn phí.",
+    lessonBridgeBtn: "Đặt buổi học thử miễn phí →",
+    lessonBridgeMissed: "Âm cần chú ý: {chars}",
     coachGo: "Bắt đầu thôi",
     quotaTitle: "Chỉ tiêu hôm nay: {done}/{goal}",
     quotaMissed: "Bạn chưa đạt chỉ tiêu hôm qua. Hãy hoàn thành chỉ tiêu hôm nay trước, không được bỏ qua.",
@@ -8683,6 +8722,9 @@ const UI_TRANSLATIONS = {
     coachTitle: "आज का सुझाव",
     coachBoth: "आप आमतौर पर {strong} में अच्छे हैं, और {weak} थोड़ा कठिन लगता है। आज {weak} कैसा रहेगा?",
     coachWeakOnly: "{weak} आपके लिए थोड़ा कठिन लगता है। आज इसका अभ्यास कैसा रहेगा?",
+    lessonBridgeAsk: "क्या आप इसे असली शिक्षक के साथ अभ्यास करना चाहेंगे? एक मुफ़्त ट्रायल क्लास आज़माएँ।",
+    lessonBridgeBtn: "मुफ़्त ट्रायल क्लास बुक करें →",
+    lessonBridgeMissed: "ध्यान देने योग्य ध्वनियाँ: {chars}",
     coachGo: "चलें",
     quotaTitle: "आज का लक्ष्य: {done}/{goal}",
     quotaMissed: "आपने कल का लक्ष्य पूरा नहीं किया। पहले आज का लक्ष्य पूरा करें, छोड़ना नहीं।",
@@ -9259,6 +9301,9 @@ const UI_TRANSLATIONS = {
     coachTitle: "今日のおすすめ",
     coachBoth: "普段は{strong}が得意ですが、{weak}は少し苦手そうですね。今日は{weak}はいかがですか？",
     coachWeakOnly: "{weak}が少し苦手そうですね。今日は練習してみませんか？",
+    lessonBridgeAsk: "この課題を、先生と一緒に練習してみませんか？無料体験レッスンをご利用ください。",
+    lessonBridgeBtn: "無料体験レッスンを申し込む →",
+    lessonBridgeMissed: "つまずきやすい音: {chars}",
     coachGo: "やってみる",
     quotaTitle: "今日のノルマ: {done}/{goal}",
     quotaMissed: "昨日のノルマが未達でした。まず今日のノルマを終わらせましょう。サボりは禁止です。",
@@ -9835,6 +9880,9 @@ const UI_TRANSLATIONS = {
     coachTitle: "Bugünün önerisi",
     coachBoth: "Genellikle {strong} konusunda iyisiniz, {weak} ise biraz zor görünüyor. Bugün {weak} nasıl olur?",
     coachWeakOnly: "{weak} sizin için biraz zor görünüyor. Bugün çalışmaya ne dersiniz?",
+    lessonBridgeAsk: "Bunu gerçek bir öğretmenle çalışmak ister misiniz? Ücretsiz deneme dersini deneyin.",
+    lessonBridgeBtn: "Ücretsiz deneme dersi ayarla →",
+    lessonBridgeMissed: "Dikkat edilecek sesler: {chars}",
     coachGo: "Hadi başlayalım",
     quotaTitle: "Bugünün hedefi: {done}/{goal}",
     quotaMissed: "Dünkü hedefi kaçırdınız. Önce bugünün hedefini tamamlayın, atlamak yok.",
@@ -10411,6 +10459,9 @@ const UI_TRANSLATIONS = {
     coachTitle: "आजको सुझाव",
     coachBoth: "तपाईं सामान्यतया {strong} मा राम्रो हुनुहुन्छ, र {weak} अलि गाह्रो देखिन्छ। आज {weak} कस्तो होला?",
     coachWeakOnly: "{weak} तपाईंलाई अलि गाह्रो देखिन्छ। आज अभ्यास गर्ने कसो?",
+    lessonBridgeAsk: "के तपाईं यसलाई साँचो शिक्षकसँग अभ्यास गर्न चाहनुहुन्छ? निःशुल्क परीक्षण कक्षा प्रयास गर्नुहोस्।",
+    lessonBridgeBtn: "निःशुल्क परीक्षण कक्षा बुक गर्नुहोस् →",
+    lessonBridgeMissed: "ध्यान दिनुपर्ने ध्वनिहरू: {chars}",
     coachGo: "सुरु गरौं",
     quotaTitle: "आजको लक्ष्य: {done}/{goal}",
     quotaMissed: "तपाईंले हिजोको लक्ष्य पूरा गर्नुभएन। पहिले आजको लक्ष्य पूरा गर्नुहोस्, छोड्न मिल्दैन।",
@@ -10987,6 +11038,9 @@ const UI_TRANSLATIONS = {
     coachTitle: "Mungkahi ngayon",
     coachBoth: "Karaniwan kang magaling sa {strong}, at mukhang medyo mahirap ang {weak}. Ano kung {weak} ngayon?",
     coachWeakOnly: "Mukhang medyo mahirap sa iyo ang {weak}. Subukan mo itong praktisin ngayon?",
+    lessonBridgeAsk: "Gusto mo bang ipractice ito kasama ang totoong guro? Subukan ang libreng trial lesson.",
+    lessonBridgeBtn: "Mag-book ng libreng trial lesson →",
+    lessonBridgeMissed: "Mga tunog na dapat bantayan: {chars}",
     coachGo: "Simulan na",
     quotaTitle: "Quota ngayon: {done}/{goal}",
     quotaMissed: "Hindi mo naabot ang quota kahapon. Tapusin muna ang quota ngayon, bawal laktawan.",
@@ -15357,7 +15411,45 @@ function pronMatchMap(target, attempt) {
   return { chars: a, hit, score };
 }
 
+// "Practice this with a teacher" card: shown right after the app has pointed out a concrete weak spot
+// (missed sounds in Pronunciation Practice, or the study-coach suggestion). Not shown to GAKU
+// (invite-code) students, who already have lessons, and snoozed for 3 days once dismissed.
+const LESSON_BRIDGE_SNOOZE_KEY = "gaku_lesson_bridge_snoozed_at";
+function lessonBridgeEligible() {
+  try {
+    const c = JSON.parse(localStorage.getItem("gaku_trial_status") || "null");
+    if (!c || !c.userId || c.userId !== ACTIVE_USER_ID) return false;
+    if (c.isGakuStudent) return false;
+    const t = parseInt(localStorage.getItem(scopedKey(LESSON_BRIDGE_SNOOZE_KEY)) || "0", 10) || 0;
+    return Date.now() - t > 3 * 86400000;
+  } catch { return false; }
+}
+function LessonBridgeCard({ T, issue }) {
+  const [hidden, setHidden] = useState(false);
+  const ok = !hidden && lessonBridgeEligible();
+  useEffect(() => { if (ok) logFunnel(ACTIVE_USER_ID, "lesson_bridge_shown"); }, [ok]);
+  if (!ok) return null;
+  return (
+    <div style={{ background:"rgba(34,197,94,0.07)", border:"1px solid rgba(34,197,94,0.3)", borderRadius:10, padding:"10px 12px", marginTop:10 }}>
+      {issue && <p style={{ color:"#e2e8f0", fontSize:12, fontWeight:700, lineHeight:1.6, margin:"0 0 4px" }}>🎯 {issue}</p>}
+      <p style={{ color:"#bbf7d0", fontSize:12, lineHeight:1.6, margin:"0 0 8px" }}>{T.lessonBridgeAsk || "Want to practice this with a real teacher? Try a free trial lesson."}</p>
+      <div style={{ display:"flex", alignItems:"center", gap:12, flexWrap:"wrap" }}>
+        <a href="https://app.seitojapanese.online/trial-lesson.html" target="_blank" rel="noopener noreferrer"
+          onClick={() => logFunnel(ACTIVE_USER_ID, "lesson_bridge_clicked")}
+          style={{ display:"inline-block", padding:"8px 16px", background:"linear-gradient(135deg,#22c55e,#16a34a)", color:"#fff", borderRadius:8, fontSize:12, fontWeight:800, textDecoration:"none" }}>
+          {T.lessonBridgeBtn || "Book a free trial lesson →"}
+        </a>
+        <button type="button" onClick={() => { try { localStorage.setItem(scopedKey(LESSON_BRIDGE_SNOOZE_KEY), String(Date.now())); } catch {} setHidden(true); }}
+          style={{ background:"none", border:"none", color:"#94a3b8", fontSize:11, cursor:"pointer", padding:0 }}>
+          {T.skipForNow || "Skip for now"}
+        </button>
+      </div>
+    </div>
+  );
+}
+
 function PronunciationSayIt({ target, T }) {
+  const [fails, setFails] = useState(0);
   const [recording, setRecording] = useState(false);
   const [transcript, setTranscript] = useState("");
   const [match, setMatch] = useState(null);
@@ -15386,6 +15478,7 @@ function PronunciationSayIt({ target, T }) {
       if (said) {
         const mm = pronMatchMap(target, said);
         logLearningEvent("pronunciation", mm.score >= 80);
+        if (mm.score < 80) setFails(f => f + 1);
         setMatch(mm);
         setBest(b => (b === null ? mm.score : Math.max(b, mm.score)));
       }
@@ -15428,6 +15521,12 @@ function PronunciationSayIt({ target, T }) {
           <button onClick={toggle} style={{ padding:"5px 12px", borderRadius:8, background:C.card, border:`1px solid ${C.border}`, color:"#94a3b8", fontSize:11, cursor:"pointer" }}>
             {T.pronTryAgain || "Try again"}
           </button>
+          {!good && fails >= 2 && (() => {
+            // After two misses on the same line, point out the exact characters that tripped them up.
+            const missed = Array.from(new Set(match.chars.filter((c, i) => !match.hit[i]))).slice(0, 6);
+            const issue = missed.length ? (T.lessonBridgeMissed || "Sounds to watch: {chars}").split("{chars}").join(missed.join(" ")) : null;
+            return <LessonBridgeCard T={T} issue={issue} />;
+          })()}
         </div>
       )}
     </div>
@@ -18449,6 +18548,7 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
                         {(strong ? (T.coachBoth || "You usually do well in {strong}, and {weak} seems a little hard. How about {weak} today?") : (T.coachWeakOnly || "{weak} seems a little hard for you. How about practicing it today?")).split("{strong}").join(strong ? areaLabel(strong.a) : "").split("{weak}").join(areaLabel(weak.a))}
                       </p>
                       <button onClick={() => goDrill(weak.a)} style={{ ...S.btn, padding:"8px 16px", background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff", fontSize:12 }}>{T.coachGo || "Let's go"} →</button>
+                      <LessonBridgeCard T={T} />
                     </div>
                   )}
                 </div>
