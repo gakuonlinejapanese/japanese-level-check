@@ -17536,7 +17536,11 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
     guideGenInFlight.current = true;
     setAiScheduleLoading(true);
     try {
-      const result = await buildAIWeeklySchedule(form, currentWeek, totalWeeks, regenRequested);
+      let result = await buildAIWeeklySchedule(form, currentWeek, totalWeeks, regenRequested);
+      if (!(result && result.schedule)) {
+        // One quick retry before giving up (transient AI/network failure).
+        result = await buildAIWeeklySchedule(form, currentWeek, totalWeeks, true);
+      }
       if (result && result.schedule) {
         saveStudyGuide(result);
         clearStudyGuideRegenerationRequest();
@@ -17544,9 +17548,18 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
         // Back the new guide up to the account right away so it follows the student to any
         // other device/domain instead of being rebuilt there.
         if (userId) syncMigrationBridge(userId);
+      } else if (!regenRequested && !loadSavedStudyGuide()) {
+        // FIRST guide and the AI failed twice: the student is already looking at the built-in
+        // schedule. Keep exactly that one as their guide instead of leaving it unsaved — otherwise
+        // the next visit would silently build a different AI schedule ("always recreated").
+        // They can still ask for a fresh one with "Update my study guide".
+        const fallback = { schedule: buildSchedule(form, T), weekTheme: "" };
+        saveStudyGuide(fallback);
+        showGuide(fallback);
+        if (userId) syncMigrationBridge(userId);
       }
-      // If generation failed, keep whatever is on screen (and any saved guide) untouched; the
-      // request flag stays set so the student's explicit update is retried next time.
+      // If an explicit "Update my study guide" failed, keep the existing guide untouched; the
+      // request flag stays set so that explicit update is retried next time.
     } finally {
       guideGenInFlight.current = false;
       setAiScheduleLoading(false);
@@ -17600,7 +17613,19 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
   // asked for one (regeneration flag).
   const guideAutoTried = useRef(false);
   useEffect(() => {
-    if (guideAutoTried.current && !isStudyGuideRegenerationRequested()) return;
+    const regen = isStudyGuideRegenerationRequested();
+    if (!regen) {
+      // A saved guide is ALWAYS what's shown (re-read on every profile/auth change, so the account's
+      // own guide wins over anything built while the account wasn't resolved yet). Never regenerate.
+      const saved = loadSavedStudyGuide();
+      if (saved) {
+        guideAutoTried.current = true;
+        setSchedule(normalizeGuideSchedule(saved.schedule, T));
+        setWeekTheme(saved.weekTheme || "");
+        return;
+      }
+    }
+    if (guideAutoTried.current && !regen) return;
     guideAutoTried.current = true;
     loadAISchedule();
   }, [form]);
@@ -19205,11 +19230,10 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
     if (saved.country && saved.timeline && saved.hoursPerDay && saved.daysPerWeek && saved.skills?.length > 0) {
       saved.profileComplete = true;
     }
-    // A brand-new account that skipped the second onboarding step got a placeholder guide built from
-    // the quick-start defaults. When they finish filling in their real profile (skills, study time…),
-    // that completion is their request for their first real guide — so build it from the real answers.
-    // (Accounts that were never "incomplete" are unaffected: their guide never changes here.)
-    if (form && form.profileComplete === false && saved.profileComplete) requestStudyGuideRegeneration();
+    // NOTE: completing/saving a profile must NEVER rebuild the study guide by itself. (This used to
+    // request a rebuild when an incomplete quick-start profile became complete, which made the
+    // student's schedule change right after they saved their profile.) The guide changes only via
+    // "Update my study guide" / "Yes, update my study content" (opts.regenerateGuide above).
     setForm(saved);
     setEditing(false);
     setForceForm(false);
