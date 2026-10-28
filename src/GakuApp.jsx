@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useCallback, useMemo, useRef } from "react";
 import StorePlans from './StorePlans';
-import { supabase, getDeviceId, getDeviceLabel } from "./supabaseClient";
+import { supabase, getDeviceId, getDeviceLabel, getSignupSource } from "./supabaseClient";
 import HanziWriter from "hanzi-writer";
+import { reportClientCrash } from "./crashReport";
 
 // True inside the iOS/Android store apps (Capacitor shell). Also forceable with ?store=1 for previews.
 // Store builds never show prices, purchase buttons, or links to outside purchase/lesson pages.
@@ -311,6 +312,25 @@ function isJlptTargetGoal(goal) {
   const goals = Array.isArray(goal) ? goal : (goal ? [goal] : []);
   return goals.some(g => /^Pass JLPT (N[1-5])$/.test(g || ""));
 }
+// Saves a copy of the student's onboarding answers (country/goal/level…) on the server so the
+// teacher can analyse who signs up and who keeps studying. Fire-and-forget; only re-sent when changed.
+async function pushProfileSummary(userId, f) {
+  try {
+    if (!supabase || !userId || !f) return;
+    const body = { country: f.country, goal: f.goal, customGoal: f.customGoal, timeline: f.timeline, jlpt: f.jlpt, hoursPerDay: f.hoursPerDay, daysPerWeek: f.daysPerWeek, skills: f.skills };
+    const sig = JSON.stringify(body);
+    const key = "gaku_profile_summary_sent_" + userId;
+    if (localStorage.getItem(key) === sig) return;
+    const { data } = await supabase.auth.getSession();
+    const token = data?.session?.access_token;
+    if (!token) return;
+    const r = await fetch("/api/create-profile", {
+      method: "POST", headers: { "Content-Type": "application/json", Authorization: "Bearer " + token },
+      body: JSON.stringify({ action: "save_profile_summary", form: body }),
+    });
+    if (r.ok) localStorage.setItem(key, sig);
+  } catch {}
+}
 // Saved profiles come from several generations of the app (older single-string goals, QuickStart
 // defaults, bridge restores from other devices…), so a stored profile can be missing fields or hold
 // them in an older shape. Screens that read `form.skills.includes(...)`, `form.goal.map(...)` or
@@ -339,6 +359,7 @@ class ScreenErrorBoundary extends React.Component {
   static getDerivedStateFromError() { return { failed: true }; }
   componentDidCatch(error, info) {
     try { console.error("Screen crashed:", error, info && info.componentStack); } catch {}
+    reportClientCrash("screen-boundary", error, info);
   }
   render() {
     if (!this.state.failed) return this.props.children;
@@ -987,6 +1008,15 @@ const UI_TRANSLATIONS = {
     help: "🆘 Help",
     editProfile: "✏️ Edit Profile",
     skillsChangeTitle: "Update your study content?",
+    confirmEmailTitle: "Check your email",
+    confirmEmailDesc: "We sent a confirmation email to {email}. Open it and tap “Confirm my email”, then come back here.",
+    confirmEmailSpam: "Can't find it? Check your spam or promotions folder.",
+    confirmEmailDone: "I've confirmed — log in",
+    confirmEmailResend: "Resend confirmation email",
+    confirmEmailResent: "Sent again! Please check your inbox and spam folder.",
+    confirmEmailNotYet: "Your email isn't confirmed yet. Open the email we sent and tap the confirm button first.",
+    confirmEmailAlready: "This email is already confirmed — you can log in now.",
+    confirmEmailBack: "← Back to log in",
     skillsChangeDesc: "You changed your study skills. Would you like new content generated for these skills, or keep the study content you already have?",
     skillsChangeUpdateBtn: "Yes, update my study content",
     skillsChangeKeepBtn: "No, keep my previous study content",
@@ -1013,6 +1043,7 @@ const UI_TRANSLATIONS = {
     installPromptDesc: "One tap to open, and you'll never lose your progress.",
     installPromptCta: "Add to Home Screen",
     installPromptSkip: "Maybe later",
+    installPromptHaveApp: "Already installed GAKU Master from Google Play or the App Store? You don't need this — just tap “Maybe later”.",
     installPromptIosSteps: "Tap the Share button, then \"Add to Home Screen\"",
     remindTitle: "When will you review tomorrow?",
     remindDesc: "Just 5 minutes a day is enough. Pick a time and we'll add a daily reminder to your calendar.",
@@ -1141,6 +1172,50 @@ const UI_TRANSLATIONS = {
     featurePickerAlways: "Vocabulary and Feedback are always shown.",
     featureShowOnly: "Show only these",
     featureKeepAll: "Keep everything",
+    modePickerTitle: "Which mode do you want to try?",
+    modeEnjoyableDesc: "Relaxed. Study at your own pace, with friendly suggestions.",
+    modeIntensiveDesc: "Strict. A daily quota, weak-area suggestions, and no skipping.",
+    modeTrialDesc: "Try Intensive mode for 3 days. After that you choose to keep it or go back.",
+    modeBtn: "Mode",
+    coachTitle: "Today's suggestion",
+    coachBoth: "You usually do well in {strong}, and {weak} seems a little hard. How about {weak} today?",
+    coachWeakOnly: "{weak} seems a little hard for you. How about practicing it today?",
+    lessonBridgeAsk: "Want to practice this with a real teacher? Try a free trial lesson.",
+    lessonBridgeBtn: "Book a free trial lesson →",
+    lessonBridgeMissed: "Sounds to watch: {chars}",
+    pcTitle: "Progress check",
+    pcIntro: "A 3-minute starting check (12 questions). Take it again in a few days to see how much you've grown.",
+    pcStart: "Start the check",
+    pcRetake: "Take it again",
+    pcRetakeWait: "You can retake it in {n} day(s).",
+    pcQ: "Question {n} / {total}",
+    pcNext: "Next →",
+    pcFinish: "See my result",
+    pcStartingPoint: "Your starting point",
+    pcThenNow: "Then vs. now",
+    pcThen: "Then",
+    pcNow: "Now",
+    pcUp: "You went up {n} point(s)! 🎉",
+    pcSame: "Same score this time — keep practicing and try again later.",
+    pcDown: "A little lower this time. One short quiz isn't the whole picture — keep practicing.",
+    pcActivityTitle: "Your practice",
+    pcActLine: "{n} practice actions since your starting check",
+    pcAccLine: "Accuracy in practice: {a}% → {b}%",
+    pcNote: "Only your score is shown, so the check stays fair when you retake it.",
+    pcNudgeStart: "Want to see how much you grow? Take a 3-minute starting check.",
+    pcNudgeRetake: "It's been a while — retake the check and see your growth!",
+    pcLater: "Later",
+    coachGo: "Let's go",
+    quotaTitle: "Today's quota: {done}/{goal}",
+    quotaMissed: "You missed yesterday's quota. Finish today's quota first — no skipping.",
+    quotaLocked: "Finish today's quota to unlock the other tabs.",
+    trialEndedTitle: "Your 3-day Intensive trial has ended. Which mode now?",
+    modeGuideTitle: "How the study modes work",
+    modeGuideIntensive: "🔥 Intensive mode: finish today's quota of 8 actions (checking a task, answering a check, practicing, saving words, etc.).",
+    modeGuideLock: "🔒 Until the quota is done, Subtitles, Milestones and JLPT are locked. Tap a locked tab and you'll come back to your Schedule. When you reach 8, everything unlocks.",
+    modeGuideEnjoyable: "😊 Enjoyable mode: no quota, no warnings. You only see a gentle suggestion like \"You're usually good at X, and Y seems a little hard. How about Y today?\" (after you have 3+ records).",
+    modeGuideEscape: "The Feedback tab and the Mode button are never locked. Want it easier? Switch to Enjoyable mode anytime from the Mode button.",
+    modeGuideOk: "Got it",
     featureCustomizeBtn: "Customize",
     feedbackTitle: "💬 Feedback & Opinion",
     feedbackSubtitle: "Tell us what you'd like improved or anything that's bothering you about the app. We read every message.",
@@ -1393,6 +1468,8 @@ const UI_TRANSLATIONS = {
     wordCardsLabel: "🃏 Word Cards",
     searchCreateCards: "Search & create cards",
     flashcardsLabel: "🎴 Flashcards",
+    quickReviewFlashcards: "🎴 Quick review with Flashcards",
+    reviewThisFlashcard: "🎴 Review this word with Flashcards",
     reviewSavedWords: "Review saved words",
     searchingDictionary: "Searching Japanese dictionary...",
     speakWord: "Pronounce word",
@@ -1548,6 +1625,15 @@ const UI_TRANSLATIONS = {
     help: "🆘 Aide",
     editProfile: "✏️ Modifier le profil",
     skillsChangeTitle: "Modifier votre contenu d'étude ?",
+    confirmEmailTitle: "Vérifiez votre e-mail",
+    confirmEmailDesc: "Nous avons envoyé un e-mail de confirmation à {email}. Ouvrez-le et appuyez sur « Confirm my email », puis revenez ici.",
+    confirmEmailSpam: "Introuvable ? Vérifiez vos spams ou l'onglet Promotions.",
+    confirmEmailDone: "J'ai confirmé — me connecter",
+    confirmEmailResend: "Renvoyer l'e-mail de confirmation",
+    confirmEmailResent: "Renvoyé ! Vérifiez votre boîte de réception et vos spams.",
+    confirmEmailNotYet: "Votre e-mail n'est pas encore confirmé. Ouvrez l'e-mail envoyé et appuyez d'abord sur le bouton de confirmation.",
+    confirmEmailAlready: "Cet e-mail est déjà confirmé — vous pouvez vous connecter.",
+    confirmEmailBack: "← Retour à la connexion",
     skillsChangeDesc: "Vous avez changé vos compétences d'étude. Voulez-vous générer un nouveau contenu pour ces compétences, ou conserver le contenu que vous avez déjà ?",
     skillsChangeUpdateBtn: "Oui, modifier mon contenu d'étude",
     skillsChangeKeepBtn: "Non, garder mon contenu précédent",
@@ -1574,6 +1660,7 @@ const UI_TRANSLATIONS = {
     installPromptDesc: "Un seul geste pour l'ouvrir, et vous ne perdrez jamais votre progression.",
     installPromptCta: "Ajouter à l'écran d'accueil",
     installPromptSkip: "Plus tard",
+    installPromptHaveApp: "Vous avez déjà installé GAKU Master depuis Google Play ou l'App Store ? Inutile ici — appuyez simplement sur « Plus tard ».",
     installPromptIosSteps: "Appuyez sur Partager, puis « Sur l'écran d'accueil »",
     remindTitle: "Quand réviserez-vous demain ?",
     remindDesc: "5 minutes par jour suffisent. Choisissez un horaire et nous ajouterons un rappel quotidien à votre calendrier.",
@@ -1701,6 +1788,50 @@ const UI_TRANSLATIONS = {
     featurePickerAlways: "Vocabulaire et Feedback restent toujours affichés.",
     featureShowOnly: "Afficher seulement celles-ci",
     featureKeepAll: "Tout garder",
+    modePickerTitle: "Quel mode voulez-vous essayer ?",
+    modeEnjoyableDesc: "Détendu. Étudiez à votre rythme, avec des suggestions amicales.",
+    modeIntensiveDesc: "Strict. Un quota quotidien, des suggestions sur vos points faibles, sans relâche.",
+    modeTrialDesc: "Essayez le mode Intensive pendant 3 jours, puis choisissez de le garder ou de revenir en arrière.",
+    modeBtn: "Mode",
+    coachTitle: "Suggestion du jour",
+    coachBoth: "Vous réussissez généralement bien en {strong}, et {weak} semble un peu difficile. Et si on travaillait {weak} aujourd'hui ?",
+    coachWeakOnly: "{weak} semble un peu difficile pour vous. Et si vous le travailliez aujourd'hui ?",
+    lessonBridgeAsk: "Envie de travailler cela avec un vrai professeur ? Essayez un cours d'essai gratuit.",
+    lessonBridgeBtn: "Réserver un cours d'essai gratuit →",
+    lessonBridgeMissed: "Sons à surveiller : {chars}",
+    pcTitle: "Bilan de progression",
+    pcIntro: "Un test de départ de 3 minutes (12 questions). Refaites-le dans quelques jours pour voir vos progrès.",
+    pcStart: "Commencer le test",
+    pcRetake: "Refaire le test",
+    pcRetakeWait: "Vous pourrez le refaire dans {n} jour(s).",
+    pcQ: "Question {n} / {total}",
+    pcNext: "Suivant →",
+    pcFinish: "Voir mon résultat",
+    pcStartingPoint: "Votre point de départ",
+    pcThenNow: "Avant et maintenant",
+    pcThen: "Avant",
+    pcNow: "Maintenant",
+    pcUp: "Vous avez gagné {n} point(s) ! 🎉",
+    pcSame: "Même score cette fois — continuez à pratiquer et réessayez plus tard.",
+    pcDown: "Un peu plus bas cette fois. Un court test ne dit pas tout — continuez à pratiquer.",
+    pcActivityTitle: "Votre pratique",
+    pcActLine: "{n} exercices pratiqués depuis votre test de départ",
+    pcAccLine: "Réussite à l'entraînement : {a} % → {b} %",
+    pcNote: "Seul votre score est affiché, pour que le test reste équitable quand vous le refaites.",
+    pcNudgeStart: "Envie de voir vos progrès ? Faites un test de départ de 3 minutes.",
+    pcNudgeRetake: "Cela fait un moment — refaites le test et voyez vos progrès !",
+    pcLater: "Plus tard",
+    coachGo: "C'est parti",
+    quotaTitle: "Quota du jour : {done}/{goal}",
+    quotaMissed: "Vous n'avez pas atteint le quota d'hier. Terminez d'abord le quota d'aujourd'hui, sans excuse.",
+    quotaLocked: "Terminez le quota du jour pour débloquer les autres onglets.",
+    trialEndedTitle: "Votre essai de 3 jours du mode Intensive est terminé. Quel mode choisir maintenant ?",
+    modeGuideTitle: "Comment fonctionnent les modes",
+    modeGuideIntensive: "🔥 Mode Intensive : terminez le quota du jour de 8 actions (cocher une tâche, répondre à une vérification, s'entraîner, enregistrer des mots, etc.).",
+    modeGuideLock: "🔒 Tant que le quota n'est pas atteint, Sous-titres, Milestones et JLPT sont verrouillés. Touchez un onglet verrouillé pour revenir au Planning. À 8 actions, tout se débloque.",
+    modeGuideEnjoyable: "😊 Mode Enjoyable : ni quota ni avertissement. Seulement une suggestion douce, par ex. « Vous réussissez bien X, et Y semble un peu difficile. Et si on travaillait Y aujourd'hui ? » (à partir de 3 résultats enregistrés).",
+    modeGuideEscape: "L'onglet Feedback et le bouton Mode ne sont jamais verrouillés. Envie de plus léger ? Passez en mode Enjoyable à tout moment avec le bouton Mode.",
+    modeGuideOk: "Compris",
     featureCustomizeBtn: "Personnaliser",
     feedbackTitle: "💬 Retour & Avis",
     feedbackSubtitle: "Dites-nous ce que vous aimeriez voir amélioré ou ce qui vous dérange dans l'application. Nous lisons chaque message.",
@@ -1907,6 +2038,8 @@ const UI_TRANSLATIONS = {
     wordCardsLabel: "🃏 Cartes de mots",
     searchCreateCards: "Rechercher et créer des cartes",
     flashcardsLabel: "🎴 Cartes mémo",
+    quickReviewFlashcards: "🎴 Révision rapide avec les cartes mémo",
+    reviewThisFlashcard: "🎴 Réviser ce mot avec les cartes mémo",
     reviewSavedWords: "Réviser les mots enregistrés",
     searchingDictionary: "Recherche dans le dictionnaire japonais...",
     speakWord: "Prononcer le mot",
@@ -2093,6 +2226,15 @@ const UI_TRANSLATIONS = {
     help: "🆘 Ayuda",
     editProfile: "✏️ Editar perfil",
     skillsChangeTitle: "¿Actualizar tu contenido de estudio?",
+    confirmEmailTitle: "Revisa tu correo",
+    confirmEmailDesc: "Enviamos un correo de confirmación a {email}. Ábrelo, pulsa “Confirm my email” y vuelve aquí.",
+    confirmEmailSpam: "¿No lo encuentras? Revisa spam o promociones.",
+    confirmEmailDone: "Ya confirmé — iniciar sesión",
+    confirmEmailResend: "Reenviar correo de confirmación",
+    confirmEmailResent: "¡Enviado de nuevo! Revisa tu bandeja de entrada y spam.",
+    confirmEmailNotYet: "Tu correo aún no está confirmado. Abre el correo que enviamos y pulsa primero el botón de confirmar.",
+    confirmEmailAlready: "Este correo ya está confirmado — ya puedes iniciar sesión.",
+    confirmEmailBack: "← Volver a iniciar sesión",
     skillsChangeDesc: "Has cambiado tus habilidades de estudio. ¿Quieres generar contenido nuevo para estas habilidades, o mantener el contenido que ya tienes?",
     skillsChangeUpdateBtn: "Sí, actualizar mi contenido de estudio",
     skillsChangeKeepBtn: "No, mantener mi contenido anterior",
@@ -2119,6 +2261,7 @@ const UI_TRANSLATIONS = {
     installPromptDesc: "Ábrela con un toque y nunca pierdas tu progreso.",
     installPromptCta: "Añadir a pantalla de inicio",
     installPromptSkip: "Más tarde",
+    installPromptHaveApp: "¿Ya instalaste GAKU Master desde Google Play o la App Store? No lo necesitas: toca «Más tarde».",
     installPromptIosSteps: "Toca Compartir y luego \"Añadir a pantalla de inicio\"",
     remindTitle: "¿Cuándo repasarás mañana?",
     remindDesc: "Con 5 minutos al día basta. Elige una hora y añadiremos un recordatorio diario a tu calendario.",
@@ -2246,6 +2389,50 @@ const UI_TRANSLATIONS = {
     featurePickerAlways: "Vocabulario y Feedback siempre se muestran.",
     featureShowOnly: "Mostrar solo estas",
     featureKeepAll: "Mantener todo",
+    modePickerTitle: "¿Qué modo quieres probar?",
+    modeEnjoyableDesc: "Relajado. Estudia a tu ritmo, con sugerencias amables.",
+    modeIntensiveDesc: "Estricto. Cuota diaria, sugerencias sobre tus puntos débiles y sin saltarse nada.",
+    modeTrialDesc: "Prueba el modo Intensive durante 3 días. Después elige si lo mantienes o vuelves atrás.",
+    modeBtn: "Modo",
+    coachTitle: "Sugerencia de hoy",
+    coachBoth: "Normalmente te va bien en {strong}, y {weak} parece un poco difícil. ¿Qué tal {weak} hoy?",
+    coachWeakOnly: "{weak} parece un poco difícil para ti. ¿Qué tal practicarlo hoy?",
+    lessonBridgeAsk: "¿Quieres practicar esto con un profesor de verdad? Prueba una clase de prueba gratuita.",
+    lessonBridgeBtn: "Reservar una clase de prueba gratis →",
+    lessonBridgeMissed: "Sonidos a vigilar: {chars}",
+    pcTitle: "Control de progreso",
+    pcIntro: "Una prueba inicial de 3 minutos (12 preguntas). Repítela en unos días para ver cuánto has avanzado.",
+    pcStart: "Empezar la prueba",
+    pcRetake: "Repetir la prueba",
+    pcRetakeWait: "Podrás repetirla en {n} día(s).",
+    pcQ: "Pregunta {n} / {total}",
+    pcNext: "Siguiente →",
+    pcFinish: "Ver mi resultado",
+    pcStartingPoint: "Tu punto de partida",
+    pcThenNow: "Antes y ahora",
+    pcThen: "Antes",
+    pcNow: "Ahora",
+    pcUp: "¡Subiste {n} punto(s)! 🎉",
+    pcSame: "Misma puntuación esta vez: sigue practicando y vuelve a intentarlo más tarde.",
+    pcDown: "Un poco más baja esta vez. Una prueba corta no lo dice todo: sigue practicando.",
+    pcActivityTitle: "Tu práctica",
+    pcActLine: "{n} acciones de práctica desde tu prueba inicial",
+    pcAccLine: "Aciertos en la práctica: {a}% → {b}%",
+    pcNote: "Solo se muestra tu puntuación, para que la prueba siga siendo justa al repetirla.",
+    pcNudgeStart: "¿Quieres ver cuánto avanzas? Haz una prueba inicial de 3 minutos.",
+    pcNudgeRetake: "Ha pasado un tiempo: repite la prueba y mira tu progreso.",
+    pcLater: "Más tarde",
+    coachGo: "Vamos",
+    quotaTitle: "Cuota de hoy: {done}/{goal}",
+    quotaMissed: "No cumpliste la cuota de ayer. Termina primero la cuota de hoy, sin excusas.",
+    quotaLocked: "Termina la cuota de hoy para desbloquear las demás pestañas.",
+    trialEndedTitle: "Terminó tu prueba de 3 días del modo Intensive. ¿Qué modo eliges ahora?",
+    modeGuideTitle: "Cómo funcionan los modos",
+    modeGuideIntensive: "🔥 Modo Intensive: completa la cuota de hoy de 8 acciones (marcar una tarea, responder una comprobación, practicar, guardar palabras, etc.).",
+    modeGuideLock: "🔒 Hasta cumplir la cuota, Subtítulos, Milestones y JLPT están bloqueados. Toca una pestaña bloqueada y volverás al Horario. Al llegar a 8, todo se desbloquea.",
+    modeGuideEnjoyable: "😊 Modo Enjoyable: sin cuota ni avisos. Solo verás una sugerencia amable como «Sueles ir bien en X, y Y parece un poco difícil. ¿Y si practicas Y hoy?» (cuando tengas 3 o más registros).",
+    modeGuideEscape: "La pestaña Feedback y el botón Mode nunca se bloquean. ¿Prefieres algo más suave? Cambia a Enjoyable cuando quieras con el botón Mode.",
+    modeGuideOk: "Entendido",
     featureCustomizeBtn: "Personalizar",
     feedbackTitle: "💬 Comentarios y Opinión",
     feedbackSubtitle: "Cuéntanos qué te gustaría que mejoráramos o qué te molesta de la app. Leemos todos los mensajes.",
@@ -2452,6 +2639,8 @@ const UI_TRANSLATIONS = {
     wordCardsLabel: "🃏 Tarjetas de palabras",
     searchCreateCards: "Buscar y crear tarjetas",
     flashcardsLabel: "🎴 Tarjetas didácticas",
+    quickReviewFlashcards: "🎴 Repaso rápido con tarjetas didácticas",
+    reviewThisFlashcard: "🎴 Repasar esta palabra con tarjetas didácticas",
     reviewSavedWords: "Repasar palabras guardadas",
     searchingDictionary: "Buscando en el diccionario japonés...",
     speakWord: "Pronunciar palabra",
@@ -2638,6 +2827,15 @@ const UI_TRANSLATIONS = {
     help: "🆘 Ajuda",
     editProfile: "✏️ Editar perfil",
     skillsChangeTitle: "Atualizar seu conteúdo de estudo?",
+    confirmEmailTitle: "Verifique seu e-mail",
+    confirmEmailDesc: "Enviamos um e-mail de confirmação para {email}. Abra-o, toque em “Confirm my email” e volte aqui.",
+    confirmEmailSpam: "Não encontrou? Verifique o spam ou promoções.",
+    confirmEmailDone: "Já confirmei — entrar",
+    confirmEmailResend: "Reenviar e-mail de confirmação",
+    confirmEmailResent: "Enviado novamente! Verifique a caixa de entrada e o spam.",
+    confirmEmailNotYet: "Seu e-mail ainda não foi confirmado. Abra o e-mail enviado e toque primeiro no botão de confirmar.",
+    confirmEmailAlready: "Este e-mail já está confirmado — você já pode entrar.",
+    confirmEmailBack: "← Voltar ao login",
     skillsChangeDesc: "Você alterou suas habilidades de estudo. Deseja gerar novo conteúdo para essas habilidades ou manter o conteúdo que você já possui?",
     skillsChangeUpdateBtn: "Sim, atualizar meu conteúdo de estudo",
     skillsChangeKeepBtn: "Não, manter meu conteúdo anterior",
@@ -2664,6 +2862,7 @@ const UI_TRANSLATIONS = {
     installPromptDesc: "Abra com um toque e nunca perca seu progresso.",
     installPromptCta: "Adicionar à tela inicial",
     installPromptSkip: "Mais tarde",
+    installPromptHaveApp: "Já instalou o GAKU Master pelo Google Play ou pela App Store? Não precisa disto — toque em «Mais tarde».",
     installPromptIosSteps: "Toque em Compartilhar e depois em \"Adicionar à Tela de Início\"",
     remindTitle: "Quando você vai revisar amanhã?",
     remindDesc: "Apenas 5 minutos por dia bastam. Escolha um horário e adicionaremos um lembrete diário ao seu calendário.",
@@ -2791,6 +2990,50 @@ const UI_TRANSLATIONS = {
     featurePickerAlways: "Vocabulário e Feedback são sempre exibidos.",
     featureShowOnly: "Mostrar somente estes",
     featureKeepAll: "Manter tudo",
+    modePickerTitle: "Qual modo você quer experimentar?",
+    modeEnjoyableDesc: "Tranquilo. Estude no seu ritmo, com sugestões amigáveis.",
+    modeIntensiveDesc: "Rigoroso. Meta diária, sugestões sobre seus pontos fracos e sem pular nada.",
+    modeTrialDesc: "Experimente o modo Intensive por 3 dias. Depois escolha se continua ou volta.",
+    modeBtn: "Modo",
+    coachTitle: "Sugestão de hoje",
+    coachBoth: "Você costuma ir bem em {strong}, e {weak} parece um pouco difícil. Que tal {weak} hoje?",
+    coachWeakOnly: "{weak} parece um pouco difícil para você. Que tal praticar hoje?",
+    lessonBridgeAsk: "Quer praticar isso com um professor de verdade? Experimente uma aula experimental gratuita.",
+    lessonBridgeBtn: "Reservar uma aula experimental grátis →",
+    lessonBridgeMissed: "Sons para observar: {chars}",
+    pcTitle: "Verificação de progresso",
+    pcIntro: "Um teste inicial de 3 minutos (12 perguntas). Refaça em alguns dias para ver o quanto você evoluiu.",
+    pcStart: "Começar o teste",
+    pcRetake: "Refazer o teste",
+    pcRetakeWait: "Você poderá refazer em {n} dia(s).",
+    pcQ: "Pergunta {n} / {total}",
+    pcNext: "Próxima →",
+    pcFinish: "Ver meu resultado",
+    pcStartingPoint: "Seu ponto de partida",
+    pcThenNow: "Antes e agora",
+    pcThen: "Antes",
+    pcNow: "Agora",
+    pcUp: "Você subiu {n} ponto(s)! 🎉",
+    pcSame: "Mesma pontuação desta vez — continue praticando e tente de novo mais tarde.",
+    pcDown: "Um pouco menor desta vez. Um teste curto não mostra tudo — continue praticando.",
+    pcActivityTitle: "Sua prática",
+    pcActLine: "{n} ações de prática desde o teste inicial",
+    pcAccLine: "Acertos na prática: {a}% → {b}%",
+    pcNote: "Só a pontuação é mostrada, para o teste continuar justo quando você refizer.",
+    pcNudgeStart: "Quer ver o quanto você evolui? Faça um teste inicial de 3 minutos.",
+    pcNudgeRetake: "Já faz um tempo — refaça o teste e veja sua evolução!",
+    pcLater: "Mais tarde",
+    coachGo: "Vamos lá",
+    quotaTitle: "Meta de hoje: {done}/{goal}",
+    quotaMissed: "Você não cumpriu a meta de ontem. Termine primeiro a meta de hoje, sem pular.",
+    quotaLocked: "Termine a meta de hoje para desbloquear as outras abas.",
+    trialEndedTitle: "Seu teste de 3 dias do modo Intensive acabou. Qual modo agora?",
+    modeGuideTitle: "Como funcionam os modos",
+    modeGuideIntensive: "🔥 Modo Intensive: cumpra a meta de hoje de 8 ações (marcar uma tarefa, responder uma verificação, praticar, salvar palavras etc.).",
+    modeGuideLock: "🔒 Até cumprir a meta, Legendas, Milestones e JLPT ficam bloqueados. Toque numa aba bloqueada e você volta ao Cronograma. Ao chegar a 8, tudo é liberado.",
+    modeGuideEnjoyable: "😊 Modo Enjoyable: sem meta e sem avisos. Você só vê uma sugestão gentil, como \"Você costuma ir bem em X, e Y parece um pouco difícil. Que tal Y hoje?\" (com 3 ou mais registros).",
+    modeGuideEscape: "A aba Feedback e o botão Mode nunca são bloqueados. Quer algo mais leve? Mude para Enjoyable quando quiser pelo botão Mode.",
+    modeGuideOk: "Entendi",
     featureCustomizeBtn: "Personalizar",
     feedbackTitle: "💬 Feedback e Opinião",
     feedbackSubtitle: "Conte-nos o que você gostaria que melhorássemos ou o que está incomodando você no app. Lemos todas as mensagens.",
@@ -2997,6 +3240,8 @@ const UI_TRANSLATIONS = {
     wordCardsLabel: "🃏 Cartões de palavras",
     searchCreateCards: "Buscar e criar cartões",
     flashcardsLabel: "🎴 Flashcards",
+    quickReviewFlashcards: "🎴 Revisão rápida com Flashcards",
+    reviewThisFlashcard: "🎴 Revisar esta palavra com Flashcards",
     reviewSavedWords: "Revisar palavras salvas",
     searchingDictionary: "Pesquisando no dicionário japonês...",
     speakWord: "Pronunciar palavra",
@@ -3183,6 +3428,15 @@ const UI_TRANSLATIONS = {
     help: "🆘 Hilfe",
     editProfile: "✏️ Profil bearbeiten",
     skillsChangeTitle: "Lerninhalte aktualisieren?",
+    confirmEmailTitle: "E-Mail prüfen",
+    confirmEmailDesc: "Wir haben eine Bestätigungs-E-Mail an {email} gesendet. Öffnen Sie sie, tippen Sie auf „Confirm my email“ und kehren Sie hierher zurück.",
+    confirmEmailSpam: "Nicht gefunden? Prüfen Sie Spam oder Werbung.",
+    confirmEmailDone: "Ich habe bestätigt — anmelden",
+    confirmEmailResend: "Bestätigungs-E-Mail erneut senden",
+    confirmEmailResent: "Erneut gesendet! Bitte Posteingang und Spam prüfen.",
+    confirmEmailNotYet: "Ihre E-Mail ist noch nicht bestätigt. Öffnen Sie die gesendete E-Mail und tippen Sie zuerst auf den Bestätigungsbutton.",
+    confirmEmailAlready: "Diese E-Mail ist bereits bestätigt — Sie können sich anmelden.",
+    confirmEmailBack: "← Zurück zur Anmeldung",
     skillsChangeDesc: "Du hast deine Lernfähigkeiten geändert. Möchtest du neue Inhalte für diese Fähigkeiten erstellen lassen oder deine bisherigen Lerninhalte behalten?",
     skillsChangeUpdateBtn: "Ja, Lerninhalte aktualisieren",
     skillsChangeKeepBtn: "Nein, bisherige Lerninhalte behalten",
@@ -3209,6 +3463,7 @@ const UI_TRANSLATIONS = {
     installPromptDesc: "Ein Fingertipp zum Öffnen, und dein Fortschritt geht nie verloren.",
     installPromptCta: "Zum Startbildschirm hinzufügen",
     installPromptSkip: "Vielleicht später",
+    installPromptHaveApp: "GAKU Master schon über Google Play oder den App Store installiert? Dann brauchst du das nicht – tippe einfach auf „Vielleicht später“.",
     installPromptIosSteps: "Tippe auf Teilen, dann auf „Zum Home-Bildschirm\"",
     remindTitle: "Wann wiederholst du morgen?",
     remindDesc: "5 Minuten pro Tag reichen. Wähle eine Uhrzeit und wir fügen eine tägliche Erinnerung zu deinem Kalender hinzu.",
@@ -3336,6 +3591,50 @@ const UI_TRANSLATIONS = {
     featurePickerAlways: "Vokabeln und Feedback werden immer angezeigt.",
     featureShowOnly: "Nur diese anzeigen",
     featureKeepAll: "Alles behalten",
+    modePickerTitle: "Welchen Modus möchten Sie ausprobieren?",
+    modeEnjoyableDesc: "Entspannt. Lernen Sie in Ihrem Tempo, mit freundlichen Vorschlägen.",
+    modeIntensiveDesc: "Streng. Ein Tagesziel, Vorschläge für Ihre Schwächen und kein Auslassen.",
+    modeTrialDesc: "Testen Sie den Intensive-Modus 3 Tage lang. Danach entscheiden Sie, ob Sie ihn behalten.",
+    modeBtn: "Modus",
+    coachTitle: "Vorschlag für heute",
+    coachBoth: "Sie sind meist gut in {strong}, und {weak} scheint etwas schwer. Wie wäre es heute mit {weak}?",
+    coachWeakOnly: "{weak} scheint Ihnen etwas schwerzufallen. Wie wäre es, es heute zu üben?",
+    lessonBridgeAsk: "Möchten Sie das mit einer echten Lehrkraft üben? Probieren Sie eine kostenlose Probestunde.",
+    lessonBridgeBtn: "Kostenlose Probestunde buchen →",
+    lessonBridgeMissed: "Laute, auf die Sie achten sollten: {chars}",
+    pcTitle: "Fortschrittscheck",
+    pcIntro: "Ein 3-minütiger Starttest (12 Fragen). Wiederholen Sie ihn in einigen Tagen, um Ihren Fortschritt zu sehen.",
+    pcStart: "Test starten",
+    pcRetake: "Test wiederholen",
+    pcRetakeWait: "Sie können ihn in {n} Tag(en) wiederholen.",
+    pcQ: "Frage {n} / {total}",
+    pcNext: "Weiter →",
+    pcFinish: "Mein Ergebnis ansehen",
+    pcStartingPoint: "Ihr Ausgangspunkt",
+    pcThenNow: "Damals und heute",
+    pcThen: "Damals",
+    pcNow: "Heute",
+    pcUp: "Sie haben sich um {n} Punkt(e) verbessert! 🎉",
+    pcSame: "Diesmal gleiche Punktzahl – üben Sie weiter und versuchen Sie es später erneut.",
+    pcDown: "Diesmal etwas niedriger. Ein kurzer Test sagt nicht alles – üben Sie weiter.",
+    pcActivityTitle: "Ihr Üben",
+    pcActLine: "{n} Übungen seit Ihrem Starttest",
+    pcAccLine: "Trefferquote beim Üben: {a} % → {b} %",
+    pcNote: "Es wird nur Ihre Punktzahl angezeigt, damit der Test bei einer Wiederholung fair bleibt.",
+    pcNudgeStart: "Möchten Sie Ihren Fortschritt sehen? Machen Sie einen 3-minütigen Starttest.",
+    pcNudgeRetake: "Es ist eine Weile her – wiederholen Sie den Test und sehen Sie Ihren Fortschritt!",
+    pcLater: "Später",
+    coachGo: "Los geht's",
+    quotaTitle: "Tagesziel: {done}/{goal}",
+    quotaMissed: "Das Tagesziel von gestern wurde verfehlt. Erledigen Sie zuerst das heutige Ziel – kein Auslassen.",
+    quotaLocked: "Erledigen Sie das Tagesziel, um die anderen Tabs freizuschalten.",
+    trialEndedTitle: "Ihre 3-tägige Intensive-Testphase ist vorbei. Welcher Modus jetzt?",
+    modeGuideTitle: "So funktionieren die Modi",
+    modeGuideIntensive: "🔥 Intensive-Modus: Erreichen Sie das heutige Tagesziel von 8 Aktionen (Aufgabe abhaken, Verständnisfrage beantworten, üben, Wörter speichern usw.).",
+    modeGuideLock: "🔒 Bis das Ziel erreicht ist, sind Untertitel, Milestones und JLPT gesperrt. Tippen Sie auf einen gesperrten Tab, kehren Sie zum Zeitplan zurück. Bei 8 wird alles freigeschaltet.",
+    modeGuideEnjoyable: "😊 Enjoyable-Modus: kein Ziel, keine Warnungen. Nur ein sanfter Vorschlag wie „Sie sind meist gut in X, und Y scheint etwas schwer. Wie wäre es heute mit Y?“ (ab 3 Einträgen).",
+    modeGuideEscape: "Der Feedback-Tab und die Mode-Taste sind nie gesperrt. Lieber entspannter? Wechseln Sie jederzeit über die Mode-Taste zu Enjoyable.",
+    modeGuideOk: "Verstanden",
     featureCustomizeBtn: "Anpassen",
     feedbackTitle: "💬 Feedback & Meinung",
     feedbackSubtitle: "Sag uns, was wir verbessern sollen oder was dich an der App stört. Wir lesen jede Nachricht.",
@@ -3542,6 +3841,8 @@ const UI_TRANSLATIONS = {
     wordCardsLabel: "🃏 Wortkarten",
     searchCreateCards: "Karten suchen & erstellen",
     flashcardsLabel: "🎴 Karteikarten",
+    quickReviewFlashcards: "🎴 Schnelle Wiederholung mit Karteikarten",
+    reviewThisFlashcard: "🎴 Dieses Wort mit Karteikarten wiederholen",
     reviewSavedWords: "Gespeicherte Wörter wiederholen",
     searchingDictionary: "Japanisches Wörterbuch wird durchsucht...",
     speakWord: "Wort aussprechen",
@@ -3728,6 +4029,15 @@ const UI_TRANSLATIONS = {
     help: "🆘 Aiuto",
     editProfile: "✏️ Modifica profilo",
     skillsChangeTitle: "Aggiornare i tuoi contenuti di studio?",
+    confirmEmailTitle: "Controlla la tua email",
+    confirmEmailDesc: "Abbiamo inviato un'email di conferma a {email}. Aprila, tocca “Confirm my email” e torna qui.",
+    confirmEmailSpam: "Non la trovi? Controlla spam o promozioni.",
+    confirmEmailDone: "Ho confermato — accedi",
+    confirmEmailResend: "Invia di nuovo l'email di conferma",
+    confirmEmailResent: "Inviata di nuovo! Controlla posta in arrivo e spam.",
+    confirmEmailNotYet: "La tua email non è ancora confermata. Apri l'email inviata e tocca prima il pulsante di conferma.",
+    confirmEmailAlready: "Questa email è già confermata — puoi accedere.",
+    confirmEmailBack: "← Torna all'accesso",
     skillsChangeDesc: "Hai modificato le tue competenze di studio. Vuoi generare nuovi contenuti per queste competenze o mantenere quelli che hai già?",
     skillsChangeUpdateBtn: "Sì, aggiorna i miei contenuti",
     skillsChangeKeepBtn: "No, mantieni i contenuti precedenti",
@@ -3754,6 +4064,7 @@ const UI_TRANSLATIONS = {
     installPromptDesc: "Aprilo con un tocco e non perderai mai i tuoi progressi.",
     installPromptCta: "Aggiungi a Home",
     installPromptSkip: "Più tardi",
+    installPromptHaveApp: "Hai già installato GAKU Master da Google Play o dall'App Store? Non serve: tocca «Più tardi».",
     installPromptIosSteps: "Tocca Condividi, poi \"Aggiungi a Home\"",
     remindTitle: "Quando ripasserai domani?",
     remindDesc: "Bastano 5 minuti al giorno. Scegli un orario e aggiungeremo un promemoria giornaliero al tuo calendario.",
@@ -3881,6 +4192,50 @@ const UI_TRANSLATIONS = {
     featurePickerAlways: "Vocabolario e Feedback sono sempre visibili.",
     featureShowOnly: "Mostra solo queste",
     featureKeepAll: "Mantieni tutto",
+    modePickerTitle: "Quale modalità vuoi provare?",
+    modeEnjoyableDesc: "Rilassata. Studia al tuo ritmo, con suggerimenti amichevoli.",
+    modeIntensiveDesc: "Rigorosa. Obiettivo giornaliero, suggerimenti sui punti deboli e niente salti.",
+    modeTrialDesc: "Prova la modalità Intensive per 3 giorni. Poi scegli se tenerla o tornare indietro.",
+    modeBtn: "Modalità",
+    coachTitle: "Suggerimento di oggi",
+    coachBoth: "Di solito vai bene in {strong}, e {weak} sembra un po' difficile. Che ne dici di {weak} oggi?",
+    coachWeakOnly: "{weak} sembra un po' difficile per te. Che ne dici di allenarlo oggi?",
+    lessonBridgeAsk: "Vuoi esercitarti su questo con un vero insegnante? Prova una lezione di prova gratuita.",
+    lessonBridgeBtn: "Prenota una lezione di prova gratuita →",
+    lessonBridgeMissed: "Suoni da tenere d'occhio: {chars}",
+    pcTitle: "Verifica dei progressi",
+    pcIntro: "Un test iniziale di 3 minuti (12 domande). Ripetilo tra qualche giorno per vedere quanto sei migliorato.",
+    pcStart: "Inizia il test",
+    pcRetake: "Ripeti il test",
+    pcRetakeWait: "Potrai ripeterlo tra {n} giorno/i.",
+    pcQ: "Domanda {n} / {total}",
+    pcNext: "Avanti →",
+    pcFinish: "Vedi il mio risultato",
+    pcStartingPoint: "Il tuo punto di partenza",
+    pcThenNow: "Prima e adesso",
+    pcThen: "Prima",
+    pcNow: "Adesso",
+    pcUp: "Hai guadagnato {n} punto/i! 🎉",
+    pcSame: "Stesso punteggio stavolta: continua a esercitarti e riprova più tardi.",
+    pcDown: "Un po' più basso stavolta. Un test breve non dice tutto: continua a esercitarti.",
+    pcActivityTitle: "I tuoi esercizi",
+    pcActLine: "{n} esercizi svolti dal test iniziale",
+    pcAccLine: "Risposte corrette negli esercizi: {a}% → {b}%",
+    pcNote: "Viene mostrato solo il punteggio, così il test resta equo quando lo ripeti.",
+    pcNudgeStart: "Vuoi vedere quanto migliori? Fai un test iniziale di 3 minuti.",
+    pcNudgeRetake: "È passato un po' di tempo: ripeti il test e guarda i tuoi progressi!",
+    pcLater: "Più tardi",
+    coachGo: "Andiamo",
+    quotaTitle: "Obiettivo di oggi: {done}/{goal}",
+    quotaMissed: "Hai mancato l'obiettivo di ieri. Completa prima quello di oggi, senza saltare.",
+    quotaLocked: "Completa l'obiettivo di oggi per sbloccare le altre schede.",
+    trialEndedTitle: "La tua prova di 3 giorni della modalità Intensive è finita. Quale modalità ora?",
+    modeGuideTitle: "Come funzionano le modalità",
+    modeGuideIntensive: "🔥 Modalità Intensive: completa l'obiettivo di oggi di 8 azioni (spuntare un compito, rispondere a una verifica, esercitarti, salvare parole, ecc.).",
+    modeGuideLock: "🔒 Finché non raggiungi l'obiettivo, Sottotitoli, Milestones e JLPT sono bloccati. Tocca una scheda bloccata e tornerai al Programma. Arrivato a 8, tutto si sblocca.",
+    modeGuideEnjoyable: "😊 Modalità Enjoyable: nessun obiettivo, nessun avviso. Vedi solo un suggerimento gentile come «Di solito vai bene in X, e Y sembra un po' difficile. Che ne dici di Y oggi?» (con 3 o più registrazioni).",
+    modeGuideEscape: "La scheda Feedback e il pulsante Mode non sono mai bloccati. Vuoi qualcosa di più leggero? Passa a Enjoyable quando vuoi dal pulsante Mode.",
+    modeGuideOk: "Capito",
     featureCustomizeBtn: "Personalizza",
     feedbackTitle: "💬 Feedback e Opinioni",
     feedbackSubtitle: "Dicci cosa vorresti che migliorassimo o cosa ti disturba dell'app. Leggiamo ogni messaggio.",
@@ -4087,6 +4442,8 @@ const UI_TRANSLATIONS = {
     wordCardsLabel: "🃏 Schede di parole",
     searchCreateCards: "Cerca e crea schede",
     flashcardsLabel: "🎴 Flashcard",
+    quickReviewFlashcards: "🎴 Ripasso rapido con le Flashcard",
+    reviewThisFlashcard: "🎴 Ripassa questa parola con le Flashcard",
     reviewSavedWords: "Rivedi le parole salvate",
     searchingDictionary: "Ricerca nel dizionario giapponese...",
     speakWord: "Pronuncia la parola",
@@ -4273,6 +4630,15 @@ const UI_TRANSLATIONS = {
     help: "🆘 帮助",
     editProfile: "✏️ 编辑资料",
     skillsChangeTitle: "要更新学习内容吗？",
+    confirmEmailTitle: "请查看邮箱",
+    confirmEmailDesc: "我们已向 {email} 发送确认邮件。请打开邮件，点击“Confirm my email”，然后返回这里。",
+    confirmEmailSpam: "找不到？请检查垃圾邮件或促销邮件文件夹。",
+    confirmEmailDone: "我已确认 — 登录",
+    confirmEmailResend: "重新发送确认邮件",
+    confirmEmailResent: "已重新发送！请检查收件箱和垃圾邮件。",
+    confirmEmailNotYet: "您的邮箱尚未确认。请先打开我们发送的邮件并点击确认按钮。",
+    confirmEmailAlready: "此邮箱已确认 — 现在可以登录。",
+    confirmEmailBack: "← 返回登录",
     skillsChangeDesc: "你更改了学习技能。是要为这些技能生成新的学习内容，还是保留之前的学习内容？",
     skillsChangeUpdateBtn: "是，更新我的学习内容",
     skillsChangeKeepBtn: "否，保留之前的学习内容",
@@ -4299,6 +4665,7 @@ const UI_TRANSLATIONS = {
     installPromptDesc: "一键打开，学习进度永不丢失。",
     installPromptCta: "添加到主屏幕",
     installPromptSkip: "以后再说",
+    installPromptHaveApp: "已经从 Google Play 或 App Store 安装了 GAKU Master？那就不需要这一步——点“以后再说”即可。",
     installPromptIosSteps: "点击分享按钮，然后选择\"添加到主屏幕\"",
     remindTitle: "明天几点复习？",
     remindDesc: "每天只需5分钟。选择一个时间，我们会在你的日历中添加每日提醒。",
@@ -4426,6 +4793,50 @@ const UI_TRANSLATIONS = {
     featurePickerAlways: "“词汇”和“反馈”始终显示。",
     featureShowOnly: "只显示这些",
     featureKeepAll: "全部保留",
+    modePickerTitle: "你想尝试哪种模式？",
+    modeEnjoyableDesc: "轻松模式。按自己的节奏学习，并给你友好的建议。",
+    modeIntensiveDesc: "严格模式。每日目标、针对薄弱项的建议，不允许偷懒。",
+    modeTrialDesc: "试用 Intensive 模式 3 天，之后可选择继续或返回。",
+    modeBtn: "模式",
+    coachTitle: "今日建议",
+    coachBoth: "你通常在{strong}方面表现不错，而{weak}似乎有点吃力。今天练习一下{weak}怎么样？",
+    coachWeakOnly: "{weak}对你来说似乎有点难。今天练习一下怎么样？",
+    lessonBridgeAsk: "想和真人老师一起练习这个吗？试试免费体验课吧。",
+    lessonBridgeBtn: "预约免费体验课 →",
+    lessonBridgeMissed: "需要留意的发音：{chars}",
+    pcTitle: "进步检测",
+    pcIntro: "3分钟的起点测试（12道题）。几天后再做一次，看看你进步了多少。",
+    pcStart: "开始测试",
+    pcRetake: "再测一次",
+    pcRetakeWait: "{n}天后可以再测一次。",
+    pcQ: "第 {n} / {total} 题",
+    pcNext: "下一题 →",
+    pcFinish: "查看我的结果",
+    pcStartingPoint: "你的起点",
+    pcThenNow: "当时 vs 现在",
+    pcThen: "当时",
+    pcNow: "现在",
+    pcUp: "你提高了{n}分！🎉",
+    pcSame: "这次分数相同——继续练习，稍后再试。",
+    pcDown: "这次稍低一点。一次短测验并不代表全部——继续练习吧。",
+    pcActivityTitle: "你的练习",
+    pcActLine: "自起点测试以来已完成{n}次练习",
+    pcAccLine: "练习正确率：{a}% → {b}%",
+    pcNote: "只显示分数，这样再次测试时依然公平。",
+    pcNudgeStart: "想看看自己的进步吗？做一次3分钟的起点测试吧。",
+    pcNudgeRetake: "已经有一段时间了——再测一次，看看你的进步！",
+    pcLater: "稍后",
+    coachGo: "开始吧",
+    quotaTitle: "今日目标：{done}/{goal}",
+    quotaMissed: "你没有完成昨天的目标。请先完成今天的目标，不要偷懒。",
+    quotaLocked: "完成今日目标即可解锁其他标签页。",
+    trialEndedTitle: "你的 3 天 Intensive 试用已结束。现在选择哪种模式？",
+    modeGuideTitle: "学习模式的说明",
+    modeGuideIntensive: "🔥 Intensive 模式：完成今天 8 个动作的目标（勾选任务、回答理解检查、练习、保存单词等）。",
+    modeGuideLock: "🔒 完成目标之前，Subtitles、Milestones 和 JLPT 会被锁定。点击被锁定的标签会回到日程页面。达到 8 个后全部解锁。",
+    modeGuideEnjoyable: "😊 Enjoyable 模式：没有目标，也没有警告。只会显示温和的建议，例如“你通常擅长 X，Y 似乎有点难。今天练习 Y 怎么样？”（有 3 条以上记录时）。",
+    modeGuideEscape: "Feedback 标签和 Mode 按钮永远不会被锁定。想轻松一点？随时可通过 Mode 按钮切换到 Enjoyable 模式。",
+    modeGuideOk: "知道了",
     featureCustomizeBtn: "自定义",
     feedbackTitle: "💬 反馈与意见",
     feedbackSubtitle: "告诉我们你希望我们改进什么，或者对这个应用有什么不满意的地方。我们会阅读每一条留言。",
@@ -4632,6 +5043,8 @@ const UI_TRANSLATIONS = {
     wordCardsLabel: "🃏 单词卡",
     searchCreateCards: "搜索并创建卡片",
     flashcardsLabel: "🎴 闪卡",
+    quickReviewFlashcards: "🎴 用闪卡快速复习",
+    reviewThisFlashcard: "🎴 用闪卡复习这个单词",
     reviewSavedWords: "复习已保存的单词",
     searchingDictionary: "正在搜索日语词典...",
     speakWord: "发音单词",
@@ -4818,6 +5231,15 @@ const UI_TRANSLATIONS = {
     help: "🆘 幫助",
     editProfile: "✏️ 編輯資料",
     skillsChangeTitle: "要更新學習內容嗎？",
+    confirmEmailTitle: "請查看信箱",
+    confirmEmailDesc: "我們已寄出確認信到 {email}。請開啟信件，點擊「Confirm my email」，然後回到這裡。",
+    confirmEmailSpam: "找不到？請檢查垃圾郵件或促銷郵件資料夾。",
+    confirmEmailDone: "我已確認 — 登入",
+    confirmEmailResend: "重新寄送確認信",
+    confirmEmailResent: "已重新寄出！請檢查收件匣與垃圾郵件。",
+    confirmEmailNotYet: "您的信箱尚未確認。請先開啟我們寄出的信件並點擊確認按鈕。",
+    confirmEmailAlready: "此信箱已確認 — 現在可以登入。",
+    confirmEmailBack: "← 返回登入",
     skillsChangeDesc: "你更改了學習技能。要為這些技能產生新的學習內容，還是保留之前的學習內容？",
     skillsChangeUpdateBtn: "是，更新我的學習內容",
     skillsChangeKeepBtn: "否，保留之前的學習內容",
@@ -4844,6 +5266,7 @@ const UI_TRANSLATIONS = {
     installPromptDesc: "一鍵開啟，學習進度永不遺失。",
     installPromptCta: "加入主畫面",
     installPromptSkip: "稍後再說",
+    installPromptHaveApp: "已經從 Google Play 或 App Store 安裝了 GAKU Master？那就不需要這一步——點「稍後再說」即可。",
     installPromptIosSteps: "點擊分享按鈕，然後選擇「加入主畫面」",
     remindTitle: "明天幾點複習？",
     remindDesc: "每天只需5分鐘。選擇一個時間，我們會在你的行事曆中新增每日提醒。",
@@ -4971,6 +5394,50 @@ const UI_TRANSLATIONS = {
     featurePickerAlways: "「詞彙」和「意見回饋」一律顯示。",
     featureShowOnly: "只顯示這些",
     featureKeepAll: "全部保留",
+    modePickerTitle: "你想嘗試哪種模式？",
+    modeEnjoyableDesc: "輕鬆模式。依自己的步調學習，並給你友善的建議。",
+    modeIntensiveDesc: "嚴格模式。每日目標、針對弱項的建議，不允許偷懶。",
+    modeTrialDesc: "試用 Intensive 模式 3 天，之後可選擇繼續或返回。",
+    modeBtn: "模式",
+    coachTitle: "今日建議",
+    coachBoth: "你通常在{strong}方面表現不錯，而{weak}似乎有點吃力。今天練習一下{weak}如何？",
+    coachWeakOnly: "{weak}對你來說似乎有點難。今天練習一下如何？",
+    lessonBridgeAsk: "想和真人老師一起練習這個嗎？試試免費體驗課吧。",
+    lessonBridgeBtn: "預約免費體驗課 →",
+    lessonBridgeMissed: "需要留意的發音：{chars}",
+    pcTitle: "進步檢測",
+    pcIntro: "3分鐘的起點測驗（12題）。幾天後再做一次，看看你進步了多少。",
+    pcStart: "開始測驗",
+    pcRetake: "再測一次",
+    pcRetakeWait: "{n}天後可以再測一次。",
+    pcQ: "第 {n} / {total} 題",
+    pcNext: "下一題 →",
+    pcFinish: "查看我的結果",
+    pcStartingPoint: "你的起點",
+    pcThenNow: "當時 vs 現在",
+    pcThen: "當時",
+    pcNow: "現在",
+    pcUp: "你進步了{n}分！🎉",
+    pcSame: "這次分數相同——繼續練習，稍後再試。",
+    pcDown: "這次稍低一點。一次短測驗並不代表全部——繼續練習吧。",
+    pcActivityTitle: "你的練習",
+    pcActLine: "自起點測驗以來已完成{n}次練習",
+    pcAccLine: "練習正確率：{a}% → {b}%",
+    pcNote: "只顯示分數，這樣再次測驗時依然公平。",
+    pcNudgeStart: "想看看自己的進步嗎？做一次3分鐘的起點測驗吧。",
+    pcNudgeRetake: "已經有一段時間了——再測一次，看看你的進步！",
+    pcLater: "稍後",
+    coachGo: "開始吧",
+    quotaTitle: "今日目標：{done}/{goal}",
+    quotaMissed: "你沒有完成昨天的目標。請先完成今天的目標，不要偷懶。",
+    quotaLocked: "完成今日目標即可解鎖其他分頁。",
+    trialEndedTitle: "你的 3 天 Intensive 試用已結束。現在選擇哪種模式？",
+    modeGuideTitle: "學習模式的說明",
+    modeGuideIntensive: "🔥 Intensive 模式：完成今天 8 個動作的目標（勾選任務、回答理解檢查、練習、儲存單字等）。",
+    modeGuideLock: "🔒 完成目標之前，Subtitles、Milestones 和 JLPT 會被鎖定。點選被鎖定的分頁會回到行程頁面。達到 8 個後全部解鎖。",
+    modeGuideEnjoyable: "😊 Enjoyable 模式：沒有目標，也沒有警告。只會顯示溫和的建議，例如「你通常擅長 X，Y 似乎有點難。今天練習 Y 如何？」（有 3 筆以上紀錄時）。",
+    modeGuideEscape: "Feedback 分頁和 Mode 按鈕永遠不會被鎖定。想輕鬆一點？隨時可透過 Mode 按鈕切換到 Enjoyable 模式。",
+    modeGuideOk: "知道了",
     featureCustomizeBtn: "自訂",
     feedbackTitle: "💬 意見回饋與想法",
     feedbackSubtitle: "告訴我們你希望我們改進什麼，或是對這個應用程式有什麼不滿意的地方。我們會閱讀每一則留言。",
@@ -5177,6 +5644,8 @@ const UI_TRANSLATIONS = {
     wordCardsLabel: "🃏 單字卡",
     searchCreateCards: "搜尋並建立卡片",
     flashcardsLabel: "🎴 閃卡",
+    quickReviewFlashcards: "🎴 用閃卡快速複習",
+    reviewThisFlashcard: "🎴 用閃卡複習這個單字",
     reviewSavedWords: "複習已儲存的單字",
     searchingDictionary: "正在搜尋日語詞典...",
     speakWord: "發音單字",
@@ -5363,6 +5832,15 @@ const UI_TRANSLATIONS = {
     help: "🆘 도움말",
     editProfile: "✏️ 프로필 편집",
     skillsChangeTitle: "학습 내용을 변경하시겠습니까?",
+    confirmEmailTitle: "이메일을 확인하세요",
+    confirmEmailDesc: "{email}(으)로 확인 메일을 보냈습니다. 메일을 열어 “Confirm my email”을 누른 뒤 여기로 돌아오세요.",
+    confirmEmailSpam: "메일이 보이지 않나요? 스팸함이나 프로모션함을 확인하세요.",
+    confirmEmailDone: "확인했어요 — 로그인",
+    confirmEmailResend: "확인 메일 다시 보내기",
+    confirmEmailResent: "다시 보냈습니다! 받은편지함과 스팸함을 확인하세요.",
+    confirmEmailNotYet: "아직 이메일이 확인되지 않았습니다. 보낸 메일을 열어 확인 버튼을 먼저 누르세요.",
+    confirmEmailAlready: "이미 확인된 이메일입니다 — 지금 로그인할 수 있어요.",
+    confirmEmailBack: "← 로그인으로 돌아가기",
     skillsChangeDesc: "학습 스킬을 변경하셨습니다. 이 스킬에 맞춰 새로운 학습 내용을 만들까요, 아니면 이전에 만든 학습 내용을 그대로 유지할까요?",
     skillsChangeUpdateBtn: "네, 학습 내용을 변경합니다",
     skillsChangeKeepBtn: "아니요, 이전 학습 내용을 유지합니다",
@@ -5389,6 +5867,7 @@ const UI_TRANSLATIONS = {
     installPromptDesc: "한 번의 탭으로 열고, 진행 상황을 절대 잃지 않아요.",
     installPromptCta: "홈 화면에 추가",
     installPromptSkip: "나중에",
+    installPromptHaveApp: "이미 Google Play 또는 App Store에서 GAKU Master를 설치하셨나요? 이 단계는 필요 없어요. “나중에”를 눌러 주세요.",
     installPromptIosSteps: "공유 버튼을 탭한 후 \"홈 화면에 추가\"를 선택하세요",
     remindTitle: "내일은 언제 복습할까요?",
     remindDesc: "하루 5분이면 충분해요. 시간을 고르면 캘린더에 매일 알림을 추가해 드려요.",
@@ -5516,6 +5995,50 @@ const UI_TRANSLATIONS = {
     featurePickerAlways: "어휘와 피드백은 항상 표시됩니다.",
     featureShowOnly: "이것만 표시",
     featureKeepAll: "모두 유지",
+    modePickerTitle: "어떤 모드를 체험해 보시겠어요?",
+    modeEnjoyableDesc: "편안한 모드. 내 속도대로 공부하고, 친절한 제안을 받아요.",
+    modeIntensiveDesc: "엄격한 모드. 하루 목표량, 약점 보완 제안, 건너뛰기 없음.",
+    modeTrialDesc: "Intensive 모드를 3일간 체험해 보세요. 이후 계속할지 돌아갈지 선택할 수 있어요.",
+    modeBtn: "모드",
+    coachTitle: "오늘의 제안",
+    coachBoth: "{strong}은(는) 보통 잘하는데 {weak}은(는) 조금 어려워 보여요. 오늘은 {weak}은(는) 어떠세요?",
+    coachWeakOnly: "{weak}은(는) 조금 어려워 보여요. 오늘 연습해 보는 건 어떨까요?",
+    lessonBridgeAsk: "이 부분을 진짜 선생님과 함께 연습해 보시겠어요? 무료 체험 수업을 신청해 보세요.",
+    lessonBridgeBtn: "무료 체험 수업 신청하기 →",
+    lessonBridgeMissed: "주의해야 할 소리: {chars}",
+    pcTitle: "실력 변화 체크",
+    pcIntro: "3분짜리 시작 점검(12문제)입니다. 며칠 뒤 다시 풀어 얼마나 늘었는지 확인해 보세요.",
+    pcStart: "점검 시작",
+    pcRetake: "다시 풀기",
+    pcRetakeWait: "{n}일 후에 다시 풀 수 있어요.",
+    pcQ: "{n} / {total}번 문제",
+    pcNext: "다음 →",
+    pcFinish: "결과 보기",
+    pcStartingPoint: "시작 시점",
+    pcThenNow: "그때와 지금",
+    pcThen: "그때",
+    pcNow: "지금",
+    pcUp: "{n}점 올랐어요! 🎉",
+    pcSame: "이번에는 같은 점수예요. 계속 연습하고 나중에 다시 해 보세요.",
+    pcDown: "이번에는 조금 낮아요. 짧은 퀴즈 하나가 전부는 아니니 계속 연습해 보세요.",
+    pcActivityTitle: "나의 연습",
+    pcActLine: "시작 점검 이후 연습 {n}회",
+    pcAccLine: "연습 정확도: {a}% → {b}%",
+    pcNote: "다시 풀 때도 공정하도록 점수만 보여 드려요.",
+    pcNudgeStart: "얼마나 성장하는지 보고 싶으세요? 3분짜리 시작 점검을 해 보세요.",
+    pcNudgeRetake: "시간이 좀 지났어요. 다시 풀어 보고 성장을 확인해 보세요!",
+    pcLater: "나중에",
+    coachGo: "시작하기",
+    quotaTitle: "오늘의 목표: {done}/{goal}",
+    quotaMissed: "어제 목표를 채우지 못했어요. 오늘 목표부터 먼저 끝내세요. 건너뛰기 없음.",
+    quotaLocked: "오늘의 목표를 끝내면 다른 탭이 열립니다.",
+    trialEndedTitle: "Intensive 모드 3일 체험이 끝났어요. 이제 어떤 모드로 할까요?",
+    modeGuideTitle: "학습 모드 안내",
+    modeGuideIntensive: "🔥 Intensive 모드: 오늘의 목표 8회 활동(과제 체크, 이해 확인 답하기, 연습, 단어 저장 등)을 끝내세요.",
+    modeGuideLock: "🔒 목표를 달성할 때까지 Subtitles, Milestones, JLPT 탭은 잠깁니다. 잠긴 탭을 누르면 스케줄 화면으로 돌아갑니다. 8회를 채우면 모두 열립니다.",
+    modeGuideEnjoyable: "😊 Enjoyable 모드: 목표도 경고도 없습니다. \"보통 X는 잘하지만 Y는 조금 어려워 보여요. 오늘은 Y는 어때요?\" 같은 부드러운 제안만 보입니다(기록이 3회 이상일 때).",
+    modeGuideEscape: "Feedback 탭과 Mode 버튼은 절대 잠기지 않습니다. 더 편하게 하고 싶다면 Mode 버튼에서 언제든 Enjoyable 모드로 바꿀 수 있어요.",
+    modeGuideOk: "확인",
     featureCustomizeBtn: "맞춤 설정",
     feedbackTitle: "💬 피드백 및 의견",
     feedbackSubtitle: "개선했으면 하는 점이나 앱에서 불편한 점을 알려주세요. 모든 메시지를 읽습니다.",
@@ -5722,6 +6245,8 @@ const UI_TRANSLATIONS = {
     wordCardsLabel: "🃏 단어 카드",
     searchCreateCards: "카드 검색 및 생성",
     flashcardsLabel: "🎴 플래시카드",
+    quickReviewFlashcards: "🎴 플래시카드로 빠르게 복습하기",
+    reviewThisFlashcard: "🎴 이 단어를 플래시카드로 복습하기",
     reviewSavedWords: "저장된 단어 복습",
     searchingDictionary: "일본어 사전 검색 중...",
     speakWord: "단어 발음 듣기",
@@ -5908,6 +6433,15 @@ const UI_TRANSLATIONS = {
     help: "🆘 ช่วยเหลือ",
     editProfile: "✏️ แก้ไขโปรไฟล์",
     skillsChangeTitle: "ต้องการอัปเดตเนื้อหาการเรียนหรือไม่?",
+    confirmEmailTitle: "ตรวจสอบอีเมลของคุณ",
+    confirmEmailDesc: "เราส่งอีเมลยืนยันไปที่ {email} แล้ว เปิดอีเมลแล้วแตะ “Confirm my email” จากนั้นกลับมาที่นี่",
+    confirmEmailSpam: "หาไม่เจอ? ตรวจดูในสแปมหรือโปรโมชัน",
+    confirmEmailDone: "ฉันยืนยันแล้ว — เข้าสู่ระบบ",
+    confirmEmailResend: "ส่งอีเมลยืนยันอีกครั้ง",
+    confirmEmailResent: "ส่งอีกครั้งแล้ว! โปรดตรวจดูกล่องจดหมายและสแปม",
+    confirmEmailNotYet: "อีเมลของคุณยังไม่ได้รับการยืนยัน โปรดเปิดอีเมลที่เราส่งและแตะปุ่มยืนยันก่อน",
+    confirmEmailAlready: "อีเมลนี้ยืนยันแล้ว — เข้าสู่ระบบได้เลย",
+    confirmEmailBack: "← กลับไปหน้าเข้าสู่ระบบ",
     skillsChangeDesc: "คุณเปลี่ยนทักษะการเรียนแล้ว ต้องการให้สร้างเนื้อหาใหม่ตามทักษะนี้ หรือเก็บเนื้อหาการเรียนเดิมไว้?",
     skillsChangeUpdateBtn: "ใช่ อัปเดตเนื้อหาการเรียนของฉัน",
     skillsChangeKeepBtn: "ไม่ เก็บเนื้อหาการเรียนเดิมไว้",
@@ -5934,6 +6468,7 @@ const UI_TRANSLATIONS = {
     installPromptDesc: "เปิดได้ในแตะเดียว และไม่มีวันสูญเสียความคืบหน้า",
     installPromptCta: "เพิ่มไปยังหน้าจอหลัก",
     installPromptSkip: "ไว้ทีหลัง",
+    installPromptHaveApp: "ติดตั้ง GAKU Master จาก Google Play หรือ App Store แล้วใช่ไหม? ไม่ต้องทำขั้นตอนนี้ แตะ “ไว้ทีหลัง” ได้เลย",
     installPromptIosSteps: "แตะปุ่มแชร์ แล้วเลือก \"เพิ่มไปยังหน้าจอหลัก\"",
     remindTitle: "พรุ่งนี้จะทบทวนตอนไหน?",
     remindDesc: "แค่วันละ 5 นาทีก็พอ เลือกเวลา แล้วเราจะเพิ่มการเตือนรายวันลงในปฏิทินของคุณ",
@@ -6061,6 +6596,50 @@ const UI_TRANSLATIONS = {
     featurePickerAlways: "คำศัพท์และ Feedback จะแสดงเสมอ",
     featureShowOnly: "แสดงเฉพาะที่เลือก",
     featureKeepAll: "เก็บทั้งหมดไว้",
+    modePickerTitle: "คุณอยากลองโหมดไหน?",
+    modeEnjoyableDesc: "โหมดผ่อนคลาย เรียนตามจังหวะของคุณ พร้อมคำแนะนำเป็นกันเอง",
+    modeIntensiveDesc: "โหมดเข้มงวด มีเป้าหมายรายวัน คำแนะนำสำหรับจุดอ่อน และห้ามข้าม",
+    modeTrialDesc: "ลองโหมด Intensive 3 วัน จากนั้นเลือกว่าจะใช้ต่อหรือกลับไปโหมดเดิม",
+    modeBtn: "โหมด",
+    coachTitle: "คำแนะนำวันนี้",
+    coachBoth: "ปกติคุณทำ{strong}ได้ดี แต่{weak}ดูจะยากไปหน่อย วันนี้ลอง{weak}ไหม?",
+    coachWeakOnly: "{weak}ดูจะยากไปหน่อยสำหรับคุณ วันนี้ลองฝึกดูไหม?",
+    lessonBridgeAsk: "อยากฝึกเรื่องนี้กับครูตัวจริงไหม? ลองเรียนทดลองฟรีดูสิ",
+    lessonBridgeBtn: "จองเรียนทดลองฟรี →",
+    lessonBridgeMissed: "เสียงที่ควรระวัง: {chars}",
+    pcTitle: "ตรวจความก้าวหน้า",
+    pcIntro: "แบบทดสอบเริ่มต้น 3 นาที (12 ข้อ) ลองทำอีกครั้งในอีกไม่กี่วันเพื่อดูว่าก้าวหน้าแค่ไหน",
+    pcStart: "เริ่มทดสอบ",
+    pcRetake: "ทำอีกครั้ง",
+    pcRetakeWait: "ทำซ้ำได้ในอีก {n} วัน",
+    pcQ: "ข้อที่ {n} / {total}",
+    pcNext: "ถัดไป →",
+    pcFinish: "ดูผลของฉัน",
+    pcStartingPoint: "จุดเริ่มต้นของคุณ",
+    pcThenNow: "ตอนนั้นกับตอนนี้",
+    pcThen: "ตอนนั้น",
+    pcNow: "ตอนนี้",
+    pcUp: "คุณได้คะแนนเพิ่มขึ้น {n} คะแนน! 🎉",
+    pcSame: "ครั้งนี้คะแนนเท่าเดิม ฝึกต่อไปแล้วลองอีกครั้งภายหลัง",
+    pcDown: "ครั้งนี้ต่ำลงเล็กน้อย แบบทดสอบสั้น ๆ ไม่ได้บอกทั้งหมด ฝึกต่อไปนะ",
+    pcActivityTitle: "การฝึกของคุณ",
+    pcActLine: "ฝึกไปแล้ว {n} ครั้งนับจากแบบทดสอบเริ่มต้น",
+    pcAccLine: "ความแม่นยำในการฝึก: {a}% → {b}%",
+    pcNote: "แสดงเฉพาะคะแนน เพื่อให้การทดสอบยุติธรรมเมื่อทำซ้ำ",
+    pcNudgeStart: "อยากดูว่าคุณก้าวหน้าแค่ไหนไหม? ลองทำแบบทดสอบเริ่มต้น 3 นาที",
+    pcNudgeRetake: "ผ่านมาสักพักแล้ว ลองทำอีกครั้งเพื่อดูความก้าวหน้า!",
+    pcLater: "ไว้ทีหลัง",
+    coachGo: "เริ่มเลย",
+    quotaTitle: "เป้าหมายวันนี้: {done}/{goal}",
+    quotaMissed: "เมื่อวานคุณทำเป้าหมายไม่ถึง กรุณาทำเป้าหมายของวันนี้ให้เสร็จก่อน ห้ามข้าม",
+    quotaLocked: "ทำเป้าหมายวันนี้ให้เสร็จเพื่อปลดล็อกแท็บอื่น",
+    trialEndedTitle: "การทดลองโหมด Intensive 3 วันสิ้นสุดแล้ว ตอนนี้จะเลือกโหมดไหน?",
+    modeGuideTitle: "โหมดการเรียนทำงานอย่างไร",
+    modeGuideIntensive: "🔥 โหมด Intensive: ทำเป้าหมายวันนี้ให้ครบ 8 กิจกรรม (ติ๊กงาน ตอบแบบตรวจความเข้าใจ ฝึก บันทึกคำศัพท์ ฯลฯ)",
+    modeGuideLock: "🔒 จนกว่าจะทำเป้าหมายครบ แท็บ Subtitles, Milestones และ JLPT จะถูกล็อก แตะแท็บที่ล็อกแล้วจะกลับไปที่ตารางเรียน เมื่อครบ 8 ทุกอย่างจะปลดล็อก",
+    modeGuideEnjoyable: "😊 โหมด Enjoyable: ไม่มีเป้าหมายและไม่มีคำเตือน จะเห็นเพียงคำแนะนำเบา ๆ เช่น \"ปกติคุณเก่ง X แต่ Y ดูจะยากไปหน่อย วันนี้ลอง Y ไหม?\" (เมื่อมีบันทึกตั้งแต่ 3 ครั้งขึ้นไป)",
+    modeGuideEscape: "แท็บ Feedback และปุ่ม Mode จะไม่ถูกล็อกเลย อยากเรียนสบาย ๆ ขึ้น? สลับเป็นโหมด Enjoyable ได้ทุกเมื่อจากปุ่ม Mode",
+    modeGuideOk: "เข้าใจแล้ว",
     featureCustomizeBtn: "ปรับแต่ง",
     feedbackTitle: "💬 ความคิดเห็นและข้อเสนอแนะ",
     feedbackSubtitle: "บอกเราว่าคุณอยากให้ปรับปรุงอะไร หรือมีอะไรที่กวนใจคุณเกี่ยวกับแอปนี้ เราจะอ่านทุกข้อความ",
@@ -6267,6 +6846,8 @@ const UI_TRANSLATIONS = {
     wordCardsLabel: "🃏 การ์ดคำศัพท์",
     searchCreateCards: "ค้นหาและสร้างการ์ด",
     flashcardsLabel: "🎴 แฟลชการ์ด",
+    quickReviewFlashcards: "🎴 ทบทวนด่วนด้วยแฟลชการ์ด",
+    reviewThisFlashcard: "🎴 ทบทวนคำนี้ด้วยแฟลชการ์ด",
     reviewSavedWords: "ทบทวนคำที่บันทึกไว้",
     searchingDictionary: "กำลังค้นหาพจนานุกรมภาษาญี่ปุ่น...",
     speakWord: "ออกเสียงคำ",
@@ -6453,6 +7034,15 @@ const UI_TRANSLATIONS = {
     help: "🆘 Bantuan",
     editProfile: "✏️ Edit profil",
     skillsChangeTitle: "Kemaskini kandungan pembelajaran anda?",
+    confirmEmailTitle: "Semak e-mel anda",
+    confirmEmailDesc: "Kami telah menghantar e-mel pengesahan ke {email}. Buka e-mel itu, ketik “Confirm my email”, kemudian kembali ke sini.",
+    confirmEmailSpam: "Tidak jumpa? Semak folder spam atau promosi.",
+    confirmEmailDone: "Saya sudah mengesahkan — log masuk",
+    confirmEmailResend: "Hantar semula e-mel pengesahan",
+    confirmEmailResent: "Dihantar semula! Sila semak peti masuk dan spam.",
+    confirmEmailNotYet: "E-mel anda belum disahkan. Buka e-mel yang kami hantar dan ketik butang pengesahan dahulu.",
+    confirmEmailAlready: "E-mel ini sudah disahkan — anda boleh log masuk sekarang.",
+    confirmEmailBack: "← Kembali ke log masuk",
     skillsChangeDesc: "Anda telah menukar kemahiran pembelajaran anda. Adakah anda mahu kandungan baharu dijana untuk kemahiran ini, atau kekalkan kandungan pembelajaran sedia ada?",
     skillsChangeUpdateBtn: "Ya, kemaskini kandungan pembelajaran saya",
     skillsChangeKeepBtn: "Tidak, kekalkan kandungan pembelajaran sebelumnya",
@@ -6479,6 +7069,7 @@ const UI_TRANSLATIONS = {
     installPromptDesc: "Buka dengan satu ketikan, dan kemajuan anda tidak akan hilang.",
     installPromptCta: "Tambah ke Skrin Utama",
     installPromptSkip: "Mungkin nanti",
+    installPromptHaveApp: "Sudah pasang GAKU Master dari Google Play atau App Store? Anda tidak perlu langkah ini — ketik “Mungkin nanti”.",
     installPromptIosSteps: "Ketik butang Kongsi, kemudian \"Tambah ke Skrin Utama\"",
     remindTitle: "Bila anda akan mengulang kaji esok?",
     remindDesc: "5 minit sehari sudah cukup. Pilih masa dan kami akan menambah peringatan harian ke kalendar anda.",
@@ -6606,6 +7197,50 @@ const UI_TRANSLATIONS = {
     featurePickerAlways: "Perbendaharaan kata dan Feedback sentiasa dipaparkan.",
     featureShowOnly: "Papar yang ini sahaja",
     featureKeepAll: "Kekalkan semua",
+    modePickerTitle: "Mod mana yang anda mahu cuba?",
+    modeEnjoyableDesc: "Santai. Belajar mengikut rentak anda, dengan cadangan mesra.",
+    modeIntensiveDesc: "Tegas. Kuota harian, cadangan untuk kelemahan anda dan tiada langkau.",
+    modeTrialDesc: "Cuba mod Intensive selama 3 hari. Selepas itu pilih sama ada mahu teruskan atau kembali.",
+    modeBtn: "Mod",
+    coachTitle: "Cadangan hari ini",
+    coachBoth: "Anda biasanya baik dalam {strong}, dan {weak} nampaknya agak sukar. Bagaimana kalau {weak} hari ini?",
+    coachWeakOnly: "{weak} nampaknya agak sukar untuk anda. Bagaimana kalau berlatih hari ini?",
+    lessonBridgeAsk: "Mahu berlatih perkara ini dengan guru sebenar? Cuba kelas percubaan percuma.",
+    lessonBridgeBtn: "Tempah kelas percubaan percuma →",
+    lessonBridgeMissed: "Bunyi yang perlu diberi perhatian: {chars}",
+    pcTitle: "Semakan kemajuan",
+    pcIntro: "Ujian permulaan 3 minit (12 soalan). Ambil semula dalam beberapa hari untuk melihat sejauh mana anda berkembang.",
+    pcStart: "Mulakan ujian",
+    pcRetake: "Ambil semula",
+    pcRetakeWait: "Anda boleh mengambilnya semula dalam {n} hari.",
+    pcQ: "Soalan {n} / {total}",
+    pcNext: "Seterusnya →",
+    pcFinish: "Lihat keputusan saya",
+    pcStartingPoint: "Titik permulaan anda",
+    pcThenNow: "Dahulu berbanding sekarang",
+    pcThen: "Dahulu",
+    pcNow: "Sekarang",
+    pcUp: "Anda naik {n} mata! 🎉",
+    pcSame: "Markah sama kali ini — teruskan berlatih dan cuba lagi nanti.",
+    pcDown: "Sedikit lebih rendah kali ini. Satu kuiz pendek tidak menunjukkan segalanya — teruskan berlatih.",
+    pcActivityTitle: "Latihan anda",
+    pcActLine: "{n} tindakan latihan sejak ujian permulaan",
+    pcAccLine: "Ketepatan dalam latihan: {a}% → {b}%",
+    pcNote: "Hanya markah dipaparkan supaya ujian kekal adil apabila diambil semula.",
+    pcNudgeStart: "Mahu lihat kemajuan anda? Ambil ujian permulaan 3 minit.",
+    pcNudgeRetake: "Sudah agak lama — ambil semula ujian dan lihat kemajuan anda!",
+    pcLater: "Nanti",
+    coachGo: "Jom mulakan",
+    quotaTitle: "Kuota hari ini: {done}/{goal}",
+    quotaMissed: "Anda terlepas kuota semalam. Siapkan kuota hari ini dahulu, tiada langkau.",
+    quotaLocked: "Siapkan kuota hari ini untuk membuka tab lain.",
+    trialEndedTitle: "Percubaan 3 hari mod Intensive anda telah tamat. Mod mana sekarang?",
+    modeGuideTitle: "Cara mod pembelajaran berfungsi",
+    modeGuideIntensive: "🔥 Mod Intensive: selesaikan kuota hari ini sebanyak 8 tindakan (tandakan tugasan, jawab semakan, berlatih, simpan perkataan, dll.).",
+    modeGuideLock: "🔒 Selagi kuota belum siap, tab Subtitles, Milestones dan JLPT dikunci. Tekan tab yang dikunci dan anda akan kembali ke Jadual. Apabila mencapai 8, semuanya dibuka.",
+    modeGuideEnjoyable: "😊 Mod Enjoyable: tiada kuota, tiada amaran. Hanya cadangan lembut seperti \"Anda biasanya bagus dalam X, dan Y nampak agak sukar. Bagaimana kalau Y hari ini?\" (apabila ada 3 rekod atau lebih).",
+    modeGuideEscape: "Tab Feedback dan butang Mode tidak pernah dikunci. Mahu lebih santai? Tukar ke mod Enjoyable bila-bila masa melalui butang Mode.",
+    modeGuideOk: "Faham",
     featureCustomizeBtn: "Suaikan",
     feedbackTitle: "💬 Maklum Balas & Pendapat",
     feedbackSubtitle: "Beritahu kami apa yang anda mahu diperbaiki atau apa-apa yang mengganggu anda tentang aplikasi ini. Kami membaca setiap mesej.",
@@ -6812,6 +7447,8 @@ const UI_TRANSLATIONS = {
     wordCardsLabel: "🃏 Kad perkataan",
     searchCreateCards: "Cari & cipta kad",
     flashcardsLabel: "🎴 Kad imbas",
+    quickReviewFlashcards: "🎴 Ulang kaji pantas dengan Kad imbas",
+    reviewThisFlashcard: "🎴 Ulang kaji perkataan ini dengan Kad imbas",
     reviewSavedWords: "Semak perkataan tersimpan",
     searchingDictionary: "Mencari dalam kamus Jepun...",
     speakWord: "Sebut perkataan",
@@ -6998,6 +7635,15 @@ const UI_TRANSLATIONS = {
     help: "🆘 Bantuan",
     editProfile: "✏️ Edit profil",
     skillsChangeTitle: "Perbarui konten belajar Anda?",
+    confirmEmailTitle: "Periksa email Anda",
+    confirmEmailDesc: "Kami telah mengirim email konfirmasi ke {email}. Buka email tersebut, ketuk “Confirm my email”, lalu kembali ke sini.",
+    confirmEmailSpam: "Tidak ketemu? Periksa folder spam atau promosi.",
+    confirmEmailDone: "Saya sudah konfirmasi — masuk",
+    confirmEmailResend: "Kirim ulang email konfirmasi",
+    confirmEmailResent: "Terkirim lagi! Periksa kotak masuk dan spam.",
+    confirmEmailNotYet: "Email Anda belum dikonfirmasi. Buka email yang kami kirim dan ketuk tombol konfirmasi terlebih dahulu.",
+    confirmEmailAlready: "Email ini sudah dikonfirmasi — Anda bisa masuk sekarang.",
+    confirmEmailBack: "← Kembali ke halaman masuk",
     skillsChangeDesc: "Anda telah mengubah keterampilan belajar Anda. Apakah Anda ingin konten baru dibuat untuk keterampilan ini, atau tetap menggunakan konten belajar yang sudah ada?",
     skillsChangeUpdateBtn: "Ya, perbarui konten belajar saya",
     skillsChangeKeepBtn: "Tidak, pertahankan konten belajar sebelumnya",
@@ -7024,6 +7670,7 @@ const UI_TRANSLATIONS = {
     installPromptDesc: "Buka dengan satu ketukan, dan progresmu tidak akan pernah hilang.",
     installPromptCta: "Tambah ke Layar Utama",
     installPromptSkip: "Nanti saja",
+    installPromptHaveApp: "Sudah memasang GAKU Master dari Google Play atau App Store? Anda tidak perlu langkah ini — ketuk “Nanti saja”.",
     installPromptIosSteps: "Ketuk tombol Bagikan, lalu \"Tambah ke Layar Utama\"",
     remindTitle: "Kapan kamu akan belajar ulang besok?",
     remindDesc: "Cukup 5 menit sehari. Pilih waktu dan kami akan menambahkan pengingat harian ke kalendermu.",
@@ -7151,6 +7798,50 @@ const UI_TRANSLATIONS = {
     featurePickerAlways: "Kosakata dan Feedback selalu ditampilkan.",
     featureShowOnly: "Tampilkan yang ini saja",
     featureKeepAll: "Pertahankan semua",
+    modePickerTitle: "Mode mana yang ingin Anda coba?",
+    modeEnjoyableDesc: "Santai. Belajar sesuai ritme Anda, dengan saran yang ramah.",
+    modeIntensiveDesc: "Ketat. Kuota harian, saran untuk kelemahan Anda, dan tanpa melewatkan.",
+    modeTrialDesc: "Coba mode Intensive selama 3 hari. Setelah itu pilih untuk melanjutkan atau kembali.",
+    modeBtn: "Mode",
+    coachTitle: "Saran hari ini",
+    coachBoth: "Anda biasanya bagus di {strong}, dan {weak} tampaknya agak sulit. Bagaimana kalau {weak} hari ini?",
+    coachWeakOnly: "{weak} tampaknya agak sulit bagi Anda. Bagaimana kalau berlatih hari ini?",
+    lessonBridgeAsk: "Ingin berlatih ini dengan guru sungguhan? Coba kelas percobaan gratis.",
+    lessonBridgeBtn: "Pesan kelas percobaan gratis →",
+    lessonBridgeMissed: "Bunyi yang perlu diperhatikan: {chars}",
+    pcTitle: "Cek kemajuan",
+    pcIntro: "Tes awal 3 menit (12 soal). Ulangi beberapa hari lagi untuk melihat seberapa jauh Anda berkembang.",
+    pcStart: "Mulai tes",
+    pcRetake: "Ulangi tes",
+    pcRetakeWait: "Anda bisa mengulanginya dalam {n} hari.",
+    pcQ: "Soal {n} / {total}",
+    pcNext: "Berikutnya →",
+    pcFinish: "Lihat hasil saya",
+    pcStartingPoint: "Titik awal Anda",
+    pcThenNow: "Dulu vs sekarang",
+    pcThen: "Dulu",
+    pcNow: "Sekarang",
+    pcUp: "Anda naik {n} poin! 🎉",
+    pcSame: "Skor sama kali ini — terus berlatih dan coba lagi nanti.",
+    pcDown: "Sedikit lebih rendah kali ini. Satu kuis singkat tidak menunjukkan semuanya — terus berlatih.",
+    pcActivityTitle: "Latihan Anda",
+    pcActLine: "{n} aktivitas latihan sejak tes awal",
+    pcAccLine: "Ketepatan dalam latihan: {a}% → {b}%",
+    pcNote: "Hanya skor yang ditampilkan agar tes tetap adil saat diulang.",
+    pcNudgeStart: "Ingin melihat kemajuan Anda? Ikuti tes awal 3 menit.",
+    pcNudgeRetake: "Sudah cukup lama — ulangi tes dan lihat kemajuan Anda!",
+    pcLater: "Nanti",
+    coachGo: "Ayo mulai",
+    quotaTitle: "Kuota hari ini: {done}/{goal}",
+    quotaMissed: "Anda tidak memenuhi kuota kemarin. Selesaikan dulu kuota hari ini, tanpa melewatkan.",
+    quotaLocked: "Selesaikan kuota hari ini untuk membuka tab lain.",
+    trialEndedTitle: "Uji coba mode Intensive 3 hari Anda telah berakhir. Mode mana sekarang?",
+    modeGuideTitle: "Cara kerja mode belajar",
+    modeGuideIntensive: "🔥 Mode Intensive: selesaikan kuota hari ini sebanyak 8 aksi (mencentang tugas, menjawab pengecekan, berlatih, menyimpan kata, dll.).",
+    modeGuideLock: "🔒 Sebelum kuota selesai, tab Subtitles, Milestones, dan JLPT terkunci. Ketuk tab yang terkunci dan Anda kembali ke Jadwal. Setelah mencapai 8, semuanya terbuka.",
+    modeGuideEnjoyable: "😊 Mode Enjoyable: tanpa kuota dan tanpa peringatan. Hanya saran lembut seperti \"Anda biasanya bagus di X, dan Y tampak agak sulit. Bagaimana kalau Y hari ini?\" (jika ada 3 catatan atau lebih).",
+    modeGuideEscape: "Tab Feedback dan tombol Mode tidak pernah terkunci. Ingin lebih santai? Ganti ke mode Enjoyable kapan saja lewat tombol Mode.",
+    modeGuideOk: "Mengerti",
     featureCustomizeBtn: "Sesuaikan",
     feedbackTitle: "💬 Masukan & Pendapat",
     feedbackSubtitle: "Beri tahu kami apa yang ingin Anda tingkatkan atau apa yang mengganggu Anda tentang aplikasi ini. Kami membaca setiap pesan.",
@@ -7357,6 +8048,8 @@ const UI_TRANSLATIONS = {
     wordCardsLabel: "🃏 Kartu kata",
     searchCreateCards: "Cari & buat kartu",
     flashcardsLabel: "🎴 Kartu hafalan",
+    quickReviewFlashcards: "🎴 Tinjauan cepat dengan Kartu hafalan",
+    reviewThisFlashcard: "🎴 Tinjau kata ini dengan Kartu hafalan",
     reviewSavedWords: "Tinjau kata tersimpan",
     searchingDictionary: "Mencari dalam kamus Jepang...",
     speakWord: "Ucapkan kata",
@@ -7543,6 +8236,15 @@ const UI_TRANSLATIONS = {
     help: "🆘 Trợ giúp",
     editProfile: "✏️ Chỉnh sửa hồ sơ",
     skillsChangeTitle: "Cập nhật nội dung học tập của bạn?",
+    confirmEmailTitle: "Hãy kiểm tra email",
+    confirmEmailDesc: "Chúng tôi đã gửi email xác nhận tới {email}. Hãy mở email, nhấn “Confirm my email” rồi quay lại đây.",
+    confirmEmailSpam: "Không thấy? Hãy kiểm tra thư rác hoặc mục Quảng cáo.",
+    confirmEmailDone: "Tôi đã xác nhận — đăng nhập",
+    confirmEmailResend: "Gửi lại email xác nhận",
+    confirmEmailResent: "Đã gửi lại! Hãy kiểm tra hộp thư đến và thư rác.",
+    confirmEmailNotYet: "Email của bạn chưa được xác nhận. Hãy mở email chúng tôi đã gửi và nhấn nút xác nhận trước.",
+    confirmEmailAlready: "Email này đã được xác nhận — bạn có thể đăng nhập ngay.",
+    confirmEmailBack: "← Quay lại đăng nhập",
     skillsChangeDesc: "Bạn đã thay đổi kỹ năng học tập. Bạn có muốn tạo nội dung mới cho các kỹ năng này, hay giữ nguyên nội dung học tập trước đó?",
     skillsChangeUpdateBtn: "Có, cập nhật nội dung học tập của tôi",
     skillsChangeKeepBtn: "Không, giữ nội dung học tập trước đó",
@@ -7569,6 +8271,7 @@ const UI_TRANSLATIONS = {
     installPromptDesc: "Mở chỉ với một chạm, và tiến trình của bạn sẽ không bao giờ mất.",
     installPromptCta: "Thêm vào màn hình chính",
     installPromptSkip: "Để sau",
+    installPromptHaveApp: "Bạn đã cài GAKU Master từ Google Play hoặc App Store? Không cần bước này — chỉ cần chạm “Để sau”.",
     installPromptIosSteps: "Chạm nút Chia sẻ, sau đó chọn \"Thêm vào MH chính\"",
     remindTitle: "Ngày mai bạn sẽ ôn bài lúc nào?",
     remindDesc: "Chỉ cần 5 phút mỗi ngày. Hãy chọn giờ và chúng tôi sẽ thêm lời nhắc hằng ngày vào lịch của bạn.",
@@ -7696,6 +8399,50 @@ const UI_TRANSLATIONS = {
     featurePickerAlways: "Từ vựng và Feedback luôn được hiển thị.",
     featureShowOnly: "Chỉ hiện những mục này",
     featureKeepAll: "Giữ tất cả",
+    modePickerTitle: "Bạn muốn thử chế độ nào?",
+    modeEnjoyableDesc: "Thoải mái. Học theo nhịp của bạn, kèm gợi ý thân thiện.",
+    modeIntensiveDesc: "Nghiêm khắc. Chỉ tiêu hằng ngày, gợi ý cho điểm yếu và không được bỏ qua.",
+    modeTrialDesc: "Thử chế độ Intensive trong 3 ngày. Sau đó bạn chọn giữ lại hoặc quay về.",
+    modeBtn: "Chế độ",
+    coachTitle: "Gợi ý hôm nay",
+    coachBoth: "Bạn thường làm tốt phần {strong}, còn {weak} có vẻ hơi khó. Hôm nay thử {weak} nhé?",
+    coachWeakOnly: "{weak} có vẻ hơi khó với bạn. Hôm nay luyện thử nhé?",
+    lessonBridgeAsk: "Bạn muốn luyện phần này với giáo viên thật không? Hãy thử một buổi học thử miễn phí.",
+    lessonBridgeBtn: "Đặt buổi học thử miễn phí →",
+    lessonBridgeMissed: "Âm cần chú ý: {chars}",
+    pcTitle: "Kiểm tra tiến bộ",
+    pcIntro: "Bài kiểm tra đầu vào 3 phút (12 câu). Làm lại sau vài ngày để xem bạn tiến bộ bao nhiêu.",
+    pcStart: "Bắt đầu kiểm tra",
+    pcRetake: "Làm lại",
+    pcRetakeWait: "Bạn có thể làm lại sau {n} ngày.",
+    pcQ: "Câu {n} / {total}",
+    pcNext: "Tiếp →",
+    pcFinish: "Xem kết quả của tôi",
+    pcStartingPoint: "Điểm xuất phát của bạn",
+    pcThenNow: "Trước và nay",
+    pcThen: "Trước",
+    pcNow: "Nay",
+    pcUp: "Bạn đã tăng {n} điểm! 🎉",
+    pcSame: "Lần này điểm bằng nhau — hãy tiếp tục luyện tập và thử lại sau.",
+    pcDown: "Lần này thấp hơn một chút. Một bài kiểm tra ngắn không nói lên tất cả — hãy tiếp tục luyện tập.",
+    pcActivityTitle: "Việc luyện tập của bạn",
+    pcActLine: "{n} lượt luyện tập kể từ bài kiểm tra đầu vào",
+    pcAccLine: "Độ chính xác khi luyện tập: {a}% → {b}%",
+    pcNote: "Chỉ hiển thị điểm số để bài kiểm tra vẫn công bằng khi bạn làm lại.",
+    pcNudgeStart: "Muốn xem bạn tiến bộ thế nào? Hãy làm bài kiểm tra đầu vào 3 phút.",
+    pcNudgeRetake: "Đã một thời gian rồi — làm lại bài kiểm tra để xem tiến bộ của bạn!",
+    pcLater: "Để sau",
+    coachGo: "Bắt đầu thôi",
+    quotaTitle: "Chỉ tiêu hôm nay: {done}/{goal}",
+    quotaMissed: "Bạn chưa đạt chỉ tiêu hôm qua. Hãy hoàn thành chỉ tiêu hôm nay trước, không được bỏ qua.",
+    quotaLocked: "Hoàn thành chỉ tiêu hôm nay để mở khóa các tab khác.",
+    trialEndedTitle: "Thời gian dùng thử Intensive 3 ngày đã kết thúc. Bạn chọn chế độ nào?",
+    modeGuideTitle: "Các chế độ học hoạt động thế nào",
+    modeGuideIntensive: "🔥 Chế độ Intensive: hoàn thành chỉ tiêu hôm nay gồm 8 hoạt động (tick nhiệm vụ, trả lời kiểm tra hiểu bài, luyện tập, lưu từ, v.v.).",
+    modeGuideLock: "🔒 Cho đến khi đạt chỉ tiêu, các tab Subtitles, Milestones và JLPT bị khoá. Chạm vào tab bị khoá sẽ quay về Lịch học. Đạt 8 là mở khoá tất cả.",
+    modeGuideEnjoyable: "😊 Chế độ Enjoyable: không chỉ tiêu, không cảnh báo. Chỉ có gợi ý nhẹ nhàng như \"Bạn thường làm tốt X, còn Y có vẻ hơi khó. Hôm nay thử Y nhé?\" (khi có từ 3 bản ghi trở lên).",
+    modeGuideEscape: "Tab Feedback và nút Mode không bao giờ bị khoá. Muốn nhẹ nhàng hơn? Bạn có thể đổi sang chế độ Enjoyable bất cứ lúc nào bằng nút Mode.",
+    modeGuideOk: "Đã hiểu",
     featureCustomizeBtn: "Tùy chỉnh",
     feedbackTitle: "💬 Phản hồi & Ý kiến",
     feedbackSubtitle: "Hãy cho chúng tôi biết bạn muốn cải thiện điều gì hoặc điều gì đang làm bạn khó chịu về ứng dụng. Chúng tôi đọc mọi tin nhắn.",
@@ -7902,6 +8649,8 @@ const UI_TRANSLATIONS = {
     wordCardsLabel: "🃏 Thẻ từ",
     searchCreateCards: "Tìm kiếm & tạo thẻ",
     flashcardsLabel: "🎴 Thẻ ghi nhớ",
+    quickReviewFlashcards: "🎴 Ôn tập nhanh bằng Thẻ ghi nhớ",
+    reviewThisFlashcard: "🎴 Ôn từ này bằng Thẻ ghi nhớ",
     reviewSavedWords: "Ôn lại từ đã lưu",
     searchingDictionary: "Đang tìm trong từ điển tiếng Nhật...",
     speakWord: "Phát âm từ",
@@ -8088,6 +8837,15 @@ const UI_TRANSLATIONS = {
     help: "🆘 सहायता",
     editProfile: "✏️ प्रोफ़ाइल संपादित करें",
     skillsChangeTitle: "क्या आप अपनी अध्ययन सामग्री अपडेट करना चाहते हैं?",
+    confirmEmailTitle: "अपना ईमेल देखें",
+    confirmEmailDesc: "हमने {email} पर पुष्टि ईमेल भेजा है। उसे खोलें, “Confirm my email” दबाएँ और फिर यहाँ लौटें।",
+    confirmEmailSpam: "नहीं मिला? स्पैम या प्रमोशन फ़ोल्डर देखें।",
+    confirmEmailDone: "मैंने पुष्टि कर दी — लॉग इन करें",
+    confirmEmailResend: "पुष्टि ईमेल दोबारा भेजें",
+    confirmEmailResent: "फिर से भेज दिया! इनबॉक्स और स्पैम देखें।",
+    confirmEmailNotYet: "आपका ईमेल अभी पुष्ट नहीं हुआ है। भेजा गया ईमेल खोलकर पहले पुष्टि बटन दबाएँ।",
+    confirmEmailAlready: "यह ईमेल पहले से पुष्ट है — अब लॉग इन करें।",
+    confirmEmailBack: "← लॉग इन पर वापस जाएँ",
     skillsChangeDesc: "आपने अपने अध्ययन कौशल बदल दिए हैं। क्या आप इन कौशलों के लिए नई सामग्री बनवाना चाहते हैं, या पहले से बनाई गई अध्ययन सामग्री को वैसे ही रखना चाहते हैं?",
     skillsChangeUpdateBtn: "हाँ, मेरी अध्ययन सामग्री अपडेट करें",
     skillsChangeKeepBtn: "नहीं, पिछली अध्ययन सामग्री रखें",
@@ -8114,6 +8872,7 @@ const UI_TRANSLATIONS = {
     installPromptDesc: "एक टैप में खोलें, और आपकी प्रगति कभी नहीं खोएगी।",
     installPromptCta: "होम स्क्रीन पर जोड़ें",
     installPromptSkip: "बाद में",
+    installPromptHaveApp: "क्या आपने GAKU Master पहले ही Google Play या App Store से इंस्टॉल कर लिया है? तब इसकी ज़रूरत नहीं — “बाद में” दबाएँ।",
     installPromptIosSteps: "शेयर बटन टैप करें, फिर \"होम स्क्रीन पर जोड़ें\" चुनें",
     remindTitle: "कल आप कब दोहराएँगे?",
     remindDesc: "रोज़ सिर्फ़ 5 मिनट काफ़ी हैं। समय चुनें और हम आपके कैलेंडर में रोज़ाना रिमाइंडर जोड़ देंगे।",
@@ -8241,6 +9000,50 @@ const UI_TRANSLATIONS = {
     featurePickerAlways: "शब्दावली और Feedback हमेशा दिखाई देते हैं।",
     featureShowOnly: "सिर्फ़ ये दिखाएँ",
     featureKeepAll: "सब कुछ रखें",
+    modePickerTitle: "आप कौन-सा मोड आज़माना चाहते हैं?",
+    modeEnjoyableDesc: "आरामदायक। अपनी गति से पढ़ें, दोस्ताना सुझावों के साथ।",
+    modeIntensiveDesc: "सख़्त। रोज़ का लक्ष्य, कमज़ोर हिस्सों के सुझाव, और कोई छोड़ना नहीं।",
+    modeTrialDesc: "Intensive मोड को 3 दिन आज़माएँ। उसके बाद रखने या वापस जाने का चुनाव करें।",
+    modeBtn: "मोड",
+    coachTitle: "आज का सुझाव",
+    coachBoth: "आप आमतौर पर {strong} में अच्छे हैं, और {weak} थोड़ा कठिन लगता है। आज {weak} कैसा रहेगा?",
+    coachWeakOnly: "{weak} आपके लिए थोड़ा कठिन लगता है। आज इसका अभ्यास कैसा रहेगा?",
+    lessonBridgeAsk: "क्या आप इसे असली शिक्षक के साथ अभ्यास करना चाहेंगे? एक मुफ़्त ट्रायल क्लास आज़माएँ।",
+    lessonBridgeBtn: "मुफ़्त ट्रायल क्लास बुक करें →",
+    lessonBridgeMissed: "ध्यान देने योग्य ध्वनियाँ: {chars}",
+    pcTitle: "प्रगति जाँच",
+    pcIntro: "3 मिनट की शुरुआती जाँच (12 प्रश्न)। कुछ दिनों बाद इसे दोबारा करें और देखें कि आपने कितनी प्रगति की।",
+    pcStart: "जाँच शुरू करें",
+    pcRetake: "दोबारा करें",
+    pcRetakeWait: "आप इसे {n} दिन बाद दोबारा कर सकते हैं।",
+    pcQ: "प्रश्न {n} / {total}",
+    pcNext: "आगे →",
+    pcFinish: "मेरा परिणाम देखें",
+    pcStartingPoint: "आपकी शुरुआत",
+    pcThenNow: "तब और अब",
+    pcThen: "तब",
+    pcNow: "अब",
+    pcUp: "आपके {n} अंक बढ़े! 🎉",
+    pcSame: "इस बार अंक वही रहे — अभ्यास जारी रखें और बाद में फिर कोशिश करें।",
+    pcDown: "इस बार थोड़ा कम रहा। एक छोटी जाँच पूरी तस्वीर नहीं है — अभ्यास जारी रखें।",
+    pcActivityTitle: "आपका अभ्यास",
+    pcActLine: "शुरुआती जाँच के बाद से {n} अभ्यास",
+    pcAccLine: "अभ्यास में सटीकता: {a}% → {b}%",
+    pcNote: "केवल आपका स्कोर दिखाया जाता है, ताकि दोबारा करने पर जाँच निष्पक्ष रहे।",
+    pcNudgeStart: "देखना चाहते हैं कि आप कितना आगे बढ़ रहे हैं? 3 मिनट की शुरुआती जाँच करें।",
+    pcNudgeRetake: "काफ़ी समय हो गया — जाँच दोबारा करें और अपनी प्रगति देखें!",
+    pcLater: "बाद में",
+    coachGo: "चलें",
+    quotaTitle: "आज का लक्ष्य: {done}/{goal}",
+    quotaMissed: "आपने कल का लक्ष्य पूरा नहीं किया। पहले आज का लक्ष्य पूरा करें, छोड़ना नहीं।",
+    quotaLocked: "आज का लक्ष्य पूरा करें, तब बाकी टैब खुलेंगे।",
+    trialEndedTitle: "आपका 3 दिन का Intensive ट्रायल ख़त्म हो गया। अब कौन-सा मोड चुनेंगे?",
+    modeGuideTitle: "स्टडी मोड कैसे काम करते हैं",
+    modeGuideIntensive: "🔥 Intensive मोड: आज के 8 कामों का लक्ष्य पूरा करें (टास्क टिक करना, समझ की जाँच का जवाब देना, अभ्यास, शब्द सेव करना आदि)।",
+    modeGuideLock: "🔒 लक्ष्य पूरा होने तक Subtitles, Milestones और JLPT टैब लॉक रहते हैं। लॉक टैब दबाने पर आप शेड्यूल पर लौट आएँगे। 8 पूरे होते ही सब खुल जाता है।",
+    modeGuideEnjoyable: "😊 Enjoyable मोड: कोई लक्ष्य या चेतावनी नहीं। बस एक नरम सुझाव दिखता है, जैसे \"आप आम तौर पर X में अच्छे हैं, और Y थोड़ा कठिन लगता है। आज Y कैसा रहेगा?\" (3 या अधिक रिकॉर्ड होने पर)।",
+    modeGuideEscape: "Feedback टैब और Mode बटन कभी लॉक नहीं होते। आसान चाहिए? Mode बटन से कभी भी Enjoyable मोड में बदलें।",
+    modeGuideOk: "समझ गया",
     featureCustomizeBtn: "अनुकूलित करें",
     feedbackTitle: "💬 प्रतिक्रिया और राय",
     feedbackSubtitle: "हमें बताएं कि आप ऐप में क्या सुधार चाहते हैं या आपको क्या परेशान कर रहा है। हम हर संदेश पढ़ते हैं।",
@@ -8447,6 +9250,8 @@ const UI_TRANSLATIONS = {
     wordCardsLabel: "🃏 शब्द कार्ड",
     searchCreateCards: "कार्ड खोजें और बनाएं",
     flashcardsLabel: "🎴 फ्लैशकार्ड",
+    quickReviewFlashcards: "🎴 फ्लैशकार्ड से त्वरित समीक्षा",
+    reviewThisFlashcard: "🎴 इस शब्द को फ्लैशकार्ड से दोहराएँ",
     reviewSavedWords: "सहेजे गए शब्दों की समीक्षा करें",
     searchingDictionary: "जापानी शब्दकोश खोज रहे हैं...",
     speakWord: "शब्द का उच्चारण करें",
@@ -8633,6 +9438,15 @@ const UI_TRANSLATIONS = {
     help: "🆘 ヘルプ",
     editProfile: "✏️ プロフィール編集",
     skillsChangeTitle: "勉強内容を変更しますか？",
+    confirmEmailTitle: "メールを確認してください",
+    confirmEmailDesc: "{email} に確認メールを送りました。メールを開いて「Confirm my email」をタップしてから、ここに戻ってください。",
+    confirmEmailSpam: "見つからない場合は、迷惑メールやプロモーションのフォルダを確認してください。",
+    confirmEmailDone: "確認しました — ログイン",
+    confirmEmailResend: "確認メールを再送する",
+    confirmEmailResent: "再送しました。受信箱と迷惑メールフォルダを確認してください。",
+    confirmEmailNotYet: "メールがまだ確認されていません。送信したメールを開いて、先に確認ボタンを押してください。",
+    confirmEmailAlready: "このメールはすでに確認済みです。ログインできます。",
+    confirmEmailBack: "← ログインに戻る",
     skillsChangeDesc: "学習スキルの選択が変わりました。この内容に合わせて新しい勉強内容を作成しますか？それとも、以前作成した勉強内容をそのまま引き継ぎますか？",
     skillsChangeUpdateBtn: "勉強内容を変更する",
     skillsChangeKeepBtn: "以前の勉強内容をそのまま引き継ぐ",
@@ -8659,6 +9473,7 @@ const UI_TRANSLATIONS = {
     installPromptDesc: "ワンタップで開けて、学習の進み具合も失われません。",
     installPromptCta: "ホーム画面に追加",
     installPromptSkip: "あとで",
+    installPromptHaveApp: "すでにGoogle PlayまたはApp StoreからGAKU Masterをインストール済みの方は、この手順は不要です。「あとで」を押してください。",
     installPromptIosSteps: "共有ボタンをタップし、「ホーム画面に追加」を選んでください",
     remindTitle: "明日はいつ復習しますか？",
     remindDesc: "1日たった5分で十分です。時間を選ぶと、カレンダーに毎日のリマインダーを追加します。",
@@ -8786,6 +9601,50 @@ const UI_TRANSLATIONS = {
     featurePickerAlways: "「単語帳」と「フィードバック」は常に表示されます。",
     featureShowOnly: "選んだものだけ表示",
     featureKeepAll: "すべて表示のまま",
+    modePickerTitle: "どのモードを試してみますか？",
+    modeEnjoyableDesc: "のんびりモード。自分のペースで学習し、やさしい提案を受けられます。",
+    modeIntensiveDesc: "きびしめモード。毎日のノルマ、苦手分野の提案があり、サボれません。",
+    modeTrialDesc: "Intensive modeを3日間お試しできます。その後、続けるか戻るかを選べます。",
+    modeBtn: "モード",
+    coachTitle: "今日のおすすめ",
+    coachBoth: "普段は{strong}が得意ですが、{weak}は少し苦手そうですね。今日は{weak}はいかがですか？",
+    coachWeakOnly: "{weak}が少し苦手そうですね。今日は練習してみませんか？",
+    lessonBridgeAsk: "この課題を、先生と一緒に練習してみませんか？無料体験レッスンをご利用ください。",
+    lessonBridgeBtn: "無料体験レッスンを申し込む →",
+    lessonBridgeMissed: "つまずきやすい音: {chars}",
+    pcTitle: "成長チェック",
+    pcIntro: "3分で終わる最初のチェック(12問)です。数日後にもう一度受けて、どれだけ伸びたか確かめましょう。",
+    pcStart: "チェックを始める",
+    pcRetake: "もう一度受ける",
+    pcRetakeWait: "あと{n}日後に再受験できます。",
+    pcQ: "{n} / {total} 問目",
+    pcNext: "次へ →",
+    pcFinish: "結果を見る",
+    pcStartingPoint: "最初の結果",
+    pcThenNow: "始めたときと今",
+    pcThen: "最初",
+    pcNow: "今",
+    pcUp: "{n}点アップしました！🎉",
+    pcSame: "今回は同じ点数です。練習を続けて、またあとで挑戦してみましょう。",
+    pcDown: "今回は少し低めでした。短いクイズだけで全体は分かりません。練習を続けましょう。",
+    pcActivityTitle: "あなたの練習",
+    pcActLine: "最初のチェック以降、{n}回練習しました",
+    pcAccLine: "練習の正答率: {a}% → {b}%",
+    pcNote: "再受験でも公平になるよう、結果は点数だけを表示します。",
+    pcNudgeStart: "どれだけ伸びたか見てみませんか？3分の最初のチェックを受けましょう。",
+    pcNudgeRetake: "しばらく経ちました。もう一度受けて、成長を確かめましょう！",
+    pcLater: "あとで",
+    coachGo: "やってみる",
+    quotaTitle: "今日のノルマ: {done}/{goal}",
+    quotaMissed: "昨日のノルマが未達でした。まず今日のノルマを終わらせましょう。サボりは禁止です。",
+    quotaLocked: "今日のノルマを終えると、ほかのタブが開きます。",
+    trialEndedTitle: "Intensive modeの3日間のお試しが終わりました。どちらのモードにしますか？",
+    modeGuideTitle: "学習モードの説明",
+    modeGuideIntensive: "🔥 Intensive mode: 今日のノルマ(1日8アクション)を終わらせましょう。タスクのチェック、理解チェックへの回答、練習、単語の保存などが数えられます。",
+    modeGuideLock: "🔒 ノルマが終わるまでは、字幕帳・Milestones・JLPTのタブがロックされます。ロックされたタブを押すと、スケジュール画面に戻ります。8回に達するとロックは外れます。",
+    modeGuideEnjoyable: "😊 Enjoyable mode: ノルマも警告もありません。記録が3回以上たまると、「普段は○○が得意ですが、△△は少し苦手そうですね。今日は△△はいかがですか？」というやさしい提案だけが表示されます。",
+    modeGuideEscape: "FeedbackタブとModeボタンはロックされません。もっとゆるくしたいときは、Modeボタンからいつでも Enjoyable mode に変えられます。",
+    modeGuideOk: "わかりました",
     featureCustomizeBtn: "カスタマイズ",
     feedbackTitle: "💬 フィードバック・ご意見",
     feedbackSubtitle: "アプリで改善してほしい点や気になる点を教えてください。すべてのメッセージに目を通しています。",
@@ -8992,6 +9851,8 @@ const UI_TRANSLATIONS = {
     wordCardsLabel: "🃏 単語カード",
     searchCreateCards: "検索してカード作成",
     flashcardsLabel: "🎴 フラッシュカード",
+    quickReviewFlashcards: "🎴 フラッシュカードですぐ復習",
+    reviewThisFlashcard: "🎴 この単語をフラッシュカードで復習",
     reviewSavedWords: "保存した単語を復習",
     searchingDictionary: "日本語辞書を検索中...",
     speakWord: "単語を発音",
@@ -9178,6 +10039,15 @@ const UI_TRANSLATIONS = {
     help: "🆘 Yardım",
     editProfile: "✏️ Profili düzenle",
     skillsChangeTitle: "Çalışma içeriğinizi güncellemek ister misiniz?",
+    confirmEmailTitle: "E-postanızı kontrol edin",
+    confirmEmailDesc: "{email} adresine bir onay e-postası gönderdik. E-postayı açın, “Confirm my email” düğmesine dokunun ve buraya dönün.",
+    confirmEmailSpam: "Bulamıyor musunuz? Spam veya promosyonlar klasörüne bakın.",
+    confirmEmailDone: "Onayladım — giriş yap",
+    confirmEmailResend: "Onay e-postasını yeniden gönder",
+    confirmEmailResent: "Yeniden gönderildi! Gelen kutusu ve spam klasörünü kontrol edin.",
+    confirmEmailNotYet: "E-postanız henüz onaylanmadı. Gönderdiğimiz e-postayı açıp önce onay düğmesine dokunun.",
+    confirmEmailAlready: "Bu e-posta zaten onaylı — şimdi giriş yapabilirsiniz.",
+    confirmEmailBack: "← Girişe dön",
     skillsChangeDesc: "Çalışma becerilerinizi değiştirdiniz. Bu beceriler için yeni içerik oluşturulmasını mı istersiniz, yoksa önceki çalışma içeriğinizi mi korumak istersiniz?",
     skillsChangeUpdateBtn: "Evet, çalışma içeriğimi güncelle",
     skillsChangeKeepBtn: "Hayır, önceki çalışma içeriğimi koru",
@@ -9204,6 +10074,7 @@ const UI_TRANSLATIONS = {
     installPromptDesc: "Tek dokunuşla aç, ilerlemen asla kaybolmasın.",
     installPromptCta: "Ana Ekrana Ekle",
     installPromptSkip: "Belki sonra",
+    installPromptHaveApp: "GAKU Master'ı zaten Google Play veya App Store'dan yüklediniz mi? Buna gerek yok — “Belki sonra”ya dokunun.",
     installPromptIosSteps: "Paylaş düğmesine, ardından \"Ana Ekrana Ekle\"ye dokunun",
     remindTitle: "Yarın ne zaman tekrar yapacaksın?",
     remindDesc: "Günde sadece 5 dakika yeterli. Bir saat seç, takvimine günlük bir hatırlatma ekleyelim.",
@@ -9331,6 +10202,50 @@ const UI_TRANSLATIONS = {
     featurePickerAlways: "Kelime ve Feedback her zaman gösterilir.",
     featureShowOnly: "Sadece bunları göster",
     featureKeepAll: "Hepsini koru",
+    modePickerTitle: "Hangi modu denemek istersiniz?",
+    modeEnjoyableDesc: "Rahat. Kendi hızınızda, dostça önerilerle çalışın.",
+    modeIntensiveDesc: "Katı. Günlük hedef, zayıf alan önerileri ve atlamak yok.",
+    modeTrialDesc: "Intensive modunu 3 gün deneyin. Sonra kalmak veya geri dönmek arasında seçin.",
+    modeBtn: "Mod",
+    coachTitle: "Bugünün önerisi",
+    coachBoth: "Genellikle {strong} konusunda iyisiniz, {weak} ise biraz zor görünüyor. Bugün {weak} nasıl olur?",
+    coachWeakOnly: "{weak} sizin için biraz zor görünüyor. Bugün çalışmaya ne dersiniz?",
+    lessonBridgeAsk: "Bunu gerçek bir öğretmenle çalışmak ister misiniz? Ücretsiz deneme dersini deneyin.",
+    lessonBridgeBtn: "Ücretsiz deneme dersi ayarla →",
+    lessonBridgeMissed: "Dikkat edilecek sesler: {chars}",
+    pcTitle: "İlerleme kontrolü",
+    pcIntro: "3 dakikalık başlangıç testi (12 soru). Ne kadar ilerlediğinizi görmek için birkaç gün sonra tekrar çözün.",
+    pcStart: "Testi başlat",
+    pcRetake: "Tekrar çöz",
+    pcRetakeWait: "{n} gün sonra tekrar çözebilirsiniz.",
+    pcQ: "Soru {n} / {total}",
+    pcNext: "İleri →",
+    pcFinish: "Sonucumu gör",
+    pcStartingPoint: "Başlangıç noktanız",
+    pcThenNow: "Önce ve şimdi",
+    pcThen: "Önce",
+    pcNow: "Şimdi",
+    pcUp: "{n} puan yükseldiniz! 🎉",
+    pcSame: "Bu sefer puan aynı — çalışmaya devam edin ve daha sonra tekrar deneyin.",
+    pcDown: "Bu sefer biraz düşük. Kısa bir test her şeyi göstermez — çalışmaya devam edin.",
+    pcActivityTitle: "Çalışmalarınız",
+    pcActLine: "Başlangıç testinden beri {n} alıştırma",
+    pcAccLine: "Alıştırmalarda doğruluk: %{a} → %{b}",
+    pcNote: "Tekrar çözdüğünüzde test adil kalsın diye yalnızca puanınız gösterilir.",
+    pcNudgeStart: "Ne kadar geliştiğinizi görmek ister misiniz? 3 dakikalık başlangıç testini çözün.",
+    pcNudgeRetake: "Epey zaman geçti — testi tekrar çözün ve ilerlemenizi görün!",
+    pcLater: "Sonra",
+    coachGo: "Hadi başlayalım",
+    quotaTitle: "Bugünün hedefi: {done}/{goal}",
+    quotaMissed: "Dünkü hedefi kaçırdınız. Önce bugünün hedefini tamamlayın, atlamak yok.",
+    quotaLocked: "Diğer sekmelerin kilidini açmak için bugünün hedefini tamamlayın.",
+    trialEndedTitle: "3 günlük Intensive denemeniz sona erdi. Şimdi hangi mod?",
+    modeGuideTitle: "Çalışma modları nasıl işler",
+    modeGuideIntensive: "🔥 Intensive modu: bugünün 8 eylemlik hedefini tamamlayın (görevi işaretlemek, anlama kontrolünü yanıtlamak, pratik yapmak, kelime kaydetmek vb.).",
+    modeGuideLock: "🔒 Hedef tamamlanana kadar Subtitles, Milestones ve JLPT sekmeleri kilitlidir. Kilitli sekmeye dokunursanız Program ekranına dönersiniz. 8'e ulaşınca hepsi açılır.",
+    modeGuideEnjoyable: "😊 Enjoyable modu: hedef de uyarı da yok. Yalnızca \"Genelde X'te iyisiniz, Y biraz zor görünüyor. Bugün Y'ye ne dersiniz?\" gibi nazik bir öneri görürsünüz (3 veya daha fazla kayıt olunca).",
+    modeGuideEscape: "Feedback sekmesi ve Mode düğmesi asla kilitlenmez. Daha rahat mı istiyorsunuz? Mode düğmesinden istediğiniz zaman Enjoyable moduna geçebilirsiniz.",
+    modeGuideOk: "Anladım",
     featureCustomizeBtn: "Özelleştir",
     feedbackTitle: "💬 Geri Bildirim ve Görüş",
     feedbackSubtitle: "Neyi iyileştirmemizi istediğinizi veya uygulamayla ilgili sizi rahatsız eden bir şeyi bize bildirin. Her mesajı okuyoruz.",
@@ -9537,6 +10452,8 @@ const UI_TRANSLATIONS = {
     wordCardsLabel: "🃏 Kelime kartları",
     searchCreateCards: "Kart ara ve oluştur",
     flashcardsLabel: "🎴 Bilgi kartları",
+    quickReviewFlashcards: "🎴 Bilgi kartlarıyla hızlı tekrar",
+    reviewThisFlashcard: "🎴 Bu kelimeyi bilgi kartlarıyla tekrar et",
     reviewSavedWords: "Kaydedilen kelimeleri gözden geçir",
     searchingDictionary: "Japonca sözlükte aranıyor...",
     speakWord: "Kelimeyi telaffuz et",
@@ -9723,6 +10640,15 @@ const UI_TRANSLATIONS = {
     help: "🆘 मद्दत",
     editProfile: "✏️ प्रोफाइल सम्पादन गर्नुहोस्",
     skillsChangeTitle: "तपाईंको अध्ययन सामग्री अपडेट गर्ने?",
+    confirmEmailTitle: "आफ्नो इमेल हेर्नुहोस्",
+    confirmEmailDesc: "हामीले {email} मा पुष्टि इमेल पठायौं। इमेल खोलेर “Confirm my email” थिच्नुहोस् र यहाँ फर्कनुहोस्।",
+    confirmEmailSpam: "भेटिएन? स्प्याम वा प्रमोशन फोल्डर हेर्नुहोस्।",
+    confirmEmailDone: "मैले पुष्टि गरें — लगइन गर्नुहोस्",
+    confirmEmailResend: "पुष्टि इमेल फेरि पठाउनुहोस्",
+    confirmEmailResent: "फेरि पठाइयो! इनबक्स र स्प्याम हेर्नुहोस्।",
+    confirmEmailNotYet: "तपाईंको इमेल अझै पुष्टि भएको छैन। पठाइएको इमेल खोलेर पहिले पुष्टि बटन थिच्नुहोस्।",
+    confirmEmailAlready: "यो इमेल पहिले नै पुष्टि भइसकेको छ — अब लगइन गर्न सक्नुहुन्छ।",
+    confirmEmailBack: "← लगइनमा फर्कनुहोस्",
     skillsChangeDesc: "तपाईंले आफ्नो अध्ययन सीपहरू परिवर्तन गर्नुभयो। के तपाईं यी सीपहरूका लागि नयाँ सामग्री बनाउन चाहनुहुन्छ, वा पहिले बनाइएको अध्ययन सामग्री त्यसै राख्न चाहनुहुन्छ?",
     skillsChangeUpdateBtn: "हो, मेरो अध्ययन सामग्री अपडेट गर्नुहोस्",
     skillsChangeKeepBtn: "होइन, अघिल्लो अध्ययन सामग्री राख्नुहोस्",
@@ -9749,6 +10675,7 @@ const UI_TRANSLATIONS = {
     installPromptDesc: "एक ट्यापमा खोल्नुहोस्, र तपाईंको प्रगति कहिल्यै हराउँदैन।",
     installPromptCta: "होम स्क्रिनमा थप्नुहोस्",
     installPromptSkip: "पछि",
+    installPromptHaveApp: "के तपाईंले GAKU Master पहिले नै Google Play वा App Store बाट इन्स्टल गर्नुभएको छ? यो आवश्यक छैन — “पछि” थिच्नुहोस्।",
     installPromptIosSteps: "सेयर बटन ट्याप गर्नुहोस्, त्यसपछि \"होम स्क्रिनमा थप्नुहोस्\" छान्नुहोस्",
     remindTitle: "भोलि कति बजे दोहोर्याउनुहुन्छ?",
     remindDesc: "दिनमा ५ मिनेट मात्र पर्याप्त छ। समय छान्नुहोस्, हामी तपाईंको क्यालेन्डरमा दैनिक रिमाइन्डर थप्छौं।",
@@ -9876,6 +10803,50 @@ const UI_TRANSLATIONS = {
     featurePickerAlways: "शब्दावली र Feedback सधैं देखिन्छन्।",
     featureShowOnly: "यी मात्र देखाउनुहोस्",
     featureKeepAll: "सबै राख्नुहोस्",
+    modePickerTitle: "तपाईं कुन मोड प्रयास गर्न चाहनुहुन्छ?",
+    modeEnjoyableDesc: "आरामदायी। आफ्नै गतिमा, मैत्रीपूर्ण सुझावसहित पढ्नुहोस्।",
+    modeIntensiveDesc: "कडा। दैनिक लक्ष्य, कमजोर क्षेत्रका सुझाव, र छोड्न मिल्दैन।",
+    modeTrialDesc: "Intensive मोड ३ दिन प्रयास गर्नुहोस्। त्यसपछि राख्ने वा फर्कने छनौट गर्नुहोस्।",
+    modeBtn: "मोड",
+    coachTitle: "आजको सुझाव",
+    coachBoth: "तपाईं सामान्यतया {strong} मा राम्रो हुनुहुन्छ, र {weak} अलि गाह्रो देखिन्छ। आज {weak} कस्तो होला?",
+    coachWeakOnly: "{weak} तपाईंलाई अलि गाह्रो देखिन्छ। आज अभ्यास गर्ने कसो?",
+    lessonBridgeAsk: "के तपाईं यसलाई साँचो शिक्षकसँग अभ्यास गर्न चाहनुहुन्छ? निःशुल्क परीक्षण कक्षा प्रयास गर्नुहोस्।",
+    lessonBridgeBtn: "निःशुल्क परीक्षण कक्षा बुक गर्नुहोस् →",
+    lessonBridgeMissed: "ध्यान दिनुपर्ने ध्वनिहरू: {chars}",
+    pcTitle: "प्रगति जाँच",
+    pcIntro: "३ मिनेटको सुरुवाती जाँच (१२ प्रश्न)। केही दिनपछि फेरि गर्नुहोस् र कति प्रगति भयो हेर्नुहोस्।",
+    pcStart: "जाँच सुरु गर्नुहोस्",
+    pcRetake: "फेरि गर्नुहोस्",
+    pcRetakeWait: "तपाईं {n} दिनपछि फेरि गर्न सक्नुहुन्छ।",
+    pcQ: "प्रश्न {n} / {total}",
+    pcNext: "अर्को →",
+    pcFinish: "मेरो नतिजा हेर्नुहोस्",
+    pcStartingPoint: "तपाईंको सुरुवात",
+    pcThenNow: "तब र अब",
+    pcThen: "तब",
+    pcNow: "अब",
+    pcUp: "तपाईंको {n} अङ्क बढ्यो! 🎉",
+    pcSame: "यस पटक अङ्क उही छ — अभ्यास जारी राख्नुहोस् र पछि फेरि प्रयास गर्नुहोस्।",
+    pcDown: "यस पटक अलि कम भयो। एउटा छोटो जाँचले सबै देखाउँदैन — अभ्यास जारी राख्नुहोस्।",
+    pcActivityTitle: "तपाईंको अभ्यास",
+    pcActLine: "सुरुवाती जाँचदेखि {n} अभ्यास",
+    pcAccLine: "अभ्यासमा शुद्धता: {a}% → {b}%",
+    pcNote: "फेरि गर्दा जाँच निष्पक्ष रहोस् भनेर केवल तपाईंको स्कोर देखाइन्छ।",
+    pcNudgeStart: "तपाईं कति अगाडि बढ्दै हुनुहुन्छ हेर्न चाहनुहुन्छ? ३ मिनेटको सुरुवाती जाँच गर्नुहोस्।",
+    pcNudgeRetake: "केही समय भयो — जाँच फेरि गर्नुहोस् र आफ्नो प्रगति हेर्नुहोस्!",
+    pcLater: "पछि",
+    coachGo: "सुरु गरौं",
+    quotaTitle: "आजको लक्ष्य: {done}/{goal}",
+    quotaMissed: "तपाईंले हिजोको लक्ष्य पूरा गर्नुभएन। पहिले आजको लक्ष्य पूरा गर्नुहोस्, छोड्न मिल्दैन।",
+    quotaLocked: "आजको लक्ष्य पूरा गरेपछि अन्य ट्याबहरू खुल्छन्।",
+    trialEndedTitle: "तपाईंको ३ दिने Intensive परीक्षण सकियो। अब कुन मोड?",
+    modeGuideTitle: "अध्ययन मोडले कसरी काम गर्छन्",
+    modeGuideIntensive: "🔥 Intensive मोड: आजको ८ कार्यको लक्ष्य पूरा गर्नुहोस् (टास्क टिक गर्ने, बुझाइ जाँचको उत्तर दिने, अभ्यास, शब्द सेभ गर्ने आदि)।",
+    modeGuideLock: "🔒 लक्ष्य पूरा नभएसम्म Subtitles, Milestones र JLPT ट्याब लक हुन्छन्। लक ट्याब थिच्दा तपाईं तालिकामा फर्कनुहुन्छ। ८ पुगेपछि सबै खुल्छ।",
+    modeGuideEnjoyable: "😊 Enjoyable मोड: कुनै लक्ष्य वा चेतावनी छैन। केवल नरम सुझाव देखिन्छ, जस्तै \"तपाईं सामान्यतया X मा राम्रो हुनुहुन्छ, Y अलि गाह्रो देखिन्छ। आज Y कस्तो होला?\" (३ वा बढी रेकर्ड भएपछि)।",
+    modeGuideEscape: "Feedback ट्याब र Mode बटन कहिल्यै लक हुँदैनन्। सजिलो चाहनुहुन्छ? Mode बटनबाट जुनसुकै बेला Enjoyable मोडमा बदल्नुहोस्।",
+    modeGuideOk: "बुझें",
     featureCustomizeBtn: "अनुकूलन गर्नुहोस्",
     feedbackTitle: "💬 प्रतिक्रिया र विचार",
     feedbackSubtitle: "एपमा के सुधार गरिदिए हुन्थ्यो वा के कुराले तपाईंलाई अप्ठ्यारो पारिरहेको छ भनी हामीलाई बताउनुहोस्। हामी हरेक सन्देश पढ्छौं।",
@@ -10082,6 +11053,8 @@ const UI_TRANSLATIONS = {
     wordCardsLabel: "🃏 शब्द कार्डहरू",
     searchCreateCards: "कार्डहरू खोज्नुहोस् र बनाउनुहोस्",
     flashcardsLabel: "🎴 फ्ल्यासकार्डहरू",
+    quickReviewFlashcards: "🎴 फ्ल्यासकार्डले छिटो दोहोर्याउनुहोस्",
+    reviewThisFlashcard: "🎴 यो शब्द फ्ल्यासकार्डले दोहोर्याउनुहोस्",
     reviewSavedWords: "सेभ गरिएका शब्दहरू समीक्षा गर्नुहोस्",
     searchingDictionary: "जापानी शब्दकोश खोजिँदै...",
     speakWord: "शब्द उच्चारण गर्नुहोस्",
@@ -10268,6 +11241,15 @@ const UI_TRANSLATIONS = {
     help: "🆘 Tulong",
     editProfile: "✏️ I-edit ang profile",
     skillsChangeTitle: "I-update ang iyong study content?",
+    confirmEmailTitle: "Tingnan ang iyong email",
+    confirmEmailDesc: "Nagpadala kami ng confirmation email sa {email}. Buksan ito, i-tap ang “Confirm my email”, at bumalik dito.",
+    confirmEmailSpam: "Hindi makita? Tingnan ang spam o promotions folder.",
+    confirmEmailDone: "Nakumpirma ko na — mag-log in",
+    confirmEmailResend: "Ipadala muli ang confirmation email",
+    confirmEmailResent: "Naipadala muli! Tingnan ang inbox at spam.",
+    confirmEmailNotYet: "Hindi pa nakukumpirma ang iyong email. Buksan muna ang ipinadala naming email at i-tap ang confirm button.",
+    confirmEmailAlready: "Nakumpirma na ang email na ito — maaari ka nang mag-log in.",
+    confirmEmailBack: "← Bumalik sa log in",
     skillsChangeDesc: "Binago mo ang iyong study skills. Gusto mo bang gumawa ng bagong content para sa mga skill na ito, o panatilihin na lang ang dati mong study content?",
     skillsChangeUpdateBtn: "Oo, i-update ang aking study content",
     skillsChangeKeepBtn: "Hindi, panatilihin ang dating study content",
@@ -10294,6 +11276,7 @@ const UI_TRANSLATIONS = {
     installPromptDesc: "Buksan sa isang tap, at hindi na mawawala ang iyong progreso.",
     installPromptCta: "Idagdag sa Home Screen",
     installPromptSkip: "Sa ibang pagkakataon",
+    installPromptHaveApp: "Na-install mo na ba ang GAKU Master mula sa Google Play o App Store? Hindi mo ito kailangan — i-tap ang “Sa ibang pagkakataon”.",
     installPromptIosSteps: "I-tap ang Share, pagkatapos ay \"Idagdag sa Home Screen\"",
     remindTitle: "Kailan ka magre-review bukas?",
     remindDesc: "Sapat na ang 5 minuto kada araw. Pumili ng oras at magdaragdag kami ng pang-araw-araw na paalala sa iyong kalendaryo.",
@@ -10421,6 +11404,50 @@ const UI_TRANSLATIONS = {
     featurePickerAlways: "Palaging ipinapakita ang Bokabularyo at Feedback.",
     featureShowOnly: "Ipakita lang ang mga ito",
     featureKeepAll: "Panatilihin lahat",
+    modePickerTitle: "Aling mode ang gusto mong subukan?",
+    modeEnjoyableDesc: "Relaks. Mag-aral sa sarili mong bilis, may mga magiliw na mungkahi.",
+    modeIntensiveDesc: "Mahigpit. May pang-araw-araw na quota, mungkahi sa mahihina mong bahagi, at bawal laktawan.",
+    modeTrialDesc: "Subukan ang Intensive mode sa loob ng 3 araw. Pagkatapos, piliin kung itutuloy o babalik.",
+    modeBtn: "Mode",
+    coachTitle: "Mungkahi ngayon",
+    coachBoth: "Karaniwan kang magaling sa {strong}, at mukhang medyo mahirap ang {weak}. Ano kung {weak} ngayon?",
+    coachWeakOnly: "Mukhang medyo mahirap sa iyo ang {weak}. Subukan mo itong praktisin ngayon?",
+    lessonBridgeAsk: "Gusto mo bang ipractice ito kasama ang totoong guro? Subukan ang libreng trial lesson.",
+    lessonBridgeBtn: "Mag-book ng libreng trial lesson →",
+    lessonBridgeMissed: "Mga tunog na dapat bantayan: {chars}",
+    pcTitle: "Pagsusuri ng progreso",
+    pcIntro: "Isang 3-minutong panimulang pagsusulit (12 tanong). Ulitin ito pagkalipas ng ilang araw para makita kung gaano ka na umunlad.",
+    pcStart: "Simulan ang pagsusulit",
+    pcRetake: "Ulitin ang pagsusulit",
+    pcRetakeWait: "Maaari mo itong ulitin sa loob ng {n} araw.",
+    pcQ: "Tanong {n} / {total}",
+    pcNext: "Susunod →",
+    pcFinish: "Tingnan ang resulta ko",
+    pcStartingPoint: "Ang panimulang punto mo",
+    pcThenNow: "Noon at ngayon",
+    pcThen: "Noon",
+    pcNow: "Ngayon",
+    pcUp: "Tumaas ka ng {n} puntos! 🎉",
+    pcSame: "Pareho ang iskor ngayon — magpatuloy sa pagsasanay at subukan ulit mamaya.",
+    pcDown: "Medyo mas mababa ngayon. Hindi ipinapakita ng isang maikling quiz ang lahat — magpatuloy sa pagsasanay.",
+    pcActivityTitle: "Ang pagsasanay mo",
+    pcActLine: "{n} pagsasanay mula sa panimulang pagsusulit",
+    pcAccLine: "Katumpakan sa pagsasanay: {a}% → {b}%",
+    pcNote: "Iskor lang ang ipinapakita para manatiling patas ang pagsusulit kapag inulit mo.",
+    pcNudgeStart: "Gusto mong makita kung gaano ka umuunlad? Kumuha ng 3-minutong panimulang pagsusulit.",
+    pcNudgeRetake: "Matagal na — ulitin ang pagsusulit at tingnan ang pag-unlad mo!",
+    pcLater: "Mamaya",
+    coachGo: "Simulan na",
+    quotaTitle: "Quota ngayon: {done}/{goal}",
+    quotaMissed: "Hindi mo naabot ang quota kahapon. Tapusin muna ang quota ngayon, bawal laktawan.",
+    quotaLocked: "Tapusin ang quota ngayon para mabuksan ang ibang tab.",
+    trialEndedTitle: "Tapos na ang 3-araw mong Intensive trial. Aling mode na ngayon?",
+    modeGuideTitle: "Paano gumagana ang mga study mode",
+    modeGuideIntensive: "🔥 Intensive mode: tapusin ang quota ngayong araw na 8 aksyon (pag-check ng task, pagsagot sa comprehension check, pagsasanay, pag-save ng salita, atbp.).",
+    modeGuideLock: "🔒 Hangga't hindi tapos ang quota, naka-lock ang Subtitles, Milestones at JLPT. Pindutin ang naka-lock na tab at babalik ka sa Schedule. Pag umabot ng 8, mabubuksan ang lahat.",
+    modeGuideEnjoyable: "😊 Enjoyable mode: walang quota, walang babala. Banayad na mungkahi lang ang makikita, tulad ng \"Karaniwan kang magaling sa X, at medyo mahirap ang Y. Subukan ang Y ngayon?\" (kapag may 3 o higit pang tala).",
+    modeGuideEscape: "Hindi kailanman nilo-lock ang Feedback tab at ang Mode button. Gusto ng mas magaan? Lumipat sa Enjoyable mode anumang oras gamit ang Mode button.",
+    modeGuideOk: "Sige",
     featureCustomizeBtn: "I-customize",
     feedbackTitle: "💬 Puna at Opinyon",
     feedbackSubtitle: "Sabihin sa amin kung ano ang gusto mong pagbutihin o anumang bagay na nakakaabala sa iyo tungkol sa app. Binabasa namin ang bawat mensahe.",
@@ -10627,6 +11654,8 @@ const UI_TRANSLATIONS = {
     wordCardsLabel: "🃏 Word Cards",
     searchCreateCards: "Maghanap at gumawa ng mga card",
     flashcardsLabel: "🎴 Flashcards",
+    quickReviewFlashcards: "🎴 Mabilis na review gamit ang Flashcards",
+    reviewThisFlashcard: "🎴 I-review ang salitang ito gamit ang Flashcards",
     reviewSavedWords: "Repasuhin ang mga naka-save na salita",
     searchingDictionary: "Hinahanap sa diksyunaryong Japanese...",
     speakWord: "Bigkasin ang salita",
@@ -11596,7 +12625,7 @@ function getListeningAudioText(item) {
 }
 
 // ─── WORD DETAIL CARD ──────────────────────────────────────────────────────────
-function WordDetailCard({ card: cardProp, onSave, onBack, form, prefLang }) {
+function WordDetailCard({ card: cardProp, onSave, onBack, form, prefLang, onReviewFlashcard, backLabel }) {
   const T = useUITranslations(prefLang || form?.preferredLang || "English");
   const [card, setCard] = useState(cardProp);
   const [saveModal, setSaveModal] = useState(false);
@@ -11747,6 +12776,7 @@ function WordDetailCard({ card: cardProp, onSave, onBack, form, prefLang }) {
       data.cards.push(newCard);
     }
     saveVocabData(data);
+    logLearningEvent("vocab", true);
     if (onSave) onSave(data);
     setSaveModal(false); setSaveMode(""); setNewFolderName(""); setSelectedFolder("");
     showToast(`✓ "${card.word}" を "${folderName}" に保存しました`);
@@ -11763,7 +12793,7 @@ function WordDetailCard({ card: cardProp, onSave, onBack, form, prefLang }) {
       )}
 
       <button onClick={onBack} style={{ background:"none", border:"none", color:"#64748b", fontSize:13, cursor:"pointer", padding:0, marginBottom:14, display:"flex", alignItems:"center", gap:4 }}>
-        ← Back to search
+        {backLabel || "← Back to search"}
       </button>
 
       {/* ── WORD HEADER ── */}
@@ -11782,6 +12812,12 @@ function WordDetailCard({ card: cardProp, onSave, onBack, form, prefLang }) {
           </button>
         </div>
       </div>
+
+      {onReviewFlashcard && (
+        <button onClick={()=>onReviewFlashcard(card)} style={{ width:"100%", ...S.btn, marginBottom:12, background:"linear-gradient(135deg,rgba(34,197,94,0.2),rgba(22,163,74,0.15))", border:"1.5px solid rgba(34,197,94,0.4)", color:"#f1f5f9", fontSize:13, fontWeight:700, padding:"11px 14px" }}>
+          {T.reviewThisFlashcard || "🎴 Review this word with Flashcards"}
+        </button>
+      )}
 
       {/* ── DEFINITION ── */}
       <div style={{ ...S.card, marginBottom:12 }}>
@@ -11979,7 +13015,7 @@ function WordDetailCard({ card: cardProp, onSave, onBack, form, prefLang }) {
 }
 
 // ─── FLASHCARD VIEW ────────────────────────────────────────────────────────────
-function FlashcardView({ form, onBack }) {
+function FlashcardView({ form, onBack, focusWord }) {
   const T = useUITranslations(form?.preferredLang || "English");
   const [allData, setAllData] = useState(() => loadVocabData());
   const [selectedFolder, setSelectedFolder] = useState("すべて");
@@ -11997,7 +13033,13 @@ function FlashcardView({ form, onBack }) {
   // originals stay in their own folders in the Library); cards NOT marked stay in the deck.
   const UNDERSTOOD = "Understood";
   const understoodWords = new Set(cards.filter(c => c.folder === UNDERSTOOD).map(c => c.word));
-  const filteredCards = selectedFolder === "すべて"
+  // focusWord: reviewing ONE word (opened from a word in the Library) — a deck of just that card.
+  const focusCards = focusWord ? (() => {
+    const same = cards.filter(c => c.word === focusWord.word && c.folder !== UNDERSTOOD);
+    const exact = same.find(c => c.folder === focusWord.folder) || same[0] || focusWord;
+    return [exact];
+  })() : null;
+  const filteredCards = focusCards ? focusCards : selectedFolder === "すべて"
     ? cards.filter(c => c.folder !== UNDERSTOOD && !understoodWords.has(c.word))
     : selectedFolder === UNDERSTOOD
       ? cards.filter(c => c.folder === UNDERSTOOD)
@@ -12014,6 +13056,7 @@ function FlashcardView({ form, onBack }) {
       data.cards.push({ ...card, id: Date.now(), folder: UNDERSTOOD, savedAt: new Date().toISOString() });
     }
     saveVocabData({ folders, cards: data.cards });
+    logLearningEvent("vocab", true);
     setAllData(loadVocabData());
     setFlipped(false); setShowHint(false);
     setIdx(i => (i >= displayCards.length - 1 ? 0 : i)); // the next card slides into this position
@@ -12025,6 +13068,7 @@ function FlashcardView({ form, onBack }) {
     if (!card || card.folder !== UNDERSTOOD) return;
     const data = loadVocabData();
     saveVocabData({ folders: data.folders, cards: data.cards.filter(c => !(c.folder === UNDERSTOOD && c.word === card.word)) });
+    logLearningEvent("vocab", false);
     setAllData(loadVocabData());
     setFlipped(false); setShowHint(false);
     setIdx(i => (i >= displayCards.length - 1 ? 0 : i));
@@ -12037,6 +13081,7 @@ function FlashcardView({ form, onBack }) {
   // Whenever the folder becomes active, check for a saved position and ask Resume vs Start Again
   // instead of silently resetting to the first card.
   useEffect(() => {
+    if (focusWord) { setIdx(0); setResumeChoice("restart"); setFlipped(false); setShowHint(false); return; }
     const saved = getSavedPos(selectedFolder);
     if (saved > 0 && saved < filteredCards.length) {
       setResumeChoice(null);
@@ -12050,7 +13095,7 @@ function FlashcardView({ form, onBack }) {
 
   // Persist position as the student moves through the deck
   useEffect(() => {
-    if (resumeChoice) savePos(selectedFolder, idx);
+    if (resumeChoice && !focusWord) savePos(selectedFolder, idx);
   }, [idx, selectedFolder, resumeChoice]);
 
   // Fetch a supporting image for the back of the card (only when flipped, and only once per word).
@@ -12141,9 +13186,9 @@ Only output the JSON object.` }
   return (
     <div>
       <button onClick={onBack} style={{ background:"none", border:"none", color:"#64748b", fontSize:13, cursor:"pointer", padding:0, marginBottom:14 }}>← Back</button>
-      {/* Folder selector */}
+      {/* Folder selector (hidden when reviewing a single word) */}
       <div style={{ display:"flex", gap:6, flexWrap:"wrap", marginBottom:12 }}>
-        {allFolders.map(f => (
+        {!focusWord && allFolders.map(f => (
           <button key={f.name} onClick={()=>handleFolderChange(f.name)} style={{ padding:"5px 12px", borderRadius:20, fontSize:11, fontWeight:700, cursor:"pointer", border:`1px solid ${selectedFolder===f.name ? C.teal : C.border}`, background: selectedFolder===f.name ? `rgba(6,182,212,0.15)` : C.card, color: selectedFolder===f.name ? C.teal : "#64748b" }}>
             {f.name==="すべて" ? "📚 すべて" : f.name==="Your Vocabulary" ? "📚 Your Vocabulary" : "📁 "+f.name}
           </button>
@@ -12243,7 +13288,7 @@ function VocabSearchBox({ value, onChange, placeholder }) {
   );
 }
 
-function LibraryView({ onBack, onSelectFolder, onCreateCard, onViewCard }) {
+function LibraryView({ onBack, onSelectFolder, onCreateCard, onViewCard, onQuickReview, T }) {
   const [data, setData] = useState(loadVocabData);
   const [librarySearch, setLibrarySearch] = useState("");
   const [newFolderName, setNewFolderName] = useState("");
@@ -12300,6 +13345,12 @@ function LibraryView({ onBack, onSelectFolder, onCreateCard, onViewCard }) {
           + New Folder
         </button>
       </div>
+
+      {onQuickReview && (
+        <button onClick={onQuickReview} style={{ width:"100%", ...S.btn, marginBottom:14, background:"linear-gradient(135deg,rgba(34,197,94,0.2),rgba(22,163,74,0.15))", border:"1.5px solid rgba(34,197,94,0.4)", color:"#f1f5f9", fontSize:14, fontWeight:700, padding:"12px 14px" }}>
+          {(T && T.quickReviewFlashcards) || "🎴 Quick review with Flashcards"}
+        </button>
+      )}
 
       {showNewFolder && (
         <div style={{ ...S.card, marginBottom:14, borderLeft:`3px solid ${C.teal}` }}>
@@ -12410,7 +13461,7 @@ function LibraryView({ onBack, onSelectFolder, onCreateCard, onViewCard }) {
 }
 
 // ─── FOLDER DETAIL VIEW ────────────────────────────────────────────────────────
-function FolderDetailView({ folderName, onBack, onViewCard, onRenamed }) {
+function FolderDetailView({ folderName, onBack, onViewCard, onRenamed, onReviewCard }) {
   const [data, setData] = useState(loadVocabData);
   const [renaming, setRenaming] = useState(false);
   const [renameValue, setRenameValue] = useState("");
@@ -12533,6 +13584,9 @@ function FolderDetailView({ folderName, onBack, onViewCard, onRenamed }) {
               </div>
               <div style={{ display:"flex", gap:6, flexShrink:0 }}>
                 <button onClick={()=>speakVocabWord(c)} style={{ padding:"6px 10px", borderRadius:8, background:"rgba(6,182,212,0.1)", border:`1px solid rgba(6,182,212,0.2)`, color:C.teal, fontSize:14, cursor:"pointer" }}>🔊</button>
+                {onReviewCard && !selecting && (
+                  <button onClick={e=>{ e.stopPropagation(); onReviewCard(c); }} title="Go Flashcard" aria-label="Go Flashcard" style={{ padding:"6px 8px", borderRadius:8, background:"rgba(34,197,94,0.1)", border:"1px solid rgba(34,197,94,0.35)", color:"#4ade80", fontSize:11, fontWeight:700, cursor:"pointer", whiteSpace:"nowrap" }}>🎴 Go Flashcard</button>
+                )}
                 <button onClick={()=>removeCard(c.id)} style={{ padding:"6px 10px", borderRadius:8, background:"rgba(239,68,68,0.08)", border:`1px solid rgba(239,68,68,0.2)`, color:"#ef4444", fontSize:14, cursor:"pointer" }}>🗑</button>
               </div>
             </div>
@@ -12821,6 +13875,9 @@ function VocabBuilder({ form }) {
   const [vocabView, setVocabView] = useState("main");
   const [selectedWord, setSelectedWord] = useState(null);
   const [selectedFolder, setSelectedFolder] = useState("Your Vocabulary");
+  const [wordFrom, setWordFrom] = useState("search"); // where the word detail was opened from: "search" | "library" | "folder"
+  const [flashFocus, setFlashFocus] = useState(null); // a single word to review in Flashcards (null = whole deck)
+  const [flashBack, setFlashBack] = useState("main"); // where Back in Flashcards returns to
   const [vocabData, setVocabData] = useState(loadVocabData);
   // Without this, data restored later by the cross-domain migration bridge
   // (which finishes after this component's first render) never reaches this
@@ -12927,11 +13984,18 @@ function VocabBuilder({ form }) {
   const totalSaved = vocabData.cards.length;
 
   // ── RENDER SUBVIEWS ──
-  if (vocabView === "library") return <LibraryView onBack={()=>setVocabView("main")} onSelectFolder={name=>{setSelectedFolder(name);setVocabView("folderDetail");}} onCreateCard={()=>setVocabView("wordSearch")} onViewCard={w=>{setSelectedWord(w);setVocabView("wordDetail");}} />;
-  if (vocabView === "folderDetail") return <FolderDetailView folderName={selectedFolder} onRenamed={setSelectedFolder} onBack={()=>setVocabView("library")} onViewCard={w=>{setSelectedWord(w);setVocabView("wordDetail");}} />;
-  if (vocabView === "wordSearch") return <WordSearchScreen form={form} onBack={()=>setVocabView("main")} onSelectWord={w=>{setSelectedWord(w);setVocabView("wordDetail");}} />;
-  if (vocabView === "wordDetail") return <WordDetailCard card={selectedWord} form={form} onBack={()=>setVocabView(selectedFolder?"wordSearch":"wordSearch")} onSave={refreshVocab} prefLang={form.preferredLang} />;
-  if (vocabView === "flashcard") return <FlashcardView form={form} onBack={()=>setVocabView("main")} />;
+  if (vocabView === "library") return <LibraryView onBack={()=>setVocabView("main")} onSelectFolder={name=>{setSelectedFolder(name);setVocabView("folderDetail");}} onCreateCard={()=>setVocabView("wordSearch")} onViewCard={w=>{setSelectedWord(w);setWordFrom("library");setVocabView("wordDetail");}} onQuickReview={()=>{setFlashFocus(null);setFlashBack("library");setVocabView("flashcard");}} T={T} />;
+  if (vocabView === "folderDetail") return <FolderDetailView folderName={selectedFolder} onRenamed={setSelectedFolder} onBack={()=>setVocabView("library")} onViewCard={w=>{setSelectedWord(w);setWordFrom("folder");setVocabView("wordDetail");}} onReviewCard={c=>{ setFlashFocus(c); setFlashBack("folderDetail"); setVocabView("flashcard"); }} />;
+  if (vocabView === "wordSearch") return <WordSearchScreen form={form} onBack={()=>setVocabView("main")} onSelectWord={w=>{setSelectedWord(w);setWordFrom("search");setVocabView("wordDetail");}} />;
+  if (vocabView === "wordDetail") {
+    const fromSaved = wordFrom === "library" || wordFrom === "folder";
+    return <WordDetailCard card={selectedWord} form={form}
+      onBack={()=>setVocabView(wordFrom === "library" ? "library" : wordFrom === "folder" ? "folderDetail" : "wordSearch")}
+      backLabel={wordFrom === "library" ? "← Back to Library" : wordFrom === "folder" ? "← Back to folder" : undefined}
+      onReviewFlashcard={fromSaved ? (c=>{ setFlashFocus(c); setFlashBack("wordDetail"); setVocabView("flashcard"); }) : undefined}
+      onSave={refreshVocab} prefLang={form.preferredLang} />;
+  }
+  if (vocabView === "flashcard") return <FlashcardView form={form} focusWord={flashFocus} onBack={()=>setVocabView(flashBack)} />;
 
   // ── MAIN VIEW ──
   return (
@@ -12946,7 +14010,7 @@ function VocabBuilder({ form }) {
           <p style={{ margin:0, fontSize:13, fontWeight:700 }}>{T.wordCardsLabel}</p>
           <p style={{ margin:"2px 0 0", fontSize:11, color:C.purpleLight }}>{T.searchCreateCards}</p>
         </button>
-        <button onClick={()=>setVocabView("flashcard")} style={{ flex:1, ...S.btn, background:`linear-gradient(135deg,rgba(34,197,94,0.15),rgba(22,163,74,0.1))`, border:`1.5px solid rgba(34,197,94,0.3)`, color:"#f1f5f9", textAlign:"left", padding:"12px 14px" }}>
+        <button onClick={()=>{setFlashFocus(null);setFlashBack("main");setVocabView("flashcard");}} style={{ flex:1, ...S.btn, background:`linear-gradient(135deg,rgba(34,197,94,0.15),rgba(22,163,74,0.1))`, border:`1.5px solid rgba(34,197,94,0.3)`, color:"#f1f5f9", textAlign:"left", padding:"12px 14px" }}>
           <p style={{ margin:0, fontSize:13, fontWeight:700 }}>{T.flashcardsLabel}</p>
           <p style={{ margin:"2px 0 0", fontSize:11, color:C.green }}>{T.reviewSavedWords}</p>
         </button>
@@ -12985,7 +14049,7 @@ function VocabBuilder({ form }) {
             <div key={i} style={{ ...S.card, borderLeft:`3px solid ${C.teal}` }}>
               {/* ── Word Header ── */}
               <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", marginBottom:8 }}>
-                <div style={{ flex:1, cursor:"pointer" }} onClick={()=>{setSelectedWord(w);setVocabView("wordDetail");}}>
+                <div style={{ flex:1, cursor:"pointer" }} onClick={()=>{setSelectedWord(w);setWordFrom("search");setVocabView("wordDetail");}}>
                   <div style={{ display:"flex", alignItems:"baseline", gap:8, marginBottom:4 }}>
                     <p style={{ color:"#f1f5f9", fontSize:22, fontWeight:900, margin:0 }}>{w.word}</p>
                     <p style={{ color:C.teal, fontSize:14, margin:0 }}>{w.reading}</p>
@@ -13034,7 +14098,7 @@ function VocabBuilder({ form }) {
                   {T.googleImages}
                 </a>
                 <button
-                  onClick={()=>{setSelectedWord(w);setVocabView("wordDetail");}}
+                  onClick={()=>{setSelectedWord(w);setWordFrom("search");setVocabView("wordDetail");}}
                   style={{ flex:1, display:"flex", alignItems:"center", justifyContent:"center", gap:4, padding:"7px 10px", borderRadius:8, background:"rgba(168,85,247,0.1)", border:"1px solid rgba(168,85,247,0.25)", color:C.purpleLight, fontSize:11, fontWeight:700, cursor:"pointer", whiteSpace:"nowrap" }}
                 >
                   {T.detailCard}
@@ -14567,7 +15631,7 @@ function PronunciationTurnCard({ item, T, lang, onBreak }) {
     recognition.onend = () => {
       setRecording(false);
       const said = lastTranscriptRef.current.trim();
-      if (said) setResult(isCloseEnough(item.text, said) ? "correct" : "incorrect");
+      if (said) { const okSaid = isCloseEnough(item.text, said); logLearningEvent("pronunciation", okSaid); setResult(okSaid ? "correct" : "incorrect"); }
     };
     recognition.onerror = () => setRecording(false);
     recognitionRef.current = recognition;
@@ -14743,7 +15807,48 @@ function pronMatchMap(target, attempt) {
   return { chars: a, hit, score };
 }
 
+// "Practice this with a teacher" card: shown right after the app has pointed out a concrete weak spot
+// (missed sounds in Pronunciation Practice, or the study-coach suggestion). Not shown to GAKU
+// (invite-code) students, who already have lessons, and snoozed for 3 days once dismissed.
+const LESSON_BRIDGE_SNOOZE_KEY = "gaku_lesson_bridge_snoozed_at";
+function lessonBridgeEligible() {
+  // Never inside the iOS/Android store apps: lesson-booking links are deliberately hidden there
+  // (decided 2026-10-07) because steering users to outside lessons/payments risks store review.
+  if (IS_STORE_APP) return false;
+  try {
+    const c = JSON.parse(localStorage.getItem("gaku_trial_status") || "null");
+    if (!c || !c.userId || c.userId !== ACTIVE_USER_ID) return false;
+    if (c.isGakuStudent) return false;
+    const t = parseInt(localStorage.getItem(scopedKey(LESSON_BRIDGE_SNOOZE_KEY)) || "0", 10) || 0;
+    return Date.now() - t > 3 * 86400000;
+  } catch { return false; }
+}
+function LessonBridgeCard({ T, issue }) {
+  const [hidden, setHidden] = useState(false);
+  const ok = !hidden && lessonBridgeEligible();
+  useEffect(() => { if (ok) logFunnel(ACTIVE_USER_ID, "lesson_bridge_shown"); }, [ok]);
+  if (!ok) return null;
+  return (
+    <div style={{ background:"rgba(34,197,94,0.07)", border:"1px solid rgba(34,197,94,0.3)", borderRadius:10, padding:"10px 12px", marginTop:10 }}>
+      {issue && <p style={{ color:"#e2e8f0", fontSize:12, fontWeight:700, lineHeight:1.6, margin:"0 0 4px" }}>🎯 {issue}</p>}
+      <p style={{ color:"#bbf7d0", fontSize:12, lineHeight:1.6, margin:"0 0 8px" }}>{T.lessonBridgeAsk || "Want to practice this with a real teacher? Try a free trial lesson."}</p>
+      <div style={{ display:"flex", alignItems:"center", gap:12, flexWrap:"wrap" }}>
+        <a href="https://app.seitojapanese.online/trial-lesson.html" target="_blank" rel="noopener noreferrer"
+          onClick={() => logFunnel(ACTIVE_USER_ID, "lesson_bridge_clicked")}
+          style={{ display:"inline-block", padding:"8px 16px", background:"linear-gradient(135deg,#22c55e,#16a34a)", color:"#fff", borderRadius:8, fontSize:12, fontWeight:800, textDecoration:"none" }}>
+          {T.lessonBridgeBtn || "Book a free trial lesson →"}
+        </a>
+        <button type="button" onClick={() => { try { localStorage.setItem(scopedKey(LESSON_BRIDGE_SNOOZE_KEY), String(Date.now())); } catch {} setHidden(true); }}
+          style={{ background:"none", border:"none", color:"#94a3b8", fontSize:11, cursor:"pointer", padding:0 }}>
+          {T.skipForNow || "Skip for now"}
+        </button>
+      </div>
+    </div>
+  );
+}
+
 function PronunciationSayIt({ target, T }) {
+  const [fails, setFails] = useState(0);
   const [recording, setRecording] = useState(false);
   const [transcript, setTranscript] = useState("");
   const [match, setMatch] = useState(null);
@@ -14771,6 +15876,8 @@ function PronunciationSayIt({ target, T }) {
       const said = lastRef.current.trim();
       if (said) {
         const mm = pronMatchMap(target, said);
+        logLearningEvent("pronunciation", mm.score >= 80);
+        if (mm.score < 80) setFails(f => f + 1);
         setMatch(mm);
         setBest(b => (b === null ? mm.score : Math.max(b, mm.score)));
       }
@@ -14813,6 +15920,12 @@ function PronunciationSayIt({ target, T }) {
           <button onClick={toggle} style={{ padding:"5px 12px", borderRadius:8, background:C.card, border:`1px solid ${C.border}`, color:"#94a3b8", fontSize:11, cursor:"pointer" }}>
             {T.pronTryAgain || "Try again"}
           </button>
+          {!good && fails >= 2 && (() => {
+            // After two misses on the same line, point out the exact characters that tripped them up.
+            const missed = Array.from(new Set(match.chars.filter((c, i) => !match.hit[i]))).slice(0, 6);
+            const issue = missed.length ? (T.lessonBridgeMissed || "Sounds to watch: {chars}").split("{chars}").join(missed.join(" ")) : null;
+            return <LessonBridgeCard T={T} issue={issue} />;
+          })()}
         </div>
       )}
     </div>
@@ -14856,6 +15969,19 @@ function copyCharLoader(char, onLoad, onError) {
     .then(d => { if (!d || !Array.isArray(d.strokes) || !d.strokes.length) throw new Error("bad"); onLoad(d); })
     .catch(onError);
 }
+// 音読み / 訓読み for one kanji, from the free kanjiapi.dev (KANJIDIC2) service. Cached per kanji for the
+// session so moving back and forth between characters doesn't re-fetch.
+const KANJI_READING_CACHE = {};
+function isKanjiCh(c) { return /[\u3400-\u4DBF\u4E00-\u9FFF]/.test(c || ""); }
+function fetchKanjiReadings(ch) {
+  if (KANJI_READING_CACHE[ch]) return KANJI_READING_CACHE[ch];
+  const p = fetch(`https://kanjiapi.dev/v1/kanji/${encodeURIComponent(ch)}`)
+    .then(r => { if (!r.ok) throw new Error("nf"); return r.json(); })
+    .then(d => ({ on: (d.on_readings || []).slice(0, 6), kun: (d.kun_readings || []).slice(0, 6), meanings: (d.meanings || []).slice(0, 3) }))
+    .catch(() => { delete KANJI_READING_CACHE[ch]; return null; });
+  KANJI_READING_CACHE[ch] = p;
+  return p;
+}
 function CopyingDown({ T, injected }) {
   const [raw, setRaw] = useState(() => { try { return localStorage.getItem(scopedKey(COPY_STORAGE_KEY)) || ""; } catch { return ""; } });
   const [error, setError] = useState("");
@@ -14869,6 +15995,7 @@ function CopyingDown({ T, injected }) {
   const [doneMistakes, setDoneMistakes] = useState(null);
   const boxRef = useRef(null);
   const writerRef = useRef(null);
+  const [kanjiInfo, setKanjiInfo] = useState(null); // { ch, on, kun, meanings } for the current kanji
   const size = Math.max(200, Math.min(300, (typeof window !== "undefined" ? window.innerWidth : 360) - 90));
 
   useEffect(() => {
@@ -14910,6 +16037,16 @@ function CopyingDown({ T, injected }) {
     return () => { cancelled = true; try { w.cancelQuiz(); } catch {} writerRef.current = null; };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session, idx, phase, size]);
+
+  // 音読み / 訓読み for the kanji being written (nothing is shown for kana).
+  const curChar = session && session.chars ? session.chars[idx] : null;
+  useEffect(() => {
+    if (!curChar || !isKanjiCh(curChar)) { setKanjiInfo(null); return undefined; }
+    let cancelled = false;
+    setKanjiInfo(null);
+    fetchKanjiReadings(curChar).then(info => { if (!cancelled && info) setKanjiInfo({ ch: curChar, ...info }); });
+    return () => { cancelled = true; };
+  }, [curChar]);
 
   const begin = () => {
     const text = raw.trim();
@@ -15015,6 +16152,22 @@ function CopyingDown({ T, injected }) {
           {status === "nodata" && <div style={{ position:"absolute", inset:0, display:"flex", alignItems:"center", justifyContent:"center", fontSize:Math.round(size * 0.6), color:"#f1f5f9", fontFamily:"'Noto Serif JP','Noto Sans JP',serif" }}>{cur}</div>}
         </div>
       </div>
+
+      {kanjiInfo && kanjiInfo.ch === cur && (kanjiInfo.on.length > 0 || kanjiInfo.kun.length > 0) && (
+        <div style={{ background:"rgba(6,182,212,0.07)", border:`1px solid ${C.border}`, borderRadius:12, padding:"10px 14px", marginBottom:10, textAlign:"left" }}>
+          {kanjiInfo.on.length > 0 && (
+            <p style={{ margin:"0 0 4px", fontSize:13, lineHeight:1.7, color:"#e2e8f0" }}>
+              <span style={{ color:C.teal, fontWeight:800 }}>音読み (On)</span>　{kanjiInfo.on.join("、")}
+            </p>
+          )}
+          {kanjiInfo.kun.length > 0 && (
+            <p style={{ margin:0, fontSize:13, lineHeight:1.7, color:"#e2e8f0" }}>
+              <span style={{ color:C.amber, fontWeight:800 }}>訓読み (Kun)</span>　{kanjiInfo.kun.join("、")}
+            </p>
+          )}
+          {kanjiInfo.meanings.length > 0 && <p style={{ margin:"4px 0 0", fontSize:11, color:"#64748b" }}>{kanjiInfo.meanings.join(", ")}</p>}
+        </div>
+      )}
 
       <div style={{ minHeight:44, textAlign:"center", marginBottom:10 }}>
         {status === "nodata" && <p style={{ color:"#fbbf24", fontSize:12, lineHeight:1.6, margin:0 }}>{T.copyNoData || "No stroke data for this character. Look at it carefully, copy it on paper, then tap Next."}</p>}
@@ -15197,6 +16350,7 @@ Respond ONLY with valid JSON, no markdown, no backticks:
     try {
       let r;
       try { r = await ask(); } catch { r = await ask(); }
+      logLearningEvent("writing", r.fits);
       setResult(r);
     } catch {
       setError(T.writeErrFail || "Couldn't check your answer. Please try again.");
@@ -15704,6 +16858,21 @@ function saveStudyGuide(result) {
     }));
   } catch {}
 }
+// Persist one task's done/undone state into the saved guide, so the check mark survives coming
+// back from an external link (page reload / remount re-reads the saved guide).
+function saveStudyGuideTaskDone(day, idx, done) {
+  try {
+    const key = scopedKey(STUDY_GUIDE_KEY);
+    const raw = localStorage.getItem(key);
+    if (!raw) return false;
+    const parsed = JSON.parse(raw);
+    const list = parsed && parsed.schedule && parsed.schedule[day];
+    if (!Array.isArray(list) || !list[idx]) return false;
+    list[idx] = { ...list[idx], done };
+    localStorage.setItem(key, JSON.stringify(parsed));
+    return true;
+  } catch { return false; }
+}
 function requestStudyGuideRegeneration() {
   try { localStorage.setItem(scopedKey(STUDY_GUIDE_REGEN_KEY), "1"); } catch {}
 }
@@ -16180,10 +17349,12 @@ const BROWSER_LANG_MAP = {
 };
 function detectBrowserLanguage() {
   try {
-    const tags = (typeof navigator !== "undefined" && navigator.languages && navigator.languages.length)
-      ? navigator.languages
-      : [typeof navigator !== "undefined" ? navigator.language : ""];
-    for (const tag of tags) {
+    // Only the device's PRIMARY language counts. Scanning the whole preference list made a phone set
+    // to e.g. Croatian (unsupported) with Japanese as a secondary language start in Japanese.
+    const primaryTag = (typeof navigator !== "undefined")
+      ? ((navigator.languages && navigator.languages.length ? navigator.languages[0] : navigator.language) || "")
+      : "";
+    for (const tag of [primaryTag]) {
       if (!tag) continue;
       const lower = tag.toLowerCase();
       if (BROWSER_LANG_MAP[lower]) return BROWSER_LANG_MAP[lower];
@@ -16492,7 +17663,7 @@ function CompleteProfileScreen({ initialForm, onFinish, onSkip }) {
   );
 }
 
-function FormScreen({ onSubmit, onBack, onCancel, initialJlpt, initialForm, onLoginClick }) {
+function FormScreen({ onSubmit, onBack, onCancel, initialJlpt, initialForm, onLoginClick, onLangChange }) {
   const [form, setForm] = useState(() => {
     const base = initialForm || {
       name:"", email:"", country:"", preferredLang:"English",
@@ -16521,7 +17692,10 @@ function FormScreen({ onSubmit, onBack, onCancel, initialJlpt, initialForm, onLo
   const showConvJlptWarning = isJlptTargetGoal(form.goal) && form.skills.includes("conversation") && !convWarningDismissed;
   const T = useUITranslations(form.preferredLang);
   const isOther = form.goal.includes("Other");
-  const valid = form.name && form.email && form.country && form.goal.length > 0 && (isOther ? form.customGoal.trim() : true) && form.timeline && form.jlpt && form.hoursPerDay && form.daysPerWeek && form.skills.length > 0;
+  // A profile created through QuickStart (profileComplete === false) has no country/timeline yet, so
+  // requiring them here made EVERY edit (including changing the language) impossible to save.
+  const isIncompleteProfile = !!initialForm && initialForm.profileComplete === false;
+  const valid = form.name && form.email && (isIncompleteProfile || form.country) && form.goal.length > 0 && (isOther ? form.customGoal.trim() : true) && (isIncompleteProfile || form.timeline) && form.jlpt && form.hoursPerDay && form.daysPerWeek && form.skills.length > 0;
 
   // When editing an existing profile (initialForm present) and the student changes
   // their study skills (勉強内容), the daily study-set cache key includes `skills`
@@ -16541,7 +17715,10 @@ function FormScreen({ onSubmit, onBack, onCancel, initialJlpt, initialForm, onLo
     const displayGoal = form.goal.map(g => g === "Other" ? form.customGoal : g).join(", ");
     const submitted = { ...form, displayGoal };
     const skillsDiffer = initialForm && JSON.stringify([...(initialForm.skills||[])].sort()) !== JSON.stringify([...(submitted.skills||[])].sort());
-    if (skillsDiffer) {
+    // Changing the FINAL GOAL (e.g. to "Pass JLPT N3") also changes what the study guide should
+    // contain, but a saved guide never rebuilds by itself — so ask, exactly like for study skills.
+    const goalDiffer = initialForm && JSON.stringify([...(initialForm.goal||[])].sort()) !== JSON.stringify([...(submitted.goal||[])].sort());
+    if (skillsDiffer || goalDiffer) {
       setPendingSubmitForm(submitted);
       return;
     }
@@ -16569,7 +17746,10 @@ function FormScreen({ onSubmit, onBack, onCancel, initialJlpt, initialForm, onLo
   const confirmKeepStudyContent = () => {
     const f = pendingSubmitForm;
     setPendingSubmitForm(null);
-    onSubmit({ ...f, skills: initialForm.skills });
+    // Keep the old study content: skills stay as they were (if they were changed); a changed goal
+    // is still saved, but the existing guide is not rebuilt.
+    const skillsWereChanged = JSON.stringify([...(initialForm.skills||[])].sort()) !== JSON.stringify([...(f.skills||[])].sort());
+    onSubmit(skillsWereChanged ? { ...f, skills: initialForm.skills } : f);
   };
 
   return (
@@ -16611,7 +17791,7 @@ function FormScreen({ onSubmit, onBack, onCancel, initialJlpt, initialForm, onLo
           {/* Native Language — changing this instantly switches all UI */}
           <div>
             <label style={S.label}>{T.yourNativeLanguage}</label>
-            <select value={form.preferredLang} onChange={e=>set("preferredLang",e.target.value)} style={S.select}>
+            <select value={form.preferredLang} onChange={e=>{ set("preferredLang",e.target.value); if (initialForm && onLangChange) onLangChange(e.target.value); }} style={S.select}>
               {LANGUAGES.map(l => <option key={l}>{l}</option>)}
             </select>
           </div>
@@ -16793,6 +17973,7 @@ function useComprehensionCheck(sectionId) {
   const [checkins, setCheckins] = useState(() => loadCheckins(sectionId));
   const [dismissed, setDismissed] = useState(() => loadDismissed(sectionId));
   const record = (itemId, understood) => {
+    logLearningEvent(sectionId, understood);
     setCheckins(prev => {
       const next = { ...prev, [itemId]: understood };
       saveCheckins(sectionId, next);
@@ -16981,6 +18162,276 @@ function readVisibleFeatures() {
     return Array.isArray(v) ? v.filter(x => OPTIONAL_FEATURES.includes(x)) : null;
   } catch { return null; }
 }
+// ─── STUDY MODE (Enjoyable / Intensive) + LEARNING COACH ──────────────────────────
+// Chosen after the Tutorial. "intensive" and "intensive_trial" switch on (1) a local analysis of the
+// student's own results (understood Yes/No, pronunciation score, writing fits/doesn't) that suggests
+// today's practice from their weak area, and (2) a strict daily quota. Everything is computed
+// on-device from a small event log — no extra AI calls. "intensive_trial" lasts 3 days, then asks.
+const STUDY_MODE_KEY = "gaku_study_mode";
+const LEARNING_LOG_KEY = "gaku_learning_log";
+const INTENSIVE_TRIAL_DAYS = 3;
+const INTENSIVE_DAILY_GOAL = 8;
+function loadStudyMode() {
+  try { const v = JSON.parse(localStorage.getItem(scopedKey(STUDY_MODE_KEY)) || "null"); return v && v.mode ? v : null; } catch { return null; }
+}
+function saveStudyMode(mode) {
+  try { localStorage.setItem(scopedKey(STUDY_MODE_KEY), JSON.stringify({ mode, since: Date.now() })); } catch {}
+}
+function effectiveStudyMode(sm) {
+  if (!sm) return "enjoyable";
+  if (sm.mode === "intensive_trial" && Date.now() - sm.since > INTENSIVE_TRIAL_DAYS * 86400000) return "trial_ended";
+  return sm.mode;
+}
+function loadLearningLog() {
+  try { const v = JSON.parse(localStorage.getItem(scopedKey(LEARNING_LOG_KEY)) || "[]"); return Array.isArray(v) ? v : []; } catch { return []; }
+}
+// area: "content" | "conversation" | "pronunciation" | "writing" | "schedule" (understood?) or "task" (a schedule task was checked)
+function logLearningEvent(area, ok) {
+  try {
+    const log = loadLearningLog();
+    log.push({ t: Date.now(), a: area, ok: !!ok });
+    localStorage.setItem(scopedKey(LEARNING_LOG_KEY), JSON.stringify(log.slice(-600)));
+    window.dispatchEvent(new CustomEvent("gaku_learning_updated"));
+  } catch {}
+}
+function dayStartMs(offsetDays) { const d = new Date(); d.setHours(0, 0, 0, 0); return d.getTime() - offsetDays * 86400000; }
+function countEventsOnDay(log, offsetDays) {
+  const s = dayStartMs(offsetDays), e = s + 86400000;
+  return log.filter(x => x.t >= s && x.t < e).length;
+}
+// Only features the student actually uses are judged: an area needs recorded results (>= 3 in 14 days)
+// AND must still be a feature they keep visible (`allow(area)` — see featureShown in Dashboard).
+function analyzeLearning(log, allow) {
+  const cutoff = Date.now() - 14 * 86400000;
+  const stats = {};
+  log.forEach(x => { if (x.t < cutoff || x.a === "task" || (allow && !allow(x.a))) return; const s = stats[x.a] || (stats[x.a] = { n: 0, ok: 0 }); s.n++; if (x.ok) s.ok++; });
+  const rows = Object.entries(stats).filter(([, s]) => s.n >= 3).map(([a, s]) => ({ a, rate: s.ok / s.n, n: s.n })).sort((x, y) => y.rate - x.rate);
+  const strong = rows.length && rows[0].rate >= 0.7 ? rows[0] : null;
+  const last = rows.length ? rows[rows.length - 1] : null;
+  const weak = last && last.rate < 0.7 && (!strong || last.a !== strong.a) ? last : null;
+  return { strong, weak };
+}
+
+// ---- Progress check: a fixed 12-question quick check taken at the start and again later ("then vs now") ----
+// Original questions (N5-N2, 3 each). Answers are never shown, only the score, so a retake stays fair.
+const PROGRESS_KEY = "gaku_progress_checks";
+const PROGRESS_NUDGE_KEY = "gaku_progress_nudge_at";
+const PROGRESS_MIN_GAP_DAYS = 3;
+const PROGRESS_LEVELS = ["N5", "N4", "N3", "N2"];
+const PROGRESS_QUESTIONS = [
+  { lv: "N5", q: "「学校」の読み方はどれですか。", c: ["がっこう", "がくこう", "がっこ", "がこう"], a: 0 },
+  { lv: "N5", q: "私は毎朝、パン＿＿食べます。", c: ["を", "が", "に", "で"], a: 0 },
+  { lv: "N5", q: "「みず」を漢字で書くと、どれですか。", c: ["水", "木", "火", "土"], a: 0 },
+  { lv: "N4", q: "友だちが私に本を貸して＿＿。", c: ["くれました", "あげました", "もらいました", "やりました"], a: 0 },
+  { lv: "N4", q: "「約束」の読み方はどれですか。", c: ["やくそく", "やっそく", "やくぞく", "よくそく"], a: 0 },
+  { lv: "N4", q: "明日は雨が降る＿＿しれません。", c: ["かも", "だけ", "ばかり", "ほど"], a: 0 },
+  { lv: "N3", q: "「経験」の読み方はどれですか。", c: ["けいけん", "けいげん", "きょうけん", "けえけん"], a: 0 },
+  { lv: "N3", q: "この本は子どもから大人＿＿、幅広く読まれています。", c: ["まで", "ほど", "ばかり", "だけ"], a: 0 },
+  { lv: "N3", q: "彼は忙しい＿＿、いつも私の相談に乗ってくれます。", c: ["のに", "ので", "から", "ために"], a: 0 },
+  { lv: "N2", q: "「複雑」の読み方はどれですか。", c: ["ふくざつ", "ふくそう", "ふくぞう", "ふっさつ"], a: 0 },
+  { lv: "N2", q: "彼は約束を破った＿＿、謝ろうともしません。", c: ["くせに", "おかげで", "どころか", "ばかりに"], a: 0 },
+  { lv: "N2", q: "状況が変わったので、計画を変更せざるを＿＿。", c: ["得ません", "取れません", "受けません", "持ちません"], a: 0 },
+];
+function loadProgressChecks() {
+  try { const v = JSON.parse(localStorage.getItem(scopedKey(PROGRESS_KEY)) || "[]"); return Array.isArray(v) ? v : []; } catch { return []; }
+}
+function saveProgressCheck(rec) {
+  try {
+    const l = loadProgressChecks(); l.push(rec);
+    localStorage.setItem(scopedKey(PROGRESS_KEY), JSON.stringify(l.slice(-20)));
+    window.dispatchEvent(new CustomEvent("gaku_progress_updated"));
+  } catch {}
+}
+function progressFill(str, vars) {
+  let o = String(str);
+  Object.keys(vars).forEach(k => { o = o.split("{" + k + "}").join(String(vars[k])); });
+  return o;
+}
+function progressShuffle(arr) {
+  const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); const t = a[i]; a[i] = a[j]; a[j] = t; }
+  return a;
+}
+// Practice activity since the starting check; accuracy compares the earlier half with the recent half.
+function progressActivity(since) {
+  const all = loadLearningLog().filter(x => x.t >= since);
+  const rated = all.filter(x => x.a !== "task");
+  const mid = since + (Date.now() - since) / 2;
+  const early = rated.filter(x => x.t < mid), late = rated.filter(x => x.t >= mid);
+  const pct = (xs) => Math.round(100 * xs.filter(x => x.ok).length / xs.length);
+  return { n: all.length, acc: early.length >= 3 && late.length >= 3 ? { a: pct(early), b: pct(late) } : null };
+}
+function ProgressBands({ rec }) {
+  return (
+    <div style={{ display:"flex", gap:6, flexWrap:"wrap", marginTop:6 }}>
+      {PROGRESS_LEVELS.map(lv => (
+        <span key={lv} style={{ fontSize:11, fontWeight:700, color:"#cbd5e1", background:"rgba(255,255,255,0.06)", border:`1px solid ${C.border}`, borderRadius:8, padding:"3px 8px" }}>{lv} {(rec.byLv && rec.byLv[lv]) || 0}/3</span>
+      ))}
+    </div>
+  );
+}
+function ProgressSummary({ T, history }) {
+  if (!history.length) return null;
+  const first = history[0], last = history[history.length - 1];
+  const compare = history.length >= 2;
+  const diff = compare ? last.score - first.score : 0;
+  const act = progressActivity(first.t);
+  return (
+    <div>
+      {!compare && (
+        <div style={{ marginBottom:10 }}>
+          <p style={{ color:C.amber, fontSize:11, fontWeight:700, margin:"0 0 2px" }}>{T.pcStartingPoint || "Your starting point"}</p>
+          <p style={{ color:"#f1f5f9", fontSize:22, fontWeight:800, margin:0 }}>{first.score} / {first.total}</p>
+          <ProgressBands rec={first} />
+        </div>
+      )}
+      {compare && (
+        <div style={{ marginBottom:10 }}>
+          <p style={{ color:C.amber, fontSize:11, fontWeight:700, margin:"0 0 6px" }}>{T.pcThenNow || "Then vs. now"}</p>
+          <div style={{ display:"flex", gap:10 }}>
+            {[[T.pcThen || "Then", first], [T.pcNow || "Now", last]].map(([label, rec], i) => (
+              <div key={i} style={{ flex:1, background:i ? "rgba(34,197,94,0.08)" : "rgba(255,255,255,0.04)", border:`1px solid ${i ? "rgba(34,197,94,0.3)" : C.border}`, borderRadius:10, padding:"8px 10px" }}>
+                <p style={{ color:"#94a3b8", fontSize:11, margin:"0 0 2px" }}>{label}</p>
+                <p style={{ color:"#f1f5f9", fontSize:22, fontWeight:800, margin:0 }}>{rec.score} / {rec.total}</p>
+                <ProgressBands rec={rec} />
+              </div>
+            ))}
+          </div>
+          <p style={{ color:diff > 0 ? C.green : "#cbd5e1", fontSize:13, fontWeight:700, lineHeight:1.6, margin:"10px 0 0" }}>
+            {diff > 0 ? progressFill(T.pcUp || "You went up {n} point(s)! 🎉", { n: diff }) : diff === 0 ? (T.pcSame || "Same score this time — keep practicing and try again later.") : (T.pcDown || "A little lower this time. One short quiz isn't the whole picture — keep practicing.")}
+          </p>
+        </div>
+      )}
+      {act.n > 0 && (
+        <div style={{ paddingTop:10, borderTop:`1px solid ${C.border}` }}>
+          <p style={{ color:C.purpleLight, fontSize:11, fontWeight:700, margin:"0 0 4px" }}>{T.pcActivityTitle || "Your practice"}</p>
+          <p style={{ color:"#e2e8f0", fontSize:12, lineHeight:1.7, margin:0 }}>{progressFill(T.pcActLine || "{n} practice actions since your starting check", { n: act.n })}</p>
+          {act.acc && <p style={{ color:"#e2e8f0", fontSize:12, lineHeight:1.7, margin:0 }}>{progressFill(T.pcAccLine || "Accuracy in practice: {a}% → {b}%", act.acc)}</p>}
+        </div>
+      )}
+    </div>
+  );
+}
+function ProgressCheck({ T, userId }) {
+  const [history, setHistory] = useState(loadProgressChecks);
+  const [phase, setPhase] = useState("home"); // home | quiz | result
+  const [qs, setQs] = useState([]);
+  const [idx, setIdx] = useState(0);
+  const [picked, setPicked] = useState(null);
+  const [answers, setAnswers] = useState([]);
+  const last = history.length ? history[history.length - 1] : null;
+  const waitDays = last ? Math.max(0, Math.ceil(PROGRESS_MIN_GAP_DAYS - (Date.now() - last.t) / 86400000)) : 0;
+  const start = () => {
+    setQs(PROGRESS_QUESTIONS.map(q => ({ ...q, order: progressShuffle(q.c.map((_, i) => i)) })));
+    setIdx(0); setPicked(null); setAnswers([]); setPhase("quiz");
+    logFunnel(userId, "progress_check_started");
+  };
+  const next = () => {
+    if (picked === null) return;
+    const ok = qs[idx].order[picked] === qs[idx].a;
+    const nextAnswers = answers.concat([ok]);
+    if (idx + 1 < qs.length) { setAnswers(nextAnswers); setIdx(idx + 1); setPicked(null); return; }
+    const byLv = {};
+    qs.forEach((q, i) => { byLv[q.lv] = (byLv[q.lv] || 0) + (nextAnswers[i] ? 1 : 0); });
+    const rec = { t: Date.now(), score: nextAnswers.filter(Boolean).length, total: qs.length, byLv };
+    const wasFirst = history.length === 0;
+    saveProgressCheck(rec);
+    setHistory(loadProgressChecks());
+    logFunnel(userId, wasFirst ? "progress_check_done" : "progress_retake_done");
+    setPhase("result");
+  };
+  const wrap = { ...S.card, marginBottom:12, background:"linear-gradient(135deg,rgba(34,197,94,0.07),rgba(168,85,247,0.07))", border:"1px solid rgba(34,197,94,0.25)" };
+  if (phase === "quiz" && qs[idx]) {
+    const q = qs[idx];
+    return (
+      <div style={wrap}>
+        <div style={{ height:5, borderRadius:3, background:"rgba(255,255,255,0.08)", overflow:"hidden", marginBottom:10 }}>
+          <div style={{ width:`${Math.round(idx / qs.length * 100)}%`, height:"100%", background:C.green }} />
+        </div>
+        <p style={{ color:"#94a3b8", fontSize:11, margin:"0 0 6px" }}>{progressFill(T.pcQ || "Question {n} / {total}", { n: idx + 1, total: qs.length })}</p>
+        <p style={{ color:"#f1f5f9", fontSize:16, fontWeight:700, lineHeight:1.7, margin:"0 0 12px" }}>{q.q}</p>
+        <div style={{ display:"flex", flexDirection:"column", gap:8, marginBottom:12 }}>
+          {q.order.map((ci, pos) => (
+            <button key={pos} onClick={() => setPicked(pos)} style={{ textAlign:"left", padding:"11px 14px", borderRadius:10, cursor:"pointer", fontSize:15, color:"#e2e8f0", background:picked === pos ? "rgba(168,85,247,0.18)" : C.card, border:`1.5px solid ${picked === pos ? C.purpleLight : C.border}` }}>{q.c[ci]}</button>
+          ))}
+        </div>
+        <button onClick={next} disabled={picked === null} style={{ ...S.btn, padding:"10px 20px", background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff", fontSize:13, opacity:picked === null ? 0.45 : 1 }}>
+          {idx + 1 < qs.length ? (T.pcNext || "Next →") : (T.pcFinish || "See my result")}
+        </button>
+      </div>
+    );
+  }
+  return (
+    <div style={wrap}>
+      <p style={{ color:"#86efac", fontSize:12, fontWeight:800, margin:"0 0 6px" }}>📈 {T.pcTitle || "Progress check"}</p>
+      {!history.length && <p style={{ color:"#e2e8f0", fontSize:13, lineHeight:1.7, margin:"0 0 12px" }}>{T.pcIntro || "A 3-minute starting check (12 questions). Take it again in a few days to see how much you've grown."}</p>}
+      <ProgressSummary T={T} history={history} />
+      {history.length > 0 && <p style={{ color:"#64748b", fontSize:11, lineHeight:1.6, margin:"10px 0" }}>{T.pcNote || "Only your score is shown, so the check stays fair when you retake it."}</p>}
+      {waitDays > 0
+        ? <p style={{ color:"#94a3b8", fontSize:12, margin:0 }}>{progressFill(T.pcRetakeWait || "You can retake it in {n} day(s).", { n: waitDays })}</p>
+        : <button onClick={start} style={{ ...S.btn, padding:"10px 20px", background:"linear-gradient(135deg,#22c55e,#16a34a)", color:"#fff", fontSize:13 }}>{history.length ? (T.pcRetake || "Take it again") : (T.pcStart || "Start the check")}</button>}
+    </div>
+  );
+}
+// Small card on the schedule screen that invites the student to take / retake the check.
+function ProgressNudge({ T, onGo }) {
+  const [hidden, setHidden] = useState(false);
+  const h = loadProgressChecks();
+  let kind = null;
+  if (h.length === 0) kind = "start";
+  else if (h.length === 1 && Date.now() - h[0].t >= 6 * 86400000) kind = "retake";
+  let snoozed = false;
+  try { const t = parseInt(localStorage.getItem(scopedKey(PROGRESS_NUDGE_KEY)) || "0", 10) || 0; snoozed = Date.now() - t < 3 * 86400000; } catch {}
+  if (hidden || !kind || snoozed) return null;
+  return (
+    <div style={{ ...S.card, marginBottom:12, background:"rgba(34,197,94,0.07)", border:"1px solid rgba(34,197,94,0.3)" }}>
+      <p style={{ color:"#bbf7d0", fontSize:12, lineHeight:1.6, margin:"0 0 8px" }}>📈 {kind === "start" ? (T.pcNudgeStart || "Want to see how much you grow? Take a 3-minute starting check.") : (T.pcNudgeRetake || "It's been a while — retake the check and see your growth!")}</p>
+      <div style={{ display:"flex", alignItems:"center", gap:12 }}>
+        <button onClick={() => { logFunnel(ACTIVE_USER_ID, "progress_nudge_clicked"); onGo(); }} style={{ ...S.btn, padding:"8px 16px", background:"linear-gradient(135deg,#22c55e,#16a34a)", color:"#fff", fontSize:12 }}>{kind === "start" ? (T.pcStart || "Start the check") : (T.pcRetake || "Take it again")}</button>
+        <button type="button" onClick={() => { try { localStorage.setItem(scopedKey(PROGRESS_NUDGE_KEY), String(Date.now())); } catch {} setHidden(true); }} style={{ background:"none", border:"none", color:"#94a3b8", fontSize:11, cursor:"pointer", padding:0 }}>{T.pcLater || "Later"}</button>
+      </div>
+    </div>
+  );
+}
+
+function ModePicker({ T, trialEnded, onPick }) {
+  const opts = trialEnded
+    ? [["intensive", "Intensive mode", T.modeIntensiveDesc], ["enjoyable", "Enjoyable mode", T.modeEnjoyableDesc]]
+    : [["enjoyable", "Enjoyable mode", T.modeEnjoyableDesc], ["intensive", "Intensive mode", T.modeIntensiveDesc], ["intensive_trial", "Trial of Intensive mode", T.modeTrialDesc]];
+  return (
+    <div style={{ position:"fixed", inset:0, background:"rgba(0,0,0,0.78)", display:"flex", alignItems:"center", justifyContent:"center", zIndex:1100, padding:16 }}>
+      <div style={{ ...S.card, width:"100%", maxWidth:420, maxHeight:"92vh", overflowY:"auto" }}>
+        <p style={{ color:"#f1f5f9", fontSize:17, fontWeight:800, margin:"0 0 14px", textAlign:"center" }}>{trialEnded ? (T.trialEndedTitle || "Your 3-day Intensive trial has ended. Which mode now?") : (T.modePickerTitle || "Which mode do you want to try?")}</p>
+        <div style={{ display:"flex", flexDirection:"column", gap:10 }}>
+          {opts.map(([id, title, desc]) => (
+            <button key={id} onClick={() => onPick(id)} style={{ textAlign:"left", padding:"12px 14px", borderRadius:12, cursor:"pointer", border:`1.5px solid ${id === "enjoyable" ? C.border : C.purpleLight}`, background:id === "enjoyable" ? C.card : "rgba(168,85,247,0.12)", color:"#e2e8f0" }}>
+              <span style={{ display:"block", fontSize:14, fontWeight:800, marginBottom:4 }}>{id === "enjoyable" ? "😊 " : "🔥 "}{title}</span>
+              <span style={{ display:"block", fontSize:12, color:"#94a3b8", lineHeight:1.6 }}>{desc}</span>
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ModeGuide({ T, onClose }) {
+  const items = [T.modeGuideIntensive, T.modeGuideLock, T.modeGuideEnjoyable, T.modeGuideEscape].filter(Boolean);
+  return (
+    <div style={{ position:"fixed", inset:0, background:"rgba(0,0,0,0.78)", display:"flex", alignItems:"center", justifyContent:"center", zIndex:1100, padding:16 }}>
+      <div style={{ ...S.card, width:"100%", maxWidth:420, maxHeight:"92vh", overflowY:"auto" }}>
+        <p style={{ color:"#f1f5f9", fontSize:17, fontWeight:800, margin:"0 0 14px", textAlign:"center" }}>{T.modeGuideTitle}</p>
+        <div style={{ display:"flex", flexDirection:"column", gap:10, marginBottom:14 }}>
+          {items.map((txt, i) => (
+            <p key={i} style={{ color:"#e2e8f0", fontSize:13, lineHeight:1.7, margin:0, padding:"10px 12px", borderRadius:10, background:"rgba(168,85,247,0.10)", border:`1px solid ${C.border}` }}>{txt}</p>
+          ))}
+        </div>
+        <button onClick={onClose} style={{ ...S.btn, width:"100%", background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff" }}>{T.modeGuideOk}</button>
+      </div>
+    </div>
+  );
+}
+
 function FeaturePicker({ T, initial, onApply }) {
   const [checked, setChecked] = useState(initial || []);
   const labels = {
@@ -17035,6 +18486,23 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
   const [showHelp, setShowHelp] = useState(false);
   const [visibleFeatures, setVisibleFeatures] = useState(readVisibleFeatures);
   const [showFeaturePicker, setShowFeaturePicker] = useState(false);
+  // Study mode (Enjoyable / Intensive / Intensive trial) — chosen after the Tutorial, changeable via the Mode button.
+  const [studyMode, setStudyMode] = useState(loadStudyMode);
+  const [showModePicker, setShowModePicker] = useState(false);
+  const [, setLearnTick] = useState(0);
+  const effMode = effectiveStudyMode(studyMode);
+  const isIntensive = effMode === "intensive" || effMode === "intensive_trial";
+  useEffect(() => { if (effMode === "trial_ended") setShowModePicker(true); }, [effMode]);
+  useEffect(() => {
+    const h = () => setLearnTick(n => n + 1);
+    window.addEventListener("gaku_learning_updated", h);
+    return () => window.removeEventListener("gaku_learning_updated", h);
+  }, []);
+  const pickStudyMode = (m) => { saveStudyMode(m); setStudyMode(loadStudyMode()); setShowModePicker(false); };
+  // One-time explanation of the study modes (quota + tab lock). Shown once per account to everyone,
+  // including students who were already using the app, after the Tutorial/pickers are out of the way.
+  const [modeGuideSeen, setModeGuideSeen] = useState(() => { try { return localStorage.getItem(scopedKey("gaku_mode_guide_seen")) === "1"; } catch { return true; } });
+  const closeModeGuide = () => { setModeGuideSeen(true); try { localStorage.setItem(scopedKey("gaku_mode_guide_seen"), "1"); } catch {} };
   const [showFounder, setShowFounder] = useState(false);
   const [featurePickerInitial, setFeaturePickerInitial] = useState([]);
   const [tab, setTab] = useState(() => { const v = readVisibleFeatures(); return (v === null || v.includes("schedule")) ? "schedule" : "vocabulary"; });
@@ -17201,7 +18669,11 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
     guideGenInFlight.current = true;
     setAiScheduleLoading(true);
     try {
-      const result = await buildAIWeeklySchedule(form, currentWeek, totalWeeks, regenRequested);
+      let result = await buildAIWeeklySchedule(form, currentWeek, totalWeeks, regenRequested);
+      if (!(result && result.schedule)) {
+        // One quick retry before giving up (transient AI/network failure).
+        result = await buildAIWeeklySchedule(form, currentWeek, totalWeeks, true);
+      }
       if (result && result.schedule) {
         saveStudyGuide(result);
         clearStudyGuideRegenerationRequest();
@@ -17209,9 +18681,18 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
         // Back the new guide up to the account right away so it follows the student to any
         // other device/domain instead of being rebuilt there.
         if (userId) syncMigrationBridge(userId);
+      } else if (!regenRequested && !loadSavedStudyGuide()) {
+        // FIRST guide and the AI failed twice: the student is already looking at the built-in
+        // schedule. Keep exactly that one as their guide instead of leaving it unsaved — otherwise
+        // the next visit would silently build a different AI schedule ("always recreated").
+        // They can still ask for a fresh one with "Update my study guide".
+        const fallback = { schedule: buildSchedule(form, T), weekTheme: "" };
+        saveStudyGuide(fallback);
+        showGuide(fallback);
+        if (userId) syncMigrationBridge(userId);
       }
-      // If generation failed, keep whatever is on screen (and any saved guide) untouched; the
-      // request flag stays set so the student's explicit update is retried next time.
+      // If an explicit "Update my study guide" failed, keep the existing guide untouched; the
+      // request flag stays set so that explicit update is retried next time.
     } finally {
       guideGenInFlight.current = false;
       setAiScheduleLoading(false);
@@ -17259,7 +18740,26 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
   // Load the student's saved study guide (generating one only if they have never had it, or they
   // explicitly asked for an update). Re-running this when `form` changes is safe: with a saved
   // guide it just re-displays the same guide.
+  // Generation is attempted at most ONCE per mount (guideAutoTried). Coming back from an external
+  // link makes the auth layer hand us a fresh-but-identical `form` object; that must never kick off
+  // another "building your study guide" run. A new run only happens when the student explicitly
+  // asked for one (regeneration flag).
+  const guideAutoTried = useRef(false);
   useEffect(() => {
+    const regen = isStudyGuideRegenerationRequested();
+    if (!regen) {
+      // A saved guide is ALWAYS what's shown (re-read on every profile/auth change, so the account's
+      // own guide wins over anything built while the account wasn't resolved yet). Never regenerate.
+      const saved = loadSavedStudyGuide();
+      if (saved) {
+        guideAutoTried.current = true;
+        setSchedule(normalizeGuideSchedule(saved.schedule, T));
+        setWeekTheme(saved.weekTheme || "");
+        return;
+      }
+    }
+    if (guideAutoTried.current && !regen) return;
+    guideAutoTried.current = true;
     loadAISchedule();
   }, [form]);
 
@@ -17328,11 +18828,18 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
       else localStorage.setItem(scopedKey("gaku_visible_features"), JSON.stringify(list));
     } catch {}
     setShowFeaturePicker(false);
+    // Right after the Tutorial + feature choice: ask which study mode to try (only if never chosen).
+    if (!loadStudyMode()) setShowModePicker(true);
   }, []);
 
   const toggleTask = useCallback((day, idx) => {
-    setSchedule(prev => ({ ...prev, [day]: prev[day].map((t,i) => i===idx ? {...t,done:!t.done} : t) }));
-  }, []);
+    const nextDone = !(schedule[day] && schedule[day][idx] && schedule[day][idx].done);
+    if (nextDone) logLearningEvent("task", true);
+    setSchedule(prev => ({ ...prev, [day]: prev[day].map((t,i) => i===idx ? {...t,done:nextDone} : t) }));
+    // Save immediately: students tap an external study link right after checking a task, and the
+    // page can be reloaded when they come back.
+    if (saveStudyGuideTaskDone(day, idx, nextDone) && userId) syncMigrationBridge(userId);
+  }, [schedule, userId]);
 
   const totalTasks = Object.values(schedule).flat().filter(t=>!t.rest).length;
   const doneTasks = Object.values(schedule).flat().filter(t=>t.done&&!t.rest).length;
@@ -17346,6 +18853,12 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
   // A feature is shown when the student kept it (or never chose); the tutorial always shows everything.
   const featureShown = (id) => tutorialActive || visibleFeatures === null || visibleFeatures.includes(id);
   const tabShown = (id) => id === "resources" ? RESOURCE_FEATURES.some(featureShown) : (OPTIONAL_FEATURES.includes(id) ? featureShown(id) : true);
+  // Intensive mode: until today's quota is met only the schedule and practice (resources) tabs open.
+  // Feedback and the Mode button always stay available as an escape hatch.
+  const lockHome = tabShown("schedule") ? "schedule" : (tabShown("resources") ? "resources" : null);
+  const quotaLocked = isIntensive && !tutorialActive && !!lockHome && countEventsOnDay(loadLearningLog(), 0) < INTENSIVE_DAILY_GOAL;
+  const LOCKABLE_TABS = ["subtitles", "milestones", "jlpt"]; // Vocabulary stays open: its use counts toward the quota
+  useEffect(() => { if (quotaLocked && LOCKABLE_TABS.includes(tab)) setTab(lockHome); }, [quotaLocked, tab, lockHome]);
   useEffect(() => {
     if (!tabShown(tab)) { setTab("vocabulary"); return; }
     if (tab === "resources" && !featureShown(resourceSubTab)) {
@@ -17408,6 +18921,8 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
         </div>
       ); })()}
       {showFeaturePicker && <FeaturePicker key={featurePickerInitial.join(",")} T={T} initial={featurePickerInitial} onApply={applyFeatureChoice} />}
+      {!modeGuideSeen && !showModePicker && !showFeaturePicker && !tutorialActive && (() => { try { return localStorage.getItem(scopedKey("gaku_tutorial_done")) === "1"; } catch { return false; } })() && !T._loading && T.modeGuideTitle && <ModeGuide T={T} onClose={closeModeGuide} />}
+      {showModePicker && !showFeaturePicker && !tutorialActive && <ModePicker T={T} trialEnded={effMode === "trial_ended"} onPick={pickStudyMode} />}
       {tutorialActive && (
         <TutorialOverlay
           T={T}
@@ -17438,6 +18953,7 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
         <div style={{ display:"flex", gap:8, flexWrap:"wrap" }}>
           <button onClick={()=>setShowFounder(true)} style={{ ...S.btn, padding:"8px 14px", background:C.card, color:"#94a3b8", border:`1px solid ${C.border}`, fontSize:12 }}>{"\u{1F464}"} {(FOUNDER_TEXT[form?.preferredLang] || FOUNDER_TEXT["English"])[0]}</button>
           <button onClick={()=>{ setFeaturePickerInitial(visibleFeatures || OPTIONAL_FEATURES); setShowFeaturePicker(true); }} style={{ ...S.btn, padding:"8px 14px", background:C.card, color:"#94a3b8", border:`1px solid ${C.border}`, fontSize:12 }}>{"\u2699\uFE0F"} {T.featureCustomizeBtn || "Customize"}</button>
+          <button onClick={()=>setShowModePicker(true)} style={{ ...S.btn, padding:"8px 14px", background:isIntensive?"rgba(168,85,247,0.2)":C.card, color:isIntensive?C.purpleLight:"#94a3b8", border:`1px solid ${isIntensive?C.purpleLight:C.border}`, fontSize:12 }}>{isIntensive ? "🔥" : "😊"} {T.modeBtn || "Mode"}</button>
           <button onClick={()=>{ setTutorialStep(0); setTutorialActive(true); }} style={{ ...S.btn, padding:"8px 14px", background:"transparent", border:`1px solid ${C.purpleLight}`, color:C.purpleLight, fontSize:12 }}>{T.tutorialBtn}</button>
           <button onClick={()=>setShowHelp(true)} style={{ ...S.btn, padding:"8px 14px", background:`linear-gradient(135deg,${C.amber},#d97706)`, color:"#fff", fontSize:12 }}>{T.help}</button>
           <button onClick={onEdit} style={{ ...S.btn, padding:"8px 14px", background:C.card, color:"#94a3b8", border:`1px solid ${C.border}`, fontSize:12 }}>{T.editProfile}</button>
@@ -17577,8 +19093,8 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
             const tutorialTarget = (tutorialActive && tutorialStep>=1 && tutorialStep<=TUTORIAL_STEPS.length) ? TUTORIAL_STEPS[tutorialStep-1] : null;
             const isTutorialTarget = tutorialTarget?.tab === t.id;
             return (
-              <button key={t.id} onClick={()=>{ setTab(t.id); logFunnel(userId, "tab_" + t.id); }} style={{ padding:"8px 14px", borderRadius:20, border:`1.5px solid ${isTutorialTarget?C.purpleLight:(tab===t.id?C.purpleLight:C.border)}`, background:tab===t.id?"rgba(168,85,247,0.15)":C.card, color:tab===t.id?C.purpleLight:"#64748b", fontSize:12, fontWeight:700, cursor:"pointer", whiteSpace:"nowrap", boxShadow:isTutorialTarget?"0 0 0 3px rgba(168,85,247,0.35)":"none" }}>
-                {t.label}
+              <button key={t.id} onClick={()=>{ if (quotaLocked && LOCKABLE_TABS.includes(t.id)) { setTab(lockHome); return; } setTab(t.id); logFunnel(userId, "tab_" + t.id); }} style={{ padding:"8px 14px", borderRadius:20, border:`1.5px solid ${isTutorialTarget?C.purpleLight:(tab===t.id?C.purpleLight:C.border)}`, background:tab===t.id?"rgba(168,85,247,0.15)":C.card, color:tab===t.id?C.purpleLight:"#64748b", fontSize:12, fontWeight:700, cursor:"pointer", whiteSpace:"nowrap", boxShadow:isTutorialTarget?"0 0 0 3px rgba(168,85,247,0.35)":"none", opacity:(quotaLocked && LOCKABLE_TABS.includes(t.id)) ? 0.45 : 1 }}>
+                {(quotaLocked && LOCKABLE_TABS.includes(t.id)) ? "🔒 " : ""}{t.label}
               </button>
             );
           })}
@@ -17586,7 +19102,41 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
 
         {tab==="schedule" && (
           <div>
-            {scheduleCheck.eligible && <LevelUpOffer T={T} currentLevel={form.jlpt} onConfirm={onLevelUp} onDismiss={scheduleCheck.dismiss} />}
+            {(() => {
+              const log = loadLearningLog();
+              const today = countEventsOnDay(log, 0);
+              const yest = countEventsOnDay(log, 1);
+              const doneQuota = today >= INTENSIVE_DAILY_GOAL;
+              const sinceMs = studyMode && studyMode.since;
+              const missedYesterday = !!sinceMs && sinceMs < dayStartMs(1) && yest < INTENSIVE_DAILY_GOAL && !doneQuota;
+              const { strong, weak } = analyzeLearning(log, (a) => a === "vocab" || featureShown(a));
+              const areaLabel = (a) => ({ schedule: T.tabSchedule, vocab: T.tabVocabulary, content: T.tabPractice, conversation: T.convTitle, pronunciation: T.pronTitle, writing: T.writeTitle }[a] || a);
+              const goDrill = (a) => { if (a === "schedule" || a === "vocab") { setTab(a === "vocab" ? "vocabulary" : "schedule"); return; } setTab("resources"); setResourceSubTab(a); };
+              // Enjoyable mode: only the gentle suggestion card (no quota, no warnings), and only when there is one.
+              if (!isIntensive && !weak) return null;
+              return (
+                <div style={{ ...S.card, marginBottom:12, background:isIntensive ? "linear-gradient(135deg,rgba(239,68,68,0.10),rgba(168,85,247,0.10))" : "rgba(168,85,247,0.08)", border:isIntensive ? "1px solid rgba(239,68,68,0.3)" : "1px solid rgba(168,85,247,0.25)" }}>
+                  {isIntensive && <p style={{ color:"#fca5a5", fontSize:12, fontWeight:800, margin:"0 0 6px" }}>🔥 {(T.quotaTitle || "Today's quota: {done}/{goal}").replace("{done}", Math.min(today, INTENSIVE_DAILY_GOAL)).replace("{goal}", INTENSIVE_DAILY_GOAL)}{doneQuota ? " ✅" : ""}</p>}
+                  {isIntensive && <div style={{ height:6, borderRadius:3, background:"rgba(255,255,255,0.08)", overflow:"hidden", marginBottom:8 }}>
+                    <div style={{ width:`${Math.min(100, Math.round(today / INTENSIVE_DAILY_GOAL * 100))}%`, height:"100%", background:doneQuota ? C.green : "#f87171" }} />
+                  </div>}
+                  {isIntensive && !doneQuota && <p style={{ color:"#fecaca", fontSize:11, lineHeight:1.6, margin:"0 0 8px" }}>🔒 {T.quotaLocked || "Finish today's quota to unlock the other tabs."}</p>}
+                  {isIntensive && missedYesterday && <p style={{ color:"#fecaca", fontSize:12, fontWeight:700, lineHeight:1.6, margin:"0 0 8px" }}>⚠️ {T.quotaMissed || "You missed yesterday's quota. Finish today's quota first — no skipping."}</p>}
+                  {weak && (
+                    <div>
+                      <p style={{ color:C.purpleLight, fontSize:11, fontWeight:700, margin:"0 0 4px" }}>🎯 {T.coachTitle || "Today's suggestion"}</p>
+                      <p style={{ color:"#e2e8f0", fontSize:13, lineHeight:1.65, margin:"0 0 10px" }}>
+                        {(strong ? (T.coachBoth || "You usually do well in {strong}, and {weak} seems a little hard. How about {weak} today?") : (T.coachWeakOnly || "{weak} seems a little hard for you. How about practicing it today?")).split("{strong}").join(strong ? areaLabel(strong.a) : "").split("{weak}").join(areaLabel(weak.a))}
+                      </p>
+                      <button onClick={() => goDrill(weak.a)} style={{ ...S.btn, padding:"8px 16px", background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff", fontSize:12 }}>{T.coachGo || "Let's go"} →</button>
+                      <LessonBridgeCard T={T} />
+                    </div>
+                  )}
+                </div>
+              );
+            })()}
+            {!tutorialActive && !(quotaLocked && LOCKABLE_TABS.includes("milestones")) && <ProgressNudge T={T} onGo={() => setTab("milestones")} />}
+            {scheduleCheck.eligible &&<LevelUpOffer T={T} currentLevel={form.jlpt} onConfirm={onLevelUp} onDismiss={scheduleCheck.dismiss} />}
             {/* Week progress banner */}
             <div style={{ ...S.card, marginBottom:12, background:"linear-gradient(135deg,rgba(139,92,246,0.12),rgba(6,182,212,0.08))", border:`1px solid rgba(139,92,246,0.25)` }}>
               <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:8 }}>
@@ -17798,6 +19348,8 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
         )}
 
         {tab==="milestones" && (
+          <>
+          <ProgressCheck T={T} userId={userId} />
           <div style={{ ...S.card }}>
             <p style={{ color:C.red, fontSize:12, fontWeight:700, letterSpacing:1, marginBottom:16 }}>{T.yourGoalRoadmap}</p>
             <p style={{ color:"#ffffff", fontSize:13, marginBottom:16 }}>{T.levelToGoal}: {form.jlpt} → {T.goal}: {translateGoal(form.goal, form.customGoal, T)}</p>
@@ -17814,10 +19366,13 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
               <p style={{ color:"#ffffff", fontSize:13, fontWeight:700, margin:"0 0 6px" }}>{T.youveGotThis}</p>
               <p style={{ color:"#ffb3d9", fontSize:12, lineHeight:1.7, margin:0 }}>{T.motivationText}</p>
             </div>
+            {!IS_STORE_APP && (
             <a href="https://www.seitojapanese.online/" target="_blank" rel="noopener noreferrer" style={{ display:"block", textAlign:"center", padding:"13px", background:`linear-gradient(135deg,${C.amber},#d97706)`, color:"#fff", borderRadius:10, fontSize:14, fontWeight:700, textDecoration:"none", marginTop:16 }}>
               {T.bookLesson}
             </a>
+            )}
           </div>
+          </>
         )}
 
         {tab==="jlpt" && <JlptResultsPanel userId={userId} T={T} />}
@@ -18022,17 +19577,96 @@ function PolicyGate({ T, name, email, plan, userId, onAgreed, onCancel }) {
 
 // ─── ROOT ────────────────────────────────────────────────────────────────────────
 // ─── ACCOUNT: login / signup with optional GAKU invite code ──────────────────
-function AuthScreen({ onAuthed, T, prefillEmail, initialMode, quickStartStep }) {
+// Shown when a student opens a Supabase password-recovery link (sent from the Supabase
+// dashboard "Send password recovery"). Lets them set a new password, then continues to GAKU Master.
+const RECOVERY_FROM_URL = (() => { try { return /type=recovery/.test(window.location.hash); } catch { return false; } })();
+function SetNewPasswordScreen({ hasSession, onDone }) {
+  const [pw, setPw] = useState("");
+  const [pw2, setPw2] = useState("");
+  const [err, setErr] = useState("");
+  const [busy, setBusy] = useState(false);
+  const submit = async (e) => {
+    e.preventDefault();
+    setErr("");
+    if (pw.length < 6) { setErr("Password must be at least 6 characters."); return; }
+    if (pw !== pw2) { setErr("The two passwords do not match."); return; }
+    setBusy(true);
+    try {
+      const { error } = await supabase.auth.updateUser({ password: pw });
+      if (error) throw error;
+      try { window.history.replaceState(null, "", window.location.pathname + window.location.search); } catch {}
+      onDone();
+    } catch (e2) {
+      setErr(e2.message || "Could not update the password.");
+    } finally { setBusy(false); }
+  };
+  const box = { width:"100%", boxSizing:"border-box", padding:"11px 14px", marginBottom:10, background:"#0f172a", border:"1.5px solid rgba(255,255,255,0.1)", borderRadius:10, color:"#f1f5f9", fontSize:14 };
+  return (
+    <div style={{ minHeight:"100vh", background:"linear-gradient(160deg,#0a0f1e 0%,#0f172a 60%,#0a0f1e 100%)", display:"flex", alignItems:"center", justifyContent:"center", padding:24 }}>
+      <form onSubmit={submit} style={{ width:"100%", maxWidth:380, background:"rgba(255,255,255,0.03)", border:"1.5px solid rgba(255,255,255,0.1)", borderRadius:20, padding:28 }}>
+        <h2 style={{ color:"#f1f5f9", fontSize:20, fontWeight:900, margin:"0 0 18px", textAlign:"center" }}>Set a new password</h2>
+        {hasSession ? (
+          <>
+            <input type="password" required minLength={6} placeholder="New password" value={pw} onChange={e=>setPw(e.target.value)} style={box} />
+            <input type="password" required minLength={6} placeholder="Confirm new password" value={pw2} onChange={e=>setPw2(e.target.value)} style={box} />
+            {err && <p style={{ color:"#f87171", fontSize:12, margin:"0 0 10px" }}>{err}</p>}
+            <button type="submit" disabled={busy} style={{ width:"100%", padding:"12px", background:"linear-gradient(135deg,#7c3aed,#a855f7)", border:"none", borderRadius:10, color:"#fff", fontSize:14, fontWeight:800, cursor:"pointer", opacity:busy?0.6:1 }}>
+              {busy ? "…" : "Save new password"}
+            </button>
+          </>
+        ) : (
+          <>
+            <p style={{ color:"#f87171", fontSize:13, margin:"0 0 14px", textAlign:"center" }}>This reset link has expired or was already used. Please ask your teacher to send a new one.</p>
+            <button type="button" onClick={onDone} style={{ width:"100%", padding:"12px", background:"linear-gradient(135deg,#7c3aed,#a855f7)", border:"none", borderRadius:10, color:"#fff", fontSize:14, fontWeight:800, cursor:"pointer" }}>Go to GAKU Master</button>
+          </>
+        )}
+      </form>
+    </div>
+  );
+}
+
+function AuthScreen({ onAuthed, T, prefillEmail, initialMode, quickStartStep, linkError, pendingForm }) {
   const [mode, setMode] = useState(initialMode || "login"); // login | signup
   const [rawEmail, setRawEmail] = useState(prefillEmail || "");
   const [password, setPassword] = useState("");
   const [inviteCode, setInviteCode] = useState("");
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState("");
+  // Email not confirmed yet: set to the address once signup succeeds (or a login is refused for
+  // being unconfirmed), which swaps the form for a "check your email" panel with a resend button.
+  const [confirmEmail, setConfirmEmail] = useState("");
+  const [confirmNote, setConfirmNote] = useState("");
+  const fillEmail = (str, email) => String(str).split("{email}").join(email);
 
   if (!supabase) {
     return <p style={{ color:"#f87171", fontSize:13 }}>Account features are not configured yet.</p>;
   }
+
+  const resendConfirmation = async (emailArg) => {
+    setConfirmNote(""); setBusy(true);
+    try {
+      const r = await fetch("/api/signup", { method:"POST", headers:{ "Content-Type":"application/json" }, body: JSON.stringify({ email: typeof emailArg === "string" ? emailArg : confirmEmail, resend: true }) });
+      const d = await r.json().catch(() => ({}));
+      if (d?.alreadyConfirmed) setConfirmNote(T?.confirmEmailAlready || "This email is already confirmed — you can log in now.");
+      else if (r.ok) setConfirmNote(T?.confirmEmailResent || "Sent again! Please check your inbox and spam folder.");
+      else setConfirmNote(d?.error || "Could not send the email. Please try again.");
+    } catch { setConfirmNote("Could not send the email. Please try again."); }
+    setBusy(false);
+  };
+  // "I've confirmed" → try the password login for real; if it still says unconfirmed, say so.
+  const loginAfterConfirm = async () => {
+    setConfirmNote(""); setBusy(true);
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({ email: confirmEmail, password });
+      if (error) {
+        if (/not confirmed/i.test(error.message || "")) setConfirmNote(T?.confirmEmailNotYet || "Your email isn't confirmed yet. Open the email we sent and tap the confirm button first.");
+        else { setConfirmEmail(""); setMode("login"); setErr(error.message || "Something went wrong."); }
+      } else {
+        onAuthed({ userId: data?.user?.id || null, email: confirmEmail });
+      }
+    } catch (e3) { setConfirmNote(e3.message || "Something went wrong."); }
+    setBusy(false);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -18052,12 +19686,14 @@ function AuthScreen({ onAuthed, T, prefillEmail, initialMode, quickStartStep }) 
         // so it no longer depends on Supabase's rate-limited built-in email sender.
         const sRes = await fetch("/api/signup", {
           method: "POST", headers: { "Content-Type":"application/json" },
-          body: JSON.stringify({ email, password }),
+          body: JSON.stringify({ email, password, pendingForm: pendingForm || undefined, verifyLater: true }),
         });
         const sData = await sRes.json().catch(() => ({}));
         if (sData?.alreadyRegistered) {
           throw new Error(T?.emailAlreadyRegistered || "This email is already registered. Please log in instead.");
         }
+        // (An account that exists but was never confirmed gets a fresh confirmation email from
+        // the server instead — sData.needsConfirmation — and continues below.)
         if (!sRes.ok) throw new Error(sData.error || "Could not create account.");
         const userId = sData?.userId;
         if (userId && inviteCode.trim()) {
@@ -18069,17 +19705,27 @@ function AuthScreen({ onAuthed, T, prefillEmail, initialMode, quickStartStep }) 
         if (userId) {
           const pRes = await fetch("/api/create-profile", {
             method: "POST", headers: { "Content-Type":"application/json" },
-            body: JSON.stringify({ userId, email, isGakuStudent: !!inviteCode.trim(), deviceId: getDeviceId() }),
+            body: JSON.stringify({ userId, email, isGakuStudent: !!inviteCode.trim(), deviceId: getDeviceId(), ...getSignupSource() }),
           });
           if (!pRes.ok) {
             const pData = await pRes.json().catch(() => ({}));
             throw new Error(pData.error || "Failed to save your profile.");
           }
         }
-        onAuthed({ userId, email });
+        // Legacy path only: the server no longer asks new students to confirm first. If it ever
+        // does, stop here with the "check your email" screen.
+        if (sData?.needsConfirmation) { setConfirmEmail(email); return; }
+        // New accounts are usable immediately (the email is verified later, from the welcome email
+        // link) — so open a session right away and go straight into the app.
+        const { data: sess, error: sessErr } = await supabase.auth.signInWithPassword({ email, password });
+        if (sessErr) throw sessErr;
+        onAuthed({ userId: sess?.user?.id || userId, email });
       } else {
         const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-        if (error) throw error;
+        if (error) {
+          if (/not confirmed/i.test(error.message || "")) { setConfirmEmail(email); return; }
+          throw error;
+        }
         onAuthed({ userId: data?.user?.id || null, email });
       }
     } catch (e2) {
@@ -18088,6 +19734,33 @@ function AuthScreen({ onAuthed, T, prefillEmail, initialMode, quickStartStep }) 
       setBusy(false);
     }
   };
+
+  if (confirmEmail) {
+    return (
+      <div style={{ minHeight:"100vh", background:"linear-gradient(160deg,#0a0f1e 0%,#0f172a 60%,#0a0f1e 100%)", display:"flex", alignItems:"center", justifyContent:"center", padding:24 }}>
+        <div style={{ width:"100%", maxWidth:380, background:"rgba(255,255,255,0.03)", border:"1.5px solid rgba(255,255,255,0.1)", borderRadius:20, padding:28, textAlign:"center" }}>
+          <p style={{ fontSize:34, margin:"0 0 8px" }}>📧</p>
+          <h2 style={{ color:"#f1f5f9", fontSize:20, fontWeight:900, margin:"0 0 12px" }}>{T?.confirmEmailTitle || "Check your email"}</h2>
+          <p style={{ color:"#cbd5e1", fontSize:13, lineHeight:1.7, margin:"0 0 8px" }}>
+            {fillEmail(T?.confirmEmailDesc || "We sent a confirmation email to {email}. Open it and tap “Confirm my email”, then come back here.", confirmEmail)}
+          </p>
+          <p style={{ color:"#94a3b8", fontSize:12, lineHeight:1.6, margin:"0 0 18px" }}>{T?.confirmEmailSpam || "Can't find it? Check your spam or promotions folder."}</p>
+          {confirmNote && <p style={{ color:"#fbbf24", fontSize:12, lineHeight:1.6, margin:"0 0 12px" }}>{confirmNote}</p>}
+          {password ? (
+            <button onClick={loginAfterConfirm} disabled={busy} style={{ width:"100%", padding:"12px", background:"linear-gradient(135deg,#7c3aed,#a855f7)", border:"none", borderRadius:10, color:"#fff", fontSize:14, fontWeight:800, cursor:"pointer", marginBottom:10 }}>
+              {busy ? "…" : (T?.confirmEmailDone || "I've confirmed — log in")}
+            </button>
+          ) : null}
+          <button onClick={() => resendConfirmation()} disabled={busy} style={{ width:"100%", padding:"11px", background:"transparent", border:"1px solid rgba(255,255,255,0.15)", borderRadius:10, color:"#cbd5e1", fontSize:13, fontWeight:700, cursor:"pointer", marginBottom:10 }}>
+            {T?.confirmEmailResend || "Resend confirmation email"}
+          </button>
+          <button onClick={()=>{ setConfirmEmail(""); setConfirmNote(""); setMode("login"); }} style={{ background:"none", border:"none", color:"#94a3b8", fontSize:12, cursor:"pointer" }}>
+            {T?.confirmEmailBack || "← Back to log in"}
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div style={{ minHeight:"100vh", background:"linear-gradient(160deg,#0a0f1e 0%,#0f172a 60%,#0a0f1e 100%)", display:"flex", alignItems:"center", justifyContent:"center", padding:24 }}>
@@ -18098,6 +19771,15 @@ function AuthScreen({ onAuthed, T, prefillEmail, initialMode, quickStartStep }) 
             what they were doing. Students reported this looked like a dead end
             / a different, unrelated page, and backed out of the browser
             entirely rather than realizing one more field would finish signup. */}
+        {linkError && (
+          <div style={{ background:"rgba(251,191,36,0.1)", border:"1px solid rgba(251,191,36,0.4)", borderRadius:10, padding:"10px 12px", marginBottom:14 }}>
+            <p style={{ color:"#fbbf24", fontSize:12, lineHeight:1.6, margin:"0 0 8px" }}>{T?.confirmLinkExpired || "That confirmation link is invalid or has expired. Enter your email below and tap the button to get a new one, then open it right away."}</p>
+            <button type="button" disabled={busy || !rawEmail.trim()} onClick={() => resendConfirmation(rawEmail.trim().toLowerCase())} style={{ padding:"8px 12px", borderRadius:8, border:"1px solid rgba(251,191,36,0.5)", background:"transparent", color:"#fbbf24", fontSize:12, fontWeight:700, cursor:"pointer" }}>
+              {T?.confirmEmailResend || "Resend confirmation email"}
+            </button>
+            {confirmNote && <p style={{ color:"#cbd5e1", fontSize:12, margin:"8px 0 0" }}>{confirmNote}</p>}
+          </div>
+        )}
         {quickStartStep && mode === "signup" && (
           <>
             <div style={{ display:"flex", gap:6, marginBottom:16 }}>
@@ -18144,6 +19826,20 @@ function DeviceApprovalGate({ T }) {
   );
 }
 
+// ─── ACCOUNT: shown when the device check could not reach the server ─────────
+function DeviceCheckErrorGate({ onRetry }) {
+  return (
+    <div style={{ minHeight:"100vh", background:"linear-gradient(160deg,#0a0f1e 0%,#0f172a 60%,#0a0f1e 100%)", display:"flex", alignItems:"center", justifyContent:"center", padding:24, textAlign:"center" }}>
+      <div style={{ maxWidth:380 }}>
+        <p style={{ fontSize:36, margin:"0 0 12px" }}>📡</p>
+        <h2 style={{ color:"#f1f5f9", fontSize:18, fontWeight:900, margin:"0 0 10px" }}>Connection problem</h2>
+        <p style={{ color:"#94a3b8", fontSize:13, lineHeight:1.6, margin:"0 0 16px" }}>We couldn't reach the GAKU server to check your device. Please check your internet connection (try switching between Wi-Fi and mobile data) and try again.</p>
+        <button type="button" onClick={onRetry} style={{ padding:"12px 28px", background:"linear-gradient(135deg,#7c3aed,#a855f7)", border:"none", borderRadius:10, color:"#fff", fontSize:14, fontWeight:800, cursor:"pointer" }}>Try again</button>
+      </div>
+    </div>
+  );
+}
+
 // ─── ACCOUNT: blocks the dashboard during a device-sharing-suspicion suspension ──
 function DeviceSuspendedGate({ T, suspendedUntil }) {
   const untilLabel = suspendedUntil ? new Date(suspendedUntil).toLocaleDateString(undefined, { year: "numeric", month: "long", day: "numeric" }) : "";
@@ -18182,7 +19878,11 @@ function logFunnel(userId, step) {
 export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail, skipTrialPaywall, previewPaywall, previewPlans }) {
   const [authUser, setAuthUser] = useState(null);
   const [authChecked, setAuthChecked] = useState(!supabase);
-  const [showAuthScreen, setShowAuthScreen] = useState(false);
+  // After the student taps "Log Out" the app reloads; this flag makes it land on the Log In screen
+  // instead of falling back to the (logged-out) dashboard/study guide. Cleared on the next login.
+  const justLoggedOut = (() => { try { return localStorage.getItem("gaku_just_logged_out") === "1"; } catch { return false; } })();
+  const [showAuthScreen, setShowAuthScreen] = useState(justLoggedOut || (() => { try { return /error_code=|error=access_denied/.test(window.location.hash || ""); } catch { return false; } })());
+  const [recoveryMode, setRecoveryMode] = useState(RECOVERY_FROM_URL);
   const [authInitialMode, setAuthInitialMode] = useState("login");
   const [deviceStatus, setDeviceStatus] = useState(null); // null | 'checking' | 'approved' | 'pending' | 'suspended'
   const [deviceSuspendedUntil, setDeviceSuspendedUntil] = useState(null);
@@ -18287,7 +19987,26 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
   // back on a blank onboarding screen after already setting up their plan).
   // Requiring an account at save time guarantees every profile reaches the
   // migration_bridge table right away.
-  const [pendingProfileSave, setPendingProfileSave] = useState(null);
+  // Kept in localStorage too: a new account must open its confirmation email (often in another tab or
+  // app), and without this the 4 QuickStart answers were lost and the student saw the first screen again.
+  const [pendingProfileSave, setPendingProfileSaveRaw] = useState(() => {
+    try { return JSON.parse(localStorage.getItem("gaku_pending_profile") || "null"); } catch { return null; }
+  });
+  const setPendingProfileSave = (v) => {
+    setPendingProfileSaveRaw(v);
+    try { if (v) localStorage.setItem("gaku_pending_profile", JSON.stringify(v)); else localStorage.removeItem("gaku_pending_profile"); } catch {}
+  };
+  // Supabase sends a failed/expired email-confirmation link back with #error_code=... in the URL.
+  const [linkError] = useState(() => {
+    try {
+      const h = window.location.hash || "";
+      if (/error_code=|error=access_denied/.test(h)) {
+        try { window.history.replaceState(null, "", window.location.pathname + window.location.search); } catch {}
+        return true;
+      }
+    } catch {}
+    return false;
+  });
   // Shown as a full-screen step between "student clicked a paid plan" and
   // "student reaches the actual payment step" — see PolicyGate above.
   const [policyGate, setPolicyGate] = useState(null); // { type: 'stripe'|'lessons', url, planLabel }
@@ -18552,13 +20271,40 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
     if (!supabase) return;
     supabase.auth.getSession().then(({ data }) => {
       setAuthUser(data?.session?.user || null);
+      if (data?.session?.user) { try { localStorage.removeItem("gaku_just_logged_out"); } catch {} setShowAuthScreen(false); }
       setAuthChecked(true);
     });
     const { data: sub } = supabase.auth.onAuthStateChange((_event, session) => {
-      setAuthUser(session?.user || null);
-      setShowAuthScreen(false);
+      if (_event === "PASSWORD_RECOVERY") setRecoveryMode(true);
+      // Token refreshes (which fire when the student returns from an external link / switches
+      // back to the app) hand us a new user object for the SAME account. Keep the existing object
+      // so the whole login flow (profile reload, device check, guide load) isn't re-run.
+      setAuthUser(prev => {
+        const next = session?.user || null;
+        return (prev && next && prev.id === next.id) ? prev : next;
+      });
+      // Only a real login closes the Log In screen (the INITIAL_SESSION/SIGNED_OUT events carry no
+      // user and must not dismiss it right after a logout).
+      if (session?.user) { setShowAuthScreen(false); try { localStorage.removeItem("gaku_just_logged_out"); } catch {} }
     });
     return () => sub?.subscription?.unsubscribe();
+  }, []);
+  // Email verification happens AFTER the student is already inside the app: the welcome email's
+  // button opens the app with ?vt=<userId>.<token>. No login is needed to redeem it (the token itself
+  // proves the mailbox), so it works even in a browser where the student isn't signed in.
+  useEffect(() => {
+    try {
+      const sp = new URLSearchParams(window.location.search);
+      const vt = sp.get("vt");
+      if (!vt) return;
+      sp.delete("vt");
+      const q = sp.toString();
+      window.history.replaceState(null, "", window.location.pathname + (q ? "?" + q : "") + window.location.hash);
+      fetch("/api/signup", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "verify", token: vt.slice(0, 200) }),
+      }).catch(() => {});
+    } catch {}
   }, []);
   // Once logged in, verify this device against known devices for the account —
   // triggers the dual-approval email flow for unrecognized devices.
@@ -18586,6 +20332,7 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
         // Same for the other fields screens read directly (skills, customGoal…): a stored profile
         // missing them used to crash the Edit Profile screen and the Dashboard (white screen).
         setForm(parsedForm ? normalizeProfileForm(parsedForm) : parsedForm);
+        if (authUser && parsedForm) pushProfileSummary(authUser.id, normalizeProfileForm(parsedForm));
         // A student who already completed onboarding once must never be sent back
         // to the profile-setup screen automatically — this used to re-trigger on
         // every app reopen for anyone whose bookmarked/home-screen URL still carries
@@ -18594,6 +20341,21 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
         // know for certain a saved profile exists, clear it unconditionally so they
         // land straight on their dashboard instead of looping back into this form.
         if (parsedForm) setForceForm(false);
+        else if (authUser) {
+          // New account that just confirmed its email: apply the answers saved before it left the app.
+          try {
+            const p = JSON.parse(localStorage.getItem("gaku_pending_profile") || "null");
+            if (p && String(p.email || "").toLowerCase() === String(authUser.email || "").toLowerCase()) {
+              setPendingProfileSave(null);
+              completeProfileSave(p);
+            } else {
+              // Confirmation link opened in a different browser/webview: the answers saved in the
+              // other browser's localStorage are gone, but they were also kept on the account.
+              const mf = authUser.user_metadata?.pending_form;
+              if (mf && typeof mf === "object") completeProfileSave({ ...mf, email: authUser.email });
+            }
+          } catch {}
+        }
       } catch { setForm(null); }
       try { setInteractionCount(parseInt(localStorage.getItem(scopedKey("gaku_interaction_count")) || "0", 10) || 0); } catch { setInteractionCount(0); }
       try { window.dispatchEvent(new Event("gaku_vocab_updated")); } catch {}
@@ -18622,9 +20384,11 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
         method: "POST", headers: { "Content-Type":"application/json" },
         body: JSON.stringify({ userId: authUser.id, email: authUser.email, deviceId: getDeviceId(), deviceLabel: getDeviceLabel(), isPwaStandalone }),
       })
-        .then(r => r.json())
+        .then(r => { if (!r.ok) throw new Error("device-check " + r.status); return r.json(); })
         .then(d => { setDeviceStatus(d.status || "pending"); setDeviceSuspendedUntil(d.suspendedUntil || null); })
-        .catch(() => setDeviceStatus("pending"));
+        // A network/server failure is NOT a new device: show a retry screen instead of
+        // the misleading "New Device Detected" approval screen.
+        .catch(() => setDeviceStatus("error"));
     })();
   }, [authUser]);
   // Safety net: iOS can evict a standalone PWA's localStorage (and with it,
@@ -18678,11 +20442,10 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
     if (saved.country && saved.timeline && saved.hoursPerDay && saved.daysPerWeek && saved.skills?.length > 0) {
       saved.profileComplete = true;
     }
-    // A brand-new account that skipped the second onboarding step got a placeholder guide built from
-    // the quick-start defaults. When they finish filling in their real profile (skills, study time…),
-    // that completion is their request for their first real guide — so build it from the real answers.
-    // (Accounts that were never "incomplete" are unaffected: their guide never changes here.)
-    if (form && form.profileComplete === false && saved.profileComplete) requestStudyGuideRegeneration();
+    // NOTE: completing/saving a profile must NEVER rebuild the study guide by itself. (This used to
+    // request a rebuild when an incomplete quick-start profile became complete, which made the
+    // student's schedule change right after they saved their profile.) The guide changes only via
+    // "Update my study guide" / "Yes, update my study content" (opts.regenerateGuide above).
     setForm(saved);
     setEditing(false);
     setForceForm(false);
@@ -18696,7 +20459,7 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
     // login, which pulled from a bridge that had never received this profile,
     // sending the student back to onboarding every single time. Pushing here
     // closes that gap: the profile reaches Supabase the moment it's saved.
-    if (authUser) { syncMigrationBridge(authUser.id); }
+    if (authUser) { syncMigrationBridge(authUser.id); pushProfileSummary(authUser.id, saved); }
     // First-ever signup (not an edit, not a re-save after the paywall):
     // give them one quick win before the full dashboard. Most trial
     // students who ever bounce do so after their very first session, so
@@ -18763,6 +20526,7 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
   };
   const handleLogout = async () => {
     if (!supabase) return;
+    try { localStorage.setItem("gaku_just_logged_out", "1"); } catch {}
     try {
       await supabase.auth.signOut();
     } finally {
@@ -18827,6 +20591,9 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
       </div>
     );
   }
+  if (recoveryMode) {
+    return <SetNewPasswordScreen hasSession={!!authUser} onDone={() => setRecoveryMode(false)} />;
+  }
   // Set synchronously (not only via the effect below) so that any child
   // component reading scoped storage during THIS render pass — e.g. a vocab
   // list calling loadVocabData() in its own useState initializer — always sees
@@ -18884,11 +20651,14 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
       prefillEmail={pendingProfileSave?.email || form?.email}
       initialMode={authInitialMode}
       quickStartStep={!!pendingProfileSave}
+      pendingForm={pendingProfileSave}
+      linkError={linkError}
     />
   );
   if (policyGate) return <PolicyGate T={T} name={form?.name || authUser?.email} email={authUser?.email || form?.email} plan={policyGate.planLabel} userId={authUser?.id} onAgreed={handlePolicyAgreed} onCancel={()=>setPolicyGate(null)} />;
   if (authUser && deviceStatus === "suspended") return <DeviceSuspendedGate T={T} suspendedUntil={deviceSuspendedUntil} />;
   if (authUser && deviceStatus === "pending") return <DeviceApprovalGate T={T} />;
+  if (authUser && deviceStatus === "error") return <DeviceCheckErrorGate onRetry={() => window.location.reload()} />;
   // Hard, non-dismissible paywall: the server (api/account-status.js) has
   // confirmed the 7-day trial plus the one-time bonus Tutorial week are both
   // over, with no payment. Unlike the soft `showPaywall` interaction-count
@@ -19061,6 +20831,14 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
         onCancel={form ? handleCancelEdit : undefined}
         initialJlpt={initialJlpt}
         initialForm={formForEdit}
+        onLangChange={form ? (lang) => {
+          // Persist a UI-language change the moment it is picked, independent of the rest of the
+          // edit form (which may be incomplete and unsavable) — otherwise it reverts on leaving.
+          const next = { ...form, preferredLang: lang };
+          setForm(next);
+          try { localStorage.setItem(scopedKey("gaku_form"), JSON.stringify(next)); } catch {}
+          if (authUser) { syncMigrationBridge(authUser.id); }
+        } : undefined}
         onLoginClick={!authUser ? () => { setAuthInitialMode("login"); setShowAuthScreen(true); } : undefined}
       />
     </ScreenErrorBoundary>
@@ -19185,6 +20963,7 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
           ) : (
             <>
               <button onClick={handleInstallClick} style={{ ...S.btn, width:"100%", marginBottom:10, background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff" }}>{T.installPromptCta}</button>
+              <p style={{ color:"#94a3b8", fontSize:11, margin:"0 0 12px", lineHeight:1.6 }}>{T.installPromptHaveApp}</p>
               <button onClick={()=>{ logFunnel(authUser?.id, "install_skipped"); setOnboardingStep(nextStepAfterOnboarding); }} style={{ ...S.btn, width:"100%", background:"none", border:"none", color:"#64748b" }}>{T.installPromptSkip}</button>
             </>
           )}

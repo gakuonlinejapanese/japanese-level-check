@@ -373,11 +373,15 @@ async function handleListCancellationRequests(supabase, res) {
 }
 
 async function handleAcknowledgeCancellationRequest(supabase, body, res) {
-  const { id } = body;
+  const { id, undo } = body;
   if (!id) return res.status(400).json({ error: "id is required" });
+  // undo: true なら「確認済み」を取り消して未確認に戻す
+  const patch = undo
+    ? { acknowledged: false, acknowledged_at: null }
+    : { acknowledged: true, acknowledged_at: new Date().toISOString() };
   const { error } = await supabase
     .from("cancellation_requests")
-    .update({ acknowledged: true, acknowledged_at: new Date().toISOString() })
+    .update(patch)
     .eq("id", id);
   if (error) return res.status(500).json({ error: error.message });
   return res.status(200).json({ ok: true });

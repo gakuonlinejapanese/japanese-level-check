@@ -12,6 +12,7 @@
     { "source": "/reader-welcome.html", "destination": "/reader-welcome.html" },
     { "source": "/trial-lesson.html", "destination": "/trial-lesson.html" },
     { "source": "/admin-trial-lessons.html", "destination": "/admin-trial-lessons.html" },
+    { "source": "/api/signup", "destination": "/api/create-profile?action=signup" },
     { "source": "/api/(.*)", "destination": "/api/$1" },
     { "source": "/(.*)", "destination": "/" }
   ],

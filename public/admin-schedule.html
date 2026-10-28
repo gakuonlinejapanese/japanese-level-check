@@ -337,7 +337,22 @@ async function loadCancellationRequests() {
   const data = await api("list-cancellation-requests");
   const el = document.getElementById("cancellation-list");
   const pending = (data.requests || []).filter(r => !r.acknowledged);
-  if (pending.length === 0) { el.innerHTML = "<p>現在、未確認のキャンセル・リスケ申請はありません。</p>"; return; }
+  const done = (data.requests || []).filter(r => r.acknowledged)
+    .sort((a, b) => new Date(b.acknowledged_at || 0) - new Date(a.acknowledged_at || 0))
+    .slice(0, 20);
+  const doneHtml = done.length === 0 ? "" : `<details style="margin-top:14px;">
+    <summary style="cursor:pointer;font-size:13px;color:#475569;">✔ 確認済みの申請（直近${done.length}件）— 間違えて押した場合はここから戻せます</summary>
+    ${done.map(r => {
+      const t = r.acknowledged_at ? new Date(r.acknowledged_at).toLocaleString("ja-JP", { timeZone: "Asia/Tokyo" }) : "";
+      return `<div class="req-card" style="opacity:.85;">
+        <div class="req-head"><span>${r.student_name} (${r.student_email || "メール未登録"}) — ${r.request_type === "cancel" ? "キャンセル" : "リスケ"}</span>
+        <span class="badge auto">確認済み ${t}</span></div>
+        <div style="font-size:12px;color:#64748b;margin:6px 0;">キャンセル対象日: ${r.cancel_date}${r.reschedule_date ? " / 希望リスケ日: " + r.reschedule_date : ""}</div>
+        <div class="row"><button class="btn" onclick="unacknowledgeCancellationRequest('${r.id}')">↩ 未確認に戻す</button></div>
+      </div>`;
+    }).join("")}
+  </details>`;
+  if (pending.length === 0) { el.innerHTML = "<p>現在、未確認のキャンセル・リスケ申請はありません。</p>" + doneHtml; return; }
 
   el.innerHTML = pending.map(r => {
     const isCancel = r.request_type === "cancel";
@@ -373,7 +388,14 @@ async function loadCancellationRequests() {
         <button class="btn confirm" onclick="acknowledgeCancellationRequest('${r.id}')">確認済みにする</button>
       </div>
     </div>`;
-  }).join("");
+  }).join("") + doneHtml;
+}
+
+async function unacknowledgeCancellationRequest(id) {
+  if (!confirm("この申請を「未確認」に戻しますか？")) return;
+  const r = await api("acknowledge-cancellation-request", { id, undo: true });
+  if (r && r.error) return alert(r.error);
+  loadCancellationRequests();
 }
 
 async function suspendGakuMaster(email, requestId, name) {

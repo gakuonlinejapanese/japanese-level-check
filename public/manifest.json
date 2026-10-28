@@ -1,7 +1,7 @@
 {
-  "short_name": "GAKU",
-  "name": "GAKU Online Japanese",
-  "description": "GAKU Online Japaneseで日本語レベルチェック・学習プランを管理",
+  "short_name": "GAKU Master",
+  "name": "GAKU Master",
+  "description": "GAKU Master — your Japanese self-study plan",
   "icons": [
     {
       "src": "favicon.ico",

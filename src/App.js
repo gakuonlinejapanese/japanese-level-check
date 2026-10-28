@@ -1,55 +1,42 @@
-import { useState } from 'react';
-import Vocabulary from './vocabulary';
-import Grammar from './grammar';
-import Reading from './reading';
-import BusinessSpeech from './business-speech';
-import CasualSpeech from './casual-speech';
-import SelfStudy from './self-study';
+import React from 'react';
 import GakuApp from './GakuApp';
+import { reportClientCrash } from './crashReport';
 
-const sections = [
-  { id:'vocabulary',  icon:'📖', label:'Vocabulary',      sub:'語彙・単語',       color:'#06b6d4' },
-  { id:'grammar',     icon:'✏️',  label:'Grammar',         sub:'文法',             color:'#8b5cf6' },
-  { id:'reading',     icon:'📄', label:'Reading',         sub:'読解',             color:'#10b981' },
-  { id:'business',    icon:'💼', label:'Business Speech', sub:'ビジネス日本語',   color:'#0ea5e9' },
-  { id:'casual',      icon:'😊', label:'Casual Speech',   sub:'カジュアル日本語', color:'#f97316' },
-];
+// Password-recovery links (Supabase "Send password recovery") land on the Site URL.
+// Send them straight to GAKU Master on the app domain, keeping the token hash.
+const IS_RECOVERY_LINK = /type=recovery/.test(window.location.hash || '');
+if (IS_RECOVERY_LINK && !(window.Capacitor && typeof window.Capacitor.isNativePlatform === 'function' && window.Capacitor.isNativePlatform())
+    && /(^|\.)vercel\.app$/.test(window.location.hostname)) {
+  window.location.replace('https://app.seitojapanese.online/app' + window.location.hash);
+}
 
-function Home({ onSelect }) {
-  return (
-    <div style={{ minHeight:'100vh', background:'linear-gradient(160deg,#0a0f1e 0%,#0f172a 60%,#0a0f1e 100%)', display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', fontFamily:"'Noto Sans JP',sans-serif", padding:'24px 16px' }}>
-      <p style={{ color:'#3b82f6', fontSize:12, fontWeight:700, letterSpacing:3, marginBottom:8 }}>CEFR A1 → C2</p>
-      <h1 style={{ color:'#f1f5f9', fontSize:42, fontWeight:900, margin:'0 0 10px', textAlign:'center' }}>Japanese Level Check</h1>
-      <p style={{ color:'#64748b', fontSize:14, marginBottom:32 }}>Select a section to start</p>
-      <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:14, width:'100%', maxWidth:520 }}>
-        {sections.map(s => (
-          <button key={s.id} onClick={() => onSelect(s.id)} style={{ background:'rgba(255,255,255,0.03)', border:`1.5px solid ${s.color}55`, borderRadius:18, padding:'22px 16px', display:'flex', flexDirection:'column', alignItems:'center', gap:6, cursor:'pointer' }}>
-            <span style={{ fontSize:32 }}>{s.icon}</span>
-            <span style={{ color:s.color, fontWeight:800, fontSize:14, textAlign:'center' }}>{s.label}</span>
-            <span style={{ color:'#64748b', fontSize:12 }}>{s.sub}</span>
-          </button>
-        ))}
+// Last line of defence: if anything in GAKU Master throws while rendering, the student sees a readable
+// message (with the technical reason, so they can screenshot it) instead of a blank white page, and the
+// error is logged on the server. Individual screens have their own, more specific boundaries too.
+class AppErrorBoundary extends React.Component {
+  constructor(props) { super(props); this.state = { error: null }; }
+  static getDerivedStateFromError(error) { return { error }; }
+  componentDidCatch(error, info) { reportClientCrash('app-boundary', error, info); }
+  render() {
+    if (!this.state.error) return this.props.children;
+    const msg = String((this.state.error && this.state.error.message) || this.state.error).slice(0, 200);
+    return (
+      <div style={{ minHeight: '100vh', background: '#0a0f1e', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24 }}>
+        <div style={{ maxWidth: 380, width: '100%', textAlign: 'center', color: '#e2e8f0', background: '#111827', border: '1px solid #1e293b', borderRadius: 16, padding: '28px 22px' }}>
+          <p style={{ fontSize: 30, margin: '0 0 8px' }}>⚠️</p>
+          <p style={{ fontSize: 15, fontWeight: 700, margin: '0 0 8px' }}>Something went wrong.</p>
+          <p style={{ fontSize: 12, color: '#94a3b8', margin: '0 0 14px', lineHeight: 1.6 }}>Your study data is safe. Please reload the page. If this keeps happening, send a screenshot of this screen to your teacher.</p>
+          <button onClick={() => window.location.reload()} style={{ width: '100%', padding: '11px 14px', borderRadius: 10, border: 'none', background: 'linear-gradient(135deg,#7c3aed,#9333ea)', color: '#fff', fontSize: 13, fontWeight: 700, cursor: 'pointer', marginBottom: 14 }}>Reload</button>
+          <p style={{ fontSize: 10, color: '#64748b', margin: 0, wordBreak: 'break-word', fontFamily: 'monospace' }}>{msg}</p>
+        </div>
       </div>
-    </div>
-  );
+    );
+  }
 }
 
-function BrandFooter() {
-  return (
-    <a href="https://www.seitojapanese.online/" target="_blank" rel="noopener noreferrer" style={{ position:'fixed', bottom:10, left:10, zIndex:999, display:'flex', flexDirection:'column', alignItems:'flex-start', gap:4, opacity:0.85, textDecoration:'none' }}>
-      <img src="/gaku-logo.png" alt="GAKU logo" style={{ width:32, height:32, borderRadius:'50%' }} />
-      <span style={{ color:'#94a3b8', fontSize:9, lineHeight:1.3, fontFamily:"'Noto Sans JP',sans-serif", maxWidth:280 }}>
-        Presented by Seito Sakamoto, an Online Japanese Tutor GAKU, a master's degree in teaching international languages.
-      </span>
-    </a>
-  );
-}
-
+// GAKU Master is the only app. Every URL (/, /app, ...) opens it directly.
+// (The old "Japanese Level Check" quiz was retired and removed on 2026-10-18.)
 export default function App() {
-  const [current, setCurrent] = useState((window.location.pathname === '/app' || (window.Capacitor && typeof window.Capacitor.isNativePlatform === 'function' && window.Capacitor.isNativePlatform())) ? 'gaku-app' : null);
-  const goSelfStudy = (section, level) => setCurrent(`self-study|${section}|${level}`);
-  window.__ss = (level) => goSelfStudy(current || 'general', level);
-
   const params = new URLSearchParams(window.location.search);
   const urlName  = params.get('name')  || '';
   const urlEmail = params.get('email') || '';
@@ -57,24 +44,17 @@ export default function App() {
   const urlPreviewPaywall = params.get('preview') === 'paywall';
   const urlPreviewPlans = params.get('plans') === '1';
 
-  if (current === 'gaku-app') return <div><GakuApp onBack={() => { if (!(window.Capacitor && typeof window.Capacitor.isNativePlatform === 'function' && window.Capacitor.isNativePlatform())) setCurrent(null); }} initialName={urlName} initialEmail={urlEmail} initialJlpt={urlJlpt} previewPaywall={urlPreviewPaywall} previewPlans={urlPreviewPlans} /></div>;
-
-  if (!current) return <><Home onSelect={setCurrent} /><BrandFooter /></>;
-
-  const isSelfStudy = current.startsWith('self-study|');
-
   return (
-    <div>
-      <button onClick={() => setCurrent(null)} style={{ position:'fixed', top:16, left:16, zIndex:999, background:'rgba(255,255,255,0.07)', border:'1px solid rgba(255,255,255,0.12)', borderRadius:10, color:'#94a3b8', fontSize:13, fontWeight:700, padding:'8px 16px', cursor:'pointer' }}>
-        ← Home
-      </button>
-      {current === 'vocabulary'  && <Vocabulary onSelfStudy={(level) => goSelfStudy('vocabulary', level)} />}
-      {current === 'grammar'     && <Grammar onSelfStudy={(level) => goSelfStudy('grammar', level)} />}
-      {current === 'reading'     && <Reading onSelfStudy={(level) => goSelfStudy('reading', level)} />}
-      {current === 'business'    && <BusinessSpeech onSelfStudy={(level) => goSelfStudy('business', level)} />}
-      {current === 'casual'      && <CasualSpeech onSelfStudy={(level) => goSelfStudy('casual', level)} />}
-      {isSelfStudy && <SelfStudy cefrLevel={current.split('|')[2]} section={current.split('|')[1]} />}
-      <BrandFooter />
-    </div>
+    <AppErrorBoundary>
+      <div>
+        <GakuApp
+          initialName={urlName}
+          initialEmail={urlEmail}
+          initialJlpt={urlJlpt}
+          previewPaywall={urlPreviewPaywall}
+          previewPlans={urlPreviewPlans}
+        />
+      </div>
+    </AppErrorBoundary>
   );
 }

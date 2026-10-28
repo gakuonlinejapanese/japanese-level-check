@@ -52,12 +52,28 @@ const FUNNEL_STEPS = new Set([
   "dashboard_shown",
   "tutorial_shown", "tutorial_skipped", "tutorial_finished",
   "tab_schedule", "tab_vocabulary", "tab_subtitles", "tab_resources", "tab_milestones",
+  "lesson_bridge_shown", "lesson_bridge_clicked",
+  "progress_check_started", "progress_check_done", "progress_retake_done", "progress_nudge_clicked",
 ]);
 
 export default async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed" });
   try {
-    const { userId, funnelStep, device } = req.body || {};
+    const { userId, funnelStep, device, crashReport } = req.body || {};
+    // Client-side crash report (see src/crashReport.js): just log it so it shows up in Vercel runtime
+    // logs as "[client-crash]". No userId needed (the student may not even be logged in).
+    if (crashReport && typeof crashReport === "object") {
+      try {
+        const cut = (v, n) => String(v == null ? "" : v).slice(0, n);
+        console.error("[client-crash]", JSON.stringify({
+          where: cut(crashReport.where, 40), message: cut(crashReport.message, 300),
+          email: cut(crashReport.email, 120), userId: cut(crashReport.userId, 60),
+          url: cut(crashReport.url, 80), native: !!crashReport.native, ua: cut(crashReport.ua, 300),
+          stack: cut(crashReport.stack, 900), component: cut(crashReport.component, 500),
+        }));
+      } catch {}
+      return res.status(200).json({ ok: true });
+    }
     if (!userId) return res.status(400).json({ error: "userId is required" });
 
     const supabase = getAdminClient();
