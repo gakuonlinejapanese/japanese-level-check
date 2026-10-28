@@ -1,5 +1,5 @@
 import { getAdminClient } from "./_supabaseAdmin.js";
-import { sendEmail } from "./_resend.js";
+import { sendEmail, isGuestEmail } from "./_resend.js";
 import { handleSignup } from "./_signup.js";
 
 const APP_URL = "https://app.seitojapanese.online";
@@ -172,7 +172,7 @@ export default async function handler(req, res) {
     // Welcome email (GAKU Reader intro + 7-day trial explanation), sent only
     // on a genuine brand-new signup — never on a trial-abuse re-signup, since
     // that email/device already received it the first time around.
-    if (isFirstTrialGrant && !priorTrialAt) {
+    if (isFirstTrialGrant && !priorTrialAt && !isGuestEmail(normalizedEmail)) {
       try {
         await sendEmail({
           to: normalizedEmail,

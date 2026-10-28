@@ -1,6 +1,6 @@
 import crypto from "crypto";
 import { getAdminClient } from "./_supabaseAdmin.js";
-import { sendEmail } from "./_resend.js";
+import { sendEmail, isGuestEmail } from "./_resend.js";
 
 const APP_URL = "https://app.seitojapanese.online";
 
@@ -54,6 +54,70 @@ async function handleVerify(req, res, admin) {
   return res.status(200).json({ ok: true, verified: true });
 }
 
+// Store apps (App Store guideline 5.1.1(v)): a student must be able to use the app, and buy a
+// subscription, WITHOUT registering. This creates a ready-to-use "guest" account behind the scenes:
+// a random placeholder address + random password that the app signs in with straight away. The student
+// never sees either. Registering is optional and later (handleUpgradeGuest below) — it swaps the
+// placeholder for a real email + password on the SAME account, so progress and purchases are kept.
+async function handleGuest(req, res, admin) {
+  let meta = {};
+  const pendingForm = req.body?.pendingForm;
+  if (pendingForm && typeof pendingForm === "object") {
+    try { if (JSON.stringify(pendingForm).length <= 4000) meta = { pending_form: pendingForm }; } catch {}
+  }
+  const email = `guest-${crypto.randomBytes(12).toString("hex")}@seitojapanese.online`;
+  const password = crypto.randomBytes(24).toString("hex");
+  const { data, error } = await admin.auth.admin.createUser({
+    email, password, email_confirm: true,
+    app_metadata: { is_guest: true },
+    user_metadata: meta,
+  });
+  if (error || !data?.user?.id) return res.status(400).json({ error: error?.message || "Could not start a guest session." });
+  return res.status(200).json({ ok: true, userId: data.user.id, email, password });
+}
+
+// Turns a guest account into a normal registered one (same user id). Proven with the guest's own
+// access token, never a userId from the body.
+async function handleUpgradeGuest(req, res, admin) {
+  const token = String(req.headers?.authorization || "").replace(/^Bearer\s+/i, "");
+  if (!token) return res.status(401).json({ error: "Not signed in." });
+  const { data: u, error: uErr } = await admin.auth.getUser(token);
+  const user = u?.user;
+  if (uErr || !user?.id) return res.status(401).json({ error: "Invalid session." });
+  const am = user.app_metadata || {};
+  if (am.is_guest !== true && !isGuestEmail(user.email)) return res.status(400).json({ error: "This account is already registered." });
+
+  const email = String(req.body?.email || "").trim().toLowerCase();
+  const password = String(req.body?.password || "");
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || isGuestEmail(email)) {
+    return res.status(400).json({ error: "Please enter a valid email address." });
+  }
+  if (password.length < 6) return res.status(400).json({ error: "Password must be at least 6 characters." });
+
+  const verifyToken = crypto.randomBytes(24).toString("hex");
+  const { error } = await admin.auth.admin.updateUserById(user.id, {
+    email, password, email_confirm: true,
+    app_metadata: { ...am, is_guest: false, email_verified: false, verify_token: verifyToken },
+  });
+  if (error) {
+    const msg = String(error.message || "");
+    if (error.code === "email_exists" || /already (been )?registered|already exists/i.test(msg)) {
+      return res.status(200).json({ alreadyRegistered: true });
+    }
+    return res.status(400).json({ error: msg || "Could not create your account." });
+  }
+  // Keep the profiles row (trial, purchases, analytics) pointing at the new address.
+  try { await admin.from("profiles").update({ email }).eq("id", user.id); } catch (e) { console.error("[signup] guest upgrade profile email failed:", e.message); }
+  try {
+    await sendEmail({
+      to: email,
+      subject: "Welcome to GAKU Master — please verify your email",
+      html: welcomeHtml(`${APP_URL}/app?vt=${user.id}.${verifyToken}`),
+    });
+  } catch (e) { console.error("[signup] guest upgrade welcome email failed:", e.message); }
+  return res.status(200).json({ ok: true, userId: user.id });
+}
+
 // Sign-up that does NOT depend on Supabase's built-in email sender (which is
 // rate limited and was set to 0/hour). New accounts are created already usable
 // (email_confirm: true) so a student is never stuck waiting for an email that may not
@@ -64,6 +128,8 @@ export async function handleSignup(req, res) {
   try {
     const admin = getAdminClient();
     if (req.body?.action === "verify") return await handleVerify(req, res, admin);
+    if (req.body?.action === "guest") return await handleGuest(req, res, admin);
+    if (req.body?.action === "upgrade_guest") return await handleUpgradeGuest(req, res, admin);
 
     const { email: rawEmail, password, resend, pendingForm } = req.body || {};
     const email = String(rawEmail || "").trim().toLowerCase();

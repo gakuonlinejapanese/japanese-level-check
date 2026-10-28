@@ -132,9 +132,13 @@ export default async function handler(req, res) {
     // "Would like to choose the cheaper plan for GAKU?" on trial-lesson.html (recorded by
     // policy-agreement.js action unlock_paid_plans, keyed by email).
     let plansUnlocked = false;
+    // App Review accounts keep full access, but the store app still shows them the subscription
+    // plans (App Review must be able to reach and test the in-app purchases).
+    let isReviewAccount = false;
     try {
       const { data: uData } = await supabase.auth.admin.getUserById(userId);
       const uEmail = uData?.user?.email?.trim().toLowerCase();
+      isReviewAccount = !!uEmail && REVIEW_ACCOUNT_EMAILS.includes(uEmail);
       if (uEmail) {
         const { data: unlockRows } = await supabase
           .from("paid_plans_unlock").select("email").eq("email", uEmail).limit(1);
@@ -281,6 +285,7 @@ export default async function handler(req, res) {
       streakDays,
       readerInstalled,
       plansUnlocked,
+      isReviewAccount,
     });
   } catch (e) {
     return res.status(500).json({ error: e.message });
