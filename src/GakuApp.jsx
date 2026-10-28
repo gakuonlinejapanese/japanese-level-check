@@ -15416,6 +15416,9 @@ function pronMatchMap(target, attempt) {
 // (invite-code) students, who already have lessons, and snoozed for 3 days once dismissed.
 const LESSON_BRIDGE_SNOOZE_KEY = "gaku_lesson_bridge_snoozed_at";
 function lessonBridgeEligible() {
+  // Never inside the iOS/Android store apps: lesson-booking links are deliberately hidden there
+  // (decided 2026-10-07) because steering users to outside lessons/payments risks store review.
+  if (IS_STORE_APP) return false;
   try {
     const c = JSON.parse(localStorage.getItem("gaku_trial_status") || "null");
     if (!c || !c.userId || c.userId !== ACTIVE_USER_ID) return false;
