@@ -1183,6 +1183,28 @@ const UI_TRANSLATIONS = {
     lessonBridgeAsk: "Want to practice this with a real teacher? Try a free trial lesson.",
     lessonBridgeBtn: "Book a free trial lesson →",
     lessonBridgeMissed: "Sounds to watch: {chars}",
+    pcTitle: "Progress check",
+    pcIntro: "A 3-minute starting check (12 questions). Take it again in a few days to see how much you've grown.",
+    pcStart: "Start the check",
+    pcRetake: "Take it again",
+    pcRetakeWait: "You can retake it in {n} day(s).",
+    pcQ: "Question {n} / {total}",
+    pcNext: "Next →",
+    pcFinish: "See my result",
+    pcStartingPoint: "Your starting point",
+    pcThenNow: "Then vs. now",
+    pcThen: "Then",
+    pcNow: "Now",
+    pcUp: "You went up {n} point(s)! 🎉",
+    pcSame: "Same score this time — keep practicing and try again later.",
+    pcDown: "A little lower this time. One short quiz isn't the whole picture — keep practicing.",
+    pcActivityTitle: "Your practice",
+    pcActLine: "{n} practice actions since your starting check",
+    pcAccLine: "Accuracy in practice: {a}% → {b}%",
+    pcNote: "Only your score is shown, so the check stays fair when you retake it.",
+    pcNudgeStart: "Want to see how much you grow? Take a 3-minute starting check.",
+    pcNudgeRetake: "It's been a while — retake the check and see your growth!",
+    pcLater: "Later",
     coachGo: "Let's go",
     quotaTitle: "Today's quota: {done}/{goal}",
     quotaMissed: "You missed yesterday's quota. Finish today's quota first — no skipping.",
@@ -1777,6 +1799,28 @@ const UI_TRANSLATIONS = {
     lessonBridgeAsk: "Envie de travailler cela avec un vrai professeur ? Essayez un cours d'essai gratuit.",
     lessonBridgeBtn: "Réserver un cours d'essai gratuit →",
     lessonBridgeMissed: "Sons à surveiller : {chars}",
+    pcTitle: "Bilan de progression",
+    pcIntro: "Un test de départ de 3 minutes (12 questions). Refaites-le dans quelques jours pour voir vos progrès.",
+    pcStart: "Commencer le test",
+    pcRetake: "Refaire le test",
+    pcRetakeWait: "Vous pourrez le refaire dans {n} jour(s).",
+    pcQ: "Question {n} / {total}",
+    pcNext: "Suivant →",
+    pcFinish: "Voir mon résultat",
+    pcStartingPoint: "Votre point de départ",
+    pcThenNow: "Avant et maintenant",
+    pcThen: "Avant",
+    pcNow: "Maintenant",
+    pcUp: "Vous avez gagné {n} point(s) ! 🎉",
+    pcSame: "Même score cette fois — continuez à pratiquer et réessayez plus tard.",
+    pcDown: "Un peu plus bas cette fois. Un court test ne dit pas tout — continuez à pratiquer.",
+    pcActivityTitle: "Votre pratique",
+    pcActLine: "{n} exercices pratiqués depuis votre test de départ",
+    pcAccLine: "Réussite à l'entraînement : {a} % → {b} %",
+    pcNote: "Seul votre score est affiché, pour que le test reste équitable quand vous le refaites.",
+    pcNudgeStart: "Envie de voir vos progrès ? Faites un test de départ de 3 minutes.",
+    pcNudgeRetake: "Cela fait un moment — refaites le test et voyez vos progrès !",
+    pcLater: "Plus tard",
     coachGo: "C'est parti",
     quotaTitle: "Quota du jour : {done}/{goal}",
     quotaMissed: "Vous n'avez pas atteint le quota d'hier. Terminez d'abord le quota d'aujourd'hui, sans excuse.",
@@ -2356,6 +2400,28 @@ const UI_TRANSLATIONS = {
     lessonBridgeAsk: "¿Quieres practicar esto con un profesor de verdad? Prueba una clase de prueba gratuita.",
     lessonBridgeBtn: "Reservar una clase de prueba gratis →",
     lessonBridgeMissed: "Sonidos a vigilar: {chars}",
+    pcTitle: "Control de progreso",
+    pcIntro: "Una prueba inicial de 3 minutos (12 preguntas). Repítela en unos días para ver cuánto has avanzado.",
+    pcStart: "Empezar la prueba",
+    pcRetake: "Repetir la prueba",
+    pcRetakeWait: "Podrás repetirla en {n} día(s).",
+    pcQ: "Pregunta {n} / {total}",
+    pcNext: "Siguiente →",
+    pcFinish: "Ver mi resultado",
+    pcStartingPoint: "Tu punto de partida",
+    pcThenNow: "Antes y ahora",
+    pcThen: "Antes",
+    pcNow: "Ahora",
+    pcUp: "¡Subiste {n} punto(s)! 🎉",
+    pcSame: "Misma puntuación esta vez: sigue practicando y vuelve a intentarlo más tarde.",
+    pcDown: "Un poco más baja esta vez. Una prueba corta no lo dice todo: sigue practicando.",
+    pcActivityTitle: "Tu práctica",
+    pcActLine: "{n} acciones de práctica desde tu prueba inicial",
+    pcAccLine: "Aciertos en la práctica: {a}% → {b}%",
+    pcNote: "Solo se muestra tu puntuación, para que la prueba siga siendo justa al repetirla.",
+    pcNudgeStart: "¿Quieres ver cuánto avanzas? Haz una prueba inicial de 3 minutos.",
+    pcNudgeRetake: "Ha pasado un tiempo: repite la prueba y mira tu progreso.",
+    pcLater: "Más tarde",
     coachGo: "Vamos",
     quotaTitle: "Cuota de hoy: {done}/{goal}",
     quotaMissed: "No cumpliste la cuota de ayer. Termina primero la cuota de hoy, sin excusas.",
@@ -2935,6 +3001,28 @@ const UI_TRANSLATIONS = {
     lessonBridgeAsk: "Quer praticar isso com um professor de verdade? Experimente uma aula experimental gratuita.",
     lessonBridgeBtn: "Reservar uma aula experimental grátis →",
     lessonBridgeMissed: "Sons para observar: {chars}",
+    pcTitle: "Verificação de progresso",
+    pcIntro: "Um teste inicial de 3 minutos (12 perguntas). Refaça em alguns dias para ver o quanto você evoluiu.",
+    pcStart: "Começar o teste",
+    pcRetake: "Refazer o teste",
+    pcRetakeWait: "Você poderá refazer em {n} dia(s).",
+    pcQ: "Pergunta {n} / {total}",
+    pcNext: "Próxima →",
+    pcFinish: "Ver meu resultado",
+    pcStartingPoint: "Seu ponto de partida",
+    pcThenNow: "Antes e agora",
+    pcThen: "Antes",
+    pcNow: "Agora",
+    pcUp: "Você subiu {n} ponto(s)! 🎉",
+    pcSame: "Mesma pontuação desta vez — continue praticando e tente de novo mais tarde.",
+    pcDown: "Um pouco menor desta vez. Um teste curto não mostra tudo — continue praticando.",
+    pcActivityTitle: "Sua prática",
+    pcActLine: "{n} ações de prática desde o teste inicial",
+    pcAccLine: "Acertos na prática: {a}% → {b}%",
+    pcNote: "Só a pontuação é mostrada, para o teste continuar justo quando você refizer.",
+    pcNudgeStart: "Quer ver o quanto você evolui? Faça um teste inicial de 3 minutos.",
+    pcNudgeRetake: "Já faz um tempo — refaça o teste e veja sua evolução!",
+    pcLater: "Mais tarde",
     coachGo: "Vamos lá",
     quotaTitle: "Meta de hoje: {done}/{goal}",
     quotaMissed: "Você não cumpriu a meta de ontem. Termine primeiro a meta de hoje, sem pular.",
@@ -3514,6 +3602,28 @@ const UI_TRANSLATIONS = {
     lessonBridgeAsk: "Möchten Sie das mit einer echten Lehrkraft üben? Probieren Sie eine kostenlose Probestunde.",
     lessonBridgeBtn: "Kostenlose Probestunde buchen →",
     lessonBridgeMissed: "Laute, auf die Sie achten sollten: {chars}",
+    pcTitle: "Fortschrittscheck",
+    pcIntro: "Ein 3-minütiger Starttest (12 Fragen). Wiederholen Sie ihn in einigen Tagen, um Ihren Fortschritt zu sehen.",
+    pcStart: "Test starten",
+    pcRetake: "Test wiederholen",
+    pcRetakeWait: "Sie können ihn in {n} Tag(en) wiederholen.",
+    pcQ: "Frage {n} / {total}",
+    pcNext: "Weiter →",
+    pcFinish: "Mein Ergebnis ansehen",
+    pcStartingPoint: "Ihr Ausgangspunkt",
+    pcThenNow: "Damals und heute",
+    pcThen: "Damals",
+    pcNow: "Heute",
+    pcUp: "Sie haben sich um {n} Punkt(e) verbessert! 🎉",
+    pcSame: "Diesmal gleiche Punktzahl – üben Sie weiter und versuchen Sie es später erneut.",
+    pcDown: "Diesmal etwas niedriger. Ein kurzer Test sagt nicht alles – üben Sie weiter.",
+    pcActivityTitle: "Ihr Üben",
+    pcActLine: "{n} Übungen seit Ihrem Starttest",
+    pcAccLine: "Trefferquote beim Üben: {a} % → {b} %",
+    pcNote: "Es wird nur Ihre Punktzahl angezeigt, damit der Test bei einer Wiederholung fair bleibt.",
+    pcNudgeStart: "Möchten Sie Ihren Fortschritt sehen? Machen Sie einen 3-minütigen Starttest.",
+    pcNudgeRetake: "Es ist eine Weile her – wiederholen Sie den Test und sehen Sie Ihren Fortschritt!",
+    pcLater: "Später",
     coachGo: "Los geht's",
     quotaTitle: "Tagesziel: {done}/{goal}",
     quotaMissed: "Das Tagesziel von gestern wurde verfehlt. Erledigen Sie zuerst das heutige Ziel – kein Auslassen.",
@@ -4093,6 +4203,28 @@ const UI_TRANSLATIONS = {
     lessonBridgeAsk: "Vuoi esercitarti su questo con un vero insegnante? Prova una lezione di prova gratuita.",
     lessonBridgeBtn: "Prenota una lezione di prova gratuita →",
     lessonBridgeMissed: "Suoni da tenere d'occhio: {chars}",
+    pcTitle: "Verifica dei progressi",
+    pcIntro: "Un test iniziale di 3 minuti (12 domande). Ripetilo tra qualche giorno per vedere quanto sei migliorato.",
+    pcStart: "Inizia il test",
+    pcRetake: "Ripeti il test",
+    pcRetakeWait: "Potrai ripeterlo tra {n} giorno/i.",
+    pcQ: "Domanda {n} / {total}",
+    pcNext: "Avanti →",
+    pcFinish: "Vedi il mio risultato",
+    pcStartingPoint: "Il tuo punto di partenza",
+    pcThenNow: "Prima e adesso",
+    pcThen: "Prima",
+    pcNow: "Adesso",
+    pcUp: "Hai guadagnato {n} punto/i! 🎉",
+    pcSame: "Stesso punteggio stavolta: continua a esercitarti e riprova più tardi.",
+    pcDown: "Un po' più basso stavolta. Un test breve non dice tutto: continua a esercitarti.",
+    pcActivityTitle: "I tuoi esercizi",
+    pcActLine: "{n} esercizi svolti dal test iniziale",
+    pcAccLine: "Risposte corrette negli esercizi: {a}% → {b}%",
+    pcNote: "Viene mostrato solo il punteggio, così il test resta equo quando lo ripeti.",
+    pcNudgeStart: "Vuoi vedere quanto migliori? Fai un test iniziale di 3 minuti.",
+    pcNudgeRetake: "È passato un po' di tempo: ripeti il test e guarda i tuoi progressi!",
+    pcLater: "Più tardi",
     coachGo: "Andiamo",
     quotaTitle: "Obiettivo di oggi: {done}/{goal}",
     quotaMissed: "Hai mancato l'obiettivo di ieri. Completa prima quello di oggi, senza saltare.",
@@ -4672,6 +4804,28 @@ const UI_TRANSLATIONS = {
     lessonBridgeAsk: "想和真人老师一起练习这个吗？试试免费体验课吧。",
     lessonBridgeBtn: "预约免费体验课 →",
     lessonBridgeMissed: "需要留意的发音：{chars}",
+    pcTitle: "进步检测",
+    pcIntro: "3分钟的起点测试（12道题）。几天后再做一次，看看你进步了多少。",
+    pcStart: "开始测试",
+    pcRetake: "再测一次",
+    pcRetakeWait: "{n}天后可以再测一次。",
+    pcQ: "第 {n} / {total} 题",
+    pcNext: "下一题 →",
+    pcFinish: "查看我的结果",
+    pcStartingPoint: "你的起点",
+    pcThenNow: "当时 vs 现在",
+    pcThen: "当时",
+    pcNow: "现在",
+    pcUp: "你提高了{n}分！🎉",
+    pcSame: "这次分数相同——继续练习，稍后再试。",
+    pcDown: "这次稍低一点。一次短测验并不代表全部——继续练习吧。",
+    pcActivityTitle: "你的练习",
+    pcActLine: "自起点测试以来已完成{n}次练习",
+    pcAccLine: "练习正确率：{a}% → {b}%",
+    pcNote: "只显示分数，这样再次测试时依然公平。",
+    pcNudgeStart: "想看看自己的进步吗？做一次3分钟的起点测试吧。",
+    pcNudgeRetake: "已经有一段时间了——再测一次，看看你的进步！",
+    pcLater: "稍后",
     coachGo: "开始吧",
     quotaTitle: "今日目标：{done}/{goal}",
     quotaMissed: "你没有完成昨天的目标。请先完成今天的目标，不要偷懒。",
@@ -5251,6 +5405,28 @@ const UI_TRANSLATIONS = {
     lessonBridgeAsk: "想和真人老師一起練習這個嗎？試試免費體驗課吧。",
     lessonBridgeBtn: "預約免費體驗課 →",
     lessonBridgeMissed: "需要留意的發音：{chars}",
+    pcTitle: "進步檢測",
+    pcIntro: "3分鐘的起點測驗（12題）。幾天後再做一次，看看你進步了多少。",
+    pcStart: "開始測驗",
+    pcRetake: "再測一次",
+    pcRetakeWait: "{n}天後可以再測一次。",
+    pcQ: "第 {n} / {total} 題",
+    pcNext: "下一題 →",
+    pcFinish: "查看我的結果",
+    pcStartingPoint: "你的起點",
+    pcThenNow: "當時 vs 現在",
+    pcThen: "當時",
+    pcNow: "現在",
+    pcUp: "你進步了{n}分！🎉",
+    pcSame: "這次分數相同——繼續練習，稍後再試。",
+    pcDown: "這次稍低一點。一次短測驗並不代表全部——繼續練習吧。",
+    pcActivityTitle: "你的練習",
+    pcActLine: "自起點測驗以來已完成{n}次練習",
+    pcAccLine: "練習正確率：{a}% → {b}%",
+    pcNote: "只顯示分數，這樣再次測驗時依然公平。",
+    pcNudgeStart: "想看看自己的進步嗎？做一次3分鐘的起點測驗吧。",
+    pcNudgeRetake: "已經有一段時間了——再測一次，看看你的進步！",
+    pcLater: "稍後",
     coachGo: "開始吧",
     quotaTitle: "今日目標：{done}/{goal}",
     quotaMissed: "你沒有完成昨天的目標。請先完成今天的目標，不要偷懶。",
@@ -5830,6 +6006,28 @@ const UI_TRANSLATIONS = {
     lessonBridgeAsk: "이 부분을 진짜 선생님과 함께 연습해 보시겠어요? 무료 체험 수업을 신청해 보세요.",
     lessonBridgeBtn: "무료 체험 수업 신청하기 →",
     lessonBridgeMissed: "주의해야 할 소리: {chars}",
+    pcTitle: "실력 변화 체크",
+    pcIntro: "3분짜리 시작 점검(12문제)입니다. 며칠 뒤 다시 풀어 얼마나 늘었는지 확인해 보세요.",
+    pcStart: "점검 시작",
+    pcRetake: "다시 풀기",
+    pcRetakeWait: "{n}일 후에 다시 풀 수 있어요.",
+    pcQ: "{n} / {total}번 문제",
+    pcNext: "다음 →",
+    pcFinish: "결과 보기",
+    pcStartingPoint: "시작 시점",
+    pcThenNow: "그때와 지금",
+    pcThen: "그때",
+    pcNow: "지금",
+    pcUp: "{n}점 올랐어요! 🎉",
+    pcSame: "이번에는 같은 점수예요. 계속 연습하고 나중에 다시 해 보세요.",
+    pcDown: "이번에는 조금 낮아요. 짧은 퀴즈 하나가 전부는 아니니 계속 연습해 보세요.",
+    pcActivityTitle: "나의 연습",
+    pcActLine: "시작 점검 이후 연습 {n}회",
+    pcAccLine: "연습 정확도: {a}% → {b}%",
+    pcNote: "다시 풀 때도 공정하도록 점수만 보여 드려요.",
+    pcNudgeStart: "얼마나 성장하는지 보고 싶으세요? 3분짜리 시작 점검을 해 보세요.",
+    pcNudgeRetake: "시간이 좀 지났어요. 다시 풀어 보고 성장을 확인해 보세요!",
+    pcLater: "나중에",
     coachGo: "시작하기",
     quotaTitle: "오늘의 목표: {done}/{goal}",
     quotaMissed: "어제 목표를 채우지 못했어요. 오늘 목표부터 먼저 끝내세요. 건너뛰기 없음.",
@@ -6409,6 +6607,28 @@ const UI_TRANSLATIONS = {
     lessonBridgeAsk: "อยากฝึกเรื่องนี้กับครูตัวจริงไหม? ลองเรียนทดลองฟรีดูสิ",
     lessonBridgeBtn: "จองเรียนทดลองฟรี →",
     lessonBridgeMissed: "เสียงที่ควรระวัง: {chars}",
+    pcTitle: "ตรวจความก้าวหน้า",
+    pcIntro: "แบบทดสอบเริ่มต้น 3 นาที (12 ข้อ) ลองทำอีกครั้งในอีกไม่กี่วันเพื่อดูว่าก้าวหน้าแค่ไหน",
+    pcStart: "เริ่มทดสอบ",
+    pcRetake: "ทำอีกครั้ง",
+    pcRetakeWait: "ทำซ้ำได้ในอีก {n} วัน",
+    pcQ: "ข้อที่ {n} / {total}",
+    pcNext: "ถัดไป →",
+    pcFinish: "ดูผลของฉัน",
+    pcStartingPoint: "จุดเริ่มต้นของคุณ",
+    pcThenNow: "ตอนนั้นกับตอนนี้",
+    pcThen: "ตอนนั้น",
+    pcNow: "ตอนนี้",
+    pcUp: "คุณได้คะแนนเพิ่มขึ้น {n} คะแนน! 🎉",
+    pcSame: "ครั้งนี้คะแนนเท่าเดิม ฝึกต่อไปแล้วลองอีกครั้งภายหลัง",
+    pcDown: "ครั้งนี้ต่ำลงเล็กน้อย แบบทดสอบสั้น ๆ ไม่ได้บอกทั้งหมด ฝึกต่อไปนะ",
+    pcActivityTitle: "การฝึกของคุณ",
+    pcActLine: "ฝึกไปแล้ว {n} ครั้งนับจากแบบทดสอบเริ่มต้น",
+    pcAccLine: "ความแม่นยำในการฝึก: {a}% → {b}%",
+    pcNote: "แสดงเฉพาะคะแนน เพื่อให้การทดสอบยุติธรรมเมื่อทำซ้ำ",
+    pcNudgeStart: "อยากดูว่าคุณก้าวหน้าแค่ไหนไหม? ลองทำแบบทดสอบเริ่มต้น 3 นาที",
+    pcNudgeRetake: "ผ่านมาสักพักแล้ว ลองทำอีกครั้งเพื่อดูความก้าวหน้า!",
+    pcLater: "ไว้ทีหลัง",
     coachGo: "เริ่มเลย",
     quotaTitle: "เป้าหมายวันนี้: {done}/{goal}",
     quotaMissed: "เมื่อวานคุณทำเป้าหมายไม่ถึง กรุณาทำเป้าหมายของวันนี้ให้เสร็จก่อน ห้ามข้าม",
@@ -6988,6 +7208,28 @@ const UI_TRANSLATIONS = {
     lessonBridgeAsk: "Mahu berlatih perkara ini dengan guru sebenar? Cuba kelas percubaan percuma.",
     lessonBridgeBtn: "Tempah kelas percubaan percuma →",
     lessonBridgeMissed: "Bunyi yang perlu diberi perhatian: {chars}",
+    pcTitle: "Semakan kemajuan",
+    pcIntro: "Ujian permulaan 3 minit (12 soalan). Ambil semula dalam beberapa hari untuk melihat sejauh mana anda berkembang.",
+    pcStart: "Mulakan ujian",
+    pcRetake: "Ambil semula",
+    pcRetakeWait: "Anda boleh mengambilnya semula dalam {n} hari.",
+    pcQ: "Soalan {n} / {total}",
+    pcNext: "Seterusnya →",
+    pcFinish: "Lihat keputusan saya",
+    pcStartingPoint: "Titik permulaan anda",
+    pcThenNow: "Dahulu berbanding sekarang",
+    pcThen: "Dahulu",
+    pcNow: "Sekarang",
+    pcUp: "Anda naik {n} mata! 🎉",
+    pcSame: "Markah sama kali ini — teruskan berlatih dan cuba lagi nanti.",
+    pcDown: "Sedikit lebih rendah kali ini. Satu kuiz pendek tidak menunjukkan segalanya — teruskan berlatih.",
+    pcActivityTitle: "Latihan anda",
+    pcActLine: "{n} tindakan latihan sejak ujian permulaan",
+    pcAccLine: "Ketepatan dalam latihan: {a}% → {b}%",
+    pcNote: "Hanya markah dipaparkan supaya ujian kekal adil apabila diambil semula.",
+    pcNudgeStart: "Mahu lihat kemajuan anda? Ambil ujian permulaan 3 minit.",
+    pcNudgeRetake: "Sudah agak lama — ambil semula ujian dan lihat kemajuan anda!",
+    pcLater: "Nanti",
     coachGo: "Jom mulakan",
     quotaTitle: "Kuota hari ini: {done}/{goal}",
     quotaMissed: "Anda terlepas kuota semalam. Siapkan kuota hari ini dahulu, tiada langkau.",
@@ -7567,6 +7809,28 @@ const UI_TRANSLATIONS = {
     lessonBridgeAsk: "Ingin berlatih ini dengan guru sungguhan? Coba kelas percobaan gratis.",
     lessonBridgeBtn: "Pesan kelas percobaan gratis →",
     lessonBridgeMissed: "Bunyi yang perlu diperhatikan: {chars}",
+    pcTitle: "Cek kemajuan",
+    pcIntro: "Tes awal 3 menit (12 soal). Ulangi beberapa hari lagi untuk melihat seberapa jauh Anda berkembang.",
+    pcStart: "Mulai tes",
+    pcRetake: "Ulangi tes",
+    pcRetakeWait: "Anda bisa mengulanginya dalam {n} hari.",
+    pcQ: "Soal {n} / {total}",
+    pcNext: "Berikutnya →",
+    pcFinish: "Lihat hasil saya",
+    pcStartingPoint: "Titik awal Anda",
+    pcThenNow: "Dulu vs sekarang",
+    pcThen: "Dulu",
+    pcNow: "Sekarang",
+    pcUp: "Anda naik {n} poin! 🎉",
+    pcSame: "Skor sama kali ini — terus berlatih dan coba lagi nanti.",
+    pcDown: "Sedikit lebih rendah kali ini. Satu kuis singkat tidak menunjukkan semuanya — terus berlatih.",
+    pcActivityTitle: "Latihan Anda",
+    pcActLine: "{n} aktivitas latihan sejak tes awal",
+    pcAccLine: "Ketepatan dalam latihan: {a}% → {b}%",
+    pcNote: "Hanya skor yang ditampilkan agar tes tetap adil saat diulang.",
+    pcNudgeStart: "Ingin melihat kemajuan Anda? Ikuti tes awal 3 menit.",
+    pcNudgeRetake: "Sudah cukup lama — ulangi tes dan lihat kemajuan Anda!",
+    pcLater: "Nanti",
     coachGo: "Ayo mulai",
     quotaTitle: "Kuota hari ini: {done}/{goal}",
     quotaMissed: "Anda tidak memenuhi kuota kemarin. Selesaikan dulu kuota hari ini, tanpa melewatkan.",
@@ -8146,6 +8410,28 @@ const UI_TRANSLATIONS = {
     lessonBridgeAsk: "Bạn muốn luyện phần này với giáo viên thật không? Hãy thử một buổi học thử miễn phí.",
     lessonBridgeBtn: "Đặt buổi học thử miễn phí →",
     lessonBridgeMissed: "Âm cần chú ý: {chars}",
+    pcTitle: "Kiểm tra tiến bộ",
+    pcIntro: "Bài kiểm tra đầu vào 3 phút (12 câu). Làm lại sau vài ngày để xem bạn tiến bộ bao nhiêu.",
+    pcStart: "Bắt đầu kiểm tra",
+    pcRetake: "Làm lại",
+    pcRetakeWait: "Bạn có thể làm lại sau {n} ngày.",
+    pcQ: "Câu {n} / {total}",
+    pcNext: "Tiếp →",
+    pcFinish: "Xem kết quả của tôi",
+    pcStartingPoint: "Điểm xuất phát của bạn",
+    pcThenNow: "Trước và nay",
+    pcThen: "Trước",
+    pcNow: "Nay",
+    pcUp: "Bạn đã tăng {n} điểm! 🎉",
+    pcSame: "Lần này điểm bằng nhau — hãy tiếp tục luyện tập và thử lại sau.",
+    pcDown: "Lần này thấp hơn một chút. Một bài kiểm tra ngắn không nói lên tất cả — hãy tiếp tục luyện tập.",
+    pcActivityTitle: "Việc luyện tập của bạn",
+    pcActLine: "{n} lượt luyện tập kể từ bài kiểm tra đầu vào",
+    pcAccLine: "Độ chính xác khi luyện tập: {a}% → {b}%",
+    pcNote: "Chỉ hiển thị điểm số để bài kiểm tra vẫn công bằng khi bạn làm lại.",
+    pcNudgeStart: "Muốn xem bạn tiến bộ thế nào? Hãy làm bài kiểm tra đầu vào 3 phút.",
+    pcNudgeRetake: "Đã một thời gian rồi — làm lại bài kiểm tra để xem tiến bộ của bạn!",
+    pcLater: "Để sau",
     coachGo: "Bắt đầu thôi",
     quotaTitle: "Chỉ tiêu hôm nay: {done}/{goal}",
     quotaMissed: "Bạn chưa đạt chỉ tiêu hôm qua. Hãy hoàn thành chỉ tiêu hôm nay trước, không được bỏ qua.",
@@ -8725,6 +9011,28 @@ const UI_TRANSLATIONS = {
     lessonBridgeAsk: "क्या आप इसे असली शिक्षक के साथ अभ्यास करना चाहेंगे? एक मुफ़्त ट्रायल क्लास आज़माएँ।",
     lessonBridgeBtn: "मुफ़्त ट्रायल क्लास बुक करें →",
     lessonBridgeMissed: "ध्यान देने योग्य ध्वनियाँ: {chars}",
+    pcTitle: "प्रगति जाँच",
+    pcIntro: "3 मिनट की शुरुआती जाँच (12 प्रश्न)। कुछ दिनों बाद इसे दोबारा करें और देखें कि आपने कितनी प्रगति की।",
+    pcStart: "जाँच शुरू करें",
+    pcRetake: "दोबारा करें",
+    pcRetakeWait: "आप इसे {n} दिन बाद दोबारा कर सकते हैं।",
+    pcQ: "प्रश्न {n} / {total}",
+    pcNext: "आगे →",
+    pcFinish: "मेरा परिणाम देखें",
+    pcStartingPoint: "आपकी शुरुआत",
+    pcThenNow: "तब और अब",
+    pcThen: "तब",
+    pcNow: "अब",
+    pcUp: "आपके {n} अंक बढ़े! 🎉",
+    pcSame: "इस बार अंक वही रहे — अभ्यास जारी रखें और बाद में फिर कोशिश करें।",
+    pcDown: "इस बार थोड़ा कम रहा। एक छोटी जाँच पूरी तस्वीर नहीं है — अभ्यास जारी रखें।",
+    pcActivityTitle: "आपका अभ्यास",
+    pcActLine: "शुरुआती जाँच के बाद से {n} अभ्यास",
+    pcAccLine: "अभ्यास में सटीकता: {a}% → {b}%",
+    pcNote: "केवल आपका स्कोर दिखाया जाता है, ताकि दोबारा करने पर जाँच निष्पक्ष रहे।",
+    pcNudgeStart: "देखना चाहते हैं कि आप कितना आगे बढ़ रहे हैं? 3 मिनट की शुरुआती जाँच करें।",
+    pcNudgeRetake: "काफ़ी समय हो गया — जाँच दोबारा करें और अपनी प्रगति देखें!",
+    pcLater: "बाद में",
     coachGo: "चलें",
     quotaTitle: "आज का लक्ष्य: {done}/{goal}",
     quotaMissed: "आपने कल का लक्ष्य पूरा नहीं किया। पहले आज का लक्ष्य पूरा करें, छोड़ना नहीं।",
@@ -9304,6 +9612,28 @@ const UI_TRANSLATIONS = {
     lessonBridgeAsk: "この課題を、先生と一緒に練習してみませんか？無料体験レッスンをご利用ください。",
     lessonBridgeBtn: "無料体験レッスンを申し込む →",
     lessonBridgeMissed: "つまずきやすい音: {chars}",
+    pcTitle: "成長チェック",
+    pcIntro: "3分で終わる最初のチェック(12問)です。数日後にもう一度受けて、どれだけ伸びたか確かめましょう。",
+    pcStart: "チェックを始める",
+    pcRetake: "もう一度受ける",
+    pcRetakeWait: "あと{n}日後に再受験できます。",
+    pcQ: "{n} / {total} 問目",
+    pcNext: "次へ →",
+    pcFinish: "結果を見る",
+    pcStartingPoint: "最初の結果",
+    pcThenNow: "始めたときと今",
+    pcThen: "最初",
+    pcNow: "今",
+    pcUp: "{n}点アップしました！🎉",
+    pcSame: "今回は同じ点数です。練習を続けて、またあとで挑戦してみましょう。",
+    pcDown: "今回は少し低めでした。短いクイズだけで全体は分かりません。練習を続けましょう。",
+    pcActivityTitle: "あなたの練習",
+    pcActLine: "最初のチェック以降、{n}回練習しました",
+    pcAccLine: "練習の正答率: {a}% → {b}%",
+    pcNote: "再受験でも公平になるよう、結果は点数だけを表示します。",
+    pcNudgeStart: "どれだけ伸びたか見てみませんか？3分の最初のチェックを受けましょう。",
+    pcNudgeRetake: "しばらく経ちました。もう一度受けて、成長を確かめましょう！",
+    pcLater: "あとで",
     coachGo: "やってみる",
     quotaTitle: "今日のノルマ: {done}/{goal}",
     quotaMissed: "昨日のノルマが未達でした。まず今日のノルマを終わらせましょう。サボりは禁止です。",
@@ -9883,6 +10213,28 @@ const UI_TRANSLATIONS = {
     lessonBridgeAsk: "Bunu gerçek bir öğretmenle çalışmak ister misiniz? Ücretsiz deneme dersini deneyin.",
     lessonBridgeBtn: "Ücretsiz deneme dersi ayarla →",
     lessonBridgeMissed: "Dikkat edilecek sesler: {chars}",
+    pcTitle: "İlerleme kontrolü",
+    pcIntro: "3 dakikalık başlangıç testi (12 soru). Ne kadar ilerlediğinizi görmek için birkaç gün sonra tekrar çözün.",
+    pcStart: "Testi başlat",
+    pcRetake: "Tekrar çöz",
+    pcRetakeWait: "{n} gün sonra tekrar çözebilirsiniz.",
+    pcQ: "Soru {n} / {total}",
+    pcNext: "İleri →",
+    pcFinish: "Sonucumu gör",
+    pcStartingPoint: "Başlangıç noktanız",
+    pcThenNow: "Önce ve şimdi",
+    pcThen: "Önce",
+    pcNow: "Şimdi",
+    pcUp: "{n} puan yükseldiniz! 🎉",
+    pcSame: "Bu sefer puan aynı — çalışmaya devam edin ve daha sonra tekrar deneyin.",
+    pcDown: "Bu sefer biraz düşük. Kısa bir test her şeyi göstermez — çalışmaya devam edin.",
+    pcActivityTitle: "Çalışmalarınız",
+    pcActLine: "Başlangıç testinden beri {n} alıştırma",
+    pcAccLine: "Alıştırmalarda doğruluk: %{a} → %{b}",
+    pcNote: "Tekrar çözdüğünüzde test adil kalsın diye yalnızca puanınız gösterilir.",
+    pcNudgeStart: "Ne kadar geliştiğinizi görmek ister misiniz? 3 dakikalık başlangıç testini çözün.",
+    pcNudgeRetake: "Epey zaman geçti — testi tekrar çözün ve ilerlemenizi görün!",
+    pcLater: "Sonra",
     coachGo: "Hadi başlayalım",
     quotaTitle: "Bugünün hedefi: {done}/{goal}",
     quotaMissed: "Dünkü hedefi kaçırdınız. Önce bugünün hedefini tamamlayın, atlamak yok.",
@@ -10462,6 +10814,28 @@ const UI_TRANSLATIONS = {
     lessonBridgeAsk: "के तपाईं यसलाई साँचो शिक्षकसँग अभ्यास गर्न चाहनुहुन्छ? निःशुल्क परीक्षण कक्षा प्रयास गर्नुहोस्।",
     lessonBridgeBtn: "निःशुल्क परीक्षण कक्षा बुक गर्नुहोस् →",
     lessonBridgeMissed: "ध्यान दिनुपर्ने ध्वनिहरू: {chars}",
+    pcTitle: "प्रगति जाँच",
+    pcIntro: "३ मिनेटको सुरुवाती जाँच (१२ प्रश्न)। केही दिनपछि फेरि गर्नुहोस् र कति प्रगति भयो हेर्नुहोस्।",
+    pcStart: "जाँच सुरु गर्नुहोस्",
+    pcRetake: "फेरि गर्नुहोस्",
+    pcRetakeWait: "तपाईं {n} दिनपछि फेरि गर्न सक्नुहुन्छ।",
+    pcQ: "प्रश्न {n} / {total}",
+    pcNext: "अर्को →",
+    pcFinish: "मेरो नतिजा हेर्नुहोस्",
+    pcStartingPoint: "तपाईंको सुरुवात",
+    pcThenNow: "तब र अब",
+    pcThen: "तब",
+    pcNow: "अब",
+    pcUp: "तपाईंको {n} अङ्क बढ्यो! 🎉",
+    pcSame: "यस पटक अङ्क उही छ — अभ्यास जारी राख्नुहोस् र पछि फेरि प्रयास गर्नुहोस्।",
+    pcDown: "यस पटक अलि कम भयो। एउटा छोटो जाँचले सबै देखाउँदैन — अभ्यास जारी राख्नुहोस्।",
+    pcActivityTitle: "तपाईंको अभ्यास",
+    pcActLine: "सुरुवाती जाँचदेखि {n} अभ्यास",
+    pcAccLine: "अभ्यासमा शुद्धता: {a}% → {b}%",
+    pcNote: "फेरि गर्दा जाँच निष्पक्ष रहोस् भनेर केवल तपाईंको स्कोर देखाइन्छ।",
+    pcNudgeStart: "तपाईं कति अगाडि बढ्दै हुनुहुन्छ हेर्न चाहनुहुन्छ? ३ मिनेटको सुरुवाती जाँच गर्नुहोस्।",
+    pcNudgeRetake: "केही समय भयो — जाँच फेरि गर्नुहोस् र आफ्नो प्रगति हेर्नुहोस्!",
+    pcLater: "पछि",
     coachGo: "सुरु गरौं",
     quotaTitle: "आजको लक्ष्य: {done}/{goal}",
     quotaMissed: "तपाईंले हिजोको लक्ष्य पूरा गर्नुभएन। पहिले आजको लक्ष्य पूरा गर्नुहोस्, छोड्न मिल्दैन।",
@@ -11041,6 +11415,28 @@ const UI_TRANSLATIONS = {
     lessonBridgeAsk: "Gusto mo bang ipractice ito kasama ang totoong guro? Subukan ang libreng trial lesson.",
     lessonBridgeBtn: "Mag-book ng libreng trial lesson →",
     lessonBridgeMissed: "Mga tunog na dapat bantayan: {chars}",
+    pcTitle: "Pagsusuri ng progreso",
+    pcIntro: "Isang 3-minutong panimulang pagsusulit (12 tanong). Ulitin ito pagkalipas ng ilang araw para makita kung gaano ka na umunlad.",
+    pcStart: "Simulan ang pagsusulit",
+    pcRetake: "Ulitin ang pagsusulit",
+    pcRetakeWait: "Maaari mo itong ulitin sa loob ng {n} araw.",
+    pcQ: "Tanong {n} / {total}",
+    pcNext: "Susunod →",
+    pcFinish: "Tingnan ang resulta ko",
+    pcStartingPoint: "Ang panimulang punto mo",
+    pcThenNow: "Noon at ngayon",
+    pcThen: "Noon",
+    pcNow: "Ngayon",
+    pcUp: "Tumaas ka ng {n} puntos! 🎉",
+    pcSame: "Pareho ang iskor ngayon — magpatuloy sa pagsasanay at subukan ulit mamaya.",
+    pcDown: "Medyo mas mababa ngayon. Hindi ipinapakita ng isang maikling quiz ang lahat — magpatuloy sa pagsasanay.",
+    pcActivityTitle: "Ang pagsasanay mo",
+    pcActLine: "{n} pagsasanay mula sa panimulang pagsusulit",
+    pcAccLine: "Katumpakan sa pagsasanay: {a}% → {b}%",
+    pcNote: "Iskor lang ang ipinapakita para manatiling patas ang pagsusulit kapag inulit mo.",
+    pcNudgeStart: "Gusto mong makita kung gaano ka umuunlad? Kumuha ng 3-minutong panimulang pagsusulit.",
+    pcNudgeRetake: "Matagal na — ulitin ang pagsusulit at tingnan ang pag-unlad mo!",
+    pcLater: "Mamaya",
     coachGo: "Simulan na",
     quotaTitle: "Quota ngayon: {done}/{goal}",
     quotaMissed: "Hindi mo naabot ang quota kahapon. Tapusin muna ang quota ngayon, bawal laktawan.",
@@ -17816,6 +18212,188 @@ function analyzeLearning(log, allow) {
   return { strong, weak };
 }
 
+// ---- Progress check: a fixed 12-question quick check taken at the start and again later ("then vs now") ----
+// Original questions (N5-N2, 3 each). Answers are never shown, only the score, so a retake stays fair.
+const PROGRESS_KEY = "gaku_progress_checks";
+const PROGRESS_NUDGE_KEY = "gaku_progress_nudge_at";
+const PROGRESS_MIN_GAP_DAYS = 3;
+const PROGRESS_LEVELS = ["N5", "N4", "N3", "N2"];
+const PROGRESS_QUESTIONS = [
+  { lv: "N5", q: "「学校」の読み方はどれですか。", c: ["がっこう", "がくこう", "がっこ", "がこう"], a: 0 },
+  { lv: "N5", q: "私は毎朝、パン＿＿食べます。", c: ["を", "が", "に", "で"], a: 0 },
+  { lv: "N5", q: "「みず」を漢字で書くと、どれですか。", c: ["水", "木", "火", "土"], a: 0 },
+  { lv: "N4", q: "友だちが私に本を貸して＿＿。", c: ["くれました", "あげました", "もらいました", "やりました"], a: 0 },
+  { lv: "N4", q: "「約束」の読み方はどれですか。", c: ["やくそく", "やっそく", "やくぞく", "よくそく"], a: 0 },
+  { lv: "N4", q: "明日は雨が降る＿＿しれません。", c: ["かも", "だけ", "ばかり", "ほど"], a: 0 },
+  { lv: "N3", q: "「経験」の読み方はどれですか。", c: ["けいけん", "けいげん", "きょうけん", "けえけん"], a: 0 },
+  { lv: "N3", q: "この本は子どもから大人＿＿、幅広く読まれています。", c: ["まで", "ほど", "ばかり", "だけ"], a: 0 },
+  { lv: "N3", q: "彼は忙しい＿＿、いつも私の相談に乗ってくれます。", c: ["のに", "ので", "から", "ために"], a: 0 },
+  { lv: "N2", q: "「複雑」の読み方はどれですか。", c: ["ふくざつ", "ふくそう", "ふくぞう", "ふっさつ"], a: 0 },
+  { lv: "N2", q: "彼は約束を破った＿＿、謝ろうともしません。", c: ["くせに", "おかげで", "どころか", "ばかりに"], a: 0 },
+  { lv: "N2", q: "状況が変わったので、計画を変更せざるを＿＿。", c: ["得ません", "取れません", "受けません", "持ちません"], a: 0 },
+];
+function loadProgressChecks() {
+  try { const v = JSON.parse(localStorage.getItem(scopedKey(PROGRESS_KEY)) || "[]"); return Array.isArray(v) ? v : []; } catch { return []; }
+}
+function saveProgressCheck(rec) {
+  try {
+    const l = loadProgressChecks(); l.push(rec);
+    localStorage.setItem(scopedKey(PROGRESS_KEY), JSON.stringify(l.slice(-20)));
+    window.dispatchEvent(new CustomEvent("gaku_progress_updated"));
+  } catch {}
+}
+function progressFill(str, vars) {
+  let o = String(str);
+  Object.keys(vars).forEach(k => { o = o.split("{" + k + "}").join(String(vars[k])); });
+  return o;
+}
+function progressShuffle(arr) {
+  const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); const t = a[i]; a[i] = a[j]; a[j] = t; }
+  return a;
+}
+// Practice activity since the starting check; accuracy compares the earlier half with the recent half.
+function progressActivity(since) {
+  const all = loadLearningLog().filter(x => x.t >= since);
+  const rated = all.filter(x => x.a !== "task");
+  const mid = since + (Date.now() - since) / 2;
+  const early = rated.filter(x => x.t < mid), late = rated.filter(x => x.t >= mid);
+  const pct = (xs) => Math.round(100 * xs.filter(x => x.ok).length / xs.length);
+  return { n: all.length, acc: early.length >= 3 && late.length >= 3 ? { a: pct(early), b: pct(late) } : null };
+}
+function ProgressBands({ rec }) {
+  return (
+    <div style={{ display:"flex", gap:6, flexWrap:"wrap", marginTop:6 }}>
+      {PROGRESS_LEVELS.map(lv => (
+        <span key={lv} style={{ fontSize:11, fontWeight:700, color:"#cbd5e1", background:"rgba(255,255,255,0.06)", border:`1px solid ${C.border}`, borderRadius:8, padding:"3px 8px" }}>{lv} {(rec.byLv && rec.byLv[lv]) || 0}/3</span>
+      ))}
+    </div>
+  );
+}
+function ProgressSummary({ T, history }) {
+  if (!history.length) return null;
+  const first = history[0], last = history[history.length - 1];
+  const compare = history.length >= 2;
+  const diff = compare ? last.score - first.score : 0;
+  const act = progressActivity(first.t);
+  return (
+    <div>
+      {!compare && (
+        <div style={{ marginBottom:10 }}>
+          <p style={{ color:C.amber, fontSize:11, fontWeight:700, margin:"0 0 2px" }}>{T.pcStartingPoint || "Your starting point"}</p>
+          <p style={{ color:"#f1f5f9", fontSize:22, fontWeight:800, margin:0 }}>{first.score} / {first.total}</p>
+          <ProgressBands rec={first} />
+        </div>
+      )}
+      {compare && (
+        <div style={{ marginBottom:10 }}>
+          <p style={{ color:C.amber, fontSize:11, fontWeight:700, margin:"0 0 6px" }}>{T.pcThenNow || "Then vs. now"}</p>
+          <div style={{ display:"flex", gap:10 }}>
+            {[[T.pcThen || "Then", first], [T.pcNow || "Now", last]].map(([label, rec], i) => (
+              <div key={i} style={{ flex:1, background:i ? "rgba(34,197,94,0.08)" : "rgba(255,255,255,0.04)", border:`1px solid ${i ? "rgba(34,197,94,0.3)" : C.border}`, borderRadius:10, padding:"8px 10px" }}>
+                <p style={{ color:"#94a3b8", fontSize:11, margin:"0 0 2px" }}>{label}</p>
+                <p style={{ color:"#f1f5f9", fontSize:22, fontWeight:800, margin:0 }}>{rec.score} / {rec.total}</p>
+                <ProgressBands rec={rec} />
+              </div>
+            ))}
+          </div>
+          <p style={{ color:diff > 0 ? C.green : "#cbd5e1", fontSize:13, fontWeight:700, lineHeight:1.6, margin:"10px 0 0" }}>
+            {diff > 0 ? progressFill(T.pcUp || "You went up {n} point(s)! 🎉", { n: diff }) : diff === 0 ? (T.pcSame || "Same score this time — keep practicing and try again later.") : (T.pcDown || "A little lower this time. One short quiz isn't the whole picture — keep practicing.")}
+          </p>
+        </div>
+      )}
+      {act.n > 0 && (
+        <div style={{ paddingTop:10, borderTop:`1px solid ${C.border}` }}>
+          <p style={{ color:C.purpleLight, fontSize:11, fontWeight:700, margin:"0 0 4px" }}>{T.pcActivityTitle || "Your practice"}</p>
+          <p style={{ color:"#e2e8f0", fontSize:12, lineHeight:1.7, margin:0 }}>{progressFill(T.pcActLine || "{n} practice actions since your starting check", { n: act.n })}</p>
+          {act.acc && <p style={{ color:"#e2e8f0", fontSize:12, lineHeight:1.7, margin:0 }}>{progressFill(T.pcAccLine || "Accuracy in practice: {a}% → {b}%", act.acc)}</p>}
+        </div>
+      )}
+    </div>
+  );
+}
+function ProgressCheck({ T, userId }) {
+  const [history, setHistory] = useState(loadProgressChecks);
+  const [phase, setPhase] = useState("home"); // home | quiz | result
+  const [qs, setQs] = useState([]);
+  const [idx, setIdx] = useState(0);
+  const [picked, setPicked] = useState(null);
+  const [answers, setAnswers] = useState([]);
+  const last = history.length ? history[history.length - 1] : null;
+  const waitDays = last ? Math.max(0, Math.ceil(PROGRESS_MIN_GAP_DAYS - (Date.now() - last.t) / 86400000)) : 0;
+  const start = () => {
+    setQs(PROGRESS_QUESTIONS.map(q => ({ ...q, order: progressShuffle(q.c.map((_, i) => i)) })));
+    setIdx(0); setPicked(null); setAnswers([]); setPhase("quiz");
+    logFunnel(userId, "progress_check_started");
+  };
+  const next = () => {
+    if (picked === null) return;
+    const ok = qs[idx].order[picked] === qs[idx].a;
+    const nextAnswers = answers.concat([ok]);
+    if (idx + 1 < qs.length) { setAnswers(nextAnswers); setIdx(idx + 1); setPicked(null); return; }
+    const byLv = {};
+    qs.forEach((q, i) => { byLv[q.lv] = (byLv[q.lv] || 0) + (nextAnswers[i] ? 1 : 0); });
+    const rec = { t: Date.now(), score: nextAnswers.filter(Boolean).length, total: qs.length, byLv };
+    const wasFirst = history.length === 0;
+    saveProgressCheck(rec);
+    setHistory(loadProgressChecks());
+    logFunnel(userId, wasFirst ? "progress_check_done" : "progress_retake_done");
+    setPhase("result");
+  };
+  const wrap = { ...S.card, marginBottom:12, background:"linear-gradient(135deg,rgba(34,197,94,0.07),rgba(168,85,247,0.07))", border:"1px solid rgba(34,197,94,0.25)" };
+  if (phase === "quiz" && qs[idx]) {
+    const q = qs[idx];
+    return (
+      <div style={wrap}>
+        <div style={{ height:5, borderRadius:3, background:"rgba(255,255,255,0.08)", overflow:"hidden", marginBottom:10 }}>
+          <div style={{ width:`${Math.round(idx / qs.length * 100)}%`, height:"100%", background:C.green }} />
+        </div>
+        <p style={{ color:"#94a3b8", fontSize:11, margin:"0 0 6px" }}>{progressFill(T.pcQ || "Question {n} / {total}", { n: idx + 1, total: qs.length })}</p>
+        <p style={{ color:"#f1f5f9", fontSize:16, fontWeight:700, lineHeight:1.7, margin:"0 0 12px" }}>{q.q}</p>
+        <div style={{ display:"flex", flexDirection:"column", gap:8, marginBottom:12 }}>
+          {q.order.map((ci, pos) => (
+            <button key={pos} onClick={() => setPicked(pos)} style={{ textAlign:"left", padding:"11px 14px", borderRadius:10, cursor:"pointer", fontSize:15, color:"#e2e8f0", background:picked === pos ? "rgba(168,85,247,0.18)" : C.card, border:`1.5px solid ${picked === pos ? C.purpleLight : C.border}` }}>{q.c[ci]}</button>
+          ))}
+        </div>
+        <button onClick={next} disabled={picked === null} style={{ ...S.btn, padding:"10px 20px", background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff", fontSize:13, opacity:picked === null ? 0.45 : 1 }}>
+          {idx + 1 < qs.length ? (T.pcNext || "Next →") : (T.pcFinish || "See my result")}
+        </button>
+      </div>
+    );
+  }
+  return (
+    <div style={wrap}>
+      <p style={{ color:"#86efac", fontSize:12, fontWeight:800, margin:"0 0 6px" }}>📈 {T.pcTitle || "Progress check"}</p>
+      {!history.length && <p style={{ color:"#e2e8f0", fontSize:13, lineHeight:1.7, margin:"0 0 12px" }}>{T.pcIntro || "A 3-minute starting check (12 questions). Take it again in a few days to see how much you've grown."}</p>}
+      <ProgressSummary T={T} history={history} />
+      {history.length > 0 && <p style={{ color:"#64748b", fontSize:11, lineHeight:1.6, margin:"10px 0" }}>{T.pcNote || "Only your score is shown, so the check stays fair when you retake it."}</p>}
+      {waitDays > 0
+        ? <p style={{ color:"#94a3b8", fontSize:12, margin:0 }}>{progressFill(T.pcRetakeWait || "You can retake it in {n} day(s).", { n: waitDays })}</p>
+        : <button onClick={start} style={{ ...S.btn, padding:"10px 20px", background:"linear-gradient(135deg,#22c55e,#16a34a)", color:"#fff", fontSize:13 }}>{history.length ? (T.pcRetake || "Take it again") : (T.pcStart || "Start the check")}</button>}
+    </div>
+  );
+}
+// Small card on the schedule screen that invites the student to take / retake the check.
+function ProgressNudge({ T, onGo }) {
+  const [hidden, setHidden] = useState(false);
+  const h = loadProgressChecks();
+  let kind = null;
+  if (h.length === 0) kind = "start";
+  else if (h.length === 1 && Date.now() - h[0].t >= 6 * 86400000) kind = "retake";
+  let snoozed = false;
+  try { const t = parseInt(localStorage.getItem(scopedKey(PROGRESS_NUDGE_KEY)) || "0", 10) || 0; snoozed = Date.now() - t < 3 * 86400000; } catch {}
+  if (hidden || !kind || snoozed) return null;
+  return (
+    <div style={{ ...S.card, marginBottom:12, background:"rgba(34,197,94,0.07)", border:"1px solid rgba(34,197,94,0.3)" }}>
+      <p style={{ color:"#bbf7d0", fontSize:12, lineHeight:1.6, margin:"0 0 8px" }}>📈 {kind === "start" ? (T.pcNudgeStart || "Want to see how much you grow? Take a 3-minute starting check.") : (T.pcNudgeRetake || "It's been a while — retake the check and see your growth!")}</p>
+      <div style={{ display:"flex", alignItems:"center", gap:12 }}>
+        <button onClick={() => { logFunnel(ACTIVE_USER_ID, "progress_nudge_clicked"); onGo(); }} style={{ ...S.btn, padding:"8px 16px", background:"linear-gradient(135deg,#22c55e,#16a34a)", color:"#fff", fontSize:12 }}>{kind === "start" ? (T.pcStart || "Start the check") : (T.pcRetake || "Take it again")}</button>
+        <button type="button" onClick={() => { try { localStorage.setItem(scopedKey(PROGRESS_NUDGE_KEY), String(Date.now())); } catch {} setHidden(true); }} style={{ background:"none", border:"none", color:"#94a3b8", fontSize:11, cursor:"pointer", padding:0 }}>{T.pcLater || "Later"}</button>
+      </div>
+    </div>
+  );
+}
+
 function ModePicker({ T, trialEnded, onPick }) {
   const opts = trialEnded
     ? [["intensive", "Intensive mode", T.modeIntensiveDesc], ["enjoyable", "Enjoyable mode", T.modeEnjoyableDesc]]
@@ -18557,6 +19135,7 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
                 </div>
               );
             })()}
+            {!tutorialActive && !(quotaLocked && LOCKABLE_TABS.includes("milestones")) && <ProgressNudge T={T} onGo={() => setTab("milestones")} />}
             {scheduleCheck.eligible &&<LevelUpOffer T={T} currentLevel={form.jlpt} onConfirm={onLevelUp} onDismiss={scheduleCheck.dismiss} />}
             {/* Week progress banner */}
             <div style={{ ...S.card, marginBottom:12, background:"linear-gradient(135deg,rgba(139,92,246,0.12),rgba(6,182,212,0.08))", border:`1px solid rgba(139,92,246,0.25)` }}>
@@ -18769,6 +19348,8 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
         )}
 
         {tab==="milestones" && (
+          <>
+          <ProgressCheck T={T} userId={userId} />
           <div style={{ ...S.card }}>
             <p style={{ color:C.red, fontSize:12, fontWeight:700, letterSpacing:1, marginBottom:16 }}>{T.yourGoalRoadmap}</p>
             <p style={{ color:"#ffffff", fontSize:13, marginBottom:16 }}>{T.levelToGoal}: {form.jlpt} → {T.goal}: {translateGoal(form.goal, form.customGoal, T)}</p>
@@ -18785,10 +19366,13 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
               <p style={{ color:"#ffffff", fontSize:13, fontWeight:700, margin:"0 0 6px" }}>{T.youveGotThis}</p>
               <p style={{ color:"#ffb3d9", fontSize:12, lineHeight:1.7, margin:0 }}>{T.motivationText}</p>
             </div>
+            {!IS_STORE_APP && (
             <a href="https://www.seitojapanese.online/" target="_blank" rel="noopener noreferrer" style={{ display:"block", textAlign:"center", padding:"13px", background:`linear-gradient(135deg,${C.amber},#d97706)`, color:"#fff", borderRadius:10, fontSize:14, fontWeight:700, textDecoration:"none", marginTop:16 }}>
               {T.bookLesson}
             </a>
+            )}
           </div>
+          </>
         )}
 
         {tab==="jlpt" && <JlptResultsPanel userId={userId} T={T} />}

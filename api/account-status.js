@@ -53,6 +53,7 @@ const FUNNEL_STEPS = new Set([
   "tutorial_shown", "tutorial_skipped", "tutorial_finished",
   "tab_schedule", "tab_vocabulary", "tab_subtitles", "tab_resources", "tab_milestones",
   "lesson_bridge_shown", "lesson_bridge_clicked",
+  "progress_check_started", "progress_check_done", "progress_retake_done", "progress_nudge_clicked",
 ]);
 
 export default async function handler(req, res) {
