@@ -20288,39 +20288,22 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
     return () => sub?.subscription?.unsubscribe();
   }, []);
   // Email verification happens AFTER the student is already inside the app: the welcome email's
-  // button opens the app with ?vt=<token>. Keep the token (it may be opened in a browser where the
-  // student isn't logged in yet), then redeem it for the logged-in account.
+  // button opens the app with ?vt=<userId>.<token>. No login is needed to redeem it (the token itself
+  // proves the mailbox), so it works even in a browser where the student isn't signed in.
   useEffect(() => {
     try {
       const sp = new URLSearchParams(window.location.search);
       const vt = sp.get("vt");
-      if (vt) {
-        localStorage.setItem("gaku_verify_token", vt.slice(0, 200));
-        sp.delete("vt");
-        const q = sp.toString();
-        window.history.replaceState(null, "", window.location.pathname + (q ? "?" + q : "") + window.location.hash);
-      }
+      if (!vt) return;
+      sp.delete("vt");
+      const q = sp.toString();
+      window.history.replaceState(null, "", window.location.pathname + (q ? "?" + q : "") + window.location.hash);
+      fetch("/api/signup", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "verify", token: vt.slice(0, 200) }),
+      }).catch(() => {});
     } catch {}
   }, []);
-  useEffect(() => {
-    if (!authUser?.id || !supabase) return;
-    let vt = null;
-    try { vt = localStorage.getItem("gaku_verify_token"); } catch {}
-    if (!vt) return;
-    (async () => {
-      try {
-        const { data } = await supabase.auth.getSession();
-        const jwt = data?.session?.access_token;
-        if (!jwt) return;
-        await fetch("/api/signup", {
-          method: "POST",
-          headers: { "Content-Type": "application/json", Authorization: `Bearer ${jwt}` },
-          body: JSON.stringify({ action: "verify", token: vt }),
-        });
-      } catch {}
-      try { localStorage.removeItem("gaku_verify_token"); } catch {}
-    })();
-  }, [authUser?.id]);
   // Once logged in, verify this device against known devices for the account —
   // triggers the dual-approval email flow for unrecognized devices.
   useEffect(() => {

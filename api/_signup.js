@@ -27,21 +27,25 @@ function welcomeHtml(link) {
         <p>Best regards,<br/>Seito — GAKU Online Japanese</p>`;
 }
 
-// Marks the logged-in account's email as verified. Called by the app when it is opened from the
-// link in the welcome email (?vt=<token>). The token lives in app_metadata, which students can
-// never edit, so only someone who actually received the email can complete this.
+// Marks an account's email as verified. Called by the app when it is opened from the link in the
+// welcome email (?vt=<userId>.<token>). The token is a 192-bit secret that lives in app_metadata
+// (students can never edit it) and was only ever emailed to the address, so possessing it proves the
+// mailbox is theirs — same trust level as a magic link. No login is needed, which matters because the
+// link usually opens in a browser where the student is not signed in (e.g. store-app users).
 async function handleVerify(req, res, admin) {
-  const jwt = String(req.headers?.authorization || "").replace(/^Bearer\s+/i, "").trim();
-  const token = String(req.body?.token || "");
-  if (!jwt || !token) return res.status(400).json({ error: "Missing token." });
-  const { data: u, error: uErr } = await admin.auth.getUser(jwt);
-  if (uErr || !u?.user) return res.status(401).json({ error: "Please log in first." });
+  const raw = String(req.body?.token || "");
+  const dot = raw.indexOf(".");
+  const userId = dot > 0 ? raw.slice(0, dot) : "";
+  const token = dot > 0 ? raw.slice(dot + 1) : "";
+  if (!/^[0-9a-f-]{36}$/i.test(userId) || !token) return res.status(400).json({ error: "Invalid verification link." });
+  const { data: u, error: uErr } = await admin.auth.admin.getUserById(userId);
+  if (uErr || !u?.user) return res.status(400).json({ error: "Invalid verification link." });
   const am = u.user.app_metadata || {};
   if (am.email_verified === true) return res.status(200).json({ ok: true, alreadyVerified: true });
   const expected = String(am.verify_token || "");
   const a = Buffer.from(expected), b = Buffer.from(token);
   if (!expected || a.length !== b.length || !crypto.timingSafeEqual(a, b)) {
-    return res.status(400).json({ error: "This verification link does not match this account." });
+    return res.status(400).json({ error: "Invalid verification link." });
   }
   const { error } = await admin.auth.admin.updateUserById(u.user.id, {
     app_metadata: { ...am, email_verified: true, verify_token: null, email_verified_at: new Date().toISOString() },
@@ -81,12 +85,12 @@ export async function handleSignup(req, res) {
         await admin.auth.admin.updateUserById(userId, { user_metadata: meta });
       } catch (e) { console.error("[signup] stash form failed:", e.message); }
     };
-    const sendWelcome = async (token) => {
+    const sendWelcome = async (uid, token) => {
       try {
         await sendEmail({
           to: email,
           subject: "Welcome to GAKU Master — please verify your email",
-          html: welcomeHtml(`${APP_URL}/app?vt=${token}`),
+          html: welcomeHtml(`${APP_URL}/app?vt=${uid}.${token}`),
         });
       } catch (e) { console.error("[signup] welcome email failed:", e.message); }
     };
@@ -170,7 +174,7 @@ export async function handleSignup(req, res) {
             user_metadata: { ...(user.user_metadata || {}), ...formMeta() },
           });
           if (upErr) return res.status(400).json({ error: upErr.message || "Could not create account." });
-          await sendWelcome(verifyToken);
+          await sendWelcome(user.id, verifyToken);
           return res.status(200).json({ ok: true, userId: user.id, needsConfirmation: false });
         }
         return res.status(200).json({ alreadyRegistered: true });
@@ -180,7 +184,7 @@ export async function handleSignup(req, res) {
 
     const userId = data?.user?.id;
     if (!userId) return res.status(500).json({ error: "Could not create account." });
-    await sendWelcome(verifyToken);
+    await sendWelcome(userId, verifyToken);
 
     return res.status(200).json({ ok: true, userId, needsConfirmation: false });
   } catch (e) {
