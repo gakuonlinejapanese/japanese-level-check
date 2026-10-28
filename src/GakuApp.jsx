@@ -14,6 +14,11 @@ const IS_STORE_APP = (() => {
   } catch { return false; }
 })();
 
+// Store-app "guest" accounts (App Store guideline 5.1.1(v): students must be able to use the app and
+// buy a subscription without registering). Their placeholder address is never shown or emailed.
+// Must match isGuestEmail in api/_resend.js.
+const isGuestEmail = (e) => /^guest-[0-9a-f]{24}@seitojapanese\.online$/i.test(String(e || "").trim());
+
 const C = {
   bg: "linear-gradient(160deg,#0a0f1e 0%,#0f172a 60%,#0a0f1e 100%)",
   purple: "#7c3aed", purpleLight: "#a855f7",
@@ -17461,7 +17466,7 @@ const QUICK_JLPT_OPTIONS = [
   ["Advanced", "levelAdvanced", "~N2"],
   ["Mastery", "levelMastery", "~N1"],
 ];
-function QuickStartForm({ onSubmit, initialJlpt, initialForm, onLoginClick }) {
+function QuickStartForm({ onSubmit, initialJlpt, initialForm, onLoginClick, guestMode, submitBusy, submitErr }) {
   // No preferredLang choice has happened yet at this point in onboarding (that question
   // lives in CompleteProfileScreen, step 2), so guess a starting UI language from the
   // browser instead of defaulting every new visitor to English.
@@ -17480,12 +17485,14 @@ function QuickStartForm({ onSubmit, initialJlpt, initialForm, onLoginClick }) {
     { key: "email", label: T.quickEmailQuestion, valid: !!email.trim() },
     { key: "goal", label: T.quickGoalQuestion, valid: goal.length > 0 && (isOther ? customGoal.trim() : true) },
     { key: "jlpt", label: T.quickLevelQuestion, valid: !!jlpt },
-  ];
+  // Store apps start as a guest: no email is asked for (registering is optional, later).
+  ].filter(s => !(guestMode && s.key === "email"));
   const total = steps.length;
   const current = steps[step];
   const toggleGoal = (g) => setGoal(gs => gs.includes(g) ? gs.filter(x=>x!==g) : [...gs, g]);
   const goBack = () => { if (step > 0) { setErr(""); setStep(s => s - 1); } };
   const goNext = (overrideJlpt) => {
+    if (submitBusy) return;
     const jlptVal = overrideJlpt ?? jlpt;
     if (step === total - 1) {
       if (!jlptVal) { setErr(T.fillRequired); return; }
@@ -17493,7 +17500,7 @@ function QuickStartForm({ onSubmit, initialJlpt, initialForm, onLoginClick }) {
       // detectBrowserLanguage() (not the QUICK_DEFAULTS placeholder) becomes the account's
       // starting preferredLang, so the rest of the app opens in the guessed language too —
       // the student can still change it explicitly in CompleteProfileScreen step 2.
-      onSubmit({ name: name.trim(), email: email.trim(), jlpt: jlptVal, goal, customGoal, displayGoal, ...QUICK_DEFAULTS, preferredLang: quickLang, profileComplete: false });
+      onSubmit({ name: name.trim(), email: guestMode ? "" : email.trim(), jlpt: jlptVal, goal, customGoal, displayGoal, ...QUICK_DEFAULTS, preferredLang: quickLang, profileComplete: false });
       return;
     }
     if (!current.valid) { setErr(T.fillRequired); return; }
@@ -17546,7 +17553,8 @@ function QuickStartForm({ onSubmit, initialJlpt, initialForm, onLoginClick }) {
             ))}
           </div>
         )}
-        {err && <p style={{ color:C.red, fontSize:12, margin:"12px 0 0" }}>{err}</p>}
+        {(err || submitErr) && <p style={{ color:C.red, fontSize:12, margin:"12px 0 0" }}>{err || submitErr}</p>}
+        {submitBusy && <p style={{ color:"#94a3b8", fontSize:12, margin:"12px 0 0" }}>{"…"}</p>}
         <div style={{ display:"flex", gap:10, marginTop:22 }}>
           {step > 0 && (
             <button onClick={goBack} style={{ ...S.btn, flex:"0 0 auto", padding:"12px 18px", background:"transparent", border:`1px solid ${C.border}`, color:"#94a3b8" }}>{T.back}</button>
@@ -17785,7 +17793,7 @@ function FormScreen({ onSubmit, onBack, onCancel, initialJlpt, initialForm, onLo
 
         <div style={{ display:"flex", flexDirection:"column", gap:14 }}>
           <div><label style={S.label}>{T.yourName}</label><input value={form.name} onChange={e=>set("name",e.target.value)} placeholder={T.namePlaceholder} style={S.input}/></div>
-          <div><label style={S.label}>{T.email}</label><input value={form.email} onChange={e=>set("email",e.target.value)} placeholder={T.emailPlaceholder} type="email" style={S.input}/></div>
+          {!isGuestEmail(form.email) && <div><label style={S.label}>{T.email}</label><input value={form.email} onChange={e=>set("email",e.target.value)} placeholder={T.emailPlaceholder} type="email" style={S.input}/></div>}
           <div><label style={S.label}>{T.country}</label><input value={form.country} onChange={e=>set("country",e.target.value)} placeholder={T.countryPlaceholder} style={S.input}/></div>
 
           {/* Native Language — changing this instantly switches all UI */}
@@ -18466,7 +18474,7 @@ function FeaturePicker({ T, initial, onApply }) {
   );
 }
 
-function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteAccountBusy, userId, streakDays, daysUntilTrialEnds, tutorialGraceDaysLeft, isTrialAccount, isGakuStudent, onCompleteProfile, readerInstalled }) {
+function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteAccountBusy, userId, streakDays, daysUntilTrialEnds, tutorialGraceDaysLeft, isTrialAccount, isGakuStudent, onCompleteProfile, readerInstalled, isGuest, onUpgrade, onShowPlans }) {
   const T = useUITranslations(form?.preferredLang || "English");
   // GAKU Reader promo card: shown on desktop Chrome/Edge to accounts that have
   // never used the extension (server says readerInstalled=false); dismissible
@@ -18957,6 +18965,12 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
           <button onClick={()=>{ setTutorialStep(0); setTutorialActive(true); }} style={{ ...S.btn, padding:"8px 14px", background:"transparent", border:`1px solid ${C.purpleLight}`, color:C.purpleLight, fontSize:12 }}>{T.tutorialBtn}</button>
           <button onClick={()=>setShowHelp(true)} style={{ ...S.btn, padding:"8px 14px", background:`linear-gradient(135deg,${C.amber},#d97706)`, color:"#fff", fontSize:12 }}>{T.help}</button>
           <button onClick={onEdit} style={{ ...S.btn, padding:"8px 14px", background:C.card, color:"#94a3b8", border:`1px solid ${C.border}`, fontSize:12 }}>{T.editProfile}</button>
+          {onShowPlans && (
+            <button onClick={onShowPlans} style={{ ...S.btn, padding:"8px 14px", background:"rgba(251,191,36,0.12)", color:"#fbbf24", border:"1px solid rgba(251,191,36,0.45)", fontSize:12 }}>{"⭐"} {T?.storePlansBtn || "Plans"}</button>
+          )}
+          {isGuest && onUpgrade && (
+            <button onClick={onUpgrade} style={{ ...S.btn, padding:"8px 14px", background:C.card, color:"#94a3b8", border:`1px solid ${C.border}`, fontSize:12 }}>{T?.guestCreateAccountBtn || "Create account"}</button>
+          )}
           {onLogout && (
             <button onClick={onLogout} style={{ ...S.btn, padding:"8px 14px", background:C.card, color:"#94a3b8", border:`1px solid ${C.border}`, fontSize:12 }}>
               {T.logOut || "Log Out"}
@@ -18995,6 +19009,16 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
           <a href="/app?preview=paywall" style={{ padding:"5px 12px", borderRadius:8, background:C.purpleLight, color:"#1e1033", fontSize:12, fontWeight:800, textDecoration:"none" }}>
             {T.viewPlansCta}
           </a>
+        </div>
+      )}
+      {isGuest && onUpgrade && (
+        <div style={{ background:"rgba(6,182,212,0.08)", borderBottom:"1px solid rgba(6,182,212,0.3)", padding:"10px 20px", display:"flex", alignItems:"center", justifyContent:"center", gap:12, flexWrap:"wrap" }}>
+          <p style={{ color:"#67e8f9", fontSize:12, fontWeight:700, margin:0 }}>
+            {T?.guestSaveText || "Optional: create a free account to use GAKU Master on other devices and keep your progress if you change phones."}
+          </p>
+          <button onClick={onUpgrade} style={{ padding:"5px 12px", borderRadius:8, background:"#06b6d4", border:"none", color:"#082f49", fontSize:12, fontWeight:800, cursor:"pointer" }}>
+            {T?.guestCreateAccountBtn || "Create account"}
+          </button>
         </div>
       )}
       {onCompleteProfile && (
@@ -19813,6 +19837,108 @@ function AuthScreen({ onAuthed, T, prefillEmail, initialMode, quickStartStep, li
   );
 }
 
+// ─── GUEST (store apps): optional registration — turns the guest account into a normal one ───
+// Same account (same user id), so progress, trial and purchases all stay. An invitation code can be
+// entered here too (it needs a real email address, which is why it lives behind registration).
+function GuestUpgradeScreen({ T, authUser, initialInvite, onClose, onLogin }) {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [inviteCode, setInviteCode] = useState(initialInvite || "");
+  const [busy, setBusy] = useState(false);
+  const [err, setErr] = useState("");
+  const inputStyle = { width:"100%", boxSizing:"border-box", padding:"11px 14px", marginBottom:10, background:"#0f172a", border:"1.5px solid rgba(255,255,255,0.1)", borderRadius:10, color:"#f1f5f9", fontSize:14 };
+  const submit = async (e) => {
+    e.preventDefault();
+    if (busy) return;
+    setErr(""); setBusy(true);
+    const mail = email.trim().toLowerCase();
+    try {
+      if (!supabase) throw new Error("Account features are not configured yet.");
+      if (inviteCode.trim()) {
+        const vRes = await fetch("/api/invite", {
+          method: "POST", headers: { "Content-Type":"application/json" },
+          body: JSON.stringify({ action: "validate", code: inviteCode.trim(), email: mail }),
+        });
+        const vData = await vRes.json().catch(() => ({}));
+        if (!vRes.ok) throw new Error(vData.error || "Invalid invite code.");
+      }
+      const { data: sessionData } = await supabase.auth.getSession();
+      const token = sessionData?.session?.access_token;
+      if (!token) throw new Error("No active session");
+      const uRes = await fetch("/api/signup", {
+        method: "POST", headers: { "Content-Type":"application/json", Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ action: "upgrade_guest", email: mail, password }),
+      });
+      const uData = await uRes.json().catch(() => ({}));
+      if (uData?.alreadyRegistered) throw new Error(T?.emailAlreadyRegistered || "This email is already registered. Please log in instead.");
+      if (!uRes.ok) throw new Error(uData?.error || "Could not create your account.");
+      if (inviteCode.trim()) {
+        await fetch("/api/invite", {
+          method: "POST", headers: { "Content-Type":"application/json" },
+          body: JSON.stringify({ action: "redeem", code: inviteCode.trim(), userId: authUser.id }),
+        });
+        await fetch("/api/create-profile", {
+          method: "POST", headers: { "Content-Type":"application/json" },
+          body: JSON.stringify({ userId: authUser.id, email: mail, isGakuStudent: true }),
+        });
+      }
+      const { error: sErr } = await supabase.auth.signInWithPassword({ email: mail, password });
+      if (sErr) throw sErr;
+      // Keep the saved profile's email in sync, then restart so the app runs as a normal registered account.
+      try {
+        const k = scopedKey("gaku_form");
+        const saved = JSON.parse(localStorage.getItem(k) || "null");
+        if (saved) { saved.email = mail; localStorage.setItem(k, JSON.stringify(saved)); }
+      } catch {}
+      window.location.reload();
+    } catch (e2) {
+      setErr(e2.message || "Something went wrong.");
+      setBusy(false);
+    }
+  };
+  return (
+    <div style={{ minHeight:"100vh", background:"linear-gradient(160deg,#0a0f1e 0%,#0f172a 60%,#0a0f1e 100%)", display:"flex", alignItems:"center", justifyContent:"center", padding:24, boxSizing:"border-box" }}>
+      <form onSubmit={submit} style={{ width:"100%", maxWidth:380, background:"rgba(255,255,255,0.03)", border:"1.5px solid rgba(255,255,255,0.1)", borderRadius:20, padding:28 }}>
+        <h2 style={{ color:"#f1f5f9", fontSize:20, fontWeight:900, margin:"0 0 8px", textAlign:"center" }}>{T?.guestUpgradeTitle || "Create your account"}</h2>
+        <p style={{ color:"#94a3b8", fontSize:12.5, lineHeight:1.6, margin:"0 0 16px", textAlign:"center" }}>
+          {T?.guestUpgradeDesc || "Optional. Your progress and any purchase stay with you, and you can use GAKU Master on other devices."}
+        </p>
+        <input type="email" required placeholder={T?.emailPlaceholder || "Email"} value={email} onChange={e=>setEmail(e.target.value)} style={inputStyle} />
+        <input type="password" required minLength={6} placeholder={T?.passwordPlaceholder || "Password"} value={password} onChange={e=>setPassword(e.target.value)} style={inputStyle} />
+        <input placeholder={T?.invitationCodeOptional || "GAKU invite code (optional)"} value={inviteCode} onChange={e=>setInviteCode(e.target.value)} style={inputStyle} />
+        {err && <p style={{ color:"#f87171", fontSize:12, margin:"0 0 10px" }}>{err}</p>}
+        <button type="submit" disabled={busy} style={{ width:"100%", padding:"12px", background:"linear-gradient(135deg,#7c3aed,#a855f7)", border:"none", borderRadius:10, color:"#fff", fontSize:14, fontWeight:800, cursor:"pointer", opacity:busy?0.6:1 }}>
+          {busy ? "…" : (T?.signupButton || "Sign Up")}
+        </button>
+        <button type="button" onClick={onClose} disabled={busy} style={{ display:"block", width:"100%", marginTop:12, background:"none", border:"none", color:"#94a3b8", fontSize:12.5, cursor:"pointer" }}>
+          {T?.guestNotNow || "Not now"}
+        </button>
+        <button type="button" onClick={onLogin} disabled={busy} style={{ display:"block", width:"100%", marginTop:6, background:"none", border:"none", color:"#64748b", fontSize:11.5, textDecoration:"underline", cursor:"pointer" }}>
+          {T?.haveAccount || "Already have an account? Log in"}
+        </button>
+      </form>
+    </div>
+  );
+}
+
+// ─── STORE APPS: subscription plans, reachable any time from the dashboard (not only after the trial) ───
+function StorePlansScreen({ T, userId, onClose, onPurchased }) {
+  return (
+    <div style={{ minHeight:"100vh", background:"linear-gradient(160deg,#0a0f1e 0%,#0f172a 60%,#0a0f1e 100%)", display:"flex", alignItems:"flex-start", justifyContent:"center", padding:24, boxSizing:"border-box" }}>
+      <div style={{ background:"linear-gradient(135deg,#1e1b4b,#0f172a)", border:"1.5px solid rgba(139,92,246,0.4)", borderRadius:20, padding:"32px 26px", maxWidth:420, width:"92%", margin:"auto", textAlign:"center" }}>
+        <h2 style={{ color:"#f1f5f9", fontSize:20, fontWeight:900, margin:"0 0 14px" }}>GAKU Master</h2>
+        <StorePlans T={T} userId={userId} onPurchased={onPurchased} />
+        <button onClick={onClose} style={{ display:"block", width:"100%", marginTop:6, padding:"10px", background:"transparent", border:"1px solid rgba(148,163,184,0.3)", borderRadius:10, color:"#cbd5e1", fontSize:13, fontWeight:700, cursor:"pointer" }}>
+          {T?.back || "Back"}
+        </button>
+        <p style={{ color:"#64748b", fontSize:11, margin:"14px 0 0" }}>
+          <a href="/terms.html" target="_blank" rel="noopener noreferrer" style={{ color:"#a78bfa" }}>{T?.termsOfUseLabel || "Terms of Use"}</a>{" · "}<a href="/privacy.html" target="_blank" rel="noopener noreferrer" style={{ color:"#a78bfa" }}>{T?.privacyPolicyLabel || "Privacy Policy"}</a>
+        </p>
+      </div>
+    </div>
+  );
+}
+
 // ─── ACCOUNT: blocks the dashboard while a new device awaits dual approval ────
 function DeviceApprovalGate({ T }) {
   return (
@@ -19878,6 +20004,14 @@ function logFunnel(userId, step) {
 export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail, skipTrialPaywall, previewPaywall, previewPlans }) {
   const [authUser, setAuthUser] = useState(null);
   const [authChecked, setAuthChecked] = useState(!supabase);
+  // Store-app guest flow (see startGuest / GuestUpgradeScreen / StorePlansScreen).
+  const [guestBusy, setGuestBusy] = useState(false);
+  const [guestErr, setGuestErr] = useState("");
+  const [showGuestUpgrade, setShowGuestUpgrade] = useState(false);
+  const [upgradeInviteCode, setUpgradeInviteCode] = useState("");
+  const [showStorePlans, setShowStorePlans] = useState(false);
+  const [isReviewAccount, setIsReviewAccount] = useState(false);
+  const isGuestUser = !!authUser && (authUser.app_metadata?.is_guest === true || isGuestEmail(authUser.email));
   // After the student taps "Log Out" the app reloads; this flag makes it land on the Log In screen
   // instead of falling back to the (logged-out) dashboard/study guide. Cleared on the next login.
   const justLoggedOut = (() => { try { return localStorage.getItem("gaku_just_logged_out") === "1"; } catch { return false; } })();
@@ -20164,6 +20298,7 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
       setStreakDays(typeof data?.streakDays === "number" ? data.streakDays : 0);
       setReaderInstalled(typeof data?.readerInstalled === "boolean" ? data.readerInstalled : null);
       if (typeof data?.plansUnlocked === "boolean") setPlansUnlocked(data.plansUnlocked);
+      if (typeof data?.isReviewAccount === "boolean") setIsReviewAccount(data.isReviewAccount);
       if ((data?.isGakuStudent || data?.isPaid) && !previewPaywall) {
         setShowPaywall(false);
         setAwaitingUnlock(false);
@@ -20411,6 +20546,36 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
       window.removeEventListener("pagehide", pushOnHide);
     };
   }, [authUser]);
+  // Store apps: start studying right away as a guest (App Store guideline 5.1.1(v) — registering must
+  // be optional). The server creates a hidden account; the answers are stored on it (pending_form) and
+  // applied by the login effect above exactly like a confirmed signup. Registering later is optional.
+  const startGuest = async (f) => {
+    if (guestBusy) return;
+    setGuestBusy(true); setGuestErr("");
+    try {
+      if (!supabase) throw new Error("Account features are not configured yet.");
+      const sRes = await fetch("/api/signup", {
+        method: "POST", headers: { "Content-Type":"application/json" },
+        body: JSON.stringify({ action: "guest", pendingForm: { ...f, email: "" } }),
+      });
+      const sData = await sRes.json().catch(() => ({}));
+      if (!sRes.ok || !sData?.userId || !sData?.email || !sData?.password) throw new Error(sData?.error || "Could not start. Please check your connection and try again.");
+      const pRes = await fetch("/api/create-profile", {
+        method: "POST", headers: { "Content-Type":"application/json" },
+        body: JSON.stringify({ userId: sData.userId, email: sData.email, isGakuStudent: false, deviceId: getDeviceId(), ...getSignupSource() }),
+      });
+      if (!pRes.ok) {
+        const pData = await pRes.json().catch(() => ({}));
+        throw new Error(pData.error || "Failed to save your profile.");
+      }
+      const { error: sErr } = await supabase.auth.signInWithPassword({ email: sData.email, password: sData.password });
+      if (sErr) throw sErr;
+    } catch (e) {
+      setGuestErr(e?.message || "Something went wrong. Please try again.");
+    } finally {
+      setGuestBusy(false);
+    }
+  };
   const handleSubmit = (f, opts) => {
     // Require an account before a profile is ever committed. If we let a
     // logged-out visitor save straight to localStorage, their entire study
@@ -20418,6 +20583,7 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
     // the first cache clear, device switch, or iOS storage eviction sends
     // them right back to this same blank form with no way to recover.
     if (!authUser) {
+      if (IS_STORE_APP) { startGuest(f); return; }
       setPendingProfileSave(f);
       setAuthInitialMode("signup");
       setShowAuthScreen(true);
@@ -20497,6 +20663,9 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
   // actually a GAKU student. Mirrors the redeem step in AuthScreen's signup.
   const handleLockedInviteRedeem = async () => {
     if (!lockedInviteCode.trim() || !authUser) return;
+    // A guest has no real email yet (invite codes are tied to the student's email), so registering
+    // comes first — the code is carried over to that screen.
+    if (isGuestUser) { setUpgradeInviteCode(lockedInviteCode.trim()); setShowGuestUpgrade(true); return; }
     setLockedInviteBusy(true);
     setLockedInviteErr("");
     try {
@@ -20656,6 +20825,21 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
     />
   );
   if (policyGate) return <PolicyGate T={T} name={form?.name || authUser?.email} email={authUser?.email || form?.email} plan={policyGate.planLabel} userId={authUser?.id} onAgreed={handlePolicyAgreed} onCancel={()=>setPolicyGate(null)} />;
+  if (authUser && isGuestUser && showGuestUpgrade) return (
+    <GuestUpgradeScreen
+      T={T}
+      authUser={authUser}
+      initialInvite={upgradeInviteCode}
+      onClose={() => { setShowGuestUpgrade(false); setUpgradeInviteCode(""); }}
+      onLogin={() => {
+        // Switching to an existing account leaves this guest session (its data stays on the guest account).
+        if (window.confirm(T?.guestLoginConfirm || "Log in to an existing account? You will leave this guest session.")) handleLogout();
+      }}
+    />
+  );
+  if (authUser && IS_STORE_APP && showStorePlans) return (
+    <StorePlansScreen T={T} userId={authUser.id} onClose={() => setShowStorePlans(false)} onPurchased={() => { setIsPaid(true); setShowStorePlans(false); }} />
+  );
   if (authUser && deviceStatus === "suspended") return <DeviceSuspendedGate T={T} suspendedUntil={deviceSuspendedUntil} />;
   if (authUser && deviceStatus === "pending") return <DeviceApprovalGate T={T} />;
   if (authUser && deviceStatus === "error") return <DeviceCheckErrorGate onRetry={() => window.location.reload()} />;
@@ -20678,10 +20862,10 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
             <button onClick={handleLockedInviteRedeem} disabled={lockedInviteBusy || !lockedInviteCode.trim()} style={{ padding:"9px 14px", borderRadius:8, border:"none", background:"linear-gradient(135deg,#7c3aed,#a855f7)", color:"#fff", fontWeight:800, fontSize:12.5, cursor:"pointer" }}>{lockedInviteBusy ? "\u2026" : (T?.unlockBtn || "Unlock")}</button>
           </div>
           {lockedInviteErr && <p style={{ color:"#f87171", fontSize:11, margin:"0 0 8px" }}>{lockedInviteErr}</p>}
-          {!reqOpen && !reqDone && (
+          {!reqOpen && !reqDone && !isGuestUser && (
             <button onClick={()=>setReqOpen(true)} style={{ background:"none", border:"none", color:"#a78bfa", fontSize:12.5, textDecoration:"underline", cursor:"pointer", margin:"6px 0 12px" }}>{T?.storeRequestCode || "Request an invitation code"}</button>
           )}
-          {reqOpen && !reqDone && (
+          {reqOpen && !reqDone && !isGuestUser && (
             <div style={{ textAlign:"left", margin:"8px 0 12px" }}>
               <p style={{ color:"#94a3b8", fontSize:12, margin:"0 0 6px" }}>{(T?.storeReplyTo || "We will reply to {email}.").replace("{email}", authUser.email)}</p>
               <textarea value={reqMsg} onChange={e=>setReqMsg(e.target.value.slice(0,1000))} placeholder={T?.storeMessagePh || "Message (optional)"} rows={3} style={{ width:"100%", boxSizing:"border-box", padding:"8px 10px", borderRadius:8, border:"1px solid rgba(148,163,184,0.3)", background:"rgba(2,6,23,0.5)", color:"#f1f5f9", fontSize:13 }} />
@@ -20819,6 +21003,9 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
   if (!form) return (
     <QuickStartForm
       onSubmit={handleSubmit}
+      guestMode={IS_STORE_APP}
+      submitBusy={guestBusy}
+      submitErr={guestErr}
       initialJlpt={initialJlpt}
       initialForm={formForEdit}
       onLoginClick={!authUser ? () => { setAuthInitialMode("login"); setShowAuthScreen(true); } : undefined}
@@ -20989,7 +21176,7 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
   }
   return (
     <div style={{ position:"relative" }} onClickCapture={handleDashboardInteraction}>
-      <Dashboard form={form} onEdit={handleEdit} onLevelUp={(lvl)=>handleSubmit({ ...form, jlpt: lvl })} onLogout={authUser ? handleLogout : undefined} onDeleteAccount={authUser ? handleDeleteAccount : undefined} deleteAccountBusy={deleteAccountBusy} userId={authUser?.id} streakDays={streakDays} readerInstalled={readerInstalled} daysUntilTrialEnds={daysUntilTrialEnds} tutorialGraceDaysLeft={tutorialGraceDaysLeft} isTrialAccount={!isGakuStudent && !isPaid} isGakuStudent={isGakuStudent} onCompleteProfile={form?.profileComplete === false ? () => setOnboardingStep("completeProfile") : undefined} />
+      <Dashboard form={form} onEdit={handleEdit} onLevelUp={(lvl)=>handleSubmit({ ...form, jlpt: lvl })} onLogout={authUser && !isGuestUser ? handleLogout : undefined} isGuest={isGuestUser} onUpgrade={isGuestUser ? () => { setUpgradeInviteCode(""); setShowGuestUpgrade(true); } : undefined} onShowPlans={IS_STORE_APP && authUser && !isPaid && (!isGakuStudent || isReviewAccount) ? () => setShowStorePlans(true) : undefined} onDeleteAccount={authUser ? handleDeleteAccount : undefined} deleteAccountBusy={deleteAccountBusy} userId={authUser?.id} streakDays={streakDays} readerInstalled={readerInstalled} daysUntilTrialEnds={daysUntilTrialEnds} tutorialGraceDaysLeft={tutorialGraceDaysLeft} isTrialAccount={!isGakuStudent && !isPaid} isGakuStudent={isGakuStudent} onCompleteProfile={form?.profileComplete === false ? () => setOnboardingStep("completeProfile") : undefined} />
       {showPaywall && !IS_STORE_APP && !(authUser && (isGakuStudent || isPaid)) && (
         <div style={{ position:"fixed", inset:0, zIndex:9999, display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"flex-start", overflowY:"auto", WebkitOverflowScrolling:"touch", padding:"16px 0", boxSizing:"border-box", background:"rgba(10,15,30,0.85)", backdropFilter:"blur(12px)" }}>
           <div style={{ background:"linear-gradient(135deg,#1e1b4b,#0f172a)", border:"1.5px solid rgba(139,92,246,0.4)", borderRadius:20, padding:"36px 32px", maxWidth:420, width:"90%", margin:"auto", textAlign:"center", boxShadow:"0 8px 40px rgba(139,92,246,0.25)" }}>
