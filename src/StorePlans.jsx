@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { isStoreBillingAvailable, initBilling, loadPackages, buyPackage, restorePurchases } from './storeBilling';
+import { isStoreBillingAvailable, initBilling, loadPackages, buyPackage, restorePurchases, debugOfferings } from './storeBilling';
 
 // Guards against a native call that never settles, so the screen can fall back instead of waiting forever.
 const withTimeout = (promise, ms, label) => Promise.race([promise, new Promise((_, reject) => setTimeout(() => reject(new Error('timeout after ' + (ms / 1000) + 's at ' + label)), ms))]);
@@ -10,21 +10,33 @@ export default function StorePlans({ T, userId, onPurchased }) {
   const [pkgs, setPkgs] = useState(null); // null = loading, [] = none
   const [busy, setBusy] = useState('');
   const [msg, setMsg] = useState('');
+  const [diag, setDiag] = useState(''); // why the plans are empty (shown small, so a failure is never a blank screen)
+  const [retry, setRetry] = useState(0);
 
   useEffect(() => {
     let alive = true;
     (async () => {
       try {
-        if (!isStoreBillingAvailable() || !userId) { if (alive) setPkgs([]); return; }
+        if (!isStoreBillingAvailable() || !userId) { if (alive) { setDiag(!userId ? 'no user id' : 'no RevenueCat key in this build'); setPkgs([]); } return; }
+        setPkgs(null); setDiag('');
         await withTimeout(initBilling(userId), 20000, 'init');
         const list = await withTimeout(loadPackages(), 20000, 'offerings');
-        if (alive) setPkgs(list);
-      } catch (e) { if (alive) setPkgs([]); }
+        if (alive) {
+          if (!list.length) { try { setDiag('no packages: ' + await withTimeout(debugOfferings(), 8000, 'debug')); } catch (e2) { setDiag('no packages'); } }
+          setPkgs(list);
+        }
+      } catch (e) { if (alive) { setDiag('error: ' + String((e && (e.message || e.code)) || e).slice(0, 300)); setPkgs([]); } }
     })();
     return () => { alive = false; };
-  }, [userId]);
+  }, [userId, retry]);
 
-  if (!pkgs || pkgs.length === 0) return null;
+  if (!pkgs) return <p style={{ color: '#94a3b8', fontSize: 12, margin: '0 0 14px' }}>{'\u2026'}</p>;
+  if (pkgs.length === 0) return (
+    <div style={{ margin: '0 0 14px' }}>
+      <p style={{ color: '#fbbf24', fontSize: 11, lineHeight: 1.5, margin: '0 0 8px', wordBreak: 'break-word' }}>{T?.storePlansUnavailable || 'Plans could not be loaded.'}{diag ? ' (' + diag + ')' : ''}</p>
+      <button onClick={() => setRetry((n) => n + 1)} style={{ background: 'none', border: '1px solid rgba(167,139,250,0.5)', borderRadius: 8, color: '#a78bfa', fontSize: 12.5, padding: '7px 14px', cursor: 'pointer' }}>{T?.confirmEmailRetry || 'Try again'}</button>
+    </div>
+  );
 
   const label = (type) => (
     type === 'MONTHLY' ? (T?.storeMonthly || 'Monthly')
