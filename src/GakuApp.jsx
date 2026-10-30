@@ -1180,6 +1180,18 @@ const UI_TRANSLATIONS = {
     coachTitle: "Today's suggestion",
     coachBoth: "You usually do well in {strong}, and {weak} seems a little hard. How about {weak} today?",
     coachWeakOnly: "{weak} seems a little hard for you. How about practicing it today?",
+    coachAdviceTitle: "🎯 Your study coach",
+    coachNoData: "Practice a little more and I'll start giving you specific advice.",
+    coachAllGood: "No weak spots right now. Keep up this pace!",
+    coachAccWeak: "{area} accuracy is {pct}%. Make {area} your focus today.",
+    coachSlowFlip: "It takes you about {sec}s to recall a word. Aim for under 5s with quick flashcard rounds.",
+    coachSlowWord: "Your slowest word is {word} ({sec}s). Review it again.",
+    coachRepeatWord: "You viewed {word} {n} times today and it isn't sticking. Try an example sentence or write it out.",
+    coachPronMiss: "You keep missing the pronunciation of {word} ({n} times). Say it slowly, then at normal speed.",
+    coachListenWeak: "Listening comprehension is {pct}%. Listen several times before reading the text.",
+    coachStatFlip: "Flip speed",
+    coachStatViews: "Words seen today",
+    coachStatListen: "Listening",
     lessonBridgeAsk: "Want to practice this with a real teacher? Try a free trial lesson.",
     lessonBridgeBtn: "Book a free trial lesson →",
     lessonBridgeMissed: "Sounds to watch: {chars}",
@@ -1796,6 +1808,18 @@ const UI_TRANSLATIONS = {
     coachTitle: "Suggestion du jour",
     coachBoth: "Vous réussissez généralement bien en {strong}, et {weak} semble un peu difficile. Et si on travaillait {weak} aujourd'hui ?",
     coachWeakOnly: "{weak} semble un peu difficile pour vous. Et si vous le travailliez aujourd'hui ?",
+    coachAdviceTitle: "🎯 Votre coach d'étude",
+    coachNoData: "Entraînez-vous encore un peu et je vous donnerai des conseils précis.",
+    coachAllGood: "Aucun point faible pour l'instant. Gardez ce rythme !",
+    coachAccWeak: "Votre taux de réussite en {area} est de {pct} %. Faites de {area} votre priorité aujourd'hui.",
+    coachSlowFlip: "Il vous faut environ {sec} s pour retrouver un mot. Visez moins de 5 s avec des séries rapides de cartes.",
+    coachSlowWord: "Votre mot le plus lent est {word} ({sec} s). Révisez-le.",
+    coachRepeatWord: "Vous avez regardé {word} {n} fois aujourd'hui sans le retenir. Essayez une phrase d'exemple ou écrivez-le.",
+    coachPronMiss: "Vous ratez souvent la prononciation de {word} ({n} fois). Dites-le lentement, puis à vitesse normale.",
+    coachListenWeak: "Votre compréhension orale est de {pct} %. Écoutez plusieurs fois avant de lire le texte.",
+    coachStatFlip: "Vitesse de retournement",
+    coachStatViews: "Mots vus aujourd'hui",
+    coachStatListen: "Écoute",
     lessonBridgeAsk: "Envie de travailler cela avec un vrai professeur ? Essayez un cours d'essai gratuit.",
     lessonBridgeBtn: "Réserver un cours d'essai gratuit →",
     lessonBridgeMissed: "Sons à surveiller : {chars}",
@@ -2397,6 +2421,18 @@ const UI_TRANSLATIONS = {
     coachTitle: "Sugerencia de hoy",
     coachBoth: "Normalmente te va bien en {strong}, y {weak} parece un poco difícil. ¿Qué tal {weak} hoy?",
     coachWeakOnly: "{weak} parece un poco difícil para ti. ¿Qué tal practicarlo hoy?",
+    coachAdviceTitle: "🎯 Tu entrenador de estudio",
+    coachNoData: "Practica un poco más y empezaré a darte consejos concretos.",
+    coachAllGood: "No hay puntos débiles ahora. ¡Mantén este ritmo!",
+    coachAccWeak: "Tu precisión en {area} es del {pct} %. Haz de {area} tu prioridad hoy.",
+    coachSlowFlip: "Tardas unos {sec} s en recordar una palabra. Intenta bajar de 5 s con rondas rápidas de tarjetas.",
+    coachSlowWord: "Tu palabra más lenta es {word} ({sec} s). Repásala otra vez.",
+    coachRepeatWord: "Hoy viste {word} {n} veces y no se te queda. Prueba con una frase de ejemplo o escríbela.",
+    coachPronMiss: "Sigues fallando la pronunciación de {word} ({n} veces). Dila despacio y luego a velocidad normal.",
+    coachListenWeak: "Tu comprensión auditiva es del {pct} %. Escucha varias veces antes de leer el texto.",
+    coachStatFlip: "Velocidad de giro",
+    coachStatViews: "Palabras vistas hoy",
+    coachStatListen: "Comprensión auditiva",
     lessonBridgeAsk: "¿Quieres practicar esto con un profesor de verdad? Prueba una clase de prueba gratuita.",
     lessonBridgeBtn: "Reservar una clase de prueba gratis →",
     lessonBridgeMissed: "Sonidos a vigilar: {chars}",
@@ -2998,6 +3034,18 @@ const UI_TRANSLATIONS = {
     coachTitle: "Sugestão de hoje",
     coachBoth: "Você costuma ir bem em {strong}, e {weak} parece um pouco difícil. Que tal {weak} hoje?",
     coachWeakOnly: "{weak} parece um pouco difícil para você. Que tal praticar hoje?",
+    coachAdviceTitle: "🎯 Seu treinador de estudos",
+    coachNoData: "Pratique um pouco mais e começarei a dar conselhos específicos.",
+    coachAllGood: "Nenhum ponto fraco no momento. Mantenha esse ritmo!",
+    coachAccWeak: "Sua taxa de acerto em {area} é {pct}%. Faça de {area} o foco de hoje.",
+    coachSlowFlip: "Você leva cerca de {sec} s para lembrar uma palavra. Tente ficar abaixo de 5 s com rodadas rápidas de cartões.",
+    coachSlowWord: "Sua palavra mais lenta é {word} ({sec} s). Revise-a novamente.",
+    coachRepeatWord: "Você viu {word} {n} vezes hoje e ela não está fixando. Tente uma frase de exemplo ou escreva-a.",
+    coachPronMiss: "Você continua errando a pronúncia de {word} ({n} vezes). Fale devagar e depois em velocidade normal.",
+    coachListenWeak: "Sua compreensão auditiva é {pct}%. Ouça várias vezes antes de ler o texto.",
+    coachStatFlip: "Velocidade de virada",
+    coachStatViews: "Palavras vistas hoje",
+    coachStatListen: "Compreensão auditiva",
     lessonBridgeAsk: "Quer praticar isso com um professor de verdade? Experimente uma aula experimental gratuita.",
     lessonBridgeBtn: "Reservar uma aula experimental grátis →",
     lessonBridgeMissed: "Sons para observar: {chars}",
@@ -3599,6 +3647,18 @@ const UI_TRANSLATIONS = {
     coachTitle: "Vorschlag für heute",
     coachBoth: "Sie sind meist gut in {strong}, und {weak} scheint etwas schwer. Wie wäre es heute mit {weak}?",
     coachWeakOnly: "{weak} scheint Ihnen etwas schwerzufallen. Wie wäre es, es heute zu üben?",
+    coachAdviceTitle: "🎯 Dein Lerncoach",
+    coachNoData: "Übe noch etwas mehr, dann gebe ich dir konkrete Tipps.",
+    coachAllGood: "Im Moment keine Schwächen. Weiter so!",
+    coachAccWeak: "Deine Trefferquote bei {area} liegt bei {pct} %. Mach {area} heute zu deinem Schwerpunkt.",
+    coachSlowFlip: "Du brauchst etwa {sec} s, um dich an ein Wort zu erinnern. Ziel: unter 5 s mit schnellen Karteikarten-Runden.",
+    coachSlowWord: "Dein langsamstes Wort ist {word} ({sec} s). Wiederhole es noch einmal.",
+    coachRepeatWord: "Du hast {word} heute {n}-mal angesehen, aber es bleibt nicht hängen. Versuche einen Beispielsatz oder schreibe es auf.",
+    coachPronMiss: "Die Aussprache von {word} gelingt dir immer wieder nicht ({n}-mal). Sprich es langsam, dann in normalem Tempo.",
+    coachListenWeak: "Dein Hörverständnis liegt bei {pct} %. Höre mehrmals zu, bevor du den Text liest.",
+    coachStatFlip: "Umdrehtempo",
+    coachStatViews: "Heute gesehene Wörter",
+    coachStatListen: "Hören",
     lessonBridgeAsk: "Möchten Sie das mit einer echten Lehrkraft üben? Probieren Sie eine kostenlose Probestunde.",
     lessonBridgeBtn: "Kostenlose Probestunde buchen →",
     lessonBridgeMissed: "Laute, auf die Sie achten sollten: {chars}",
@@ -4200,6 +4260,18 @@ const UI_TRANSLATIONS = {
     coachTitle: "Suggerimento di oggi",
     coachBoth: "Di solito vai bene in {strong}, e {weak} sembra un po' difficile. Che ne dici di {weak} oggi?",
     coachWeakOnly: "{weak} sembra un po' difficile per te. Che ne dici di allenarlo oggi?",
+    coachAdviceTitle: "🎯 Il tuo coach di studio",
+    coachNoData: "Esercitati ancora un po' e inizierò a darti consigli specifici.",
+    coachAllGood: "Nessun punto debole al momento. Continua così!",
+    coachAccWeak: "La tua precisione in {area} è {pct}%. Fai di {area} la tua priorità oggi.",
+    coachSlowFlip: "Ti servono circa {sec} s per ricordare una parola. Punta a meno di 5 s con giri rapidi di flashcard.",
+    coachSlowWord: "La tua parola più lenta è {word} ({sec} s). Ripassala.",
+    coachRepeatWord: "Oggi hai visto {word} {n} volte e non ti resta in mente. Prova con una frase d'esempio o scrivila.",
+    coachPronMiss: "Continui a sbagliare la pronuncia di {word} ({n} volte). Dilla lentamente, poi a velocità normale.",
+    coachListenWeak: "La tua comprensione orale è {pct}%. Ascolta più volte prima di leggere il testo.",
+    coachStatFlip: "Velocità di giro",
+    coachStatViews: "Parole viste oggi",
+    coachStatListen: "Ascolto",
     lessonBridgeAsk: "Vuoi esercitarti su questo con un vero insegnante? Prova una lezione di prova gratuita.",
     lessonBridgeBtn: "Prenota una lezione di prova gratuita →",
     lessonBridgeMissed: "Suoni da tenere d'occhio: {chars}",
@@ -4801,6 +4873,18 @@ const UI_TRANSLATIONS = {
     coachTitle: "今日建议",
     coachBoth: "你通常在{strong}方面表现不错，而{weak}似乎有点吃力。今天练习一下{weak}怎么样？",
     coachWeakOnly: "{weak}对你来说似乎有点难。今天练习一下怎么样？",
+    coachAdviceTitle: "🎯 你的学习教练",
+    coachNoData: "再多练习一点，我就能给你具体的建议了。",
+    coachAllGood: "目前没有薄弱项，保持这个节奏！",
+    coachAccWeak: "{area}的正确率是 {pct}%。今天就把{area}作为重点吧。",
+    coachSlowFlip: "你回想一个单词大约需要 {sec} 秒。试着用快速闪卡把时间缩短到 5 秒以内。",
+    coachSlowWord: "你最慢的单词是 {word}（{sec} 秒）。再复习一遍吧。",
+    coachRepeatWord: "今天你看了 {word} {n} 次，但还没记住。试试造个例句或写一写。",
+    coachPronMiss: "你多次读错 {word} 的发音（{n} 次）。先慢慢读，再用正常语速读。",
+    coachListenWeak: "听力理解率是 {pct}%。读文本之前多听几遍。",
+    coachStatFlip: "翻卡速度",
+    coachStatViews: "今天看过的单词",
+    coachStatListen: "听力",
     lessonBridgeAsk: "想和真人老师一起练习这个吗？试试免费体验课吧。",
     lessonBridgeBtn: "预约免费体验课 →",
     lessonBridgeMissed: "需要留意的发音：{chars}",
@@ -5402,6 +5486,18 @@ const UI_TRANSLATIONS = {
     coachTitle: "今日建議",
     coachBoth: "你通常在{strong}方面表現不錯，而{weak}似乎有點吃力。今天練習一下{weak}如何？",
     coachWeakOnly: "{weak}對你來說似乎有點難。今天練習一下如何？",
+    coachAdviceTitle: "🎯 你的學習教練",
+    coachNoData: "再多練習一點，我就能給你具體的建議了。",
+    coachAllGood: "目前沒有弱項，保持這個節奏！",
+    coachAccWeak: "{area}的正確率是 {pct}%。今天就把{area}當作重點吧。",
+    coachSlowFlip: "你回想一個單字大約需要 {sec} 秒。試著用快速閃卡把時間縮短到 5 秒以內。",
+    coachSlowWord: "你最慢的單字是 {word}（{sec} 秒）。再複習一遍吧。",
+    coachRepeatWord: "今天你看了 {word} {n} 次，但還沒記住。試試造個例句或寫一寫。",
+    coachPronMiss: "你多次唸錯 {word} 的發音（{n} 次）。先慢慢唸，再用正常語速唸。",
+    coachListenWeak: "聽力理解率是 {pct}%。讀文本之前多聽幾遍。",
+    coachStatFlip: "翻卡速度",
+    coachStatViews: "今天看過的單字",
+    coachStatListen: "聽力",
     lessonBridgeAsk: "想和真人老師一起練習這個嗎？試試免費體驗課吧。",
     lessonBridgeBtn: "預約免費體驗課 →",
     lessonBridgeMissed: "需要留意的發音：{chars}",
@@ -6003,6 +6099,18 @@ const UI_TRANSLATIONS = {
     coachTitle: "오늘의 제안",
     coachBoth: "{strong}은(는) 보통 잘하는데 {weak}은(는) 조금 어려워 보여요. 오늘은 {weak}은(는) 어떠세요?",
     coachWeakOnly: "{weak}은(는) 조금 어려워 보여요. 오늘 연습해 보는 건 어떨까요?",
+    coachAdviceTitle: "🎯 나의 학습 코치",
+    coachNoData: "조금만 더 연습하면 구체적인 조언을 드릴게요.",
+    coachAllGood: "지금은 약점이 없어요. 이 페이스를 유지하세요!",
+    coachAccWeak: "{area} 정답률은 {pct}%예요. 오늘은 {area}에 집중해 보세요.",
+    coachSlowFlip: "단어 하나를 떠올리는 데 약 {sec}초가 걸려요. 빠른 카드 라운드로 5초 이내를 목표로 해 보세요.",
+    coachSlowWord: "가장 느리게 떠올린 단어는 {word}({sec}초)예요. 다시 복습해 보세요.",
+    coachRepeatWord: "오늘 {word}을(를) {n}번 봤는데 아직 기억에 남지 않았어요. 예문을 만들어 보거나 직접 써 보세요.",
+    coachPronMiss: "{word}의 발음을 계속 틀리고 있어요({n}회). 천천히 말한 뒤 보통 속도로 말해 보세요.",
+    coachListenWeak: "듣기 이해도는 {pct}%예요. 텍스트를 읽기 전에 여러 번 들어 보세요.",
+    coachStatFlip: "카드 뒤집기 속도",
+    coachStatViews: "오늘 본 단어",
+    coachStatListen: "듣기",
     lessonBridgeAsk: "이 부분을 진짜 선생님과 함께 연습해 보시겠어요? 무료 체험 수업을 신청해 보세요.",
     lessonBridgeBtn: "무료 체험 수업 신청하기 →",
     lessonBridgeMissed: "주의해야 할 소리: {chars}",
@@ -6604,6 +6712,18 @@ const UI_TRANSLATIONS = {
     coachTitle: "คำแนะนำวันนี้",
     coachBoth: "ปกติคุณทำ{strong}ได้ดี แต่{weak}ดูจะยากไปหน่อย วันนี้ลอง{weak}ไหม?",
     coachWeakOnly: "{weak}ดูจะยากไปหน่อยสำหรับคุณ วันนี้ลองฝึกดูไหม?",
+    coachAdviceTitle: "🎯 โค้ชการเรียนของคุณ",
+    coachNoData: "ฝึกอีกนิด แล้วฉันจะเริ่มให้คำแนะนำเฉพาะตัวคุณ",
+    coachAllGood: "ตอนนี้ยังไม่มีจุดอ่อน รักษาจังหวะนี้ไว้นะ!",
+    coachAccWeak: "ความแม่นยำด้าน{area}อยู่ที่ {pct}% วันนี้ลองเน้น{area}ดู",
+    coachSlowFlip: "คุณใช้เวลาประมาณ {sec} วินาทีในการนึกคำศัพท์ ลองฝึกแฟลชการ์ดเร็วๆ ให้ต่ำกว่า 5 วินาที",
+    coachSlowWord: "คำที่คุณนึกช้าที่สุดคือ {word} ({sec} วินาที) ลองทบทวนอีกครั้ง",
+    coachRepeatWord: "วันนี้คุณดูคำว่า {word} {n} ครั้งแล้วแต่ยังจำไม่ได้ ลองแต่งประโยคตัวอย่างหรือเขียนออกมา",
+    coachPronMiss: "คุณออกเสียง {word} ผิดบ่อย ({n} ครั้ง) ลองพูดช้าๆ แล้วค่อยพูดด้วยความเร็วปกติ",
+    coachListenWeak: "ความเข้าใจการฟังอยู่ที่ {pct}% ลองฟังหลายครั้งก่อนอ่านข้อความ",
+    coachStatFlip: "ความเร็วในการพลิกการ์ด",
+    coachStatViews: "คำที่ดูวันนี้",
+    coachStatListen: "การฟัง",
     lessonBridgeAsk: "อยากฝึกเรื่องนี้กับครูตัวจริงไหม? ลองเรียนทดลองฟรีดูสิ",
     lessonBridgeBtn: "จองเรียนทดลองฟรี →",
     lessonBridgeMissed: "เสียงที่ควรระวัง: {chars}",
@@ -7205,6 +7325,18 @@ const UI_TRANSLATIONS = {
     coachTitle: "Cadangan hari ini",
     coachBoth: "Anda biasanya baik dalam {strong}, dan {weak} nampaknya agak sukar. Bagaimana kalau {weak} hari ini?",
     coachWeakOnly: "{weak} nampaknya agak sukar untuk anda. Bagaimana kalau berlatih hari ini?",
+    coachAdviceTitle: "🎯 Jurulatih belajar anda",
+    coachNoData: "Berlatih sedikit lagi dan saya akan mula memberi nasihat khusus.",
+    coachAllGood: "Tiada kelemahan buat masa ini. Teruskan rentak ini!",
+    coachAccWeak: "Ketepatan {area} ialah {pct}%. Jadikan {area} fokus anda hari ini.",
+    coachSlowFlip: "Anda mengambil kira-kira {sec} saat untuk mengingat satu perkataan. Cuba capai kurang daripada 5 saat dengan pusingan kad kilat yang pantas.",
+    coachSlowWord: "Perkataan paling perlahan anda ialah {word} ({sec} saat). Ulang kaji sekali lagi.",
+    coachRepeatWord: "Anda melihat {word} sebanyak {n} kali hari ini tetapi masih tidak melekat. Cuba ayat contoh atau tulis perkataan itu.",
+    coachPronMiss: "Anda terus tersilap sebutan {word} ({n} kali). Sebut perlahan-lahan, kemudian pada kelajuan biasa.",
+    coachListenWeak: "Kefahaman mendengar ialah {pct}%. Dengar beberapa kali sebelum membaca teks.",
+    coachStatFlip: "Kelajuan pusing kad",
+    coachStatViews: "Perkataan dilihat hari ini",
+    coachStatListen: "Mendengar",
     lessonBridgeAsk: "Mahu berlatih perkara ini dengan guru sebenar? Cuba kelas percubaan percuma.",
     lessonBridgeBtn: "Tempah kelas percubaan percuma →",
     lessonBridgeMissed: "Bunyi yang perlu diberi perhatian: {chars}",
@@ -7806,6 +7938,18 @@ const UI_TRANSLATIONS = {
     coachTitle: "Saran hari ini",
     coachBoth: "Anda biasanya bagus di {strong}, dan {weak} tampaknya agak sulit. Bagaimana kalau {weak} hari ini?",
     coachWeakOnly: "{weak} tampaknya agak sulit bagi Anda. Bagaimana kalau berlatih hari ini?",
+    coachAdviceTitle: "🎯 Pelatih belajar Anda",
+    coachNoData: "Berlatihlah sedikit lagi dan saya akan mulai memberi saran yang spesifik.",
+    coachAllGood: "Belum ada kelemahan saat ini. Pertahankan ritme ini!",
+    coachAccWeak: "Akurasi {area} adalah {pct}%. Jadikan {area} fokus Anda hari ini.",
+    coachSlowFlip: "Anda butuh sekitar {sec} detik untuk mengingat satu kata. Targetkan di bawah 5 detik dengan putaran kartu kilat yang cepat.",
+    coachSlowWord: "Kata paling lambat Anda adalah {word} ({sec} detik). Ulangi sekali lagi.",
+    coachRepeatWord: "Hari ini Anda melihat {word} sebanyak {n} kali tetapi belum melekat. Coba buat kalimat contoh atau tulis kata itu.",
+    coachPronMiss: "Anda terus salah mengucapkan {word} ({n} kali). Ucapkan pelan-pelan, lalu dengan kecepatan normal.",
+    coachListenWeak: "Pemahaman menyimak adalah {pct}%. Dengarkan beberapa kali sebelum membaca teks.",
+    coachStatFlip: "Kecepatan membalik kartu",
+    coachStatViews: "Kata dilihat hari ini",
+    coachStatListen: "Menyimak",
     lessonBridgeAsk: "Ingin berlatih ini dengan guru sungguhan? Coba kelas percobaan gratis.",
     lessonBridgeBtn: "Pesan kelas percobaan gratis →",
     lessonBridgeMissed: "Bunyi yang perlu diperhatikan: {chars}",
@@ -8407,6 +8551,18 @@ const UI_TRANSLATIONS = {
     coachTitle: "Gợi ý hôm nay",
     coachBoth: "Bạn thường làm tốt phần {strong}, còn {weak} có vẻ hơi khó. Hôm nay thử {weak} nhé?",
     coachWeakOnly: "{weak} có vẻ hơi khó với bạn. Hôm nay luyện thử nhé?",
+    coachAdviceTitle: "🎯 Huấn luyện viên học tập của bạn",
+    coachNoData: "Hãy luyện thêm một chút, tôi sẽ bắt đầu đưa ra lời khuyên cụ thể.",
+    coachAllGood: "Hiện chưa có điểm yếu nào. Hãy giữ nhịp độ này!",
+    coachAccWeak: "Độ chính xác về {area} là {pct}%. Hôm nay hãy tập trung vào {area}.",
+    coachSlowFlip: "Bạn mất khoảng {sec} giây để nhớ lại một từ. Hãy đặt mục tiêu dưới 5 giây bằng các vòng thẻ nhanh.",
+    coachSlowWord: "Từ bạn nhớ chậm nhất là {word} ({sec} giây). Hãy ôn lại.",
+    coachRepeatWord: "Hôm nay bạn đã xem {word} {n} lần mà vẫn chưa nhớ. Hãy thử đặt câu ví dụ hoặc viết ra.",
+    coachPronMiss: "Bạn liên tục phát âm sai {word} ({n} lần). Hãy nói chậm rồi nói với tốc độ bình thường.",
+    coachListenWeak: "Khả năng nghe hiểu là {pct}%. Hãy nghe vài lần trước khi đọc văn bản.",
+    coachStatFlip: "Tốc độ lật thẻ",
+    coachStatViews: "Từ đã xem hôm nay",
+    coachStatListen: "Nghe",
     lessonBridgeAsk: "Bạn muốn luyện phần này với giáo viên thật không? Hãy thử một buổi học thử miễn phí.",
     lessonBridgeBtn: "Đặt buổi học thử miễn phí →",
     lessonBridgeMissed: "Âm cần chú ý: {chars}",
@@ -9008,6 +9164,18 @@ const UI_TRANSLATIONS = {
     coachTitle: "आज का सुझाव",
     coachBoth: "आप आमतौर पर {strong} में अच्छे हैं, और {weak} थोड़ा कठिन लगता है। आज {weak} कैसा रहेगा?",
     coachWeakOnly: "{weak} आपके लिए थोड़ा कठिन लगता है। आज इसका अभ्यास कैसा रहेगा?",
+    coachAdviceTitle: "🎯 आपका स्टडी कोच",
+    coachNoData: "थोड़ा और अभ्यास करें, फिर मैं आपको खास सुझाव देना शुरू करूँगा।",
+    coachAllGood: "अभी कोई कमज़ोर हिस्सा नहीं है। यही रफ़्तार बनाए रखें!",
+    coachAccWeak: "{area} में आपकी सटीकता {pct}% है। आज {area} पर ध्यान दें।",
+    coachSlowFlip: "एक शब्द याद करने में आपको लगभग {sec} सेकंड लगते हैं। तेज़ फ़्लैशकार्ड राउंड से 5 सेकंड से कम का लक्ष्य रखें।",
+    coachSlowWord: "आपका सबसे धीमा शब्द {word} है ({sec} सेकंड)। इसे फिर से दोहराएँ।",
+    coachRepeatWord: "आज आपने {word} को {n} बार देखा, फिर भी याद नहीं हो रहा। कोई उदाहरण वाक्य बनाएँ या इसे लिखकर देखें।",
+    coachPronMiss: "आप {word} का उच्चारण बार-बार ग़लत कर रहे हैं ({n} बार)। इसे धीरे बोलें, फिर सामान्य गति से।",
+    coachListenWeak: "सुनकर समझने की क्षमता {pct}% है। पाठ पढ़ने से पहले कई बार सुनें।",
+    coachStatFlip: "कार्ड पलटने की गति",
+    coachStatViews: "आज देखे गए शब्द",
+    coachStatListen: "सुनना",
     lessonBridgeAsk: "क्या आप इसे असली शिक्षक के साथ अभ्यास करना चाहेंगे? एक मुफ़्त ट्रायल क्लास आज़माएँ।",
     lessonBridgeBtn: "मुफ़्त ट्रायल क्लास बुक करें →",
     lessonBridgeMissed: "ध्यान देने योग्य ध्वनियाँ: {chars}",
@@ -9609,6 +9777,18 @@ const UI_TRANSLATIONS = {
     coachTitle: "今日のおすすめ",
     coachBoth: "普段は{strong}が得意ですが、{weak}は少し苦手そうですね。今日は{weak}はいかがですか？",
     coachWeakOnly: "{weak}が少し苦手そうですね。今日は練習してみませんか？",
+    coachAdviceTitle: "🎯 あなたの学習コーチ",
+    coachNoData: "もう少し練習すると、具体的なアドバイスができるようになります。",
+    coachAllGood: "今のところ苦手分野はありません。このペースで続けましょう!",
+    coachAccWeak: "{area}の正答率は{pct}%です。今日は{area}を重点的に勉強しましょう。",
+    coachSlowFlip: "単語を思い出すのに平均{sec}秒かかっています。フラッシュカードを素早く回して5秒以内を目指しましょう。",
+    coachSlowWord: "一番時間がかかった単語は「{word}」({sec}秒)です。もう一度復習しましょう。",
+    coachRepeatWord: "「{word}」を今日{n}回見ましたが、まだ定着していません。例文を作るか、書いて覚えましょう。",
+    coachPronMiss: "「{word}」の発音を{n}回間違えています。ゆっくり言ってから、普通の速さで言ってみましょう。",
+    coachListenWeak: "リスニングの理解度は{pct}%です。テキストを読む前に、何度か聞きましょう。",
+    coachStatFlip: "カードをめくる速さ",
+    coachStatViews: "今日見た単語",
+    coachStatListen: "リスニング",
     lessonBridgeAsk: "この課題を、先生と一緒に練習してみませんか？無料体験レッスンをご利用ください。",
     lessonBridgeBtn: "無料体験レッスンを申し込む →",
     lessonBridgeMissed: "つまずきやすい音: {chars}",
@@ -10210,6 +10390,18 @@ const UI_TRANSLATIONS = {
     coachTitle: "Bugünün önerisi",
     coachBoth: "Genellikle {strong} konusunda iyisiniz, {weak} ise biraz zor görünüyor. Bugün {weak} nasıl olur?",
     coachWeakOnly: "{weak} sizin için biraz zor görünüyor. Bugün çalışmaya ne dersiniz?",
+    coachAdviceTitle: "🎯 Çalışma koçunuz",
+    coachNoData: "Biraz daha pratik yapın, size özel tavsiyeler vermeye başlayayım.",
+    coachAllGood: "Şu an zayıf nokta yok. Bu tempoyu koruyun!",
+    coachAccWeak: "{area} doğruluğunuz %{pct}. Bugün {area} alanına odaklanın.",
+    coachSlowFlip: "Bir kelimeyi hatırlamanız yaklaşık {sec} sn sürüyor. Hızlı kart turlarıyla 5 sn altını hedefleyin.",
+    coachSlowWord: "En yavaş hatırladığınız kelime {word} ({sec} sn). Tekrar gözden geçirin.",
+    coachRepeatWord: "Bugün {word} kelimesine {n} kez baktınız ama yerleşmedi. Örnek bir cümle kurun veya yazarak deneyin.",
+    coachPronMiss: "{word} telaffuzunu sürekli yanlış yapıyorsunuz ({n} kez). Önce yavaş, sonra normal hızda söyleyin.",
+    coachListenWeak: "Dinleme anlama oranınız %{pct}. Metni okumadan önce birkaç kez dinleyin.",
+    coachStatFlip: "Kart çevirme hızı",
+    coachStatViews: "Bugün görülen kelimeler",
+    coachStatListen: "Dinleme",
     lessonBridgeAsk: "Bunu gerçek bir öğretmenle çalışmak ister misiniz? Ücretsiz deneme dersini deneyin.",
     lessonBridgeBtn: "Ücretsiz deneme dersi ayarla →",
     lessonBridgeMissed: "Dikkat edilecek sesler: {chars}",
@@ -10811,6 +11003,18 @@ const UI_TRANSLATIONS = {
     coachTitle: "आजको सुझाव",
     coachBoth: "तपाईं सामान्यतया {strong} मा राम्रो हुनुहुन्छ, र {weak} अलि गाह्रो देखिन्छ। आज {weak} कस्तो होला?",
     coachWeakOnly: "{weak} तपाईंलाई अलि गाह्रो देखिन्छ। आज अभ्यास गर्ने कसो?",
+    coachAdviceTitle: "🎯 तपाईंको अध्ययन प्रशिक्षक",
+    coachNoData: "अलि बढी अभ्यास गर्नुहोस्, म तपाईंलाई विशेष सल्लाह दिन थाल्छु।",
+    coachAllGood: "अहिले कमजोर क्षेत्र छैन। यही गति कायम राख्नुहोस्!",
+    coachAccWeak: "{area} को शुद्धता {pct}% छ। आज {area} मा ध्यान दिनुहोस्।",
+    coachSlowFlip: "एउटा शब्द सम्झन तपाईंलाई करिब {sec} सेकेन्ड लाग्छ। छिटो फ्ल्यासकार्ड राउन्डबाट ५ सेकेन्डभन्दा कम लक्ष्य राख्नुहोस्।",
+    coachSlowWord: "तपाईंको सबैभन्दा ढिलो शब्द {word} हो ({sec} सेकेन्ड)। फेरि दोहोर्याउनुहोस्।",
+    coachRepeatWord: "आज तपाईंले {word} {n} पटक हेर्नुभयो तर अझै याद भएन। उदाहरण वाक्य बनाउनुहोस् वा लेखेर हेर्नुहोस्।",
+    coachPronMiss: "तपाईं {word} को उच्चारण बारम्बार गल्ती गर्दै हुनुहुन्छ ({n} पटक)। पहिले बिस्तारै, अनि सामान्य गतिमा भन्नुहोस्।",
+    coachListenWeak: "सुनाइ बुझाइ {pct}% छ। पाठ पढ्नु अघि धेरै पटक सुन्नुहोस्।",
+    coachStatFlip: "कार्ड पल्टाउने गति",
+    coachStatViews: "आज हेरिएका शब्द",
+    coachStatListen: "सुनाइ",
     lessonBridgeAsk: "के तपाईं यसलाई साँचो शिक्षकसँग अभ्यास गर्न चाहनुहुन्छ? निःशुल्क परीक्षण कक्षा प्रयास गर्नुहोस्।",
     lessonBridgeBtn: "निःशुल्क परीक्षण कक्षा बुक गर्नुहोस् →",
     lessonBridgeMissed: "ध्यान दिनुपर्ने ध्वनिहरू: {chars}",
@@ -11412,6 +11616,18 @@ const UI_TRANSLATIONS = {
     coachTitle: "Mungkahi ngayon",
     coachBoth: "Karaniwan kang magaling sa {strong}, at mukhang medyo mahirap ang {weak}. Ano kung {weak} ngayon?",
     coachWeakOnly: "Mukhang medyo mahirap sa iyo ang {weak}. Subukan mo itong praktisin ngayon?",
+    coachAdviceTitle: "🎯 Ang iyong study coach",
+    coachNoData: "Magsanay pa nang kaunti at magbibigay ako ng mas tiyak na payo.",
+    coachAllGood: "Wala pang mahinang bahagi ngayon. Panatilihin ang bilis na ito!",
+    coachAccWeak: "{pct}% ang katumpakan mo sa {area}. Gawing pokus ang {area} ngayon.",
+    coachSlowFlip: "Mga {sec} segundo ang inaabot mo para maalala ang isang salita. Layuning mas mababa sa 5 segundo gamit ang mabilis na flashcard rounds.",
+    coachSlowWord: "Pinakamabagal mong salita ay {word} ({sec} segundo). Balikan ito ulit.",
+    coachRepeatWord: "{n} beses mong tiningnan ang {word} ngayon pero hindi pa rin tumatatak. Subukan ang halimbawang pangungusap o isulat ito.",
+    coachPronMiss: "Paulit-ulit kang nagkakamali sa bigkas ng {word} ({n} beses). Sabihin ito nang dahan-dahan, saka sa normal na bilis.",
+    coachListenWeak: "{pct}% ang pag-unawa mo sa pakikinig. Makinig nang ilang beses bago basahin ang teksto.",
+    coachStatFlip: "Bilis ng pagpihit ng card",
+    coachStatViews: "Mga salitang nakita ngayon",
+    coachStatListen: "Pakikinig",
     lessonBridgeAsk: "Gusto mo bang ipractice ito kasama ang totoong guro? Subukan ang libreng trial lesson.",
     lessonBridgeBtn: "Mag-book ng libreng trial lesson →",
     lessonBridgeMissed: "Mga tunog na dapat bantayan: {chars}",
@@ -13073,6 +13289,18 @@ function FlashcardView({ form, onBack, focusWord }) {
     setFlipped(false); setShowHint(false);
     setIdx(i => (i >= displayCards.length - 1 ? 0 : i));
   };
+  // Study metrics for the coach: every time a card is shown counts as one view of that word, and the
+  // time from showing the card to the first flip is the student's "flip speed" for that word.
+  const shownAtRef = useRef(0);
+  const flippedOnceRef = useRef(false);
+  const handleFlip = () => {
+    if (!flipped && card && !flippedOnceRef.current) {
+      flippedOnceRef.current = true;
+      const ms = Date.now() - shownAtRef.current;
+      if (ms > 0 && ms < 60000) logMetric("flip", card.word, { ms });
+    }
+    setFlipped(f => !f);
+  };
 
   const posKey = (folder) => `gaku_flashcard_pos_${folder}`;
   const getSavedPos = (folder) => { try { return parseInt(localStorage.getItem(posKey(folder)) || "0", 10) || 0; } catch { return 0; } };
@@ -13097,6 +13325,15 @@ function FlashcardView({ form, onBack, focusWord }) {
   useEffect(() => {
     if (resumeChoice && !focusWord) savePos(selectedFolder, idx);
   }, [idx, selectedFolder, resumeChoice]);
+
+  // A card appeared: start the flip timer and count one view of this word.
+  useEffect(() => {
+    if (!card || resumeChoice === null) return;
+    shownAtRef.current = Date.now();
+    flippedOnceRef.current = false;
+    logMetric("view", card.word);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [card?.word, card?.folder, idx, resumeChoice]);
 
   // Fetch a supporting image for the back of the card (only when flipped, and only once per word).
   // Wikimedia Commons is mostly indexed in English, so searching by the English meaning first tends
@@ -13211,7 +13448,7 @@ Only output the JSON object.` }
       ) : (
         <>
           <p style={{ color:"#64748b", fontSize:12, textAlign:"center", margin:"0 0 16px" }}>{idx+1} / {displayCards.length}</p>
-          <div onClick={()=>setFlipped(f=>!f)} style={{ ...S.card, minHeight:220, display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", cursor:"pointer", textAlign:"center", borderLeft:`4px solid ${C.teal}`, marginBottom:16 }}>
+          <div onClick={handleFlip} style={{ ...S.card, minHeight:220, display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", cursor:"pointer", textAlign:"center", borderLeft:`4px solid ${C.teal}`, marginBottom:16 }}>
             {!flipped ? (
               <>
                 <p style={{ color:"#f1f5f9", fontSize:44, fontWeight:900, margin:"0 0 6px", letterSpacing:2 }}>{card.word}</p>
@@ -14672,7 +14909,7 @@ Respond ONLY with a valid JSON array, no markdown, no backticks:
                 <div key={i}>
                   <ExerciseCard item={it} revealed={!!revealed[globalIdx]} onReveal={()=>setRevealed(r=>({...r,[globalIdx]:!r[globalIdx]}))} T={T} lang={form?.preferredLang || "English"} />
                   {revealed[globalIdx] && (
-                    <ComprehensionCheck itemId={`item-${globalIdx}`} checkins={contentCheck.checkins} onRecord={contentCheck.record} T={T} />
+                    <ComprehensionCheck itemId={`item-${globalIdx}`} checkins={contentCheck.checkins} onRecord={(id, u) => { contentCheck.record(id, u); if (it.skill === "listening") logMetric("listen", "", { ok: !!u }); }} T={T} />
                   )}
                 </div>
               );
@@ -15508,7 +15745,7 @@ function ConversationPredictor({ form, onLevelUp }) {
             {heardLines.map((line) => (
               <div key={line.id}>
                 <LiveHeardLineCard line={line} T={T} lang={form?.preferredLang || "English"} jlpt={form?.jlpt} />
-                <ComprehensionCheck itemId={`heard-${line.id}`} checkins={conversationCheck.checkins} onRecord={conversationCheck.record} T={T} />
+                <ComprehensionCheck itemId={`heard-${line.id}`} checkins={conversationCheck.checkins} onRecord={(id, u) => { conversationCheck.record(id, u); logMetric("listen", "", { ok: !!u }); }} T={T} />
                 {conversationCheck.checkins[`heard-${line.id}`] === false && (
                   <p style={{ color:C.amber, fontSize:12, lineHeight:1.7, margin:"8px 0 0" }}>🐢 {T.pronSlowNo || "No problem. Slow the video down and listen to that part again — GAKU will write it down once more."}</p>
                 )}
@@ -15631,7 +15868,7 @@ function PronunciationTurnCard({ item, T, lang, onBreak }) {
     recognition.onend = () => {
       setRecording(false);
       const said = lastTranscriptRef.current.trim();
-      if (said) { const okSaid = isCloseEnough(item.text, said); logLearningEvent("pronunciation", okSaid); setResult(okSaid ? "correct" : "incorrect"); }
+      if (said) { const okSaid = isCloseEnough(item.text, said); logLearningEvent("pronunciation", okSaid); logMetric("pron", item.text, { ok: okSaid }); setResult(okSaid ? "correct" : "incorrect"); }
     };
     recognition.onerror = () => setRecording(false);
     recognitionRef.current = recognition;
@@ -15877,6 +16114,7 @@ function PronunciationSayIt({ target, T }) {
       if (said) {
         const mm = pronMatchMap(target, said);
         logLearningEvent("pronunciation", mm.score >= 80);
+        logMetric("pron", target, { ok: mm.score >= 80 });
         if (mm.score < 80) setFails(f => f + 1);
         setMatch(mm);
         setBest(b => (b === null ? mm.score : Math.max(b, mm.score)));
@@ -18212,6 +18450,112 @@ function analyzeLearning(log, allow) {
   return { strong, weak };
 }
 
+// ---- Detailed study metrics + always-on coach (Intensive modes) ----
+// A second small on-device log (separate from the quota log, so these records never count toward the
+// daily quota): "view" = a word card was shown (w = word) · "flip" = ms taken to turn a card over
+// (w = word, ms) · "pron" = a pronunciation attempt (w = target text, ok) · "listen" = a listening
+// comprehension answer (ok). Accuracy for pronunciation / writing / etc. still comes from the learning log.
+const METRIC_LOG_KEY = "gaku_metric_log";
+function loadMetricLog() {
+  try { const v = JSON.parse(localStorage.getItem(scopedKey(METRIC_LOG_KEY)) || "[]"); return Array.isArray(v) ? v : []; } catch { return []; }
+}
+function logMetric(k, w, extra) {
+  try {
+    const log = loadMetricLog();
+    log.push({ t: Date.now(), k, w: w ? String(w).slice(0, 60) : "", ...(extra || {}) });
+    localStorage.setItem(scopedKey(METRIC_LOG_KEY), JSON.stringify(log.slice(-1500)));
+    window.dispatchEvent(new CustomEvent("gaku_learning_updated"));
+  } catch {}
+}
+function medianOf(xs) {
+  if (!xs.length) return 0;
+  const s = xs.slice().sort((a, b) => a - b), m = Math.floor(s.length / 2);
+  return s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2;
+}
+function coachAreaLabel(T, a) {
+  return ({ schedule: T.tabSchedule, vocab: T.tabVocabulary, content: T.tabPractice, conversation: T.convTitle, pronunciation: T.pronTitle, writing: T.writeTitle }[a]) || a;
+}
+// Everything is computed from the last 14 days (views: today only). No AI calls.
+function analyzeCoach(allow) {
+  const cutoff = Date.now() - 14 * 86400000, todayMs = dayStartMs(0);
+  const ok = (a) => !allow || allow(a);
+  const m = loadMetricLog().filter(x => x.t >= cutoff);
+  const learn = loadLearningLog().filter(x => x.t >= cutoff && x.a !== "task");
+  const rate = (a) => { const xs = learn.filter(x => x.a === a); return xs.length ? Math.round(100 * xs.filter(x => x.ok).length / xs.length) : null; };
+  const flips = m.filter(x => x.k === "flip" && x.ms > 0);
+  const flipSec = flips.length >= 5 ? medianOf(flips.map(x => x.ms)) / 1000 : null;
+  const byWord = {};
+  flips.forEach(x => { (byWord[x.w] = byWord[x.w] || []).push(x.ms); });
+  const slowWord = Object.entries(byWord).filter(([, a]) => a.length >= 2).map(([w, a]) => ({ w, sec: medianOf(a) / 1000 })).filter(x => x.sec >= 8).sort((a, b) => b.sec - a.sec)[0] || null;
+  const views = {}; let viewsToday = 0;
+  m.forEach(x => { if (x.k === "view" && x.t >= todayMs) { views[x.w] = (views[x.w] || 0) + 1; viewsToday++; } });
+  const repeat = Object.entries(views).filter(([, n]) => n >= 3).map(([w, n]) => ({ w, n })).sort((a, b) => b.n - a.n)[0] || null;
+  const pmiss = {};
+  m.forEach(x => { if (x.k === "pron" && x.ok === false) pmiss[x.w] = (pmiss[x.w] || 0) + 1; });
+  const pronMiss = ok("pronunciation") ? (Object.entries(pmiss).filter(([, n]) => n >= 2).map(([w, n]) => ({ w, n })).sort((a, b) => b.n - a.n)[0] || null) : null;
+  const L = m.filter(x => x.k === "listen");
+  const listenPct = L.length ? Math.round(100 * L.filter(x => x.ok).length / L.length) : null;
+  const { weak } = analyzeLearning(loadLearningLog(), allow);
+  const advice = [];
+  if (weak) advice.push({ type: "acc", a: weak.a, pct: Math.round(weak.rate * 100) });
+  if (listenPct !== null && L.length >= 3 && listenPct < 70 && (ok("conversation") || ok("content"))) advice.push({ type: "listen", pct: listenPct });
+  if (pronMiss) advice.push({ type: "pron", w: pronMiss.w, n: pronMiss.n });
+  if (repeat) advice.push({ type: "repeat", w: repeat.w, n: repeat.n });
+  if (flipSec !== null && flipSec >= 6) advice.push({ type: "slow", sec: Math.round(flipSec) });
+  else if (slowWord) advice.push({ type: "slowword", w: slowWord.w, sec: Math.round(slowWord.sec) });
+  return {
+    advice,
+    hasData: learn.length + m.length > 0,
+    stats: { flipSec, viewsToday, pron: ok("pronunciation") ? rate("pronunciation") : null, writing: ok("writing") ? rate("writing") : null, listen: listenPct },
+  };
+}
+function CoachPanel({ T, allow, onGo, compact }) {
+  const { advice, stats, hasData } = analyzeCoach(allow);
+  const line = (a) => {
+    if (a.type === "acc") return progressFill(T.coachAccWeak || "{area} accuracy is {pct}%. Make {area} your focus today.", { area: coachAreaLabel(T, a.a), pct: a.pct });
+    if (a.type === "listen") return progressFill(T.coachListenWeak || "Listening comprehension is {pct}%. Listen several times before reading the text.", { pct: a.pct });
+    if (a.type === "pron") return progressFill(T.coachPronMiss || "You keep missing the pronunciation of {word} ({n} times). Say it slowly, then at normal speed.", { word: a.w, n: a.n });
+    if (a.type === "repeat") return progressFill(T.coachRepeatWord || "You viewed {word} {n} times today and it isn't sticking. Try an example sentence or write it out.", { word: a.w, n: a.n });
+    if (a.type === "slow") return progressFill(T.coachSlowFlip || "It takes you about {sec}s to recall a word. Aim for under 5s with quick flashcard rounds.", { sec: a.sec });
+    return progressFill(T.coachSlowWord || "Your slowest word is {word} ({sec}s). Review it again.", { word: a.w, sec: a.sec });
+  };
+  const target = (a) => a.type === "acc" ? a.a : a.type === "listen" ? "conversation" : a.type === "pron" ? "pronunciation" : "vocab";
+  const shown = advice.slice(0, compact ? 1 : 3);
+  if (compact) {
+    if (!shown.length) return null;
+    return (
+      <div style={{ ...S.card, marginBottom:12, padding:"10px 12px", background:"rgba(168,85,247,0.08)", border:"1px solid rgba(168,85,247,0.25)", display:"flex", alignItems:"center", gap:10 }}>
+        <p style={{ color:"#e2e8f0", fontSize:12, lineHeight:1.6, margin:0, flex:1 }}>🎯 {line(shown[0])}</p>
+        <button onClick={() => onGo(target(shown[0]))} style={{ ...S.btn, padding:"6px 12px", background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff", fontSize:11, flexShrink:0 }}>{T.coachGo || "Let's go"} →</button>
+      </div>
+    );
+  }
+  const chips = [
+    [T.coachStatFlip || "Flip speed", stats.flipSec !== null ? stats.flipSec.toFixed(1) + "s" : "–"],
+    [T.coachStatViews || "Words seen today", String(stats.viewsToday)],
+    [T.pronTitle || "Pronunciation", stats.pron !== null ? stats.pron + "%" : "–"],
+    [T.coachStatListen || "Listening", stats.listen !== null ? stats.listen + "%" : "–"],
+    [T.writeTitle || "Writing", stats.writing !== null ? stats.writing + "%" : "–"],
+  ];
+  return (
+    <div>
+      <p style={{ color:C.purpleLight, fontSize:11, fontWeight:700, margin:"0 0 6px" }}>{T.coachAdviceTitle || "🎯 Your study coach"}</p>
+      <div style={{ display:"flex", gap:6, flexWrap:"wrap", marginBottom:10 }}>
+        {chips.map(([label, val], i) => (
+          <span key={i} style={{ fontSize:11, color:"#cbd5e1", background:"rgba(255,255,255,0.06)", border:`1px solid ${C.border}`, borderRadius:8, padding:"3px 8px" }}>{label}: <b style={{ color:"#f1f5f9" }}>{val}</b></span>
+        ))}
+      </div>
+      {shown.length === 0 && <p style={{ color:"#e2e8f0", fontSize:13, lineHeight:1.65, margin:"0 0 6px" }}>{hasData ? (T.coachAllGood || "No weak spots right now. Keep up this pace!") : (T.coachNoData || "Practice a little more and I'll start giving you specific advice.")}</p>}
+      {shown.map((a, i) => (
+        <div key={i} style={{ marginBottom:10 }}>
+          <p style={{ color:"#e2e8f0", fontSize:13, lineHeight:1.65, margin:"0 0 6px" }}>{i + 1}. {line(a)}</p>
+          <button onClick={() => onGo(target(a))} style={{ ...S.btn, padding:"7px 14px", background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff", fontSize:12 }}>{T.coachGo || "Let's go"} →</button>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 // ---- Progress check: a fixed 12-question quick check taken at the start and again later ("then vs now") ----
 // Original questions (N5-N2, 3 each). Answers are never shown, only the score, so a retake stays fair.
 const PROGRESS_KEY = "gaku_progress_checks";
@@ -18858,6 +19202,9 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
   const lockHome = tabShown("schedule") ? "schedule" : (tabShown("resources") ? "resources" : null);
   const quotaLocked = isIntensive && !tutorialActive && !!lockHome && countEventsOnDay(loadLearningLog(), 0) < INTENSIVE_DAILY_GOAL;
   const LOCKABLE_TABS = ["subtitles", "milestones", "jlpt"]; // Vocabulary stays open: its use counts toward the quota
+  // Coach (Intensive modes): only judges features the student keeps visible; the button jumps to the practice.
+  const coachAllow = (a) => a === "vocab" || featureShown(a);
+  const coachGo = (a) => { if (a === "schedule" || a === "vocab") { setTab(a === "vocab" ? "vocabulary" : "schedule"); return; } setTab("resources"); setResourceSubTab(a); };
   useEffect(() => { if (quotaLocked && LOCKABLE_TABS.includes(tab)) setTab(lockHome); }, [quotaLocked, tab, lockHome]);
   useEffect(() => {
     if (!tabShown(tab)) { setTab("vocabulary"); return; }
@@ -19100,6 +19447,8 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
           })}
         </div>
 
+        {isIntensive && tab !== "schedule" && !tutorialActive && <CoachPanel compact T={T} allow={coachAllow} onGo={coachGo} />}
+
         {tab==="schedule" && (
           <div>
             {(() => {
@@ -19122,7 +19471,9 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
                   </div>}
                   {isIntensive && !doneQuota && <p style={{ color:"#fecaca", fontSize:11, lineHeight:1.6, margin:"0 0 8px" }}>🔒 {T.quotaLocked || "Finish today's quota to unlock the other tabs."}</p>}
                   {isIntensive && missedYesterday && <p style={{ color:"#fecaca", fontSize:12, fontWeight:700, lineHeight:1.6, margin:"0 0 8px" }}>⚠️ {T.quotaMissed || "You missed yesterday's quota. Finish today's quota first — no skipping."}</p>}
-                  {weak && (
+                  {isIntensive && <CoachPanel T={T} allow={coachAllow} onGo={coachGo} />}
+                  {isIntensive && weak && <LessonBridgeCard T={T} />}
+                  {!isIntensive && weak && (
                     <div>
                       <p style={{ color:C.purpleLight, fontSize:11, fontWeight:700, margin:"0 0 4px" }}>🎯 {T.coachTitle || "Today's suggestion"}</p>
                       <p style={{ color:"#e2e8f0", fontSize:13, lineHeight:1.65, margin:"0 0 10px" }}>
