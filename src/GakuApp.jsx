@@ -14808,6 +14808,8 @@ Create between 10 and 20 practice activities (choose a count that fits the amoun
 ${skillInstructions}
    Aim for a natural spread across the selected skills rather than clustering on just one — but only generate a skill if the content actually gives you real material for it (e.g. skip conversation if there's no dialogue in the content).
 5. For fill-in-the-blank, ALWAYS include the full original Japanese sentence with ___ for the blank AND the ①②③④ choices in the same prompt. The blank must sit exactly where the blanked word/particle belongs — never place it next to a particle or word that's already written elsewhere in the sentence, since that makes every choice wrong or duplicated (e.g. don't blank "＿＿＿に" if "に" already follows the blank). Before finalizing, mentally insert each choice into the blank and confirm exactly one produces a natural sentence matching your "answer" field.
+   HOW TO BUILD EVERY ①②③④ QUESTION (fill-in-the-blank, particle choice, meaning choice): (a) first write the complete correct sentence, (b) take out exactly the word/particle you want to test and that becomes the blank, (c) the "answer" field must be that exact removed word, and it MUST appear literally as one of the four choices — never leave the correct word out of the choices, (d) add three clearly wrong distractors. Example: 「おまえのせいだ」 → blank 「おまえ＿＿＿せいだ」, choices ①の ②は ③を ④に, answer の.
+6. For questions about how a word is written in kanji, give the standard everyday kanji form (e.g. おまえ → お前, NOT 貴方 or 御前), and only ask when you are sure of the standard form.
 
 Return fields for each activity:
 - skill: one of ${allowedSkills.join(", ")}
@@ -14824,7 +14826,14 @@ Respond ONLY with a valid JSON array, no markdown, no backticks:
       const text = d.content?.map(c=>c.text||"").join("") || "[]";
       const parsed = JSON.parse(text.replace(/```json|```/g,"").trim());
       if (Array.isArray(parsed) && parsed.length) {
-        setItems(parsed);
+        // Quality gate: fix known kanji answers, drop ①②③④ questions whose answer isn't among the
+        // choices, then have a second quick pass independently solve each choice question and drop
+        // any the model got wrong (e.g. the right word missing from the choices).
+        const cleaned = cleanGeneratedItems(parsed, !!kanaOnlyMode);
+        const verified = cleaned.length ? await verifyChoiceItems(cleaned) : [];
+        const finalItems = verified.length ? verified : cleaned;
+        if (finalItems.length) setItems(finalItems);
+        else setError(T.contentErrNoAct || "Couldn't generate activities from that content. Try pasting more text.");
       } else {
         setError(T.contentErrNoAct || "Couldn't generate activities from that content. Try pasting more text.");
       }
@@ -15019,6 +15028,81 @@ async function callClaudeFast(prompt, maxTokens = 700) {
   });
   const d = await res.json();
   return d.content?.map(c=>c.text||"").join("").trim() || "";
+}
+
+// ---- Quality checks for generated practice items (Create From Content) ----
+const CIRCLED_NUMS = "①②③④";
+function parseChoices(prompt) {
+  return [...String(prompt || "").matchAll(/([①②③④])\s*([^①②③④\n]*)/g)].map(m => ({ n: CIRCLED_NUMS.indexOf(m[1]) + 1, text: m[2].trim().replace(/[、,，。\s]+$/, "") }));
+}
+function normChoiceText(s) { return String(s || "").replace(/\([^)]*\)|（[^）]*）/g, "").replace(/[「」『』\s。、,，.]/g, "").trim(); }
+// 1-4 = which choice the "answer" field points at, 0 = the answer is not among the choices.
+function answerChoiceIndex(answer, choices) {
+  const a = String(answer || "").trim();
+  const lead = a.match(/^([①②③④])/);
+  if (lead) return CIRCLED_NUMS.indexOf(lead[1]) + 1;
+  if (/^[1-4]$/.test(a)) return parseInt(a, 10);
+  const na = normChoiceText(a);
+  if (!na) return 0;
+  const hit = choices.find(c => normChoiceText(c.text) === na);
+  return hit ? hit.n : 0;
+}
+// Kanji spellings the model has got wrong. Applied deterministically (not in kana-only mode).
+const KNOWN_KANJI_ANSWERS = [
+  { word: "おまえ", correct: "お前" },
+];
+function fixKnownKanjiAnswer(it) {
+  const p = String(it.prompt || "");
+  if (!/漢字/.test(p)) return it;
+  for (const k of KNOWN_KANJI_ANSWERS) {
+    if (p.includes("「" + k.word + "」") && !String(it.answer || "").includes(k.correct)) return { ...it, answer: k.correct };
+  }
+  return it;
+}
+function cleanGeneratedItems(items, kanaOnly) {
+  return items
+    .filter(it => it && typeof it.prompt === "string" && it.prompt.trim() && it.answer != null && String(it.answer).trim())
+    .map(it => (kanaOnly ? it : fixKnownKanjiAnswer(it)))
+    .filter(it => {
+      const ch = parseChoices(it.prompt);
+      return ch.length < 2 || answerChoiceIndex(it.answer, ch) > 0;
+    });
+}
+// One short extra call: the model solves every ①②③④ question WITHOUT seeing our answer; a question is
+// kept only when its independent answer matches ours. If the call fails or times out, nothing is dropped.
+async function verifyChoiceItems(items) {
+  const qs = [];
+  items.forEach((it, i) => { if (parseChoices(it.prompt).length >= 2) qs.push({ id: i, q: it.prompt }); });
+  if (!qs.length) return items;
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), 10000);
+  try {
+    const res = await fetch("/api/claude", {
+      method: "POST", headers: { "Content-Type": "application/json" }, signal: ctrl.signal,
+      body: JSON.stringify({ model: "claude-sonnet-4-20250514", max_tokens: 2000, provider: "content",
+        messages: [{ role: "user", content: `You are a strict Japanese exam proofreader. Below are multiple-choice questions (choices ①②③④). For each one, decide which single choice is the correct answer.
+Rules: use ONLY the question as written. If NO choice gives a correct, natural answer (for example the right word is missing from the choices), or if more than one choice is equally correct, answer 0. Do not guess.
+
+QUESTIONS:
+${JSON.stringify(qs)}
+
+Respond ONLY with a valid JSON array, no markdown, no backticks: [{"id":0,"correct":2}]` }] }),
+    });
+    const d = await res.json();
+    const text = d.content?.map(c => c.text || "").join("") || "[]";
+    const m = text.replace(/```json|```/g, "").match(/\[[\s\S]*\]/);
+    const results = {};
+    (JSON.parse(m ? m[0] : "[]") || []).forEach(r => { if (r && typeof r.id === "number") results[r.id] = Number(r.correct); });
+    return items.filter((it, i) => {
+      if (!(i in results)) return true;
+      const ch = parseChoices(it.prompt);
+      return ch.length < 2 || results[i] === answerChoiceIndex(it.answer, ch);
+    });
+  } catch {
+    return items;
+  } finally {
+    clearTimeout(timer);
+  }
 }
 
 // Known misreadings the model has produced in the past, plus katakana spelling variants we
