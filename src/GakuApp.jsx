@@ -20746,20 +20746,6 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
       // before the early-return below, which only short-circuits the
       // trial-specific paywall checks.
       setAbsenceSuspended(!!data?.absenceSuspended);
-      // 一時停止中にサーバー側でデータ初期化された場合、この端末に残った学習データも一度だけ消す
-      // (消さないと次回ログイン時の同期でサーバーへ書き戻されてしまう)。
-      if (data?.absenceDataResetAt) {
-        try {
-          const seenKey = `gaku_absence_reset_seen_${userId}`;
-          if (localStorage.getItem(seenKey) !== String(data.absenceDataResetAt)) {
-            clearUserLocalStorage(userId);
-            localStorage.setItem(seenKey, String(data.absenceDataResetAt));
-            setForm(null);
-            setForceForm(true);
-            setInteractionCount(0);
-          }
-        } catch {}
-      }
       setStreakDays(typeof data?.streakDays === "number" ? data.streakDays : 0);
       setReaderInstalled(typeof data?.readerInstalled === "boolean" ? data.readerInstalled : null);
       if (typeof data?.plansUnlocked === "boolean") setPlansUnlocked(data.plansUnlocked);
