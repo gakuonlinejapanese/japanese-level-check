@@ -1353,10 +1353,15 @@ async function handleRequestJlptMockTest(req, res) {
         console.error("[request_jlpt_mock_test] student email failed:", emailErr.message);
       }
       try {
+        const isTrialMode = preferredMode === "trial_lesson";
         await sendEmail({
           to: ADMIN_EMAIL,
-          subject: `[GAKU] JLPT free mock test requested — ${name || normalizedEmail}`,
-          html: `<p>A student requested the free JLPT mock test and was just sent the assessment-report email automatically${hasMaterials ? " (with download links to the test materials already included)" : ""}.</p>
+          // 体験授業を選んだ場合は件名で一目で分かるようにし、このメールに返信するだけで本人に届くようにする
+          subject: isTrialMode
+            ? `[GAKU] ★ ACTION: JLPT mock test as FREE TRIAL LESSON — ${name || normalizedEmail}`
+            : `[GAKU] JLPT free mock test requested — ${name || normalizedEmail}`,
+          replyTo: isTrialMode ? normalizedEmail : undefined,
+          html: `${isTrialMode ? `<p style="background:#fff7ed;border:1px solid #fb923c;padding:10px;border-radius:6px;"><strong>This student chose to take the JLPT mock test as a Free Trial Lesson.</strong> Please arrange the trial lesson with them — just reply to this email (it goes to ${normalizedEmail}). They were also asked in their email to contact you at ${ADMIN_EMAIL}.</p>` : ""}<p>A student requested the free JLPT mock test and was just sent the assessment-report email automatically${hasMaterials ? " (with download links to the test materials already included)" : ""}.</p>
                  <p><strong>Name:</strong> ${name || "(not provided)"}<br/>
                     <strong>Email:</strong> ${normalizedEmail}<br/>
                     <strong>JLPT level:</strong> ${jltLevelSafe(jlptLevel)}<br/>
