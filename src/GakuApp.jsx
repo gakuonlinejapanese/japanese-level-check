@@ -1113,6 +1113,7 @@ const UI_TRANSLATIONS = {
     imgTapSearch: "Tap to search for an image",
     flashTapToCheck: "Tap to check",
     flashListenExample: "Listen to the example",
+    ttsProblem: "🔇 No sound? Your phone may not have a Japanese voice. Open Settings → search “Text-to-speech output” → install the Japanese voice data (Google Text-to-speech), then try again.",
     flashGenRomaji: "Generating romaji…",
     flashGenTranslation: "Generating translation…",
     flashUnderstand: "✅ Understand",
@@ -1749,6 +1750,7 @@ const UI_TRANSLATIONS = {
     imgTapSearch: "Touchez pour chercher une image",
     flashTapToCheck: "Touchez pour vérifier",
     flashListenExample: "Écouter l'exemple",
+    ttsProblem: "🔇 Pas de son ? Votre téléphone n’a peut-être pas de voix japonaise. Ouvrez Paramètres → cherchez « Synthèse vocale » → installez les données vocales japonaises (Google Text-to-speech), puis réessayez.",
     flashGenRomaji: "Génération du romaji…",
     flashGenTranslation: "Génération de la traduction…",
     flashUnderstand: "✅ Compris",
@@ -2370,6 +2372,7 @@ const UI_TRANSLATIONS = {
     imgTapSearch: "Toca para buscar una imagen",
     flashTapToCheck: "Toca para comprobar",
     flashListenExample: "Escuchar el ejemplo",
+    ttsProblem: "🔇 ¿No hay sonido? Es posible que tu teléfono no tenga una voz japonesa. Abre Ajustes → busca «Salida de texto a voz» → instala los datos de voz en japonés (Google Text-to-speech) y vuelve a intentarlo.",
     flashGenRomaji: "Generando romaji…",
     flashGenTranslation: "Generando traducción…",
     flashUnderstand: "✅ Entendido",
@@ -2991,6 +2994,7 @@ const UI_TRANSLATIONS = {
     imgTapSearch: "Toque para buscar uma imagem",
     flashTapToCheck: "Toque para conferir",
     flashListenExample: "Ouvir o exemplo",
+    ttsProblem: "🔇 Sem som? Seu celular pode não ter uma voz em japonês. Abra Configurações → procure «Saída de conversão de texto em voz» → instale os dados de voz em japonês (Google Text-to-speech) e tente de novo.",
     flashGenRomaji: "Gerando romaji…",
     flashGenTranslation: "Gerando tradução…",
     flashUnderstand: "✅ Entendi",
@@ -3612,6 +3616,7 @@ const UI_TRANSLATIONS = {
     imgTapSearch: "Tippen, um ein Bild zu suchen",
     flashTapToCheck: "Zum Prüfen tippen",
     flashListenExample: "Beispiel anhören",
+    ttsProblem: "🔇 Kein Ton? Dein Handy hat möglicherweise keine japanische Stimme. Öffne Einstellungen → suche „Text-to-Speech-Ausgabe“ → installiere die japanischen Sprachdaten (Google Text-to-speech) und versuche es erneut.",
     flashGenRomaji: "Romaji wird erstellt…",
     flashGenTranslation: "Übersetzung wird erstellt…",
     flashUnderstand: "✅ Verstanden",
@@ -4233,6 +4238,7 @@ const UI_TRANSLATIONS = {
     imgTapSearch: "Tocca per cercare un'immagine",
     flashTapToCheck: "Tocca per controllare",
     flashListenExample: "Ascolta l'esempio",
+    ttsProblem: "🔇 Nessun suono? Il telefono potrebbe non avere una voce giapponese. Apri Impostazioni → cerca «Sintesi vocale» → installa i dati vocali giapponesi (Google Text-to-speech) e riprova.",
     flashGenRomaji: "Generazione del romaji…",
     flashGenTranslation: "Generazione della traduzione…",
     flashUnderstand: "✅ Capito",
@@ -4854,6 +4860,7 @@ const UI_TRANSLATIONS = {
     imgTapSearch: "点击搜索图片",
     flashTapToCheck: "点击查看答案",
     flashListenExample: "听例句",
+    ttsProblem: "🔇 没有声音？你的手机可能没有日语语音。打开“设置”→搜索“文字转语音输出”→安装日语语音数据（Google 文字转语音），然后再试一次。",
     flashGenRomaji: "正在生成罗马字…",
     flashGenTranslation: "正在生成翻译…",
     flashUnderstand: "✅ 已理解",
@@ -5475,6 +5482,7 @@ const UI_TRANSLATIONS = {
     imgTapSearch: "點擊搜尋圖片",
     flashTapToCheck: "點擊查看答案",
     flashListenExample: "聽例句",
+    ttsProblem: "🔇 沒有聲音？你的手機可能沒有日語語音。開啟「設定」→搜尋「文字轉語音輸出」→安裝日語語音資料（Google 文字轉語音），然後再試一次。",
     flashGenRomaji: "正在產生羅馬字…",
     flashGenTranslation: "正在產生翻譯…",
     flashUnderstand: "✅ 已理解",
@@ -6096,6 +6104,7 @@ const UI_TRANSLATIONS = {
     imgTapSearch: "탭하여 이미지 검색",
     flashTapToCheck: "탭하여 확인",
     flashListenExample: "예문 듣기",
+    ttsProblem: "🔇 소리가 안 나나요? 휴대폰에 일본어 음성이 없을 수 있어요. 설정 → “텍스트 음성 변환 출력” 검색 → 일본어 음성 데이터(Google 텍스트 음성 변환)를 설치한 뒤 다시 시도하세요.",
     flashGenRomaji: "로마자 생성 중…",
     flashGenTranslation: "번역 생성 중…",
     flashUnderstand: "✅ 이해했어요",
@@ -6717,6 +6726,7 @@ const UI_TRANSLATIONS = {
     imgTapSearch: "แตะเพื่อค้นหารูป",
     flashTapToCheck: "แตะเพื่อดูคำตอบ",
     flashListenExample: "ฟังประโยคตัวอย่าง",
+    ttsProblem: "🔇 ไม่มีเสียงใช่ไหม? โทรศัพท์ของคุณอาจไม่มีเสียงภาษาญี่ปุ่น เปิดการตั้งค่า → ค้นหา “เอาต์พุตการแปลงข้อความเป็นเสียงพูด” → ติดตั้งข้อมูลเสียงภาษาญี่ปุ่น (Google Text-to-speech) แล้วลองอีกครั้ง",
     flashGenRomaji: "กำลังสร้างโรมะจิ…",
     flashGenTranslation: "กำลังสร้างคำแปล…",
     flashUnderstand: "✅ เข้าใจแล้ว",
@@ -7338,6 +7348,7 @@ const UI_TRANSLATIONS = {
     imgTapSearch: "Ketik untuk mencari imej",
     flashTapToCheck: "Ketik untuk semak",
     flashListenExample: "Dengar ayat contoh",
+    ttsProblem: "🔇 Tiada bunyi? Telefon anda mungkin tiada suara Jepun. Buka Tetapan → cari “Output teks ke ucapan” → pasang data suara Jepun (Google Text-to-speech), kemudian cuba lagi.",
     flashGenRomaji: "Menjana romaji…",
     flashGenTranslation: "Menjana terjemahan…",
     flashUnderstand: "✅ Faham",
@@ -7959,6 +7970,7 @@ const UI_TRANSLATIONS = {
     imgTapSearch: "Ketuk untuk mencari gambar",
     flashTapToCheck: "Ketuk untuk memeriksa",
     flashListenExample: "Dengarkan contoh kalimat",
+    ttsProblem: "🔇 Tidak ada suara? Ponsel Anda mungkin tidak punya suara bahasa Jepang. Buka Pengaturan → cari “Output text-to-speech” → instal data suara Jepang (Google Text-to-speech), lalu coba lagi.",
     flashGenRomaji: "Membuat romaji…",
     flashGenTranslation: "Membuat terjemahan…",
     flashUnderstand: "✅ Paham",
@@ -8580,6 +8592,7 @@ const UI_TRANSLATIONS = {
     imgTapSearch: "Chạm để tìm ảnh",
     flashTapToCheck: "Chạm để kiểm tra",
     flashListenExample: "Nghe câu ví dụ",
+    ttsProblem: "🔇 Không có tiếng? Điện thoại của bạn có thể chưa có giọng tiếng Nhật. Mở Cài đặt → tìm “Đầu ra chuyển văn bản thành giọng nói” → cài dữ liệu giọng tiếng Nhật (Google Text-to-speech) rồi thử lại.",
     flashGenRomaji: "Đang tạo romaji…",
     flashGenTranslation: "Đang tạo bản dịch…",
     flashUnderstand: "✅ Đã hiểu",
@@ -9201,6 +9214,7 @@ const UI_TRANSLATIONS = {
     imgTapSearch: "छवि खोजने के लिए टैप करें",
     flashTapToCheck: "जाँचने के लिए टैप करें",
     flashListenExample: "उदाहरण सुनें",
+    ttsProblem: "🔇 आवाज़ नहीं आ रही? हो सकता है आपके फ़ोन में जापानी आवाज़ न हो। सेटिंग्स खोलें → “टेक्स्ट-टू-स्पीच आउटपुट” खोजें → जापानी वॉइस डेटा (Google Text-to-speech) इंस्टॉल करें, फिर दोबारा कोशिश करें।",
     flashGenRomaji: "रोमाजी बन रहा है…",
     flashGenTranslation: "अनुवाद बन रहा है…",
     flashUnderstand: "✅ समझ गया",
@@ -9822,6 +9836,7 @@ const UI_TRANSLATIONS = {
     imgTapSearch: "タップして画像を検索",
     flashTapToCheck: "タップして確認",
     flashListenExample: "例文を聞く",
+    ttsProblem: "🔇 音が出ませんか?お使いのスマホに日本語の音声データが入っていない可能性があります。設定→「テキスト読み上げの出力」で検索→日本語の音声データ(Google 音声合成)をインストールして、もう一度お試しください。",
     flashGenRomaji: "ローマ字を生成中…",
     flashGenTranslation: "翻訳を生成中…",
     flashUnderstand: "✅ Understand(理解した)",
@@ -10443,6 +10458,7 @@ const UI_TRANSLATIONS = {
     imgTapSearch: "Görsel aramak için dokun",
     flashTapToCheck: "Kontrol için dokun",
     flashListenExample: "Örneği dinle",
+    ttsProblem: "🔇 Ses yok mu? Telefonunuzda Japonca ses olmayabilir. Ayarlar’ı açın → “Metin okuma çıkışı” arayın → Japonca ses verilerini (Google Text-to-speech) yükleyin ve tekrar deneyin.",
     flashGenRomaji: "Romaji oluşturuluyor…",
     flashGenTranslation: "Çeviri oluşturuluyor…",
     flashUnderstand: "✅ Anladım",
@@ -11064,6 +11080,7 @@ const UI_TRANSLATIONS = {
     imgTapSearch: "तस्बिर खोज्न ट्याप गर्नुहोस्",
     flashTapToCheck: "जाँच गर्न ट्याप गर्नुहोस्",
     flashListenExample: "उदाहरण सुन्नुहोस्",
+    ttsProblem: "🔇 आवाज आएन? तपाईंको फोनमा जापानी आवाज नहुन सक्छ। सेटिङ खोल्नुहोस् → “टेक्स्ट-टु-स्पिच आउटपुट” खोज्नुहोस् → जापानी आवाज डेटा (Google Text-to-speech) इन्स्टल गर्नुहोस्, अनि फेरि प्रयास गर्नुहोस्।",
     flashGenRomaji: "रोमाजी बन्दै छ…",
     flashGenTranslation: "अनुवाद बन्दै छ…",
     flashUnderstand: "✅ बुझें",
@@ -11685,6 +11702,7 @@ const UI_TRANSLATIONS = {
     imgTapSearch: "I-tap para maghanap ng larawan",
     flashTapToCheck: "I-tap para tingnan",
     flashListenExample: "Pakinggan ang halimbawa",
+    ttsProblem: "🔇 Walang tunog? Maaaring walang boses na Hapon ang telepono mo. Buksan ang Settings → hanapin ang “Text-to-speech output” → i-install ang Japanese voice data (Google Text-to-speech), saka subukan ulit.",
     flashGenRomaji: "Ginagawa ang romaji…",
     flashGenTranslation: "Ginagawa ang salin…",
     flashUnderstand: "✅ Naiintindihan",
@@ -12730,14 +12748,77 @@ function pickJapaneseVoice() {
     return voices.find(v => preferred.test(v.name)) || voices[0];
   } catch { return null; }
 }
-function speakJapanese(text, rate = 0.85) {
-  if (!window.speechSynthesis) return;
-  window.speechSynthesis.cancel();
+// Tells the screen (see TtsProblemToast) that speech didn't work, instead of failing silently.
+let _lastTtsReportAt = 0;
+function reportSpeechProblem(kind) {
+  const now = Date.now();
+  if (now - _lastTtsReportAt < 4000) return;
+  _lastTtsReportAt = now;
+  try { window.dispatchEvent(new CustomEvent("gaku_tts_problem", { detail: kind })); } catch {}
+}
+// Android WebView / Chrome often return an EMPTY voice list on the first call and fill it in a moment
+// later; speaking before that can be dropped. Wait briefly (max ~0.7s), then go ahead regardless.
+function whenVoicesReady(cb) {
+  try {
+    const synth = window.speechSynthesis;
+    if ((synth.getVoices() || []).length) { cb(); return; }
+    let done = false;
+    const fire = () => {
+      if (done) return; done = true;
+      try { synth.removeEventListener("voiceschanged", fire); } catch {}
+      cb();
+    };
+    try { synth.addEventListener("voiceschanged", fire); } catch {}
+    setTimeout(fire, 700);
+  } catch { cb(); }
+}
+function makeJapaneseUtterance(text, rate) {
   const u = new SpeechSynthesisUtterance(text);
   u.lang = "ja-JP"; u.rate = rate;
   const jpVoice = pickJapaneseVoice();
   if (jpVoice) u.voice = jpVoice;
-  window.speechSynthesis.speak(u);
+  return u;
+}
+function speakJapanese(text, rate = 0.85) {
+  const synth = window.speechSynthesis;
+  if (!synth || typeof SpeechSynthesisUtterance === "undefined") { reportSpeechProblem("unsupported"); return; }
+  const clean = String(text || "").trim();
+  if (!clean) return;
+  whenVoicesReady(() => {
+    let wasBusy = false;
+    try { wasBusy = !!(synth.speaking || synth.pending); if (wasBusy) synth.cancel(); } catch {}
+    const u = makeJapaneseUtterance(clean, rate);
+    let started = false;
+    u.onstart = () => { started = true; };
+    u.onerror = (e) => {
+      const err = e && e.error;
+      if (err && err !== "interrupted" && err !== "canceled") reportSpeechProblem(err);
+    };
+    // If nothing started within 3s the phone has no working speech engine / Japanese voice.
+    setTimeout(() => { try { if (!started && !synth.speaking) reportSpeechProblem("silent"); } catch {} }, 3000);
+    // Chrome/Android drops a speak() issued in the same tick as cancel(), so wait a moment after one.
+    setTimeout(() => {
+      try { synth.resume(); } catch {}
+      try { synth.speak(u); } catch { reportSpeechProblem("error"); }
+    }, wasBusy ? 80 : 0);
+  });
+}
+
+// Small banner shown when 🔊 Listen can't make any sound (e.g. the phone lacks a Japanese voice).
+function TtsProblemToast({ T }) {
+  const [show, setShow] = useState(false);
+  useEffect(() => {
+    let timer = null;
+    const onProblem = () => { setShow(true); clearTimeout(timer); timer = setTimeout(() => setShow(false), 12000); };
+    window.addEventListener("gaku_tts_problem", onProblem);
+    return () => { window.removeEventListener("gaku_tts_problem", onProblem); clearTimeout(timer); };
+  }, []);
+  if (!show) return null;
+  return (
+    <div onClick={() => setShow(false)} style={{ background:"rgba(251,191,36,0.12)", border:"1px solid rgba(251,191,36,0.4)", borderRadius:10, padding:"10px 12px", margin:"0 0 12px", color:C.amber, fontSize:12, lineHeight:1.6, cursor:"pointer" }}>
+      {T.ttsProblem || "🔇 No sound? Your phone may not have a Japanese voice. Open Settings → search “Text-to-speech output” → install the Japanese voice data (Google Text-to-speech), then try again."}
+    </div>
+  );
 }
 
 // ─── VOCAB WORD READINGS (FURIGANA) & PRONUNCIATION ─────────────────────────────
@@ -12907,6 +12988,7 @@ function stopFolderPlayback() {
   try { if (window.speechSynthesis) window.speechSynthesis.cancel(); } catch {}
 }
 function playWordsSequentially(cards, { rate = 0.85, gapMs = 600, onIndex, onDone } = {}) {
+  if (!window.speechSynthesis || typeof SpeechSynthesisUtterance === "undefined") reportSpeechProblem("unsupported");
   if (!window.speechSynthesis || !cards.length) { if (onDone) onDone(); return; }
   const token = ++_folderPlayToken;
   let i = 0;
@@ -12918,17 +13000,20 @@ function playWordsSequentially(cards, { rate = 0.85, gapMs = 600, onIndex, onDon
     i++;
     const text = speechTextForWord(card);
     if (!text) { next(); return; }
-    const u = new SpeechSynthesisUtterance(text);
-    u.lang = "ja-JP"; u.rate = rate;
-    const v = pickJapaneseVoice();
-    if (v) u.voice = v;
+    const u = makeJapaneseUtterance(text, rate);
     let advanced = false;
     const advance = () => { if (advanced) return; advanced = true; setTimeout(next, gapMs); };
-    u.onend = advance; u.onerror = advance;
-    window.speechSynthesis.speak(u);
+    u.onend = advance;
+    u.onerror = (e) => {
+      const err = e && e.error;
+      if (err && err !== "interrupted" && err !== "canceled") reportSpeechProblem(err);
+      advance();
+    };
+    try { window.speechSynthesis.resume(); } catch {}
+    try { window.speechSynthesis.speak(u); } catch { reportSpeechProblem("error"); advance(); }
   };
   window.speechSynthesis.cancel();
-  setTimeout(next, 80);
+  whenVoicesReady(() => setTimeout(next, 80));
 }
 
 // Small "0.8x / 0.5x" slow-playback buttons shown next to a Listen button in
@@ -13567,6 +13652,7 @@ Only output the JSON object.` }
   return (
     <div>
       <button onClick={onBack} style={{ background:"none", border:"none", color:"#64748b", fontSize:13, cursor:"pointer", padding:0, marginBottom:14 }}>← Back</button>
+      <TtsProblemToast T={T} />
       {/* Folder selector (hidden when reviewing a single word) */}
       <div style={{ display:"flex", gap:6, flexWrap:"wrap", marginBottom:12 }}>
         {!focusWord && allFolders.map(f => (
