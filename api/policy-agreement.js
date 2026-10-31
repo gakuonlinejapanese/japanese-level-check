@@ -1223,7 +1223,7 @@ function buildJlptMockOfferEmailHtml(name, jlptLevel, testSection, preferredMode
     ? ` (Listening test, Q1${listeningAudioCount > 1 ? `-Q${listeningAudioCount}` : ""} are the audio files linked above)`
     : "";
   const modeParagraph = preferredMode === "trial_lesson"
-    ? `<p>Since you chose to take it as part of a <strong>Free Trial Lesson</strong>, I'll also reach out separately to schedule a time for your trial lesson, where we'll go through the test together.</p>`
+    ? `<p>Since you chose to take it as part of a <strong>Free Trial Lesson</strong>, please contact me by email at <a href="mailto:seitojapanese.online@gmail.com" style="color:#06b6d4;">seitojapanese.online@gmail.com</a> (you can simply reply to this email) to schedule a time for your trial lesson, where we'll go through the test together.</p>`
     : "";
   const hasAnswerSheet = !!(JLPT_MATERIALS[level] && JLPT_MATERIALS[level].answerSheet);
   const answerInstructions = hasAnswerSheet
@@ -1346,6 +1346,8 @@ async function handleRequestJlptMockTest(req, res) {
           to: normalizedEmail,
           subject: `Re: JLPT ${level} Free Assessment Report`,
           html: buildJlptMockOfferEmailHtml(name, jlptLevel, testSection, preferredMode),
+          // 送信元は noreply@ なので、返信(体験授業の連絡・解答の返送)がSeitoに届くようにする
+          replyTo: ADMIN_EMAIL,
         });
       } catch (emailErr) {
         console.error("[request_jlpt_mock_test] student email failed:", emailErr.message);
@@ -1362,7 +1364,7 @@ async function handleRequestJlptMockTest(req, res) {
                     <strong>Preferred mode:</strong> ${modeLabel}</p>
                  <p>${hasMaterials
                     ? "No action needed for the test materials — the student already received download links."
-                    : `Please send the actual JLPT ${level} test materials to this student directly — they aren't hosted yet.`}${preferredMode === "trial_lesson" ? " Please also follow up to schedule their free trial lesson." : ""}</p>`,
+                    : `Please send the actual JLPT ${level} test materials to this student directly — they aren't hosted yet.`}${preferredMode === "trial_lesson" ? " The student chose a Free Trial Lesson and was asked to email you (seitojapanese.online@gmail.com) to schedule it, so please watch for their message." : ""}</p>`,
         });
       } catch (emailErr) {
         console.error("[request_jlpt_mock_test] admin notify failed:", emailErr.message);
