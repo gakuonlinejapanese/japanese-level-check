@@ -16548,13 +16548,30 @@ const COPY_MAX_CHARS = 30;
 const isKanaCh = (c) => /[\u3041-\u3096\u30A1-\u30FA\u30FC]/.test(c);
 const isWritableCh = (c) => isKanaCh(c) || /[\u3400-\u4DBF\u4E00-\u9FFF\u3005]/.test(c);
 function copyCharLoader(char, onLoad, onError) {
-  const url = isKanaCh(char)
-    ? `/kana-data/${char.codePointAt(0)}.json`
-    : `https://cdn.jsdelivr.net/npm/hanzi-writer-data-jp@0/${encodeURIComponent(char)}.json`;
-  fetch(url)
-    .then(r => { if (!r.ok) throw new Error("nf"); return r.json(); })
-    .then(d => { if (!d || !Array.isArray(d.strokes) || !d.strokes.length) throw new Error("bad"); onLoad(d); })
-    .catch(onError);
+  const okData = (d) => d && Array.isArray(d.strokes) && d.strokes.length && Array.isArray(d.medians) &&
+    d.medians.length === d.strokes.length && d.medians.every(m => Array.isArray(m) && m.length >= 2);
+  const isNative = typeof window !== "undefined" && window.Capacitor && typeof window.Capacitor.isNativePlatform === "function" && window.Capacitor.isNativePlatform();
+  let urls;
+  if (isKanaCh(char)) {
+    const p = `/kana-data/${char.codePointAt(0)}.json`;
+    // Store apps bundle files locally (possibly an older copy) and CapacitorHttp can't load relative
+    // paths, so try the live servers first there; on the web try the same site first.
+    urls = isNative
+      ? ["https://app.seitojapanese.online" + p, "https://japanese-level-check.vercel.app" + p, p]
+      : [p, "https://japanese-level-check.vercel.app" + p];
+  } else {
+    urls = [`https://cdn.jsdelivr.net/npm/hanzi-writer-data-jp@0/${encodeURIComponent(char)}.json`];
+  }
+  const attempt = (i) => {
+    if (i >= urls.length) { onError(); return; }
+    const ctl = typeof AbortController !== "undefined" ? new AbortController() : null;
+    const timer = setTimeout(() => { try { ctl && ctl.abort(); } catch {} }, 8000);
+    fetch(urls[i], ctl ? { signal: ctl.signal } : undefined)
+      .then(r => { if (!r.ok) throw new Error("nf"); return r.json(); })
+      .then(d => { clearTimeout(timer); if (!okData(d)) throw new Error("bad"); onLoad(d); })
+      .catch(() => { clearTimeout(timer); attempt(i + 1); });
+  };
+  attempt(0);
 }
 // 音読み / 訓読み for one kanji, from the free kanjiapi.dev (KANJIDIC2) service. Cached per kanji for the
 // session so moving back and forth between characters doesn't re-fetch.
