@@ -52,28 +52,31 @@ export async function nativeSpeak(text, rate = 0.85) {
   const TTS = await plugin();
   const base = { text, rate, pitch: 1.0, volume: 1.0, queueStrategy: 0 };
   let lastErr = null;
+  const log = [];
+  const note = (step, e) => log.push(step + ":" + String((e && (e.message || e.errorMessage || e.code)) || e || "fail").slice(0, 60));
 
   // 1) Plain ja-JP request.
   try { await TTS.speak({ ...base, lang: "ja-JP" }); return; }
-  catch (e) { if (isInterrupt(e)) return; lastErr = e; }
+  catch (e) { if (isInterrupt(e)) return; lastErr = e; note("ja-JP", e); }
 
   // 2) Explicitly pick an installed Japanese voice (works when the engine's default language isn't Japanese).
   const idx = await findJapaneseVoiceIndex(TTS);
   if (idx >= 0) {
     try { await TTS.speak({ ...base, lang: "ja-JP", voice: idx }); return; }
-    catch (e) { if (isInterrupt(e)) return; lastErr = e; }
-  }
+    catch (e) { if (isInterrupt(e)) return; lastErr = e; note("voice" + idx, e); }
+  } else { log.push("voices:none"); }
 
   // 3) Bare "ja" locale.
   try { await TTS.speak({ ...base, lang: "ja" }); return; }
-  catch (e) { if (isInterrupt(e)) return; lastErr = e; }
+  catch (e) { if (isInterrupt(e)) return; lastErr = e; note("ja", e); }
 
   // 4) Browser speech engine inside the WebView.
   if (await webSpeak(text, rate)) return;
+  log.push("web:silent");
 
   // Nothing worked — tell the caller whether it looks like a missing Japanese voice.
   const noVoice = idx < 0;
-  const err = new Error(noVoice ? "no-japanese-voice" : "native-error: " + String((lastErr && (lastErr.message || lastErr)) || ""));
+  const err = new Error((noVoice ? "no-japanese-voice" : "native-error") + " | " + log.join(" | "));
   throw err;
 }
 export async function nativeStop() {

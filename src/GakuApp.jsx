@@ -12751,11 +12751,12 @@ function pickJapaneseVoice() {
 }
 // Tells the screen (see TtsProblemToast) that speech didn't work, instead of failing silently.
 let _lastTtsReportAt = 0;
-function reportSpeechProblem(kind) {
+const TTS_BUILD = "tts2";
+function reportSpeechProblem(kind, detail) {
   const now = Date.now();
   if (now - _lastTtsReportAt < 4000) return;
   _lastTtsReportAt = now;
-  try { window.dispatchEvent(new CustomEvent("gaku_tts_problem", { detail: kind })); } catch {}
+  try { window.dispatchEvent(new CustomEvent("gaku_tts_problem", { detail: { kind, detail: String(detail || "").slice(0, 300) } })); } catch {}
 }
 // Android WebView / Chrome often return an EMPTY voice list on the first call and fill it in a moment
 // later; speaking before that can be dropped. Wait briefly (max ~0.7s), then go ahead regardless.
@@ -12787,7 +12788,7 @@ function speakJapanese(text, rate = 0.85) {
     nativeSpeak(t, rate).catch(err => {
       const msg = String((err && (err.message || err)) || "");
       if (/interrupt|cancel|stop/i.test(msg)) return;
-      reportSpeechProblem(/japanese/i.test(msg) ? "no-japanese-voice" : "native-error");
+      reportSpeechProblem(/^no-japanese-voice/.test(msg) ? "no-japanese-voice" : "native-error", msg);
     });
     return;
   }
@@ -12818,9 +12819,10 @@ function speakJapanese(text, rate = 0.85) {
 // Small banner shown when 🔊 Listen can't make any sound (e.g. the phone lacks a Japanese voice).
 function TtsProblemToast({ T }) {
   const [show, setShow] = useState(false);
+  const [info, setInfo] = useState("");
   useEffect(() => {
     let timer = null;
-    const onProblem = () => { setShow(true); clearTimeout(timer); timer = setTimeout(() => setShow(false), 12000); };
+    const onProblem = (e) => { const d = (e && e.detail) || {}; setInfo([TTS_BUILD, d.kind, d.detail].filter(Boolean).join(" / ")); setShow(true); clearTimeout(timer); timer = setTimeout(() => setShow(false), 12000); };
     window.addEventListener("gaku_tts_problem", onProblem);
     return () => { window.removeEventListener("gaku_tts_problem", onProblem); clearTimeout(timer); };
   }, []);
@@ -12828,6 +12830,7 @@ function TtsProblemToast({ T }) {
   return (
     <div onClick={() => setShow(false)} style={{ background:"rgba(251,191,36,0.12)", border:"1px solid rgba(251,191,36,0.4)", borderRadius:10, padding:"10px 12px", margin:"0 0 12px", color:C.amber, fontSize:12, lineHeight:1.6, cursor:"pointer" }}>
       {T.ttsProblem || "🔇 No sound? Your phone may not have a Japanese voice. Open Settings → search “Text-to-speech output” → install the Japanese voice data (Google Text-to-speech), then try again."}
+      <div style={{ marginTop:6, fontSize:10, opacity:0.7, wordBreak:"break-all" }}>[{info}]</div>
     </div>
   );
 }
@@ -13012,7 +13015,7 @@ function playWordsSequentially(cards, { rate = 0.85, gapMs = 600, onIndex, onDon
           try { await nativeSpeak(text, rate); }
           catch (err) {
             if (token !== _folderPlayToken) return;
-            reportSpeechProblem(/japanese/i.test(String((err && err.message) || "")) ? "no-japanese-voice" : "native-error");
+            { const m = String((err && err.message) || ""); reportSpeechProblem(/^no-japanese-voice/.test(m) ? "no-japanese-voice" : "native-error", m); }
             break;
           }
         }
