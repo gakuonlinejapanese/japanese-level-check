@@ -3,6 +3,7 @@ import StorePlans from './StorePlans';
 import { supabase, getDeviceId, getDeviceLabel, getSignupSource } from "./supabaseClient";
 import HanziWriter from "hanzi-writer";
 import { reportClientCrash } from "./crashReport";
+import { isAndroidNative, nativeSpeak, nativeStop } from "./nativeTts";
 
 // True inside the iOS/Android store apps (Capacitor shell). Also forceable with ?store=1 for previews.
 // Store builds never show prices, purchase buttons, or links to outside purchase/lesson pages.
@@ -12780,6 +12781,16 @@ function makeJapaneseUtterance(text, rate) {
   return u;
 }
 function speakJapanese(text, rate = 0.85) {
+  if (isAndroidNative()) {
+    const t = String(text || "").trim();
+    if (!t) return;
+    nativeSpeak(t, rate).catch(err => {
+      const msg = String((err && (err.message || err)) || "");
+      if (/interrupt|cancel|stop/i.test(msg)) return;
+      reportSpeechProblem(/japanese/i.test(msg) ? "no-japanese-voice" : "native-error");
+    });
+    return;
+  }
   const synth = window.speechSynthesis;
   if (!synth || typeof SpeechSynthesisUtterance === "undefined") { reportSpeechProblem("unsupported"); return; }
   const clean = String(text || "").trim();
@@ -12985,9 +12996,33 @@ async function repairVocabReadings(force = false) {
 let _folderPlayToken = 0;
 function stopFolderPlayback() {
   _folderPlayToken++;
+  if (isAndroidNative()) nativeStop();
   try { if (window.speechSynthesis) window.speechSynthesis.cancel(); } catch {}
 }
 function playWordsSequentially(cards, { rate = 0.85, gapMs = 600, onIndex, onDone } = {}) {
+  if (isAndroidNative()) {
+    if (!cards.length) { if (onDone) onDone(); return; }
+    const token = ++_folderPlayToken;
+    (async () => {
+      for (let i = 0; i < cards.length; i++) {
+        if (token !== _folderPlayToken) return;
+        if (onIndex) onIndex(i);
+        const text = speechTextForWord(cards[i]);
+        if (text) {
+          try { await nativeSpeak(text, rate); }
+          catch (err) {
+            if (token !== _folderPlayToken) return;
+            reportSpeechProblem(/japanese/i.test(String((err && err.message) || "")) ? "no-japanese-voice" : "native-error");
+            break;
+          }
+        }
+        if (token !== _folderPlayToken) return;
+        await new Promise(r => setTimeout(r, gapMs));
+      }
+      if (token === _folderPlayToken && onDone) onDone();
+    })();
+    return;
+  }
   if (!window.speechSynthesis || typeof SpeechSynthesisUtterance === "undefined") reportSpeechProblem("unsupported");
   if (!window.speechSynthesis || !cards.length) { if (onDone) onDone(); return; }
   const token = ++_folderPlayToken;
