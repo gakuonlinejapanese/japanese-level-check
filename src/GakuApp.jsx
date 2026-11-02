@@ -12834,7 +12834,11 @@ function speakJapanese(text, rate = 0.85) {
     nativeSpeak(t, rate).catch(err => {
       const msg = String((err && (err.message || err)) || "");
       if (/interrupt|cancel|stop/i.test(msg)) return;
-      reportSpeechProblem(/^no-japanese-voice/.test(msg) ? "no-japanese-voice" : "native-error", msg);
+      // The phone's own voice failed (e.g. no Japanese voice data): play a real audio clip instead, and only
+      // show the yellow "No sound?" banner if that fails too.
+      speakWithAudioFallback(t, rate).then(ok => {
+        if (!ok) reportSpeechProblem(/^no-japanese-voice/.test(msg) ? "no-japanese-voice" : "native-error", msg);
+      });
     });
     return;
   }

@@ -55,19 +55,29 @@ export async function nativeSpeak(text, rate = 0.85) {
   const log = [];
   const note = (step, e) => log.push(step + ":" + String((e && (e.message || e.errorMessage || e.code)) || e || "fail").slice(0, 60));
 
+  // Some phones (e.g. OnePlus/OxygenOS without Japanese voice data) let speak() "succeed" instantly without
+  // making any sound. Real speech always takes a moment, so a near-instant finish counts as a failure and the
+  // next method is tried (finally the audio-clip fallback in speakJapanese).
+  const clean = String(text || "").replace(/\s+/g, "");
+  const speakChecked = async (opts) => {
+    const t0 = Date.now();
+    await TTS.speak(opts);
+    if (clean.length >= 2 && Date.now() - t0 < 150) throw new Error("silent-instant-finish");
+  };
+
   // 1) Plain ja-JP request.
-  try { await TTS.speak({ ...base, lang: "ja-JP" }); return; }
+  try { await speakChecked({ ...base, lang: "ja-JP" }); return; }
   catch (e) { if (isInterrupt(e)) return; lastErr = e; note("ja-JP", e); }
 
   // 2) Explicitly pick an installed Japanese voice (works when the engine's default language isn't Japanese).
   const idx = await findJapaneseVoiceIndex(TTS);
   if (idx >= 0) {
-    try { await TTS.speak({ ...base, lang: "ja-JP", voice: idx }); return; }
+    try { await speakChecked({ ...base, lang: "ja-JP", voice: idx }); return; }
     catch (e) { if (isInterrupt(e)) return; lastErr = e; note("voice" + idx, e); }
   } else { log.push("voices:none"); }
 
   // 3) Bare "ja" locale.
-  try { await TTS.speak({ ...base, lang: "ja" }); return; }
+  try { await speakChecked({ ...base, lang: "ja" }); return; }
   catch (e) { if (isInterrupt(e)) return; lastErr = e; note("ja", e); }
 
   // 4) Browser speech engine inside the WebView.
