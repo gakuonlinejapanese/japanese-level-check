@@ -12796,26 +12796,36 @@ function splitForAudioFallback(text) {
   parts.forEach(p => { for (let i = 0; i < p.length; i += 80) out.push(p.slice(i, i + 80)); });
   return out;
 }
-// Resolves true if at least the first clip started playing.
+// Resolves true only once the first clip is really playing (false on load error / 4s timeout).
 function speakWithAudioFallback(text, rate = 0.85) {
   return new Promise((resolve) => {
     const chunks = splitForAudioFallback(text);
     if (!chunks.length || typeof Audio === "undefined") { resolve(false); return; }
     stopFallbackAudio();
     const token = _fallbackToken;
-    let first = true;
+    let settled = false;
+    const settle = (ok) => { if (settled) return; settled = true; resolve(ok); };
     const playAt = (i) => {
       if (token !== _fallbackToken || i >= chunks.length) return;
       const a = new Audio("https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=ja&q=" + encodeURIComponent(chunks[i]));
       try { a.referrerPolicy = "no-referrer"; } catch {}
       try { a.preservesPitch = true; a.playbackRate = Math.max(0.5, Math.min(1.5, rate)); } catch {}
       _fallbackAudio = a;
+      a.onplaying = () => settle(true);
       a.onended = () => playAt(i + 1);
-      a.onerror = () => { if (first) { first = false; resolve(false); } };
-      a.play().then(() => { if (first) { first = false; resolve(true); } }).catch(() => { if (first) { first = false; resolve(false); } });
+      a.onerror = () => settle(false);
+      a.play().catch(() => settle(false));
     };
+    setTimeout(() => settle(false), 4000);
     playAt(0);
   });
+}
+// True when the device has a Japanese voice that runs on the device itself (reliable). Network voices such as
+// Chrome's "Google 日本語" often report "started" but stay silent on some PCs, so they don't count.
+function hasLocalJapaneseVoice() {
+  try {
+    return (window.speechSynthesis.getVoices() || []).some(v => /^ja([-_]|$)/i.test(v.lang || "") && v.localService);
+  } catch { return false; }
 }
 function speakJapanese(text, rate = 0.85) {
   if (isAndroidNative()) {
@@ -12834,12 +12844,16 @@ function speakJapanese(text, rate = 0.85) {
   if (!clean) return;
   whenVoicesReady(() => {
     stopFallbackAudio();
-    // No Japanese voice installed at all (common on Windows PCs): skip the device voice and play real audio.
-    if (!pickJapaneseVoice()) {
+    // No on-device Japanese voice (common on Windows PCs; Chrome's network voice can be silent): play real
+    // audio first, and fall back to the device voice only if the audio can't be played.
+    if (!hasLocalJapaneseVoice()) {
       try { synth.cancel(); } catch {}
-      speakWithAudioFallback(clean, rate).then(ok => { if (!ok) reportSpeechProblem("no-japanese-voice", "audio-fallback-failed"); });
+      speakWithAudioFallback(clean, rate).then(ok => { if (!ok) speakWithDeviceVoice(); });
       return;
     }
+    speakWithDeviceVoice();
+  });
+  function speakWithDeviceVoice() {
     let wasBusy = false;
     try { wasBusy = !!(synth.speaking || synth.pending); if (wasBusy) synth.cancel(); } catch {}
     const u = makeJapaneseUtterance(clean, rate);
@@ -12862,7 +12876,7 @@ function speakJapanese(text, rate = 0.85) {
       try { synth.resume(); } catch {}
       try { synth.speak(u); } catch { reportSpeechProblem("error"); }
     }, wasBusy ? 80 : 0);
-  });
+  }
 }
 
 // Small banner shown when 🔊 Listen can't make any sound (e.g. the phone lacks a Japanese voice).
@@ -13088,8 +13102,8 @@ function playWordsSequentially(cards, { rate = 0.85, gapMs = 600, onIndex, onDon
     i++;
     const text = speechTextForWord(card);
     if (!text) { next(); return; }
-    if (!pickJapaneseVoice()) {
-      // No Japanese voice on this device: play each word as an audio clip, then move on.
+    if (!hasLocalJapaneseVoice()) {
+      // No on-device Japanese voice: play each word as an audio clip, then move on.
       speakWithAudioFallback(text, rate).then(ok => {
         if (!ok) { reportSpeechProblem("no-japanese-voice", "audio-fallback-failed"); if (onDone) onDone(); return; }
         const a = _fallbackAudio;
