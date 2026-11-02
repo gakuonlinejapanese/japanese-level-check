@@ -12781,6 +12781,42 @@ function makeJapaneseUtterance(text, rate) {
   if (jpVoice) u.voice = jpVoice;
   return u;
 }
+// Last-resort voice for desktop/mobile browsers that have NO working Japanese speech voice (e.g. Chrome on a
+// Windows PC without the Japanese language pack): plays a real audio clip instead of the device's TTS, so
+// the student hears Japanese even when the browser's own voice list has none.
+let _fallbackAudio = null;
+let _fallbackToken = 0;
+function stopFallbackAudio() {
+  _fallbackToken++;
+  try { if (_fallbackAudio) { _fallbackAudio.pause(); _fallbackAudio = null; } } catch {}
+}
+function splitForAudioFallback(text) {
+  const parts = String(text || "").split(/(?<=[。！？!?\n])/).map(s => s.trim()).filter(Boolean);
+  const out = [];
+  parts.forEach(p => { for (let i = 0; i < p.length; i += 80) out.push(p.slice(i, i + 80)); });
+  return out;
+}
+// Resolves true if at least the first clip started playing.
+function speakWithAudioFallback(text, rate = 0.85) {
+  return new Promise((resolve) => {
+    const chunks = splitForAudioFallback(text);
+    if (!chunks.length || typeof Audio === "undefined") { resolve(false); return; }
+    stopFallbackAudio();
+    const token = _fallbackToken;
+    let first = true;
+    const playAt = (i) => {
+      if (token !== _fallbackToken || i >= chunks.length) return;
+      const a = new Audio("https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=ja&q=" + encodeURIComponent(chunks[i]));
+      try { a.referrerPolicy = "no-referrer"; } catch {}
+      try { a.preservesPitch = true; a.playbackRate = Math.max(0.5, Math.min(1.5, rate)); } catch {}
+      _fallbackAudio = a;
+      a.onended = () => playAt(i + 1);
+      a.onerror = () => { if (first) { first = false; resolve(false); } };
+      a.play().then(() => { if (first) { first = false; resolve(true); } }).catch(() => { if (first) { first = false; resolve(false); } });
+    };
+    playAt(0);
+  });
+}
 function speakJapanese(text, rate = 0.85) {
   if (isAndroidNative()) {
     const t = String(text || "").trim();
@@ -12797,17 +12833,30 @@ function speakJapanese(text, rate = 0.85) {
   const clean = String(text || "").trim();
   if (!clean) return;
   whenVoicesReady(() => {
+    stopFallbackAudio();
+    // No Japanese voice installed at all (common on Windows PCs): skip the device voice and play real audio.
+    if (!pickJapaneseVoice()) {
+      try { synth.cancel(); } catch {}
+      speakWithAudioFallback(clean, rate).then(ok => { if (!ok) reportSpeechProblem("no-japanese-voice", "audio-fallback-failed"); });
+      return;
+    }
     let wasBusy = false;
     try { wasBusy = !!(synth.speaking || synth.pending); if (wasBusy) synth.cancel(); } catch {}
     const u = makeJapaneseUtterance(clean, rate);
     let started = false;
+    let usedFallback = false;
+    const fallback = (why) => {
+      if (usedFallback) return; usedFallback = true;
+      try { synth.cancel(); } catch {}
+      speakWithAudioFallback(clean, rate).then(ok => { if (!ok) reportSpeechProblem(why, "audio-fallback-failed"); });
+    };
     u.onstart = () => { started = true; };
     u.onerror = (e) => {
       const err = e && e.error;
-      if (err && err !== "interrupted" && err !== "canceled") reportSpeechProblem(err);
+      if (err && err !== "interrupted" && err !== "canceled") fallback(err);
     };
-    // If nothing started within 3s the phone has no working speech engine / Japanese voice.
-    setTimeout(() => { try { if (!started && !synth.speaking) reportSpeechProblem("silent"); } catch {} }, 3000);
+    // If nothing started within 2s the device voice is not working — use the audio clip instead.
+    setTimeout(() => { try { if (!started && !synth.speaking) fallback("silent"); } catch {} }, 2000);
     // Chrome/Android drops a speak() issued in the same tick as cancel(), so wait a moment after one.
     setTimeout(() => {
       try { synth.resume(); } catch {}
@@ -12999,6 +13048,7 @@ async function repairVocabReadings(force = false) {
 let _folderPlayToken = 0;
 function stopFolderPlayback() {
   _folderPlayToken++;
+  stopFallbackAudio();
   if (isAndroidNative()) nativeStop();
   try { if (window.speechSynthesis) window.speechSynthesis.cancel(); } catch {}
 }
@@ -13038,6 +13088,18 @@ function playWordsSequentially(cards, { rate = 0.85, gapMs = 600, onIndex, onDon
     i++;
     const text = speechTextForWord(card);
     if (!text) { next(); return; }
+    if (!pickJapaneseVoice()) {
+      // No Japanese voice on this device: play each word as an audio clip, then move on.
+      speakWithAudioFallback(text, rate).then(ok => {
+        if (!ok) { reportSpeechProblem("no-japanese-voice", "audio-fallback-failed"); if (onDone) onDone(); return; }
+        const a = _fallbackAudio;
+        let moved = false;
+        const go = () => { if (moved) return; moved = true; setTimeout(next, gapMs); };
+        if (a) { a.addEventListener("ended", go); a.addEventListener("error", go); }
+        setTimeout(go, 6000);
+      });
+      return;
+    }
     const u = makeJapaneseUtterance(text, rate);
     let advanced = false;
     const advance = () => { if (advanced) return; advanced = true; setTimeout(next, gapMs); };
