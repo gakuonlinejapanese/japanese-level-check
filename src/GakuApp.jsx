@@ -12751,7 +12751,7 @@ function pickJapaneseVoice() {
 }
 // Tells the screen (see TtsProblemToast) that speech didn't work, instead of failing silently.
 let _lastTtsReportAt = 0;
-const TTS_BUILD = "tts2";
+const TTS_BUILD = "tts3";
 function reportSpeechProblem(kind, detail) {
   const now = Date.now();
   if (now - _lastTtsReportAt < 4000) return;

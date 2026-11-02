@@ -59,26 +59,53 @@ export async function nativeSpeak(text, rate = 0.85) {
   // making any sound. Real speech always takes a moment, so a near-instant finish counts as a failure and the
   // next method is tried (finally the audio-clip fallback in speakJapanese).
   const clean = String(text || "").replace(/\s+/g, "");
+  // The Android plugin never checks the return value of the engine's speak() and never times out: if the
+  // engine silently drops the request, the promise below stays pending FOREVER — no sound, no audio-clip
+  // fallback and no yellow banner. So we also watch for the "a word started" event (onRangeStart) and give
+  // up if there is no sign of speech within a few seconds.
+  const START_WAIT_MS = 3500;
   const speakChecked = async (opts) => {
     const t0 = Date.now();
-    await TTS.speak(opts);
+    let started = false;
+    let handle = null;
+    let timer = null;
+    try { handle = await TTS.addListener("onRangeStart", () => { started = true; }); } catch {}
+    const watchdog = new Promise((_, reject) => {
+      timer = setTimeout(() => { if (!started) reject(new Error("silent-stalled")); }, START_WAIT_MS);
+    });
+    try {
+      await Promise.race([TTS.speak(opts), watchdog]);
+    } catch (e) {
+      if (String((e && e.message) || "") === "silent-stalled") { try { await TTS.stop(); } catch {} }
+      throw e;
+    } finally {
+      clearTimeout(timer);
+      try { if (handle && handle.remove) await handle.remove(); } catch {}
+    }
     if (clean.length >= 2 && Date.now() - t0 < 150) throw new Error("silent-instant-finish");
   };
+  const stalled = (e) => String((e && e.message) || "") === "silent-stalled";
+  let nativeDead = false; // the engine accepted the request but never produced speech
 
   // 1) Plain ja-JP request.
   try { await speakChecked({ ...base, lang: "ja-JP" }); return; }
-  catch (e) { if (isInterrupt(e)) return; lastErr = e; note("ja-JP", e); }
+  catch (e) { if (isInterrupt(e)) return; lastErr = e; note("ja-JP", e); if (stalled(e)) nativeDead = true; }
 
   // 2) Explicitly pick an installed Japanese voice (works when the engine's default language isn't Japanese).
+  //    (Skipped when the engine already stalled — retrying it would only stall again, 3.5s at a time.)
   const idx = await findJapaneseVoiceIndex(TTS);
-  if (idx >= 0) {
-    try { await speakChecked({ ...base, lang: "ja-JP", voice: idx }); return; }
-    catch (e) { if (isInterrupt(e)) return; lastErr = e; note("voice" + idx, e); }
-  } else { log.push("voices:none"); }
+  if (!nativeDead) {
+    if (idx >= 0) {
+      try { await speakChecked({ ...base, lang: "ja-JP", voice: idx }); return; }
+      catch (e) { if (isInterrupt(e)) return; lastErr = e; note("voice" + idx, e); if (stalled(e)) nativeDead = true; }
+    } else { log.push("voices:none"); }
+  }
 
   // 3) Bare "ja" locale.
-  try { await speakChecked({ ...base, lang: "ja" }); return; }
-  catch (e) { if (isInterrupt(e)) return; lastErr = e; note("ja", e); }
+  if (!nativeDead) {
+    try { await speakChecked({ ...base, lang: "ja" }); return; }
+    catch (e) { if (isInterrupt(e)) return; lastErr = e; note("ja", e); if (stalled(e)) nativeDead = true; }
+  }
 
   // 4) Browser speech engine inside the WebView.
   if (await webSpeak(text, rate)) return;
