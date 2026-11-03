@@ -1456,6 +1456,8 @@ const UI_TRANSLATIONS = {
     currentLevelLabel: "Current level:",
     hideAnswerBtn: "Hide answer",
     showAnswerBtn: "Show answer",
+    questionFuriganaLabel: "Furigana on questions",
+    questionFuriganaDesc: "Shows furigana above the kanji in the question text only. Answers stay without furigana, and kanji-reading questions keep their target word plain so the answer isn't given away.",
     furiganaOn: "ON",
     furiganaOff: "OFF",
     // Paywall — main plan content
@@ -2011,6 +2013,8 @@ const UI_TRANSLATIONS = {
     didYouUnderstand: "Avez-vous compris ceci ?",
     hideAnswerBtn: "Masquer la réponse",
     showAnswerBtn: "Afficher la réponse",
+    questionFuriganaLabel: "Furigana sur les questions",
+    questionFuriganaDesc: "Affiche les furigana au-dessus des kanji dans l'énoncé uniquement. Les réponses restent sans furigana, et les questions de lecture de kanji gardent le mot visé sans furigana pour ne pas donner la réponse.",
     furiganaOn: "Activé",
     furiganaOff: "Désactivé",
     studyTimePerDay: "TEMPS D'ÉTUDE PAR JOUR *",
@@ -2633,6 +2637,8 @@ const UI_TRANSLATIONS = {
     didYouUnderstand: "¿Entendiste esto?",
     hideAnswerBtn: "Ocultar respuesta",
     showAnswerBtn: "Mostrar respuesta",
+    questionFuriganaLabel: "Furigana en las preguntas",
+    questionFuriganaDesc: "Muestra furigana sobre los kanji solo en el enunciado. Las respuestas quedan sin furigana, y en las preguntas de lectura de kanji la palabra a evaluar no lleva furigana para no dar la respuesta.",
     furiganaOn: "Activado",
     furiganaOff: "Desactivado",
     studyTimePerDay: "TIEMPO DE ESTUDIO POR DÍA *",
@@ -3255,6 +3261,8 @@ const UI_TRANSLATIONS = {
     didYouUnderstand: "Você entendeu isso?",
     hideAnswerBtn: "Ocultar resposta",
     showAnswerBtn: "Mostrar resposta",
+    questionFuriganaLabel: "Furigana nas perguntas",
+    questionFuriganaDesc: "Mostra furigana sobre os kanji apenas no enunciado. As respostas ficam sem furigana, e nas perguntas de leitura de kanji a palavra avaliada fica sem furigana para não revelar a resposta.",
     furiganaOn: "Ativado",
     furiganaOff: "Desativado",
     studyTimePerDay: "TEMPO DE ESTUDO POR DIA *",
@@ -3877,6 +3885,8 @@ const UI_TRANSLATIONS = {
     didYouUnderstand: "Hast du das verstanden?",
     hideAnswerBtn: "Antwort ausblenden",
     showAnswerBtn: "Antwort anzeigen",
+    questionFuriganaLabel: "Furigana bei den Fragen",
+    questionFuriganaDesc: "Zeigt Furigana über den Kanji nur im Fragetext. Antworten bleiben ohne Furigana, und bei Kanji-Leseaufgaben bleibt das gefragte Wort ohne Furigana, damit die Antwort nicht verraten wird.",
     furiganaOn: "Ein",
     furiganaOff: "Aus",
     studyTimePerDay: "LERNZEIT PRO TAG *",
@@ -4499,6 +4509,8 @@ const UI_TRANSLATIONS = {
     didYouUnderstand: "Hai capito questo?",
     hideAnswerBtn: "Nascondi risposta",
     showAnswerBtn: "Mostra risposta",
+    questionFuriganaLabel: "Furigana nelle domande",
+    questionFuriganaDesc: "Mostra il furigana sopra i kanji solo nel testo della domanda. Le risposte restano senza furigana e nelle domande di lettura dei kanji la parola richiesta resta senza furigana per non svelare la risposta.",
     furiganaOn: "Attivo",
     furiganaOff: "Disattivo",
     studyTimePerDay: "TEMPO DI STUDIO AL GIORNO *",
@@ -5121,6 +5133,8 @@ const UI_TRANSLATIONS = {
     didYouUnderstand: "你理解这个吗？",
     hideAnswerBtn: "隐藏答案",
     showAnswerBtn: "显示答案",
+    questionFuriganaLabel: "题目显示注音假名",
+    questionFuriganaDesc: "仅在题目文字的汉字上方显示注音假名。答案不显示注音;汉字读音类题目中的目标词不加注音,以免泄露答案。",
     furiganaOn: "开",
     furiganaOff: "关",
     studyTimePerDay: "每天学习时间 *",
@@ -5743,6 +5757,8 @@ const UI_TRANSLATIONS = {
     didYouUnderstand: "你理解這個嗎？",
     hideAnswerBtn: "隱藏答案",
     showAnswerBtn: "顯示答案",
+    questionFuriganaLabel: "題目顯示注音假名",
+    questionFuriganaDesc: "僅在題目文字的漢字上方顯示注音假名。答案不顯示注音;漢字讀音類題目中的目標詞不加注音,以免洩露答案。",
     furiganaOn: "開",
     furiganaOff: "關",
     studyTimePerDay: "每天學習時間 *",
@@ -6365,6 +6381,8 @@ const UI_TRANSLATIONS = {
     didYouUnderstand: "이해되셨나요?",
     hideAnswerBtn: "답 숨기기",
     showAnswerBtn: "답 보기",
+    questionFuriganaLabel: "문제에 후리가나 표시",
+    questionFuriganaDesc: "문제 본문의 한자 위에만 후리가나를 표시합니다. 정답에는 후리가나가 붙지 않으며, 한자 읽기 문제는 정답이 드러나지 않도록 대상 단어에 후리가나를 붙이지 않습니다.",
     furiganaOn: "켜짐",
     furiganaOff: "꺼짐",
     studyTimePerDay: "하루 학습 시간 *",
@@ -6987,6 +7005,8 @@ const UI_TRANSLATIONS = {
     didYouUnderstand: "คุณเข้าใจสิ่งนี้ไหม?",
     hideAnswerBtn: "ซ่อนคำตอบ",
     showAnswerBtn: "แสดงคำตอบ",
+    questionFuriganaLabel: "แสดงฟุริงานะในโจทย์",
+    questionFuriganaDesc: "แสดงฟุริงานะเหนือคันจิเฉพาะในตัวโจทย์เท่านั้น คำตอบจะไม่มีฟุริงานะ และในโจทย์การอ่านคันจิ คำที่ถูกถามจะไม่มีฟุริงานะเพื่อไม่ให้เฉลยคำตอบ",
     furiganaOn: "เปิด",
     furiganaOff: "ปิด",
     studyTimePerDay: "เวลาเรียนต่อวัน *",
@@ -7609,6 +7629,8 @@ const UI_TRANSLATIONS = {
     didYouUnderstand: "Adakah anda faham perkara ini?",
     hideAnswerBtn: "Sembunyikan jawapan",
     showAnswerBtn: "Tunjukkan jawapan",
+    questionFuriganaLabel: "Furigana pada soalan",
+    questionFuriganaDesc: "Menunjukkan furigana di atas kanji dalam teks soalan sahaja. Jawapan kekal tanpa furigana, dan soalan bacaan kanji tidak meletakkan furigana pada perkataan sasaran supaya jawapan tidak terdedah.",
     furiganaOn: "Hidup",
     furiganaOff: "Mati",
     studyTimePerDay: "MASA BELAJAR SEHARI *",
@@ -8231,6 +8253,8 @@ const UI_TRANSLATIONS = {
     didYouUnderstand: "Apakah kamu memahami ini?",
     hideAnswerBtn: "Sembunyikan jawaban",
     showAnswerBtn: "Tampilkan jawaban",
+    questionFuriganaLabel: "Furigana pada soal",
+    questionFuriganaDesc: "Menampilkan furigana di atas kanji hanya pada teks soal. Jawaban tetap tanpa furigana, dan pada soal cara baca kanji kata yang ditanyakan tidak diberi furigana agar jawabannya tidak terbongkar.",
     furiganaOn: "Aktif",
     furiganaOff: "Nonaktif",
     studyTimePerDay: "WAKTU BELAJAR PER HARI *",
@@ -8853,6 +8877,8 @@ const UI_TRANSLATIONS = {
     didYouUnderstand: "Bạn có hiểu điều này không?",
     hideAnswerBtn: "ᮨn đáp án",
     showAnswerBtn: "Hiện đáp án",
+    questionFuriganaLabel: "Hiển thị furigana trong câu hỏi",
+    questionFuriganaDesc: "Chỉ hiển thị furigana phía trên chữ kanji trong nội dung câu hỏi. Đáp án không có furigana, và với câu hỏi về cách đọc kanji thì từ cần hỏi không gắn furigana để không lộ đáp án.",
     furiganaOn: "Bật",
     furiganaOff: "Tắt",
     studyTimePerDay: "THỜI GIAN HỌC MỖI NGÀY *",
@@ -9475,6 +9501,8 @@ const UI_TRANSLATIONS = {
     didYouUnderstand: "क्या आपने इसे समझा?",
     hideAnswerBtn: "उत्तर छिपाएं",
     showAnswerBtn: "उत्तर दिखाएं",
+    questionFuriganaLabel: "प्रश्नों में फुरिगाना",
+    questionFuriganaDesc: "केवल प्रश्न के पाठ में कांजी के ऊपर फुरिगाना दिखाता है। उत्तरों में फुरिगाना नहीं होता, और कांजी पढ़ने वाले प्रश्नों में पूछा गया शब्द बिना फुरिगाना के रहता है ताकि उत्तर न खुले।",
     furiganaOn: "चालू",
     furiganaOff: "बंद",
     studyTimePerDay: "प्रतिदिन अध्ययन समय *",
@@ -10097,6 +10125,8 @@ const UI_TRANSLATIONS = {
     didYouUnderstand: "これは理解できましたか？",
     hideAnswerBtn: "答えを隠す",
     showAnswerBtn: "答えを表示",
+    questionFuriganaLabel: "問題文にふりがなを付ける",
+    questionFuriganaDesc: "問題文の漢字の上にだけふりがなを表示します。答えにはふりがなは付きません。また、漢字の読みを問う問題では、答えがわかってしまわないよう対象の語にはふりがなを付けません。",
     furiganaOn: "オン",
     furiganaOff: "オフ",
     studyTimePerDay: "1日の学習時間 *",
@@ -10719,6 +10749,8 @@ const UI_TRANSLATIONS = {
     didYouUnderstand: "Bunu anladınız mı?",
     hideAnswerBtn: "Cevabı gizle",
     showAnswerBtn: "Cevabı göster",
+    questionFuriganaLabel: "Sorularda furigana",
+    questionFuriganaDesc: "Furigana'yı yalnızca soru metnindeki kanjilerin üzerinde gösterir. Cevaplarda furigana olmaz; kanji okuma sorularında sorulan kelimeye de cevap belli olmasın diye furigana eklenmez.",
     furiganaOn: "Açık",
     furiganaOff: "Kapalı",
     studyTimePerDay: "GÜNLÜK ÇALIŞMA SÜRESİ *",
@@ -11341,6 +11373,8 @@ const UI_TRANSLATIONS = {
     didYouUnderstand: "के तपाईंले यो बुझ्नुभयो?",
     hideAnswerBtn: "उत्तर लुकाउनुहोस्",
     showAnswerBtn: "उत्तर देखाउनुहोस्",
+    questionFuriganaLabel: "प्रश्नहरूमा फुरिगाना",
+    questionFuriganaDesc: "प्रश्नको पाठमा मात्र कान्जीमाथि फुरिगाना देखाउँछ। उत्तरमा फुरिगाना हुँदैन, र कान्जी पढाइका प्रश्नमा सोधिएको शब्दमा उत्तर नखुलोस् भनेर फुरिगाना राखिँदैन।",
     furiganaOn: "अन",
     furiganaOff: "अफ",
     studyTimePerDay: "दैनिक अध्ययन समय *",
@@ -11963,6 +11997,8 @@ const UI_TRANSLATIONS = {
     didYouUnderstand: "Naiintindihan mo ba ito?",
     hideAnswerBtn: "Itago ang sagot",
     showAnswerBtn: "Ipakita ang sagot",
+    questionFuriganaLabel: "Furigana sa mga tanong",
+    questionFuriganaDesc: "Ipinapakita ang furigana sa ibabaw ng kanji sa teksto lamang ng tanong. Walang furigana ang mga sagot, at sa mga tanong sa pagbasa ng kanji, walang furigana ang tinatanong na salita para hindi mahayag ang sagot.",
     furiganaOn: "Naka-on",
     furiganaOff: "Naka-off",
     studyTimePerDay: "ORAS NG PAG-AARAL KADA ARAW *",
@@ -14959,8 +14995,122 @@ const SKILL_COLORS = {
   jlpt:"#a78bfa", reading:"#fb923c", kanji:"#e879f9", grammar:"#60a5fa"
 };
 
+// ─── Furigana on QUESTION text only (2026-11-03) ────────────────────────────────
+// A student at N4 level said they can't read the question text yet because of kanji. When this
+// switch is ON, every question's prompt (NOT the answer/tip) is shown with furigana above the
+// kanji. Questions that test reading/writing of kanji keep the tested kanji and the ①②③④
+// choices WITHOUT furigana so the furigana doesn't give the answer away.
+const QUESTION_FURIGANA_KEY = "gaku_question_furigana";
+const QUESTION_FURIGANA_EVENT = "gaku-question-furigana-change";
+const questionFuriganaCache = new Map();
+const QF_KANJI_RUN = "[\\u4E00-\\u9FFF\\u3005]+";
+const QF_READING = "[\\(（][\\u3040-\\u30FF\\u30FC]+[\\)）]";
+
+// At most 2 questions are sent to the AI at a time so turning the switch on for a 20-question set
+// doesn't fire 60 requests at once.
+let qfActive = 0;
+const qfWaiting = [];
+function runQuestionFuriganaLimited(fn) {
+  return new Promise((resolve) => {
+    const start = () => {
+      qfActive++;
+      Promise.resolve().then(fn).then(resolve, () => resolve(null)).finally(() => {
+        qfActive--;
+        const next = qfWaiting.shift();
+        if (next) next();
+      });
+    };
+    if (qfActive < 2) start(); else qfWaiting.push(start);
+  });
+}
+
+function isReadingOrWritingQuestion(item) {
+  return item.skill === "kanji" || /読み|よみ|書き|かき|漢字/.test(item.prompt || "");
+}
+
+// Removes furigana from the quoted target word(s) 「…」 and from the ①②③④ choice lines.
+function stripAnswerRevealingFurigana(text) {
+  const strip = (s) => s.replace(new RegExp(`(${QF_KANJI_RUN})${QF_READING}`, "g"), "$1");
+  return text
+    .replace(/「([^」]*)」/g, (m, inner) => `「${strip(inner)}」`)
+    .split("\n")
+    .map((line) => (/[①②③④]/.test(line) ? strip(line) : line))
+    .join("\n");
+}
+
+async function getQuestionFurigana(item) {
+  const prompt = item.prompt || "";
+  if (questionFuriganaCache.has(prompt)) return questionFuriganaCache.get(prompt);
+  if (!hasKanji(prompt)) return prompt;
+  const out = await runQuestionFuriganaLimited(() => getFuriganaText(prompt));
+  let result = out || prompt;
+  if (isReadingOrWritingQuestion(item)) result = stripAnswerRevealingFurigana(result);
+  questionFuriganaCache.set(prompt, result);
+  return result;
+}
+
+function useQuestionFurigana() {
+  const read = () => { try { return localStorage.getItem(scopedKey(QUESTION_FURIGANA_KEY)) === "1"; } catch { return false; } };
+  const [on, setOn] = useState(read);
+  useEffect(() => {
+    const handler = () => setOn(read());
+    window.addEventListener(QUESTION_FURIGANA_EVENT, handler);
+    return () => window.removeEventListener(QUESTION_FURIGANA_EVENT, handler);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  const set = (v) => {
+    try { localStorage.setItem(scopedKey(QUESTION_FURIGANA_KEY), v ? "1" : "0"); } catch {}
+    setOn(v);
+    window.dispatchEvent(new Event(QUESTION_FURIGANA_EVENT));
+  };
+  return [on, set];
+}
+
+// Turns "勉強(べんきょう)しています" into real <ruby> markup (reading above the kanji).
+function FuriganaRichText({ text }) {
+  const re = new RegExp(`(${QF_KANJI_RUN})[\\(（]([\\u3040-\\u30FF\\u30FC]+)[\\)）]`, "g");
+  const parts = [];
+  let last = 0, m, k = 0;
+  while ((m = re.exec(text)) !== null) {
+    if (m.index > last) parts.push(text.slice(last, m.index));
+    parts.push(
+      <ruby key={k++}>{m[1]}<rp>(</rp><rt style={{ fontSize:9, color:C.teal, fontWeight:700, letterSpacing:0 }}>{m[2]}</rt><rp>)</rp></ruby>
+    );
+    last = m.index + m[0].length;
+  }
+  if (last < text.length) parts.push(text.slice(last));
+  return <>{parts}</>;
+}
+
+function QuestionFuriganaToggle({ T }) {
+  const [on, setOn] = useQuestionFurigana();
+  return (
+    <div style={{ ...S.card, marginBottom:12, padding:"10px 12px" }}>
+      <button onClick={() => setOn(!on)} role="switch" aria-checked={on}
+        style={{ width:"100%", display:"flex", alignItems:"center", gap:10, padding:"8px 10px", borderRadius:10, cursor:"pointer",
+          background: on ? "rgba(103,232,249,0.15)" : C.card, border:`1px solid ${on ? "rgba(103,232,249,0.5)" : C.border}`,
+          color: on ? "#67e8f9" : "#94a3b8", fontSize:13, fontWeight:700, textAlign:"left" }}>
+        <span style={{ fontSize:16 }}>{on ? "✅" : "⬜"}</span>
+        <span>ふりがな — {T?.questionFuriganaLabel || "Furigana on questions"}</span>
+      </button>
+      <p style={{ color:"#94a3b8", fontSize:11, lineHeight:1.6, margin:"6px 2px 0" }}>
+        {T?.questionFuriganaDesc || "Shows furigana above the kanji in the question text only. Answers stay without furigana, and kanji-reading questions keep their target word plain so the answer isn't given away."}
+      </p>
+    </div>
+  );
+}
+
 function ExerciseCard({ item, revealed, onReveal, T, lang }) {
   const color = SKILL_COLORS[item.skill] || C.purpleLight;
+  const [qFuriOn] = useQuestionFurigana();
+  const [qFuri, setQFuri] = useState("");
+  useEffect(() => {
+    let dead = false;
+    if (!qFuriOn) { setQFuri(""); return; }
+    getQuestionFurigana(item).then((r) => { if (!dead) setQFuri(r); });
+    return () => { dead = true; };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [qFuriOn, item.prompt, item.skill]);
   const [recording, setRecording] = useState(false);
   const [transcript, setTranscript] = useState("");
   const [recogSupported, setRecogSupported] = useState(true);
@@ -14996,7 +15146,10 @@ function ExerciseCard({ item, revealed, onReveal, T, lang }) {
         <span style={{ color:"#ffffff", fontSize:11 }}>{item.type}</span>
       </div>
       <div style={{ display:"flex", alignItems:"flex-start", gap:8, margin:"0 0 6px" }}>
-        <p style={{ color:"#f1f5f9", fontSize:14, lineHeight:1.8, margin:0, whiteSpace:"pre-wrap", flex:1 }}>{item.prompt}</p>
+        <p style={{ color:"#f1f5f9", fontSize:14, lineHeight: qFuriOn ? 2.4 : 1.8, margin:0, whiteSpace:"pre-wrap", flex:1 }}>
+          {qFuriOn && qFuri ? <FuriganaRichText text={qFuri} /> : item.prompt}
+          {qFuriOn && !qFuri && hasKanji(item.prompt) && <span style={{ color:"#67e8f9", fontSize:11 }}> ⏳</span>}
+        </p>
       </div>
       {(item.skill === "listening" || item.skill === "pronunciation") && (
         <div style={{ display:"flex", gap:8, marginBottom:8, flexWrap:"wrap" }}>
@@ -15249,6 +15402,7 @@ Respond ONLY with a valid JSON array, no markdown, no backticks:
       {items.length > 0 && (
         <>
           {contentCheck.eligible && <LevelUpOffer T={T} currentLevel={form.jlpt} onConfirm={onLevelUp} onDismiss={contentCheck.dismiss} />}
+          <QuestionFuriganaToggle T={T} />
           <div style={{ display:"flex", gap:6, flexWrap:"wrap", marginBottom:12 }}>
             <button onClick={()=>setActiveSkillFilter("all")} style={{ padding:"4px 10px", borderRadius:20, fontSize:11, fontWeight:700, cursor:"pointer", border:`1px solid ${activeSkillFilter==="all"?C.purpleLight:C.border}`, background:activeSkillFilter==="all"?"rgba(168,85,247,0.15)":C.card, color:activeSkillFilter==="all"?C.purpleLight:"#64748b" }}>
               すべて ({items.length})
