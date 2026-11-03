@@ -19545,7 +19545,9 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
     setJlptMockStep("done");
     dismissJlptMockOffer();
   };
-  const showJlptMockOffer = !IS_STORE_APP && (form.skills||[]).includes("jlpt") && !jlptMockDismissed;
+  // Shown in the store apps too (2026-11-03): the form only POSTs to /api/policy-agreement and the
+  // student/Seito emails go out server-side, so no price, purchase button, or outside link appears in-app.
+  const showJlptMockOffer = (form.skills||[]).includes("jlpt") && !jlptMockDismissed;
 
   // "💬 Feedback" tab — students can report bugs/improvement ideas any time. Invite-code (GAKU)
   // students can submit any number of times; non-invite (trial) students get exactly one
