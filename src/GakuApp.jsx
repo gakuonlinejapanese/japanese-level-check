@@ -1458,6 +1458,8 @@ const UI_TRANSLATIONS = {
     showAnswerBtn: "Show answer",
     questionFuriganaLabel: "Furigana on questions",
     questionFuriganaDesc: "Shows furigana above the kanji in the question text only. Answers stay without furigana, and kanji-reading questions keep their target word plain so the answer isn't given away.",
+    restartWeek1Btn: "Start over from Week 1",
+    restartWeek1Confirm: "Start over from Week 1? The week counter goes back to Week 1 and all check marks are cleared. Your study plan itself stays the same.",
     furiganaOn: "ON",
     furiganaOff: "OFF",
     // Paywall — main plan content
@@ -2015,6 +2017,8 @@ const UI_TRANSLATIONS = {
     showAnswerBtn: "Afficher la réponse",
     questionFuriganaLabel: "Furigana sur les questions",
     questionFuriganaDesc: "Affiche les furigana au-dessus des kanji dans l'énoncé uniquement. Les réponses restent sans furigana, et les questions de lecture de kanji gardent le mot visé sans furigana pour ne pas donner la réponse.",
+    restartWeek1Btn: "Recommencer à la semaine 1",
+    restartWeek1Confirm: "Recommencer à la semaine 1 ? Le compteur de semaine revient à la semaine 1 et toutes les coches sont effacées. Votre plan d'étude reste identique.",
     furiganaOn: "Activé",
     furiganaOff: "Désactivé",
     studyTimePerDay: "TEMPS D'ÉTUDE PAR JOUR *",
@@ -2639,6 +2643,8 @@ const UI_TRANSLATIONS = {
     showAnswerBtn: "Mostrar respuesta",
     questionFuriganaLabel: "Furigana en las preguntas",
     questionFuriganaDesc: "Muestra furigana sobre los kanji solo en el enunciado. Las respuestas quedan sin furigana, y en las preguntas de lectura de kanji la palabra a evaluar no lleva furigana para no dar la respuesta.",
+    restartWeek1Btn: "Empezar de nuevo desde la semana 1",
+    restartWeek1Confirm: "¿Empezar de nuevo desde la semana 1? El contador vuelve a la semana 1 y se borran todas las marcas. Tu plan de estudio sigue igual.",
     furiganaOn: "Activado",
     furiganaOff: "Desactivado",
     studyTimePerDay: "TIEMPO DE ESTUDIO POR DÍA *",
@@ -3263,6 +3269,8 @@ const UI_TRANSLATIONS = {
     showAnswerBtn: "Mostrar resposta",
     questionFuriganaLabel: "Furigana nas perguntas",
     questionFuriganaDesc: "Mostra furigana sobre os kanji apenas no enunciado. As respostas ficam sem furigana, e nas perguntas de leitura de kanji a palavra avaliada fica sem furigana para não revelar a resposta.",
+    restartWeek1Btn: "Recomeçar da semana 1",
+    restartWeek1Confirm: "Recomeçar da semana 1? O contador volta para a semana 1 e todas as marcações são apagadas. Seu plano de estudo continua o mesmo.",
     furiganaOn: "Ativado",
     furiganaOff: "Desativado",
     studyTimePerDay: "TEMPO DE ESTUDO POR DIA *",
@@ -3887,6 +3895,8 @@ const UI_TRANSLATIONS = {
     showAnswerBtn: "Antwort anzeigen",
     questionFuriganaLabel: "Furigana bei den Fragen",
     questionFuriganaDesc: "Zeigt Furigana über den Kanji nur im Fragetext. Antworten bleiben ohne Furigana, und bei Kanji-Leseaufgaben bleibt das gefragte Wort ohne Furigana, damit die Antwort nicht verraten wird.",
+    restartWeek1Btn: "Von Woche 1 neu beginnen",
+    restartWeek1Confirm: "Von Woche 1 neu beginnen? Der Wochenzähler springt auf Woche 1 zurück und alle Häkchen werden gelöscht. Dein Lernplan selbst bleibt gleich.",
     furiganaOn: "Ein",
     furiganaOff: "Aus",
     studyTimePerDay: "LERNZEIT PRO TAG *",
@@ -4511,6 +4521,8 @@ const UI_TRANSLATIONS = {
     showAnswerBtn: "Mostra risposta",
     questionFuriganaLabel: "Furigana nelle domande",
     questionFuriganaDesc: "Mostra il furigana sopra i kanji solo nel testo della domanda. Le risposte restano senza furigana e nelle domande di lettura dei kanji la parola richiesta resta senza furigana per non svelare la risposta.",
+    restartWeek1Btn: "Ricomincia dalla settimana 1",
+    restartWeek1Confirm: "Ricominciare dalla settimana 1? Il contatore torna alla settimana 1 e tutte le spunte vengono cancellate. Il tuo piano di studio resta lo stesso.",
     furiganaOn: "Attivo",
     furiganaOff: "Disattivo",
     studyTimePerDay: "TEMPO DI STUDIO AL GIORNO *",
@@ -5135,6 +5147,8 @@ const UI_TRANSLATIONS = {
     showAnswerBtn: "显示答案",
     questionFuriganaLabel: "题目显示注音假名",
     questionFuriganaDesc: "仅在题目文字的汉字上方显示注音假名。答案不显示注音;汉字读音类题目中的目标词不加注音,以免泄露答案。",
+    restartWeek1Btn: "从第1周重新开始",
+    restartWeek1Confirm: "从第1周重新开始？周数将回到第1周，所有勾选都会清除。学习计划本身保持不变。",
     furiganaOn: "开",
     furiganaOff: "关",
     studyTimePerDay: "每天学习时间 *",
@@ -5759,6 +5773,8 @@ const UI_TRANSLATIONS = {
     showAnswerBtn: "顯示答案",
     questionFuriganaLabel: "題目顯示注音假名",
     questionFuriganaDesc: "僅在題目文字的漢字上方顯示注音假名。答案不顯示注音;漢字讀音類題目中的目標詞不加注音,以免洩露答案。",
+    restartWeek1Btn: "從第1週重新開始",
+    restartWeek1Confirm: "從第1週重新開始？週數將回到第1週，所有勾選都會清除。學習計畫本身維持不變。",
     furiganaOn: "開",
     furiganaOff: "關",
     studyTimePerDay: "每天學習時間 *",
@@ -6383,6 +6399,8 @@ const UI_TRANSLATIONS = {
     showAnswerBtn: "답 보기",
     questionFuriganaLabel: "문제에 후리가나 표시",
     questionFuriganaDesc: "문제 본문의 한자 위에만 후리가나를 표시합니다. 정답에는 후리가나가 붙지 않으며, 한자 읽기 문제는 정답이 드러나지 않도록 대상 단어에 후리가나를 붙이지 않습니다.",
+    restartWeek1Btn: "1주차부터 다시 시작",
+    restartWeek1Confirm: "1주차부터 다시 시작할까요? 주차가 1주차로 돌아가고 모든 체크 표시가 지워집니다. 학습 계획 자체는 그대로입니다.",
     furiganaOn: "켜짐",
     furiganaOff: "꺼짐",
     studyTimePerDay: "하루 학습 시간 *",
@@ -7007,6 +7025,8 @@ const UI_TRANSLATIONS = {
     showAnswerBtn: "แสดงคำตอบ",
     questionFuriganaLabel: "แสดงฟุริงานะในโจทย์",
     questionFuriganaDesc: "แสดงฟุริงานะเหนือคันจิเฉพาะในตัวโจทย์เท่านั้น คำตอบจะไม่มีฟุริงานะ และในโจทย์การอ่านคันจิ คำที่ถูกถามจะไม่มีฟุริงานะเพื่อไม่ให้เฉลยคำตอบ",
+    restartWeek1Btn: "เริ่มใหม่ตั้งแต่สัปดาห์ที่ 1",
+    restartWeek1Confirm: "เริ่มใหม่ตั้งแต่สัปดาห์ที่ 1 หรือไม่? ตัวนับสัปดาห์จะกลับไปที่สัปดาห์ที่ 1 และเครื่องหมายถูกทั้งหมดจะถูกล้าง แผนการเรียนยังคงเหมือนเดิม",
     furiganaOn: "เปิด",
     furiganaOff: "ปิด",
     studyTimePerDay: "เวลาเรียนต่อวัน *",
@@ -7631,6 +7651,8 @@ const UI_TRANSLATIONS = {
     showAnswerBtn: "Tunjukkan jawapan",
     questionFuriganaLabel: "Furigana pada soalan",
     questionFuriganaDesc: "Menunjukkan furigana di atas kanji dalam teks soalan sahaja. Jawapan kekal tanpa furigana, dan soalan bacaan kanji tidak meletakkan furigana pada perkataan sasaran supaya jawapan tidak terdedah.",
+    restartWeek1Btn: "Mula semula dari minggu 1",
+    restartWeek1Confirm: "Mula semula dari minggu 1? Pengira minggu kembali ke minggu 1 dan semua tanda semak dipadam. Pelan belajar anda kekal sama.",
     furiganaOn: "Hidup",
     furiganaOff: "Mati",
     studyTimePerDay: "MASA BELAJAR SEHARI *",
@@ -8255,6 +8277,8 @@ const UI_TRANSLATIONS = {
     showAnswerBtn: "Tampilkan jawaban",
     questionFuriganaLabel: "Furigana pada soal",
     questionFuriganaDesc: "Menampilkan furigana di atas kanji hanya pada teks soal. Jawaban tetap tanpa furigana, dan pada soal cara baca kanji kata yang ditanyakan tidak diberi furigana agar jawabannya tidak terbongkar.",
+    restartWeek1Btn: "Mulai ulang dari minggu 1",
+    restartWeek1Confirm: "Mulai ulang dari minggu 1? Penghitung minggu kembali ke minggu 1 dan semua tanda centang dihapus. Rencana belajar Anda tetap sama.",
     furiganaOn: "Aktif",
     furiganaOff: "Nonaktif",
     studyTimePerDay: "WAKTU BELAJAR PER HARI *",
@@ -8879,6 +8903,8 @@ const UI_TRANSLATIONS = {
     showAnswerBtn: "Hiện đáp án",
     questionFuriganaLabel: "Hiển thị furigana trong câu hỏi",
     questionFuriganaDesc: "Chỉ hiển thị furigana phía trên chữ kanji trong nội dung câu hỏi. Đáp án không có furigana, và với câu hỏi về cách đọc kanji thì từ cần hỏi không gắn furigana để không lộ đáp án.",
+    restartWeek1Btn: "Bắt đầu lại từ tuần 1",
+    restartWeek1Confirm: "Bắt đầu lại từ tuần 1? Bộ đếm tuần sẽ trở về tuần 1 và mọi dấu tích sẽ bị xóa. Kế hoạch học của bạn vẫn giữ nguyên.",
     furiganaOn: "Bật",
     furiganaOff: "Tắt",
     studyTimePerDay: "THỜI GIAN HỌC MỖI NGÀY *",
@@ -9503,6 +9529,8 @@ const UI_TRANSLATIONS = {
     showAnswerBtn: "उत्तर दिखाएं",
     questionFuriganaLabel: "प्रश्नों में फुरिगाना",
     questionFuriganaDesc: "केवल प्रश्न के पाठ में कांजी के ऊपर फुरिगाना दिखाता है। उत्तरों में फुरिगाना नहीं होता, और कांजी पढ़ने वाले प्रश्नों में पूछा गया शब्द बिना फुरिगाना के रहता है ताकि उत्तर न खुले।",
+    restartWeek1Btn: "सप्ताह 1 से फिर शुरू करें",
+    restartWeek1Confirm: "सप्ताह 1 से फिर शुरू करें? सप्ताह की गिनती सप्ताह 1 पर लौट जाएगी और सभी चेक के निशान हट जाएंगे। आपकी अध्ययन योजना वही रहेगी।",
     furiganaOn: "चालू",
     furiganaOff: "बंद",
     studyTimePerDay: "प्रतिदिन अध्ययन समय *",
@@ -10127,6 +10155,8 @@ const UI_TRANSLATIONS = {
     showAnswerBtn: "答えを表示",
     questionFuriganaLabel: "問題文にふりがなを付ける",
     questionFuriganaDesc: "問題文の漢字の上にだけふりがなを表示します。答えにはふりがなは付きません。また、漢字の読みを問う問題では、答えがわかってしまわないよう対象の語にはふりがなを付けません。",
+    restartWeek1Btn: "第1週からやり直す",
+    restartWeek1Confirm: "第1週からやり直しますか？週のカウントが第1週に戻り、すべてのチェックが消えます。学習プラン自体は変わりません。",
     furiganaOn: "オン",
     furiganaOff: "オフ",
     studyTimePerDay: "1日の学習時間 *",
@@ -10751,6 +10781,8 @@ const UI_TRANSLATIONS = {
     showAnswerBtn: "Cevabı göster",
     questionFuriganaLabel: "Sorularda furigana",
     questionFuriganaDesc: "Furigana'yı yalnızca soru metnindeki kanjilerin üzerinde gösterir. Cevaplarda furigana olmaz; kanji okuma sorularında sorulan kelimeye de cevap belli olmasın diye furigana eklenmez.",
+    restartWeek1Btn: "1. haftadan yeniden başla",
+    restartWeek1Confirm: "1. haftadan yeniden başlansın mı? Hafta sayacı 1. haftaya döner ve tüm işaretler silinir. Çalışma planınızın kendisi aynı kalır.",
     furiganaOn: "Açık",
     furiganaOff: "Kapalı",
     studyTimePerDay: "GÜNLÜK ÇALIŞMA SÜRESİ *",
@@ -11375,6 +11407,8 @@ const UI_TRANSLATIONS = {
     showAnswerBtn: "उत्तर देखाउनुहोस्",
     questionFuriganaLabel: "प्रश्नहरूमा फुरिगाना",
     questionFuriganaDesc: "प्रश्नको पाठमा मात्र कान्जीमाथि फुरिगाना देखाउँछ। उत्तरमा फुरिगाना हुँदैन, र कान्जी पढाइका प्रश्नमा सोधिएको शब्दमा उत्तर नखुलोस् भनेर फुरिगाना राखिँदैन।",
+    restartWeek1Btn: "हप्ता १ बाट फेरि सुरु गर्नुहोस्",
+    restartWeek1Confirm: "हप्ता १ बाट फेरि सुरु गर्ने? हप्ताको गणना हप्ता १ मा फर्किन्छ र सबै चेक चिन्ह हट्छन्। तपाईंको अध्ययन योजना उस्तै रहन्छ।",
     furiganaOn: "अन",
     furiganaOff: "अफ",
     studyTimePerDay: "दैनिक अध्ययन समय *",
@@ -11999,6 +12033,8 @@ const UI_TRANSLATIONS = {
     showAnswerBtn: "Ipakita ang sagot",
     questionFuriganaLabel: "Furigana sa mga tanong",
     questionFuriganaDesc: "Ipinapakita ang furigana sa ibabaw ng kanji sa teksto lamang ng tanong. Walang furigana ang mga sagot, at sa mga tanong sa pagbasa ng kanji, walang furigana ang tinatanong na salita para hindi mahayag ang sagot.",
+    restartWeek1Btn: "Magsimula muli mula Linggo 1",
+    restartWeek1Confirm: "Magsimula muli mula Linggo 1? Babalik sa Linggo 1 ang bilang ng linggo at made-delete ang lahat ng check mark. Mananatiling pareho ang iyong study plan.",
     furiganaOn: "Naka-on",
     furiganaOff: "Naka-off",
     studyTimePerDay: "ORAS NG PAG-AARAL KADA ARAW *",
@@ -17714,6 +17750,22 @@ function saveStudyGuideTaskDone(day, idx, done) {
     return true;
   } catch { return false; }
 }
+// Un-checks every task of the saved guide (the tasks themselves stay exactly as they are).
+// Returns the cleared schedule, or null when there is no saved guide.
+function clearStudyGuideChecks() {
+  try {
+    const key = scopedKey(STUDY_GUIDE_KEY);
+    const raw = localStorage.getItem(key);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw);
+    if (!parsed || !parsed.schedule) return null;
+    Object.keys(parsed.schedule).forEach(day => {
+      if (Array.isArray(parsed.schedule[day])) parsed.schedule[day] = parsed.schedule[day].map(t => ({ ...t, done: false }));
+    });
+    localStorage.setItem(key, JSON.stringify(parsed));
+    return parsed.schedule;
+  } catch { return null; }
+}
 function requestStudyGuideRegeneration() {
   try { localStorage.setItem(scopedKey(STUDY_GUIDE_REGEN_KEY), "1"); } catch {}
 }
@@ -19421,7 +19473,7 @@ function FeaturePicker({ T, initial, onApply }) {
   );
 }
 
-function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteAccountBusy, userId, streakDays, daysUntilTrialEnds, tutorialGraceDaysLeft, isTrialAccount, isGakuStudent, onCompleteProfile, readerInstalled }) {
+function Dashboard({ form, onEdit, onLevelUp, onRestartWeek1, onLogout, onDeleteAccount, deleteAccountBusy, userId, streakDays, daysUntilTrialEnds, tutorialGraceDaysLeft, isTrialAccount, isGakuStudent, onCompleteProfile, readerInstalled }) {
   const T = useUITranslations(form?.preferredLang || "English");
   // GAKU Reader promo card: shown on desktop Chrome/Edge to accounts that have
   // never used the extension (server says readerInstalled=false); dismissible
@@ -19798,6 +19850,14 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
     if (saveStudyGuideTaskDone(day, idx, nextDone) && userId) syncMigrationBridge(userId);
   }, [schedule, userId]);
 
+  const restartWeek1 = () => {
+    if (!window.confirm(T.restartWeek1Confirm || "Start over from Week 1? The week counter goes back to Week 1 and all check marks are cleared. Your study plan itself stays the same.")) return;
+    const cleared = clearStudyGuideChecks();
+    if (cleared) setSchedule(normalizeGuideSchedule(cleared, T));
+    else setSchedule(prev => { const o = {}; Object.keys(prev).forEach(d => { o[d] = (prev[d] || []).map(t => ({ ...t, done: false })); }); return o; });
+    if (onRestartWeek1) onRestartWeek1();
+    if (userId) syncMigrationBridge(userId);
+  };
   const totalTasks = Object.values(schedule).flat().filter(t=>!t.rest).length;
   const doneTasks = Object.values(schedule).flat().filter(t=>t.done&&!t.rest).length;
   const progress = totalTasks ? Math.round(doneTasks/totalTasks*100) : 0;
@@ -19805,6 +19865,9 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
 
   const DAY_KEYS = ["monday","tuesday","wednesday","thursday","friday","saturday","sunday"];
   const WEEKDAY_EN = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
+  // Japanese weekday names, shown next to the student's language so both can be checked at a glance
+  // (e.g. against a work calendar).
+  const WEEKDAY_JA = ["月曜日(げつようび)","火曜日(かようび)","水曜日(すいようび)","木曜日(もくようび)","金曜日(きんようび)","土曜日(どようび)","日曜日(にちようび)"];
   const isTranslating = T._loading;
 
   // A feature is shown when the student kept it (or never chose); the tutorial always shows everything.
@@ -20107,6 +20170,7 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
                 <div>
                   <p style={{ color:C.purpleLight, fontSize:11, fontWeight:700, letterSpacing:1, margin:0 }}>📅 WEEK {currentWeek} / {totalWeeks}</p>
                   <p style={{ color:"#ffffff", fontSize:11, margin:"2px 0 0" }}>{totalWeeks - currentWeek} {T.weeksRemaining} · {Math.round((currentWeek/totalWeeks)*100)}{T.percentComplete}</p>
+                  <button type="button" onClick={restartWeek1} style={{ marginTop:8, padding:"4px 10px", borderRadius:8, border:"1px solid rgba(139,92,246,0.4)", background:"rgba(139,92,246,0.1)", color:C.purpleLight, fontSize:11, fontWeight:700, cursor:"pointer" }}>↺ {T.restartWeek1Btn || "Start over from Week 1"}</button>
                 </div>
                 {/* The old one-tap "Refresh" button that rebuilt the whole guide was removed on purpose:
                     the guide changes ONLY when the student presses "Update my study guide" in Edit Profile. */}
@@ -20135,7 +20199,7 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
               ) : (
                 WEEKDAY_EN.map((day, di) => {
                   const tasks = schedule[day] || [];
-                  const dayLabel = T[DAY_KEYS[di]] || day.toUpperCase();
+                  const dayLabel = (T[DAY_KEYS[di]] || day.toUpperCase()) + " · " + WEEKDAY_JA[di];
                   return (
                     <div key={day} style={{ marginBottom:16 }}>
                       <p style={{ color:"#94a3b8", fontSize:11, fontWeight:700, letterSpacing:1, borderBottom:`1px solid ${C.border}`, paddingBottom:6, marginBottom:8 }}>{dayLabel}</p>
@@ -21387,6 +21451,15 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
     }
     completeProfileSave(f, opts);
   };
+  // "Start over from Week 1": moves the plan start date to now so the week counter is Week 1 again.
+  // It deliberately does NOT touch the study guide itself (that only changes via "Update my study guide").
+  const handleRestartWeek1 = () => {
+    if (!form) return;
+    const saved = { ...form, planStartDate: new Date().toISOString() };
+    setForm(saved);
+    try { localStorage.setItem(scopedKey("gaku_form"), JSON.stringify(saved)); } catch {}
+    if (authUser) { syncMigrationBridge(authUser.id); pushProfileSummary(authUser.id, saved); }
+  };
   const completeProfileSave = (f, opts) => {
     // Capture before setForm below overwrites it: a brand-new signup has no
     // prior form at all, whereas an edit always has one already.
@@ -21951,7 +22024,7 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
   }
   return (
     <div style={{ position:"relative" }} onClickCapture={handleDashboardInteraction}>
-      <Dashboard form={form} onEdit={handleEdit} onLevelUp={(lvl)=>handleSubmit({ ...form, jlpt: lvl })} onLogout={authUser ? handleLogout : undefined} onDeleteAccount={authUser ? handleDeleteAccount : undefined} deleteAccountBusy={deleteAccountBusy} userId={authUser?.id} streakDays={streakDays} readerInstalled={readerInstalled} daysUntilTrialEnds={daysUntilTrialEnds} tutorialGraceDaysLeft={tutorialGraceDaysLeft} isTrialAccount={!isGakuStudent && !isPaid} isGakuStudent={isGakuStudent} onCompleteProfile={form?.profileComplete === false ? () => setOnboardingStep("completeProfile") : undefined} />
+      <Dashboard form={form} onEdit={handleEdit} onLevelUp={(lvl)=>handleSubmit({ ...form, jlpt: lvl })} onRestartWeek1={handleRestartWeek1} onLogout={authUser ? handleLogout : undefined} onDeleteAccount={authUser ? handleDeleteAccount : undefined} deleteAccountBusy={deleteAccountBusy} userId={authUser?.id} streakDays={streakDays} readerInstalled={readerInstalled} daysUntilTrialEnds={daysUntilTrialEnds} tutorialGraceDaysLeft={tutorialGraceDaysLeft} isTrialAccount={!isGakuStudent && !isPaid} isGakuStudent={isGakuStudent} onCompleteProfile={form?.profileComplete === false ? () => setOnboardingStep("completeProfile") : undefined} />
       {showPaywall && !IS_STORE_APP && !(authUser && (isGakuStudent || isPaid)) && (
         <div style={{ position:"fixed", inset:0, zIndex:9999, display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"flex-start", overflowY:"auto", WebkitOverflowScrolling:"touch", padding:"16px 0", boxSizing:"border-box", background:"rgba(10,15,30,0.85)", backdropFilter:"blur(12px)" }}>
           <div style={{ background:"linear-gradient(135deg,#1e1b4b,#0f172a)", border:"1.5px solid rgba(139,92,246,0.4)", borderRadius:20, padding:"36px 32px", maxWidth:420, width:"90%", margin:"auto", textAlign:"center", boxShadow:"0 8px 40px rgba(139,92,246,0.25)" }}>
