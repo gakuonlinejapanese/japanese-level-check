@@ -19172,18 +19172,18 @@ const PROGRESS_NUDGE_KEY = "gaku_progress_nudge_at";
 const PROGRESS_MIN_GAP_DAYS = 3;
 const PROGRESS_LEVELS = ["N5", "N4", "N3", "N2"];
 const PROGRESS_QUESTIONS = [
-  { lv: "N5", q: "「学校」の読み方はどれですか。", c: ["がっこう", "がくこう", "がっこ", "がこう"], a: 0 },
-  { lv: "N5", q: "私は毎朝、パン＿＿食べます。", c: ["を", "が", "に", "で"], a: 0 },
-  { lv: "N5", q: "「みず」を漢字で書くと、どれですか。", c: ["水", "木", "火", "土"], a: 0 },
-  { lv: "N4", q: "友だちが私に本を貸して＿＿。", c: ["くれました", "あげました", "もらいました", "やりました"], a: 0 },
-  { lv: "N4", q: "「約束」の読み方はどれですか。", c: ["やくそく", "やっそく", "やくぞく", "よくそく"], a: 0 },
-  { lv: "N4", q: "明日は雨が降る＿＿しれません。", c: ["かも", "だけ", "ばかり", "ほど"], a: 0 },
-  { lv: "N3", q: "「経験」の読み方はどれですか。", c: ["けいけん", "けいげん", "きょうけん", "けえけん"], a: 0 },
-  { lv: "N3", q: "この本は子どもから大人＿＿、幅広く読まれています。", c: ["まで", "ほど", "ばかり", "だけ"], a: 0 },
-  { lv: "N3", q: "彼は忙しい＿＿、いつも私の相談に乗ってくれます。", c: ["のに", "ので", "から", "ために"], a: 0 },
-  { lv: "N2", q: "「複雑」の読み方はどれですか。", c: ["ふくざつ", "ふくそう", "ふくぞう", "ふっさつ"], a: 0 },
-  { lv: "N2", q: "彼は約束を破った＿＿、謝ろうともしません。", c: ["くせに", "おかげで", "どころか", "ばかりに"], a: 0 },
-  { lv: "N2", q: "状況が変わったので、計画を変更せざるを＿＿。", c: ["得ません", "取れません", "受けません", "持ちません"], a: 0 },
+  { lv: "N5", q: "「学校」の読み方はどれですか。", qf: "「学校」の読(よ)み方(かた)はどれですか。", c: ["がっこう", "がくこう", "がっこ", "がこう"], a: 0 },
+  { lv: "N5", q: "私は毎朝、パン＿＿食べます。", qf: "私(わたし)は毎朝(まいあさ)、パン＿＿食(た)べます。", c: ["を", "が", "に", "で"], a: 0 },
+  { lv: "N5", q: "「みず」を漢字で書くと、どれですか。", qf: "「みず」を漢字(かんじ)で書(か)くと、どれですか。", c: ["水", "木", "火", "土"], a: 0 },
+  { lv: "N4", q: "友だちが私に本を貸して＿＿。", qf: "友(とも)だちが私(わたし)に本(ほん)を貸(か)して＿＿。", c: ["くれました", "あげました", "もらいました", "やりました"], a: 0 },
+  { lv: "N4", q: "「約束」の読み方はどれですか。", qf: "「約束」の読(よ)み方(かた)はどれですか。", c: ["やくそく", "やっそく", "やくぞく", "よくそく"], a: 0 },
+  { lv: "N4", q: "明日は雨が降る＿＿しれません。", qf: "明日(あした)は雨(あめ)が降(ふ)る＿＿しれません。", c: ["かも", "だけ", "ばかり", "ほど"], a: 0 },
+  { lv: "N3", q: "「経験」の読み方はどれですか。", qf: "「経験」の読(よ)み方(かた)はどれですか。", c: ["けいけん", "けいげん", "きょうけん", "けえけん"], a: 0 },
+  { lv: "N3", q: "この本は子どもから大人＿＿、幅広く読まれています。", qf: "この本(ほん)は子(こ)どもから大人(おとな)＿＿、幅広(はばひろ)く読(よ)まれています。", c: ["まで", "ほど", "ばかり", "だけ"], a: 0 },
+  { lv: "N3", q: "彼は忙しい＿＿、いつも私の相談に乗ってくれます。", qf: "彼(かれ)は忙(いそが)しい＿＿、いつも私(わたし)の相談(そうだん)に乗(の)ってくれます。", c: ["のに", "ので", "から", "ために"], a: 0 },
+  { lv: "N2", q: "「複雑」の読み方はどれですか。", qf: "「複雑」の読(よ)み方(かた)はどれですか。", c: ["ふくざつ", "ふくそう", "ふくぞう", "ふっさつ"], a: 0 },
+  { lv: "N2", q: "彼は約束を破った＿＿、謝ろうともしません。", qf: "彼(かれ)は約束(やくそく)を破(やぶ)った＿＿、謝(あやま)ろうともしません。", c: ["くせに", "おかげで", "どころか", "ばかりに"], a: 0 },
+  { lv: "N2", q: "状況が変わったので、計画を変更せざるを＿＿。", qf: "状況(じょうきょう)が変(か)わったので、計画(けいかく)を変更(へんこう)せざるを＿＿。", c: ["得ません", "取れません", "受けません", "持ちません"], a: 0 },
 ];
 function loadProgressChecks() {
   try { const v = JSON.parse(localStorage.getItem(scopedKey(PROGRESS_KEY)) || "[]"); return Array.isArray(v) ? v : []; } catch { return []; }
@@ -19266,6 +19266,7 @@ function ProgressSummary({ T, history }) {
   );
 }
 function ProgressCheck({ T, userId }) {
+  const [qFuriOn] = useQuestionFurigana(); // "furigana on questions" switch (question text only)
   const [history, setHistory] = useState(loadProgressChecks);
   const [phase, setPhase] = useState("home"); // home | quiz | result
   const [qs, setQs] = useState([]);
@@ -19302,7 +19303,8 @@ function ProgressCheck({ T, userId }) {
           <div style={{ width:`${Math.round(idx / qs.length * 100)}%`, height:"100%", background:C.green }} />
         </div>
         <p style={{ color:"#94a3b8", fontSize:11, margin:"0 0 6px" }}>{progressFill(T.pcQ || "Question {n} / {total}", { n: idx + 1, total: qs.length })}</p>
-        <p style={{ color:"#f1f5f9", fontSize:16, fontWeight:700, lineHeight:1.7, margin:"0 0 12px" }}>{q.q}</p>
+        <QuestionFuriganaToggle T={T} />
+        <p style={{ color:"#f1f5f9", fontSize:16, fontWeight:700, lineHeight: qFuriOn ? 2.3 : 1.7, margin:"0 0 12px" }}>{qFuriOn && q.qf ? <FuriganaRichText text={q.qf} /> : q.q}</p>
         <div style={{ display:"flex", flexDirection:"column", gap:8, marginBottom:12 }}>
           {q.order.map((ci, pos) => (
             <button key={pos} onClick={() => setPicked(pos)} style={{ textAlign:"left", padding:"11px 14px", borderRadius:10, cursor:"pointer", fontSize:15, color:"#e2e8f0", background:picked === pos ? "rgba(168,85,247,0.18)" : C.card, border:`1.5px solid ${picked === pos ? C.purpleLight : C.border}` }}>{q.c[ci]}</button>
