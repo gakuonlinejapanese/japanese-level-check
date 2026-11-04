@@ -93,6 +93,91 @@ export function overrideInstruction() {
   ].join(" ");
 }
 
+
+// ─── UI text overrides ────────────────────────────────────────────────────────
+// Many on-screen descriptions say "Japanese" (Create From Content, Writing, Pronunciation…).
+// For a non-Japanese target this swaps those strings for target-language versions. English and
+// Japanese UI have hand-written text; any other UI language falls back to the English text
+// (prototype limitation — those can be translated later).
+export function targetLangTextOverrides(uiLang) {
+  if (isJa()) return null;
+  const c = tl();
+  const ja = uiLang === "Japanese";
+  const N = ja ? (c.code === "en" ? "英語" : "モンゴル語") : c.name;
+  if (ja) {
+    return {
+      remindEventTitle: `GAKU Master — 5分の${N}復習`,
+      fqDesc: `好きな${N}(キャプション、歌詞の一行、ニュースの文など)を貼り付けると、数秒で3問のクイズができます。`,
+      fqPlaceholder: `${N}のテキストをここに貼り付けてください…`,
+      tutorialMilestonesDesc: `これはあなたの${N}の目標へのロードマップです。これから先の道のりを見てみましょう。`,
+      tutorialContentDesc: `さっそく試しましょう:${N}のテキスト(記事、字幕、キャプションなど)を下に貼り付けると、GAKUがそこから練習問題を作ります。ウェブ版のGAKU Readerと同じ仕組みです。`,
+      ttsProblem: `🔇 音が出ませんか?お使いのスマホに${N}の音声が入っていない可能性があります。設定 →「テキスト読み上げの出力」を検索 → ${N}の音声データ(Google テキスト読み上げ)をインストールして、もう一度お試しください。`,
+      writeVocabQPrompt: `次の単語を使って、${N}で短い文章を書いてください: {words}`,
+      writeQDesc: `ネットで見つけた作文の問題(エッセイのテーマ、試験形式の問題、メールを書く課題など)を貼り付けてください。${N}で答えを書くと、GAKUが問題に合っているかチェックします。`,
+      writeAPlaceholder: `${N}で答えを入力してください…`,
+      writeErrNotJa: `答えは${N}で書いてください。`,
+      tutorialWritingDesc: `さっそく試しましょう:「質問」を選び、作文の問題を貼り付けて${N}で答えを入力すると、GAKUが問題に合っているか(合っていなければ模範解答も)教えてくれます。`,
+      speakAloud: `声に出す:今日の内容を${N}で要約する(5分)`,
+      currentJlpt: `現在の${N}レベル(自己評価)*`,
+      modeGuideLock: `🔒 ノルマが終わるまで、字幕帳とマイルストーンはロックされています。ロックされたタブをタップするとスケジュールに戻ります。8に達すると、すべて解放されます。`,
+      howToPractice: `貼り付けた${N}のテキスト(記事、字幕、キャプション)から、AIが練習問題を作ります。語彙、文法、読解、リスニング、会話、発音をカバー。「答えを見る」をタップして確認しましょう。`,
+      vocabBuilderDesc: `トピックを入力すると、関連する${N}の単語が表示されます(英語・日本語どちらでもOK)`,
+      searchingDictionary: `${N}の辞書を検索中...`,
+      contentDesc: `読んでいる、または見ている${N}のテキスト(記事、動画の字幕・概要欄、キャプション、メッセージなど)を貼り付けてください。GAKUがそこから{jlpt}レベルの練習問題を作ります。ウェブ版のGAKU Readerと同じ仕組みです。`,
+      contentPlaceholder: `${N}のテキスト、字幕、キャプションをここに貼り付けてください`,
+      contentErrEmpty: `先に${N}のテキスト(または動画の字幕・概要欄)を貼り付けてください。`,
+      pronListenDesc: `YouTubeなどの動画を、マイクの近くで音を出して再生します。GAKUが聞こえた内容を1行ずつ書き出し、翻訳で理解を助けます。`,
+      pronDesc: `${N}のテキスト(記事、動画の字幕、歌、自分のメモなど)を貼り付けてください。「コンテンツから作成」と同じです。GAKUが自然な文やフレーズを取り出すので、声に出して読む(または聞いて繰り返す)と、発音がどれだけ近かったかをチェックします。`,
+      pronPasteLabel: `${N}のテキストをここに貼り付け`,
+      pronAddNewPlaceholder: `${N}の単語や文を入力または貼り付け...`,
+    };
+  }
+  return {
+    remindEventTitle: `GAKU Master — 5-min ${N} review`,
+    fqDesc: `Paste any ${N} you like (a caption, lyrics line, news sentence) and get a 3-question quiz in seconds.`,
+    fqPlaceholder: `Paste ${N} text here…`,
+    tutorialMilestonesDesc: `This is your roadmap to your ${N} goal. Take a look at what's coming next on your journey.`,
+    tutorialContentDesc: `Try it now: paste some ${N} text below (an article, subtitles, a caption) and let GAKU build practice activities from it — just like GAKU Reader does on the web.`,
+    ttsProblem: `🔇 No sound? Your phone may not have a ${N} voice. Open Settings → search “Text-to-speech output” → install the ${N} voice data (Google Text-to-speech), then try again.`,
+    writeVocabQPrompt: `Write a short text in ${N} using these words: {words}`,
+    writeQDesc: `Paste a writing question you found online (an essay prompt, an exam-style question, an email task…). Write your answer in ${N} and GAKU checks it against the question.`,
+    writeAPlaceholder: `Type your answer in ${N}…`,
+    writeErrNotJa: `Please write your answer in ${N}.`,
+    tutorialWritingDesc: `Try it now: pick “Questions”, paste a writing question, type your answer in ${N}, and GAKU tells you if it fits (with a model answer if not).`,
+    speakAloud: `Speak aloud: summarize today's content in ${N} (5 min)`,
+    currentJlpt: `CURRENT ${N.toUpperCase()} LEVEL (SELF-ESTIMATE) *`,
+    modeGuideLock: `🔒 Until the quota is done, Subtitles and Milestones are locked. Tap a locked tab and you'll come back to your Schedule. When you reach 8, everything unlocks.`,
+    howToPractice: `AI-generated exercises built from ${N} text you paste (articles, subtitles, captions) — covers vocabulary, grammar, reading, listening, conversation, and pronunciation. Tap 'Show answer' to check yourself.`,
+    vocabBuilderDesc: `Enter a topic to see related ${N} words (English or any language OK)`,
+    searchingDictionary: `Searching ${N} dictionary...`,
+    contentDesc: `Paste ${N} text you're reading or watching — an article, video subtitles/description, a caption, a message — and GAKU will build {jlpt}-level activities from it, just like GAKU Reader does on the web.`,
+    contentPlaceholder: `Paste ${N} text, subtitles, or a caption here`,
+    contentErrEmpty: `Paste some ${N} text (or a video's subtitles/description) first.`,
+    pronListenDesc: `Play a YouTube or any video with the sound on near your mic. GAKU listens, writes down what it hears line by line, and helps you understand it with translation.`,
+    pronDesc: `Paste any ${N} text — an article, video subtitles, a song, your own notes — just like Create From Content. GAKU will pull out natural sentences and phrases for you to read aloud (or listen and repeat), then check how close your spoken attempt was.`,
+    pronPasteLabel: `Paste ${N} text here`,
+    pronAddNewPlaceholder: `Type or paste a ${N} word or sentence...`,
+  };
+}
+export function applyTargetLangText(T, uiLang) {
+  const o = targetLangTextOverrides(uiLang);
+  return o ? { ...T, ...o } : T;
+}
+
+// Does this text look like it is written in the target language? (Used by Writing's answer check.)
+export function looksLikeTarget(text) {
+  const t = text || "";
+  const code = getTargetLang();
+  if (code === "en") return /[A-Za-z]/.test(t);
+  if (code === "mn") return /[\u0400-\u04FF]/.test(t);
+  return /[\u3040-\u30FF\u4E00-\u9FFF]/.test(t);
+}
+
+// Which skills a student can pick: kanji / kana-only / JLPT prep make no sense outside Japanese.
+export function allowedSkillKeys(all) {
+  return isJa() ? all : all.filter(k => !["kanji", "jlpt", "onlyHiragana", "onlyKatakana"].includes(k));
+}
+
 // ─── AI request hook ──────────────────────────────────────────────────────────
 // Wraps window.fetch once. For POSTs to /api/claude while the target is not Japanese, it
 // prepends the override above as a system message. Japanese mode is never touched.
@@ -106,7 +191,8 @@ export function installTargetLangFetch() {
       const url = typeof input === "string" ? input : (input && input.url) || "";
       if (!isJa() && url.includes("/api/claude") && init && typeof init.body === "string") {
         const body = JSON.parse(init.body);
-        if (Array.isArray(body.messages)) {
+        const isUiTranslation = Array.isArray(body.messages) && body.messages.some(m => typeof m.content === "string" && m.content.includes("Translate ONLY the VALUES"));
+        if (Array.isArray(body.messages) && !isUiTranslation) {
           const extra = overrideInstruction();
           const msgs = body.messages.slice();
           if (msgs[0] && msgs[0].role === "system") {

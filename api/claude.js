@@ -148,7 +148,7 @@ async function callGroq(groqKeys, commonBody, model = GROQ_DEFAULT_MODEL) {
 // 🎧 listening answer-explanation scan mode: the extension records the tab's
 // audio while the student replays a JLPT listening question, base64-encodes it,
 // and sends it here to get a Japanese transcript back.
-async function callGroqWhisper(groqKeys, audioBuffer, mimeType) {
+async function callGroqWhisper(groqKeys, audioBuffer, mimeType, language = "ja") {
   if (!groqKeys.length) return { text: null, lastError: "No Groq keys configured" };
 
   let lastError = null;
@@ -158,7 +158,7 @@ async function callGroqWhisper(groqKeys, audioBuffer, mimeType) {
       const ext = (mimeType || "").includes("webm") ? "webm" : "wav";
       form.append("file", new Blob([audioBuffer], { type: mimeType || "audio/webm" }), `audio.${ext}`);
       form.append("model", "whisper-large-v3");
-      form.append("language", "ja"); // JLPT listening audio is Japanese
+      form.append("language", language); // "ja" by default (JLPT listening audio is Japanese); "en"/"mn" for those learning modes
       form.append("response_format", "json");
 
       const response = await fetch("https://api.groq.com/openai/v1/audio/transcriptions", {
@@ -192,13 +192,13 @@ async function callGroqWhisper(groqKeys, audioBuffer, mimeType) {
 
 // DeepInfra's OpenAI-compatible Whisper endpoint — fallback when every Groq key is
 // rate-limited or errors out (e.g. many students using tab-audio listening at once).
-async function callDeepInfraWhisper(deepInfraKey, audioBuffer, mimeType) {
+async function callDeepInfraWhisper(deepInfraKey, audioBuffer, mimeType, language = "ja") {
   if (!deepInfraKey) return { text: null, lastError: "No DeepInfra key configured" };
   try {
     const form = new FormData();
     form.append("file", new Blob([audioBuffer], { type: mimeType || "audio/webm" }), "audio.webm");
     form.append("model", "openai/whisper-large-v3-turbo");
-    form.append("language", "ja");
+    form.append("language", language);
     const response = await fetch("https://api.deepinfra.com/v1/openai/audio/transcriptions", {
       method: "POST",
       headers: { "Authorization": `Bearer ${deepInfraKey}` },
@@ -221,6 +221,7 @@ export default async function handler(req, res) {
 
   try {
     const { messages, max_tokens, provider, frequency_penalty, audioBase64, mimeType } = req.body;
+    const whisperLang = ["ja", "en", "mn"].includes(req.body.language) ? req.body.language : "ja";
 
     const groqKeys = [
       process.env.GROQ_API_KEY,
@@ -240,13 +241,13 @@ export default async function handler(req, res) {
         return res.status(400).json({ error: "Missing audioBase64" });
       }
       const audioBuffer = Buffer.from(audioBase64, "base64");
-      const whisperResult = await callGroqWhisper(groqKeys, audioBuffer, mimeType);
+      const whisperResult = await callGroqWhisper(groqKeys, audioBuffer, mimeType, whisperLang);
       if (whisperResult.text !== null) {
         console.log("provider=whisper: Groq OK");
         return res.status(200).json({ text: whisperResult.text });
       }
       console.error("provider=whisper: Groq FAILED —", whisperResult.lastError);
-      const diResult = await callDeepInfraWhisper(process.env.DEEPINFRA_API_KEY, audioBuffer, mimeType);
+      const diResult = await callDeepInfraWhisper(process.env.DEEPINFRA_API_KEY, audioBuffer, mimeType, whisperLang);
       if (diResult.text !== null) {
         console.log("provider=whisper: DeepInfra fallback OK");
         return res.status(200).json({ text: diResult.text });

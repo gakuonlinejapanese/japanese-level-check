@@ -4,7 +4,7 @@ import { supabase, getDeviceId, getDeviceLabel, getSignupSource } from "./supaba
 import HanziWriter from "hanzi-writer";
 import { reportClientCrash } from "./crashReport";
 import { isAndroidNative, nativeSpeak, nativeStop } from "./nativeTts";
-import { tl, isJa, getTargetLang, setTargetLang, tlSuffix, TARGET_LANGS, CEFR_BY_LEVEL } from "./targetLang";
+import { tl, isJa, getTargetLang, setTargetLang, tlSuffix, TARGET_LANGS, CEFR_BY_LEVEL, applyTargetLangText, looksLikeTarget, allowedSkillKeys } from "./targetLang";
 
 // True inside the iOS/Android store apps (Capacitor shell). Also forceable with ?store=1 for previews.
 // Store builds never show prices, purchase buttons, or links to outside purchase/lesson pages.
@@ -12448,7 +12448,7 @@ function useUITranslations(lang) {
   // Always return something immediately — English while AI translation is loading
   const result = staticT || aiT || UI_TRANSLATIONS["English"];
   // Merge English as base so any missing keys fall back gracefully
-  return { ...UI_TRANSLATIONS["English"], ...result, _loading: transLoading && !staticT && !aiT };
+  return applyTargetLangText({ ...UI_TRANSLATIONS["English"], ...result, _loading: transLoading && !staticT && !aiT }, lang);
 }
 
 const WRITING_TOPICS = {
@@ -14430,7 +14430,7 @@ Respond ONLY in valid JSON array format (no markdown, no backticks, no preamble)
       {loading && (
         <div style={{ textAlign:"center", padding:"30px 0" }}>
           <p style={{ color:C.teal, fontSize:28, margin:"0 0 10px", animation:"spin 1.2s linear infinite" }}>🔍</p>
-          <p style={{ color:"#64748b", fontSize:13 }}>Searching Japanese dictionary...</p>
+          <p style={{ color:"#64748b", fontSize:13 }}>Searching {tl().name} dictionary...</p>
         </div>
       )}
 
@@ -15487,7 +15487,7 @@ Respond ONLY with a valid JSON array, no markdown, no backticks:
         <textarea
           value={source}
           onChange={e=>{ setSource(e.target.value.slice(0, 6000)); setSourceFurigana(""); setSourceFuriganaOn(false); }}
-          placeholder={`日本語のテキストをここに貼り付けてください... (${T.contentPlaceholder || "paste Japanese text, subtitles, or a caption here"})`}
+          placeholder={isJa() ? `日本語のテキストをここに貼り付けてください... (${T.contentPlaceholder || "paste Japanese text, subtitles, or a caption here"})` : (T.contentPlaceholder || "")}
           rows={6}
           maxLength={6000}
           style={{ width:"100%", boxSizing:"border-box", background:"rgba(255,255,255,0.03)", border:`1px solid ${C.border}`, borderRadius:10, color:"#f1f5f9", fontSize:13, padding:"10px 12px", resize:"vertical", fontFamily:"inherit" }}
@@ -15511,7 +15511,7 @@ Respond ONLY with a valid JSON array, no markdown, no backticks:
       {items.length > 0 && (
         <>
           {contentCheck.eligible && <LevelUpOffer T={T} currentLevel={form.jlpt} onConfirm={onLevelUp} onDismiss={contentCheck.dismiss} />}
-          <QuestionFuriganaToggle T={T} />
+          {isJa() && <QuestionFuriganaToggle T={T} />}
           <div style={{ display:"flex", gap:6, flexWrap:"wrap", marginBottom:12 }}>
             <button onClick={()=>setActiveSkillFilter("all")} style={{ padding:"4px 10px", borderRadius:20, fontSize:11, fontWeight:700, cursor:"pointer", border:`1px solid ${activeSkillFilter==="all"?C.purpleLight:C.border}`, background:activeSkillFilter==="all"?"rgba(168,85,247,0.15)":C.card, color:activeSkillFilter==="all"?C.purpleLight:"#64748b" }}>
               すべて ({items.length})
@@ -16059,11 +16059,11 @@ const WHISPER_JUNK_RE = /^(ご視聴(いただき)?ありがとうございま�
 function cleanWhisperLines(text) {
   const t = (text || "").trim();
   if (!t) return [];
-  if (!/[\u3040-\u30ff\u4e00-\u9fff]/.test(t)) return []; // no Japanese at all → noise
+  if (!looksLikeTarget(t)) return []; // no target-language text at all → noise
   const bare = t.replace(/[\s。、！？!?]/g, "");
   if (bare.length > 24 && new Set(bare).size / bare.length < 0.2) return []; // runaway repetition
-  const parts = t.match(/[^。！？!?]+[。！？!?]*/g) || [t];
-  return parts.map(x => x.trim()).filter(x => x && !WHISPER_JUNK_RE.test(x));
+  const parts = t.match(/[^。！？!?.]+[。！？!?.]*/g) || [t];
+  return parts.map(x => x.trim()).filter(x => x && !(isJa() && WHISPER_JUNK_RE.test(x)));
 }
 
 function blobToBase64(blob) {
@@ -16099,7 +16099,7 @@ function useTabAudioTranscriber(onLines) {
       for (let attempt = 0; attempt < 2 && text === null; attempt++) {
         const res = await fetch("/api/claude", {
           method: "POST", headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ provider: "whisper", audioBase64, mimeType: "audio/webm" }),
+          body: JSON.stringify({ provider: "whisper", audioBase64, mimeType: "audio/webm", language: tl().code }),
         });
         if (res.ok) { const d = await res.json(); text = typeof d.text === "string" ? d.text : ""; }
         else if (attempt === 0) await new Promise(r => setTimeout(r, 2500));
@@ -17257,13 +17257,13 @@ function WritingPractice({ form }) {
     try { localStorage.setItem(scopedKey(WRITING_STORAGE_KEY), JSON.stringify({ question, answer })); } catch {}
   }, [question, answer]);
 
-  const hasJapanese = (s) => /[\u3040-\u30FF\u4E00-\u9FFF]/.test(s || "");
+  const hasJapanese = (s) => looksLikeTarget(s);
 
   const check = async () => {
     const q = question.trim();
     const a = answer.trim();
     if (!q || !a) { setError(T.writeErrEmpty || "Paste a question and type your answer first."); return; }
-    if (!hasJapanese(a)) { setError(T.writeErrNotJa || "Please write your answer in Japanese."); return; }
+    if (!hasJapanese(a)) { setError(T.writeErrNotJa || ("Please write your answer in " + tl().name + ".")); return; }
     setLoading(true); setError(""); setResult(null);
     const prompt = `You are a kind, accurate Japanese writing teacher. The student's level is ${form?.jlpt || "Beginner"}.
 
@@ -17324,7 +17324,7 @@ Respond ONLY with valid JSON, no markdown, no backticks:
       <div style={{ ...S.card, marginBottom:16 }}>
         <p style={{ color:C.teal, fontSize:12, fontWeight:700, letterSpacing:1, marginBottom:10 }}>✍️ {T.writeTitle || "Writing Practice"}</p>
         <div style={{ display:"flex", gap:8, marginBottom:12 }}>
-          {modeBtn("copy", "📝 " + (T.writeModeCopy || "Copying down"), false)}
+          {isJa() && modeBtn("copy", "📝 " + (T.writeModeCopy || "Copying down"), false)}
           {modeBtn("question", "❓ " + (T.writeModeQuestion || "Questions"), false)}
         </div>
         <WritingVocabPicker T={T} mode={mode} onUse={useVocabWords} />
@@ -18705,7 +18705,7 @@ function CompleteProfileScreen({ initialForm, onFinish, onSkip }) {
         )}
         {current.key === "skills" && (
           <div style={{ display:"flex", flexWrap:"wrap", gap:8 }}>
-            {Object.keys(SKILL_LABELS).map(k => (
+            {allowedSkillKeys(Object.keys(SKILL_LABELS)).map(k => (
               <button key={k} onClick={()=>toggleSkill(k)} style={{ padding:"9px 16px", borderRadius:20, border:`1.5px solid ${skills.includes(k)?C.purpleLight:C.border}`, background:skills.includes(k)?"rgba(168,85,247,0.15)":C.card, color:skills.includes(k)?C.purpleLight:"#94a3b8", fontSize:13, fontWeight:600, cursor:"pointer" }}>{T[SKILL_LABEL_KEY[k]] || SKILL_LABELS[k]}</button>
             ))}
           </div>
@@ -18932,13 +18932,13 @@ function FormScreen({ onSubmit, onBack, onCancel, initialJlpt, initialForm, onLo
           <div>
             <label style={S.label}>{T.whatStudySkills}</label>
             <div style={{ display:"flex", flexWrap:"wrap", gap:8 }}>
-              {Object.keys(SKILL_LABELS).map(k => (
+              {allowedSkillKeys(Object.keys(SKILL_LABELS)).map(k => (
                 <button key={k} onClick={()=>toggleSkill(k)} style={{ padding:"8px 14px", borderRadius:20, border:`1.5px solid ${form.skills.includes(k)?C.purpleLight:C.border}`, background:form.skills.includes(k)?"rgba(168,85,247,0.15)":C.card, color:form.skills.includes(k)?C.purpleLight:"#94a3b8", fontSize:12, fontWeight:600, cursor:"pointer" }}>
                   {T[SKILL_LABEL_KEY[k]] || SKILL_LABELS[k]}
                 </button>
               ))}
             </div>
-            {(form.skills.includes("onlyHiragana") || form.skills.includes("onlyKatakana") || form.jlpt === "Beginner") && (
+            {isJa() && (form.skills.includes("onlyHiragana") || form.skills.includes("onlyKatakana") || form.jlpt === "Beginner") && (
               <div style={{ marginTop:10, background:"rgba(6,182,212,0.06)", border:`1px solid rgba(6,182,212,0.2)`, borderRadius:10, padding:"12px 14px" }}>
                 <p style={{ color:C.teal, fontSize:12, fontWeight:700, margin:"0 0 4px" }}>{T.kanaResourcesTitle}</p>
                 <p style={{ color:"#94a3b8", fontSize:11, margin:"0 0 10px" }}>{T.kanaResourcesDesc}</p>
@@ -19526,7 +19526,7 @@ function ProgressCheck({ T, userId }) {
           <div style={{ width:`${Math.round(idx / qs.length * 100)}%`, height:"100%", background:C.green }} />
         </div>
         <p style={{ color:"#94a3b8", fontSize:11, margin:"0 0 6px" }}>{progressFill(T.pcQ || "Question {n} / {total}", { n: idx + 1, total: qs.length })}</p>
-        <QuestionFuriganaToggle T={T} />
+        {isJa() && <QuestionFuriganaToggle T={T} />}
         <p style={{ color:"#f1f5f9", fontSize:16, fontWeight:700, lineHeight: qFuriOn ? 2.3 : 1.7, margin:"0 0 12px" }}>{qFuriOn && q.qf ? <FuriganaRichText text={q.qf} /> : q.q}</p>
         <div style={{ display:"flex", flexDirection:"column", gap:8, marginBottom:12 }}>
           {q.order.map((ci, pos) => (
@@ -20499,7 +20499,7 @@ function Dashboard({ form, onEdit, onLevelUp, onSetWeek, onLogout, onDeleteAccou
                 </div>
               </div>
             )}
-            {((form.skills||[]).includes("onlyHiragana") || (form.skills||[]).includes("onlyKatakana") || form.jlpt === "Beginner") && (
+            {isJa() && ((form.skills||[]).includes("onlyHiragana") || (form.skills||[]).includes("onlyKatakana") || form.jlpt === "Beginner") && (
               <div style={{ ...S.card, marginBottom:16, borderLeft:`3px solid ${C.teal}` }}>
                 <p style={{ color:C.teal, fontSize:12, fontWeight:700, letterSpacing:1, marginBottom:4 }}>{T.kanaResourcesTitle}</p>
                 <p style={{ color:"#ffffff", fontSize:12, marginBottom:14 }}>{T.kanaResourcesDesc}</p>
