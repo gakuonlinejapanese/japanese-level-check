@@ -107,6 +107,37 @@ export function overrideInstruction() {
 }
 
 
+
+// ─── Mongolian (Cyrillic) → Latin letters ─────────────────────────────────────
+// Shown by the "ABC" button under subtitles/lines so learners who can't read Cyrillic yet can read the
+// sound. Done locally (instant, free, always the same result) following the common MNS 5217 style:
+// ө→ö, ү→ü, х→kh, ц→ts, ч→ch, ш→sh, ж→j, я→ya, ю→yu, ё→yo, е→ye/e.
+const MN_LATIN = {
+  а:"a", б:"b", в:"v", г:"g", д:"d", ё:"yo", ж:"j", з:"z", и:"i", й:"i", к:"k", л:"l", м:"m", н:"n",
+  о:"o", ө:"ö", п:"p", р:"r", с:"s", т:"t", у:"u", ү:"ü", ф:"f", х:"kh", ц:"ts", ч:"ch", ш:"sh", щ:"shch",
+  ъ:"ʺ", ы:"y", ь:"ʹ", э:"e", ю:"yu", я:"ya",
+};
+const MN_VOWELS = "аеёиоөуүэюяы";
+export function mnToLatin(text) {
+  const src = String(text || "");
+  let out = "";
+  for (let i = 0; i < src.length; i++) {
+    const ch = src[i];
+    const low = ch.toLowerCase();
+    let rep;
+    if (low === "е") {
+      const prev = i > 0 ? src[i - 1].toLowerCase() : "";
+      rep = (!prev || MN_VOWELS.includes(prev) || prev === "ъ" || prev === "ь" || /[^\p{L}]/u.test(prev)) ? "ye" : "e";
+    } else if (MN_LATIN[low] !== undefined) {
+      rep = MN_LATIN[low];
+    } else { out += ch; continue; }
+    out += (ch !== low) ? rep.charAt(0).toUpperCase() + rep.slice(1) : rep;
+  }
+  return out;
+}
+// True when the "ABC" (Latin letters) button makes sense: only for Mongolian (Cyrillic) targets.
+export function needsLatinButton() { return getTargetLang() === "mn"; }
+
 // ─── UI text overrides ────────────────────────────────────────────────────────
 // Many on-screen descriptions say "Japanese" (Create From Content, Writing, Pronunciation…).
 // For a non-Japanese target this swaps those strings for target-language versions. English and

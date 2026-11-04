@@ -4,7 +4,7 @@ import { supabase, getDeviceId, getDeviceLabel, getSignupSource } from "./supaba
 import HanziWriter from "hanzi-writer";
 import { reportClientCrash } from "./crashReport";
 import { isAndroidNative, nativeSpeak, nativeStop } from "./nativeTts";
-import { isTargetLangAllowed, setTargetLangAllowed, tl, isJa, getTargetLang, setTargetLang, tlSuffix, TARGET_LANGS, CEFR_BY_LEVEL, applyTargetLangText, looksLikeTarget, allowedSkillKeys } from "./targetLang";
+import { isTargetLangAllowed, setTargetLangAllowed, tl, isJa, getTargetLang, setTargetLang, tlSuffix, TARGET_LANGS, CEFR_BY_LEVEL, applyTargetLangText, looksLikeTarget, allowedSkillKeys, mnToLatin, needsLatinButton } from "./targetLang";
 
 // True inside the iOS/Android store apps (Capacitor shell). Also forceable with ?store=1 for previews.
 // Store builds never show prices, purchase buttons, or links to outside purchase/lesson pages.
@@ -12944,6 +12944,8 @@ function splitForAudioFallback(text) {
 // Resolves true only once the first clip is really playing (false on load error / 4s timeout).
 function speakWithAudioFallback(text, rate = 0.85) {
   return new Promise((resolve) => {
+    // Google's free audio clips have no Mongolian voice (the request is rejected), so don't even try.
+    if (tl().code === "mn") { resolve(false); return; }
     const chunks = splitForAudioFallback(text);
     if (!chunks.length || typeof Audio === "undefined") { resolve(false); return; }
     stopFallbackAudio();
@@ -12982,7 +12984,7 @@ function speakJapanese(text, rate = 0.85) {
       // The phone's own voice failed (e.g. no Japanese voice data): play a real audio clip instead, and only
       // show the yellow "No sound?" banner if that fails too.
       speakWithAudioFallback(t, rate).then(ok => {
-        if (!ok) reportSpeechProblem(/^no-japanese-voice/.test(msg) ? "no-japanese-voice" : "native-error", msg);
+        if (!ok) reportSpeechProblem(tl().code === "mn" ? "no-mn-voice" : (/^no-japanese-voice/.test(msg) ? "no-japanese-voice" : "native-error"), msg);
       });
     });
     return;
@@ -12993,6 +12995,9 @@ function speakJapanese(text, rate = 0.85) {
   if (!clean) return;
   whenVoicesReady(() => {
     stopFallbackAudio();
+    // Mongolian: browsers/phones almost never ship a Mongolian voice and no audio-clip service has one, so
+    // when the device has none, say so clearly instead of staying silent.
+    if (tl().code === "mn" && !pickJapaneseVoice()) { try { synth.cancel(); } catch {} reportSpeechProblem("no-mn-voice"); return; }
     // No on-device Japanese voice (common on Windows PCs; Chrome's network voice can be silent): play real
     // audio first, and fall back to the device voice only if the audio can't be played.
     if (!hasLocalJapaneseVoice()) {
@@ -13041,7 +13046,9 @@ function TtsProblemToast({ T }) {
   if (!show) return null;
   return (
     <div onClick={() => setShow(false)} style={{ background:"rgba(251,191,36,0.12)", border:"1px solid rgba(251,191,36,0.4)", borderRadius:10, padding:"10px 12px", margin:"0 0 12px", color:C.amber, fontSize:12, lineHeight:1.6, cursor:"pointer" }}>
-      {T.ttsProblem || "🔇 No sound? Your phone may not have a Japanese voice. Open Settings → search “Text-to-speech output” → install the Japanese voice data (Google Text-to-speech), then try again."}
+      {info.includes("no-mn-voice")
+        ? (/[ぁ-ん]/.test(T.ttsProblem || "") ? "🔇 この端末にはモンゴル語の音声データがなく、音声を再生できません(モンゴル語の読み上げは、多くのスマホ・ブラウザでまだ未対応です)。「ABC」ボタンでローマ字を見ながら練習してください。" : "🔇 This device has no Mongolian voice, so the audio can't be played (most phones and browsers don't support Mongolian text-to-speech yet). Use the “ABC” button to read the sounds in Latin letters.")
+        : (T.ttsProblem || "🔇 No sound? Your phone may not have a Japanese voice. Open Settings → search “Text-to-speech output” → install the Japanese voice data (Google Text-to-speech), then try again.")}
       <div style={{ marginTop:6, fontSize:10, opacity:0.7, wordBreak:"break-all" }}>[{info}]</div>
     </div>
   );
@@ -15936,12 +15943,16 @@ function JLineTools({ text, lang, T }) {
         {isJa() && <button onClick={()=>toggleVariant("romaji")} disabled={loadingType!==null} style={{ fontSize:11, color:"#c4b5fd", fontWeight:700, background:visible.romaji?"rgba(196,181,253,0.22)":"rgba(196,181,253,0.1)", padding:"4px 10px", borderRadius:8, border:"1px solid rgba(196,181,253,0.3)", cursor:"pointer" }}>
           {loadingType==="romaji" ? "⏳" : (T?.romajiBtn || "Romaji")}
         </button>}
+        {needsLatinButton() && <button onClick={()=>setVisible(v=>({ ...v, romaji:!v.romaji }))} style={{ fontSize:11, color:"#c4b5fd", fontWeight:700, background:visible.romaji?"rgba(196,181,253,0.22)":"rgba(196,181,253,0.1)", padding:"4px 10px", borderRadius:8, border:"1px solid rgba(196,181,253,0.3)", cursor:"pointer" }}>
+          {T?.latinBtn || "ABC"}
+        </button>}
         <button onClick={()=>toggleVariant("translate")} disabled={loadingType!==null} style={{ fontSize:11, color:"#fbbf24", fontWeight:700, background:visible.translate?"rgba(251,191,36,0.22)":"rgba(251,191,36,0.1)", padding:"4px 10px", borderRadius:8, border:"1px solid rgba(251,191,36,0.3)", cursor:"pointer" }}>
           {loadingType==="translate" ? "⏳" : (T?.translateBtn || "Translate")}
         </button>
       </div>
       {visible.furigana && furigana && <p style={{ color:"#67e8f9", fontSize:12, margin:"0 0 4px", fontStyle:"italic", whiteSpace:"pre-wrap" }}>{furigana}</p>}
-      {visible.romaji && romaji && <p style={{ color:"#c4b5fd", fontSize:12, margin:"0 0 4px", fontStyle:"italic", whiteSpace:"pre-wrap" }}>{romaji}</p>}
+      {needsLatinButton() && visible.romaji && <p style={{ color:"#c4b5fd", fontSize:12, margin:"0 0 4px", fontStyle:"italic", whiteSpace:"pre-wrap" }}>{mnToLatin(text)}</p>}
+      {!needsLatinButton() && visible.romaji && romaji && <p style={{ color:"#c4b5fd", fontSize:12, margin:"0 0 4px", fontStyle:"italic", whiteSpace:"pre-wrap" }}>{romaji}</p>}
       {visible.translate && translation && <p style={{ color:"#fbbf24", fontSize:12, margin:"0 0 4px", fontStyle:"italic", whiteSpace:"pre-wrap" }}>{translation}</p>}
     </div>
   );
