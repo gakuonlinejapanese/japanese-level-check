@@ -4,7 +4,7 @@ import { supabase, getDeviceId, getDeviceLabel, getSignupSource } from "./supaba
 import HanziWriter from "hanzi-writer";
 import { reportClientCrash } from "./crashReport";
 import { isAndroidNative, nativeSpeak, nativeStop } from "./nativeTts";
-import { tl, isJa, getTargetLang, setTargetLang, tlSuffix, TARGET_LANGS, CEFR_BY_LEVEL, applyTargetLangText, looksLikeTarget, allowedSkillKeys } from "./targetLang";
+import { isTargetLangAllowed, setTargetLangAllowed, tl, isJa, getTargetLang, setTargetLang, tlSuffix, TARGET_LANGS, CEFR_BY_LEVEL, applyTargetLangText, looksLikeTarget, allowedSkillKeys } from "./targetLang";
 
 // True inside the iOS/Android store apps (Capacitor shell). Also forceable with ?store=1 for previews.
 // Store builds never show prices, purchase buttons, or links to outside purchase/lesson pages.
@@ -18692,6 +18692,7 @@ function goalOptionsForTarget() {
   return ["Daily conversation", "Travel abroad", "Get a job / work", "Study abroad", "Pass an exam", "Other"];
 }
 function TargetLangSwitch({ compact }) {
+  if (!isTargetLangAllowed()) return null;
   const cur = getTargetLang();
   return (
     <div style={{ display:"flex", alignItems:"center", gap:6, flexWrap:"wrap", marginBottom: compact ? 0 : 16 }}>
@@ -21730,6 +21731,7 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
     // then reload this student's own profile/vocab/interaction data (falls
     // back to the unscoped legacy keys when logged out).
     ACTIVE_USER_ID = authUser?.id || null;
+    setTargetLangAllowed(authUser?.email);
     (async () => {
       // Pull/push the cross-domain bridge FIRST so that if this is the first
       // time this browser/domain has seen this account, the fields read right
@@ -22028,6 +22030,7 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
   // the correct account, with no one-frame window where it could still read
   // the previous user's (or nobody's) data.
   ACTIVE_USER_ID = authUser?.id || null;
+  setTargetLangAllowed(authUser?.email);
   const handleAuthed = ({ userId, email } = {}) => {
     setShowAuthScreen(false);
     // A profile form was filled out but held back because the student wasn't

@@ -52,7 +52,20 @@ function readInitial() {
   return "ja";
 }
 
+// ─── Who may use English / Mongolian learning mode ────────────────────────────
+// Prototype rollout: only these accounts. Everyone else (and anyone logged out) always gets the
+// normal Japanese app, even if a ?learn= link or an old saved choice says otherwise.
+const ALLOWED_EMAILS = ["r.yamaguchi1080@gmail.com"];
+let _allowed = false;
+// Called with the logged-in email on every render of the app shell (cheap, synchronous) so the rest
+// of the tree already sees the right language during that same render pass.
+export function setTargetLangAllowed(email) {
+  _allowed = !!email && ALLOWED_EMAILS.includes(String(email).trim().toLowerCase());
+}
+export function isTargetLangAllowed() { return _allowed; }
+
 export function getTargetLang() {
+  if (!_allowed) return "ja";
   if (!_current) _current = readInitial();
   return _current;
 }
@@ -62,7 +75,7 @@ export function isJa() { return getTargetLang() === "ja"; }
 // Switching reloads the page: every screen, cached study guide and speech setting then
 // starts cleanly in the new language (data is stored separately per language, see tlSuffix).
 export function setTargetLang(code) {
-  if (!TARGET_LANGS[code]) return;
+  if (!_allowed || !TARGET_LANGS[code]) return;
   try { localStorage.setItem(LS_KEY, code); } catch {}
   _current = code;
   try {
