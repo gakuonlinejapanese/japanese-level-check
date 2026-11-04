@@ -17143,6 +17143,201 @@ function CopyingDown({ T, injected }) {
   );
 }
 
+
+// ─── COPYING DOWN for alphabet languages (English / Mongolian) ─────────────────────
+// The Japanese version practices stroke order with HanziWriter. Latin/Cyrillic words have no stroke
+// data, so this version copies a sentence WORD BY WORD: look at the word (and hear it), trace it with a
+// finger or mouse on the pad, then type it from what you copied — GAKU checks the exact spelling,
+// capital letters and punctuation. A word counts as "perfect" when it is right on the first try.
+const COPY_TEXT_MAX_CHARS = 200;
+function CopyingDownText({ T, injected }) {
+  const [raw, setRaw] = useState(() => { try { return localStorage.getItem(scopedKey(COPY_STORAGE_KEY)) || ""; } catch { return ""; } });
+  const [error, setError] = useState("");
+  const [session, setSession] = useState(null); // { words:[], truncated }
+  const [idx, setIdx] = useState(0);
+  const [results, setResults] = useState({}); // wordIndex -> mistakes before it was right (number) | "skip"
+  const [phase, setPhase] = useState("write"); // write | summary
+  const [typed, setTyped] = useState("");
+  const [tries, setTries] = useState(0);
+  const [verdict, setVerdict] = useState(null); // null | "ok" | "bad"
+  const [guide, setGuide] = useState(true);
+  const canvasRef = useRef(null);
+  const drawing = useRef(false);
+  const lastPt = useRef(null);
+  const padW = Math.max(220, Math.min(340, (typeof window !== "undefined" ? window.innerWidth : 360) - 90));
+  const padH = 150;
+  const fill = (str, vars) => Object.keys(vars).reduce((acc, k) => acc.split("{" + k + "}").join(String(vars[k])), str);
+
+  useEffect(() => { try { localStorage.setItem(scopedKey(COPY_STORAGE_KEY), raw); } catch {} }, [raw]);
+  // Words picked from the student's Vocabulary folder become the text to copy.
+  useEffect(() => {
+    if (!injected || !injected.text) return;
+    setRaw(injected.text.slice(0, 600)); setSession(null); setResults({}); setIdx(0); setPhase("write"); setError("");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [injected && injected.n]);
+
+  const clearPad = () => {
+    const c = canvasRef.current; if (!c) return;
+    const ctx = c.getContext("2d"); ctx.clearRect(0, 0, c.width, c.height);
+  };
+  // New word → blank pad and empty answer.
+  useEffect(() => { clearPad(); setTyped(""); setTries(0); setVerdict(null); }, [idx, session, phase]);
+
+  const begin = () => {
+    const all = raw.trim().split(/\s+/).filter(Boolean);
+    if (!all.length) { setError(T.copyErrEmpty || "Paste a sentence first."); return; }
+    const words = []; let len = 0; let truncated = false;
+    for (const w of all) {
+      if (len + w.length > COPY_TEXT_MAX_CHARS && words.length) { truncated = true; break; }
+      words.push(w); len += w.length + 1;
+    }
+    setError(""); setResults({}); setIdx(0); setPhase("write"); setSession({ words, truncated });
+  };
+  const reset = () => { setSession(null); setResults({}); setIdx(0); setPhase("write"); setError(""); };
+
+  const pt = (e) => {
+    const r = canvasRef.current.getBoundingClientRect();
+    return { x: (e.clientX - r.left) * (canvasRef.current.width / r.width), y: (e.clientY - r.top) * (canvasRef.current.height / r.height) };
+  };
+  const down = (e) => {
+    drawing.current = true; lastPt.current = pt(e);
+    try { canvasRef.current.setPointerCapture(e.pointerId); } catch {}
+  };
+  const move = (e) => {
+    if (!drawing.current) return;
+    const c = canvasRef.current; const ctx = c.getContext("2d"); const p = pt(e);
+    ctx.strokeStyle = "#06b6d4"; ctx.lineWidth = 5; ctx.lineCap = "round"; ctx.lineJoin = "round";
+    ctx.beginPath(); ctx.moveTo(lastPt.current.x, lastPt.current.y); ctx.lineTo(p.x, p.y); ctx.stroke();
+    lastPt.current = p;
+  };
+  const up = () => { drawing.current = false; lastPt.current = null; };
+
+  const word = session ? session.words[idx] : "";
+  const check = () => {
+    if (!typed.trim()) return;
+    if (typed.trim() === word) {
+      setVerdict("ok");
+      setResults(r => (r[idx] === undefined ? { ...r, [idx]: tries } : r));
+    } else {
+      setVerdict("bad"); setTries(t => t + 1);
+    }
+  };
+  const goNext = () => {
+    setResults(r => (r[idx] === undefined ? { ...r, [idx]: tries > 0 ? tries : "skip" } : r));
+    if (idx < session.words.length - 1) setIdx(idx + 1); else setPhase("summary");
+  };
+  const goPrev = () => { if (idx > 0) setIdx(idx - 1); };
+
+  const btn = (extra) => ({ ...S.btn, padding:"10px 14px", fontSize:12, ...extra });
+  const ghost = { background:"transparent", border:`1px solid ${C.border}`, color:"#94a3b8" };
+
+  if (!session) {
+    return (
+      <div>
+        <p style={{ color:"#39ff14", fontSize:12, lineHeight:1.7, marginBottom:12 }}>{T.copyDesc}</p>
+        <label style={S.label}>{(T.copyLabel || "Text to copy").toUpperCase()}</label>
+        <textarea value={raw} onChange={e => { setRaw(e.target.value.slice(0, 600)); setError(""); }}
+          placeholder={T.copyPlaceholder} rows={4}
+          style={{ ...S.input, resize:"vertical", lineHeight:1.7, marginBottom:12, fontFamily:"inherit" }} />
+        {error && <p style={{ color:"#f87171", fontSize:12, margin:"0 0 10px" }}>{error}</p>}
+        <button onClick={begin} style={{ ...S.btn, width:"100%", background:`linear-gradient(135deg,${C.teal},#0891b2)`, color:"#fff" }}>
+          ✍️ {T.copyStartBtn || "Start writing"}
+        </button>
+      </div>
+    );
+  }
+
+  if (phase === "summary") {
+    const total = session.words.length;
+    const okCount = session.words.filter((_, i) => results[i] === 0).length;
+    const weak = session.words.map((w, i) => ({ w, i })).filter(x => results[x.i] !== 0);
+    return (
+      <div style={{ textAlign:"center" }}>
+        <p style={{ color:"#f1f5f9", fontSize:18, fontWeight:800, margin:"4px 0 8px" }}>{T.copySummaryTitle || "🎉 Nice work!"}</p>
+        <p style={{ color:C.green, fontSize:14, fontWeight:700, margin:"0 0 14px" }}>{fill(T.copySummaryScore, { ok: okCount, total })}</p>
+        {weak.length > 0 && (
+          <div style={{ marginBottom:14 }}>
+            <p style={{ color:"#64748b", fontSize:11, fontWeight:700, letterSpacing:1, margin:"0 0 8px" }}>{(T.copyWeak || "Practice these again").toUpperCase()}</p>
+            <div style={{ display:"flex", gap:8, justifyContent:"center", flexWrap:"wrap" }}>
+              {weak.map(x => (
+                <button key={x.i} onClick={() => { setIdx(x.i); setPhase("write"); }}
+                  style={{ padding:"8px 14px", fontSize:16, borderRadius:10, border:"1.5px solid rgba(251,191,36,0.6)", background:"rgba(251,191,36,0.1)", color:"#fbbf24", cursor:"pointer" }}>{x.w}</button>
+              ))}
+            </div>
+          </div>
+        )}
+        <div style={{ display:"flex", gap:8, justifyContent:"center" }}>
+          <button onClick={() => { setResults({}); setIdx(0); setPhase("write"); }} style={btn({ background:`linear-gradient(135deg,${C.teal},#0891b2)`, color:"#fff" })}>↺ {T.copyTryAgain || "Try again"}</button>
+          <button onClick={reset} style={btn(ghost)}>{T.copyNewText || "New text"}</button>
+        </div>
+      </div>
+    );
+  }
+
+  const isLast = idx === session.words.length - 1;
+  const fontSize = Math.max(22, Math.min(64, Math.floor(padW / (Math.max(word.length, 3) * 0.62))));
+  return (
+    <div>
+      <div style={{ background:"#0f172a", border:`1px solid ${C.border}`, borderRadius:12, padding:"10px 12px", marginBottom:10, lineHeight:2, wordBreak:"break-word" }}>
+        {session.words.map((w, i) => (
+          <span key={i} style={{ fontSize:16, padding:"1px 4px", marginRight:2, borderRadius:4,
+            color: i === idx ? "#0f172a" : (results[i] === 0 ? C.green : (results[i] !== undefined ? "#fbbf24" : "#cbd5e1")),
+            background: i === idx ? C.teal : "transparent", fontWeight: i === idx ? 800 : 400 }}>{w}</span>
+        ))}
+      </div>
+      {session.truncated && <p style={{ color:"#94a3b8", fontSize:11, margin:"0 0 8px" }}>{fill(T.copyTooLong || "Only the first {n} characters are practiced at a time.", { n: COPY_TEXT_MAX_CHARS })}</p>}
+      <p style={{ color:"#94a3b8", fontSize:12, fontWeight:700, margin:"0 0 8px", textAlign:"center" }}>{fill(T.copyWordOf, { current: idx + 1, total: session.words.length })}</p>
+
+      <div style={{ display:"flex", justifyContent:"center", marginBottom:6 }}>
+        <div style={{ position:"relative", width:padW, height:padH, borderRadius:12, border:`1.5px solid ${C.border}`, background:"#0f172a", overflow:"hidden" }}>
+          <div style={{ position:"absolute", left:12, right:12, top:"62%", borderTop:"1px dashed rgba(255,255,255,0.18)", pointerEvents:"none" }} />
+          {guide && (
+            <div style={{ position:"absolute", inset:0, display:"flex", alignItems:"center", justifyContent:"center", fontSize, color:"rgba(148,163,184,0.38)", fontFamily:"'Segoe Print','Comic Sans MS',cursive", whiteSpace:"nowrap", pointerEvents:"none", userSelect:"none" }}>{word}</div>
+          )}
+          <canvas ref={canvasRef} width={padW * 2} height={padH * 2}
+            onPointerDown={down} onPointerMove={move} onPointerUp={up} onPointerCancel={up} onPointerLeave={up}
+            style={{ position:"absolute", inset:0, width:"100%", height:"100%", touchAction:"none" }} />
+        </div>
+      </div>
+      <p style={{ color:"#64748b", fontSize:11, textAlign:"center", margin:"0 0 10px" }}>{T.copyTraceHint}</p>
+      <div style={{ display:"flex", gap:8, justifyContent:"center", flexWrap:"wrap", marginBottom:12 }}>
+        <button onClick={() => speakJapanese(word, 0.8)} style={btn({ background:"rgba(168,85,247,0.15)", border:"1px solid rgba(168,85,247,0.5)", color:C.purpleLight || "#c084fc" })}>🔊 {T.speak || "Listen"}</button>
+        <button onClick={() => setGuide(g => !g)} style={btn(ghost)}>{guide ? "🙈 " + (T.copyGuideHide || "Hide guide") : "👁 " + (T.copyGuideShow || "Show guide")}</button>
+        <button onClick={clearPad} style={btn(ghost)}>🧽 {T.copyClear}</button>
+      </div>
+
+      <label style={S.label}>{(T.copyTypeLabel || "").toUpperCase()}</label>
+      <div style={{ display:"flex", gap:8, marginBottom:8 }}>
+        <input value={typed} onChange={e => { setTyped(e.target.value); setVerdict(null); }}
+          onKeyDown={e => { if (e.key === "Enter") check(); }}
+          placeholder={T.copyTypePlaceholder} autoCapitalize="off" autoCorrect="off" autoComplete="off" spellCheck={false}
+          style={{ ...S.input, flex:1, marginBottom:0, fontSize:18 }} />
+        <button onClick={check} disabled={!typed.trim()} style={btn({ background:`linear-gradient(135deg,${C.teal},#0891b2)`, color:"#fff", opacity: typed.trim() ? 1 : 0.5 })}>{T.copyCheckBtn}</button>
+      </div>
+      <div style={{ minHeight:44, textAlign:"center", marginBottom:10 }}>
+        {verdict === "ok" && <p style={{ color:C.green, fontSize:13, fontWeight:700, margin:0 }}>{tries === 0 ? T.copySpellOk : fill(T.copySpellOkTries, { n: tries })}</p>}
+        {verdict === "bad" && (
+          <p style={{ color:"#f87171", fontSize:13, lineHeight:1.7, margin:0 }}>
+            {T.copySpellBad}
+            <br />
+            <span style={{ fontSize:18, letterSpacing:1 }}>
+              {typed.trim().split("").map((ch, i) => (
+                <span key={i} style={{ color: ch === word[i] ? C.green : "#f87171", fontWeight: ch === word[i] ? 400 : 800 }}>{ch}</span>
+              ))}
+            </span>
+          </p>
+        )}
+      </div>
+
+      <div style={{ display:"flex", gap:8, justifyContent:"center" }}>
+        <button onClick={goPrev} disabled={idx === 0} style={btn({ ...ghost, opacity: idx === 0 ? 0.4 : 1 })}>◀ {T.copyPrev || "Back"}</button>
+        <button onClick={goNext} style={btn({ background:`linear-gradient(135deg,${C.teal},#0891b2)`, color:"#fff" })}>{isLast ? (T.copyFinish || "Finish") : (T.copyNext || "Next") + " ▶"}</button>
+        <button onClick={reset} style={btn(ghost)}>{T.copyNewText || "New text"}</button>
+      </div>
+    </div>
+  );
+}
+
 // ─── WRITING PRACTICE ──────────────────────────────────────────────────────────
 // Questions mode: the student pastes a writing question found online, types an answer in
 // Japanese, and the AI checks whether the answer fits the question. If it fits: praise +
@@ -17240,7 +17435,7 @@ function WritingPractice({ form }) {
   const [result, setResult] = useState(null); // { fits, feedback, model }
   const [injected, setInjected] = useState(null); // { text, n } words picked from Vocabulary for Copying down
   const useVocabWords = (words) => {
-    if (mode === "copy") { setInjected({ text: words.join("、"), n: Date.now() }); return; }
+    if (mode === "copy") { setInjected({ text: words.join(isJa() ? "、" : " "), n: Date.now() }); return; }
     const list = words.join("、");
     setQuestion((T.writeVocabQPrompt || "Write a short text in Japanese using these words: {words}").split("{words}").join(list).slice(0, 3000));
     setAnswer(""); setResult(null); setError("");
@@ -17324,11 +17519,11 @@ Respond ONLY with valid JSON, no markdown, no backticks:
       <div style={{ ...S.card, marginBottom:16 }}>
         <p style={{ color:C.teal, fontSize:12, fontWeight:700, letterSpacing:1, marginBottom:10 }}>✍️ {T.writeTitle || "Writing Practice"}</p>
         <div style={{ display:"flex", gap:8, marginBottom:12 }}>
-          {isJa() && modeBtn("copy", "📝 " + (T.writeModeCopy || "Copying down"), false)}
+          {modeBtn("copy", "📝 " + (T.writeModeCopy || "Copying down"), false)}
           {modeBtn("question", "❓ " + (T.writeModeQuestion || "Questions"), false)}
         </div>
         <WritingVocabPicker T={T} mode={mode} onUse={useVocabWords} />
-        {mode === "copy" && <CopyingDown T={T} injected={injected} />}
+        {mode === "copy" && (isJa() ? <CopyingDown T={T} injected={injected} /> : <CopyingDownText T={T} injected={injected} />)}
         {mode === "question" && (<>
         <p style={{ color:"#39ff14", fontSize:12, lineHeight:1.7, marginBottom:12 }}>
           {T.writeQDesc || "Paste a writing question you found online (an essay prompt, a JLPT-style question, an email task…). Write your answer in Japanese and GAKU checks it against the question."}
