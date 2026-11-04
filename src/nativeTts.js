@@ -1,3 +1,4 @@
+import { tl } from "./targetLang";
 // Native (Android) text-to-speech. The Android WebView's built-in speechSynthesis is unreliable (often
 // silent, empty voice list), so inside the Android store app we call the phone's own TTS engine through
 // the Capacitor plugin. Everywhere else the caller falls back to the browser's speechSynthesis.
@@ -19,7 +20,7 @@ async function findJapaneseVoiceIndex(TTS) {
   try {
     const { voices } = await TTS.getSupportedVoices();
     if (!Array.isArray(voices)) return -1;
-    const idx = voices.findIndex(v => /^ja([-_]|$)/i.test(v.lang || ""));
+    const idx = voices.findIndex(v => new RegExp("^" + tl().ttsPrefix + "([-_]|$)", "i").test(v.lang || ""));
     return idx;
   } catch { return -1; }
 }
@@ -31,8 +32,8 @@ function webSpeak(text, rate) {
       const synth = window.speechSynthesis;
       if (!synth || typeof SpeechSynthesisUtterance === "undefined") { resolve(false); return; }
       const u = new SpeechSynthesisUtterance(text);
-      u.lang = "ja-JP"; u.rate = rate;
-      const v = (synth.getVoices() || []).find(x => /^ja([-_]|$)/i.test(x.lang || ""));
+      u.lang = tl().tts; u.rate = rate;
+      const v = (synth.getVoices() || []).find(x => new RegExp("^" + tl().ttsPrefix + "([-_]|$)", "i").test(x.lang || ""));
       if (v) u.voice = v;
       let started = false;
       u.onstart = () => { started = true; resolve(true); };
@@ -88,23 +89,23 @@ export async function nativeSpeak(text, rate = 0.85) {
   let nativeDead = false; // the engine accepted the request but never produced speech
 
   // 1) Plain ja-JP request.
-  try { await speakChecked({ ...base, lang: "ja-JP" }); return; }
-  catch (e) { if (isInterrupt(e)) return; lastErr = e; note("ja-JP", e); if (stalled(e)) nativeDead = true; }
+  try { await speakChecked({ ...base, lang: tl().tts }); return; }
+  catch (e) { if (isInterrupt(e)) return; lastErr = e; note(tl().tts, e); if (stalled(e)) nativeDead = true; }
 
   // 2) Explicitly pick an installed Japanese voice (works when the engine's default language isn't Japanese).
   //    (Skipped when the engine already stalled — retrying it would only stall again, 3.5s at a time.)
   const idx = await findJapaneseVoiceIndex(TTS);
   if (!nativeDead) {
     if (idx >= 0) {
-      try { await speakChecked({ ...base, lang: "ja-JP", voice: idx }); return; }
+      try { await speakChecked({ ...base, lang: tl().tts, voice: idx }); return; }
       catch (e) { if (isInterrupt(e)) return; lastErr = e; note("voice" + idx, e); if (stalled(e)) nativeDead = true; }
     } else { log.push("voices:none"); }
   }
 
   // 3) Bare "ja" locale.
   if (!nativeDead) {
-    try { await speakChecked({ ...base, lang: "ja" }); return; }
-    catch (e) { if (isInterrupt(e)) return; lastErr = e; note("ja", e); if (stalled(e)) nativeDead = true; }
+    try { await speakChecked({ ...base, lang: tl().ttsPrefix }); return; }
+    catch (e) { if (isInterrupt(e)) return; lastErr = e; note(tl().ttsPrefix, e); if (stalled(e)) nativeDead = true; }
   }
 
   // 4) Browser speech engine inside the WebView.

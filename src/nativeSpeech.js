@@ -4,11 +4,12 @@
 // native recognizer. GakuApp.jsx keeps using the standard API and does not need changes.
 // In normal browsers nothing is installed and the browser's own API is used.
 import { Capacitor } from '@capacitor/core';
+import { tl } from './targetLang';
 import { SpeechRecognition as NativeSR } from '@capacitor-community/speech-recognition';
 
 class NativeSpeechRecognition {
   constructor() {
-    this.lang = 'ja-JP';
+    this.lang = tl().stt;
     this.interimResults = true;
     this.continuous = false;
     this.onresult = null;
@@ -60,7 +61,7 @@ class NativeSpeechRecognition {
       }));
       if (typeof this.onstart === 'function') { try { this.onstart(); } catch (e) { /* ignore */ } }
       await NativeSR.start({
-        language: this.lang || 'ja-JP',
+        language: this.lang || tl().stt,
         maxResults: 1,
         partialResults: true,
         popup: false,

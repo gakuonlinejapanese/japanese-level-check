@@ -4,6 +4,7 @@ import { supabase, getDeviceId, getDeviceLabel, getSignupSource } from "./supaba
 import HanziWriter from "hanzi-writer";
 import { reportClientCrash } from "./crashReport";
 import { isAndroidNative, nativeSpeak, nativeStop } from "./nativeTts";
+import { tl, isJa, getTargetLang, setTargetLang, tlSuffix, TARGET_LANGS, CEFR_BY_LEVEL } from "./targetLang";
 
 // True inside the iOS/Android store apps (Capacitor shell). Also forceable with ?store=1 for previews.
 // Store builds never show prices, purchase buttons, or links to outside purchase/lesson pages.
@@ -12464,7 +12465,7 @@ const WRITING_TOPICS = {
 // free quiz-only flow before signup).
 let ACTIVE_USER_ID = null;
 function scopedKey(base) {
-  return ACTIVE_USER_ID ? `${base}_${ACTIVE_USER_ID}` : base;
+  return ACTIVE_USER_ID ? `${base}_${ACTIVE_USER_ID}${tlSuffix()}` : base;
 }
 
 // ─── CROSS-DOMAIN DATA BRIDGE (Supabase) ──────────────────────────────────────
@@ -12887,9 +12888,9 @@ function JlptResultsPanel({ userId, T }) {
 // "ja_JP" / "ja-jp"), preferring the natural-sounding ones when present.
 function pickJapaneseVoice() {
   try {
-    const voices = (window.speechSynthesis.getVoices() || []).filter(v => /^ja([-_]|$)/i.test(v.lang || ""));
+    const voices = (window.speechSynthesis.getVoices() || []).filter(v => new RegExp("^" + tl().ttsPrefix + "([-_]|$)", "i").test(v.lang || ""));
     if (!voices.length) return null;
-    const preferred = /Google.*日本語|Kyoko|O-?Ren|Nanami|Haruka|Ayumi|Hattori|Otoya|Siri/i;
+    const preferred = isJa() ? /Google.*日本語|Kyoko|O-?Ren|Nanami|Haruka|Ayumi|Hattori|Otoya|Siri/i : /Google|Samantha|Aria|Jenny|Siri|Natural/i;
     return voices.find(v => preferred.test(v.name)) || voices[0];
   } catch { return null; }
 }
@@ -12920,7 +12921,7 @@ function whenVoicesReady(cb) {
 }
 function makeJapaneseUtterance(text, rate) {
   const u = new SpeechSynthesisUtterance(text);
-  u.lang = "ja-JP"; u.rate = rate;
+  u.lang = tl().tts; u.rate = rate;
   const jpVoice = pickJapaneseVoice();
   if (jpVoice) u.voice = jpVoice;
   return u;
@@ -12935,7 +12936,7 @@ function stopFallbackAudio() {
   try { if (_fallbackAudio) { _fallbackAudio.pause(); _fallbackAudio = null; } } catch {}
 }
 function splitForAudioFallback(text) {
-  const parts = String(text || "").split(/(?<=[。！？!?\n])/).map(s => s.trim()).filter(Boolean);
+  const parts = String(text || "").split(new RegExp("(?<=[" + tl().sentenceEnd + "])")).map(s => s.trim()).filter(Boolean);
   const out = [];
   parts.forEach(p => { for (let i = 0; i < p.length; i += 80) out.push(p.slice(i, i + 80)); });
   return out;
@@ -12951,7 +12952,7 @@ function speakWithAudioFallback(text, rate = 0.85) {
     const settle = (ok) => { if (settled) return; settled = true; resolve(ok); };
     const playAt = (i) => {
       if (token !== _fallbackToken || i >= chunks.length) return;
-      const a = new Audio("https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=ja&q=" + encodeURIComponent(chunks[i]));
+      const a = new Audio("https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=" + tl().gtts + "&q=" + encodeURIComponent(chunks[i]));
       try { a.referrerPolicy = "no-referrer"; } catch {}
       try { a.preservesPitch = true; a.playbackRate = Math.max(0.5, Math.min(1.5, rate)); } catch {}
       _fallbackAudio = a;
@@ -12968,7 +12969,7 @@ function speakWithAudioFallback(text, rate = 0.85) {
 // Chrome's "Google 日本語" often report "started" but stay silent on some PCs, so they don't count.
 function hasLocalJapaneseVoice() {
   try {
-    return (window.speechSynthesis.getVoices() || []).some(v => /^ja([-_]|$)/i.test(v.lang || "") && v.localService);
+    return (window.speechSynthesis.getVoices() || []).some(v => new RegExp("^" + tl().ttsPrefix + "([-_]|$)", "i").test(v.lang || "") && v.localService);
   } catch { return false; }
 }
 function speakJapanese(text, rate = 0.85) {
@@ -15232,7 +15233,7 @@ function ExerciseCard({ item, revealed, onReveal, T, lang }) {
       return;
     }
     const recognition = new SR();
-    recognition.lang = "ja-JP";
+    recognition.lang = tl().stt;
     recognition.interimResults = true;
     recognition.continuous = false;
     recognition.onresult = (e) => {
@@ -15929,12 +15930,12 @@ function JLineTools({ text, lang, T }) {
   return (
     <div style={{ marginTop:6, marginBottom:6 }}>
       <div style={{ display:"flex", gap:6, marginBottom:6 }}>
-        <button onClick={()=>toggleVariant("furigana")} disabled={loadingType!==null} style={{ fontSize:11, color:"#67e8f9", fontWeight:700, background:visible.furigana?"rgba(103,232,249,0.22)":"rgba(103,232,249,0.1)", padding:"4px 10px", borderRadius:8, border:"1px solid rgba(103,232,249,0.3)", cursor:"pointer" }}>
+        {isJa() && <button onClick={()=>toggleVariant("furigana")} disabled={loadingType!==null} style={{ fontSize:11, color:"#67e8f9", fontWeight:700, background:visible.furigana?"rgba(103,232,249,0.22)":"rgba(103,232,249,0.1)", padding:"4px 10px", borderRadius:8, border:"1px solid rgba(103,232,249,0.3)", cursor:"pointer" }}>
           {loadingType==="furigana" ? "⏳" : (T?.furiganaBtn || "ふりがな")}
-        </button>
-        <button onClick={()=>toggleVariant("romaji")} disabled={loadingType!==null} style={{ fontSize:11, color:"#c4b5fd", fontWeight:700, background:visible.romaji?"rgba(196,181,253,0.22)":"rgba(196,181,253,0.1)", padding:"4px 10px", borderRadius:8, border:"1px solid rgba(196,181,253,0.3)", cursor:"pointer" }}>
+        </button>}
+        {isJa() && <button onClick={()=>toggleVariant("romaji")} disabled={loadingType!==null} style={{ fontSize:11, color:"#c4b5fd", fontWeight:700, background:visible.romaji?"rgba(196,181,253,0.22)":"rgba(196,181,253,0.1)", padding:"4px 10px", borderRadius:8, border:"1px solid rgba(196,181,253,0.3)", cursor:"pointer" }}>
           {loadingType==="romaji" ? "⏳" : (T?.romajiBtn || "Romaji")}
-        </button>
+        </button>}
         <button onClick={()=>toggleVariant("translate")} disabled={loadingType!==null} style={{ fontSize:11, color:"#fbbf24", fontWeight:700, background:visible.translate?"rgba(251,191,36,0.22)":"rgba(251,191,36,0.1)", padding:"4px 10px", borderRadius:8, border:"1px solid rgba(251,191,36,0.3)", cursor:"pointer" }}>
           {loadingType==="translate" ? "⏳" : (T?.translateBtn || "Translate")}
         </button>
@@ -15986,7 +15987,7 @@ Respond ONLY with valid JSON, no markdown, no backticks, nothing else.`;
     if (!SR) { setRecogSupported(false); return; }
     if (recording) { recognitionRef.current?.stop(); return; }
     const recognition = new SR();
-    recognition.lang = "ja-JP";
+    recognition.lang = tl().stt;
     recognition.interimResults = true;
     recognition.continuous = false;
     recognition.onresult = (e) => {
@@ -16346,7 +16347,7 @@ function ConversationPredictor({ form, onLevelUp }) {
     const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (!SR) { setRecogSupported(false); return; }
     const recognition = new SR();
-    recognition.lang = "ja-JP";
+    recognition.lang = tl().stt;
     recognition.interimResults = true;
     recognition.continuous = true;
     recognition.onresult = (e) => {
@@ -16551,7 +16552,7 @@ function PronunciationTurnCard({ item, T, lang, onBreak }) {
     if (!SR) { setRecogSupported(false); return; }
     if (recording) { recognitionRef.current?.stop(); return; }
     const recognition = new SR();
-    recognition.lang = "ja-JP";
+    recognition.lang = tl().stt;
     recognition.interimResults = true;
     recognition.continuous = false;
     recognition.onresult = (e) => {
@@ -16795,7 +16796,7 @@ function PronunciationSayIt({ target, T }) {
     if (!SR) { setSupported(false); return; }
     if (recording) { recRef.current?.stop(); return; }
     const r = new SR();
-    r.lang = "ja-JP";
+    r.lang = tl().stt;
     r.interimResults = true;
     r.continuous = false;
     r.onresult = (e) => {
@@ -17417,7 +17418,7 @@ function PronunciationListenAlong({ form, onLevelUp }) {
     const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (!SR) { setRecogSupported(false); shouldListenRef.current = false; setListening(false); return; }
     const recognition = new SR();
-    recognition.lang = "ja-JP";
+    recognition.lang = tl().stt;
     recognition.interimResults = true;
     recognition.continuous = true;
     recognition.onresult = (e) => {
@@ -17967,7 +17968,7 @@ async function buildAIWeeklySchedule(form, weekNum, totalWeeks, forceFresh = fal
   } else {
     // Non-JLPT goal (or JLPT current-level without a JLPT pass-goal): normal curated CLT pool,
     // but still hard-restricted to the skills the student actually selected.
-    const levelResList = LEVEL_RESOURCES[form.jlpt] || [];
+    const levelResList = isJa() ? (LEVEL_RESOURCES[form.jlpt] || []) : (NON_JA_RESOURCES[getTargetLang()] || []);
     const skillResList = selectedSkills.flatMap(s => RESOURCES[s] || []);
     const isAnimeGoal = (Array.isArray(form.goal) ? form.goal : (form.goal?[form.goal]:[])).includes("Understand Anime/Manga") || (form.displayGoal||"").includes("Understand Anime/Manga");
     const showTravelResources = isTravelGoal(form.goal, form.displayGoal);
@@ -18308,7 +18309,7 @@ Warm, under 100 words, English.` }]
 const LANGUAGES = [
   "English","Spanish","French","German","Chinese (Simplified)","Chinese (Traditional)",
   "Italian","Korean","Thai","Malay","Indonesian","Vietnamese","Hindi",
-  "Japanese","Turkish","Nepali","Filipino","Mizo","Bengali",
+  "Japanese","Turkish","Nepali","Filipino","Mizo","Bengali","Mongolian",
 ];
 
 // Native-script display names for the 🌐 language badge (shown regardless of UI language)
@@ -18317,7 +18318,7 @@ const NATIVE_LANG_NAMES = {
   "Chinese (Simplified)":"简体中文","Chinese (Traditional)":"繁體中文","Italian":"Italiano",
   "Korean":"한국어","Thai":"ไทย","Malay":"Bahasa Melayu","Indonesian":"Bahasa Indonesia",
   "Vietnamese":"Tiếng Việt","Hindi":"हिन्दी","Japanese":"日本語","Turkish":"Türkçe",
-  "Nepali":"नेपाली","Filipino":"Filipino","Mizo":"Mizo ṭawng","Bengali":"বাংলা",
+  "Nepali":"नेपाली","Filipino":"Filipino","Mizo":"Mizo ṭawng","Bengali":"বাংলা","Mongolian":"Монгол",
 };
 
 // QuickStartForm runs before the student has picked a preferredLang (that question is
@@ -18436,6 +18437,40 @@ const QUICK_DEFAULTS = {
   timeline: "", hoursPerDay: "1-2 hours", daysPerWeek: "3-4 days",
   skills: ["vocabulary", "grammar"],
 };
+
+// ─── Target-language prototype helpers (English / Mongolian learning) ─────────
+const NON_JA_RESOURCES = {
+  en: [
+    { name:"BBC Learning English", desc:"Free lessons, short videos and podcasts for every level, from the BBC.", url:"https://www.bbc.co.uk/learningenglish", free:true, mode:"listening", skills:{ vocab:4, grammar:4, reading:3, speaking:3, listening:5 } },
+    { name:"VOA Learning English", desc:"News stories read slowly in simple English, with transcripts — great for listening and reading.", url:"https://learningenglish.voanews.com", free:true, mode:"listening", skills:{ vocab:4, grammar:2, reading:4, speaking:2, listening:5 } },
+    { name:"Cambridge Dictionary", desc:"Clear definitions and example sentences for learners.", url:"https://dictionary.cambridge.org", free:true, mode:"reading", skills:{ vocab:5, grammar:2, reading:3, speaking:1, listening:1 } },
+  ],
+  mn: [
+    { name:"Mongolian Wikipedia", desc:"Read real Mongolian articles on any topic you like.", url:"https://mn.wikipedia.org", free:true, mode:"reading", skills:{ vocab:3, grammar:2, reading:5, speaking:0, listening:0 } },
+    { name:"MONTSAME News", desc:"Mongolia's national news agency — authentic Mongolian news for reading practice.", url:"https://montsame.mn", free:true, mode:"reading", skills:{ vocab:3, grammar:2, reading:4, speaking:0, listening:0 } },
+  ],
+};
+function goalOptionsForTarget() {
+  if (isJa()) return Object.keys(GOAL_KEY_MAP);
+  return ["Daily conversation", "Travel abroad", "Get a job / work", "Study abroad", "Pass an exam", "Other"];
+}
+function TargetLangSwitch({ compact }) {
+  const cur = getTargetLang();
+  return (
+    <div style={{ display:"flex", alignItems:"center", gap:6, flexWrap:"wrap", marginBottom: compact ? 0 : 16 }}>
+      {!compact && <span style={{ color:"#94a3b8", fontSize:11, fontWeight:700, marginRight:2 }}>I want to learn:</span>}
+      {Object.values(TARGET_LANGS).map(l => (
+        <button key={l.code} onClick={()=>{ if (l.code !== cur) setTargetLang(l.code); }}
+          style={{ padding: compact ? "3px 8px" : "6px 12px", borderRadius:99, fontSize: compact ? 10 : 12, fontWeight:700, cursor:"pointer",
+            border:`1.5px solid ${l.code===cur ? C.purpleLight : C.border}`,
+            background: l.code===cur ? "rgba(168,85,247,0.18)" : "transparent", color: l.code===cur ? "#f1f5f9" : "#94a3b8" }}>
+          {l.flag} {l.native}
+        </button>
+      ))}
+    </div>
+  );
+}
+
 // [val, levelTKey, approxSuffix] — approxSuffix ("~N5" etc.) is JLPT-code notation that
 // reads the same in every language, so only the level name + the "(no JLPT)" hint (for
 // Beginner) are looked up in T; see quickNoJlptHint in UI_TRANSLATIONS.
@@ -18489,6 +18524,7 @@ function QuickStartForm({ onSubmit, initialJlpt, initialForm, onLoginClick }) {
   return (
     <div style={{ ...S.page, display:"flex", alignItems:"center", justifyContent:"center", padding:"40px 16px 60px" }}>
       <div style={{ width:"100%", maxWidth:440 }}>
+        <TargetLangSwitch />
         {onLoginClick && (
           <div style={{ textAlign:"right", marginBottom:14 }}>
             <button onClick={onLoginClick} style={{ background:"none", border:"none", color:"#94a3b8", fontSize:12, cursor:"pointer", textDecoration:"underline" }}>
@@ -18512,7 +18548,7 @@ function QuickStartForm({ onSubmit, initialJlpt, initialForm, onLoginClick }) {
         {current.key === "goal" && (
           <>
             <div style={{ display:"flex", flexWrap:"wrap", gap:8 }}>
-              {Object.keys(GOAL_KEY_MAP).map(g => (
+              {goalOptionsForTarget().map(g => (
                 <button key={g} onClick={()=>toggleGoal(g)} style={{ padding:"9px 16px", borderRadius:20, border:`1.5px solid ${goal.includes(g)?C.purpleLight:C.border}`, background:goal.includes(g)?"rgba(168,85,247,0.15)":C.card, color:goal.includes(g)?C.purpleLight:"#94a3b8", fontSize:13, fontWeight:600, cursor:"pointer" }}>
                   {T[GOAL_KEY_MAP[g]] || g}
                 </button>
@@ -18527,7 +18563,7 @@ function QuickStartForm({ onSubmit, initialJlpt, initialForm, onLoginClick }) {
           <div style={{ display:"flex", flexDirection:"column", gap:8 }}>
             {QUICK_JLPT_OPTIONS.map(([val,levelKey,approx]) => (
               <button key={val} onClick={()=>{ setJlpt(val); goNext(val); }} style={{ textAlign:"left", padding:"12px 16px", borderRadius:10, border:`1.5px solid ${jlpt===val?C.purpleLight:C.border}`, background:jlpt===val?"rgba(168,85,247,0.15)":C.card, color:jlpt===val?C.purpleLight:"#e2e8f0", fontSize:13, fontWeight:600, cursor:"pointer" }}>
-                {T[levelKey]} {approx ? `(${approx})` : T.quickNoJlptHint}
+                {T[levelKey]} {isJa() ? (approx ? `(${approx})` : T.quickNoJlptHint) : (CEFR_BY_LEVEL[val] ? `(${CEFR_BY_LEVEL[val]})` : "")}
               </button>
             ))}
           </div>
@@ -18786,7 +18822,7 @@ function FormScreen({ onSubmit, onBack, onCancel, initialJlpt, initialForm, onLo
           <div>
             <label style={S.label}>{T.finalGoal}</label>
             <div style={{ display:"flex", flexWrap:"wrap", gap:8 }}>
-              {Object.keys(GOAL_KEY_MAP).map(g => (
+              {goalOptionsForTarget().map(g => (
                 <button key={g} onClick={()=>toggleGoal(g)} style={{ padding:"8px 14px", borderRadius:20, border:`1.5px solid ${form.goal.includes(g)?C.purpleLight:C.border}`, background:form.goal.includes(g)?"rgba(168,85,247,0.15)":C.card, color:form.goal.includes(g)?C.purpleLight:"#94a3b8", fontSize:12, fontWeight:600, cursor:"pointer" }}>
                   {T[GOAL_KEY_MAP[g]] || g}
                 </button>
@@ -19999,7 +20035,7 @@ function Dashboard({ form, onEdit, onLevelUp, onSetWeek, onLogout, onDeleteAccou
     { id:"subtitles",  label: T.tabSubtitles || "🎬 字幕帳" },
     { id:"resources",  label: T.tabResources },
     { id:"milestones", label: T.tabMilestones },
-    { id:"jlpt",       label: T.tabJlpt || "🎓 JLPT結果" },
+    ...(isJa() ? [{ id:"jlpt",       label: T.tabJlpt || "🎓 JLPT結果" }] : []),
     { id:"feedback",   label: T.tabFeedback || "💬 Feedback" },
   ];
   const RESOURCE_SUBTABS = [
@@ -20067,7 +20103,8 @@ function Dashboard({ form, onEdit, onLevelUp, onSetWeek, onLogout, onDeleteAccou
 
       <div style={{ background:"rgba(10,15,30,0.95)", borderBottom:`1px solid ${C.border}`, padding:"calc(14px + env(safe-area-inset-top, 0px)) calc(20px + env(safe-area-inset-right, 0px)) 14px calc(20px + env(safe-area-inset-left, 0px))", position:"sticky", top:0, zIndex:100, display:"flex", justifyContent:"space-between", alignItems:"center" }}>
         <div>
-          <p style={{ color:C.purpleLight, fontSize:10, fontWeight:700, letterSpacing:2, margin:0 }}>{T.gakuSelfStudy}</p>
+          <p style={{ color:C.purpleLight, fontSize:10, fontWeight:700, letterSpacing:2, margin:"0 0 4px" }}>{T.gakuSelfStudy}</p>
+          <TargetLangSwitch compact />
           <div style={{ display:"flex", alignItems:"center", gap:8 }}>
             <p style={{ color:"#f1f5f9", fontSize:14, fontWeight:800, margin:0 }}>{form.name}'s {T.studyPlan}</p>
             {streakDays > 0 && (
@@ -20396,7 +20433,7 @@ function Dashboard({ form, onEdit, onLevelUp, onSetWeek, onLogout, onDeleteAccou
             // anime/manga-tagged resources for their level first, without hiding
             // the rest of the curated list — same data, reordered by relevance.
             const isAnimeGoal = (Array.isArray(form.goal) ? form.goal : (form.goal?[form.goal]:[])).includes("Understand Anime/Manga") || (form.displayGoal||"").includes("Understand Anime/Manga");
-            const rawResList = LEVEL_RESOURCES[form.jlpt] || [];
+            const rawResList = isJa() ? (LEVEL_RESOURCES[form.jlpt] || []) : (NON_JA_RESOURCES[getTargetLang()] || []);
             const resList = isAnimeGoal
               ? [...rawResList].sort((a,b) => Number(/anime|manga/i.test(b.name)) - Number(/anime|manga/i.test(a.name)))
               : rawResList;
