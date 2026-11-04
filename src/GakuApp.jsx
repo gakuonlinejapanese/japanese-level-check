@@ -18682,16 +18682,52 @@ const EN_RESOURCES_BY_LEVEL = {
     { name:"Intelligence Squared", desc:"Debates and advanced discussions: listen, then build and voice your own opinion.", url:"https://www.intelligencesquared.com/", free:true, mode:"listening", skills:SK(3,1,1,4,5) },
   ],
 };
+const TUFS_MN = "https://www.coelang.tufs.ac.jp/mt/mn/";
+const PEACE_CORPS_MN = "https://www.fsi-language-courses.org/mongolian/courses/peace-corps-mongolian-language-lessons/";
+const NOMIIN_GER = "https://www.mongolianlanguage.mn/free-lessons";
+const MNB = "https://www.mnb.mn/";
+const SMN = "https://mn.smn.news/";
 const NON_JA_RESOURCES = {
   en: EN_RESOURCES_BY_LEVEL,
-  mn: [
-    { name:"Mongolian Wikipedia", desc:"Read real Mongolian articles on any topic you like.", url:"https://mn.wikipedia.org", free:true, mode:"reading", skills:{ vocab:3, grammar:2, reading:5, speaking:0, listening:0 } },
-    { name:"MONTSAME News", desc:"Mongolia's national news agency — authentic Mongolian news for reading practice.", url:"https://montsame.mn", free:true, mode:"reading", skills:{ vocab:3, grammar:2, reading:4, speaking:0, listening:0 } },
-  ],
+  mn: {
+    "Beginner": [
+      { name:"TUFS Mongolian – Pronunciation Module", desc:"Learn basic Mongolian pronunciation with audio.", descJa:"基本的な発音を学ぶ。", url:TUFS_MN+"pmod/practical/", free:true, mode:"listening", skills:SK(2,1,0,2,5) },
+      { name:"TUFS Mongolian – Conversation Module", desc:"Practice basic conversational expressions.", descJa:"基本的な会話表現を練習。", url:TUFS_MN+"dmod/lp/index.php?menunum=1#linkmenu", free:true, mode:"speaking", skills:SK(3,2,1,5,4) },
+    ],
+    "Elementary": [
+      { name:"Peace Corps Mongolian – Audio Lessons", desc:"Free beginner audio lessons (with text) from the Peace Corps.", descJa:"初級向け音声教材。", url:PEACE_CORPS_MN, free:true, mode:"listening", skills:SK(3,2,1,3,5) },
+      { name:"Nomiin Ger – Free Lessons", desc:"Vocabulary, grammar and short reading materials.", descJa:"語彙、文法、短い読解教材。", url:NOMIIN_GER, free:true, mode:"reading", skills:SK(3,3,5,0,0) },
+      { name:"TUFS Mongolian – Grammar Module", desc:"Check the grammar while building short sentences.", descJa:"文法を確認しながら短文を作る。", url:TUFS_MN+"gmod/", free:true, mode:"writing", skills:SK(2,5,0,0,0) },
+      { name:"Peace Corps Mongolian – Basic Lessons", desc:"Practice basic expressions used in daily life.", descJa:"日常生活で使う基本表現を練習。", url:PEACE_CORPS_MN, free:true, mode:"speaking", skills:SK(3,2,1,5,3) },
+    ],
+    "Intermediate": [
+      { name:"Peace Corps Mongolian – Audio", desc:"Listen to the audio and understand the content.", descJa:"音声を聞いて内容を理解する。", url:PEACE_CORPS_MN, free:true, mode:"listening", skills:SK(3,2,1,3,5) },
+      { name:"Nomiin Ger – Free Lessons", desc:"Grammar, vocabulary and reading questions.", descJa:"文法・語彙・読解問題。", url:NOMIIN_GER, free:true, mode:"reading", skills:SK(3,3,5,0,0) },
+      { name:"TUFS Mongolian – Conversation Module (practice)", desc:"Apply the conversational expressions you have learned.", descJa:"会話表現の応用練習。", url:TUFS_MN+"dmod/lp/index.php?menunum=1#linkmenu", free:true, mode:"speaking", skills:SK(3,2,1,5,4) },
+    ],
+    "Upper Intermediate": [
+      { name:"MNB – Videos, News & Podcasts", desc:"Real Mongolian news and programs from the national broadcaster.", descJa:"モンゴルの実際のニュースや番組。", url:MNB, free:true, mode:"listening", skills:SK(3,1,2,2,5) },
+      { name:"MNB – News", desc:"Read local news articles.", descJa:"現地のニュース記事を読む。", url:MNB, free:true, mode:"reading", skills:SK(4,2,5,0,0) },
+      { name:"Nomiin Ger", desc:"Check grammar while writing explanations and opinion pieces.", descJa:"文法を確認しながら説明文や意見文を書く。", url:NOMIIN_GER, free:true, mode:"writing", skills:SK(2,5,0,0,0) },
+      { name:"MNB – Programs & Interviews", desc:"Imitate how the speakers talk, then summarize and give your opinion aloud.", descJa:"話者の表現をまねて要約・意見を話す。", url:MNB, free:true, mode:"speaking", skills:SK(3,1,1,5,4) },
+    ],
+    "Advanced": [
+      { name:"MNB – Radio & Podcasts", desc:"Listen to natural-speed audio.", descJa:"自然な速度の音声を聞く。", url:MNB, free:true, mode:"listening", skills:SK(3,1,1,2,5) },
+      { name:"MNB – News & Features", desc:"Read about society, politics and culture.", descJa:"社会・政治・文化などの話題を読む。", url:MNB, free:true, mode:"reading", skills:SK(4,2,5,0,0) },
+      { name:"Southern Mongolia News", desc:"Use Mongolian articles as a model to write summaries and opinion pieces.", descJa:"モンゴル語の記事を参考に、要約や論説を書く。", url:SMN, free:true, mode:"writing", skills:SK(3,3,3,0,0) },
+      { name:"MNB – Interviews & Debates", desc:"Give your opinion on complex topics.", descJa:"複雑なテーマについて意見を述べる。", url:MNB, free:true, mode:"speaking", skills:SK(3,1,1,5,4) },
+    ],
+    "Mastery": [
+      { name:"MNB – Live, Radio & Programs", desc:"Understand broadcasts made for native speakers.", descJa:"ネイティブ向けの放送を理解する。", url:MNB, free:true, mode:"listening", skills:SK(3,1,1,2,5) },
+      { name:"Southern Mongolia News", desc:"Read about current affairs and social issues.", descJa:"現地の時事・社会問題を読む。", url:SMN, free:true, mode:"reading", skills:SK(4,2,5,0,0) },
+      { name:"MNB", desc:"A reference for writing logical texts about news and social issues.", descJa:"ニュースや社会問題について論理的な文章を書くための参考資料。", url:MNB, free:true, mode:"writing", skills:SK(3,3,3,0,0) },
+      { name:"MNB – Interviews & Debates", desc:"Discuss and present on specialized topics.", descJa:"専門的な話題を使って議論・発表する。", url:MNB, free:true, mode:"speaking", skills:SK(3,1,1,5,4) },
+    ],
+  },
 };
 // Let schedule tasks that name one of these resources link straight to it (same as the Japanese list).
 Object.values(EN_RESOURCES_BY_LEVEL).forEach(registerResourceLookup);
-registerResourceLookup(NON_JA_RESOURCES.mn);
+Object.values(NON_JA_RESOURCES.mn).forEach(registerResourceLookup);
 // Resources for the current (non-Japanese) target language; English is listed per level.
 function nonJaResources(level) {
   const r = NON_JA_RESOURCES[getTargetLang()];
@@ -20734,7 +20770,7 @@ function Dashboard({ form, onEdit, onLevelUp, onSetWeek, onLogout, onDeleteAccou
                         <p style={{ color:"#f1f5f9", fontSize:14, fontWeight:700, margin:0 }}>{r.name}</p>
                         <span style={{ color:C.teal, fontSize:10, fontWeight:700, background:"rgba(6,182,212,0.1)", padding:"2px 8px", borderRadius:99, whiteSpace:"nowrap", marginLeft:8 }}>{T[r.levelKey]}</span>
                       </div>
-                      <p style={{ color:"#94a3b8", fontSize:12, margin:"0 0 10px", lineHeight:1.6 }}>{(r.descKey && T[r.descKey]) || r.desc}</p>
+                      <p style={{ color:"#94a3b8", fontSize:12, margin:"0 0 10px", lineHeight:1.6 }}>{(r.descKey && T[r.descKey]) || (form?.preferredLang === "Japanese" && r.descJa) || r.desc}</p>
                       <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:"3px 12px", marginBottom:10 }}>
                         {[[T.vocab,r.skills.vocab],[T.grammar,r.skills.grammar],[T.reading,r.skills.reading],[T.speaking,r.skills.speaking],[T.listening,r.skills.listening]].map(([label,val])=>(
                           <div key={label} style={{ display:"flex", alignItems:"center", gap:4 }}>
