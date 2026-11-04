@@ -17968,8 +17968,8 @@ async function buildAIWeeklySchedule(form, weekNum, totalWeeks, forceFresh = fal
   } else {
     // Non-JLPT goal (or JLPT current-level without a JLPT pass-goal): normal curated CLT pool,
     // but still hard-restricted to the skills the student actually selected.
-    const levelResList = isJa() ? (LEVEL_RESOURCES[form.jlpt] || []) : (NON_JA_RESOURCES[getTargetLang()] || []);
-    const skillResList = selectedSkills.flatMap(s => RESOURCES[s] || []);
+    const levelResList = isJa() ? (LEVEL_RESOURCES[form.jlpt] || []) : nonJaResources(form.jlpt);
+    const skillResList = isJa() ? selectedSkills.flatMap(s => RESOURCES[s] || []) : [];
     const isAnimeGoal = (Array.isArray(form.goal) ? form.goal : (form.goal?[form.goal]:[])).includes("Understand Anime/Manga") || (form.displayGoal||"").includes("Understand Anime/Manga");
     const showTravelResources = isTravelGoal(form.goal, form.displayGoal);
     availableResources = [...levelResList, ...skillResList, ...(showTravelResources ? TRAVEL_JAPAN_RESOURCES : [])]
@@ -18439,17 +18439,59 @@ const QUICK_DEFAULTS = {
 };
 
 // ─── Target-language prototype helpers (English / Mongolian learning) ─────────
-const NON_JA_RESOURCES = {
-  en: [
-    { name:"BBC Learning English", desc:"Free lessons, short videos and podcasts for every level, from the BBC.", url:"https://www.bbc.co.uk/learningenglish", free:true, mode:"listening", skills:{ vocab:4, grammar:4, reading:3, speaking:3, listening:5 } },
-    { name:"VOA Learning English", desc:"News stories read slowly in simple English, with transcripts — great for listening and reading.", url:"https://learningenglish.voanews.com", free:true, mode:"listening", skills:{ vocab:4, grammar:2, reading:4, speaking:2, listening:5 } },
-    { name:"Cambridge Dictionary", desc:"Clear definitions and example sentences for learners.", url:"https://dictionary.cambridge.org", free:true, mode:"reading", skills:{ vocab:5, grammar:2, reading:3, speaking:1, listening:1 } },
+const BC = (kind, lv) => `https://learnenglish.britishcouncil.org/free-resources/${kind}/${lv}`;
+const SK = (vocab, grammar, reading, speaking, listening) => ({ vocab, grammar, reading, speaking, listening });
+const EN_RESOURCES_BY_LEVEL = {
+  "Beginner": [
+    { name:"VOA – Let's Learn English Level 1", desc:"Beginner video lessons and audio with everyday phrases to listen to and repeat.", url:"https://learningenglish.voanews.com/p/5644.html", free:true, mode:"listening", skills:SK(3,3,1,4,5) },
+    { name:"British Council – A1 Reading", desc:"Short texts with comprehension questions.", url:BC("reading","a1"), free:true, mode:"reading", skills:SK(3,2,5,0,0) },
+    { name:"British Council – A1 Writing", desc:"Practice writing short messages, forms and simple emails.", url:BC("writing","a1"), free:true, mode:"writing", skills:SK(2,3,0,0,0) },
   ],
+  "Elementary": [
+    { name:"ELLLO – A2 Listening & Conversations", desc:"Short natural conversations with audio, video and scripts; also good for repeating aloud.", url:"https://elllo.org/levels/views/A2-views.html", free:true, mode:"listening", skills:SK(3,2,1,4,5) },
+    { name:"British Council – A2 Reading", desc:"Everyday texts with comprehension tasks.", url:BC("reading","a2"), free:true, mode:"reading", skills:SK(3,2,5,0,0) },
+    { name:"British Council – A2 Writing", desc:"Practice messages, self-introductions and emails.", url:BC("writing","a2"), free:true, mode:"writing", skills:SK(2,3,0,0,0) },
+  ],
+  "Intermediate": [
+    { name:"British Council – B1 Reading", desc:"Longer everyday and informational texts with tasks.", url:BC("reading","b1"), free:true, mode:"reading", skills:SK(3,2,5,0,0) },
+    { name:"British Council – B1 Writing", desc:"Emails, short essays and reviews with model answers.", url:BC("writing","b1"), free:true, mode:"writing", skills:SK(2,3,0,0,0) },
+    { name:"Cambridge Write & Improve", desc:"Submit your own English writing and get free instant feedback (no sign-up needed).", url:"https://writeandimprove.com/", free:true, mode:"writing", skills:SK(2,4,0,0,0) },
+    { name:"ELLLO – B1 Conversations", desc:"Natural conversations by many different speakers, with audio and scripts.", url:"https://elllo.org/levels/views/B1-views.html", free:true, mode:"listening", skills:SK(3,2,1,4,5) },
+  ],
+  "Upper Intermediate": [
+    { name:"TED Talks", desc:"Talks on many topics with subtitles and transcripts; summarize and share your opinion aloud.", url:"https://www.ted.com/talks", free:true, mode:"listening", skills:SK(3,1,2,4,5) },
+    { name:"British Council – B2 Reading", desc:"Longer articles and reports with comprehension tasks.", url:BC("reading","b2"), free:true, mode:"reading", skills:SK(3,2,5,0,0) },
+    { name:"British Council – B2 Writing", desc:"Essays, reports and formal emails.", url:BC("writing","b2"), free:true, mode:"writing", skills:SK(2,3,0,0,0) },
+    { name:"Cambridge Write & Improve", desc:"Submit your own English writing and get free instant feedback (no sign-up needed).", url:"https://writeandimprove.com/", free:true, mode:"writing", skills:SK(2,4,0,0,0) },
+    { name:"ELLLO – B2 Conversations", desc:"Natural conversations at a higher level with audio and scripts.", url:"https://elllo.org/levels/views/B2-views.html", free:true, mode:"listening", skills:SK(3,2,1,3,5) },
+  ],
+  "Advanced": [
+    { name:"British Council – C1 Reading", desc:"Advanced articles with comprehension tasks.", url:BC("reading","c1"), free:true, mode:"reading", skills:SK(3,2,5,0,0) },
+    { name:"British Council – C1 Writing", desc:"Advanced writing lessons: essays, reports and proposals.", url:BC("writing","c1"), free:true, mode:"writing", skills:SK(2,3,0,0,0) },
+    { name:"TED Talks", desc:"Discuss and present abstract topics after watching a talk.", url:"https://www.ted.com/talks", free:true, mode:"listening", skills:SK(3,1,2,4,5) },
+    { name:"ELLLO – C1 Conversations", desc:"Advanced natural conversations with audio and scripts.", url:"https://elllo.org/levels/views/C1-views.html", free:true, mode:"listening", skills:SK(3,2,1,3,5) },
+  ],
+  "Mastery": [
+    { name:"Aeon", desc:"Long-form essays on philosophy, science, society and culture — free to read.", url:"https://aeon.co/about", free:true, mode:"reading", skills:SK(4,2,5,0,0) },
+    { name:"Intelligence Squared", desc:"Debates and advanced discussions: listen, then build and voice your own opinion.", url:"https://www.intelligencesquared.com/", free:true, mode:"listening", skills:SK(3,1,1,4,5) },
+  ],
+};
+const NON_JA_RESOURCES = {
+  en: EN_RESOURCES_BY_LEVEL,
   mn: [
     { name:"Mongolian Wikipedia", desc:"Read real Mongolian articles on any topic you like.", url:"https://mn.wikipedia.org", free:true, mode:"reading", skills:{ vocab:3, grammar:2, reading:5, speaking:0, listening:0 } },
     { name:"MONTSAME News", desc:"Mongolia's national news agency — authentic Mongolian news for reading practice.", url:"https://montsame.mn", free:true, mode:"reading", skills:{ vocab:3, grammar:2, reading:4, speaking:0, listening:0 } },
   ],
 };
+// Let schedule tasks that name one of these resources link straight to it (same as the Japanese list).
+Object.values(EN_RESOURCES_BY_LEVEL).forEach(registerResourceLookup);
+registerResourceLookup(NON_JA_RESOURCES.mn);
+// Resources for the current (non-Japanese) target language; English is listed per level.
+function nonJaResources(level) {
+  const r = NON_JA_RESOURCES[getTargetLang()];
+  if (Array.isArray(r)) return r;
+  return (r && (r[level] || r["Beginner"])) || [];
+}
 function goalOptionsForTarget() {
   if (isJa()) return Object.keys(GOAL_KEY_MAP);
   return ["Daily conversation", "Travel abroad", "Get a job / work", "Study abroad", "Pass an exam", "Other"];
@@ -20433,7 +20475,7 @@ function Dashboard({ form, onEdit, onLevelUp, onSetWeek, onLogout, onDeleteAccou
             // anime/manga-tagged resources for their level first, without hiding
             // the rest of the curated list — same data, reordered by relevance.
             const isAnimeGoal = (Array.isArray(form.goal) ? form.goal : (form.goal?[form.goal]:[])).includes("Understand Anime/Manga") || (form.displayGoal||"").includes("Understand Anime/Manga");
-            const rawResList = isJa() ? (LEVEL_RESOURCES[form.jlpt] || []) : (NON_JA_RESOURCES[getTargetLang()] || []);
+            const rawResList = isJa() ? (LEVEL_RESOURCES[form.jlpt] || []) : nonJaResources(form.jlpt);
             const resList = isAnimeGoal
               ? [...rawResList].sort((a,b) => Number(/anime|manga/i.test(b.name)) - Number(/anime|manga/i.test(a.name)))
               : rawResList;
