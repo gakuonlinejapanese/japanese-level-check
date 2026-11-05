@@ -2,7 +2,7 @@ import { getAdminClient } from "./_supabaseAdmin.js";
 import { assessLongAbsence } from "./_absence.js";
 import { sendEmail } from "./_resend.js";
 import { ADMIN_EMAIL } from "./_supabaseAdmin.js";
-import { triageAndStore, handleAdminListSupport, handleAdminAddSupport, handleAdminSupportDecide } from "./_supportInbox.js";
+import { triageAndStore, handleAdminListSupport, handleAdminAddSupport, handleAdminSupportDecide, handleAdminRegisterInbound, handleInboundEmail } from "./_supportInbox.js";
 
 // ---- Free trial lesson: country/city validation (server-side re-check of what
 // public/trial-lesson.html already enforces client-side against the free-text
@@ -175,6 +175,8 @@ export default async function handler(req, res) {
     return res.status(200).end();
   }
   if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed" });
+  // Brevo inbound-email webhook (reply.seitojapanese.online) — authenticated by a token in the URL.
+  if (req.query && req.query.inbound) return handleInboundEmail(req, res);
   try {
     const { action } = req.body || {};
     if (action === "cancellation_request") return handleCancellationRequest(req, res);
@@ -191,6 +193,7 @@ export default async function handler(req, res) {
     if (action === "check_feedback_submitted") return handleCheckFeedbackSubmitted(req, res);
     if (action === "admin_list_support") return handleAdminListSupport(req, res);
     if (action === "admin_add_support") return handleAdminAddSupport(req, res);
+    if (action === "admin_register_inbound") return handleAdminRegisterInbound(req, res);
     if (action === "admin_support_decide") return handleAdminSupportDecide(req, res);
     if (action === "send_free_plan_winback_emails") return handleSendFreePlanWinback(req, res);
     if (action === "send_trial_ended_notice_emails") return handleSendTrialEndedNotice(req, res);
@@ -1648,9 +1651,11 @@ async function handleSubmitFeedback(req, res) {
 
     // AI triage into the approval queue (admin-support.html). Best-effort and never throws;
     // nothing is sent to the student or changed in code until Seito approves it there.
-    await triageAndStore({ source: "app_feedback", email: normalizedEmail, name, body: text });
+    // triageAndStore also emails Seito ONE combined notification (summary + draft reply + link).
+    // Only if triage/storage failed do we fall back to the plain original-text email below.
+    const triaged = await triageAndStore({ source: "app_feedback", email: normalizedEmail, name, body: text, isGakuStudent: !!isGakuStudent });
 
-    try {
+    if (!triaged) try {
       await sendEmail({
         to: ADMIN_EMAIL,
         subject: `[GAKU] New feedback from ${name || normalizedEmail}`,

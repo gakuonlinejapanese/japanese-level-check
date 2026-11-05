@@ -6,7 +6,10 @@
 // it is wired in through api/policy-agreement.js actions.
 import { getAdminClient, ADMIN_EMAIL } from "./_supabaseAdmin.js";
 import { sendEmail } from "./_resend.js";
+import { createHash } from "crypto";
 
+const SITE = process.env.PUBLIC_SITE_URL || "https://app.seitojapanese.online";
+const INBOUND_DOMAIN = process.env.INBOUND_DOMAIN || "reply.seitojapanese.online";
 const GITHUB_REPO = process.env.GITHUB_REPO || "gakuonlinejapanese/japanese-level-check";
 
 function checkSecret(req) {
@@ -77,7 +80,7 @@ const CATS = ["bug", "how_to_question", "feature_request", "complaint", "billing
 const SEVS = ["low", "medium", "high"];
 
 // Best-effort: never throws, so a triage hiccup can never break feedback submission.
-export async function triageAndStore({ source, feedbackId, email, name, body }) {
+export async function triageAndStore({ source, feedbackId, email, name, body, isGakuStudent, notify = true }) {
   try {
     const supabase = getAdminClient();
     let t = null;
@@ -98,10 +101,87 @@ export async function triageAndStore({ source, feedbackId, email, name, body }) 
     };
     const { data, error } = await supabase.from("support_inbox").insert(row).select().single();
     if (error) { console.error("[support] insert failed:", error.message); return null; }
+    if (notify) await notifyAdmin(data, isGakuStudent);
     return data;
   } catch (e) {
     console.error("[support] triageAndStore failed:", e.message);
     return null;
+  }
+}
+
+const SEV_JA = { high: "重要度:高", medium: "重要度:中", low: "重要度:低" };
+const CAT_JA = { bug: "不具合", how_to_question: "使い方の質問", feature_request: "機能の要望", complaint: "苦情", billing: "支払い", other: "その他" };
+
+// ONE combined email to Seito: AI summary + draft reply + original text + link to the approval screen.
+async function notifyAdmin(item, isGakuStudent) {
+  try {
+    const who = `${item.student_name || ""} ${item.student_email || ""}`.trim() || "(不明)";
+    const srcLabel = item.source === "email" ? "メール" : "アプリのFeedback";
+    await sendEmail({
+      to: ADMIN_EMAIL,
+      subject: `[GAKU] ${item.severity === "high" ? "【重要】" : ""}${CAT_JA[item.category] || "その他"}: ${who}`,
+      html: `<p><a href="${SITE}/admin-support.html" style="font-weight:bold;">▶ 確認画面を開く(OKを押すまで何も送信されません)</a></p>
+        <p><strong>${esc(srcLabel)}</strong> / ${esc(CAT_JA[item.category] || "その他")} / ${esc(SEV_JA[item.severity] || "")}${isGakuStudent === undefined ? "" : " / 招待コード生徒: " + (isGakuStudent ? "はい" : "いいえ")}<br/>
+        <strong>生徒:</strong> ${esc(who)}</p>
+        <p><strong>要約:</strong> ${esc(item.summary)}</p>
+        ${item.suspected_cause ? `<p><strong>原因の推測(未確認):</strong> ${esc(item.suspected_cause)}</p>` : ""}
+        ${item.proposed_reply ? `<p><strong>返信案:</strong></p><p style="white-space:pre-wrap;background:#f1f5f9;padding:10px;border-radius:8px;">${esc(item.proposed_reply)}</p>` : ""}
+        <p><strong>生徒の原文:</strong></p><p style="white-space:pre-wrap;">${esc(item.body)}</p>`,
+    });
+  } catch (e) {
+    console.error("[support] admin notify failed:", e.message);
+  }
+}
+
+// The Brevo webhook cannot send custom headers or signatures, so the URL carries a token derived
+// from ADMIN_SECRET (the secret itself never leaves the server or goes to Brevo).
+function inboundToken() {
+  return createHash("sha256").update("inbound:" + (process.env.ADMIN_SECRET || "")).digest("hex").slice(0, 40);
+}
+
+// Brevo Inbound Parsing -> POST { items: [...] } to /api/policy-agreement?inbound=<token>
+export async function handleInboundEmail(req, res) {
+  if (!process.env.ADMIN_SECRET || req.query.inbound !== inboundToken()) return res.status(401).json({ error: "Unauthorized" });
+  try {
+    const items = Array.isArray(req.body?.items) ? req.body.items : [];
+    let stored = 0;
+    for (const it of items.slice(0, 10)) {
+      const from = (it?.From?.Address || "").trim().toLowerCase();
+      if (!from || /@(reply\.)?seitojapanese\.online$/i.test(from) || /^(no-?reply|mailer-daemon|postmaster)@/i.test(from)) continue; // never loop on our own mail
+      if (Number(it?.Spam?.Score) >= 6) { console.log("[support] inbound skipped as spam:", from); continue; }
+      const text = (it.ExtractedMarkdownMessage || it.RawTextBody || "").toString().trim();
+      if (!text) continue;
+      const body = (it.Subject ? `Subject: ${it.Subject}\n\n` : "") + text;
+      const row = await triageAndStore({ source: "email", email: from, name: it?.From?.Name || null, body });
+      if (row) stored++;
+    }
+    return res.status(200).json({ ok: true, stored }); // 200 even if skipped, so Brevo does not retry
+  } catch (e) {
+    console.error("[support] inbound failed:", e.message);
+    return res.status(200).json({ ok: false });
+  }
+}
+
+// One-time: registers the inbound webhook at Brevo using the server's own BREVO_API_KEY.
+export async function handleAdminRegisterInbound(req, res) {
+  if (!checkSecret(req)) return res.status(401).json({ error: "Unauthorized" });
+  try {
+    const apiKey = process.env.BREVO_API_KEY;
+    if (!apiKey) return res.status(500).json({ error: "BREVO_API_KEY not configured" });
+    const url = `${SITE}/api/policy-agreement?inbound=${inboundToken()}`;
+    const r = await fetch("https://api.brevo.com/v3/webhooks", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Accept: "application/json", "api-key": apiKey },
+      body: JSON.stringify({
+        type: "inbound", events: ["inboundEmailProcessed"], domain: INBOUND_DOMAIN, url,
+        description: "GAKU support inbox",
+      }),
+    });
+    const text = await r.text();
+    if (!r.ok) return res.status(502).json({ error: `Brevo (${r.status}): ${text.slice(0, 400)}` });
+    return res.status(200).json({ ok: true, address: `support@${INBOUND_DOMAIN}` });
+  } catch (e) {
+    return res.status(500).json({ error: e.message });
   }
 }
 
@@ -124,7 +204,7 @@ export async function handleAdminAddSupport(req, res) {
   const { email, name, body } = req.body || {};
   const text = (body || "").toString().trim();
   if (!text) return res.status(400).json({ error: "body is required" });
-  const row = await triageAndStore({ source: "email", email, name, body: text });
+  const row = await triageAndStore({ source: "email", email, name, body: text, notify: false });
   if (!row) return res.status(500).json({ error: "could not save" });
   return res.status(200).json({ ok: true, item: row });
 }

@@ -55,6 +55,14 @@
   </div>
 
   <details class="card">
+    <summary>📮 メール自動受信の設定(DNS反映後に1回だけ)</summary>
+    <p class="small">生徒がメールで送る宛先: <b>support@reply.seitojapanese.online</b><br />
+      WixのMXレコード追加から数時間たったら、下のボタンを1回押してください(Brevoに受け口を登録します)。</p>
+    <div class="row"><button class="b-main" id="regBtn">メール自動受信を有効にする</button></div>
+    <div id="regMsg"></div>
+  </details>
+
+  <details class="card">
     <summary>✉️ メールで届いた内容を追加する</summary>
     <label>生徒のメールアドレス</label><input id="addEmail" placeholder="student@example.com" />
     <label>名前(任意)</label><input id="addName" />
@@ -148,6 +156,14 @@ async function load(quiet) {
 $("loadBtn").onclick = () => load(false);
 $("tabPending").onclick = () => { showPending = true; $("tabPending").className = "on"; $("tabDone").className = ""; render(); };
 $("tabDone").onclick = () => { showPending = false; $("tabDone").className = "on"; $("tabPending").className = ""; render(); };
+$("regBtn").onclick = async () => {
+  $("regBtn").disabled = true;
+  try {
+    const j = await call("admin_register_inbound", {});
+    say($("regMsg"), "有効にしました。受信アドレス: " + j.address + "\n自分のメールからテスト送信して、「確認待ち」に出るか確認してください。", true);
+  } catch (e) { say($("regMsg"), "失敗: " + e.message + "\n(DNSがまだ反映されていない場合は、数時間後にもう一度お試しください)", false); }
+  $("regBtn").disabled = false;
+};
 $("addBtn").onclick = async () => {
   $("addBtn").disabled = true;
   try {
