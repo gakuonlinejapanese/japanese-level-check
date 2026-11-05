@@ -12967,6 +12967,65 @@ function speakWithAudioFallback(text, rate = 0.85) {
     playAt(0);
   });
 }
+// Mongolian voice from Azure (Yesui), via /api/claude action:"tts". Phones/browsers rarely have a Mongolian voice,
+// so for the Mongolian target this is tried FIRST. Resolves true once the first clip is really playing, and false
+// when anything goes wrong (not configured, not logged in, offline…) so the caller can fall back. Clips already
+// fetched are kept in memory, so replaying a line costs nothing extra.
+const _azureClipCache = new Map();
+async function fetchAzureClip(text, rate, token) {
+  const key = rate + "|" + text;
+  if (_azureClipCache.has(key)) return _azureClipCache.get(key);
+  const r = await fetch("/api/claude", {
+    method: "POST",
+    headers: { "Content-Type": "application/json", Authorization: "Bearer " + token },
+    body: JSON.stringify({ action: "tts", text, rate, voice: "female" }),
+  });
+  if (!r.ok) throw new Error("tts-" + r.status);
+  const url = URL.createObjectURL(await r.blob());
+  if (_azureClipCache.size > 60) {
+    const oldest = _azureClipCache.keys().next().value;
+    try { URL.revokeObjectURL(_azureClipCache.get(oldest)); } catch {}
+    _azureClipCache.delete(oldest);
+  }
+  _azureClipCache.set(key, url);
+  return url;
+}
+function speakWithAzure(text, rate = 0.85) {
+  return new Promise(async (resolve) => {
+    let settled = false;
+    const settle = (ok) => { if (settled) return; settled = true; resolve(ok); };
+    try {
+      if (typeof Audio === "undefined" || !supabase) { settle(false); return; }
+      const { data } = await supabase.auth.getSession();
+      const token = data?.session?.access_token;
+      if (!token) { settle(false); return; }
+      const chunks = []; // sentence-sized pieces so playback starts quickly
+      String(text || "").split(new RegExp("(?<=[" + tl().sentenceEnd + "])")).map(s => s.trim()).filter(Boolean).forEach(p => {
+        for (let i = 0; i < p.length; i += 280) chunks.push(p.slice(i, i + 280));
+      });
+      if (!chunks.length) { settle(false); return; }
+      stopFallbackAudio();
+      const myToken = _fallbackToken;
+      const r = Math.round(Math.max(0.5, Math.min(1.5, rate)) * 100) / 100;
+      const clips = chunks.map((c, i) => (i === 0 ? fetchAzureClip(c, r, token) : null));
+      const playAt = async (i) => {
+        if (myToken !== _fallbackToken || i >= chunks.length) return;
+        let url;
+        try { url = await (clips[i] || (clips[i] = fetchAzureClip(chunks[i], r, token))); } catch { settle(false); return; }
+        if (myToken !== _fallbackToken) return;
+        if (i + 1 < chunks.length && !clips[i + 1]) clips[i + 1] = fetchAzureClip(chunks[i + 1], r, token).catch(() => null);
+        const a = new Audio(url);
+        _fallbackAudio = a;
+        a.onplaying = () => settle(true);
+        a.onended = () => playAt(i + 1);
+        a.onerror = () => settle(false);
+        a.play().catch(() => settle(false));
+      };
+      setTimeout(() => settle(false), 8000);
+      playAt(0);
+    } catch { settle(false); }
+  });
+}
 // True when the device has a Japanese voice that runs on the device itself (reliable). Network voices such as
 // Chrome's "Google 日本語" often report "started" but stay silent on some PCs, so they don't count.
 function hasLocalJapaneseVoice() {
@@ -12974,7 +13033,17 @@ function hasLocalJapaneseVoice() {
     return (window.speechSynthesis.getVoices() || []).some(v => new RegExp("^" + tl().ttsPrefix + "([-_]|$)", "i").test(v.lang || "") && v.localService);
   } catch { return false; }
 }
-function speakJapanese(text, rate = 0.85) {
+function speakJapanese(text, rate = 0.85, _skipAzure = false) {
+  // Mongolian: use Azure's real Mongolian voice first; only if that can't play, fall through to the device voice
+  // (and then the "no Mongolian voice" message) exactly as before.
+  if (tl().code === "mn" && !_skipAzure) {
+    const t = String(text || "").trim();
+    if (!t) return;
+    try { if (window.speechSynthesis) window.speechSynthesis.cancel(); } catch {}
+    if (isAndroidNative()) { try { Promise.resolve(nativeStop()).catch(() => {}); } catch {} }
+    speakWithAzure(t, rate).then(ok => { if (!ok) speakJapanese(text, rate, true); });
+    return;
+  }
   if (isAndroidNative()) {
     const t = String(text || "").trim();
     if (!t) return;

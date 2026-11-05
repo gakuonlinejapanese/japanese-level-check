@@ -214,10 +214,68 @@ async function callDeepInfraWhisper(deepInfraKey, audioBuffer, mimeType, languag
   }
 }
 
+// ---- Mongolian text-to-speech (Azure) ----------------------------------------
+// Phones and browsers almost never ship a Mongolian voice, so GAKU Master asks this endpoint for an
+// mp3 made by Azure's Mongolian neural voices (mn-MN-YesuiNeural / mn-MN-BataaNeural). It lives inside
+// api/claude.js (action:"tts") because Vercel's function count is already at the 12 limit.
+// Needs the env vars AZURE_SPEECH_KEY and AZURE_SPEECH_REGION (e.g. "japaneast"). The key never leaves
+// the server. Only logged-in GAKU users may call it, text is capped, and only the Mongolian voices exist.
+const AZURE_TTS_VOICES = { female: "mn-MN-YesuiNeural", male: "mn-MN-BataaNeural" };
+const xmlEscape = (s) => String(s).replace(/[<>&'"]/g, (c) => ({ "<": "&lt;", ">": "&gt;", "&": "&amp;", "'": "&apos;", '"': "&quot;" }[c]));
+
+async function handleAzureTts(req, res) {
+  const key = process.env.AZURE_SPEECH_KEY;
+  const region = process.env.AZURE_SPEECH_REGION;
+  if (!key || !region) return res.status(503).json({ error: "tts-not-configured" });
+
+  const token = String(req.headers.authorization || "").replace(/^Bearer\s+/i, "");
+  if (!token) return res.status(401).json({ error: "login-required" });
+  try {
+    const { getAdminClient } = await import("./_supabaseAdmin.js");
+    const { data, error } = await getAdminClient().auth.getUser(token);
+    if (error || !data?.user) return res.status(401).json({ error: "login-required" });
+  } catch {
+    return res.status(500).json({ error: "auth-check-failed" });
+  }
+
+  const text = String(req.body.text || "").trim().slice(0, 600);
+  if (!text) return res.status(400).json({ error: "empty-text" });
+  const voice = AZURE_TTS_VOICES[req.body.voice] || AZURE_TTS_VOICES.female;
+  // rate comes from the app's 0.5–1.5 speed buttons; Azure takes a percentage change.
+  const rateNum = Math.max(0.5, Math.min(1.5, Number(req.body.rate) || 1));
+  const ratePct = Math.round((rateNum - 1) * 100);
+  const ssml = `<speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xml:lang="mn-MN"><voice name="${voice}"><prosody rate="${ratePct >= 0 ? "+" : ""}${ratePct}%">${xmlEscape(text)}</prosody></voice></speak>`;
+
+  try {
+    const r = await fetch(`https://${region}.tts.speech.microsoft.com/cognitiveservices/v1`, {
+      method: "POST",
+      headers: {
+        "Ocp-Apim-Subscription-Key": key,
+        "Content-Type": "application/ssml+xml",
+        "X-Microsoft-OutputFormat": "audio-24khz-48kbitrate-mono-mp3",
+        "User-Agent": "gaku-master",
+      },
+      body: ssml,
+    });
+    if (!r.ok) {
+      console.error("azure-tts failed", r.status, (await r.text()).slice(0, 200));
+      return res.status(502).json({ error: "tts-failed", status: r.status });
+    }
+    const buf = Buffer.from(await r.arrayBuffer());
+    res.setHeader("Content-Type", "audio/mpeg");
+    res.setHeader("Cache-Control", "private, max-age=86400");
+    return res.status(200).send(buf);
+  } catch (e) {
+    console.error("azure-tts error", e);
+    return res.status(502).json({ error: "tts-failed" });
+  }
+}
+
 export default async function handler(req, res) {
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
   }
+  if (req.body && req.body.action === "tts") return handleAzureTts(req, res);
 
   try {
     const { messages, max_tokens, provider, frequency_penalty, audioBase64, mimeType } = req.body;
