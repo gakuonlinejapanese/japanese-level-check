@@ -2,6 +2,7 @@ import { getAdminClient } from "./_supabaseAdmin.js";
 import { assessLongAbsence } from "./_absence.js";
 import { sendEmail } from "./_resend.js";
 import { ADMIN_EMAIL } from "./_supabaseAdmin.js";
+import { triageAndStore, handleAdminListSupport, handleAdminAddSupport, handleAdminSupportDecide } from "./_supportInbox.js";
 
 // ---- Free trial lesson: country/city validation (server-side re-check of what
 // public/trial-lesson.html already enforces client-side against the free-text
@@ -188,6 +189,9 @@ export default async function handler(req, res) {
     if (action === "request_invitation_code") return handleRequestInvitationCode(req, res);
     if (action === "submit_feedback") return handleSubmitFeedback(req, res);
     if (action === "check_feedback_submitted") return handleCheckFeedbackSubmitted(req, res);
+    if (action === "admin_list_support") return handleAdminListSupport(req, res);
+    if (action === "admin_add_support") return handleAdminAddSupport(req, res);
+    if (action === "admin_support_decide") return handleAdminSupportDecide(req, res);
     if (action === "send_free_plan_winback_emails") return handleSendFreePlanWinback(req, res);
     if (action === "send_trial_ended_notice_emails") return handleSendTrialEndedNotice(req, res);
     if (action === "send_tutorial_announcement_emails") return handleSendTutorialAnnouncement(req, res);
@@ -1641,6 +1645,10 @@ async function handleSubmitFeedback(req, res) {
       created_at: createdAt,
     });
     if (insertErr) return res.status(500).json({ error: insertErr.message });
+
+    // AI triage into the approval queue (admin-support.html). Best-effort and never throws;
+    // nothing is sent to the student or changed in code until Seito approves it there.
+    await triageAndStore({ source: "app_feedback", email: normalizedEmail, name, body: text });
 
     try {
       await sendEmail({
