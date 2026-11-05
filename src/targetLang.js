@@ -138,6 +138,17 @@ export function mnToLatin(text) {
 // True when the "ABC" (Latin letters) button makes sense: only for Mongolian (Cyrillic) targets.
 export function needsLatinButton() { return getTargetLang() === "mn"; }
 
+// The Latin-letter reading to show for a saved word / sentence. For Mongolian it is computed from the Cyrillic
+// text itself (same result every time, works even when the AI left the reading empty or wrote it in Cyrillic);
+// for any other target it just returns the reading that was stored with the card.
+export function latinFor(text, existing) {
+  const keep = String(existing || "").trim();
+  if (!needsLatinButton()) return keep;
+  const src = String(text || "");
+  if (/[Ѐ-ӿ]/.test(src)) return mnToLatin(src);
+  return keep;
+}
+
 // ─── UI text overrides ────────────────────────────────────────────────────────
 // Many on-screen descriptions say "Japanese" (Create From Content, Writing, Pronunciation…).
 // For a non-Japanese target this swaps those strings for target-language versions. English and

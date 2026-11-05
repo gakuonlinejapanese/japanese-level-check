@@ -4,7 +4,7 @@ import { supabase, getDeviceId, getDeviceLabel, getSignupSource } from "./supaba
 import HanziWriter from "hanzi-writer";
 import { reportClientCrash } from "./crashReport";
 import { isAndroidNative, nativeSpeak, nativeStop } from "./nativeTts";
-import { isTargetLangAllowed, setTargetLangAllowed, tl, isJa, getTargetLang, setTargetLang, tlSuffix, TARGET_LANGS, CEFR_BY_LEVEL, applyTargetLangText, looksLikeTarget, allowedSkillKeys, mnToLatin, needsLatinButton } from "./targetLang";
+import { isTargetLangAllowed, setTargetLangAllowed, tl, isJa, getTargetLang, setTargetLang, tlSuffix, TARGET_LANGS, CEFR_BY_LEVEL, applyTargetLangText, looksLikeTarget, allowedSkillKeys, mnToLatin, needsLatinButton, latinFor } from "./targetLang";
 
 // True inside the iOS/Android store apps (Capacitor shell). Also forceable with ?store=1 for previews.
 // Store builds never show prices, purchase buttons, or links to outside purchase/lesson pages.
@@ -13516,7 +13516,7 @@ function WordDetailCard({ card: cardProp, onSave, onBack, form, prefLang, onRevi
         <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start" }}>
           <div>
             <p style={{ color:"#f1f5f9", fontSize:32, fontWeight:900, margin:"0 0 4px", letterSpacing:2 }}>{card.word}</p>
-            <p style={{ color:C.teal, fontSize:16, margin:"0 0 4px" }}>{card.reading}</p>
+            <p style={{ color:C.teal, fontSize:16, margin:"0 0 4px" }}>{latinFor(card.word, card.reading)}</p>
             <div style={{ display:"flex", gap:6, flexWrap:"wrap" }}>
               {card.jlpt && <span style={{ background:"rgba(168,85,247,0.2)", color:C.purpleLight, fontSize:11, fontWeight:700, padding:"2px 8px", borderRadius:99 }}>{card.jlpt}</span>}
               {card.partOfSpeech && <span style={{ background:"rgba(6,182,212,0.15)", color:C.teal, fontSize:11, fontWeight:600, padding:"2px 8px", borderRadius:99 }}>{card.partOfSpeech}</span>}
@@ -13556,7 +13556,7 @@ function WordDetailCard({ card: cardProp, onSave, onBack, form, prefLang, onRevi
           ? <p style={{ color:"#475569", fontSize:13, fontStyle:"italic" }}>✨ AI generating...</p>
           : <>
               <p style={{ color:"#f1f5f9", fontSize:14, lineHeight:1.9, margin:"0 0 4px" }}>{card.example}</p>
-              {card.reading_example && <p style={{ color:"#67e8f9", fontSize:12, margin:"0 0 4px", fontStyle:"italic" }}>{card.reading_example}</p>}
+              {latinFor(card.example, card.reading_example) && <p style={{ color:"#67e8f9", fontSize:12, margin:"0 0 4px", fontStyle:"italic" }}>{latinFor(card.example, card.reading_example)}</p>}
               {card.example_translated
                 ? <p style={{ color:"#64748b", fontSize:13, margin:0, fontStyle:"italic" }}>{card.example_translated}</p>
                 : null
@@ -13952,8 +13952,9 @@ Only output the JSON object.` }
             {!flipped ? (
               <>
                 <p style={{ color:"#f1f5f9", fontSize:44, fontWeight:900, margin:"0 0 6px", letterSpacing:2 }}>{card.word}</p>
-                {showHint && card.reading && <p style={{ color:C.teal, fontSize:20, margin:"0 0 2px", fontWeight:700 }}>{card.reading}</p>}
-                {showHint && card.reading && <p style={{ color:"#67e8f9", fontSize:13, margin:"0 0 6px", fontStyle:"italic" }}>{card.reading.split("").map(c=>{const hMap={"あ":"a","い":"i","う":"u","え":"e","お":"o","か":"ka","き":"ki","く":"ku","け":"ke","こ":"ko","さ":"sa","し":"shi","す":"su","せ":"se","そ":"so","た":"ta","ち":"chi","つ":"tsu","て":"te","と":"to","な":"na","に":"ni","ぬ":"nu","ね":"ne","の":"no","は":"ha","ひ":"hi","ふ":"fu","へ":"he","ほ":"ho","ま":"ma","み":"mi","む":"mu","め":"me","も":"mo","や":"ya","ゆ":"yu","よ":"yo","ら":"ra","り":"ri","る":"ru","れ":"re","ろ":"ro","わ":"wa","を":"wo","ん":"n","が":"ga","ぎ":"gi","ぐ":"gu","げ":"ge","ご":"go","ざ":"za","じ":"ji","ず":"zu","ぜ":"ze","ぞ":"zo","だ":"da","ぢ":"di","づ":"du","で":"de","ど":"do","ば":"ba","び":"bi","ぶ":"bu","べ":"be","ぼ":"bo","ぱ":"pa","ぴ":"pi","ぷ":"pu","ぺ":"pe","ぽ":"po","きゃ":"kya","きゅ":"kyu","きょ":"kyo","しゃ":"sha","しゅ":"shu","しょ":"sho","ちゃ":"cha","ちゅ":"chu","ちょ":"cho","にゃ":"nya","にゅ":"nyu","にょ":"nyo","ひゃ":"hya","ひゅ":"hyu","ひょ":"hyo","みゃ":"mya","みゅ":"myu","みょ":"myo","りゃ":"rya","りゅ":"ryu","りょ":"ryo","ぎゃ":"gya","ぎゅ":"gyu","ぎょ":"gyo","じゃ":"ja","じゅ":"ju","じょ":"jo","びゃ":"bya","びゅ":"byu","びょ":"byo","ぴゃ":"pya","ぴゅ":"pyu","ぴょ":"pyo","っ":"(t)","ー":"-","、":""," ":"","　":""};return hMap[c]||c;}).join("")}</p>}
+                {showHint && needsLatinButton() && latinFor(card.word, card.reading) && <p style={{ color:C.teal, fontSize:20, margin:"0 0 6px", fontWeight:700 }}>{latinFor(card.word, card.reading)}</p>}
+                {showHint && !needsLatinButton() && card.reading && <p style={{ color:C.teal, fontSize:20, margin:"0 0 2px", fontWeight:700 }}>{card.reading}</p>}
+                {showHint && !needsLatinButton() && card.reading && <p style={{ color:"#67e8f9", fontSize:13, margin:"0 0 6px", fontStyle:"italic" }}>{card.reading.split("").map(c=>{const hMap={"あ":"a","い":"i","う":"u","え":"e","お":"o","か":"ka","き":"ki","く":"ku","け":"ke","こ":"ko","さ":"sa","し":"shi","す":"su","せ":"se","そ":"so","た":"ta","ち":"chi","つ":"tsu","て":"te","と":"to","な":"na","に":"ni","ぬ":"nu","ね":"ne","の":"no","は":"ha","ひ":"hi","ふ":"fu","へ":"he","ほ":"ho","ま":"ma","み":"mi","む":"mu","め":"me","も":"mo","や":"ya","ゆ":"yu","よ":"yo","ら":"ra","り":"ri","る":"ru","れ":"re","ろ":"ro","わ":"wa","を":"wo","ん":"n","が":"ga","ぎ":"gi","ぐ":"gu","げ":"ge","ご":"go","ざ":"za","じ":"ji","ず":"zu","ぜ":"ze","ぞ":"zo","だ":"da","ぢ":"di","づ":"du","で":"de","ど":"do","ば":"ba","び":"bi","ぶ":"bu","べ":"be","ぼ":"bo","ぱ":"pa","ぴ":"pi","ぷ":"pu","ぺ":"pe","ぽ":"po","きゃ":"kya","きゅ":"kyu","きょ":"kyo","しゃ":"sha","しゅ":"shu","しょ":"sho","ちゃ":"cha","ちゅ":"chu","ちょ":"cho","にゃ":"nya","にゅ":"nyu","にょ":"nyo","ひゃ":"hya","ひゅ":"hyu","ひょ":"hyo","みゃ":"mya","みゅ":"myu","みょ":"myo","りゃ":"rya","りゅ":"ryu","りょ":"ryo","ぎゃ":"gya","ぎゅ":"gyu","ぎょ":"gyo","じゃ":"ja","じゅ":"ju","じょ":"jo","びゃ":"bya","びゅ":"byu","びょ":"byo","ぴゃ":"pya","ぴゅ":"pyu","ぴょ":"pyo","っ":"(t)","ー":"-","、":""," ":"","　":""};return hMap[c]||c;}).join("")}</p>}
                 <p style={{ color:"#ff0844", fontSize:11, fontWeight:700 }}>{T.flashTapToCheck || "Tap to check"}</p>
               </>
             ) : (
@@ -13962,12 +13963,12 @@ Only output the JSON object.` }
                   <img src={card.imageUrl || flipImages[card.word]} alt={card.word} style={{ width:"100%", maxWidth:260, borderRadius:10, objectFit:"cover", maxHeight:150, display:"block", margin:"0 auto 12px" }} />
                 )}
                 <p style={{ color:"#f1f5f9", fontSize:28, fontWeight:900, margin:"0 0 4px", letterSpacing:1 }}>{card.word}</p>
-                {card.reading && <p style={{ color:C.teal, fontSize:18, margin:"0 0 4px", fontWeight:700 }}>{card.reading}</p>}
+                {latinFor(card.word, card.reading) && <p style={{ color:C.teal, fontSize:18, margin:"0 0 4px", fontWeight:700 }}>{latinFor(card.word, card.reading)}</p>}
                 {card.meaning && <p style={{ color:"#94a3b8", fontSize:12, margin:"0 0 10px" }}>{card.meaning}</p>}
                 {card.meaningNative && <p style={{ color:"#475569", fontSize:11, margin:"0 0 8px", fontStyle:"italic" }}>{card.meaningNative}</p>}
                 {card.example && <p style={{ color:"#cbd5e1", fontSize:13, lineHeight:1.7, maxWidth:280, margin:"0 0 2px" }}>{card.example}</p>}
-                {card.reading_example
-                  ? <p style={{ color:"#67e8f9", fontSize:11, fontStyle:"italic", maxWidth:280, margin:"0 0 2px" }}>{card.reading_example}</p>
+                {latinFor(card.example, card.reading_example)
+                  ? <p style={{ color:"#67e8f9", fontSize:11, fontStyle:"italic", maxWidth:280, margin:"0 0 2px" }}>{latinFor(card.example, card.reading_example)}</p>
                   : fillingCard ? <p style={{ color:"#475569", fontSize:11, margin:"0 0 2px" }}>✨ {T.flashGenRomaji || "Generating romaji…"}</p> : null}
                 {card.example_translated
                   ? <p style={{ color:"#64748b", fontSize:11, fontStyle:"italic", maxWidth:280, margin:"0 0 10px" }}>{card.example_translated}</p>
@@ -14116,6 +14117,7 @@ function LibraryView({ onBack, onSelectFolder, onCreateCard, onViewCard, onQuick
                 <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", gap:10 }}>
                   <div style={{ cursor:onViewCard?"pointer":"default", flex:1 }} onClick={()=>onViewCard && onViewCard(c)}>
                     <p style={{ margin:"0 0 2px" }}><FuriganaWord word={c.word} reading={c.reading} size={22} /></p>
+                    {needsLatinButton() && latinFor(c.word, c.reading) && <p style={{ color:C.teal, fontSize:12, fontWeight:700, margin:"0 0 2px" }}>{latinFor(c.word, c.reading)}</p>}
                     <p style={{ color:"#94a3b8", fontSize:12, margin:0 }}>{c.meaning}</p>
                     <p style={{ color:"#475569", fontSize:11, margin:"4px 0 0" }}>{c.folder==="Your Vocabulary"?"📚":"📁"} {c.folder}</p>
                   </div>
@@ -14317,6 +14319,7 @@ function FolderDetailView({ folderName, onBack, onViewCard, onRenamed, onReviewC
               {selecting && <span style={{ color: sel[String(c.id||`${c.word}-${idx}`)] ? C.teal : "#475569", fontSize:20, lineHeight:1 }}>{sel[String(c.id||`${c.word}-${idx}`)] ? "☑" : "☐"}</span>}
               <div style={{ cursor:"pointer", flex:1 }} onClick={selecting ? undefined : ()=>onViewCard(c)}>
                 <p style={{ margin:"0 0 2px" }}><FuriganaWord word={c.word} reading={c.reading} size={22} /></p>
+                {needsLatinButton() && latinFor(c.word, c.reading) && <p style={{ color:C.teal, fontSize:12, fontWeight:700, margin:"0 0 2px" }}>{latinFor(c.word, c.reading)}</p>}
                 <p style={{ color:"#94a3b8", fontSize:12, margin:0 }}>{c.meaning}</p>
               </div>
               <div style={{ display:"flex", gap:6, flexShrink:0 }}>
@@ -14450,7 +14453,7 @@ Respond ONLY in valid JSON array format (no markdown, no backticks, no preamble)
                 <div style={{ flex:1 }}>
                   <div style={{ display:"flex", alignItems:"baseline", gap:8, marginBottom:4 }}>
                     <p style={{ color:"#f1f5f9", fontSize:22, fontWeight:900, margin:0 }}>{w.word}</p>
-                    <p style={{ color:C.teal, fontSize:14, margin:0 }}>{w.reading}</p>
+                    <p style={{ color:C.teal, fontSize:14, margin:0 }}>{latinFor(w.word, w.reading)}</p>
                   </div>
                   <div style={{ display:"flex", gap:6, marginBottom:6 }}>
                     {w.jlpt && <span style={{ background:"rgba(168,85,247,0.2)", color:C.purpleLight, fontSize:10, fontWeight:700, padding:"1px 7px", borderRadius:99 }}>{w.jlpt}</span>}
@@ -14789,8 +14792,8 @@ function VocabBuilder({ form }) {
                 <div style={{ flex:1, cursor:"pointer" }} onClick={()=>{setSelectedWord(w);setWordFrom("search");setVocabView("wordDetail");}}>
                   <div style={{ display:"flex", alignItems:"baseline", gap:8, marginBottom:4 }}>
                     <p style={{ color:"#f1f5f9", fontSize:22, fontWeight:900, margin:0 }}>{w.word}</p>
-                    <p style={{ color:C.teal, fontSize:14, margin:0 }}>{w.reading}</p>
-                    {w.jlpt && <span style={{ background:"rgba(168,85,247,0.2)", color:C.purpleLight, fontSize:10, fontWeight:700, padding:"1px 7px", borderRadius:99 }}>{w.jlpt}</span>}
+                    <p style={{ color:C.teal, fontSize:14, margin:0 }}>{latinFor(w.word, w.reading)}</p>
+                    {w.jlpt &&<span style={{ background:"rgba(168,85,247,0.2)", color:C.purpleLight, fontSize:10, fontWeight:700, padding:"1px 7px", borderRadius:99 }}>{w.jlpt}</span>}
                     {w.partOfSpeech && <span style={{ background:"rgba(6,182,212,0.12)", color:C.teal, fontSize:10, fontWeight:600, padding:"1px 7px", borderRadius:99 }}>{w.partOfSpeech}</span>}
                   </div>
                   <p style={{ color:"#94a3b8", fontSize:13, margin:0 }}>{w.meaning}</p>
@@ -15304,6 +15307,7 @@ function ExerciseCard({ item, revealed, onReveal, T, lang }) {
         <div style={{ background:"rgba(34,197,94,0.06)", borderRadius:10, padding:"10px 12px" }}>
           <p style={{ color:C.green, fontSize:11, fontWeight:700, margin:"0 0 4px" }}>✅ ANSWER</p>
           <p style={{ color:"#f1f5f9", fontSize:13, margin:"0 0 6px" }}>{item.answer}</p>
+          {needsLatinButton() && typeof item.answer === "string" && /[Ѐ-ӿ]/.test(item.answer) && <p style={{ color:"#c4b5fd", fontSize:12, margin:"0 0 6px", fontStyle:"italic", whiteSpace:"pre-wrap" }}>{mnToLatin(item.answer)}</p>}
           {item.tip && <p style={{ color:"#ffffff", fontSize:12, margin:"0 0 6px", fontStyle:"italic" }}>💬 {item.tip}</p>}
           {item.source_url && (
             <a href={item.source_url} target="_blank" rel="noopener noreferrer"
@@ -17419,7 +17423,7 @@ function WritingVocabPicker({ T, onUse, mode }) {
                     <span style={{ color:on ? C.teal : "#475569", fontSize:15 }}>{on ? "☑" : "☐"}</span>
                     {/* Words are plain selectable text: long-press / drag to copy a single word */}
                     <span onClick={e => { if (String(window.getSelection && window.getSelection()).length) e.stopPropagation(); }} style={{ fontSize:15, fontWeight:700, userSelect:"text", WebkitUserSelect:"text", cursor:"text" }}>{c.word}</span>
-                    {c.reading && c.reading !== c.word && <span style={{ color:"#94a3b8", fontSize:12, userSelect:"text", WebkitUserSelect:"text" }}>{c.reading}</span>}
+                    {latinFor(c.word, c.reading) && latinFor(c.word, c.reading) !== c.word && <span style={{ color:"#94a3b8", fontSize:12, userSelect:"text", WebkitUserSelect:"text" }}>{latinFor(c.word, c.reading)}</span>}
                     {c.meaning && <span style={{ color:"#64748b", fontSize:11, marginLeft:"auto", maxWidth:"40%", overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>{c.meaning}</span>}
                   </div>
                 );
