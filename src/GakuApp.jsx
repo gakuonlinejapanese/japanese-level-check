@@ -1242,6 +1242,7 @@ const UI_TRANSLATIONS = {
     feedbackTitle: "💬 Feedback & Opinion",
     feedbackSubtitle: "Tell us what you'd like improved or anything that's bothering you about the app. We read every message.",
     feedbackWarning: "If you post slander, abusive language, or discriminatory terms, your account will be suspended immediately. We accept no responsibility even if legal action results.",
+    supportEmailNote: "Can't log in or having trouble with the app? Email us:",
     feedbackChecking: "Checking...",
     feedbackAlreadySubmitted: "You've already submitted your one-time feedback. Thank you! (GAKU-invited students can submit as many times as they like.)",
     feedbackSuccess: "Thank you — your feedback was sent.",
@@ -1887,6 +1888,7 @@ const UI_TRANSLATIONS = {
     feedbackTitle: "💬 Retour & Avis",
     feedbackSubtitle: "Dites-nous ce que vous aimeriez voir amélioré ou ce qui vous dérange dans l'application. Nous lisons chaque message.",
     feedbackWarning: "En cas de diffamation, propos injurieux ou termes discriminatoires, votre compte sera immédiatement suspendu. Nous déclinons toute responsabilité, même en cas de poursuites judiciaires.",
+    supportEmailNote: "Impossible de vous connecter ou un problème avec l'application ? Écrivez-nous :",
     feedbackChecking: "Vérification...",
     feedbackAlreadySubmitted: "Vous avez déjà envoyé votre unique retour. Merci ! (Les étudiants invités par GAKU peuvent en envoyer autant de fois qu'ils le souhaitent.)",
     feedbackSuccess: "Merci — votre retour a été envoyé.",
@@ -2517,6 +2519,7 @@ const UI_TRANSLATIONS = {
     feedbackTitle: "💬 Comentarios y Opinión",
     feedbackSubtitle: "Cuéntanos qué te gustaría que mejoráramos o qué te molesta de la app. Leemos todos los mensajes.",
     feedbackWarning: "Si publicas difamación, lenguaje abusivo o términos discriminatorios, tu cuenta será suspendida de inmediato. No asumimos ninguna responsabilidad aunque se inicien acciones legales.",
+    supportEmailNote: "¿No puedes iniciar sesión o tienes problemas con la app? Escríbenos:",
     feedbackChecking: "Comprobando...",
     feedbackAlreadySubmitted: "Ya has enviado tu comentario único. ¡Gracias! (Los estudiantes invitados por GAKU pueden enviar tantas veces como quieran.)",
     feedbackSuccess: "Gracias — tu comentario fue enviado.",
@@ -3147,6 +3150,7 @@ const UI_TRANSLATIONS = {
     feedbackTitle: "💬 Feedback e Opinião",
     feedbackSubtitle: "Conte-nos o que você gostaria que melhorássemos ou o que está incomodando você no app. Lemos todas as mensagens.",
     feedbackWarning: "Se você publicar difamação, linguagem abusiva ou termos discriminatórios, sua conta será suspensa imediatamente. Não assumimos nenhuma responsabilidade mesmo que haja ação judicial.",
+    supportEmailNote: "Não consegue entrar ou está com problemas no app? Escreva para nós:",
     feedbackChecking: "Verificando...",
     feedbackAlreadySubmitted: "Você já enviou seu feedback único. Obrigado! (Alunos convidados pela GAKU podem enviar quantas vezes quiserem.)",
     feedbackSuccess: "Obrigado — seu feedback foi enviado.",
@@ -3777,6 +3781,7 @@ const UI_TRANSLATIONS = {
     feedbackTitle: "💬 Feedback & Meinung",
     feedbackSubtitle: "Sag uns, was wir verbessern sollen oder was dich an der App stört. Wir lesen jede Nachricht.",
     feedbackWarning: "Bei Verleumdung, beleidigender Sprache oder diskriminierenden Begriffen wird dein Konto sofort gesperrt. Wir übernehmen keine Verantwortung, selbst wenn rechtliche Schritte eingeleitet werden.",
+    supportEmailNote: "Kein Login möglich oder Probleme mit der App? Schreib uns:",
     feedbackChecking: "Wird überprüft...",
     feedbackAlreadySubmitted: "Du hast dein einmaliges Feedback bereits gesendet. Danke! (Von GAKU eingeladene Studierende können beliebig oft Feedback senden.)",
     feedbackSuccess: "Danke — dein Feedback wurde gesendet.",
@@ -4407,6 +4412,7 @@ const UI_TRANSLATIONS = {
     feedbackTitle: "💬 Feedback e Opinioni",
     feedbackSubtitle: "Dicci cosa vorresti che migliorassimo o cosa ti disturba dell'app. Leggiamo ogni messaggio.",
     feedbackWarning: "In caso di diffamazione, linguaggio offensivo o termini discriminatori, il tuo account verrà sospeso immediatamente. Non ci assumiamo alcuna responsabilità anche in caso di azioni legali.",
+    supportEmailNote: "Non riesci ad accedere o hai problemi con l'app? Scrivici:",
     feedbackChecking: "Verifica in corso...",
     feedbackAlreadySubmitted: "Hai già inviato il tuo feedback unico. Grazie! (Gli studenti invitati da GAKU possono inviarne quante volte vogliono.)",
     feedbackSuccess: "Grazie — il tuo feedback è stato inviato.",
@@ -5037,6 +5043,7 @@ const UI_TRANSLATIONS = {
     feedbackTitle: "💬 反馈与意见",
     feedbackSubtitle: "告诉我们你希望我们改进什么，或者对这个应用有什么不满意的地方。我们会阅读每一条留言。",
     feedbackWarning: "万一发布诽谤、辱骂或歧视性言论，账号将立即被停用。即使因此产生诉讼，我们也概不负责。",
+    supportEmailNote: "无法登录或使用应用时遇到问题？请发邮件给我们：",
     feedbackChecking: "正在检查...",
     feedbackAlreadySubmitted: "你已经提交过唯一一次反馈了，谢谢！(受GAKU邀请的学生可以随时多次提交。)",
     feedbackSuccess: "谢谢——你的反馈已发送。",
@@ -5667,6 +5674,7 @@ const UI_TRANSLATIONS = {
     feedbackTitle: "💬 意見回饋與想法",
     feedbackSubtitle: "告訴我們你希望我們改進什麼，或是對這個應用程式有什麼不滿意的地方。我們會閱讀每一則留言。",
     feedbackWarning: "萬一發布誹謗、辱罵或歧視性言論，帳號將立即被停用。即使因此產生訴訟，我們也概不負責。",
+    supportEmailNote: "無法登入或使用應用程式時遇到問題？請寄信給我們：",
     feedbackChecking: "檢查中...",
     feedbackAlreadySubmitted: "你已經提交過唯一一次意見回饋了，謝謝！(受GAKU邀請的學生可以隨時多次提交。)",
     feedbackSuccess: "謝謝——你的意見回饋已送出。",
@@ -6297,6 +6305,7 @@ const UI_TRANSLATIONS = {
     feedbackTitle: "💬 피드백 및 의견",
     feedbackSubtitle: "개선했으면 하는 점이나 앱에서 불편한 점을 알려주세요. 모든 메시지를 읽습니다.",
     feedbackWarning: "만약 명예훼손, 욕설, 차별적 표현을 작성할 경우 계정이 즉시 정지됩니다. 소송이 발생하더라도 일체의 책임을 지지 않습니다.",
+    supportEmailNote: "로그인이 안 되거나 앱 사용에 문제가 있나요? 이메일로 문의하세요:",
     feedbackChecking: "확인 중...",
     feedbackAlreadySubmitted: "이미 1회 피드백을 제출하셨습니다. 감사합니다! (GAKU 초대 학생은 몇 번이든 제출할 수 있습니다.)",
     feedbackSuccess: "감사합니다 — 피드백이 전송되었습니다.",
@@ -6927,6 +6936,7 @@ const UI_TRANSLATIONS = {
     feedbackTitle: "💬 ความคิดเห็นและข้อเสนอแนะ",
     feedbackSubtitle: "บอกเราว่าคุณอยากให้ปรับปรุงอะไร หรือมีอะไรที่กวนใจคุณเกี่ยวกับแอปนี้ เราจะอ่านทุกข้อความ",
     feedbackWarning: "หากคุณโพสต์ข้อความหมิ่นประมาท คำหยาบคาย หรือถ้อยคำเลือกปฏิบัติ บัญชีของคุณจะถูกระงับทันที เราจะไม่รับผิดชอบใด ๆ แม้จะเกิดการฟ้องร้อง",
+    supportEmailNote: "เข้าสู่ระบบไม่ได้หรือมีปัญหากับแอป? ส่งอีเมลถึงเรา:",
     feedbackChecking: "กำลังตรวจสอบ...",
     feedbackAlreadySubmitted: "คุณส่งความคิดเห็นครั้งเดียวไปแล้ว ขอบคุณค่ะ/ครับ! (นักเรียนที่ได้รับเชิญจาก GAKU สามารถส่งได้ไม่จำกัดจำนวนครั้ง)",
     feedbackSuccess: "ขอบคุณ — ความคิดเห็นของคุณถูกส่งแล้ว",
@@ -7557,6 +7567,7 @@ const UI_TRANSLATIONS = {
     feedbackTitle: "💬 Maklum Balas & Pendapat",
     feedbackSubtitle: "Beritahu kami apa yang anda mahu diperbaiki atau apa-apa yang mengganggu anda tentang aplikasi ini. Kami membaca setiap mesej.",
     feedbackWarning: "Sekiranya anda menulis fitnah, bahasa kesat, atau istilah diskriminasi, akaun anda akan digantung serta-merta. Kami tidak bertanggungjawab walaupun tindakan undang-undang diambil.",
+    supportEmailNote: "Tidak dapat log masuk atau ada masalah dengan aplikasi? E-mel kami:",
     feedbackChecking: "Sedang menyemak...",
     feedbackAlreadySubmitted: "Anda telah menghantar maklum balas sekali sahaja anda. Terima kasih! (Pelajar jemputan GAKU boleh menghantar seberapa banyak kali yang mereka mahu.)",
     feedbackSuccess: "Terima kasih — maklum balas anda telah dihantar.",
@@ -8187,6 +8198,7 @@ const UI_TRANSLATIONS = {
     feedbackTitle: "💬 Masukan & Pendapat",
     feedbackSubtitle: "Beri tahu kami apa yang ingin Anda tingkatkan atau apa yang mengganggu Anda tentang aplikasi ini. Kami membaca setiap pesan.",
     feedbackWarning: "Jika Anda menulis fitnah, bahasa kasar, atau istilah diskriminatif, akun Anda akan langsung ditangguhkan. Kami tidak bertanggung jawab meskipun terjadi tuntutan hukum.",
+    supportEmailNote: "Tidak bisa masuk atau ada masalah dengan aplikasi? Kirim email ke kami:",
     feedbackChecking: "Memeriksa...",
     feedbackAlreadySubmitted: "Anda sudah mengirimkan masukan satu kali Anda. Terima kasih! (Siswa yang diundang GAKU dapat mengirim sebanyak yang mereka mau.)",
     feedbackSuccess: "Terima kasih — masukan Anda telah dikirim.",
@@ -8817,6 +8829,7 @@ const UI_TRANSLATIONS = {
     feedbackTitle: "💬 Phản hồi & Ý kiến",
     feedbackSubtitle: "Hãy cho chúng tôi biết bạn muốn cải thiện điều gì hoặc điều gì đang làm bạn khó chịu về ứng dụng. Chúng tôi đọc mọi tin nhắn.",
     feedbackWarning: "Nếu bạn viết nội dung phỉ báng, ngôn từ lăng mạ hoặc phân biệt đối xử, tài khoản của bạn sẽ bị đình chỉ ngay lập tức. Chúng tôi không chịu bất kỳ trách nhiệm nào kể cả khi có kiện tụng xảy ra.",
+    supportEmailNote: "Không đăng nhập được hoặc gặp sự cố với ứng dụng? Hãy gửi email cho chúng tôi:",
     feedbackChecking: "Đang kiểm tra...",
     feedbackAlreadySubmitted: "Bạn đã gửi phản hồi một lần duy nhất của mình. Cảm ơn bạn! (Học viên được GAKU mời có thể gửi bao nhiêu lần tùy thích.)",
     feedbackSuccess: "Cảm ơn — phản hồi của bạn đã được gửi.",
@@ -9447,6 +9460,7 @@ const UI_TRANSLATIONS = {
     feedbackTitle: "💬 प्रतिक्रिया और राय",
     feedbackSubtitle: "हमें बताएं कि आप ऐप में क्या सुधार चाहते हैं या आपको क्या परेशान कर रहा है। हम हर संदेश पढ़ते हैं।",
     feedbackWarning: "यदि आप मानहानि, अपमानजनक भाषा या भेदभावपूर्ण शब्दों का उपयोग करते हैं, तो आपका खाता तुरंत निलंबित कर दिया जाएगा। कानूनी कार्रवाई होने पर भी हम कोई ज़िम्मेदारी नहीं लेंगे।",
+    supportEmailNote: "लॉग इन नहीं हो पा रहा या ऐप में समस्या है? हमें ईमेल करें:",
     feedbackChecking: "जाँच हो रही है...",
     feedbackAlreadySubmitted: "आप पहले ही अपनी एक बार की प्रतिक्रिया भेज चुके हैं। धन्यवाद! (GAKU द्वारा आमंत्रित छात्र जितनी बार चाहें भेज सकते हैं।)",
     feedbackSuccess: "धन्यवाद — आपकी प्रतिक्रिया भेज दी गई है।",
@@ -10077,6 +10091,7 @@ const UI_TRANSLATIONS = {
     feedbackTitle: "💬 フィードバック・ご意見",
     feedbackSubtitle: "アプリで改善してほしい点や気になる点を教えてください。すべてのメッセージに目を通しています。",
     feedbackWarning: "万が一誹謗中傷、暴言、差別用語などを書いた場合は直ちにアカウント停止。訴訟が起こっても一切の責任は負いません。",
+    supportEmailNote: "ログインできない、またはアプリで困ったときは、こちらへメールしてください:",
     feedbackChecking: "確認中...",
     feedbackAlreadySubmitted: "フィードバックはすでに1回送信済みです。ありがとうございました！(GAKU招待生徒は何回でも送信できます。)",
     feedbackSuccess: "ありがとうございました — フィードバックを送信しました。",
@@ -10707,6 +10722,7 @@ const UI_TRANSLATIONS = {
     feedbackTitle: "💬 Geri Bildirim ve Görüş",
     feedbackSubtitle: "Neyi iyileştirmemizi istediğinizi veya uygulamayla ilgili sizi rahatsız eden bir şeyi bize bildirin. Her mesajı okuyoruz.",
     feedbackWarning: "İftira, hakaret içeren dil veya ayrımcı ifadeler yazmanız durumunda hesabınız derhal askıya alınacaktır. Dava açılsa dahi hiçbir sorumluluk kabul etmiyoruz.",
+    supportEmailNote: "Giriş yapamıyor musunuz veya uygulamada sorun mu yaşıyorsunuz? Bize e-posta gönderin:",
     feedbackChecking: "Kontrol ediliyor...",
     feedbackAlreadySubmitted: "Tek seferlik geri bildiriminizi zaten gönderdiniz. Teşekkürler! (GAKU tarafından davet edilen öğrenciler istedikleri kadar gönderebilir.)",
     feedbackSuccess: "Teşekkürler — geri bildiriminiz gönderildi.",
@@ -11337,6 +11353,7 @@ const UI_TRANSLATIONS = {
     feedbackTitle: "💬 प्रतिक्रिया र विचार",
     feedbackSubtitle: "एपमा के सुधार गरिदिए हुन्थ्यो वा के कुराले तपाईंलाई अप्ठ्यारो पारिरहेको छ भनी हामीलाई बताउनुहोस्। हामी हरेक सन्देश पढ्छौं।",
     feedbackWarning: "यदि तपाईंले मानहानि, अपमानजनक भाषा वा भेदभावपूर्ण शब्द लेख्नुभयो भने तपाईंको खाता तुरुन्तै निलम्बन गरिनेछ। मुद्दा परे पनि हामी कुनै जिम्मेवारी लिने छैनौं।",
+    supportEmailNote: "लगइन गर्न सकिएन वा एपमा समस्या छ? हामीलाई इमेल गर्नुहोस्:",
     feedbackChecking: "जाँच गर्दै...",
     feedbackAlreadySubmitted: "तपाईंले आफ्नो एक पटकको प्रतिक्रिया पहिले नै पठाइसक्नुभएको छ। धन्यवाद! (GAKU ले निमन्त्रणा गरेका विद्यार्थीहरूले जति पटक चाहे पनि पठाउन सक्छन्।)",
     feedbackSuccess: "धन्यवाद — तपाईंको प्रतिक्रिया पठाइयो।",
@@ -11967,6 +11984,7 @@ const UI_TRANSLATIONS = {
     feedbackTitle: "💬 Puna at Opinyon",
     feedbackSubtitle: "Sabihin sa amin kung ano ang gusto mong pagbutihin o anumang bagay na nakakaabala sa iyo tungkol sa app. Binabasa namin ang bawat mensahe.",
     feedbackWarning: "Kung magsulat ka ng paninirang-puri, mapanlait na wika, o mga diskriminasyong termino, agad na sususpindihin ang iyong account. Wala kaming pananagutan kahit magkaroon ng legal na aksyon.",
+    supportEmailNote: "Hindi makapag-log in o may problema sa app? Mag-email sa amin:",
     feedbackChecking: "Sinusuri...",
     feedbackAlreadySubmitted: "Naisumite mo na ang iyong isang beses na puna. Salamat! (Ang mga estudyanteng inimbitahan ng GAKU ay maaaring magsumite nang paulit-ulit.)",
     feedbackSuccess: "Salamat — naipadala na ang iyong puna.",
@@ -20530,6 +20548,7 @@ function Dashboard({ form, onEdit, onLevelUp, onSetWeek, onLogout, onDeleteAccou
             <p style={{ color:"#94a3b8", fontSize:12, marginBottom:14, lineHeight:1.5 }}>
               {T.feedbackSubtitle || "Tell us what you'd like improved or anything that's bothering you about the app. We read every message."}
             </p>
+            <div style={{ marginTop:-6, marginBottom:14, textAlign:"left" }}><SupportEmailLine T={T} /></div>
 
             <div style={{ background:"rgba(239,68,68,0.1)", border:"1px solid rgba(239,68,68,0.4)", borderRadius:10, padding:"10px 12px", marginBottom:14 }}>
               <p style={{ color:"#f87171", fontSize:11, margin:0, lineHeight:1.5, fontWeight:600 }}>
@@ -20953,8 +20972,21 @@ function AuthScreen({ onAuthed, T, prefillEmail, initialMode, quickStartStep, li
         <button type="button" onClick={()=>{setMode(m=>m==="login"?"signup":"login"); setErr("");}} style={{ display:"block", width:"100%", marginTop:14, background:"none", border:"none", color:"#94a3b8", fontSize:12, cursor:"pointer" }}>
           {mode === "login" ? (T?.needAccount || "Need an account? Sign up") : (T?.haveAccount || "Already have an account? Log in")}
         </button>
+        <SupportEmailLine T={T} />
       </form>
     </div>
+  );
+}
+
+// Support email shown where a student may be stuck (login, device approval, Feedback tab).
+// Mail sent here lands in the owner's support inbox (see api/_supportInbox.js).
+const SUPPORT_EMAIL = "support@reply.seitojapanese.online";
+function SupportEmailLine({ T }) {
+  return (
+    <p style={{ color:"#94a3b8", fontSize:12, lineHeight:1.6, margin:"14px 0 0", textAlign:"center" }}>
+      {T?.supportEmailNote || "Can't log in or having trouble with the app? Email us:"}{" "}
+      <a href={"mailto:" + SUPPORT_EMAIL} style={{ color:"#a78bfa", fontWeight:700, wordBreak:"break-all" }}>{SUPPORT_EMAIL}</a>
+    </p>
   );
 }
 
@@ -20966,6 +20998,7 @@ function DeviceApprovalGate({ T }) {
         <p style={{ fontSize:36, margin:"0 0 12px" }}>📩</p>
         <h2 style={{ color:"#f1f5f9", fontSize:18, fontWeight:900, margin:"0 0 10px" }}>{T?.deviceApprovalTitle || "New Device Detected"}</h2>
         <p style={{ color:"#94a3b8", fontSize:13, lineHeight:1.6 }}>{T?.deviceApprovalDesc || "We've sent an approval email to you and to GAKU. Once both approve, this device will be unlocked — please check your inbox."}</p>
+        <SupportEmailLine T={T} />
       </div>
     </div>
   );

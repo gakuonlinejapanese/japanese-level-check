@@ -266,7 +266,8 @@ export async function handleAdminSupportDecide(req, res) {
           to: item.student_email,
           subject: (subject || "Re: Your message to GAKU").toString().slice(0, 200),
           html: `<div style="white-space:pre-wrap;font-family:sans-serif;line-height:1.6;">${esc(text)}</div>`,
-          replyTo: ADMIN_EMAIL,
+          // Student follow-ups go to the support inbox (Brevo inbound), not to a personal mailbox.
+          replyTo: `support@${INBOUND_DOMAIN}`,
         });
         update.replied_at = new Date().toISOString();
         update.proposed_reply = text;
