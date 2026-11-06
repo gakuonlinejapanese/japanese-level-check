@@ -15,6 +15,20 @@ const IS_STORE_APP = (() => {
   } catch { return false; }
 })();
 
+// ─── Light / Dark theme (2026-11-06) ───────────────────────────────────────────
+// The app is dark by default. "Light" mode flips the whole page (see index.css, html.gaku-light)
+// so every screen, including ones with hard-coded colors, gets a white background.
+// The choice is saved on the device and applied immediately at startup.
+const GAKU_THEME_KEY = "gaku_theme";
+function getSavedTheme() {
+  try { return localStorage.getItem(GAKU_THEME_KEY) === "light" ? "light" : "dark"; } catch { return "dark"; }
+}
+function applyTheme(theme) {
+  try { document.documentElement.classList.toggle("gaku-light", theme === "light"); } catch {}
+  try { localStorage.setItem(GAKU_THEME_KEY, theme); } catch {}
+}
+try { document.documentElement.classList.toggle("gaku-light", getSavedTheme() === "light"); } catch {}
+
 const C = {
   bg: "linear-gradient(160deg,#0a0f1e 0%,#0f172a 60%,#0a0f1e 100%)",
   purple: "#7c3aed", purpleLight: "#a855f7",
@@ -19585,6 +19599,7 @@ function FeaturePicker({ T, initial, onApply }) {
 }
 
 function Dashboard({ form, onEdit, onLevelUp, onSetWeek, onLogout, onDeleteAccount, deleteAccountBusy, userId, streakDays, daysUntilTrialEnds, tutorialGraceDaysLeft, isTrialAccount, isGakuStudent, onCompleteProfile, readerInstalled }) {
+  const [themeMode, setThemeMode] = useState(getSavedTheme);
   const T = useUITranslations(form?.preferredLang || "English");
   // GAKU Reader promo card: shown on desktop Chrome/Edge to accounts that have
   // never used the extension (server says readerInstalled=false); dismissible
@@ -20096,6 +20111,7 @@ function Dashboard({ form, onEdit, onLevelUp, onSetWeek, onLogout, onDeleteAccou
           </div>
         </div>
         <div style={{ display:"flex", gap:8, flexWrap:"wrap" }}>
+          <button onClick={()=>{ const next = themeMode === "light" ? "dark" : "light"; applyTheme(next); setThemeMode(next); }} aria-label={themeMode === "light" ? "Dark mode" : "Light mode"} title={themeMode === "light" ? "Dark mode" : "Light mode"} style={{ ...S.btn, padding:"8px 14px", background:C.card, color:"#94a3b8", border:`1px solid ${C.border}`, fontSize:12 }}>{themeMode === "light" ? "\u{1F319}" : "\u2600\uFE0F"}</button>
           <button onClick={()=>setShowFounder(true)} style={{ ...S.btn, padding:"8px 14px", background:C.card, color:"#94a3b8", border:`1px solid ${C.border}`, fontSize:12 }}>{"\u{1F464}"} {(FOUNDER_TEXT[form?.preferredLang] || FOUNDER_TEXT["English"])[0]}</button>
           <button onClick={()=>{ setFeaturePickerInitial(visibleFeatures || OPTIONAL_FEATURES); setShowFeaturePicker(true); }} style={{ ...S.btn, padding:"8px 14px", background:C.card, color:"#94a3b8", border:`1px solid ${C.border}`, fontSize:12 }}>{"\u2699\uFE0F"} {T.featureCustomizeBtn || "Customize"}</button>
           <button onClick={()=>setShowModePicker(true)} style={{ ...S.btn, padding:"8px 14px", background:isIntensive?"rgba(168,85,247,0.2)":C.card, color:isIntensive?C.purpleLight:"#94a3b8", border:`1px solid ${isIntensive?C.purpleLight:C.border}`, fontSize:12 }}>{isIntensive ? "🔥" : "😊"} {T.modeBtn || "Mode"}</button>
