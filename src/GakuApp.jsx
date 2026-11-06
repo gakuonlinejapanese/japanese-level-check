@@ -12972,6 +12972,26 @@ function speakWithAudioFallback(text, rate = 0.85) {
 // when anything goes wrong (not configured, not logged in, offline…) so the caller can fall back. Clips already
 // fetched are kept in memory, so replaying a line costs nothing extra.
 const _azureClipCache = new Map();
+// When the server says Azure isn't set up (503) or the login is missing/expired (401), stop asking for a while so
+// every tap doesn't first wait for a doomed request before falling back to the device voice.
+let _azureDownUntil = 0;
+// iPhone/Safari only allow sound that starts inside the tap itself, but the Azure clip arrives after a network
+// round trip. So the tap "unlocks" one shared audio element with a silent clip, and every Azure clip is then
+// played through that same element.
+const SILENT_WAV = "data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA=";
+let _mnAudio = null;
+function unlockMnAudio() {
+  try {
+    if (typeof Audio === "undefined") return null;
+    if (!_mnAudio) _mnAudio = new Audio();
+    const a = _mnAudio;
+    a.onplaying = a.onended = a.onerror = null;
+    a.src = SILENT_WAV;
+    const p = a.play();
+    if (p && p.catch) p.catch(() => {});
+    return a;
+  } catch { return null; }
+}
 async function fetchAzureClip(text, rate, token) {
   const key = rate + "|" + text;
   if (_azureClipCache.has(key)) return _azureClipCache.get(key);
@@ -12980,7 +13000,11 @@ async function fetchAzureClip(text, rate, token) {
     headers: { "Content-Type": "application/json", Authorization: "Bearer " + token },
     body: JSON.stringify({ action: "tts", text, rate, voice: "female" }),
   });
-  if (!r.ok) throw new Error("tts-" + r.status);
+  if (!r.ok) {
+    if (r.status === 503) _azureDownUntil = Date.now() + 5 * 60 * 1000;
+    else if (r.status === 401) _azureDownUntil = Date.now() + 60 * 1000;
+    throw new Error("tts-" + r.status);
+  }
   const url = URL.createObjectURL(await r.blob());
   if (_azureClipCache.size > 60) {
     const oldest = _azureClipCache.keys().next().value;
@@ -12990,12 +13014,12 @@ async function fetchAzureClip(text, rate, token) {
   _azureClipCache.set(key, url);
   return url;
 }
-function speakWithAzure(text, rate = 0.85) {
+function speakWithAzure(text, rate = 0.85, el = null) {
   return new Promise(async (resolve) => {
     let settled = false;
     const settle = (ok) => { if (settled) return; settled = true; resolve(ok); };
     try {
-      if (typeof Audio === "undefined" || !supabase) { settle(false); return; }
+      if (!el || !supabase) { settle(false); return; }
       const { data } = await supabase.auth.getSession();
       const token = data?.session?.access_token;
       if (!token) { settle(false); return; }
@@ -13013,15 +13037,19 @@ function speakWithAzure(text, rate = 0.85) {
         let url;
         try { url = await (clips[i] || (clips[i] = fetchAzureClip(chunks[i], r, token))); } catch { settle(false); return; }
         if (myToken !== _fallbackToken) return;
+        if (!url) { settle(false); return; } // a later piece failed to download: stop here instead of playing nothing
         if (i + 1 < chunks.length && !clips[i + 1]) clips[i + 1] = fetchAzureClip(chunks[i + 1], r, token).catch(() => null);
-        const a = new Audio(url);
+        const a = el;
         _fallbackAudio = a;
         a.onplaying = () => settle(true);
         a.onended = () => playAt(i + 1);
         a.onerror = () => settle(false);
+        a.src = url;
         a.play().catch(() => settle(false));
       };
-      setTimeout(() => settle(false), 8000);
+      // Too slow: give up AND cancel this attempt, so a clip that arrives late can't start playing on top of
+      // the device-voice fallback.
+      setTimeout(() => { if (!settled) { stopFallbackAudio(); settle(false); } }, 8000);
       playAt(0);
     } catch { settle(false); }
   });
@@ -13036,12 +13064,13 @@ function hasLocalJapaneseVoice() {
 function speakJapanese(text, rate = 0.85, _skipAzure = false) {
   // Mongolian: use Azure's real Mongolian voice first; only if that can't play, fall through to the device voice
   // (and then the "no Mongolian voice" message) exactly as before.
-  if (tl().code === "mn" && !_skipAzure) {
+  if (tl().code === "mn" && !_skipAzure && Date.now() >= _azureDownUntil) {
     const t = String(text || "").trim();
     if (!t) return;
+    const el = unlockMnAudio(); // must happen right here, inside the tap, before any waiting (iPhone/Safari)
     try { if (window.speechSynthesis) window.speechSynthesis.cancel(); } catch {}
     if (isAndroidNative()) { try { Promise.resolve(nativeStop()).catch(() => {}); } catch {} }
-    speakWithAzure(t, rate).then(ok => { if (!ok) speakJapanese(text, rate, true); });
+    speakWithAzure(t, rate, el).then(ok => { if (!ok) speakJapanese(text, rate, true); });
     return;
   }
   if (isAndroidNative()) {
@@ -13291,7 +13320,44 @@ function stopFolderPlayback() {
   if (isAndroidNative()) nativeStop();
   try { if (window.speechSynthesis) window.speechSynthesis.cancel(); } catch {}
 }
-function playWordsSequentially(cards, { rate = 0.85, gapMs = 600, onIndex, onDone } = {}) {
+function playWordsSequentially(cards, { rate = 0.85, gapMs = 600, onIndex, onDone, _skipAzure = false } = {}) {
+  // Mongolian: play each word with Azure's Mongolian voice (devices have none). If the very first word can't be
+  // played that way, hand the remaining words to the normal device-voice code below.
+  if (tl().code === "mn" && !_skipAzure && Date.now() >= _azureDownUntil) {
+    if (!cards.length) { if (onDone) onDone(); return; }
+    const token = ++_folderPlayToken;
+    const el = unlockMnAudio(); // inside the tap (iPhone/Safari)
+    try { if (window.speechSynthesis) window.speechSynthesis.cancel(); } catch {}
+    if (isAndroidNative()) { try { Promise.resolve(nativeStop()).catch(() => {}); } catch {} }
+    (async () => {
+      for (let i = 0; i < cards.length; i++) {
+        if (token !== _folderPlayToken) return;
+        if (onIndex) onIndex(i);
+        const text = speechTextForWord(cards[i]);
+        if (text) {
+          const ok = await speakWithAzure(text, rate, el);
+          if (token !== _folderPlayToken) return;
+          if (!ok) {
+            // Azure failed: continue with the device voice from this word on (shows the usual message if none).
+            playWordsSequentially(cards.slice(i), { rate, gapMs, onIndex: (j) => { if (onIndex) onIndex(i + j); }, onDone, _skipAzure: true });
+            return;
+          }
+          // wait until this word has finished playing (or 15 s at most)
+          await new Promise((res) => {
+            let done = false;
+            const fin = () => { if (done) return; done = true; res(); };
+            el.addEventListener("ended", fin, { once: true });
+            el.addEventListener("error", fin, { once: true });
+            setTimeout(fin, 15000);
+          });
+        }
+        if (token !== _folderPlayToken) return;
+        await new Promise(r => setTimeout(r, gapMs));
+      }
+      if (token === _folderPlayToken && onDone) onDone();
+    })();
+    return;
+  }
   if (isAndroidNative()) {
     if (!cards.length) { if (onDone) onDone(); return; }
     const token = ++_folderPlayToken;

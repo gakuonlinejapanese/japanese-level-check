@@ -115,7 +115,7 @@ export function overrideInstruction() {
 const MN_LATIN = {
   а:"a", б:"b", в:"v", г:"g", д:"d", ё:"yo", ж:"j", з:"z", и:"i", й:"i", к:"k", л:"l", м:"m", н:"n",
   о:"o", ө:"ö", п:"p", р:"r", с:"s", т:"t", у:"u", ү:"ü", ф:"f", х:"kh", ц:"ts", ч:"ch", ш:"sh", щ:"shch",
-  ъ:"ʺ", ы:"y", ь:"ʹ", э:"e", ю:"yu", я:"ya",
+  ъ:"", ы:"y", ь:"'", э:"e", ю:"yu", я:"ya",
 };
 const MN_VOWELS = "аеёиоөуүэюяы";
 export function mnToLatin(text) {
@@ -131,7 +131,12 @@ export function mnToLatin(text) {
     } else if (MN_LATIN[low] !== undefined) {
       rep = MN_LATIN[low];
     } else { out += ch; continue; }
-    out += (ch !== low) ? rep.charAt(0).toUpperCase() + rep.slice(1) : rep;
+    if (ch === low) { out += rep; continue; }
+    // Capital letter. Inside an ALL-CAPS word (СОНИН, ХОТ, ЕЭ) a two-letter result like "kh" must be fully
+    // capitalised ("KH") instead of "Kh", otherwise it comes out as "SONIN KhOT".
+    const nb = (j) => (j >= 0 && j < src.length) ? src[j] : "";
+    const inCaps = rep.length > 1 && (/\p{Lu}/u.test(nb(i + 1)) || /\p{Lu}/u.test(nb(i - 1)));
+    out += inCaps ? rep.toUpperCase() : rep.charAt(0).toUpperCase() + rep.slice(1);
   }
   return out;
 }
