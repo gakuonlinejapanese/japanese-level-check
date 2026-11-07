@@ -18143,7 +18143,10 @@ function loadSavedStudyGuide() {
     const raw = localStorage.getItem(scopedKey(STUDY_GUIDE_KEY));
     if (!raw) return null;
     const parsed = JSON.parse(raw);
-    return parsed && parsed.schedule && typeof parsed.schedule === "object" ? parsed : null;
+    if (!(parsed && parsed.schedule && typeof parsed.schedule === "object")) return null;
+    // English/Mongolian only: a guide with empty (minutes-only) tasks is broken, so it is rebuilt once.
+    if (!isJa() && guideHasEmptyTasks(parsed)) return null;
+    return parsed;
   } catch { return null; }
 }
 function saveStudyGuide(result) {
@@ -18240,6 +18243,7 @@ function findLegacyScheduleGuide(form) {
 }
 
 async function buildAIWeeklySchedule(form, weekNum, totalWeeks, forceFresh = false) {
+  if (!isJa()) return buildTargetLangGuide(form, weekNum); // English / Mongolian: assembled in code from the curated sites
   const lang = form.preferredLang || "English";
   const cacheKey = `${form.email || form.name}_w${weekNum}_${form.jlpt}_${(Array.isArray(form.goal)?form.goal:(form.goal?[form.goal]:[])).join("")}_${(form.skills||[]).join("")}_${lang}`;
   // Check localStorage first (skipped when the student explicitly asked for a fresh guide)
@@ -18872,6 +18876,56 @@ function nonJaResources(level) {
   const r = NON_JA_RESOURCES[getTargetLang()];
   if (Array.isArray(r)) return r;
   return (r && (r[level] || r["Beginner"])) || [];
+}
+// ─── Study guide for English / Mongolian targets (built in code, not by the AI) ──────────────────
+// The AI schedule prompt tells the model to write tasks in the student's UI language (e.g. Japanese) while the
+// target-language override tells it "do not output any Japanese" — the two clash and the model returned
+// tasks that were only minutes ("10", "10", "25"). For English/Mongolian the plan is now assembled here from the
+// curated sites in EN_RESOURCES_BY_LEVEL / NON_JA_RESOURCES, so every task names a real site (which
+// findTaskResourceLink turns into a clickable link) and is written in the student's UI language.
+function buildTargetLangGuide(form, weekNum) {
+  const lang = form.preferredLang || "English";
+  const T = applyTargetLangText(getT(lang), lang);
+  const hoursMap = { "Less than 1 hour":45, "1–2 hours":90, "2–3 hours":150, "3+ hours":180 };
+  const daysMap  = { "1–2 days":2, "3–4 days":4, "5–6 days":5, "Every day":7 };
+  const mins = hoursMap[form.hoursPerDay] || 60;
+  const days = daysMap[form.daysPerWeek] || 5;
+  const share = { conversation:0.3, listening:0.2, reading:0.15, grammar:0.15, pronunciation:0.1, writing:0.15 };
+  let skills = allowedSkillKeys(form.skills || []).filter(s => share[s]);
+  if (!skills.length) skills = ["conversation", "listening", "reading"];
+  const pool = nonJaResources(form.jlpt);
+  const useJa = lang === "Japanese";
+  const WEEKDAYS = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
+  const schedule = {};
+  WEEKDAYS.slice(0, days).forEach((day, i) => {
+    const skill = skills[i % skills.length];
+    const blockMins = Math.max(10, Math.round(mins * share[skill]));
+    const mode = SKILL_TO_MODE[skill];
+    const sameMode = pool.filter(r => r.mode === mode);
+    const choices = sameMode.length ? sameMode : pool;
+    const res = choices.length ? choices[(weekNum - 1 + i) % choices.length] : null;
+    const label = T[SKILL_LABEL_KEY[skill]] || SKILL_LABELS[skill] || skill;
+    const desc = res ? ((useJa && res.descJa) || res.desc || "") : "";
+    const main = res
+      ? { task: `${label}: ${res.name}${desc ? " — " + desc : ""} (${blockMins} min)`, done:false, skill: res.mode }
+      : { task: `${label}: ${T[SKILL_NOTE_KEY[skill]] || ""} (${blockMins} min)`, done:false, skill: mode };
+    schedule[day] = [
+      main,
+      { task: T.vocabReview || "Vocabulary review — saved words (10 min)", done:false, skill:"reading" },
+      i % 2 === 0 ? { task: T.speakAloud || "Speak aloud: summarize today's content (5 min)", done:false, skill:"speaking" } : null,
+    ].filter(Boolean);
+  });
+  WEEKDAYS.slice(days).forEach(day => {
+    schedule[day] = [{ task: T.restDay || "Rest day 🌸", done:false, rest:true }];
+  });
+  return { schedule, weekTheme: "" };
+}
+// A saved guide whose tasks contain no words at all (only "10", "25"…) is a broken one from the old AI prompt.
+function guideHasEmptyTasks(guide) {
+  try {
+    return Object.values(guide.schedule || {}).some(list => (list || []).some(t =>
+      t && !t.rest && !/\p{L}/u.test(String(t.task || "").replace(/\bmin\b/gi, ""))));
+  } catch { return false; }
 }
 function goalOptionsForTarget() {
   if (isJa()) return Object.keys(GOAL_KEY_MAP);
@@ -20217,7 +20271,7 @@ function Dashboard({ form, onEdit, onLevelUp, onSetWeek, onLogout, onDeleteAccou
       const saved = loadSavedStudyGuide();
       if (saved) { showGuide(saved); return; }
       // 2) A guide from the old device-local cache — adopt it so it stays exactly as they know it.
-      const legacy = findLegacyScheduleGuide(form);
+      const legacy = isJa() ? findLegacyScheduleGuide(form) : null; // that cache is not per-language: never adopt it for English/Mongolian
       if (legacy) {
         saveStudyGuide(legacy);
         showGuide(legacy);
