@@ -28,7 +28,7 @@ async function readRawBody(req) {
   return Buffer.concat(chunks);
 }
 
-// App Store / Google Play subscriptions arrive through RevenueCat's webhook (same URL as Stripe's,
+// App Store subscriptions arrive through RevenueCat's webhook (same URL as Stripe's,
 // kept in this file because the Vercel function limit is reached). RevenueCat sends the shared secret
 // we configure as the Authorization header; Stripe always sends a stripe-signature header instead.
 const RC_GRANT_EVENTS = new Set(["INITIAL_PURCHASE", "RENEWAL", "PRODUCT_CHANGE", "UNCANCELLATION", "NON_RENEWING_PURCHASE"]);

@@ -2,6 +2,7 @@ import { getAdminClient } from "./_supabaseAdmin.js";
 import { assessLongAbsence } from "./_absence.js";
 import { sendEmail } from "./_resend.js";
 import { ADMIN_EMAIL } from "./_supabaseAdmin.js";
+import { triageAndStore, handleAdminListSupport, handleAdminAddSupport, handleAdminSupportDecide, handleAdminRegisterInbound, handleInboundEmail } from "./_supportInbox.js";
 
 // ---- Free trial lesson: country/city validation (server-side re-check of what
 // public/trial-lesson.html already enforces client-side against the free-text
@@ -174,6 +175,8 @@ export default async function handler(req, res) {
     return res.status(200).end();
   }
   if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed" });
+  // Brevo inbound-email webhook (reply.seitojapanese.online) — authenticated by a token in the URL.
+  if (req.query && req.query.inbound) return handleInboundEmail(req, res);
   try {
     const { action } = req.body || {};
     if (action === "cancellation_request") return handleCancellationRequest(req, res);
@@ -188,6 +191,10 @@ export default async function handler(req, res) {
     if (action === "request_invitation_code") return handleRequestInvitationCode(req, res);
     if (action === "submit_feedback") return handleSubmitFeedback(req, res);
     if (action === "check_feedback_submitted") return handleCheckFeedbackSubmitted(req, res);
+    if (action === "admin_list_support") return handleAdminListSupport(req, res);
+    if (action === "admin_add_support") return handleAdminAddSupport(req, res);
+    if (action === "admin_register_inbound") return handleAdminRegisterInbound(req, res);
+    if (action === "admin_support_decide") return handleAdminSupportDecide(req, res);
     if (action === "send_free_plan_winback_emails") return handleSendFreePlanWinback(req, res);
     if (action === "send_trial_ended_notice_emails") return handleSendTrialEndedNotice(req, res);
     if (action === "send_tutorial_announcement_emails") return handleSendTutorialAnnouncement(req, res);
@@ -1223,7 +1230,7 @@ function buildJlptMockOfferEmailHtml(name, jlptLevel, testSection, preferredMode
     ? ` (Listening test, Q1${listeningAudioCount > 1 ? `-Q${listeningAudioCount}` : ""} are the audio files linked above)`
     : "";
   const modeParagraph = preferredMode === "trial_lesson"
-    ? `<p>Since you chose to take it as part of a <strong>Free Trial Lesson</strong>, I'll also reach out separately to schedule a time for your trial lesson, where we'll go through the test together.</p>`
+    ? `<p>Since you chose to take it as part of a <strong>Free Trial Lesson</strong>, please contact me by email at <a href="mailto:seitojapanese.online@gmail.com" style="color:#06b6d4;">seitojapanese.online@gmail.com</a> (you can simply reply to this email) to schedule a time for your trial lesson, where we'll go through the test together.</p>`
     : "";
   const hasAnswerSheet = !!(JLPT_MATERIALS[level] && JLPT_MATERIALS[level].answerSheet);
   const answerInstructions = hasAnswerSheet
@@ -1346,15 +1353,22 @@ async function handleRequestJlptMockTest(req, res) {
           to: normalizedEmail,
           subject: `Re: JLPT ${level} Free Assessment Report`,
           html: buildJlptMockOfferEmailHtml(name, jlptLevel, testSection, preferredMode),
+          // 送信元は noreply@ なので、返信(体験授業の連絡・解答の返送)がSeitoに届くようにする
+          replyTo: ADMIN_EMAIL,
         });
       } catch (emailErr) {
         console.error("[request_jlpt_mock_test] student email failed:", emailErr.message);
       }
       try {
+        const isTrialMode = preferredMode === "trial_lesson";
         await sendEmail({
           to: ADMIN_EMAIL,
-          subject: `[GAKU] JLPT free mock test requested — ${name || normalizedEmail}`,
-          html: `<p>A student requested the free JLPT mock test and was just sent the assessment-report email automatically${hasMaterials ? " (with download links to the test materials already included)" : ""}.</p>
+          // 体験授業を選んだ場合は件名で一目で分かるようにし、このメールに返信するだけで本人に届くようにする
+          subject: isTrialMode
+            ? `[GAKU] ★ ACTION: JLPT mock test as FREE TRIAL LESSON — ${name || normalizedEmail}`
+            : `[GAKU] JLPT free mock test requested — ${name || normalizedEmail}`,
+          replyTo: isTrialMode ? normalizedEmail : undefined,
+          html: `${isTrialMode ? `<p style="background:#fff7ed;border:1px solid #fb923c;padding:10px;border-radius:6px;"><strong>This student chose to take the JLPT mock test as a Free Trial Lesson.</strong> Please arrange the trial lesson with them — just reply to this email (it goes to ${normalizedEmail}). They were also asked in their email to contact you at ${ADMIN_EMAIL}.</p>` : ""}<p>A student requested the free JLPT mock test and was just sent the assessment-report email automatically${hasMaterials ? " (with download links to the test materials already included)" : ""}.</p>
                  <p><strong>Name:</strong> ${name || "(not provided)"}<br/>
                     <strong>Email:</strong> ${normalizedEmail}<br/>
                     <strong>JLPT level:</strong> ${jltLevelSafe(jlptLevel)}<br/>
@@ -1362,7 +1376,7 @@ async function handleRequestJlptMockTest(req, res) {
                     <strong>Preferred mode:</strong> ${modeLabel}</p>
                  <p>${hasMaterials
                     ? "No action needed for the test materials — the student already received download links."
-                    : `Please send the actual JLPT ${level} test materials to this student directly — they aren't hosted yet.`}${preferredMode === "trial_lesson" ? " Please also follow up to schedule their free trial lesson." : ""}</p>`,
+                    : `Please send the actual JLPT ${level} test materials to this student directly — they aren't hosted yet.`}${preferredMode === "trial_lesson" ? " The student chose a Free Trial Lesson and was asked to email you (seitojapanese.online@gmail.com) to schedule it, so please watch for their message." : ""}</p>`,
         });
       } catch (emailErr) {
         console.error("[request_jlpt_mock_test] admin notify failed:", emailErr.message);
@@ -1635,7 +1649,13 @@ async function handleSubmitFeedback(req, res) {
     });
     if (insertErr) return res.status(500).json({ error: insertErr.message });
 
-    try {
+    // AI triage into the approval queue (admin-support.html). Best-effort and never throws;
+    // nothing is sent to the student or changed in code until Seito approves it there.
+    // triageAndStore also emails Seito ONE combined notification (summary + draft reply + link).
+    // Only if triage/storage failed do we fall back to the plain original-text email below.
+    const triaged = await triageAndStore({ source: "app_feedback", email: normalizedEmail, name, body: text, isGakuStudent: !!isGakuStudent });
+
+    if (!triaged) try {
       await sendEmail({
         to: ADMIN_EMAIL,
         subject: `[GAKU] New feedback from ${name || normalizedEmail}`,

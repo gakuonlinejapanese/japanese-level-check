@@ -80,7 +80,7 @@ export default function StorePlans({ T, userId, onPurchased }) {
       </button>
       {msg && <p style={{ color: '#f87171', fontSize: 11.5, margin: '4px 0 6px' }}>{msg}</p>}
       <p style={{ color: '#94a3b8', fontSize: 10.5, lineHeight: 1.6, margin: '6px 0 0' }}>
-        {T?.storeAutoRenewNote || 'Subscriptions renew automatically at the price shown unless cancelled at least 24 hours before the end of the current period. You can manage or cancel in your App Store or Google Play account settings.'}
+        {T?.storeAutoRenewNote || 'Subscriptions renew automatically at the price shown unless cancelled at least 24 hours before the end of the current period. You can manage or cancel in your App Store account settings.'}
       </p>
     </div>
   );

@@ -3,6 +3,7 @@ import StorePlans from './StorePlans';
 import { supabase, getDeviceId, getDeviceLabel, getSignupSource } from "./supabaseClient";
 import HanziWriter from "hanzi-writer";
 import { reportClientCrash } from "./crashReport";
+import { isAndroidNative, nativeSpeak, nativeStop } from "./nativeTts";
 
 // True inside the iOS/Android store apps (Capacitor shell). Also forceable with ?store=1 for previews.
 // Store builds never show prices, purchase buttons, or links to outside purchase/lesson pages.
@@ -18,6 +19,20 @@ const IS_STORE_APP = (() => {
 // buy a subscription without registering). Their placeholder address is never shown or emailed.
 // Must match isGuestEmail in api/_resend.js.
 const isGuestEmail = (e) => /^guest-[0-9a-f]{24}@seitojapanese\.online$/i.test(String(e || "").trim());
+
+// ─── Light / Dark theme (2026-11-06) ───────────────────────────────────────────
+// The app is dark by default. "Light" mode flips the whole page (see index.css, html.gaku-light)
+// so every screen, including ones with hard-coded colors, gets a white background.
+// The choice is saved on the device and applied immediately at startup.
+const GAKU_THEME_KEY = "gaku_theme";
+function getSavedTheme() {
+  try { return localStorage.getItem(GAKU_THEME_KEY) === "light" ? "light" : "dark"; } catch { return "dark"; }
+}
+function applyTheme(theme) {
+  try { document.documentElement.classList.toggle("gaku-light", theme === "light"); } catch {}
+  try { localStorage.setItem(GAKU_THEME_KEY, theme); } catch {}
+}
+try { document.documentElement.classList.toggle("gaku-light", getSavedTheme() === "light"); } catch {}
 
 const C = {
   bg: "linear-gradient(160deg,#0a0f1e 0%,#0f172a 60%,#0a0f1e 100%)",
@@ -1048,7 +1063,7 @@ const UI_TRANSLATIONS = {
     installPromptDesc: "One tap to open, and you'll never lose your progress.",
     installPromptCta: "Add to Home Screen",
     installPromptSkip: "Maybe later",
-    installPromptHaveApp: "Already installed GAKU Master from Google Play or the App Store? You don't need this — just tap “Maybe later”.",
+    installPromptHaveApp: "Already installed GAKU Master from the App Store? You don't need this — just tap “Maybe later”.",
     installPromptIosSteps: "Tap the Share button, then \"Add to Home Screen\"",
     remindTitle: "When will you review tomorrow?",
     remindDesc: "Just 5 minutes a day is enough. Pick a time and we'll add a daily reminder to your calendar.",
@@ -1093,6 +1108,14 @@ const UI_TRANSLATIONS = {
     tutorialSubtitlesDesc: "Paste a video link below and turn its subtitles or audio into your own listening and vocabulary practice.",
     tutorialResourcesDesc: "Browse the resources picked for your level below, or paste some content to build your own practice set.",
     tutorialMilestonesDesc: "This is your roadmap to your Japanese goal. Take a look at what's coming next on your journey.",
+    tutModesTitle: "Study modes & coach",
+    tutorialModesDesc: "Tap 😊 Mode at the top to choose Enjoyable (relaxed) or Intensive (a daily quota of 8 actions). In Intensive mode your study coach tracks your flip speed, pronunciation, listening and accuracy, and always tells you what to focus on.",
+    tutGuideTitle: "Update my study guide",
+    tutorialGuideDesc: "Your weekly plan stays the same so you can follow it. Only when you want a new plan, open ✏️ Edit Profile and press “Update my study guide”.",
+    tutLibraryTitle: "Library & Flashcards",
+    tutorialLibraryDesc: "Your saved words live in folders. You can rename folders, copy words to other folders, search by meaning, and review with Flashcards — press ✅ Understand when you've learned a word.",
+    tutProgressTitle: "Progress check",
+    tutorialProgressDesc: "Take the 3-minute check now, then again in a few days to see how much you've grown (then vs. now).",
     tutorialContentDesc: "Try it now: paste some Japanese text below (an article, subtitles, a caption) and let GAKU build practice activities from it — just like GAKU Reader does on the web.",
     tutorialConversationDesc: "Try it now: play a video, tap “Listen to a video tab” (or the mic) and let GAKU listen to the real dialogue — it'll help you understand each line and suggest how you could respond.",
     tutorialPronunciationDesc: "Try it now: play a video of native speakers, tap “Listen to a video tab” and GAKU writes down each line. Then say the sentence out loud on a card and see how close you were. Can't catch it? Slow the video down and listen again.",
@@ -1110,6 +1133,7 @@ const UI_TRANSLATIONS = {
     imgTapSearch: "Tap to search for an image",
     flashTapToCheck: "Tap to check",
     flashListenExample: "Listen to the example",
+    ttsProblem: "🔇 No sound? Your phone may not have a Japanese voice. Open Settings → search “Text-to-speech output” → install the Japanese voice data (Google Text-to-speech), then try again.",
     flashGenRomaji: "Generating romaji…",
     flashGenTranslation: "Generating translation…",
     flashUnderstand: "✅ Understand",
@@ -1185,6 +1209,18 @@ const UI_TRANSLATIONS = {
     coachTitle: "Today's suggestion",
     coachBoth: "You usually do well in {strong}, and {weak} seems a little hard. How about {weak} today?",
     coachWeakOnly: "{weak} seems a little hard for you. How about practicing it today?",
+    coachAdviceTitle: "🎯 Your study coach",
+    coachNoData: "Practice a little more and I'll start giving you specific advice.",
+    coachAllGood: "No weak spots right now. Keep up this pace!",
+    coachAccWeak: "{area} accuracy is {pct}%. Make {area} your focus today.",
+    coachSlowFlip: "It takes you about {sec}s to recall a word. Aim for under 5s with quick flashcard rounds.",
+    coachSlowWord: "Your slowest word is {word} ({sec}s). Review it again.",
+    coachRepeatWord: "You viewed {word} {n} times today and it isn't sticking. Try an example sentence or write it out.",
+    coachPronMiss: "You keep missing the pronunciation of {word} ({n} times). Say it slowly, then at normal speed.",
+    coachListenWeak: "Listening comprehension is {pct}%. Listen several times before reading the text.",
+    coachStatFlip: "Flip speed",
+    coachStatViews: "Words seen today",
+    coachStatListen: "Listening",
     lessonBridgeAsk: "Want to practice this with a real teacher? Try a free trial lesson.",
     lessonBridgeBtn: "Book a free trial lesson →",
     lessonBridgeMissed: "Sounds to watch: {chars}",
@@ -1225,6 +1261,7 @@ const UI_TRANSLATIONS = {
     feedbackTitle: "💬 Feedback & Opinion",
     feedbackSubtitle: "Tell us what you'd like improved or anything that's bothering you about the app. We read every message.",
     feedbackWarning: "If you post slander, abusive language, or discriminatory terms, your account will be suspended immediately. We accept no responsibility even if legal action results.",
+    supportEmailNote: "Can't log in or having trouble with the app? Email us:",
     feedbackChecking: "Checking...",
     feedbackAlreadySubmitted: "You've already submitted your one-time feedback. Thank you! (GAKU-invited students can submit as many times as they like.)",
     feedbackSuccess: "Thank you — your feedback was sent.",
@@ -1439,6 +1476,14 @@ const UI_TRANSLATIONS = {
     currentLevelLabel: "Current level:",
     hideAnswerBtn: "Hide answer",
     showAnswerBtn: "Show answer",
+    questionFuriganaLabel: "Furigana on questions",
+    questionFuriganaDesc: "Shows furigana above the kanji in the question text only. Answers stay without furigana, and kanji-reading questions keep their target word plain so the answer isn't given away.",
+    restartWeek1Btn: "Start over from Week 1",
+    restartWeek1Confirm: "Start over from Week 1? This week's check marks are cleared. You can come back to your other weeks from the week picker, and your study plan stays the same.",
+    weekPickLabel: "Go to week",
+    weekPickWeek: "Week {n}",
+    weekPickInProgress: "in progress",
+    weekBackToProgress: "Back to Week {n} (in progress)",
     furiganaOn: "ON",
     furiganaOff: "OFF",
     // Paywall — main plan content
@@ -1552,7 +1597,7 @@ const UI_TRANSLATIONS = {
     storeRestore: "Restore purchases",
     storePurchaseFailed: "Purchase could not be completed. Please try again.",
     storeNothingToRestore: "No previous purchases were found.",
-    storeAutoRenewNote: "Subscriptions renew automatically at the price shown unless cancelled at least 24 hours before the end of the current period. You can manage or cancel in your App Store or Google Play account settings.",
+    storeAutoRenewNote: "Subscriptions renew automatically at the price shown unless cancelled at least 24 hours before the end of the current period. You can manage or cancel in your App Store account settings.",
     pronSlowTip: "Can't catch it? Slow the video down (for example YouTube speed 0.5× or 0.75×) and listen again. Your teacher is the video — GAKU just writes it down.",
     pronSlowNo: "No problem. Slow the video down and listen to that part again — GAKU will write it down once more.",
     pronBestScore: "Best score",
@@ -1665,7 +1710,7 @@ const UI_TRANSLATIONS = {
     installPromptDesc: "Un seul geste pour l'ouvrir, et vous ne perdrez jamais votre progression.",
     installPromptCta: "Ajouter à l'écran d'accueil",
     installPromptSkip: "Plus tard",
-    installPromptHaveApp: "Vous avez déjà installé GAKU Master depuis Google Play ou l'App Store ? Inutile ici — appuyez simplement sur « Plus tard ».",
+    installPromptHaveApp: "Vous avez déjà installé GAKU Master depuis l'App Store ? Inutile ici — appuyez simplement sur « Plus tard ».",
     installPromptIosSteps: "Appuyez sur Partager, puis « Sur l'écran d'accueil »",
     remindTitle: "Quand réviserez-vous demain ?",
     remindDesc: "5 minutes par jour suffisent. Choisissez un horaire et nous ajouterons un rappel quotidien à votre calendrier.",
@@ -1709,6 +1754,14 @@ const UI_TRANSLATIONS = {
     tutorialSubtitlesDesc: "Collez un lien de vidéo ci-dessous et transformez ses sous-titres ou son audio en exercice d'écoute et de vocabulaire personnalisé.",
     tutorialResourcesDesc: "Parcourez les ressources sélectionnées pour votre niveau ci-dessous, ou collez du contenu pour créer votre propre exercice.",
     tutorialMilestonesDesc: "Voici votre feuille de route vers votre objectif en japonais. Jetez un œil à ce qui vous attend ensuite.",
+    tutModesTitle: "Modes d'étude et coach",
+    tutorialModesDesc: "Touchez 😊 Mode en haut pour choisir Enjoyable (détendu) ou Intensive (quota quotidien de 8 actions). En mode Intensive, votre coach suit votre vitesse de retournement, votre prononciation, votre écoute et votre précision, et vous dit toujours sur quoi vous concentrer.",
+    tutGuideTitle: "Mettre à jour mon guide d'étude",
+    tutorialGuideDesc: "Votre plan hebdomadaire reste le même pour que vous puissiez le suivre. Si vous voulez un nouveau plan, ouvrez ✏️ Modifier le profil et appuyez sur « Update my study guide ».",
+    tutLibraryTitle: "Bibliothèque et cartes mémoire",
+    tutorialLibraryDesc: "Vos mots enregistrés sont rangés dans des dossiers. Vous pouvez renommer les dossiers, copier des mots vers d'autres dossiers, chercher par sens et réviser avec les cartes — appuyez sur ✅ Understand quand un mot est appris.",
+    tutProgressTitle: "Bilan de progression",
+    tutorialProgressDesc: "Faites le test de 3 minutes maintenant, puis refaites-le dans quelques jours pour voir vos progrès (avant et après).",
     tutorialContentDesc: "Essayez maintenant : collez un texte japonais ci-dessous (un article, des sous-titres, une légende) et laissez GAKU en créer des exercices — comme le fait GAKU Reader sur le web.",
     tutorialConversationDesc: "Essayez maintenant : lancez une vidéo, appuyez sur « Écouter un onglet vidéo » (ou sur le micro) et laissez GAKU écouter le vrai dialogue — il vous aidera à comprendre chaque réplique et vous suggérera comment répondre.",
     tutorialPronunciationDesc: "Essayez maintenant : lancez une vidéo de locuteurs natifs, appuyez sur « Écouter un onglet vidéo » et GAKU note chaque phrase. Ensuite, sur une carte, dites la phrase à voix haute et voyez à quel point vous étiez proche. Vous n'arrivez pas à saisir ? Ralentissez la vidéo et réécoutez.",
@@ -1726,6 +1779,7 @@ const UI_TRANSLATIONS = {
     imgTapSearch: "Touchez pour chercher une image",
     flashTapToCheck: "Touchez pour vérifier",
     flashListenExample: "Écouter l'exemple",
+    ttsProblem: "🔇 Pas de son ? Votre téléphone n’a peut-être pas de voix japonaise. Ouvrez Paramètres → cherchez « Synthèse vocale » → installez les données vocales japonaises (Google Text-to-speech), puis réessayez.",
     flashGenRomaji: "Génération du romaji…",
     flashGenTranslation: "Génération de la traduction…",
     flashUnderstand: "✅ Compris",
@@ -1801,6 +1855,18 @@ const UI_TRANSLATIONS = {
     coachTitle: "Suggestion du jour",
     coachBoth: "Vous réussissez généralement bien en {strong}, et {weak} semble un peu difficile. Et si on travaillait {weak} aujourd'hui ?",
     coachWeakOnly: "{weak} semble un peu difficile pour vous. Et si vous le travailliez aujourd'hui ?",
+    coachAdviceTitle: "🎯 Votre coach d'étude",
+    coachNoData: "Entraînez-vous encore un peu et je vous donnerai des conseils précis.",
+    coachAllGood: "Aucun point faible pour l'instant. Gardez ce rythme !",
+    coachAccWeak: "Votre taux de réussite en {area} est de {pct} %. Faites de {area} votre priorité aujourd'hui.",
+    coachSlowFlip: "Il vous faut environ {sec} s pour retrouver un mot. Visez moins de 5 s avec des séries rapides de cartes.",
+    coachSlowWord: "Votre mot le plus lent est {word} ({sec} s). Révisez-le.",
+    coachRepeatWord: "Vous avez regardé {word} {n} fois aujourd'hui sans le retenir. Essayez une phrase d'exemple ou écrivez-le.",
+    coachPronMiss: "Vous ratez souvent la prononciation de {word} ({n} fois). Dites-le lentement, puis à vitesse normale.",
+    coachListenWeak: "Votre compréhension orale est de {pct} %. Écoutez plusieurs fois avant de lire le texte.",
+    coachStatFlip: "Vitesse de retournement",
+    coachStatViews: "Mots vus aujourd'hui",
+    coachStatListen: "Écoute",
     lessonBridgeAsk: "Envie de travailler cela avec un vrai professeur ? Essayez un cours d'essai gratuit.",
     lessonBridgeBtn: "Réserver un cours d'essai gratuit →",
     lessonBridgeMissed: "Sons à surveiller : {chars}",
@@ -1841,6 +1907,7 @@ const UI_TRANSLATIONS = {
     feedbackTitle: "💬 Retour & Avis",
     feedbackSubtitle: "Dites-nous ce que vous aimeriez voir amélioré ou ce qui vous dérange dans l'application. Nous lisons chaque message.",
     feedbackWarning: "En cas de diffamation, propos injurieux ou termes discriminatoires, votre compte sera immédiatement suspendu. Nous déclinons toute responsabilité, même en cas de poursuites judiciaires.",
+    supportEmailNote: "Impossible de vous connecter ou un problème avec l'application ? Écrivez-nous :",
     feedbackChecking: "Vérification...",
     feedbackAlreadySubmitted: "Vous avez déjà envoyé votre unique retour. Merci ! (Les étudiants invités par GAKU peuvent en envoyer autant de fois qu'ils le souhaitent.)",
     feedbackSuccess: "Merci — votre retour a été envoyé.",
@@ -1973,6 +2040,14 @@ const UI_TRANSLATIONS = {
     didYouUnderstand: "Avez-vous compris ceci ?",
     hideAnswerBtn: "Masquer la réponse",
     showAnswerBtn: "Afficher la réponse",
+    questionFuriganaLabel: "Furigana sur les questions",
+    questionFuriganaDesc: "Affiche les furigana au-dessus des kanji dans l'énoncé uniquement. Les réponses restent sans furigana, et les questions de lecture de kanji gardent le mot visé sans furigana pour ne pas donner la réponse.",
+    restartWeek1Btn: "Recommencer à la semaine 1",
+    restartWeek1Confirm: "Recommencer à la semaine 1 ? Les coches de cette semaine sont effacées. Vous pouvez revenir à vos autres semaines avec le sélecteur, et votre plan d'étude reste identique.",
+    weekPickLabel: "Aller à la semaine",
+    weekPickWeek: "Semaine {n}",
+    weekPickInProgress: "en cours",
+    weekBackToProgress: "Retour à la semaine {n} (en cours)",
     furiganaOn: "Activé",
     furiganaOff: "Désactivé",
     studyTimePerDay: "TEMPS D'ÉTUDE PAR JOUR *",
@@ -2109,7 +2184,7 @@ const UI_TRANSLATIONS = {
     storeRestore: "Restaurer les achats",
     storePurchaseFailed: "L'achat n'a pas pu être finalisé. Veuillez réessayer.",
     storeNothingToRestore: "Aucun achat précédent n'a été trouvé.",
-    storeAutoRenewNote: "Les abonnements se renouvellent automatiquement au prix affiché, sauf résiliation au moins 24 heures avant la fin de la période en cours. Vous pouvez gérer ou résilier votre abonnement dans les réglages de votre compte App Store ou Google Play.",
+    storeAutoRenewNote: "Les abonnements se renouvellent automatiquement au prix affiché, sauf résiliation au moins 24 heures avant la fin de la période en cours. Vous pouvez gérer ou résilier votre abonnement dans les réglages de votre compte App Store.",
     pronSlowTip: "Vous n'arrivez pas à saisir ? Ralentissez la vidéo (par exemple vitesse 0,5× ou 0,75× sur YouTube) et écoutez à nouveau. Le professeur, c'est la vidéo — GAKU se contente de transcrire.",
     pronSlowNo: "Pas de souci. Ralentissez la vidéo et réécoutez ce passage — GAKU le transcrira de nouveau.",
     pronBestScore: "Meilleur score",
@@ -2266,7 +2341,7 @@ const UI_TRANSLATIONS = {
     installPromptDesc: "Ábrela con un toque y nunca pierdas tu progreso.",
     installPromptCta: "Añadir a pantalla de inicio",
     installPromptSkip: "Más tarde",
-    installPromptHaveApp: "¿Ya instalaste GAKU Master desde Google Play o la App Store? No lo necesitas: toca «Más tarde».",
+    installPromptHaveApp: "¿Ya instalaste GAKU Master desde la App Store? No lo necesitas: toca «Más tarde».",
     installPromptIosSteps: "Toca Compartir y luego \"Añadir a pantalla de inicio\"",
     remindTitle: "¿Cuándo repasarás mañana?",
     remindDesc: "Con 5 minutos al día basta. Elige una hora y añadiremos un recordatorio diario a tu calendario.",
@@ -2310,6 +2385,14 @@ const UI_TRANSLATIONS = {
     tutorialSubtitlesDesc: "Pega el enlace de un video abajo y convierte sus subtítulos o audio en tu propia práctica de escucha y vocabulario.",
     tutorialResourcesDesc: "Explora los recursos elegidos para tu nivel abajo, o pega contenido para crear tu propio ejercicio.",
     tutorialMilestonesDesc: "Esta es tu hoja de ruta hacia tu objetivo en japonés. Echa un vistazo a lo que viene a continuación.",
+    tutModesTitle: "Modos de estudio y entrenador",
+    tutorialModesDesc: "Toca 😊 Mode arriba para elegir Enjoyable (relajado) o Intensive (cuota diaria de 8 acciones). En el modo Intensive, tu entrenador sigue tu velocidad de giro, pronunciación, comprensión auditiva y precisión, y siempre te dice en qué centrarte.",
+    tutGuideTitle: "Actualizar mi guía de estudio",
+    tutorialGuideDesc: "Tu plan semanal no cambia para que puedas seguirlo. Solo cuando quieras un plan nuevo, abre ✏️ Editar perfil y pulsa «Update my study guide».",
+    tutLibraryTitle: "Biblioteca y tarjetas",
+    tutorialLibraryDesc: "Tus palabras guardadas están en carpetas. Puedes renombrar carpetas, copiar palabras a otras carpetas, buscar por significado y repasar con tarjetas: pulsa ✅ Understand cuando hayas aprendido una palabra.",
+    tutProgressTitle: "Prueba de progreso",
+    tutorialProgressDesc: "Haz la prueba de 3 minutos ahora y repítela en unos días para ver cuánto has avanzado (antes y ahora).",
     tutorialContentDesc: "Pruébalo ahora: pega un texto en japonés abajo (un artículo, subtítulos, una leyenda) y deja que GAKU cree ejercicios a partir de él, igual que hace GAKU Reader en la web.",
     tutorialConversationDesc: "Pruébalo ahora: reproduce un video, pulsa «Escuchar una pestaña de video» (o el micrófono) y deja que GAKU escuche el diálogo real — te ayudará a entender cada línea y te sugerirá cómo responder.",
     tutorialPronunciationDesc: "Pruébalo ahora: reproduce un video de hablantes nativos, pulsa «Escuchar una pestaña de video» y GAKU escribirá cada línea. Luego, en una tarjeta, di la frase en voz alta y comprueba qué tan cerca estuviste. ¿No la captas? Ralentiza el video y vuelve a escuchar.",
@@ -2327,6 +2410,7 @@ const UI_TRANSLATIONS = {
     imgTapSearch: "Toca para buscar una imagen",
     flashTapToCheck: "Toca para comprobar",
     flashListenExample: "Escuchar el ejemplo",
+    ttsProblem: "🔇 ¿No hay sonido? Es posible que tu teléfono no tenga una voz japonesa. Abre Ajustes → busca «Salida de texto a voz» → instala los datos de voz en japonés (Google Text-to-speech) y vuelve a intentarlo.",
     flashGenRomaji: "Generando romaji…",
     flashGenTranslation: "Generando traducción…",
     flashUnderstand: "✅ Entendido",
@@ -2402,6 +2486,18 @@ const UI_TRANSLATIONS = {
     coachTitle: "Sugerencia de hoy",
     coachBoth: "Normalmente te va bien en {strong}, y {weak} parece un poco difícil. ¿Qué tal {weak} hoy?",
     coachWeakOnly: "{weak} parece un poco difícil para ti. ¿Qué tal practicarlo hoy?",
+    coachAdviceTitle: "🎯 Tu entrenador de estudio",
+    coachNoData: "Practica un poco más y empezaré a darte consejos concretos.",
+    coachAllGood: "No hay puntos débiles ahora. ¡Mantén este ritmo!",
+    coachAccWeak: "Tu precisión en {area} es del {pct} %. Haz de {area} tu prioridad hoy.",
+    coachSlowFlip: "Tardas unos {sec} s en recordar una palabra. Intenta bajar de 5 s con rondas rápidas de tarjetas.",
+    coachSlowWord: "Tu palabra más lenta es {word} ({sec} s). Repásala otra vez.",
+    coachRepeatWord: "Hoy viste {word} {n} veces y no se te queda. Prueba con una frase de ejemplo o escríbela.",
+    coachPronMiss: "Sigues fallando la pronunciación de {word} ({n} veces). Dila despacio y luego a velocidad normal.",
+    coachListenWeak: "Tu comprensión auditiva es del {pct} %. Escucha varias veces antes de leer el texto.",
+    coachStatFlip: "Velocidad de giro",
+    coachStatViews: "Palabras vistas hoy",
+    coachStatListen: "Comprensión auditiva",
     lessonBridgeAsk: "¿Quieres practicar esto con un profesor de verdad? Prueba una clase de prueba gratuita.",
     lessonBridgeBtn: "Reservar una clase de prueba gratis →",
     lessonBridgeMissed: "Sonidos a vigilar: {chars}",
@@ -2442,6 +2538,7 @@ const UI_TRANSLATIONS = {
     feedbackTitle: "💬 Comentarios y Opinión",
     feedbackSubtitle: "Cuéntanos qué te gustaría que mejoráramos o qué te molesta de la app. Leemos todos los mensajes.",
     feedbackWarning: "Si publicas difamación, lenguaje abusivo o términos discriminatorios, tu cuenta será suspendida de inmediato. No asumimos ninguna responsabilidad aunque se inicien acciones legales.",
+    supportEmailNote: "¿No puedes iniciar sesión o tienes problemas con la app? Escríbenos:",
     feedbackChecking: "Comprobando...",
     feedbackAlreadySubmitted: "Ya has enviado tu comentario único. ¡Gracias! (Los estudiantes invitados por GAKU pueden enviar tantas veces como quieran.)",
     feedbackSuccess: "Gracias — tu comentario fue enviado.",
@@ -2574,6 +2671,14 @@ const UI_TRANSLATIONS = {
     didYouUnderstand: "¿Entendiste esto?",
     hideAnswerBtn: "Ocultar respuesta",
     showAnswerBtn: "Mostrar respuesta",
+    questionFuriganaLabel: "Furigana en las preguntas",
+    questionFuriganaDesc: "Muestra furigana sobre los kanji solo en el enunciado. Las respuestas quedan sin furigana, y en las preguntas de lectura de kanji la palabra a evaluar no lleva furigana para no dar la respuesta.",
+    restartWeek1Btn: "Empezar de nuevo desde la semana 1",
+    restartWeek1Confirm: "¿Empezar de nuevo desde la semana 1? Se borran las marcas de esta semana. Puedes volver a tus otras semanas con el selector, y tu plan de estudio sigue igual.",
+    weekPickLabel: "Ir a la semana",
+    weekPickWeek: "Semana {n}",
+    weekPickInProgress: "en curso",
+    weekBackToProgress: "Volver a la semana {n} (en curso)",
     furiganaOn: "Activado",
     furiganaOff: "Desactivado",
     studyTimePerDay: "TIEMPO DE ESTUDIO POR DÍA *",
@@ -2710,7 +2815,7 @@ const UI_TRANSLATIONS = {
     storeRestore: "Restaurar compras",
     storePurchaseFailed: "No se pudo completar la compra. Inténtalo de nuevo.",
     storeNothingToRestore: "No se encontraron compras anteriores.",
-    storeAutoRenewNote: "Las suscripciones se renuevan automáticamente al precio indicado, salvo que se cancelen al menos 24 horas antes de que termine el periodo actual. Puedes gestionarlas o cancelarlas en los ajustes de tu cuenta de App Store o Google Play.",
+    storeAutoRenewNote: "Las suscripciones se renuevan automáticamente al precio indicado, salvo que se cancelen al menos 24 horas antes de que termine el periodo actual. Puedes gestionarlas o cancelarlas en los ajustes de tu cuenta de App Store.",
     pronSlowTip: "¿No lo captas? Ralentiza el video (por ejemplo, velocidad 0,5× o 0,75× en YouTube) y vuelve a escuchar. El maestro es el video — GAKU solo lo transcribe.",
     pronSlowNo: "No hay problema. Ralentiza el video y escucha esa parte otra vez — GAKU la transcribirá de nuevo.",
     pronBestScore: "Mejor puntuación",
@@ -2867,7 +2972,7 @@ const UI_TRANSLATIONS = {
     installPromptDesc: "Abra com um toque e nunca perca seu progresso.",
     installPromptCta: "Adicionar à tela inicial",
     installPromptSkip: "Mais tarde",
-    installPromptHaveApp: "Já instalou o GAKU Master pelo Google Play ou pela App Store? Não precisa disto — toque em «Mais tarde».",
+    installPromptHaveApp: "Já instalou o GAKU Master pela App Store? Não precisa disto — toque em «Mais tarde».",
     installPromptIosSteps: "Toque em Compartilhar e depois em \"Adicionar à Tela de Início\"",
     remindTitle: "Quando você vai revisar amanhã?",
     remindDesc: "Apenas 5 minutos por dia bastam. Escolha um horário e adicionaremos um lembrete diário ao seu calendário.",
@@ -2911,6 +3016,14 @@ const UI_TRANSLATIONS = {
     tutorialSubtitlesDesc: "Cole o link de um vídeo abaixo e transforme as legendas ou o áudio em sua própria prática de escuta e vocabulário.",
     tutorialResourcesDesc: "Explore os recursos selecionados para o seu nível abaixo, ou cole um conteúdo para criar seu próprio exercício.",
     tutorialMilestonesDesc: "Este é o seu roteiro rumo ao seu objetivo em japonês. Dê uma olhada no que vem a seguir.",
+    tutModesTitle: "Modos de estudo e treinador",
+    tutorialModesDesc: "Toque em 😊 Mode no topo para escolher Enjoyable (relaxado) ou Intensive (meta diária de 8 ações). No modo Intensive, seu treinador acompanha sua velocidade de virada, pronúncia, compreensão auditiva e acertos, e sempre diz em que focar.",
+    tutGuideTitle: "Atualizar meu guia de estudos",
+    tutorialGuideDesc: "Seu plano semanal continua o mesmo para você poder segui-lo. Só quando quiser um plano novo, abra ✏️ Editar perfil e toque em “Update my study guide”.",
+    tutLibraryTitle: "Biblioteca e cartões",
+    tutorialLibraryDesc: "Suas palavras salvas ficam em pastas. Você pode renomear pastas, copiar palavras para outras pastas, buscar pelo significado e revisar com cartões — toque em ✅ Understand quando aprender uma palavra.",
+    tutProgressTitle: "Teste de progresso",
+    tutorialProgressDesc: "Faça o teste de 3 minutos agora e repita em alguns dias para ver o quanto evoluiu (antes e depois).",
     tutorialContentDesc: "Experimente agora: cole um texto em japonês abaixo (um artigo, legendas, uma legenda de foto) e deixe o GAKU criar atividades a partir dele, assim como o GAKU Reader faz na web.",
     tutorialConversationDesc: "Experimente agora: reproduza um vídeo, toque em “Ouvir uma aba de vídeo” (ou no microfone) e deixe o GAKU ouvir o diálogo real — ele vai te ajudar a entender cada fala e sugerir como responder.",
     tutorialPronunciationDesc: "Experimente agora: reproduza um vídeo de falantes nativos, toque em “Ouvir uma aba de vídeo” e o GAKU anota cada fala. Depois, em um cartão, diga a frase em voz alta e veja o quão perto você chegou. Não entendeu? Diminua a velocidade do vídeo e ouça de novo.",
@@ -2928,6 +3041,7 @@ const UI_TRANSLATIONS = {
     imgTapSearch: "Toque para buscar uma imagem",
     flashTapToCheck: "Toque para conferir",
     flashListenExample: "Ouvir o exemplo",
+    ttsProblem: "🔇 Sem som? Seu celular pode não ter uma voz em japonês. Abra Configurações → procure «Saída de conversão de texto em voz» → instale os dados de voz em japonês (Google Text-to-speech) e tente de novo.",
     flashGenRomaji: "Gerando romaji…",
     flashGenTranslation: "Gerando tradução…",
     flashUnderstand: "✅ Entendi",
@@ -3003,6 +3117,18 @@ const UI_TRANSLATIONS = {
     coachTitle: "Sugestão de hoje",
     coachBoth: "Você costuma ir bem em {strong}, e {weak} parece um pouco difícil. Que tal {weak} hoje?",
     coachWeakOnly: "{weak} parece um pouco difícil para você. Que tal praticar hoje?",
+    coachAdviceTitle: "🎯 Seu treinador de estudos",
+    coachNoData: "Pratique um pouco mais e começarei a dar conselhos específicos.",
+    coachAllGood: "Nenhum ponto fraco no momento. Mantenha esse ritmo!",
+    coachAccWeak: "Sua taxa de acerto em {area} é {pct}%. Faça de {area} o foco de hoje.",
+    coachSlowFlip: "Você leva cerca de {sec} s para lembrar uma palavra. Tente ficar abaixo de 5 s com rodadas rápidas de cartões.",
+    coachSlowWord: "Sua palavra mais lenta é {word} ({sec} s). Revise-a novamente.",
+    coachRepeatWord: "Você viu {word} {n} vezes hoje e ela não está fixando. Tente uma frase de exemplo ou escreva-a.",
+    coachPronMiss: "Você continua errando a pronúncia de {word} ({n} vezes). Fale devagar e depois em velocidade normal.",
+    coachListenWeak: "Sua compreensão auditiva é {pct}%. Ouça várias vezes antes de ler o texto.",
+    coachStatFlip: "Velocidade de virada",
+    coachStatViews: "Palavras vistas hoje",
+    coachStatListen: "Compreensão auditiva",
     lessonBridgeAsk: "Quer praticar isso com um professor de verdade? Experimente uma aula experimental gratuita.",
     lessonBridgeBtn: "Reservar uma aula experimental grátis →",
     lessonBridgeMissed: "Sons para observar: {chars}",
@@ -3043,6 +3169,7 @@ const UI_TRANSLATIONS = {
     feedbackTitle: "💬 Feedback e Opinião",
     feedbackSubtitle: "Conte-nos o que você gostaria que melhorássemos ou o que está incomodando você no app. Lemos todas as mensagens.",
     feedbackWarning: "Se você publicar difamação, linguagem abusiva ou termos discriminatórios, sua conta será suspensa imediatamente. Não assumimos nenhuma responsabilidade mesmo que haja ação judicial.",
+    supportEmailNote: "Não consegue entrar ou está com problemas no app? Escreva para nós:",
     feedbackChecking: "Verificando...",
     feedbackAlreadySubmitted: "Você já enviou seu feedback único. Obrigado! (Alunos convidados pela GAKU podem enviar quantas vezes quiserem.)",
     feedbackSuccess: "Obrigado — seu feedback foi enviado.",
@@ -3175,6 +3302,14 @@ const UI_TRANSLATIONS = {
     didYouUnderstand: "Você entendeu isso?",
     hideAnswerBtn: "Ocultar resposta",
     showAnswerBtn: "Mostrar resposta",
+    questionFuriganaLabel: "Furigana nas perguntas",
+    questionFuriganaDesc: "Mostra furigana sobre os kanji apenas no enunciado. As respostas ficam sem furigana, e nas perguntas de leitura de kanji a palavra avaliada fica sem furigana para não revelar a resposta.",
+    restartWeek1Btn: "Recomeçar da semana 1",
+    restartWeek1Confirm: "Recomeçar da semana 1? As marcações desta semana serão apagadas. Você pode voltar às outras semanas pelo seletor, e seu plano de estudo continua o mesmo.",
+    weekPickLabel: "Ir para a semana",
+    weekPickWeek: "Semana {n}",
+    weekPickInProgress: "em andamento",
+    weekBackToProgress: "Voltar à semana {n} (em andamento)",
     furiganaOn: "Ativado",
     furiganaOff: "Desativado",
     studyTimePerDay: "TEMPO DE ESTUDO POR DIA *",
@@ -3311,7 +3446,7 @@ const UI_TRANSLATIONS = {
     storeRestore: "Restaurar compras",
     storePurchaseFailed: "Não foi possível concluir a compra. Tente novamente.",
     storeNothingToRestore: "Nenhuma compra anterior foi encontrada.",
-    storeAutoRenewNote: "As assinaturas são renovadas automaticamente pelo preço exibido, a menos que sejam canceladas pelo menos 24 horas antes do fim do período atual. Você pode gerenciar ou cancelar nas configurações da sua conta da App Store ou do Google Play.",
+    storeAutoRenewNote: "As assinaturas são renovadas automaticamente pelo preço exibido, a menos que sejam canceladas pelo menos 24 horas antes do fim do período atual. Você pode gerenciar ou cancelar nas configurações da sua conta da App Store.",
     pronSlowTip: "Não conseguiu entender? Diminua a velocidade do vídeo (por exemplo, 0,5× ou 0,75× no YouTube) e ouça de novo. O professor é o vídeo — o GAKU apenas transcreve.",
     pronSlowNo: "Sem problema. Diminua a velocidade do vídeo e ouça esse trecho novamente — o GAKU vai transcrever mais uma vez.",
     pronBestScore: "Melhor pontuação",
@@ -3468,7 +3603,7 @@ const UI_TRANSLATIONS = {
     installPromptDesc: "Ein Fingertipp zum Öffnen, und dein Fortschritt geht nie verloren.",
     installPromptCta: "Zum Startbildschirm hinzufügen",
     installPromptSkip: "Vielleicht später",
-    installPromptHaveApp: "GAKU Master schon über Google Play oder den App Store installiert? Dann brauchst du das nicht – tippe einfach auf „Vielleicht später“.",
+    installPromptHaveApp: "GAKU Master schon über den App Store installiert? Dann brauchst du das nicht – tippe einfach auf „Vielleicht später“.",
     installPromptIosSteps: "Tippe auf Teilen, dann auf „Zum Home-Bildschirm\"",
     remindTitle: "Wann wiederholst du morgen?",
     remindDesc: "5 Minuten pro Tag reichen. Wähle eine Uhrzeit und wir fügen eine tägliche Erinnerung zu deinem Kalender hinzu.",
@@ -3512,6 +3647,14 @@ const UI_TRANSLATIONS = {
     tutorialSubtitlesDesc: "Füge unten einen Video-Link ein und verwandle dessen Untertitel oder Ton in dein eigenes Hör- und Vokabeltraining.",
     tutorialResourcesDesc: "Stöbere unten in den für dein Niveau ausgewählten Ressourcen oder füge einen Text ein, um eine eigene Übung zu erstellen.",
     tutorialMilestonesDesc: "Das ist deine Roadmap zu deinem Japanisch-Ziel. Wirf einen Blick darauf, was als Nächstes kommt.",
+    tutModesTitle: "Lernmodi & Coach",
+    tutorialModesDesc: "Tippe oben auf 😊 Mode, um Enjoyable (entspannt) oder Intensive (Tagesziel von 8 Aktionen) zu wählen. Im Intensive-Modus verfolgt dein Coach Umdrehtempo, Aussprache, Hörverständnis und Trefferquote und sagt dir immer, worauf du dich konzentrieren solltest.",
+    tutGuideTitle: "Meinen Lernplan aktualisieren",
+    tutorialGuideDesc: "Dein Wochenplan bleibt gleich, damit du ihm folgen kannst. Nur wenn du einen neuen Plan möchtest, öffne ✏️ Profil bearbeiten und tippe auf „Update my study guide“.",
+    tutLibraryTitle: "Bibliothek & Karteikarten",
+    tutorialLibraryDesc: "Deine gespeicherten Wörter liegen in Ordnern. Du kannst Ordner umbenennen, Wörter in andere Ordner kopieren, nach Bedeutung suchen und mit Karteikarten wiederholen — tippe auf ✅ Understand, wenn du ein Wort gelernt hast.",
+    tutProgressTitle: "Fortschrittstest",
+    tutorialProgressDesc: "Mach den 3-Minuten-Test jetzt und wiederhole ihn in ein paar Tagen, um deinen Fortschritt zu sehen (damals vs. jetzt).",
     tutorialContentDesc: "Probier's gleich aus: Füge unten einen japanischen Text ein (einen Artikel, Untertitel, eine Bildunterschrift) und lass GAKU daraus Übungen erstellen — genau wie GAKU Reader es im Web tut.",
     tutorialConversationDesc: "Probier's gleich aus: Spiele ein Video ab, tippe auf „Video-Tab abhören“ (oder auf das Mikrofon) und lass GAKU dem echten Dialog zuhören – es hilft dir, jede Zeile zu verstehen, und schlägt dir Antworten vor.",
     tutorialPronunciationDesc: "Probier's gleich aus: Spiele ein Video mit Muttersprachlern ab, tippe auf „Video-Tab abhören“, und GAKU schreibt jede Zeile mit. Sprich dann auf einer Karte den Satz laut nach und sieh, wie nah du dran warst. Nicht verstanden? Verlangsame das Video und höre noch einmal zu.",
@@ -3529,6 +3672,7 @@ const UI_TRANSLATIONS = {
     imgTapSearch: "Tippen, um ein Bild zu suchen",
     flashTapToCheck: "Zum Prüfen tippen",
     flashListenExample: "Beispiel anhören",
+    ttsProblem: "🔇 Kein Ton? Dein Handy hat möglicherweise keine japanische Stimme. Öffne Einstellungen → suche „Text-to-Speech-Ausgabe“ → installiere die japanischen Sprachdaten (Google Text-to-speech) und versuche es erneut.",
     flashGenRomaji: "Romaji wird erstellt…",
     flashGenTranslation: "Übersetzung wird erstellt…",
     flashUnderstand: "✅ Verstanden",
@@ -3604,6 +3748,18 @@ const UI_TRANSLATIONS = {
     coachTitle: "Vorschlag für heute",
     coachBoth: "Sie sind meist gut in {strong}, und {weak} scheint etwas schwer. Wie wäre es heute mit {weak}?",
     coachWeakOnly: "{weak} scheint Ihnen etwas schwerzufallen. Wie wäre es, es heute zu üben?",
+    coachAdviceTitle: "🎯 Dein Lerncoach",
+    coachNoData: "Übe noch etwas mehr, dann gebe ich dir konkrete Tipps.",
+    coachAllGood: "Im Moment keine Schwächen. Weiter so!",
+    coachAccWeak: "Deine Trefferquote bei {area} liegt bei {pct} %. Mach {area} heute zu deinem Schwerpunkt.",
+    coachSlowFlip: "Du brauchst etwa {sec} s, um dich an ein Wort zu erinnern. Ziel: unter 5 s mit schnellen Karteikarten-Runden.",
+    coachSlowWord: "Dein langsamstes Wort ist {word} ({sec} s). Wiederhole es noch einmal.",
+    coachRepeatWord: "Du hast {word} heute {n}-mal angesehen, aber es bleibt nicht hängen. Versuche einen Beispielsatz oder schreibe es auf.",
+    coachPronMiss: "Die Aussprache von {word} gelingt dir immer wieder nicht ({n}-mal). Sprich es langsam, dann in normalem Tempo.",
+    coachListenWeak: "Dein Hörverständnis liegt bei {pct} %. Höre mehrmals zu, bevor du den Text liest.",
+    coachStatFlip: "Umdrehtempo",
+    coachStatViews: "Heute gesehene Wörter",
+    coachStatListen: "Hören",
     lessonBridgeAsk: "Möchten Sie das mit einer echten Lehrkraft üben? Probieren Sie eine kostenlose Probestunde.",
     lessonBridgeBtn: "Kostenlose Probestunde buchen →",
     lessonBridgeMissed: "Laute, auf die Sie achten sollten: {chars}",
@@ -3644,6 +3800,7 @@ const UI_TRANSLATIONS = {
     feedbackTitle: "💬 Feedback & Meinung",
     feedbackSubtitle: "Sag uns, was wir verbessern sollen oder was dich an der App stört. Wir lesen jede Nachricht.",
     feedbackWarning: "Bei Verleumdung, beleidigender Sprache oder diskriminierenden Begriffen wird dein Konto sofort gesperrt. Wir übernehmen keine Verantwortung, selbst wenn rechtliche Schritte eingeleitet werden.",
+    supportEmailNote: "Kein Login möglich oder Probleme mit der App? Schreib uns:",
     feedbackChecking: "Wird überprüft...",
     feedbackAlreadySubmitted: "Du hast dein einmaliges Feedback bereits gesendet. Danke! (Von GAKU eingeladene Studierende können beliebig oft Feedback senden.)",
     feedbackSuccess: "Danke — dein Feedback wurde gesendet.",
@@ -3776,6 +3933,14 @@ const UI_TRANSLATIONS = {
     didYouUnderstand: "Hast du das verstanden?",
     hideAnswerBtn: "Antwort ausblenden",
     showAnswerBtn: "Antwort anzeigen",
+    questionFuriganaLabel: "Furigana bei den Fragen",
+    questionFuriganaDesc: "Zeigt Furigana über den Kanji nur im Fragetext. Antworten bleiben ohne Furigana, und bei Kanji-Leseaufgaben bleibt das gefragte Wort ohne Furigana, damit die Antwort nicht verraten wird.",
+    restartWeek1Btn: "Von Woche 1 neu beginnen",
+    restartWeek1Confirm: "Von Woche 1 neu beginnen? Die Häkchen dieser Woche werden gelöscht. Über die Wochenauswahl kannst du zu deinen anderen Wochen zurückkehren, und dein Lernplan bleibt gleich.",
+    weekPickLabel: "Zu Woche",
+    weekPickWeek: "Woche {n}",
+    weekPickInProgress: "aktuell",
+    weekBackToProgress: "Zurück zu Woche {n} (aktuell)",
     furiganaOn: "Ein",
     furiganaOff: "Aus",
     studyTimePerDay: "LERNZEIT PRO TAG *",
@@ -3912,7 +4077,7 @@ const UI_TRANSLATIONS = {
     storeRestore: "Käufe wiederherstellen",
     storePurchaseFailed: "Der Kauf konnte nicht abgeschlossen werden. Bitte versuche es erneut.",
     storeNothingToRestore: "Es wurden keine früheren Käufe gefunden.",
-    storeAutoRenewNote: "Abonnements verlängern sich automatisch zum angezeigten Preis, sofern sie nicht mindestens 24 Stunden vor Ende des aktuellen Zeitraums gekündigt werden. Du kannst sie in den Kontoeinstellungen deines App Store oder Google Play verwalten oder kündigen.",
+    storeAutoRenewNote: "Abonnements verlängern sich automatisch zum angezeigten Preis, sofern sie nicht mindestens 24 Stunden vor Ende des aktuellen Zeitraums gekündigt werden. Du kannst sie in den Kontoeinstellungen deines App Store verwalten oder kündigen.",
     pronSlowTip: "Nicht verstanden? Verlangsame das Video (z. B. YouTube-Geschwindigkeit 0,5× oder 0,75×) und höre noch einmal zu. Das Video ist dein Lehrer — GAKU schreibt nur mit.",
     pronSlowNo: "Kein Problem. Verlangsame das Video und höre diese Stelle noch einmal — GAKU schreibt sie erneut mit.",
     pronBestScore: "Beste Punktzahl",
@@ -4069,7 +4234,7 @@ const UI_TRANSLATIONS = {
     installPromptDesc: "Aprilo con un tocco e non perderai mai i tuoi progressi.",
     installPromptCta: "Aggiungi a Home",
     installPromptSkip: "Più tardi",
-    installPromptHaveApp: "Hai già installato GAKU Master da Google Play o dall'App Store? Non serve: tocca «Più tardi».",
+    installPromptHaveApp: "Hai già installato GAKU Master dall'App Store? Non serve: tocca «Più tardi».",
     installPromptIosSteps: "Tocca Condividi, poi \"Aggiungi a Home\"",
     remindTitle: "Quando ripasserai domani?",
     remindDesc: "Bastano 5 minuti al giorno. Scegli un orario e aggiungeremo un promemoria giornaliero al tuo calendario.",
@@ -4113,6 +4278,14 @@ const UI_TRANSLATIONS = {
     tutorialSubtitlesDesc: "Incolla il link di un video qui sotto e trasforma i suoi sottotitoli o l'audio in un esercizio personale di ascolto e vocabolario.",
     tutorialResourcesDesc: "Sfoglia le risorse selezionate per il tuo livello qui sotto, oppure incolla un contenuto per creare il tuo esercizio.",
     tutorialMilestonesDesc: "Questa è la tua roadmap verso il tuo obiettivo in giapponese. Dai un'occhiata a cosa ti aspetta.",
+    tutModesTitle: "Modalità di studio e coach",
+    tutorialModesDesc: "Tocca 😊 Mode in alto per scegliere Enjoyable (rilassata) o Intensive (obiettivo giornaliero di 8 azioni). In modalità Intensive il coach segue velocità di giro, pronuncia, ascolto e precisione e ti dice sempre su cosa concentrarti.",
+    tutGuideTitle: "Aggiorna la mia guida di studio",
+    tutorialGuideDesc: "Il tuo piano settimanale resta lo stesso, così puoi seguirlo. Solo quando vuoi un piano nuovo, apri ✏️ Modifica profilo e premi «Update my study guide».",
+    tutLibraryTitle: "Libreria e flashcard",
+    tutorialLibraryDesc: "Le parole salvate sono in cartelle. Puoi rinominare le cartelle, copiare parole in altre cartelle, cercare per significato e ripassare con le flashcard: premi ✅ Understand quando hai imparato una parola.",
+    tutProgressTitle: "Verifica dei progressi",
+    tutorialProgressDesc: "Fai ora la verifica di 3 minuti e ripetila tra qualche giorno per vedere quanto sei cresciuto (prima e dopo).",
     tutorialContentDesc: "Provalo subito: incolla un testo giapponese qui sotto (un articolo, sottotitoli, una didascalia) e lascia che GAKU crei attività a partire da esso, proprio come fa GAKU Reader sul web.",
     tutorialConversationDesc: "Provalo subito: riproduci un video, tocca «Ascolta una scheda video» (o il microfono) e lascia che GAKU ascolti il dialogo reale — ti aiuterà a capire ogni battuta e ti suggerirà come rispondere.",
     tutorialPronunciationDesc: "Provalo subito: riproduci un video di madrelingua, tocca «Ascolta una scheda video» e GAKU trascrive ogni frase. Poi, su una scheda, ripeti la frase ad alta voce e guarda quanto ti sei avvicinato. Non capisci? Rallenta il video e riascolta.",
@@ -4130,6 +4303,7 @@ const UI_TRANSLATIONS = {
     imgTapSearch: "Tocca per cercare un'immagine",
     flashTapToCheck: "Tocca per controllare",
     flashListenExample: "Ascolta l'esempio",
+    ttsProblem: "🔇 Nessun suono? Il telefono potrebbe non avere una voce giapponese. Apri Impostazioni → cerca «Sintesi vocale» → installa i dati vocali giapponesi (Google Text-to-speech) e riprova.",
     flashGenRomaji: "Generazione del romaji…",
     flashGenTranslation: "Generazione della traduzione…",
     flashUnderstand: "✅ Capito",
@@ -4205,6 +4379,18 @@ const UI_TRANSLATIONS = {
     coachTitle: "Suggerimento di oggi",
     coachBoth: "Di solito vai bene in {strong}, e {weak} sembra un po' difficile. Che ne dici di {weak} oggi?",
     coachWeakOnly: "{weak} sembra un po' difficile per te. Che ne dici di allenarlo oggi?",
+    coachAdviceTitle: "🎯 Il tuo coach di studio",
+    coachNoData: "Esercitati ancora un po' e inizierò a darti consigli specifici.",
+    coachAllGood: "Nessun punto debole al momento. Continua così!",
+    coachAccWeak: "La tua precisione in {area} è {pct}%. Fai di {area} la tua priorità oggi.",
+    coachSlowFlip: "Ti servono circa {sec} s per ricordare una parola. Punta a meno di 5 s con giri rapidi di flashcard.",
+    coachSlowWord: "La tua parola più lenta è {word} ({sec} s). Ripassala.",
+    coachRepeatWord: "Oggi hai visto {word} {n} volte e non ti resta in mente. Prova con una frase d'esempio o scrivila.",
+    coachPronMiss: "Continui a sbagliare la pronuncia di {word} ({n} volte). Dilla lentamente, poi a velocità normale.",
+    coachListenWeak: "La tua comprensione orale è {pct}%. Ascolta più volte prima di leggere il testo.",
+    coachStatFlip: "Velocità di giro",
+    coachStatViews: "Parole viste oggi",
+    coachStatListen: "Ascolto",
     lessonBridgeAsk: "Vuoi esercitarti su questo con un vero insegnante? Prova una lezione di prova gratuita.",
     lessonBridgeBtn: "Prenota una lezione di prova gratuita →",
     lessonBridgeMissed: "Suoni da tenere d'occhio: {chars}",
@@ -4245,6 +4431,7 @@ const UI_TRANSLATIONS = {
     feedbackTitle: "💬 Feedback e Opinioni",
     feedbackSubtitle: "Dicci cosa vorresti che migliorassimo o cosa ti disturba dell'app. Leggiamo ogni messaggio.",
     feedbackWarning: "In caso di diffamazione, linguaggio offensivo o termini discriminatori, il tuo account verrà sospeso immediatamente. Non ci assumiamo alcuna responsabilità anche in caso di azioni legali.",
+    supportEmailNote: "Non riesci ad accedere o hai problemi con l'app? Scrivici:",
     feedbackChecking: "Verifica in corso...",
     feedbackAlreadySubmitted: "Hai già inviato il tuo feedback unico. Grazie! (Gli studenti invitati da GAKU possono inviarne quante volte vogliono.)",
     feedbackSuccess: "Grazie — il tuo feedback è stato inviato.",
@@ -4377,6 +4564,14 @@ const UI_TRANSLATIONS = {
     didYouUnderstand: "Hai capito questo?",
     hideAnswerBtn: "Nascondi risposta",
     showAnswerBtn: "Mostra risposta",
+    questionFuriganaLabel: "Furigana nelle domande",
+    questionFuriganaDesc: "Mostra il furigana sopra i kanji solo nel testo della domanda. Le risposte restano senza furigana e nelle domande di lettura dei kanji la parola richiesta resta senza furigana per non svelare la risposta.",
+    restartWeek1Btn: "Ricomincia dalla settimana 1",
+    restartWeek1Confirm: "Ricominciare dalla settimana 1? Le spunte di questa settimana vengono cancellate. Puoi tornare alle altre settimane dal selettore e il tuo piano di studio resta lo stesso.",
+    weekPickLabel: "Vai alla settimana",
+    weekPickWeek: "Settimana {n}",
+    weekPickInProgress: "in corso",
+    weekBackToProgress: "Torna alla settimana {n} (in corso)",
     furiganaOn: "Attivo",
     furiganaOff: "Disattivo",
     studyTimePerDay: "TEMPO DI STUDIO AL GIORNO *",
@@ -4513,7 +4708,7 @@ const UI_TRANSLATIONS = {
     storeRestore: "Ripristina acquisti",
     storePurchaseFailed: "Impossibile completare l'acquisto. Riprova.",
     storeNothingToRestore: "Nessun acquisto precedente trovato.",
-    storeAutoRenewNote: "Gli abbonamenti si rinnovano automaticamente al prezzo indicato, salvo disdetta almeno 24 ore prima della fine del periodo in corso. Puoi gestirli o annullarli nelle impostazioni del tuo account App Store o Google Play.",
+    storeAutoRenewNote: "Gli abbonamenti si rinnovano automaticamente al prezzo indicato, salvo disdetta almeno 24 ore prima della fine del periodo in corso. Puoi gestirli o annullarli nelle impostazioni del tuo account App Store.",
     pronSlowTip: "Non riesci a capire? Rallenta il video (ad esempio velocità 0,5× o 0,75× su YouTube) e ascolta di nuovo. L'insegnante è il video — GAKU si limita a trascrivere.",
     pronSlowNo: "Nessun problema. Rallenta il video e riascolta quella parte — GAKU la trascriverà ancora una volta.",
     pronBestScore: "Punteggio migliore",
@@ -4670,7 +4865,7 @@ const UI_TRANSLATIONS = {
     installPromptDesc: "一键打开，学习进度永不丢失。",
     installPromptCta: "添加到主屏幕",
     installPromptSkip: "以后再说",
-    installPromptHaveApp: "已经从 Google Play 或 App Store 安装了 GAKU Master？那就不需要这一步——点“以后再说”即可。",
+    installPromptHaveApp: "已经从 App Store 安装了 GAKU Master？那就不需要这一步——点“以后再说”即可。",
     installPromptIosSteps: "点击分享按钮，然后选择\"添加到主屏幕\"",
     remindTitle: "明天几点复习？",
     remindDesc: "每天只需5分钟。选择一个时间，我们会在你的日历中添加每日提醒。",
@@ -4714,6 +4909,14 @@ const UI_TRANSLATIONS = {
     tutorialSubtitlesDesc: "在下面粘贴一个视频链接，把它的字幕或语音变成属于你自己的听力和词汇练习。",
     tutorialResourcesDesc: "浏览下面为你的水平精选的学习资源，或者粘贴一段内容来制作你自己的练习。",
     tutorialMilestonesDesc: "这是通往你日语目标的路线图。看看接下来会遇到什么。",
+    tutModesTitle: "学习模式与教练",
+    tutorialModesDesc: "点击顶部的 😊 Mode，选择 Enjoyable（轻松）或 Intensive（每天 8 个动作的目标）。在 Intensive 模式下，学习教练会记录你的翻卡速度、发音、听力和正确率，并随时告诉你该重点学什么。",
+    tutGuideTitle: "更新我的学习指南",
+    tutorialGuideDesc: "你的每周计划保持不变，方便你照着学。只有想要新计划时，才打开 ✏️ 编辑资料并点击“Update my study guide”。",
+    tutLibraryTitle: "单词库与闪卡",
+    tutorialLibraryDesc: "保存的单词都放在文件夹里。你可以重命名文件夹、把单词复制到其他文件夹、按意思搜索，还可以用闪卡复习——学会一个单词后点击 ✅ Understand。",
+    tutProgressTitle: "进步检测",
+    tutorialProgressDesc: "现在做一次 3 分钟的检测，几天后再做一次，看看你进步了多少（之前 vs. 现在）。",
     tutorialContentDesc: "现在就试试：在下面粘贴一段日语文本(文章、字幕、说明文字)，让GAKU据此生成练习活动——就像GAKU Reader在网页上做的那样。",
     tutorialConversationDesc: "现在就试试：播放一段视频，点击“收听视频标签页”（或麦克风），让GAKU聆听真实对话——它会帮你理解每一句话，并给出回应建议。",
     tutorialPronunciationDesc: "现在就试试：播放母语者的视频，点击“收听视频标签页”，GAKU会把每句话记录下来。然后在卡片上大声说出这句话，看看你有多接近。听不清？把视频放慢再听一遍。",
@@ -4731,6 +4934,7 @@ const UI_TRANSLATIONS = {
     imgTapSearch: "点击搜索图片",
     flashTapToCheck: "点击查看答案",
     flashListenExample: "听例句",
+    ttsProblem: "🔇 没有声音？你的手机可能没有日语语音。打开“设置”→搜索“文字转语音输出”→安装日语语音数据（Google 文字转语音），然后再试一次。",
     flashGenRomaji: "正在生成罗马字…",
     flashGenTranslation: "正在生成翻译…",
     flashUnderstand: "✅ 已理解",
@@ -4806,6 +5010,18 @@ const UI_TRANSLATIONS = {
     coachTitle: "今日建议",
     coachBoth: "你通常在{strong}方面表现不错，而{weak}似乎有点吃力。今天练习一下{weak}怎么样？",
     coachWeakOnly: "{weak}对你来说似乎有点难。今天练习一下怎么样？",
+    coachAdviceTitle: "🎯 你的学习教练",
+    coachNoData: "再多练习一点，我就能给你具体的建议了。",
+    coachAllGood: "目前没有薄弱项，保持这个节奏！",
+    coachAccWeak: "{area}的正确率是 {pct}%。今天就把{area}作为重点吧。",
+    coachSlowFlip: "你回想一个单词大约需要 {sec} 秒。试着用快速闪卡把时间缩短到 5 秒以内。",
+    coachSlowWord: "你最慢的单词是 {word}（{sec} 秒）。再复习一遍吧。",
+    coachRepeatWord: "今天你看了 {word} {n} 次，但还没记住。试试造个例句或写一写。",
+    coachPronMiss: "你多次读错 {word} 的发音（{n} 次）。先慢慢读，再用正常语速读。",
+    coachListenWeak: "听力理解率是 {pct}%。读文本之前多听几遍。",
+    coachStatFlip: "翻卡速度",
+    coachStatViews: "今天看过的单词",
+    coachStatListen: "听力",
     lessonBridgeAsk: "想和真人老师一起练习这个吗？试试免费体验课吧。",
     lessonBridgeBtn: "预约免费体验课 →",
     lessonBridgeMissed: "需要留意的发音：{chars}",
@@ -4846,6 +5062,7 @@ const UI_TRANSLATIONS = {
     feedbackTitle: "💬 反馈与意见",
     feedbackSubtitle: "告诉我们你希望我们改进什么，或者对这个应用有什么不满意的地方。我们会阅读每一条留言。",
     feedbackWarning: "万一发布诽谤、辱骂或歧视性言论，账号将立即被停用。即使因此产生诉讼，我们也概不负责。",
+    supportEmailNote: "无法登录或使用应用时遇到问题？请发邮件给我们：",
     feedbackChecking: "正在检查...",
     feedbackAlreadySubmitted: "你已经提交过唯一一次反馈了，谢谢！(受GAKU邀请的学生可以随时多次提交。)",
     feedbackSuccess: "谢谢——你的反馈已发送。",
@@ -4978,6 +5195,14 @@ const UI_TRANSLATIONS = {
     didYouUnderstand: "你理解这个吗？",
     hideAnswerBtn: "隐藏答案",
     showAnswerBtn: "显示答案",
+    questionFuriganaLabel: "题目显示注音假名",
+    questionFuriganaDesc: "仅在题目文字的汉字上方显示注音假名。答案不显示注音;汉字读音类题目中的目标词不加注音,以免泄露答案。",
+    restartWeek1Btn: "从第1周重新开始",
+    restartWeek1Confirm: "从第1周重新开始？本周的勾选会被清除。你可以通过周选择器回到其他周，学习计划本身保持不变。",
+    weekPickLabel: "前往周",
+    weekPickWeek: "第{n}周",
+    weekPickInProgress: "进行中",
+    weekBackToProgress: "返回第{n}周（进行中）",
     furiganaOn: "开",
     furiganaOff: "关",
     studyTimePerDay: "每天学习时间 *",
@@ -5114,7 +5339,7 @@ const UI_TRANSLATIONS = {
     storeRestore: "恢复购买",
     storePurchaseFailed: "无法完成购买,请重试。",
     storeNothingToRestore: "未找到之前的购买记录。",
-    storeAutoRenewNote: "订阅将按所示价格自动续订,除非在当前周期结束前至少24小时取消。您可以在 App Store 或 Google Play 的账户设置中管理或取消订阅。",
+    storeAutoRenewNote: "订阅将按所示价格自动续订,除非在当前周期结束前至少24小时取消。您可以在 App Store 的账户设置中管理或取消订阅。",
     pronSlowTip: "听不清楚?请把视频放慢(例如YouTube的0.5倍或0.75倍速)再听一遍。老师就是视频本身——GAKU只负责把内容记录下来。",
     pronSlowNo: "没关系。请把视频放慢,再听一遍这一段——GAKU会再次为你记录。",
     pronBestScore: "最高得分",
@@ -5271,7 +5496,7 @@ const UI_TRANSLATIONS = {
     installPromptDesc: "一鍵開啟，學習進度永不遺失。",
     installPromptCta: "加入主畫面",
     installPromptSkip: "稍後再說",
-    installPromptHaveApp: "已經從 Google Play 或 App Store 安裝了 GAKU Master？那就不需要這一步——點「稍後再說」即可。",
+    installPromptHaveApp: "已經從 App Store 安裝了 GAKU Master？那就不需要這一步——點「稍後再說」即可。",
     installPromptIosSteps: "點擊分享按鈕，然後選擇「加入主畫面」",
     remindTitle: "明天幾點複習？",
     remindDesc: "每天只需5分鐘。選擇一個時間，我們會在你的行事曆中新增每日提醒。",
@@ -5315,6 +5540,14 @@ const UI_TRANSLATIONS = {
     tutorialSubtitlesDesc: "在下面貼上一個影片連結，把它的字幕或語音變成屬於你自己的聽力和詞彙練習。",
     tutorialResourcesDesc: "瀏覽下面為你的程度精選的學習資源，或貼上一段內容來製作你自己的練習。",
     tutorialMilestonesDesc: "這是通往你日文目標的路線圖。看看接下來會遇到什麼。",
+    tutModesTitle: "學習模式與教練",
+    tutorialModesDesc: "點擊頂部的 😊 Mode，選擇 Enjoyable（輕鬆）或 Intensive（每天 8 個動作的目標）。在 Intensive 模式下，學習教練會記錄你的翻卡速度、發音、聽力和正確率，並隨時告訴你該重點學什麼。",
+    tutGuideTitle: "更新我的學習指南",
+    tutorialGuideDesc: "你的每週計畫保持不變，方便你照著學。只有想要新計畫時，才打開 ✏️ 編輯資料並點擊「Update my study guide」。",
+    tutLibraryTitle: "單字庫與閃卡",
+    tutorialLibraryDesc: "儲存的單字都放在資料夾裡。你可以重新命名資料夾、把單字複製到其他資料夾、依意思搜尋，還可以用閃卡複習——學會一個單字後點擊 ✅ Understand。",
+    tutProgressTitle: "進步檢測",
+    tutorialProgressDesc: "現在做一次 3 分鐘的檢測，幾天後再做一次，看看你進步了多少（之前 vs. 現在）。",
     tutorialContentDesc: "現在就試試：在下面貼上一段日語文字(文章、字幕、說明文字)，讓GAKU據此生成練習活動——就像GAKU Reader在網頁上做的那樣。",
     tutorialConversationDesc: "現在就試試：播放一段影片，點擊「收聽影片分頁」（或麥克風），讓GAKU聆聽真實對話——它會幫你理解每一句話，並給出回應建議。",
     tutorialPronunciationDesc: "現在就試試：播放母語者的影片，點擊「收聽影片分頁」，GAKU會把每句話記錄下來。然後在卡片上大聲說出這句話，看看你有多接近。聽不清？把影片放慢再聽一遍。",
@@ -5332,6 +5565,7 @@ const UI_TRANSLATIONS = {
     imgTapSearch: "點擊搜尋圖片",
     flashTapToCheck: "點擊查看答案",
     flashListenExample: "聽例句",
+    ttsProblem: "🔇 沒有聲音？你的手機可能沒有日語語音。開啟「設定」→搜尋「文字轉語音輸出」→安裝日語語音資料（Google 文字轉語音），然後再試一次。",
     flashGenRomaji: "正在產生羅馬字…",
     flashGenTranslation: "正在產生翻譯…",
     flashUnderstand: "✅ 已理解",
@@ -5407,6 +5641,18 @@ const UI_TRANSLATIONS = {
     coachTitle: "今日建議",
     coachBoth: "你通常在{strong}方面表現不錯，而{weak}似乎有點吃力。今天練習一下{weak}如何？",
     coachWeakOnly: "{weak}對你來說似乎有點難。今天練習一下如何？",
+    coachAdviceTitle: "🎯 你的學習教練",
+    coachNoData: "再多練習一點，我就能給你具體的建議了。",
+    coachAllGood: "目前沒有弱項，保持這個節奏！",
+    coachAccWeak: "{area}的正確率是 {pct}%。今天就把{area}當作重點吧。",
+    coachSlowFlip: "你回想一個單字大約需要 {sec} 秒。試著用快速閃卡把時間縮短到 5 秒以內。",
+    coachSlowWord: "你最慢的單字是 {word}（{sec} 秒）。再複習一遍吧。",
+    coachRepeatWord: "今天你看了 {word} {n} 次，但還沒記住。試試造個例句或寫一寫。",
+    coachPronMiss: "你多次唸錯 {word} 的發音（{n} 次）。先慢慢唸，再用正常語速唸。",
+    coachListenWeak: "聽力理解率是 {pct}%。讀文本之前多聽幾遍。",
+    coachStatFlip: "翻卡速度",
+    coachStatViews: "今天看過的單字",
+    coachStatListen: "聽力",
     lessonBridgeAsk: "想和真人老師一起練習這個嗎？試試免費體驗課吧。",
     lessonBridgeBtn: "預約免費體驗課 →",
     lessonBridgeMissed: "需要留意的發音：{chars}",
@@ -5447,6 +5693,7 @@ const UI_TRANSLATIONS = {
     feedbackTitle: "💬 意見回饋與想法",
     feedbackSubtitle: "告訴我們你希望我們改進什麼，或是對這個應用程式有什麼不滿意的地方。我們會閱讀每一則留言。",
     feedbackWarning: "萬一發布誹謗、辱罵或歧視性言論，帳號將立即被停用。即使因此產生訴訟，我們也概不負責。",
+    supportEmailNote: "無法登入或使用應用程式時遇到問題？請寄信給我們：",
     feedbackChecking: "檢查中...",
     feedbackAlreadySubmitted: "你已經提交過唯一一次意見回饋了，謝謝！(受GAKU邀請的學生可以隨時多次提交。)",
     feedbackSuccess: "謝謝——你的意見回饋已送出。",
@@ -5579,6 +5826,14 @@ const UI_TRANSLATIONS = {
     didYouUnderstand: "你理解這個嗎？",
     hideAnswerBtn: "隱藏答案",
     showAnswerBtn: "顯示答案",
+    questionFuriganaLabel: "題目顯示注音假名",
+    questionFuriganaDesc: "僅在題目文字的漢字上方顯示注音假名。答案不顯示注音;漢字讀音類題目中的目標詞不加注音,以免洩露答案。",
+    restartWeek1Btn: "從第1週重新開始",
+    restartWeek1Confirm: "從第1週重新開始？本週的勾選會被清除。你可以透過週選擇器回到其他週，學習計畫本身維持不變。",
+    weekPickLabel: "前往週",
+    weekPickWeek: "第{n}週",
+    weekPickInProgress: "進行中",
+    weekBackToProgress: "返回第{n}週（進行中）",
     furiganaOn: "開",
     furiganaOff: "關",
     studyTimePerDay: "每天學習時間 *",
@@ -5715,7 +5970,7 @@ const UI_TRANSLATIONS = {
     storeRestore: "恢復購買",
     storePurchaseFailed: "無法完成購買,請再試一次。",
     storeNothingToRestore: "找不到先前的購買紀錄。",
-    storeAutoRenewNote: "訂閱將依所示價格自動續訂,除非在目前週期結束前至少24小時取消。您可以在 App Store 或 Google Play 的帳號設定中管理或取消訂閱。",
+    storeAutoRenewNote: "訂閱將依所示價格自動續訂,除非在目前週期結束前至少24小時取消。您可以在 App Store 的帳號設定中管理或取消訂閱。",
     pronSlowTip: "聽不清楚?請把影片放慢(例如YouTube的0.5倍或0.75倍速)再聽一遍。老師就是影片本身——GAKU只負責把內容記錄下來。",
     pronSlowNo: "沒關係。請把影片放慢,再聽一遍這一段——GAKU會再次為你記錄。",
     pronBestScore: "最高得分",
@@ -5872,7 +6127,7 @@ const UI_TRANSLATIONS = {
     installPromptDesc: "한 번의 탭으로 열고, 진행 상황을 절대 잃지 않아요.",
     installPromptCta: "홈 화면에 추가",
     installPromptSkip: "나중에",
-    installPromptHaveApp: "이미 Google Play 또는 App Store에서 GAKU Master를 설치하셨나요? 이 단계는 필요 없어요. “나중에”를 눌러 주세요.",
+    installPromptHaveApp: "이미 App Store에서 GAKU Master를 설치하셨나요? 이 단계는 필요 없어요. “나중에”를 눌러 주세요.",
     installPromptIosSteps: "공유 버튼을 탭한 후 \"홈 화면에 추가\"를 선택하세요",
     remindTitle: "내일은 언제 복습할까요?",
     remindDesc: "하루 5분이면 충분해요. 시간을 고르면 캘린더에 매일 알림을 추가해 드려요.",
@@ -5916,6 +6171,14 @@ const UI_TRANSLATIONS = {
     tutorialSubtitlesDesc: "아래에 영상 링크를 붙여넣어 자막이나 음성을 나만의 듣기·어휘 학습 자료로 만들어 보세요.",
     tutorialResourcesDesc: "아래에서 당신의 레벨에 맞춰 엄선된 자료를 둘러보거나, 콘텐츠를 붙여넣어 나만의 연습 문제를 만들어 보세요.",
     tutorialMilestonesDesc: "이것은 당신의 일본어 목표까지의 로드맵입니다. 다음에 무엇이 있는지 살펴보세요.",
+    tutModesTitle: "학습 모드 & 코치",
+    tutorialModesDesc: "상단의 😊 Mode를 눌러 Enjoyable(편하게) 또는 Intensive(하루 8회 활동 목표)를 선택하세요. Intensive 모드에서는 학습 코치가 카드 뒤집기 속도, 발음, 듣기, 정답률을 분석해 지금 무엇에 집중하면 좋을지 늘 알려 줘요.",
+    tutGuideTitle: "학습 가이드 업데이트",
+    tutorialGuideDesc: "주간 계획은 그대로 유지되니 따라가기 쉬워요. 새 계획이 필요할 때만 ✏️ 프로필 편집을 열고 “Update my study guide”를 누르세요.",
+    tutLibraryTitle: "라이브러리 & 플래시카드",
+    tutorialLibraryDesc: "저장한 단어는 폴더에 모여 있어요. 폴더 이름 변경, 다른 폴더로 단어 복사, 뜻으로 검색, 플래시카드 복습이 가능해요. 단어를 익혔다면 ✅ Understand를 누르세요.",
+    tutProgressTitle: "실력 체크",
+    tutorialProgressDesc: "지금 3분 체크를 해 보고, 며칠 뒤 다시 해서 얼마나 성장했는지 확인하세요(그때 vs. 지금).",
     tutorialContentDesc: "지금 해보세요: 아래에 일본어 텍스트(기사, 자막, 캡션 등)를 붙여넣으면 GAKU가 그걸로 연습 활동을 만들어줍니다 — 웹의 GAKU Reader와 똑같이요.",
     tutorialConversationDesc: "지금 해보세요: 영상을 재생하고 '영상 탭 듣기'(또는 마이크)를 누르면 GAKU가 실제 대화를 듣습니다 — 한 줄씩 이해를 돕고 어떻게 대답할지 제안해줘요.",
     tutorialPronunciationDesc: "지금 해보세요: 원어민이 나오는 영상을 재생하고 '영상 탭 듣기'를 누르면 GAKU가 한 줄씩 받아 적습니다. 그다음 카드에서 문장을 소리 내어 말하고 얼마나 가까웠는지 확인하세요. 잘 안 들리나요? 영상을 느리게 재생해서 다시 들어보세요.",
@@ -5933,6 +6196,7 @@ const UI_TRANSLATIONS = {
     imgTapSearch: "탭하여 이미지 검색",
     flashTapToCheck: "탭하여 확인",
     flashListenExample: "예문 듣기",
+    ttsProblem: "🔇 소리가 안 나나요? 휴대폰에 일본어 음성이 없을 수 있어요. 설정 → “텍스트 음성 변환 출력” 검색 → 일본어 음성 데이터(Google 텍스트 음성 변환)를 설치한 뒤 다시 시도하세요.",
     flashGenRomaji: "로마자 생성 중…",
     flashGenTranslation: "번역 생성 중…",
     flashUnderstand: "✅ 이해했어요",
@@ -6008,6 +6272,18 @@ const UI_TRANSLATIONS = {
     coachTitle: "오늘의 제안",
     coachBoth: "{strong}은(는) 보통 잘하는데 {weak}은(는) 조금 어려워 보여요. 오늘은 {weak}은(는) 어떠세요?",
     coachWeakOnly: "{weak}은(는) 조금 어려워 보여요. 오늘 연습해 보는 건 어떨까요?",
+    coachAdviceTitle: "🎯 나의 학습 코치",
+    coachNoData: "조금만 더 연습하면 구체적인 조언을 드릴게요.",
+    coachAllGood: "지금은 약점이 없어요. 이 페이스를 유지하세요!",
+    coachAccWeak: "{area} 정답률은 {pct}%예요. 오늘은 {area}에 집중해 보세요.",
+    coachSlowFlip: "단어 하나를 떠올리는 데 약 {sec}초가 걸려요. 빠른 카드 라운드로 5초 이내를 목표로 해 보세요.",
+    coachSlowWord: "가장 느리게 떠올린 단어는 {word}({sec}초)예요. 다시 복습해 보세요.",
+    coachRepeatWord: "오늘 {word}을(를) {n}번 봤는데 아직 기억에 남지 않았어요. 예문을 만들어 보거나 직접 써 보세요.",
+    coachPronMiss: "{word}의 발음을 계속 틀리고 있어요({n}회). 천천히 말한 뒤 보통 속도로 말해 보세요.",
+    coachListenWeak: "듣기 이해도는 {pct}%예요. 텍스트를 읽기 전에 여러 번 들어 보세요.",
+    coachStatFlip: "카드 뒤집기 속도",
+    coachStatViews: "오늘 본 단어",
+    coachStatListen: "듣기",
     lessonBridgeAsk: "이 부분을 진짜 선생님과 함께 연습해 보시겠어요? 무료 체험 수업을 신청해 보세요.",
     lessonBridgeBtn: "무료 체험 수업 신청하기 →",
     lessonBridgeMissed: "주의해야 할 소리: {chars}",
@@ -6048,6 +6324,7 @@ const UI_TRANSLATIONS = {
     feedbackTitle: "💬 피드백 및 의견",
     feedbackSubtitle: "개선했으면 하는 점이나 앱에서 불편한 점을 알려주세요. 모든 메시지를 읽습니다.",
     feedbackWarning: "만약 명예훼손, 욕설, 차별적 표현을 작성할 경우 계정이 즉시 정지됩니다. 소송이 발생하더라도 일체의 책임을 지지 않습니다.",
+    supportEmailNote: "로그인이 안 되거나 앱 사용에 문제가 있나요? 이메일로 문의하세요:",
     feedbackChecking: "확인 중...",
     feedbackAlreadySubmitted: "이미 1회 피드백을 제출하셨습니다. 감사합니다! (GAKU 초대 학생은 몇 번이든 제출할 수 있습니다.)",
     feedbackSuccess: "감사합니다 — 피드백이 전송되었습니다.",
@@ -6180,6 +6457,14 @@ const UI_TRANSLATIONS = {
     didYouUnderstand: "이해되셨나요?",
     hideAnswerBtn: "답 숨기기",
     showAnswerBtn: "답 보기",
+    questionFuriganaLabel: "문제에 후리가나 표시",
+    questionFuriganaDesc: "문제 본문의 한자 위에만 후리가나를 표시합니다. 정답에는 후리가나가 붙지 않으며, 한자 읽기 문제는 정답이 드러나지 않도록 대상 단어에 후리가나를 붙이지 않습니다.",
+    restartWeek1Btn: "1주차부터 다시 시작",
+    restartWeek1Confirm: "1주차부터 다시 시작할까요? 이번 주의 체크 표시가 지워집니다. 주차 선택에서 다른 주로 돌아갈 수 있으며 학습 계획 자체는 그대로입니다.",
+    weekPickLabel: "주차 이동",
+    weekPickWeek: "{n}주차",
+    weekPickInProgress: "진행 중",
+    weekBackToProgress: "{n}주차로 돌아가기 (진행 중)",
     furiganaOn: "켜짐",
     furiganaOff: "꺼짐",
     studyTimePerDay: "하루 학습 시간 *",
@@ -6316,7 +6601,7 @@ const UI_TRANSLATIONS = {
     storeRestore: "구매 복원",
     storePurchaseFailed: "구매를 완료하지 못했습니다. 다시 시도해 주세요.",
     storeNothingToRestore: "이전 구매 내역을 찾을 수 없습니다.",
-    storeAutoRenewNote: "구독은 현재 기간이 끝나기 최소 24시간 전에 취소하지 않으면 표시된 가격으로 자동 갱신됩니다. App Store 또는 Google Play 계정 설정에서 관리하거나 취소할 수 있습니다.",
+    storeAutoRenewNote: "구독은 현재 기간이 끝나기 최소 24시간 전에 취소하지 않으면 표시된 가격으로 자동 갱신됩니다. App Store 계정 설정에서 관리하거나 취소할 수 있습니다.",
     pronSlowTip: "잘 안 들리나요? 영상을 느리게(예: YouTube 재생 속도 0.5배 또는 0.75배) 재생해서 다시 들어보세요. 선생님은 영상이고, GAKU는 받아 적기만 합니다.",
     pronSlowNo: "괜찮아요. 영상을 느리게 재생해서 그 부분을 다시 들어보세요. GAKU가 다시 받아 적어 드립니다.",
     pronBestScore: "최고 점수",
@@ -6473,7 +6758,7 @@ const UI_TRANSLATIONS = {
     installPromptDesc: "เปิดได้ในแตะเดียว และไม่มีวันสูญเสียความคืบหน้า",
     installPromptCta: "เพิ่มไปยังหน้าจอหลัก",
     installPromptSkip: "ไว้ทีหลัง",
-    installPromptHaveApp: "ติดตั้ง GAKU Master จาก Google Play หรือ App Store แล้วใช่ไหม? ไม่ต้องทำขั้นตอนนี้ แตะ “ไว้ทีหลัง” ได้เลย",
+    installPromptHaveApp: "ติดตั้ง GAKU Master จาก App Store แล้วใช่ไหม? ไม่ต้องทำขั้นตอนนี้ แตะ “ไว้ทีหลัง” ได้เลย",
     installPromptIosSteps: "แตะปุ่มแชร์ แล้วเลือก \"เพิ่มไปยังหน้าจอหลัก\"",
     remindTitle: "พรุ่งนี้จะทบทวนตอนไหน?",
     remindDesc: "แค่วันละ 5 นาทีก็พอ เลือกเวลา แล้วเราจะเพิ่มการเตือนรายวันลงในปฏิทินของคุณ",
@@ -6517,6 +6802,14 @@ const UI_TRANSLATIONS = {
     tutorialSubtitlesDesc: "วางลิงก์วิดีโอด้านล่าง แล้วเปลี่ยนคำบรรยายหรือเสียงพูดให้กลายเป็นแบบฝึกฟังและคำศัพท์ของคุณเอง",
     tutorialResourcesDesc: "ลองดูแหล่งเรียนรู้ที่คัดสรรมาให้เหมาะกับระดับของคุณด้านล่าง หรือวางเนื้อหาเพื่อสร้างแบบฝึกหัดของคุณเอง",
     tutorialMilestonesDesc: "นี่คือแผนที่นำทางสู่เป้าหมายภาษาญี่ปุ่นของคุณ ลองดูว่าอะไรจะตามมาต่อไป",
+    tutModesTitle: "โหมดการเรียนและโค้ช",
+    tutorialModesDesc: "แตะ 😊 Mode ด้านบนเพื่อเลือก Enjoyable (สบายๆ) หรือ Intensive (เป้าหมายรายวัน 8 กิจกรรม) ในโหมด Intensive โค้ชจะติดตามความเร็วในการพลิกการ์ด การออกเสียง การฟัง และความแม่นยำ แล้วบอกคุณเสมอว่าควรเน้นอะไร",
+    tutGuideTitle: "อัปเดตแนวทางการเรียนของฉัน",
+    tutorialGuideDesc: "แผนรายสัปดาห์ของคุณจะไม่เปลี่ยน เพื่อให้ทำตามได้ง่าย เมื่ออยากได้แผนใหม่เท่านั้น ให้เปิด ✏️ แก้ไขโปรไฟล์ แล้วกด “Update my study guide”",
+    tutLibraryTitle: "คลังคำศัพท์และแฟลชการ์ด",
+    tutorialLibraryDesc: "คำศัพท์ที่บันทึกไว้อยู่ในโฟลเดอร์ คุณเปลี่ยนชื่อโฟลเดอร์ คัดลอกคำไปโฟลเดอร์อื่น ค้นหาตามความหมาย และทบทวนด้วยแฟลชการ์ดได้ — กด ✅ Understand เมื่อจำคำนั้นได้แล้ว",
+    tutProgressTitle: "เช็กความก้าวหน้า",
+    tutorialProgressDesc: "ทำแบบเช็ก 3 นาทีตอนนี้ แล้วทำอีกครั้งในอีกไม่กี่วันเพื่อดูว่าคุณก้าวหน้าแค่ไหน (ก่อน vs. ตอนนี้)",
     tutorialContentDesc: "ลองเลย: วางข้อความภาษาญี่ปุ่นด้านล่าง (บทความ คำบรรยาย หรือคำอธิบายภาพ) แล้วให้ GAKU สร้างกิจกรรมฝึกฝนจากมัน เหมือนที่ GAKU Reader ทำบนเว็บ",
     tutorialConversationDesc: "ลองเลย: เปิดวิดีโอ แล้วกด “ฟังแท็บวิดีโอ” (หรือไมโครโฟน) ให้ GAKU ฟังบทสนทนาจริง — มันจะช่วยให้คุณเข้าใจแต่ละประโยคและแนะนำวิธีตอบกลับ",
     tutorialPronunciationDesc: "ลองเลย: เปิดวิดีโอของเจ้าของภาษา แล้วกด “ฟังแท็บวิดีโอ” GAKU จะจดทีละประโยคให้ จากนั้นในการ์ดให้พูดประโยคออกเสียง แล้วดูว่าใกล้เคียงแค่ไหน ฟังไม่ทัน? ลองเปิดวิดีโอให้ช้าลงแล้วฟังอีกครั้ง",
@@ -6534,6 +6827,7 @@ const UI_TRANSLATIONS = {
     imgTapSearch: "แตะเพื่อค้นหารูป",
     flashTapToCheck: "แตะเพื่อดูคำตอบ",
     flashListenExample: "ฟังประโยคตัวอย่าง",
+    ttsProblem: "🔇 ไม่มีเสียงใช่ไหม? โทรศัพท์ของคุณอาจไม่มีเสียงภาษาญี่ปุ่น เปิดการตั้งค่า → ค้นหา “เอาต์พุตการแปลงข้อความเป็นเสียงพูด” → ติดตั้งข้อมูลเสียงภาษาญี่ปุ่น (Google Text-to-speech) แล้วลองอีกครั้ง",
     flashGenRomaji: "กำลังสร้างโรมะจิ…",
     flashGenTranslation: "กำลังสร้างคำแปล…",
     flashUnderstand: "✅ เข้าใจแล้ว",
@@ -6609,6 +6903,18 @@ const UI_TRANSLATIONS = {
     coachTitle: "คำแนะนำวันนี้",
     coachBoth: "ปกติคุณทำ{strong}ได้ดี แต่{weak}ดูจะยากไปหน่อย วันนี้ลอง{weak}ไหม?",
     coachWeakOnly: "{weak}ดูจะยากไปหน่อยสำหรับคุณ วันนี้ลองฝึกดูไหม?",
+    coachAdviceTitle: "🎯 โค้ชการเรียนของคุณ",
+    coachNoData: "ฝึกอีกนิด แล้วฉันจะเริ่มให้คำแนะนำเฉพาะตัวคุณ",
+    coachAllGood: "ตอนนี้ยังไม่มีจุดอ่อน รักษาจังหวะนี้ไว้นะ!",
+    coachAccWeak: "ความแม่นยำด้าน{area}อยู่ที่ {pct}% วันนี้ลองเน้น{area}ดู",
+    coachSlowFlip: "คุณใช้เวลาประมาณ {sec} วินาทีในการนึกคำศัพท์ ลองฝึกแฟลชการ์ดเร็วๆ ให้ต่ำกว่า 5 วินาที",
+    coachSlowWord: "คำที่คุณนึกช้าที่สุดคือ {word} ({sec} วินาที) ลองทบทวนอีกครั้ง",
+    coachRepeatWord: "วันนี้คุณดูคำว่า {word} {n} ครั้งแล้วแต่ยังจำไม่ได้ ลองแต่งประโยคตัวอย่างหรือเขียนออกมา",
+    coachPronMiss: "คุณออกเสียง {word} ผิดบ่อย ({n} ครั้ง) ลองพูดช้าๆ แล้วค่อยพูดด้วยความเร็วปกติ",
+    coachListenWeak: "ความเข้าใจการฟังอยู่ที่ {pct}% ลองฟังหลายครั้งก่อนอ่านข้อความ",
+    coachStatFlip: "ความเร็วในการพลิกการ์ด",
+    coachStatViews: "คำที่ดูวันนี้",
+    coachStatListen: "การฟัง",
     lessonBridgeAsk: "อยากฝึกเรื่องนี้กับครูตัวจริงไหม? ลองเรียนทดลองฟรีดูสิ",
     lessonBridgeBtn: "จองเรียนทดลองฟรี →",
     lessonBridgeMissed: "เสียงที่ควรระวัง: {chars}",
@@ -6649,6 +6955,7 @@ const UI_TRANSLATIONS = {
     feedbackTitle: "💬 ความคิดเห็นและข้อเสนอแนะ",
     feedbackSubtitle: "บอกเราว่าคุณอยากให้ปรับปรุงอะไร หรือมีอะไรที่กวนใจคุณเกี่ยวกับแอปนี้ เราจะอ่านทุกข้อความ",
     feedbackWarning: "หากคุณโพสต์ข้อความหมิ่นประมาท คำหยาบคาย หรือถ้อยคำเลือกปฏิบัติ บัญชีของคุณจะถูกระงับทันที เราจะไม่รับผิดชอบใด ๆ แม้จะเกิดการฟ้องร้อง",
+    supportEmailNote: "เข้าสู่ระบบไม่ได้หรือมีปัญหากับแอป? ส่งอีเมลถึงเรา:",
     feedbackChecking: "กำลังตรวจสอบ...",
     feedbackAlreadySubmitted: "คุณส่งความคิดเห็นครั้งเดียวไปแล้ว ขอบคุณค่ะ/ครับ! (นักเรียนที่ได้รับเชิญจาก GAKU สามารถส่งได้ไม่จำกัดจำนวนครั้ง)",
     feedbackSuccess: "ขอบคุณ — ความคิดเห็นของคุณถูกส่งแล้ว",
@@ -6781,6 +7088,14 @@ const UI_TRANSLATIONS = {
     didYouUnderstand: "คุณเข้าใจสิ่งนี้ไหม?",
     hideAnswerBtn: "ซ่อนคำตอบ",
     showAnswerBtn: "แสดงคำตอบ",
+    questionFuriganaLabel: "แสดงฟุริงานะในโจทย์",
+    questionFuriganaDesc: "แสดงฟุริงานะเหนือคันจิเฉพาะในตัวโจทย์เท่านั้น คำตอบจะไม่มีฟุริงานะ และในโจทย์การอ่านคันจิ คำที่ถูกถามจะไม่มีฟุริงานะเพื่อไม่ให้เฉลยคำตอบ",
+    restartWeek1Btn: "เริ่มใหม่ตั้งแต่สัปดาห์ที่ 1",
+    restartWeek1Confirm: "เริ่มใหม่ตั้งแต่สัปดาห์ที่ 1 หรือไม่? เครื่องหมายถูกของสัปดาห์นี้จะถูกล้าง คุณกลับไปยังสัปดาห์อื่นได้จากตัวเลือกสัปดาห์ และแผนการเรียนยังคงเหมือนเดิม",
+    weekPickLabel: "ไปที่สัปดาห์",
+    weekPickWeek: "สัปดาห์ที่ {n}",
+    weekPickInProgress: "กำลังดำเนินอยู่",
+    weekBackToProgress: "กลับไปสัปดาห์ที่ {n} (กำลังดำเนินอยู่)",
     furiganaOn: "เปิด",
     furiganaOff: "ปิด",
     studyTimePerDay: "เวลาเรียนต่อวัน *",
@@ -6917,7 +7232,7 @@ const UI_TRANSLATIONS = {
     storeRestore: "กู้คืนการซื้อ",
     storePurchaseFailed: "ไม่สามารถทำรายการซื้อให้เสร็จสมบูรณ์ได้ โปรดลองอีกครั้ง",
     storeNothingToRestore: "ไม่พบประวัติการซื้อก่อนหน้า",
-    storeAutoRenewNote: "การสมัครสมาชิกจะต่ออายุอัตโนมัติตามราคาที่แสดง เว้นแต่จะยกเลิกอย่างน้อย 24 ชั่วโมงก่อนสิ้นสุดรอบปัจจุบัน คุณสามารถจัดการหรือยกเลิกได้ในการตั้งค่าบัญชี App Store หรือ Google Play",
+    storeAutoRenewNote: "การสมัครสมาชิกจะต่ออายุอัตโนมัติตามราคาที่แสดง เว้นแต่จะยกเลิกอย่างน้อย 24 ชั่วโมงก่อนสิ้นสุดรอบปัจจุบัน คุณสามารถจัดการหรือยกเลิกได้ในการตั้งค่าบัญชี App Store",
     pronSlowTip: "ฟังไม่ทัน? ลองเปิดวิดีโอให้ช้าลง (เช่น ความเร็ว 0.5× หรือ 0.75× ใน YouTube) แล้วฟังอีกครั้ง ครูคือวิดีโอ ส่วน GAKU ทำหน้าที่จดให้เท่านั้น",
     pronSlowNo: "ไม่เป็นไร ลองเปิดวิดีโอให้ช้าลงแล้วฟังช่วงนั้นอีกครั้ง GAKU จะจดให้ใหม่",
     pronBestScore: "คะแนนสูงสุด",
@@ -7074,7 +7389,7 @@ const UI_TRANSLATIONS = {
     installPromptDesc: "Buka dengan satu ketikan, dan kemajuan anda tidak akan hilang.",
     installPromptCta: "Tambah ke Skrin Utama",
     installPromptSkip: "Mungkin nanti",
-    installPromptHaveApp: "Sudah pasang GAKU Master dari Google Play atau App Store? Anda tidak perlu langkah ini — ketik “Mungkin nanti”.",
+    installPromptHaveApp: "Sudah pasang GAKU Master dari App Store? Anda tidak perlu langkah ini — ketik “Mungkin nanti”.",
     installPromptIosSteps: "Ketik butang Kongsi, kemudian \"Tambah ke Skrin Utama\"",
     remindTitle: "Bila anda akan mengulang kaji esok?",
     remindDesc: "5 minit sehari sudah cukup. Pilih masa dan kami akan menambah peringatan harian ke kalendar anda.",
@@ -7118,6 +7433,14 @@ const UI_TRANSLATIONS = {
     tutorialSubtitlesDesc: "Tampal pautan video di bawah dan tukar sari kata atau audionya kepada latihan pendengaran dan kosa kata anda sendiri.",
     tutorialResourcesDesc: "Lihat sumber pembelajaran pilihan untuk tahap anda di bawah, atau tampal kandungan untuk membina latihan anda sendiri.",
     tutorialMilestonesDesc: "Ini ialah pelan hala tuju anda ke arah matlamat bahasa Jepun anda. Lihat apa yang akan datang seterusnya.",
+    tutModesTitle: "Mod belajar & jurulatih",
+    tutorialModesDesc: "Ketik 😊 Mode di atas untuk memilih Enjoyable (santai) atau Intensive (kuota harian 8 tindakan). Dalam mod Intensive, jurulatih anda menjejak kelajuan pusing kad, sebutan, pendengaran dan ketepatan, dan sentiasa memberitahu apa yang perlu difokuskan.",
+    tutGuideTitle: "Kemas kini panduan belajar saya",
+    tutorialGuideDesc: "Pelan mingguan anda kekal sama supaya mudah diikuti. Hanya apabila mahu pelan baharu, buka ✏️ Edit Profil dan tekan “Update my study guide”.",
+    tutLibraryTitle: "Pustaka & kad kilat",
+    tutorialLibraryDesc: "Perkataan yang disimpan berada dalam folder. Anda boleh menamakan semula folder, menyalin perkataan ke folder lain, mencari mengikut makna, dan mengulang kaji dengan kad kilat — tekan ✅ Understand apabila anda sudah menguasai sesuatu perkataan.",
+    tutProgressTitle: "Semakan kemajuan",
+    tutorialProgressDesc: "Ambil semakan 3 minit sekarang, kemudian ulang beberapa hari lagi untuk melihat sejauh mana anda berkembang (dahulu vs. sekarang).",
     tutorialContentDesc: "Cubalah sekarang: tampal teks Jepun di bawah (artikel, sari kata, kapsyen) dan biarkan GAKU membina aktiviti latihan daripadanya — sama seperti GAKU Reader lakukan di web.",
     tutorialConversationDesc: "Cuba sekarang: mainkan video, tekan “Dengar tab video” (atau mikrofon) dan biarkan GAKU mendengar dialog sebenar — ia akan membantu anda memahami setiap baris dan mencadangkan cara membalas.",
     tutorialPronunciationDesc: "Cuba sekarang: mainkan video penutur asli, tekan “Dengar tab video” dan GAKU akan menulis setiap baris. Kemudian, pada kad, sebut ayat itu dengan kuat dan lihat sejauh mana anda hampir betul. Tidak dapat menangkap? Perlahankan video dan dengar semula.",
@@ -7135,6 +7458,7 @@ const UI_TRANSLATIONS = {
     imgTapSearch: "Ketik untuk mencari imej",
     flashTapToCheck: "Ketik untuk semak",
     flashListenExample: "Dengar ayat contoh",
+    ttsProblem: "🔇 Tiada bunyi? Telefon anda mungkin tiada suara Jepun. Buka Tetapan → cari “Output teks ke ucapan” → pasang data suara Jepun (Google Text-to-speech), kemudian cuba lagi.",
     flashGenRomaji: "Menjana romaji…",
     flashGenTranslation: "Menjana terjemahan…",
     flashUnderstand: "✅ Faham",
@@ -7210,6 +7534,18 @@ const UI_TRANSLATIONS = {
     coachTitle: "Cadangan hari ini",
     coachBoth: "Anda biasanya baik dalam {strong}, dan {weak} nampaknya agak sukar. Bagaimana kalau {weak} hari ini?",
     coachWeakOnly: "{weak} nampaknya agak sukar untuk anda. Bagaimana kalau berlatih hari ini?",
+    coachAdviceTitle: "🎯 Jurulatih belajar anda",
+    coachNoData: "Berlatih sedikit lagi dan saya akan mula memberi nasihat khusus.",
+    coachAllGood: "Tiada kelemahan buat masa ini. Teruskan rentak ini!",
+    coachAccWeak: "Ketepatan {area} ialah {pct}%. Jadikan {area} fokus anda hari ini.",
+    coachSlowFlip: "Anda mengambil kira-kira {sec} saat untuk mengingat satu perkataan. Cuba capai kurang daripada 5 saat dengan pusingan kad kilat yang pantas.",
+    coachSlowWord: "Perkataan paling perlahan anda ialah {word} ({sec} saat). Ulang kaji sekali lagi.",
+    coachRepeatWord: "Anda melihat {word} sebanyak {n} kali hari ini tetapi masih tidak melekat. Cuba ayat contoh atau tulis perkataan itu.",
+    coachPronMiss: "Anda terus tersilap sebutan {word} ({n} kali). Sebut perlahan-lahan, kemudian pada kelajuan biasa.",
+    coachListenWeak: "Kefahaman mendengar ialah {pct}%. Dengar beberapa kali sebelum membaca teks.",
+    coachStatFlip: "Kelajuan pusing kad",
+    coachStatViews: "Perkataan dilihat hari ini",
+    coachStatListen: "Mendengar",
     lessonBridgeAsk: "Mahu berlatih perkara ini dengan guru sebenar? Cuba kelas percubaan percuma.",
     lessonBridgeBtn: "Tempah kelas percubaan percuma →",
     lessonBridgeMissed: "Bunyi yang perlu diberi perhatian: {chars}",
@@ -7250,6 +7586,7 @@ const UI_TRANSLATIONS = {
     feedbackTitle: "💬 Maklum Balas & Pendapat",
     feedbackSubtitle: "Beritahu kami apa yang anda mahu diperbaiki atau apa-apa yang mengganggu anda tentang aplikasi ini. Kami membaca setiap mesej.",
     feedbackWarning: "Sekiranya anda menulis fitnah, bahasa kesat, atau istilah diskriminasi, akaun anda akan digantung serta-merta. Kami tidak bertanggungjawab walaupun tindakan undang-undang diambil.",
+    supportEmailNote: "Tidak dapat log masuk atau ada masalah dengan aplikasi? E-mel kami:",
     feedbackChecking: "Sedang menyemak...",
     feedbackAlreadySubmitted: "Anda telah menghantar maklum balas sekali sahaja anda. Terima kasih! (Pelajar jemputan GAKU boleh menghantar seberapa banyak kali yang mereka mahu.)",
     feedbackSuccess: "Terima kasih — maklum balas anda telah dihantar.",
@@ -7382,6 +7719,14 @@ const UI_TRANSLATIONS = {
     didYouUnderstand: "Adakah anda faham perkara ini?",
     hideAnswerBtn: "Sembunyikan jawapan",
     showAnswerBtn: "Tunjukkan jawapan",
+    questionFuriganaLabel: "Furigana pada soalan",
+    questionFuriganaDesc: "Menunjukkan furigana di atas kanji dalam teks soalan sahaja. Jawapan kekal tanpa furigana, dan soalan bacaan kanji tidak meletakkan furigana pada perkataan sasaran supaya jawapan tidak terdedah.",
+    restartWeek1Btn: "Mula semula dari minggu 1",
+    restartWeek1Confirm: "Mula semula dari minggu 1? Tanda semak minggu ini dipadam. Anda boleh kembali ke minggu lain melalui pemilih minggu, dan pelan belajar anda kekal sama.",
+    weekPickLabel: "Pergi ke minggu",
+    weekPickWeek: "Minggu {n}",
+    weekPickInProgress: "sedang berjalan",
+    weekBackToProgress: "Kembali ke minggu {n} (sedang berjalan)",
     furiganaOn: "Hidup",
     furiganaOff: "Mati",
     studyTimePerDay: "MASA BELAJAR SEHARI *",
@@ -7518,7 +7863,7 @@ const UI_TRANSLATIONS = {
     storeRestore: "Pulihkan pembelian",
     storePurchaseFailed: "Pembelian tidak dapat diselesaikan. Sila cuba lagi.",
     storeNothingToRestore: "Tiada pembelian terdahulu ditemui.",
-    storeAutoRenewNote: "Langganan diperbaharui secara automatik pada harga yang ditunjukkan melainkan dibatalkan sekurang-kurangnya 24 jam sebelum tamat tempoh semasa. Anda boleh mengurus atau membatalkan dalam tetapan akaun App Store atau Google Play anda.",
+    storeAutoRenewNote: "Langganan diperbaharui secara automatik pada harga yang ditunjukkan melainkan dibatalkan sekurang-kurangnya 24 jam sebelum tamat tempoh semasa. Anda boleh mengurus atau membatalkan dalam tetapan akaun App Store anda.",
     pronSlowTip: "Tidak dapat menangkap? Perlahankan video (contohnya kelajuan 0.5× atau 0.75× di YouTube) dan dengar semula. Guru anda ialah video itu — GAKU hanya menulisnya.",
     pronSlowNo: "Tidak mengapa. Perlahankan video dan dengar bahagian itu sekali lagi — GAKU akan menulisnya semula.",
     pronBestScore: "Skor terbaik",
@@ -7675,7 +8020,7 @@ const UI_TRANSLATIONS = {
     installPromptDesc: "Buka dengan satu ketukan, dan progresmu tidak akan pernah hilang.",
     installPromptCta: "Tambah ke Layar Utama",
     installPromptSkip: "Nanti saja",
-    installPromptHaveApp: "Sudah memasang GAKU Master dari Google Play atau App Store? Anda tidak perlu langkah ini — ketuk “Nanti saja”.",
+    installPromptHaveApp: "Sudah memasang GAKU Master dari App Store? Anda tidak perlu langkah ini — ketuk “Nanti saja”.",
     installPromptIosSteps: "Ketuk tombol Bagikan, lalu \"Tambah ke Layar Utama\"",
     remindTitle: "Kapan kamu akan belajar ulang besok?",
     remindDesc: "Cukup 5 menit sehari. Pilih waktu dan kami akan menambahkan pengingat harian ke kalendermu.",
@@ -7719,6 +8064,14 @@ const UI_TRANSLATIONS = {
     tutorialSubtitlesDesc: "Tempel tautan video di bawah dan ubah subtitle atau audionya menjadi latihan mendengarkan dan kosakata Anda sendiri.",
     tutorialResourcesDesc: "Jelajahi sumber belajar pilihan sesuai level Anda di bawah, atau tempel konten untuk membuat latihan Anda sendiri.",
     tutorialMilestonesDesc: "Ini adalah peta jalan menuju tujuan bahasa Jepang Anda. Lihat apa yang akan datang berikutnya.",
+    tutModesTitle: "Mode belajar & pelatih",
+    tutorialModesDesc: "Ketuk 😊 Mode di atas untuk memilih Enjoyable (santai) atau Intensive (kuota harian 8 aksi). Di mode Intensive, pelatih Anda memantau kecepatan membalik kartu, pengucapan, menyimak, dan akurasi, lalu selalu memberi tahu apa yang perlu difokuskan.",
+    tutGuideTitle: "Perbarui panduan belajar saya",
+    tutorialGuideDesc: "Rencana mingguan Anda tetap sama agar mudah diikuti. Hanya saat ingin rencana baru, buka ✏️ Edit Profil dan tekan “Update my study guide”.",
+    tutLibraryTitle: "Perpustakaan & kartu kilat",
+    tutorialLibraryDesc: "Kata yang disimpan ada di dalam folder. Anda bisa mengganti nama folder, menyalin kata ke folder lain, mencari berdasarkan arti, dan mengulang dengan kartu kilat — tekan ✅ Understand saat kata sudah dikuasai.",
+    tutProgressTitle: "Cek kemajuan",
+    tutorialProgressDesc: "Ikuti cek 3 menit sekarang, lalu ulangi beberapa hari lagi untuk melihat seberapa jauh Anda berkembang (dulu vs. sekarang).",
     tutorialContentDesc: "Coba sekarang: tempel teks bahasa Jepang di bawah (artikel, subtitle, keterangan) dan biarkan GAKU membuat aktivitas latihan darinya — sama seperti yang dilakukan GAKU Reader di web.",
     tutorialConversationDesc: "Coba sekarang: putar video, ketuk “Dengarkan tab video” (atau mikrofon) dan biarkan GAKU mendengarkan dialog asli — GAKU akan membantu Anda memahami tiap baris dan menyarankan cara membalas.",
     tutorialPronunciationDesc: "Coba sekarang: putar video penutur asli, ketuk “Dengarkan tab video”, dan GAKU akan menuliskan setiap baris. Lalu, pada kartu, ucapkan kalimatnya dengan lantang dan lihat seberapa dekat Anda. Tidak tertangkap? Perlambat videonya dan dengarkan lagi.",
@@ -7736,6 +8089,7 @@ const UI_TRANSLATIONS = {
     imgTapSearch: "Ketuk untuk mencari gambar",
     flashTapToCheck: "Ketuk untuk memeriksa",
     flashListenExample: "Dengarkan contoh kalimat",
+    ttsProblem: "🔇 Tidak ada suara? Ponsel Anda mungkin tidak punya suara bahasa Jepang. Buka Pengaturan → cari “Output text-to-speech” → instal data suara Jepang (Google Text-to-speech), lalu coba lagi.",
     flashGenRomaji: "Membuat romaji…",
     flashGenTranslation: "Membuat terjemahan…",
     flashUnderstand: "✅ Paham",
@@ -7811,6 +8165,18 @@ const UI_TRANSLATIONS = {
     coachTitle: "Saran hari ini",
     coachBoth: "Anda biasanya bagus di {strong}, dan {weak} tampaknya agak sulit. Bagaimana kalau {weak} hari ini?",
     coachWeakOnly: "{weak} tampaknya agak sulit bagi Anda. Bagaimana kalau berlatih hari ini?",
+    coachAdviceTitle: "🎯 Pelatih belajar Anda",
+    coachNoData: "Berlatihlah sedikit lagi dan saya akan mulai memberi saran yang spesifik.",
+    coachAllGood: "Belum ada kelemahan saat ini. Pertahankan ritme ini!",
+    coachAccWeak: "Akurasi {area} adalah {pct}%. Jadikan {area} fokus Anda hari ini.",
+    coachSlowFlip: "Anda butuh sekitar {sec} detik untuk mengingat satu kata. Targetkan di bawah 5 detik dengan putaran kartu kilat yang cepat.",
+    coachSlowWord: "Kata paling lambat Anda adalah {word} ({sec} detik). Ulangi sekali lagi.",
+    coachRepeatWord: "Hari ini Anda melihat {word} sebanyak {n} kali tetapi belum melekat. Coba buat kalimat contoh atau tulis kata itu.",
+    coachPronMiss: "Anda terus salah mengucapkan {word} ({n} kali). Ucapkan pelan-pelan, lalu dengan kecepatan normal.",
+    coachListenWeak: "Pemahaman menyimak adalah {pct}%. Dengarkan beberapa kali sebelum membaca teks.",
+    coachStatFlip: "Kecepatan membalik kartu",
+    coachStatViews: "Kata dilihat hari ini",
+    coachStatListen: "Menyimak",
     lessonBridgeAsk: "Ingin berlatih ini dengan guru sungguhan? Coba kelas percobaan gratis.",
     lessonBridgeBtn: "Pesan kelas percobaan gratis →",
     lessonBridgeMissed: "Bunyi yang perlu diperhatikan: {chars}",
@@ -7851,6 +8217,7 @@ const UI_TRANSLATIONS = {
     feedbackTitle: "💬 Masukan & Pendapat",
     feedbackSubtitle: "Beri tahu kami apa yang ingin Anda tingkatkan atau apa yang mengganggu Anda tentang aplikasi ini. Kami membaca setiap pesan.",
     feedbackWarning: "Jika Anda menulis fitnah, bahasa kasar, atau istilah diskriminatif, akun Anda akan langsung ditangguhkan. Kami tidak bertanggung jawab meskipun terjadi tuntutan hukum.",
+    supportEmailNote: "Tidak bisa masuk atau ada masalah dengan aplikasi? Kirim email ke kami:",
     feedbackChecking: "Memeriksa...",
     feedbackAlreadySubmitted: "Anda sudah mengirimkan masukan satu kali Anda. Terima kasih! (Siswa yang diundang GAKU dapat mengirim sebanyak yang mereka mau.)",
     feedbackSuccess: "Terima kasih — masukan Anda telah dikirim.",
@@ -7983,6 +8350,14 @@ const UI_TRANSLATIONS = {
     didYouUnderstand: "Apakah kamu memahami ini?",
     hideAnswerBtn: "Sembunyikan jawaban",
     showAnswerBtn: "Tampilkan jawaban",
+    questionFuriganaLabel: "Furigana pada soal",
+    questionFuriganaDesc: "Menampilkan furigana di atas kanji hanya pada teks soal. Jawaban tetap tanpa furigana, dan pada soal cara baca kanji kata yang ditanyakan tidak diberi furigana agar jawabannya tidak terbongkar.",
+    restartWeek1Btn: "Mulai ulang dari minggu 1",
+    restartWeek1Confirm: "Mulai ulang dari minggu 1? Tanda centang minggu ini dihapus. Anda bisa kembali ke minggu lain lewat pemilih minggu, dan rencana belajar Anda tetap sama.",
+    weekPickLabel: "Pergi ke minggu",
+    weekPickWeek: "Minggu {n}",
+    weekPickInProgress: "sedang berjalan",
+    weekBackToProgress: "Kembali ke minggu {n} (sedang berjalan)",
     furiganaOn: "Aktif",
     furiganaOff: "Nonaktif",
     studyTimePerDay: "WAKTU BELAJAR PER HARI *",
@@ -8119,7 +8494,7 @@ const UI_TRANSLATIONS = {
     storeRestore: "Pulihkan pembelian",
     storePurchaseFailed: "Pembelian tidak dapat diselesaikan. Silakan coba lagi.",
     storeNothingToRestore: "Tidak ada pembelian sebelumnya yang ditemukan.",
-    storeAutoRenewNote: "Langganan diperpanjang otomatis dengan harga yang tertera kecuali dibatalkan setidaknya 24 jam sebelum periode saat ini berakhir. Anda dapat mengelola atau membatalkannya di pengaturan akun App Store atau Google Play.",
+    storeAutoRenewNote: "Langganan diperpanjang otomatis dengan harga yang tertera kecuali dibatalkan setidaknya 24 jam sebelum periode saat ini berakhir. Anda dapat mengelola atau membatalkannya di pengaturan akun App Store.",
     pronSlowTip: "Tidak tertangkap? Perlambat video (misalnya kecepatan 0,5× atau 0,75× di YouTube) lalu dengarkan lagi. Gurunya adalah video itu — GAKU hanya menuliskannya.",
     pronSlowNo: "Tidak apa-apa. Perlambat videonya dan dengarkan bagian itu sekali lagi — GAKU akan menuliskannya lagi.",
     pronBestScore: "Skor terbaik",
@@ -8276,7 +8651,7 @@ const UI_TRANSLATIONS = {
     installPromptDesc: "Mở chỉ với một chạm, và tiến trình của bạn sẽ không bao giờ mất.",
     installPromptCta: "Thêm vào màn hình chính",
     installPromptSkip: "Để sau",
-    installPromptHaveApp: "Bạn đã cài GAKU Master từ Google Play hoặc App Store? Không cần bước này — chỉ cần chạm “Để sau”.",
+    installPromptHaveApp: "Bạn đã cài GAKU Master từ App Store? Không cần bước này — chỉ cần chạm “Để sau”.",
     installPromptIosSteps: "Chạm nút Chia sẻ, sau đó chọn \"Thêm vào MH chính\"",
     remindTitle: "Ngày mai bạn sẽ ôn bài lúc nào?",
     remindDesc: "Chỉ cần 5 phút mỗi ngày. Hãy chọn giờ và chúng tôi sẽ thêm lời nhắc hằng ngày vào lịch của bạn.",
@@ -8320,6 +8695,14 @@ const UI_TRANSLATIONS = {
     tutorialSubtitlesDesc: "Dán liên kết video bên dưới và biến phụ đề hoặc âm thanh của nó thành bài luyện nghe và từ vựng của riêng bạn.",
     tutorialResourcesDesc: "Xem qua các tài nguyên được chọn lọc phù hợp với trình độ của bạn bên dưới, hoặc dán nội dung để tạo bài luyện tập của riêng bạn.",
     tutorialMilestonesDesc: "Đây là lộ trình đến mục tiêu tiếng Nhật của bạn. Hãy xem điều gì sẽ đến tiếp theo.",
+    tutModesTitle: "Chế độ học & huấn luyện viên",
+    tutorialModesDesc: "Chạm vào 😊 Mode ở trên cùng để chọn Enjoyable (thoải mái) hoặc Intensive (chỉ tiêu hằng ngày 8 hoạt động). Ở chế độ Intensive, huấn luyện viên theo dõi tốc độ lật thẻ, phát âm, nghe và độ chính xác của bạn, và luôn cho biết bạn nên tập trung vào đâu.",
+    tutGuideTitle: "Cập nhật hướng dẫn học của tôi",
+    tutorialGuideDesc: "Kế hoạch tuần của bạn được giữ nguyên để dễ theo dõi. Chỉ khi muốn kế hoạch mới, hãy mở ✏️ Chỉnh sửa hồ sơ và nhấn “Update my study guide”.",
+    tutLibraryTitle: "Thư viện & thẻ ghi nhớ",
+    tutorialLibraryDesc: "Các từ đã lưu nằm trong thư mục. Bạn có thể đổi tên thư mục, sao chép từ sang thư mục khác, tìm theo nghĩa và ôn bằng thẻ ghi nhớ — nhấn ✅ Understand khi đã thuộc một từ.",
+    tutProgressTitle: "Kiểm tra tiến bộ",
+    tutorialProgressDesc: "Làm bài kiểm tra 3 phút ngay bây giờ, vài ngày sau làm lại để xem bạn tiến bộ bao nhiêu (trước vs. nay).",
     tutorialContentDesc: "Thử ngay bây giờ: dán một đoạn văn bản tiếng Nhật bên dưới (bài báo, phụ đề, chú thích) và để GAKU tạo hoạt động luyện tập từ đó — giống như GAKU Reader làm trên web.",
     tutorialConversationDesc: "Hãy thử ngay: phát một video, nhấn “Nghe tab video” (hoặc micro) và để GAKU nghe đoạn hội thoại thật — GAKU sẽ giúp bạn hiểu từng câu và gợi ý cách trả lời.",
     tutorialPronunciationDesc: "Hãy thử ngay: phát video của người bản xứ, nhấn “Nghe tab video”, GAKU sẽ ghi lại từng câu. Sau đó, trên thẻ, hãy nói to câu đó và xem bạn nói gần đúng đến đâu. Nghe không kịp? Hãy làm chậm video và nghe lại.",
@@ -8337,6 +8720,7 @@ const UI_TRANSLATIONS = {
     imgTapSearch: "Chạm để tìm ảnh",
     flashTapToCheck: "Chạm để kiểm tra",
     flashListenExample: "Nghe câu ví dụ",
+    ttsProblem: "🔇 Không có tiếng? Điện thoại của bạn có thể chưa có giọng tiếng Nhật. Mở Cài đặt → tìm “Đầu ra chuyển văn bản thành giọng nói” → cài dữ liệu giọng tiếng Nhật (Google Text-to-speech) rồi thử lại.",
     flashGenRomaji: "Đang tạo romaji…",
     flashGenTranslation: "Đang tạo bản dịch…",
     flashUnderstand: "✅ Đã hiểu",
@@ -8412,6 +8796,18 @@ const UI_TRANSLATIONS = {
     coachTitle: "Gợi ý hôm nay",
     coachBoth: "Bạn thường làm tốt phần {strong}, còn {weak} có vẻ hơi khó. Hôm nay thử {weak} nhé?",
     coachWeakOnly: "{weak} có vẻ hơi khó với bạn. Hôm nay luyện thử nhé?",
+    coachAdviceTitle: "🎯 Huấn luyện viên học tập của bạn",
+    coachNoData: "Hãy luyện thêm một chút, tôi sẽ bắt đầu đưa ra lời khuyên cụ thể.",
+    coachAllGood: "Hiện chưa có điểm yếu nào. Hãy giữ nhịp độ này!",
+    coachAccWeak: "Độ chính xác về {area} là {pct}%. Hôm nay hãy tập trung vào {area}.",
+    coachSlowFlip: "Bạn mất khoảng {sec} giây để nhớ lại một từ. Hãy đặt mục tiêu dưới 5 giây bằng các vòng thẻ nhanh.",
+    coachSlowWord: "Từ bạn nhớ chậm nhất là {word} ({sec} giây). Hãy ôn lại.",
+    coachRepeatWord: "Hôm nay bạn đã xem {word} {n} lần mà vẫn chưa nhớ. Hãy thử đặt câu ví dụ hoặc viết ra.",
+    coachPronMiss: "Bạn liên tục phát âm sai {word} ({n} lần). Hãy nói chậm rồi nói với tốc độ bình thường.",
+    coachListenWeak: "Khả năng nghe hiểu là {pct}%. Hãy nghe vài lần trước khi đọc văn bản.",
+    coachStatFlip: "Tốc độ lật thẻ",
+    coachStatViews: "Từ đã xem hôm nay",
+    coachStatListen: "Nghe",
     lessonBridgeAsk: "Bạn muốn luyện phần này với giáo viên thật không? Hãy thử một buổi học thử miễn phí.",
     lessonBridgeBtn: "Đặt buổi học thử miễn phí →",
     lessonBridgeMissed: "Âm cần chú ý: {chars}",
@@ -8452,6 +8848,7 @@ const UI_TRANSLATIONS = {
     feedbackTitle: "💬 Phản hồi & Ý kiến",
     feedbackSubtitle: "Hãy cho chúng tôi biết bạn muốn cải thiện điều gì hoặc điều gì đang làm bạn khó chịu về ứng dụng. Chúng tôi đọc mọi tin nhắn.",
     feedbackWarning: "Nếu bạn viết nội dung phỉ báng, ngôn từ lăng mạ hoặc phân biệt đối xử, tài khoản của bạn sẽ bị đình chỉ ngay lập tức. Chúng tôi không chịu bất kỳ trách nhiệm nào kể cả khi có kiện tụng xảy ra.",
+    supportEmailNote: "Không đăng nhập được hoặc gặp sự cố với ứng dụng? Hãy gửi email cho chúng tôi:",
     feedbackChecking: "Đang kiểm tra...",
     feedbackAlreadySubmitted: "Bạn đã gửi phản hồi một lần duy nhất của mình. Cảm ơn bạn! (Học viên được GAKU mời có thể gửi bao nhiêu lần tùy thích.)",
     feedbackSuccess: "Cảm ơn — phản hồi của bạn đã được gửi.",
@@ -8584,6 +8981,14 @@ const UI_TRANSLATIONS = {
     didYouUnderstand: "Bạn có hiểu điều này không?",
     hideAnswerBtn: "ᮨn đáp án",
     showAnswerBtn: "Hiện đáp án",
+    questionFuriganaLabel: "Hiển thị furigana trong câu hỏi",
+    questionFuriganaDesc: "Chỉ hiển thị furigana phía trên chữ kanji trong nội dung câu hỏi. Đáp án không có furigana, và với câu hỏi về cách đọc kanji thì từ cần hỏi không gắn furigana để không lộ đáp án.",
+    restartWeek1Btn: "Bắt đầu lại từ tuần 1",
+    restartWeek1Confirm: "Bắt đầu lại từ tuần 1? Dấu tích của tuần này sẽ bị xóa. Bạn có thể quay lại các tuần khác bằng bộ chọn tuần, và kế hoạch học vẫn giữ nguyên.",
+    weekPickLabel: "Đi đến tuần",
+    weekPickWeek: "Tuần {n}",
+    weekPickInProgress: "đang học",
+    weekBackToProgress: "Quay lại tuần {n} (đang học)",
     furiganaOn: "Bật",
     furiganaOff: "Tắt",
     studyTimePerDay: "THỜI GIAN HỌC MỖI NGÀY *",
@@ -8720,7 +9125,7 @@ const UI_TRANSLATIONS = {
     storeRestore: "Khôi phục giao dịch mua",
     storePurchaseFailed: "Không thể hoàn tất giao dịch mua. Vui lòng thử lại.",
     storeNothingToRestore: "Không tìm thấy giao dịch mua nào trước đây.",
-    storeAutoRenewNote: "Gói đăng ký tự động gia hạn theo mức giá hiển thị, trừ khi bị hủy ít nhất 24 giờ trước khi kết thúc kỳ hiện tại. Bạn có thể quản lý hoặc hủy trong cài đặt tài khoản App Store hoặc Google Play.",
+    storeAutoRenewNote: "Gói đăng ký tự động gia hạn theo mức giá hiển thị, trừ khi bị hủy ít nhất 24 giờ trước khi kết thúc kỳ hiện tại. Bạn có thể quản lý hoặc hủy trong cài đặt tài khoản App Store.",
     pronSlowTip: "Nghe không kịp? Hãy làm chậm video (ví dụ tốc độ 0,5× hoặc 0,75× trên YouTube) rồi nghe lại. Giáo viên chính là video — GAKU chỉ ghi lại thôi.",
     pronSlowNo: "Không sao. Hãy làm chậm video và nghe lại đoạn đó — GAKU sẽ ghi lại một lần nữa.",
     pronBestScore: "Điểm cao nhất",
@@ -8877,7 +9282,7 @@ const UI_TRANSLATIONS = {
     installPromptDesc: "एक टैप में खोलें, और आपकी प्रगति कभी नहीं खोएगी।",
     installPromptCta: "होम स्क्रीन पर जोड़ें",
     installPromptSkip: "बाद में",
-    installPromptHaveApp: "क्या आपने GAKU Master पहले ही Google Play या App Store से इंस्टॉल कर लिया है? तब इसकी ज़रूरत नहीं — “बाद में” दबाएँ।",
+    installPromptHaveApp: "क्या आपने GAKU Master पहले ही App Store से इंस्टॉल कर लिया है? तब इसकी ज़रूरत नहीं — “बाद में” दबाएँ।",
     installPromptIosSteps: "शेयर बटन टैप करें, फिर \"होम स्क्रीन पर जोड़ें\" चुनें",
     remindTitle: "कल आप कब दोहराएँगे?",
     remindDesc: "रोज़ सिर्फ़ 5 मिनट काफ़ी हैं। समय चुनें और हम आपके कैलेंडर में रोज़ाना रिमाइंडर जोड़ देंगे।",
@@ -8921,6 +9326,14 @@ const UI_TRANSLATIONS = {
     tutorialSubtitlesDesc: "नीचे किसी वीडियो का लिंक पेस्ट करें और उसकी सबटाइटल या ऑडियो को अपनी खुद की लिसनिंग और वोकैबुलरी प्रैक्टिस में बदलें।",
     tutorialResourcesDesc: "नीचे अपने स्तर के लिए चुने गए संसाधन देखें, या अभ्यास बनाने के लिए कोई कंटेंट पेस्ट करें।",
     tutorialMilestonesDesc: "यह आपके जापानी लक्ष्य तक का रोडमैप है। देखें आगे क्या आने वाला है।",
+    tutModesTitle: "स्टडी मोड और कोच",
+    tutorialModesDesc: "ऊपर 😊 Mode दबाकर Enjoyable (आरामदायक) या Intensive (रोज़ 8 गतिविधियों का लक्ष्य) चुनें। Intensive मोड में आपका कोच कार्ड पलटने की गति, उच्चारण, सुनना और सटीकता पर नज़र रखता है और हमेशा बताता है कि किस पर ध्यान देना है।",
+    tutGuideTitle: "मेरी स्टडी गाइड अपडेट करें",
+    tutorialGuideDesc: "आपका साप्ताहिक प्लान वही रहता है ताकि आप उसे आसानी से फ़ॉलो कर सकें। नया प्लान चाहिए तभी ✏️ प्रोफ़ाइल संपादित करें खोलकर “Update my study guide” दबाएँ।",
+    tutLibraryTitle: "लाइब्रेरी और फ़्लैशकार्ड",
+    tutorialLibraryDesc: "सेव किए शब्द फ़ोल्डरों में रहते हैं। आप फ़ोल्डर का नाम बदल सकते हैं, शब्द दूसरे फ़ोल्डर में कॉपी कर सकते हैं, अर्थ से खोज सकते हैं और फ़्लैशकार्ड से दोहरा सकते हैं — शब्द सीख लेने पर ✅ Understand दबाएँ।",
+    tutProgressTitle: "प्रगति जाँच",
+    tutorialProgressDesc: "अभी 3 मिनट की जाँच दें और कुछ दिन बाद फिर दें, ताकि देख सकें कि आप कितना आगे बढ़े (पहले बनाम अब)।",
     tutorialContentDesc: "अभी आज़माएं: नीचे कोई जापानी टेक्स्ट पेस्ट करें (कोई लेख, सबटाइटल, कैप्शन) और GAKU को उससे अभ्यास गतिविधियां बनाने दें — बिल्कुल वैसे ही जैसे GAKU Reader वेब पर करता है।",
     tutorialConversationDesc: "अभी आज़माएँ: कोई वीडियो चलाएँ, “वीडियो टैब सुनें” (या माइक) दबाएँ और GAKU को असली बातचीत सुनने दें — यह हर पंक्ति समझने में मदद करेगा और जवाब देने के सुझाव देगा।",
     tutorialPronunciationDesc: "अभी आज़माएँ: मूल भाषा बोलने वालों का वीडियो चलाएँ, “वीडियो टैब सुनें” दबाएँ, और GAKU हर पंक्ति लिख देगा। फिर कार्ड पर वाक्य को ज़ोर से बोलें और देखें कि आप कितने करीब थे। समझ नहीं आया? वीडियो को धीमा करके फिर से सुनें।",
@@ -8938,6 +9351,7 @@ const UI_TRANSLATIONS = {
     imgTapSearch: "छवि खोजने के लिए टैप करें",
     flashTapToCheck: "जाँचने के लिए टैप करें",
     flashListenExample: "उदाहरण सुनें",
+    ttsProblem: "🔇 आवाज़ नहीं आ रही? हो सकता है आपके फ़ोन में जापानी आवाज़ न हो। सेटिंग्स खोलें → “टेक्स्ट-टू-स्पीच आउटपुट” खोजें → जापानी वॉइस डेटा (Google Text-to-speech) इंस्टॉल करें, फिर दोबारा कोशिश करें।",
     flashGenRomaji: "रोमाजी बन रहा है…",
     flashGenTranslation: "अनुवाद बन रहा है…",
     flashUnderstand: "✅ समझ गया",
@@ -9013,6 +9427,18 @@ const UI_TRANSLATIONS = {
     coachTitle: "आज का सुझाव",
     coachBoth: "आप आमतौर पर {strong} में अच्छे हैं, और {weak} थोड़ा कठिन लगता है। आज {weak} कैसा रहेगा?",
     coachWeakOnly: "{weak} आपके लिए थोड़ा कठिन लगता है। आज इसका अभ्यास कैसा रहेगा?",
+    coachAdviceTitle: "🎯 आपका स्टडी कोच",
+    coachNoData: "थोड़ा और अभ्यास करें, फिर मैं आपको खास सुझाव देना शुरू करूँगा।",
+    coachAllGood: "अभी कोई कमज़ोर हिस्सा नहीं है। यही रफ़्तार बनाए रखें!",
+    coachAccWeak: "{area} में आपकी सटीकता {pct}% है। आज {area} पर ध्यान दें।",
+    coachSlowFlip: "एक शब्द याद करने में आपको लगभग {sec} सेकंड लगते हैं। तेज़ फ़्लैशकार्ड राउंड से 5 सेकंड से कम का लक्ष्य रखें।",
+    coachSlowWord: "आपका सबसे धीमा शब्द {word} है ({sec} सेकंड)। इसे फिर से दोहराएँ।",
+    coachRepeatWord: "आज आपने {word} को {n} बार देखा, फिर भी याद नहीं हो रहा। कोई उदाहरण वाक्य बनाएँ या इसे लिखकर देखें।",
+    coachPronMiss: "आप {word} का उच्चारण बार-बार ग़लत कर रहे हैं ({n} बार)। इसे धीरे बोलें, फिर सामान्य गति से।",
+    coachListenWeak: "सुनकर समझने की क्षमता {pct}% है। पाठ पढ़ने से पहले कई बार सुनें।",
+    coachStatFlip: "कार्ड पलटने की गति",
+    coachStatViews: "आज देखे गए शब्द",
+    coachStatListen: "सुनना",
     lessonBridgeAsk: "क्या आप इसे असली शिक्षक के साथ अभ्यास करना चाहेंगे? एक मुफ़्त ट्रायल क्लास आज़माएँ।",
     lessonBridgeBtn: "मुफ़्त ट्रायल क्लास बुक करें →",
     lessonBridgeMissed: "ध्यान देने योग्य ध्वनियाँ: {chars}",
@@ -9053,6 +9479,7 @@ const UI_TRANSLATIONS = {
     feedbackTitle: "💬 प्रतिक्रिया और राय",
     feedbackSubtitle: "हमें बताएं कि आप ऐप में क्या सुधार चाहते हैं या आपको क्या परेशान कर रहा है। हम हर संदेश पढ़ते हैं।",
     feedbackWarning: "यदि आप मानहानि, अपमानजनक भाषा या भेदभावपूर्ण शब्दों का उपयोग करते हैं, तो आपका खाता तुरंत निलंबित कर दिया जाएगा। कानूनी कार्रवाई होने पर भी हम कोई ज़िम्मेदारी नहीं लेंगे।",
+    supportEmailNote: "लॉग इन नहीं हो पा रहा या ऐप में समस्या है? हमें ईमेल करें:",
     feedbackChecking: "जाँच हो रही है...",
     feedbackAlreadySubmitted: "आप पहले ही अपनी एक बार की प्रतिक्रिया भेज चुके हैं। धन्यवाद! (GAKU द्वारा आमंत्रित छात्र जितनी बार चाहें भेज सकते हैं।)",
     feedbackSuccess: "धन्यवाद — आपकी प्रतिक्रिया भेज दी गई है।",
@@ -9185,6 +9612,14 @@ const UI_TRANSLATIONS = {
     didYouUnderstand: "क्या आपने इसे समझा?",
     hideAnswerBtn: "उत्तर छिपाएं",
     showAnswerBtn: "उत्तर दिखाएं",
+    questionFuriganaLabel: "प्रश्नों में फुरिगाना",
+    questionFuriganaDesc: "केवल प्रश्न के पाठ में कांजी के ऊपर फुरिगाना दिखाता है। उत्तरों में फुरिगाना नहीं होता, और कांजी पढ़ने वाले प्रश्नों में पूछा गया शब्द बिना फुरिगाना के रहता है ताकि उत्तर न खुले।",
+    restartWeek1Btn: "सप्ताह 1 से फिर शुरू करें",
+    restartWeek1Confirm: "सप्ताह 1 से फिर शुरू करें? इस सप्ताह के चेक के निशान हट जाएंगे। आप सप्ताह चयनकर्ता से अपने अन्य सप्ताहों पर लौट सकते हैं, और आपकी अध्ययन योजना वही रहेगी।",
+    weekPickLabel: "सप्ताह पर जाएं",
+    weekPickWeek: "सप्ताह {n}",
+    weekPickInProgress: "जारी",
+    weekBackToProgress: "सप्ताह {n} पर लौटें (जारी)",
     furiganaOn: "चालू",
     furiganaOff: "बंद",
     studyTimePerDay: "प्रतिदिन अध्ययन समय *",
@@ -9321,7 +9756,7 @@ const UI_TRANSLATIONS = {
     storeRestore: "खरीदारी बहाल करें",
     storePurchaseFailed: "खरीदारी पूरी नहीं हो सकी। कृपया फिर से कोशिश करें।",
     storeNothingToRestore: "पहले की कोई खरीदारी नहीं मिली।",
-    storeAutoRenewNote: "सदस्यताएँ दिखाई गई कीमत पर अपने-आप नवीनीकृत होती हैं, जब तक कि वर्तमान अवधि समाप्त होने से कम से कम 24 घंटे पहले रद्द न की जाएँ। आप अपने App Store या Google Play खाते की सेटिंग में इन्हें प्रबंधित या रद्द कर सकते हैं।",
+    storeAutoRenewNote: "सदस्यताएँ दिखाई गई कीमत पर अपने-आप नवीनीकृत होती हैं, जब तक कि वर्तमान अवधि समाप्त होने से कम से कम 24 घंटे पहले रद्द न की जाएँ। आप अपने App Store खाते की सेटिंग में इन्हें प्रबंधित या रद्द कर सकते हैं।",
     pronSlowTip: "समझ नहीं आया? वीडियो को धीमा करें (जैसे YouTube में 0.5× या 0.75× गति) और फिर से सुनें। शिक्षक वीडियो है — GAKU सिर्फ़ उसे लिख देता है।",
     pronSlowNo: "कोई बात नहीं। वीडियो को धीमा करके उस हिस्से को फिर से सुनें — GAKU उसे दोबारा लिख देगा।",
     pronBestScore: "सर्वश्रेष्ठ स्कोर",
@@ -9478,7 +9913,7 @@ const UI_TRANSLATIONS = {
     installPromptDesc: "ワンタップで開けて、学習の進み具合も失われません。",
     installPromptCta: "ホーム画面に追加",
     installPromptSkip: "あとで",
-    installPromptHaveApp: "すでにGoogle PlayまたはApp StoreからGAKU Masterをインストール済みの方は、この手順は不要です。「あとで」を押してください。",
+    installPromptHaveApp: "すでにApp StoreからGAKU Masterをインストール済みの方は、この手順は不要です。「あとで」を押してください。",
     installPromptIosSteps: "共有ボタンをタップし、「ホーム画面に追加」を選んでください",
     remindTitle: "明日はいつ復習しますか？",
     remindDesc: "1日たった5分で十分です。時間を選ぶと、カレンダーに毎日のリマインダーを追加します。",
@@ -9522,6 +9957,14 @@ const UI_TRANSLATIONS = {
     tutorialSubtitlesDesc: "下に動画のリンクを貼り付けて、その字幕や音声を自分だけのリスニング・単語練習に変えてみましょう。",
     tutorialResourcesDesc: "下のあなたのレベルに合わせて厳選されたリソースを見てみるか、内容を貼り付けて自分の練習問題を作ってみましょう。",
     tutorialMilestonesDesc: "これは日本語の目標までのロードマップです。この先どんな道のりが待っているか見てみましょう。",
+    tutModesTitle: "学習モードとコーチ",
+    tutorialModesDesc: "上の 😊 モード を押して、Enjoyable(気軽に)か Intensive(1日8アクションのノルマ)を選べます。Intensive では、学習コーチがカードをめくる速さ・発音・リスニング・正答率を分析して、今なにを重点的に勉強するとよいかを常に教えてくれます。",
+    tutGuideTitle: "勉強ガイドを更新する",
+    tutorialGuideDesc: "毎週のプランは変わらないので、そのまま続けられます。新しいプランがほしいときだけ、✏️ プロフィール編集 を開いて「Update my study guide」を押してください。",
+    tutLibraryTitle: "Library と Flashcard",
+    tutorialLibraryDesc: "保存した単語はフォルダにまとまっています。フォルダ名の変更、別フォルダへの単語コピー、意味での検索、Flashcard での復習ができます。覚えた単語は ✅ Understand を押しましょう。",
+    tutProgressTitle: "Progress check",
+    tutorialProgressDesc: "まず3分間のチェックを受けて、数日後にもう一度受けると、どれだけ成長したか(以前と今)が分かります。",
     tutorialContentDesc: "早速試してみましょう: 下に日本語のテキスト(記事・字幕・キャプションなど)を貼り付けて、GAKUに練習アクティビティを作ってもらいましょう — WebのGAKU Readerと同じ仕組みです。",
     tutorialConversationDesc: "今すぐ試してみましょう：動画を再生して「動画のタブを聞き取る」（またはマイク）を押すと、GAKUが実際の会話を聞き取ります。1行ずつ理解を助け、どう返事するかのヒントも出します。",
     tutorialPronunciationDesc: "今すぐ試してみましょう：ネイティブが話す動画を再生して「動画のタブを聞き取る」を押すと、GAKUが1行ずつ文字に起こします。次に、カードの文を声に出して言い、どれだけ近かったか確認しましょう。聞き取れないときは、動画をスロー再生してもう一度聞いてみましょう。",
@@ -9539,6 +9982,7 @@ const UI_TRANSLATIONS = {
     imgTapSearch: "タップして画像を検索",
     flashTapToCheck: "タップして確認",
     flashListenExample: "例文を聞く",
+    ttsProblem: "🔇 音が出ませんか?お使いのスマホに日本語の音声データが入っていない可能性があります。設定→「テキスト読み上げの出力」で検索→日本語の音声データ(Google 音声合成)をインストールして、もう一度お試しください。",
     flashGenRomaji: "ローマ字を生成中…",
     flashGenTranslation: "翻訳を生成中…",
     flashUnderstand: "✅ Understand(理解した)",
@@ -9614,6 +10058,18 @@ const UI_TRANSLATIONS = {
     coachTitle: "今日のおすすめ",
     coachBoth: "普段は{strong}が得意ですが、{weak}は少し苦手そうですね。今日は{weak}はいかがですか？",
     coachWeakOnly: "{weak}が少し苦手そうですね。今日は練習してみませんか？",
+    coachAdviceTitle: "🎯 あなたの学習コーチ",
+    coachNoData: "もう少し練習すると、具体的なアドバイスができるようになります。",
+    coachAllGood: "今のところ苦手分野はありません。このペースで続けましょう!",
+    coachAccWeak: "{area}の正答率は{pct}%です。今日は{area}を重点的に勉強しましょう。",
+    coachSlowFlip: "単語を思い出すのに平均{sec}秒かかっています。フラッシュカードを素早く回して5秒以内を目指しましょう。",
+    coachSlowWord: "一番時間がかかった単語は「{word}」({sec}秒)です。もう一度復習しましょう。",
+    coachRepeatWord: "「{word}」を今日{n}回見ましたが、まだ定着していません。例文を作るか、書いて覚えましょう。",
+    coachPronMiss: "「{word}」の発音を{n}回間違えています。ゆっくり言ってから、普通の速さで言ってみましょう。",
+    coachListenWeak: "リスニングの理解度は{pct}%です。テキストを読む前に、何度か聞きましょう。",
+    coachStatFlip: "カードをめくる速さ",
+    coachStatViews: "今日見た単語",
+    coachStatListen: "リスニング",
     lessonBridgeAsk: "この課題を、先生と一緒に練習してみませんか？無料体験レッスンをご利用ください。",
     lessonBridgeBtn: "無料体験レッスンを申し込む →",
     lessonBridgeMissed: "つまずきやすい音: {chars}",
@@ -9654,6 +10110,7 @@ const UI_TRANSLATIONS = {
     feedbackTitle: "💬 フィードバック・ご意見",
     feedbackSubtitle: "アプリで改善してほしい点や気になる点を教えてください。すべてのメッセージに目を通しています。",
     feedbackWarning: "万が一誹謗中傷、暴言、差別用語などを書いた場合は直ちにアカウント停止。訴訟が起こっても一切の責任は負いません。",
+    supportEmailNote: "ログインできない、またはアプリで困ったときは、こちらへメールしてください:",
     feedbackChecking: "確認中...",
     feedbackAlreadySubmitted: "フィードバックはすでに1回送信済みです。ありがとうございました！(GAKU招待生徒は何回でも送信できます。)",
     feedbackSuccess: "ありがとうございました — フィードバックを送信しました。",
@@ -9786,6 +10243,14 @@ const UI_TRANSLATIONS = {
     didYouUnderstand: "これは理解できましたか？",
     hideAnswerBtn: "答えを隠す",
     showAnswerBtn: "答えを表示",
+    questionFuriganaLabel: "問題文にふりがなを付ける",
+    questionFuriganaDesc: "問題文の漢字の上にだけふりがなを表示します。答えにはふりがなは付きません。また、漢字の読みを問う問題では、答えがわかってしまわないよう対象の語にはふりがなを付けません。",
+    restartWeek1Btn: "第1週からやり直す",
+    restartWeek1Confirm: "第1週からやり直しますか？この週のチェックが消えます。ほかの週には、週の選択からいつでも戻れます。学習プラン自体は変わりません。",
+    weekPickLabel: "週へ移動",
+    weekPickWeek: "第{n}週",
+    weekPickInProgress: "進行中",
+    weekBackToProgress: "第{n}週(進行中)に戻る",
     furiganaOn: "オン",
     furiganaOff: "オフ",
     studyTimePerDay: "1日の学習時間 *",
@@ -9922,7 +10387,7 @@ const UI_TRANSLATIONS = {
     storeRestore: "購入を復元",
     storePurchaseFailed: "購入を完了できませんでした。もう一度お試しください。",
     storeNothingToRestore: "以前の購入は見つかりませんでした。",
-    storeAutoRenewNote: "サブスクリプションは、現在の期間が終了する24時間以上前に解約しない限り、表示された価格で自動更新されます。App StoreまたはGoogle Playのアカウント設定で管理・解約できます。",
+    storeAutoRenewNote: "サブスクリプションは、現在の期間が終了する24時間以上前に解約しない限り、表示された価格で自動更新されます。App Storeのアカウント設定で管理・解約できます。",
     pronSlowTip: "聞き取れない場合は、動画をスロー再生(YouTubeなら再生速度0.5倍や0.75倍)して、もう一度聞き取ってください。先生は動画です。GAKUは文字起こしでサポートします。",
     pronSlowNo: "大丈夫です。動画をスロー再生して、その部分をもう一度聞き取ってください。GAKUがもう一度文字に起こします。",
     pronBestScore: "ベストスコア",
@@ -10079,7 +10544,7 @@ const UI_TRANSLATIONS = {
     installPromptDesc: "Tek dokunuşla aç, ilerlemen asla kaybolmasın.",
     installPromptCta: "Ana Ekrana Ekle",
     installPromptSkip: "Belki sonra",
-    installPromptHaveApp: "GAKU Master'ı zaten Google Play veya App Store'dan yüklediniz mi? Buna gerek yok — “Belki sonra”ya dokunun.",
+    installPromptHaveApp: "GAKU Master'ı zaten App Store'dan yüklediniz mi? Buna gerek yok — “Belki sonra”ya dokunun.",
     installPromptIosSteps: "Paylaş düğmesine, ardından \"Ana Ekrana Ekle\"ye dokunun",
     remindTitle: "Yarın ne zaman tekrar yapacaksın?",
     remindDesc: "Günde sadece 5 dakika yeterli. Bir saat seç, takvimine günlük bir hatırlatma ekleyelim.",
@@ -10123,6 +10588,14 @@ const UI_TRANSLATIONS = {
     tutorialSubtitlesDesc: "Aşağıya bir video bağlantısı yapıştırın ve altyazısını veya sesini kendi dinleme ve kelime alıştırmanıza dönüştürün.",
     tutorialResourcesDesc: "Aşağıda seviyenize özel seçilmiş kaynaklara göz atın veya kendi alıştırmanızı oluşturmak için bir içerik yapıştırın.",
     tutorialMilestonesDesc: "Bu, Japonca hedefinize giden yol haritanız. Sırada ne olduğuna bir göz atın.",
+    tutModesTitle: "Çalışma modları ve koç",
+    tutorialModesDesc: "Enjoyable (rahat) veya Intensive (günlük 8 eylemlik hedef) seçmek için üstteki 😊 Mode düğmesine dokunun. Intensive modunda koçunuz kart çevirme hızınızı, telaffuzunuzu, dinlemenizi ve doğruluğunuzu izler ve nereye odaklanmanız gerektiğini her zaman söyler.",
+    tutGuideTitle: "Çalışma rehberimi güncelle",
+    tutorialGuideDesc: "Haftalık planınız takip edebilmeniz için aynı kalır. Yalnızca yeni bir plan istediğinizde ✏️ Profili Düzenle'yi açıp “Update my study guide”a basın.",
+    tutLibraryTitle: "Kütüphane ve bilgi kartları",
+    tutorialLibraryDesc: "Kaydettiğiniz kelimeler klasörlerde durur. Klasörleri yeniden adlandırabilir, kelimeleri başka klasörlere kopyalayabilir, anlamla arayabilir ve bilgi kartlarıyla tekrar edebilirsiniz — bir kelimeyi öğrenince ✅ Understand'e basın.",
+    tutProgressTitle: "İlerleme kontrolü",
+    tutorialProgressDesc: "3 dakikalık kontrolü şimdi yapın, birkaç gün sonra tekrar yapın ve ne kadar geliştiğinizi görün (önce vs. şimdi).",
     tutorialContentDesc: "Hemen deneyin: aşağıya bir Japonca metin yapıştırın (bir makale, altyazı, bir başlık) ve GAKU'nun bundan alıştırma etkinlikleri oluşturmasına izin verin — tıpkı GAKU Reader'ın web'de yaptığı gibi.",
     tutorialConversationDesc: "Hemen deneyin: bir video oynatın, “Video sekmesini dinle”ye (veya mikrofona) dokunun ve GAKU'nun gerçek diyaloğu dinlemesine izin verin — her satırı anlamanıza yardımcı olur ve nasıl cevap verebileceğinizi önerir.",
     tutorialPronunciationDesc: "Hemen deneyin: ana dili konuşanların olduğu bir video oynatın, “Video sekmesini dinle”ye dokunun; GAKU her satırı yazıya döker. Sonra kartta cümleyi yüksek sesle söyleyin ve ne kadar yaklaştığınıza bakın. Anlayamadınız mı? Videoyu yavaşlatıp tekrar dinleyin.",
@@ -10140,6 +10613,7 @@ const UI_TRANSLATIONS = {
     imgTapSearch: "Görsel aramak için dokun",
     flashTapToCheck: "Kontrol için dokun",
     flashListenExample: "Örneği dinle",
+    ttsProblem: "🔇 Ses yok mu? Telefonunuzda Japonca ses olmayabilir. Ayarlar’ı açın → “Metin okuma çıkışı” arayın → Japonca ses verilerini (Google Text-to-speech) yükleyin ve tekrar deneyin.",
     flashGenRomaji: "Romaji oluşturuluyor…",
     flashGenTranslation: "Çeviri oluşturuluyor…",
     flashUnderstand: "✅ Anladım",
@@ -10215,6 +10689,18 @@ const UI_TRANSLATIONS = {
     coachTitle: "Bugünün önerisi",
     coachBoth: "Genellikle {strong} konusunda iyisiniz, {weak} ise biraz zor görünüyor. Bugün {weak} nasıl olur?",
     coachWeakOnly: "{weak} sizin için biraz zor görünüyor. Bugün çalışmaya ne dersiniz?",
+    coachAdviceTitle: "🎯 Çalışma koçunuz",
+    coachNoData: "Biraz daha pratik yapın, size özel tavsiyeler vermeye başlayayım.",
+    coachAllGood: "Şu an zayıf nokta yok. Bu tempoyu koruyun!",
+    coachAccWeak: "{area} doğruluğunuz %{pct}. Bugün {area} alanına odaklanın.",
+    coachSlowFlip: "Bir kelimeyi hatırlamanız yaklaşık {sec} sn sürüyor. Hızlı kart turlarıyla 5 sn altını hedefleyin.",
+    coachSlowWord: "En yavaş hatırladığınız kelime {word} ({sec} sn). Tekrar gözden geçirin.",
+    coachRepeatWord: "Bugün {word} kelimesine {n} kez baktınız ama yerleşmedi. Örnek bir cümle kurun veya yazarak deneyin.",
+    coachPronMiss: "{word} telaffuzunu sürekli yanlış yapıyorsunuz ({n} kez). Önce yavaş, sonra normal hızda söyleyin.",
+    coachListenWeak: "Dinleme anlama oranınız %{pct}. Metni okumadan önce birkaç kez dinleyin.",
+    coachStatFlip: "Kart çevirme hızı",
+    coachStatViews: "Bugün görülen kelimeler",
+    coachStatListen: "Dinleme",
     lessonBridgeAsk: "Bunu gerçek bir öğretmenle çalışmak ister misiniz? Ücretsiz deneme dersini deneyin.",
     lessonBridgeBtn: "Ücretsiz deneme dersi ayarla →",
     lessonBridgeMissed: "Dikkat edilecek sesler: {chars}",
@@ -10255,6 +10741,7 @@ const UI_TRANSLATIONS = {
     feedbackTitle: "💬 Geri Bildirim ve Görüş",
     feedbackSubtitle: "Neyi iyileştirmemizi istediğinizi veya uygulamayla ilgili sizi rahatsız eden bir şeyi bize bildirin. Her mesajı okuyoruz.",
     feedbackWarning: "İftira, hakaret içeren dil veya ayrımcı ifadeler yazmanız durumunda hesabınız derhal askıya alınacaktır. Dava açılsa dahi hiçbir sorumluluk kabul etmiyoruz.",
+    supportEmailNote: "Giriş yapamıyor musunuz veya uygulamada sorun mu yaşıyorsunuz? Bize e-posta gönderin:",
     feedbackChecking: "Kontrol ediliyor...",
     feedbackAlreadySubmitted: "Tek seferlik geri bildiriminizi zaten gönderdiniz. Teşekkürler! (GAKU tarafından davet edilen öğrenciler istedikleri kadar gönderebilir.)",
     feedbackSuccess: "Teşekkürler — geri bildiriminiz gönderildi.",
@@ -10387,6 +10874,14 @@ const UI_TRANSLATIONS = {
     didYouUnderstand: "Bunu anladınız mı?",
     hideAnswerBtn: "Cevabı gizle",
     showAnswerBtn: "Cevabı göster",
+    questionFuriganaLabel: "Sorularda furigana",
+    questionFuriganaDesc: "Furigana'yı yalnızca soru metnindeki kanjilerin üzerinde gösterir. Cevaplarda furigana olmaz; kanji okuma sorularında sorulan kelimeye de cevap belli olmasın diye furigana eklenmez.",
+    restartWeek1Btn: "1. haftadan yeniden başla",
+    restartWeek1Confirm: "1. haftadan yeniden başlansın mı? Bu haftanın işaretleri silinir. Diğer haftalarınıza hafta seçiciden dönebilirsiniz ve çalışma planınız aynı kalır.",
+    weekPickLabel: "Haftaya git",
+    weekPickWeek: "Hafta {n}",
+    weekPickInProgress: "devam eden",
+    weekBackToProgress: "Hafta {n}'e dön (devam eden)",
     furiganaOn: "Açık",
     furiganaOff: "Kapalı",
     studyTimePerDay: "GÜNLÜK ÇALIŞMA SÜRESİ *",
@@ -10523,7 +11018,7 @@ const UI_TRANSLATIONS = {
     storeRestore: "Satın alımları geri yükle",
     storePurchaseFailed: "Satın alma tamamlanamadı. Lütfen tekrar deneyin.",
     storeNothingToRestore: "Önceki bir satın alma bulunamadı.",
-    storeAutoRenewNote: "Abonelikler, mevcut dönemin bitiminden en az 24 saat önce iptal edilmediği sürece gösterilen fiyattan otomatik olarak yenilenir. App Store veya Google Play hesap ayarlarından yönetebilir ya da iptal edebilirsiniz.",
+    storeAutoRenewNote: "Abonelikler, mevcut dönemin bitiminden en az 24 saat önce iptal edilmediği sürece gösterilen fiyattan otomatik olarak yenilenir. App Store hesap ayarlarından yönetebilir ya da iptal edebilirsiniz.",
     pronSlowTip: "Anlayamadınız mı? Videoyu yavaşlatın (örneğin YouTube'da 0,5× veya 0,75× hız) ve tekrar dinleyin. Öğretmeniniz video — GAKU yalnızca yazıya döker.",
     pronSlowNo: "Sorun değil. Videoyu yavaşlatıp o bölümü tekrar dinleyin — GAKU onu yeniden yazacak.",
     pronBestScore: "En iyi puan",
@@ -10680,7 +11175,7 @@ const UI_TRANSLATIONS = {
     installPromptDesc: "एक ट्यापमा खोल्नुहोस्, र तपाईंको प्रगति कहिल्यै हराउँदैन।",
     installPromptCta: "होम स्क्रिनमा थप्नुहोस्",
     installPromptSkip: "पछि",
-    installPromptHaveApp: "के तपाईंले GAKU Master पहिले नै Google Play वा App Store बाट इन्स्टल गर्नुभएको छ? यो आवश्यक छैन — “पछि” थिच्नुहोस्।",
+    installPromptHaveApp: "के तपाईंले GAKU Master पहिले नै App Store बाट इन्स्टल गर्नुभएको छ? यो आवश्यक छैन — “पछि” थिच्नुहोस्।",
     installPromptIosSteps: "सेयर बटन ट्याप गर्नुहोस्, त्यसपछि \"होम स्क्रिनमा थप्नुहोस्\" छान्नुहोस्",
     remindTitle: "भोलि कति बजे दोहोर्याउनुहुन्छ?",
     remindDesc: "दिनमा ५ मिनेट मात्र पर्याप्त छ। समय छान्नुहोस्, हामी तपाईंको क्यालेन्डरमा दैनिक रिमाइन्डर थप्छौं।",
@@ -10724,6 +11219,14 @@ const UI_TRANSLATIONS = {
     tutorialSubtitlesDesc: "तल कुनै भिडियोको लिंक टाँस्नुहोस् र यसको सबटाइटल वा अडियोलाई आफ्नै सुनाइ र शब्दावली अभ्यासमा बदल्नुहोस्।",
     tutorialResourcesDesc: "तल तपाईंको स्तरका लागि छानिएका स्रोतहरू हेर्नुहोस्, वा आफ्नै अभ्यास बनाउन कुनै सामग्री टाँस्नुहोस्।",
     tutorialMilestonesDesc: "यो तपाईंको जापानी लक्ष्यसम्मको रोडम्याप हो। अब के आउँदैछ हेर्नुहोस्।",
+    tutModesTitle: "अध्ययन मोड र प्रशिक्षक",
+    tutorialModesDesc: "माथिको 😊 Mode थिचेर Enjoyable (सहज) वा Intensive (दैनिक ८ कार्यको लक्ष्य) छान्नुहोस्। Intensive मोडमा तपाईंको प्रशिक्षकले कार्ड पल्टाउने गति, उच्चारण, सुनाइ र शुद्धता हेर्छ र कुन कुरामा ध्यान दिने भनेर सधैं बताउँछ।",
+    tutGuideTitle: "मेरो अध्ययन गाइड अपडेट गर्नुहोस्",
+    tutorialGuideDesc: "तपाईंको साप्ताहिक योजना उस्तै रहन्छ ताकि सजिलै पछ्याउन सक्नुहोस्। नयाँ योजना चाहिँदा मात्र ✏️ प्रोफाइल सम्पादन खोलेर “Update my study guide” थिच्नुहोस्।",
+    tutLibraryTitle: "लाइब्रेरी र फ्ल्यासकार्ड",
+    tutorialLibraryDesc: "सेभ गरिएका शब्दहरू फोल्डरमा हुन्छन्। तपाईं फोल्डरको नाम बदल्न, शब्द अर्को फोल्डरमा कपी गर्न, अर्थले खोज्न र फ्ल्यासकार्डबाट दोहोर्याउन सक्नुहुन्छ — शब्द सिकेपछि ✅ Understand थिच्नुहोस्।",
+    tutProgressTitle: "प्रगति जाँच",
+    tutorialProgressDesc: "अहिले ३ मिनेटको जाँच दिनुहोस् र केही दिनपछि फेरि दिनुहोस्, कति प्रगति भयो हेर्न (पहिले बनाम अहिले)।",
     tutorialContentDesc: "अहिले नै प्रयास गर्नुहोस्: तल कुनै जापानी पाठ टाँस्नुहोस् (लेख, सबटाइटल, क्याप्सन) र GAKUलाई त्यसबाट अभ्यास गतिविधिहरू बनाउन दिनुहोस् — ठ्याक्कै GAKU Readerले वेबमा गरेजस्तै।",
     tutorialConversationDesc: "अहिले प्रयास गर्नुहोस्: कुनै भिडियो चलाउनुहोस्, “भिडियो ट्याब सुन्नुहोस्” (वा माइक) थिच्नुहोस् र GAKUलाई वास्तविक कुराकानी सुन्न दिनुहोस् — यसले हरेक पङ्क्ति बुझ्न मद्दत गर्नेछ र कसरी जवाफ दिने सुझाव दिनेछ।",
     tutorialPronunciationDesc: "अहिले प्रयास गर्नुहोस्: मातृभाषीहरूको भिडियो चलाउनुहोस्, “भिडियो ट्याब सुन्नुहोस्” थिच्नुहोस्, र GAKUले हरेक पङ्क्ति लेखिदिनेछ। त्यसपछि कार्डमा वाक्य ठूलो स्वरमा बोल्नुहोस् र कति नजिक हुनुभयो हेर्नुहोस्। बुझ्न गाह्रो भयो? भिडियो ढिलो गरेर फेरि सुन्नुहोस्।",
@@ -10741,6 +11244,7 @@ const UI_TRANSLATIONS = {
     imgTapSearch: "तस्बिर खोज्न ट्याप गर्नुहोस्",
     flashTapToCheck: "जाँच गर्न ट्याप गर्नुहोस्",
     flashListenExample: "उदाहरण सुन्नुहोस्",
+    ttsProblem: "🔇 आवाज आएन? तपाईंको फोनमा जापानी आवाज नहुन सक्छ। सेटिङ खोल्नुहोस् → “टेक्स्ट-टु-स्पिच आउटपुट” खोज्नुहोस् → जापानी आवाज डेटा (Google Text-to-speech) इन्स्टल गर्नुहोस्, अनि फेरि प्रयास गर्नुहोस्।",
     flashGenRomaji: "रोमाजी बन्दै छ…",
     flashGenTranslation: "अनुवाद बन्दै छ…",
     flashUnderstand: "✅ बुझें",
@@ -10816,6 +11320,18 @@ const UI_TRANSLATIONS = {
     coachTitle: "आजको सुझाव",
     coachBoth: "तपाईं सामान्यतया {strong} मा राम्रो हुनुहुन्छ, र {weak} अलि गाह्रो देखिन्छ। आज {weak} कस्तो होला?",
     coachWeakOnly: "{weak} तपाईंलाई अलि गाह्रो देखिन्छ। आज अभ्यास गर्ने कसो?",
+    coachAdviceTitle: "🎯 तपाईंको अध्ययन प्रशिक्षक",
+    coachNoData: "अलि बढी अभ्यास गर्नुहोस्, म तपाईंलाई विशेष सल्लाह दिन थाल्छु।",
+    coachAllGood: "अहिले कमजोर क्षेत्र छैन। यही गति कायम राख्नुहोस्!",
+    coachAccWeak: "{area} को शुद्धता {pct}% छ। आज {area} मा ध्यान दिनुहोस्।",
+    coachSlowFlip: "एउटा शब्द सम्झन तपाईंलाई करिब {sec} सेकेन्ड लाग्छ। छिटो फ्ल्यासकार्ड राउन्डबाट ५ सेकेन्डभन्दा कम लक्ष्य राख्नुहोस्।",
+    coachSlowWord: "तपाईंको सबैभन्दा ढिलो शब्द {word} हो ({sec} सेकेन्ड)। फेरि दोहोर्याउनुहोस्।",
+    coachRepeatWord: "आज तपाईंले {word} {n} पटक हेर्नुभयो तर अझै याद भएन। उदाहरण वाक्य बनाउनुहोस् वा लेखेर हेर्नुहोस्।",
+    coachPronMiss: "तपाईं {word} को उच्चारण बारम्बार गल्ती गर्दै हुनुहुन्छ ({n} पटक)। पहिले बिस्तारै, अनि सामान्य गतिमा भन्नुहोस्।",
+    coachListenWeak: "सुनाइ बुझाइ {pct}% छ। पाठ पढ्नु अघि धेरै पटक सुन्नुहोस्।",
+    coachStatFlip: "कार्ड पल्टाउने गति",
+    coachStatViews: "आज हेरिएका शब्द",
+    coachStatListen: "सुनाइ",
     lessonBridgeAsk: "के तपाईं यसलाई साँचो शिक्षकसँग अभ्यास गर्न चाहनुहुन्छ? निःशुल्क परीक्षण कक्षा प्रयास गर्नुहोस्।",
     lessonBridgeBtn: "निःशुल्क परीक्षण कक्षा बुक गर्नुहोस् →",
     lessonBridgeMissed: "ध्यान दिनुपर्ने ध्वनिहरू: {chars}",
@@ -10856,6 +11372,7 @@ const UI_TRANSLATIONS = {
     feedbackTitle: "💬 प्रतिक्रिया र विचार",
     feedbackSubtitle: "एपमा के सुधार गरिदिए हुन्थ्यो वा के कुराले तपाईंलाई अप्ठ्यारो पारिरहेको छ भनी हामीलाई बताउनुहोस्। हामी हरेक सन्देश पढ्छौं।",
     feedbackWarning: "यदि तपाईंले मानहानि, अपमानजनक भाषा वा भेदभावपूर्ण शब्द लेख्नुभयो भने तपाईंको खाता तुरुन्तै निलम्बन गरिनेछ। मुद्दा परे पनि हामी कुनै जिम्मेवारी लिने छैनौं।",
+    supportEmailNote: "लगइन गर्न सकिएन वा एपमा समस्या छ? हामीलाई इमेल गर्नुहोस्:",
     feedbackChecking: "जाँच गर्दै...",
     feedbackAlreadySubmitted: "तपाईंले आफ्नो एक पटकको प्रतिक्रिया पहिले नै पठाइसक्नुभएको छ। धन्यवाद! (GAKU ले निमन्त्रणा गरेका विद्यार्थीहरूले जति पटक चाहे पनि पठाउन सक्छन्।)",
     feedbackSuccess: "धन्यवाद — तपाईंको प्रतिक्रिया पठाइयो।",
@@ -10988,6 +11505,14 @@ const UI_TRANSLATIONS = {
     didYouUnderstand: "के तपाईंले यो बुझ्नुभयो?",
     hideAnswerBtn: "उत्तर लुकाउनुहोस्",
     showAnswerBtn: "उत्तर देखाउनुहोस्",
+    questionFuriganaLabel: "प्रश्नहरूमा फुरिगाना",
+    questionFuriganaDesc: "प्रश्नको पाठमा मात्र कान्जीमाथि फुरिगाना देखाउँछ। उत्तरमा फुरिगाना हुँदैन, र कान्जी पढाइका प्रश्नमा सोधिएको शब्दमा उत्तर नखुलोस् भनेर फुरिगाना राखिँदैन।",
+    restartWeek1Btn: "हप्ता १ बाट फेरि सुरु गर्नुहोस्",
+    restartWeek1Confirm: "हप्ता १ बाट फेरि सुरु गर्ने? यस हप्ताका चेक चिन्ह हट्नेछन्। हप्ता चयनकर्ताबाट तपाईं अन्य हप्ताहरूमा फर्कन सक्नुहुन्छ, र अध्ययन योजना उस्तै रहन्छ।",
+    weekPickLabel: "हप्तामा जानुहोस्",
+    weekPickWeek: "हप्ता {n}",
+    weekPickInProgress: "चालु",
+    weekBackToProgress: "हप्ता {n} मा फर्कनुहोस् (चालु)",
     furiganaOn: "अन",
     furiganaOff: "अफ",
     studyTimePerDay: "दैनिक अध्ययन समय *",
@@ -11124,7 +11649,7 @@ const UI_TRANSLATIONS = {
     storeRestore: "खरिद पुनःस्थापना गर्नुहोस्",
     storePurchaseFailed: "खरिद पूरा हुन सकेन। कृपया फेरि प्रयास गर्नुहोस्।",
     storeNothingToRestore: "अघिको कुनै खरिद फेला परेन।",
-    storeAutoRenewNote: "सदस्यताहरू हालको अवधि सकिनुभन्दा कम्तीमा २४ घण्टा अगाडि रद्द नगरेसम्म देखाइएको मूल्यमा स्वतः नवीकरण हुन्छन्। तपाईं App Store वा Google Play खाताको सेटिङमा व्यवस्थापन वा रद्द गर्न सक्नुहुन्छ।",
+    storeAutoRenewNote: "सदस्यताहरू हालको अवधि सकिनुभन्दा कम्तीमा २४ घण्टा अगाडि रद्द नगरेसम्म देखाइएको मूल्यमा स्वतः नवीकरण हुन्छन्। तपाईं App Store खाताको सेटिङमा व्यवस्थापन वा रद्द गर्न सक्नुहुन्छ।",
     pronSlowTip: "बुझ्न गाह्रो भयो? भिडियो ढिलो गर्नुहोस् (जस्तै YouTube मा 0.5× वा 0.75× गति) र फेरि सुन्नुहोस्। शिक्षक भिडियो नै हो — GAKUले मात्र लेखिदिन्छ।",
     pronSlowNo: "ठीक छ। भिडियो ढिलो गरेर त्यो भाग फेरि सुन्नुहोस् — GAKUले फेरि लेखिदिनेछ।",
     pronBestScore: "उत्कृष्ट स्कोर",
@@ -11281,7 +11806,7 @@ const UI_TRANSLATIONS = {
     installPromptDesc: "Buksan sa isang tap, at hindi na mawawala ang iyong progreso.",
     installPromptCta: "Idagdag sa Home Screen",
     installPromptSkip: "Sa ibang pagkakataon",
-    installPromptHaveApp: "Na-install mo na ba ang GAKU Master mula sa Google Play o App Store? Hindi mo ito kailangan — i-tap ang “Sa ibang pagkakataon”.",
+    installPromptHaveApp: "Na-install mo na ba ang GAKU Master mula sa App Store? Hindi mo ito kailangan — i-tap ang “Sa ibang pagkakataon”.",
     installPromptIosSteps: "I-tap ang Share, pagkatapos ay \"Idagdag sa Home Screen\"",
     remindTitle: "Kailan ka magre-review bukas?",
     remindDesc: "Sapat na ang 5 minuto kada araw. Pumili ng oras at magdaragdag kami ng pang-araw-araw na paalala sa iyong kalendaryo.",
@@ -11325,6 +11850,14 @@ const UI_TRANSLATIONS = {
     tutorialSubtitlesDesc: "I-paste ang link ng isang video sa ibaba at gawing sarili mong listening at vocabulary practice ang subtitle o audio nito.",
     tutorialResourcesDesc: "Tingnan ang mga hand-picked na resource para sa iyong level sa ibaba, o mag-paste ng content para gumawa ng sarili mong practice.",
     tutorialMilestonesDesc: "Ito ang iyong roadmap patungo sa iyong layunin sa Nihongo. Tingnan kung ano ang susunod.",
+    tutModesTitle: "Mga study mode at coach",
+    tutorialModesDesc: "I-tap ang 😊 Mode sa itaas para piliin ang Enjoyable (relaks) o Intensive (araw-araw na quota na 8 aksyon). Sa Intensive mode, sinusubaybayan ng coach mo ang bilis ng pagpihit ng card, bigkas, pakikinig, at katumpakan, at lagi niyang sinasabi kung saan ka dapat mag-focus.",
+    tutGuideTitle: "I-update ang aking study guide",
+    tutorialGuideDesc: "Hindi nagbabago ang lingguhang plano mo para madali mo itong masundan. Kapag gusto mo lang ng bagong plano, buksan ang ✏️ I-edit ang Profile at pindutin ang “Update my study guide”.",
+    tutLibraryTitle: "Library at flashcard",
+    tutorialLibraryDesc: "Nasa mga folder ang mga na-save mong salita. Puwede mong palitan ang pangalan ng folder, kopyahin ang mga salita sa ibang folder, maghanap ayon sa kahulugan, at mag-review gamit ang flashcard — pindutin ang ✅ Understand kapag natutunan mo na ang isang salita.",
+    tutProgressTitle: "Progress check",
+    tutorialProgressDesc: "Gawin ngayon ang 3-minutong check, at ulitin makalipas ang ilang araw para makita kung gaano ka na umunlad (dati vs. ngayon).",
     tutorialContentDesc: "Subukan na ngayon: mag-paste ng Japanese text sa ibaba (isang artikulo, subtitle, caption) at hayaang gumawa ang GAKU ng mga practice activity mula dito — tulad ng ginagawa ng GAKU Reader sa web.",
     tutorialConversationDesc: "Subukan ngayon: mag-play ng video, i-tap ang “Pakinggan ang tab ng video” (o ang mikropono) at hayaang pakinggan ng GAKU ang totoong usapan — tutulungan ka nitong maintindihan ang bawat linya at magmumungkahi kung paano sumagot.",
     tutorialPronunciationDesc: "Subukan ngayon: mag-play ng video ng mga native speaker, i-tap ang “Pakinggan ang tab ng video”, at isusulat ng GAKU ang bawat linya. Pagkatapos, sa card, sabihin nang malakas ang pangungusap at tingnan kung gaano ka kalapit. Hindi maintindihan? Pabagalin ang video at pakinggan muli.",
@@ -11342,6 +11875,7 @@ const UI_TRANSLATIONS = {
     imgTapSearch: "I-tap para maghanap ng larawan",
     flashTapToCheck: "I-tap para tingnan",
     flashListenExample: "Pakinggan ang halimbawa",
+    ttsProblem: "🔇 Walang tunog? Maaaring walang boses na Hapon ang telepono mo. Buksan ang Settings → hanapin ang “Text-to-speech output” → i-install ang Japanese voice data (Google Text-to-speech), saka subukan ulit.",
     flashGenRomaji: "Ginagawa ang romaji…",
     flashGenTranslation: "Ginagawa ang salin…",
     flashUnderstand: "✅ Naiintindihan",
@@ -11417,6 +11951,18 @@ const UI_TRANSLATIONS = {
     coachTitle: "Mungkahi ngayon",
     coachBoth: "Karaniwan kang magaling sa {strong}, at mukhang medyo mahirap ang {weak}. Ano kung {weak} ngayon?",
     coachWeakOnly: "Mukhang medyo mahirap sa iyo ang {weak}. Subukan mo itong praktisin ngayon?",
+    coachAdviceTitle: "🎯 Ang iyong study coach",
+    coachNoData: "Magsanay pa nang kaunti at magbibigay ako ng mas tiyak na payo.",
+    coachAllGood: "Wala pang mahinang bahagi ngayon. Panatilihin ang bilis na ito!",
+    coachAccWeak: "{pct}% ang katumpakan mo sa {area}. Gawing pokus ang {area} ngayon.",
+    coachSlowFlip: "Mga {sec} segundo ang inaabot mo para maalala ang isang salita. Layuning mas mababa sa 5 segundo gamit ang mabilis na flashcard rounds.",
+    coachSlowWord: "Pinakamabagal mong salita ay {word} ({sec} segundo). Balikan ito ulit.",
+    coachRepeatWord: "{n} beses mong tiningnan ang {word} ngayon pero hindi pa rin tumatatak. Subukan ang halimbawang pangungusap o isulat ito.",
+    coachPronMiss: "Paulit-ulit kang nagkakamali sa bigkas ng {word} ({n} beses). Sabihin ito nang dahan-dahan, saka sa normal na bilis.",
+    coachListenWeak: "{pct}% ang pag-unawa mo sa pakikinig. Makinig nang ilang beses bago basahin ang teksto.",
+    coachStatFlip: "Bilis ng pagpihit ng card",
+    coachStatViews: "Mga salitang nakita ngayon",
+    coachStatListen: "Pakikinig",
     lessonBridgeAsk: "Gusto mo bang ipractice ito kasama ang totoong guro? Subukan ang libreng trial lesson.",
     lessonBridgeBtn: "Mag-book ng libreng trial lesson →",
     lessonBridgeMissed: "Mga tunog na dapat bantayan: {chars}",
@@ -11457,6 +12003,7 @@ const UI_TRANSLATIONS = {
     feedbackTitle: "💬 Puna at Opinyon",
     feedbackSubtitle: "Sabihin sa amin kung ano ang gusto mong pagbutihin o anumang bagay na nakakaabala sa iyo tungkol sa app. Binabasa namin ang bawat mensahe.",
     feedbackWarning: "Kung magsulat ka ng paninirang-puri, mapanlait na wika, o mga diskriminasyong termino, agad na sususpindihin ang iyong account. Wala kaming pananagutan kahit magkaroon ng legal na aksyon.",
+    supportEmailNote: "Hindi makapag-log in o may problema sa app? Mag-email sa amin:",
     feedbackChecking: "Sinusuri...",
     feedbackAlreadySubmitted: "Naisumite mo na ang iyong isang beses na puna. Salamat! (Ang mga estudyanteng inimbitahan ng GAKU ay maaaring magsumite nang paulit-ulit.)",
     feedbackSuccess: "Salamat — naipadala na ang iyong puna.",
@@ -11589,6 +12136,14 @@ const UI_TRANSLATIONS = {
     didYouUnderstand: "Naiintindihan mo ba ito?",
     hideAnswerBtn: "Itago ang sagot",
     showAnswerBtn: "Ipakita ang sagot",
+    questionFuriganaLabel: "Furigana sa mga tanong",
+    questionFuriganaDesc: "Ipinapakita ang furigana sa ibabaw ng kanji sa teksto lamang ng tanong. Walang furigana ang mga sagot, at sa mga tanong sa pagbasa ng kanji, walang furigana ang tinatanong na salita para hindi mahayag ang sagot.",
+    restartWeek1Btn: "Magsimula muli mula Linggo 1",
+    restartWeek1Confirm: "Magsimula muli mula Linggo 1? Made-delete ang mga check mark ng linggong ito. Makakabalik ka sa ibang mga linggo gamit ang week picker, at mananatiling pareho ang iyong study plan.",
+    weekPickLabel: "Pumunta sa linggo",
+    weekPickWeek: "Linggo {n}",
+    weekPickInProgress: "kasalukuyan",
+    weekBackToProgress: "Bumalik sa Linggo {n} (kasalukuyan)",
     furiganaOn: "Naka-on",
     furiganaOff: "Naka-off",
     studyTimePerDay: "ORAS NG PAG-AARAL KADA ARAW *",
@@ -11725,7 +12280,7 @@ const UI_TRANSLATIONS = {
     storeRestore: "I-restore ang mga binili",
     storePurchaseFailed: "Hindi makumpleto ang pagbili. Pakisubukan ulit.",
     storeNothingToRestore: "Walang nakitang nakaraang binili.",
-    storeAutoRenewNote: "Awtomatikong nagre-renew ang mga subscription sa presyong ipinapakita maliban kung kanselahin nang hindi bababa sa 24 oras bago matapos ang kasalukuyang panahon. Maaari mo itong i-manage o kanselahin sa mga setting ng iyong App Store o Google Play account.",
+    storeAutoRenewNote: "Awtomatikong nagre-renew ang mga subscription sa presyong ipinapakita maliban kung kanselahin nang hindi bababa sa 24 oras bago matapos ang kasalukuyang panahon. Maaari mo itong i-manage o kanselahin sa mga setting ng iyong App Store account.",
     pronSlowTip: "Hindi maintindihan? Pabagalin ang video (halimbawa, 0.5× o 0.75× na bilis sa YouTube) at pakinggan muli. Ang video ang guro mo — isinusulat lang ito ng GAKU.",
     pronSlowNo: "Okay lang. Pabagalin ang video at pakinggan muli ang bahaging iyon — isusulat ito muli ng GAKU.",
     pronBestScore: "Pinakamataas na score",
@@ -12375,14 +12930,157 @@ function pickJapaneseVoice() {
     return voices.find(v => preferred.test(v.name)) || voices[0];
   } catch { return null; }
 }
-function speakJapanese(text, rate = 0.85) {
-  if (!window.speechSynthesis) return;
-  window.speechSynthesis.cancel();
+// Tells the screen (see TtsProblemToast) that speech didn't work, instead of failing silently.
+let _lastTtsReportAt = 0;
+const TTS_BUILD = "tts3";
+function reportSpeechProblem(kind, detail) {
+  const now = Date.now();
+  if (now - _lastTtsReportAt < 4000) return;
+  _lastTtsReportAt = now;
+  try { window.dispatchEvent(new CustomEvent("gaku_tts_problem", { detail: { kind, detail: String(detail || "").slice(0, 300) } })); } catch {}
+}
+// Android WebView / Chrome often return an EMPTY voice list on the first call and fill it in a moment
+// later; speaking before that can be dropped. Wait briefly (max ~0.7s), then go ahead regardless.
+function whenVoicesReady(cb) {
+  try {
+    const synth = window.speechSynthesis;
+    if ((synth.getVoices() || []).length) { cb(); return; }
+    let done = false;
+    const fire = () => {
+      if (done) return; done = true;
+      try { synth.removeEventListener("voiceschanged", fire); } catch {}
+      cb();
+    };
+    try { synth.addEventListener("voiceschanged", fire); } catch {}
+    setTimeout(fire, 700);
+  } catch { cb(); }
+}
+function makeJapaneseUtterance(text, rate) {
   const u = new SpeechSynthesisUtterance(text);
   u.lang = "ja-JP"; u.rate = rate;
   const jpVoice = pickJapaneseVoice();
   if (jpVoice) u.voice = jpVoice;
-  window.speechSynthesis.speak(u);
+  return u;
+}
+// Last-resort voice for desktop/mobile browsers that have NO working Japanese speech voice (e.g. Chrome on a
+// Windows PC without the Japanese language pack): plays a real audio clip instead of the device's TTS, so
+// the student hears Japanese even when the browser's own voice list has none.
+let _fallbackAudio = null;
+let _fallbackToken = 0;
+function stopFallbackAudio() {
+  _fallbackToken++;
+  try { if (_fallbackAudio) { _fallbackAudio.pause(); _fallbackAudio = null; } } catch {}
+}
+function splitForAudioFallback(text) {
+  const parts = String(text || "").split(/(?<=[。！？!?\n])/).map(s => s.trim()).filter(Boolean);
+  const out = [];
+  parts.forEach(p => { for (let i = 0; i < p.length; i += 80) out.push(p.slice(i, i + 80)); });
+  return out;
+}
+// Resolves true only once the first clip is really playing (false on load error / 4s timeout).
+function speakWithAudioFallback(text, rate = 0.85) {
+  return new Promise((resolve) => {
+    const chunks = splitForAudioFallback(text);
+    if (!chunks.length || typeof Audio === "undefined") { resolve(false); return; }
+    stopFallbackAudio();
+    const token = _fallbackToken;
+    let settled = false;
+    const settle = (ok) => { if (settled) return; settled = true; resolve(ok); };
+    const playAt = (i) => {
+      if (token !== _fallbackToken || i >= chunks.length) return;
+      const a = new Audio("https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=ja&q=" + encodeURIComponent(chunks[i]));
+      try { a.referrerPolicy = "no-referrer"; } catch {}
+      try { a.preservesPitch = true; a.playbackRate = Math.max(0.5, Math.min(1.5, rate)); } catch {}
+      _fallbackAudio = a;
+      a.onplaying = () => settle(true);
+      a.onended = () => playAt(i + 1);
+      a.onerror = () => settle(false);
+      a.play().catch(() => settle(false));
+    };
+    setTimeout(() => settle(false), 4000);
+    playAt(0);
+  });
+}
+// True when the device has a Japanese voice that runs on the device itself (reliable). Network voices such as
+// Chrome's "Google 日本語" often report "started" but stay silent on some PCs, so they don't count.
+function hasLocalJapaneseVoice() {
+  try {
+    return (window.speechSynthesis.getVoices() || []).some(v => /^ja([-_]|$)/i.test(v.lang || "") && v.localService);
+  } catch { return false; }
+}
+function speakJapanese(text, rate = 0.85) {
+  if (isAndroidNative()) {
+    const t = String(text || "").trim();
+    if (!t) return;
+    nativeSpeak(t, rate).catch(err => {
+      const msg = String((err && (err.message || err)) || "");
+      if (/interrupt|cancel|stop/i.test(msg)) return;
+      // The phone's own voice failed (e.g. no Japanese voice data): play a real audio clip instead, and only
+      // show the yellow "No sound?" banner if that fails too.
+      speakWithAudioFallback(t, rate).then(ok => {
+        if (!ok) reportSpeechProblem(/^no-japanese-voice/.test(msg) ? "no-japanese-voice" : "native-error", msg);
+      });
+    });
+    return;
+  }
+  const synth = window.speechSynthesis;
+  if (!synth || typeof SpeechSynthesisUtterance === "undefined") { reportSpeechProblem("unsupported"); return; }
+  const clean = String(text || "").trim();
+  if (!clean) return;
+  whenVoicesReady(() => {
+    stopFallbackAudio();
+    // No on-device Japanese voice (common on Windows PCs; Chrome's network voice can be silent): play real
+    // audio first, and fall back to the device voice only if the audio can't be played.
+    if (!hasLocalJapaneseVoice()) {
+      try { synth.cancel(); } catch {}
+      speakWithAudioFallback(clean, rate).then(ok => { if (!ok) speakWithDeviceVoice(); });
+      return;
+    }
+    speakWithDeviceVoice();
+  });
+  function speakWithDeviceVoice() {
+    let wasBusy = false;
+    try { wasBusy = !!(synth.speaking || synth.pending); if (wasBusy) synth.cancel(); } catch {}
+    const u = makeJapaneseUtterance(clean, rate);
+    let started = false;
+    let usedFallback = false;
+    const fallback = (why) => {
+      if (usedFallback) return; usedFallback = true;
+      try { synth.cancel(); } catch {}
+      speakWithAudioFallback(clean, rate).then(ok => { if (!ok) reportSpeechProblem(why, "audio-fallback-failed"); });
+    };
+    u.onstart = () => { started = true; };
+    u.onerror = (e) => {
+      const err = e && e.error;
+      if (err && err !== "interrupted" && err !== "canceled") fallback(err);
+    };
+    // If nothing started within 2s the device voice is not working — use the audio clip instead.
+    setTimeout(() => { try { if (!started && !synth.speaking) fallback("silent"); } catch {} }, 2000);
+    // Chrome/Android drops a speak() issued in the same tick as cancel(), so wait a moment after one.
+    setTimeout(() => {
+      try { synth.resume(); } catch {}
+      try { synth.speak(u); } catch { reportSpeechProblem("error"); }
+    }, wasBusy ? 80 : 0);
+  }
+}
+
+// Small banner shown when 🔊 Listen can't make any sound (e.g. the phone lacks a Japanese voice).
+function TtsProblemToast({ T }) {
+  const [show, setShow] = useState(false);
+  const [info, setInfo] = useState("");
+  useEffect(() => {
+    let timer = null;
+    const onProblem = (e) => { const d = (e && e.detail) || {}; setInfo([TTS_BUILD, d.kind, d.detail].filter(Boolean).join(" / ")); setShow(true); clearTimeout(timer); timer = setTimeout(() => setShow(false), 12000); };
+    window.addEventListener("gaku_tts_problem", onProblem);
+    return () => { window.removeEventListener("gaku_tts_problem", onProblem); clearTimeout(timer); };
+  }, []);
+  if (!show) return null;
+  return (
+    <div onClick={() => setShow(false)} style={{ background:"rgba(251,191,36,0.12)", border:"1px solid rgba(251,191,36,0.4)", borderRadius:10, padding:"10px 12px", margin:"0 0 12px", color:C.amber, fontSize:12, lineHeight:1.6, cursor:"pointer" }}>
+      {T.ttsProblem || "🔇 No sound? Your phone may not have a Japanese voice. Open Settings → search “Text-to-speech output” → install the Japanese voice data (Google Text-to-speech), then try again."}
+      <div style={{ marginTop:6, fontSize:10, opacity:0.7, wordBreak:"break-all" }}>[{info}]</div>
+    </div>
+  );
 }
 
 // ─── VOCAB WORD READINGS (FURIGANA) & PRONUNCIATION ─────────────────────────────
@@ -12549,9 +13247,35 @@ async function repairVocabReadings(force = false) {
 let _folderPlayToken = 0;
 function stopFolderPlayback() {
   _folderPlayToken++;
+  stopFallbackAudio();
+  if (isAndroidNative()) nativeStop();
   try { if (window.speechSynthesis) window.speechSynthesis.cancel(); } catch {}
 }
 function playWordsSequentially(cards, { rate = 0.85, gapMs = 600, onIndex, onDone } = {}) {
+  if (isAndroidNative()) {
+    if (!cards.length) { if (onDone) onDone(); return; }
+    const token = ++_folderPlayToken;
+    (async () => {
+      for (let i = 0; i < cards.length; i++) {
+        if (token !== _folderPlayToken) return;
+        if (onIndex) onIndex(i);
+        const text = speechTextForWord(cards[i]);
+        if (text) {
+          try { await nativeSpeak(text, rate); }
+          catch (err) {
+            if (token !== _folderPlayToken) return;
+            { const m = String((err && err.message) || ""); reportSpeechProblem(/^no-japanese-voice/.test(m) ? "no-japanese-voice" : "native-error", m); }
+            break;
+          }
+        }
+        if (token !== _folderPlayToken) return;
+        await new Promise(r => setTimeout(r, gapMs));
+      }
+      if (token === _folderPlayToken && onDone) onDone();
+    })();
+    return;
+  }
+  if (!window.speechSynthesis || typeof SpeechSynthesisUtterance === "undefined") reportSpeechProblem("unsupported");
   if (!window.speechSynthesis || !cards.length) { if (onDone) onDone(); return; }
   const token = ++_folderPlayToken;
   let i = 0;
@@ -12563,17 +13287,32 @@ function playWordsSequentially(cards, { rate = 0.85, gapMs = 600, onIndex, onDon
     i++;
     const text = speechTextForWord(card);
     if (!text) { next(); return; }
-    const u = new SpeechSynthesisUtterance(text);
-    u.lang = "ja-JP"; u.rate = rate;
-    const v = pickJapaneseVoice();
-    if (v) u.voice = v;
+    if (!hasLocalJapaneseVoice()) {
+      // No on-device Japanese voice: play each word as an audio clip, then move on.
+      speakWithAudioFallback(text, rate).then(ok => {
+        if (!ok) { reportSpeechProblem("no-japanese-voice", "audio-fallback-failed"); if (onDone) onDone(); return; }
+        const a = _fallbackAudio;
+        let moved = false;
+        const go = () => { if (moved) return; moved = true; setTimeout(next, gapMs); };
+        if (a) { a.addEventListener("ended", go); a.addEventListener("error", go); }
+        setTimeout(go, 6000);
+      });
+      return;
+    }
+    const u = makeJapaneseUtterance(text, rate);
     let advanced = false;
     const advance = () => { if (advanced) return; advanced = true; setTimeout(next, gapMs); };
-    u.onend = advance; u.onerror = advance;
-    window.speechSynthesis.speak(u);
+    u.onend = advance;
+    u.onerror = (e) => {
+      const err = e && e.error;
+      if (err && err !== "interrupted" && err !== "canceled") reportSpeechProblem(err);
+      advance();
+    };
+    try { window.speechSynthesis.resume(); } catch {}
+    try { window.speechSynthesis.speak(u); } catch { reportSpeechProblem("error"); advance(); }
   };
   window.speechSynthesis.cancel();
-  setTimeout(next, 80);
+  whenVoicesReady(() => setTimeout(next, 80));
 }
 
 // Small "0.8x / 0.5x" slow-playback buttons shown next to a Listen button in
@@ -13078,6 +13817,18 @@ function FlashcardView({ form, onBack, focusWord }) {
     setFlipped(false); setShowHint(false);
     setIdx(i => (i >= displayCards.length - 1 ? 0 : i));
   };
+  // Study metrics for the coach: every time a card is shown counts as one view of that word, and the
+  // time from showing the card to the first flip is the student's "flip speed" for that word.
+  const shownAtRef = useRef(0);
+  const flippedOnceRef = useRef(false);
+  const handleFlip = () => {
+    if (!flipped && card && !flippedOnceRef.current) {
+      flippedOnceRef.current = true;
+      const ms = Date.now() - shownAtRef.current;
+      if (ms > 0 && ms < 60000) logMetric("flip", card.word, { ms });
+    }
+    setFlipped(f => !f);
+  };
 
   const posKey = (folder) => `gaku_flashcard_pos_${folder}`;
   const getSavedPos = (folder) => { try { return parseInt(localStorage.getItem(posKey(folder)) || "0", 10) || 0; } catch { return 0; } };
@@ -13102,6 +13853,15 @@ function FlashcardView({ form, onBack, focusWord }) {
   useEffect(() => {
     if (resumeChoice && !focusWord) savePos(selectedFolder, idx);
   }, [idx, selectedFolder, resumeChoice]);
+
+  // A card appeared: start the flip timer and count one view of this word.
+  useEffect(() => {
+    if (!card || resumeChoice === null) return;
+    shownAtRef.current = Date.now();
+    flippedOnceRef.current = false;
+    logMetric("view", card.word);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [card?.word, card?.folder, idx, resumeChoice]);
 
   // Fetch a supporting image for the back of the card (only when flipped, and only once per word).
   // Wikimedia Commons is mostly indexed in English, so searching by the English meaning first tends
@@ -13191,6 +13951,7 @@ Only output the JSON object.` }
   return (
     <div>
       <button onClick={onBack} style={{ background:"none", border:"none", color:"#64748b", fontSize:13, cursor:"pointer", padding:0, marginBottom:14 }}>← Back</button>
+      <TtsProblemToast T={T} />
       {/* Folder selector (hidden when reviewing a single word) */}
       <div style={{ display:"flex", gap:6, flexWrap:"wrap", marginBottom:12 }}>
         {!focusWord && allFolders.map(f => (
@@ -13216,7 +13977,7 @@ Only output the JSON object.` }
       ) : (
         <>
           <p style={{ color:"#64748b", fontSize:12, textAlign:"center", margin:"0 0 16px" }}>{idx+1} / {displayCards.length}</p>
-          <div onClick={()=>setFlipped(f=>!f)} style={{ ...S.card, minHeight:220, display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", cursor:"pointer", textAlign:"center", borderLeft:`4px solid ${C.teal}`, marginBottom:16 }}>
+          <div onClick={handleFlip} style={{ ...S.card, minHeight:220, display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", cursor:"pointer", textAlign:"center", borderLeft:`4px solid ${C.teal}`, marginBottom:16 }}>
             {!flipped ? (
               <>
                 <p style={{ color:"#f1f5f9", fontSize:44, fontWeight:900, margin:"0 0 6px", letterSpacing:2 }}>{card.word}</p>
@@ -14379,8 +15140,122 @@ const SKILL_COLORS = {
   jlpt:"#a78bfa", reading:"#fb923c", kanji:"#e879f9", grammar:"#60a5fa"
 };
 
+// ─── Furigana on QUESTION text only (2026-11-03) ────────────────────────────────
+// A student at N4 level said they can't read the question text yet because of kanji. When this
+// switch is ON, every question's prompt (NOT the answer/tip) is shown with furigana above the
+// kanji. Questions that test reading/writing of kanji keep the tested kanji and the ①②③④
+// choices WITHOUT furigana so the furigana doesn't give the answer away.
+const QUESTION_FURIGANA_KEY = "gaku_question_furigana";
+const QUESTION_FURIGANA_EVENT = "gaku-question-furigana-change";
+const questionFuriganaCache = new Map();
+const QF_KANJI_RUN = "[\\u4E00-\\u9FFF\\u3005]+";
+const QF_READING = "[\\(（][\\u3040-\\u30FF\\u30FC]+[\\)）]";
+
+// At most 2 questions are sent to the AI at a time so turning the switch on for a 20-question set
+// doesn't fire 60 requests at once.
+let qfActive = 0;
+const qfWaiting = [];
+function runQuestionFuriganaLimited(fn) {
+  return new Promise((resolve) => {
+    const start = () => {
+      qfActive++;
+      Promise.resolve().then(fn).then(resolve, () => resolve(null)).finally(() => {
+        qfActive--;
+        const next = qfWaiting.shift();
+        if (next) next();
+      });
+    };
+    if (qfActive < 2) start(); else qfWaiting.push(start);
+  });
+}
+
+function isReadingOrWritingQuestion(item) {
+  return item.skill === "kanji" || /読み|よみ|書き|かき|漢字/.test(item.prompt || "");
+}
+
+// Removes furigana from the quoted target word(s) 「…」 and from the ①②③④ choice lines.
+function stripAnswerRevealingFurigana(text) {
+  const strip = (s) => s.replace(new RegExp(`(${QF_KANJI_RUN})${QF_READING}`, "g"), "$1");
+  return text
+    .replace(/「([^」]*)」/g, (m, inner) => `「${strip(inner)}」`)
+    .split("\n")
+    .map((line) => (/[①②③④]/.test(line) ? strip(line) : line))
+    .join("\n");
+}
+
+async function getQuestionFurigana(item) {
+  const prompt = item.prompt || "";
+  if (questionFuriganaCache.has(prompt)) return questionFuriganaCache.get(prompt);
+  if (!hasKanji(prompt)) return prompt;
+  const out = await runQuestionFuriganaLimited(() => getFuriganaText(prompt));
+  let result = out || prompt;
+  if (isReadingOrWritingQuestion(item)) result = stripAnswerRevealingFurigana(result);
+  questionFuriganaCache.set(prompt, result);
+  return result;
+}
+
+function useQuestionFurigana() {
+  const read = () => { try { return localStorage.getItem(scopedKey(QUESTION_FURIGANA_KEY)) === "1"; } catch { return false; } };
+  const [on, setOn] = useState(read);
+  useEffect(() => {
+    const handler = () => setOn(read());
+    window.addEventListener(QUESTION_FURIGANA_EVENT, handler);
+    return () => window.removeEventListener(QUESTION_FURIGANA_EVENT, handler);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  const set = (v) => {
+    try { localStorage.setItem(scopedKey(QUESTION_FURIGANA_KEY), v ? "1" : "0"); } catch {}
+    setOn(v);
+    window.dispatchEvent(new Event(QUESTION_FURIGANA_EVENT));
+  };
+  return [on, set];
+}
+
+// Turns "勉強(べんきょう)しています" into real <ruby> markup (reading above the kanji).
+function FuriganaRichText({ text }) {
+  const re = new RegExp(`(${QF_KANJI_RUN})[\\(（]([\\u3040-\\u30FF\\u30FC]+)[\\)）]`, "g");
+  const parts = [];
+  let last = 0, m, k = 0;
+  while ((m = re.exec(text)) !== null) {
+    if (m.index > last) parts.push(text.slice(last, m.index));
+    parts.push(
+      <ruby key={k++}>{m[1]}<rp>(</rp><rt style={{ fontSize:9, color:C.teal, fontWeight:700, letterSpacing:0 }}>{m[2]}</rt><rp>)</rp></ruby>
+    );
+    last = m.index + m[0].length;
+  }
+  if (last < text.length) parts.push(text.slice(last));
+  return <>{parts}</>;
+}
+
+function QuestionFuriganaToggle({ T }) {
+  const [on, setOn] = useQuestionFurigana();
+  return (
+    <div style={{ ...S.card, marginBottom:12, padding:"10px 12px" }}>
+      <button onClick={() => setOn(!on)} role="switch" aria-checked={on}
+        style={{ width:"100%", display:"flex", alignItems:"center", gap:10, padding:"8px 10px", borderRadius:10, cursor:"pointer",
+          background: on ? "rgba(103,232,249,0.15)" : C.card, border:`1px solid ${on ? "rgba(103,232,249,0.5)" : C.border}`,
+          color: on ? "#67e8f9" : "#94a3b8", fontSize:13, fontWeight:700, textAlign:"left" }}>
+        <span style={{ fontSize:16 }}>{on ? "✅" : "⬜"}</span>
+        <span>ふりがな — {T?.questionFuriganaLabel || "Furigana on questions"}</span>
+      </button>
+      <p style={{ color:"#94a3b8", fontSize:11, lineHeight:1.6, margin:"6px 2px 0" }}>
+        {T?.questionFuriganaDesc || "Shows furigana above the kanji in the question text only. Answers stay without furigana, and kanji-reading questions keep their target word plain so the answer isn't given away."}
+      </p>
+    </div>
+  );
+}
+
 function ExerciseCard({ item, revealed, onReveal, T, lang }) {
   const color = SKILL_COLORS[item.skill] || C.purpleLight;
+  const [qFuriOn] = useQuestionFurigana();
+  const [qFuri, setQFuri] = useState("");
+  useEffect(() => {
+    let dead = false;
+    if (!qFuriOn) { setQFuri(""); return; }
+    getQuestionFurigana(item).then((r) => { if (!dead) setQFuri(r); });
+    return () => { dead = true; };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [qFuriOn, item.prompt, item.skill]);
   const [recording, setRecording] = useState(false);
   const [transcript, setTranscript] = useState("");
   const [recogSupported, setRecogSupported] = useState(true);
@@ -14416,7 +15291,10 @@ function ExerciseCard({ item, revealed, onReveal, T, lang }) {
         <span style={{ color:"#ffffff", fontSize:11 }}>{item.type}</span>
       </div>
       <div style={{ display:"flex", alignItems:"flex-start", gap:8, margin:"0 0 6px" }}>
-        <p style={{ color:"#f1f5f9", fontSize:14, lineHeight:1.8, margin:0, whiteSpace:"pre-wrap", flex:1 }}>{item.prompt}</p>
+        <p style={{ color:"#f1f5f9", fontSize:14, lineHeight: qFuriOn ? 2.4 : 1.8, margin:0, whiteSpace:"pre-wrap", flex:1 }}>
+          {qFuriOn && qFuri ? <FuriganaRichText text={qFuri} /> : item.prompt}
+          {qFuriOn && !qFuri && hasKanji(item.prompt) && <span style={{ color:"#67e8f9", fontSize:11 }}> ⏳</span>}
+        </p>
       </div>
       {(item.skill === "listening" || item.skill === "pronunciation") && (
         <div style={{ display:"flex", gap:8, marginBottom:8, flexWrap:"wrap" }}>
@@ -14576,6 +15454,8 @@ Create between 10 and 20 practice activities (choose a count that fits the amoun
 ${skillInstructions}
    Aim for a natural spread across the selected skills rather than clustering on just one — but only generate a skill if the content actually gives you real material for it (e.g. skip conversation if there's no dialogue in the content).
 5. For fill-in-the-blank, ALWAYS include the full original Japanese sentence with ___ for the blank AND the ①②③④ choices in the same prompt. The blank must sit exactly where the blanked word/particle belongs — never place it next to a particle or word that's already written elsewhere in the sentence, since that makes every choice wrong or duplicated (e.g. don't blank "＿＿＿に" if "に" already follows the blank). Before finalizing, mentally insert each choice into the blank and confirm exactly one produces a natural sentence matching your "answer" field.
+   HOW TO BUILD EVERY ①②③④ QUESTION (fill-in-the-blank, particle choice, meaning choice): (a) first write the complete correct sentence, (b) take out exactly the word/particle you want to test and that becomes the blank, (c) the "answer" field must be that exact removed word, and it MUST appear literally as one of the four choices — never leave the correct word out of the choices, (d) add three clearly wrong distractors. Example: 「おまえのせいだ」 → blank 「おまえ＿＿＿せいだ」, choices ①の ②は ③を ④に, answer の.
+6. For questions about how a word is written in kanji, give the standard everyday kanji form (e.g. おまえ → お前, NOT 貴方 or 御前), and only ask when you are sure of the standard form.
 
 Return fields for each activity:
 - skill: one of ${allowedSkills.join(", ")}
@@ -14592,7 +15472,14 @@ Respond ONLY with a valid JSON array, no markdown, no backticks:
       const text = d.content?.map(c=>c.text||"").join("") || "[]";
       const parsed = JSON.parse(text.replace(/```json|```/g,"").trim());
       if (Array.isArray(parsed) && parsed.length) {
-        setItems(parsed);
+        // Quality gate: fix known kanji answers, drop ①②③④ questions whose answer isn't among the
+        // choices, then have a second quick pass independently solve each choice question and drop
+        // any the model got wrong (e.g. the right word missing from the choices).
+        const cleaned = cleanGeneratedItems(parsed, !!kanaOnlyMode);
+        const verified = cleaned.length ? await verifyChoiceItems(cleaned) : [];
+        const finalItems = verified.length ? verified : cleaned;
+        if (finalItems.length) setItems(finalItems);
+        else setError(T.contentErrNoAct || "Couldn't generate activities from that content. Try pasting more text.");
       } else {
         setError(T.contentErrNoAct || "Couldn't generate activities from that content. Try pasting more text.");
       }
@@ -14660,6 +15547,7 @@ Respond ONLY with a valid JSON array, no markdown, no backticks:
       {items.length > 0 && (
         <>
           {contentCheck.eligible && <LevelUpOffer T={T} currentLevel={form.jlpt} onConfirm={onLevelUp} onDismiss={contentCheck.dismiss} />}
+          <QuestionFuriganaToggle T={T} />
           <div style={{ display:"flex", gap:6, flexWrap:"wrap", marginBottom:12 }}>
             <button onClick={()=>setActiveSkillFilter("all")} style={{ padding:"4px 10px", borderRadius:20, fontSize:11, fontWeight:700, cursor:"pointer", border:`1px solid ${activeSkillFilter==="all"?C.purpleLight:C.border}`, background:activeSkillFilter==="all"?"rgba(168,85,247,0.15)":C.card, color:activeSkillFilter==="all"?C.purpleLight:"#64748b" }}>
               すべて ({items.length})
@@ -14677,7 +15565,7 @@ Respond ONLY with a valid JSON array, no markdown, no backticks:
                 <div key={i}>
                   <ExerciseCard item={it} revealed={!!revealed[globalIdx]} onReveal={()=>setRevealed(r=>({...r,[globalIdx]:!r[globalIdx]}))} T={T} lang={form?.preferredLang || "English"} />
                   {revealed[globalIdx] && (
-                    <ComprehensionCheck itemId={`item-${globalIdx}`} checkins={contentCheck.checkins} onRecord={contentCheck.record} T={T} />
+                    <ComprehensionCheck itemId={`item-${globalIdx}`} checkins={contentCheck.checkins} onRecord={(id, u) => { contentCheck.record(id, u); if (it.skill === "listening") logMetric("listen", "", { ok: !!u }); }} T={T} />
                   )}
                 </div>
               );
@@ -14787,6 +15675,81 @@ async function callClaudeFast(prompt, maxTokens = 700) {
   });
   const d = await res.json();
   return d.content?.map(c=>c.text||"").join("").trim() || "";
+}
+
+// ---- Quality checks for generated practice items (Create From Content) ----
+const CIRCLED_NUMS = "①②③④";
+function parseChoices(prompt) {
+  return [...String(prompt || "").matchAll(/([①②③④])\s*([^①②③④\n]*)/g)].map(m => ({ n: CIRCLED_NUMS.indexOf(m[1]) + 1, text: m[2].trim().replace(/[、,，。\s]+$/, "") }));
+}
+function normChoiceText(s) { return String(s || "").replace(/\([^)]*\)|（[^）]*）/g, "").replace(/[「」『』\s。、,，.]/g, "").trim(); }
+// 1-4 = which choice the "answer" field points at, 0 = the answer is not among the choices.
+function answerChoiceIndex(answer, choices) {
+  const a = String(answer || "").trim();
+  const lead = a.match(/^([①②③④])/);
+  if (lead) return CIRCLED_NUMS.indexOf(lead[1]) + 1;
+  if (/^[1-4]$/.test(a)) return parseInt(a, 10);
+  const na = normChoiceText(a);
+  if (!na) return 0;
+  const hit = choices.find(c => normChoiceText(c.text) === na);
+  return hit ? hit.n : 0;
+}
+// Kanji spellings the model has got wrong. Applied deterministically (not in kana-only mode).
+const KNOWN_KANJI_ANSWERS = [
+  { word: "おまえ", correct: "お前" },
+];
+function fixKnownKanjiAnswer(it) {
+  const p = String(it.prompt || "");
+  if (!/漢字/.test(p)) return it;
+  for (const k of KNOWN_KANJI_ANSWERS) {
+    if (p.includes("「" + k.word + "」") && !String(it.answer || "").includes(k.correct)) return { ...it, answer: k.correct };
+  }
+  return it;
+}
+function cleanGeneratedItems(items, kanaOnly) {
+  return items
+    .filter(it => it && typeof it.prompt === "string" && it.prompt.trim() && it.answer != null && String(it.answer).trim())
+    .map(it => (kanaOnly ? it : fixKnownKanjiAnswer(it)))
+    .filter(it => {
+      const ch = parseChoices(it.prompt);
+      return ch.length < 2 || answerChoiceIndex(it.answer, ch) > 0;
+    });
+}
+// One short extra call: the model solves every ①②③④ question WITHOUT seeing our answer; a question is
+// kept only when its independent answer matches ours. If the call fails or times out, nothing is dropped.
+async function verifyChoiceItems(items) {
+  const qs = [];
+  items.forEach((it, i) => { if (parseChoices(it.prompt).length >= 2) qs.push({ id: i, q: it.prompt }); });
+  if (!qs.length) return items;
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), 10000);
+  try {
+    const res = await fetch("/api/claude", {
+      method: "POST", headers: { "Content-Type": "application/json" }, signal: ctrl.signal,
+      body: JSON.stringify({ model: "claude-sonnet-4-20250514", max_tokens: 2000, provider: "content",
+        messages: [{ role: "user", content: `You are a strict Japanese exam proofreader. Below are multiple-choice questions (choices ①②③④). For each one, decide which single choice is the correct answer.
+Rules: use ONLY the question as written. If NO choice gives a correct, natural answer (for example the right word is missing from the choices), or if more than one choice is equally correct, answer 0. Do not guess.
+
+QUESTIONS:
+${JSON.stringify(qs)}
+
+Respond ONLY with a valid JSON array, no markdown, no backticks: [{"id":0,"correct":2}]` }] }),
+    });
+    const d = await res.json();
+    const text = d.content?.map(c => c.text || "").join("") || "[]";
+    const m = text.replace(/```json|```/g, "").match(/\[[\s\S]*\]/);
+    const results = {};
+    (JSON.parse(m ? m[0] : "[]") || []).forEach(r => { if (r && typeof r.id === "number") results[r.id] = Number(r.correct); });
+    return items.filter((it, i) => {
+      if (!(i in results)) return true;
+      const ch = parseChoices(it.prompt);
+      return ch.length < 2 || results[i] === answerChoiceIndex(it.answer, ch);
+    });
+  } catch {
+    return items;
+  } finally {
+    clearTimeout(timer);
+  }
 }
 
 // Known misreadings the model has produced in the past, plus katakana spelling variants we
@@ -15513,7 +16476,7 @@ function ConversationPredictor({ form, onLevelUp }) {
             {heardLines.map((line) => (
               <div key={line.id}>
                 <LiveHeardLineCard line={line} T={T} lang={form?.preferredLang || "English"} jlpt={form?.jlpt} />
-                <ComprehensionCheck itemId={`heard-${line.id}`} checkins={conversationCheck.checkins} onRecord={conversationCheck.record} T={T} />
+                <ComprehensionCheck itemId={`heard-${line.id}`} checkins={conversationCheck.checkins} onRecord={(id, u) => { conversationCheck.record(id, u); logMetric("listen", "", { ok: !!u }); }} T={T} />
                 {conversationCheck.checkins[`heard-${line.id}`] === false && (
                   <p style={{ color:C.amber, fontSize:12, lineHeight:1.7, margin:"8px 0 0" }}>🐢 {T.pronSlowNo || "No problem. Slow the video down and listen to that part again — GAKU will write it down once more."}</p>
                 )}
@@ -15636,7 +16599,7 @@ function PronunciationTurnCard({ item, T, lang, onBreak }) {
     recognition.onend = () => {
       setRecording(false);
       const said = lastTranscriptRef.current.trim();
-      if (said) { const okSaid = isCloseEnough(item.text, said); logLearningEvent("pronunciation", okSaid); setResult(okSaid ? "correct" : "incorrect"); }
+      if (said) { const okSaid = isCloseEnough(item.text, said); logLearningEvent("pronunciation", okSaid); logMetric("pron", item.text, { ok: okSaid }); setResult(okSaid ? "correct" : "incorrect"); }
     };
     recognition.onerror = () => setRecording(false);
     recognitionRef.current = recognition;
@@ -15882,6 +16845,7 @@ function PronunciationSayIt({ target, T }) {
       if (said) {
         const mm = pronMatchMap(target, said);
         logLearningEvent("pronunciation", mm.score >= 80);
+        logMetric("pron", target, { ok: mm.score >= 80 });
         if (mm.score < 80) setFails(f => f + 1);
         setMatch(mm);
         setBest(b => (b === null ? mm.score : Math.max(b, mm.score)));
@@ -15966,13 +16930,30 @@ const COPY_MAX_CHARS = 30;
 const isKanaCh = (c) => /[\u3041-\u3096\u30A1-\u30FA\u30FC]/.test(c);
 const isWritableCh = (c) => isKanaCh(c) || /[\u3400-\u4DBF\u4E00-\u9FFF\u3005]/.test(c);
 function copyCharLoader(char, onLoad, onError) {
-  const url = isKanaCh(char)
-    ? `/kana-data/${char.codePointAt(0)}.json`
-    : `https://cdn.jsdelivr.net/npm/hanzi-writer-data-jp@0/${encodeURIComponent(char)}.json`;
-  fetch(url)
-    .then(r => { if (!r.ok) throw new Error("nf"); return r.json(); })
-    .then(d => { if (!d || !Array.isArray(d.strokes) || !d.strokes.length) throw new Error("bad"); onLoad(d); })
-    .catch(onError);
+  const okData = (d) => d && Array.isArray(d.strokes) && d.strokes.length && Array.isArray(d.medians) &&
+    d.medians.length === d.strokes.length && d.medians.every(m => Array.isArray(m) && m.length >= 2);
+  const isNative = typeof window !== "undefined" && window.Capacitor && typeof window.Capacitor.isNativePlatform === "function" && window.Capacitor.isNativePlatform();
+  let urls;
+  if (isKanaCh(char)) {
+    const p = `/kana-data/${char.codePointAt(0)}.json`;
+    // Store apps bundle files locally (possibly an older copy) and CapacitorHttp can't load relative
+    // paths, so try the live servers first there; on the web try the same site first.
+    urls = isNative
+      ? ["https://app.seitojapanese.online" + p, "https://japanese-level-check.vercel.app" + p, p]
+      : [p, "https://japanese-level-check.vercel.app" + p];
+  } else {
+    urls = [`https://cdn.jsdelivr.net/npm/hanzi-writer-data-jp@0/${encodeURIComponent(char)}.json`];
+  }
+  const attempt = (i) => {
+    if (i >= urls.length) { onError(); return; }
+    const ctl = typeof AbortController !== "undefined" ? new AbortController() : null;
+    const timer = setTimeout(() => { try { ctl && ctl.abort(); } catch {} }, 8000);
+    fetch(urls[i], ctl ? { signal: ctl.signal } : undefined)
+      .then(r => { if (!r.ok) throw new Error("nf"); return r.json(); })
+      .then(d => { clearTimeout(timer); if (!okData(d)) throw new Error("bad"); onLoad(d); })
+      .catch(() => { clearTimeout(timer); attempt(i + 1); });
+  };
+  attempt(0);
 }
 // 音読み / 訓読み for one kanji, from the free kanjiapi.dev (KANJIDIC2) service. Cached per kanji for the
 // session so moving back and forth between characters doesn't re-fetch.
@@ -16877,6 +17858,43 @@ function saveStudyGuideTaskDone(day, idx, done) {
     localStorage.setItem(key, JSON.stringify(parsed));
     return true;
   } catch { return false; }
+}
+// Per-week check marks. The study guide is one fixed plan, but each week keeps its own check marks, so a
+// student can go back to Week 1 (or any week up to the one in progress) and return without losing anything.
+const WEEK_CHECKS_KEY = "gaku_week_checks";
+function loadWeekChecks() {
+  try { const v = JSON.parse(localStorage.getItem(scopedKey(WEEK_CHECKS_KEY)) || "{}"); return v && typeof v === "object" ? v : {}; } catch { return {}; }
+}
+function saveWeekChecks(map) { try { localStorage.setItem(scopedKey(WEEK_CHECKS_KEY), JSON.stringify(map)); } catch {} }
+function snapshotChecks(schedule) {
+  const o = {};
+  Object.keys(schedule || {}).forEach(d => { o[d] = (schedule[d] || []).map(t => !!t.done); });
+  return o;
+}
+function applyChecks(schedule, snap) {
+  const o = {};
+  Object.keys(schedule || {}).forEach(d => { o[d] = (schedule[d] || []).map((t, i) => ({ ...t, done: !!(snap && snap[d] && snap[d][i]) })); });
+  return o;
+}
+function setStudyGuideSchedule(schedule) {
+  const saved = loadSavedStudyGuide();
+  saveStudyGuide({ schedule, weekTheme: (saved && saved.weekTheme) || "" });
+}
+// Un-checks every task of the saved guide (the tasks themselves stay exactly as they are).
+// Returns the cleared schedule, or null when there is no saved guide.
+function clearStudyGuideChecks() {
+  try {
+    const key = scopedKey(STUDY_GUIDE_KEY);
+    const raw = localStorage.getItem(key);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw);
+    if (!parsed || !parsed.schedule) return null;
+    Object.keys(parsed.schedule).forEach(day => {
+      if (Array.isArray(parsed.schedule[day])) parsed.schedule[day] = parsed.schedule[day].map(t => ({ ...t, done: false }));
+    });
+    localStorage.setItem(key, JSON.stringify(parsed));
+    return parsed.schedule;
+  } catch { return null; }
 }
 function requestStudyGuideRegeneration() {
   try { localStorage.setItem(scopedKey(STUDY_GUIDE_REGEN_KEY), "1"); } catch {}
@@ -18074,7 +19092,12 @@ function LevelUpOffer({ T, currentLevel, onConfirm, onDismiss }) {
 // most valuable features to show off.
 const TUTORIAL_STEPS = [
   { tab: "schedule" },
+  // Extra steps on the same tab: they carry their own title/description keys (descKey/labelKey)
+  // because the "tab:subTab" lookup below can only hold one description per tab.
+  { tab: "schedule", labelKey: "tutModesTitle", descKey: "tutorialModesDesc" },
+  { tab: "schedule", labelKey: "tutGuideTitle", descKey: "tutorialGuideDesc" },
   { tab: "vocabulary" },
+  { tab: "vocabulary", labelKey: "tutLibraryTitle", descKey: "tutorialLibraryDesc" },
   { tab: "subtitles" },
   { tab: "resources", subTab: "links" },
   { tab: "resources", subTab: "content" },
@@ -18082,6 +19105,7 @@ const TUTORIAL_STEPS = [
   { tab: "resources", subTab: "pronunciation" },
   { tab: "resources", subTab: "writing" },
   { tab: "milestones" },
+  { tab: "milestones", labelKey: "tutProgressTitle", descKey: "tutorialProgressDesc" },
 ];
 const TUTORIAL_DESC_KEYS = {
   "schedule:": "tutorialScheduleDesc",
@@ -18115,10 +19139,10 @@ function TutorialOverlay({ T, step, tab, resourceSubTab, tabsMeta, resourceSubTa
   if (step >= 1 && step <= TUTORIAL_STEPS.length) {
     const target = TUTORIAL_STEPS[step - 1];
     const reached = tab === target.tab && (!target.subTab || resourceSubTab === target.subTab);
-    const targetLabel = target.subTab
+    const targetLabel = target.labelKey && T[target.labelKey] ? T[target.labelKey] : target.subTab
       ? (resourceSubTabsMeta.find(st => st.id === target.subTab)?.label || target.subTab)
       : (tabsMeta.find(t => t.id === target.tab)?.label || target.tab);
-    const descKey = TUTORIAL_DESC_KEYS[`${target.tab}:${target.subTab || ""}`];
+    const descKey = target.descKey || TUTORIAL_DESC_KEYS[`${target.tab}:${target.subTab || ""}`];
     const stepOfText = (T.tutorialStepOf || "Step {current} of {total}")
       .replace("{current}", String(step)).replace("{total}", String(TUTORIAL_STEPS.length));
     return (
@@ -18220,6 +19244,112 @@ function analyzeLearning(log, allow) {
   return { strong, weak };
 }
 
+// ---- Detailed study metrics + always-on coach (Intensive modes) ----
+// A second small on-device log (separate from the quota log, so these records never count toward the
+// daily quota): "view" = a word card was shown (w = word) · "flip" = ms taken to turn a card over
+// (w = word, ms) · "pron" = a pronunciation attempt (w = target text, ok) · "listen" = a listening
+// comprehension answer (ok). Accuracy for pronunciation / writing / etc. still comes from the learning log.
+const METRIC_LOG_KEY = "gaku_metric_log";
+function loadMetricLog() {
+  try { const v = JSON.parse(localStorage.getItem(scopedKey(METRIC_LOG_KEY)) || "[]"); return Array.isArray(v) ? v : []; } catch { return []; }
+}
+function logMetric(k, w, extra) {
+  try {
+    const log = loadMetricLog();
+    log.push({ t: Date.now(), k, w: w ? String(w).slice(0, 60) : "", ...(extra || {}) });
+    localStorage.setItem(scopedKey(METRIC_LOG_KEY), JSON.stringify(log.slice(-1500)));
+    window.dispatchEvent(new CustomEvent("gaku_learning_updated"));
+  } catch {}
+}
+function medianOf(xs) {
+  if (!xs.length) return 0;
+  const s = xs.slice().sort((a, b) => a - b), m = Math.floor(s.length / 2);
+  return s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2;
+}
+function coachAreaLabel(T, a) {
+  return ({ schedule: T.tabSchedule, vocab: T.tabVocabulary, content: T.tabPractice, conversation: T.convTitle, pronunciation: T.pronTitle, writing: T.writeTitle }[a]) || a;
+}
+// Everything is computed from the last 14 days (views: today only). No AI calls.
+function analyzeCoach(allow) {
+  const cutoff = Date.now() - 14 * 86400000, todayMs = dayStartMs(0);
+  const ok = (a) => !allow || allow(a);
+  const m = loadMetricLog().filter(x => x.t >= cutoff);
+  const learn = loadLearningLog().filter(x => x.t >= cutoff && x.a !== "task");
+  const rate = (a) => { const xs = learn.filter(x => x.a === a); return xs.length ? Math.round(100 * xs.filter(x => x.ok).length / xs.length) : null; };
+  const flips = m.filter(x => x.k === "flip" && x.ms > 0);
+  const flipSec = flips.length >= 5 ? medianOf(flips.map(x => x.ms)) / 1000 : null;
+  const byWord = {};
+  flips.forEach(x => { (byWord[x.w] = byWord[x.w] || []).push(x.ms); });
+  const slowWord = Object.entries(byWord).filter(([, a]) => a.length >= 2).map(([w, a]) => ({ w, sec: medianOf(a) / 1000 })).filter(x => x.sec >= 8).sort((a, b) => b.sec - a.sec)[0] || null;
+  const views = {}; let viewsToday = 0;
+  m.forEach(x => { if (x.k === "view" && x.t >= todayMs) { views[x.w] = (views[x.w] || 0) + 1; viewsToday++; } });
+  const repeat = Object.entries(views).filter(([, n]) => n >= 3).map(([w, n]) => ({ w, n })).sort((a, b) => b.n - a.n)[0] || null;
+  const pmiss = {};
+  m.forEach(x => { if (x.k === "pron" && x.ok === false) pmiss[x.w] = (pmiss[x.w] || 0) + 1; });
+  const pronMiss = ok("pronunciation") ? (Object.entries(pmiss).filter(([, n]) => n >= 2).map(([w, n]) => ({ w, n })).sort((a, b) => b.n - a.n)[0] || null) : null;
+  const L = m.filter(x => x.k === "listen");
+  const listenPct = L.length ? Math.round(100 * L.filter(x => x.ok).length / L.length) : null;
+  const { weak } = analyzeLearning(loadLearningLog(), allow);
+  const advice = [];
+  if (weak) advice.push({ type: "acc", a: weak.a, pct: Math.round(weak.rate * 100) });
+  if (listenPct !== null && L.length >= 3 && listenPct < 70 && (ok("conversation") || ok("content"))) advice.push({ type: "listen", pct: listenPct });
+  if (pronMiss) advice.push({ type: "pron", w: pronMiss.w, n: pronMiss.n });
+  if (repeat) advice.push({ type: "repeat", w: repeat.w, n: repeat.n });
+  if (flipSec !== null && flipSec >= 6) advice.push({ type: "slow", sec: Math.round(flipSec) });
+  else if (slowWord) advice.push({ type: "slowword", w: slowWord.w, sec: Math.round(slowWord.sec) });
+  return {
+    advice,
+    hasData: learn.length + m.length > 0,
+    stats: { flipSec, viewsToday, pron: ok("pronunciation") ? rate("pronunciation") : null, writing: ok("writing") ? rate("writing") : null, listen: listenPct },
+  };
+}
+function CoachPanel({ T, allow, onGo, compact }) {
+  const { advice, stats, hasData } = analyzeCoach(allow);
+  const line = (a) => {
+    if (a.type === "acc") return progressFill(T.coachAccWeak || "{area} accuracy is {pct}%. Make {area} your focus today.", { area: coachAreaLabel(T, a.a), pct: a.pct });
+    if (a.type === "listen") return progressFill(T.coachListenWeak || "Listening comprehension is {pct}%. Listen several times before reading the text.", { pct: a.pct });
+    if (a.type === "pron") return progressFill(T.coachPronMiss || "You keep missing the pronunciation of {word} ({n} times). Say it slowly, then at normal speed.", { word: a.w, n: a.n });
+    if (a.type === "repeat") return progressFill(T.coachRepeatWord || "You viewed {word} {n} times today and it isn't sticking. Try an example sentence or write it out.", { word: a.w, n: a.n });
+    if (a.type === "slow") return progressFill(T.coachSlowFlip || "It takes you about {sec}s to recall a word. Aim for under 5s with quick flashcard rounds.", { sec: a.sec });
+    return progressFill(T.coachSlowWord || "Your slowest word is {word} ({sec}s). Review it again.", { word: a.w, sec: a.sec });
+  };
+  const target = (a) => a.type === "acc" ? a.a : a.type === "listen" ? "conversation" : a.type === "pron" ? "pronunciation" : "vocab";
+  const shown = advice.slice(0, compact ? 1 : 3);
+  if (compact) {
+    if (!shown.length) return null;
+    return (
+      <div style={{ ...S.card, marginBottom:12, padding:"10px 12px", background:"rgba(168,85,247,0.08)", border:"1px solid rgba(168,85,247,0.25)", display:"flex", alignItems:"center", gap:10 }}>
+        <p style={{ color:"#e2e8f0", fontSize:12, lineHeight:1.6, margin:0, flex:1 }}>🎯 {line(shown[0])}</p>
+        <button onClick={() => onGo(target(shown[0]))} style={{ ...S.btn, padding:"6px 12px", background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff", fontSize:11, flexShrink:0 }}>{T.coachGo || "Let's go"} →</button>
+      </div>
+    );
+  }
+  const chips = [
+    [T.coachStatFlip || "Flip speed", stats.flipSec !== null ? stats.flipSec.toFixed(1) + "s" : "–"],
+    [T.coachStatViews || "Words seen today", String(stats.viewsToday)],
+    [T.pronTitle || "Pronunciation", stats.pron !== null ? stats.pron + "%" : "–"],
+    [T.coachStatListen || "Listening", stats.listen !== null ? stats.listen + "%" : "–"],
+    [T.writeTitle || "Writing", stats.writing !== null ? stats.writing + "%" : "–"],
+  ];
+  return (
+    <div>
+      <p style={{ color:C.purpleLight, fontSize:11, fontWeight:700, margin:"0 0 6px" }}>{T.coachAdviceTitle || "🎯 Your study coach"}</p>
+      <div style={{ display:"flex", gap:6, flexWrap:"wrap", marginBottom:10 }}>
+        {chips.map(([label, val], i) => (
+          <span key={i} style={{ fontSize:11, color:"#cbd5e1", background:"rgba(255,255,255,0.06)", border:`1px solid ${C.border}`, borderRadius:8, padding:"3px 8px" }}>{label}: <b style={{ color:"#f1f5f9" }}>{val}</b></span>
+        ))}
+      </div>
+      {shown.length === 0 && <p style={{ color:"#e2e8f0", fontSize:13, lineHeight:1.65, margin:"0 0 6px" }}>{hasData ? (T.coachAllGood || "No weak spots right now. Keep up this pace!") : (T.coachNoData || "Practice a little more and I'll start giving you specific advice.")}</p>}
+      {shown.map((a, i) => (
+        <div key={i} style={{ marginBottom:10 }}>
+          <p style={{ color:"#e2e8f0", fontSize:13, lineHeight:1.65, margin:"0 0 6px" }}>{i + 1}. {line(a)}</p>
+          <button onClick={() => onGo(target(a))} style={{ ...S.btn, padding:"7px 14px", background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff", fontSize:12 }}>{T.coachGo || "Let's go"} →</button>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 // ---- Progress check: a fixed 12-question quick check taken at the start and again later ("then vs now") ----
 // Original questions (N5-N2, 3 each). Answers are never shown, only the score, so a retake stays fair.
 const PROGRESS_KEY = "gaku_progress_checks";
@@ -18227,18 +19357,18 @@ const PROGRESS_NUDGE_KEY = "gaku_progress_nudge_at";
 const PROGRESS_MIN_GAP_DAYS = 3;
 const PROGRESS_LEVELS = ["N5", "N4", "N3", "N2"];
 const PROGRESS_QUESTIONS = [
-  { lv: "N5", q: "「学校」の読み方はどれですか。", c: ["がっこう", "がくこう", "がっこ", "がこう"], a: 0 },
-  { lv: "N5", q: "私は毎朝、パン＿＿食べます。", c: ["を", "が", "に", "で"], a: 0 },
-  { lv: "N5", q: "「みず」を漢字で書くと、どれですか。", c: ["水", "木", "火", "土"], a: 0 },
-  { lv: "N4", q: "友だちが私に本を貸して＿＿。", c: ["くれました", "あげました", "もらいました", "やりました"], a: 0 },
-  { lv: "N4", q: "「約束」の読み方はどれですか。", c: ["やくそく", "やっそく", "やくぞく", "よくそく"], a: 0 },
-  { lv: "N4", q: "明日は雨が降る＿＿しれません。", c: ["かも", "だけ", "ばかり", "ほど"], a: 0 },
-  { lv: "N3", q: "「経験」の読み方はどれですか。", c: ["けいけん", "けいげん", "きょうけん", "けえけん"], a: 0 },
-  { lv: "N3", q: "この本は子どもから大人＿＿、幅広く読まれています。", c: ["まで", "ほど", "ばかり", "だけ"], a: 0 },
-  { lv: "N3", q: "彼は忙しい＿＿、いつも私の相談に乗ってくれます。", c: ["のに", "ので", "から", "ために"], a: 0 },
-  { lv: "N2", q: "「複雑」の読み方はどれですか。", c: ["ふくざつ", "ふくそう", "ふくぞう", "ふっさつ"], a: 0 },
-  { lv: "N2", q: "彼は約束を破った＿＿、謝ろうともしません。", c: ["くせに", "おかげで", "どころか", "ばかりに"], a: 0 },
-  { lv: "N2", q: "状況が変わったので、計画を変更せざるを＿＿。", c: ["得ません", "取れません", "受けません", "持ちません"], a: 0 },
+  { lv: "N5", q: "「学校」の読み方はどれですか。", qf: "「学校」の読(よ)み方(かた)はどれですか。", c: ["がっこう", "がくこう", "がっこ", "がこう"], a: 0 },
+  { lv: "N5", q: "私は毎朝、パン＿＿食べます。", qf: "私(わたし)は毎朝(まいあさ)、パン＿＿食(た)べます。", c: ["を", "が", "に", "で"], a: 0 },
+  { lv: "N5", q: "「みず」を漢字で書くと、どれですか。", qf: "「みず」を漢字(かんじ)で書(か)くと、どれですか。", c: ["水", "木", "火", "土"], a: 0 },
+  { lv: "N4", q: "友だちが私に本を貸して＿＿。", qf: "友(とも)だちが私(わたし)に本(ほん)を貸(か)して＿＿。", c: ["くれました", "あげました", "もらいました", "やりました"], a: 0 },
+  { lv: "N4", q: "「約束」の読み方はどれですか。", qf: "「約束」の読(よ)み方(かた)はどれですか。", c: ["やくそく", "やっそく", "やくぞく", "よくそく"], a: 0 },
+  { lv: "N4", q: "明日は雨が降る＿＿しれません。", qf: "明日(あした)は雨(あめ)が降(ふ)る＿＿しれません。", c: ["かも", "だけ", "ばかり", "ほど"], a: 0 },
+  { lv: "N3", q: "「経験」の読み方はどれですか。", qf: "「経験」の読(よ)み方(かた)はどれですか。", c: ["けいけん", "けいげん", "きょうけん", "けえけん"], a: 0 },
+  { lv: "N3", q: "この本は子どもから大人＿＿、幅広く読まれています。", qf: "この本(ほん)は子(こ)どもから大人(おとな)＿＿、幅広(はばひろ)く読(よ)まれています。", c: ["まで", "ほど", "ばかり", "だけ"], a: 0 },
+  { lv: "N3", q: "彼は忙しい＿＿、いつも私の相談に乗ってくれます。", qf: "彼(かれ)は忙(いそが)しい＿＿、いつも私(わたし)の相談(そうだん)に乗(の)ってくれます。", c: ["のに", "ので", "から", "ために"], a: 0 },
+  { lv: "N2", q: "「複雑」の読み方はどれですか。", qf: "「複雑」の読(よ)み方(かた)はどれですか。", c: ["ふくざつ", "ふくそう", "ふくぞう", "ふっさつ"], a: 0 },
+  { lv: "N2", q: "彼は約束を破った＿＿、謝ろうともしません。", qf: "彼(かれ)は約束(やくそく)を破(やぶ)った＿＿、謝(あやま)ろうともしません。", c: ["くせに", "おかげで", "どころか", "ばかりに"], a: 0 },
+  { lv: "N2", q: "状況が変わったので、計画を変更せざるを＿＿。", qf: "状況(じょうきょう)が変(か)わったので、計画(けいかく)を変更(へんこう)せざるを＿＿。", c: ["得ません", "取れません", "受けません", "持ちません"], a: 0 },
 ];
 function loadProgressChecks() {
   try { const v = JSON.parse(localStorage.getItem(scopedKey(PROGRESS_KEY)) || "[]"); return Array.isArray(v) ? v : []; } catch { return []; }
@@ -18321,6 +19451,7 @@ function ProgressSummary({ T, history }) {
   );
 }
 function ProgressCheck({ T, userId }) {
+  const [qFuriOn] = useQuestionFurigana(); // "furigana on questions" switch (question text only)
   const [history, setHistory] = useState(loadProgressChecks);
   const [phase, setPhase] = useState("home"); // home | quiz | result
   const [qs, setQs] = useState([]);
@@ -18357,7 +19488,8 @@ function ProgressCheck({ T, userId }) {
           <div style={{ width:`${Math.round(idx / qs.length * 100)}%`, height:"100%", background:C.green }} />
         </div>
         <p style={{ color:"#94a3b8", fontSize:11, margin:"0 0 6px" }}>{progressFill(T.pcQ || "Question {n} / {total}", { n: idx + 1, total: qs.length })}</p>
-        <p style={{ color:"#f1f5f9", fontSize:16, fontWeight:700, lineHeight:1.7, margin:"0 0 12px" }}>{q.q}</p>
+        <QuestionFuriganaToggle T={T} />
+        <p style={{ color:"#f1f5f9", fontSize:16, fontWeight:700, lineHeight: qFuriOn ? 2.3 : 1.7, margin:"0 0 12px" }}>{qFuriOn && q.qf ? <FuriganaRichText text={q.qf} /> : q.q}</p>
         <div style={{ display:"flex", flexDirection:"column", gap:8, marginBottom:12 }}>
           {q.order.map((ci, pos) => (
             <button key={pos} onClick={() => setPicked(pos)} style={{ textAlign:"left", padding:"11px 14px", borderRadius:10, cursor:"pointer", fontSize:15, color:"#e2e8f0", background:picked === pos ? "rgba(168,85,247,0.18)" : C.card, border:`1.5px solid ${picked === pos ? C.purpleLight : C.border}` }}>{q.c[ci]}</button>
@@ -18474,7 +19606,8 @@ function FeaturePicker({ T, initial, onApply }) {
   );
 }
 
-function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteAccountBusy, userId, streakDays, daysUntilTrialEnds, tutorialGraceDaysLeft, isTrialAccount, isGakuStudent, onCompleteProfile, readerInstalled, isGuest, onUpgrade, onShowPlans }) {
+function Dashboard({ form, onEdit, onLevelUp, onSetWeek, onLogout, onDeleteAccount, deleteAccountBusy, userId, streakDays, daysUntilTrialEnds, tutorialGraceDaysLeft, isTrialAccount, isGakuStudent, onCompleteProfile, readerInstalled, isGuest, onUpgrade, onShowPlans }) {
+  const [themeMode, setThemeMode] = useState(getSavedTheme);
   const T = useUITranslations(form?.preferredLang || "English");
   // GAKU Reader promo card: shown on desktop Chrome/Edge to accounts that have
   // never used the extension (server says readerInstalled=false); dismissible
@@ -18600,7 +19733,9 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
     setJlptMockStep("done");
     dismissJlptMockOffer();
   };
-  const showJlptMockOffer = !IS_STORE_APP && (form.skills||[]).includes("jlpt") && !jlptMockDismissed;
+  // Shown in the store apps too (2026-11-03): the form only POSTs to /api/policy-agreement and the
+  // student/Seito emails go out server-side, so no price, purchase button, or outside link appears in-app.
+  const showJlptMockOffer = (form.skills||[]).includes("jlpt") && !jlptMockDismissed;
 
   // "💬 Feedback" tab — students can report bugs/improvement ideas any time. Invite-code (GAKU)
   // students can submit any number of times; non-invite (trial) students get exactly one
@@ -18849,6 +19984,25 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
     if (saveStudyGuideTaskDone(day, idx, nextDone) && userId) syncMigrationBridge(userId);
   }, [schedule, userId]);
 
+  // The furthest week the student has reached = their "in progress" week. They can move between
+  // Week 1 and that week at any time; every week keeps its own check marks.
+  const reachedWeek = Math.max(form.maxWeekReached || 0, currentWeek);
+  const goToWeek = (n, fresh) => {
+    if (!n || n < 1) return;
+    const map = loadWeekChecks();
+    map[currentWeek] = snapshotChecks(schedule);
+    if (fresh) delete map[n];
+    saveWeekChecks(map);
+    const next = applyChecks(schedule, map[n]);
+    setSchedule(next);
+    setStudyGuideSchedule(next);
+    if (onSetWeek) onSetWeek(n, reachedWeek);
+    if (userId) syncMigrationBridge(userId);
+  };
+  const restartWeek1 = () => {
+    if (!window.confirm(T.restartWeek1Confirm || "Start over from Week 1? This week's check marks are cleared. You can come back to your other weeks from the week picker, and your study plan stays the same.")) return;
+    goToWeek(1, true);
+  };
   const totalTasks = Object.values(schedule).flat().filter(t=>!t.rest).length;
   const doneTasks = Object.values(schedule).flat().filter(t=>t.done&&!t.rest).length;
   const progress = totalTasks ? Math.round(doneTasks/totalTasks*100) : 0;
@@ -18856,6 +20010,9 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
 
   const DAY_KEYS = ["monday","tuesday","wednesday","thursday","friday","saturday","sunday"];
   const WEEKDAY_EN = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
+  // Japanese weekday names, shown next to the student's language so both can be checked at a glance
+  // (e.g. against a work calendar).
+  const WEEKDAY_JA = ["月曜日(げつようび)","火曜日(かようび)","水曜日(すいようび)","木曜日(もくようび)","金曜日(きんようび)","土曜日(どようび)","日曜日(にちようび)"];
   const isTranslating = T._loading;
 
   // A feature is shown when the student kept it (or never chose); the tutorial always shows everything.
@@ -18866,6 +20023,9 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
   const lockHome = tabShown("schedule") ? "schedule" : (tabShown("resources") ? "resources" : null);
   const quotaLocked = isIntensive && !tutorialActive && !!lockHome && countEventsOnDay(loadLearningLog(), 0) < INTENSIVE_DAILY_GOAL;
   const LOCKABLE_TABS = ["subtitles", "milestones", "jlpt"]; // Vocabulary stays open: its use counts toward the quota
+  // Coach (Intensive modes): only judges features the student keeps visible; the button jumps to the practice.
+  const coachAllow = (a) => a === "vocab" || featureShown(a);
+  const coachGo = (a) => { if (a === "schedule" || a === "vocab") { setTab(a === "vocab" ? "vocabulary" : "schedule"); return; } setTab("resources"); setResourceSubTab(a); };
   useEffect(() => { if (quotaLocked && LOCKABLE_TABS.includes(tab)) setTab(lockHome); }, [quotaLocked, tab, lockHome]);
   useEffect(() => {
     if (!tabShown(tab)) { setTab("vocabulary"); return; }
@@ -18959,6 +20119,7 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
           </div>
         </div>
         <div style={{ display:"flex", gap:8, flexWrap:"wrap" }}>
+          <button onClick={()=>{ const next = themeMode === "light" ? "dark" : "light"; applyTheme(next); setThemeMode(next); }} aria-label={themeMode === "light" ? "Dark mode" : "Light mode"} title={themeMode === "light" ? "Dark mode" : "Light mode"} style={{ ...S.btn, padding:"8px 14px", background:C.card, color:"#94a3b8", border:`1px solid ${C.border}`, fontSize:12 }}>{themeMode === "light" ? "\u{1F319}" : "\u2600\uFE0F"}</button>
           <button onClick={()=>setShowFounder(true)} style={{ ...S.btn, padding:"8px 14px", background:C.card, color:"#94a3b8", border:`1px solid ${C.border}`, fontSize:12 }}>{"\u{1F464}"} {(FOUNDER_TEXT[form?.preferredLang] || FOUNDER_TEXT["English"])[0]}</button>
           <button onClick={()=>{ setFeaturePickerInitial(visibleFeatures || OPTIONAL_FEATURES); setShowFeaturePicker(true); }} style={{ ...S.btn, padding:"8px 14px", background:C.card, color:"#94a3b8", border:`1px solid ${C.border}`, fontSize:12 }}>{"\u2699\uFE0F"} {T.featureCustomizeBtn || "Customize"}</button>
           <button onClick={()=>setShowModePicker(true)} style={{ ...S.btn, padding:"8px 14px", background:isIntensive?"rgba(168,85,247,0.2)":C.card, color:isIntensive?C.purpleLight:"#94a3b8", border:`1px solid ${isIntensive?C.purpleLight:C.border}`, fontSize:12 }}>{isIntensive ? "🔥" : "😊"} {T.modeBtn || "Mode"}</button>
@@ -19124,6 +20285,8 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
           })}
         </div>
 
+        {isIntensive && tab !== "schedule" && !tutorialActive && <CoachPanel compact T={T} allow={coachAllow} onGo={coachGo} />}
+
         {tab==="schedule" && (
           <div>
             {(() => {
@@ -19146,7 +20309,9 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
                   </div>}
                   {isIntensive && !doneQuota && <p style={{ color:"#fecaca", fontSize:11, lineHeight:1.6, margin:"0 0 8px" }}>🔒 {T.quotaLocked || "Finish today's quota to unlock the other tabs."}</p>}
                   {isIntensive && missedYesterday && <p style={{ color:"#fecaca", fontSize:12, fontWeight:700, lineHeight:1.6, margin:"0 0 8px" }}>⚠️ {T.quotaMissed || "You missed yesterday's quota. Finish today's quota first — no skipping."}</p>}
-                  {weak && (
+                  {isIntensive && <CoachPanel T={T} allow={coachAllow} onGo={coachGo} />}
+                  {isIntensive && weak && <LessonBridgeCard T={T} />}
+                  {!isIntensive && weak && (
                     <div>
                       <p style={{ color:C.purpleLight, fontSize:11, fontWeight:700, margin:"0 0 4px" }}>🎯 {T.coachTitle || "Today's suggestion"}</p>
                       <p style={{ color:"#e2e8f0", fontSize:13, lineHeight:1.65, margin:"0 0 10px" }}>
@@ -19167,6 +20332,20 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
                 <div>
                   <p style={{ color:C.purpleLight, fontSize:11, fontWeight:700, letterSpacing:1, margin:0 }}>📅 WEEK {currentWeek} / {totalWeeks}</p>
                   <p style={{ color:"#ffffff", fontSize:11, margin:"2px 0 0" }}>{totalWeeks - currentWeek} {T.weeksRemaining} · {Math.round((currentWeek/totalWeeks)*100)}{T.percentComplete}</p>
+                  <div style={{ display:"flex", gap:8, flexWrap:"wrap", alignItems:"center", marginTop:8 }}>
+                    {reachedWeek > 1 && (
+                      <select value={currentWeek} onChange={e => goToWeek(parseInt(e.target.value, 10), false)} aria-label={T.weekPickLabel || "Go to week"}
+                        style={{ padding:"4px 8px", borderRadius:8, border:"1px solid rgba(139,92,246,0.4)", background:"rgba(15,23,42,0.9)", color:C.purpleLight, fontSize:11, fontWeight:700, cursor:"pointer" }}>
+                        {Array.from({ length: reachedWeek }, (_, i) => i + 1).map(n => (
+                          <option key={n} value={n}>{(T.weekPickWeek || "Week {n}").replace("{n}", n)}{n === reachedWeek && reachedWeek > 1 ? " · " + (T.weekPickInProgress || "in progress") : ""}</option>
+                        ))}
+                      </select>
+                    )}
+                    {currentWeek < reachedWeek && (
+                      <button type="button" onClick={() => goToWeek(reachedWeek, false)} style={{ padding:"4px 10px", borderRadius:8, border:"1px solid rgba(34,197,94,0.45)", background:"rgba(34,197,94,0.1)", color:"#86efac", fontSize:11, fontWeight:700, cursor:"pointer" }}>→ {(T.weekBackToProgress || "Back to Week {n} (in progress)").replace("{n}", reachedWeek)}</button>
+                    )}
+                    <button type="button" onClick={restartWeek1} style={{ padding:"4px 10px", borderRadius:8, border:"1px solid rgba(139,92,246,0.4)", background:"rgba(139,92,246,0.1)", color:C.purpleLight, fontSize:11, fontWeight:700, cursor:"pointer" }}>↺ {T.restartWeek1Btn || "Start over from Week 1"}</button>
+                  </div>
                 </div>
                 {/* The old one-tap "Refresh" button that rebuilt the whole guide was removed on purpose:
                     the guide changes ONLY when the student presses "Update my study guide" in Edit Profile. */}
@@ -19195,7 +20374,7 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
               ) : (
                 WEEKDAY_EN.map((day, di) => {
                   const tasks = schedule[day] || [];
-                  const dayLabel = T[DAY_KEYS[di]] || day.toUpperCase();
+                  const dayLabel = (T[DAY_KEYS[di]] || day.toUpperCase()) + " · " + WEEKDAY_JA[di];
                   return (
                     <div key={day} style={{ marginBottom:16 }}>
                       <p style={{ color:"#94a3b8", fontSize:11, fontWeight:700, letterSpacing:1, borderBottom:`1px solid ${C.border}`, paddingBottom:6, marginBottom:8 }}>{dayLabel}</p>
@@ -19409,6 +20588,7 @@ function Dashboard({ form, onEdit, onLevelUp, onLogout, onDeleteAccount, deleteA
             <p style={{ color:"#94a3b8", fontSize:12, marginBottom:14, lineHeight:1.5 }}>
               {T.feedbackSubtitle || "Tell us what you'd like improved or anything that's bothering you about the app. We read every message."}
             </p>
+            <div style={{ marginTop:-6, marginBottom:14, textAlign:"left" }}><SupportEmailLine T={T} /></div>
 
             <div style={{ background:"rgba(239,68,68,0.1)", border:"1px solid rgba(239,68,68,0.4)", borderRadius:10, padding:"10px 12px", marginBottom:14 }}>
               <p style={{ color:"#f87171", fontSize:11, margin:0, lineHeight:1.5, fontWeight:600 }}>
@@ -19832,6 +21012,7 @@ function AuthScreen({ onAuthed, T, prefillEmail, initialMode, quickStartStep, li
         <button type="button" onClick={()=>{setMode(m=>m==="login"?"signup":"login"); setErr("");}} style={{ display:"block", width:"100%", marginTop:14, background:"none", border:"none", color:"#94a3b8", fontSize:12, cursor:"pointer" }}>
           {mode === "login" ? (T?.needAccount || "Need an account? Sign up") : (T?.haveAccount || "Already have an account? Log in")}
         </button>
+        <SupportEmailLine T={T} />
       </form>
     </div>
   );
@@ -19939,6 +21120,18 @@ function StorePlansScreen({ T, userId, onClose, onPurchased }) {
   );
 }
 
+// Support email shown where a student may be stuck (login, device approval, Feedback tab).
+// Mail sent here lands in the owner's support inbox (see api/_supportInbox.js).
+const SUPPORT_EMAIL = "support@reply.seitojapanese.online";
+function SupportEmailLine({ T }) {
+  return (
+    <p style={{ color:"#94a3b8", fontSize:12, lineHeight:1.6, margin:"14px 0 0", textAlign:"center" }}>
+      {T?.supportEmailNote || "Can't log in or having trouble with the app? Email us:"}{" "}
+      <a href={"mailto:" + SUPPORT_EMAIL} style={{ color:"#a78bfa", fontWeight:700, wordBreak:"break-all" }}>{SUPPORT_EMAIL}</a>
+    </p>
+  );
+}
+
 // ─── ACCOUNT: blocks the dashboard while a new device awaits dual approval ────
 function DeviceApprovalGate({ T }) {
   return (
@@ -19947,6 +21140,7 @@ function DeviceApprovalGate({ T }) {
         <p style={{ fontSize:36, margin:"0 0 12px" }}>📩</p>
         <h2 style={{ color:"#f1f5f9", fontSize:18, fontWeight:900, margin:"0 0 10px" }}>{T?.deviceApprovalTitle || "New Device Detected"}</h2>
         <p style={{ color:"#94a3b8", fontSize:13, lineHeight:1.6 }}>{T?.deviceApprovalDesc || "We've sent an approval email to you and to GAKU. Once both approve, this device will be unlocked — please check your inbox."}</p>
+        <SupportEmailLine T={T} />
       </div>
     </div>
   );
@@ -20591,6 +21785,17 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
     }
     completeProfileSave(f, opts);
   };
+  // Moves the week counter to week `n` by shifting the plan start date (Week 1 = now). `reached` is the
+  // furthest week the student has been on, remembered so they can always come back to their in-progress week.
+  // It deliberately does NOT touch the study guide itself (that only changes via "Update my study guide").
+  const handleSetWeek = (n, reached) => {
+    if (!form) return;
+    const startIso = new Date(Date.now() - (Math.max(1, n) - 1) * 7 * 86400000).toISOString();
+    const saved = { ...form, planStartDate: startIso, maxWeekReached: Math.max(form.maxWeekReached || 0, reached || 0, n) };
+    setForm(saved);
+    try { localStorage.setItem(scopedKey("gaku_form"), JSON.stringify(saved)); } catch {}
+    if (authUser) { syncMigrationBridge(authUser.id); pushProfileSummary(authUser.id, saved); }
+  };
   const completeProfileSave = (f, opts) => {
     // Capture before setForm below overwrites it: a brand-new signup has no
     // prior form at all, whereas an edit always has one already.
@@ -20601,7 +21806,7 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
     if (opts && opts.regenerateGuide) requestStudyGuideRegeneration();
     // Preserve planStartDate from existing form (only set it once, on first save)
     const startDate = (form && form.planStartDate) ? form.planStartDate : new Date().toISOString();
-    const saved = { ...f, planStartDate: startDate };
+    const saved = { ...f, planStartDate: startDate, maxWeekReached: (form && form.maxWeekReached) || f.maxWeekReached || undefined };
     // A save that already has every deferred field filled in (e.g. the
     // student used the full edit form directly, or finished CompleteProfileScreen)
     // is complete regardless of which path it came through.
@@ -21176,7 +22381,7 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
   }
   return (
     <div style={{ position:"relative" }} onClickCapture={handleDashboardInteraction}>
-      <Dashboard form={form} onEdit={handleEdit} onLevelUp={(lvl)=>handleSubmit({ ...form, jlpt: lvl })} onLogout={authUser && !isGuestUser ? handleLogout : undefined} isGuest={isGuestUser} onUpgrade={isGuestUser ? () => { setUpgradeInviteCode(""); setShowGuestUpgrade(true); } : undefined} onShowPlans={IS_STORE_APP && authUser && !isPaid && (!isGakuStudent || isReviewAccount) ? () => setShowStorePlans(true) : undefined} onDeleteAccount={authUser ? handleDeleteAccount : undefined} deleteAccountBusy={deleteAccountBusy} userId={authUser?.id} streakDays={streakDays} readerInstalled={readerInstalled} daysUntilTrialEnds={daysUntilTrialEnds} tutorialGraceDaysLeft={tutorialGraceDaysLeft} isTrialAccount={!isGakuStudent && !isPaid} isGakuStudent={isGakuStudent} onCompleteProfile={form?.profileComplete === false ? () => setOnboardingStep("completeProfile") : undefined} />
+      <Dashboard form={form} onEdit={handleEdit} onLevelUp={(lvl)=>handleSubmit({ ...form, jlpt: lvl })} onSetWeek={handleSetWeek} onLogout={authUser && !isGuestUser ? handleLogout : undefined} isGuest={isGuestUser} onUpgrade={isGuestUser ? () => { setUpgradeInviteCode(""); setShowGuestUpgrade(true); } : undefined} onShowPlans={IS_STORE_APP && authUser && !isPaid && (!isGakuStudent || isReviewAccount) ? () => setShowStorePlans(true) : undefined} onDeleteAccount={authUser ? handleDeleteAccount : undefined} deleteAccountBusy={deleteAccountBusy} userId={authUser?.id} streakDays={streakDays} readerInstalled={readerInstalled} daysUntilTrialEnds={daysUntilTrialEnds} tutorialGraceDaysLeft={tutorialGraceDaysLeft} isTrialAccount={!isGakuStudent && !isPaid} isGakuStudent={isGakuStudent} onCompleteProfile={form?.profileComplete === false ? () => setOnboardingStep("completeProfile") : undefined} />
       {showPaywall && !IS_STORE_APP && !(authUser && (isGakuStudent || isPaid)) && (
         <div style={{ position:"fixed", inset:0, zIndex:9999, display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"flex-start", overflowY:"auto", WebkitOverflowScrolling:"touch", padding:"16px 0", boxSizing:"border-box", background:"rgba(10,15,30,0.85)", backdropFilter:"blur(12px)" }}>
           <div style={{ background:"linear-gradient(135deg,#1e1b4b,#0f172a)", border:"1.5px solid rgba(139,92,246,0.4)", borderRadius:20, padding:"36px 32px", maxWidth:420, width:"90%", margin:"auto", textAlign:"center", boxShadow:"0 8px 40px rgba(139,92,246,0.25)" }}>

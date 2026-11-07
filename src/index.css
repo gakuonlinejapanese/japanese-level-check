@@ -16,3 +16,16 @@ code {
   color: #7dd3a8 !important;
   opacity: 1;
 }
+
+/* Light mode (2026-11-06): the app is built dark, so light mode inverts the whole page and then
+   flips photos/video back so they look normal. Toggled by the sun/moon button on the dashboard. */
+html.gaku-light {
+  background: #0a0f1e;
+  filter: invert(1) hue-rotate(180deg);
+}
+html.gaku-light img,
+html.gaku-light video,
+html.gaku-light canvas,
+html.gaku-light iframe {
+  filter: invert(1) hue-rotate(180deg);
+}

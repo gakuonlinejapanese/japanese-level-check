@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>GAKU — サポート受信箱</title>
+<meta name="robots" content="noindex, nofollow" />
+<style>
+  * { box-sizing: border-box; }
+  body { margin:0; min-height:100vh; font-family:'Hiragino Sans','Noto Sans JP',sans-serif;
+    background:linear-gradient(160deg,#0a0f1e 0%,#0f172a 60%,#0a0f1e 100%); color:#f1f5f9; padding:24px 16px; }
+  .wrap { max-width:760px; margin:0 auto; }
+  h1 { font-size:20px; margin:0 0 6px; }
+  p.sub { color:#94a3b8; font-size:13px; line-height:1.6; margin:0 0 18px; }
+  .card { background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:14px; padding:18px; margin-bottom:14px; }
+  label { display:block; color:#64748b; font-size:11px; font-weight:700; margin:12px 0 5px; letter-spacing:.5px; }
+  input, textarea, select { width:100%; padding:10px 12px; background:#0f172a; border:1.5px solid rgba(255,255,255,0.1);
+    border-radius:10px; color:#f1f5f9; font-size:14px; font-family:inherit; outline:none; }
+  textarea { min-height:110px; resize:vertical; line-height:1.55; }
+  .row { display:flex; gap:8px; flex-wrap:wrap; margin-top:12px; }
+  button { padding:10px 14px; border:none; border-radius:10px; font-size:13px; font-weight:700; cursor:pointer; color:#fff; }
+  button:disabled { opacity:.5; cursor:not-allowed; }
+  .b-main { background:linear-gradient(135deg,#7c3aed,#a855f7); }
+  .b-ok { background:#16a34a; }
+  .b-ghost { background:rgba(255,255,255,0.08); color:#e2e8f0; border:1px solid rgba(255,255,255,0.15); }
+  .tags { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:8px; }
+  .tag { font-size:11px; font-weight:700; padding:3px 8px; border-radius:999px; background:rgba(255,255,255,0.08); color:#cbd5e1; }
+  .tag.high { background:rgba(239,68,68,0.18); color:#fca5a5; }
+  .tag.medium { background:rgba(234,179,8,0.18); color:#fde047; }
+  .tag.low { background:rgba(34,197,94,0.15); color:#86efac; }
+  .sum { font-size:15px; font-weight:700; line-height:1.55; margin:4px 0; }
+  .small { color:#94a3b8; font-size:12px; line-height:1.6; white-space:pre-wrap; }
+  details { margin-top:8px; }
+  summary { cursor:pointer; color:#94a3b8; font-size:12px; }
+  .orig { background:#0b1220; border-radius:8px; padding:10px; font-size:13px; white-space:pre-wrap; margin-top:6px; color:#cbd5e1; }
+  .msg { margin-top:10px; font-size:13px; padding:9px 11px; border-radius:8px; line-height:1.6; white-space:pre-wrap; }
+  .msg.ok { background:rgba(34,197,94,0.12); color:#4ade80; border:1px solid rgba(34,197,94,0.3); }
+  .msg.err { background:rgba(239,68,68,0.12); color:#f87171; border:1px solid rgba(239,68,68,0.3); }
+  .tabs { display:flex; gap:8px; margin:14px 0; }
+  .tabs button { background:rgba(255,255,255,0.06); color:#cbd5e1; }
+  .tabs button.on { background:#7c3aed; color:#fff; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>📥 GAKU サポート受信箱</h1>
+  <p class="sub">生徒のフィードバックは自動でAIが分類し、原因の推測・修正メモ・返信案まで作ります。<br />
+    ここで内容を確認して「OK」を押したものだけが、返信メールの送信/修正依頼になります(押すまで何も起きません)。</p>
+
+  <div class="card">
+    <label>管理者パスワード (ADMIN_SECRET)</label>
+    <input id="secret" type="password" placeholder="管理者パスワード" autocomplete="off" />
+    <div class="row"><button class="b-main" id="loadBtn">読み込む</button></div>
+    <div id="topMsg"></div>
+  </div>
+
+  <details class="card">
+    <summary>📮 メール自動受信の設定(DNS反映後に1回だけ)</summary>
+    <p class="small">生徒がメールで送る宛先: <b>support@reply.seitojapanese.online</b><br />
+      WixのMXレコード追加から数時間たったら、下のボタンを1回押してください(Brevoに受け口を登録します)。</p>
+    <div class="row"><button class="b-main" id="regBtn">メール自動受信を有効にする</button></div>
+    <div id="regMsg"></div>
+  </details>
+
+  <details class="card">
+    <summary>✉️ メールで届いた内容を追加する</summary>
+    <label>生徒のメールアドレス</label><input id="addEmail" placeholder="student@example.com" />
+    <label>名前(任意)</label><input id="addName" />
+    <label>メール本文</label><textarea id="addBody" placeholder="生徒から届いたメール本文を貼り付け"></textarea>
+    <div class="row"><button class="b-main" id="addBtn">追加してAIに分類させる</button></div>
+    <div id="addMsg"></div>
+  </details>
+
+  <div class="tabs">
+    <button id="tabPending" class="on">確認待ち</button>
+    <button id="tabDone">処理済み</button>
+  </div>
+  <div id="list"></div>
+</div>
+
+<script>
+const API = "/api/policy-agreement";
+const CAT = { bug:"不具合", how_to_question:"使い方の質問", feature_request:"機能の要望", complaint:"苦情", billing:"支払い", other:"その他" };
+const SEV = { high:"重要度: 高", medium:"重要度: 中", low:"重要度: 低" };
+const STATUS = { pending:"確認待ち", replied:"返信済み", fix_approved:"修正OK", dismissed:"却下" };
+let items = [], showPending = true, githubConfigured = false;
+
+const $ = (id) => document.getElementById(id);
+function say(el, text, ok) { el.innerHTML = ""; const d = document.createElement("div"); d.className = "msg " + (ok ? "ok" : "err"); d.textContent = text; el.appendChild(d); }
+async function call(action, extra) {
+  const r = await fetch(API, { method:"POST", headers:{ "Content-Type":"application/json" },
+    body: JSON.stringify({ action, secret: $("secret").value, ...extra }) });
+  const j = await r.json().catch(() => ({}));
+  if (!r.ok) throw new Error(j.error || ("HTTP " + r.status));
+  return j;
+}
+function mk(tag, cls, text) { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
+
+function render() {
+  const list = $("list"); list.innerHTML = "";
+  const shown = items.filter((i) => showPending ? i.status === "pending" : i.status !== "pending");
+  if (!shown.length) { list.appendChild(mk("div", "small", showPending ? "確認待ちはありません 🎉" : "処理済みはまだありません")); return; }
+  for (const it of shown) {
+    const card = mk("div", "card");
+    const tags = mk("div", "tags");
+    tags.appendChild(mk("span", "tag", it.source === "email" ? "✉️ メール" : "💬 アプリ"));
+    tags.appendChild(mk("span", "tag", CAT[it.category] || "その他"));
+    tags.appendChild(mk("span", "tag " + (it.severity || "medium"), SEV[it.severity] || SEV.medium));
+    if (it.status !== "pending") tags.appendChild(mk("span", "tag", STATUS[it.status] || it.status));
+    card.appendChild(tags);
+    card.appendChild(mk("div", "sum", it.summary || ""));
+    card.appendChild(mk("div", "small", (it.student_name ? it.student_name + " / " : "") + (it.student_email || "(メールなし)") + " / " + new Date(it.created_at).toLocaleString("ja-JP")));
+    if (it.suspected_cause) card.appendChild(mk("div", "small", "🔎 原因の推測(未確認): " + it.suspected_cause));
+    const det = mk("details"); det.appendChild(mk("summary", null, "生徒の原文を見る")); det.appendChild(mk("div", "orig", it.body)); card.appendChild(det);
+
+    if (it.status === "pending") {
+      card.appendChild(mk("label", null, "生徒への返信案(編集できます)"));
+      const ta = mk("textarea"); ta.value = it.proposed_reply || ""; card.appendChild(ta);
+      const out = mk("div");
+      const row = mk("div", "row");
+      const act = async (decision, label) => {
+        if (!confirm(label + " を実行します。よろしいですか?")) return;
+        try {
+          const j = await call("admin_support_decide", { id: it.id, decision, replyText: ta.value });
+          let t = "完了しました。";
+          if (j.githubIssueUrl) t += "\n修正依頼を作成: " + j.githubIssueUrl;
+          if (j.githubNotConfigured) t += "\n(GitHub連携が未設定のため、修正依頼は作成されていません。ステータスだけ「修正OK」にしました)";
+          if (j.githubError) t += "\n修正依頼の作成に失敗: " + j.githubError;
+          say(out, t, true); await load(true);
+        } catch (e) { say(out, "失敗: " + e.message, false); }
+      };
+      const b1 = mk("button", "b-ok", "✅ この返信を送る"); b1.onclick = () => act("send_reply", "返信メールの送信");
+      row.appendChild(b1);
+      if (it.category === "bug" || it.fix_brief) {
+        const b2 = mk("button", "b-main", "🔧 修正OK + 返信を送る"); b2.onclick = () => act("approve_fix_and_reply", "修正依頼+返信の送信");
+        const b3 = mk("button", "b-ghost", "🔧 修正OKのみ(返信しない)"); b3.onclick = () => act("approve_fix", "修正依頼");
+        row.appendChild(b2); row.appendChild(b3);
+      }
+      const b4 = mk("button", "b-ghost", "却下"); b4.onclick = () => act("dismiss", "却下");
+      row.appendChild(b4);
+      card.appendChild(row); card.appendChild(out);
+    } else if (it.github_issue_url) {
+      const a = mk("a", "small", it.github_issue_url); a.href = it.github_issue_url; a.target = "_blank"; a.rel = "noopener"; card.appendChild(a);
+    }
+    list.appendChild(card);
+  }
+}
+
+async function load(quiet) {
+  try {
+    const j = await call("admin_list_support");
+    items = j.items || []; githubConfigured = !!j.githubConfigured; render();
+    if (!quiet) say($("topMsg"), "読み込みました(確認待ち " + items.filter((i) => i.status === "pending").length + "件)。" + (githubConfigured ? "" : "\n※GitHub連携は未設定です(修正OKは記録のみ)。"), true);
+  } catch (e) { say($("topMsg"), "失敗: " + e.message, false); }
+}
+$("loadBtn").onclick = () => load(false);
+$("tabPending").onclick = () => { showPending = true; $("tabPending").className = "on"; $("tabDone").className = ""; render(); };
+$("tabDone").onclick = () => { showPending = false; $("tabDone").className = "on"; $("tabPending").className = ""; render(); };
+$("regBtn").onclick = async () => {
+  $("regBtn").disabled = true;
+  try {
+    const j = await call("admin_register_inbound", {});
+    say($("regMsg"), "有効にしました。受信アドレス: " + j.address + "\n自分のメールからテスト送信して、「確認待ち」に出るか確認してください。", true);
+  } catch (e) { say($("regMsg"), "失敗: " + e.message + "\n(DNSがまだ反映されていない場合は、数時間後にもう一度お試しください)", false); }
+  $("regBtn").disabled = false;
+};
+$("addBtn").onclick = async () => {
+  $("addBtn").disabled = true;
+  try {
+    await call("admin_add_support", { email: $("addEmail").value, name: $("addName").value, body: $("addBody").value });
+    say($("addMsg"), "追加しました。「確認待ち」に表示されます。", true);
+    $("addBody").value = ""; await load(true);
+  } catch (e) { say($("addMsg"), "失敗: " + e.message, false); }
+  $("addBtn").disabled = false;
+};
+</script>
+</body>
+</html>

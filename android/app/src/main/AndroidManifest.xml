@@ -44,5 +44,10 @@
         <intent>
             <action android:name="android.speech.RecognitionService" />
         </intent>
+        <!-- Android 11+ hides other apps from us unless declared here. Without this the phone's
+             text-to-speech engine can't be found and every 🔊 Listen button is silent. -->
+        <intent>
+            <action android:name="android.intent.action.TTS_SERVICE" />
+        </intent>
     </queries>
 </manifest>

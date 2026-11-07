@@ -111,7 +111,7 @@ export default async function handler(req, res) {
     if (!isGakuStudent) {
       const { data: userData } = await supabase.auth.admin.getUserById(userId);
       const userEmail = userData?.user?.email?.trim().toLowerCase();
-      // App Store / Google Play reviewer accounts: always full access, never locked by the trial.
+      // App Store reviewer accounts: always full access, never locked by the trial.
       if (userEmail && REVIEW_ACCOUNT_EMAILS.includes(userEmail)) {
         isGakuStudent = true;
         await supabase.from("profiles").upsert({ id: userId, is_gaku_student: true });
@@ -268,7 +268,8 @@ export default async function handler(req, res) {
     let absenceSuspended = false;
     try {
       const { data: abs, error: absErr } = await supabase.from("profiles").select("absence_suspended_at").eq("id", userId).maybeSingle();
-      if (!absErr && abs?.absence_suspended_at && !isPaid) absenceSuspended = true;
+      // absence_suspended_at が未来の日時なら「その時刻から停止」の予約(まだ停止しない)。
+      if (!absErr && abs?.absence_suspended_at && new Date(abs.absence_suspended_at) <= new Date() && !isPaid) absenceSuspended = true;
     } catch {}
 
     return res.status(200).json({

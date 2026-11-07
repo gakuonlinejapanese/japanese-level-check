@@ -485,6 +485,7 @@ async function handleReaderStats(supabase, body, res) {
 // scheduled_emails に登録された「日付指定の処理」を、予定日になったら実行する(毎日のcronから呼ばれる)。
 //   action = 'email'   : 指定のメールを送る
 //   action = 'suspend' : GAKU Masterを一時停止し、英文の停止通知メールを送る(Seito承認済みの予約)
+//   action = 'delete'  : 停止中の生徒のアカウント自動削除(メールなし)。支払い済み/利用再開済み/アカウント無しならスキップ
 // 失敗した行はpendingのまま残して翌日また試す。skip_if_paid=true の行は、実行時点ですでに
 // 有料プランに入っている生徒なら何もせず skipped にする。
 async function handleScheduledEmails(supabase) {
@@ -492,7 +493,7 @@ async function handleScheduledEmails(supabase) {
   const { data: due, error } = await supabase
     .from("scheduled_emails").select("*").eq("status", "pending").lte("send_on", today).limit(50);
   if (error) return { error: error.message };
-  let sent = 0, suspended = 0, skipped = 0, failed = 0;
+  let sent = 0, suspended = 0, deleted = 0, skipped = 0, failed = 0;
   const finish = (id, status) =>
     supabase.from("scheduled_emails").update({ status, processed_at: new Date().toISOString() }).eq("id", id);
   for (const row of due || []) {
@@ -511,6 +512,27 @@ async function handleScheduledEmails(supabase) {
         continue;
       }
 
+      if (row.action === "delete") {
+        // 一時停止中の生徒のアカウント自動削除(メールは送らない)。実行時点でまだ停止中(利用再開されていない)
+        // かつ未払いの場合のみ。有料プランに入った/Seitoが利用再開した場合は何もせず skipped にする。
+        // すでにアカウントが無い場合も skipped(再実行しても安全)。
+        const { data: absProf } = prof
+          ? await supabase.from("profiles").select("absence_suspended_at").eq("id", prof.id).maybeSingle()
+          : { data: null };
+        if (!prof || prof.is_paid || !absProf?.absence_suspended_at) { await finish(row.id, "skipped"); skipped++; continue; }
+        // 外部キーが「no action」の2表だけ先に切り離す(同意記録・招待コードの行自体は残す)。
+        // それ以外(profiles / assigned_vocab / migration_bridge / device_* など)は auth ユーザー削除で連鎖削除される。
+        const { error: consentErr } = await supabase.from("jlpt_scan_consent_log").update({ user_id: null }).eq("user_id", prof.id);
+        if (consentErr) throw new Error(consentErr.message);
+        const { error: inviteErr } = await supabase.from("invite_codes").update({ used_by: null }).eq("used_by", prof.id);
+        if (inviteErr) throw new Error(inviteErr.message);
+        const { error: delUserErr } = await supabase.auth.admin.deleteUser(prof.id);
+        if (delUserErr) throw new Error(delUserErr.message);
+        await finish(row.id, "sent");
+        deleted++;
+        continue;
+      }
+
       await sendEmail({ to: row.to_email, subject: row.subject, html: row.html, replyTo: ADMIN_EMAIL });
       await finish(row.id, "sent");
       sent++;
@@ -519,7 +541,7 @@ async function handleScheduledEmails(supabase) {
       failed++;
     }
   }
-  return { sent, suspended, skipped, failed };
+  return { sent, suspended, deleted, skipped, failed };
 }
 
 export default async function handler(req, res) {
