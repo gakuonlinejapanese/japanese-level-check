@@ -18868,6 +18868,78 @@ const NON_JA_RESOURCES = {
     ],
   },
 };
+// YouTube channels / video series per level (supplied by the teacher, 2026-11-07). Each is [name, description, 日本語の説明, url].
+// Names end with "– YouTube" so a schedule task naming one links to the video, not to a website with a similar name.
+const YT_LISTENING = SK(3, 2, 1, 3, 5);
+const YT_EN = {
+  "Beginner": [
+    ["VOA Learning English – YouTube", "Slow, clear English news and lessons for learners.", "学習者向けのゆっくりで分かりやすい英語ニュースとレッスン。", "https://www.youtube.com/@voalearningenglish"],
+    ["BBC Learning English – YouTube", "Short, clear English lessons from the BBC.", "BBCの短くて分かりやすい英語レッスン。", "https://www.youtube.com/@bbclearningenglish"],
+    ["English with Jennifer – YouTube", "Friendly step-by-step English lessons for beginners.", "初心者向けのやさしい英語レッスン。", "https://www.youtube.com/@EnglishwithJennifer"],
+  ],
+  "Elementary": [
+    ["Easy English – YouTube", "Real street interviews with English subtitles.", "英語字幕つきの実際の街頭インタビュー。", "https://www.youtube.com/@EasyEnglishVideos"],
+    ["Learn English with Bob the Canadian – YouTube", "Easy-to-follow everyday English lessons.", "日常で使う英語のやさしいレッスン。", "https://www.youtube.com/@LearnEnglishwithBobtheCanadian"],
+    ["BBC English in a Minute – YouTube", "One-minute videos explaining common English expressions.", "よく使う英語表現を1分で解説。", "https://www.youtube.com/@bbclearningenglish/search?query=English%20in%20a%20Minute"],
+  ],
+  "Intermediate": [
+    ["BBC 6 Minute English – YouTube", "Six-minute discussions on everyday topics, with vocabulary.", "身近な話題を6分で話す会話と語彙解説。", "https://www.youtube.com/@bbclearningenglish/search?query=6%20Minute%20English"],
+    ["TED-Ed – YouTube", "Short animated lessons on many subjects.", "さまざまな分野の短いアニメ解説。", "https://www.youtube.com/@TEDEd"],
+    ["engVid – YouTube", "Grammar, vocabulary and speaking lessons by teachers.", "文法・語彙・会話の講義動画。", "https://www.youtube.com/@engvid"],
+  ],
+  "Upper Intermediate": [
+    ["TED Talks – YouTube", "Talks on many topics; summarize and give your opinion aloud.", "多様なテーマのトーク。要約や意見を声に出して話す。", "https://www.youtube.com/@TED"],
+    ["Vox – YouTube", "Explainer videos on news, society and science.", "ニュース・社会・科学の解説動画。", "https://www.youtube.com/@Vox"],
+  ],
+  "Advanced": [
+    ["BBC News – YouTube", "Real news reports at natural speed.", "自然な速さの実際のニュース。", "https://www.youtube.com/@BBCNews"],
+    ["The Economist – YouTube", "In-depth videos on world affairs and the economy.", "国際情勢や経済を掘り下げる動画。", "https://www.youtube.com/@TheEconomist"],
+    ["CrashCourse – YouTube", "Fast-paced academic courses on history, science and more.", "歴史・科学などのテンポの速い講義。", "https://www.youtube.com/@crashcourse"],
+  ],
+  "Mastery": [
+    ["Intelligence Squared – YouTube", "Debates and advanced discussions.", "ディベートと高度な議論。", "https://www.youtube.com/@IntelligenceSquared"],
+    ["NPR – YouTube", "News, interviews and features for native listeners.", "ネイティブ向けのニュース・インタビュー・特集。", "https://www.youtube.com/@npr"],
+    ["The Royal Institution – YouTube", "Science lectures by leading experts.", "第一線の専門家による科学講義。", "https://www.youtube.com/@TheRoyalInstitution"],
+  ],
+};
+const YT_MN = {
+  "Beginner": [
+    ["MongolHel – YouTube", "Beginner Mongolian language videos (search results).", "初級のモンゴル語動画(YouTube検索)。", "https://www.youtube.com/results?search_query=MongolHel+Mongolian+language"],
+    ["楽しいモンゴル語講座 – YouTube", "Fun Mongolian lessons in Japanese.", "日本語で学べる楽しいモンゴル語講座。", "https://www.youtube.com/channel/UCoWfxAShXNh7mwFnNVZ008w"],
+    ["Easy Mongolian – YouTube", "Easy Languages-style Mongolian videos (search results).", "Easy Languages形式のモンゴル語動画(YouTube検索)。", "https://www.youtube.com/results?search_query=Easy+Mongolian+Easy+Languages"],
+  ],
+  "Elementary": [
+    ["Nomiin Ger – YouTube", "Mongolian lessons from the Nomiin Ger channel.", "Nomiin Gerチャンネルのモンゴル語レッスン。", "https://www.youtube.com/@MongolianLanguage"],
+    ["Easy Mongolian Street Interviews – YouTube", "Short street interviews in Mongolian (search results).", "モンゴル語の短い街頭インタビュー(YouTube検索)。", "https://www.youtube.com/results?search_query=Easy+Mongolian+street+interviews"],
+    ["Mongolian Basic Conversations – YouTube", "Basic everyday conversations (search results).", "日常の基本会話(YouTube検索)。", "https://www.youtube.com/results?search_query=Mongolian+basic+conversation"],
+  ],
+  "Intermediate": [
+    ["ARTGER Mongolia – YouTube", "Mongolian programs and everyday-life videos (search results).", "モンゴルの番組・生活の動画(YouTube検索)。", "https://www.youtube.com/results?search_query=ARTGER+Mongolia"],
+    ["Nomiin Ger – Listening Practice – YouTube", "Listening practice video from Nomiin Ger.", "Nomiin Gerのリスニング練習動画。", "https://www.youtube.com/watch?v=P8npH7d1DTA"],
+    ["MNB – YouTube", "Mongolian National Broadcaster channel.", "モンゴル国営放送のチャンネル。", "https://www.youtube.com/user/MNB1TV"],
+  ],
+  "Upper Intermediate": [
+    ["MNB News – YouTube", "News broadcasts from the national broadcaster.", "国営放送のニュース番組。", "https://www.youtube.com/user/MNB1TV"],
+    ["GoGo News Agency – YouTube", "Mongolian news videos (search results).", "モンゴルのニュース動画(YouTube検索)。", "https://www.youtube.com/results?search_query=GoGo+News+Agency+Mongolia"],
+    ["Mongolian Documentaries – YouTube", "Documentaries in Mongolian (search results).", "モンゴル語のドキュメンタリー(YouTube検索)。", "https://www.youtube.com/results?search_query=Mongolian+documentary"],
+  ],
+  "Advanced": [
+    ["Bloomberg TV Mongolia – YouTube", "Business and economy news in Mongolian (search results).", "ビジネス・経済ニュース(YouTube検索)。", "https://www.youtube.com/results?search_query=Bloomberg+TV+Mongolia"],
+    ["Eagle News Mongolia – YouTube", "Mongolian news programs (search results).", "モンゴルのニュース番組(YouTube検索)。", "https://www.youtube.com/results?search_query=Eagle+News+Mongolia"],
+    ["Mongolian Podcasts & Interviews – YouTube", "Podcasts and interviews at natural speed (search results).", "自然な速さのポッドキャストとインタビュー(YouTube検索)。", "https://www.youtube.com/results?search_query=Mongolian+podcast+interview"],
+  ],
+  "Mastery": [
+    ["Mongolian Parliament Debates – YouTube", "Parliamentary debates (search results).", "国会の討論(YouTube検索)。", "https://www.youtube.com/results?search_query=Mongolia+parliament+debate"],
+    ["Mongolian University Lectures – YouTube", "University lectures in Mongolian (search results).", "モンゴル語の大学講義(YouTube検索)。", "https://www.youtube.com/results?search_query=Mongolian+university+lecture"],
+    ["Mongolian Literature & Author Interviews – YouTube", "Literature talks and author interviews (search results).", "文学と作家インタビュー(YouTube検索)。", "https://www.youtube.com/results?search_query=Mongolian+literature+author+interview"],
+  ],
+};
+[[YT_EN, EN_RESOURCES_BY_LEVEL], [YT_MN, NON_JA_RESOURCES.mn]].forEach(([yt, target]) => {
+  Object.keys(yt).forEach(level => {
+    (target[level] = target[level] || []).push(...yt[level].map(([name, desc, descJa, url]) =>
+      ({ name, desc, descJa, url, free:true, mode:"listening", skills:YT_LISTENING })));
+  });
+});
 // Let schedule tasks that name one of these resources link straight to it (same as the Japanese list).
 Object.values(EN_RESOURCES_BY_LEVEL).forEach(registerResourceLookup);
 Object.values(NON_JA_RESOURCES.mn).forEach(registerResourceLookup);
@@ -18901,8 +18973,10 @@ function buildTargetLangGuide(form, weekNum) {
     const skill = skills[i % skills.length];
     const blockMins = Math.max(10, Math.round(mins * share[skill]));
     const mode = SKILL_TO_MODE[skill];
+    // Speaking days with no speaking resource listen-and-repeat (shadow) a listening one rather than get a reading page.
     const sameMode = pool.filter(r => r.mode === mode);
-    const choices = sameMode.length ? sameMode : pool;
+    const shadow = mode === "speaking" ? pool.filter(r => r.mode === "listening") : [];
+    const choices = sameMode.length ? sameMode : (shadow.length ? shadow : pool);
     const res = choices.length ? choices[(weekNum - 1 + i) % choices.length] : null;
     const label = T[SKILL_LABEL_KEY[skill]] || SKILL_LABELS[skill] || skill;
     const desc = res ? ((useJa && res.descJa) || res.desc || "") : "";
