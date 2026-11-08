@@ -1,3 +1,4 @@
+import { readerLogin, readerAi } from "./_readerAuth.js";
 // ---- Model IDs -------------------------------------------------------------
 // NOTE (2026-09-24): Groq retired llama-3.3-70b-versatile and llama-3.1-8b-instant
 // (deprecated 2026-08-16 for free/developer tiers; Groq recommends openai/gpt-oss-120b
@@ -215,8 +216,23 @@ async function callDeepInfraWhisper(deepInfraKey, audioBuffer, mimeType) {
 }
 
 export default async function handler(req, res) {
+  // GAKU Master Reader: /api/claude?reader=login (email+password -> token) and
+  // /api/claude?reader=ai (token required). Kept in this file because the project
+  // is at Vercel's serverless-function limit.
+  const readerMode = req.query && req.query.reader;
+  if (readerMode === "login") return readerLogin(req, res);
+  if (readerMode === "ai" && !req.readerAuthed) return readerAi(req, res, handler);
+
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
+  }
+
+  // GAKU Master Reader (Chrome extension) must go through api/reader-ai.js, which
+  // requires a logged-in GAKU Master account. Browser extensions always send an
+  // Origin of chrome-extension://..., so refuse those here (this also shuts out
+  // old Reader versions that called this endpoint without any login).
+  if (!req.readerAuthed && String(req.headers.origin || "").startsWith("chrome-extension://")) {
+    return res.status(401).json({ error: "Please update GAKU Master Reader and log in with your GAKU Master account." });
   }
 
   try {
