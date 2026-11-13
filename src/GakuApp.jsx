@@ -1223,6 +1223,7 @@ const UI_TRANSLATIONS = {
     coachWordMistake: "You keep getting the word {word} wrong ({n} times). Review it today and write one sentence with it.",
     coachMistakeNames: "Particles|Verb conjugation|Word choice|Word order|Spelling and script",
     coachStatSpeak: "Speaking",
+    coachWriteRetry: "Characters to write again: {chars}. Tap the button to practice them now.",
     coachStatViews: "Words seen today",
     coachStatListen: "Listening",
     lessonBridgeAsk: "Want to practice this with a real teacher? Try a free trial lesson.",
@@ -1878,6 +1879,7 @@ const UI_TRANSLATIONS = {
     coachWordMistake: "Vous vous trompez souvent sur le mot {word} ({n} fois). Révisez-le aujourd'hui et écrivez une phrase avec.",
     coachMistakeNames: "les particules|la conjugaison des verbes|le choix des mots|l'ordre des mots|l'orthographe et l'écriture",
     coachStatSpeak: "Expression orale",
+    coachWriteRetry: "Caractères à réécrire : {chars}. Appuyez sur le bouton pour les pratiquer maintenant.",
     coachStatViews: "Mots vus aujourd'hui",
     coachStatListen: "Écoute",
     lessonBridgeAsk: "Envie de travailler cela avec un vrai professeur ? Essayez un cours d'essai gratuit.",
@@ -2518,6 +2520,7 @@ const UI_TRANSLATIONS = {
     coachWordMistake: "Te equivocas seguido con la palabra {word} ({n} veces). Repásala hoy y escribe una frase con ella.",
     coachMistakeNames: "las partículas|la conjugación verbal|la elección de palabras|el orden de las palabras|la ortografía y la escritura",
     coachStatSpeak: "Expresión oral",
+    coachWriteRetry: "Caracteres para escribir de nuevo: {chars}. Toca el botón para practicarlos ahora.",
     coachStatViews: "Palabras vistas hoy",
     coachStatListen: "Comprensión auditiva",
     lessonBridgeAsk: "¿Quieres practicar esto con un profesor de verdad? Prueba una clase de prueba gratuita.",
@@ -3158,6 +3161,7 @@ const UI_TRANSLATIONS = {
     coachWordMistake: "Você erra muito a palavra {word} ({n} vezes). Revise-a hoje e escreva uma frase com ela.",
     coachMistakeNames: "as partículas|a conjugação verbal|a escolha de palavras|a ordem das palavras|a ortografia e a escrita",
     coachStatSpeak: "Fala",
+    coachWriteRetry: "Caracteres para escrever de novo: {chars}. Toque no botão para praticá-los agora.",
     coachStatViews: "Palavras vistas hoje",
     coachStatListen: "Compreensão auditiva",
     lessonBridgeAsk: "Quer praticar isso com um professor de verdade? Experimente uma aula experimental gratuita.",
@@ -3798,6 +3802,7 @@ const UI_TRANSLATIONS = {
     coachWordMistake: "Das Wort {word} gelingt dir oft nicht ({n} Mal). Wiederhole es heute und schreibe einen Satz damit.",
     coachMistakeNames: "Partikeln|Verbkonjugation|Wortwahl|Wortstellung|Rechtschreibung und Schrift",
     coachStatSpeak: "Sprechen",
+    coachWriteRetry: "Zeichen zum erneuten Schreiben: {chars}. Tippe auf den Button, um sie jetzt zu üben.",
     coachStatViews: "Heute gesehene Wörter",
     coachStatListen: "Hören",
     lessonBridgeAsk: "Möchten Sie das mit einer echten Lehrkraft üben? Probieren Sie eine kostenlose Probestunde.",
@@ -4438,6 +4443,7 @@ const UI_TRANSLATIONS = {
     coachWordMistake: "Sbagli spesso la parola {word} ({n} volte). Ripassala oggi e scrivi una frase con essa.",
     coachMistakeNames: "le particelle|la coniugazione dei verbi|la scelta delle parole|l'ordine delle parole|l'ortografia e la scrittura",
     coachStatSpeak: "Parlato",
+    coachWriteRetry: "Caratteri da riscrivere: {chars}. Tocca il pulsante per esercitarti ora.",
     coachStatViews: "Parole viste oggi",
     coachStatListen: "Ascolto",
     lessonBridgeAsk: "Vuoi esercitarti su questo con un vero insegnante? Prova una lezione di prova gratuita.",
@@ -5078,6 +5084,7 @@ const UI_TRANSLATIONS = {
     coachWordMistake: "你总是用错「{word}」这个词（{n}次）。今天复习一下，并用它造一个句子。",
     coachMistakeNames: "助词|动词变形|词语选择|语序|拼写和文字",
     coachStatSpeak: "口语",
+    coachWriteRetry: "需要再写一次的字：{chars}。点按按钮现在就练习。",
     coachStatViews: "今天看过的单词",
     coachStatListen: "听力",
     lessonBridgeAsk: "想和真人老师一起练习这个吗？试试免费体验课吧。",
@@ -5718,6 +5725,7 @@ const UI_TRANSLATIONS = {
     coachWordMistake: "你總是用錯「{word}」這個詞（{n}次）。今天複習一下，並用它造一個句子。",
     coachMistakeNames: "助詞|動詞變化|詞語選擇|語序|拼寫和文字",
     coachStatSpeak: "口語",
+    coachWriteRetry: "需要再寫一次的字：{chars}。點按按鈕現在就練習。",
     coachStatViews: "今天看過的單字",
     coachStatListen: "聽力",
     lessonBridgeAsk: "想和真人老師一起練習這個嗎？試試免費體驗課吧。",
@@ -6358,6 +6366,7 @@ const UI_TRANSLATIONS = {
     coachWordMistake: "「{word}」라는 단어를 자주 틀립니다({n}회). 오늘 다시 복습하고 그 단어로 문장을 하나 써 보세요.",
     coachMistakeNames: "조사|동사 활용|단어 선택|어순|표기와 문자",
     coachStatSpeak: "말하기",
+    coachWriteRetry: "다시 써 볼 글자: {chars}. 버튼을 눌러 지금 연습해 보세요.",
     coachStatViews: "오늘 본 단어",
     coachStatListen: "듣기",
     lessonBridgeAsk: "이 부분을 진짜 선생님과 함께 연습해 보시겠어요? 무료 체험 수업을 신청해 보세요.",
@@ -6998,6 +7007,7 @@ const UI_TRANSLATIONS = {
     coachWordMistake: "คุณใช้คำว่า {word} ผิดบ่อย ({n} ครั้ง) วันนี้ลองทบทวนและแต่งประโยคด้วยคำนี้หนึ่งประโยค",
     coachMistakeNames: "คำช่วย|การผันกริยา|การเลือกคำ|ลำดับคำ|การสะกดและตัวอักษร",
     coachStatSpeak: "การพูด",
+    coachWriteRetry: "ตัวอักษรที่ควรเขียนอีกครั้ง: {chars} แตะปุ่มเพื่อฝึกตอนนี้",
     coachStatViews: "คำที่ดูวันนี้",
     coachStatListen: "การฟัง",
     lessonBridgeAsk: "อยากฝึกเรื่องนี้กับครูตัวจริงไหม? ลองเรียนทดลองฟรีดูสิ",
@@ -7638,6 +7648,7 @@ const UI_TRANSLATIONS = {
     coachWordMistake: "Anda kerap tersilap perkataan {word} ({n} kali). Ulang kaji hari ini dan tulis satu ayat dengannya.",
     coachMistakeNames: "partikel|konjugasi kata kerja|pemilihan perkataan|susunan perkataan|ejaan dan tulisan",
     coachStatSpeak: "Pertuturan",
+    coachWriteRetry: "Aksara untuk ditulis semula: {chars}. Ketik butang untuk berlatih sekarang.",
     coachStatViews: "Perkataan dilihat hari ini",
     coachStatListen: "Mendengar",
     lessonBridgeAsk: "Mahu berlatih perkara ini dengan guru sebenar? Cuba kelas percubaan percuma.",
@@ -8278,6 +8289,7 @@ const UI_TRANSLATIONS = {
     coachWordMistake: "Anda sering salah pada kata {word} ({n} kali). Ulas hari ini dan tulis satu kalimat dengan kata itu.",
     coachMistakeNames: "partikel|konjugasi kata kerja|pemilihan kata|urutan kata|ejaan dan tulisan",
     coachStatSpeak: "Berbicara",
+    coachWriteRetry: "Karakter yang perlu ditulis ulang: {chars}. Ketuk tombol untuk berlatih sekarang.",
     coachStatViews: "Kata dilihat hari ini",
     coachStatListen: "Menyimak",
     lessonBridgeAsk: "Ingin berlatih ini dengan guru sungguhan? Coba kelas percobaan gratis.",
@@ -8918,6 +8930,7 @@ const UI_TRANSLATIONS = {
     coachWordMistake: "Bạn hay dùng sai từ {word} ({n} lần). Hôm nay hãy ôn lại và viết một câu với từ này.",
     coachMistakeNames: "trợ từ|chia động từ|chọn từ|thứ tự từ|chính tả và chữ viết",
     coachStatSpeak: "Nói",
+    coachWriteRetry: "Các chữ cần viết lại: {chars}. Chạm nút để luyện ngay.",
     coachStatViews: "Từ đã xem hôm nay",
     coachStatListen: "Nghe",
     lessonBridgeAsk: "Bạn muốn luyện phần này với giáo viên thật không? Hãy thử một buổi học thử miễn phí.",
@@ -9558,6 +9571,7 @@ const UI_TRANSLATIONS = {
     coachWordMistake: "आप {word} शब्द में बार-बार गलती कर रहे हैं ({n} बार)। आज इसे दोहराएँ और इससे एक वाक्य लिखें।",
     coachMistakeNames: "कारक चिह्न (पार्टिकल)|क्रिया रूप|शब्द चयन|शब्द क्रम|वर्तनी और लिपि",
     coachStatSpeak: "बोलना",
+    coachWriteRetry: "दोबारा लिखने वाले अक्षर: {chars}। अभी अभ्यास के लिए बटन दबाएँ।",
     coachStatViews: "आज देखे गए शब्द",
     coachStatListen: "सुनना",
     lessonBridgeAsk: "क्या आप इसे असली शिक्षक के साथ अभ्यास करना चाहेंगे? एक मुफ़्त ट्रायल क्लास आज़माएँ।",
@@ -10198,6 +10212,7 @@ const UI_TRANSLATIONS = {
     coachWordMistake: "「{word}」をよく間違えています（{n}回）。今日もう一度復習して、この単語で1文書いてみましょう。",
     coachMistakeNames: "助詞|動詞の活用|単語の選び方|語順|表記（かな・漢字）",
     coachStatSpeak: "スピーキング",
+    coachWriteRetry: "もう一度練習する文字：{chars}。ボタンを押して、今すぐ書いてみましょう。",
     coachStatViews: "今日見た単語",
     coachStatListen: "リスニング",
     lessonBridgeAsk: "この課題を、先生と一緒に練習してみませんか？無料体験レッスンをご利用ください。",
@@ -10838,6 +10853,7 @@ const UI_TRANSLATIONS = {
     coachWordMistake: "{word} kelimesini sık yanlış kullanıyorsun ({n} kez). Bugün tekrar et ve onunla bir cümle yaz.",
     coachMistakeNames: "edatlar|fiil çekimi|kelime seçimi|kelime sırası|yazım ve yazı",
     coachStatSpeak: "Konuşma",
+    coachWriteRetry: "Yeniden yazılacak karakterler: {chars}. Şimdi çalışmak için düğmeye dokun.",
     coachStatViews: "Bugün görülen kelimeler",
     coachStatListen: "Dinleme",
     lessonBridgeAsk: "Bunu gerçek bir öğretmenle çalışmak ister misiniz? Ücretsiz deneme dersini deneyin.",
@@ -11478,6 +11494,7 @@ const UI_TRANSLATIONS = {
     coachWordMistake: "तपाईं {word} शब्दमा बारम्बार गल्ती गर्दै हुनुहुन्छ ({n} पटक)। आज दोहोर्याउनुहोस् र यसबाट एउटा वाक्य लेख्नुहोस्।",
     coachMistakeNames: "कारक चिह्न (पार्टिकल)|क्रिया रूप|शब्द छनोट|शब्द क्रम|हिज्जे र लिपि",
     coachStatSpeak: "बोल्ने अभ्यास",
+    coachWriteRetry: "फेरि लेख्नुपर्ने अक्षर: {chars}। अहिले अभ्यास गर्न बटन थिच्नुहोस्।",
     coachStatViews: "आज हेरिएका शब्द",
     coachStatListen: "सुनाइ",
     lessonBridgeAsk: "के तपाईं यसलाई साँचो शिक्षकसँग अभ्यास गर्न चाहनुहुन्छ? निःशुल्क परीक्षण कक्षा प्रयास गर्नुहोस्।",
@@ -12118,6 +12135,7 @@ const UI_TRANSLATIONS = {
     coachWordMistake: "Madalas kang magkamali sa salitang {word} ({n} beses). Balikan ito ngayon at sumulat ng isang pangungusap gamit ito.",
     coachMistakeNames: "mga particle|conjugation ng pandiwa|pagpili ng salita|ayos ng mga salita|baybay at sulat",
     coachStatSpeak: "Pagsasalita",
+    coachWriteRetry: "Mga karakter na isulat muli: {chars}. I-tap ang button para magsanay ngayon.",
     coachStatViews: "Mga salitang nakita ngayon",
     coachStatListen: "Pakikinig",
     lessonBridgeAsk: "Gusto mo bang ipractice ito kasama ang totoong guro? Subukan ang libreng trial lesson.",
@@ -17456,6 +17474,14 @@ function WritingPractice({ form }) {
   };
 
   useEffect(() => {
+    const take = (text) => { setMode("copy"); setInjected({ text, n: Date.now() }); try { localStorage.removeItem(scopedKey(WRITING_RETRY_KEY)); } catch {} };
+    try { const t = localStorage.getItem(scopedKey(WRITING_RETRY_KEY)); if (t) take(t); } catch {}
+    const onRetry = (e) => { if (e && e.detail) take(String(e.detail)); };
+    window.addEventListener("gaku_writing_retry", onRetry);
+    return () => window.removeEventListener("gaku_writing_retry", onRetry);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  useEffect(() => {
     try {
       const s = JSON.parse(localStorage.getItem(scopedKey(WRITING_STORAGE_KEY)) || "null");
       if (s && typeof s === "object") { setQuestion(s.question || ""); setAnswer(s.answer || ""); }
@@ -19471,6 +19497,10 @@ function analyzeCoach(allow) {
   const writeTotal = wEv.length + lw.length;
   const writePct = writeTotal ? Math.round(100 * (wEv.filter(x => x.ok).length + lw.filter(x => x.ok).length) / writeTotal) : null;
   const writeMiss = ok("writing") ? (writeChars.filter(c => c.n >= 2 && c.pct < 70)[0] || null) : null;
+  // Characters whose latest attempt had a mistake (even a single one) -> "write these again".
+  const lastTry = {};
+  wEv.forEach(x => { delete lastTry[x.w]; lastTry[x.w] = !!x.ok; });
+  const retryChars = ok("writing") ? Object.keys(lastTry).filter(c => !lastTry[c]).reverse().slice(0, 10) : [];
   // Grammar / word mistakes from AI-checked Writing and Speaking answers: the most frequent mistake type
   // (>= 3 in 14 days) and any word that keeps being wrong (>= 2 times).
   const mk = m.filter(x => x.k === "mistake" && MISTAKE_TYPES.includes(x.t) && (x.src === "speaking" ? ok("conversation") || ok("content") : ok("writing")));
@@ -19497,7 +19527,8 @@ function analyzeCoach(allow) {
   if (weak) advice.push({ type: "acc", a: weak.a, pct: Math.round(weak.rate * 100) });
   if (listenPct !== null && L.length >= 3 && listenPct < 70 && (ok("conversation") || ok("content"))) advice.push({ type: "listen", pct: listenPct });
   if (pronMiss) advice.push({ type: "pron", w: pronMiss.w, n: pronMiss.n });
-  if (writeMiss) advice.push({ type: "writemiss", w: writeMiss.w, n: writeMiss.n, pct: writeMiss.pct });
+  if (retryChars.length) advice.push({ type: "writeretry", chars: retryChars });
+  if (writeMiss && !retryChars.includes(writeMiss.w)) advice.push({ type: "writemiss", w: writeMiss.w, n: writeMiss.n, pct: writeMiss.pct });
   if (typeMiss) advice.push({ type: "mtype", idx: typeMiss.idx, n: typeMiss.n, speaking: typeMiss.speaking });
   if (wordMiss) advice.push({ type: "wordmiss", w: wordMiss.w, n: wordMiss.n });
   if (repeat) advice.push({ type: "repeat", w: repeat.w, n: repeat.n });
@@ -19511,9 +19542,22 @@ function analyzeCoach(allow) {
     writeChars: ok("writing") ? writeChars : [],
   };
 }
+// "Write these again": put the characters into Writing > Copying down and switch to it. Works whether the
+// Writing screen is already open (event) or not yet mounted (storage flag read on mount).
+const WRITING_RETRY_KEY = "gaku_writing_retry";
+function startWritingRetry(chars) {
+  const text = (chars || []).join("");
+  if (!text) return;
+  try {
+    localStorage.setItem(scopedKey("gaku_writing_copy_text"), text);
+    localStorage.setItem(scopedKey(WRITING_RETRY_KEY), text);
+  } catch {}
+  window.dispatchEvent(new CustomEvent("gaku_writing_retry", { detail: text }));
+}
 function CoachPanel({ T, allow, onGo, compact }) {
   const { advice, stats, hasData, flipWords, writeChars } = analyzeCoach(allow);
   const line = (a) => {
+    if (a.type === "writeretry") return progressFill(T.coachWriteRetry || "Characters to write again: {chars}. Tap the button to practice them now.", { chars: a.chars.join(" ") });
     if (a.type === "mtype") return progressFill(T.coachMistakeType || "Your most frequent mistake is {type} ({n} times in the last 2 weeks). Make it your focus today.", { type: (T.coachMistakeNames || "Particles|Verb conjugation|Word choice|Word order|Spelling and script").split("|")[a.idx] || "", n: a.n });
     if (a.type === "wordmiss") return progressFill(T.coachWordMistake || "You keep getting the word {word} wrong ({n} times). Review it today and write one sentence with it.", { word: a.w, n: a.n });
     if (a.type === "writemiss") return progressFill(T.coachWriteMiss || "You keep missing the character {word} ({n} tries, {pct}% clean). Write it slowly, one stroke at a time.", { word: a.w, n: a.n, pct: a.pct });
@@ -19524,14 +19568,14 @@ function CoachPanel({ T, allow, onGo, compact }) {
     if (a.type === "slow") return progressFill(T.coachSlowFlip || "It takes you about {sec}s to recall a word. Aim for under 5s with quick flashcard rounds.", { sec: a.sec });
     return progressFill(T.coachSlowWord || "Your slowest word is {word} ({sec}s). Review it again.", { word: a.w, sec: a.sec });
   };
-  const target = (a) => a.type === "acc" ? a.a : a.type === "listen" ? "conversation" : a.type === "pron" ? "pronunciation" : a.type === "writemiss" ? "writing" : a.type === "mtype" ? (a.speaking ? "conversation" : "writing") : a.type === "wordmiss" ? "writing" : "vocab";
+  const target = (a) => a.type === "acc" ? a.a : a.type === "listen" ? "conversation" : a.type === "pron" ? "pronunciation" : a.type === "writemiss" || a.type === "writeretry" ? "writing" : a.type === "mtype" ? (a.speaking ? "conversation" : "writing") : a.type === "wordmiss" ? "writing" : "vocab";
   const shown = advice.slice(0, compact ? 1 : 3);
   if (compact) {
     if (!shown.length) return null;
     return (
       <div style={{ ...S.card, marginBottom:12, padding:"10px 12px", background:"rgba(168,85,247,0.08)", border:"1px solid rgba(168,85,247,0.25)", display:"flex", alignItems:"center", gap:10 }}>
         <p style={{ color:"#e2e8f0", fontSize:12, lineHeight:1.6, margin:0, flex:1 }}>🎯 {line(shown[0])}</p>
-        <button onClick={() => onGo(target(shown[0]))} style={{ ...S.btn, padding:"6px 12px", background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff", fontSize:11, flexShrink:0 }}>{T.coachGo || "Let's go"} →</button>
+        <button onClick={() => { if (shown[0].type === "writeretry") startWritingRetry(shown[0].chars); onGo(target(shown[0])); }} style={{ ...S.btn, padding:"6px 12px", background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff", fontSize:11, flexShrink:0 }}>{T.coachGo || "Let's go"} →</button>
       </div>
     );
   }
@@ -19562,7 +19606,7 @@ function CoachPanel({ T, allow, onGo, compact }) {
       {shown.map((a, i) => (
         <div key={i} style={{ marginBottom:10 }}>
           <p style={{ color:"#e2e8f0", fontSize:13, lineHeight:1.65, margin:"0 0 6px" }}>{i + 1}. {line(a)}</p>
-          <button onClick={() => onGo(target(a))} style={{ ...S.btn, padding:"7px 14px", background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff", fontSize:12 }}>{T.coachGo || "Let's go"} →</button>
+          <button onClick={() => { if (a.type === "writeretry") startWritingRetry(a.chars); onGo(target(a)); }} style={{ ...S.btn, padding:"7px 14px", background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff", fontSize:12 }}>{T.coachGo || "Let's go"} →</button>
         </div>
       ))}
       {flipWords.length > 0 && (
