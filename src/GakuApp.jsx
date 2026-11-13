@@ -1224,6 +1224,15 @@ const UI_TRANSLATIONS = {
     coachMistakeNames: "Particles|Verb conjugation|Word choice|Word order|Spelling and script",
     coachStatSpeak: "Speaking",
     coachWriteRetry: "Characters to write again: {chars}. Tap the button to practice them now.",
+    ivWarnTitle: "⚠️ Please read before choosing Intensive Mode",
+    ivWarnBody: "Intensive Mode is only for people who are serious about learning Japanese, or who are aiming for an exam or qualification. Every day you must finish a quota of 8 study actions, and some tabs stay locked until you do. If you just want to enjoy learning, choose Enjoyable Mode.",
+    ivWarnOk: "OK, I'm serious",
+    ivWarnBack: "Choose another mode",
+    ivGuideTitle: "How to read your Intensive Mode data",
+    ivGuideItems: "🔥 Today's quota — Shows how many of today's 8 study actions you have finished. When you reach 8, the locked tabs open.||⏱ Flip speed / Words seen today — Flip speed is how long you typically take (median of the last 2 weeks) to turn a vocabulary card over. Under 5 seconds is good; 6 seconds or more means words are slow to come back. Words seen today counts the cards you looked at today.||🗣 Pronunciation Practice — The share of your recent pronunciation attempts that were correct. Below 70% means it needs more practice.||✍️ Writing Practice — The share of characters and written answers you got right without a mistake in the last 2 weeks.||✏️ Stroke accuracy — Of all the strokes you wrote, the share that had the correct order and shape.||🎤 Speaking — The share of your spoken answers that had no grammar or word mistakes.||📋 Word by word / Character by character — Open these lists to see the speed of each word and the accuracy of each character. Yellow marks a weak point (6 seconds or slower, or under 70%). ×2 means you tried it twice.||🎯 Coach advice — From your last 2 weeks it suggests today's focus: your most frequent mistake type (particles, verb forms, word choice, word order, spelling), a word you keep getting wrong, or characters to write again. Tap “Let's go” to practice right away.||ℹ️ Good to know — A dash (–) means there is not enough data yet. Your records are kept on this device. You can read this guide again anytime with the “How to read this” button in the coach.",
+    ivGuideOk: "Got it, start studying",
+    ivGuideBtn: "ℹ️ How to read this",
+    coachEnjoyAsk: "Would you like to work on this today?",
     coachStatViews: "Words seen today",
     coachStatListen: "Listening",
     lessonBridgeAsk: "Want to practice this with a real teacher? Try a free trial lesson.",
@@ -1880,6 +1889,15 @@ const UI_TRANSLATIONS = {
     coachMistakeNames: "les particules|la conjugaison des verbes|le choix des mots|l'ordre des mots|l'orthographe et l'écriture",
     coachStatSpeak: "Expression orale",
     coachWriteRetry: "Caractères à réécrire : {chars}. Appuyez sur le bouton pour les pratiquer maintenant.",
+    ivWarnTitle: "⚠️ À lire avant de choisir le mode Intensive",
+    ivWarnBody: "Le mode Intensive est réservé aux personnes qui veulent vraiment apprendre le japonais ou qui préparent un examen ou une certification. Chaque jour, vous devez terminer un quota de 8 actions d'étude, et certains onglets restent verrouillés tant qu'il n'est pas atteint. Si vous voulez simplement apprendre avec plaisir, choisissez le mode Enjoyable.",
+    ivWarnOk: "OK, je suis motivé(e)",
+    ivWarnBack: "Choisir un autre mode",
+    ivGuideTitle: "Comment lire vos données du mode Intensive",
+    ivGuideItems: "🔥 Quota du jour — Indique combien de vos 8 actions d'étude du jour sont terminées. À 8, les onglets verrouillés s'ouvrent.||⏱ Vitesse de retournement / Mots vus aujourd'hui — La vitesse de retournement est le temps habituel (médiane des 2 dernières semaines) pour retourner une carte de vocabulaire. Moins de 5 secondes, c'est bien ; 6 secondes ou plus signifie que les mots reviennent lentement. « Mots vus aujourd'hui » compte les cartes regardées aujourd'hui.||🗣 Pronunciation Practice — La part de vos essais de prononciation récents qui étaient corrects. Sous 70 %, il faut s'entraîner davantage.||✍️ Writing Practice — La part des caractères et réponses écrites réussis sans erreur ces 2 dernières semaines.||✏️ Précision des traits — Parmi tous les traits écrits, la part avec le bon ordre et la bonne forme.||🎤 Speaking — La part de vos réponses orales sans erreur de grammaire ni de vocabulaire.||📋 Mot par mot / Caractère par caractère — Ouvrez ces listes pour voir la vitesse de chaque mot et la précision de chaque caractère. Le jaune signale un point faible (6 secondes ou plus, ou moins de 70 %). ×2 signifie deux essais.||🎯 Conseil du coach — D'après vos 2 dernières semaines, il propose le focus du jour : votre type d'erreur le plus fréquent (particules, formes verbales, choix des mots, ordre des mots, orthographe), un mot que vous ratez souvent, ou des caractères à réécrire. Touchez « Allons-y » pour pratiquer tout de suite.||ℹ️ Bon à savoir — Un tiret (–) signifie qu'il n'y a pas encore assez de données. Vos données restent sur cet appareil. Vous pouvez relire ce guide à tout moment avec le bouton « Comment lire ceci » du coach.",
+    ivGuideOk: "Compris, je commence",
+    ivGuideBtn: "ℹ️ Comment lire ceci",
+    coachEnjoyAsk: "Voulez-vous travailler ça aujourd'hui ?",
     coachStatViews: "Mots vus aujourd'hui",
     coachStatListen: "Écoute",
     lessonBridgeAsk: "Envie de travailler cela avec un vrai professeur ? Essayez un cours d'essai gratuit.",
@@ -2521,6 +2539,15 @@ const UI_TRANSLATIONS = {
     coachMistakeNames: "las partículas|la conjugación verbal|la elección de palabras|el orden de las palabras|la ortografía y la escritura",
     coachStatSpeak: "Expresión oral",
     coachWriteRetry: "Caracteres para escribir de nuevo: {chars}. Toca el botón para practicarlos ahora.",
+    ivWarnTitle: "⚠️ A leer antes de elegir el modo Intensive",
+    ivWarnBody: "El modo Intensive es solo para quienes se toman en serio aprender japonés o preparan un examen o una certificación. Cada día debes completar una cuota de 8 acciones de estudio, y algunas pestañas siguen bloqueadas hasta lograrlo. Si solo quieres disfrutar aprendiendo, elige el modo Enjoyable.",
+    ivWarnOk: "OK, voy en serio",
+    ivWarnBack: "Elegir otro modo",
+    ivGuideTitle: "Cómo leer tus datos del modo Intensive",
+    ivGuideItems: "🔥 Cuota de hoy — Muestra cuántas de las 8 acciones de estudio de hoy has completado. Al llegar a 8, se abren las pestañas bloqueadas.||⏱ Velocidad de giro / Palabras vistas hoy — La velocidad de giro es el tiempo habitual (mediana de las últimas 2 semanas) que tardas en dar la vuelta a una tarjeta de vocabulario. Menos de 5 segundos es bueno; 6 o más significa que las palabras tardan en venirte. «Palabras vistas hoy» cuenta las tarjetas que miraste hoy.||🗣 Pronunciation Practice — El porcentaje de tus intentos recientes de pronunciación que fueron correctos. Por debajo del 70 % hay que practicar más.||✍️ Writing Practice — El porcentaje de caracteres y respuestas escritas acertados sin errores en las últimas 2 semanas.||✏️ Precisión de trazos — De todos los trazos que escribiste, el porcentaje con el orden y la forma correctos.||🎤 Speaking — El porcentaje de tus respuestas habladas sin errores de gramática ni de palabras.||📋 Palabra por palabra / Carácter por carácter — Abre estas listas para ver la velocidad de cada palabra y la precisión de cada carácter. El amarillo marca un punto débil (6 segundos o más, o menos del 70 %). ×2 significa dos intentos.||🎯 Consejo del coach — Según tus últimas 2 semanas, sugiere el enfoque de hoy: tu tipo de error más frecuente (partículas, formas verbales, elección de palabras, orden de palabras, ortografía), una palabra que sigues fallando o caracteres para volver a escribir. Toca «Vamos» para practicar ya.||ℹ️ Conviene saber — Un guion (–) significa que aún no hay datos suficientes. Tus registros se guardan en este dispositivo. Puedes releer esta guía cuando quieras con el botón «Cómo leer esto» del coach.",
+    ivGuideOk: "Entendido, a estudiar",
+    ivGuideBtn: "ℹ️ Cómo leer esto",
+    coachEnjoyAsk: "¿Quieres trabajar en esto hoy?",
     coachStatViews: "Palabras vistas hoy",
     coachStatListen: "Comprensión auditiva",
     lessonBridgeAsk: "¿Quieres practicar esto con un profesor de verdad? Prueba una clase de prueba gratuita.",
@@ -3162,6 +3189,15 @@ const UI_TRANSLATIONS = {
     coachMistakeNames: "as partículas|a conjugação verbal|a escolha de palavras|a ordem das palavras|a ortografia e a escrita",
     coachStatSpeak: "Fala",
     coachWriteRetry: "Caracteres para escrever de novo: {chars}. Toque no botão para praticá-los agora.",
+    ivWarnTitle: "⚠️ Leia antes de escolher o modo Intensive",
+    ivWarnBody: "O modo Intensive é só para quem leva a sério o aprendizado de japonês ou quer passar em um exame ou certificação. Todos os dias você precisa cumprir uma meta de 8 ações de estudo, e algumas abas ficam bloqueadas até lá. Se você só quer aprender com leveza, escolha o modo Enjoyable.",
+    ivWarnOk: "OK, estou falando sério",
+    ivWarnBack: "Escolher outro modo",
+    ivGuideTitle: "Como ler os dados do modo Intensive",
+    ivGuideItems: "🔥 Meta de hoje — Mostra quantas das 8 ações de estudo de hoje você já concluiu. Ao chegar a 8, as abas bloqueadas se abrem.||⏱ Velocidade de virada / Palavras vistas hoje — A velocidade de virada é o tempo habitual (mediana das últimas 2 semanas) que você leva para virar um cartão de vocabulário. Menos de 5 segundos é bom; 6 ou mais indica que as palavras demoram a voltar. «Palavras vistas hoje» conta os cartões que você viu hoje.||🗣 Pronunciation Practice — A parcela das suas tentativas recentes de pronúncia que estavam corretas. Abaixo de 70% é preciso praticar mais.||✍️ Writing Practice — A parcela de caracteres e respostas escritas certos, sem erros, nas últimas 2 semanas.||✏️ Precisão dos traços — De todos os traços escritos, a parcela com ordem e forma corretas.||🎤 Speaking — A parcela das suas respostas faladas sem erros de gramática ou de palavras.||📋 Palavra por palavra / Caractere por caractere — Abra estas listas para ver a velocidade de cada palavra e a precisão de cada caractere. Amarelo marca um ponto fraco (6 segundos ou mais, ou abaixo de 70%). ×2 significa duas tentativas.||🎯 Conselho do coach — Com base nas últimas 2 semanas, sugere o foco de hoje: seu tipo de erro mais frequente (partículas, formas verbais, escolha de palavras, ordem das palavras, ortografia), uma palavra que você continua errando ou caracteres para escrever de novo. Toque em «Vamos lá» para praticar já.||ℹ️ Bom saber — Um traço (–) significa que ainda não há dados suficientes. Seus registros ficam neste dispositivo. Você pode reler este guia quando quiser com o botão «Como ler isto» do coach.",
+    ivGuideOk: "Entendi, vamos estudar",
+    ivGuideBtn: "ℹ️ Como ler isto",
+    coachEnjoyAsk: "Quer trabalhar nisso hoje?",
     coachStatViews: "Palavras vistas hoje",
     coachStatListen: "Compreensão auditiva",
     lessonBridgeAsk: "Quer praticar isso com um professor de verdade? Experimente uma aula experimental gratuita.",
@@ -3803,6 +3839,15 @@ const UI_TRANSLATIONS = {
     coachMistakeNames: "Partikeln|Verbkonjugation|Wortwahl|Wortstellung|Rechtschreibung und Schrift",
     coachStatSpeak: "Sprechen",
     coachWriteRetry: "Zeichen zum erneuten Schreiben: {chars}. Tippe auf den Button, um sie jetzt zu üben.",
+    ivWarnTitle: "⚠️ Bitte vor der Wahl des Intensive-Modus lesen",
+    ivWarnBody: "Der Intensive-Modus ist nur für Menschen, die es mit dem Japanischlernen ernst meinen oder auf eine Prüfung oder Qualifikation hinarbeiten. Jeden Tag musst du ein Tagesziel von 8 Lernaktionen erreichen, und einige Tabs bleiben bis dahin gesperrt. Wenn du einfach mit Freude lernen möchtest, wähle den Enjoyable-Modus.",
+    ivWarnOk: "OK, es ist mir ernst",
+    ivWarnBack: "Anderen Modus wählen",
+    ivGuideTitle: "So liest du deine Intensive-Daten",
+    ivGuideItems: "🔥 Tagesziel — Zeigt, wie viele der 8 Lernaktionen von heute du geschafft hast. Bei 8 öffnen sich die gesperrten Tabs.||⏱ Umdrehtempo / Heute gesehene Wörter — Das Umdrehtempo ist die übliche Zeit (Median der letzten 2 Wochen), die du brauchst, um eine Vokabelkarte umzudrehen. Unter 5 Sekunden ist gut; ab 6 Sekunden fallen dir Wörter nur langsam ein. „Heute gesehene Wörter“ zählt die Karten, die du heute angesehen hast.||🗣 Pronunciation Practice — Der Anteil deiner letzten Aussprache-Versuche, die richtig waren. Unter 70 % solltest du mehr üben.||✍️ Writing Practice — Der Anteil der Zeichen und geschriebenen Antworten, die du in den letzten 2 Wochen ohne Fehler geschafft hast.||✏️ Strichgenauigkeit — Der Anteil aller geschriebenen Striche mit richtiger Reihenfolge und Form.||🎤 Speaking — Der Anteil deiner gesprochenen Antworten ohne Grammatik- oder Wortfehler.||📋 Wort für Wort / Zeichen für Zeichen — Öffne diese Listen, um das Tempo jedes Wortes und die Genauigkeit jedes Zeichens zu sehen. Gelb markiert eine Schwäche (ab 6 Sekunden oder unter 70 %). ×2 heißt, du hast es zweimal versucht.||🎯 Coach-Tipp — Aus den letzten 2 Wochen schlägt er den heutigen Schwerpunkt vor: deine häufigste Fehlerart (Partikeln, Verbformen, Wortwahl, Wortstellung, Rechtschreibung), ein Wort, das du oft falsch machst, oder Zeichen zum erneuten Schreiben. Tippe auf „Los geht's“, um sofort zu üben.||ℹ️ Gut zu wissen — Ein Strich (–) bedeutet, dass noch nicht genug Daten vorliegen. Deine Aufzeichnungen bleiben auf diesem Gerät. Mit der Taste „So liest du das“ im Coach kannst du diese Anleitung jederzeit erneut lesen.",
+    ivGuideOk: "Verstanden, los geht's",
+    ivGuideBtn: "ℹ️ So liest du das",
+    coachEnjoyAsk: "Möchtest du heute daran arbeiten?",
     coachStatViews: "Heute gesehene Wörter",
     coachStatListen: "Hören",
     lessonBridgeAsk: "Möchten Sie das mit einer echten Lehrkraft üben? Probieren Sie eine kostenlose Probestunde.",
@@ -4444,6 +4489,15 @@ const UI_TRANSLATIONS = {
     coachMistakeNames: "le particelle|la coniugazione dei verbi|la scelta delle parole|l'ordine delle parole|l'ortografia e la scrittura",
     coachStatSpeak: "Parlato",
     coachWriteRetry: "Caratteri da riscrivere: {chars}. Tocca il pulsante per esercitarti ora.",
+    ivWarnTitle: "⚠️ Da leggere prima di scegliere la modalità Intensive",
+    ivWarnBody: "La modalità Intensive è solo per chi prende sul serio lo studio del giapponese o punta a un esame o a una certificazione. Ogni giorno devi completare un obiettivo di 8 azioni di studio e alcune schede restano bloccate finché non ci riesci. Se vuoi solo divertirti a imparare, scegli la modalità Enjoyable.",
+    ivWarnOk: "OK, faccio sul serio",
+    ivWarnBack: "Scegli un'altra modalità",
+    ivGuideTitle: "Come leggere i dati della modalità Intensive",
+    ivGuideItems: "🔥 Obiettivo di oggi — Mostra quante delle 8 azioni di studio di oggi hai completato. Arrivato a 8, le schede bloccate si aprono.||⏱ Velocità di giro / Parole viste oggi — La velocità di giro è il tempo abituale (mediana delle ultime 2 settimane) per girare una carta di vocabolario. Sotto i 5 secondi va bene; da 6 secondi in su le parole tornano lentamente. «Parole viste oggi» conta le carte guardate oggi.||🗣 Pronunciation Practice — La quota dei tuoi recenti tentativi di pronuncia che erano corretti. Sotto il 70% serve più pratica.||✍️ Writing Practice — La quota di caratteri e risposte scritte giusti senza errori nelle ultime 2 settimane.||✏️ Precisione dei tratti — Tra tutti i tratti scritti, la quota con ordine e forma corretti.||🎤 Speaking — La quota delle tue risposte parlate senza errori di grammatica o di parole.||📋 Parola per parola / Carattere per carattere — Apri queste liste per vedere la velocità di ogni parola e la precisione di ogni carattere. Il giallo indica un punto debole (6 secondi o più, o sotto il 70%). ×2 significa due tentativi.||🎯 Consiglio del coach — In base alle ultime 2 settimane suggerisce il focus di oggi: il tipo di errore più frequente (particelle, forme verbali, scelta delle parole, ordine delle parole, ortografia), una parola che sbagli spesso o caratteri da riscrivere. Tocca «Andiamo» per esercitarti subito.||ℹ️ Da sapere — Un trattino (–) significa che non ci sono ancora abbastanza dati. I tuoi registri restano su questo dispositivo. Puoi rileggere questa guida quando vuoi con il pulsante «Come leggere questo» del coach.",
+    ivGuideOk: "Capito, iniziamo",
+    ivGuideBtn: "ℹ️ Come leggere questo",
+    coachEnjoyAsk: "Vuoi lavorarci oggi?",
     coachStatViews: "Parole viste oggi",
     coachStatListen: "Ascolto",
     lessonBridgeAsk: "Vuoi esercitarti su questo con un vero insegnante? Prova una lezione di prova gratuita.",
@@ -5085,6 +5139,15 @@ const UI_TRANSLATIONS = {
     coachMistakeNames: "助词|动词变形|词语选择|语序|拼写和文字",
     coachStatSpeak: "口语",
     coachWriteRetry: "需要再写一次的字：{chars}。点按按钮现在就练习。",
+    ivWarnTitle: "⚠️ 选择 Intensive 模式前请先阅读",
+    ivWarnBody: "Intensive 模式只适合认真学习日语的人，或以考试、资格认证为目标的人。每天必须完成 8 个学习动作的目标，完成之前部分标签会保持锁定。如果你只是想轻松愉快地学习，请选择 Enjoyable 模式。",
+    ivWarnOk: "好的，我是认真的",
+    ivWarnBack: "选择其他模式",
+    ivGuideTitle: "如何查看 Intensive 模式的数据",
+    ivGuideItems: "🔥 今日目标 — 显示今天 8 个学习动作已完成几个。达到 8 个后，被锁定的标签会打开。||⏱ 翻卡速度 / 今天看过的单词 — 翻卡速度是你翻开一张单词卡通常所需的时间（最近两周的中位数）。5 秒以内为佳；6 秒以上说明单词回想得较慢。“今天看过的单词”统计你今天查看的卡片数量。||🗣 Pronunciation Practice — 你最近的发音尝试中正确的比例。低于 70% 说明需要多练习。||✍️ Writing Practice — 最近两周内，你无错误写对的文字和书面回答所占的比例。||✏️ 笔画准确率 — 在你写过的所有笔画中，笔顺和形状都正确的比例。||🎤 Speaking — 你的口语回答中没有语法或用词错误的比例。||📋 逐词 / 逐字 — 打开这些列表，可以看到每个单词的速度和每个文字的准确率。黄色表示薄弱点（6 秒以上，或低于 70%）。×2 表示你试了两次。||🎯 教练建议 — 根据你最近两周的情况，提出今天的重点：最常犯的错误类型（助词、动词变形、词语选择、语序、拼写）、总是错的单词，或需要重写的文字。点按“Let's go”即可马上练习。||ℹ️ 小提示 — 横线（–）表示数据还不够。你的记录保存在本设备上。随时可以通过教练里的“如何查看”按钮再次阅读本说明。",
+    ivGuideOk: "明白了，开始学习",
+    ivGuideBtn: "ℹ️ 如何查看",
+    coachEnjoyAsk: "今天要不要练习这一项？",
     coachStatViews: "今天看过的单词",
     coachStatListen: "听力",
     lessonBridgeAsk: "想和真人老师一起练习这个吗？试试免费体验课吧。",
@@ -5726,6 +5789,15 @@ const UI_TRANSLATIONS = {
     coachMistakeNames: "助詞|動詞變化|詞語選擇|語序|拼寫和文字",
     coachStatSpeak: "口語",
     coachWriteRetry: "需要再寫一次的字：{chars}。點按按鈕現在就練習。",
+    ivWarnTitle: "⚠️ 選擇 Intensive 模式前請先閱讀",
+    ivWarnBody: "Intensive 模式只適合認真學習日語的人，或以考試、資格認證為目標的人。每天必須完成 8 個學習動作的目標，完成之前部分分頁會保持鎖定。如果你只是想輕鬆愉快地學習，請選擇 Enjoyable 模式。",
+    ivWarnOk: "好的，我是認真的",
+    ivWarnBack: "選擇其他模式",
+    ivGuideTitle: "如何查看 Intensive 模式的資料",
+    ivGuideItems: "🔥 今日目標 — 顯示今天 8 個學習動作已完成幾個。達到 8 個後，被鎖定的分頁會開啟。||⏱ 翻卡速度 / 今天看過的單字 — 翻卡速度是你翻開一張單字卡通常所需的時間（最近兩週的中位數）。5 秒以內為佳；6 秒以上表示單字回想較慢。「今天看過的單字」統計你今天查看的卡片數量。||🗣 Pronunciation Practice — 你最近的發音嘗試中正確的比例。低於 70% 表示需要多練習。||✍️ Writing Practice — 最近兩週內，你無錯誤寫對的文字和書面回答所占的比例。||✏️ 筆畫準確率 — 在你寫過的所有筆畫中，筆順和形狀都正確的比例。||🎤 Speaking — 你的口語回答中沒有文法或用詞錯誤的比例。||📋 逐詞 / 逐字 — 打開這些清單，可以看到每個單字的速度和每個文字的準確率。黃色表示弱點（6 秒以上，或低於 70%）。×2 表示你試了兩次。||🎯 教練建議 — 根據你最近兩週的情況，提出今天的重點：最常犯的錯誤類型（助詞、動詞變化、詞語選擇、語序、拼寫）、一直答錯的單字，或需要重寫的文字。點按「Let's go」即可馬上練習。||ℹ️ 小提醒 — 橫線（–）表示資料還不夠。你的紀錄保存在本裝置上。隨時可以透過教練裡的「如何查看」按鈕再次閱讀本說明。",
+    ivGuideOk: "明白了，開始學習",
+    ivGuideBtn: "ℹ️ 如何查看",
+    coachEnjoyAsk: "今天要不要練習這一項？",
     coachStatViews: "今天看過的單字",
     coachStatListen: "聽力",
     lessonBridgeAsk: "想和真人老師一起練習這個嗎？試試免費體驗課吧。",
@@ -6367,6 +6439,15 @@ const UI_TRANSLATIONS = {
     coachMistakeNames: "조사|동사 활용|단어 선택|어순|표기와 문자",
     coachStatSpeak: "말하기",
     coachWriteRetry: "다시 써 볼 글자: {chars}. 버튼을 눌러 지금 연습해 보세요.",
+    ivWarnTitle: "⚠️ Intensive 모드를 선택하기 전에 꼭 읽어 주세요",
+    ivWarnBody: "Intensive 모드는 일본어를 진지하게 배우려는 분이나 시험·자격 취득을 목표로 하는 분만 이용해 주세요. 매일 8개의 학습 행동을 채워야 하며, 달성하기 전까지 일부 탭은 잠겨 있습니다. 가볍게 즐기며 배우고 싶다면 Enjoyable 모드를 선택하세요.",
+    ivWarnOk: "네, 진지하게 하겠습니다",
+    ivWarnBack: "다른 모드 선택",
+    ivGuideTitle: "Intensive 모드 데이터 보는 법",
+    ivGuideItems: "🔥 오늘의 목표 — 오늘의 학습 행동 8개 중 몇 개를 마쳤는지 보여 줍니다. 8개가 되면 잠긴 탭이 열립니다.||⏱ 카드 뒤집기 속도 / 오늘 본 단어 — 카드 뒤집기 속도는 단어 카드를 뒤집는 데 보통 걸리는 시간(최근 2주의 중앙값)입니다. 5초 이내면 좋고, 6초 이상이면 단어가 천천히 떠오른다는 뜻입니다. ‘오늘 본 단어’는 오늘 본 카드 수입니다.||🗣 Pronunciation Practice — 최근 발음 시도 중 맞은 비율입니다. 70% 미만이면 더 연습이 필요합니다.||✍️ Writing Practice — 최근 2주 동안 실수 없이 쓴 글자와 서술형 답변의 비율입니다.||✏️ 획 정확도 — 쓴 모든 획 중 순서와 모양이 맞은 비율입니다.||🎤 Speaking — 말한 답변 중 문법이나 단어 실수가 없었던 비율입니다.||📋 단어별 / 글자별 — 이 목록을 열면 단어마다의 속도와 글자마다의 정확도를 볼 수 있습니다. 노란색은 약점(6초 이상 또는 70% 미만)입니다. ×2는 두 번 시도했다는 뜻입니다.||🎯 코치 조언 — 최근 2주 기록을 바탕으로 오늘의 중점을 제안합니다: 가장 자주 하는 실수 유형(조사, 동사 활용, 단어 선택, 어순, 표기), 계속 틀리는 단어, 다시 써야 할 글자. ‘Let's go’를 누르면 바로 연습할 수 있습니다.||ℹ️ 알아 두세요 — 대시(–)는 아직 데이터가 부족하다는 뜻입니다. 기록은 이 기기에 저장됩니다. 코치의 ‘보는 법’ 버튼으로 이 안내를 언제든 다시 볼 수 있습니다.",
+    ivGuideOk: "알겠습니다, 시작할게요",
+    ivGuideBtn: "ℹ️ 보는 법",
+    coachEnjoyAsk: "오늘 이 부분을 연습해 볼까요?",
     coachStatViews: "오늘 본 단어",
     coachStatListen: "듣기",
     lessonBridgeAsk: "이 부분을 진짜 선생님과 함께 연습해 보시겠어요? 무료 체험 수업을 신청해 보세요.",
@@ -7008,6 +7089,15 @@ const UI_TRANSLATIONS = {
     coachMistakeNames: "คำช่วย|การผันกริยา|การเลือกคำ|ลำดับคำ|การสะกดและตัวอักษร",
     coachStatSpeak: "การพูด",
     coachWriteRetry: "ตัวอักษรที่ควรเขียนอีกครั้ง: {chars} แตะปุ่มเพื่อฝึกตอนนี้",
+    ivWarnTitle: "⚠️ โปรดอ่านก่อนเลือกโหมด Intensive",
+    ivWarnBody: "โหมด Intensive เหมาะสำหรับผู้ที่จริงจังกับการเรียนภาษาญี่ปุ่น หรือมีเป้าหมายสอบหรือขอใบรับรองเท่านั้น ทุกวันคุณต้องทำเป้าหมาย 8 กิจกรรมการเรียนให้ครบ และบางแท็บจะถูกล็อกจนกว่าจะทำครบ หากต้องการเรียนอย่างสนุก ๆ ให้เลือกโหมด Enjoyable",
+    ivWarnOk: "โอเค ฉันจริงจัง",
+    ivWarnBack: "เลือกโหมดอื่น",
+    ivGuideTitle: "วิธีอ่านข้อมูลโหมด Intensive",
+    ivGuideItems: "🔥 เป้าหมายวันนี้ — แสดงว่าคุณทำกิจกรรมการเรียนวันนี้ครบกี่ข้อจาก 8 ข้อ เมื่อครบ 8 แท็บที่ล็อกจะเปิด||⏱ ความเร็วพลิกการ์ด / คำที่เห็นวันนี้ — ความเร็วพลิกการ์ดคือเวลาที่คุณใช้พลิกการ์ดคำศัพท์โดยทั่วไป (ค่ามัธยฐาน 2 สัปดาห์ล่าสุด) ต่ำกว่า 5 วินาทีถือว่าดี 6 วินาทีขึ้นไปแปลว่านึกคำช้า “คำที่เห็นวันนี้” นับจำนวนการ์ดที่ดูวันนี้||🗣 Pronunciation Practice — สัดส่วนการลองออกเสียงล่าสุดที่ถูกต้อง ต่ำกว่า 70% ควรฝึกเพิ่ม||✍️ Writing Practice — สัดส่วนตัวอักษรและคำตอบที่เขียนถูกโดยไม่มีข้อผิดพลาดใน 2 สัปดาห์ล่าสุด||✏️ ความแม่นยำของเส้น — จากทุกเส้นที่คุณเขียน สัดส่วนที่ลำดับและรูปร่างถูกต้อง||🎤 Speaking — สัดส่วนคำตอบที่พูดโดยไม่มีข้อผิดพลาดด้านไวยากรณ์หรือคำศัพท์||📋 รายคำ / รายตัวอักษร — เปิดรายการเหล่านี้เพื่อดูความเร็วของแต่ละคำและความแม่นยำของแต่ละตัวอักษร สีเหลืองคือจุดอ่อน (6 วินาทีขึ้นไป หรือต่ำกว่า 70%) ×2 หมายถึงลองสองครั้ง||🎯 คำแนะนำจากโค้ช — จากข้อมูล 2 สัปดาห์ล่าสุด โค้ชแนะนำจุดเน้นของวันนี้: ประเภทข้อผิดพลาดที่พบบ่อยที่สุด (คำช่วย การผันกริยา การเลือกคำ ลำดับคำ การสะกด) คำที่ผิดซ้ำ ๆ หรือตัวอักษรที่ควรเขียนอีกครั้ง แตะ “Let's go” เพื่อฝึกทันที||ℹ️ ควรรู้ — เครื่องหมาย (–) หมายถึงยังมีข้อมูลไม่พอ บันทึกของคุณเก็บไว้ในอุปกรณ์นี้ คุณอ่านคู่มือนี้ซ้ำได้ทุกเมื่อด้วยปุ่ม “วิธีอ่าน” ในโค้ช",
+    ivGuideOk: "เข้าใจแล้ว เริ่มเรียน",
+    ivGuideBtn: "ℹ️ วิธีอ่าน",
+    coachEnjoyAsk: "วันนี้อยากลองฝึกเรื่องนี้ไหม?",
     coachStatViews: "คำที่ดูวันนี้",
     coachStatListen: "การฟัง",
     lessonBridgeAsk: "อยากฝึกเรื่องนี้กับครูตัวจริงไหม? ลองเรียนทดลองฟรีดูสิ",
@@ -7649,6 +7739,15 @@ const UI_TRANSLATIONS = {
     coachMistakeNames: "partikel|konjugasi kata kerja|pemilihan perkataan|susunan perkataan|ejaan dan tulisan",
     coachStatSpeak: "Pertuturan",
     coachWriteRetry: "Aksara untuk ditulis semula: {chars}. Ketik butang untuk berlatih sekarang.",
+    ivWarnTitle: "⚠️ Sila baca sebelum memilih mod Intensive",
+    ivWarnBody: "Mod Intensive hanya untuk mereka yang bersungguh-sungguh mempelajari bahasa Jepun atau menyasarkan peperiksaan atau pensijilan. Setiap hari anda mesti menyiapkan kuota 8 tindakan belajar, dan beberapa tab kekal dikunci sehingga siap. Jika anda sekadar mahu belajar dengan santai, pilih mod Enjoyable.",
+    ivWarnOk: "OK, saya bersungguh-sungguh",
+    ivWarnBack: "Pilih mod lain",
+    ivGuideTitle: "Cara membaca data mod Intensive",
+    ivGuideItems: "🔥 Kuota hari ini — Menunjukkan berapa daripada 8 tindakan belajar hari ini yang telah anda siapkan. Apabila mencapai 8, tab yang dikunci akan dibuka.||⏱ Kelajuan pusing kad / Perkataan dilihat hari ini — Kelajuan pusing kad ialah masa biasa (median 2 minggu terakhir) anda memusingkan kad perbendaharaan kata. Bawah 5 saat adalah baik; 6 saat atau lebih bermakna perkataan lambat diingati. “Perkataan dilihat hari ini” mengira kad yang anda lihat hari ini.||🗣 Pronunciation Practice — Peratusan percubaan sebutan terkini yang betul. Bawah 70% bermakna perlu lebih latihan.||✍️ Writing Practice — Peratusan aksara dan jawapan bertulis yang betul tanpa kesilapan dalam 2 minggu terakhir.||✏️ Ketepatan coretan — Daripada semua coretan yang anda tulis, peratusan yang tertib dan bentuknya betul.||🎤 Speaking — Peratusan jawapan lisan anda tanpa kesilapan tatabahasa atau perkataan.||📋 Perkataan demi perkataan / Aksara demi aksara — Buka senarai ini untuk melihat kelajuan setiap perkataan dan ketepatan setiap aksara. Kuning menandakan titik lemah (6 saat atau lebih, atau bawah 70%). ×2 bermakna dua percubaan.||🎯 Nasihat jurulatih — Berdasarkan 2 minggu terakhir, ia mencadangkan fokus hari ini: jenis kesilapan paling kerap (partikel, bentuk kata kerja, pemilihan perkataan, susunan perkataan, ejaan), perkataan yang sering salah, atau aksara untuk ditulis semula. Ketik “Let's go” untuk berlatih segera.||ℹ️ Perlu tahu — Sengkang (–) bermakna data belum mencukupi. Rekod anda disimpan pada peranti ini. Anda boleh membaca panduan ini semula bila-bila masa dengan butang “Cara membaca” pada jurulatih.",
+    ivGuideOk: "Faham, mula belajar",
+    ivGuideBtn: "ℹ️ Cara membaca",
+    coachEnjoyAsk: "Mahu berlatih perkara ini hari ini?",
     coachStatViews: "Perkataan dilihat hari ini",
     coachStatListen: "Mendengar",
     lessonBridgeAsk: "Mahu berlatih perkara ini dengan guru sebenar? Cuba kelas percubaan percuma.",
@@ -8290,6 +8389,15 @@ const UI_TRANSLATIONS = {
     coachMistakeNames: "partikel|konjugasi kata kerja|pemilihan kata|urutan kata|ejaan dan tulisan",
     coachStatSpeak: "Berbicara",
     coachWriteRetry: "Karakter yang perlu ditulis ulang: {chars}. Ketuk tombol untuk berlatih sekarang.",
+    ivWarnTitle: "⚠️ Harap baca sebelum memilih mode Intensive",
+    ivWarnBody: "Mode Intensive hanya untuk Anda yang serius belajar bahasa Jepang atau menargetkan ujian maupun sertifikasi. Setiap hari Anda harus menyelesaikan kuota 8 aktivitas belajar, dan beberapa tab tetap terkunci sampai selesai. Jika Anda hanya ingin belajar dengan santai, pilih mode Enjoyable.",
+    ivWarnOk: "OK, saya serius",
+    ivWarnBack: "Pilih mode lain",
+    ivGuideTitle: "Cara membaca data mode Intensive",
+    ivGuideItems: "🔥 Kuota hari ini — Menunjukkan berapa dari 8 aktivitas belajar hari ini yang sudah Anda selesaikan. Saat mencapai 8, tab yang terkunci terbuka.||⏱ Kecepatan membalik kartu / Kata dilihat hari ini — Kecepatan membalik kartu adalah waktu yang biasanya Anda butuhkan untuk membalik kartu kosakata (median 2 minggu terakhir). Di bawah 5 detik bagus; 6 detik atau lebih berarti kata lambat teringat. “Kata dilihat hari ini” menghitung kartu yang Anda lihat hari ini.||🗣 Pronunciation Practice — Persentase percobaan pelafalan terbaru yang benar. Di bawah 70% berarti perlu lebih banyak latihan.||✍️ Writing Practice — Persentase karakter dan jawaban tertulis yang benar tanpa kesalahan dalam 2 minggu terakhir.||✏️ Akurasi goresan — Dari semua goresan yang Anda tulis, persentase yang urutan dan bentuknya benar.||🎤 Speaking — Persentase jawaban lisan Anda tanpa kesalahan tata bahasa atau kata.||📋 Kata demi kata / Karakter demi karakter — Buka daftar ini untuk melihat kecepatan tiap kata dan akurasi tiap karakter. Kuning menandai titik lemah (6 detik atau lebih, atau di bawah 70%). ×2 berarti dua kali mencoba.||🎯 Saran pelatih — Berdasarkan 2 minggu terakhir, pelatih menyarankan fokus hari ini: jenis kesalahan paling sering (partikel, bentuk kata kerja, pilihan kata, urutan kata, ejaan), kata yang terus salah, atau karakter yang perlu ditulis ulang. Ketuk “Let's go” untuk langsung berlatih.||ℹ️ Perlu diketahui — Tanda strip (–) berarti data belum cukup. Catatan Anda disimpan di perangkat ini. Anda bisa membaca panduan ini lagi kapan saja lewat tombol “Cara membaca” pada pelatih.",
+    ivGuideOk: "Mengerti, mulai belajar",
+    ivGuideBtn: "ℹ️ Cara membaca",
+    coachEnjoyAsk: "Mau berlatih hal ini hari ini?",
     coachStatViews: "Kata dilihat hari ini",
     coachStatListen: "Menyimak",
     lessonBridgeAsk: "Ingin berlatih ini dengan guru sungguhan? Coba kelas percobaan gratis.",
@@ -8931,6 +9039,15 @@ const UI_TRANSLATIONS = {
     coachMistakeNames: "trợ từ|chia động từ|chọn từ|thứ tự từ|chính tả và chữ viết",
     coachStatSpeak: "Nói",
     coachWriteRetry: "Các chữ cần viết lại: {chars}. Chạm nút để luyện ngay.",
+    ivWarnTitle: "⚠️ Hãy đọc trước khi chọn chế độ Intensive",
+    ivWarnBody: "Chế độ Intensive chỉ dành cho người nghiêm túc học tiếng Nhật hoặc đang hướng tới kỳ thi, chứng chỉ. Mỗi ngày bạn phải hoàn thành chỉ tiêu 8 hoạt động học, và một số tab sẽ bị khóa cho đến khi hoàn thành. Nếu bạn chỉ muốn học thoải mái, hãy chọn chế độ Enjoyable.",
+    ivWarnOk: "OK, tôi nghiêm túc",
+    ivWarnBack: "Chọn chế độ khác",
+    ivGuideTitle: "Cách đọc dữ liệu chế độ Intensive",
+    ivGuideItems: "🔥 Chỉ tiêu hôm nay — Cho biết bạn đã hoàn thành bao nhiêu trong 8 hoạt động học hôm nay. Đạt 8 thì các tab bị khóa sẽ mở.||⏱ Tốc độ lật thẻ / Từ đã xem hôm nay — Tốc độ lật thẻ là thời gian bạn thường mất để lật một thẻ từ vựng (trung vị 2 tuần gần nhất). Dưới 5 giây là tốt; từ 6 giây trở lên nghĩa là nhớ từ chậm. “Từ đã xem hôm nay” đếm số thẻ bạn đã xem hôm nay.||🗣 Pronunciation Practice — Tỷ lệ các lần thử phát âm gần đây đúng. Dưới 70% nghĩa là cần luyện thêm.||✍️ Writing Practice — Tỷ lệ chữ và câu trả lời viết đúng, không lỗi trong 2 tuần gần nhất.||✏️ Độ chính xác nét viết — Trong tất cả các nét bạn viết, tỷ lệ có đúng thứ tự và hình dạng.||🎤 Speaking — Tỷ lệ câu trả lời nói không có lỗi ngữ pháp hay từ vựng.||📋 Theo từng từ / Theo từng chữ — Mở các danh sách này để xem tốc độ của từng từ và độ chính xác của từng chữ. Màu vàng là điểm yếu (từ 6 giây trở lên, hoặc dưới 70%). ×2 nghĩa là bạn đã thử hai lần.||🎯 Lời khuyên của huấn luyện viên — Dựa trên 2 tuần gần nhất, gợi ý trọng tâm hôm nay: loại lỗi bạn hay mắc nhất (trợ từ, chia động từ, chọn từ, thứ tự từ, chính tả), từ bạn hay sai, hoặc chữ cần viết lại. Chạm “Let's go” để luyện ngay.||ℹ️ Cần biết — Dấu gạch (–) nghĩa là chưa đủ dữ liệu. Ghi chép của bạn được lưu trên thiết bị này. Bạn có thể đọc lại hướng dẫn này bất cứ lúc nào bằng nút “Cách đọc” trong phần huấn luyện viên.",
+    ivGuideOk: "Đã hiểu, bắt đầu học",
+    ivGuideBtn: "ℹ️ Cách đọc",
+    coachEnjoyAsk: "Hôm nay bạn có muốn luyện phần này không?",
     coachStatViews: "Từ đã xem hôm nay",
     coachStatListen: "Nghe",
     lessonBridgeAsk: "Bạn muốn luyện phần này với giáo viên thật không? Hãy thử một buổi học thử miễn phí.",
@@ -9572,6 +9689,15 @@ const UI_TRANSLATIONS = {
     coachMistakeNames: "कारक चिह्न (पार्टिकल)|क्रिया रूप|शब्द चयन|शब्द क्रम|वर्तनी और लिपि",
     coachStatSpeak: "बोलना",
     coachWriteRetry: "दोबारा लिखने वाले अक्षर: {chars}। अभी अभ्यास के लिए बटन दबाएँ।",
+    ivWarnTitle: "⚠️ Intensive मोड चुनने से पहले कृपया पढ़ें",
+    ivWarnBody: "Intensive मोड केवल उन लोगों के लिए है जो जापानी सीखने को लेकर गंभीर हैं या किसी परीक्षा या प्रमाणपत्र का लक्ष्य रखते हैं। हर दिन आपको 8 अध्ययन गतिविधियों का कोटा पूरा करना होगा, और पूरा होने तक कुछ टैब लॉक रहेंगे। अगर आप बस आनंद से सीखना चाहते हैं, तो Enjoyable मोड चुनें।",
+    ivWarnOk: "ठीक है, मैं गंभीर हूँ",
+    ivWarnBack: "दूसरा मोड चुनें",
+    ivGuideTitle: "Intensive मोड का डेटा कैसे पढ़ें",
+    ivGuideItems: "🔥 आज का कोटा — दिखाता है कि आज की 8 अध्ययन गतिविधियों में से आपने कितनी पूरी की हैं। 8 होने पर लॉक टैब खुल जाते हैं।||⏱ कार्ड पलटने की गति / आज देखे शब्द — कार्ड पलटने की गति वह सामान्य समय है (पिछले 2 हफ़्तों की माध्यिका) जो आप शब्द-कार्ड पलटने में लेते हैं। 5 सेकंड से कम अच्छा है; 6 सेकंड या अधिक का मतलब है कि शब्द देर से याद आते हैं। “आज देखे शब्द” आज देखे गए कार्ड गिनता है।||🗣 Pronunciation Practice — आपके हाल के उच्चारण प्रयासों में सही प्रयासों का अनुपात। 70% से कम हो तो और अभ्यास चाहिए।||✍️ Writing Practice — पिछले 2 हफ़्तों में बिना गलती सही लिखे अक्षरों और लिखित उत्तरों का अनुपात।||✏️ स्ट्रोक की सटीकता — आपके लिखे सभी स्ट्रोक में से सही क्रम और आकार वाले स्ट्रोक का अनुपात।||🎤 Speaking — आपके बोले उत्तरों में से बिना व्याकरण या शब्द की गलती वाले उत्तरों का अनुपात।||📋 शब्द-दर-शब्द / अक्षर-दर-अक्षर — इन सूचियों को खोलकर हर शब्द की गति और हर अक्षर की सटीकता देखें। पीला रंग कमज़ोरी दिखाता है (6 सेकंड या अधिक, या 70% से कम)। ×2 का मतलब दो बार कोशिश।||🎯 कोच की सलाह — पिछले 2 हफ़्तों के आधार पर आज का फोकस सुझाता है: सबसे आम गलती का प्रकार (कारक चिह्न, क्रिया रूप, शब्द चयन, शब्द क्रम, वर्तनी), बार-बार गलत होने वाला शब्द, या दोबारा लिखने वाले अक्षर। तुरंत अभ्यास के लिए “Let's go” दबाएँ।||ℹ️ जानने योग्य — डैश (–) का मतलब है कि अभी पर्याप्त डेटा नहीं है। आपके रिकॉर्ड इसी डिवाइस पर रहते हैं। कोच के “कैसे पढ़ें” बटन से आप यह गाइड कभी भी दोबारा पढ़ सकते हैं।",
+    ivGuideOk: "समझ गया, पढ़ाई शुरू करें",
+    ivGuideBtn: "ℹ️ कैसे पढ़ें",
+    coachEnjoyAsk: "क्या आज इस पर अभ्यास करना चाहेंगे?",
     coachStatViews: "आज देखे गए शब्द",
     coachStatListen: "सुनना",
     lessonBridgeAsk: "क्या आप इसे असली शिक्षक के साथ अभ्यास करना चाहेंगे? एक मुफ़्त ट्रायल क्लास आज़माएँ।",
@@ -10213,6 +10339,15 @@ const UI_TRANSLATIONS = {
     coachMistakeNames: "助詞|動詞の活用|単語の選び方|語順|表記（かな・漢字）",
     coachStatSpeak: "スピーキング",
     coachWriteRetry: "もう一度練習する文字：{chars}。ボタンを押して、今すぐ書いてみましょう。",
+    ivWarnTitle: "⚠️ Intensiveモードを選ぶ前にお読みください",
+    ivWarnBody: "Intensiveモードは、本気で日本語を学びたい方、試験や資格の取得を目指している方だけがご利用ください。毎日8回の学習アクションというノルマがあり、達成するまで一部のタブは使えません。気軽に楽しく学びたい方はEnjoyableモードを選んでください。",
+    ivWarnOk: "OK、本気でやります",
+    ivWarnBack: "ほかのモードを選ぶ",
+    ivGuideTitle: "Intensiveモードのデータの見方",
+    ivGuideItems: "🔥 今日のノルマ — 今日の学習アクション8回のうち、いくつ終わったかを表示します。8回に達すると、ロックされたタブが開きます。||⏱ フリップ速度／今日見た単語 — フリップ速度は、単語カードをめくるまでにかかる普段の時間(直近2週間の中央値)です。5秒未満なら良好、6秒以上は単語が思い出しにくいサインです。「今日見た単語」は、今日見たカードの枚数です。||🗣 Pronunciation Practice — 最近の発音の挑戦のうち、正解だった割合です。70%未満なら、もう少し練習しましょう。||✍️ Writing Practice — 直近2週間で、ミスなく書けた文字と書いた答えの割合です。||✏️ Stroke accuracy（画の正確さ） — 書いたすべての画のうち、書き順と形が正しかった割合です。||🎤 Speaking — 話した答えのうち、文法や単語のミスがなかった割合です。||📋 単語ごと／一文字ごと — このリストを開くと、単語ごとの速さと、一文字ごとの正確さが見られます。黄色は弱点(6秒以上、または70%未満)のサインです。×2は2回挑戦したという意味です。||🎯 コーチのアドバイス — 直近2週間の記録から、今日の重点を提案します。よくするミスの種類(助詞・動詞の活用・単語の選び方・語順・表記)、何度も間違える単語、もう一度書く文字などです。「Let's go」を押すと、すぐ練習できます。||ℹ️ ご注意 — 「–」はまだデータが足りないという意味です。記録はこの端末の中に保存されます。この説明は、コーチの「見方」ボタンからいつでも読み返せます。",
+    ivGuideOk: "わかりました、始めます",
+    ivGuideBtn: "ℹ️ 見方",
+    coachEnjoyAsk: "今日これからやってみますか?",
     coachStatViews: "今日見た単語",
     coachStatListen: "リスニング",
     lessonBridgeAsk: "この課題を、先生と一緒に練習してみませんか？無料体験レッスンをご利用ください。",
@@ -10854,6 +10989,15 @@ const UI_TRANSLATIONS = {
     coachMistakeNames: "edatlar|fiil çekimi|kelime seçimi|kelime sırası|yazım ve yazı",
     coachStatSpeak: "Konuşma",
     coachWriteRetry: "Yeniden yazılacak karakterler: {chars}. Şimdi çalışmak için düğmeye dokun.",
+    ivWarnTitle: "⚠️ Intensive modunu seçmeden önce lütfen okuyun",
+    ivWarnBody: "Intensive modu yalnızca Japoncayı ciddi biçimde öğrenmek isteyenler veya bir sınav ya da sertifika hedefleyenler içindir. Her gün 8 çalışma eylemlik hedefi tamamlamanız gerekir ve tamamlayana kadar bazı sekmeler kilitli kalır. Sadece keyifle öğrenmek istiyorsanız Enjoyable modunu seçin.",
+    ivWarnOk: "Tamam, ciddiyim",
+    ivWarnBack: "Başka mod seç",
+    ivGuideTitle: "Intensive modu verileri nasıl okunur",
+    ivGuideItems: "🔥 Bugünkü hedef — Bugünün 8 çalışma eyleminden kaçını tamamladığınızı gösterir. 8'e ulaşınca kilitli sekmeler açılır.||⏱ Kart çevirme hızı / Bugün görülen kelimeler — Kart çevirme hızı, bir kelime kartını çevirmeniz için genellikle gereken süredir (son 2 haftanın medyanı). 5 saniyenin altı iyidir; 6 saniye ve üzeri kelimelerin geç hatırlandığını gösterir. “Bugün görülen kelimeler” bugün baktığınız kart sayısıdır.||🗣 Pronunciation Practice — Son telaffuz denemelerinizin doğru olanlarının oranı. %70'in altı daha fazla pratik gerektirir.||✍️ Writing Practice — Son 2 haftada hatasız yazdığınız karakterlerin ve yazılı cevapların oranı.||✏️ Çizgi doğruluğu — Yazdığınız tüm çizgiler içinde sırası ve şekli doğru olanların oranı.||🎤 Speaking — Sözlü cevaplarınızdan dilbilgisi veya kelime hatası olmayanların oranı.||📋 Kelime kelime / Karakter karakter — Bu listeleri açarak her kelimenin hızını ve her karakterin doğruluğunu görün. Sarı, zayıf noktayı gösterir (6 saniye ve üzeri veya %70'in altı). ×2 iki kez denediğiniz anlamına gelir.||🎯 Koç tavsiyesi — Son 2 haftanıza bakarak bugünün odağını önerir: en sık yaptığınız hata türü (edatlar, fiil çekimi, kelime seçimi, kelime sırası, yazım), sürekli yanlış yaptığınız bir kelime veya yeniden yazılacak karakterler. Hemen çalışmak için “Let's go” düğmesine dokunun.||ℹ️ Bilmekte fayda var — Tire (–) henüz yeterli veri olmadığı anlamına gelir. Kayıtlarınız bu cihazda tutulur. Koçtaki “Nasıl okunur” düğmesiyle bu kılavuzu istediğiniz zaman yeniden okuyabilirsiniz.",
+    ivGuideOk: "Anladım, çalışmaya başla",
+    ivGuideBtn: "ℹ️ Nasıl okunur",
+    coachEnjoyAsk: "Bugün bunun üzerinde çalışmak ister misiniz?",
     coachStatViews: "Bugün görülen kelimeler",
     coachStatListen: "Dinleme",
     lessonBridgeAsk: "Bunu gerçek bir öğretmenle çalışmak ister misiniz? Ücretsiz deneme dersini deneyin.",
@@ -11495,6 +11639,15 @@ const UI_TRANSLATIONS = {
     coachMistakeNames: "कारक चिह्न (पार्टिकल)|क्रिया रूप|शब्द छनोट|शब्द क्रम|हिज्जे र लिपि",
     coachStatSpeak: "बोल्ने अभ्यास",
     coachWriteRetry: "फेरि लेख्नुपर्ने अक्षर: {chars}। अहिले अभ्यास गर्न बटन थिच्नुहोस्।",
+    ivWarnTitle: "⚠️ Intensive मोड चुन्नु अघि कृपया पढ्नुहोस्",
+    ivWarnBody: "Intensive मोड जापानी भाषा गम्भीर रूपमा सिक्न चाहने वा परीक्षा वा प्रमाणपत्र लक्ष्य गर्नेहरूका लागि मात्र हो। हरेक दिन ८ अध्ययन गतिविधिको कोटा पूरा गर्नुपर्छ, र पूरा नभएसम्म केही ट्याब लक रहन्छन्। रमाइलोसँग सिक्न मात्र चाहनुहुन्छ भने Enjoyable मोड छान्नुहोस्।",
+    ivWarnOk: "ठीक छ, म गम्भीर छु",
+    ivWarnBack: "अर्को मोड छान्नुहोस्",
+    ivGuideTitle: "Intensive मोडको डेटा कसरी पढ्ने",
+    ivGuideItems: "🔥 आजको कोटा — आजका ८ अध्ययन गतिविधिमध्ये कति पूरा गर्नुभयो भनेर देखाउँछ। ८ पुगेपछि लक ट्याब खुल्छन्।||⏱ कार्ड पल्टाउने गति / आज देखिएका शब्द — कार्ड पल्टाउने गति भनेको शब्द-कार्ड पल्टाउन सामान्यतया लाग्ने समय हो (पछिल्ला २ हप्ताको मध्यक)। ५ सेकेन्डभन्दा कम राम्रो हो; ६ सेकेन्ड वा बढीको अर्थ शब्द ढिलो सम्झिन्छ। “आज देखिएका शब्द” ले आज हेरेका कार्ड गन्छ।||🗣 Pronunciation Practice — पछिल्ला उच्चारण प्रयासमध्ये सही भएकाको अनुपात। ७०% भन्दा कम भए थप अभ्यास चाहिन्छ।||✍️ Writing Practice — पछिल्ला २ हप्तामा गल्तीबिना सही लेखिएका अक्षर र लिखित उत्तरहरूको अनुपात।||✏️ स्ट्रोकको शुद्धता — तपाईंले लेखेका सबै स्ट्रोकमध्ये सही क्रम र आकार भएकाको अनुपात।||🎤 Speaking — बोलेका उत्तरमध्ये व्याकरण वा शब्दको गल्ती नभएकाको अनुपात।||📋 शब्द-शब्द / अक्षर-अक्षर — यी सूची खोलेर हरेक शब्दको गति र हरेक अक्षरको शुद्धता हेर्नुहोस्। पहेँलोले कमजोरी देखाउँछ (६ सेकेन्ड वा बढी, वा ७०% भन्दा कम)। ×२ को अर्थ दुई पटक प्रयास।||🎯 कोचको सल्लाह — पछिल्ला २ हप्ताका आधारमा आजको फोकस सुझाउँछ: सबैभन्दा धेरै हुने गल्तीको प्रकार (कारक चिह्न, क्रिया रूप, शब्द छनोट, शब्द क्रम, हिज्जे), बारम्बार गलत हुने शब्द, वा फेरि लेख्नुपर्ने अक्षर। तुरुन्तै अभ्यासका लागि “Let's go” थिच्नुहोस्।||ℹ️ जान्नुहोस् — डयाश (–) को अर्थ अझै पर्याप्त डेटा छैन। तपाईंका रेकर्ड यही डिभाइसमा राखिन्छन्। कोचको “कसरी पढ्ने” बटनबाट यो गाइड जहिले पनि फेरि पढ्न सकिन्छ।",
+    ivGuideOk: "बुझें, पढाइ सुरु गरौं",
+    ivGuideBtn: "ℹ️ कसरी पढ्ने",
+    coachEnjoyAsk: "आज यसमा अभ्यास गर्न चाहनुहुन्छ?",
     coachStatViews: "आज हेरिएका शब्द",
     coachStatListen: "सुनाइ",
     lessonBridgeAsk: "के तपाईं यसलाई साँचो शिक्षकसँग अभ्यास गर्न चाहनुहुन्छ? निःशुल्क परीक्षण कक्षा प्रयास गर्नुहोस्।",
@@ -12136,6 +12289,15 @@ const UI_TRANSLATIONS = {
     coachMistakeNames: "mga particle|conjugation ng pandiwa|pagpili ng salita|ayos ng mga salita|baybay at sulat",
     coachStatSpeak: "Pagsasalita",
     coachWriteRetry: "Mga karakter na isulat muli: {chars}. I-tap ang button para magsanay ngayon.",
+    ivWarnTitle: "⚠️ Basahin bago piliin ang Intensive mode",
+    ivWarnBody: "Ang Intensive mode ay para lamang sa mga seryoso sa pag-aaral ng Japanese o may layuning pumasa sa pagsusulit o kumuha ng sertipikasyon. Araw-araw kailangan mong tapusin ang quota na 8 gawaing pag-aaral, at may mga tab na mananatiling naka-lock hanggang matapos ito. Kung gusto mo lang matuto nang masaya, piliin ang Enjoyable mode.",
+    ivWarnOk: "OK, seryoso ako",
+    ivWarnBack: "Pumili ng ibang mode",
+    ivGuideTitle: "Paano basahin ang data ng Intensive mode",
+    ivGuideItems: "🔥 Quota ngayong araw — Ipinapakita kung ilan sa 8 gawaing pag-aaral ngayong araw ang natapos mo. Pagdating sa 8, bubukas ang mga naka-lock na tab.||⏱ Bilis ng pagpihit ng card / Mga salitang nakita ngayon — Ang bilis ng pagpihit ng card ay ang karaniwang oras na kailangan mo para ipihit ang vocabulary card (median ng huling 2 linggo). Mas mababa sa 5 segundo ay maganda; 6 segundo pataas ay mabagal na pag-alala. Binibilang ng “Mga salitang nakita ngayon” ang mga card na tiningnan mo ngayon.||🗣 Pronunciation Practice — Ang bahagi ng mga huling pagsubok mo sa pagbigkas na tama. Mas mababa sa 70% ay kailangan pa ng pagsasanay.||✍️ Writing Practice — Ang bahagi ng mga karakter at nakasulat na sagot na tama at walang mali sa huling 2 linggo.||✏️ Katumpakan ng stroke — Sa lahat ng stroke na isinulat mo, ang bahagi na tama ang ayos at hugis.||🎤 Speaking — Ang bahagi ng mga sagot mong binigkas na walang mali sa grammar o salita.||📋 Bawat salita / Bawat karakter — Buksan ang mga listahang ito para makita ang bilis ng bawat salita at ang katumpakan ng bawat karakter. Ang dilaw ay mahinang bahagi (6 segundo pataas, o mas mababa sa 70%). Ang ×2 ay dalawang beses mong sinubukan.||🎯 Payo ng coach — Batay sa huling 2 linggo, iminumungkahi nito ang pokus ngayon: ang pinakamadalas mong uri ng pagkakamali (particle, conjugation ng pandiwa, pagpili ng salita, ayos ng salita, baybay), salitang paulit-ulit na mali, o karakter na dapat isulat muli. I-tap ang “Let's go” para magsanay agad.||ℹ️ Mabuting malaman — Ang gatlang (–) ay nangangahulugang kulang pa ang data. Nakatago sa device na ito ang mga tala mo. Mababasa mo ulit ang gabay na ito anumang oras gamit ang button na “Paano basahin” sa coach.",
+    ivGuideOk: "Naintindihan ko, simulan na",
+    ivGuideBtn: "ℹ️ Paano basahin",
+    coachEnjoyAsk: "Gusto mo bang pagsanayan ito ngayong araw?",
     coachStatViews: "Mga salitang nakita ngayon",
     coachStatListen: "Pakikinig",
     lessonBridgeAsk: "Gusto mo bang ipractice ito kasama ang totoong guro? Subukan ang libreng trial lesson.",
@@ -15740,7 +15902,7 @@ Respond ONLY with a valid JSON array, no markdown, no backticks:
                 <div key={i}>
                   <ExerciseCard item={it} revealed={!!revealed[globalIdx]} onReveal={()=>setRevealed(r=>({...r,[globalIdx]:!r[globalIdx]}))} T={T} lang={form?.preferredLang || "English"} />
                   {revealed[globalIdx] && (
-                    <ComprehensionCheck itemId={`item-${globalIdx}`} checkins={contentCheck.checkins} onRecord={(id, u) => { contentCheck.record(id, u); if (it.skill === "listening") logMetric("listen", "", { ok: !!u }); }} T={T} />
+                    <ComprehensionCheck itemId={`item-${globalIdx}`} checkins={contentCheck.checkins} onRecord={(id, u) => { contentCheck.record(id, u); }} T={T} />
                   )}
                 </div>
               );
@@ -16654,7 +16816,7 @@ function ConversationPredictor({ form, onLevelUp }) {
             {heardLines.map((line) => (
               <div key={line.id}>
                 <LiveHeardLineCard line={line} T={T} lang={form?.preferredLang || "English"} jlpt={form?.jlpt} />
-                <ComprehensionCheck itemId={`heard-${line.id}`} checkins={conversationCheck.checkins} onRecord={(id, u) => { conversationCheck.record(id, u); logMetric("listen", "", { ok: !!u }); }} T={T} />
+                <ComprehensionCheck itemId={`heard-${line.id}`} checkins={conversationCheck.checkins} onRecord={(id, u) => { conversationCheck.record(id, u); }} T={T} />
                 {conversationCheck.checkins[`heard-${line.id}`] === false && (
                   <p style={{ color:C.amber, fontSize:12, lineHeight:1.7, margin:"8px 0 0" }}>🐢 {T.pronSlowNo || "No problem. Slow the video down and listen to that part again — GAKU will write it down once more."}</p>
                 )}
@@ -17067,12 +17229,6 @@ function PronunciationSayIt({ target, T }) {
           <button onClick={toggle} style={{ padding:"5px 12px", borderRadius:8, background:C.card, border:`1px solid ${C.border}`, color:"#94a3b8", fontSize:11, cursor:"pointer" }}>
             {T.pronTryAgain || "Try again"}
           </button>
-          {!good && fails >= 2 && (() => {
-            // After two misses on the same line, point out the exact characters that tripped them up.
-            const missed = Array.from(new Set(match.chars.filter((c, i) => !match.hit[i]))).slice(0, 6);
-            const issue = missed.length ? (T.lessonBridgeMissed || "Sounds to watch: {chars}").split("{chars}").join(missed.join(" ")) : null;
-            return <LessonBridgeCard T={T} issue={issue} />;
-          })()}
         </div>
       )}
     </div>
@@ -19520,12 +19676,9 @@ function analyzeCoach(allow) {
   const pmiss = {};
   m.forEach(x => { if (x.k === "pron" && x.ok === false) pmiss[x.w] = (pmiss[x.w] || 0) + 1; });
   const pronMiss = ok("pronunciation") ? (Object.entries(pmiss).filter(([, n]) => n >= 2).map(([w, n]) => ({ w, n })).sort((a, b) => b.n - a.n)[0] || null) : null;
-  const L = m.filter(x => x.k === "listen");
-  const listenPct = L.length ? Math.round(100 * L.filter(x => x.ok).length / L.length) : null;
   const { weak } = analyzeLearning(loadLearningLog(), allow);
   const advice = [];
   if (weak) advice.push({ type: "acc", a: weak.a, pct: Math.round(weak.rate * 100) });
-  if (listenPct !== null && L.length >= 3 && listenPct < 70 && (ok("conversation") || ok("content"))) advice.push({ type: "listen", pct: listenPct });
   if (pronMiss) advice.push({ type: "pron", w: pronMiss.w, n: pronMiss.n });
   if (retryChars.length) advice.push({ type: "writeretry", chars: retryChars });
   if (writeMiss && !retryChars.includes(writeMiss.w)) advice.push({ type: "writemiss", w: writeMiss.w, n: writeMiss.n, pct: writeMiss.pct });
@@ -19537,7 +19690,7 @@ function analyzeCoach(allow) {
   return {
     advice,
     hasData: learn.length + m.length > 0,
-    stats: { flipSec, viewsToday, pron: ok("pronunciation") ? rate("pronunciation") : null, writing: ok("writing") ? writePct : null, stroke: ok("writing") ? strokePct : null, speak: (ok("conversation") || ok("content")) ? speakPct : null, listen: listenPct },
+    stats: { flipSec, viewsToday, pron: ok("pronunciation") ? rate("pronunciation") : null, writing: ok("writing") ? writePct : null, stroke: ok("writing") ? strokePct : null, speak: (ok("conversation") || ok("content")) ? speakPct : null },
     flipWords,
     writeChars: ok("writing") ? writeChars : [],
   };
@@ -19554,9 +19707,7 @@ function startWritingRetry(chars) {
   } catch {}
   window.dispatchEvent(new CustomEvent("gaku_writing_retry", { detail: text }));
 }
-function CoachPanel({ T, allow, onGo, compact }) {
-  const { advice, stats, hasData, flipWords, writeChars } = analyzeCoach(allow);
-  const line = (a) => {
+function coachAdviceLine(T, a) {
     if (a.type === "writeretry") return progressFill(T.coachWriteRetry || "Characters to write again: {chars}. Tap the button to practice them now.", { chars: a.chars.join(" ") });
     if (a.type === "mtype") return progressFill(T.coachMistakeType || "Your most frequent mistake is {type} ({n} times in the last 2 weeks). Make it your focus today.", { type: (T.coachMistakeNames || "Particles|Verb conjugation|Word choice|Word order|Spelling and script").split("|")[a.idx] || "", n: a.n });
     if (a.type === "wordmiss") return progressFill(T.coachWordMistake || "You keep getting the word {word} wrong ({n} times). Review it today and write one sentence with it.", { word: a.w, n: a.n });
@@ -19567,8 +19718,13 @@ function CoachPanel({ T, allow, onGo, compact }) {
     if (a.type === "repeat") return progressFill(T.coachRepeatWord || "You viewed {word} {n} times today and it isn't sticking. Try an example sentence or write it out.", { word: a.w, n: a.n });
     if (a.type === "slow") return progressFill(T.coachSlowFlip || "It takes you about {sec}s to recall a word. Aim for under 5s with quick flashcard rounds.", { sec: a.sec });
     return progressFill(T.coachSlowWord || "Your slowest word is {word} ({sec}s). Review it again.", { word: a.w, sec: a.sec });
-  };
-  const target = (a) => a.type === "acc" ? a.a : a.type === "listen" ? "conversation" : a.type === "pron" ? "pronunciation" : a.type === "writemiss" || a.type === "writeretry" ? "writing" : a.type === "mtype" ? (a.speaking ? "conversation" : "writing") : a.type === "wordmiss" ? "writing" : "vocab";
+  }
+function coachAdviceTarget(a) { return a.type === "acc" ? a.a : a.type === "listen" ? "conversation" : a.type === "pron" ? "pronunciation" : a.type === "writemiss" || a.type === "writeretry" ? "writing" : a.type === "mtype" ? (a.speaking ? "conversation" : "writing") : a.type === "wordmiss" ? "writing" : "vocab"; }
+function CoachPanel({ T, allow, onGo, compact }) {
+  const [showGuide, setShowGuide] = useState(false);
+  const { advice, stats, hasData, flipWords, writeChars } = analyzeCoach(allow);
+  const line = (a) => coachAdviceLine(T, a);
+  const target = coachAdviceTarget;
   const shown = advice.slice(0, compact ? 1 : 3);
   if (compact) {
     if (!shown.length) return null;
@@ -19583,7 +19739,6 @@ function CoachPanel({ T, allow, onGo, compact }) {
     [T.coachStatFlip || "Flip speed", stats.flipSec !== null ? stats.flipSec.toFixed(1) + "s" : "–"],
     [T.coachStatViews || "Words seen today", String(stats.viewsToday)],
     [T.pronTitle || "Pronunciation", stats.pron !== null ? stats.pron + "%" : "–"],
-    [T.coachStatListen || "Listening", stats.listen !== null ? stats.listen + "%" : "–"],
     [T.writeTitle || "Writing", stats.writing !== null ? stats.writing + "%" : "–"],
     [T.coachStatStroke || "Stroke accuracy", stats.stroke !== null ? stats.stroke + "%" : "–"],
     [T.coachStatSpeak || "Speaking", stats.speak !== null ? stats.speak + "%" : "–"],
@@ -19596,7 +19751,11 @@ function CoachPanel({ T, allow, onGo, compact }) {
   );
   return (
     <div>
-      <p style={{ color:C.purpleLight, fontSize:11, fontWeight:700, margin:"0 0 6px" }}>{T.coachAdviceTitle || "🎯 Your study coach"}</p>
+      <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", gap:8, margin:"0 0 6px" }}>
+        <p style={{ color:C.purpleLight, fontSize:11, fontWeight:700, margin:0 }}>{T.coachAdviceTitle || "🎯 Your study coach"}</p>
+        <button onClick={() => setShowGuide(true)} style={{ background:"none", border:`1px solid ${C.border}`, borderRadius:8, color:"#94a3b8", fontSize:11, padding:"3px 8px", cursor:"pointer" }}>{T.ivGuideBtn || "ℹ️ How to read this"}</button>
+      </div>
+      {showGuide && <IntensiveGuide T={T} onClose={() => setShowGuide(false)} />}
       <div style={{ display:"flex", gap:6, flexWrap:"wrap", marginBottom:10 }}>
         {chips.map(([label, val], i) => (
           <span key={i} style={{ fontSize:11, color:"#cbd5e1", background:"rgba(255,255,255,0.06)", border:`1px solid ${C.border}`, borderRadius:8, padding:"3px 8px" }}>{label}: <b style={{ color:"#f1f5f9" }}>{val}</b></span>
@@ -19813,17 +19972,62 @@ function ProgressNudge({ T, onGo }) {
   );
 }
 
+function IntensiveWarn({ T, onOk, onBack }) {
+  return (
+    <div style={{ position:"fixed", inset:0, background:"rgba(0,0,0,0.78)", display:"flex", alignItems:"center", justifyContent:"center", zIndex:1100, padding:16 }}>
+      <div style={{ ...S.card, width:"100%", maxWidth:420, maxHeight:"92vh", overflowY:"auto" }}>
+        <p style={{ color:"#fca5a5", fontSize:16, fontWeight:800, margin:"0 0 12px", textAlign:"center" }}>{T.ivWarnTitle || "⚠️ Please read before choosing Intensive Mode"}</p>
+        <p style={{ color:"#e2e8f0", fontSize:13, lineHeight:1.8, margin:"0 0 16px", padding:"12px 14px", borderRadius:10, background:"rgba(239,68,68,0.08)", border:"1px solid rgba(239,68,68,0.3)" }}>{T.ivWarnBody || "Intensive Mode is only for people who are serious about learning Japanese, or who are aiming for an exam or qualification. Every day you must finish a quota of 8 study actions, and some tabs stay locked until you do. If you just want to enjoy learning, choose Enjoyable Mode."}</p>
+        <button onClick={onOk} style={{ ...S.btn, width:"100%", background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff", marginBottom:8 }}>{T.ivWarnOk || "OK, I'm serious"}</button>
+        <button onClick={onBack} style={{ ...S.btn, width:"100%", background:"transparent", border:`1px solid ${C.border}`, color:"#94a3b8" }}>{T.ivWarnBack || "Choose another mode"}</button>
+      </div>
+    </div>
+  );
+}
+
+// How to read every number Intensive Mode shows. Shown right after the student confirms the warning, once
+// more to existing Intensive students, and any time from the "How to read this" button in the coach.
+const IV_GUIDE_EN = "🔥 Today's quota — Shows how many of today's 8 study actions you have finished. When you reach 8, the locked tabs open.||⏱ Flip speed / Words seen today — Flip speed is how long you typically take (median of the last 2 weeks) to turn a vocabulary card over. Under 5 seconds is good; 6 seconds or more means words are slow to come back. Words seen today counts the cards you looked at today.||🗣 Pronunciation Practice — The share of your recent pronunciation attempts that were correct. Below 70% means it needs more practice.||✍️ Writing Practice — The share of characters and written answers you got right without a mistake in the last 2 weeks.||✏️ Stroke accuracy — Of all the strokes you wrote, the share that had the correct order and shape.||🎤 Speaking — The share of your spoken answers that had no grammar or word mistakes.||📋 Word by word / Character by character — Open these lists to see the speed of each word and the accuracy of each character. Yellow marks a weak point (6 seconds or slower, or under 70%). ×2 means you tried it twice.||🎯 Coach advice — From your last 2 weeks it suggests today's focus: your most frequent mistake type (particles, verb forms, word choice, word order, spelling), a word you keep getting wrong, or characters to write again. Tap “Let's go” to practice right away.||ℹ️ Good to know — A dash (–) means there is not enough data yet. Your records are kept on this device. You can read this guide again anytime with the “How to read this” button in the coach.";
+function IntensiveGuide({ T, onClose }) {
+  const items = String(T.ivGuideItems || IV_GUIDE_EN).split("||").filter(Boolean);
+  return (
+    <div style={{ position:"fixed", inset:0, background:"rgba(0,0,0,0.78)", display:"flex", alignItems:"center", justifyContent:"center", zIndex:1100, padding:16 }}>
+      <div style={{ ...S.card, width:"100%", maxWidth:440, maxHeight:"92vh", overflowY:"auto" }}>
+        <p style={{ color:"#f1f5f9", fontSize:17, fontWeight:800, margin:"0 0 14px", textAlign:"center" }}>{T.ivGuideTitle || "How to read your Intensive Mode data"}</p>
+        <div style={{ display:"flex", flexDirection:"column", gap:8, marginBottom:14 }}>
+          {items.map((txt, i) => {
+            const k = txt.indexOf(" — ");
+            const head = k > 0 ? txt.slice(0, k) : "";
+            const body = k > 0 ? txt.slice(k + 3) : txt;
+            return (
+              <div key={i} style={{ padding:"10px 12px", borderRadius:10, background:"rgba(168,85,247,0.10)", border:`1px solid ${C.border}` }}>
+                {head && <p style={{ color:C.purpleLight, fontSize:13, fontWeight:800, margin:"0 0 4px" }}>{head}</p>}
+                <p style={{ color:"#e2e8f0", fontSize:12, lineHeight:1.75, margin:0 }}>{body}</p>
+              </div>
+            );
+          })}
+        </div>
+        <button onClick={onClose} style={{ ...S.btn, width:"100%", background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff" }}>{T.ivGuideOk || "Got it, start studying"}</button>
+      </div>
+    </div>
+  );
+}
+
 function ModePicker({ T, trialEnded, onPick }) {
+  const [warnFor, setWarnFor] = useState(null);
   const opts = trialEnded
     ? [["intensive", "Intensive mode", T.modeIntensiveDesc], ["enjoyable", "Enjoyable mode", T.modeEnjoyableDesc]]
     : [["enjoyable", "Enjoyable mode", T.modeEnjoyableDesc], ["intensive", "Intensive mode", T.modeIntensiveDesc], ["intensive_trial", "Trial of Intensive mode", T.modeTrialDesc]];
+  // Intensive / Trial: show the "serious learners only" notice first; the guide opens after OK.
+  const choose = (id) => { if (id === "enjoyable") onPick(id); else setWarnFor(id); };
+  if (warnFor) return <IntensiveWarn T={T} onOk={() => onPick(warnFor, true)} onBack={() => setWarnFor(null)} />;
   return (
     <div style={{ position:"fixed", inset:0, background:"rgba(0,0,0,0.78)", display:"flex", alignItems:"center", justifyContent:"center", zIndex:1100, padding:16 }}>
       <div style={{ ...S.card, width:"100%", maxWidth:420, maxHeight:"92vh", overflowY:"auto" }}>
         <p style={{ color:"#f1f5f9", fontSize:17, fontWeight:800, margin:"0 0 14px", textAlign:"center" }}>{trialEnded ? (T.trialEndedTitle || "Your 3-day Intensive trial has ended. Which mode now?") : (T.modePickerTitle || "Which mode do you want to try?")}</p>
         <div style={{ display:"flex", flexDirection:"column", gap:10 }}>
           {opts.map(([id, title, desc]) => (
-            <button key={id} onClick={() => onPick(id)} style={{ textAlign:"left", padding:"12px 14px", borderRadius:12, cursor:"pointer", border:`1.5px solid ${id === "enjoyable" ? C.border : C.purpleLight}`, background:id === "enjoyable" ? C.card : "rgba(168,85,247,0.12)", color:"#e2e8f0" }}>
+            <button key={id} onClick={() => choose(id)} style={{ textAlign:"left", padding:"12px 14px", borderRadius:12, cursor:"pointer", border:`1.5px solid ${id === "enjoyable" ? C.border : C.purpleLight}`, background:id === "enjoyable" ? C.card : "rgba(168,85,247,0.12)", color:"#e2e8f0" }}>
               <span style={{ display:"block", fontSize:14, fontWeight:800, marginBottom:4 }}>{id === "enjoyable" ? "😊 " : "🔥 "}{title}</span>
               <span style={{ display:"block", fontSize:12, color:"#94a3b8", lineHeight:1.6 }}>{desc}</span>
             </button>
@@ -19918,7 +20122,10 @@ function Dashboard({ form, onEdit, onLevelUp, onSetWeek, onLogout, onDeleteAccou
     window.addEventListener("gaku_learning_updated", h);
     return () => window.removeEventListener("gaku_learning_updated", h);
   }, []);
-  const pickStudyMode = (m) => { saveStudyMode(m); setStudyMode(loadStudyMode()); setShowModePicker(false); };
+  const [showIntensiveGuide, setShowIntensiveGuide] = useState(false);
+  const [ivSeen, setIvSeen] = useState(() => { try { return localStorage.getItem(scopedKey("gaku_intensive_guide_seen")) === "1"; } catch { return true; } });
+  const closeIntensiveGuide = () => { setShowIntensiveGuide(false); setIvSeen(true); try { localStorage.setItem(scopedKey("gaku_intensive_guide_seen"), "1"); } catch {} };
+  const pickStudyMode = (m, showGuide) => { saveStudyMode(m); setStudyMode(loadStudyMode()); setShowModePicker(false); if (showGuide) setShowIntensiveGuide(true); };
   // One-time explanation of the study modes (quota + tab lock). Shown once per account to everyone,
   // including students who were already using the app, after the Tutorial/pickers are out of the way.
   const [modeGuideSeen, setModeGuideSeen] = useState(() => { try { return localStorage.getItem(scopedKey("gaku_mode_guide_seen")) === "1"; } catch { return true; } });
@@ -20368,7 +20575,8 @@ function Dashboard({ form, onEdit, onLevelUp, onSetWeek, onLogout, onDeleteAccou
         </div>
       ); })()}
       {showFeaturePicker && <FeaturePicker key={featurePickerInitial.join(",")} T={T} initial={featurePickerInitial} onApply={applyFeatureChoice} />}
-      {!modeGuideSeen && !showModePicker && !showFeaturePicker && !tutorialActive && (() => { try { return localStorage.getItem(scopedKey("gaku_tutorial_done")) === "1"; } catch { return false; } })() && !T._loading && T.modeGuideTitle && <ModeGuide T={T} onClose={closeModeGuide} />}
+      {!modeGuideSeen && !showIntensiveGuide && !showModePicker && !showFeaturePicker && !tutorialActive && (() => { try { return localStorage.getItem(scopedKey("gaku_tutorial_done")) === "1"; } catch { return false; } })() && !T._loading && T.modeGuideTitle && <ModeGuide T={T} onClose={closeModeGuide} />}
+      {(showIntensiveGuide || (isIntensive && !ivSeen && modeGuideSeen && !showModePicker && !showFeaturePicker && !tutorialActive && (() => { try { return localStorage.getItem(scopedKey("gaku_tutorial_done")) === "1"; } catch { return false; } })())) && !T._loading && <IntensiveGuide T={T} onClose={closeIntensiveGuide} />}
       {showModePicker && !showFeaturePicker && !tutorialActive && <ModePicker T={T} trialEnded={effMode === "trial_ended"} onPick={pickStudyMode} />}
       {tutorialActive && (
         <TutorialOverlay
@@ -20563,7 +20771,8 @@ function Dashboard({ form, onEdit, onLevelUp, onSetWeek, onLogout, onDeleteAccou
               const areaLabel = (a) => ({ schedule: T.tabSchedule, vocab: T.tabVocabulary, content: T.tabPractice, conversation: T.convTitle, pronunciation: T.pronTitle, writing: T.writeTitle }[a] || a);
               const goDrill = (a) => { if (a === "schedule" || a === "vocab") { setTab(a === "vocab" ? "vocabulary" : "schedule"); return; } setTab("resources"); setResourceSubTab(a); };
               // Enjoyable mode: only the gentle suggestion card (no quota, no warnings), and only when there is one.
-              if (!isIntensive && !weak) return null;
+              const enjoyAdv = (!isIntensive && !weak) ? (analyzeCoach(coachAllow).advice[0] || null) : null;
+              if (!isIntensive && !weak && !enjoyAdv) return null;
               return (
                 <div style={{ ...S.card, marginBottom:12, background:isIntensive ? "linear-gradient(135deg,rgba(239,68,68,0.10),rgba(168,85,247,0.10))" : "rgba(168,85,247,0.08)", border:isIntensive ? "1px solid rgba(239,68,68,0.3)" : "1px solid rgba(168,85,247,0.25)" }}>
                   {isIntensive && <p style={{ color:"#fca5a5", fontSize:12, fontWeight:800, margin:"0 0 6px" }}>🔥 {(T.quotaTitle || "Today's quota: {done}/{goal}").replace("{done}", Math.min(today, INTENSIVE_DAILY_GOAL)).replace("{goal}", INTENSIVE_DAILY_GOAL)}{doneQuota ? " ✅" : ""}</p>}
@@ -20573,7 +20782,6 @@ function Dashboard({ form, onEdit, onLevelUp, onSetWeek, onLogout, onDeleteAccou
                   {isIntensive && !doneQuota && <p style={{ color:"#fecaca", fontSize:11, lineHeight:1.6, margin:"0 0 8px" }}>🔒 {T.quotaLocked || "Finish today's quota to unlock the other tabs."}</p>}
                   {isIntensive && missedYesterday && <p style={{ color:"#fecaca", fontSize:12, fontWeight:700, lineHeight:1.6, margin:"0 0 8px" }}>⚠️ {T.quotaMissed || "You missed yesterday's quota. Finish today's quota first — no skipping."}</p>}
                   {isIntensive && <CoachPanel T={T} allow={coachAllow} onGo={coachGo} />}
-                  {isIntensive && weak && <LessonBridgeCard T={T} />}
                   {!isIntensive && weak && (
                     <div>
                       <p style={{ color:C.purpleLight, fontSize:11, fontWeight:700, margin:"0 0 4px" }}>🎯 {T.coachTitle || "Today's suggestion"}</p>
@@ -20581,7 +20789,13 @@ function Dashboard({ form, onEdit, onLevelUp, onSetWeek, onLogout, onDeleteAccou
                         {(strong ? (T.coachBoth || "You usually do well in {strong}, and {weak} seems a little hard. How about {weak} today?") : (T.coachWeakOnly || "{weak} seems a little hard for you. How about practicing it today?")).split("{strong}").join(strong ? areaLabel(strong.a) : "").split("{weak}").join(areaLabel(weak.a))}
                       </p>
                       <button onClick={() => goDrill(weak.a)} style={{ ...S.btn, padding:"8px 16px", background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff", fontSize:12 }}>{T.coachGo || "Let's go"} →</button>
-                      <LessonBridgeCard T={T} />
+                    </div>
+                  )}
+                  {!isIntensive && !weak && enjoyAdv && (
+                    <div>
+                      <p style={{ color:C.purpleLight, fontSize:11, fontWeight:700, margin:"0 0 4px" }}>🎯 {T.coachTitle || "Today's suggestion"}</p>
+                      <p style={{ color:"#e2e8f0", fontSize:13, lineHeight:1.65, margin:"0 0 10px" }}>{coachAdviceLine(T, enjoyAdv)} {T.coachEnjoyAsk || "Would you like to work on this today?"}</p>
+                      <button onClick={() => { if (enjoyAdv.type === "writeretry") startWritingRetry(enjoyAdv.chars); goDrill(coachAdviceTarget(enjoyAdv)); }} style={{ ...S.btn, padding:"8px 16px", background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff", fontSize:12 }}>{T.coachGo || "Let's go"} →</button>
                     </div>
                   )}
                 </div>
