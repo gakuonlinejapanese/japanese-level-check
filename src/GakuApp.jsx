@@ -1219,6 +1219,10 @@ const UI_TRANSLATIONS = {
     coachWriteMiss: "You keep missing the character {word} ({n} tries, {pct}% clean). Write it slowly, one stroke at a time.",
     coachDetailFlip: "Flip speed, word by word",
     coachDetailWrite: "Writing, character by character",
+    coachMistakeType: "Your most frequent mistake is {type} ({n} times in the last 2 weeks). Make it your focus today.",
+    coachWordMistake: "You keep getting the word {word} wrong ({n} times). Review it today and write one sentence with it.",
+    coachMistakeNames: "Particles|Verb conjugation|Word choice|Word order|Spelling and script",
+    coachStatSpeak: "Speaking",
     coachStatViews: "Words seen today",
     coachStatListen: "Listening",
     lessonBridgeAsk: "Want to practice this with a real teacher? Try a free trial lesson.",
@@ -1870,6 +1874,10 @@ const UI_TRANSLATIONS = {
     coachWriteMiss: "Vous ratez souvent le caractère {word} ({n} essais, {pct} % sans erreur). Écrivez-le lentement, trait par trait.",
     coachDetailFlip: "Vitesse de retournement, mot par mot",
     coachDetailWrite: "Écriture, caractère par caractère",
+    coachMistakeType: "Votre erreur la plus fréquente concerne : {type} ({n} fois ces 2 dernières semaines). Concentrez-vous dessus aujourd'hui.",
+    coachWordMistake: "Vous vous trompez souvent sur le mot {word} ({n} fois). Révisez-le aujourd'hui et écrivez une phrase avec.",
+    coachMistakeNames: "les particules|la conjugaison des verbes|le choix des mots|l'ordre des mots|l'orthographe et l'écriture",
+    coachStatSpeak: "Expression orale",
     coachStatViews: "Mots vus aujourd'hui",
     coachStatListen: "Écoute",
     lessonBridgeAsk: "Envie de travailler cela avec un vrai professeur ? Essayez un cours d'essai gratuit.",
@@ -2506,6 +2514,10 @@ const UI_TRANSLATIONS = {
     coachWriteMiss: "Fallas seguido el carácter {word} ({n} intentos, {pct}% sin errores). Escríbelo despacio, trazo por trazo.",
     coachDetailFlip: "Velocidad de giro, palabra por palabra",
     coachDetailWrite: "Escritura, carácter por carácter",
+    coachMistakeType: "Tu error más frecuente es: {type} ({n} veces en las últimas 2 semanas). Hoy céntrate en eso.",
+    coachWordMistake: "Te equivocas seguido con la palabra {word} ({n} veces). Repásala hoy y escribe una frase con ella.",
+    coachMistakeNames: "las partículas|la conjugación verbal|la elección de palabras|el orden de las palabras|la ortografía y la escritura",
+    coachStatSpeak: "Expresión oral",
     coachStatViews: "Palabras vistas hoy",
     coachStatListen: "Comprensión auditiva",
     lessonBridgeAsk: "¿Quieres practicar esto con un profesor de verdad? Prueba una clase de prueba gratuita.",
@@ -3142,6 +3154,10 @@ const UI_TRANSLATIONS = {
     coachWriteMiss: "Você erra muito o caractere {word} ({n} tentativas, {pct}% sem erros). Escreva devagar, traço por traço.",
     coachDetailFlip: "Velocidade de virada, palavra por palavra",
     coachDetailWrite: "Escrita, caractere por caractere",
+    coachMistakeType: "Seu erro mais frequente é: {type} ({n} vezes nas últimas 2 semanas). Foque nisso hoje.",
+    coachWordMistake: "Você erra muito a palavra {word} ({n} vezes). Revise-a hoje e escreva uma frase com ela.",
+    coachMistakeNames: "as partículas|a conjugação verbal|a escolha de palavras|a ordem das palavras|a ortografia e a escrita",
+    coachStatSpeak: "Fala",
     coachStatViews: "Palavras vistas hoje",
     coachStatListen: "Compreensão auditiva",
     lessonBridgeAsk: "Quer praticar isso com um professor de verdade? Experimente uma aula experimental gratuita.",
@@ -3778,6 +3794,10 @@ const UI_TRANSLATIONS = {
     coachWriteMiss: "Das Zeichen {word} misslingt dir oft ({n} Versuche, {pct} % fehlerfrei). Schreib es langsam, Strich für Strich.",
     coachDetailFlip: "Umdrehtempo, Wort für Wort",
     coachDetailWrite: "Schreiben, Zeichen für Zeichen",
+    coachMistakeType: "Dein häufigster Fehler: {type} ({n} Mal in den letzten 2 Wochen). Konzentriere dich heute darauf.",
+    coachWordMistake: "Das Wort {word} gelingt dir oft nicht ({n} Mal). Wiederhole es heute und schreibe einen Satz damit.",
+    coachMistakeNames: "Partikeln|Verbkonjugation|Wortwahl|Wortstellung|Rechtschreibung und Schrift",
+    coachStatSpeak: "Sprechen",
     coachStatViews: "Heute gesehene Wörter",
     coachStatListen: "Hören",
     lessonBridgeAsk: "Möchten Sie das mit einer echten Lehrkraft üben? Probieren Sie eine kostenlose Probestunde.",
@@ -4414,6 +4434,10 @@ const UI_TRANSLATIONS = {
     coachWriteMiss: "Sbagli spesso il carattere {word} ({n} tentativi, {pct}% senza errori). Scrivilo lentamente, tratto per tratto.",
     coachDetailFlip: "Velocità di giro, parola per parola",
     coachDetailWrite: "Scrittura, carattere per carattere",
+    coachMistakeType: "Il tuo errore più frequente: {type} ({n} volte nelle ultime 2 settimane). Concentrati su questo oggi.",
+    coachWordMistake: "Sbagli spesso la parola {word} ({n} volte). Ripassala oggi e scrivi una frase con essa.",
+    coachMistakeNames: "le particelle|la coniugazione dei verbi|la scelta delle parole|l'ordine delle parole|l'ortografia e la scrittura",
+    coachStatSpeak: "Parlato",
     coachStatViews: "Parole viste oggi",
     coachStatListen: "Ascolto",
     lessonBridgeAsk: "Vuoi esercitarti su questo con un vero insegnante? Prova una lezione di prova gratuita.",
@@ -5050,6 +5074,10 @@ const UI_TRANSLATIONS = {
     coachWriteMiss: "你总是写错「{word}」（{n}次，无错率{pct}%）。请慢慢地一笔一画书写。",
     coachDetailFlip: "逐词翻卡速度",
     coachDetailWrite: "逐字书写情况",
+    coachMistakeType: "你最常见的错误是：{type}（最近两周{n}次）。今天请重点练习这一项。",
+    coachWordMistake: "你总是用错「{word}」这个词（{n}次）。今天复习一下，并用它造一个句子。",
+    coachMistakeNames: "助词|动词变形|词语选择|语序|拼写和文字",
+    coachStatSpeak: "口语",
     coachStatViews: "今天看过的单词",
     coachStatListen: "听力",
     lessonBridgeAsk: "想和真人老师一起练习这个吗？试试免费体验课吧。",
@@ -5686,6 +5714,10 @@ const UI_TRANSLATIONS = {
     coachWriteMiss: "你總是寫錯「{word}」（{n}次，無錯率{pct}%）。請慢慢地一筆一畫書寫。",
     coachDetailFlip: "逐詞翻卡速度",
     coachDetailWrite: "逐字書寫情況",
+    coachMistakeType: "你最常見的錯誤是：{type}（最近兩週{n}次）。今天請重點練習這一項。",
+    coachWordMistake: "你總是用錯「{word}」這個詞（{n}次）。今天複習一下，並用它造一個句子。",
+    coachMistakeNames: "助詞|動詞變化|詞語選擇|語序|拼寫和文字",
+    coachStatSpeak: "口語",
     coachStatViews: "今天看過的單字",
     coachStatListen: "聽力",
     lessonBridgeAsk: "想和真人老師一起練習這個嗎？試試免費體驗課吧。",
@@ -6322,6 +6354,10 @@ const UI_TRANSLATIONS = {
     coachWriteMiss: "{word} 글자를 자주 틀립니다({n}회 시도, 오류 없음 {pct}%). 천천히 한 획씩 써 보세요.",
     coachDetailFlip: "단어별 카드 뒤집기 속도",
     coachDetailWrite: "글자별 쓰기",
+    coachMistakeType: "가장 자주 하는 실수는 {type}입니다(최근 2주간 {n}회). 오늘은 이 부분을 중점적으로 연습해 보세요.",
+    coachWordMistake: "「{word}」라는 단어를 자주 틀립니다({n}회). 오늘 다시 복습하고 그 단어로 문장을 하나 써 보세요.",
+    coachMistakeNames: "조사|동사 활용|단어 선택|어순|표기와 문자",
+    coachStatSpeak: "말하기",
     coachStatViews: "오늘 본 단어",
     coachStatListen: "듣기",
     lessonBridgeAsk: "이 부분을 진짜 선생님과 함께 연습해 보시겠어요? 무료 체험 수업을 신청해 보세요.",
@@ -6958,6 +6994,10 @@ const UI_TRANSLATIONS = {
     coachWriteMiss: "คุณเขียนตัวอักษร {word} ผิดบ่อย ({n} ครั้ง ถูกทั้งหมด {pct}%) ลองเขียนช้า ๆ ทีละเส้น",
     coachDetailFlip: "ความเร็วพลิกการ์ดรายคำ",
     coachDetailWrite: "การเขียนรายตัวอักษร",
+    coachMistakeType: "ข้อผิดพลาดที่พบบ่อยที่สุดของคุณคือ {type} ({n} ครั้งใน 2 สัปดาห์ที่ผ่านมา) วันนี้ลองเน้นเรื่องนี้",
+    coachWordMistake: "คุณใช้คำว่า {word} ผิดบ่อย ({n} ครั้ง) วันนี้ลองทบทวนและแต่งประโยคด้วยคำนี้หนึ่งประโยค",
+    coachMistakeNames: "คำช่วย|การผันกริยา|การเลือกคำ|ลำดับคำ|การสะกดและตัวอักษร",
+    coachStatSpeak: "การพูด",
     coachStatViews: "คำที่ดูวันนี้",
     coachStatListen: "การฟัง",
     lessonBridgeAsk: "อยากฝึกเรื่องนี้กับครูตัวจริงไหม? ลองเรียนทดลองฟรีดูสิ",
@@ -7594,6 +7634,10 @@ const UI_TRANSLATIONS = {
     coachWriteMiss: "Anda sering tersilap aksara {word} ({n} cubaan, {pct}% tanpa kesilapan). Tulis perlahan-lahan, satu coretan demi satu.",
     coachDetailFlip: "Kelajuan pusing kad, satu demi satu perkataan",
     coachDetailWrite: "Penulisan, satu demi satu aksara",
+    coachMistakeType: "Kesilapan anda yang paling kerap ialah {type} ({n} kali dalam 2 minggu lepas). Fokus pada perkara ini hari ini.",
+    coachWordMistake: "Anda kerap tersilap perkataan {word} ({n} kali). Ulang kaji hari ini dan tulis satu ayat dengannya.",
+    coachMistakeNames: "partikel|konjugasi kata kerja|pemilihan perkataan|susunan perkataan|ejaan dan tulisan",
+    coachStatSpeak: "Pertuturan",
     coachStatViews: "Perkataan dilihat hari ini",
     coachStatListen: "Mendengar",
     lessonBridgeAsk: "Mahu berlatih perkara ini dengan guru sebenar? Cuba kelas percubaan percuma.",
@@ -8230,6 +8274,10 @@ const UI_TRANSLATIONS = {
     coachWriteMiss: "Anda sering salah menulis karakter {word} ({n} percobaan, {pct}% tanpa salah). Tulis pelan-pelan, satu goresan demi satu.",
     coachDetailFlip: "Kecepatan membalik kartu, kata demi kata",
     coachDetailWrite: "Menulis, karakter demi karakter",
+    coachMistakeType: "Kesalahan Anda yang paling sering adalah {type} ({n} kali dalam 2 minggu terakhir). Fokuslah pada hal ini hari ini.",
+    coachWordMistake: "Anda sering salah pada kata {word} ({n} kali). Ulas hari ini dan tulis satu kalimat dengan kata itu.",
+    coachMistakeNames: "partikel|konjugasi kata kerja|pemilihan kata|urutan kata|ejaan dan tulisan",
+    coachStatSpeak: "Berbicara",
     coachStatViews: "Kata dilihat hari ini",
     coachStatListen: "Menyimak",
     lessonBridgeAsk: "Ingin berlatih ini dengan guru sungguhan? Coba kelas percobaan gratis.",
@@ -8866,6 +8914,10 @@ const UI_TRANSLATIONS = {
     coachWriteMiss: "Bạn hay viết sai chữ {word} ({n} lần, {pct}% không lỗi). Hãy viết chậm, từng nét một.",
     coachDetailFlip: "Tốc độ lật thẻ theo từng từ",
     coachDetailWrite: "Viết theo từng chữ",
+    coachMistakeType: "Lỗi bạn hay mắc nhất là {type} ({n} lần trong 2 tuần qua). Hôm nay hãy tập trung vào phần này.",
+    coachWordMistake: "Bạn hay dùng sai từ {word} ({n} lần). Hôm nay hãy ôn lại và viết một câu với từ này.",
+    coachMistakeNames: "trợ từ|chia động từ|chọn từ|thứ tự từ|chính tả và chữ viết",
+    coachStatSpeak: "Nói",
     coachStatViews: "Từ đã xem hôm nay",
     coachStatListen: "Nghe",
     lessonBridgeAsk: "Bạn muốn luyện phần này với giáo viên thật không? Hãy thử một buổi học thử miễn phí.",
@@ -9502,6 +9554,10 @@ const UI_TRANSLATIONS = {
     coachWriteMiss: "आप {word} अक्षर में बार-बार गलती कर रहे हैं ({n} प्रयास, {pct}% बिना गलती)। धीरे-धीरे, एक-एक स्ट्रोक लिखें।",
     coachDetailFlip: "शब्द-दर-शब्द कार्ड पलटने की गति",
     coachDetailWrite: "अक्षर-दर-अक्षर लेखन",
+    coachMistakeType: "आपकी सबसे आम गलती {type} है (पिछले 2 हफ़्तों में {n} बार)। आज इसी पर ध्यान दें।",
+    coachWordMistake: "आप {word} शब्द में बार-बार गलती कर रहे हैं ({n} बार)। आज इसे दोहराएँ और इससे एक वाक्य लिखें।",
+    coachMistakeNames: "कारक चिह्न (पार्टिकल)|क्रिया रूप|शब्द चयन|शब्द क्रम|वर्तनी और लिपि",
+    coachStatSpeak: "बोलना",
     coachStatViews: "आज देखे गए शब्द",
     coachStatListen: "सुनना",
     lessonBridgeAsk: "क्या आप इसे असली शिक्षक के साथ अभ्यास करना चाहेंगे? एक मुफ़्त ट्रायल क्लास आज़माएँ।",
@@ -10138,6 +10194,10 @@ const UI_TRANSLATIONS = {
     coachWriteMiss: "「{word}」をよく間違えています（{n}回、ミスなし{pct}%）。ゆっくり一画ずつ書いてみましょう。",
     coachDetailFlip: "単語ごとのめくる速さ",
     coachDetailWrite: "一文字ごとの書き取り",
+    coachMistakeType: "よくするミスは「{type}」です（直近2週間で{n}回）。今日はここを中心にやってみましょう。",
+    coachWordMistake: "「{word}」をよく間違えています（{n}回）。今日もう一度復習して、この単語で1文書いてみましょう。",
+    coachMistakeNames: "助詞|動詞の活用|単語の選び方|語順|表記（かな・漢字）",
+    coachStatSpeak: "スピーキング",
     coachStatViews: "今日見た単語",
     coachStatListen: "リスニング",
     lessonBridgeAsk: "この課題を、先生と一緒に練習してみませんか？無料体験レッスンをご利用ください。",
@@ -10774,6 +10834,10 @@ const UI_TRANSLATIONS = {
     coachWriteMiss: "{word} karakterini sık yanlış yazıyorsun ({n} deneme, %{pct} hatasız). Yavaşça, çizgi çizgi yaz.",
     coachDetailFlip: "Kelime kelime kart çevirme hızı",
     coachDetailWrite: "Karakter karakter yazma",
+    coachMistakeType: "En sık yaptığın hata: {type} (son 2 haftada {n} kez). Bugün buna odaklan.",
+    coachWordMistake: "{word} kelimesini sık yanlış kullanıyorsun ({n} kez). Bugün tekrar et ve onunla bir cümle yaz.",
+    coachMistakeNames: "edatlar|fiil çekimi|kelime seçimi|kelime sırası|yazım ve yazı",
+    coachStatSpeak: "Konuşma",
     coachStatViews: "Bugün görülen kelimeler",
     coachStatListen: "Dinleme",
     lessonBridgeAsk: "Bunu gerçek bir öğretmenle çalışmak ister misiniz? Ücretsiz deneme dersini deneyin.",
@@ -11410,6 +11474,10 @@ const UI_TRANSLATIONS = {
     coachWriteMiss: "तपाईं {word} अक्षरमा बारम्बार गल्ती गर्दै हुनुहुन्छ ({n} प्रयास, {pct}% गल्तीबिना)। विस्तारै, एक-एक स्ट्रोक लेख्नुहोस्।",
     coachDetailFlip: "शब्द-शब्द कार्ड पल्टाउने गति",
     coachDetailWrite: "अक्षर-अक्षर लेखन",
+    coachMistakeType: "तपाईंको सबैभन्दा बारम्बार गल्ती {type} हो (पछिल्ला २ हप्तामा {n} पटक)। आज यसमै ध्यान दिनुहोस्।",
+    coachWordMistake: "तपाईं {word} शब्दमा बारम्बार गल्ती गर्दै हुनुहुन्छ ({n} पटक)। आज दोहोर्याउनुहोस् र यसबाट एउटा वाक्य लेख्नुहोस्।",
+    coachMistakeNames: "कारक चिह्न (पार्टिकल)|क्रिया रूप|शब्द छनोट|शब्द क्रम|हिज्जे र लिपि",
+    coachStatSpeak: "बोल्ने अभ्यास",
     coachStatViews: "आज हेरिएका शब्द",
     coachStatListen: "सुनाइ",
     lessonBridgeAsk: "के तपाईं यसलाई साँचो शिक्षकसँग अभ्यास गर्न चाहनुहुन्छ? निःशुल्क परीक्षण कक्षा प्रयास गर्नुहोस्।",
@@ -12046,6 +12114,10 @@ const UI_TRANSLATIONS = {
     coachWriteMiss: "Madalas kang magkamali sa karakter na {word} ({n} subok, {pct}% walang mali). Isulat nang dahan-dahan, isang stroke bawat isa.",
     coachDetailFlip: "Bilis ng pagpihit ng card, bawat salita",
     coachDetailWrite: "Pagsusulat, bawat karakter",
+    coachMistakeType: "Ang pinakamadalas mong pagkakamali ay {type} ({n} beses sa nakaraang 2 linggo). Ituon dito ngayong araw.",
+    coachWordMistake: "Madalas kang magkamali sa salitang {word} ({n} beses). Balikan ito ngayon at sumulat ng isang pangungusap gamit ito.",
+    coachMistakeNames: "mga particle|conjugation ng pandiwa|pagpili ng salita|ayos ng mga salita|baybay at sulat",
+    coachStatSpeak: "Pagsasalita",
     coachStatViews: "Mga salitang nakita ngayon",
     coachStatListen: "Pakikinig",
     lessonBridgeAsk: "Gusto mo bang ipractice ito kasama ang totoong guro? Subukan ang libreng trial lesson.",
@@ -16093,12 +16165,15 @@ Check the response for grammar or word-choice mistakes (particle usage, verb con
 If the response is already natural and correct, respond with exactly: {"hasError": false}
 
 If there is a genuine mistake, respond with this JSON shape:
-{"hasError": true, "incorrect": "the student's response as said (in Japanese)", "corrected": "the naturally corrected full sentence (in Japanese)", "translation": "translation of the corrected sentence into ${lang || "English"}", "explanation": "short explanation, written in ${lang || "English"}, of the mistake and the fix", "example": "one short additional Japanese example sentence using the corrected grammar point", "exampleTranslation": "translation of that example into ${lang || "English"}"}
+{"hasError": true, "incorrect": "the student's response as said (in Japanese)", "corrected": "the naturally corrected full sentence (in Japanese)", "translation": "translation of the corrected sentence into ${lang || "English"}", "type": "exactly one of: particle, conjugation, word, order, spelling (the main kind of mistake)", "wrong": "the short wrong word or phrase as said (max 12 characters)", "explanation": "short explanation, written in ${lang || "English"}, of the mistake and the fix", "example": "one short additional Japanese example sentence using the corrected grammar point", "exampleTranslation": "translation of that example into ${lang || "English"}"}
 
 Respond ONLY with valid JSON, no markdown, no backticks, nothing else.`;
       const out = await callClaudeFast(prompt, 700);
       const parsed = JSON.parse(out.replace(/```json|```/g,"").trim());
       setFeedback(parsed);
+      // Study metrics (speaking): one entry per checked answer, plus the mistake type / wrong word if any.
+      logMetric("speak", "", { ok: !parsed.hasError });
+      if (parsed.hasError && MISTAKE_TYPES.includes(parsed.type)) logMetric("mistake", String(parsed.wrong || "").slice(0, 12), { src: "speaking", t: parsed.type });
     } catch { setFeedback(null); }
     setFeedbackLoading(false);
   };
@@ -17415,9 +17490,10 @@ Decide whether the answer FITS the question: does it address what the question a
 
 Write "feedback" in ${lang}: 2-4 short sentences. Say what was good, name any content that was missing or off-topic, and point out the most important grammar or wording fixes with the corrected Japanese. Be encouraging and specific. Never invent requirements that are not in the question.
 Write "model" in natural Japanese at the student's level (similar length to what the question asks for). Always include it.
+Write "mistakes": the genuine grammar/wording mistakes in the student's answer (at most 5; an empty list if there are none, even when the answer does not fit the question). For each: "type" is exactly one of "particle" (wrong/missing particle), "conjugation" (verb/adjective form), "word" (wrong word choice or a non-existent word), "order" (word order), "spelling" (wrong kana/kanji/script); "wrong" is the short wrong word or phrase exactly as the student wrote it (max 12 characters); "right" is the correction.
 
 Respond ONLY with valid JSON, no markdown, no backticks:
-{"fits":true,"feedback":"","model":""}`;
+{"fits":true,"feedback":"","model":"","mistakes":[{"type":"particle","wrong":"","right":""}]}`;
     const ask = async () => {
       const res = await fetch("/api/claude", {
         method: "POST", headers: { "Content-Type": "application/json" },
@@ -17429,12 +17505,15 @@ Respond ONLY with valid JSON, no markdown, no backticks:
       const m = raw.match(/\{[\s\S]*\}/);
       const parsed = JSON.parse(m ? m[0] : raw);
       if (typeof parsed.fits !== "boolean" || !String(parsed.feedback || "").trim()) throw new Error("bad");
-      return { fits: parsed.fits, feedback: String(parsed.feedback).trim(), model: String(parsed.model || "").trim() };
+      const mistakes = (Array.isArray(parsed.mistakes) ? parsed.mistakes : []).filter(x => x && MISTAKE_TYPES.includes(x.type)).slice(0, 5);
+      return { fits: parsed.fits, feedback: String(parsed.feedback).trim(), model: String(parsed.model || "").trim(), mistakes };
     };
     try {
       let r;
       try { r = await ask(); } catch { r = await ask(); }
       logLearningEvent("writing", r.fits);
+      // Study metrics: each grammar/wording mistake is recorded with its type and the wrong word.
+      r.mistakes.forEach(x => logMetric("mistake", String(x.wrong || "").slice(0, 12), { src: "writing", t: x.type }));
       setResult(r);
     } catch {
       setError(T.writeErrFail || "Couldn't check your answer. Please try again.");
@@ -19345,6 +19424,9 @@ function analyzeLearning(log, allow) {
 // (w = word, ms) · "pron" = a pronunciation attempt (w = target text, ok) · "listen" = a listening
 // comprehension answer (ok). Accuracy for pronunciation / writing / etc. still comes from the learning log.
 const METRIC_LOG_KEY = "gaku_metric_log";
+// Kinds of grammar/wording mistakes the AI reports for Writing (Questions) and Speaking answers.
+// Order matches the pipe-separated labels in the coachMistakeNames translation.
+const MISTAKE_TYPES = ["particle", "conjugation", "word", "order", "spelling"];
 function loadMetricLog() {
   try { const v = JSON.parse(localStorage.getItem(scopedKey(METRIC_LOG_KEY)) || "[]"); return Array.isArray(v) ? v : []; } catch { return []; }
 }
@@ -19389,6 +19471,18 @@ function analyzeCoach(allow) {
   const writeTotal = wEv.length + lw.length;
   const writePct = writeTotal ? Math.round(100 * (wEv.filter(x => x.ok).length + lw.filter(x => x.ok).length) / writeTotal) : null;
   const writeMiss = ok("writing") ? (writeChars.filter(c => c.n >= 2 && c.pct < 70)[0] || null) : null;
+  // Grammar / word mistakes from AI-checked Writing and Speaking answers: the most frequent mistake type
+  // (>= 3 in 14 days) and any word that keeps being wrong (>= 2 times).
+  const mk = m.filter(x => x.k === "mistake" && MISTAKE_TYPES.includes(x.t) && (x.src === "speaking" ? ok("conversation") || ok("content") : ok("writing")));
+  const byType = {};
+  mk.forEach(x => { const c = byType[x.t] || (byType[x.t] = { t: x.t, n: 0, sp: 0 }); c.n++; if (x.src === "speaking") c.sp++; });
+  const topType = Object.values(byType).sort((a, b) => b.n - a.n)[0];
+  const typeMiss = topType && topType.n >= 3 ? { idx: MISTAKE_TYPES.indexOf(topType.t), n: topType.n, speaking: topType.sp * 2 > topType.n } : null;
+  const wrongWords = {};
+  mk.filter(x => x.t === "word" && x.w).forEach(x => { wrongWords[x.w] = (wrongWords[x.w] || 0) + 1; });
+  const wordMiss = Object.entries(wrongWords).filter(([, n]) => n >= 2).map(([w, n]) => ({ w, n })).sort((a, b) => b.n - a.n)[0] || null;
+  const sp = m.filter(x => x.k === "speak");
+  const speakPct = sp.length ? Math.round(100 * sp.filter(x => x.ok).length / sp.length) : null;
   const slowWord = Object.entries(byWord).filter(([, a]) => a.length >= 2).map(([w, a]) => ({ w, sec: medianOf(a) / 1000 })).filter(x => x.sec >= 8).sort((a, b) => b.sec - a.sec)[0] || null;
   const views = {}; let viewsToday = 0;
   m.forEach(x => { if (x.k === "view" && x.t >= todayMs) { views[x.w] = (views[x.w] || 0) + 1; viewsToday++; } });
@@ -19404,13 +19498,15 @@ function analyzeCoach(allow) {
   if (listenPct !== null && L.length >= 3 && listenPct < 70 && (ok("conversation") || ok("content"))) advice.push({ type: "listen", pct: listenPct });
   if (pronMiss) advice.push({ type: "pron", w: pronMiss.w, n: pronMiss.n });
   if (writeMiss) advice.push({ type: "writemiss", w: writeMiss.w, n: writeMiss.n, pct: writeMiss.pct });
+  if (typeMiss) advice.push({ type: "mtype", idx: typeMiss.idx, n: typeMiss.n, speaking: typeMiss.speaking });
+  if (wordMiss) advice.push({ type: "wordmiss", w: wordMiss.w, n: wordMiss.n });
   if (repeat) advice.push({ type: "repeat", w: repeat.w, n: repeat.n });
   if (flipSec !== null && flipSec >= 6) advice.push({ type: "slow", sec: Math.round(flipSec) });
   else if (slowWord) advice.push({ type: "slowword", w: slowWord.w, sec: Math.round(slowWord.sec) });
   return {
     advice,
     hasData: learn.length + m.length > 0,
-    stats: { flipSec, viewsToday, pron: ok("pronunciation") ? rate("pronunciation") : null, writing: ok("writing") ? writePct : null, stroke: ok("writing") ? strokePct : null, listen: listenPct },
+    stats: { flipSec, viewsToday, pron: ok("pronunciation") ? rate("pronunciation") : null, writing: ok("writing") ? writePct : null, stroke: ok("writing") ? strokePct : null, speak: (ok("conversation") || ok("content")) ? speakPct : null, listen: listenPct },
     flipWords,
     writeChars: ok("writing") ? writeChars : [],
   };
@@ -19418,6 +19514,8 @@ function analyzeCoach(allow) {
 function CoachPanel({ T, allow, onGo, compact }) {
   const { advice, stats, hasData, flipWords, writeChars } = analyzeCoach(allow);
   const line = (a) => {
+    if (a.type === "mtype") return progressFill(T.coachMistakeType || "Your most frequent mistake is {type} ({n} times in the last 2 weeks). Make it your focus today.", { type: (T.coachMistakeNames || "Particles|Verb conjugation|Word choice|Word order|Spelling and script").split("|")[a.idx] || "", n: a.n });
+    if (a.type === "wordmiss") return progressFill(T.coachWordMistake || "You keep getting the word {word} wrong ({n} times). Review it today and write one sentence with it.", { word: a.w, n: a.n });
     if (a.type === "writemiss") return progressFill(T.coachWriteMiss || "You keep missing the character {word} ({n} tries, {pct}% clean). Write it slowly, one stroke at a time.", { word: a.w, n: a.n, pct: a.pct });
     if (a.type === "acc") return progressFill(T.coachAccWeak || "{area} accuracy is {pct}%. Make {area} your focus today.", { area: coachAreaLabel(T, a.a), pct: a.pct });
     if (a.type === "listen") return progressFill(T.coachListenWeak || "Listening comprehension is {pct}%. Listen several times before reading the text.", { pct: a.pct });
@@ -19426,7 +19524,7 @@ function CoachPanel({ T, allow, onGo, compact }) {
     if (a.type === "slow") return progressFill(T.coachSlowFlip || "It takes you about {sec}s to recall a word. Aim for under 5s with quick flashcard rounds.", { sec: a.sec });
     return progressFill(T.coachSlowWord || "Your slowest word is {word} ({sec}s). Review it again.", { word: a.w, sec: a.sec });
   };
-  const target = (a) => a.type === "acc" ? a.a : a.type === "listen" ? "conversation" : a.type === "pron" ? "pronunciation" : a.type === "writemiss" ? "writing" : "vocab";
+  const target = (a) => a.type === "acc" ? a.a : a.type === "listen" ? "conversation" : a.type === "pron" ? "pronunciation" : a.type === "writemiss" ? "writing" : a.type === "mtype" ? (a.speaking ? "conversation" : "writing") : a.type === "wordmiss" ? "writing" : "vocab";
   const shown = advice.slice(0, compact ? 1 : 3);
   if (compact) {
     if (!shown.length) return null;
@@ -19444,6 +19542,7 @@ function CoachPanel({ T, allow, onGo, compact }) {
     [T.coachStatListen || "Listening", stats.listen !== null ? stats.listen + "%" : "–"],
     [T.writeTitle || "Writing", stats.writing !== null ? stats.writing + "%" : "–"],
     [T.coachStatStroke || "Stroke accuracy", stats.stroke !== null ? stats.stroke + "%" : "–"],
+    [T.coachStatSpeak || "Speaking", stats.speak !== null ? stats.speak + "%" : "–"],
   ];
   const detailRow = (k, label, right, bad) => (
     <div key={k} style={{ display:"flex", justifyContent:"space-between", gap:10, fontSize:12, padding:"3px 0", borderBottom:`1px solid ${C.border}` }}>
