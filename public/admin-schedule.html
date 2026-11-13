@@ -63,6 +63,16 @@
   </section>
 
   <section>
+    <h2>💾 生徒データのバックアップ</h2>
+    <p style="font-size:12px;color:#64748b;margin:0 0 10px;">長期間使われていない生徒のデータを初期化する前に押してください。全生徒の学習データ（単語帳・フォルダ・勉強ガイド・チェック状況・プロフィールなど）を、その時点の状態で丸ごと保存します。保存は何回でもでき、古いバックアップは消えません。</p>
+    <div class="row" style="margin-top:0;">
+      <button class="btn confirm" id="backup-btn" onclick="createBackup()">💾 今すぐ全生徒をバックアップ</button>
+      <span id="backup-status" style="font-size:12px;color:#64748b;"></span>
+    </div>
+    <div id="backup-list" style="margin-top:12px;"><p>読み込み中…</p></div>
+  </section>
+
+  <section>
     <h2>📋 キャンセル・リスケ申請</h2>
     <div id="cancellation-list"><p>読み込み中…</p></div>
     <div style="margin-top:12px;padding-top:10px;border-top:1px dashed #cbd5e1;font-size:12px;">
@@ -260,6 +270,7 @@ function enterAdmin() {
   document.getElementById("app").style.display = "block";
   loadWaitlist();
   loadSuspendedStudents();
+  loadBackups();
   loadAvailabilityGrid();
   loadOfficialStudents();
   loadTrialLessonList();
@@ -274,6 +285,73 @@ async function api(action, extra = {}) {
   });
   if (resp.status === 401) { alert("パスワードが違います"); location.reload(); }
   return resp.json();
+}
+
+// ---------- 生徒データのバックアップ ----------
+function fmtBackupSize(bytes) {
+  if (bytes >= 1048576) return (bytes / 1048576).toFixed(1) + " MB";
+  return Math.max(1, Math.round(bytes / 1024)) + " KB";
+}
+function fmtBackupDate(iso) {
+  return new Date(iso).toLocaleString("ja-JP", { timeZone: "Asia/Tokyo", hour12: false }) + " (JST)";
+}
+
+async function loadBackups() {
+  const el = document.getElementById("backup-list");
+  try {
+    const data = await api("list-backups");
+    if (data.error) { el.innerHTML = `<p style="color:#dc2626;font-size:12px;">${data.error}</p>`; return; }
+    const list = data.backups || [];
+    if (list.length === 0) { el.innerHTML = "<p style=\"font-size:13px;\">まだバックアップはありません。</p>"; return; }
+    el.innerHTML = list.map((b, i) => `
+      <div class="req-card" style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;">
+        <div style="font-size:13px;">
+          <strong>${fmtBackupDate(b.created_at)}</strong>${i === 0 ? ' <span class="badge confirmed">最新</span>' : ""}<br/>
+          <span style="color:#64748b;font-size:12px;">${b.student_count}人分 ・ ${fmtBackupSize(b.size_bytes)}${b.label ? " ・ " + b.label.replace(/</g, "&lt;") : ""}</span>
+        </div>
+        <button class="btn" onclick="downloadBackup('${b.id}')">⬇ JSONをダウンロード</button>
+      </div>`).join("");
+  } catch (e) {
+    el.innerHTML = `<p style="color:#dc2626;font-size:12px;">読み込みに失敗しました: ${e.message}</p>`;
+  }
+}
+
+async function createBackup() {
+  if (!confirm("全生徒の学習データをバックアップします。よろしいですか？")) return;
+  const btn = document.getElementById("backup-btn");
+  const status = document.getElementById("backup-status");
+  btn.disabled = true;
+  status.textContent = "バックアップ中…（数秒かかります）";
+  try {
+    const data = await api("create-backup");
+    if (data.error) { status.textContent = ""; alert("バックアップに失敗しました: " + data.error); return; }
+    status.textContent = `✅ 完了: ${data.backup.student_count}人分 ・ ${fmtBackupSize(data.backup.size_bytes)}`;
+    await loadBackups();
+  } catch (e) {
+    status.textContent = "";
+    alert("バックアップに失敗しました: " + e.message);
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+async function downloadBackup(id) {
+  try {
+    const data = await api("download-backup", { id });
+    if (data.error) { alert("ダウンロードに失敗しました: " + data.error); return; }
+    const b = data.backup;
+    const stamp = new Date(b.created_at).toISOString().slice(0, 16).replace(/[-:T]/g, "");
+    const blob = new Blob([JSON.stringify(b.snapshot, null, 2)], { type: "application/json" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = `gaku-backup-${stamp}.json`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 5000);
+  } catch (e) {
+    alert("ダウンロードに失敗しました（データが大きすぎる可能性があります）: " + e.message);
+  }
 }
 
 function fmtDT(dateStr, timeStr) {

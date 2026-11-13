@@ -40,6 +40,11 @@ import { assessLongAbsence, SUSPEND_EMAIL_SUBJECT, suspendEmailHtml } from "./_a
 //     （api/policy-agreement.jsが受付時にメール一致で予約枠を自動解放し、その結果も含む）
 // POST { secret, action: "acknowledge-cancellation-request", id }
 //   → 申請を「確認済み」にする（admin-schedule.htmlの一覧から消える）
+// POST { secret, action: "create-backup", label? }
+//   → 全生徒の学習データ(profiles/migration_bridge/assigned_vocab等)を1つのスナップショットとして
+//     student_data_backups に保存（データ初期化・退学処理の前にSeitoがボタン1つで実行）
+// POST { secret, action: "list-backups" }  → バックアップ履歴（中身は含まない）
+// POST { secret, action: "download-backup", id }  → 指定バックアップのJSON全体（管理画面のダウンロード用）
 
 function requireAdmin(body) {
   return body.secret && body.secret === process.env.ADMIN_SECRET;
@@ -676,6 +681,161 @@ async function handleSendLessonReminders(supabase, res) {
   return res.status(200).json({ ok: true, sent: sentIds.length, failed: failedIds.length, checked: toSend.length });
 }
 
+// ---------- 生徒データのバックアップ ----------
+// 長期間使わない生徒のデータ初期化(account-status.jsのGRACE_DAYS経過後の自動削除や退学処理)の前に、
+// Seitoがボタン1つで全生徒の学習データを丸ごと保存しておくための機能。
+// 保存先は student_data_backups(RLS有効・ポリシーなし=サーバーのservice roleだけが読み書き可能)。
+// auth.usersへの外部キーは付けていないので、アカウントが削除されてもバックアップは残る。
+
+// Supabaseの1回あたり1000行上限を超えても全件取れるよう、ページ分割して読む
+async function fetchAllRows(supabase, table, columns = "*") {
+  const pageSize = 1000;
+  const rows = [];
+  for (let from = 0; ; from += pageSize) {
+    const { data, error } = await supabase.from(table).select(columns).range(from, from + pageSize - 1);
+    if (error) throw new Error(`${table}: ${error.message}`);
+    rows.push(...(data || []));
+    if (!data || data.length < pageSize) break;
+  }
+  return rows;
+}
+
+function groupBy(rows, key) {
+  const map = new Map();
+  for (const r of rows) {
+    const k = r[key];
+    if (!k) continue;
+    if (!map.has(k)) map.set(k, []);
+    map.get(k).push(r);
+  }
+  return map;
+}
+
+async function handleCreateBackup(supabase, body, res) {
+  const label = typeof body.label === "string" ? body.label.trim().slice(0, 200) : "";
+  try {
+    const [
+      profiles, bridge, vocab, engagement, funnel, jlptResults, mockRequests, feedback, agreements, invites,
+    ] = await Promise.all([
+      fetchAllRows(supabase, "profiles"),
+      fetchAllRows(supabase, "migration_bridge"),
+      fetchAllRows(supabase, "assigned_vocab"),
+      fetchAllRows(supabase, "trial_engagement_days"),
+      fetchAllRows(supabase, "trial_funnel_events"),
+      fetchAllRows(supabase, "jlpt_results"),
+      fetchAllRows(supabase, "jlpt_mock_test_requests"),
+      fetchAllRows(supabase, "student_feedback"),
+      fetchAllRows(supabase, "policy_agreements"),
+      fetchAllRows(supabase, "invite_codes"),
+    ]);
+
+    const bridgeBy = new Map(bridge.map((b) => [b.user_id, b]));
+    const vocabBy = groupBy(vocab, "student_id");
+    const engagementBy = groupBy(engagement, "user_id");
+    const funnelBy = groupBy(funnel, "user_id");
+    const jlptBy = groupBy(jlptResults, "student_id");
+    const mockBy = groupBy(mockRequests, "user_id");
+    const feedbackBy = groupBy(feedback, "user_id");
+    const agreementsBy = groupBy(agreements, "user_id");
+    const invitesBy = groupBy(invites, "used_by");
+
+    // 1生徒=1オブジェクト。復元するときは user_id で引けば、その生徒の全データが揃っている。
+    const students = profiles.map((p) => ({
+      user_id: p.id,
+      email: p.email,
+      name: p.name,
+      profile: p,
+      // 学習データ本体(単語帳・フォルダ・勉強ガイド・チェック状況など)はlocalStorageのスナップショットとしてここに入っている
+      migration_bridge: bridgeBy.get(p.id)?.data || null,
+      migration_bridge_updated_at: bridgeBy.get(p.id)?.updated_at || null,
+      assigned_vocab: vocabBy.get(p.id) || [],
+      trial_engagement_days: engagementBy.get(p.id) || [],
+      trial_funnel_events: funnelBy.get(p.id) || [],
+      jlpt_results: jlptBy.get(p.id) || [],
+      jlpt_mock_test_requests: mockBy.get(p.id) || [],
+      student_feedback: feedbackBy.get(p.id) || [],
+      policy_agreements: agreementsBy.get(p.id) || [],
+      invite_codes: invitesBy.get(p.id) || [],
+    }));
+
+    // プロフィールが既に消えている(退学処理などで削除済み)のに、データだけ残っているユーザーも取りこぼさない
+    const knownIds = new Set(profiles.map((p) => p.id));
+    const orphanIds = new Set();
+    for (const m of [bridgeBy, vocabBy, jlptBy]) for (const id of m.keys()) if (!knownIds.has(id)) orphanIds.add(id);
+    for (const id of orphanIds) {
+      students.push({
+        user_id: id,
+        email: null,
+        name: null,
+        profile: null,
+        migration_bridge: bridgeBy.get(id)?.data || null,
+        migration_bridge_updated_at: bridgeBy.get(id)?.updated_at || null,
+        assigned_vocab: vocabBy.get(id) || [],
+        trial_engagement_days: [],
+        trial_funnel_events: [],
+        jlpt_results: jlptBy.get(id) || [],
+        jlpt_mock_test_requests: [],
+        student_feedback: [],
+        policy_agreements: [],
+        invite_codes: [],
+      });
+    }
+
+    const createdAt = new Date().toISOString();
+    const snapshot = { version: 1, created_at: createdAt, student_count: students.length, students };
+    const sizeBytes = Buffer.byteLength(JSON.stringify(snapshot), "utf8");
+
+    const { data: inserted, error: insErr } = await supabase
+      .from("student_data_backups")
+      .insert({ label: label || null, student_count: students.length, size_bytes: sizeBytes, snapshot })
+      .select("id, created_at, label, student_count, size_bytes")
+      .single();
+    if (insErr) {
+      const hint = /student_data_backups/.test(insErr.message || "") ? "（student_data_backupsテーブルがありません）" : "";
+      return res.status(500).json({ error: insErr.message + hint });
+    }
+    return res.status(200).json({ ok: true, backup: inserted });
+  } catch (e) {
+    return res.status(500).json({ error: e.message });
+  }
+}
+
+async function handleListBackups(supabase, res) {
+  // snapshot本体は重いので一覧では返さない
+  const { data, error } = await supabase
+    .from("student_data_backups")
+    .select("id, created_at, label, student_count, size_bytes")
+    .order("created_at", { ascending: false })
+    .limit(50);
+  if (error) return res.status(500).json({ error: error.message });
+  return res.status(200).json({ backups: data || [] });
+}
+
+async function handleDownloadBackup(supabase, body, res) {
+  if (!body.id) return res.status(400).json({ error: "id is required" });
+  const { data, error } = await supabase
+    .from("student_data_backups")
+    .select("id, created_at, label, student_count, size_bytes, snapshot")
+    .eq("id", body.id)
+    .maybeSingle();
+  if (error) return res.status(500).json({ error: error.message });
+  if (!data) return res.status(404).json({ error: "バックアップが見つかりません" });
+
+  // Vercelの関数レスポンスは約4.5MBが上限。JLPT診断PDF(base64)が全体の約4割を占めるため、
+  // ダウンロード用JSONからはPDF本体だけ除く(データベース内のバックアップには全部残っている)。
+  let pdfOmitted = 0;
+  for (const s of data.snapshot?.students || []) {
+    for (const r of s.jlpt_results || []) {
+      if (r.pdf_base64) { r.pdf_base64 = null; r.pdf_omitted_in_download = true; pdfOmitted += 1; }
+    }
+  }
+  const payloadBytes = Buffer.byteLength(JSON.stringify(data), "utf8");
+  if (payloadBytes > 4200000) {
+    return res.status(413).json({ error: `バックアップが大きすぎて(${Math.round(payloadBytes / 1048576)}MB)ブラウザからは取り出せません。データベース内には保存済みです。` });
+  }
+  return res.status(200).json({ ok: true, backup: data, pdfOmitted });
+}
+
 export default async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed" });
   const supabase = getAdminClient();
@@ -709,6 +869,9 @@ export default async function handler(req, res) {
     if (action === "send-lesson-reminders") return await handleSendLessonReminders(supabase, res);
     if (action === "list-cancellation-requests") return await handleListCancellationRequests(supabase, res);
     if (action === "acknowledge-cancellation-request") return await handleAcknowledgeCancellationRequest(supabase, body, res);
+    if (action === "create-backup") return await handleCreateBackup(supabase, body, res);
+    if (action === "list-backups") return await handleListBackups(supabase, res);
+    if (action === "download-backup") return await handleDownloadBackup(supabase, body, res);
 
     return res.status(400).json({ error: "Unknown action" });
   } catch (e) {
