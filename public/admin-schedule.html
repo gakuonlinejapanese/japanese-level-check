@@ -645,9 +645,28 @@ async function loadOfficialStudents() {
     const locationLabel = s.country
       ? `${s.country}${s.state ? " – " + s.state : ""}`
       : "住まい未登録";
+    const ab = s.absence;
+    let absenceLabel = "";
+    if (ab) {
+      const th = ab.threshold || 5;
+      const reached = ab.confirmed >= th;
+      const near = !reached && ab.projected >= th;
+      const color = reached ? "#c62828" : near ? "#e65100" : "#555";
+      const bg = reached ? "#ffebee" : near ? "#fff3e0" : "#f3f3f3";
+      const monthsText = (ab.months || []).map(m => m.replace("-", "年") + "月").join("、");
+      const detail = ab.overridden
+        ? `手動調整で固定(自動計算: 確定${ab.autoConfirmed}ヶ月 / 予定込み${ab.autoProjected}ヶ月)`
+        : (monthsText ? `対象の月: ${monthsText}` : "丸1ヶ月の欠席なし");
+      const main = ab.overridden || ab.confirmed === ab.projected
+        ? `${ab.confirmed}ヶ月`
+        : `${ab.confirmed}ヶ月(予定込み ${ab.projected}ヶ月)`;
+      const flag = reached ? " ⚠️ 5ヶ月以上" : near ? " ⚠️ 予定で5ヶ月以上" : "";
+      absenceLabel = `<div style="margin-top:4px;"><span title="${detail}" style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:12px;color:${color};background:${bg};">📊 累積休学: ${main}${ab.overridden ? "(手動)" : ""}${flag}</span> <span style="font-size:11px;color:#888;">${detail}</span></div>`;
+    }
     return `<div class="req-card" style="display:flex;justify-content:space-between;align-items:center;gap:8px;">
-      <span><strong>${s.name}</strong> — ${s.email}${s.notes ? " — " + s.notes : ""} — 📍${locationLabel}${s.timezone ? " (" + s.timezone + ")" : ""}</span>
+      <span><strong>${s.name}</strong> — ${s.email}${s.notes ? " — " + s.notes : ""} — 📍${locationLabel}${s.timezone ? " (" + s.timezone + ")" : ""}${absenceLabel}</span>
       <span style="flex-shrink:0;display:flex;gap:4px;">
+        <button class="opt-btn avail" onclick="editOfficialStudentAbsenceMonths('${s.id}')">📊 月数</button>
         <button class="opt-btn avail" onclick="editOfficialStudentName('${s.id}','${s.name.replace(/'/g, "\\'")}')">✏️ 名前</button>
         <button class="opt-btn avail" onclick="editOfficialStudentLocation('${s.id}')">📍 住まい</button>
       </span>
@@ -733,6 +752,25 @@ async function createOfficialBooking() {
   document.getElementById("booking-label").value = "";
   loadAvailabilityGrid();
   loadRescheduleList();
+}
+
+// 累積休学月数の手動調整: 数字を入れるとその月数で固定、空欄にすると自動計算に戻す
+async function editOfficialStudentAbsenceMonths(id) {
+  const student = (await api("list-official-students")).students.find(s => s.id === id);
+  if (!student) return;
+  const ab = student.absence;
+  const current = ab && ab.overridden ? String(ab.confirmed) : "";
+  const msg = `${student.name}\n累積休学月数を手動で固定します。\n(自動計算: 確定${ab ? ab.autoConfirmed : "?"}ヶ月 / 予定込み${ab ? ab.autoProjected : "?"}ヶ月)\n\n数字を入力 = その月数で固定\n空欄にしてOK = 自動計算に戻す`;
+  const input = prompt(msg, current);
+  if (input === null) return;
+  const trimmed = input.trim();
+  let value = null;
+  if (trimmed !== "") {
+    value = Number(trimmed);
+    if (!Number.isInteger(value) || value < 0) { alert("0以上の整数を入力してください。"); return; }
+  }
+  await api("update-official-student", { id, name: student.name, absence_months_override: value });
+  loadOfficialStudents();
 }
 
 async function editOfficialStudentName(id, currentName) {

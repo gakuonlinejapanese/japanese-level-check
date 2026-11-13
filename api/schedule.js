@@ -1,6 +1,6 @@
 import { getAdminClient, ADMIN_EMAIL } from "./_supabaseAdmin.js";
 import { sendEmail } from "./_resend.js";
-import { assessLongAbsence, SUSPEND_EMAIL_SUBJECT, suspendEmailHtml } from "./_absence.js";
+import { assessLongAbsence, SUSPEND_EMAIL_SUBJECT, suspendEmailHtml, computeAbsenceMonths, nameTokens, ABSENCE_COUNT_START, ABSENCE_MONTHS_THRESHOLD } from "./_absence.js";
 
 // api/schedule.js — レッスン予約・ウェイトリスト機能を1ファイルに集約
 // (admin-withdrawal.js と同じ理由: Vercel Hobbyプランの12関数制限を超えないため)
@@ -311,7 +311,54 @@ async function handleRejectWaitlist(supabase, body, res) {
 async function handleListOfficialStudents(supabase, res) {
   const { data, error } = await supabase.from("official_students").select("*").order("name");
   if (error) return res.status(500).json({ error: error.message });
-  return res.status(200).json({ students: data || [] });
+  const students = data || [];
+
+  // 累積休学月数: キャンセルフォームの記録(2026-08-01以降)から数える。失敗しても名簿の表示は止めない。
+  try {
+    const { data: reqs, error: rErr } = await supabase
+      .from("cancellation_requests")
+      .select("request_type, student_name, student_email, cancel_date, return_date, reschedule_date")
+      .gte("cancel_date", "2026-07-01");
+    if (rErr) throw rErr;
+
+    const byId = new Map(students.map((s) => [s.id, []]));
+    const byEmail = new Map(students.map((s) => [(s.email || "").trim().toLowerCase(), s.id]));
+    const tokens = students.map((s) => ({ id: s.id, t: new Set(nameTokens(s.name)) }));
+
+    for (const r of reqs || []) {
+      const end = r.request_type === "cancel" ? r.return_date : r.reschedule_date;
+      if (!r.cancel_date || !end) continue;
+      let id = byEmail.get((r.student_email || "").trim().toLowerCase());
+      if (!id && !r.student_email) {
+        // メールのない古い申請は名前で照合(一致する人がちょうど1人のときだけ採用)
+        const rt = nameTokens(r.student_name);
+        const hits = tokens.filter((s) => rt.some((t) => s.t.has(t)));
+        if (hits.length === 1) id = hits[0].id;
+      }
+      if (id) byId.get(id).push({ start: r.cancel_date, end });
+    }
+
+    const today = new Date(Date.now() + 9 * 3600 * 1000).toISOString().slice(0, 10); // 日本時間
+    for (const s of students) {
+      const auto = computeAbsenceMonths(byId.get(s.id) || [], today);
+      const ov = s.absence_months_override;
+      const overridden = ov !== null && ov !== undefined;
+      s.absence = {
+        confirmed: overridden ? ov : auto.confirmed,
+        projected: overridden ? ov : auto.projected,
+        months: auto.months,
+        overridden,
+        autoConfirmed: auto.confirmed,
+        autoProjected: auto.projected,
+        threshold: ABSENCE_MONTHS_THRESHOLD,
+        countFrom: ABSENCE_COUNT_START,
+      };
+    }
+  } catch (e) {
+    console.error("absence months calc failed:", e.message);
+  }
+
+  return res.status(200).json({ students });
 }
 
 async function handleAddOfficialStudent(supabase, body, res) {
@@ -330,11 +377,20 @@ async function handleAddOfficialStudent(supabase, body, res) {
 }
 
 async function handleUpdateOfficialStudent(supabase, body, res) {
-  const { id, name, email, notes, timezone, country, state } = body;
+  const { id, name, email, notes, timezone, country, state, absence_months_override } = body;
   if (!id) return res.status(400).json({ error: "id is required" });
   if (!name) return res.status(400).json({ error: "name is required" });
 
   const updates = { name };
+  // 累積休学月数の手動調整(数字=その月数で固定 / null=自動計算に戻す)
+  if (absence_months_override !== undefined) {
+    if (absence_months_override === null || absence_months_override === "") updates.absence_months_override = null;
+    else {
+      const n = Number(absence_months_override);
+      if (!Number.isInteger(n) || n < 0 || n > 120) return res.status(400).json({ error: "absence_months_override must be an integer 0-120 or null" });
+      updates.absence_months_override = n;
+    }
+  }
   if (email !== undefined) updates.email = email.trim().toLowerCase();
   if (notes !== undefined) updates.notes = notes || null;
   if (timezone !== undefined) updates.timezone = timezone || null;
