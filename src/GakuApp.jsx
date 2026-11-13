@@ -1215,6 +1215,10 @@ const UI_TRANSLATIONS = {
     coachPronMiss: "You keep missing the pronunciation of {word} ({n} times). Say it slowly, then at normal speed.",
     coachListenWeak: "Listening comprehension is {pct}%. Listen several times before reading the text.",
     coachStatFlip: "Flip speed",
+    coachStatStroke: "Stroke accuracy",
+    coachWriteMiss: "You keep missing the character {word} ({n} tries, {pct}% clean). Write it slowly, one stroke at a time.",
+    coachDetailFlip: "Flip speed, word by word",
+    coachDetailWrite: "Writing, character by character",
     coachStatViews: "Words seen today",
     coachStatListen: "Listening",
     lessonBridgeAsk: "Want to practice this with a real teacher? Try a free trial lesson.",
@@ -1862,6 +1866,10 @@ const UI_TRANSLATIONS = {
     coachPronMiss: "Vous ratez souvent la prononciation de {word} ({n} fois). Dites-le lentement, puis à vitesse normale.",
     coachListenWeak: "Votre compréhension orale est de {pct} %. Écoutez plusieurs fois avant de lire le texte.",
     coachStatFlip: "Vitesse de retournement",
+    coachStatStroke: "Précision des traits",
+    coachWriteMiss: "Vous ratez souvent le caractère {word} ({n} essais, {pct} % sans erreur). Écrivez-le lentement, trait par trait.",
+    coachDetailFlip: "Vitesse de retournement, mot par mot",
+    coachDetailWrite: "Écriture, caractère par caractère",
     coachStatViews: "Mots vus aujourd'hui",
     coachStatListen: "Écoute",
     lessonBridgeAsk: "Envie de travailler cela avec un vrai professeur ? Essayez un cours d'essai gratuit.",
@@ -2494,6 +2502,10 @@ const UI_TRANSLATIONS = {
     coachPronMiss: "Sigues fallando la pronunciación de {word} ({n} veces). Dila despacio y luego a velocidad normal.",
     coachListenWeak: "Tu comprensión auditiva es del {pct} %. Escucha varias veces antes de leer el texto.",
     coachStatFlip: "Velocidad de giro",
+    coachStatStroke: "Precisión de trazos",
+    coachWriteMiss: "Fallas seguido el carácter {word} ({n} intentos, {pct}% sin errores). Escríbelo despacio, trazo por trazo.",
+    coachDetailFlip: "Velocidad de giro, palabra por palabra",
+    coachDetailWrite: "Escritura, carácter por carácter",
     coachStatViews: "Palabras vistas hoy",
     coachStatListen: "Comprensión auditiva",
     lessonBridgeAsk: "¿Quieres practicar esto con un profesor de verdad? Prueba una clase de prueba gratuita.",
@@ -3126,6 +3138,10 @@ const UI_TRANSLATIONS = {
     coachPronMiss: "Você continua errando a pronúncia de {word} ({n} vezes). Fale devagar e depois em velocidade normal.",
     coachListenWeak: "Sua compreensão auditiva é {pct}%. Ouça várias vezes antes de ler o texto.",
     coachStatFlip: "Velocidade de virada",
+    coachStatStroke: "Precisão dos traços",
+    coachWriteMiss: "Você erra muito o caractere {word} ({n} tentativas, {pct}% sem erros). Escreva devagar, traço por traço.",
+    coachDetailFlip: "Velocidade de virada, palavra por palavra",
+    coachDetailWrite: "Escrita, caractere por caractere",
     coachStatViews: "Palavras vistas hoje",
     coachStatListen: "Compreensão auditiva",
     lessonBridgeAsk: "Quer praticar isso com um professor de verdade? Experimente uma aula experimental gratuita.",
@@ -3758,6 +3774,10 @@ const UI_TRANSLATIONS = {
     coachPronMiss: "Die Aussprache von {word} gelingt dir immer wieder nicht ({n}-mal). Sprich es langsam, dann in normalem Tempo.",
     coachListenWeak: "Dein Hörverständnis liegt bei {pct} %. Höre mehrmals zu, bevor du den Text liest.",
     coachStatFlip: "Umdrehtempo",
+    coachStatStroke: "Strichgenauigkeit",
+    coachWriteMiss: "Das Zeichen {word} misslingt dir oft ({n} Versuche, {pct} % fehlerfrei). Schreib es langsam, Strich für Strich.",
+    coachDetailFlip: "Umdrehtempo, Wort für Wort",
+    coachDetailWrite: "Schreiben, Zeichen für Zeichen",
     coachStatViews: "Heute gesehene Wörter",
     coachStatListen: "Hören",
     lessonBridgeAsk: "Möchten Sie das mit einer echten Lehrkraft üben? Probieren Sie eine kostenlose Probestunde.",
@@ -4390,6 +4410,10 @@ const UI_TRANSLATIONS = {
     coachPronMiss: "Continui a sbagliare la pronuncia di {word} ({n} volte). Dilla lentamente, poi a velocità normale.",
     coachListenWeak: "La tua comprensione orale è {pct}%. Ascolta più volte prima di leggere il testo.",
     coachStatFlip: "Velocità di giro",
+    coachStatStroke: "Precisione dei tratti",
+    coachWriteMiss: "Sbagli spesso il carattere {word} ({n} tentativi, {pct}% senza errori). Scrivilo lentamente, tratto per tratto.",
+    coachDetailFlip: "Velocità di giro, parola per parola",
+    coachDetailWrite: "Scrittura, carattere per carattere",
     coachStatViews: "Parole viste oggi",
     coachStatListen: "Ascolto",
     lessonBridgeAsk: "Vuoi esercitarti su questo con un vero insegnante? Prova una lezione di prova gratuita.",
@@ -5022,6 +5046,10 @@ const UI_TRANSLATIONS = {
     coachPronMiss: "你多次读错 {word} 的发音（{n} 次）。先慢慢读，再用正常语速读。",
     coachListenWeak: "听力理解率是 {pct}%。读文本之前多听几遍。",
     coachStatFlip: "翻卡速度",
+    coachStatStroke: "笔画准确率",
+    coachWriteMiss: "你总是写错「{word}」（{n}次，无错率{pct}%）。请慢慢地一笔一画书写。",
+    coachDetailFlip: "逐词翻卡速度",
+    coachDetailWrite: "逐字书写情况",
     coachStatViews: "今天看过的单词",
     coachStatListen: "听力",
     lessonBridgeAsk: "想和真人老师一起练习这个吗？试试免费体验课吧。",
@@ -5654,6 +5682,10 @@ const UI_TRANSLATIONS = {
     coachPronMiss: "你多次唸錯 {word} 的發音（{n} 次）。先慢慢唸，再用正常語速唸。",
     coachListenWeak: "聽力理解率是 {pct}%。讀文本之前多聽幾遍。",
     coachStatFlip: "翻卡速度",
+    coachStatStroke: "筆畫準確率",
+    coachWriteMiss: "你總是寫錯「{word}」（{n}次，無錯率{pct}%）。請慢慢地一筆一畫書寫。",
+    coachDetailFlip: "逐詞翻卡速度",
+    coachDetailWrite: "逐字書寫情況",
     coachStatViews: "今天看過的單字",
     coachStatListen: "聽力",
     lessonBridgeAsk: "想和真人老師一起練習這個嗎？試試免費體驗課吧。",
@@ -6286,6 +6318,10 @@ const UI_TRANSLATIONS = {
     coachPronMiss: "{word}의 발음을 계속 틀리고 있어요({n}회). 천천히 말한 뒤 보통 속도로 말해 보세요.",
     coachListenWeak: "듣기 이해도는 {pct}%예요. 텍스트를 읽기 전에 여러 번 들어 보세요.",
     coachStatFlip: "카드 뒤집기 속도",
+    coachStatStroke: "획 정확도",
+    coachWriteMiss: "{word} 글자를 자주 틀립니다({n}회 시도, 오류 없음 {pct}%). 천천히 한 획씩 써 보세요.",
+    coachDetailFlip: "단어별 카드 뒤집기 속도",
+    coachDetailWrite: "글자별 쓰기",
     coachStatViews: "오늘 본 단어",
     coachStatListen: "듣기",
     lessonBridgeAsk: "이 부분을 진짜 선생님과 함께 연습해 보시겠어요? 무료 체험 수업을 신청해 보세요.",
@@ -6918,6 +6954,10 @@ const UI_TRANSLATIONS = {
     coachPronMiss: "คุณออกเสียง {word} ผิดบ่อย ({n} ครั้ง) ลองพูดช้าๆ แล้วค่อยพูดด้วยความเร็วปกติ",
     coachListenWeak: "ความเข้าใจการฟังอยู่ที่ {pct}% ลองฟังหลายครั้งก่อนอ่านข้อความ",
     coachStatFlip: "ความเร็วในการพลิกการ์ด",
+    coachStatStroke: "ความแม่นยำของเส้น",
+    coachWriteMiss: "คุณเขียนตัวอักษร {word} ผิดบ่อย ({n} ครั้ง ถูกทั้งหมด {pct}%) ลองเขียนช้า ๆ ทีละเส้น",
+    coachDetailFlip: "ความเร็วพลิกการ์ดรายคำ",
+    coachDetailWrite: "การเขียนรายตัวอักษร",
     coachStatViews: "คำที่ดูวันนี้",
     coachStatListen: "การฟัง",
     lessonBridgeAsk: "อยากฝึกเรื่องนี้กับครูตัวจริงไหม? ลองเรียนทดลองฟรีดูสิ",
@@ -7550,6 +7590,10 @@ const UI_TRANSLATIONS = {
     coachPronMiss: "Anda terus tersilap sebutan {word} ({n} kali). Sebut perlahan-lahan, kemudian pada kelajuan biasa.",
     coachListenWeak: "Kefahaman mendengar ialah {pct}%. Dengar beberapa kali sebelum membaca teks.",
     coachStatFlip: "Kelajuan pusing kad",
+    coachStatStroke: "Ketepatan coretan",
+    coachWriteMiss: "Anda sering tersilap aksara {word} ({n} cubaan, {pct}% tanpa kesilapan). Tulis perlahan-lahan, satu coretan demi satu.",
+    coachDetailFlip: "Kelajuan pusing kad, satu demi satu perkataan",
+    coachDetailWrite: "Penulisan, satu demi satu aksara",
     coachStatViews: "Perkataan dilihat hari ini",
     coachStatListen: "Mendengar",
     lessonBridgeAsk: "Mahu berlatih perkara ini dengan guru sebenar? Cuba kelas percubaan percuma.",
@@ -8182,6 +8226,10 @@ const UI_TRANSLATIONS = {
     coachPronMiss: "Anda terus salah mengucapkan {word} ({n} kali). Ucapkan pelan-pelan, lalu dengan kecepatan normal.",
     coachListenWeak: "Pemahaman menyimak adalah {pct}%. Dengarkan beberapa kali sebelum membaca teks.",
     coachStatFlip: "Kecepatan membalik kartu",
+    coachStatStroke: "Akurasi goresan",
+    coachWriteMiss: "Anda sering salah menulis karakter {word} ({n} percobaan, {pct}% tanpa salah). Tulis pelan-pelan, satu goresan demi satu.",
+    coachDetailFlip: "Kecepatan membalik kartu, kata demi kata",
+    coachDetailWrite: "Menulis, karakter demi karakter",
     coachStatViews: "Kata dilihat hari ini",
     coachStatListen: "Menyimak",
     lessonBridgeAsk: "Ingin berlatih ini dengan guru sungguhan? Coba kelas percobaan gratis.",
@@ -8814,6 +8862,10 @@ const UI_TRANSLATIONS = {
     coachPronMiss: "Bạn liên tục phát âm sai {word} ({n} lần). Hãy nói chậm rồi nói với tốc độ bình thường.",
     coachListenWeak: "Khả năng nghe hiểu là {pct}%. Hãy nghe vài lần trước khi đọc văn bản.",
     coachStatFlip: "Tốc độ lật thẻ",
+    coachStatStroke: "Độ chính xác nét viết",
+    coachWriteMiss: "Bạn hay viết sai chữ {word} ({n} lần, {pct}% không lỗi). Hãy viết chậm, từng nét một.",
+    coachDetailFlip: "Tốc độ lật thẻ theo từng từ",
+    coachDetailWrite: "Viết theo từng chữ",
     coachStatViews: "Từ đã xem hôm nay",
     coachStatListen: "Nghe",
     lessonBridgeAsk: "Bạn muốn luyện phần này với giáo viên thật không? Hãy thử một buổi học thử miễn phí.",
@@ -9446,6 +9498,10 @@ const UI_TRANSLATIONS = {
     coachPronMiss: "आप {word} का उच्चारण बार-बार ग़लत कर रहे हैं ({n} बार)। इसे धीरे बोलें, फिर सामान्य गति से।",
     coachListenWeak: "सुनकर समझने की क्षमता {pct}% है। पाठ पढ़ने से पहले कई बार सुनें।",
     coachStatFlip: "कार्ड पलटने की गति",
+    coachStatStroke: "स्ट्रोक की सटीकता",
+    coachWriteMiss: "आप {word} अक्षर में बार-बार गलती कर रहे हैं ({n} प्रयास, {pct}% बिना गलती)। धीरे-धीरे, एक-एक स्ट्रोक लिखें।",
+    coachDetailFlip: "शब्द-दर-शब्द कार्ड पलटने की गति",
+    coachDetailWrite: "अक्षर-दर-अक्षर लेखन",
     coachStatViews: "आज देखे गए शब्द",
     coachStatListen: "सुनना",
     lessonBridgeAsk: "क्या आप इसे असली शिक्षक के साथ अभ्यास करना चाहेंगे? एक मुफ़्त ट्रायल क्लास आज़माएँ।",
@@ -10078,6 +10134,10 @@ const UI_TRANSLATIONS = {
     coachPronMiss: "「{word}」の発音を{n}回間違えています。ゆっくり言ってから、普通の速さで言ってみましょう。",
     coachListenWeak: "リスニングの理解度は{pct}%です。テキストを読む前に、何度か聞きましょう。",
     coachStatFlip: "カードをめくる速さ",
+    coachStatStroke: "画の正確さ",
+    coachWriteMiss: "「{word}」をよく間違えています（{n}回、ミスなし{pct}%）。ゆっくり一画ずつ書いてみましょう。",
+    coachDetailFlip: "単語ごとのめくる速さ",
+    coachDetailWrite: "一文字ごとの書き取り",
     coachStatViews: "今日見た単語",
     coachStatListen: "リスニング",
     lessonBridgeAsk: "この課題を、先生と一緒に練習してみませんか？無料体験レッスンをご利用ください。",
@@ -10710,6 +10770,10 @@ const UI_TRANSLATIONS = {
     coachPronMiss: "{word} telaffuzunu sürekli yanlış yapıyorsunuz ({n} kez). Önce yavaş, sonra normal hızda söyleyin.",
     coachListenWeak: "Dinleme anlama oranınız %{pct}. Metni okumadan önce birkaç kez dinleyin.",
     coachStatFlip: "Kart çevirme hızı",
+    coachStatStroke: "Çizgi doğruluğu",
+    coachWriteMiss: "{word} karakterini sık yanlış yazıyorsun ({n} deneme, %{pct} hatasız). Yavaşça, çizgi çizgi yaz.",
+    coachDetailFlip: "Kelime kelime kart çevirme hızı",
+    coachDetailWrite: "Karakter karakter yazma",
     coachStatViews: "Bugün görülen kelimeler",
     coachStatListen: "Dinleme",
     lessonBridgeAsk: "Bunu gerçek bir öğretmenle çalışmak ister misiniz? Ücretsiz deneme dersini deneyin.",
@@ -11342,6 +11406,10 @@ const UI_TRANSLATIONS = {
     coachPronMiss: "तपाईं {word} को उच्चारण बारम्बार गल्ती गर्दै हुनुहुन्छ ({n} पटक)। पहिले बिस्तारै, अनि सामान्य गतिमा भन्नुहोस्।",
     coachListenWeak: "सुनाइ बुझाइ {pct}% छ। पाठ पढ्नु अघि धेरै पटक सुन्नुहोस्।",
     coachStatFlip: "कार्ड पल्टाउने गति",
+    coachStatStroke: "स्ट्रोकको शुद्धता",
+    coachWriteMiss: "तपाईं {word} अक्षरमा बारम्बार गल्ती गर्दै हुनुहुन्छ ({n} प्रयास, {pct}% गल्तीबिना)। विस्तारै, एक-एक स्ट्रोक लेख्नुहोस्।",
+    coachDetailFlip: "शब्द-शब्द कार्ड पल्टाउने गति",
+    coachDetailWrite: "अक्षर-अक्षर लेखन",
     coachStatViews: "आज हेरिएका शब्द",
     coachStatListen: "सुनाइ",
     lessonBridgeAsk: "के तपाईं यसलाई साँचो शिक्षकसँग अभ्यास गर्न चाहनुहुन्छ? निःशुल्क परीक्षण कक्षा प्रयास गर्नुहोस्।",
@@ -11974,6 +12042,10 @@ const UI_TRANSLATIONS = {
     coachPronMiss: "Paulit-ulit kang nagkakamali sa bigkas ng {word} ({n} beses). Sabihin ito nang dahan-dahan, saka sa normal na bilis.",
     coachListenWeak: "{pct}% ang pag-unawa mo sa pakikinig. Makinig nang ilang beses bago basahin ang teksto.",
     coachStatFlip: "Bilis ng pagpihit ng card",
+    coachStatStroke: "Katumpakan ng stroke",
+    coachWriteMiss: "Madalas kang magkamali sa karakter na {word} ({n} subok, {pct}% walang mali). Isulat nang dahan-dahan, isang stroke bawat isa.",
+    coachDetailFlip: "Bilis ng pagpihit ng card, bawat salita",
+    coachDetailWrite: "Pagsusulat, bawat karakter",
     coachStatViews: "Mga salitang nakita ngayon",
     coachStatListen: "Pakikinig",
     lessonBridgeAsk: "Gusto mo bang ipractice ito kasama ang totoong guro? Subukan ang libreng trial lesson.",
@@ -13838,7 +13910,7 @@ function FlashcardView({ form, onBack, focusWord }) {
     if (!flipped && card && !flippedOnceRef.current) {
       flippedOnceRef.current = true;
       const ms = Date.now() - shownAtRef.current;
-      if (ms > 0 && ms < 60000) logMetric("flip", card.word, { ms });
+      if (ms > 0 && ms < 120000) logMetric("flip", card.word, { ms });
     }
     setFlipped(f => !f);
   };
@@ -17009,11 +17081,18 @@ function CopyingDown({ T, injected }) {
 
   const startQuiz = (w, withGuide) => {
     setMistakeStroke(""); setDoneMistakes(null);
+    // Study metrics: every stroke (right/wrong) and every finished character is recorded per character,
+    // so the coach can show accuracy character by character (kept apart from the daily quota log).
+    const ch = session && session.chars ? session.chars[idx] : "";
+    const startedAt = Date.now();
     w.quiz({
       showOutline: withGuide, leniency: 1.2, highlightOnComplete: true,
-      onMistake: (d) => setMistakeStroke(String((d.strokeNum || 0) + 1)),
-      onCorrectStroke: () => setMistakeStroke(""),
-      onComplete: (d) => { setDoneMistakes(d.totalMistakes); setResults(r => ({ ...r, [idx]: d.totalMistakes })); },
+      onMistake: (d) => { setMistakeStroke(String((d.strokeNum || 0) + 1)); if (ch) logMetric("stroke", ch, { n: (d.strokeNum || 0) + 1, ok: false }); },
+      onCorrectStroke: (d) => { setMistakeStroke(""); if (ch) logMetric("stroke", ch, { n: ((d && d.strokeNum) || 0) + 1, ok: true }); },
+      onComplete: (d) => {
+        setDoneMistakes(d.totalMistakes); setResults(r => ({ ...r, [idx]: d.totalMistakes }));
+        if (ch) logMetric("write", ch, { ok: d.totalMistakes === 0, miss: d.totalMistakes, ms: Date.now() - startedAt });
+      },
     });
   };
 
@@ -17075,7 +17154,13 @@ function CopyingDown({ T, injected }) {
   };
   const goNext = () => {
     if (status === "nodata") setResults(r => ({ ...r, [idx]: "skip" }));
-    if (idx < session.chars.length - 1) setIdx(idx + 1); else setPhase("summary");
+    if (idx < session.chars.length - 1) setIdx(idx + 1);
+    else {
+      // One learning-log entry per finished text (counts once toward the daily quota, feeds the coach).
+      const done = session.chars.map((_, i) => results[i]).filter(v => typeof v === "number");
+      if (done.length) logLearningEvent("writing", done.filter(v => v === 0).length / done.length >= 0.8);
+      setPhase("summary");
+    }
   };
   const goPrev = () => { if (idx > 0) setIdx(idx - 1); };
 
@@ -19267,7 +19352,7 @@ function logMetric(k, w, extra) {
   try {
     const log = loadMetricLog();
     log.push({ t: Date.now(), k, w: w ? String(w).slice(0, 60) : "", ...(extra || {}) });
-    localStorage.setItem(scopedKey(METRIC_LOG_KEY), JSON.stringify(log.slice(-1500)));
+    localStorage.setItem(scopedKey(METRIC_LOG_KEY), JSON.stringify(log.slice(-3000)));
     window.dispatchEvent(new CustomEvent("gaku_learning_updated"));
   } catch {}
 }
@@ -19287,9 +19372,23 @@ function analyzeCoach(allow) {
   const learn = loadLearningLog().filter(x => x.t >= cutoff && x.a !== "task");
   const rate = (a) => { const xs = learn.filter(x => x.a === a); return xs.length ? Math.round(100 * xs.filter(x => x.ok).length / xs.length) : null; };
   const flips = m.filter(x => x.k === "flip" && x.ms > 0);
-  const flipSec = flips.length >= 5 ? medianOf(flips.map(x => x.ms)) / 1000 : null;
+  // Every single flip counts (no minimum), and each word is measured on its own.
+  const flipSec = flips.length >= 1 ? medianOf(flips.map(x => x.ms)) / 1000 : null;
   const byWord = {};
   flips.forEach(x => { (byWord[x.w] = byWord[x.w] || []).push(x.ms); });
+  const flipWords = Object.entries(byWord).map(([w, a]) => ({ w, n: a.length, sec: medianOf(a) / 1000 })).sort((a, b) => b.sec - a.sec);
+  // Writing, character by character: a finished character is "ok" when it had no mistakes; strokes are
+  // tracked one by one. Writing Questions answers (learning log) are included in the overall accuracy.
+  const wEv = m.filter(x => x.k === "write");
+  const byChar = {};
+  wEv.forEach(x => { const c = byChar[x.w] || (byChar[x.w] = { n: 0, ok: 0 }); c.n++; if (x.ok) c.ok++; });
+  const writeChars = Object.entries(byChar).map(([w, c]) => ({ w, n: c.n, pct: Math.round(100 * c.ok / c.n) })).sort((a, b) => a.pct - b.pct || b.n - a.n);
+  const sEv = m.filter(x => x.k === "stroke");
+  const strokePct = sEv.length ? Math.round(100 * sEv.filter(x => x.ok).length / sEv.length) : null;
+  const lw = learn.filter(x => x.a === "writing");
+  const writeTotal = wEv.length + lw.length;
+  const writePct = writeTotal ? Math.round(100 * (wEv.filter(x => x.ok).length + lw.filter(x => x.ok).length) / writeTotal) : null;
+  const writeMiss = ok("writing") ? (writeChars.filter(c => c.n >= 2 && c.pct < 70)[0] || null) : null;
   const slowWord = Object.entries(byWord).filter(([, a]) => a.length >= 2).map(([w, a]) => ({ w, sec: medianOf(a) / 1000 })).filter(x => x.sec >= 8).sort((a, b) => b.sec - a.sec)[0] || null;
   const views = {}; let viewsToday = 0;
   m.forEach(x => { if (x.k === "view" && x.t >= todayMs) { views[x.w] = (views[x.w] || 0) + 1; viewsToday++; } });
@@ -19304,18 +19403,22 @@ function analyzeCoach(allow) {
   if (weak) advice.push({ type: "acc", a: weak.a, pct: Math.round(weak.rate * 100) });
   if (listenPct !== null && L.length >= 3 && listenPct < 70 && (ok("conversation") || ok("content"))) advice.push({ type: "listen", pct: listenPct });
   if (pronMiss) advice.push({ type: "pron", w: pronMiss.w, n: pronMiss.n });
+  if (writeMiss) advice.push({ type: "writemiss", w: writeMiss.w, n: writeMiss.n, pct: writeMiss.pct });
   if (repeat) advice.push({ type: "repeat", w: repeat.w, n: repeat.n });
   if (flipSec !== null && flipSec >= 6) advice.push({ type: "slow", sec: Math.round(flipSec) });
   else if (slowWord) advice.push({ type: "slowword", w: slowWord.w, sec: Math.round(slowWord.sec) });
   return {
     advice,
     hasData: learn.length + m.length > 0,
-    stats: { flipSec, viewsToday, pron: ok("pronunciation") ? rate("pronunciation") : null, writing: ok("writing") ? rate("writing") : null, listen: listenPct },
+    stats: { flipSec, viewsToday, pron: ok("pronunciation") ? rate("pronunciation") : null, writing: ok("writing") ? writePct : null, stroke: ok("writing") ? strokePct : null, listen: listenPct },
+    flipWords,
+    writeChars: ok("writing") ? writeChars : [],
   };
 }
 function CoachPanel({ T, allow, onGo, compact }) {
-  const { advice, stats, hasData } = analyzeCoach(allow);
+  const { advice, stats, hasData, flipWords, writeChars } = analyzeCoach(allow);
   const line = (a) => {
+    if (a.type === "writemiss") return progressFill(T.coachWriteMiss || "You keep missing the character {word} ({n} tries, {pct}% clean). Write it slowly, one stroke at a time.", { word: a.w, n: a.n, pct: a.pct });
     if (a.type === "acc") return progressFill(T.coachAccWeak || "{area} accuracy is {pct}%. Make {area} your focus today.", { area: coachAreaLabel(T, a.a), pct: a.pct });
     if (a.type === "listen") return progressFill(T.coachListenWeak || "Listening comprehension is {pct}%. Listen several times before reading the text.", { pct: a.pct });
     if (a.type === "pron") return progressFill(T.coachPronMiss || "You keep missing the pronunciation of {word} ({n} times). Say it slowly, then at normal speed.", { word: a.w, n: a.n });
@@ -19323,7 +19426,7 @@ function CoachPanel({ T, allow, onGo, compact }) {
     if (a.type === "slow") return progressFill(T.coachSlowFlip || "It takes you about {sec}s to recall a word. Aim for under 5s with quick flashcard rounds.", { sec: a.sec });
     return progressFill(T.coachSlowWord || "Your slowest word is {word} ({sec}s). Review it again.", { word: a.w, sec: a.sec });
   };
-  const target = (a) => a.type === "acc" ? a.a : a.type === "listen" ? "conversation" : a.type === "pron" ? "pronunciation" : "vocab";
+  const target = (a) => a.type === "acc" ? a.a : a.type === "listen" ? "conversation" : a.type === "pron" ? "pronunciation" : a.type === "writemiss" ? "writing" : "vocab";
   const shown = advice.slice(0, compact ? 1 : 3);
   if (compact) {
     if (!shown.length) return null;
@@ -19340,7 +19443,14 @@ function CoachPanel({ T, allow, onGo, compact }) {
     [T.pronTitle || "Pronunciation", stats.pron !== null ? stats.pron + "%" : "–"],
     [T.coachStatListen || "Listening", stats.listen !== null ? stats.listen + "%" : "–"],
     [T.writeTitle || "Writing", stats.writing !== null ? stats.writing + "%" : "–"],
+    [T.coachStatStroke || "Stroke accuracy", stats.stroke !== null ? stats.stroke + "%" : "–"],
   ];
+  const detailRow = (k, label, right, bad) => (
+    <div key={k} style={{ display:"flex", justifyContent:"space-between", gap:10, fontSize:12, padding:"3px 0", borderBottom:`1px solid ${C.border}` }}>
+      <span style={{ color:"#e2e8f0", wordBreak:"break-all" }}>{label}</span>
+      <b style={{ color: bad ? "#fbbf24" : "#86efac", flexShrink:0 }}>{right}</b>
+    </div>
+  );
   return (
     <div>
       <p style={{ color:C.purpleLight, fontSize:11, fontWeight:700, margin:"0 0 6px" }}>{T.coachAdviceTitle || "🎯 Your study coach"}</p>
@@ -19356,6 +19466,22 @@ function CoachPanel({ T, allow, onGo, compact }) {
           <button onClick={() => onGo(target(a))} style={{ ...S.btn, padding:"7px 14px", background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff", fontSize:12 }}>{T.coachGo || "Let's go"} →</button>
         </div>
       ))}
+      {flipWords.length > 0 && (
+        <details style={{ marginTop:8 }}>
+          <summary style={{ color:C.purpleLight, fontSize:12, fontWeight:700, cursor:"pointer" }}>{T.coachDetailFlip || "Flip speed, word by word"} ({flipWords.length})</summary>
+          <div style={{ marginTop:6, maxHeight:180, overflowY:"auto" }}>
+            {flipWords.slice(0, 40).map(x => detailRow("f" + x.w, x.w, x.sec.toFixed(1) + "s" + (x.n > 1 ? " ×" + x.n : ""), x.sec >= 6))}
+          </div>
+        </details>
+      )}
+      {writeChars.length > 0 && (
+        <details style={{ marginTop:8 }}>
+          <summary style={{ color:C.purpleLight, fontSize:12, fontWeight:700, cursor:"pointer" }}>{T.coachDetailWrite || "Writing, character by character"} ({writeChars.length})</summary>
+          <div style={{ marginTop:6, maxHeight:180, overflowY:"auto" }}>
+            {writeChars.slice(0, 60).map(x => detailRow("w" + x.w, x.w, x.pct + "% · ×" + x.n, x.pct < 70))}
+          </div>
+        </details>
+      )}
     </div>
   );
 }
