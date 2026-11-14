@@ -13728,7 +13728,7 @@ function WordDetailCard({ card: cardProp, onSave, onBack, form, prefLang, onRevi
     "Chinese (Simplified)":"cmn", "Chinese (Traditional)":"cmn", "Italian":"ita",
     "Korean":"kor", "Thai":"tha", "Malay":"zsm", "Indonesian":"ind",
     "Vietnamese":"vie", "Hindi":"hin", "Japanese":"jpn", "Turkish":"tur",
-    "Nepali":"nep", "Filipino":"tgl", "Portuguese":"por", "Mizo":"lus", "Bengali":"ben",
+    "Nepali":"nep", "Filipino":"tgl", "Portuguese":"por",
   };
 
   // Fetch real, existing example sentences containing this word from Tatoeba's
@@ -18704,7 +18704,7 @@ Warm, under 100 words, English.` }]
 const LANGUAGES = [
   "English","Spanish","French","German","Chinese (Simplified)","Chinese (Traditional)",
   "Italian","Korean","Thai","Malay","Indonesian","Vietnamese","Hindi",
-  "Japanese","Turkish","Nepali","Filipino","Mizo","Bengali",
+  "Japanese","Turkish","Nepali","Filipino",
 ];
 
 // Native-script display names for the 🌐 language badge (shown regardless of UI language)
@@ -18713,7 +18713,7 @@ const NATIVE_LANG_NAMES = {
   "Chinese (Simplified)":"简体中文","Chinese (Traditional)":"繁體中文","Italian":"Italiano",
   "Korean":"한국어","Thai":"ไทย","Malay":"Bahasa Melayu","Indonesian":"Bahasa Indonesia",
   "Vietnamese":"Tiếng Việt","Hindi":"हिन्दी","Japanese":"日本語","Turkish":"Türkçe",
-  "Nepali":"नेपाली","Filipino":"Filipino","Mizo":"Mizo ṭawng","Bengali":"বাংলা",
+  "Nepali":"नेपाली","Filipino":"Filipino",
 };
 
 // QuickStartForm runs before the student has picked a preferredLang (that question is
@@ -21765,7 +21765,7 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
     "Korean": "ko", "Thai": "th", "Malay": "ms", "Indonesian": "id",
     "Vietnamese": "vi", "Japanese": "ja", "Turkish": "tr", "Filipino": "fil",
     // Not supported by Stripe — let Stripe auto-detect from the browser instead
-    "Hindi": "auto", "Nepali": "auto", "Mizo": "auto", "Bengali": "auto",
+    "Hindi": "auto", "Nepali": "auto",
   };
 
   // Attaches the logged-in student's Supabase user id to the Stripe Payment Link
