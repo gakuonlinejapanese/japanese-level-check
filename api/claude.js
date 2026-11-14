@@ -1,3 +1,4 @@
+import { readerLogin, readerAuthorize } from "./_readerAuth.js";
 // ---- Model IDs -------------------------------------------------------------
 // NOTE (2026-09-24): Groq retired llama-3.3-70b-versatile and llama-3.1-8b-instant
 // (deprecated 2026-08-16 for free/developer tiers; Groq recommends openai/gpt-oss-120b
@@ -217,6 +218,16 @@ async function callDeepInfraWhisper(deepInfraKey, audioBuffer, mimeType) {
 export default async function handler(req, res) {
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
+  }
+
+  // GAKU Reader extension: ?reader=login verifies email+password; ?reader=ai requires the token
+  // from that login (and an account that isn't locked). Requests without ?reader (the main web app)
+  // behave exactly as before.
+  const readerMode = req.query?.reader;
+  if (readerMode === "login") return readerLogin(req, res);
+  if (readerMode === "ai") {
+    const auth = await readerAuthorize(req);
+    if (!auth.ok) return res.status(auth.status).json({ error: auth.error });
   }
 
   try {

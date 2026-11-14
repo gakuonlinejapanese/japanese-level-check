@@ -67,6 +67,12 @@ export default function StorePlans({ T, userId, onPurchased }) {
   return (
     <div style={{ margin: '0 0 18px' }}>
       <p style={{ color: '#f1f5f9', fontSize: 14, fontWeight: 800, margin: '0 0 10px' }}>{T?.storePlansTitle || 'Choose a plan to keep learning'}</p>
+      <div style={{ margin: '0 0 12px', padding: '10px 12px', borderRadius: 10, background: 'rgba(148,163,184,0.12)' }}>
+        <p style={{ color: '#e2e8f0', fontSize: 12.5, fontWeight: 800, margin: '0 0 6px' }}>{T?.storeIncludesTitle || 'Included with your subscription'}</p>
+        {(T?.storeIncludesList || 'Personalized weekly study plan\nVocabulary lists with real example sentences\nConversation Practice with speech recognition\nPronunciation Practice\nWriting practice and JLPT study materials').split('\n').map((line, i) => (
+          <p key={i} style={{ color: '#cbd5e1', fontSize: 12, lineHeight: 1.6, margin: '0 0 2px' }}>{'✓ '}{line}</p>
+        ))}
+      </div>
       {pkgs.map((p) => (
         <button key={p.id} onClick={() => buy(p)} disabled={!!busy}
           style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%', padding: '12px 14px', margin: '0 0 8px', borderRadius: 10, border: 'none', background: 'linear-gradient(135deg,#7c3aed,#a855f7)', color: '#fff', fontWeight: 800, fontSize: 14, cursor: 'pointer', opacity: busy && busy !== p.id ? 0.6 : 1 }}>

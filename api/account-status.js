@@ -166,7 +166,21 @@ export default async function handler(req, res) {
     }
     const daysSinceTutorialGrace = tutorialGraceStartedAt ? (Date.now() - tutorialGraceStartedAt.getTime()) / 86400000 : null;
     const inTutorialGraceWeek = daysSinceTutorialGrace !== null && daysSinceTutorialGrace < TUTORIAL_GRACE_DAYS;
-    const trialExpired = !isPaid && !isGakuStudent && pastTrial && !inTutorialGraceWeek;
+    // Seito-forced "trial ended" lock (table forced_trial_end, keyed by email, no expiry).
+    // Stays locked until the row is deleted by hand (e.g. after the student asks for a code
+    // or pays). A paid account is never locked. Also applies if they later redeem a code.
+    let forcedTrialEnd = false;
+    try {
+      const { data: fUser } = await supabase.auth.admin.getUserById(userId);
+      const fEmail = fUser?.user?.email?.trim().toLowerCase();
+      if (fEmail) {
+        const { data: fRows } = await supabase.from("forced_trial_end").select("email").eq("email", fEmail).limit(1);
+        forcedTrialEnd = !!(fRows && fRows.length > 0) && !isPaid;
+      }
+    } catch (forcedErr) {
+      console.error("[account-status] forced lock lookup failed:", forcedErr.message);
+    }
+    const trialExpired = forcedTrialEnd || (!isPaid && !isGakuStudent && pastTrial && !inTutorialGraceWeek);
     const daysUntilTrialEnds = daysSinceTrial !== null && !pastTrial ? Math.max(0, Math.ceil(TRIAL_DAYS - daysSinceTrial)) : null;
     // Days left in the bonus Tutorial week (null once it's over/not applicable) —
     // lets the client show a "your bonus week is ending" banner, mirroring the
@@ -274,7 +288,7 @@ export default async function handler(req, res) {
 
     return res.status(200).json({
       absenceSuspended,
-      isGakuStudent,
+      isGakuStudent: forcedTrialEnd ? false : isGakuStudent, // forced-lock accounts never skip the lock
       isPaid,
       paidPlan: data?.paid_plan || null,
       suspended,

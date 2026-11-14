@@ -61,6 +61,13 @@ export default async function handler(req, res) {
             userId: profile.id,
             ...computeTrialFields({ ...profile, is_gaku_student: isGakuStudentResolved }),
           };
+          // Seito-forced lock (table forced_trial_end): same rule as api/account-status.js.
+          try {
+            const { data: fRows } = await supabase.from("forced_trial_end").select("email").eq("email", normalizedEmail).limit(1);
+            if (fRows && fRows.length > 0 && !trialStatus.isPaid) {
+              trialStatus = { ...trialStatus, trialExpired: true, isGakuStudent: false };
+            }
+          } catch {}
         } else {
           trialStatus = { found: false };
         }

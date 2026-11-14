@@ -65,6 +65,54 @@ export async function assessLongAbsence(supabase, { email, requestType, cancelDa
   return result;
 }
 
+// ---------- 累積休学月数(Official Students名簿用) ----------
+// キャンセルフォームの記録から「丸1ヶ月まるごと休んだ暦月」の数を数える。
+// 数え始めは 2026-08-01。月内に戻った欠席は丸1ヶ月に当たらないので自然にノーカウントになる。
+export const ABSENCE_COUNT_START = "2026-08-01";
+export const ABSENCE_MONTHS_THRESHOLD = 5;
+
+// periods: [{ start: "YYYY-MM-DD", end: "YYYY-MM-DD" }]  end は復帰日(その日は含まない)
+// today: "YYYY-MM-DD"(日本時間)
+// 戻り値: { confirmed, projected, months }  confirmed=すでに終わった月だけ / projected=予定の月も含む
+export function computeAbsenceMonths(periods, today) {
+  const clipped = (periods || [])
+    .map((p) => ({ start: p.start < ABSENCE_COUNT_START ? ABSENCE_COUNT_START : p.start, end: p.end }))
+    .filter((p) => p.start && p.end && p.end > p.start)
+    .sort((a, b) => (a.start < b.start ? -1 : a.start > b.start ? 1 : 0));
+
+  // 重なる・隣り合う期間をまとめる
+  const merged = [];
+  for (const p of clipped) {
+    const last = merged[merged.length - 1];
+    if (last && p.start <= last.end) { if (p.end > last.end) last.end = p.end; }
+    else merged.push({ ...p });
+  }
+  if (merged.length === 0) return { confirmed: 0, projected: 0, months: [] };
+
+  const maxEnd = merged[merged.length - 1].end;
+  const pad = (n) => String(n).padStart(2, "0");
+  let y = 2026, m = 8;
+  const months = [];
+  let confirmed = 0;
+  for (let guard = 0; guard < 120; guard++) {
+    const first = `${y}-${pad(m)}-01`;
+    if (first >= maxEnd) break;
+    const ny = m === 12 ? y + 1 : y, nm = m === 12 ? 1 : m + 1;
+    const next = `${ny}-${pad(nm)}-01`;
+    if (merged.some((p) => p.start <= first && p.end >= next)) {
+      months.push(`${y}-${pad(m)}`);
+      if (next <= today) confirmed++;
+    }
+    y = ny; m = nm;
+  }
+  return { confirmed, projected: months.length, months };
+}
+
+// 名前のゆるい照合用(メールのない古い申請を名簿に結びつける)。英字3文字以上の単語だけ使う。
+export function nameTokens(s) {
+  return (s || "").toLowerCase().split(/[^a-z]+/).filter((t) => t.length >= 3);
+}
+
 export const SUSPEND_EMAIL_SUBJECT = "Your GAKU Master access has been temporarily suspended";
 
 export function suspendEmailHtml(name) {

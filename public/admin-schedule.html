@@ -63,6 +63,16 @@
   </section>
 
   <section>
+    <h2>💾 生徒データのバックアップ</h2>
+    <p style="font-size:12px;color:#64748b;margin:0 0 10px;">長期間使われていない生徒のデータを初期化する前に押してください。全生徒の学習データ（単語帳・フォルダ・勉強ガイド・チェック状況・プロフィールなど）を、その時点の状態で丸ごと保存します。保存は何回でもでき、古いバックアップは消えません。</p>
+    <div class="row" style="margin-top:0;">
+      <button class="btn confirm" id="backup-btn" onclick="createBackup()">💾 今すぐ全生徒をバックアップ</button>
+      <span id="backup-status" style="font-size:12px;color:#64748b;"></span>
+    </div>
+    <div id="backup-list" style="margin-top:12px;"><p>読み込み中…</p></div>
+  </section>
+
+  <section>
     <h2>📋 キャンセル・リスケ申請</h2>
     <div id="cancellation-list"><p>読み込み中…</p></div>
     <div style="margin-top:12px;padding-top:10px;border-top:1px dashed #cbd5e1;font-size:12px;">
@@ -260,6 +270,7 @@ function enterAdmin() {
   document.getElementById("app").style.display = "block";
   loadWaitlist();
   loadSuspendedStudents();
+  loadBackups();
   loadAvailabilityGrid();
   loadOfficialStudents();
   loadTrialLessonList();
@@ -274,6 +285,73 @@ async function api(action, extra = {}) {
   });
   if (resp.status === 401) { alert("パスワードが違います"); location.reload(); }
   return resp.json();
+}
+
+// ---------- 生徒データのバックアップ ----------
+function fmtBackupSize(bytes) {
+  if (bytes >= 1048576) return (bytes / 1048576).toFixed(1) + " MB";
+  return Math.max(1, Math.round(bytes / 1024)) + " KB";
+}
+function fmtBackupDate(iso) {
+  return new Date(iso).toLocaleString("ja-JP", { timeZone: "Asia/Tokyo", hour12: false }) + " (JST)";
+}
+
+async function loadBackups() {
+  const el = document.getElementById("backup-list");
+  try {
+    const data = await api("list-backups");
+    if (data.error) { el.innerHTML = `<p style="color:#dc2626;font-size:12px;">${data.error}</p>`; return; }
+    const list = data.backups || [];
+    if (list.length === 0) { el.innerHTML = "<p style=\"font-size:13px;\">まだバックアップはありません。</p>"; return; }
+    el.innerHTML = list.map((b, i) => `
+      <div class="req-card" style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;">
+        <div style="font-size:13px;">
+          <strong>${fmtBackupDate(b.created_at)}</strong>${i === 0 ? ' <span class="badge confirmed">最新</span>' : ""}<br/>
+          <span style="color:#64748b;font-size:12px;">${b.student_count}人分 ・ ${fmtBackupSize(b.size_bytes)}${b.label ? " ・ " + b.label.replace(/</g, "&lt;") : ""}</span>
+        </div>
+        <button class="btn" onclick="downloadBackup('${b.id}')">⬇ JSONをダウンロード</button>
+      </div>`).join("");
+  } catch (e) {
+    el.innerHTML = `<p style="color:#dc2626;font-size:12px;">読み込みに失敗しました: ${e.message}</p>`;
+  }
+}
+
+async function createBackup() {
+  if (!confirm("全生徒の学習データをバックアップします。よろしいですか？")) return;
+  const btn = document.getElementById("backup-btn");
+  const status = document.getElementById("backup-status");
+  btn.disabled = true;
+  status.textContent = "バックアップ中…（数秒かかります）";
+  try {
+    const data = await api("create-backup");
+    if (data.error) { status.textContent = ""; alert("バックアップに失敗しました: " + data.error); return; }
+    status.textContent = `✅ 完了: ${data.backup.student_count}人分 ・ ${fmtBackupSize(data.backup.size_bytes)}`;
+    await loadBackups();
+  } catch (e) {
+    status.textContent = "";
+    alert("バックアップに失敗しました: " + e.message);
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+async function downloadBackup(id) {
+  try {
+    const data = await api("download-backup", { id });
+    if (data.error) { alert("ダウンロードに失敗しました: " + data.error); return; }
+    const b = data.backup;
+    const stamp = new Date(b.created_at).toISOString().slice(0, 16).replace(/[-:T]/g, "");
+    const blob = new Blob([JSON.stringify(b.snapshot, null, 2)], { type: "application/json" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = `gaku-backup-${stamp}.json`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 5000);
+  } catch (e) {
+    alert("ダウンロードに失敗しました（データが大きすぎる可能性があります）: " + e.message);
+  }
 }
 
 function fmtDT(dateStr, timeStr) {
@@ -567,9 +645,28 @@ async function loadOfficialStudents() {
     const locationLabel = s.country
       ? `${s.country}${s.state ? " – " + s.state : ""}`
       : "住まい未登録";
+    const ab = s.absence;
+    let absenceLabel = "";
+    if (ab) {
+      const th = ab.threshold || 5;
+      const reached = ab.confirmed >= th;
+      const near = !reached && ab.projected >= th;
+      const color = reached ? "#c62828" : near ? "#e65100" : "#555";
+      const bg = reached ? "#ffebee" : near ? "#fff3e0" : "#f3f3f3";
+      const monthsText = (ab.months || []).map(m => m.replace("-", "年") + "月").join("、");
+      const detail = ab.overridden
+        ? `手動調整で固定(自動計算: 確定${ab.autoConfirmed}ヶ月 / 予定込み${ab.autoProjected}ヶ月)`
+        : (monthsText ? `対象の月: ${monthsText}` : "丸1ヶ月の欠席なし");
+      const main = ab.overridden || ab.confirmed === ab.projected
+        ? `${ab.confirmed}ヶ月`
+        : `${ab.confirmed}ヶ月(予定込み ${ab.projected}ヶ月)`;
+      const flag = reached ? " ⚠️ 5ヶ月以上" : near ? " ⚠️ 予定で5ヶ月以上" : "";
+      absenceLabel = `<div style="margin-top:4px;"><span title="${detail}" style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:12px;color:${color};background:${bg};">📊 累積休学: ${main}${ab.overridden ? "(手動)" : ""}${flag}</span> <span style="font-size:11px;color:#888;">${detail}</span></div>`;
+    }
     return `<div class="req-card" style="display:flex;justify-content:space-between;align-items:center;gap:8px;">
-      <span><strong>${s.name}</strong> — ${s.email}${s.notes ? " — " + s.notes : ""} — 📍${locationLabel}${s.timezone ? " (" + s.timezone + ")" : ""}</span>
+      <span><strong>${s.name}</strong> — ${s.email}${s.notes ? " — " + s.notes : ""} — 📍${locationLabel}${s.timezone ? " (" + s.timezone + ")" : ""}${absenceLabel}</span>
       <span style="flex-shrink:0;display:flex;gap:4px;">
+        <button class="opt-btn avail" onclick="editOfficialStudentAbsenceMonths('${s.id}')">📊 月数</button>
         <button class="opt-btn avail" onclick="editOfficialStudentName('${s.id}','${s.name.replace(/'/g, "\\'")}')">✏️ 名前</button>
         <button class="opt-btn avail" onclick="editOfficialStudentLocation('${s.id}')">📍 住まい</button>
       </span>
@@ -655,6 +752,25 @@ async function createOfficialBooking() {
   document.getElementById("booking-label").value = "";
   loadAvailabilityGrid();
   loadRescheduleList();
+}
+
+// 累積休学月数の手動調整: 数字を入れるとその月数で固定、空欄にすると自動計算に戻す
+async function editOfficialStudentAbsenceMonths(id) {
+  const student = (await api("list-official-students")).students.find(s => s.id === id);
+  if (!student) return;
+  const ab = student.absence;
+  const current = ab && ab.overridden ? String(ab.confirmed) : "";
+  const msg = `${student.name}\n累積休学月数を手動で固定します。\n(自動計算: 確定${ab ? ab.autoConfirmed : "?"}ヶ月 / 予定込み${ab ? ab.autoProjected : "?"}ヶ月)\n\n数字を入力 = その月数で固定\n空欄にしてOK = 自動計算に戻す`;
+  const input = prompt(msg, current);
+  if (input === null) return;
+  const trimmed = input.trim();
+  let value = null;
+  if (trimmed !== "") {
+    value = Number(trimmed);
+    if (!Number.isInteger(value) || value < 0) { alert("0以上の整数を入力してください。"); return; }
+  }
+  await api("update-official-student", { id, name: student.name, absence_months_override: value });
+  loadOfficialStudents();
 }
 
 async function editOfficialStudentName(id, currentName) {

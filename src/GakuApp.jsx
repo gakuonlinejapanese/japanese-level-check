@@ -1091,6 +1091,7 @@ const UI_TRANSLATIONS = {
     tabPractice: "✨ From Content",
     tabVocabulary: "📚 Vocabulary",
     tabResources: "🔗 Resources",
+    tabActivities: "🎯 Activities",
     tabMilestones: "🏆 Milestones",
     tabJlpt: "🎓 JLPT Results",
     tabFeedback: "💬 Feedback",
@@ -1219,6 +1220,24 @@ const UI_TRANSLATIONS = {
     coachPronMiss: "You keep missing the pronunciation of {word} ({n} times). Say it slowly, then at normal speed.",
     coachListenWeak: "Listening comprehension is {pct}%. Listen several times before reading the text.",
     coachStatFlip: "Flip speed",
+    coachStatStroke: "Stroke accuracy",
+    coachWriteMiss: "You keep missing the character {word} ({n} tries, {pct}% clean). Write it slowly, one stroke at a time.",
+    coachDetailFlip: "Flip speed, word by word",
+    coachDetailWrite: "Writing, character by character",
+    coachMistakeType: "Your most frequent mistake is {type} ({n} times in the last 2 weeks). Make it your focus today.",
+    coachWordMistake: "You keep getting the word {word} wrong ({n} times). Review it today and write one sentence with it.",
+    coachMistakeNames: "Particles|Verb conjugation|Word choice|Word order|Spelling and script",
+    coachStatSpeak: "Speaking",
+    coachWriteRetry: "Characters to write again: {chars}. Tap the button to practice them now.",
+    ivWarnTitle: "⚠️ Please read before choosing Intensive Mode",
+    ivWarnBody: "Intensive Mode is only for people who are serious about learning Japanese, or who are aiming for an exam or qualification. Every day you must finish a quota of 8 study actions, and some tabs stay locked until you do. If you just want to enjoy learning, choose Enjoyable Mode.",
+    ivWarnOk: "OK, I'm serious",
+    ivWarnBack: "Choose another mode",
+    ivGuideTitle: "How to read your Intensive Mode data",
+    ivGuideItems: "🔥 Today's quota — Shows how many of today's 8 study actions you have finished. When you reach 8, the locked tabs open.||⏱ Flip speed / Words seen today — Flip speed is how long you typically take (median of the last 2 weeks) to turn a vocabulary card over. Under 5 seconds is good; 6 seconds or more means words are slow to come back. Words seen today counts the cards you looked at today.||🗣 Pronunciation Practice — The share of your recent pronunciation attempts that were correct. Below 70% means it needs more practice.||✍️ Writing Practice — The share of characters and written answers you got right without a mistake in the last 2 weeks.||✏️ Stroke accuracy — Of all the strokes you wrote, the share that had the correct order and shape.||🎤 Speaking — The share of your spoken answers that had no grammar or word mistakes.||📋 Word by word / Character by character — Open these lists to see the speed of each word and the accuracy of each character. Yellow marks a weak point (6 seconds or slower, or under 70%). ×2 means you tried it twice.||🎯 Coach advice — From your last 2 weeks it suggests today's focus: your most frequent mistake type (particles, verb forms, word choice, word order, spelling), a word you keep getting wrong, or characters to write again. Tap “Let's go” to practice right away.||ℹ️ Good to know — A dash (–) means there is not enough data yet. Your records are kept on this device. You can read this guide again anytime with the “How to read this” button in the coach.",
+    ivGuideOk: "Got it, start studying",
+    ivGuideBtn: "ℹ️ How to read this",
+    coachEnjoyAsk: "Would you like to work on this today?",
     coachStatViews: "Words seen today",
     coachStatListen: "Listening",
     lessonBridgeAsk: "Want to practice this with a real teacher? Try a free trial lesson.",
@@ -1591,6 +1610,8 @@ const UI_TRANSLATIONS = {
     resExternalNote: "Links in Resources lead to independent outside websites and official channels. GAKU is not affiliated with them and does not host or copy their content.",
     paywallRenewNote: "Plans renew automatically at the price shown until cancelled. Payments on the web are processed securely by Stripe. Links to outside websites open in a new tab; those sites are independent and not affiliated with GAKU.",
     storePlansTitle: "Choose a plan to keep learning",
+    storeIncludesTitle: "Included with your subscription",
+    storeIncludesList: "Personalized weekly study plan\nVocabulary lists with real example sentences\nConversation Practice with speech recognition\nPronunciation Practice\nWriting practice and JLPT study materials",
     storeMonthly: "Monthly",
     store3Months: "3 months",
     store6Months: "6 months",
@@ -1737,6 +1758,7 @@ const UI_TRANSLATIONS = {
     tabPractice: "✨ À partir du contenu",
     tabVocabulary: "📚 Vocabulaire",
     tabResources: "🔗 Ressources",
+    tabActivities: "🎯 Activités",
     tabMilestones: "🏆 Objectifs",
     tabJlpt: "🎓 Résultats JLPT",
     tabFeedback: "💬 Retour",
@@ -1865,6 +1887,24 @@ const UI_TRANSLATIONS = {
     coachPronMiss: "Vous ratez souvent la prononciation de {word} ({n} fois). Dites-le lentement, puis à vitesse normale.",
     coachListenWeak: "Votre compréhension orale est de {pct} %. Écoutez plusieurs fois avant de lire le texte.",
     coachStatFlip: "Vitesse de retournement",
+    coachStatStroke: "Précision des traits",
+    coachWriteMiss: "Vous ratez souvent le caractère {word} ({n} essais, {pct} % sans erreur). Écrivez-le lentement, trait par trait.",
+    coachDetailFlip: "Vitesse de retournement, mot par mot",
+    coachDetailWrite: "Écriture, caractère par caractère",
+    coachMistakeType: "Votre erreur la plus fréquente concerne : {type} ({n} fois ces 2 dernières semaines). Concentrez-vous dessus aujourd'hui.",
+    coachWordMistake: "Vous vous trompez souvent sur le mot {word} ({n} fois). Révisez-le aujourd'hui et écrivez une phrase avec.",
+    coachMistakeNames: "les particules|la conjugaison des verbes|le choix des mots|l'ordre des mots|l'orthographe et l'écriture",
+    coachStatSpeak: "Expression orale",
+    coachWriteRetry: "Caractères à réécrire : {chars}. Appuyez sur le bouton pour les pratiquer maintenant.",
+    ivWarnTitle: "⚠️ À lire avant de choisir le mode Intensive",
+    ivWarnBody: "Le mode Intensive est réservé aux personnes qui veulent vraiment apprendre le japonais ou qui préparent un examen ou une certification. Chaque jour, vous devez terminer un quota de 8 actions d'étude, et certains onglets restent verrouillés tant qu'il n'est pas atteint. Si vous voulez simplement apprendre avec plaisir, choisissez le mode Enjoyable.",
+    ivWarnOk: "OK, je suis motivé(e)",
+    ivWarnBack: "Choisir un autre mode",
+    ivGuideTitle: "Comment lire vos données du mode Intensive",
+    ivGuideItems: "🔥 Quota du jour — Indique combien de vos 8 actions d'étude du jour sont terminées. À 8, les onglets verrouillés s'ouvrent.||⏱ Vitesse de retournement / Mots vus aujourd'hui — La vitesse de retournement est le temps habituel (médiane des 2 dernières semaines) pour retourner une carte de vocabulaire. Moins de 5 secondes, c'est bien ; 6 secondes ou plus signifie que les mots reviennent lentement. « Mots vus aujourd'hui » compte les cartes regardées aujourd'hui.||🗣 Pronunciation Practice — La part de vos essais de prononciation récents qui étaient corrects. Sous 70 %, il faut s'entraîner davantage.||✍️ Writing Practice — La part des caractères et réponses écrites réussis sans erreur ces 2 dernières semaines.||✏️ Précision des traits — Parmi tous les traits écrits, la part avec le bon ordre et la bonne forme.||🎤 Speaking — La part de vos réponses orales sans erreur de grammaire ni de vocabulaire.||📋 Mot par mot / Caractère par caractère — Ouvrez ces listes pour voir la vitesse de chaque mot et la précision de chaque caractère. Le jaune signale un point faible (6 secondes ou plus, ou moins de 70 %). ×2 signifie deux essais.||🎯 Conseil du coach — D'après vos 2 dernières semaines, il propose le focus du jour : votre type d'erreur le plus fréquent (particules, formes verbales, choix des mots, ordre des mots, orthographe), un mot que vous ratez souvent, ou des caractères à réécrire. Touchez « Allons-y » pour pratiquer tout de suite.||ℹ️ Bon à savoir — Un tiret (–) signifie qu'il n'y a pas encore assez de données. Vos données restent sur cet appareil. Vous pouvez relire ce guide à tout moment avec le bouton « Comment lire ceci » du coach.",
+    ivGuideOk: "Compris, je commence",
+    ivGuideBtn: "ℹ️ Comment lire ceci",
+    coachEnjoyAsk: "Voulez-vous travailler ça aujourd'hui ?",
     coachStatViews: "Mots vus aujourd'hui",
     coachStatListen: "Écoute",
     lessonBridgeAsk: "Envie de travailler cela avec un vrai professeur ? Essayez un cours d'essai gratuit.",
@@ -2178,6 +2218,8 @@ const UI_TRANSLATIONS = {
     resExternalNote: "Les liens de la section Ressources mènent à des sites externes indépendants et à des chaînes officielles. GAKU n'est pas affilié à ces derniers et n'héberge ni ne copie leur contenu.",
     paywallRenewNote: "Les abonnements se renouvellent automatiquement au prix affiché jusqu'à leur résiliation. Les paiements sur le web sont traités de manière sécurisée par Stripe. Les liens vers des sites externes s'ouvrent dans un nouvel onglet ; ces sites sont indépendants et non affiliés à GAKU.",
     storePlansTitle: "Choisissez un abonnement pour continuer à apprendre",
+    storeIncludesTitle: "Inclus dans votre abonnement",
+    storeIncludesList: "Programme d'étude hebdomadaire personnalisé\nListes de vocabulaire avec de vraies phrases d'exemple\nPratique de la conversation avec reconnaissance vocale\nPratique de la prononciation\nExercices d'écriture et supports d'étude JLPT",
     storeMonthly: "Mensuel",
     store3Months: "3 mois",
     store6Months: "6 mois",
@@ -2368,6 +2410,7 @@ const UI_TRANSLATIONS = {
     tabPractice: "✨ Desde el contenido",
     tabVocabulary: "📚 Vocabulario",
     tabResources: "🔗 Recursos",
+    tabActivities: "🎯 Actividades",
     tabMilestones: "🏆 Metas",
     tabJlpt: "🎓 Resultados JLPT",
     tabFeedback: "💬 Comentarios",
@@ -2496,6 +2539,24 @@ const UI_TRANSLATIONS = {
     coachPronMiss: "Sigues fallando la pronunciación de {word} ({n} veces). Dila despacio y luego a velocidad normal.",
     coachListenWeak: "Tu comprensión auditiva es del {pct} %. Escucha varias veces antes de leer el texto.",
     coachStatFlip: "Velocidad de giro",
+    coachStatStroke: "Precisión de trazos",
+    coachWriteMiss: "Fallas seguido el carácter {word} ({n} intentos, {pct}% sin errores). Escríbelo despacio, trazo por trazo.",
+    coachDetailFlip: "Velocidad de giro, palabra por palabra",
+    coachDetailWrite: "Escritura, carácter por carácter",
+    coachMistakeType: "Tu error más frecuente es: {type} ({n} veces en las últimas 2 semanas). Hoy céntrate en eso.",
+    coachWordMistake: "Te equivocas seguido con la palabra {word} ({n} veces). Repásala hoy y escribe una frase con ella.",
+    coachMistakeNames: "las partículas|la conjugación verbal|la elección de palabras|el orden de las palabras|la ortografía y la escritura",
+    coachStatSpeak: "Expresión oral",
+    coachWriteRetry: "Caracteres para escribir de nuevo: {chars}. Toca el botón para practicarlos ahora.",
+    ivWarnTitle: "⚠️ A leer antes de elegir el modo Intensive",
+    ivWarnBody: "El modo Intensive es solo para quienes se toman en serio aprender japonés o preparan un examen o una certificación. Cada día debes completar una cuota de 8 acciones de estudio, y algunas pestañas siguen bloqueadas hasta lograrlo. Si solo quieres disfrutar aprendiendo, elige el modo Enjoyable.",
+    ivWarnOk: "OK, voy en serio",
+    ivWarnBack: "Elegir otro modo",
+    ivGuideTitle: "Cómo leer tus datos del modo Intensive",
+    ivGuideItems: "🔥 Cuota de hoy — Muestra cuántas de las 8 acciones de estudio de hoy has completado. Al llegar a 8, se abren las pestañas bloqueadas.||⏱ Velocidad de giro / Palabras vistas hoy — La velocidad de giro es el tiempo habitual (mediana de las últimas 2 semanas) que tardas en dar la vuelta a una tarjeta de vocabulario. Menos de 5 segundos es bueno; 6 o más significa que las palabras tardan en venirte. «Palabras vistas hoy» cuenta las tarjetas que miraste hoy.||🗣 Pronunciation Practice — El porcentaje de tus intentos recientes de pronunciación que fueron correctos. Por debajo del 70 % hay que practicar más.||✍️ Writing Practice — El porcentaje de caracteres y respuestas escritas acertados sin errores en las últimas 2 semanas.||✏️ Precisión de trazos — De todos los trazos que escribiste, el porcentaje con el orden y la forma correctos.||🎤 Speaking — El porcentaje de tus respuestas habladas sin errores de gramática ni de palabras.||📋 Palabra por palabra / Carácter por carácter — Abre estas listas para ver la velocidad de cada palabra y la precisión de cada carácter. El amarillo marca un punto débil (6 segundos o más, o menos del 70 %). ×2 significa dos intentos.||🎯 Consejo del coach — Según tus últimas 2 semanas, sugiere el enfoque de hoy: tu tipo de error más frecuente (partículas, formas verbales, elección de palabras, orden de palabras, ortografía), una palabra que sigues fallando o caracteres para volver a escribir. Toca «Vamos» para practicar ya.||ℹ️ Conviene saber — Un guion (–) significa que aún no hay datos suficientes. Tus registros se guardan en este dispositivo. Puedes releer esta guía cuando quieras con el botón «Cómo leer esto» del coach.",
+    ivGuideOk: "Entendido, a estudiar",
+    ivGuideBtn: "ℹ️ Cómo leer esto",
+    coachEnjoyAsk: "¿Quieres trabajar en esto hoy?",
     coachStatViews: "Palabras vistas hoy",
     coachStatListen: "Comprensión auditiva",
     lessonBridgeAsk: "¿Quieres practicar esto con un profesor de verdad? Prueba una clase de prueba gratuita.",
@@ -2809,6 +2870,8 @@ const UI_TRANSLATIONS = {
     resExternalNote: "Los enlaces de Recursos llevan a sitios web externos independientes y a canales oficiales. GAKU no está afiliado a ellos y no aloja ni copia su contenido.",
     paywallRenewNote: "Los planes se renuevan automáticamente al precio indicado hasta que se cancelen. Los pagos en la web los procesa de forma segura Stripe. Los enlaces a sitios externos se abren en una pestaña nueva; esos sitios son independientes y no están afiliados a GAKU.",
     storePlansTitle: "Elige un plan para seguir aprendiendo",
+    storeIncludesTitle: "Incluido en tu suscripción",
+    storeIncludesList: "Plan de estudio semanal personalizado\nListas de vocabulario con frases de ejemplo reales\nPráctica de conversación con reconocimiento de voz\nPráctica de pronunciación\nPráctica de escritura y materiales de estudio del JLPT",
     storeMonthly: "Mensual",
     store3Months: "3 meses",
     store6Months: "6 meses",
@@ -2999,6 +3062,7 @@ const UI_TRANSLATIONS = {
     tabPractice: "✨ A partir do conteúdo",
     tabVocabulary: "📚 Vocabulário",
     tabResources: "🔗 Recursos",
+    tabActivities: "🎯 Atividades",
     tabMilestones: "🏆 Metas",
     tabJlpt: "🎓 Resultados JLPT",
     tabFeedback: "💬 Feedback",
@@ -3127,6 +3191,24 @@ const UI_TRANSLATIONS = {
     coachPronMiss: "Você continua errando a pronúncia de {word} ({n} vezes). Fale devagar e depois em velocidade normal.",
     coachListenWeak: "Sua compreensão auditiva é {pct}%. Ouça várias vezes antes de ler o texto.",
     coachStatFlip: "Velocidade de virada",
+    coachStatStroke: "Precisão dos traços",
+    coachWriteMiss: "Você erra muito o caractere {word} ({n} tentativas, {pct}% sem erros). Escreva devagar, traço por traço.",
+    coachDetailFlip: "Velocidade de virada, palavra por palavra",
+    coachDetailWrite: "Escrita, caractere por caractere",
+    coachMistakeType: "Seu erro mais frequente é: {type} ({n} vezes nas últimas 2 semanas). Foque nisso hoje.",
+    coachWordMistake: "Você erra muito a palavra {word} ({n} vezes). Revise-a hoje e escreva uma frase com ela.",
+    coachMistakeNames: "as partículas|a conjugação verbal|a escolha de palavras|a ordem das palavras|a ortografia e a escrita",
+    coachStatSpeak: "Fala",
+    coachWriteRetry: "Caracteres para escrever de novo: {chars}. Toque no botão para praticá-los agora.",
+    ivWarnTitle: "⚠️ Leia antes de escolher o modo Intensive",
+    ivWarnBody: "O modo Intensive é só para quem leva a sério o aprendizado de japonês ou quer passar em um exame ou certificação. Todos os dias você precisa cumprir uma meta de 8 ações de estudo, e algumas abas ficam bloqueadas até lá. Se você só quer aprender com leveza, escolha o modo Enjoyable.",
+    ivWarnOk: "OK, estou falando sério",
+    ivWarnBack: "Escolher outro modo",
+    ivGuideTitle: "Como ler os dados do modo Intensive",
+    ivGuideItems: "🔥 Meta de hoje — Mostra quantas das 8 ações de estudo de hoje você já concluiu. Ao chegar a 8, as abas bloqueadas se abrem.||⏱ Velocidade de virada / Palavras vistas hoje — A velocidade de virada é o tempo habitual (mediana das últimas 2 semanas) que você leva para virar um cartão de vocabulário. Menos de 5 segundos é bom; 6 ou mais indica que as palavras demoram a voltar. «Palavras vistas hoje» conta os cartões que você viu hoje.||🗣 Pronunciation Practice — A parcela das suas tentativas recentes de pronúncia que estavam corretas. Abaixo de 70% é preciso praticar mais.||✍️ Writing Practice — A parcela de caracteres e respostas escritas certos, sem erros, nas últimas 2 semanas.||✏️ Precisão dos traços — De todos os traços escritos, a parcela com ordem e forma corretas.||🎤 Speaking — A parcela das suas respostas faladas sem erros de gramática ou de palavras.||📋 Palavra por palavra / Caractere por caractere — Abra estas listas para ver a velocidade de cada palavra e a precisão de cada caractere. Amarelo marca um ponto fraco (6 segundos ou mais, ou abaixo de 70%). ×2 significa duas tentativas.||🎯 Conselho do coach — Com base nas últimas 2 semanas, sugere o foco de hoje: seu tipo de erro mais frequente (partículas, formas verbais, escolha de palavras, ordem das palavras, ortografia), uma palavra que você continua errando ou caracteres para escrever de novo. Toque em «Vamos lá» para praticar já.||ℹ️ Bom saber — Um traço (–) significa que ainda não há dados suficientes. Seus registros ficam neste dispositivo. Você pode reler este guia quando quiser com o botão «Como ler isto» do coach.",
+    ivGuideOk: "Entendi, vamos estudar",
+    ivGuideBtn: "ℹ️ Como ler isto",
+    coachEnjoyAsk: "Quer trabalhar nisso hoje?",
     coachStatViews: "Palavras vistas hoje",
     coachStatListen: "Compreensão auditiva",
     lessonBridgeAsk: "Quer praticar isso com um professor de verdade? Experimente uma aula experimental gratuita.",
@@ -3440,6 +3522,8 @@ const UI_TRANSLATIONS = {
     resExternalNote: "Os links em Recursos levam a sites externos independentes e a canais oficiais. O GAKU não é afiliado a eles e não hospeda nem copia o conteúdo deles.",
     paywallRenewNote: "Os planos são renovados automaticamente pelo preço exibido até o cancelamento. Os pagamentos na web são processados com segurança pelo Stripe. Os links para sites externos abrem em uma nova aba; esses sites são independentes e não afiliados ao GAKU.",
     storePlansTitle: "Escolha um plano para continuar aprendendo",
+    storeIncludesTitle: "Incluído na sua assinatura",
+    storeIncludesList: "Plano de estudo semanal personalizado\nListas de vocabulário com frases de exemplo reais\nPrática de conversação com reconhecimento de voz\nPrática de pronúncia\nPrática de escrita e materiais de estudo do JLPT",
     storeMonthly: "Mensal",
     store3Months: "3 meses",
     store6Months: "6 meses",
@@ -3630,6 +3714,7 @@ const UI_TRANSLATIONS = {
     tabPractice: "✨ Aus Inhalt",
     tabVocabulary: "📚 Vokabular",
     tabResources: "🔗 Ressourcen",
+    tabActivities: "🎯 Aktivitäten",
     tabMilestones: "🏆 Meilensteine",
     tabJlpt: "🎓 JLPT-Ergebnisse",
     tabFeedback: "💬 Feedback",
@@ -3758,6 +3843,24 @@ const UI_TRANSLATIONS = {
     coachPronMiss: "Die Aussprache von {word} gelingt dir immer wieder nicht ({n}-mal). Sprich es langsam, dann in normalem Tempo.",
     coachListenWeak: "Dein Hörverständnis liegt bei {pct} %. Höre mehrmals zu, bevor du den Text liest.",
     coachStatFlip: "Umdrehtempo",
+    coachStatStroke: "Strichgenauigkeit",
+    coachWriteMiss: "Das Zeichen {word} misslingt dir oft ({n} Versuche, {pct} % fehlerfrei). Schreib es langsam, Strich für Strich.",
+    coachDetailFlip: "Umdrehtempo, Wort für Wort",
+    coachDetailWrite: "Schreiben, Zeichen für Zeichen",
+    coachMistakeType: "Dein häufigster Fehler: {type} ({n} Mal in den letzten 2 Wochen). Konzentriere dich heute darauf.",
+    coachWordMistake: "Das Wort {word} gelingt dir oft nicht ({n} Mal). Wiederhole es heute und schreibe einen Satz damit.",
+    coachMistakeNames: "Partikeln|Verbkonjugation|Wortwahl|Wortstellung|Rechtschreibung und Schrift",
+    coachStatSpeak: "Sprechen",
+    coachWriteRetry: "Zeichen zum erneuten Schreiben: {chars}. Tippe auf den Button, um sie jetzt zu üben.",
+    ivWarnTitle: "⚠️ Bitte vor der Wahl des Intensive-Modus lesen",
+    ivWarnBody: "Der Intensive-Modus ist nur für Menschen, die es mit dem Japanischlernen ernst meinen oder auf eine Prüfung oder Qualifikation hinarbeiten. Jeden Tag musst du ein Tagesziel von 8 Lernaktionen erreichen, und einige Tabs bleiben bis dahin gesperrt. Wenn du einfach mit Freude lernen möchtest, wähle den Enjoyable-Modus.",
+    ivWarnOk: "OK, es ist mir ernst",
+    ivWarnBack: "Anderen Modus wählen",
+    ivGuideTitle: "So liest du deine Intensive-Daten",
+    ivGuideItems: "🔥 Tagesziel — Zeigt, wie viele der 8 Lernaktionen von heute du geschafft hast. Bei 8 öffnen sich die gesperrten Tabs.||⏱ Umdrehtempo / Heute gesehene Wörter — Das Umdrehtempo ist die übliche Zeit (Median der letzten 2 Wochen), die du brauchst, um eine Vokabelkarte umzudrehen. Unter 5 Sekunden ist gut; ab 6 Sekunden fallen dir Wörter nur langsam ein. „Heute gesehene Wörter“ zählt die Karten, die du heute angesehen hast.||🗣 Pronunciation Practice — Der Anteil deiner letzten Aussprache-Versuche, die richtig waren. Unter 70 % solltest du mehr üben.||✍️ Writing Practice — Der Anteil der Zeichen und geschriebenen Antworten, die du in den letzten 2 Wochen ohne Fehler geschafft hast.||✏️ Strichgenauigkeit — Der Anteil aller geschriebenen Striche mit richtiger Reihenfolge und Form.||🎤 Speaking — Der Anteil deiner gesprochenen Antworten ohne Grammatik- oder Wortfehler.||📋 Wort für Wort / Zeichen für Zeichen — Öffne diese Listen, um das Tempo jedes Wortes und die Genauigkeit jedes Zeichens zu sehen. Gelb markiert eine Schwäche (ab 6 Sekunden oder unter 70 %). ×2 heißt, du hast es zweimal versucht.||🎯 Coach-Tipp — Aus den letzten 2 Wochen schlägt er den heutigen Schwerpunkt vor: deine häufigste Fehlerart (Partikeln, Verbformen, Wortwahl, Wortstellung, Rechtschreibung), ein Wort, das du oft falsch machst, oder Zeichen zum erneuten Schreiben. Tippe auf „Los geht's“, um sofort zu üben.||ℹ️ Gut zu wissen — Ein Strich (–) bedeutet, dass noch nicht genug Daten vorliegen. Deine Aufzeichnungen bleiben auf diesem Gerät. Mit der Taste „So liest du das“ im Coach kannst du diese Anleitung jederzeit erneut lesen.",
+    ivGuideOk: "Verstanden, los geht's",
+    ivGuideBtn: "ℹ️ So liest du das",
+    coachEnjoyAsk: "Möchtest du heute daran arbeiten?",
     coachStatViews: "Heute gesehene Wörter",
     coachStatListen: "Hören",
     lessonBridgeAsk: "Möchten Sie das mit einer echten Lehrkraft üben? Probieren Sie eine kostenlose Probestunde.",
@@ -4071,6 +4174,8 @@ const UI_TRANSLATIONS = {
     resExternalNote: "Links unter „Ressourcen“ führen zu unabhängigen externen Websites und offiziellen Kanälen. GAKU ist nicht mit ihnen verbunden und hostet oder kopiert deren Inhalte nicht.",
     paywallRenewNote: "Tarife verlängern sich automatisch zum angezeigten Preis, bis sie gekündigt werden. Zahlungen im Web werden sicher von Stripe abgewickelt. Links zu externen Websites öffnen sich in einem neuen Tab; diese Seiten sind unabhängig und nicht mit GAKU verbunden.",
     storePlansTitle: "Wähle einen Tarif, um weiterzulernen",
+    storeIncludesTitle: "In deinem Abo enthalten",
+    storeIncludesList: "Persönlicher wöchentlicher Lernplan\nVokabellisten mit echten Beispielsätzen\nKonversationsübung mit Spracherkennung\nAussprachetraining\nSchreibübungen und JLPT-Lernmaterialien",
     storeMonthly: "Monatlich",
     store3Months: "3 Monate",
     store6Months: "6 Monate",
@@ -4261,6 +4366,7 @@ const UI_TRANSLATIONS = {
     tabPractice: "✨ Dal contenuto",
     tabVocabulary: "📚 Vocabolario",
     tabResources: "🔗 Risorse",
+    tabActivities: "🎯 Attività",
     tabMilestones: "🏆 Obiettivi",
     tabJlpt: "🎓 Risultati JLPT",
     tabFeedback: "💬 Feedback",
@@ -4389,6 +4495,24 @@ const UI_TRANSLATIONS = {
     coachPronMiss: "Continui a sbagliare la pronuncia di {word} ({n} volte). Dilla lentamente, poi a velocità normale.",
     coachListenWeak: "La tua comprensione orale è {pct}%. Ascolta più volte prima di leggere il testo.",
     coachStatFlip: "Velocità di giro",
+    coachStatStroke: "Precisione dei tratti",
+    coachWriteMiss: "Sbagli spesso il carattere {word} ({n} tentativi, {pct}% senza errori). Scrivilo lentamente, tratto per tratto.",
+    coachDetailFlip: "Velocità di giro, parola per parola",
+    coachDetailWrite: "Scrittura, carattere per carattere",
+    coachMistakeType: "Il tuo errore più frequente: {type} ({n} volte nelle ultime 2 settimane). Concentrati su questo oggi.",
+    coachWordMistake: "Sbagli spesso la parola {word} ({n} volte). Ripassala oggi e scrivi una frase con essa.",
+    coachMistakeNames: "le particelle|la coniugazione dei verbi|la scelta delle parole|l'ordine delle parole|l'ortografia e la scrittura",
+    coachStatSpeak: "Parlato",
+    coachWriteRetry: "Caratteri da riscrivere: {chars}. Tocca il pulsante per esercitarti ora.",
+    ivWarnTitle: "⚠️ Da leggere prima di scegliere la modalità Intensive",
+    ivWarnBody: "La modalità Intensive è solo per chi prende sul serio lo studio del giapponese o punta a un esame o a una certificazione. Ogni giorno devi completare un obiettivo di 8 azioni di studio e alcune schede restano bloccate finché non ci riesci. Se vuoi solo divertirti a imparare, scegli la modalità Enjoyable.",
+    ivWarnOk: "OK, faccio sul serio",
+    ivWarnBack: "Scegli un'altra modalità",
+    ivGuideTitle: "Come leggere i dati della modalità Intensive",
+    ivGuideItems: "🔥 Obiettivo di oggi — Mostra quante delle 8 azioni di studio di oggi hai completato. Arrivato a 8, le schede bloccate si aprono.||⏱ Velocità di giro / Parole viste oggi — La velocità di giro è il tempo abituale (mediana delle ultime 2 settimane) per girare una carta di vocabolario. Sotto i 5 secondi va bene; da 6 secondi in su le parole tornano lentamente. «Parole viste oggi» conta le carte guardate oggi.||🗣 Pronunciation Practice — La quota dei tuoi recenti tentativi di pronuncia che erano corretti. Sotto il 70% serve più pratica.||✍️ Writing Practice — La quota di caratteri e risposte scritte giusti senza errori nelle ultime 2 settimane.||✏️ Precisione dei tratti — Tra tutti i tratti scritti, la quota con ordine e forma corretti.||🎤 Speaking — La quota delle tue risposte parlate senza errori di grammatica o di parole.||📋 Parola per parola / Carattere per carattere — Apri queste liste per vedere la velocità di ogni parola e la precisione di ogni carattere. Il giallo indica un punto debole (6 secondi o più, o sotto il 70%). ×2 significa due tentativi.||🎯 Consiglio del coach — In base alle ultime 2 settimane suggerisce il focus di oggi: il tipo di errore più frequente (particelle, forme verbali, scelta delle parole, ordine delle parole, ortografia), una parola che sbagli spesso o caratteri da riscrivere. Tocca «Andiamo» per esercitarti subito.||ℹ️ Da sapere — Un trattino (–) significa che non ci sono ancora abbastanza dati. I tuoi registri restano su questo dispositivo. Puoi rileggere questa guida quando vuoi con il pulsante «Come leggere questo» del coach.",
+    ivGuideOk: "Capito, iniziamo",
+    ivGuideBtn: "ℹ️ Come leggere questo",
+    coachEnjoyAsk: "Vuoi lavorarci oggi?",
     coachStatViews: "Parole viste oggi",
     coachStatListen: "Ascolto",
     lessonBridgeAsk: "Vuoi esercitarti su questo con un vero insegnante? Prova una lezione di prova gratuita.",
@@ -4702,6 +4826,8 @@ const UI_TRANSLATIONS = {
     resExternalNote: "I link in Risorse portano a siti esterni indipendenti e a canali ufficiali. GAKU non è affiliato a essi e non ospita né copia i loro contenuti.",
     paywallRenewNote: "I piani si rinnovano automaticamente al prezzo indicato fino alla cancellazione. I pagamenti sul web sono elaborati in modo sicuro da Stripe. I link a siti esterni si aprono in una nuova scheda; tali siti sono indipendenti e non affiliati a GAKU.",
     storePlansTitle: "Scegli un piano per continuare a imparare",
+    storeIncludesTitle: "Incluso nel tuo abbonamento",
+    storeIncludesList: "Piano di studio settimanale personalizzato\nListe di vocaboli con frasi di esempio reali\nPratica di conversazione con riconoscimento vocale\nPratica di pronuncia\nEsercizi di scrittura e materiali di studio JLPT",
     storeMonthly: "Mensile",
     store3Months: "3 mesi",
     store6Months: "6 mesi",
@@ -4892,6 +5018,7 @@ const UI_TRANSLATIONS = {
     tabPractice: "✨ 来自内容",
     tabVocabulary: "📚 词汇",
     tabResources: "🔗 资源",
+    tabActivities: "🎯 活动",
     tabMilestones: "🏆 里程碑",
     tabJlpt: "🎓 JLPT成绩",
     tabFeedback: "💬 反馈",
@@ -5020,6 +5147,24 @@ const UI_TRANSLATIONS = {
     coachPronMiss: "你多次读错 {word} 的发音（{n} 次）。先慢慢读，再用正常语速读。",
     coachListenWeak: "听力理解率是 {pct}%。读文本之前多听几遍。",
     coachStatFlip: "翻卡速度",
+    coachStatStroke: "笔画准确率",
+    coachWriteMiss: "你总是写错「{word}」（{n}次，无错率{pct}%）。请慢慢地一笔一画书写。",
+    coachDetailFlip: "逐词翻卡速度",
+    coachDetailWrite: "逐字书写情况",
+    coachMistakeType: "你最常见的错误是：{type}（最近两周{n}次）。今天请重点练习这一项。",
+    coachWordMistake: "你总是用错「{word}」这个词（{n}次）。今天复习一下，并用它造一个句子。",
+    coachMistakeNames: "助词|动词变形|词语选择|语序|拼写和文字",
+    coachStatSpeak: "口语",
+    coachWriteRetry: "需要再写一次的字：{chars}。点按按钮现在就练习。",
+    ivWarnTitle: "⚠️ 选择 Intensive 模式前请先阅读",
+    ivWarnBody: "Intensive 模式只适合认真学习日语的人，或以考试、资格认证为目标的人。每天必须完成 8 个学习动作的目标，完成之前部分标签会保持锁定。如果你只是想轻松愉快地学习，请选择 Enjoyable 模式。",
+    ivWarnOk: "好的，我是认真的",
+    ivWarnBack: "选择其他模式",
+    ivGuideTitle: "如何查看 Intensive 模式的数据",
+    ivGuideItems: "🔥 今日目标 — 显示今天 8 个学习动作已完成几个。达到 8 个后，被锁定的标签会打开。||⏱ 翻卡速度 / 今天看过的单词 — 翻卡速度是你翻开一张单词卡通常所需的时间（最近两周的中位数）。5 秒以内为佳；6 秒以上说明单词回想得较慢。“今天看过的单词”统计你今天查看的卡片数量。||🗣 Pronunciation Practice — 你最近的发音尝试中正确的比例。低于 70% 说明需要多练习。||✍️ Writing Practice — 最近两周内，你无错误写对的文字和书面回答所占的比例。||✏️ 笔画准确率 — 在你写过的所有笔画中，笔顺和形状都正确的比例。||🎤 Speaking — 你的口语回答中没有语法或用词错误的比例。||📋 逐词 / 逐字 — 打开这些列表，可以看到每个单词的速度和每个文字的准确率。黄色表示薄弱点（6 秒以上，或低于 70%）。×2 表示你试了两次。||🎯 教练建议 — 根据你最近两周的情况，提出今天的重点：最常犯的错误类型（助词、动词变形、词语选择、语序、拼写）、总是错的单词，或需要重写的文字。点按“Let's go”即可马上练习。||ℹ️ 小提示 — 横线（–）表示数据还不够。你的记录保存在本设备上。随时可以通过教练里的“如何查看”按钮再次阅读本说明。",
+    ivGuideOk: "明白了，开始学习",
+    ivGuideBtn: "ℹ️ 如何查看",
+    coachEnjoyAsk: "今天要不要练习这一项？",
     coachStatViews: "今天看过的单词",
     coachStatListen: "听力",
     lessonBridgeAsk: "想和真人老师一起练习这个吗？试试免费体验课吧。",
@@ -5333,6 +5478,8 @@ const UI_TRANSLATIONS = {
     resExternalNote: "“资源”中的链接指向独立的外部网站和官方频道。GAKU 与它们没有关联,也不托管或复制它们的内容。",
     paywallRenewNote: "套餐将按所示价格自动续订,直至取消。网页端的付款由 Stripe 安全处理。外部网站的链接会在新标签页中打开;这些网站相互独立,与 GAKU 无关联。",
     storePlansTitle: "选择一个套餐,继续学习",
+    storeIncludesTitle: "订阅包含的内容",
+    storeIncludesList: "个性化每周学习计划\n带真实例句的词汇表\n带语音识别的会话练习\n发音练习\n写作练习和 JLPT 学习资料",
     storeMonthly: "按月",
     store3Months: "3个月",
     store6Months: "6个月",
@@ -5523,6 +5670,7 @@ const UI_TRANSLATIONS = {
     tabPractice: "✨ 來自內容",
     tabVocabulary: "📚 詞彙",
     tabResources: "🔗 資源",
+    tabActivities: "🎯 活動",
     tabMilestones: "🏆 里程碑",
     tabJlpt: "🎓 JLPT成績",
     tabFeedback: "💬 意見回饋",
@@ -5651,6 +5799,24 @@ const UI_TRANSLATIONS = {
     coachPronMiss: "你多次唸錯 {word} 的發音（{n} 次）。先慢慢唸，再用正常語速唸。",
     coachListenWeak: "聽力理解率是 {pct}%。讀文本之前多聽幾遍。",
     coachStatFlip: "翻卡速度",
+    coachStatStroke: "筆畫準確率",
+    coachWriteMiss: "你總是寫錯「{word}」（{n}次，無錯率{pct}%）。請慢慢地一筆一畫書寫。",
+    coachDetailFlip: "逐詞翻卡速度",
+    coachDetailWrite: "逐字書寫情況",
+    coachMistakeType: "你最常見的錯誤是：{type}（最近兩週{n}次）。今天請重點練習這一項。",
+    coachWordMistake: "你總是用錯「{word}」這個詞（{n}次）。今天複習一下，並用它造一個句子。",
+    coachMistakeNames: "助詞|動詞變化|詞語選擇|語序|拼寫和文字",
+    coachStatSpeak: "口語",
+    coachWriteRetry: "需要再寫一次的字：{chars}。點按按鈕現在就練習。",
+    ivWarnTitle: "⚠️ 選擇 Intensive 模式前請先閱讀",
+    ivWarnBody: "Intensive 模式只適合認真學習日語的人，或以考試、資格認證為目標的人。每天必須完成 8 個學習動作的目標，完成之前部分分頁會保持鎖定。如果你只是想輕鬆愉快地學習，請選擇 Enjoyable 模式。",
+    ivWarnOk: "好的，我是認真的",
+    ivWarnBack: "選擇其他模式",
+    ivGuideTitle: "如何查看 Intensive 模式的資料",
+    ivGuideItems: "🔥 今日目標 — 顯示今天 8 個學習動作已完成幾個。達到 8 個後，被鎖定的分頁會開啟。||⏱ 翻卡速度 / 今天看過的單字 — 翻卡速度是你翻開一張單字卡通常所需的時間（最近兩週的中位數）。5 秒以內為佳；6 秒以上表示單字回想較慢。「今天看過的單字」統計你今天查看的卡片數量。||🗣 Pronunciation Practice — 你最近的發音嘗試中正確的比例。低於 70% 表示需要多練習。||✍️ Writing Practice — 最近兩週內，你無錯誤寫對的文字和書面回答所占的比例。||✏️ 筆畫準確率 — 在你寫過的所有筆畫中，筆順和形狀都正確的比例。||🎤 Speaking — 你的口語回答中沒有文法或用詞錯誤的比例。||📋 逐詞 / 逐字 — 打開這些清單，可以看到每個單字的速度和每個文字的準確率。黃色表示弱點（6 秒以上，或低於 70%）。×2 表示你試了兩次。||🎯 教練建議 — 根據你最近兩週的情況，提出今天的重點：最常犯的錯誤類型（助詞、動詞變化、詞語選擇、語序、拼寫）、一直答錯的單字，或需要重寫的文字。點按「Let's go」即可馬上練習。||ℹ️ 小提醒 — 橫線（–）表示資料還不夠。你的紀錄保存在本裝置上。隨時可以透過教練裡的「如何查看」按鈕再次閱讀本說明。",
+    ivGuideOk: "明白了，開始學習",
+    ivGuideBtn: "ℹ️ 如何查看",
+    coachEnjoyAsk: "今天要不要練習這一項？",
     coachStatViews: "今天看過的單字",
     coachStatListen: "聽力",
     lessonBridgeAsk: "想和真人老師一起練習這個嗎？試試免費體驗課吧。",
@@ -5964,6 +6130,8 @@ const UI_TRANSLATIONS = {
     resExternalNote: "「資源」中的連結會前往獨立的外部網站與官方頻道。GAKU 與它們沒有關聯,也不代管或複製它們的內容。",
     paywallRenewNote: "方案會依所示價格自動續訂,直到取消為止。網頁上的付款由 Stripe 安全處理。外部網站的連結會在新分頁中開啟;這些網站各自獨立,與 GAKU 無關聯。",
     storePlansTitle: "選擇方案,繼續學習",
+    storeIncludesTitle: "訂閱包含的內容",
+    storeIncludesList: "個人化每週學習計畫\n附真實例句的詞彙表\n附語音辨識的會話練習\n發音練習\n寫作練習與 JLPT 學習資料",
     storeMonthly: "按月",
     store3Months: "3個月",
     store6Months: "6個月",
@@ -6154,6 +6322,7 @@ const UI_TRANSLATIONS = {
     tabPractice: "✨ 콘텐츠에서",
     tabVocabulary: "📚 어휘",
     tabResources: "🔗 자료",
+    tabActivities: "🎯 활동",
     tabMilestones: "🏆 목표",
     tabJlpt: "🎓 JLPT 결과",
     tabFeedback: "💬 피드백",
@@ -6282,6 +6451,24 @@ const UI_TRANSLATIONS = {
     coachPronMiss: "{word}의 발음을 계속 틀리고 있어요({n}회). 천천히 말한 뒤 보통 속도로 말해 보세요.",
     coachListenWeak: "듣기 이해도는 {pct}%예요. 텍스트를 읽기 전에 여러 번 들어 보세요.",
     coachStatFlip: "카드 뒤집기 속도",
+    coachStatStroke: "획 정확도",
+    coachWriteMiss: "{word} 글자를 자주 틀립니다({n}회 시도, 오류 없음 {pct}%). 천천히 한 획씩 써 보세요.",
+    coachDetailFlip: "단어별 카드 뒤집기 속도",
+    coachDetailWrite: "글자별 쓰기",
+    coachMistakeType: "가장 자주 하는 실수는 {type}입니다(최근 2주간 {n}회). 오늘은 이 부분을 중점적으로 연습해 보세요.",
+    coachWordMistake: "「{word}」라는 단어를 자주 틀립니다({n}회). 오늘 다시 복습하고 그 단어로 문장을 하나 써 보세요.",
+    coachMistakeNames: "조사|동사 활용|단어 선택|어순|표기와 문자",
+    coachStatSpeak: "말하기",
+    coachWriteRetry: "다시 써 볼 글자: {chars}. 버튼을 눌러 지금 연습해 보세요.",
+    ivWarnTitle: "⚠️ Intensive 모드를 선택하기 전에 꼭 읽어 주세요",
+    ivWarnBody: "Intensive 모드는 일본어를 진지하게 배우려는 분이나 시험·자격 취득을 목표로 하는 분만 이용해 주세요. 매일 8개의 학습 행동을 채워야 하며, 달성하기 전까지 일부 탭은 잠겨 있습니다. 가볍게 즐기며 배우고 싶다면 Enjoyable 모드를 선택하세요.",
+    ivWarnOk: "네, 진지하게 하겠습니다",
+    ivWarnBack: "다른 모드 선택",
+    ivGuideTitle: "Intensive 모드 데이터 보는 법",
+    ivGuideItems: "🔥 오늘의 목표 — 오늘의 학습 행동 8개 중 몇 개를 마쳤는지 보여 줍니다. 8개가 되면 잠긴 탭이 열립니다.||⏱ 카드 뒤집기 속도 / 오늘 본 단어 — 카드 뒤집기 속도는 단어 카드를 뒤집는 데 보통 걸리는 시간(최근 2주의 중앙값)입니다. 5초 이내면 좋고, 6초 이상이면 단어가 천천히 떠오른다는 뜻입니다. ‘오늘 본 단어’는 오늘 본 카드 수입니다.||🗣 Pronunciation Practice — 최근 발음 시도 중 맞은 비율입니다. 70% 미만이면 더 연습이 필요합니다.||✍️ Writing Practice — 최근 2주 동안 실수 없이 쓴 글자와 서술형 답변의 비율입니다.||✏️ 획 정확도 — 쓴 모든 획 중 순서와 모양이 맞은 비율입니다.||🎤 Speaking — 말한 답변 중 문법이나 단어 실수가 없었던 비율입니다.||📋 단어별 / 글자별 — 이 목록을 열면 단어마다의 속도와 글자마다의 정확도를 볼 수 있습니다. 노란색은 약점(6초 이상 또는 70% 미만)입니다. ×2는 두 번 시도했다는 뜻입니다.||🎯 코치 조언 — 최근 2주 기록을 바탕으로 오늘의 중점을 제안합니다: 가장 자주 하는 실수 유형(조사, 동사 활용, 단어 선택, 어순, 표기), 계속 틀리는 단어, 다시 써야 할 글자. ‘Let's go’를 누르면 바로 연습할 수 있습니다.||ℹ️ 알아 두세요 — 대시(–)는 아직 데이터가 부족하다는 뜻입니다. 기록은 이 기기에 저장됩니다. 코치의 ‘보는 법’ 버튼으로 이 안내를 언제든 다시 볼 수 있습니다.",
+    ivGuideOk: "알겠습니다, 시작할게요",
+    ivGuideBtn: "ℹ️ 보는 법",
+    coachEnjoyAsk: "오늘 이 부분을 연습해 볼까요?",
     coachStatViews: "오늘 본 단어",
     coachStatListen: "듣기",
     lessonBridgeAsk: "이 부분을 진짜 선생님과 함께 연습해 보시겠어요? 무료 체험 수업을 신청해 보세요.",
@@ -6595,6 +6782,8 @@ const UI_TRANSLATIONS = {
     resExternalNote: "리소스의 링크는 독립된 외부 웹사이트와 공식 채널로 연결됩니다. GAKU는 이들과 제휴 관계가 아니며, 해당 콘텐츠를 호스팅하거나 복사하지 않습니다.",
     paywallRenewNote: "플랜은 취소하기 전까지 표시된 가격으로 자동 갱신됩니다. 웹에서의 결제는 Stripe가 안전하게 처리합니다. 외부 웹사이트 링크는 새 탭에서 열리며, 해당 사이트들은 독립적이고 GAKU와 제휴 관계가 아닙니다.",
     storePlansTitle: "계속 학습할 플랜을 선택하세요",
+    storeIncludesTitle: "구독에 포함된 내용",
+    storeIncludesList: "맞춤형 주간 학습 계획\n실제 예문이 있는 단어 목록\n음성 인식 회화 연습\n발음 연습\n쓰기 연습 및 JLPT 학습 자료",
     storeMonthly: "월간",
     store3Months: "3개월",
     store6Months: "6개월",
@@ -6785,6 +6974,7 @@ const UI_TRANSLATIONS = {
     tabPractice: "✨ จากเนื้อหา",
     tabVocabulary: "📚 คำศัพท์",
     tabResources: "🔗 แหล่งเรียนรู้",
+    tabActivities: "🎯 กิจกรรม",
     tabMilestones: "🏆 เป้าหมาย",
     tabJlpt: "🎓 ผลสอบ JLPT",
     tabFeedback: "💬 ความคิดเห็น",
@@ -6913,6 +7103,24 @@ const UI_TRANSLATIONS = {
     coachPronMiss: "คุณออกเสียง {word} ผิดบ่อย ({n} ครั้ง) ลองพูดช้าๆ แล้วค่อยพูดด้วยความเร็วปกติ",
     coachListenWeak: "ความเข้าใจการฟังอยู่ที่ {pct}% ลองฟังหลายครั้งก่อนอ่านข้อความ",
     coachStatFlip: "ความเร็วในการพลิกการ์ด",
+    coachStatStroke: "ความแม่นยำของเส้น",
+    coachWriteMiss: "คุณเขียนตัวอักษร {word} ผิดบ่อย ({n} ครั้ง ถูกทั้งหมด {pct}%) ลองเขียนช้า ๆ ทีละเส้น",
+    coachDetailFlip: "ความเร็วพลิกการ์ดรายคำ",
+    coachDetailWrite: "การเขียนรายตัวอักษร",
+    coachMistakeType: "ข้อผิดพลาดที่พบบ่อยที่สุดของคุณคือ {type} ({n} ครั้งใน 2 สัปดาห์ที่ผ่านมา) วันนี้ลองเน้นเรื่องนี้",
+    coachWordMistake: "คุณใช้คำว่า {word} ผิดบ่อย ({n} ครั้ง) วันนี้ลองทบทวนและแต่งประโยคด้วยคำนี้หนึ่งประโยค",
+    coachMistakeNames: "คำช่วย|การผันกริยา|การเลือกคำ|ลำดับคำ|การสะกดและตัวอักษร",
+    coachStatSpeak: "การพูด",
+    coachWriteRetry: "ตัวอักษรที่ควรเขียนอีกครั้ง: {chars} แตะปุ่มเพื่อฝึกตอนนี้",
+    ivWarnTitle: "⚠️ โปรดอ่านก่อนเลือกโหมด Intensive",
+    ivWarnBody: "โหมด Intensive เหมาะสำหรับผู้ที่จริงจังกับการเรียนภาษาญี่ปุ่น หรือมีเป้าหมายสอบหรือขอใบรับรองเท่านั้น ทุกวันคุณต้องทำเป้าหมาย 8 กิจกรรมการเรียนให้ครบ และบางแท็บจะถูกล็อกจนกว่าจะทำครบ หากต้องการเรียนอย่างสนุก ๆ ให้เลือกโหมด Enjoyable",
+    ivWarnOk: "โอเค ฉันจริงจัง",
+    ivWarnBack: "เลือกโหมดอื่น",
+    ivGuideTitle: "วิธีอ่านข้อมูลโหมด Intensive",
+    ivGuideItems: "🔥 เป้าหมายวันนี้ — แสดงว่าคุณทำกิจกรรมการเรียนวันนี้ครบกี่ข้อจาก 8 ข้อ เมื่อครบ 8 แท็บที่ล็อกจะเปิด||⏱ ความเร็วพลิกการ์ด / คำที่เห็นวันนี้ — ความเร็วพลิกการ์ดคือเวลาที่คุณใช้พลิกการ์ดคำศัพท์โดยทั่วไป (ค่ามัธยฐาน 2 สัปดาห์ล่าสุด) ต่ำกว่า 5 วินาทีถือว่าดี 6 วินาทีขึ้นไปแปลว่านึกคำช้า “คำที่เห็นวันนี้” นับจำนวนการ์ดที่ดูวันนี้||🗣 Pronunciation Practice — สัดส่วนการลองออกเสียงล่าสุดที่ถูกต้อง ต่ำกว่า 70% ควรฝึกเพิ่ม||✍️ Writing Practice — สัดส่วนตัวอักษรและคำตอบที่เขียนถูกโดยไม่มีข้อผิดพลาดใน 2 สัปดาห์ล่าสุด||✏️ ความแม่นยำของเส้น — จากทุกเส้นที่คุณเขียน สัดส่วนที่ลำดับและรูปร่างถูกต้อง||🎤 Speaking — สัดส่วนคำตอบที่พูดโดยไม่มีข้อผิดพลาดด้านไวยากรณ์หรือคำศัพท์||📋 รายคำ / รายตัวอักษร — เปิดรายการเหล่านี้เพื่อดูความเร็วของแต่ละคำและความแม่นยำของแต่ละตัวอักษร สีเหลืองคือจุดอ่อน (6 วินาทีขึ้นไป หรือต่ำกว่า 70%) ×2 หมายถึงลองสองครั้ง||🎯 คำแนะนำจากโค้ช — จากข้อมูล 2 สัปดาห์ล่าสุด โค้ชแนะนำจุดเน้นของวันนี้: ประเภทข้อผิดพลาดที่พบบ่อยที่สุด (คำช่วย การผันกริยา การเลือกคำ ลำดับคำ การสะกด) คำที่ผิดซ้ำ ๆ หรือตัวอักษรที่ควรเขียนอีกครั้ง แตะ “Let's go” เพื่อฝึกทันที||ℹ️ ควรรู้ — เครื่องหมาย (–) หมายถึงยังมีข้อมูลไม่พอ บันทึกของคุณเก็บไว้ในอุปกรณ์นี้ คุณอ่านคู่มือนี้ซ้ำได้ทุกเมื่อด้วยปุ่ม “วิธีอ่าน” ในโค้ช",
+    ivGuideOk: "เข้าใจแล้ว เริ่มเรียน",
+    ivGuideBtn: "ℹ️ วิธีอ่าน",
+    coachEnjoyAsk: "วันนี้อยากลองฝึกเรื่องนี้ไหม?",
     coachStatViews: "คำที่ดูวันนี้",
     coachStatListen: "การฟัง",
     lessonBridgeAsk: "อยากฝึกเรื่องนี้กับครูตัวจริงไหม? ลองเรียนทดลองฟรีดูสิ",
@@ -7226,6 +7434,8 @@ const UI_TRANSLATIONS = {
     resExternalNote: "ลิงก์ในส่วนแหล่งเรียนรู้นำไปยังเว็บไซต์ภายนอกที่เป็นอิสระและช่องทางทางการ GAKU ไม่มีส่วนเกี่ยวข้องกับเว็บไซต์เหล่านั้น และไม่ได้โฮสต์หรือคัดลอกเนื้อหาของพวกเขา",
     paywallRenewNote: "แพ็กเกจจะต่ออายุอัตโนมัติตามราคาที่แสดงจนกว่าจะยกเลิก การชำระเงินบนเว็บดำเนินการอย่างปลอดภัยโดย Stripe ลิงก์ไปยังเว็บไซต์ภายนอกจะเปิดในแท็บใหม่ เว็บไซต์เหล่านั้นเป็นอิสระและไม่เกี่ยวข้องกับ GAKU",
     storePlansTitle: "เลือกแพ็กเกจเพื่อเรียนต่อ",
+    storeIncludesTitle: "สิ่งที่รวมอยู่ในการสมัครสมาชิก",
+    storeIncludesList: "แผนการเรียนรายสัปดาห์ที่ปรับให้เหมาะกับคุณ\nรายการคำศัพท์พร้อมประโยคตัวอย่างจริง\nฝึกสนทนาพร้อมระบบจดจำเสียงพูด\nฝึกการออกเสียง\nฝึกเขียนและสื่อการเรียน JLPT",
     storeMonthly: "รายเดือน",
     store3Months: "3 เดือน",
     store6Months: "6 เดือน",
@@ -7416,6 +7626,7 @@ const UI_TRANSLATIONS = {
     tabPractice: "✨ Dari Kandungan",
     tabVocabulary: "📚 Kosa Kata",
     tabResources: "🔗 Sumber",
+    tabActivities: "🎯 Aktivitas",
     tabMilestones: "🏆 Pencapaian",
     tabJlpt: "🎓 Keputusan JLPT",
     tabFeedback: "💬 Maklum Balas",
@@ -7544,6 +7755,24 @@ const UI_TRANSLATIONS = {
     coachPronMiss: "Anda terus tersilap sebutan {word} ({n} kali). Sebut perlahan-lahan, kemudian pada kelajuan biasa.",
     coachListenWeak: "Kefahaman mendengar ialah {pct}%. Dengar beberapa kali sebelum membaca teks.",
     coachStatFlip: "Kelajuan pusing kad",
+    coachStatStroke: "Ketepatan coretan",
+    coachWriteMiss: "Anda sering tersilap aksara {word} ({n} cubaan, {pct}% tanpa kesilapan). Tulis perlahan-lahan, satu coretan demi satu.",
+    coachDetailFlip: "Kelajuan pusing kad, satu demi satu perkataan",
+    coachDetailWrite: "Penulisan, satu demi satu aksara",
+    coachMistakeType: "Kesilapan anda yang paling kerap ialah {type} ({n} kali dalam 2 minggu lepas). Fokus pada perkara ini hari ini.",
+    coachWordMistake: "Anda kerap tersilap perkataan {word} ({n} kali). Ulang kaji hari ini dan tulis satu ayat dengannya.",
+    coachMistakeNames: "partikel|konjugasi kata kerja|pemilihan perkataan|susunan perkataan|ejaan dan tulisan",
+    coachStatSpeak: "Pertuturan",
+    coachWriteRetry: "Aksara untuk ditulis semula: {chars}. Ketik butang untuk berlatih sekarang.",
+    ivWarnTitle: "⚠️ Sila baca sebelum memilih mod Intensive",
+    ivWarnBody: "Mod Intensive hanya untuk mereka yang bersungguh-sungguh mempelajari bahasa Jepun atau menyasarkan peperiksaan atau pensijilan. Setiap hari anda mesti menyiapkan kuota 8 tindakan belajar, dan beberapa tab kekal dikunci sehingga siap. Jika anda sekadar mahu belajar dengan santai, pilih mod Enjoyable.",
+    ivWarnOk: "OK, saya bersungguh-sungguh",
+    ivWarnBack: "Pilih mod lain",
+    ivGuideTitle: "Cara membaca data mod Intensive",
+    ivGuideItems: "🔥 Kuota hari ini — Menunjukkan berapa daripada 8 tindakan belajar hari ini yang telah anda siapkan. Apabila mencapai 8, tab yang dikunci akan dibuka.||⏱ Kelajuan pusing kad / Perkataan dilihat hari ini — Kelajuan pusing kad ialah masa biasa (median 2 minggu terakhir) anda memusingkan kad perbendaharaan kata. Bawah 5 saat adalah baik; 6 saat atau lebih bermakna perkataan lambat diingati. “Perkataan dilihat hari ini” mengira kad yang anda lihat hari ini.||🗣 Pronunciation Practice — Peratusan percubaan sebutan terkini yang betul. Bawah 70% bermakna perlu lebih latihan.||✍️ Writing Practice — Peratusan aksara dan jawapan bertulis yang betul tanpa kesilapan dalam 2 minggu terakhir.||✏️ Ketepatan coretan — Daripada semua coretan yang anda tulis, peratusan yang tertib dan bentuknya betul.||🎤 Speaking — Peratusan jawapan lisan anda tanpa kesilapan tatabahasa atau perkataan.||📋 Perkataan demi perkataan / Aksara demi aksara — Buka senarai ini untuk melihat kelajuan setiap perkataan dan ketepatan setiap aksara. Kuning menandakan titik lemah (6 saat atau lebih, atau bawah 70%). ×2 bermakna dua percubaan.||🎯 Nasihat jurulatih — Berdasarkan 2 minggu terakhir, ia mencadangkan fokus hari ini: jenis kesilapan paling kerap (partikel, bentuk kata kerja, pemilihan perkataan, susunan perkataan, ejaan), perkataan yang sering salah, atau aksara untuk ditulis semula. Ketik “Let's go” untuk berlatih segera.||ℹ️ Perlu tahu — Sengkang (–) bermakna data belum mencukupi. Rekod anda disimpan pada peranti ini. Anda boleh membaca panduan ini semula bila-bila masa dengan butang “Cara membaca” pada jurulatih.",
+    ivGuideOk: "Faham, mula belajar",
+    ivGuideBtn: "ℹ️ Cara membaca",
+    coachEnjoyAsk: "Mahu berlatih perkara ini hari ini?",
     coachStatViews: "Perkataan dilihat hari ini",
     coachStatListen: "Mendengar",
     lessonBridgeAsk: "Mahu berlatih perkara ini dengan guru sebenar? Cuba kelas percubaan percuma.",
@@ -7857,6 +8086,8 @@ const UI_TRANSLATIONS = {
     resExternalNote: "Pautan dalam Sumber membawa anda ke laman web luar yang bebas dan saluran rasmi. GAKU tidak berafiliasi dengan mereka dan tidak menganjurkan atau menyalin kandungan mereka.",
     paywallRenewNote: "Pelan diperbaharui secara automatik pada harga yang ditunjukkan sehingga dibatalkan. Pembayaran di web diproses dengan selamat oleh Stripe. Pautan ke laman web luar dibuka dalam tab baharu; laman web tersebut adalah bebas dan tidak berafiliasi dengan GAKU.",
     storePlansTitle: "Pilih pelan untuk terus belajar",
+    storeIncludesTitle: "Termasuk dalam langganan anda",
+    storeIncludesList: "Pelan belajar mingguan yang diperibadikan\nSenarai perbendaharaan kata dengan ayat contoh sebenar\nLatihan perbualan dengan pengecaman suara\nLatihan sebutan\nLatihan menulis dan bahan belajar JLPT",
     storeMonthly: "Bulanan",
     store3Months: "3 bulan",
     store6Months: "6 bulan",
@@ -8047,6 +8278,7 @@ const UI_TRANSLATIONS = {
     tabPractice: "✨ Dari Konten",
     tabVocabulary: "📚 Kosakata",
     tabResources: "🔗 Sumber",
+    tabActivities: "🎯 Aktiviti",
     tabMilestones: "🏆 Pencapaian",
     tabJlpt: "🎓 Hasil JLPT",
     tabFeedback: "💬 Masukan",
@@ -8175,6 +8407,24 @@ const UI_TRANSLATIONS = {
     coachPronMiss: "Anda terus salah mengucapkan {word} ({n} kali). Ucapkan pelan-pelan, lalu dengan kecepatan normal.",
     coachListenWeak: "Pemahaman menyimak adalah {pct}%. Dengarkan beberapa kali sebelum membaca teks.",
     coachStatFlip: "Kecepatan membalik kartu",
+    coachStatStroke: "Akurasi goresan",
+    coachWriteMiss: "Anda sering salah menulis karakter {word} ({n} percobaan, {pct}% tanpa salah). Tulis pelan-pelan, satu goresan demi satu.",
+    coachDetailFlip: "Kecepatan membalik kartu, kata demi kata",
+    coachDetailWrite: "Menulis, karakter demi karakter",
+    coachMistakeType: "Kesalahan Anda yang paling sering adalah {type} ({n} kali dalam 2 minggu terakhir). Fokuslah pada hal ini hari ini.",
+    coachWordMistake: "Anda sering salah pada kata {word} ({n} kali). Ulas hari ini dan tulis satu kalimat dengan kata itu.",
+    coachMistakeNames: "partikel|konjugasi kata kerja|pemilihan kata|urutan kata|ejaan dan tulisan",
+    coachStatSpeak: "Berbicara",
+    coachWriteRetry: "Karakter yang perlu ditulis ulang: {chars}. Ketuk tombol untuk berlatih sekarang.",
+    ivWarnTitle: "⚠️ Harap baca sebelum memilih mode Intensive",
+    ivWarnBody: "Mode Intensive hanya untuk Anda yang serius belajar bahasa Jepang atau menargetkan ujian maupun sertifikasi. Setiap hari Anda harus menyelesaikan kuota 8 aktivitas belajar, dan beberapa tab tetap terkunci sampai selesai. Jika Anda hanya ingin belajar dengan santai, pilih mode Enjoyable.",
+    ivWarnOk: "OK, saya serius",
+    ivWarnBack: "Pilih mode lain",
+    ivGuideTitle: "Cara membaca data mode Intensive",
+    ivGuideItems: "🔥 Kuota hari ini — Menunjukkan berapa dari 8 aktivitas belajar hari ini yang sudah Anda selesaikan. Saat mencapai 8, tab yang terkunci terbuka.||⏱ Kecepatan membalik kartu / Kata dilihat hari ini — Kecepatan membalik kartu adalah waktu yang biasanya Anda butuhkan untuk membalik kartu kosakata (median 2 minggu terakhir). Di bawah 5 detik bagus; 6 detik atau lebih berarti kata lambat teringat. “Kata dilihat hari ini” menghitung kartu yang Anda lihat hari ini.||🗣 Pronunciation Practice — Persentase percobaan pelafalan terbaru yang benar. Di bawah 70% berarti perlu lebih banyak latihan.||✍️ Writing Practice — Persentase karakter dan jawaban tertulis yang benar tanpa kesalahan dalam 2 minggu terakhir.||✏️ Akurasi goresan — Dari semua goresan yang Anda tulis, persentase yang urutan dan bentuknya benar.||🎤 Speaking — Persentase jawaban lisan Anda tanpa kesalahan tata bahasa atau kata.||📋 Kata demi kata / Karakter demi karakter — Buka daftar ini untuk melihat kecepatan tiap kata dan akurasi tiap karakter. Kuning menandai titik lemah (6 detik atau lebih, atau di bawah 70%). ×2 berarti dua kali mencoba.||🎯 Saran pelatih — Berdasarkan 2 minggu terakhir, pelatih menyarankan fokus hari ini: jenis kesalahan paling sering (partikel, bentuk kata kerja, pilihan kata, urutan kata, ejaan), kata yang terus salah, atau karakter yang perlu ditulis ulang. Ketuk “Let's go” untuk langsung berlatih.||ℹ️ Perlu diketahui — Tanda strip (–) berarti data belum cukup. Catatan Anda disimpan di perangkat ini. Anda bisa membaca panduan ini lagi kapan saja lewat tombol “Cara membaca” pada pelatih.",
+    ivGuideOk: "Mengerti, mulai belajar",
+    ivGuideBtn: "ℹ️ Cara membaca",
+    coachEnjoyAsk: "Mau berlatih hal ini hari ini?",
     coachStatViews: "Kata dilihat hari ini",
     coachStatListen: "Menyimak",
     lessonBridgeAsk: "Ingin berlatih ini dengan guru sungguhan? Coba kelas percobaan gratis.",
@@ -8488,6 +8738,8 @@ const UI_TRANSLATIONS = {
     resExternalNote: "Tautan di Sumber Belajar mengarah ke situs web luar yang independen dan kanal resmi. GAKU tidak berafiliasi dengan mereka dan tidak menghosting atau menyalin konten mereka.",
     paywallRenewNote: "Paket diperpanjang otomatis dengan harga yang tertera hingga dibatalkan. Pembayaran di web diproses dengan aman oleh Stripe. Tautan ke situs luar dibuka di tab baru; situs-situs tersebut independen dan tidak berafiliasi dengan GAKU.",
     storePlansTitle: "Pilih paket untuk terus belajar",
+    storeIncludesTitle: "Termasuk dalam langganan Anda",
+    storeIncludesList: "Rencana belajar mingguan yang dipersonalisasi\nDaftar kosakata dengan contoh kalimat nyata\nLatihan percakapan dengan pengenalan suara\nLatihan pelafalan\nLatihan menulis dan materi belajar JLPT",
     storeMonthly: "Bulanan",
     store3Months: "3 bulan",
     store6Months: "6 bulan",
@@ -8678,6 +8930,7 @@ const UI_TRANSLATIONS = {
     tabPractice: "✨ Từ nội dung",
     tabVocabulary: "📚 Từ vựng",
     tabResources: "🔗 Tài liệu",
+    tabActivities: "🎯 Hoạt động",
     tabMilestones: "🏆 Mục tiêu",
     tabJlpt: "🎓 Kết quả JLPT",
     tabFeedback: "💬 Phản hồi",
@@ -8806,6 +9059,24 @@ const UI_TRANSLATIONS = {
     coachPronMiss: "Bạn liên tục phát âm sai {word} ({n} lần). Hãy nói chậm rồi nói với tốc độ bình thường.",
     coachListenWeak: "Khả năng nghe hiểu là {pct}%. Hãy nghe vài lần trước khi đọc văn bản.",
     coachStatFlip: "Tốc độ lật thẻ",
+    coachStatStroke: "Độ chính xác nét viết",
+    coachWriteMiss: "Bạn hay viết sai chữ {word} ({n} lần, {pct}% không lỗi). Hãy viết chậm, từng nét một.",
+    coachDetailFlip: "Tốc độ lật thẻ theo từng từ",
+    coachDetailWrite: "Viết theo từng chữ",
+    coachMistakeType: "Lỗi bạn hay mắc nhất là {type} ({n} lần trong 2 tuần qua). Hôm nay hãy tập trung vào phần này.",
+    coachWordMistake: "Bạn hay dùng sai từ {word} ({n} lần). Hôm nay hãy ôn lại và viết một câu với từ này.",
+    coachMistakeNames: "trợ từ|chia động từ|chọn từ|thứ tự từ|chính tả và chữ viết",
+    coachStatSpeak: "Nói",
+    coachWriteRetry: "Các chữ cần viết lại: {chars}. Chạm nút để luyện ngay.",
+    ivWarnTitle: "⚠️ Hãy đọc trước khi chọn chế độ Intensive",
+    ivWarnBody: "Chế độ Intensive chỉ dành cho người nghiêm túc học tiếng Nhật hoặc đang hướng tới kỳ thi, chứng chỉ. Mỗi ngày bạn phải hoàn thành chỉ tiêu 8 hoạt động học, và một số tab sẽ bị khóa cho đến khi hoàn thành. Nếu bạn chỉ muốn học thoải mái, hãy chọn chế độ Enjoyable.",
+    ivWarnOk: "OK, tôi nghiêm túc",
+    ivWarnBack: "Chọn chế độ khác",
+    ivGuideTitle: "Cách đọc dữ liệu chế độ Intensive",
+    ivGuideItems: "🔥 Chỉ tiêu hôm nay — Cho biết bạn đã hoàn thành bao nhiêu trong 8 hoạt động học hôm nay. Đạt 8 thì các tab bị khóa sẽ mở.||⏱ Tốc độ lật thẻ / Từ đã xem hôm nay — Tốc độ lật thẻ là thời gian bạn thường mất để lật một thẻ từ vựng (trung vị 2 tuần gần nhất). Dưới 5 giây là tốt; từ 6 giây trở lên nghĩa là nhớ từ chậm. “Từ đã xem hôm nay” đếm số thẻ bạn đã xem hôm nay.||🗣 Pronunciation Practice — Tỷ lệ các lần thử phát âm gần đây đúng. Dưới 70% nghĩa là cần luyện thêm.||✍️ Writing Practice — Tỷ lệ chữ và câu trả lời viết đúng, không lỗi trong 2 tuần gần nhất.||✏️ Độ chính xác nét viết — Trong tất cả các nét bạn viết, tỷ lệ có đúng thứ tự và hình dạng.||🎤 Speaking — Tỷ lệ câu trả lời nói không có lỗi ngữ pháp hay từ vựng.||📋 Theo từng từ / Theo từng chữ — Mở các danh sách này để xem tốc độ của từng từ và độ chính xác của từng chữ. Màu vàng là điểm yếu (từ 6 giây trở lên, hoặc dưới 70%). ×2 nghĩa là bạn đã thử hai lần.||🎯 Lời khuyên của huấn luyện viên — Dựa trên 2 tuần gần nhất, gợi ý trọng tâm hôm nay: loại lỗi bạn hay mắc nhất (trợ từ, chia động từ, chọn từ, thứ tự từ, chính tả), từ bạn hay sai, hoặc chữ cần viết lại. Chạm “Let's go” để luyện ngay.||ℹ️ Cần biết — Dấu gạch (–) nghĩa là chưa đủ dữ liệu. Ghi chép của bạn được lưu trên thiết bị này. Bạn có thể đọc lại hướng dẫn này bất cứ lúc nào bằng nút “Cách đọc” trong phần huấn luyện viên.",
+    ivGuideOk: "Đã hiểu, bắt đầu học",
+    ivGuideBtn: "ℹ️ Cách đọc",
+    coachEnjoyAsk: "Hôm nay bạn có muốn luyện phần này không?",
     coachStatViews: "Từ đã xem hôm nay",
     coachStatListen: "Nghe",
     lessonBridgeAsk: "Bạn muốn luyện phần này với giáo viên thật không? Hãy thử một buổi học thử miễn phí.",
@@ -9119,6 +9390,8 @@ const UI_TRANSLATIONS = {
     resExternalNote: "Các liên kết trong Tài nguyên dẫn đến các trang web bên ngoài độc lập và kênh chính thức. GAKU không liên kết với họ và không lưu trữ hay sao chép nội dung của họ.",
     paywallRenewNote: "Các gói tự động gia hạn theo mức giá hiển thị cho đến khi hủy. Thanh toán trên web được Stripe xử lý an toàn. Liên kết đến trang web bên ngoài sẽ mở trong tab mới; các trang đó độc lập và không liên kết với GAKU.",
     storePlansTitle: "Chọn gói để tiếp tục học",
+    storeIncludesTitle: "Bao gồm trong gói đăng ký",
+    storeIncludesList: "Kế hoạch học hàng tuần được cá nhân hóa\nDanh sách từ vựng kèm câu ví dụ thực tế\nLuyện hội thoại với nhận dạng giọng nói\nLuyện phát âm\nLuyện viết và tài liệu học JLPT",
     storeMonthly: "Hàng tháng",
     store3Months: "3 tháng",
     store6Months: "6 tháng",
@@ -9309,6 +9582,7 @@ const UI_TRANSLATIONS = {
     tabPractice: "✨ सामग्री से",
     tabVocabulary: "📚 शब्दावली",
     tabResources: "🔗 संसाधन",
+    tabActivities: "🎯 गतिविधियाँ",
     tabMilestones: "🏆 लक्ष्य",
     tabJlpt: "🎓 JLPT परिणाम",
     tabFeedback: "💬 प्रतिक्रिया",
@@ -9437,6 +9711,24 @@ const UI_TRANSLATIONS = {
     coachPronMiss: "आप {word} का उच्चारण बार-बार ग़लत कर रहे हैं ({n} बार)। इसे धीरे बोलें, फिर सामान्य गति से।",
     coachListenWeak: "सुनकर समझने की क्षमता {pct}% है। पाठ पढ़ने से पहले कई बार सुनें।",
     coachStatFlip: "कार्ड पलटने की गति",
+    coachStatStroke: "स्ट्रोक की सटीकता",
+    coachWriteMiss: "आप {word} अक्षर में बार-बार गलती कर रहे हैं ({n} प्रयास, {pct}% बिना गलती)। धीरे-धीरे, एक-एक स्ट्रोक लिखें।",
+    coachDetailFlip: "शब्द-दर-शब्द कार्ड पलटने की गति",
+    coachDetailWrite: "अक्षर-दर-अक्षर लेखन",
+    coachMistakeType: "आपकी सबसे आम गलती {type} है (पिछले 2 हफ़्तों में {n} बार)। आज इसी पर ध्यान दें।",
+    coachWordMistake: "आप {word} शब्द में बार-बार गलती कर रहे हैं ({n} बार)। आज इसे दोहराएँ और इससे एक वाक्य लिखें।",
+    coachMistakeNames: "कारक चिह्न (पार्टिकल)|क्रिया रूप|शब्द चयन|शब्द क्रम|वर्तनी और लिपि",
+    coachStatSpeak: "बोलना",
+    coachWriteRetry: "दोबारा लिखने वाले अक्षर: {chars}। अभी अभ्यास के लिए बटन दबाएँ।",
+    ivWarnTitle: "⚠️ Intensive मोड चुनने से पहले कृपया पढ़ें",
+    ivWarnBody: "Intensive मोड केवल उन लोगों के लिए है जो जापानी सीखने को लेकर गंभीर हैं या किसी परीक्षा या प्रमाणपत्र का लक्ष्य रखते हैं। हर दिन आपको 8 अध्ययन गतिविधियों का कोटा पूरा करना होगा, और पूरा होने तक कुछ टैब लॉक रहेंगे। अगर आप बस आनंद से सीखना चाहते हैं, तो Enjoyable मोड चुनें।",
+    ivWarnOk: "ठीक है, मैं गंभीर हूँ",
+    ivWarnBack: "दूसरा मोड चुनें",
+    ivGuideTitle: "Intensive मोड का डेटा कैसे पढ़ें",
+    ivGuideItems: "🔥 आज का कोटा — दिखाता है कि आज की 8 अध्ययन गतिविधियों में से आपने कितनी पूरी की हैं। 8 होने पर लॉक टैब खुल जाते हैं।||⏱ कार्ड पलटने की गति / आज देखे शब्द — कार्ड पलटने की गति वह सामान्य समय है (पिछले 2 हफ़्तों की माध्यिका) जो आप शब्द-कार्ड पलटने में लेते हैं। 5 सेकंड से कम अच्छा है; 6 सेकंड या अधिक का मतलब है कि शब्द देर से याद आते हैं। “आज देखे शब्द” आज देखे गए कार्ड गिनता है।||🗣 Pronunciation Practice — आपके हाल के उच्चारण प्रयासों में सही प्रयासों का अनुपात। 70% से कम हो तो और अभ्यास चाहिए।||✍️ Writing Practice — पिछले 2 हफ़्तों में बिना गलती सही लिखे अक्षरों और लिखित उत्तरों का अनुपात।||✏️ स्ट्रोक की सटीकता — आपके लिखे सभी स्ट्रोक में से सही क्रम और आकार वाले स्ट्रोक का अनुपात।||🎤 Speaking — आपके बोले उत्तरों में से बिना व्याकरण या शब्द की गलती वाले उत्तरों का अनुपात।||📋 शब्द-दर-शब्द / अक्षर-दर-अक्षर — इन सूचियों को खोलकर हर शब्द की गति और हर अक्षर की सटीकता देखें। पीला रंग कमज़ोरी दिखाता है (6 सेकंड या अधिक, या 70% से कम)। ×2 का मतलब दो बार कोशिश।||🎯 कोच की सलाह — पिछले 2 हफ़्तों के आधार पर आज का फोकस सुझाता है: सबसे आम गलती का प्रकार (कारक चिह्न, क्रिया रूप, शब्द चयन, शब्द क्रम, वर्तनी), बार-बार गलत होने वाला शब्द, या दोबारा लिखने वाले अक्षर। तुरंत अभ्यास के लिए “Let's go” दबाएँ।||ℹ️ जानने योग्य — डैश (–) का मतलब है कि अभी पर्याप्त डेटा नहीं है। आपके रिकॉर्ड इसी डिवाइस पर रहते हैं। कोच के “कैसे पढ़ें” बटन से आप यह गाइड कभी भी दोबारा पढ़ सकते हैं।",
+    ivGuideOk: "समझ गया, पढ़ाई शुरू करें",
+    ivGuideBtn: "ℹ️ कैसे पढ़ें",
+    coachEnjoyAsk: "क्या आज इस पर अभ्यास करना चाहेंगे?",
     coachStatViews: "आज देखे गए शब्द",
     coachStatListen: "सुनना",
     lessonBridgeAsk: "क्या आप इसे असली शिक्षक के साथ अभ्यास करना चाहेंगे? एक मुफ़्त ट्रायल क्लास आज़माएँ।",
@@ -9750,6 +10042,8 @@ const UI_TRANSLATIONS = {
     resExternalNote: "संसाधन में दिए गए लिंक स्वतंत्र बाहरी वेबसाइटों और आधिकारिक चैनलों पर ले जाते हैं। GAKU का उनसे कोई संबंध नहीं है और वह उनकी सामग्री को होस्ट या कॉपी नहीं करता।",
     paywallRenewNote: "प्लान रद्द किए जाने तक दिखाई गई कीमत पर अपने-आप नवीनीकृत होते हैं। वेब पर भुगतान Stripe द्वारा सुरक्षित रूप से प्रोसेस किए जाते हैं। बाहरी वेबसाइटों के लिंक नए टैब में खुलते हैं; वे साइटें स्वतंत्र हैं और GAKU से संबद्ध नहीं हैं।",
     storePlansTitle: "सीखना जारी रखने के लिए प्लान चुनें",
+    storeIncludesTitle: "आपकी सदस्यता में शामिल",
+    storeIncludesList: "व्यक्तिगत साप्ताहिक अध्ययन योजना\nवास्तविक उदाहरण वाक्यों के साथ शब्दावली सूचियाँ\nवॉइस रिकग्निशन के साथ बातचीत का अभ्यास\nउच्चारण अभ्यास\nलेखन अभ्यास और JLPT अध्ययन सामग्री",
     storeMonthly: "मासिक",
     store3Months: "3 महीने",
     store6Months: "6 महीने",
@@ -9940,6 +10234,7 @@ const UI_TRANSLATIONS = {
     tabPractice: "✨ コンテンツから",
     tabVocabulary: "📚 単語帳",
     tabResources: "🔗 リソース",
+    tabActivities: "🎯 アクティビティ",
     tabMilestones: "🏆 目標",
     tabJlpt: "🎓 JLPT結果",
     tabFeedback: "💬 フィードバック",
@@ -10068,6 +10363,24 @@ const UI_TRANSLATIONS = {
     coachPronMiss: "「{word}」の発音を{n}回間違えています。ゆっくり言ってから、普通の速さで言ってみましょう。",
     coachListenWeak: "リスニングの理解度は{pct}%です。テキストを読む前に、何度か聞きましょう。",
     coachStatFlip: "カードをめくる速さ",
+    coachStatStroke: "画の正確さ",
+    coachWriteMiss: "「{word}」をよく間違えています（{n}回、ミスなし{pct}%）。ゆっくり一画ずつ書いてみましょう。",
+    coachDetailFlip: "単語ごとのめくる速さ",
+    coachDetailWrite: "一文字ごとの書き取り",
+    coachMistakeType: "よくするミスは「{type}」です（直近2週間で{n}回）。今日はここを中心にやってみましょう。",
+    coachWordMistake: "「{word}」をよく間違えています（{n}回）。今日もう一度復習して、この単語で1文書いてみましょう。",
+    coachMistakeNames: "助詞|動詞の活用|単語の選び方|語順|表記（かな・漢字）",
+    coachStatSpeak: "スピーキング",
+    coachWriteRetry: "もう一度練習する文字：{chars}。ボタンを押して、今すぐ書いてみましょう。",
+    ivWarnTitle: "⚠️ Intensiveモードを選ぶ前にお読みください",
+    ivWarnBody: "Intensiveモードは、本気で日本語を学びたい方、試験や資格の取得を目指している方だけがご利用ください。毎日8回の学習アクションというノルマがあり、達成するまで一部のタブは使えません。気軽に楽しく学びたい方はEnjoyableモードを選んでください。",
+    ivWarnOk: "OK、本気でやります",
+    ivWarnBack: "ほかのモードを選ぶ",
+    ivGuideTitle: "Intensiveモードのデータの見方",
+    ivGuideItems: "🔥 今日のノルマ — 今日の学習アクション8回のうち、いくつ終わったかを表示します。8回に達すると、ロックされたタブが開きます。||⏱ フリップ速度／今日見た単語 — フリップ速度は、単語カードをめくるまでにかかる普段の時間(直近2週間の中央値)です。5秒未満なら良好、6秒以上は単語が思い出しにくいサインです。「今日見た単語」は、今日見たカードの枚数です。||🗣 Pronunciation Practice — 最近の発音の挑戦のうち、正解だった割合です。70%未満なら、もう少し練習しましょう。||✍️ Writing Practice — 直近2週間で、ミスなく書けた文字と書いた答えの割合です。||✏️ Stroke accuracy（画の正確さ） — 書いたすべての画のうち、書き順と形が正しかった割合です。||🎤 Speaking — 話した答えのうち、文法や単語のミスがなかった割合です。||📋 単語ごと／一文字ごと — このリストを開くと、単語ごとの速さと、一文字ごとの正確さが見られます。黄色は弱点(6秒以上、または70%未満)のサインです。×2は2回挑戦したという意味です。||🎯 コーチのアドバイス — 直近2週間の記録から、今日の重点を提案します。よくするミスの種類(助詞・動詞の活用・単語の選び方・語順・表記)、何度も間違える単語、もう一度書く文字などです。「Let's go」を押すと、すぐ練習できます。||ℹ️ ご注意 — 「–」はまだデータが足りないという意味です。記録はこの端末の中に保存されます。この説明は、コーチの「見方」ボタンからいつでも読み返せます。",
+    ivGuideOk: "わかりました、始めます",
+    ivGuideBtn: "ℹ️ 見方",
+    coachEnjoyAsk: "今日これからやってみますか?",
     coachStatViews: "今日見た単語",
     coachStatListen: "リスニング",
     lessonBridgeAsk: "この課題を、先生と一緒に練習してみませんか？無料体験レッスンをご利用ください。",
@@ -10381,6 +10694,8 @@ const UI_TRANSLATIONS = {
     resExternalNote: "Resourcesのリンクは、独立した外部サイトや公式チャンネルへつながります。GAKUはそれらと提携しておらず、その内容をホスティングまたは複製していません。",
     paywallRenewNote: "プランは、解約するまで表示された価格で自動更新されます。Web上での支払いはStripeが安全に処理します。外部サイトへのリンクは新しいタブで開きます。それらのサイトは独立しており、GAKUとは提携していません。",
     storePlansTitle: "学習を続けるプランを選んでください",
+    storeIncludesTitle: "サブスクリプションに含まれる内容",
+    storeIncludesList: "あなた専用の週間学習プラン\n実際の例文つき単語リスト\n音声認識つき会話練習\n発音練習\nライティング練習とJLPT学習教材",
     storeMonthly: "月額",
     store3Months: "3か月",
     store6Months: "6か月",
@@ -10571,6 +10886,7 @@ const UI_TRANSLATIONS = {
     tabPractice: "✨ İçerikten",
     tabVocabulary: "📚 Kelime Bilgisi",
     tabResources: "🔗 Kaynaklar",
+    tabActivities: "🎯 Etkinlikler",
     tabMilestones: "🏆 Hedefler",
     tabJlpt: "🎓 JLPT Sonuçları",
     tabFeedback: "💬 Geri Bildirim",
@@ -10699,6 +11015,24 @@ const UI_TRANSLATIONS = {
     coachPronMiss: "{word} telaffuzunu sürekli yanlış yapıyorsunuz ({n} kez). Önce yavaş, sonra normal hızda söyleyin.",
     coachListenWeak: "Dinleme anlama oranınız %{pct}. Metni okumadan önce birkaç kez dinleyin.",
     coachStatFlip: "Kart çevirme hızı",
+    coachStatStroke: "Çizgi doğruluğu",
+    coachWriteMiss: "{word} karakterini sık yanlış yazıyorsun ({n} deneme, %{pct} hatasız). Yavaşça, çizgi çizgi yaz.",
+    coachDetailFlip: "Kelime kelime kart çevirme hızı",
+    coachDetailWrite: "Karakter karakter yazma",
+    coachMistakeType: "En sık yaptığın hata: {type} (son 2 haftada {n} kez). Bugün buna odaklan.",
+    coachWordMistake: "{word} kelimesini sık yanlış kullanıyorsun ({n} kez). Bugün tekrar et ve onunla bir cümle yaz.",
+    coachMistakeNames: "edatlar|fiil çekimi|kelime seçimi|kelime sırası|yazım ve yazı",
+    coachStatSpeak: "Konuşma",
+    coachWriteRetry: "Yeniden yazılacak karakterler: {chars}. Şimdi çalışmak için düğmeye dokun.",
+    ivWarnTitle: "⚠️ Intensive modunu seçmeden önce lütfen okuyun",
+    ivWarnBody: "Intensive modu yalnızca Japoncayı ciddi biçimde öğrenmek isteyenler veya bir sınav ya da sertifika hedefleyenler içindir. Her gün 8 çalışma eylemlik hedefi tamamlamanız gerekir ve tamamlayana kadar bazı sekmeler kilitli kalır. Sadece keyifle öğrenmek istiyorsanız Enjoyable modunu seçin.",
+    ivWarnOk: "Tamam, ciddiyim",
+    ivWarnBack: "Başka mod seç",
+    ivGuideTitle: "Intensive modu verileri nasıl okunur",
+    ivGuideItems: "🔥 Bugünkü hedef — Bugünün 8 çalışma eyleminden kaçını tamamladığınızı gösterir. 8'e ulaşınca kilitli sekmeler açılır.||⏱ Kart çevirme hızı / Bugün görülen kelimeler — Kart çevirme hızı, bir kelime kartını çevirmeniz için genellikle gereken süredir (son 2 haftanın medyanı). 5 saniyenin altı iyidir; 6 saniye ve üzeri kelimelerin geç hatırlandığını gösterir. “Bugün görülen kelimeler” bugün baktığınız kart sayısıdır.||🗣 Pronunciation Practice — Son telaffuz denemelerinizin doğru olanlarının oranı. %70'in altı daha fazla pratik gerektirir.||✍️ Writing Practice — Son 2 haftada hatasız yazdığınız karakterlerin ve yazılı cevapların oranı.||✏️ Çizgi doğruluğu — Yazdığınız tüm çizgiler içinde sırası ve şekli doğru olanların oranı.||🎤 Speaking — Sözlü cevaplarınızdan dilbilgisi veya kelime hatası olmayanların oranı.||📋 Kelime kelime / Karakter karakter — Bu listeleri açarak her kelimenin hızını ve her karakterin doğruluğunu görün. Sarı, zayıf noktayı gösterir (6 saniye ve üzeri veya %70'in altı). ×2 iki kez denediğiniz anlamına gelir.||🎯 Koç tavsiyesi — Son 2 haftanıza bakarak bugünün odağını önerir: en sık yaptığınız hata türü (edatlar, fiil çekimi, kelime seçimi, kelime sırası, yazım), sürekli yanlış yaptığınız bir kelime veya yeniden yazılacak karakterler. Hemen çalışmak için “Let's go” düğmesine dokunun.||ℹ️ Bilmekte fayda var — Tire (–) henüz yeterli veri olmadığı anlamına gelir. Kayıtlarınız bu cihazda tutulur. Koçtaki “Nasıl okunur” düğmesiyle bu kılavuzu istediğiniz zaman yeniden okuyabilirsiniz.",
+    ivGuideOk: "Anladım, çalışmaya başla",
+    ivGuideBtn: "ℹ️ Nasıl okunur",
+    coachEnjoyAsk: "Bugün bunun üzerinde çalışmak ister misiniz?",
     coachStatViews: "Bugün görülen kelimeler",
     coachStatListen: "Dinleme",
     lessonBridgeAsk: "Bunu gerçek bir öğretmenle çalışmak ister misiniz? Ücretsiz deneme dersini deneyin.",
@@ -11012,6 +11346,8 @@ const UI_TRANSLATIONS = {
     resExternalNote: "Kaynaklar bölümündeki bağlantılar bağımsız dış web sitelerine ve resmî kanallara yönlendirir. GAKU bunlarla bağlantılı değildir ve içeriklerini barındırmaz veya kopyalamaz.",
     paywallRenewNote: "Planlar, iptal edilene kadar gösterilen fiyattan otomatik olarak yenilenir. Web'deki ödemeler Stripe tarafından güvenli şekilde işlenir. Dış sitelere giden bağlantılar yeni sekmede açılır; bu siteler bağımsızdır ve GAKU ile bağlantılı değildir.",
     storePlansTitle: "Öğrenmeye devam etmek için bir plan seçin",
+    storeIncludesTitle: "Aboneliğinize dahil olanlar",
+    storeIncludesList: "Kişiselleştirilmiş haftalık çalışma planı\nGerçek örnek cümleli kelime listeleri\nKonuşma tanıma ile konuşma pratiği\nTelaffuz pratiği\nYazma pratiği ve JLPT çalışma materyalleri",
     storeMonthly: "Aylık",
     store3Months: "3 ay",
     store6Months: "6 ay",
@@ -11202,6 +11538,7 @@ const UI_TRANSLATIONS = {
     tabPractice: "✨ सामग्रीबाट",
     tabVocabulary: "📚 शब्दावली",
     tabResources: "🔗 स्रोतहरू",
+    tabActivities: "🎯 गतिविधिहरू",
     tabMilestones: "🏆 लक्ष्यहरू",
     tabJlpt: "🎓 JLPT नतिजा",
     tabFeedback: "💬 प्रतिक्रिया",
@@ -11330,6 +11667,24 @@ const UI_TRANSLATIONS = {
     coachPronMiss: "तपाईं {word} को उच्चारण बारम्बार गल्ती गर्दै हुनुहुन्छ ({n} पटक)। पहिले बिस्तारै, अनि सामान्य गतिमा भन्नुहोस्।",
     coachListenWeak: "सुनाइ बुझाइ {pct}% छ। पाठ पढ्नु अघि धेरै पटक सुन्नुहोस्।",
     coachStatFlip: "कार्ड पल्टाउने गति",
+    coachStatStroke: "स्ट्रोकको शुद्धता",
+    coachWriteMiss: "तपाईं {word} अक्षरमा बारम्बार गल्ती गर्दै हुनुहुन्छ ({n} प्रयास, {pct}% गल्तीबिना)। विस्तारै, एक-एक स्ट्रोक लेख्नुहोस्।",
+    coachDetailFlip: "शब्द-शब्द कार्ड पल्टाउने गति",
+    coachDetailWrite: "अक्षर-अक्षर लेखन",
+    coachMistakeType: "तपाईंको सबैभन्दा बारम्बार गल्ती {type} हो (पछिल्ला २ हप्तामा {n} पटक)। आज यसमै ध्यान दिनुहोस्।",
+    coachWordMistake: "तपाईं {word} शब्दमा बारम्बार गल्ती गर्दै हुनुहुन्छ ({n} पटक)। आज दोहोर्याउनुहोस् र यसबाट एउटा वाक्य लेख्नुहोस्।",
+    coachMistakeNames: "कारक चिह्न (पार्टिकल)|क्रिया रूप|शब्द छनोट|शब्द क्रम|हिज्जे र लिपि",
+    coachStatSpeak: "बोल्ने अभ्यास",
+    coachWriteRetry: "फेरि लेख्नुपर्ने अक्षर: {chars}। अहिले अभ्यास गर्न बटन थिच्नुहोस्।",
+    ivWarnTitle: "⚠️ Intensive मोड चुन्नु अघि कृपया पढ्नुहोस्",
+    ivWarnBody: "Intensive मोड जापानी भाषा गम्भीर रूपमा सिक्न चाहने वा परीक्षा वा प्रमाणपत्र लक्ष्य गर्नेहरूका लागि मात्र हो। हरेक दिन ८ अध्ययन गतिविधिको कोटा पूरा गर्नुपर्छ, र पूरा नभएसम्म केही ट्याब लक रहन्छन्। रमाइलोसँग सिक्न मात्र चाहनुहुन्छ भने Enjoyable मोड छान्नुहोस्।",
+    ivWarnOk: "ठीक छ, म गम्भीर छु",
+    ivWarnBack: "अर्को मोड छान्नुहोस्",
+    ivGuideTitle: "Intensive मोडको डेटा कसरी पढ्ने",
+    ivGuideItems: "🔥 आजको कोटा — आजका ८ अध्ययन गतिविधिमध्ये कति पूरा गर्नुभयो भनेर देखाउँछ। ८ पुगेपछि लक ट्याब खुल्छन्।||⏱ कार्ड पल्टाउने गति / आज देखिएका शब्द — कार्ड पल्टाउने गति भनेको शब्द-कार्ड पल्टाउन सामान्यतया लाग्ने समय हो (पछिल्ला २ हप्ताको मध्यक)। ५ सेकेन्डभन्दा कम राम्रो हो; ६ सेकेन्ड वा बढीको अर्थ शब्द ढिलो सम्झिन्छ। “आज देखिएका शब्द” ले आज हेरेका कार्ड गन्छ।||🗣 Pronunciation Practice — पछिल्ला उच्चारण प्रयासमध्ये सही भएकाको अनुपात। ७०% भन्दा कम भए थप अभ्यास चाहिन्छ।||✍️ Writing Practice — पछिल्ला २ हप्तामा गल्तीबिना सही लेखिएका अक्षर र लिखित उत्तरहरूको अनुपात।||✏️ स्ट्रोकको शुद्धता — तपाईंले लेखेका सबै स्ट्रोकमध्ये सही क्रम र आकार भएकाको अनुपात।||🎤 Speaking — बोलेका उत्तरमध्ये व्याकरण वा शब्दको गल्ती नभएकाको अनुपात।||📋 शब्द-शब्द / अक्षर-अक्षर — यी सूची खोलेर हरेक शब्दको गति र हरेक अक्षरको शुद्धता हेर्नुहोस्। पहेँलोले कमजोरी देखाउँछ (६ सेकेन्ड वा बढी, वा ७०% भन्दा कम)। ×२ को अर्थ दुई पटक प्रयास।||🎯 कोचको सल्लाह — पछिल्ला २ हप्ताका आधारमा आजको फोकस सुझाउँछ: सबैभन्दा धेरै हुने गल्तीको प्रकार (कारक चिह्न, क्रिया रूप, शब्द छनोट, शब्द क्रम, हिज्जे), बारम्बार गलत हुने शब्द, वा फेरि लेख्नुपर्ने अक्षर। तुरुन्तै अभ्यासका लागि “Let's go” थिच्नुहोस्।||ℹ️ जान्नुहोस् — डयाश (–) को अर्थ अझै पर्याप्त डेटा छैन। तपाईंका रेकर्ड यही डिभाइसमा राखिन्छन्। कोचको “कसरी पढ्ने” बटनबाट यो गाइड जहिले पनि फेरि पढ्न सकिन्छ।",
+    ivGuideOk: "बुझें, पढाइ सुरु गरौं",
+    ivGuideBtn: "ℹ️ कसरी पढ्ने",
+    coachEnjoyAsk: "आज यसमा अभ्यास गर्न चाहनुहुन्छ?",
     coachStatViews: "आज हेरिएका शब्द",
     coachStatListen: "सुनाइ",
     lessonBridgeAsk: "के तपाईं यसलाई साँचो शिक्षकसँग अभ्यास गर्न चाहनुहुन्छ? निःशुल्क परीक्षण कक्षा प्रयास गर्नुहोस्।",
@@ -11643,6 +11998,8 @@ const UI_TRANSLATIONS = {
     resExternalNote: "स्रोतहरूमा रहेका लिङ्कहरूले स्वतन्त्र बाहिरी वेबसाइट र आधिकारिक च्यानलहरूमा पुर्‍याउँछन्। GAKU को तिनीहरूसँग कुनै सम्बन्ध छैन र यसले तिनको सामग्री होस्ट वा कपी गर्दैन।",
     paywallRenewNote: "प्लानहरू रद्द नगरेसम्म देखाइएको मूल्यमा स्वतः नवीकरण हुन्छन्। वेबमा भुक्तानी Stripe द्वारा सुरक्षित रूपमा प्रशोधन गरिन्छ। बाहिरी वेबसाइटका लिङ्कहरू नयाँ ट्याबमा खुल्छन्; ती साइटहरू स्वतन्त्र छन् र GAKU सँग सम्बन्धित छैनन्।",
     storePlansTitle: "सिक्न जारी राख्न प्लान छान्नुहोस्",
+    storeIncludesTitle: "तपाईंको सदस्यतामा समावेश",
+    storeIncludesList: "व्यक्तिगत साप्ताहिक अध्ययन योजना\nवास्तविक उदाहरण वाक्य सहितका शब्दावली सूची\nआवाज पहिचान सहितको कुराकानी अभ्यास\nउच्चारण अभ्यास\nलेखन अभ्यास र JLPT अध्ययन सामग्री",
     storeMonthly: "मासिक",
     store3Months: "३ महिना",
     store6Months: "६ महिना",
@@ -11833,6 +12190,7 @@ const UI_TRANSLATIONS = {
     tabPractice: "✨ Mula sa Nilalaman",
     tabVocabulary: "📚 Bokabularyo",
     tabResources: "🔗 Mga Resources",
+    tabActivities: "🎯 Mga Aktibidad",
     tabMilestones: "🏆 Mga Layunin",
     tabJlpt: "🎓 Resulta ng JLPT",
     tabFeedback: "💬 Puna",
@@ -11961,6 +12319,24 @@ const UI_TRANSLATIONS = {
     coachPronMiss: "Paulit-ulit kang nagkakamali sa bigkas ng {word} ({n} beses). Sabihin ito nang dahan-dahan, saka sa normal na bilis.",
     coachListenWeak: "{pct}% ang pag-unawa mo sa pakikinig. Makinig nang ilang beses bago basahin ang teksto.",
     coachStatFlip: "Bilis ng pagpihit ng card",
+    coachStatStroke: "Katumpakan ng stroke",
+    coachWriteMiss: "Madalas kang magkamali sa karakter na {word} ({n} subok, {pct}% walang mali). Isulat nang dahan-dahan, isang stroke bawat isa.",
+    coachDetailFlip: "Bilis ng pagpihit ng card, bawat salita",
+    coachDetailWrite: "Pagsusulat, bawat karakter",
+    coachMistakeType: "Ang pinakamadalas mong pagkakamali ay {type} ({n} beses sa nakaraang 2 linggo). Ituon dito ngayong araw.",
+    coachWordMistake: "Madalas kang magkamali sa salitang {word} ({n} beses). Balikan ito ngayon at sumulat ng isang pangungusap gamit ito.",
+    coachMistakeNames: "mga particle|conjugation ng pandiwa|pagpili ng salita|ayos ng mga salita|baybay at sulat",
+    coachStatSpeak: "Pagsasalita",
+    coachWriteRetry: "Mga karakter na isulat muli: {chars}. I-tap ang button para magsanay ngayon.",
+    ivWarnTitle: "⚠️ Basahin bago piliin ang Intensive mode",
+    ivWarnBody: "Ang Intensive mode ay para lamang sa mga seryoso sa pag-aaral ng Japanese o may layuning pumasa sa pagsusulit o kumuha ng sertipikasyon. Araw-araw kailangan mong tapusin ang quota na 8 gawaing pag-aaral, at may mga tab na mananatiling naka-lock hanggang matapos ito. Kung gusto mo lang matuto nang masaya, piliin ang Enjoyable mode.",
+    ivWarnOk: "OK, seryoso ako",
+    ivWarnBack: "Pumili ng ibang mode",
+    ivGuideTitle: "Paano basahin ang data ng Intensive mode",
+    ivGuideItems: "🔥 Quota ngayong araw — Ipinapakita kung ilan sa 8 gawaing pag-aaral ngayong araw ang natapos mo. Pagdating sa 8, bubukas ang mga naka-lock na tab.||⏱ Bilis ng pagpihit ng card / Mga salitang nakita ngayon — Ang bilis ng pagpihit ng card ay ang karaniwang oras na kailangan mo para ipihit ang vocabulary card (median ng huling 2 linggo). Mas mababa sa 5 segundo ay maganda; 6 segundo pataas ay mabagal na pag-alala. Binibilang ng “Mga salitang nakita ngayon” ang mga card na tiningnan mo ngayon.||🗣 Pronunciation Practice — Ang bahagi ng mga huling pagsubok mo sa pagbigkas na tama. Mas mababa sa 70% ay kailangan pa ng pagsasanay.||✍️ Writing Practice — Ang bahagi ng mga karakter at nakasulat na sagot na tama at walang mali sa huling 2 linggo.||✏️ Katumpakan ng stroke — Sa lahat ng stroke na isinulat mo, ang bahagi na tama ang ayos at hugis.||🎤 Speaking — Ang bahagi ng mga sagot mong binigkas na walang mali sa grammar o salita.||📋 Bawat salita / Bawat karakter — Buksan ang mga listahang ito para makita ang bilis ng bawat salita at ang katumpakan ng bawat karakter. Ang dilaw ay mahinang bahagi (6 segundo pataas, o mas mababa sa 70%). Ang ×2 ay dalawang beses mong sinubukan.||🎯 Payo ng coach — Batay sa huling 2 linggo, iminumungkahi nito ang pokus ngayon: ang pinakamadalas mong uri ng pagkakamali (particle, conjugation ng pandiwa, pagpili ng salita, ayos ng salita, baybay), salitang paulit-ulit na mali, o karakter na dapat isulat muli. I-tap ang “Let's go” para magsanay agad.||ℹ️ Mabuting malaman — Ang gatlang (–) ay nangangahulugang kulang pa ang data. Nakatago sa device na ito ang mga tala mo. Mababasa mo ulit ang gabay na ito anumang oras gamit ang button na “Paano basahin” sa coach.",
+    ivGuideOk: "Naintindihan ko, simulan na",
+    ivGuideBtn: "ℹ️ Paano basahin",
+    coachEnjoyAsk: "Gusto mo bang pagsanayan ito ngayong araw?",
     coachStatViews: "Mga salitang nakita ngayon",
     coachStatListen: "Pakikinig",
     lessonBridgeAsk: "Gusto mo bang ipractice ito kasama ang totoong guro? Subukan ang libreng trial lesson.",
@@ -12274,6 +12650,8 @@ const UI_TRANSLATIONS = {
     resExternalNote: "Ang mga link sa Resources ay patungo sa mga independiyenteng panlabas na website at opisyal na channel. Hindi kaakibat ng GAKU ang mga ito at hindi nito iniho-host o kinokopya ang nilalaman nila.",
     paywallRenewNote: "Awtomatikong nagre-renew ang mga plano sa presyong ipinapakita hanggang kanselahin. Ligtas na pinoproseso ng Stripe ang mga bayad sa web. Ang mga link sa panlabas na website ay bubukas sa bagong tab; ang mga site na iyon ay independiyente at hindi kaakibat ng GAKU.",
     storePlansTitle: "Pumili ng plano para magpatuloy sa pag-aaral",
+    storeIncludesTitle: "Kasama sa iyong subscription",
+    storeIncludesList: "Personalized na lingguhang study plan\nMga listahan ng bokabularyo na may totoong halimbawang pangungusap\nPagsasanay sa pag-uusap na may speech recognition\nPagsasanay sa pagbigkas\nPagsasanay sa pagsulat at mga materyales sa pag-aaral ng JLPT",
     storeMonthly: "Buwanan",
     store3Months: "3 buwan",
     store6Months: "6 na buwan",
@@ -13391,7 +13769,7 @@ function WordDetailCard({ card: cardProp, onSave, onBack, form, prefLang, onRevi
     "Chinese (Simplified)":"cmn", "Chinese (Traditional)":"cmn", "Italian":"ita",
     "Korean":"kor", "Thai":"tha", "Malay":"zsm", "Indonesian":"ind",
     "Vietnamese":"vie", "Hindi":"hin", "Japanese":"jpn", "Turkish":"tur",
-    "Nepali":"nep", "Filipino":"tgl", "Portuguese":"por", "Mizo":"lus", "Bengali":"ben",
+    "Nepali":"nep", "Filipino":"tgl", "Portuguese":"por",
   };
 
   // Fetch real, existing example sentences containing this word from Tatoeba's
@@ -13825,7 +14203,7 @@ function FlashcardView({ form, onBack, focusWord }) {
     if (!flipped && card && !flippedOnceRef.current) {
       flippedOnceRef.current = true;
       const ms = Date.now() - shownAtRef.current;
-      if (ms > 0 && ms < 60000) logMetric("flip", card.word, { ms });
+      if (ms > 0 && ms < 120000) logMetric("flip", card.word, { ms });
     }
     setFlipped(f => !f);
   };
@@ -15565,7 +15943,7 @@ Respond ONLY with a valid JSON array, no markdown, no backticks:
                 <div key={i}>
                   <ExerciseCard item={it} revealed={!!revealed[globalIdx]} onReveal={()=>setRevealed(r=>({...r,[globalIdx]:!r[globalIdx]}))} T={T} lang={form?.preferredLang || "English"} />
                   {revealed[globalIdx] && (
-                    <ComprehensionCheck itemId={`item-${globalIdx}`} checkins={contentCheck.checkins} onRecord={(id, u) => { contentCheck.record(id, u); if (it.skill === "listening") logMetric("listen", "", { ok: !!u }); }} T={T} />
+                    <ComprehensionCheck itemId={`item-${globalIdx}`} checkins={contentCheck.checkins} onRecord={(id, u) => { contentCheck.record(id, u); }} T={T} />
                   )}
                 </div>
               );
@@ -16008,12 +16386,15 @@ Check the response for grammar or word-choice mistakes (particle usage, verb con
 If the response is already natural and correct, respond with exactly: {"hasError": false}
 
 If there is a genuine mistake, respond with this JSON shape:
-{"hasError": true, "incorrect": "the student's response as said (in Japanese)", "corrected": "the naturally corrected full sentence (in Japanese)", "translation": "translation of the corrected sentence into ${lang || "English"}", "explanation": "short explanation, written in ${lang || "English"}, of the mistake and the fix", "example": "one short additional Japanese example sentence using the corrected grammar point", "exampleTranslation": "translation of that example into ${lang || "English"}"}
+{"hasError": true, "incorrect": "the student's response as said (in Japanese)", "corrected": "the naturally corrected full sentence (in Japanese)", "translation": "translation of the corrected sentence into ${lang || "English"}", "type": "exactly one of: particle, conjugation, word, order, spelling (the main kind of mistake)", "wrong": "the short wrong word or phrase as said (max 12 characters)", "explanation": "short explanation, written in ${lang || "English"}, of the mistake and the fix", "example": "one short additional Japanese example sentence using the corrected grammar point", "exampleTranslation": "translation of that example into ${lang || "English"}"}
 
 Respond ONLY with valid JSON, no markdown, no backticks, nothing else.`;
       const out = await callClaudeFast(prompt, 700);
       const parsed = JSON.parse(out.replace(/```json|```/g,"").trim());
       setFeedback(parsed);
+      // Study metrics (speaking): one entry per checked answer, plus the mistake type / wrong word if any.
+      logMetric("speak", "", { ok: !parsed.hasError });
+      if (parsed.hasError && MISTAKE_TYPES.includes(parsed.type)) logMetric("mistake", String(parsed.wrong || "").slice(0, 12), { src: "speaking", t: parsed.type });
     } catch { setFeedback(null); }
     setFeedbackLoading(false);
   };
@@ -16476,7 +16857,7 @@ function ConversationPredictor({ form, onLevelUp }) {
             {heardLines.map((line) => (
               <div key={line.id}>
                 <LiveHeardLineCard line={line} T={T} lang={form?.preferredLang || "English"} jlpt={form?.jlpt} />
-                <ComprehensionCheck itemId={`heard-${line.id}`} checkins={conversationCheck.checkins} onRecord={(id, u) => { conversationCheck.record(id, u); logMetric("listen", "", { ok: !!u }); }} T={T} />
+                <ComprehensionCheck itemId={`heard-${line.id}`} checkins={conversationCheck.checkins} onRecord={(id, u) => { conversationCheck.record(id, u); }} T={T} />
                 {conversationCheck.checkins[`heard-${line.id}`] === false && (
                   <p style={{ color:C.amber, fontSize:12, lineHeight:1.7, margin:"8px 0 0" }}>🐢 {T.pronSlowNo || "No problem. Slow the video down and listen to that part again — GAKU will write it down once more."}</p>
                 )}
@@ -16889,12 +17270,6 @@ function PronunciationSayIt({ target, T }) {
           <button onClick={toggle} style={{ padding:"5px 12px", borderRadius:8, background:C.card, border:`1px solid ${C.border}`, color:"#94a3b8", fontSize:11, cursor:"pointer" }}>
             {T.pronTryAgain || "Try again"}
           </button>
-          {!good && fails >= 2 && (() => {
-            // After two misses on the same line, point out the exact characters that tripped them up.
-            const missed = Array.from(new Set(match.chars.filter((c, i) => !match.hit[i]))).slice(0, 6);
-            const issue = missed.length ? (T.lessonBridgeMissed || "Sounds to watch: {chars}").split("{chars}").join(missed.join(" ")) : null;
-            return <LessonBridgeCard T={T} issue={issue} />;
-          })()}
         </div>
       )}
     </div>
@@ -16996,11 +17371,18 @@ function CopyingDown({ T, injected }) {
 
   const startQuiz = (w, withGuide) => {
     setMistakeStroke(""); setDoneMistakes(null);
+    // Study metrics: every stroke (right/wrong) and every finished character is recorded per character,
+    // so the coach can show accuracy character by character (kept apart from the daily quota log).
+    const ch = session && session.chars ? session.chars[idx] : "";
+    const startedAt = Date.now();
     w.quiz({
       showOutline: withGuide, leniency: 1.2, highlightOnComplete: true,
-      onMistake: (d) => setMistakeStroke(String((d.strokeNum || 0) + 1)),
-      onCorrectStroke: () => setMistakeStroke(""),
-      onComplete: (d) => { setDoneMistakes(d.totalMistakes); setResults(r => ({ ...r, [idx]: d.totalMistakes })); },
+      onMistake: (d) => { setMistakeStroke(String((d.strokeNum || 0) + 1)); if (ch) logMetric("stroke", ch, { n: (d.strokeNum || 0) + 1, ok: false }); },
+      onCorrectStroke: (d) => { setMistakeStroke(""); if (ch) logMetric("stroke", ch, { n: ((d && d.strokeNum) || 0) + 1, ok: true }); },
+      onComplete: (d) => {
+        setDoneMistakes(d.totalMistakes); setResults(r => ({ ...r, [idx]: d.totalMistakes }));
+        if (ch) logMetric("write", ch, { ok: d.totalMistakes === 0, miss: d.totalMistakes, ms: Date.now() - startedAt });
+      },
     });
   };
 
@@ -17062,7 +17444,13 @@ function CopyingDown({ T, injected }) {
   };
   const goNext = () => {
     if (status === "nodata") setResults(r => ({ ...r, [idx]: "skip" }));
-    if (idx < session.chars.length - 1) setIdx(idx + 1); else setPhase("summary");
+    if (idx < session.chars.length - 1) setIdx(idx + 1);
+    else {
+      // One learning-log entry per finished text (counts once toward the daily quota, feeds the coach).
+      const done = session.chars.map((_, i) => results[i]).filter(v => typeof v === "number");
+      if (done.length) logLearningEvent("writing", done.filter(v => v === 0).length / done.length >= 0.8);
+      setPhase("summary");
+    }
   };
   const goPrev = () => { if (idx > 0) setIdx(idx - 1); };
 
@@ -17283,6 +17671,14 @@ function WritingPractice({ form }) {
   };
 
   useEffect(() => {
+    const take = (text) => { setMode("copy"); setInjected({ text, n: Date.now() }); try { localStorage.removeItem(scopedKey(WRITING_RETRY_KEY)); } catch {} };
+    try { const t = localStorage.getItem(scopedKey(WRITING_RETRY_KEY)); if (t) take(t); } catch {}
+    const onRetry = (e) => { if (e && e.detail) take(String(e.detail)); };
+    window.addEventListener("gaku_writing_retry", onRetry);
+    return () => window.removeEventListener("gaku_writing_retry", onRetry);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  useEffect(() => {
     try {
       const s = JSON.parse(localStorage.getItem(scopedKey(WRITING_STORAGE_KEY)) || "null");
       if (s && typeof s === "object") { setQuestion(s.question || ""); setAnswer(s.answer || ""); }
@@ -17317,9 +17713,10 @@ Decide whether the answer FITS the question: does it address what the question a
 
 Write "feedback" in ${lang}: 2-4 short sentences. Say what was good, name any content that was missing or off-topic, and point out the most important grammar or wording fixes with the corrected Japanese. Be encouraging and specific. Never invent requirements that are not in the question.
 Write "model" in natural Japanese at the student's level (similar length to what the question asks for). Always include it.
+Write "mistakes": the genuine grammar/wording mistakes in the student's answer (at most 5; an empty list if there are none, even when the answer does not fit the question). For each: "type" is exactly one of "particle" (wrong/missing particle), "conjugation" (verb/adjective form), "word" (wrong word choice or a non-existent word), "order" (word order), "spelling" (wrong kana/kanji/script); "wrong" is the short wrong word or phrase exactly as the student wrote it (max 12 characters); "right" is the correction.
 
 Respond ONLY with valid JSON, no markdown, no backticks:
-{"fits":true,"feedback":"","model":""}`;
+{"fits":true,"feedback":"","model":"","mistakes":[{"type":"particle","wrong":"","right":""}]}`;
     const ask = async () => {
       const res = await fetch("/api/claude", {
         method: "POST", headers: { "Content-Type": "application/json" },
@@ -17331,12 +17728,15 @@ Respond ONLY with valid JSON, no markdown, no backticks:
       const m = raw.match(/\{[\s\S]*\}/);
       const parsed = JSON.parse(m ? m[0] : raw);
       if (typeof parsed.fits !== "boolean" || !String(parsed.feedback || "").trim()) throw new Error("bad");
-      return { fits: parsed.fits, feedback: String(parsed.feedback).trim(), model: String(parsed.model || "").trim() };
+      const mistakes = (Array.isArray(parsed.mistakes) ? parsed.mistakes : []).filter(x => x && MISTAKE_TYPES.includes(x.type)).slice(0, 5);
+      return { fits: parsed.fits, feedback: String(parsed.feedback).trim(), model: String(parsed.model || "").trim(), mistakes };
     };
     try {
       let r;
       try { r = await ask(); } catch { r = await ask(); }
       logLearningEvent("writing", r.fits);
+      // Study metrics: each grammar/wording mistake is recorded with its type and the wrong word.
+      r.mistakes.forEach(x => logMetric("mistake", String(x.wrong || "").slice(0, 12), { src: "writing", t: x.type }));
       setResult(r);
     } catch {
       setError(T.writeErrFail || "Couldn't check your answer. Please try again.");
@@ -18251,7 +18651,7 @@ CRITICAL: Write your ENTIRE response in ${lang}. Every word, including labels an
                 [T.tabPractice,   T.howToPractice],
                 [`🎙️ ${T.convTitle}`, T.convDesc],
                 [T.tabVocabulary, T.howToVocab],
-                [T.tabResources,  T.howToResources],
+                [T.tabActivities || T.tabResources,  T.howToResources],
                 [T.tabMilestones, T.howToMilestones],
                 [T.editProfile,   T.howToEditProfile],
                 [T.help,          T.howToHelp],
@@ -18345,7 +18745,7 @@ Warm, under 100 words, English.` }]
 const LANGUAGES = [
   "English","Spanish","French","German","Chinese (Simplified)","Chinese (Traditional)",
   "Italian","Korean","Thai","Malay","Indonesian","Vietnamese","Hindi",
-  "Japanese","Turkish","Nepali","Filipino","Mizo","Bengali",
+  "Japanese","Turkish","Nepali","Filipino",
 ];
 
 // Native-script display names for the 🌐 language badge (shown regardless of UI language)
@@ -18354,7 +18754,7 @@ const NATIVE_LANG_NAMES = {
   "Chinese (Simplified)":"简体中文","Chinese (Traditional)":"繁體中文","Italian":"Italiano",
   "Korean":"한국어","Thai":"ไทย","Malay":"Bahasa Melayu","Indonesian":"Bahasa Indonesia",
   "Vietnamese":"Tiếng Việt","Hindi":"हिन्दी","Japanese":"日本語","Turkish":"Türkçe",
-  "Nepali":"नेपाली","Filipino":"Filipino","Mizo":"Mizo ṭawng","Bengali":"বাংলা",
+  "Nepali":"नेपाली","Filipino":"Filipino",
 };
 
 // QuickStartForm runs before the student has picked a preferredLang (that question is
@@ -19250,6 +19650,9 @@ function analyzeLearning(log, allow) {
 // (w = word, ms) · "pron" = a pronunciation attempt (w = target text, ok) · "listen" = a listening
 // comprehension answer (ok). Accuracy for pronunciation / writing / etc. still comes from the learning log.
 const METRIC_LOG_KEY = "gaku_metric_log";
+// Kinds of grammar/wording mistakes the AI reports for Writing (Questions) and Speaking answers.
+// Order matches the pipe-separated labels in the coachMistakeNames translation.
+const MISTAKE_TYPES = ["particle", "conjugation", "word", "order", "spelling"];
 function loadMetricLog() {
   try { const v = JSON.parse(localStorage.getItem(scopedKey(METRIC_LOG_KEY)) || "[]"); return Array.isArray(v) ? v : []; } catch { return []; }
 }
@@ -19257,7 +19660,7 @@ function logMetric(k, w, extra) {
   try {
     const log = loadMetricLog();
     log.push({ t: Date.now(), k, w: w ? String(w).slice(0, 60) : "", ...(extra || {}) });
-    localStorage.setItem(scopedKey(METRIC_LOG_KEY), JSON.stringify(log.slice(-1500)));
+    localStorage.setItem(scopedKey(METRIC_LOG_KEY), JSON.stringify(log.slice(-3000)));
     window.dispatchEvent(new CustomEvent("gaku_learning_updated"));
   } catch {}
 }
@@ -19277,9 +19680,39 @@ function analyzeCoach(allow) {
   const learn = loadLearningLog().filter(x => x.t >= cutoff && x.a !== "task");
   const rate = (a) => { const xs = learn.filter(x => x.a === a); return xs.length ? Math.round(100 * xs.filter(x => x.ok).length / xs.length) : null; };
   const flips = m.filter(x => x.k === "flip" && x.ms > 0);
-  const flipSec = flips.length >= 5 ? medianOf(flips.map(x => x.ms)) / 1000 : null;
+  // Every single flip counts (no minimum), and each word is measured on its own.
+  const flipSec = flips.length >= 1 ? medianOf(flips.map(x => x.ms)) / 1000 : null;
   const byWord = {};
   flips.forEach(x => { (byWord[x.w] = byWord[x.w] || []).push(x.ms); });
+  const flipWords = Object.entries(byWord).map(([w, a]) => ({ w, n: a.length, sec: medianOf(a) / 1000 })).sort((a, b) => b.sec - a.sec);
+  // Writing, character by character: a finished character is "ok" when it had no mistakes; strokes are
+  // tracked one by one. Writing Questions answers (learning log) are included in the overall accuracy.
+  const wEv = m.filter(x => x.k === "write");
+  const byChar = {};
+  wEv.forEach(x => { const c = byChar[x.w] || (byChar[x.w] = { n: 0, ok: 0 }); c.n++; if (x.ok) c.ok++; });
+  const writeChars = Object.entries(byChar).map(([w, c]) => ({ w, n: c.n, pct: Math.round(100 * c.ok / c.n) })).sort((a, b) => a.pct - b.pct || b.n - a.n);
+  const sEv = m.filter(x => x.k === "stroke");
+  const strokePct = sEv.length ? Math.round(100 * sEv.filter(x => x.ok).length / sEv.length) : null;
+  const lw = learn.filter(x => x.a === "writing");
+  const writeTotal = wEv.length + lw.length;
+  const writePct = writeTotal ? Math.round(100 * (wEv.filter(x => x.ok).length + lw.filter(x => x.ok).length) / writeTotal) : null;
+  const writeMiss = ok("writing") ? (writeChars.filter(c => c.n >= 2 && c.pct < 70)[0] || null) : null;
+  // Characters whose latest attempt had a mistake (even a single one) -> "write these again".
+  const lastTry = {};
+  wEv.forEach(x => { delete lastTry[x.w]; lastTry[x.w] = !!x.ok; });
+  const retryChars = ok("writing") ? Object.keys(lastTry).filter(c => !lastTry[c]).reverse().slice(0, 10) : [];
+  // Grammar / word mistakes from AI-checked Writing and Speaking answers: the most frequent mistake type
+  // (>= 3 in 14 days) and any word that keeps being wrong (>= 2 times).
+  const mk = m.filter(x => x.k === "mistake" && MISTAKE_TYPES.includes(x.t) && (x.src === "speaking" ? ok("conversation") || ok("content") : ok("writing")));
+  const byType = {};
+  mk.forEach(x => { const c = byType[x.t] || (byType[x.t] = { t: x.t, n: 0, sp: 0 }); c.n++; if (x.src === "speaking") c.sp++; });
+  const topType = Object.values(byType).sort((a, b) => b.n - a.n)[0];
+  const typeMiss = topType && topType.n >= 3 ? { idx: MISTAKE_TYPES.indexOf(topType.t), n: topType.n, speaking: topType.sp * 2 > topType.n } : null;
+  const wrongWords = {};
+  mk.filter(x => x.t === "word" && x.w).forEach(x => { wrongWords[x.w] = (wrongWords[x.w] || 0) + 1; });
+  const wordMiss = Object.entries(wrongWords).filter(([, n]) => n >= 2).map(([w, n]) => ({ w, n })).sort((a, b) => b.n - a.n)[0] || null;
+  const sp = m.filter(x => x.k === "speak");
+  const speakPct = sp.length ? Math.round(100 * sp.filter(x => x.ok).length / sp.length) : null;
   const slowWord = Object.entries(byWord).filter(([, a]) => a.length >= 2).map(([w, a]) => ({ w, sec: medianOf(a) / 1000 })).filter(x => x.sec >= 8).sort((a, b) => b.sec - a.sec)[0] || null;
   const views = {}; let viewsToday = 0;
   m.forEach(x => { if (x.k === "view" && x.t >= todayMs) { views[x.w] = (views[x.w] || 0) + 1; viewsToday++; } });
@@ -19287,40 +19720,62 @@ function analyzeCoach(allow) {
   const pmiss = {};
   m.forEach(x => { if (x.k === "pron" && x.ok === false) pmiss[x.w] = (pmiss[x.w] || 0) + 1; });
   const pronMiss = ok("pronunciation") ? (Object.entries(pmiss).filter(([, n]) => n >= 2).map(([w, n]) => ({ w, n })).sort((a, b) => b.n - a.n)[0] || null) : null;
-  const L = m.filter(x => x.k === "listen");
-  const listenPct = L.length ? Math.round(100 * L.filter(x => x.ok).length / L.length) : null;
   const { weak } = analyzeLearning(loadLearningLog(), allow);
   const advice = [];
   if (weak) advice.push({ type: "acc", a: weak.a, pct: Math.round(weak.rate * 100) });
-  if (listenPct !== null && L.length >= 3 && listenPct < 70 && (ok("conversation") || ok("content"))) advice.push({ type: "listen", pct: listenPct });
   if (pronMiss) advice.push({ type: "pron", w: pronMiss.w, n: pronMiss.n });
+  if (retryChars.length) advice.push({ type: "writeretry", chars: retryChars });
+  if (writeMiss && !retryChars.includes(writeMiss.w)) advice.push({ type: "writemiss", w: writeMiss.w, n: writeMiss.n, pct: writeMiss.pct });
+  if (typeMiss) advice.push({ type: "mtype", idx: typeMiss.idx, n: typeMiss.n, speaking: typeMiss.speaking });
+  if (wordMiss) advice.push({ type: "wordmiss", w: wordMiss.w, n: wordMiss.n });
   if (repeat) advice.push({ type: "repeat", w: repeat.w, n: repeat.n });
   if (flipSec !== null && flipSec >= 6) advice.push({ type: "slow", sec: Math.round(flipSec) });
   else if (slowWord) advice.push({ type: "slowword", w: slowWord.w, sec: Math.round(slowWord.sec) });
   return {
     advice,
     hasData: learn.length + m.length > 0,
-    stats: { flipSec, viewsToday, pron: ok("pronunciation") ? rate("pronunciation") : null, writing: ok("writing") ? rate("writing") : null, listen: listenPct },
+    stats: { flipSec, viewsToday, pron: ok("pronunciation") ? rate("pronunciation") : null, writing: ok("writing") ? writePct : null, stroke: ok("writing") ? strokePct : null, speak: (ok("conversation") || ok("content")) ? speakPct : null },
+    flipWords,
+    writeChars: ok("writing") ? writeChars : [],
   };
 }
-function CoachPanel({ T, allow, onGo, compact }) {
-  const { advice, stats, hasData } = analyzeCoach(allow);
-  const line = (a) => {
+// "Write these again": put the characters into Writing > Copying down and switch to it. Works whether the
+// Writing screen is already open (event) or not yet mounted (storage flag read on mount).
+const WRITING_RETRY_KEY = "gaku_writing_retry";
+function startWritingRetry(chars) {
+  const text = (chars || []).join("");
+  if (!text) return;
+  try {
+    localStorage.setItem(scopedKey("gaku_writing_copy_text"), text);
+    localStorage.setItem(scopedKey(WRITING_RETRY_KEY), text);
+  } catch {}
+  window.dispatchEvent(new CustomEvent("gaku_writing_retry", { detail: text }));
+}
+function coachAdviceLine(T, a) {
+    if (a.type === "writeretry") return progressFill(T.coachWriteRetry || "Characters to write again: {chars}. Tap the button to practice them now.", { chars: a.chars.join(" ") });
+    if (a.type === "mtype") return progressFill(T.coachMistakeType || "Your most frequent mistake is {type} ({n} times in the last 2 weeks). Make it your focus today.", { type: (T.coachMistakeNames || "Particles|Verb conjugation|Word choice|Word order|Spelling and script").split("|")[a.idx] || "", n: a.n });
+    if (a.type === "wordmiss") return progressFill(T.coachWordMistake || "You keep getting the word {word} wrong ({n} times). Review it today and write one sentence with it.", { word: a.w, n: a.n });
+    if (a.type === "writemiss") return progressFill(T.coachWriteMiss || "You keep missing the character {word} ({n} tries, {pct}% clean). Write it slowly, one stroke at a time.", { word: a.w, n: a.n, pct: a.pct });
     if (a.type === "acc") return progressFill(T.coachAccWeak || "{area} accuracy is {pct}%. Make {area} your focus today.", { area: coachAreaLabel(T, a.a), pct: a.pct });
     if (a.type === "listen") return progressFill(T.coachListenWeak || "Listening comprehension is {pct}%. Listen several times before reading the text.", { pct: a.pct });
     if (a.type === "pron") return progressFill(T.coachPronMiss || "You keep missing the pronunciation of {word} ({n} times). Say it slowly, then at normal speed.", { word: a.w, n: a.n });
     if (a.type === "repeat") return progressFill(T.coachRepeatWord || "You viewed {word} {n} times today and it isn't sticking. Try an example sentence or write it out.", { word: a.w, n: a.n });
     if (a.type === "slow") return progressFill(T.coachSlowFlip || "It takes you about {sec}s to recall a word. Aim for under 5s with quick flashcard rounds.", { sec: a.sec });
     return progressFill(T.coachSlowWord || "Your slowest word is {word} ({sec}s). Review it again.", { word: a.w, sec: a.sec });
-  };
-  const target = (a) => a.type === "acc" ? a.a : a.type === "listen" ? "conversation" : a.type === "pron" ? "pronunciation" : "vocab";
+  }
+function coachAdviceTarget(a) { return a.type === "acc" ? a.a : a.type === "listen" ? "conversation" : a.type === "pron" ? "pronunciation" : a.type === "writemiss" || a.type === "writeretry" ? "writing" : a.type === "mtype" ? (a.speaking ? "conversation" : "writing") : a.type === "wordmiss" ? "writing" : "vocab"; }
+function CoachPanel({ T, allow, onGo, compact }) {
+  const [showGuide, setShowGuide] = useState(false);
+  const { advice, stats, hasData, flipWords, writeChars } = analyzeCoach(allow);
+  const line = (a) => coachAdviceLine(T, a);
+  const target = coachAdviceTarget;
   const shown = advice.slice(0, compact ? 1 : 3);
   if (compact) {
     if (!shown.length) return null;
     return (
       <div style={{ ...S.card, marginBottom:12, padding:"10px 12px", background:"rgba(168,85,247,0.08)", border:"1px solid rgba(168,85,247,0.25)", display:"flex", alignItems:"center", gap:10 }}>
         <p style={{ color:"#e2e8f0", fontSize:12, lineHeight:1.6, margin:0, flex:1 }}>🎯 {line(shown[0])}</p>
-        <button onClick={() => onGo(target(shown[0]))} style={{ ...S.btn, padding:"6px 12px", background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff", fontSize:11, flexShrink:0 }}>{T.coachGo || "Let's go"} →</button>
+        <button onClick={() => { if (shown[0].type === "writeretry") startWritingRetry(shown[0].chars); onGo(target(shown[0])); }} style={{ ...S.btn, padding:"6px 12px", background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff", fontSize:11, flexShrink:0 }}>{T.coachGo || "Let's go"} →</button>
       </div>
     );
   }
@@ -19328,12 +19783,23 @@ function CoachPanel({ T, allow, onGo, compact }) {
     [T.coachStatFlip || "Flip speed", stats.flipSec !== null ? stats.flipSec.toFixed(1) + "s" : "–"],
     [T.coachStatViews || "Words seen today", String(stats.viewsToday)],
     [T.pronTitle || "Pronunciation", stats.pron !== null ? stats.pron + "%" : "–"],
-    [T.coachStatListen || "Listening", stats.listen !== null ? stats.listen + "%" : "–"],
     [T.writeTitle || "Writing", stats.writing !== null ? stats.writing + "%" : "–"],
+    [T.coachStatStroke || "Stroke accuracy", stats.stroke !== null ? stats.stroke + "%" : "–"],
+    [T.coachStatSpeak || "Speaking", stats.speak !== null ? stats.speak + "%" : "–"],
   ];
+  const detailRow = (k, label, right, bad) => (
+    <div key={k} style={{ display:"flex", justifyContent:"space-between", gap:10, fontSize:12, padding:"3px 0", borderBottom:`1px solid ${C.border}` }}>
+      <span style={{ color:"#e2e8f0", wordBreak:"break-all" }}>{label}</span>
+      <b style={{ color: bad ? "#fbbf24" : "#86efac", flexShrink:0 }}>{right}</b>
+    </div>
+  );
   return (
     <div>
-      <p style={{ color:C.purpleLight, fontSize:11, fontWeight:700, margin:"0 0 6px" }}>{T.coachAdviceTitle || "🎯 Your study coach"}</p>
+      <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", gap:8, margin:"0 0 6px" }}>
+        <p style={{ color:C.purpleLight, fontSize:11, fontWeight:700, margin:0 }}>{T.coachAdviceTitle || "🎯 Your study coach"}</p>
+        <button onClick={() => setShowGuide(true)} style={{ background:"none", border:`1px solid ${C.border}`, borderRadius:8, color:"#94a3b8", fontSize:11, padding:"3px 8px", cursor:"pointer" }}>{T.ivGuideBtn || "ℹ️ How to read this"}</button>
+      </div>
+      {showGuide && <IntensiveGuide T={T} onClose={() => setShowGuide(false)} />}
       <div style={{ display:"flex", gap:6, flexWrap:"wrap", marginBottom:10 }}>
         {chips.map(([label, val], i) => (
           <span key={i} style={{ fontSize:11, color:"#cbd5e1", background:"rgba(255,255,255,0.06)", border:`1px solid ${C.border}`, borderRadius:8, padding:"3px 8px" }}>{label}: <b style={{ color:"#f1f5f9" }}>{val}</b></span>
@@ -19343,9 +19809,25 @@ function CoachPanel({ T, allow, onGo, compact }) {
       {shown.map((a, i) => (
         <div key={i} style={{ marginBottom:10 }}>
           <p style={{ color:"#e2e8f0", fontSize:13, lineHeight:1.65, margin:"0 0 6px" }}>{i + 1}. {line(a)}</p>
-          <button onClick={() => onGo(target(a))} style={{ ...S.btn, padding:"7px 14px", background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff", fontSize:12 }}>{T.coachGo || "Let's go"} →</button>
+          <button onClick={() => { if (a.type === "writeretry") startWritingRetry(a.chars); onGo(target(a)); }} style={{ ...S.btn, padding:"7px 14px", background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff", fontSize:12 }}>{T.coachGo || "Let's go"} →</button>
         </div>
       ))}
+      {flipWords.length > 0 && (
+        <details style={{ marginTop:8 }}>
+          <summary style={{ color:C.purpleLight, fontSize:12, fontWeight:700, cursor:"pointer" }}>{T.coachDetailFlip || "Flip speed, word by word"} ({flipWords.length})</summary>
+          <div style={{ marginTop:6, maxHeight:180, overflowY:"auto" }}>
+            {flipWords.slice(0, 40).map(x => detailRow("f" + x.w, x.w, x.sec.toFixed(1) + "s" + (x.n > 1 ? " ×" + x.n : ""), x.sec >= 6))}
+          </div>
+        </details>
+      )}
+      {writeChars.length > 0 && (
+        <details style={{ marginTop:8 }}>
+          <summary style={{ color:C.purpleLight, fontSize:12, fontWeight:700, cursor:"pointer" }}>{T.coachDetailWrite || "Writing, character by character"} ({writeChars.length})</summary>
+          <div style={{ marginTop:6, maxHeight:180, overflowY:"auto" }}>
+            {writeChars.slice(0, 60).map(x => detailRow("w" + x.w, x.w, x.pct + "% · ×" + x.n, x.pct < 70))}
+          </div>
+        </details>
+      )}
     </div>
   );
 }
@@ -19534,17 +20016,62 @@ function ProgressNudge({ T, onGo }) {
   );
 }
 
+function IntensiveWarn({ T, onOk, onBack }) {
+  return (
+    <div style={{ position:"fixed", inset:0, background:"rgba(0,0,0,0.78)", display:"flex", alignItems:"center", justifyContent:"center", zIndex:1100, padding:16 }}>
+      <div style={{ ...S.card, width:"100%", maxWidth:420, maxHeight:"92vh", overflowY:"auto" }}>
+        <p style={{ color:"#fca5a5", fontSize:16, fontWeight:800, margin:"0 0 12px", textAlign:"center" }}>{T.ivWarnTitle || "⚠️ Please read before choosing Intensive Mode"}</p>
+        <p style={{ color:"#e2e8f0", fontSize:13, lineHeight:1.8, margin:"0 0 16px", padding:"12px 14px", borderRadius:10, background:"rgba(239,68,68,0.08)", border:"1px solid rgba(239,68,68,0.3)" }}>{T.ivWarnBody || "Intensive Mode is only for people who are serious about learning Japanese, or who are aiming for an exam or qualification. Every day you must finish a quota of 8 study actions, and some tabs stay locked until you do. If you just want to enjoy learning, choose Enjoyable Mode."}</p>
+        <button onClick={onOk} style={{ ...S.btn, width:"100%", background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff", marginBottom:8 }}>{T.ivWarnOk || "OK, I'm serious"}</button>
+        <button onClick={onBack} style={{ ...S.btn, width:"100%", background:"transparent", border:`1px solid ${C.border}`, color:"#94a3b8" }}>{T.ivWarnBack || "Choose another mode"}</button>
+      </div>
+    </div>
+  );
+}
+
+// How to read every number Intensive Mode shows. Shown right after the student confirms the warning, once
+// more to existing Intensive students, and any time from the "How to read this" button in the coach.
+const IV_GUIDE_EN = "🔥 Today's quota — Shows how many of today's 8 study actions you have finished. When you reach 8, the locked tabs open.||⏱ Flip speed / Words seen today — Flip speed is how long you typically take (median of the last 2 weeks) to turn a vocabulary card over. Under 5 seconds is good; 6 seconds or more means words are slow to come back. Words seen today counts the cards you looked at today.||🗣 Pronunciation Practice — The share of your recent pronunciation attempts that were correct. Below 70% means it needs more practice.||✍️ Writing Practice — The share of characters and written answers you got right without a mistake in the last 2 weeks.||✏️ Stroke accuracy — Of all the strokes you wrote, the share that had the correct order and shape.||🎤 Speaking — The share of your spoken answers that had no grammar or word mistakes.||📋 Word by word / Character by character — Open these lists to see the speed of each word and the accuracy of each character. Yellow marks a weak point (6 seconds or slower, or under 70%). ×2 means you tried it twice.||🎯 Coach advice — From your last 2 weeks it suggests today's focus: your most frequent mistake type (particles, verb forms, word choice, word order, spelling), a word you keep getting wrong, or characters to write again. Tap “Let's go” to practice right away.||ℹ️ Good to know — A dash (–) means there is not enough data yet. Your records are kept on this device. You can read this guide again anytime with the “How to read this” button in the coach.";
+function IntensiveGuide({ T, onClose }) {
+  const items = String(T.ivGuideItems || IV_GUIDE_EN).split("||").filter(Boolean);
+  return (
+    <div style={{ position:"fixed", inset:0, background:"rgba(0,0,0,0.78)", display:"flex", alignItems:"center", justifyContent:"center", zIndex:1100, padding:16 }}>
+      <div style={{ ...S.card, width:"100%", maxWidth:440, maxHeight:"92vh", overflowY:"auto" }}>
+        <p style={{ color:"#f1f5f9", fontSize:17, fontWeight:800, margin:"0 0 14px", textAlign:"center" }}>{T.ivGuideTitle || "How to read your Intensive Mode data"}</p>
+        <div style={{ display:"flex", flexDirection:"column", gap:8, marginBottom:14 }}>
+          {items.map((txt, i) => {
+            const k = txt.indexOf(" — ");
+            const head = k > 0 ? txt.slice(0, k) : "";
+            const body = k > 0 ? txt.slice(k + 3) : txt;
+            return (
+              <div key={i} style={{ padding:"10px 12px", borderRadius:10, background:"rgba(168,85,247,0.10)", border:`1px solid ${C.border}` }}>
+                {head && <p style={{ color:C.purpleLight, fontSize:13, fontWeight:800, margin:"0 0 4px" }}>{head}</p>}
+                <p style={{ color:"#e2e8f0", fontSize:12, lineHeight:1.75, margin:0 }}>{body}</p>
+              </div>
+            );
+          })}
+        </div>
+        <button onClick={onClose} style={{ ...S.btn, width:"100%", background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff" }}>{T.ivGuideOk || "Got it, start studying"}</button>
+      </div>
+    </div>
+  );
+}
+
 function ModePicker({ T, trialEnded, onPick }) {
+  const [warnFor, setWarnFor] = useState(null);
   const opts = trialEnded
     ? [["intensive", "Intensive mode", T.modeIntensiveDesc], ["enjoyable", "Enjoyable mode", T.modeEnjoyableDesc]]
     : [["enjoyable", "Enjoyable mode", T.modeEnjoyableDesc], ["intensive", "Intensive mode", T.modeIntensiveDesc], ["intensive_trial", "Trial of Intensive mode", T.modeTrialDesc]];
+  // Intensive / Trial: show the "serious learners only" notice first; the guide opens after OK.
+  const choose = (id) => { if (id === "enjoyable") onPick(id); else setWarnFor(id); };
+  if (warnFor) return <IntensiveWarn T={T} onOk={() => onPick(warnFor, true)} onBack={() => setWarnFor(null)} />;
   return (
     <div style={{ position:"fixed", inset:0, background:"rgba(0,0,0,0.78)", display:"flex", alignItems:"center", justifyContent:"center", zIndex:1100, padding:16 }}>
       <div style={{ ...S.card, width:"100%", maxWidth:420, maxHeight:"92vh", overflowY:"auto" }}>
         <p style={{ color:"#f1f5f9", fontSize:17, fontWeight:800, margin:"0 0 14px", textAlign:"center" }}>{trialEnded ? (T.trialEndedTitle || "Your 3-day Intensive trial has ended. Which mode now?") : (T.modePickerTitle || "Which mode do you want to try?")}</p>
         <div style={{ display:"flex", flexDirection:"column", gap:10 }}>
           {opts.map(([id, title, desc]) => (
-            <button key={id} onClick={() => onPick(id)} style={{ textAlign:"left", padding:"12px 14px", borderRadius:12, cursor:"pointer", border:`1.5px solid ${id === "enjoyable" ? C.border : C.purpleLight}`, background:id === "enjoyable" ? C.card : "rgba(168,85,247,0.12)", color:"#e2e8f0" }}>
+            <button key={id} onClick={() => choose(id)} style={{ textAlign:"left", padding:"12px 14px", borderRadius:12, cursor:"pointer", border:`1.5px solid ${id === "enjoyable" ? C.border : C.purpleLight}`, background:id === "enjoyable" ? C.card : "rgba(168,85,247,0.12)", color:"#e2e8f0" }}>
               <span style={{ display:"block", fontSize:14, fontWeight:800, marginBottom:4 }}>{id === "enjoyable" ? "😊 " : "🔥 "}{title}</span>
               <span style={{ display:"block", fontSize:12, color:"#94a3b8", lineHeight:1.6 }}>{desc}</span>
             </button>
@@ -19639,7 +20166,10 @@ function Dashboard({ form, onEdit, onLevelUp, onSetWeek, onLogout, onDeleteAccou
     window.addEventListener("gaku_learning_updated", h);
     return () => window.removeEventListener("gaku_learning_updated", h);
   }, []);
-  const pickStudyMode = (m) => { saveStudyMode(m); setStudyMode(loadStudyMode()); setShowModePicker(false); };
+  const [showIntensiveGuide, setShowIntensiveGuide] = useState(false);
+  const [ivSeen, setIvSeen] = useState(() => { try { return localStorage.getItem(scopedKey("gaku_intensive_guide_seen")) === "1"; } catch { return true; } });
+  const closeIntensiveGuide = () => { setShowIntensiveGuide(false); setIvSeen(true); try { localStorage.setItem(scopedKey("gaku_intensive_guide_seen"), "1"); } catch {} };
+  const pickStudyMode = (m, showGuide) => { saveStudyMode(m); setStudyMode(loadStudyMode()); setShowModePicker(false); if (showGuide) setShowIntensiveGuide(true); };
   // One-time explanation of the study modes (quota + tab lock). Shown once per account to everyone,
   // including students who were already using the app, after the Tutorial/pickers are out of the way.
   const [modeGuideSeen, setModeGuideSeen] = useState(() => { try { return localStorage.getItem(scopedKey("gaku_mode_guide_seen")) === "1"; } catch { return true; } });
@@ -20038,7 +20568,7 @@ function Dashboard({ form, onEdit, onLevelUp, onSetWeek, onLogout, onDeleteAccou
     { id:"schedule",   label: T.tabSchedule },
     { id:"vocabulary", label: T.tabVocabulary },
     { id:"subtitles",  label: T.tabSubtitles || "🎬 字幕帳" },
-    { id:"resources",  label: T.tabResources },
+    { id:"resources",  label: T.tabActivities || T.tabResources },
     { id:"milestones", label: T.tabMilestones },
     { id:"jlpt",       label: T.tabJlpt || "🎓 JLPT結果" },
     { id:"feedback",   label: T.tabFeedback || "💬 Feedback" },
@@ -20089,7 +20619,8 @@ function Dashboard({ form, onEdit, onLevelUp, onSetWeek, onLogout, onDeleteAccou
         </div>
       ); })()}
       {showFeaturePicker && <FeaturePicker key={featurePickerInitial.join(",")} T={T} initial={featurePickerInitial} onApply={applyFeatureChoice} />}
-      {!modeGuideSeen && !showModePicker && !showFeaturePicker && !tutorialActive && (() => { try { return localStorage.getItem(scopedKey("gaku_tutorial_done")) === "1"; } catch { return false; } })() && !T._loading && T.modeGuideTitle && <ModeGuide T={T} onClose={closeModeGuide} />}
+      {!modeGuideSeen && !showIntensiveGuide && !showModePicker && !showFeaturePicker && !tutorialActive && (() => { try { return localStorage.getItem(scopedKey("gaku_tutorial_done")) === "1"; } catch { return false; } })() && !T._loading && T.modeGuideTitle && <ModeGuide T={T} onClose={closeModeGuide} />}
+      {(showIntensiveGuide || (isIntensive && !ivSeen && modeGuideSeen && !showModePicker && !showFeaturePicker && !tutorialActive && (() => { try { return localStorage.getItem(scopedKey("gaku_tutorial_done")) === "1"; } catch { return false; } })())) && !T._loading && <IntensiveGuide T={T} onClose={closeIntensiveGuide} />}
       {showModePicker && !showFeaturePicker && !tutorialActive && <ModePicker T={T} trialEnded={effMode === "trial_ended"} onPick={pickStudyMode} />}
       {tutorialActive && (
         <TutorialOverlay
@@ -20300,7 +20831,8 @@ function Dashboard({ form, onEdit, onLevelUp, onSetWeek, onLogout, onDeleteAccou
               const areaLabel = (a) => ({ schedule: T.tabSchedule, vocab: T.tabVocabulary, content: T.tabPractice, conversation: T.convTitle, pronunciation: T.pronTitle, writing: T.writeTitle }[a] || a);
               const goDrill = (a) => { if (a === "schedule" || a === "vocab") { setTab(a === "vocab" ? "vocabulary" : "schedule"); return; } setTab("resources"); setResourceSubTab(a); };
               // Enjoyable mode: only the gentle suggestion card (no quota, no warnings), and only when there is one.
-              if (!isIntensive && !weak) return null;
+              const enjoyAdv = (!isIntensive && !weak) ? (analyzeCoach(coachAllow).advice[0] || null) : null;
+              if (!isIntensive && !weak && !enjoyAdv) return null;
               return (
                 <div style={{ ...S.card, marginBottom:12, background:isIntensive ? "linear-gradient(135deg,rgba(239,68,68,0.10),rgba(168,85,247,0.10))" : "rgba(168,85,247,0.08)", border:isIntensive ? "1px solid rgba(239,68,68,0.3)" : "1px solid rgba(168,85,247,0.25)" }}>
                   {isIntensive && <p style={{ color:"#fca5a5", fontSize:12, fontWeight:800, margin:"0 0 6px" }}>🔥 {(T.quotaTitle || "Today's quota: {done}/{goal}").replace("{done}", Math.min(today, INTENSIVE_DAILY_GOAL)).replace("{goal}", INTENSIVE_DAILY_GOAL)}{doneQuota ? " ✅" : ""}</p>}
@@ -20310,7 +20842,6 @@ function Dashboard({ form, onEdit, onLevelUp, onSetWeek, onLogout, onDeleteAccou
                   {isIntensive && !doneQuota && <p style={{ color:"#fecaca", fontSize:11, lineHeight:1.6, margin:"0 0 8px" }}>🔒 {T.quotaLocked || "Finish today's quota to unlock the other tabs."}</p>}
                   {isIntensive && missedYesterday && <p style={{ color:"#fecaca", fontSize:12, fontWeight:700, lineHeight:1.6, margin:"0 0 8px" }}>⚠️ {T.quotaMissed || "You missed yesterday's quota. Finish today's quota first — no skipping."}</p>}
                   {isIntensive && <CoachPanel T={T} allow={coachAllow} onGo={coachGo} />}
-                  {isIntensive && weak && <LessonBridgeCard T={T} />}
                   {!isIntensive && weak && (
                     <div>
                       <p style={{ color:C.purpleLight, fontSize:11, fontWeight:700, margin:"0 0 4px" }}>🎯 {T.coachTitle || "Today's suggestion"}</p>
@@ -20318,7 +20849,13 @@ function Dashboard({ form, onEdit, onLevelUp, onSetWeek, onLogout, onDeleteAccou
                         {(strong ? (T.coachBoth || "You usually do well in {strong}, and {weak} seems a little hard. How about {weak} today?") : (T.coachWeakOnly || "{weak} seems a little hard for you. How about practicing it today?")).split("{strong}").join(strong ? areaLabel(strong.a) : "").split("{weak}").join(areaLabel(weak.a))}
                       </p>
                       <button onClick={() => goDrill(weak.a)} style={{ ...S.btn, padding:"8px 16px", background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff", fontSize:12 }}>{T.coachGo || "Let's go"} →</button>
-                      <LessonBridgeCard T={T} />
+                    </div>
+                  )}
+                  {!isIntensive && !weak && enjoyAdv && (
+                    <div>
+                      <p style={{ color:C.purpleLight, fontSize:11, fontWeight:700, margin:"0 0 4px" }}>🎯 {T.coachTitle || "Today's suggestion"}</p>
+                      <p style={{ color:"#e2e8f0", fontSize:13, lineHeight:1.65, margin:"0 0 10px" }}>{coachAdviceLine(T, enjoyAdv)} {T.coachEnjoyAsk || "Would you like to work on this today?"}</p>
+                      <button onClick={() => { if (enjoyAdv.type === "writeretry") startWritingRetry(enjoyAdv.chars); goDrill(coachAdviceTarget(enjoyAdv)); }} style={{ ...S.btn, padding:"8px 16px", background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff", fontSize:12 }}>{T.coachGo || "Let's go"} →</button>
                     </div>
                   )}
                 </div>
@@ -21398,7 +21935,7 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
     "Korean": "ko", "Thai": "th", "Malay": "ms", "Indonesian": "id",
     "Vietnamese": "vi", "Japanese": "ja", "Turkish": "tr", "Filipino": "fil",
     // Not supported by Stripe — let Stripe auto-detect from the browser instead
-    "Hindi": "auto", "Nepali": "auto", "Mizo": "auto", "Bengali": "auto",
+    "Hindi": "auto", "Nepali": "auto",
   };
 
   // Attaches the logged-in student's Supabase user id to the Stripe Payment Link
