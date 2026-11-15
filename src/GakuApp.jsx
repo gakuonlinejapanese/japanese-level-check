@@ -14,6 +14,9 @@ const IS_STORE_APP = (() => {
     return new URLSearchParams(window.location.search).get("store") === "1";
   } catch { return false; }
 })();
+// Store apps must not point students to other browsers/platforms (App Store 2.3.10), so the
+// "speech recognition unavailable" notices use neutral wording there.
+const STORE_NO_VOICE_MSG = "Voice input isn't available on this device.";
 
 // Store-app "guest" accounts (App Store guideline 5.1.1(v): students must be able to use the app and
 // buy a subscription without registering). Their placeholder address is never shown or emailed.
@@ -15690,7 +15693,7 @@ function ExerciseCard({ item, revealed, onReveal, T, lang }) {
             style={{ display:"flex", alignItems:"center", gap:6, padding:"6px 12px", borderRadius:8, background:recording?"rgba(239,68,68,0.15)":"rgba(168,85,247,0.12)", border:`1px solid ${recording?"rgba(239,68,68,0.4)":"rgba(168,85,247,0.3)"}`, color:recording?"#f87171":C.purpleLight, fontSize:12, fontWeight:700, cursor:"pointer" }}>
             {recording ? `⏺ ${T?.recordingInProgress || "Recording..."}` : `🎤 ${T?.recordVoice || "Record"}`}
           </button>
-          {!recogSupported && <p style={{ color:C.red, fontSize:11, marginTop:6 }}>Voice input isn't supported in this browser — try Chrome.</p>}
+          {!recogSupported && <p style={{ color:C.red, fontSize:11, marginTop:6 }}>{IS_STORE_APP ? STORE_NO_VOICE_MSG : "Voice input isn't supported in this browser — try Chrome."}</p>}
           {transcript && (
             <div style={{ background:"rgba(168,85,247,0.06)", borderRadius:8, padding:"8px 10px", marginTop:6 }}>
               <p style={{ color:C.purpleLight, fontSize:11, fontWeight:700, margin:"0 0 3px" }}>{T?.yourSpokenAnswer || "Your spoken answer:"}</p>
@@ -16429,7 +16432,7 @@ Respond ONLY with valid JSON, no markdown, no backticks, nothing else.`;
         style={{ display:"flex", alignItems:"center", gap:6, padding:"6px 12px", borderRadius:8, background:recording?"rgba(239,68,68,0.15)":"rgba(168,85,247,0.12)", border:`1px solid ${recording?"rgba(239,68,68,0.4)":"rgba(168,85,247,0.3)"}`, color:recording?"#f87171":C.purpleLight, fontSize:12, fontWeight:700, cursor:"pointer" }}>
         {recording ? `⏺ ${T?.recordingInProgress || "Recording..."}` : `🎤 ${T?.recordVoice || "Record"}`}
       </button>
-      {!recogSupported && <p style={{ color:C.red, fontSize:11, marginTop:6 }}>Voice input isn't supported in this browser — try Chrome.</p>}
+      {!recogSupported && <p style={{ color:C.red, fontSize:11, marginTop:6 }}>{IS_STORE_APP ? STORE_NO_VOICE_MSG : "Voice input isn't supported in this browser — try Chrome."}</p>}
       {transcript && (
         <div style={{ background:"rgba(168,85,247,0.06)", borderRadius:8, padding:"8px 10px", marginTop:8 }}>
           <p style={{ color:C.purpleLight, fontSize:11, fontWeight:700, margin:"0 0 3px" }}>{T?.yourSpokenAnswer || "Your spoken answer:"}</p>
@@ -16832,7 +16835,7 @@ function ConversationPredictor({ form, onLevelUp }) {
         <button onClick={toggleListening} style={{ display:"flex", alignItems:"center", justifyContent:"center", gap:8, width:"100%", padding:"12px 12px", borderRadius:10, border:`1px solid ${listening?"rgba(239,68,68,0.4)":"rgba(6,182,212,0.35)"}`, background:listening?"rgba(239,68,68,0.12)":"rgba(6,182,212,0.1)", color:listening?"#f87171":C.teal, fontSize:14, fontWeight:700, cursor:"pointer" }}>
           {listening ? `⏺ ${T.convListenStop || "Stop listening"}` : `🎤 ${T.convListenStart || "Start listening"}`}
         </button>
-        {!recogSupported && <p style={{ color:C.red, fontSize:11, marginTop:8 }}>{T.convListenUnsupported || "Live listening isn't supported in this browser — try Chrome on desktop or Android."}</p>}
+        {!recogSupported && <p style={{ color:C.red, fontSize:11, marginTop:8 }}>{IS_STORE_APP ? STORE_NO_VOICE_MSG : (T.convListenUnsupported || "Live listening isn't supported in this browser — try Chrome on desktop or Android.")}</p>}
         {listening && (
           <p style={{ color:"#94a3b8", fontSize:12, marginTop:10, fontStyle:"italic", minHeight:16 }}>
             {interimText || (T.convListening || "Listening…")}
@@ -17048,7 +17051,7 @@ function PronunciationTurnCard({ item, T, lang, onBreak }) {
         style={{ display:"flex", alignItems:"center", gap:6, padding:"6px 12px", borderRadius:8, background:recording?"rgba(239,68,68,0.15)":"rgba(168,85,247,0.12)", border:`1px solid ${recording?"rgba(239,68,68,0.4)":"rgba(168,85,247,0.3)"}`, color:recording?"#f87171":C.purpleLight, fontSize:12, fontWeight:700, cursor:"pointer" }}>
         {recording ? `⏺ ${T?.recordingInProgress || "Recording..."}` : `🎤 ${T?.recordVoice || "Record"}`}
       </button>
-      {!recogSupported && <p style={{ color:C.red, fontSize:11, marginTop:6 }}>Voice input isn't supported in this browser — try Chrome.</p>}
+      {!recogSupported && <p style={{ color:C.red, fontSize:11, marginTop:6 }}>{IS_STORE_APP ? STORE_NO_VOICE_MSG : "Voice input isn't supported in this browser — try Chrome."}</p>}
 
       {result === "correct" && (
         <div style={{ background:"rgba(34,197,94,0.06)", borderRadius:8, padding:"10px 12px", marginTop:10 }}>
@@ -17250,7 +17253,7 @@ function PronunciationSayIt({ target, T }) {
         {recording ? `⏺ ${T.recordingInProgress || "Recording..."}` : `🎤 ${T.recordVoice || "Record"}`}
       </button>
       {recording && transcript && <p style={{ color:"#94a3b8", fontSize:12, fontStyle:"italic", margin:"8px 0 0" }}>{transcript}</p>}
-      {!supported && <p style={{ color:C.red, fontSize:11, marginTop:6 }}>Voice input isn't supported in this browser — try Chrome.</p>}
+      {!supported && <p style={{ color:C.red, fontSize:11, marginTop:6 }}>{IS_STORE_APP ? STORE_NO_VOICE_MSG : "Voice input isn't supported in this browser — try Chrome."}</p>}
 
       {match && !recording && (
         <div style={{ background:good?"rgba(34,197,94,0.06)":"rgba(239,68,68,0.06)", border:`1px solid ${good?"rgba(34,197,94,0.2)":"rgba(239,68,68,0.2)"}`, borderRadius:8, padding:"10px 12px", marginTop:10 }}>
@@ -17922,7 +17925,7 @@ function PronunciationListenAlong({ form, onLevelUp }) {
         <button onClick={toggleListening} style={{ display:"flex", alignItems:"center", justifyContent:"center", gap:8, width:"100%", padding:"12px 12px", borderRadius:10, border:`1px solid ${listening?"rgba(239,68,68,0.4)":"rgba(6,182,212,0.35)"}`, background:listening?"rgba(239,68,68,0.12)":"rgba(6,182,212,0.1)", color:listening?"#f87171":C.teal, fontSize:14, fontWeight:700, cursor:"pointer" }}>
           {listening ? `⏺ ${T.convListenStop || "Stop listening"}` : `🎤 ${T.convListenStart || "Start listening"}`}
         </button>
-        {!recogSupported && <p style={{ color:C.red, fontSize:11, marginTop:8 }}>{T.convListenUnsupported || "Live listening isn't supported in this browser — try Chrome on desktop or Android."}</p>}
+        {!recogSupported && <p style={{ color:C.red, fontSize:11, marginTop:8 }}>{IS_STORE_APP ? STORE_NO_VOICE_MSG : (T.convListenUnsupported || "Live listening isn't supported in this browser — try Chrome on desktop or Android.")}</p>}
         {listening && (
           <p style={{ color:"#94a3b8", fontSize:12, marginTop:10, fontStyle:"italic", minHeight:16 }}>
             {interimText || (T.convListening || "Listening…")}
