@@ -1597,6 +1597,7 @@ const UI_TRANSLATIONS = {
     pronTitle: "Pronunciation Practice",
     pronListenDesc: "Play a YouTube or any video with the sound on near your mic. GAKU listens, writes down what it hears line by line, and helps you understand it with furigana, romaji and translation.",
     storeSuspendedTitle: "GAKU Master is temporarily suspended",
+    storeTrialEndedTitle: "Your free trial has ended",
     storeInviteHint: "If you have an invitation code, enter it below to continue.",
     storeRequestCode: "Request an invitation code",
     storeReplyTo: "We will reply to {email}.",
@@ -21650,7 +21651,7 @@ function StorePlansScreen({ T, userId, onClose, onPurchased }) {
           {T?.back || "Back"}
         </button>
         <p style={{ color:"#64748b", fontSize:11, margin:"14px 0 0" }}>
-          <a href="/terms.html" target="_blank" rel="noopener noreferrer" style={{ color:"#a78bfa" }}>{T?.termsOfUseLabel || "Terms of Use"}</a>{" · "}<a href="/privacy.html" target="_blank" rel="noopener noreferrer" style={{ color:"#a78bfa" }}>{T?.privacyPolicyLabel || "Privacy Policy"}</a>
+          <a href="https://app.seitojapanese.online/terms.html" target="_blank" rel="noopener noreferrer" style={{ color:"#a78bfa" }}>{T?.termsOfUseLabel || "Terms of Use"}</a>{" · "}<a href="https://app.seitojapanese.online/privacy.html" target="_blank" rel="noopener noreferrer" style={{ color:"#a78bfa" }}>{T?.privacyPolicyLabel || "Privacy Policy"}</a>
         </p>
       </div>
     </div>
@@ -22596,7 +22597,7 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
     return (
       <div style={{ minHeight:"100vh", background:"linear-gradient(160deg,#0a0f1e 0%,#0f172a 60%,#0a0f1e 100%)", display:"flex", alignItems:"flex-start", justifyContent:"center", padding:24, boxSizing:"border-box" }}>
         <div style={{ background:"linear-gradient(135deg,#1e1b4b,#0f172a)", border:"1.5px solid rgba(139,92,246,0.4)", borderRadius:20, padding:"32px 26px", maxWidth:420, width:"92%", margin:"auto", textAlign:"center" }}>
-          <h2 style={{ color:"#f1f5f9", fontSize:20, fontWeight:900, margin:"0 0 10px" }}>{absenceSuspended ? (T?.storeSuspendedTitle || "GAKU Master is temporarily suspended") : (T?.trialEndedTitle || "Your free trial has ended")}</h2>
+          <h2 style={{ color:"#f1f5f9", fontSize:20, fontWeight:900, margin:"0 0 10px" }}>{absenceSuspended ? (T?.storeSuspendedTitle || "GAKU Master is temporarily suspended") : (T?.storeTrialEndedTitle || "Your free trial has ended")}</h2>
           {!absenceSuspended && <StorePlans T={T} userId={authUser.id} onPurchased={() => setIsPaid(true)} />}
           <p style={{ color:"#94a3b8", fontSize:13, margin:"0 0 16px", lineHeight:1.6 }}>{T?.storeInviteHint || "If you have an invitation code, enter it below to continue."}</p>
           <div style={{ display:"flex", gap:6, marginBottom:8 }}>
@@ -22619,7 +22620,7 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
           <p style={{ color:"#64748b", fontSize:11, margin:"4px 0 12px", lineHeight:1.6 }}>{T?.storeDataKept || "Your saved study data is kept for a limited time."}</p>
           <button onClick={authUser ? handleDeleteAccount : undefined} disabled={deleteAccountBusy} style={{ background:"none", border:"none", color:"#64748b", fontSize:11, textDecoration:"underline", cursor:"pointer" }}>{T?.deleteAccountLink || "Delete my account instead"}</button>
           <p style={{ color:"#64748b", fontSize:11, margin:"12px 0 0" }}>
-            <a href="/terms.html" target="_blank" rel="noopener noreferrer" style={{ color:"#a78bfa" }}>{T?.termsOfUseLabel || "Terms of Use"}</a>{" \u00b7 "}<a href="/privacy.html" target="_blank" rel="noopener noreferrer" style={{ color:"#a78bfa" }}>{T?.privacyPolicyLabel || "Privacy Policy"}</a>
+            <a href="https://app.seitojapanese.online/terms.html" target="_blank" rel="noopener noreferrer" style={{ color:"#a78bfa" }}>{T?.termsOfUseLabel || "Terms of Use"}</a>{" \u00b7 "}<a href="https://app.seitojapanese.online/privacy.html" target="_blank" rel="noopener noreferrer" style={{ color:"#a78bfa" }}>{T?.privacyPolicyLabel || "Privacy Policy"}</a>
           </p>
         </div>
       </div>
@@ -22726,9 +22727,9 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
               {T?.paywallRenewNote || "Plans renew automatically at the price shown until cancelled. Payments on the web are processed securely by Stripe. Links to outside websites open in a new tab; those sites are independent and not affiliated with GAKU."}
             </p>
             <p style={{ color:"#94a3b8", fontSize:11, margin:0 }}>
-              <a href="/terms.html" target="_blank" rel="noopener noreferrer" style={{ color:"#a78bfa" }}>{T?.termsOfUseLabel || "Terms of Use"}</a>
+              <a href="https://app.seitojapanese.online/terms.html" target="_blank" rel="noopener noreferrer" style={{ color:"#a78bfa" }}>{T?.termsOfUseLabel || "Terms of Use"}</a>
               {" \u00b7 "}
-              <a href="/privacy.html" target="_blank" rel="noopener noreferrer" style={{ color:"#a78bfa" }}>{T?.privacyPolicyLabel || "Privacy Policy"}</a>
+              <a href="https://app.seitojapanese.online/privacy.html" target="_blank" rel="noopener noreferrer" style={{ color:"#a78bfa" }}>{T?.privacyPolicyLabel || "Privacy Policy"}</a>
             </p>
           </div>
         </div>
