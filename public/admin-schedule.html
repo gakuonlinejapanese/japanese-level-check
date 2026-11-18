@@ -137,6 +137,7 @@
       <input type="text" id="off-name" placeholder="名前" />
       <input type="email" id="off-email" placeholder="メール" />
       <input type="text" id="off-notes" placeholder="メモ（固定スケジュール等）" />
+      <input type="tel" id="off-whatsapp" placeholder="WhatsApp番号（例: +14155551234）" />
       <select id="off-country"></select>
       <select id="off-state" style="display:none;"></select>
       <select id="off-timezone-other" style="display:none;"></select>
@@ -664,11 +665,12 @@ async function loadOfficialStudents() {
       absenceLabel = `<div style="margin-top:4px;"><span title="${detail}" style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:12px;color:${color};background:${bg};">📊 累積休学: ${main}${ab.overridden ? "(手動)" : ""}${flag}</span> <span style="font-size:11px;color:#888;">${detail}</span></div>`;
     }
     return `<div class="req-card" style="display:flex;justify-content:space-between;align-items:center;gap:8px;">
-      <span><strong>${s.name}</strong> — ${s.email}${s.notes ? " — " + s.notes : ""} — 📍${locationLabel}${s.timezone ? " (" + s.timezone + ")" : ""}${absenceLabel}</span>
+      <span><strong>${s.name}</strong> — ${s.email}${s.notes ? " — " + s.notes : ""} — 💬${s.whatsapp ? s.whatsapp : "WhatsApp未登録"} — 📍${locationLabel}${s.timezone ? " (" + s.timezone + ")" : ""}${absenceLabel}</span>
       <span style="flex-shrink:0;display:flex;gap:4px;">
         <button class="opt-btn avail" onclick="editOfficialStudentAbsenceMonths('${s.id}')">📊 月数</button>
         <button class="opt-btn avail" onclick="editOfficialStudentName('${s.id}','${s.name.replace(/'/g, "\\'")}')">✏️ 名前</button>
         <button class="opt-btn avail" onclick="editOfficialStudentLocation('${s.id}')">📍 住まい</button>
+        <button class="opt-btn avail" onclick="editOfficialStudentWhatsapp('${s.id}')">💬 WhatsApp</button>
       </span>
     </div>`;
   }).join("") || "<p>まだ登録されていません。</p>";
@@ -783,6 +785,25 @@ async function editOfficialStudentName(id, currentName) {
   loadOfficialStudents();
 }
 
+function normalizeWhatsapp(raw) {
+  // 空欄=未登録。入力は「+国番号 番号」形式に整える(スペース・ハイフン・括弧は除去)
+  const cleaned = String(raw || "").replace(/[\s\-().]/g, "");
+  if (!cleaned) return { value: null };
+  if (!/^\+\d{7,15}$/.test(cleaned)) return { error: "国番号つきで入力してください(例: +14155551234)" };
+  return { value: cleaned };
+}
+
+async function editOfficialStudentWhatsapp(id) {
+  const student = (await api("list-official-students")).students.find(s => s.id === id);
+  if (!student) return;
+  const input = prompt(`WhatsApp番号を国番号つきで入力してください(例: +14155551234)\n空欄にすると登録を削除します。\n\n現在: ${student.whatsapp || "未登録"}`, student.whatsapp || "");
+  if (input === null) return; // キャンセル
+  const parsed = normalizeWhatsapp(input);
+  if (parsed.error) return alert(parsed.error);
+  await api("update-official-student", { id, name: student.name, whatsapp: parsed.value });
+  loadOfficialStudents();
+}
+
 async function editOfficialStudentLocation(id) {
   const student = (await api("list-official-students")).students.find(s => s.id === id);
   if (!student) return;
@@ -828,6 +849,8 @@ async function addOfficialStudent() {
   const stateSel = document.getElementById("off-state");
   const otherSel = document.getElementById("off-timezone-other");
   if (!name || !email) return alert("名前とメールを入力してください");
+  const waParsed = normalizeWhatsapp(document.getElementById("off-whatsapp").value);
+  if (waParsed.error) return alert(waParsed.error);
 
   let timezone = null, state = null;
   const entry = COUNTRY_TZ[country];
@@ -845,7 +868,8 @@ async function addOfficialStudent() {
     }
   }
 
-  await api("add-official-student", { name, email, notes, country: country || null, state, timezone });
+  await api("add-official-student", { name, email, notes, country: country || null, state, timezone, whatsapp: waParsed.value });
+  document.getElementById("off-whatsapp").value = "";
   document.getElementById("off-name").value = "";
   document.getElementById("off-email").value = "";
   document.getElementById("off-notes").value = "";

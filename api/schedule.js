@@ -23,8 +23,8 @@ import { assessLongAbsence, SUSPEND_EMAIL_SUBJECT, suspendEmailHtml, computeAbse
 // POST { secret, action: "reject-waitlist", waitlistId }
 //   → どの希望も合わなかった場合。生徒に「空き枠なし」メールを送る
 // POST { secret, action: "list-official-students" }
-// POST { secret, action: "add-official-student", name, email, notes }
-// POST { secret, action: "update-official-student", id, name, email?, notes? }
+// POST { secret, action: "add-official-student", name, email, notes, whatsapp? }
+// POST { secret, action: "update-official-student", id, name, email?, notes?, whatsapp? }
 //   → 既存のOfficial Studentの名前（・メール・メモ）を更新
 // POST { secret, action: "suspend-gaku-master", email, requestId? }  → 1ヶ月以上の欠席でSeitoが承認した生徒のGAKU Master利用を一時停止し、英文メールで通知
 // POST { secret, action: "list-suspended-gaku-master" }  → 現在GAKU Master停止中の生徒一覧(管理画面の「利用再開」ボタン用)
@@ -362,13 +362,14 @@ async function handleListOfficialStudents(supabase, res) {
 }
 
 async function handleAddOfficialStudent(supabase, body, res) {
-  const { name, email, notes, timezone, country, state } = body;
+  const { name, email, notes, timezone, country, state, whatsapp } = body;
   if (!name || !email) return res.status(400).json({ error: "name and email are required" });
   const { data, error } = await supabase
     .from("official_students")
     .insert({
       name, email: email.trim().toLowerCase(), notes: notes || null,
       timezone: timezone || null, country: country || null, state: state || null,
+      whatsapp: (typeof whatsapp === "string" && whatsapp.trim()) ? whatsapp.trim() : null,
     })
     .select()
     .single();
@@ -377,7 +378,7 @@ async function handleAddOfficialStudent(supabase, body, res) {
 }
 
 async function handleUpdateOfficialStudent(supabase, body, res) {
-  const { id, name, email, notes, timezone, country, state, absence_months_override } = body;
+  const { id, name, email, notes, timezone, country, state, whatsapp, absence_months_override } = body;
   if (!id) return res.status(400).json({ error: "id is required" });
   if (!name) return res.status(400).json({ error: "name is required" });
 
@@ -396,6 +397,7 @@ async function handleUpdateOfficialStudent(supabase, body, res) {
   if (timezone !== undefined) updates.timezone = timezone || null;
   if (country !== undefined) updates.country = country || null;
   if (state !== undefined) updates.state = state || null;
+  if (whatsapp !== undefined) updates.whatsapp = (typeof whatsapp === "string" && whatsapp.trim()) ? whatsapp.trim() : null;
 
   const { data, error } = await supabase
     .from("official_students")
