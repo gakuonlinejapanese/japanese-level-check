@@ -18521,6 +18521,103 @@ async function translateMilestonesAI(milestones, lang) {
 }
 
 // ─── HELP MODAL ────────────────────────────────────────────────────────────────
+// ─── Per-section "How to use" help (the "?" button) ──────────────────────────
+// Self-contained English/Japanese text (not in UI_TRANSLATIONS). Other UI languages fall back to English.
+const SECTION_HELP = {
+  schedule: {
+    en: { title:"Schedule", what:"Your personal weekly study plan. It is made once for you and never changes unless you press \"Update my study guide\" in Edit Profile.", steps:["Open today's tasks and do them in order.","Tap a task's link or \"Go to…\" button to open the right tool.","Tick the box when you finish — your streak and progress go up."], example:"Example: \"Read a manga scene\" → tap the link → come back → tick it." },
+    ja: { title:"スケジュール", what:"あなた専用の1週間の勉強プランです。一度作成されたら、Edit Profileで「Update my study guide」を押さない限り変わりません。", steps:["今日のタスクを上から順にやります。","タスクのリンクや「Go to…」ボタンで、必要なツールを開きます。","終わったらチェックを入れます。連続日数と進捗が増えます。"], example:"例:「マンガの1場面を読む」→ リンクを開く → 戻ってチェック。" }
+  },
+  vocabulary: {
+    en: { title:"Vocabulary", what:"Look up any word and save it to your own folders (Library) to review later.", steps:["Type a word in English or Japanese and search.","Tap Save and choose a folder.","Open the Library to review with flashcards or listen to the pronunciation."], example:"Example: search \"階段\" → Save → review in your \"Daily life\" folder." },
+    ja: { title:"単語", what:"好きな単語を調べて、自分のフォルダ(Library)に保存し、あとで復習できます。", steps:["英語か日本語で単語を入力して検索します。","Saveを押してフォルダを選びます。","Libraryでフラッシュカードや発音で復習します。"], example:"例:「階段」を検索 → Save →「Daily life」フォルダで復習。" }
+  },
+  subtitles: {
+    en: { title:"Subtitles", what:"Save words and lines from videos you watch, so you can study them later.", steps:["Paste a subtitle line or word from the video.","Save it to your list.","Come back to review the lines you saved."], example:"Example: paste a line from an anime episode → save → review it tomorrow." },
+    ja: { title:"字幕帳", what:"見た動画の単語やセリフを保存して、あとで勉強できます。", steps:["動画の字幕のセリフや単語を貼り付けます。","リストに保存します。","保存したセリフを後で見返します。"], example:"例:アニメのセリフを貼り付け → 保存 → 明日復習。" }
+  },
+  milestones: {
+    en: { title:"Milestones", what:"Your goal roadmap and progress check, so you can see how far you have come.", steps:["Read your roadmap steps for your goal.","Use the progress check to see where you stand.","Keep your streak going to move forward."], example:"Example: finish this week's tasks to reach the next milestone." },
+    ja: { title:"マイルストーン", what:"目標までの道のりと進捗チェックです。どこまで進んだかがわかります。", steps:["目標に向けたロードマップを読みます。","進捗チェックで今の位置を確認します。","連続学習を続けて前に進みます。"], example:"例: 今週のタスクを終えると、次のマイルストーンに近づきます。" }
+  },
+  jlpt: {
+    en: { title:"JLPT results", what:"Your JLPT diagnosis result sent by your teacher appears here.", steps:["Wait for your teacher to send your result.","Open this tab to see it.","Tap Download PDF to save it."], example:"Example: after your mock test, your result report shows up here." },
+    ja: { title:"JLPT結果", what:"先生から送られたJLPT診断結果がここに表示されます。", steps:["先生が結果を送るのを待ちます。","このタブを開いて確認します。","Download PDFで保存します。"], example:"例: 模擬試験のあと、結果レポートがここに届きます。" }
+  },
+  feedback: {
+    en: { title:"Feedback", what:"Tell us what to improve in GAKU Master.", steps:["Write your idea or problem.","Tap Send.","Please be kind — abusive messages are not accepted."], example:"Example: \"Please add more N4 grammar questions.\"" },
+    ja: { title:"フィードバック", what:"GAKU Masterの改善してほしい点を教えてください。", steps:["アイデアや困っていることを書きます。","送信を押します。","暴言・誹謗中傷は受け付けられません。"], example:"例:「N4の文法問題を増やしてください。」" }
+  },
+  res_links: {
+    en: { title:"Resources", what:"Hand-picked websites, videos and apps for your level and skills.", steps:["Browse the cards for your level.","Tap the Open button to go to the site.","Use GAKU Reader on those pages to look up words."], example:"Example: open a recommended reading site and read one short page." },
+    ja: { title:"リソース", what:"あなたのレベルとスキルに合わせて選んだサイト・動画・アプリです。", steps:["自分のレベルのカードを見ます。","Openボタンでサイトを開きます。","そのページでGAKU Readerを使って単語を調べます。"], example:"例: おすすめの読み物サイトを開いて、短い1ページを読む。" }
+  },
+  res_content: {
+    en: { title:"Create From Content", what:"Paste any Japanese you are reading or watching, and GAKU turns it into practice questions.", steps:["Paste Japanese text (an article, subtitles, a message).","Tap Analyze to make questions.","Answer them, and turn furigana / romaji / translation on if you need help."], example:"Example: paste an apartment notice → get meaning, kanji and grammar questions from it." },
+    ja: { title:"Create From Content", what:"読んでいる・見ている日本語を貼り付けると、GAKUが練習問題を作ります。", steps:["日本語の文章(記事・字幕・メッセージなど)を貼り付けます。","Analyzeを押して問題を作ります。","答えて、必要ならふりがな・ローマ字・翻訳を使います。"], example:"例: マンションのお知らせを貼り付け → 意味・漢字・文法の問題ができます。" }
+  },
+  res_conversation: {
+    en: { title:"Conversation Practice", what:"Play a real video near your mic. GAKU listens, shows the real lines, and helps you reply.", steps:["Tap the listen button and play a Japanese video with sound.","Each line you hear becomes a card — tap Listen to replay it.","Tap \"How would you respond?\" to practice a natural reply."], example:"Example: play a YouTube conversation → pick the best reply from 4 choices." },
+    ja: { title:"Conversation Practice", what:"動画の音声をマイクで聞き取り、実際のセリフをカードにして、返し方の練習ができます。", steps:["聞き取りボタンを押して、日本語の動画を音を出して流します。","聞こえたセリフがカードになります。Listenで繰り返し聞けます。","「How would you respond?」で自然な返し方を練習します。"], example:"例: YouTubeの会話を流す → 4つの返事から一番自然なものを選ぶ。" }
+  },
+  res_pronunciation: {
+    en: { title:"Pronunciation Practice", what:"Read Japanese aloud (or listen and repeat) and see how close your speaking was.", steps:["Paste Japanese text to get phrases.","Listen, then record yourself saying it.","Check your result and try again."], example:"Example: paste a short song line → say it → see your score." },
+    ja: { title:"Pronunciation Practice", what:"日本語を声に出して読み(または聞いて繰り返し)、発音がどれだけ近いかを確認します。", steps:["日本語の文章を貼り付けてフレーズを作ります。","聞いてから、自分で声に出して録音します。","結果を見て、もう一度挑戦します。"], example:"例: 短い歌詞を貼り付け → 声に出す → 結果を見る。" }
+  },
+  res_writing: {
+    en: { title:"Writing Practice", what:"Practice writing Japanese by copying text or answering questions.", steps:["Choose a mode (Copying down or Questions).","Pick text, or choose words from your Library.","Type your answer and check it."], example:"Example: copy 3 sentences from a manga scene, then check your typing." },
+    ja: { title:"Writing Practice", what:"文章を書き写したり、質問に答えたりして、日本語を書く練習をします。", steps:["モード(Copying down か Questions)を選びます。","文章を選ぶか、Libraryの単語を選びます。","入力して答え合わせをします。"], example:"例: マンガの場面から3文を書き写して、入力を確認する。" }
+  }
+};
+
+function SectionHelp({ id, lang, autoOpen }) {
+  const isJa = lang === "Japanese";
+  const entry = SECTION_HELP[id];
+  const key = "gaku_help_hide_" + id;
+  const [open, setOpen] = useState(false);
+  useEffect(() => {
+    setOpen(false);
+    if (!autoOpen || !entry) return;
+    let hidden = false;
+    try { hidden = localStorage.getItem(scopedKey(key)) === "1"; } catch {}
+    if (!hidden) setOpen(true);
+  }, [id, autoOpen]);
+  if (!entry) return null;
+  const c = isJa ? entry.ja : entry.en;
+  const L = isJa
+    ? { how:"使い方", what:"これは何?", steps:"使い方3ステップ", close:"閉じる", never:"次から表示しない" }
+    : { how:"How to use", what:"What is this?", steps:"3 steps", close:"Close", never:"Don't show again" };
+  const dismiss = (forever) => {
+    if (forever) { try { localStorage.setItem(scopedKey(key), "1"); } catch {} }
+    setOpen(false);
+  };
+  return (
+    <div style={{ marginBottom:12 }}>
+      <button onClick={() => setOpen(o => !o)} aria-expanded={open}
+        style={{ display:"inline-flex", alignItems:"center", gap:6, padding:"5px 12px 5px 6px", borderRadius:99, background:"rgba(168,85,247,0.12)", border:`1px solid ${C.purpleLight}`, color:C.purpleLight, fontSize:12, fontWeight:700, cursor:"pointer" }}>
+        <span style={{ width:20, height:20, borderRadius:"50%", background:C.purpleLight, color:"#1e1033", display:"inline-flex", alignItems:"center", justifyContent:"center", fontSize:12, fontWeight:900 }}>?</span>
+        {L.how}
+      </button>
+      {open && (
+        <div style={{ ...S.card, marginTop:8, borderLeft:`3px solid ${C.purpleLight}` }}>
+          <p style={{ color:"#f1f5f9", fontSize:14, fontWeight:800, margin:"0 0 8px" }}>{c.title}</p>
+          <p style={{ color:C.purpleLight, fontSize:11, fontWeight:700, letterSpacing:1, margin:"0 0 4px" }}>{L.what}</p>
+          <p style={{ color:"#e2e8f0", fontSize:13, lineHeight:1.7, margin:"0 0 10px" }}>{c.what}</p>
+          <p style={{ color:C.purpleLight, fontSize:11, fontWeight:700, letterSpacing:1, margin:"0 0 4px" }}>{L.steps}</p>
+          <ol style={{ color:"#e2e8f0", fontSize:13, lineHeight:1.7, margin:"0 0 10px", paddingLeft:20 }}>
+            {c.steps.map((t, i) => <li key={i}>{t}</li>)}
+          </ol>
+          <p style={{ color:"#94a3b8", fontSize:12, lineHeight:1.6, margin:"0 0 12px" }}>{c.example}</p>
+          <div style={{ display:"flex", gap:8, flexWrap:"wrap" }}>
+            <button onClick={() => dismiss(false)} style={{ ...S.btn, padding:"7px 14px", fontSize:12, background:C.card, color:"#94a3b8", border:`1px solid ${C.border}` }}>{L.close}</button>
+            <button onClick={() => dismiss(true)} style={{ ...S.btn, padding:"7px 14px", fontSize:12, background:"transparent", color:"#94a3b8", border:`1px solid ${C.border}` }}>{L.never}</button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 function HelpModal({ onClose, form }) {
   const T = useUITranslations(form?.preferredLang || "English");
   const [view, setView] = useState("menu"); // menu | lesson | howto
@@ -20796,6 +20893,7 @@ function Dashboard({ form, onEdit, onLevelUp, onSetWeek, onLogout, onDeleteAccou
 
         {tab==="schedule" && (
           <div>
+            <SectionHelp id="schedule" lang={form?.preferredLang} autoOpen={!tutorialActive} />
             {(() => {
               const log = loadLearningLog();
               const today = countEventsOnDay(log, 0);
@@ -20935,9 +21033,9 @@ function Dashboard({ form, onEdit, onLevelUp, onSetWeek, onLogout, onDeleteAccou
           </div>
         )}
 
-        {tab==="vocabulary" && <VocabBuilder form={form} />}
+        {tab==="vocabulary" && <><SectionHelp id="vocabulary" lang={form?.preferredLang} autoOpen={!tutorialActive} /><VocabBuilder form={form} /></>}
 
-        {tab==="subtitles" && <SubtitleVocabBuilder form={form} />}
+        {tab==="subtitles" && <><SectionHelp id="subtitles" lang={form?.preferredLang} autoOpen={!tutorialActive} /><SubtitleVocabBuilder form={form} /></>}
 
         {tab==="resources" && (
           <div>
@@ -20953,6 +21051,8 @@ function Dashboard({ form, onEdit, onLevelUp, onSetWeek, onLogout, onDeleteAccou
                 );
               })}
             </div>
+
+            <SectionHelp id={"res_" + resourceSubTab} lang={form?.preferredLang} autoOpen={!tutorialActive} />
 
             {resourceSubTab==="content" && <ContentAnalyzer form={form} onLevelUp={onLevelUp} />}
 
@@ -21065,6 +21165,7 @@ function Dashboard({ form, onEdit, onLevelUp, onSetWeek, onLogout, onDeleteAccou
 
         {tab==="milestones" && (
           <>
+          <SectionHelp id="milestones" lang={form?.preferredLang} autoOpen={!tutorialActive} />
           <ProgressCheck T={T} userId={userId} />
           <div style={{ ...S.card }}>
             <p style={{ color:C.red, fontSize:12, fontWeight:700, letterSpacing:1, marginBottom:16 }}>{T.yourGoalRoadmap}</p>
@@ -21091,9 +21192,11 @@ function Dashboard({ form, onEdit, onLevelUp, onSetWeek, onLogout, onDeleteAccou
           </>
         )}
 
-        {tab==="jlpt" && <JlptResultsPanel userId={userId} T={T} />}
+        {tab==="jlpt" && <><SectionHelp id="jlpt" lang={form?.preferredLang} autoOpen={!tutorialActive} /><JlptResultsPanel userId={userId} T={T} /></>}
 
         {tab==="feedback" && (
+          <div>
+          <SectionHelp id="feedback" lang={form?.preferredLang} autoOpen={!tutorialActive} />
           <div style={{ ...S.card }}>
             <p style={{ color:C.purpleLight, fontSize:13, fontWeight:700, marginBottom:6 }}>
               {T.feedbackTitle || "💬 Feedback & Opinion"}
@@ -21156,6 +21259,7 @@ function Dashboard({ form, onEdit, onLevelUp, onSetWeek, onLogout, onDeleteAccou
                 </button>
               </div>
             )}
+          </div>
           </div>
         )}
       </div>
