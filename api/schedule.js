@@ -148,9 +148,10 @@ async function handleListAvailability(supabase, body, res) {
   const trialIds = [...new Set(slots.filter((s) => s.trial_lesson_request_id).map((s) => s.trial_lesson_request_id))];
 
   const officialMap = {};
+  const officialWhatsappMap = {};
   if (officialIds.length > 0) {
-    const { data: rows } = await supabase.from("official_students").select("id, name").in("id", officialIds);
-    (rows || []).forEach((r) => { officialMap[r.id] = r.name; });
+    const { data: rows } = await supabase.from("official_students").select("id, name, whatsapp").in("id", officialIds);
+    (rows || []).forEach((r) => { officialMap[r.id] = r.name; officialWhatsappMap[r.id] = r.whatsapp || null; });
   }
   const waitlistMap = {};
   if (waitlistIds.length > 0) {
@@ -170,6 +171,7 @@ async function handleListAvailability(supabase, body, res) {
       (s.waitlist_request_id && waitlistMap[s.waitlist_request_id]) ||
       (s.trial_lesson_request_id && trialMap[s.trial_lesson_request_id]) ||
       null,
+    student_whatsapp: (s.official_student_id && officialWhatsappMap[s.official_student_id]) || null,
   }));
 
   return res.status(200).json({ slots: withNames });
@@ -207,6 +209,10 @@ async function handleAddOfficialBooking(supabase, body, res) {
   if (error) return res.status(500).json({ error: error.message });
 
   // 予約確定と同時に、生徒へ日本時間＋（登録済みなら）現地時間入りの確認メールを送る
+  // 送信の成否は管理画面に返す（以前は失敗してもサーバーのログに残るだけで、Seitoには分からなかった）
+  let emailed = false;
+  let emailMessageId = null;
+  let emailError = null;
   if (officialStudentId) {
     try {
       const { data: student } = await supabase
@@ -215,7 +221,7 @@ async function handleAddOfficialBooking(supabase, body, res) {
         .eq("id", officialStudentId)
         .maybeSingle();
       if (student && student.email) {
-        await sendEmail({
+        const result = await sendEmail({
           to: student.email,
           subject: "Your GAKU lesson time is confirmed!",
           html: `
@@ -224,13 +230,69 @@ async function handleAddOfficialBooking(supabase, body, res) {
             <p>See you then!<br/>GAKU Online Japanese</p>
           `,
         });
+        emailed = !(result && result.skipped);
+        emailMessageId = (result && result.messageId) || null;
+      } else {
+        emailError = "この生徒のメールアドレスが未登録のため、確認メールは送っていません。";
       }
     } catch (e) {
       console.error("Failed to send official booking confirmation email:", e.message);
+      emailError = e.message;
     }
   }
 
-  return res.status(200).json({ ok: true });
+  return res.status(200).json({ ok: true, emailed, emailMessageId, emailError });
+}
+
+// 管理画面の「📧 今すぐ送信」ボタン用。時間枠(開始45分前〜)に関係なく、Zoomリンク入りの案内メールを今すぐ1通送る。
+// 返り値の emailMessageId は Brevo の送信ログ(Transactional → Logs)で検索できるID。
+// 自動リマインドと二重にならないよう、reminder_sent_at が未設定なら同時に立てる。
+async function handleSendNoticeNow(supabase, body, res) {
+  const { id } = body;
+  if (!id) return res.status(400).json({ error: "id is required" });
+
+  const { data: slot, error } = await supabase.from("teacher_availability").select("*").eq("id", id).maybeSingle();
+  if (error) return res.status(500).json({ error: error.message });
+  if (!slot) return res.status(404).json({ error: "予約が見つかりません" });
+  if (slot.status !== "booked") return res.status(400).json({ error: "確定済みの予約ではありません" });
+  if (!slot.zoom_link) return res.status(400).json({ error: "先にZoomリンクを登録してください" });
+
+  let name = slot.label || "there";
+  let email = null;
+  let tz = null;
+  if (slot.official_student_id) {
+    const { data } = await supabase.from("official_students").select("name, email, timezone").eq("id", slot.official_student_id).maybeSingle();
+    if (data) { name = data.name; email = data.email; tz = data.timezone; }
+  } else if (slot.waitlist_request_id) {
+    const { data } = await supabase.from("waitlist_requests").select("student_name, student_email, student_timezone").eq("id", slot.waitlist_request_id).maybeSingle();
+    if (data) { name = data.student_name; email = data.student_email; tz = data.student_timezone; }
+  } else if (slot.trial_lesson_request_id) {
+    const { data } = await supabase.from("trial_lesson_requests").select("full_name, email, timezone_used").eq("id", slot.trial_lesson_request_id).maybeSingle();
+    if (data) { name = data.full_name; email = data.email; tz = data.timezone_used; }
+  }
+  if (!email) return res.status(400).json({ error: "この予約には生徒のメールアドレスが紐づいていません" });
+
+  try {
+    const result = await sendEmail({
+      to: email,
+      replyTo: ADMIN_EMAIL,
+      subject: "Your GAKU lesson link",
+      html: `
+        <p>Hi ${name},</p>
+        <p>Here is the link for your lesson at ${lessonTimeLine(slot.lesson_date, slot.start_time, tz)}.</p>
+        <p>Please join using this link:</p>
+        <p><a href="${slot.zoom_link}">${slot.zoom_link}</a></p>
+        <p>See you soon!<br/>GAKU Online Japanese</p>
+      `,
+    });
+    if (result && result.skipped) return res.status(400).json({ error: "送信先が無効のため送信しませんでした" });
+    if (!slot.reminder_sent_at) {
+      await supabase.from("teacher_availability").update({ reminder_sent_at: new Date().toISOString() }).eq("id", id).is("reminder_sent_at", null);
+    }
+    return res.status(200).json({ ok: true, to: email, emailMessageId: (result && result.messageId) || null });
+  } catch (e) {
+    return res.status(502).json({ error: `送信に失敗しました: ${e.message}`, to: email });
+  }
 }
 
 async function handleConfirmBooking(supabase, body, res) {
@@ -925,6 +987,7 @@ export default async function handler(req, res) {
     if (action === "reschedule-booking") return await handleRescheduleBooking(supabase, body, res);
     if (action === "set-zoom-link") return await handleSetZoomLink(supabase, body, res);
     if (action === "send-lesson-reminders") return await handleSendLessonReminders(supabase, res);
+    if (action === "send-notice-now") return await handleSendNoticeNow(supabase, body, res);
     if (action === "list-cancellation-requests") return await handleListCancellationRequests(supabase, res);
     if (action === "acknowledge-cancellation-request") return await handleAcknowledgeCancellationRequest(supabase, body, res);
     if (action === "create-backup") return await handleCreateBackup(supabase, body, res);

@@ -616,15 +616,45 @@ async function loadZoomDaySlots() {
     return;
   }
 
-  el.innerHTML = zoomDaySlots.map(s => {
+  el.innerHTML = zoomDaySlots.map((s, i) => {
     const already = s.zoom_link ? ` <span style="color:${'var(--green)'};font-size:11px;">✓登録済み</span>` : "";
     const trialTag = s.source === "trial_lesson" ? ` <span style="color:#2563eb;font-size:11px;">🆓 Free Trial</span>` : "";
     const nameTag = s.student_name ? ` <strong>${s.student_name}</strong>` : "";
-    return `<label style="display:flex;align-items:center;gap:8px;font-size:13px;padding:4px 0;">
-      <input type="checkbox" class="zoom-slot-cb" value="${s.id}" />
-      ${s.start_time.slice(0,5)}${nameTag}${s.label ? " — " + s.label : ""}${trialTag}${already}
-    </label>`;
+    // Zoom登録済みの予約だけ、今すぐ送るボタンを出す(メールは自動送信と同じ経路。WhatsAppは番号登録済みの生徒のみ)
+    const sendBtns = s.zoom_link
+      ? `<span style="flex-shrink:0;display:flex;gap:4px;">
+          <button class="opt-btn avail" onclick="sendNoticeNow(${i})">📧 今すぐメール送信</button>
+          ${s.student_whatsapp ? `<button class="opt-btn avail" onclick="openWhatsappNotice(${i})">💬 WhatsAppで送る</button>` : ""}
+        </span>`
+      : "";
+    return `<div style="display:flex;align-items:center;justify-content:space-between;gap:8px;padding:4px 0;">
+      <label style="display:flex;align-items:center;gap:8px;font-size:13px;">
+        <input type="checkbox" class="zoom-slot-cb" value="${s.id}" />
+        <span>${s.start_time.slice(0,5)}${nameTag}${s.label ? " — " + s.label : ""}${trialTag}${already}</span>
+      </label>
+      ${sendBtns}
+    </div>`;
   }).join("");
+}
+
+// Zoomリンク入りの案内メールを、開始時刻に関係なく今すぐ1通送る(結果と、Brevoのログで検索できるIDを表示)
+async function sendNoticeNow(i) {
+  const s = zoomDaySlots[i];
+  if (!s) return;
+  if (!confirm(`${s.student_name || s.label || "この予約"} (${s.start_time.slice(0,5)} JST) に、Zoomリンク入りのメールを今すぐ送ります。よろしいですか？`)) return;
+  const r = await api("send-notice-now", { id: s.id });
+  if (r.error) return alert("メール送信に失敗しました:\n" + r.error + (r.to ? "\n送信先: " + r.to : ""));
+  alert(`メールを送信しました(送信先: ${r.to})。\n\nBrevoは受け付けましたが、相手の受信箱に入ったかどうかはBrevoの「Transactional → Logs」で上記アドレスを検索して確認できます。${r.emailMessageId ? "\nメッセージID: " + r.emailMessageId : ""}`);
+  loadZoomDaySlots();
+}
+
+// WhatsAppの「送信画面」を開く(メッセージは入力済み。Seitoが送信ボタンを押すと送られる)。自動送信ではありません。
+function openWhatsappNotice(i) {
+  const s = zoomDaySlots[i];
+  if (!s || !s.student_whatsapp || !s.zoom_link) return;
+  const digits = String(s.student_whatsapp).replace(/\D/g, "");
+  const msg = `Hi ${s.student_name || ""}, here is the Zoom link for your GAKU lesson at ${s.lesson_date} ${s.start_time.slice(0,5)} (Japan Standard Time):\n${s.zoom_link}`;
+  window.open(`https://wa.me/${digits}?text=${encodeURIComponent(msg)}`, "_blank");
 }
 
 async function applyZoomLink() {
@@ -749,8 +779,12 @@ async function createOfficialBooking() {
   const label = document.getElementById("booking-label").value.trim();
   if (!officialStudentId) return alert("生徒を選択してください（Official Studentsに未登録なら先に登録してください）");
   if (!date || !time) return alert("日付と時間を入力してください");
-  await api("add-official-booking", { date, time: time + ":00", durationMinutes, officialStudentId, label });
-  alert("予約を作成しました。続けてZoomリンクを登録できます。");
+  const r = await api("add-official-booking", { date, time: time + ":00", durationMinutes, officialStudentId, label });
+  if (r.error) return alert("予約の作成に失敗しました:\n" + r.error);
+  const mailNote = r.emailed
+    ? "確認メールを送信しました(Brevoが受け付けました)。"
+    : "⚠️ 確認メールは送信できませんでした: " + (r.emailError || "不明なエラー");
+  alert("予約を作成しました。続けてZoomリンクを登録できます。\n\n" + mailNote);
   document.getElementById("booking-label").value = "";
   loadAvailabilityGrid();
   loadRescheduleList();
