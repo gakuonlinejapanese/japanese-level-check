@@ -13894,6 +13894,7 @@ function WordDetailCard({ card: cardProp, onSave, onBack, form, prefLang, onRevi
     }
     saveVocabData(data);
     logLearningEvent("vocab", true);
+    markFirstStep("word");
     if (onSave) onSave(data);
     setSaveModal(false); setSaveMode(""); setNewFolderName(""); setSelectedFolder("");
     showToast(`✓ "${card.word}" を "${folderName}" に保存しました`);
@@ -15036,6 +15037,7 @@ function VocabBuilder({ form }) {
 
   const findWords = async (retryCount = 0) => {
     if (!search.trim()) return;
+    lsSetScoped("gaku_hint_vocab_search", "1"); // the first-time hint bubble has done its job
     setLoading(true);
     setFindError("");
     setWords([]);
@@ -15159,6 +15161,8 @@ function VocabBuilder({ form }) {
       <div style={{ ...S.card, marginBottom:16 }}>
         <p style={{ color:C.teal, fontSize:12, fontWeight:700, letterSpacing:1, marginBottom:4 }}>{T.vocabBuilderTitle}</p>
         <p style={{ color:"#ffffff", fontSize:12, marginBottom:14 }}>{T.vocabBuilderDesc}</p>
+        <FirstTapHint id="vocab_search" show={!loading && !words.length && !isFirstWordDone()}
+          text={form?.preferredLang === "Japanese" ? "単語を1つ入力して検索 → 出てきた単語を保存してみましょう。" : "Type one word and search — then save it to your Library."} />
         <div style={{ display:"flex", gap:8 }}>
           <input value={search} onChange={e=>setSearch(e.target.value)} onKeyDown={e=>e.key==="Enter"&&findWords()} placeholder={T.vocabSearchPlaceholder} style={{ ...S.input, flex:1 }} />
           <button onClick={findWords} disabled={!search.trim()||loading} style={{ ...S.btn, background:search.trim()?`linear-gradient(135deg,${C.teal},#0891b2)`:"#1e293b", color:search.trim()?"#fff":"#ffffff", whiteSpace:"nowrap", padding:"12px 18px" }}>
@@ -15732,20 +15736,28 @@ function ContentAnalyzer({ form, onLevelUp }) {
   const [sourceFurigana, setSourceFurigana] = useState("");
   const [sourceFuriganaLoading, setSourceFuriganaLoading] = useState(false);
   const [savedSet, setSavedSet] = useState(null); // a previously-generated study set found in this browser, offered via Resume/Reset
+  const [samplePrefilled, setSamplePrefilled] = useState(false); // the paste box was pre-filled with a sample (first-time students only)
   const contentCheck = useComprehensionCheck("content");
 
   const CONTENT_STORAGE_KEY = "gaku_content_study_set";
 
   // On first mount, check for a study set left over from before navigating away — but don't
   // auto-load it; let the student choose Resume or Reset so nothing appears unexpectedly.
+  // A student who has never used Create From Content (and has nothing saved) gets a sample text in the
+  // box, so their first "I did it" is a single tap on Analyze.
   useEffect(() => {
+    let hasSaved = false;
     try {
       const raw = localStorage.getItem(scopedKey(CONTENT_STORAGE_KEY));
       if (raw) {
         const parsed = JSON.parse(raw);
-        if (parsed && Array.isArray(parsed.items) && parsed.items.length) setSavedSet(parsed);
+        if (parsed && Array.isArray(parsed.items) && parsed.items.length) { setSavedSet(parsed); hasSaved = true; }
       }
     } catch {}
+    if (!hasSaved && !isFirstContentDone()) {
+      setSource(pickSampleText(form?.jlpt));
+      setSamplePrefilled(true);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -15851,7 +15863,7 @@ Respond ONLY with a valid JSON array, no markdown, no backticks:
         const cleaned = cleanGeneratedItems(parsed, !!kanaOnlyMode);
         const verified = cleaned.length ? await verifyChoiceItems(cleaned) : [];
         const finalItems = verified.length ? verified : cleaned;
-        if (finalItems.length) setItems(finalItems);
+        if (finalItems.length) { setItems(finalItems); markFirstStep("content"); }
         else setError(T.contentErrNoAct || "Couldn't generate activities from that content. Try pasting more text.");
       } else {
         setError(T.contentErrNoAct || "Couldn't generate activities from that content. Try pasting more text.");
@@ -15893,16 +15905,23 @@ Respond ONLY with a valid JSON array, no markdown, no backticks:
         <p style={{ color:"#ffffff", fontSize:12, marginBottom:12, lineHeight:1.7 }}>
           {(T.contentDesc || "Paste Japanese text you're reading or watching — an article, video subtitles/description, a caption, a message — and GAKU will build {jlpt}-level activities from it, just like GAKU Reader does on the web.").replace("{jlpt}", form.jlpt)}
         </p>
+        {samplePrefilled && (
+          <p style={{ color:"#67e8f9", fontSize:12, fontWeight:700, lineHeight:1.6, margin:"0 0 8px" }}>
+            ✨ {form?.preferredLang === "Japanese" ? "サンプルの文章を入れておきました。下のボタンを押すだけでOK。自分の文章に貼り替えてもOKです。" : "We added a sample text for you. Just tap the button below — or paste your own."}
+          </p>
+        )}
         <textarea
           value={source}
-          onChange={e=>{ setSource(e.target.value.slice(0, 6000)); setSourceFurigana(""); setSourceFuriganaOn(false); }}
+          onChange={e=>{ setSource(e.target.value.slice(0, 6000)); setSourceFurigana(""); setSourceFuriganaOn(false); setSamplePrefilled(false); }}
           placeholder={`日本語のテキストをここに貼り付けてください... (${T.contentPlaceholder || "paste Japanese text, subtitles, or a caption here"})`}
           rows={6}
           maxLength={6000}
           style={{ width:"100%", boxSizing:"border-box", background:"rgba(255,255,255,0.03)", border:`1px solid ${C.border}`, borderRadius:10, color:"#f1f5f9", fontSize:13, padding:"10px 12px", resize:"vertical", fontFamily:"inherit" }}
         />
         <p style={{ color: source.length >= 6000 ? C.red : "#64748b", fontSize:11, textAlign:"right", margin:"4px 0 12px" }}>{source.length}/6000</p>
-        <button onClick={analyze} disabled={loading} style={{ ...S.btn, width:"100%", background:loading?"rgba(6,182,212,0.15)":`linear-gradient(135deg,${C.teal},#0891b2)`, color:loading?"#64748b":"#fff" }}>
+        <FirstTapHint id="content_analyze" show={!loading && !items.length && !isFirstContentDone()}
+          text={form?.preferredLang === "Japanese" ? "ここを押すと、1分以内に最初の練習問題ができます。" : "Tap here — your first activities will be ready in about a minute."} />
+        <button onClick={() => { lsSetScoped("gaku_hint_content_analyze", "1"); analyze(); }} disabled={loading} style={{ ...S.btn, width:"100%", background:loading?"rgba(6,182,212,0.15)":`linear-gradient(135deg,${C.teal},#0891b2)`, color:loading?"#64748b":"#fff" }}>
           {loading ? `⏳ ${T.contentAnalyzing || "Analyzing content..."}` : (items.length ? `🔄 ${T.contentAnalyzeAgain || "Analyze again"}` : `${T.contentAnalyzeButton || "Analyze & Generate Activities"} ✨`)}
         </button>
         <button onClick={toggleSourceFurigana} disabled={!source.trim() || sourceFuriganaLoading}
@@ -18618,6 +18637,134 @@ function SectionHelp({ id, lang, autoOpen }) {
   );
 }
 
+// ---- First steps (activation) --------------------------------------------------------------
+// Added 2026-11-21. Google Play showed 27 installs but only 8 first launches, and most of the people
+// who did open the app never got to a real study action. These pieces get a new student to one
+// concrete "I did it" within a minute or two:
+//   • FirstStepsChecklist — progress card at the top of the Schedule tab (profile / Create From
+//     Content once / save one word). Done-state is derived from on-device flags + the learning log,
+//     so it also works for people who already did these things (and then it never shows).
+//   • FirstTapHint — a one-time speech bubble that points at the single button to press.
+//   • pickSampleText — Create From Content opens with a sample text so "Analyze" is the only tap.
+// Copy is English + Japanese (Japanese only when the UI language is Japanese), same as SectionHelp.
+const FIRST_STEPS_COPY = {
+  en: { title:"Your first steps", sub:"Takes about 3 minutes", profile:"Set up your profile", content:"Try Create From Content (1 min)", word:"Save your first word", go:"Go →", allDone:"🎉 Nice start! You finished your first steps.", ok:"OK", hide:"Hide", progress:"{n} / {m} done" },
+  ja: { title:"最初の一歩", sub:"3分でできます", profile:"プロフィールを設定する", content:"Create From Contentを1回試す(1分)", word:"単語を1つ保存する", go:"進む →", allDone:"🎉 最初の一歩が完了しました!", ok:"OK", hide:"閉じる", progress:"{n} / {m} 完了" }
+};
+const FIRST_CONTENT_FLAG = "gaku_first_content_done";
+const FIRST_WORD_FLAG = "gaku_first_word_done";
+const FIRST_STEPS_HIDE = "gaku_first_steps_hidden";
+const FIRST_STEPS_START = "gaku_first_steps_start";
+const FIRST_STEPS_DAYS = 14; // stop showing the checklist after two weeks, finished or not
+function lsGetScoped(k) { try { return localStorage.getItem(scopedKey(k)); } catch { return null; } }
+function lsSetScoped(k, v) { try { localStorage.setItem(scopedKey(k), v); } catch {} }
+function isFirstContentDone() { return lsGetScoped(FIRST_CONTENT_FLAG) === "1" || loadLearningLog().some(x => x.a === "content"); }
+function isFirstWordDone() { return lsGetScoped(FIRST_WORD_FLAG) === "1" || loadLearningLog().some(x => x.a === "vocab"); }
+// step: "content" | "word". Sets the on-device flag once and tells the Dashboard (which logs the funnel step).
+function markFirstStep(step) {
+  const flag = step === "content" ? FIRST_CONTENT_FLAG : FIRST_WORD_FLAG;
+  if (lsGetScoped(flag) === "1") return;
+  lsSetScoped(flag, "1");
+  try { window.dispatchEvent(new CustomEvent("gaku_first_step", { detail: { step } })); } catch {}
+}
+
+// Short sample passages (original text written for GAKU) so a brand-new student can press Analyze right away.
+const SAMPLE_TEXTS = {
+  beginner: "私は毎朝コーヒーを飲みます。今日は駅で友達に会いました。いっしょに昼ごはんを食べて、公園を散歩しました。楽しい一日でした。",
+  middle: "最近、駅の近くに新しいカフェができました。木の家具が多くて、とても落ち着く雰囲気です。平日の午後は空いているので、本を読んだり、日本語の勉強をしたりするのにぴったりです。先週、初めて行ってみたところ、店員さんがとても親切で、おすすめのケーキを教えてくれました。",
+  advanced: "働き方改革が進む中、リモートワークを導入する企業が増えています。通勤時間がなくなることで、家族と過ごす時間や自己学習に使える時間が増えたという声がある一方、同僚とのコミュニケーション不足を懸念する人も少なくありません。大切なのは、自分に合った働き方を見つけることではないでしょうか。"
+};
+function pickSampleText(jlpt) {
+  const v = String(jlpt || "").toLowerCase();
+  if (/beginner|elementary|n5|n4/.test(v)) return SAMPLE_TEXTS.beginner;
+  if (/advanced|mastery|n1/.test(v)) return SAMPLE_TEXTS.advanced;
+  return SAMPLE_TEXTS.middle;
+}
+
+function FirstStepsChecklist({ lang, userId, profileDone, showContent, showVocab, onGoProfile, onGoContent, onGoVocab }) {
+  const L = FIRST_STEPS_COPY[lang === "Japanese" ? "ja" : "en"];
+  const [, tick] = useState(0);
+  const [hidden, setHidden] = useState(() => {
+    if (lsGetScoped(FIRST_STEPS_HIDE) === "1") return true;
+    // Someone who has already done everything (an existing student) never sees the checklist.
+    if (profileDone && (!showContent || isFirstContentDone()) && (!showVocab || isFirstWordDone())) { lsSetScoped(FIRST_STEPS_HIDE, "1"); return true; }
+    return false;
+  });
+  useEffect(() => {
+    if (!lsGetScoped(FIRST_STEPS_START)) lsSetScoped(FIRST_STEPS_START, String(Date.now()));
+    const h = () => tick(n => n + 1);
+    window.addEventListener("gaku_first_step", h);
+    window.addEventListener("gaku_learning_updated", h);
+    window.addEventListener("gaku_vocab_updated", h);
+    return () => {
+      window.removeEventListener("gaku_first_step", h);
+      window.removeEventListener("gaku_learning_updated", h);
+      window.removeEventListener("gaku_vocab_updated", h);
+    };
+  }, []);
+  const rows = [
+    { id:"profile", label:L.profile, done:!!profileDone, go:onGoProfile },
+    ...(showContent ? [{ id:"content", label:L.content, done:isFirstContentDone(), go:onGoContent }] : []),
+    ...(showVocab ? [{ id:"word", label:L.word, done:isFirstWordDone(), go:onGoVocab }] : []),
+  ];
+  const doneCount = rows.filter(r => r.done).length;
+  const allDone = doneCount === rows.length;
+  useEffect(() => { if (!hidden) logFunnel(userId, allDone ? "first_steps_done" : "first_steps_shown"); }, [hidden, allDone, userId]);
+  const start = parseInt(lsGetScoped(FIRST_STEPS_START) || "0", 10);
+  if (hidden || (start && Date.now() - start > FIRST_STEPS_DAYS * 86400000)) return null;
+  const close = () => { lsSetScoped(FIRST_STEPS_HIDE, "1"); setHidden(true); };
+  if (allDone) {
+    return (
+      <div style={{ ...S.card, marginBottom:12, background:"rgba(34,197,94,0.1)", border:"1px solid rgba(34,197,94,0.4)", display:"flex", alignItems:"center", justifyContent:"space-between", gap:10 }}>
+        <p style={{ color:"#86efac", fontSize:13, fontWeight:800, margin:0 }}>{L.allDone}</p>
+        <button onClick={close} style={{ ...S.btn, padding:"6px 14px", fontSize:12, background:C.card, color:"#94a3b8", border:`1px solid ${C.border}` }}>{L.ok}</button>
+      </div>
+    );
+  }
+  const nextId = (rows.find(r => !r.done) || {}).id;
+  return (
+    <div style={{ ...S.card, marginBottom:12, background:"linear-gradient(135deg,rgba(168,85,247,0.14),rgba(6,182,212,0.08))", border:`1px solid ${C.purpleLight}` }}>
+      <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", gap:8, marginBottom:8 }}>
+        <div>
+          <p style={{ color:C.purpleLight, fontSize:11, fontWeight:800, letterSpacing:1, margin:0 }}>🚀 {L.title.toUpperCase()}</p>
+          <p style={{ color:"#94a3b8", fontSize:11, margin:"2px 0 0" }}>{L.sub} · {L.progress.replace("{n}", doneCount).replace("{m}", rows.length)}</p>
+        </div>
+        <button onClick={close} aria-label={L.hide} style={{ background:"none", border:"none", color:"#64748b", fontSize:12, cursor:"pointer", padding:"2px 4px" }}>{L.hide} ✕</button>
+      </div>
+      <div style={{ height:6, borderRadius:3, background:"rgba(255,255,255,0.08)", overflow:"hidden", marginBottom:10 }}>
+        <div style={{ width:`${Math.round(doneCount / rows.length * 100)}%`, height:"100%", background:`linear-gradient(90deg,${C.purpleLight},${C.teal})`, transition:"width .4s" }} />
+      </div>
+      {rows.map(r => (
+        <button key={r.id} onClick={r.done ? undefined : r.go} disabled={r.done || !r.go}
+          style={{ width:"100%", display:"flex", alignItems:"center", gap:10, padding:"9px 10px", marginBottom:6, borderRadius:10, textAlign:"left", cursor:r.done ? "default" : "pointer",
+            background:r.done ? "rgba(34,197,94,0.08)" : (r.id === nextId ? "rgba(168,85,247,0.2)" : "rgba(255,255,255,0.04)"),
+            border:`1px solid ${r.done ? "rgba(34,197,94,0.35)" : (r.id === nextId ? C.purpleLight : C.border)}` }}>
+          <span style={{ width:22, height:22, borderRadius:"50%", flexShrink:0, display:"inline-flex", alignItems:"center", justifyContent:"center", fontSize:12, fontWeight:900,
+            background:r.done ? "#22c55e" : "transparent", color:r.done ? "#052e16" : "#64748b", border:r.done ? "none" : "2px solid #475569" }}>{r.done ? "✓" : ""}</span>
+          <span style={{ flex:1, color:r.done ? "#86efac" : "#f1f5f9", fontSize:13, fontWeight:700, textDecoration:r.done ? "line-through" : "none" }}>{r.label}</span>
+          {!r.done && r.go && <span style={{ color:C.purpleLight, fontSize:12, fontWeight:800, whiteSpace:"nowrap" }}>{L.go}</span>}
+        </button>
+      ))}
+    </div>
+  );
+}
+
+// One-time speech bubble that points (arrow down) at the next button. Tap it to dismiss; it never returns.
+function FirstTapHint({ id, text, show = true }) {
+  const key = "gaku_hint_" + id;
+  const [seen, setSeen] = useState(() => lsGetScoped(key) === "1");
+  if (seen || !show) return null;
+  const dismiss = () => { lsSetScoped(key, "1"); setSeen(true); };
+  return (
+    <div onClick={dismiss} role="note" style={{ position:"relative", display:"flex", alignItems:"center", gap:8, margin:"0 0 12px", padding:"9px 12px", borderRadius:12, background:C.purpleLight, color:"#1e1033", fontSize:12, fontWeight:800, lineHeight:1.5, cursor:"pointer", boxShadow:"0 4px 14px rgba(168,85,247,0.35)" }}>
+      <span style={{ fontSize:16 }}>👇</span>
+      <span style={{ flex:1 }}>{text}</span>
+      <span style={{ fontSize:12, opacity:0.6 }}>✕</span>
+      <span style={{ position:"absolute", left:24, bottom:-6, width:12, height:12, background:C.purpleLight, transform:"rotate(45deg)" }} />
+    </div>
+  );
+}
+
 function HelpModal({ onClose, form }) {
   const T = useUITranslations(form?.preferredLang || "English");
   const [view, setView] = useState("menu"); // menu | lesson | howto
@@ -20272,6 +20419,13 @@ function Dashboard({ form, onEdit, onLevelUp, onSetWeek, onLogout, onDeleteAccou
   // already completed or skipped; always replayable via the header button.
   const [tutorialActive, setTutorialActive] = useState(false);
   const [tutorialStep, setTutorialStep] = useState(0);
+  // First-steps funnel: Create From Content / word saving announce themselves with a window event
+  // (see markFirstStep); log them once per account so the first-session drop-off can be read in SQL.
+  useEffect(() => {
+    const h = (e) => { const s = e && e.detail && e.detail.step; if (s === "content" || s === "word") logFunnel(userId, "first_" + s); };
+    window.addEventListener("gaku_first_step", h);
+    return () => window.removeEventListener("gaku_first_step", h);
+  }, [userId]);
   const [weekTheme, setWeekTheme] = useState(() => (isStudyGuideRegenerationRequested() ? "" : (loadSavedStudyGuide()?.weekTheme || "")));
   const [aiScheduleLoading, setAiScheduleLoading] = useState(false);
   const guideGenInFlight = useRef(false);
@@ -20893,6 +21047,18 @@ function Dashboard({ form, onEdit, onLevelUp, onSetWeek, onLogout, onDeleteAccou
 
         {tab==="schedule" && (
           <div>
+            {!tutorialActive && (
+              <FirstStepsChecklist
+                lang={form?.preferredLang}
+                userId={userId}
+                profileDone={!onCompleteProfile}
+                showContent={featureShown("content")}
+                showVocab={tabShown("vocabulary")}
+                onGoProfile={onCompleteProfile}
+                onGoContent={() => { setTab("resources"); setResourceSubTab("content"); logFunnel(userId, "tab_resources"); }}
+                onGoVocab={() => { setTab("vocabulary"); logFunnel(userId, "tab_vocabulary"); }}
+              />
+            )}
             <SectionHelp id="schedule" lang={form?.preferredLang} autoOpen={!tutorialActive} />
             {(() => {
               const log = loadLearningLog();

@@ -54,6 +54,8 @@ const FUNNEL_STEPS = new Set([
   "tab_schedule", "tab_vocabulary", "tab_subtitles", "tab_resources", "tab_milestones",
   "lesson_bridge_shown", "lesson_bridge_clicked",
   "progress_check_started", "progress_check_done", "progress_retake_done", "progress_nudge_clicked",
+  // First-steps checklist (2026-11-21): did the new student actually do something real?
+  "first_steps_shown", "first_steps_done", "first_content", "first_word",
 ]);
 
 export default async function handler(req, res) {

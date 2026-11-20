@@ -243,6 +243,65 @@ async function handleTrialEngagementCheck(supabase) {
   return { checked: (candidates || []).length, notified };
 }
 
+// ── First-step nudge (2026-11-21) ─────────────────────────────────────────────────────────
+// Day-1 email: tells a new, unpaid trial student ONE thing to try today (Create From Content with
+// the built-in sample text, or saving one word). Skipped once they've done both (the app logs
+// first_content / first_word into trial_funnel_events). OFF unless FIRST_STEP_EMAIL_ENABLED=1, so
+// the wording can be approved before any real student receives it. Also used (as one extra line)
+// by the day 2-3 reminder below when enabled.
+const FIRST_STEP_EMAIL_ENABLED = () => process.env.FIRST_STEP_EMAIL_ENABLED === "1";
+const FIRST_STEP_BATCH_LIMIT = 100;
+const FIRST_STEP_CONTENT_HTML = `<p><b>Try Create From Content (about 1 minute):</b> open the app, go to the Activities tab (called "Resources" in older versions) and tap "From Content". We put a sample text in the box for you — just tap "Analyze &amp; Generate Activities" and you'll get your first practice questions.</p>`;
+const FIRST_STEP_WORD_HTML = `<p><b>Save your first word (about 1 minute):</b> open the Vocabulary tab, type any word you're curious about, tap Find, and save it to your Library.</p>`;
+
+async function nextFirstStepHtml(supabase, userId) {
+  const { data } = await supabase.from("trial_funnel_events").select("step").eq("user_id", userId).in("step", ["first_content", "first_word"]);
+  const steps = new Set((data || []).map((r) => r.step));
+  if (!steps.has("first_content")) return { html: FIRST_STEP_CONTENT_HTML, done: false };
+  if (!steps.has("first_word")) return { html: FIRST_STEP_WORD_HTML, done: false };
+  return { html: "", done: true };
+}
+
+async function handleFirstStepNudge(supabase) {
+  if (!FIRST_STEP_EMAIL_ENABLED()) return { skipped: "disabled" };
+  const now = Date.now();
+  const { data: candidates, error } = await supabase
+    .from("profiles")
+    .select("id, email")
+    .eq("is_paid", false)
+    .eq("is_gaku_student", false)
+    .is("first_step_nudge_sent_at", null)
+    .gte("trial_started_at", new Date(now - 2 * 86400000).toISOString())
+    .lte("trial_started_at", new Date(now - 1 * 86400000).toISOString())
+    .limit(FIRST_STEP_BATCH_LIMIT);
+  if (error) return { checked: 0, notified: 0, error: error.message };
+  let notified = 0;
+  for (const profile of candidates || []) {
+    try {
+      const sentAt = new Date().toISOString();
+      if (profile.email) {
+        const step = await nextFirstStepHtml(supabase, profile.id);
+        if (!step.done) {
+          const html = `
+            <p>Hi,</p>
+            <p>Thanks for installing GAKU Master! Here is one small thing to try today:</p>
+            ${step.html}
+            <p><a href="${APP_URL}" style="color:#a855f7">Open GAKU Master →</a></p>
+            <p>One step is plenty for today.</p>
+            <p>— Seito</p>
+          `;
+          await sendEmail({ to: profile.email, subject: "Your 1-minute first step in GAKU Master", html });
+          notified += 1;
+        }
+      }
+      await supabase.from("profiles").update({ first_step_nudge_sent_at: sentAt }).eq("id", profile.id);
+    } catch (innerErr) {
+      console.error(`[first-step-nudge] failed for ${profile.email}:`, innerErr.message);
+    }
+  }
+  return { checked: (candidates || []).length, notified };
+}
+
 const LOW_ENGAGEMENT_WINDOW_MIN_DAYS = 2;
 const LOW_ENGAGEMENT_WINDOW_MAX_DAYS = 3;
 const LOW_ENGAGEMENT_ACTIVE_DAYS_THRESHOLD = 2;
@@ -273,10 +332,12 @@ async function handleLowEngagementReminder(supabase) {
         .eq("user_id", profile.id);
       if (countErr || (count || 0) >= LOW_ENGAGEMENT_ACTIVE_DAYS_THRESHOLD) continue;
 
+      const stepBlock = FIRST_STEP_EMAIL_ENABLED() ? (await nextFirstStepHtml(supabase, profile.id)).html : "";
       const html = `
         <p>Hi,</p>
         <p>You started your Japanese study plan on GAKU Master a couple of days ago — nice start! Life gets busy, so this is just a friendly nudge to pick up right where you left off.</p>
         <p>Your plan, vocabulary, and progress are all still waiting for you.</p>
+        ${stepBlock ? `<p>If you only have a minute, try this:</p>${stepBlock}` : ""}
         <p><a href="${APP_URL}" style="color:#a855f7">Continue studying →</a></p>
         <p>Even 5 minutes today keeps the momentum going!</p>
         <p>— Seito</p>
@@ -553,13 +614,14 @@ export default async function handler(req, res) {
       return res.status(401).json({ error: "Unauthorized" });
     }
     try {
-      const [deleteResult, engagementResult, lowEngagementResult, trialEndingResult, unpaidReminderResult, scheduledEmailResult] = await Promise.all([
+      const [deleteResult, engagementResult, lowEngagementResult, trialEndingResult, unpaidReminderResult, scheduledEmailResult, firstStepResult] = await Promise.all([
         runCronDelete(supabase).catch((e) => ({ ok: false, error: e.message })),
         handleTrialEngagementCheck(supabase).catch((e) => ({ error: e.message })),
         handleLowEngagementReminder(supabase).catch((e) => ({ error: e.message })),
         handleTrialEndingWarning(supabase).catch((e) => ({ error: e.message })),
         handleUnpaidCheckoutReminder(supabase).catch((e) => ({ error: e.message })),
         handleScheduledEmails(supabase).catch((e) => ({ error: e.message })),
+        handleFirstStepNudge(supabase).catch((e) => ({ error: e.message })),
       ]);
       return res.status(200).json({
         ...deleteResult,
@@ -568,6 +630,7 @@ export default async function handler(req, res) {
         trialEndingWarning: trialEndingResult,
         unpaidCheckoutReminder: unpaidReminderResult,
         scheduledEmails: scheduledEmailResult,
+        firstStepNudge: firstStepResult,
       });
     } catch (e) {
       return res.status(500).json({ error: e.message });
