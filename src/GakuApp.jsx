@@ -17778,7 +17778,7 @@ Respond ONLY with valid JSON, no markdown, no backticks:
   return (
     <div>
       <SectionHelp id={helpId} lang={lang} autoOpen={helpAuto}
-        onAction={helpId === "res_writing_copy_write" ? (() => { try { window.dispatchEvent(new CustomEvent("gaku_open_mode_picker")); } catch {} }) : undefined} />
+        onAction={(helpId === "res_writing_copy_write" || helpId === "res_writing") ? (() => { try { window.dispatchEvent(new CustomEvent("gaku_open_mode_picker")); } catch {} }) : undefined} />
       <div style={{ ...S.card, marginBottom:16 }}>
         <p style={{ color:C.teal, fontSize:12, fontWeight:700, letterSpacing:1, marginBottom:10 }}>✍️ {T.writeTitle || "Writing Practice"}</p>
         <div style={{ display:"flex", gap:8, marginBottom:12 }}>
@@ -18552,8 +18552,8 @@ async function translateMilestonesAI(milestones, lang) {
 // Self-contained English/Japanese text (not in UI_TRANSLATIONS). Other UI languages fall back to English.
 const SECTION_HELP = {
   schedule: {
-    en: { title:"Schedule", what:"Your personal weekly study plan. It is made once for you and never changes unless you press \"Update my study guide\" in Edit Profile.", steps:["Open today's tasks and do them in order.","Tap a task's link or \"Go to…\" button to open the right tool.","Tick the box when you finish — your streak and progress go up."], example:"Example: \"Read a manga scene\" → tap the link → come back → tick it." },
-    ja: { title:"スケジュール", what:"あなた専用の1週間の勉強プランです。一度作成されたら、Edit Profileで「Update my study guide」を押さない限り変わりません。", steps:["今日のタスクを上から順にやります。","タスクのリンクや「Go to…」ボタンで、必要なツールを開きます。","終わったらチェックを入れます。連続日数と進捗が増えます。"], example:"例:「マンガの1場面を読む」→ リンクを開く → 戻ってチェック。" }
+    en: { title:"Schedule", what:"Your personal weekly study plan. It is made once for you and never changes unless you press \"Update my study guide\" in Edit Profile.", steps:["Open today's tasks and do them in order.","Tap a task's link or \"Go to…\" button to open the right tool.","Tick the box when you finish — your streak and progress go up."], example:"Example: \"Read a manga scene\" → tap the link → come back → tick it.", intensive:"At the top of this screen, Intensive Mode shows a daily goal (8 actions a day) and warns you if you are behind. It also looks at your last 14 days of study and suggests the areas where you make the most mistakes, so you know what to practice today." },
+    ja: { title:"スケジュール", what:"あなた専用の1週間の勉強プランです。一度作成されたら、Edit Profileで「Update my study guide」を押さない限り変わりません。", steps:["今日のタスクを上から順にやります。","タスクのリンクや「Go to…」ボタンで、必要なツールを開きます。","終わったらチェックを入れます。連続日数と進捗が増えます。"], example:"例:「マンガの1場面を読む」→ リンクを開く → 戻ってチェック。", intensive:"Intensive Modeでは、この画面の上に「今日のノルマ(1日8アクション)」が表示され、未達だと警告が出ます。さらに直近14日間の学習から、ミスが多い分野を見つけて「今日はここを中心に」と提案します。" }
   },
   vocabulary: {
     en: { title:"Vocabulary", what:"Look up any word and save it to your own folders (Library) to review later.", steps:["Type a word in English or Japanese and search.","Tap Save and choose a folder.","Open the Library to review with flashcards or listen to the pronunciation."], example:"Example: search \"階段\" → Save → review in your \"Daily life\" folder." },
@@ -18608,16 +18608,16 @@ const SECTION_HELP = {
     ja: { title:"Create From Content", what:"読んでいる・見ている日本語を貼り付けると、GAKUが練習問題を作ります。", steps:["日本語の文章(記事・字幕・メッセージなど)を貼り付けます。","Analyzeを押して問題を作ります。","答えて、必要ならふりがな・ローマ字・翻訳を使います。"], example:"例: マンションのお知らせを貼り付け → 意味・漢字・文法の問題ができます。" }
   },
   res_conversation: {
-    en: { title:"Conversation Practice", what:"Play a real video near your mic. GAKU listens, shows the real lines, and helps you reply.", steps:["Tap the listen button and play a Japanese video with sound.","Each line you hear becomes a card. If GAKU could not catch a line, it will ask you to listen again — please replay the video or audio you were listening to.","Tap \"How would you respond?\" to practice a natural reply."], example:"Example: play a YouTube conversation → pick the best reply from 4 choices." },
-    ja: { title:"Conversation Practice", what:"動画の音声をマイクで聞き取り、実際のセリフをカードにして、返し方の練習ができます。", steps:["聞き取りボタンを押して、日本語の動画を音を出して流します。","聞こえたセリフがカードになります。聞き取れない場合は、GAKUが「もう一度聴いてください」と指示します。そのときは、聴いていた動画や音声を再生し直してください。","「How would you respond?」で自然な返し方を練習します。"], example:"例: YouTubeの会話を流す → 4つの返事から一番自然なものを選ぶ。" }
+    en: { title:"Conversation Practice", what:"Play a real video near your mic. GAKU listens, shows the real lines, and helps you reply.", steps:["Tap the listen button and play a Japanese video with sound.","Each line you hear becomes a card. If GAKU could not catch a line, it will ask you to listen again — please replay the video or audio you were listening to.","Tap \"How would you respond?\" to practice a natural reply."], example:"Example: play a YouTube conversation → pick the best reply from 4 choices.", intensive:"When you speak your reply, GAKU checks your Japanese. Intensive Mode records whether each spoken answer was correct and what kind of mistake you made (particles, verb forms, word choice, word order or spelling), and repeated wrong words. It then suggests what to focus on today." },
+    ja: { title:"Conversation Practice", what:"動画の音声をマイクで聞き取り、実際のセリフをカードにして、返し方の練習ができます。", steps:["聞き取りボタンを押して、日本語の動画を音を出して流します。","聞こえたセリフがカードになります。聞き取れない場合は、GAKUが「もう一度聴いてください」と指示します。そのときは、聴いていた動画や音声を再生し直してください。","「How would you respond?」で自然な返し方を練習します。"], example:"例: YouTubeの会話を流す → 4つの返事から一番自然なものを選ぶ。", intensive:"声に出して答えると、GAKUが日本語をチェックします。Intensive Modeでは、答えが合っていたかと、ミスの種類(助詞・活用・単語・語順・表記)、繰り返し間違える単語を記録します。そして「今日はここを中心に」と提案します。" }
   },
   res_pronunciation: {
-    en: { title:"Pronunciation Practice", what:"Read Japanese aloud (or listen and repeat) and see how close your speaking was.", steps:["Paste Japanese text to get phrases.","Listen, then record yourself saying it.","Check your result and try again."], example:"Example: paste a short song line → say it → see your score." },
-    ja: { title:"Pronunciation Practice", what:"日本語を声に出して読み(または聞いて繰り返し)、発音がどれだけ近いかを確認します。", steps:["日本語の文章を貼り付けてフレーズを作ります。","聞いてから、自分で声に出して録音します。","結果を見て、もう一度挑戦します。"], example:"例: 短い歌詞を貼り付け → 声に出す → 結果を見る。" }
+    en: { title:"Pronunciation Practice", what:"Read Japanese aloud (or listen and repeat) and see how close your speaking was.", steps:["Paste Japanese text to get phrases.","Listen, then record yourself saying it.","Check your result and try again."], example:"Example: paste a short song line → say it → see your score.", intensive:"Intensive Mode records the result of every pronunciation try (and your score), so it can find the phrases you keep getting wrong and suggest them for extra practice." },
+    ja: { title:"Pronunciation Practice", what:"日本語を声に出して読み(または聞いて繰り返し)、発音がどれだけ近いかを確認します。", steps:["日本語の文章を貼り付けてフレーズを作ります。","聞いてから、自分で声に出して録音します。","結果を見て、もう一度挑戦します。"], example:"例: 短い歌詞を貼り付け → 声に出す → 結果を見る。", intensive:"Intensive Modeでは、発音の結果(スコア)を毎回記録します。何度も間違えるフレーズを見つけて、追加の練習として提案します。" }
   },
   res_writing: {
-    en: { title:"Writing Practice", what:"Practice writing Japanese by copying text or answering questions.", steps:["Choose a mode (Copying down or Questions).","Pick text, or choose words from your Library.","Type your answer and check it."], example:"Example: copy 3 sentences from a manga scene, then check your typing." },
-    ja: { title:"Writing Practice", what:"文章を書き写したり、質問に答えたりして、日本語を書く練習をします。", steps:["モード(Copying down か Questions)を選びます。","文章を選ぶか、Libraryの単語を選びます。","入力して答え合わせをします。"], example:"例: マンガの場面から3文を書き写して、入力を確認する。" }
+    en: { title:"Writing Practice", what:"Practice writing Japanese by copying text or answering questions.", steps:["Choose a mode (Copying down or Questions).","Pick text, or choose words from your Library.","Type your answer and check it."], example:"Example: copy 3 sentences from a manga scene, then check your typing.", intensive:"Intensive Mode measures your writing accuracy more carefully. In Copying down, it records every character and stroke. In Questions mode, GAKU checks your answer and records the kind of mistake (particles, verb forms, word choice, word order or spelling) and the wrong words. It then points out which mistakes you make most and what to practice today." },
+    ja: { title:"Writing Practice", what:"文章を書き写したり、質問に答えたりして、日本語を書く練習をします。", steps:["モード(Copying down か Questions)を選びます。","文章を選ぶか、Libraryの単語を選びます。","入力して答え合わせをします。"], example:"例: マンガの場面から3文を書き写して、入力を確認する。", intensive:"Intensive Modeでは、書く力をより正確に測ります。書き写しでは1文字・1画ごとに記録します。Questionsでは、答えをGAKUがチェックして、ミスの種類(助詞・活用・単語・語順・表記)と間違えた単語を記録します。そして、よくあるミスと「今日はここを中心に」を提案します。" }
   }
 };
 
@@ -18664,8 +18664,14 @@ function SectionHelp({ id, lang, autoOpen, onAction }) {
             </ul>
           )}
           <p style={{ color:"#94a3b8", fontSize:12, lineHeight:1.6, margin:"0 0 12px" }}>{c.example}</p>
-          {c.action && onAction && (
-            <button onClick={() => { dismiss(false); onAction(); }} style={{ ...S.btn, width:"100%", marginBottom:10, padding:"10px 14px", fontSize:13, background:"linear-gradient(135deg,rgba(168,85,247,0.35),rgba(124,58,237,0.3))", border:`1px solid ${C.purpleLight}`, color:"#f5f3ff", fontWeight:800 }}>🔥 {c.action}</button>
+          {c.intensive && (
+            <div style={{ margin:"0 0 12px", padding:"10px 12px", borderRadius:10, background:"rgba(168,85,247,0.10)", border:`1px solid ${C.purpleLight}` }}>
+              <p style={{ color:C.purpleLight, fontSize:11, fontWeight:800, letterSpacing:1, margin:"0 0 4px" }}>🔥 {isJa ? "Intensive Mode" : "Intensive Mode"}</p>
+              <p style={{ color:"#e2e8f0", fontSize:13, lineHeight:1.7, margin:0 }}>{c.intensive}</p>
+            </div>
+          )}
+          {(c.action || c.intensive) && onAction && (
+            <button onClick={() => { dismiss(false); onAction(); }} style={{ ...S.btn, width:"100%", marginBottom:10, padding:"10px 14px", fontSize:13, background:"linear-gradient(135deg,rgba(168,85,247,0.35),rgba(124,58,237,0.3))", border:`1px solid ${C.purpleLight}`, color:"#f5f3ff", fontWeight:800 }}>🔥 {c.action || (isJa ? "Intensive Modeを試す" : "Try Intensive Mode")}</button>
           )}
           <div style={{ display:"flex", gap:8, flexWrap:"wrap" }}>
             <button onClick={() => dismiss(false)} style={{ ...S.btn, padding:"7px 14px", fontSize:12, background:C.card, color:"#94a3b8", border:`1px solid ${C.border}` }}>{L.close}</button>
@@ -21105,7 +21111,8 @@ function Dashboard({ form, onEdit, onLevelUp, onSetWeek, onLogout, onDeleteAccou
                 onGoVocab={() => { setTab("vocabulary"); logFunnel(userId, "tab_vocabulary"); }}
               />
             )}
-            <SectionHelp id="schedule" lang={form?.preferredLang} autoOpen={!tutorialActive} />
+            <SectionHelp id="schedule" lang={form?.preferredLang} autoOpen={!tutorialActive}
+              onAction={() => { try { window.dispatchEvent(new CustomEvent("gaku_open_mode_picker")); } catch {} }} />
             {(() => {
               const log = loadLearningLog();
               const today = countEventsOnDay(log, 0);
@@ -21264,7 +21271,8 @@ function Dashboard({ form, onEdit, onLevelUp, onSetWeek, onLogout, onDeleteAccou
               })}
             </div>
 
-            {resourceSubTab !== "writing" && <SectionHelp id={"res_" + resourceSubTab} lang={form?.preferredLang} autoOpen={!tutorialActive} />}
+            {resourceSubTab !== "writing" && <SectionHelp id={"res_" + resourceSubTab} lang={form?.preferredLang} autoOpen={!tutorialActive}
+              onAction={(resourceSubTab === "conversation" || resourceSubTab === "pronunciation") ? (() => { try { window.dispatchEvent(new CustomEvent("gaku_open_mode_picker")); } catch {} }) : undefined} />}
 
             {resourceSubTab==="content" && <ContentAnalyzer form={form} onLevelUp={onLevelUp} />}
 
