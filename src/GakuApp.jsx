@@ -15009,7 +15009,7 @@ function pickRandomIdioms(n = 8) {
   return picked;
 }
 
-function VocabBuilder({ form }) {
+function VocabBuilder({ form, helpAuto = true }) {
   const T = useUITranslations(form?.preferredLang || "English");
   // vocabView: "main" | "library" | "folderDetail" | "wordSearch" | "wordDetail" | "flashcard"
   const [vocabView, setVocabView] = useState("main");
@@ -15125,9 +15125,11 @@ function VocabBuilder({ form }) {
   const totalSaved = vocabData.cards.length;
 
   // ── RENDER SUBVIEWS ──
-  if (vocabView === "library") return <LibraryView onBack={()=>setVocabView("main")} onSelectFolder={name=>{setSelectedFolder(name);setVocabView("folderDetail");}} onCreateCard={()=>setVocabView("wordSearch")} onViewCard={w=>{setSelectedWord(w);setWordFrom("library");setVocabView("wordDetail");}} onQuickReview={()=>{setFlashFocus(null);setFlashBack("library");setVocabView("flashcard");}} T={T} />;
-  if (vocabView === "folderDetail") return <FolderDetailView folderName={selectedFolder} onRenamed={setSelectedFolder} onBack={()=>setVocabView("library")} onViewCard={w=>{setSelectedWord(w);setWordFrom("folder");setVocabView("wordDetail");}} onReviewCard={c=>{ setFlashFocus(c); setFlashBack("folderDetail"); setVocabView("flashcard"); }} />;
-  if (vocabView === "wordSearch") return <WordSearchScreen form={form} onBack={()=>setVocabView("main")} onSelectWord={w=>{setSelectedWord(w);setWordFrom("search");setVocabView("wordDetail");}} />;
+  const helpFor = (hid, withAction) => <SectionHelp id={hid} lang={form?.preferredLang} autoOpen={helpAuto}
+    onAction={withAction ? (() => { try { window.dispatchEvent(new CustomEvent("gaku_open_mode_picker")); } catch {} }) : undefined} />;
+  if (vocabView === "library") return <>{helpFor("vocab_library")}<LibraryView onBack={()=>setVocabView("main")} onSelectFolder={name=>{setSelectedFolder(name);setVocabView("folderDetail");}} onCreateCard={()=>setVocabView("wordSearch")} onViewCard={w=>{setSelectedWord(w);setWordFrom("library");setVocabView("wordDetail");}} onQuickReview={()=>{setFlashFocus(null);setFlashBack("library");setVocabView("flashcard");}} T={T} /></>;
+  if (vocabView === "folderDetail") return <>{helpFor("vocab_folder")}<FolderDetailView folderName={selectedFolder} onRenamed={setSelectedFolder} onBack={()=>setVocabView("library")} onViewCard={w=>{setSelectedWord(w);setWordFrom("folder");setVocabView("wordDetail");}} onReviewCard={c=>{ setFlashFocus(c); setFlashBack("folderDetail"); setVocabView("flashcard"); }} /></>;
+  if (vocabView === "wordSearch") return <>{helpFor("vocab_wordcards")}<WordSearchScreen form={form} onBack={()=>setVocabView("main")} onSelectWord={w=>{setSelectedWord(w);setWordFrom("search");setVocabView("wordDetail");}} /></>;
   if (vocabView === "wordDetail") {
     const fromSaved = wordFrom === "library" || wordFrom === "folder";
     return <WordDetailCard card={selectedWord} form={form}
@@ -15136,11 +15138,12 @@ function VocabBuilder({ form }) {
       onReviewFlashcard={fromSaved ? (c=>{ setFlashFocus(c); setFlashBack("wordDetail"); setVocabView("flashcard"); }) : undefined}
       onSave={refreshVocab} prefLang={form.preferredLang} />;
   }
-  if (vocabView === "flashcard") return <FlashcardView form={form} focusWord={flashFocus} onBack={()=>setVocabView(flashBack)} />;
+  if (vocabView === "flashcard") return <>{helpFor("vocab_flashcard", true)}<FlashcardView form={form} focusWord={flashFocus} onBack={()=>setVocabView(flashBack)} /></>;
 
   // ── MAIN VIEW ──
   return (
     <div>
+      {helpFor("vocabulary")}
       {/* ── TOP ACTION BAR ── */}
       <div style={{ display:"flex", gap:8, marginBottom:16, flexWrap:"wrap" }}>
         <button onClick={()=>setVocabView("library")} style={{ flex:1, ...S.btn, background:C.card, border:`1.5px solid ${C.border}`, color:"#f1f5f9", textAlign:"left", padding:"12px 14px" }}>
@@ -18567,9 +18570,25 @@ const SECTION_HELP = {
     en: { title:"Feedback", what:"Tell us what to improve in GAKU Master.", steps:["Write your idea or problem.","Tap Send.","Please be kind — abusive messages are not accepted."], example:"Example: \"Please add more N4 grammar questions.\"" },
     ja: { title:"フィードバック", what:"GAKU Masterの改善してほしい点を教えてください。", steps:["アイデアや困っていることを書きます。","送信を押します。","暴言・誹謗中傷は受け付けられません。"], example:"例:「N4の文法問題を増やしてください。」" }
   },
+  vocab_wordcards: {
+    en: { title:"Word Cards", what:"Search any word and open its word card — meaning, reading and example sentences.", steps:["Type an English or Japanese word (or a topic) and tap Search.","Tap a result to open its card.","Save it to a folder so you can review it later."], example:"Example: search \"階段\" → open the card → Save to your \"Daily life\" folder." },
+    ja: { title:"単語カード", what:"好きな単語を検索して、単語カード(意味・読み方・例文)を開けます。", steps:["英語か日本語の単語(またはテーマ)を入力して検索します。","結果を押すと、その単語カードが開きます。","フォルダに保存すると、あとで復習できます。"], example:"例:「階段」を検索 → カードを開く →「Daily life」フォルダに保存。" }
+  },
+  vocab_library: {
+    en: { title:"Library", what:"All the words you saved, sorted into folders.", steps:["Tap a folder to see the word cards inside.","Tap 🔊 ▶ on a folder to hear all its words one after another.","Tap \"Quick review with Flashcards\" to practice your words."], example:"Tip: make your own folders with \"New folder\" (for example, one folder for each lesson)." },
+    ja: { title:"Library(単語帳)", what:"保存した単語が、フォルダごとに入っています。", steps:["フォルダを押すと、中の単語カードが開きます。","フォルダの🔊 ▶を押すと、その中の単語を順番に聞けます。","「Quick review with Flashcards」で単語を復習します。"], example:"ヒント:「New folder」で自分のフォルダを作れます(例: レッスンごとに1つ)。" }
+  },
+  vocab_folder: {
+    en: { title:"Word cards in this folder", what:"Each box below is one word card — a word you saved.", steps:["Tap a word card to open it: meaning, reading and example sentences.","Tap 🔊 to hear the word. Tap 🔊 ▶ All (top right) to hear every word in this folder.","Tap Go Flashcard to practice just that word. Tap the trash can to delete the card."], example:"Tip: \"📋 Copy to folder\" copies words into another folder (for example, your next lesson's folder)." },
+    ja: { title:"このフォルダの単語カード", what:"下の1つの箱が、保存した単語カード1枚です。", steps:["単語カードを押すと、意味・読み方・例文が開きます。","🔊で単語の音声、右上の「🔊 ▶ All」でこのフォルダの全単語を順番に聞けます。","「Go Flashcard」でその単語だけを復習します。ゴミ箱でカードを削除します。"], example:"ヒント:「📋 別のフォルダへコピー」で、単語を別のフォルダ(例: 次のレッスン用)にコピーできます。" }
+  },
+  vocab_flashcard: {
+    en: { title:"Flashcards", what:"Practice your saved words like paper flashcards. Tap the card to flip it and check the answer.", steps:["Look at the word and try to remember the meaning. Tap Hint if you need the reading, then tap the card to see the answer.","If you knew it, tap ✅ Understand. The word moves to the \"Understood\" folder, so you can review only the words you don't know yet. It is still saved in your Library — nothing is lost.","If you didn't know it, don't press anything. Just tap → for the next card; it stays in your deck."], example:"Intensive Mode records how fast you flip each card and how many times you press Understand, and uses it to show which words you really know and which you don't.", action:"Try Intensive Mode" },
+    ja: { title:"フラッシュカード", what:"保存した単語を、紙の単語カードのように復習します。カードを押すとめくれて、答えが見られます。", steps:["単語を見て、意味を思い出します。読み方が必要なら「Hint」を押し、カードを押して答えを見ます。","わかったら「✅ Understand」を押します。その単語は「Understood」フォルダに移り、まだわからない単語だけを復習できます。Libraryにも保存されたままなので、消えません。","わからなかったら、何も押さずに → で次のカードへ進みます。その単語はデッキに残ります。"], example:"Intensive Modeを使うと、カードをめくる速さやUnderstandを押した回数を記録して、本当にわかっている単語とそうでない単語を見分けられます。", action:"Intensive Modeを試す" }
+  },
   res_links: {
-    en: { title:"Resources", what:"Hand-picked websites, videos and apps for your level and skills.", steps:["Browse the cards for your level.","Tap the Open button to go to the site.","Use GAKU Reader on those pages to look up words."], example:"Example: open a recommended reading site and read one short page." },
-    ja: { title:"リソース", what:"あなたのレベルとスキルに合わせて選んだサイト・動画・アプリです。", steps:["自分のレベルのカードを見ます。","Openボタンでサイトを開きます。","そのページでGAKU Readerを使って単語を調べます。"], example:"例: おすすめの読み物サイトを開いて、短い1ページを読む。" }
+    en: { title:"Resources", what:"Hand-picked websites, videos and apps for your level and skills.", steps:["Look at the cards below (each card is a video or website). They are picked to match your level.","Tap the Open button on a card you like.","Use GAKU Reader on that page to look up words you don't know."], example:"Example: open a recommended reading site and read one short page." },
+    ja: { title:"リソース", what:"あなたのレベルとスキルに合わせて選んだサイト・動画・アプリです。", steps:["下に並んでいるカード(動画やサイトの紹介)を見ます。あなたのレベルに合うものが選ばれています。","気になるカードの「Open」ボタンを押して開きます。","そのページでGAKU Readerを使って、わからない単語を調べます。"], example:"例: おすすめの読み物サイトを開いて、短い1ページを読む。" }
   },
   res_content: {
     en: { title:"Create From Content", what:"Paste any Japanese you are reading or watching, and GAKU turns it into practice questions.", steps:["Paste Japanese text (an article, subtitles, a message).","Tap Analyze to make questions.","Answer them, and turn furigana / romaji / translation on if you need help."], example:"Example: paste an apartment notice → get meaning, kanji and grammar questions from it." },
@@ -18589,7 +18608,7 @@ const SECTION_HELP = {
   }
 };
 
-function SectionHelp({ id, lang, autoOpen }) {
+function SectionHelp({ id, lang, autoOpen, onAction }) {
   const isJa = lang === "Japanese";
   const entry = SECTION_HELP[id];
   const key = "gaku_help_hide_" + id;
@@ -18627,6 +18646,9 @@ function SectionHelp({ id, lang, autoOpen }) {
             {c.steps.map((t, i) => <li key={i}>{t}</li>)}
           </ol>
           <p style={{ color:"#94a3b8", fontSize:12, lineHeight:1.6, margin:"0 0 12px" }}>{c.example}</p>
+          {c.action && onAction && (
+            <button onClick={() => { dismiss(false); onAction(); }} style={{ ...S.btn, width:"100%", marginBottom:10, padding:"10px 14px", fontSize:13, background:"linear-gradient(135deg,rgba(168,85,247,0.35),rgba(124,58,237,0.3))", border:`1px solid ${C.purpleLight}`, color:"#f5f3ff", fontWeight:800 }}>🔥 {c.action}</button>
+          )}
           <div style={{ display:"flex", gap:8, flexWrap:"wrap" }}>
             <button onClick={() => dismiss(false)} style={{ ...S.btn, padding:"7px 14px", fontSize:12, background:C.card, color:"#94a3b8", border:`1px solid ${C.border}` }}>{L.close}</button>
             <button onClick={() => dismiss(true)} style={{ ...S.btn, padding:"7px 14px", fontSize:12, background:"transparent", color:"#94a3b8", border:`1px solid ${C.border}` }}>{L.never}</button>
@@ -20397,6 +20419,12 @@ function Dashboard({ form, onEdit, onLevelUp, onSetWeek, onLogout, onDeleteAccou
   const effMode = effectiveStudyMode(studyMode);
   const isIntensive = effMode === "intensive" || effMode === "intensive_trial";
   useEffect(() => { if (effMode === "trial_ended") setShowModePicker(true); }, [effMode]);
+  // The Flashcards help has a "Try Intensive Mode" button that asks the Dashboard to open the mode picker.
+  useEffect(() => {
+    const h = () => setShowModePicker(true);
+    window.addEventListener("gaku_open_mode_picker", h);
+    return () => window.removeEventListener("gaku_open_mode_picker", h);
+  }, []);
   useEffect(() => {
     const h = () => setLearnTick(n => n + 1);
     window.addEventListener("gaku_learning_updated", h);
@@ -21199,7 +21227,7 @@ function Dashboard({ form, onEdit, onLevelUp, onSetWeek, onLogout, onDeleteAccou
           </div>
         )}
 
-        {tab==="vocabulary" && <><SectionHelp id="vocabulary" lang={form?.preferredLang} autoOpen={!tutorialActive} /><VocabBuilder form={form} /></>}
+        {tab==="vocabulary" && <VocabBuilder form={form} helpAuto={!tutorialActive} />}
 
         {tab==="subtitles" && <><SectionHelp id="subtitles" lang={form?.preferredLang} autoOpen={!tutorialActive} /><SubtitleVocabBuilder form={form} /></>}
 
