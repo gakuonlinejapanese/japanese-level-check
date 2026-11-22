@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback, useMemo, useRef } from "react";
 import StorePlans from './StorePlans';
+import HELP_I18N from "./helpTranslations";
 import { supabase, getDeviceId, getDeviceLabel, getSignupSource } from "./supabaseClient";
 import HanziWriter from "hanzi-writer";
 import { reportClientCrash } from "./crashReport";
@@ -15165,7 +15166,7 @@ function VocabBuilder({ form, helpAuto = true }) {
         <p style={{ color:C.teal, fontSize:12, fontWeight:700, letterSpacing:1, marginBottom:4 }}>{T.vocabBuilderTitle}</p>
         <p style={{ color:"#ffffff", fontSize:12, marginBottom:14 }}>{T.vocabBuilderDesc}</p>
         <FirstTapHint id="vocab_search" show={!loading && !words.length && !isFirstWordDone()}
-          text={form?.preferredLang === "Japanese" ? "単語を1つ入力して検索 → 出てきた単語を保存してみましょう。" : "Type one word and search — then save it to your Library."} />
+          text={form?.preferredLang === "Japanese" ? "単語を1つ入力して検索 → 出てきた単語を保存してみましょう。" : (HELP_I18N[form?.preferredLang]?.hints?.vocab_search || "Type one word and search — then save it to your Library.")} />
         <div style={{ display:"flex", gap:8 }}>
           <input value={search} onChange={e=>setSearch(e.target.value)} onKeyDown={e=>e.key==="Enter"&&findWords()} placeholder={T.vocabSearchPlaceholder} style={{ ...S.input, flex:1 }} />
           <button onClick={findWords} disabled={!search.trim()||loading} style={{ ...S.btn, background:search.trim()?`linear-gradient(135deg,${C.teal},#0891b2)`:"#1e293b", color:search.trim()?"#fff":"#ffffff", whiteSpace:"nowrap", padding:"12px 18px" }}>
@@ -15910,7 +15911,7 @@ Respond ONLY with a valid JSON array, no markdown, no backticks:
         </p>
         {samplePrefilled && (
           <p style={{ color:"#67e8f9", fontSize:12, fontWeight:700, lineHeight:1.6, margin:"0 0 8px" }}>
-            ✨ {form?.preferredLang === "Japanese" ? "サンプルの文章を入れておきました。下のボタンを押すだけでOK。自分の文章に貼り替えてもOKです。" : "We added a sample text for you. Just tap the button below — or paste your own."}
+            ✨ {form?.preferredLang === "Japanese" ? "サンプルの文章を入れておきました。下のボタンを押すだけでOK。自分の文章に貼り替えてもOKです。" : (HELP_I18N[form?.preferredLang]?.hints?.content_sample || "We added a sample text for you. Just tap the button below — or paste your own.")}
           </p>
         )}
         <textarea
@@ -15923,7 +15924,7 @@ Respond ONLY with a valid JSON array, no markdown, no backticks:
         />
         <p style={{ color: source.length >= 6000 ? C.red : "#64748b", fontSize:11, textAlign:"right", margin:"4px 0 12px" }}>{source.length}/6000</p>
         <FirstTapHint id="content_analyze" show={!loading && !items.length && !isFirstContentDone()}
-          text={form?.preferredLang === "Japanese" ? "ここを押すと、1分以内に最初の練習問題ができます。" : "Tap here — your first activities will be ready in about a minute."} />
+          text={form?.preferredLang === "Japanese" ? "ここを押すと、1分以内に最初の練習問題ができます。" : (HELP_I18N[form?.preferredLang]?.hints?.content_analyze || "Tap here — your first activities will be ready in about a minute.")} />
         <button onClick={() => { lsSetScoped("gaku_hint_content_analyze", "1"); analyze(); }} disabled={loading} style={{ ...S.btn, width:"100%", background:loading?"rgba(6,182,212,0.15)":`linear-gradient(135deg,${C.teal},#0891b2)`, color:loading?"#64748b":"#fff" }}>
           {loading ? `⏳ ${T.contentAnalyzing || "Analyzing content..."}` : (items.length ? `🔄 ${T.contentAnalyzeAgain || "Analyze again"}` : `${T.contentAnalyzeButton || "Analyze & Generate Activities"} ✨`)}
         </button>
@@ -18634,10 +18635,11 @@ function SectionHelp({ id, lang, autoOpen, onAction }) {
     if (!hidden) setOpen(true);
   }, [id, autoOpen]);
   if (!entry) return null;
-  const c = isJa ? entry.ja : entry.en;
+  const tr = (!isJa && HELP_I18N[lang]) || null;   // other UI languages (falls back to English)
+  const c = isJa ? entry.ja : ((tr && tr.sections && tr.sections[id]) || entry.en);
   const L = isJa
-    ? { how:"使い方", what:"これは何?", steps:"使い方3ステップ", close:"閉じる", never:"次から表示しない" }
-    : { how:"How to use", what:"What is this?", steps:"3 steps", close:"Close", never:"Don't show again" };
+    ? { how:"使い方", what:"これは何?", steps:"使い方3ステップ", close:"閉じる", never:"次から表示しない", tryIntensive:"Intensive Modeを試す" }
+    : { how:"How to use", what:"What is this?", steps:"3 steps", close:"Close", never:"Don't show again", tryIntensive:"Try Intensive Mode", ...((tr && tr.labels) || {}) };
   const dismiss = (forever) => {
     if (forever) { try { localStorage.setItem(scopedKey(key), "1"); } catch {} }
     setOpen(false);
@@ -18666,12 +18668,12 @@ function SectionHelp({ id, lang, autoOpen, onAction }) {
           <p style={{ color:"#94a3b8", fontSize:12, lineHeight:1.6, margin:"0 0 12px" }}>{c.example}</p>
           {c.intensive && (
             <div style={{ margin:"0 0 12px", padding:"10px 12px", borderRadius:10, background:"rgba(168,85,247,0.10)", border:`1px solid ${C.purpleLight}` }}>
-              <p style={{ color:C.purpleLight, fontSize:11, fontWeight:800, letterSpacing:1, margin:"0 0 4px" }}>🔥 {isJa ? "Intensive Mode" : "Intensive Mode"}</p>
+              <p style={{ color:C.purpleLight, fontSize:11, fontWeight:800, letterSpacing:1, margin:"0 0 4px" }}>🔥 Intensive Mode</p>
               <p style={{ color:"#e2e8f0", fontSize:13, lineHeight:1.7, margin:0 }}>{c.intensive}</p>
             </div>
           )}
           {(c.action || c.intensive) && onAction && (
-            <button onClick={() => { dismiss(false); onAction(); }} style={{ ...S.btn, width:"100%", marginBottom:10, padding:"10px 14px", fontSize:13, background:"linear-gradient(135deg,rgba(168,85,247,0.35),rgba(124,58,237,0.3))", border:`1px solid ${C.purpleLight}`, color:"#f5f3ff", fontWeight:800 }}>🔥 {c.action || (isJa ? "Intensive Modeを試す" : "Try Intensive Mode")}</button>
+            <button onClick={() => { dismiss(false); onAction(); }} style={{ ...S.btn, width:"100%", marginBottom:10, padding:"10px 14px", fontSize:13, background:"linear-gradient(135deg,rgba(168,85,247,0.35),rgba(124,58,237,0.3))", border:`1px solid ${C.purpleLight}`, color:"#f5f3ff", fontWeight:800 }}>🔥 {c.action || L.tryIntensive}</button>
           )}
           <div style={{ display:"flex", gap:8, flexWrap:"wrap" }}>
             <button onClick={() => dismiss(false)} style={{ ...S.btn, padding:"7px 14px", fontSize:12, background:C.card, color:"#94a3b8", border:`1px solid ${C.border}` }}>{L.close}</button>
@@ -18728,7 +18730,7 @@ function pickSampleText(jlpt) {
 }
 
 function FirstStepsChecklist({ lang, userId, profileDone, showContent, showVocab, onGoProfile, onGoContent, onGoVocab }) {
-  const L = FIRST_STEPS_COPY[lang === "Japanese" ? "ja" : "en"];
+  const L = lang === "Japanese" ? FIRST_STEPS_COPY.ja : ((HELP_I18N[lang] && HELP_I18N[lang].firstSteps) || FIRST_STEPS_COPY.en);
   const [, tick] = useState(0);
   const [hidden, setHidden] = useState(() => {
     if (lsGetScoped(FIRST_STEPS_HIDE) === "1") return true;
