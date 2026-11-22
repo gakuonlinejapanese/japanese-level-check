@@ -17360,7 +17360,7 @@ function fetchKanjiReadings(ch) {
   KANJI_READING_CACHE[ch] = p;
   return p;
 }
-function CopyingDown({ T, injected }) {
+function CopyingDown({ T, injected, onStage }) {
   const [raw, setRaw] = useState(() => { try { return localStorage.getItem(scopedKey(COPY_STORAGE_KEY)) || ""; } catch { return ""; } });
   const [error, setError] = useState("");
   const [session, setSession] = useState(null); // { tokens:[{ch,w}], chars:[], truncated }
@@ -17371,6 +17371,7 @@ function CopyingDown({ T, injected }) {
   const [mistakeStroke, setMistakeStroke] = useState("");
   const [guide, setGuide] = useState(true);
   const [doneMistakes, setDoneMistakes] = useState(null);
+  useEffect(() => { if (onStage) onStage(!session ? "setup" : phase === "summary" ? "summary" : "write"); }, [session, phase]); // eslint-disable-line react-hooks/exhaustive-deps
   const boxRef = useRef(null);
   const writerRef = useRef(null);
   const [kanjiInfo, setKanjiInfo] = useState(null); // { ch, on, kun, meanings } for the current kanji
@@ -17670,7 +17671,7 @@ function WritingVocabPicker({ T, onUse, mode }) {
     </div>
   );
 }
-function WritingPractice({ form }) {
+function WritingPractice({ form, helpAuto = true }) {
   const lang = form?.preferredLang || "English";
   const T = useUITranslations(lang);
   const [mode, setMode] = useState("question");
@@ -17680,6 +17681,7 @@ function WritingPractice({ form }) {
   const [error, setError] = useState("");
   const [result, setResult] = useState(null); // { fits, feedback, model }
   const [injected, setInjected] = useState(null); // { text, n } words picked from Vocabulary for Copying down
+  const [copyStage, setCopyStage] = useState("setup"); // reported by CopyingDown: setup | write | summary
   const useVocabWords = (words) => {
     if (mode === "copy") { setInjected({ text: words.join("、"), n: Date.now() }); return; }
     const list = words.join("、");
@@ -17772,8 +17774,11 @@ Respond ONLY with valid JSON, no markdown, no backticks:
     </button>
   );
 
+  const helpId = mode === "copy" ? (copyStage === "setup" ? "res_writing_copy" : "res_writing_copy_write") : "res_writing";
   return (
     <div>
+      <SectionHelp id={helpId} lang={lang} autoOpen={helpAuto}
+        onAction={helpId === "res_writing_copy_write" ? (() => { try { window.dispatchEvent(new CustomEvent("gaku_open_mode_picker")); } catch {} }) : undefined} />
       <div style={{ ...S.card, marginBottom:16 }}>
         <p style={{ color:C.teal, fontSize:12, fontWeight:700, letterSpacing:1, marginBottom:10 }}>✍️ {T.writeTitle || "Writing Practice"}</p>
         <div style={{ display:"flex", gap:8, marginBottom:12 }}>
@@ -17781,7 +17786,7 @@ Respond ONLY with valid JSON, no markdown, no backticks:
           {modeBtn("question", "❓ " + (T.writeModeQuestion || "Questions"), false)}
         </div>
         <WritingVocabPicker T={T} mode={mode} onUse={useVocabWords} />
-        {mode === "copy" && <CopyingDown T={T} injected={injected} />}
+        {mode === "copy" && <CopyingDown T={T} injected={injected} onStage={setCopyStage} />}
         {mode === "question" && (<>
         <p style={{ color:"#39ff14", fontSize:12, lineHeight:1.7, marginBottom:12 }}>
           {T.writeQDesc || "Paste a writing question you found online (an essay prompt, a JLPT-style question, an email task…). Write your answer in Japanese and GAKU checks it against the question."}
@@ -18586,6 +18591,14 @@ const SECTION_HELP = {
     en: { title:"Flashcards", what:"Practice your saved words like paper flashcards. Tap the card to flip it and check the answer.", steps:["Look at the word and try to remember the meaning. Tap Hint if you need the reading, then tap the card to see the answer.","If you knew it, tap ✅ Understand. The word moves to the \"Understood\" folder, so you can review only the words you don't know yet. It is still saved in your Library — nothing is lost.","If you didn't know it, don't press anything. Just tap → for the next card; it stays in your deck."], example:"Intensive Mode records how fast you flip each card and how many times you press Understand, and uses it to show which words you really know and which you don't.", action:"Try Intensive Mode" },
     ja: { title:"フラッシュカード", what:"保存した単語を、紙の単語カードのように復習します。カードを押すとめくれて、答えが見られます。", steps:["単語を見て、意味を思い出します。読み方が必要なら「Hint」を押し、カードを押して答えを見ます。","わかったら「✅ Understand」を押します。その単語は「Understood」フォルダに移り、まだわからない単語だけを復習できます。Libraryにも保存されたままなので、消えません。","わからなかったら、何も押さずに → で次のカードへ進みます。その単語はデッキに残ります。"], example:"Intensive Modeを使うと、カードをめくる速さやUnderstandを押した回数を記録して、本当にわかっている単語とそうでない単語を見分けられます。", action:"Intensive Modeを試す" }
   },
+  res_writing_copy: {
+    en: { title:"Writing Practice — Copying down", what:"Copy Japanese one character at a time, drawing each stroke with your finger or mouse. GAKU checks your stroke order and shape.", steps:["Paste a Japanese sentence in the box, or tap \"Choose words from your Library\" to use words you saved.","Tap \"Start writing\".","Write each character, one stroke at a time."], example:"Tip: up to 30 characters are practiced at a time." },
+    ja: { title:"Writing Practice — 書き写し", what:"日本語を1文字ずつ、指やマウスで1画ずつ書き写します。GAKUが筆順と形をチェックします。", steps:["日本語の文を貼り付けるか、「単語帳から単語を選ぶ」で保存した単語を選びます。","「書き始める」を押します。","1文字ずつ、1画ずつ書きます。"], example:"ヒント: 1回に練習できるのは最大30文字です。" }
+  },
+  res_writing_copy_write: {
+    en: { title:"Writing one character at a time", what:"You write, one character at a time, the text you pasted or the words you picked from your Library.", steps:["Write the character one stroke at a time, in the right order. GAKU tells you when a stroke is wrong.","Not sure how to write it? Tap ▶ Watch stroke order. Want another go? Tap ↺ Try again.","When you finish a character, tap the blue Next ▶ button. On the last character it says Finish."], notes:["The guide is the faint gray outline of the character. With 👁 Show guide you can trace over it; with 🙈 Hide guide you write from memory.","New text takes you back to the previous screen, where you choose new words, characters or a sentence."], example:"Intensive Mode measures your writing more accurately and analyzes the characters, words and sentences you find difficult.", action:"Try Intensive Mode" },
+    ja: { title:"1文字ずつ書く", what:"先ほど貼り付けた文、または単語帳から選んだ単語を、1文字ずつ書きます。", steps:["1画ずつ、正しい順番で書きます。間違えるとGAKUが教えてくれます。","書き方がわからなければ「▶ 筆順を見る」を押します。もう一度書きたいときは「↺ もう一度」を押します。","1文字書き終わったら、青い「次へ ▶」を押します。最後の文字では「終了」と表示されます。"], notes:["「ガイド」とは、文字のうすい灰色の輪郭のことです。「👁 ガイドを表示」ではなぞって書け、「🙈 ガイドを隠す」では何も見ずに書きます。","「新しい文」を押すと前の画面に戻り、新しい単語・文字・文章を選び直せます。"], example:"Intensive Modeを使うと、書く力をより正確に測り、苦手な文章・単語・文字を分析してくれます。", action:"Intensive Modeを使う" }
+  },
   res_links: {
     en: { title:"Resources", what:"Hand-picked websites, videos and apps for your level and skills.", steps:["Look at the cards below (each card is a video or website). They are picked to match your level.","Tap the Open button on a card you like.","Use GAKU Reader on that page to look up words you don't know."], example:"Example: open a recommended reading site and read one short page." },
     ja: { title:"リソース", what:"あなたのレベルとスキルに合わせて選んだサイト・動画・アプリです。", steps:["下に並んでいるカード(動画やサイトの紹介)を見ます。あなたのレベルに合うものが選ばれています。","気になるカードの「Open」ボタンを押して開きます。","そのページでGAKU Readerを使って、わからない単語を調べます。"], example:"例: おすすめの読み物サイトを開いて、短い1ページを読む。" }
@@ -18595,8 +18608,8 @@ const SECTION_HELP = {
     ja: { title:"Create From Content", what:"読んでいる・見ている日本語を貼り付けると、GAKUが練習問題を作ります。", steps:["日本語の文章(記事・字幕・メッセージなど)を貼り付けます。","Analyzeを押して問題を作ります。","答えて、必要ならふりがな・ローマ字・翻訳を使います。"], example:"例: マンションのお知らせを貼り付け → 意味・漢字・文法の問題ができます。" }
   },
   res_conversation: {
-    en: { title:"Conversation Practice", what:"Play a real video near your mic. GAKU listens, shows the real lines, and helps you reply.", steps:["Tap the listen button and play a Japanese video with sound.","Each line you hear becomes a card — tap Listen to replay it.","Tap \"How would you respond?\" to practice a natural reply."], example:"Example: play a YouTube conversation → pick the best reply from 4 choices." },
-    ja: { title:"Conversation Practice", what:"動画の音声をマイクで聞き取り、実際のセリフをカードにして、返し方の練習ができます。", steps:["聞き取りボタンを押して、日本語の動画を音を出して流します。","聞こえたセリフがカードになります。Listenで繰り返し聞けます。","「How would you respond?」で自然な返し方を練習します。"], example:"例: YouTubeの会話を流す → 4つの返事から一番自然なものを選ぶ。" }
+    en: { title:"Conversation Practice", what:"Play a real video near your mic. GAKU listens, shows the real lines, and helps you reply.", steps:["Tap the listen button and play a Japanese video with sound.","Each line you hear becomes a card. If GAKU could not catch a line, it will ask you to listen again — please replay the video or audio you were listening to.","Tap \"How would you respond?\" to practice a natural reply."], example:"Example: play a YouTube conversation → pick the best reply from 4 choices." },
+    ja: { title:"Conversation Practice", what:"動画の音声をマイクで聞き取り、実際のセリフをカードにして、返し方の練習ができます。", steps:["聞き取りボタンを押して、日本語の動画を音を出して流します。","聞こえたセリフがカードになります。聞き取れない場合は、GAKUが「もう一度聴いてください」と指示します。そのときは、聴いていた動画や音声を再生し直してください。","「How would you respond?」で自然な返し方を練習します。"], example:"例: YouTubeの会話を流す → 4つの返事から一番自然なものを選ぶ。" }
   },
   res_pronunciation: {
     en: { title:"Pronunciation Practice", what:"Read Japanese aloud (or listen and repeat) and see how close your speaking was.", steps:["Paste Japanese text to get phrases.","Listen, then record yourself saying it.","Check your result and try again."], example:"Example: paste a short song line → say it → see your score." },
@@ -18645,6 +18658,11 @@ function SectionHelp({ id, lang, autoOpen, onAction }) {
           <ol style={{ color:"#e2e8f0", fontSize:13, lineHeight:1.7, margin:"0 0 10px", paddingLeft:20 }}>
             {c.steps.map((t, i) => <li key={i}>{t}</li>)}
           </ol>
+          {c.notes && c.notes.length > 0 && (
+            <ul style={{ color:"#e2e8f0", fontSize:13, lineHeight:1.7, margin:"0 0 10px", paddingLeft:20 }}>
+              {c.notes.map((t, i) => <li key={i}>{t}</li>)}
+            </ul>
+          )}
           <p style={{ color:"#94a3b8", fontSize:12, lineHeight:1.6, margin:"0 0 12px" }}>{c.example}</p>
           {c.action && onAction && (
             <button onClick={() => { dismiss(false); onAction(); }} style={{ ...S.btn, width:"100%", marginBottom:10, padding:"10px 14px", fontSize:13, background:"linear-gradient(135deg,rgba(168,85,247,0.35),rgba(124,58,237,0.3))", border:`1px solid ${C.purpleLight}`, color:"#f5f3ff", fontWeight:800 }}>🔥 {c.action}</button>
@@ -21246,7 +21264,7 @@ function Dashboard({ form, onEdit, onLevelUp, onSetWeek, onLogout, onDeleteAccou
               })}
             </div>
 
-            <SectionHelp id={"res_" + resourceSubTab} lang={form?.preferredLang} autoOpen={!tutorialActive} />
+            {resourceSubTab !== "writing" && <SectionHelp id={"res_" + resourceSubTab} lang={form?.preferredLang} autoOpen={!tutorialActive} />}
 
             {resourceSubTab==="content" && <ContentAnalyzer form={form} onLevelUp={onLevelUp} />}
 
@@ -21254,7 +21272,7 @@ function Dashboard({ form, onEdit, onLevelUp, onSetWeek, onLogout, onDeleteAccou
 
             {resourceSubTab==="pronunciation" && <PronunciationListenAlong form={form} onLevelUp={onLevelUp} />}
 
-            {resourceSubTab==="writing" && <WritingPractice form={form} />}
+            {resourceSubTab==="writing" && <WritingPractice form={form} helpAuto={!tutorialActive} />}
 
             {resourceSubTab==="links" && (() => {
             // When the student's goal is understanding anime/manga, surface the
