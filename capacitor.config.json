@@ -9,6 +9,10 @@
     "SplashScreen": {
       "launchShowDuration": 1200,
       "backgroundColor": "#0a0f1e"
+    },
+    "LocalNotifications": {
+      "smallIcon": "ic_stat_gaku",
+      "iconColor": "#A855F7"
     }
   },
   "zoomEnabled": true

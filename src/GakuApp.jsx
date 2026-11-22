@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback, useMemo, useRef } from "react";
 import StorePlans from './StorePlans';
 import HELP_I18N from "./helpTranslations";
+import { isAndroidApp, reminderCopy, scheduleDailyReminders, cancelDailyReminders } from "./dailyReminders";
 import { supabase, getDeviceId, getDeviceLabel, getSignupSource } from "./supabaseClient";
 import HanziWriter from "hanzi-writer";
 import { reportClientCrash } from "./crashReport";
@@ -18685,6 +18686,32 @@ function SectionHelp({ id, lang, autoOpen, onAction }) {
   );
 }
 
+// ---- Daily reminders (Android app) -----------------------------------------------------------
+// 5 local notifications a day, 8:00–23:00 in the phone's own time. See src/dailyReminders.js.
+// Preference per account: "on" | "off" | (unset = never asked). iOS is not enabled yet.
+const DAILY_REMINDER_PREF = "gaku_daily_reminders";
+async function enableDailyReminders(lang) {
+  const r = await scheduleDailyReminders(lang);
+  if (r === "granted") lsSetScoped(DAILY_REMINDER_PREF, "on");
+  else if (r === "denied") { lsSetScoped(DAILY_REMINDER_PREF, "off"); try { alert(reminderCopy(lang).denied); } catch {} }
+  return r;
+}
+function ReminderPromptCard({ lang, onTurnOn, onNotNow }) {
+  const rc = reminderCopy(lang);
+  const [busy, setBusy] = useState(false);
+  return (
+    <div style={{ ...S.card, marginBottom:12, borderLeft:`3px solid ${C.purpleLight}` }}>
+      <p style={{ color:"#f1f5f9", fontSize:14, fontWeight:800, margin:"0 0 6px" }}>🔔 {rc.title}</p>
+      <p style={{ color:"#e2e8f0", fontSize:13, lineHeight:1.7, margin:"0 0 12px" }}>{rc.desc}</p>
+      <div style={{ display:"flex", gap:8, flexWrap:"wrap" }}>
+        <button disabled={busy} onClick={async () => { setBusy(true); try { await onTurnOn(); } finally { setBusy(false); } }}
+          style={{ ...S.btn, padding:"9px 16px", fontSize:13, background:"linear-gradient(135deg,rgba(168,85,247,0.35),rgba(124,58,237,0.3))", border:`1px solid ${C.purpleLight}`, color:"#f5f3ff", fontWeight:800 }}>{rc.turnOn}</button>
+        <button onClick={onNotNow} style={{ ...S.btn, padding:"9px 16px", fontSize:13, background:C.card, color:"#94a3b8", border:`1px solid ${C.border}` }}>{rc.notNow}</button>
+      </div>
+    </div>
+  );
+}
+
 // ---- First steps (activation) --------------------------------------------------------------
 // Added 2026-11-21. Google Play showed 27 installs but only 8 first launches, and most of the people
 // who did open the app never got to a real study action. These pieces get a new student to one
@@ -20441,6 +20468,21 @@ function Dashboard({ form, onEdit, onLevelUp, onSetWeek, onLogout, onDeleteAccou
   // Study mode (Enjoyable / Intensive / Intensive trial) — chosen after the Tutorial, changeable via the Mode button.
   const [studyMode, setStudyMode] = useState(loadStudyMode);
   const [showModePicker, setShowModePicker] = useState(false);
+  // Daily reminders (Android app only). Re-schedules on every start so a changed UI language or an app update is picked up.
+  const [remindersPref, setRemindersPref] = useState(() => (isAndroidApp() ? lsGetScoped(DAILY_REMINDER_PREF) : null));
+  useEffect(() => {
+    if (isAndroidApp() && lsGetScoped(DAILY_REMINDER_PREF) === "on") scheduleDailyReminders(form?.preferredLang);
+  }, [form?.preferredLang]);
+  const toggleReminders = async () => {
+    if (remindersPref === "on") {
+      await cancelDailyReminders();
+      lsSetScoped(DAILY_REMINDER_PREF, "off");
+      setRemindersPref("off");
+      return;
+    }
+    const r = await enableDailyReminders(form?.preferredLang);
+    setRemindersPref(r === "granted" ? "on" : "off");
+  };
   const [, setLearnTick] = useState(0);
   const effMode = effectiveStudyMode(studyMode);
   const isIntensive = effMode === "intensive" || effMode === "intensive_trial";
@@ -20951,6 +20993,13 @@ function Dashboard({ form, onEdit, onLevelUp, onSetWeek, onLogout, onDeleteAccou
           <button onClick={()=>setShowFounder(true)} style={{ ...S.btn, padding:"8px 14px", background:C.card, color:"#94a3b8", border:`1px solid ${C.border}`, fontSize:12 }}>{"\u{1F464}"} {(FOUNDER_TEXT[form?.preferredLang] || FOUNDER_TEXT["English"])[0]}</button>
           <button onClick={()=>{ setFeaturePickerInitial(visibleFeatures || OPTIONAL_FEATURES); setShowFeaturePicker(true); }} style={{ ...S.btn, padding:"8px 14px", background:C.card, color:"#94a3b8", border:`1px solid ${C.border}`, fontSize:12 }}>{"\u2699\uFE0F"} {T.featureCustomizeBtn || "Customize"}</button>
           <button onClick={()=>setShowModePicker(true)} style={{ ...S.btn, padding:"8px 14px", background:isIntensive?"rgba(168,85,247,0.2)":C.card, color:isIntensive?C.purpleLight:"#94a3b8", border:`1px solid ${isIntensive?C.purpleLight:C.border}`, fontSize:12 }}>{isIntensive ? "🔥" : "😊"} {T.modeBtn || "Mode"}</button>
+          {isAndroidApp() && (() => {
+            const rc = reminderCopy(form?.preferredLang);
+            const on = remindersPref === "on";
+            return (
+              <button onClick={toggleReminders} style={{ ...S.btn, padding:"8px 14px", background:on?"rgba(168,85,247,0.2)":C.card, color:on?C.purpleLight:"#94a3b8", border:`1px solid ${on?C.purpleLight:C.border}`, fontSize:12 }}>{on ? "🔔" : "🔕"} {on ? rc.on : rc.off}</button>
+            );
+          })()}
           <button onClick={()=>{ setTutorialStep(0); setTutorialActive(true); }} style={{ ...S.btn, padding:"8px 14px", background:"transparent", border:`1px solid ${C.purpleLight}`, color:C.purpleLight, fontSize:12 }}>{T.tutorialBtn}</button>
           <button onClick={()=>setShowHelp(true)} style={{ ...S.btn, padding:"8px 14px", background:`linear-gradient(135deg,${C.amber},#d97706)`, color:"#fff", fontSize:12 }}>{T.help}</button>
           <button onClick={onEdit} style={{ ...S.btn, padding:"8px 14px", background:C.card, color:"#94a3b8", border:`1px solid ${C.border}`, fontSize:12 }}>{T.editProfile}</button>
@@ -21112,6 +21161,10 @@ function Dashboard({ form, onEdit, onLevelUp, onSetWeek, onLogout, onDeleteAccou
                 onGoContent={() => { setTab("resources"); setResourceSubTab("content"); logFunnel(userId, "tab_resources"); }}
                 onGoVocab={() => { setTab("vocabulary"); logFunnel(userId, "tab_vocabulary"); }}
               />
+            )}
+            {isAndroidApp() && remindersPref === null && !tutorialActive && (
+              <ReminderPromptCard lang={form?.preferredLang} onTurnOn={toggleReminders}
+                onNotNow={() => { lsSetScoped(DAILY_REMINDER_PREF, "off"); setRemindersPref("off"); }} />
             )}
             <SectionHelp id="schedule" lang={form?.preferredLang} autoOpen={!tutorialActive}
               onAction={() => { try { window.dispatchEvent(new CustomEvent("gaku_open_mode_picker")); } catch {} }} />
@@ -22593,6 +22646,7 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
   const handleLogout = async () => {
     if (!supabase) return;
     try { localStorage.setItem("gaku_just_logged_out", "1"); } catch {}
+    try { await cancelDailyReminders(); } catch {}
     try {
       await supabase.auth.signOut();
     } finally {
@@ -22616,6 +22670,7 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(data.error || "Failed to delete account.");
+      try { await cancelDailyReminders(); } catch {}
       await supabase.auth.signOut();
       window.location.reload();
     } catch (e) {
@@ -22986,6 +23041,21 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
       const canShowInstallStep = !alreadyStandalone && (canInstallPwa || isIOSNow);
       setOnboardingStep(canShowInstallStep ? "install" : nextStepAfterOnboarding);
     };
+    // Android app: instead of downloading a calendar file, turn on the 5 daily reminder notifications.
+    if (isAndroidApp()) {
+      const rc = reminderCopy(form?.preferredLang);
+      return (
+        <div style={{ minHeight:"100vh", background:C.bg, display:"flex", alignItems:"center", justifyContent:"center", padding:24 }}>
+          <div style={{ background:"linear-gradient(135deg,#1e1b4b,#0f172a)", border:"1.5px solid rgba(139,92,246,0.4)", borderRadius:20, padding:"36px 32px", maxWidth:420, width:"90%", textAlign:"center", boxShadow:"0 8px 40px rgba(139,92,246,0.25)" }}>
+            <p style={{ fontSize:32, margin:"0 0 6px" }}>🔔</p>
+            <h2 style={{ color:"#f1f5f9", fontSize:19, fontWeight:900, margin:"0 0 8px" }}>{rc.title}</h2>
+            <p style={{ color:"#94a3b8", fontSize:13, margin:"0 0 20px", lineHeight:1.6 }}>{rc.desc}</p>
+            <button onClick={async () => { logFunnel(authUser?.id, "remind_set"); await enableDailyReminders(form?.preferredLang); afterRemind(); }} style={{ ...S.btn, width:"100%", marginBottom:10, background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff" }}>{rc.turnOn}</button>
+            <button onClick={() => { logFunnel(authUser?.id, "remind_skipped"); lsSetScoped(DAILY_REMINDER_PREF, "off"); afterRemind(); }} style={{ ...S.btn, width:"100%", background:"none", border:"none", color:"#64748b" }}>{rc.notNow}</button>
+          </div>
+        </div>
+      );
+    }
     const slots = [
       [T.remindMorning, 8, 0], [T.remindLunch, 12, 30], [T.remindEvening, 19, 0], [T.remindNight, 21, 30],
     ];
