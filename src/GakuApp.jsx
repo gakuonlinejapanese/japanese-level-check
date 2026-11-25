@@ -15392,10 +15392,10 @@ function SubtitleVocabBuilder({ form }) {
           <label style={{ ...S.label, color:"#ffffff" }}>{T.subtitlesSourceLabel || "Video title / source (optional — used as the folder name)"}</label>
           <input value={sourceTitle} onChange={e => setSourceTitle(e.target.value)} placeholder={T.subtitlesSourcePlaceholder || "e.g. NHK news 7/2"} style={{ ...S.input, marginBottom:12 }} />
           <label style={{ ...S.label, color:"#ffffff" }}>{T.subtitlesPasteLabel || "Paste subtitles / transcript here"}</label>
-          <textarea value={raw} onChange={e => setRaw(e.target.value)} rows={10}
+          <textarea data-guide="sub-text" value={raw} onChange={e => setRaw(e.target.value)} rows={10}
             placeholder={T.subtitlesPastePlaceholder || "Paste plain text or an .srt file's contents — timestamps and cue numbers are removed automatically."}
             style={{ ...S.input, resize:"vertical", fontFamily:"inherit", lineHeight:1.7, marginBottom:14 }} />
-          <button onClick={handleLoad} disabled={!raw.trim()} style={{ ...S.btn, width:"100%", background: raw.trim() ? `linear-gradient(135deg,${C.purple},#9333ea)` : "#1e293b", color: raw.trim() ? "#fff" : "#ffffff" }}>
+          <button data-guide="sub-load" onClick={handleLoad} disabled={!raw.trim()} style={{ ...S.btn, width:"100%", background: raw.trim() ? `linear-gradient(135deg,${C.purple},#9333ea)` : "#1e293b", color: raw.trim() ? "#fff" : "#ffffff" }}>
             {T.subtitlesLoadBtn || "Load transcript"}
           </button>
         </div>
@@ -16576,7 +16576,7 @@ function TabAudioListenBlock({ tab, T, onBeforeStart }) {
   };
   return (
     <div style={{ marginBottom:12 }}>
-      <button onClick={handle} style={{ display:"flex", alignItems:"center", justifyContent:"center", gap:8, width:"100%", padding:"12px 12px", borderRadius:10, border:`1px solid ${tab.active?"rgba(239,68,68,0.4)":"rgba(34,197,94,0.45)"}`, background:tab.active?"rgba(239,68,68,0.12)":"rgba(34,197,94,0.12)", color:tab.active?"#f87171":C.green, fontSize:14, fontWeight:700, cursor:"pointer" }}>
+      <button data-guide="conv-tab-listen" onClick={handle} style={{ display:"flex", alignItems:"center", justifyContent:"center", gap:8, width:"100%", padding:"12px 12px", borderRadius:10, border:`1px solid ${tab.active?"rgba(239,68,68,0.4)":"rgba(34,197,94,0.45)"}`, background:tab.active?"rgba(239,68,68,0.12)":"rgba(34,197,94,0.12)", color:tab.active?"#f87171":C.green, fontSize:14, fontWeight:700, cursor:"pointer" }}>
         {tab.active ? `⏺ ${T.tabListenStop || "Stop listening to the tab"}` : `🖥️ ${T.tabListenBtn || "Listen to a video tab (recommended)"}`}
       </button>
       {!tab.active && (
@@ -16651,7 +16651,7 @@ Respond ONLY with valid JSON, no markdown, no backticks:
           <div style={{ flex:1, height:1, background:C.border }} />
         </div>
         {!hint && (
-          <button onClick={getHint} disabled={loadingHint} style={{ ...S.btn, background:loadingHint?"rgba(168,85,247,0.15)":`linear-gradient(135deg,${C.purple},#9333ea)`, color:loadingHint?"#64748b":"#fff", fontSize:12, padding:"9px 14px", width:"100%" }}>
+          <button data-guide="conv-hint" onClick={getHint} disabled={loadingHint} style={{ ...S.btn, background:loadingHint?"rgba(168,85,247,0.15)":`linear-gradient(135deg,${C.purple},#9333ea)`, color:loadingHint?"#64748b":"#fff", fontSize:12, padding:"9px 14px", width:"100%" }}>
             {loadingHint ? `⏳ ${T?.convHintLoading || "Thinking of response hints..."}` : `💡 ${T?.convHintBtn || "See 4 response ideas"}`}
           </button>
         )}
@@ -16984,7 +16984,7 @@ function PronunciationTurnCard({ item, T, lang, onBreak }) {
       )}
 
       <div style={{ display:"flex", gap:8, marginBottom:10, flexWrap:"wrap" }}>
-        <button onClick={()=>speakJapanese(stripForSpeech(item.text), 1)}
+        <button data-guide="pron-listen" onClick={()=>speakJapanese(stripForSpeech(item.text), 1)}
           style={{ display:"flex", alignItems:"center", gap:6, padding:"6px 12px", borderRadius:8, background:"rgba(6,182,212,0.12)", border:`1px solid rgba(6,182,212,0.3)`, color:C.teal, fontSize:12, fontWeight:700, cursor:"pointer" }}>
           🔊 {T?.listenAudio || "Listen"}
         </button>
@@ -17009,7 +17009,7 @@ function PronunciationTurnCard({ item, T, lang, onBreak }) {
       <p style={{ color:C.purpleLight, fontSize:12, fontWeight:700, margin:"10px 0 8px" }}>
         {T?.pronRecordPrompt || "Now say it out loud"}
       </p>
-      <button onClick={toggleRecording}
+      <button data-guide="pron-record" onClick={toggleRecording}
         style={{ display:"flex", alignItems:"center", gap:6, padding:"6px 12px", borderRadius:8, background:recording?"rgba(239,68,68,0.15)":"rgba(168,85,247,0.12)", border:`1px solid ${recording?"rgba(239,68,68,0.4)":"rgba(168,85,247,0.3)"}`, color:recording?"#f87171":C.purpleLight, fontSize:12, fontWeight:700, cursor:"pointer" }}>
         {recording ? `⏺ ${T?.recordingInProgress || "Recording..."}` : `🎤 ${T?.recordVoice || "Record"}`}
       </button>
@@ -17715,7 +17715,7 @@ Respond ONLY with valid JSON, no markdown, no backticks:
   const newQuestion = () => { setQuestion(""); setAnswer(""); setResult(null); setError(""); };
 
   const modeBtn = (id, label, disabled) => (
-    <button key={id} disabled={disabled} onClick={() => !disabled && setMode(id)}
+    <button key={id} data-guide={"write-mode-"+id} disabled={disabled} onClick={() => !disabled && setMode(id)}
       style={{ flex:1, padding:"10px 8px", borderRadius:10, fontSize:12, fontWeight:700, cursor:disabled?"not-allowed":"pointer",
         border:`1.5px solid ${mode===id?C.teal:C.border}`, background:mode===id?"rgba(6,182,212,0.12)":C.card,
         color:disabled?"#475569":(mode===id?C.teal:"#94a3b8"), opacity:disabled?0.7:1 }}>
@@ -17742,18 +17742,18 @@ Respond ONLY with valid JSON, no markdown, no backticks:
         </p>
 
         <label style={S.label}>{(T.writeQLabel || "THE QUESTION").toUpperCase()}</label>
-        <textarea value={question} onChange={e => { setQuestion(e.target.value.slice(0, 3000)); setResult(null); }}
+        <textarea data-guide="write-question" value={question} onChange={e => { setQuestion(e.target.value.slice(0, 3000)); setResult(null); }}
           placeholder={T.writeQPlaceholder || "Paste the question here…"} rows={4}
           style={{ ...S.input, resize:"vertical", lineHeight:1.6, marginBottom:12, fontFamily:"inherit" }} />
 
         <label style={S.label}>{(T.writeALabel || "YOUR ANSWER").toUpperCase()}</label>
-        <textarea value={answer} onChange={e => { setAnswer(e.target.value.slice(0, 1500)); setResult(null); }}
+        <textarea data-guide="write-answer" value={answer} onChange={e => { setAnswer(e.target.value.slice(0, 1500)); setResult(null); }}
           placeholder={T.writeAPlaceholder || "Type your answer in Japanese…"} rows={6}
           style={{ ...S.input, resize:"vertical", lineHeight:1.7, marginBottom:12, fontFamily:"inherit" }} />
 
         {error && <p style={{ color:"#f87171", fontSize:12, margin:"0 0 10px" }}>{error}</p>}
         <div style={{ display:"flex", gap:8 }}>
-          <button onClick={check} disabled={loading}
+          <button data-guide="write-check" onClick={check} disabled={loading}
             style={{ ...S.btn, flex:1, background:`linear-gradient(135deg,${C.teal},#0891b2)`, color:"#fff", opacity:loading?0.7:1 }}>
             {loading ? (T.writeChecking || "Checking…") : (T.writeCheckBtn || "Check my answer")}
           </button>
@@ -18502,14 +18502,16 @@ async function translateMilestonesAI(milestones, lang) {
 // explanation: the on-screen guided pointer (GuideCoach below). The button shows only where a guide exists.
 function SectionHelp({ id, lang }) {
   const T = useUITranslations(lang || "English");
-  const g = EASY_GUIDE_FOR[id];
-  if (!g) return null;
+  // ALWAYS rendered (2026-11-25): the button never disappears, on every screen. Screens without their own
+  // step-by-step guide open a one-step "this is the page" guide (EASY_GUIDE_FOR falls back to page_<id>).
+  const g = EASY_GUIDE_FOR[id] || "page_" + id;
+  const label = String(T.howToUse || (lang === "Japanese" ? "使い方" : "How to use")).replace(/^[^\p{L}\p{N}]+/u, "");
   return (
-    <div style={{ marginBottom:12 }}>
-      <button onClick={() => startGuide(g)}
+    <div data-guide="help-btn" style={{ marginBottom:12 }}>
+      <button onClick={() => startGuide(EASY_GUIDES[g] ? g : "page_generic")}
         style={{ display:"inline-flex", alignItems:"center", gap:6, padding:"5px 12px 5px 6px", borderRadius:99, background:"rgba(168,85,247,0.12)", border:`1px solid ${C.purpleLight}`, color:C.purpleLight, fontSize:12, fontWeight:700, cursor:"pointer" }}>
         <span style={{ width:20, height:20, borderRadius:"50%", background:C.purpleLight, color:"#1e1033", display:"inline-flex", alignItems:"center", justifyContent:"center", fontSize:12, fontWeight:900 }}>?</span>
-        {T.howToUse || (lang === "Japanese" ? "使い方" : "How to use")}
+        {label}
       </button>
     </div>
   );
@@ -18570,56 +18572,112 @@ const EASY_GUIDES = {
     en: { title: "From Content", steps: [
       { sel: "tab-resources", at: { tab:"resources" }, t: "Tap here." },
       { sel: "sub-content", at: { tab:"resources", sub:"content" }, t: "Tap “From Content”." },
-      { sel: "content-text", t: "Paste Japanese here.", next: true },
-      { sel: "content-analyze", t: "Tap this big button." },
+      { sel: "content-text", t: "① PASTE HERE. Put the Japanese text you want to study in this box. (A sample is already inside.)", next: true },
+      { sel: "content-analyze", t: "② Then tap this big button." },
     ] },
     ja: { title: "From Content", steps: [
       { sel: "tab-resources", at: { tab:"resources" }, t: "ここを おす。" },
       { sel: "sub-content", at: { tab:"resources", sub:"content" }, t: "「From Content」を おす。" },
-      { sel: "content-text", t: "ここに 日本語を はる。", next: true },
-      { sel: "content-analyze", t: "この おおきい ボタンを おす。" },
+      { sel: "content-text", t: "① ここに はる。勉強したい日本語の文を、この わく の中に はります。(見本が入っています)", next: true },
+      { sel: "content-analyze", t: "② つぎに、この おおきい ボタンを おす。" },
     ] }
   },
   conversation: {
     en: { title: "Conversation Practice", steps: [
       { sel: "tab-resources", at: { tab:"resources" }, t: "Tap here." },
       { sel: "sub-conversation", at: { tab:"resources", sub:"conversation" }, t: "Tap “Conversation”." },
-      { sel: "conv-listen", t: "Tap here. Then play a Japanese video with sound." },
+      { sel: "conv-tab-listen", opt: true, t: "① Easiest: tap here to listen to a video tab. (Not shown on this device? Tap Next.)", next: true },
+      { sel: "conv-listen", t: "② RECORD HERE. Tap this microphone button, then play a Japanese video or talk. There is no box to paste into." },
+      { sel: "conv-hint", opt: true, t: "③ When a line appears, tap here to see how to answer.", next: true },
     ] },
     ja: { title: "Conversation Practice", steps: [
       { sel: "tab-resources", at: { tab:"resources" }, t: "ここを おす。" },
       { sel: "sub-conversation", at: { tab:"resources", sub:"conversation" }, t: "「Conversation」を おす。" },
-      { sel: "conv-listen", t: "ここを おす。そして 日本語の どうがを おとを だして ながす。" },
+      { sel: "conv-tab-listen", opt: true, t: "① かんたん: ここを おすと、ひらいている どうがの おとを きけます。(出ないときは「つぎへ」)", next: true },
+      { sel: "conv-listen", t: "② ここで ろくおん。この マイク ボタンを おして、日本語の どうがを ながす(または はなす)。はる わく は ありません。" },
+      { sel: "conv-hint", opt: true, t: "③ 文が 出たら、ここを おすと こたえかたが 見えます。", next: true },
     ] }
   },
   pronunciation: {
     en: { title: "Pronunciation Practice", steps: [
       { sel: "tab-resources", at: { tab:"resources" }, t: "Tap here." },
       { sel: "sub-pronunciation", at: { tab:"resources", sub:"pronunciation" }, t: "Tap “Pronunciation”." },
-      { sel: "pron-text", t: "Paste Japanese here.", next: true },
-      { sel: "pron-generate", t: "Tap this big button." },
+      { sel: "pron-text", t: "① PASTE HERE. Put the Japanese text you want to practice saying in this box.", next: true },
+      { sel: "pron-generate", t: "② Tap this big button. Practice cards will appear." },
+      { sel: "pron-listen", t: "③ LISTEN HERE first. Tap to hear the sentence.", next: true },
+      { sel: "pron-record", t: "④ RECORD HERE. Tap, then say the sentence out loud." },
     ] },
     ja: { title: "Pronunciation Practice", steps: [
       { sel: "tab-resources", at: { tab:"resources" }, t: "ここを おす。" },
       { sel: "sub-pronunciation", at: { tab:"resources", sub:"pronunciation" }, t: "「Pronunciation」を おす。" },
-      { sel: "pron-text", t: "ここに 日本語を はる。", next: true },
-      { sel: "pron-generate", t: "この おおきい ボタンを おす。" },
+      { sel: "pron-text", t: "① ここに はる。言う れんしゅうを したい日本語の文を、この わく の中に はります。", next: true },
+      { sel: "pron-generate", t: "② この おおきい ボタンを おす。れんしゅうカードが 出ます。" },
+      { sel: "pron-listen", t: "③ まず ここで きく。おして おてほんを きく。", next: true },
+      { sel: "pron-record", t: "④ ここで ろくおん。おして、声に 出して 言う。" },
     ] }
   },
   writing: {
     en: { title: "Writing Practice", steps: [
       { sel: "tab-resources", at: { tab:"resources" }, t: "Tap here." },
       { sel: "sub-writing", at: { tab:"resources", sub:"writing" }, t: "Tap “Writing”." },
-      { sel: "write-text", t: "Paste a short sentence here.", next: true },
-      { sel: "write-start", t: "Tap here. Draw with your finger!" },
+      { sel: "write-mode-copy", t: "Pick a style. “Copying down” = copy a sentence by hand. “Questions” = write an answer.", next: true },
+      { alts: [ { sel: "write-text", t: "① PASTE HERE. Put a short Japanese sentence in this box." }, { sel: "write-question", t: "① PASTE THE QUESTION HERE." } ], next: true },
+      { alts: [ { sel: "write-start", t: "② Tap here. Then draw with your finger!" }, { sel: "write-answer", t: "② TYPE YOUR ANSWER HERE, in Japanese." } ], next: true },
+      { sel: "write-check", opt: true, t: "③ Tap here to check your answer.", next: true },
     ] },
     ja: { title: "Writing Practice", steps: [
       { sel: "tab-resources", at: { tab:"resources" }, t: "ここを おす。" },
       { sel: "sub-writing", at: { tab:"resources", sub:"writing" }, t: "「Writing」を おす。" },
-      { sel: "write-text", t: "ここに みじかい 文を はる。", next: true },
-      { sel: "write-start", t: "ここを おす。ゆびで かこう!" },
+      { sel: "write-mode-copy", t: "やりかたを えらぶ。「Copying down」= 文を 書きうつす。「Questions」= 問題に 答えを 書く。", next: true },
+      { alts: [ { sel: "write-text", t: "① ここに はる。みじかい 日本語の文を、この わく の中に はります。" }, { sel: "write-question", t: "① ここに 問題を はる。" } ], next: true },
+      { alts: [ { sel: "write-start", t: "② ここを おす。ゆびで かこう!" }, { sel: "write-answer", t: "② ここに 答えを 日本語で 書く。" } ], next: true },
+      { sel: "write-check", opt: true, t: "③ ここを おすと 答えあわせ。", next: true },
     ] }
-  }
+  },
+  page_generic: {
+    en: { title: "This page", steps: [ { sel: "@next", t: "You are here. Start from the top of this frame and go down.", next: true } ] },
+    ja: { title: "このページ", steps: [ { sel: "@next", t: "ここが いまの ページです。この わく の 上から 下へ すすみます。", next: true } ] }
+  },
+  page_subtitles: {
+    en: { title: "Subtitles", steps: [ { sel: "@next", t: "Use the box inside this frame to paste subtitles, then follow the buttons.", next: true } ] },
+    ja: { title: "字幕", steps: [ { sel: "@next", t: "この わく の中に 字幕を はって、ボタンを おします。", next: true } ] }
+  },
+  page_milestones: {
+    en: { title: "Milestones", steps: [ { sel: "@next", t: "Your progress checks are in this frame. Tap a card to open it.", next: true } ] },
+    ja: { title: "マイルストーン", steps: [ { sel: "@next", t: "しんちょくチェックは この わく の中です。カードを おすと ひらきます。", next: true } ] }
+  },
+  page_jlpt: {
+    en: { title: "JLPT", steps: [ { sel: "@next", t: "Your JLPT results are in this frame.", next: true } ] },
+    ja: { title: "JLPT", steps: [ { sel: "@next", t: "JLPTの けっかは この わく の中です。", next: true } ] }
+  },
+  page_feedback: {
+    en: { title: "Feedback", steps: [ { sel: "@next", t: "Write your message in this frame and send it.", next: true } ] },
+    ja: { title: "フィードバック", steps: [ { sel: "@next", t: "この わく の中に メッセージを 書いて おくります。", next: true } ] }
+  },
+  page_res_links: {
+    en: { title: "Links", steps: [ { sel: "@next", t: "Tap a link in this frame to open a study site.", next: true } ] },
+    ja: { title: "リンク", steps: [ { sel: "@next", t: "この わく の中の リンクを おすと べんきょうサイトが ひらきます。", next: true } ] }
+  },
+  page_vocab_wordcards: {
+    en: { title: "Word Cards", steps: [ { sel: "@next", t: "Search a word in this frame, then tap the word to make a card.", next: true } ] },
+    ja: { title: "単語カード", steps: [ { sel: "@next", t: "この わく の中で ことばを さがして、おすと カードが できます。", next: true } ] }
+  },
+  page_vocab_library: {
+    en: { title: "Library", steps: [ { sel: "@next", t: "Your saved cards are in this frame. Tap a folder to open it.", next: true } ] },
+    ja: { title: "ライブラリ", steps: [ { sel: "@next", t: "ほぞんした カードは この わく の中です。フォルダを おすと ひらきます。", next: true } ] }
+  },
+  page_vocab_folder: {
+    en: { title: "Folder", steps: [ { sel: "@next", t: "The cards in this folder are in this frame. Tap a card to see it.", next: true } ] },
+    ja: { title: "フォルダ", steps: [ { sel: "@next", t: "この フォルダの カードは この わく の中です。おすと 見られます。", next: true } ] }
+  },
+  page_vocab_flashcard: {
+    en: { title: "Flashcards", steps: [ { sel: "@next", t: "Flashcards are in this frame. Tap the card to flip it.", next: true } ] },
+    ja: { title: "フラッシュカード", steps: [ { sel: "@next", t: "フラッシュカードは この わく の中です。カードを おすと うらがえります。", next: true } ] }
+  },
+  page_res_writing_copy: {
+    en: { title: "Writing", steps: [ { sel: "@next", t: "Pick how you want to practice in this frame.", next: true } ] },
+    ja: { title: "書く", steps: [ { sel: "@next", t: "この わく の中で れんしゅうの やりかたを えらびます。", next: true } ] }
+  },
 };
 // Which section's "?" help opens which guide.
 const EASY_GUIDE_FOR = { schedule:"schedule", vocabulary:"vocabulary", res_content:"content", res_conversation:"conversation", res_pronunciation:"pronunciation", res_writing:"writing" };
@@ -18641,6 +18699,8 @@ function GuideCoach({ guide, lang, tab, sub, onClose }) {
   const [i0] = useState(() => { let k = 0; while (c && k < c.steps.length - 1 && atOk(c.steps[k])) k++; return k; });
   const [i, setI] = useState(i0);
   const [rect, setRect] = useState(null);
+  const [altT, setAltT] = useState(null);
+  const altRef = useRef(null);
   const scrolled = useRef(-1);
   const s = c ? c.steps[i] : null;
   const last = i >= total - 1;
@@ -18649,9 +18709,10 @@ function GuideCoach({ guide, lang, tab, sub, onClose }) {
   useEffect(() => { if (s && atOk(s) && i < total - 1) setI(n => Math.min(n + 1, total - 1)); /* eslint-disable-next-line */ }, [tab, sub, i]);
   // Keep the ring on the real element (it can move: scrolling, tabs changing, content loading).
   useEffect(() => {
-    if (!s || !s.sel) { setRect(null); return; }
+    if (!s || (!s.sel && !s.alts)) { setRect(null); setAltT(null); return; }
     let alive = true;
-    const find = () => document.querySelector('[data-guide="' + s.sel + '"]');
+    const q = (k) => { if (k === "@next") { const b = document.querySelector('[data-guide="help-btn"]'); return b && b.nextElementSibling; } return document.querySelector('[data-guide="' + k + '"]'); };
+    const find = () => { if (s.alts) { for (const a of s.alts) { const e = q(a.sel); if (e) { if (altRef.current !== a.t) { altRef.current = a.t; setAltT(a.t); } return e; } } return null; } return q(s.sel); };
     const tick = () => {
       if (!alive) return;
       const el = find();
@@ -18690,9 +18751,9 @@ function GuideCoach({ guide, lang, tab, sub, onClose }) {
           <p style={{ color:C.purpleLight, fontSize:11, fontWeight:800, letterSpacing:1, margin:0 }}>{c.title} · {L.of.replace("{n}", i - i0 + 1).replace("{m}", total - i0)}</p>
           <button onClick={onClose} aria-label={L.close} style={{ background:"none", border:"none", color:"#94a3b8", fontSize:12, fontWeight:700, cursor:"pointer", padding:"2px 4px" }}>{L.close} ✕</button>
         </div>
-        <p style={{ color:"#f1f5f9", fontSize:19, fontWeight:800, lineHeight:1.45, margin:"0 0 8px" }}>{s.t}</p>
-        {s.sel && !rect && <p style={{ color:"#94a3b8", fontSize:12, margin:"0 0 8px" }}>{L.missing}</p>}
-        <button onClick={() => (last ? onClose() : advance())} style={{ ...S.btn, width:"100%", padding:"12px", fontSize:15, fontWeight:800, background: (s.sel && rect && !s.next) ? C.card : `linear-gradient(135deg,${C.purple},#9333ea)`, color: (s.sel && rect && !s.next) ? "#94a3b8" : "#fff", border: (s.sel && rect && !s.next) ? `1px solid ${C.border}` : "none" }}>{last ? L.done : L.next}</button>
+        <p style={{ color:"#f1f5f9", fontSize:19, fontWeight:800, lineHeight:1.45, margin:"0 0 8px" }}>{(s.alts && rect && altT) || s.t || (s.alts ? s.alts[0].t : "")}</p>
+        {(s.sel || s.alts) && !rect && <p style={{ color:"#94a3b8", fontSize:12, margin:"0 0 8px" }}>{L.missing}</p>}
+        <button onClick={() => (last ? onClose() : advance())} style={{ ...S.btn, width:"100%", padding:"12px", fontSize:15, fontWeight:800, background: ((s.sel || s.alts) && rect && !s.next) ? C.card : `linear-gradient(135deg,${C.purple},#9333ea)`, color: ((s.sel || s.alts) && rect && !s.next) ? "#94a3b8" : "#fff", border: ((s.sel || s.alts) && rect && !s.next) ? `1px solid ${C.border}` : "none" }}>{last ? L.done : L.next}</button>
       </div>
     </>
   );
