@@ -18764,8 +18764,7 @@ function GuideCoach({ guide, lang, tab, sub, onClose }) {
   }, [i, s, advance]);
   if (!g) return null;
   const vh = typeof window !== "undefined" ? window.innerHeight : 800;
-  const targetLow = rect && (rect.top + rect.height / 2) > vh / 2;
-  const cardPos = targetLow ? { top: "calc(12px + env(safe-area-inset-top, 0px))" } : { bottom: "calc(12px + env(safe-area-inset-bottom, 0px))" };
+  const cardPos = { top: "calc(12px + env(safe-area-inset-top, 0px))" }; // always at the top so it never covers the buttons below
   const fingerBelow = rect && (rect.top + rect.height + 56 < vh);
   return (
     <>
