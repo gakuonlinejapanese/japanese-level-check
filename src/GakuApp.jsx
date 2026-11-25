@@ -1243,6 +1243,8 @@ const UI_TRANSLATIONS = {
     pcTitle: "Progress check",
     pcIntro: "A 3-minute starting check (12 questions). Take it again in a few days to see how much you've grown.",
     pcStart: "Start the check",
+    pcHide: "Hide",
+    pcShowAgain: "Show the progress check again",
     pcRetake: "Take it again",
     pcRetakeWait: "You can retake it in {n} day(s).",
     pcQ: "Question {n} / {total}",
@@ -1910,6 +1912,8 @@ const UI_TRANSLATIONS = {
     pcTitle: "Bilan de progression",
     pcIntro: "Un test de départ de 3 minutes (12 questions). Refaites-le dans quelques jours pour voir vos progrès.",
     pcStart: "Commencer le test",
+    pcHide: "Masquer",
+    pcShowAgain: "Réafficher le test de progression",
     pcRetake: "Refaire le test",
     pcRetakeWait: "Vous pourrez le refaire dans {n} jour(s).",
     pcQ: "Question {n} / {total}",
@@ -2562,6 +2566,8 @@ const UI_TRANSLATIONS = {
     pcTitle: "Control de progreso",
     pcIntro: "Una prueba inicial de 3 minutos (12 preguntas). Repítela en unos días para ver cuánto has avanzado.",
     pcStart: "Empezar la prueba",
+    pcHide: "Ocultar",
+    pcShowAgain: "Mostrar de nuevo la prueba de progreso",
     pcRetake: "Repetir la prueba",
     pcRetakeWait: "Podrás repetirla en {n} día(s).",
     pcQ: "Pregunta {n} / {total}",
@@ -3214,6 +3220,8 @@ const UI_TRANSLATIONS = {
     pcTitle: "Verificação de progresso",
     pcIntro: "Um teste inicial de 3 minutos (12 perguntas). Refaça em alguns dias para ver o quanto você evoluiu.",
     pcStart: "Começar o teste",
+    pcHide: "Ocultar",
+    pcShowAgain: "Mostrar novamente o teste de progresso",
     pcRetake: "Refazer o teste",
     pcRetakeWait: "Você poderá refazer em {n} dia(s).",
     pcQ: "Pergunta {n} / {total}",
@@ -3866,6 +3874,8 @@ const UI_TRANSLATIONS = {
     pcTitle: "Fortschrittscheck",
     pcIntro: "Ein 3-minütiger Starttest (12 Fragen). Wiederholen Sie ihn in einigen Tagen, um Ihren Fortschritt zu sehen.",
     pcStart: "Test starten",
+    pcHide: "Ausblenden",
+    pcShowAgain: "Fortschrittstest wieder anzeigen",
     pcRetake: "Test wiederholen",
     pcRetakeWait: "Sie können ihn in {n} Tag(en) wiederholen.",
     pcQ: "Frage {n} / {total}",
@@ -4518,6 +4528,8 @@ const UI_TRANSLATIONS = {
     pcTitle: "Verifica dei progressi",
     pcIntro: "Un test iniziale di 3 minuti (12 domande). Ripetilo tra qualche giorno per vedere quanto sei migliorato.",
     pcStart: "Inizia il test",
+    pcHide: "Nascondi",
+    pcShowAgain: "Mostra di nuovo la verifica dei progressi",
     pcRetake: "Ripeti il test",
     pcRetakeWait: "Potrai ripeterlo tra {n} giorno/i.",
     pcQ: "Domanda {n} / {total}",
@@ -5170,6 +5182,8 @@ const UI_TRANSLATIONS = {
     pcTitle: "进步检测",
     pcIntro: "3分钟的起点测试（12道题）。几天后再做一次，看看你进步了多少。",
     pcStart: "开始测试",
+    pcHide: "隐藏",
+    pcShowAgain: "重新显示进度检测",
     pcRetake: "再测一次",
     pcRetakeWait: "{n}天后可以再测一次。",
     pcQ: "第 {n} / {total} 题",
@@ -5822,6 +5836,8 @@ const UI_TRANSLATIONS = {
     pcTitle: "進步檢測",
     pcIntro: "3分鐘的起點測驗（12題）。幾天後再做一次，看看你進步了多少。",
     pcStart: "開始測驗",
+    pcHide: "隱藏",
+    pcShowAgain: "重新顯示進度檢測",
     pcRetake: "再測一次",
     pcRetakeWait: "{n}天後可以再測一次。",
     pcQ: "第 {n} / {total} 題",
@@ -6474,6 +6490,8 @@ const UI_TRANSLATIONS = {
     pcTitle: "실력 변화 체크",
     pcIntro: "3분짜리 시작 점검(12문제)입니다. 며칠 뒤 다시 풀어 얼마나 늘었는지 확인해 보세요.",
     pcStart: "점검 시작",
+    pcHide: "숨기기",
+    pcShowAgain: "진도 체크 다시 보기",
     pcRetake: "다시 풀기",
     pcRetakeWait: "{n}일 후에 다시 풀 수 있어요.",
     pcQ: "{n} / {total}번 문제",
@@ -7126,6 +7144,8 @@ const UI_TRANSLATIONS = {
     pcTitle: "ตรวจความก้าวหน้า",
     pcIntro: "แบบทดสอบเริ่มต้น 3 นาที (12 ข้อ) ลองทำอีกครั้งในอีกไม่กี่วันเพื่อดูว่าก้าวหน้าแค่ไหน",
     pcStart: "เริ่มทดสอบ",
+    pcHide: "ซ่อน",
+    pcShowAgain: "แสดงการตรวจความก้าวหน้าอีกครั้ง",
     pcRetake: "ทำอีกครั้ง",
     pcRetakeWait: "ทำซ้ำได้ในอีก {n} วัน",
     pcQ: "ข้อที่ {n} / {total}",
@@ -7778,6 +7798,8 @@ const UI_TRANSLATIONS = {
     pcTitle: "Semakan kemajuan",
     pcIntro: "Ujian permulaan 3 minit (12 soalan). Ambil semula dalam beberapa hari untuk melihat sejauh mana anda berkembang.",
     pcStart: "Mulakan ujian",
+    pcHide: "Sembunyikan",
+    pcShowAgain: "Papar semula semakan kemajuan",
     pcRetake: "Ambil semula",
     pcRetakeWait: "Anda boleh mengambilnya semula dalam {n} hari.",
     pcQ: "Soalan {n} / {total}",
@@ -8430,6 +8452,8 @@ const UI_TRANSLATIONS = {
     pcTitle: "Cek kemajuan",
     pcIntro: "Tes awal 3 menit (12 soal). Ulangi beberapa hari lagi untuk melihat seberapa jauh Anda berkembang.",
     pcStart: "Mulai tes",
+    pcHide: "Sembunyikan",
+    pcShowAgain: "Tampilkan lagi cek kemajuan",
     pcRetake: "Ulangi tes",
     pcRetakeWait: "Anda bisa mengulanginya dalam {n} hari.",
     pcQ: "Soal {n} / {total}",
@@ -9082,6 +9106,8 @@ const UI_TRANSLATIONS = {
     pcTitle: "Kiểm tra tiến bộ",
     pcIntro: "Bài kiểm tra đầu vào 3 phút (12 câu). Làm lại sau vài ngày để xem bạn tiến bộ bao nhiêu.",
     pcStart: "Bắt đầu kiểm tra",
+    pcHide: "Ẩn",
+    pcShowAgain: "Hiện lại bài kiểm tra tiến độ",
     pcRetake: "Làm lại",
     pcRetakeWait: "Bạn có thể làm lại sau {n} ngày.",
     pcQ: "Câu {n} / {total}",
@@ -9734,6 +9760,8 @@ const UI_TRANSLATIONS = {
     pcTitle: "प्रगति जाँच",
     pcIntro: "3 मिनट की शुरुआती जाँच (12 प्रश्न)। कुछ दिनों बाद इसे दोबारा करें और देखें कि आपने कितनी प्रगति की।",
     pcStart: "जाँच शुरू करें",
+    pcHide: "छिपाएँ",
+    pcShowAgain: "प्रगति जाँच फिर से दिखाएँ",
     pcRetake: "दोबारा करें",
     pcRetakeWait: "आप इसे {n} दिन बाद दोबारा कर सकते हैं।",
     pcQ: "प्रश्न {n} / {total}",
@@ -10386,6 +10414,8 @@ const UI_TRANSLATIONS = {
     pcTitle: "成長チェック",
     pcIntro: "3分で終わる最初のチェック(12問)です。数日後にもう一度受けて、どれだけ伸びたか確かめましょう。",
     pcStart: "チェックを始める",
+    pcHide: "非表示",
+    pcShowAgain: "進捗チェックをもう一度表示",
     pcRetake: "もう一度受ける",
     pcRetakeWait: "あと{n}日後に再受験できます。",
     pcQ: "{n} / {total} 問目",
@@ -11038,6 +11068,8 @@ const UI_TRANSLATIONS = {
     pcTitle: "İlerleme kontrolü",
     pcIntro: "3 dakikalık başlangıç testi (12 soru). Ne kadar ilerlediğinizi görmek için birkaç gün sonra tekrar çözün.",
     pcStart: "Testi başlat",
+    pcHide: "Gizle",
+    pcShowAgain: "İlerleme kontrolünü tekrar göster",
     pcRetake: "Tekrar çöz",
     pcRetakeWait: "{n} gün sonra tekrar çözebilirsiniz.",
     pcQ: "Soru {n} / {total}",
@@ -11690,6 +11722,8 @@ const UI_TRANSLATIONS = {
     pcTitle: "प्रगति जाँच",
     pcIntro: "३ मिनेटको सुरुवाती जाँच (१२ प्रश्न)। केही दिनपछि फेरि गर्नुहोस् र कति प्रगति भयो हेर्नुहोस्।",
     pcStart: "जाँच सुरु गर्नुहोस्",
+    pcHide: "लुकाउनुहोस्",
+    pcShowAgain: "प्रगति जाँच फेरि देखाउनुहोस्",
     pcRetake: "फेरि गर्नुहोस्",
     pcRetakeWait: "तपाईं {n} दिनपछि फेरि गर्न सक्नुहुन्छ।",
     pcQ: "प्रश्न {n} / {total}",
@@ -12342,6 +12376,8 @@ const UI_TRANSLATIONS = {
     pcTitle: "Pagsusuri ng progreso",
     pcIntro: "Isang 3-minutong panimulang pagsusulit (12 tanong). Ulitin ito pagkalipas ng ilang araw para makita kung gaano ka na umunlad.",
     pcStart: "Simulan ang pagsusulit",
+    pcHide: "Itago",
+    pcShowAgain: "Ipakita muli ang progress check",
     pcRetake: "Ulitin ang pagsusulit",
     pcRetakeWait: "Maaari mo itong ulitin sa loob ng {n} araw.",
     pcQ: "Tanong {n} / {total}",
@@ -20330,6 +20366,24 @@ function CoachPanel({ T, allow, onGo, compact }) {
 // Original questions (N5-N2, 3 each). Answers are never shown, only the score, so a retake stays fair.
 const PROGRESS_KEY = "gaku_progress_checks";
 const PROGRESS_NUDGE_KEY = "gaku_progress_nudge_at";
+// "Hide" for the progress check (the Start-the-check banner + the Progress check card in Milestones):
+// once a student presses it, both stay hidden for good on this account (a small link brings it back).
+const PROGRESS_HIDE_KEY = "gaku_progress_hidden";
+function isProgressHidden() { try { return localStorage.getItem(scopedKey(PROGRESS_HIDE_KEY)) === "1"; } catch { return false; } }
+function useProgressHidden() {
+  const [hidden, setHidden] = useState(isProgressHidden);
+  useEffect(() => {
+    const h = () => setHidden(isProgressHidden());
+    window.addEventListener("gaku_progress_hide_changed", h);
+    return () => window.removeEventListener("gaku_progress_hide_changed", h);
+  }, []);
+  const set = (v) => {
+    try { if (v) localStorage.setItem(scopedKey(PROGRESS_HIDE_KEY), "1"); else localStorage.removeItem(scopedKey(PROGRESS_HIDE_KEY)); } catch {}
+    setHidden(v);
+    try { window.dispatchEvent(new CustomEvent("gaku_progress_hide_changed")); } catch {}
+  };
+  return [hidden, set];
+}
 const PROGRESS_MIN_GAP_DAYS = 3;
 const PROGRESS_LEVELS = ["N5", "N4", "N3", "N2"];
 const PROGRESS_QUESTIONS = [
@@ -20427,6 +20481,7 @@ function ProgressSummary({ T, history }) {
   );
 }
 function ProgressCheck({ T, userId }) {
+  const [pcHidden, setPcHidden] = useProgressHidden();
   const [qFuriOn] = useQuestionFurigana(); // "furigana on questions" switch (question text only)
   const [history, setHistory] = useState(loadProgressChecks);
   const [phase, setPhase] = useState("home"); // home | quiz | result
@@ -20455,6 +20510,13 @@ function ProgressCheck({ T, userId }) {
     logFunnel(userId, wasFirst ? "progress_check_done" : "progress_retake_done");
     setPhase("result");
   };
+  if (pcHidden && phase !== "quiz") {
+    return (
+      <div style={{ margin:"0 0 12px" }}>
+        <button type="button" onClick={() => setPcHidden(false)} style={{ background:"none", border:"none", color:"#64748b", fontSize:11, cursor:"pointer", padding:0, textDecoration:"underline" }}>{T.pcShowAgain || "Show the progress check again"}</button>
+      </div>
+    );
+  }
   const wrap = { ...S.card, marginBottom:12, background:"linear-gradient(135deg,rgba(34,197,94,0.07),rgba(168,85,247,0.07))", border:"1px solid rgba(34,197,94,0.25)" };
   if (phase === "quiz" && qs[idx]) {
     const q = qs[idx];
@@ -20486,25 +20548,30 @@ function ProgressCheck({ T, userId }) {
       {waitDays > 0
         ? <p style={{ color:"#94a3b8", fontSize:12, margin:0 }}>{progressFill(T.pcRetakeWait || "You can retake it in {n} day(s).", { n: waitDays })}</p>
         : <button onClick={start} style={{ ...S.btn, padding:"10px 20px", background:"linear-gradient(135deg,#22c55e,#16a34a)", color:"#fff", fontSize:13 }}>{history.length ? (T.pcRetake || "Take it again") : (T.pcStart || "Start the check")}</button>}
+      <div style={{ marginTop:10 }}>
+        <button type="button" onClick={() => setPcHidden(true)} style={{ padding:"6px 14px", borderRadius:8, background:C.card, border:`1px solid ${C.border}`, color:"#94a3b8", fontSize:12, cursor:"pointer" }}>🙈 {T.pcHide || "Hide"}</button>
+      </div>
     </div>
   );
 }
 // Small card on the schedule screen that invites the student to take / retake the check.
 function ProgressNudge({ T, onGo }) {
   const [hidden, setHidden] = useState(false);
+  const [pcHidden, setPcHidden] = useProgressHidden();
   const h = loadProgressChecks();
   let kind = null;
   if (h.length === 0) kind = "start";
   else if (h.length === 1 && Date.now() - h[0].t >= 6 * 86400000) kind = "retake";
   let snoozed = false;
   try { const t = parseInt(localStorage.getItem(scopedKey(PROGRESS_NUDGE_KEY)) || "0", 10) || 0; snoozed = Date.now() - t < 3 * 86400000; } catch {}
-  if (hidden || !kind || snoozed) return null;
+  if (pcHidden || hidden || !kind || snoozed) return null;
   return (
     <div style={{ ...S.card, marginBottom:12, background:"rgba(34,197,94,0.07)", border:"1px solid rgba(34,197,94,0.3)" }}>
       <p style={{ color:"#bbf7d0", fontSize:12, lineHeight:1.6, margin:"0 0 8px" }}>📈 {kind === "start" ? (T.pcNudgeStart || "Want to see how much you grow? Take a 3-minute starting check.") : (T.pcNudgeRetake || "It's been a while — retake the check and see your growth!")}</p>
       <div style={{ display:"flex", alignItems:"center", gap:12 }}>
         <button onClick={() => { logFunnel(ACTIVE_USER_ID, "progress_nudge_clicked"); onGo(); }} style={{ ...S.btn, padding:"8px 16px", background:"linear-gradient(135deg,#22c55e,#16a34a)", color:"#fff", fontSize:12 }}>{kind === "start" ? (T.pcStart || "Start the check") : (T.pcRetake || "Take it again")}</button>
         <button type="button" onClick={() => { try { localStorage.setItem(scopedKey(PROGRESS_NUDGE_KEY), String(Date.now())); } catch {} setHidden(true); }} style={{ background:"none", border:"none", color:"#94a3b8", fontSize:11, cursor:"pointer", padding:0 }}>{T.pcLater || "Later"}</button>
+        <button type="button" onClick={() => setPcHidden(true)} style={{ padding:"5px 12px", borderRadius:8, background:C.card, border:`1px solid ${C.border}`, color:"#94a3b8", fontSize:11, cursor:"pointer" }}>🙈 {T.pcHide || "Hide"}</button>
       </div>
     </div>
   );
