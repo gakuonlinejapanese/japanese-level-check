@@ -53,6 +53,7 @@ export const GUIDE_KEYS = {
   "Your saved cards are in this frame. Tap a folder to open it.": "library",
   "The cards in this folder are in this frame. Tap a card to see it.": "folderPg",
   "Flashcards are in this frame. Tap the card to flip it.": "flash",
+  "Want to review with flashcards? Tap “Go Flashcard” to start the Flashcards activity.": "goFlash",
   "Pick how you want to practice in this frame.": "pickWriting",
   // titles (feature names such as From Content / Conversation Practice stay in English)
   "Your first minute": "tFirst",
@@ -92,6 +93,7 @@ const GUIDE_I18N = {
    links:"Toca un enlace de este recuadro para abrir un sitio de estudio.", wordcards:"Busca una palabra en este recuadro y tócala para crear una tarjeta.",
    library:"Tus tarjetas guardadas están en este recuadro. Toca una carpeta para abrirla.", folderPg:"Las tarjetas de esta carpeta están en este recuadro. Toca una para verla.",
    flash:"Las tarjetas de estudio están en este recuadro. Toca la tarjeta para darle la vuelta.", pickWriting:"Elige cómo quieres practicar en este recuadro.",
+   goFlash:"¿Quieres repasar con tarjetas de estudio? Toca “Go Flashcard” para empezar la actividad de Flashcards.",
    tFirst:"Tu primer minuto", tSchedule:"Horario", tVocab:"Vocabulario", tPage:"Esta página", tSubtitles:"Subtítulos", tMilestones:"Hitos", tFeedback:"Comentarios", tLinks:"Enlaces", tWordCards:"Tarjetas de palabras", tLibrary:"Biblioteca", tFolder:"Carpeta", tFlash:"Tarjetas de estudio"
   }
  },
@@ -117,6 +119,7 @@ const GUIDE_I18N = {
    links:"Touche un lien dans ce cadre pour ouvrir un site d'étude.", wordcards:"Cherche un mot dans ce cadre, puis touche-le pour créer une carte.",
    library:"Tes cartes enregistrées sont dans ce cadre. Touche un dossier pour l'ouvrir.", folderPg:"Les cartes de ce dossier sont dans ce cadre. Touche une carte pour la voir.",
    flash:"Les cartes mémoire sont dans ce cadre. Touche la carte pour la retourner.", pickWriting:"Choisis comment t'entraîner dans ce cadre.",
+   goFlash:"Tu veux réviser avec des cartes mémoire ? Touche « Go Flashcard » pour lancer l'activité Flashcards.",
    tFirst:"Ta première minute", tSchedule:"Planning", tVocab:"Vocabulaire", tPage:"Cette page", tSubtitles:"Sous-titres", tMilestones:"Étapes", tFeedback:"Avis", tLinks:"Liens", tWordCards:"Cartes de mots", tLibrary:"Bibliothèque", tFolder:"Dossier", tFlash:"Cartes mémoire"
   }
  },
@@ -142,6 +145,7 @@ const GUIDE_I18N = {
    links:"Tippe in diesem Rahmen auf einen Link, um eine Lernseite zu öffnen.", wordcards:"Suche in diesem Rahmen ein Wort und tippe darauf, um eine Karte zu erstellen.",
    library:"Deine gespeicherten Karten sind in diesem Rahmen. Tippe auf einen Ordner, um ihn zu öffnen.", folderPg:"Die Karten dieses Ordners sind in diesem Rahmen. Tippe auf eine Karte, um sie zu sehen.",
    flash:"Die Lernkarten sind in diesem Rahmen. Tippe auf die Karte, um sie umzudrehen.", pickWriting:"Wähle in diesem Rahmen, wie du üben möchtest.",
+   goFlash:"Du möchtest mit Lernkarten wiederholen? Tippe auf „Go Flashcard“, um die Flashcards-Aktivität zu starten.",
    tFirst:"Deine erste Minute", tSchedule:"Zeitplan", tVocab:"Vokabeln", tPage:"Diese Seite", tSubtitles:"Untertitel", tMilestones:"Meilensteine", tFeedback:"Feedback", tLinks:"Links", tWordCards:"Wortkarten", tLibrary:"Bibliothek", tFolder:"Ordner", tFlash:"Lernkarten"
   }
  },
@@ -167,6 +171,7 @@ const GUIDE_I18N = {
    links:"点这个框里的链接，打开学习网站。", wordcards:"在这个框里搜索单词，然后点这个单词制作卡片。",
    library:"你保存的卡片在这个框里。点文件夹即可打开。", folderPg:"这个文件夹里的卡片在这个框里。点一张卡片查看。",
    flash:"闪卡在这个框里。点卡片即可翻面。", pickWriting:"在这个框里选择你想怎么练习。",
+   goFlash:"想用闪卡复习吗？点“Go Flashcard”，开始闪卡练习。",
    tFirst:"你的第一分钟", tSchedule:"日程", tVocab:"词汇", tPage:"本页", tSubtitles:"字幕", tMilestones:"里程碑", tFeedback:"反馈", tLinks:"链接", tWordCards:"单词卡片", tLibrary:"资料库", tFolder:"文件夹", tFlash:"闪卡"
   }
  },
@@ -192,6 +197,7 @@ const GUIDE_I18N = {
    links:"點這個框裡的連結,打開學習網站。", wordcards:"在這個框裡搜尋單字,然後點這個單字製作卡片。",
    library:"你儲存的卡片在這個框裡。點資料夾即可打開。", folderPg:"這個資料夾裡的卡片在這個框裡。點一張卡片查看。",
    flash:"閃卡在這個框裡。點卡片即可翻面。", pickWriting:"在這個框裡選擇你想怎麼練習。",
+   goFlash:"想用閃卡複習嗎?點「Go Flashcard」,開始閃卡練習。",
    tFirst:"你的第一分鐘", tSchedule:"行程", tVocab:"詞彙", tPage:"本頁", tSubtitles:"字幕", tMilestones:"里程碑", tFeedback:"意見回饋", tLinks:"連結", tWordCards:"單字卡片", tLibrary:"資料庫", tFolder:"資料夾", tFlash:"閃卡"
   }
  },
@@ -217,6 +223,7 @@ const GUIDE_I18N = {
    links:"Tocca un link in questo riquadro per aprire un sito di studio.", wordcards:"Cerca una parola in questo riquadro, poi toccala per creare una scheda.",
    library:"Le tue schede salvate sono in questo riquadro. Tocca una cartella per aprirla.", folderPg:"Le schede di questa cartella sono in questo riquadro. Tocca una scheda per vederla.",
    flash:"Le flashcard sono in questo riquadro. Tocca la scheda per girarla.", pickWriting:"Scegli come vuoi esercitarti in questo riquadro.",
+   goFlash:"Vuoi ripassare con le flashcard? Tocca “Go Flashcard” per iniziare l'attività Flashcards.",
    tFirst:"Il tuo primo minuto", tSchedule:"Programma", tVocab:"Vocabolario", tPage:"Questa pagina", tSubtitles:"Sottotitoli", tMilestones:"Traguardi", tFeedback:"Feedback", tLinks:"Link", tWordCards:"Schede di parole", tLibrary:"Libreria", tFolder:"Cartella", tFlash:"Flashcard"
   }
  },
@@ -242,6 +249,7 @@ const GUIDE_I18N = {
    links:"이 틀 안의 링크를 눌러 학습 사이트를 여세요.", wordcards:"이 틀 안에서 단어를 검색한 뒤, 단어를 눌러 카드를 만드세요.",
    library:"저장한 카드가 이 틀 안에 있어요. 폴더를 눌러 여세요.", folderPg:"이 폴더의 카드가 이 틀 안에 있어요. 카드를 눌러 보세요.",
    flash:"플래시카드가 이 틀 안에 있어요. 카드를 눌러 뒤집으세요.", pickWriting:"이 틀 안에서 연습 방식을 고르세요.",
+   goFlash:"플래시카드로 복습하고 싶나요? “Go Flashcard”를 눌러 Flashcards 활동을 시작하세요.",
    tFirst:"첫 1분", tSchedule:"일정", tVocab:"단어", tPage:"이 페이지", tSubtitles:"자막", tMilestones:"마일스톤", tFeedback:"의견", tLinks:"링크", tWordCards:"단어 카드", tLibrary:"라이브러리", tFolder:"폴더", tFlash:"플래시카드"
   }
  },
@@ -267,6 +275,7 @@ const GUIDE_I18N = {
    links:"แตะลิงก์ในกรอบนี้เพื่อเปิดเว็บไซต์เรียน", wordcards:"ค้นหาคำศัพท์ในกรอบนี้ แล้วแตะคำนั้นเพื่อสร้างการ์ด",
    library:"การ์ดที่บันทึกไว้อยู่ในกรอบนี้ แตะโฟลเดอร์เพื่อเปิด", folderPg:"การ์ดในโฟลเดอร์นี้อยู่ในกรอบนี้ แตะการ์ดเพื่อดู",
    flash:"แฟลชการ์ดอยู่ในกรอบนี้ แตะการ์ดเพื่อพลิก", pickWriting:"เลือกวิธีที่อยากฝึกในกรอบนี้",
+   goFlash:"อยากทบทวนด้วยแฟลชการ์ดใช่ไหม? แตะ “Go Flashcard” เพื่อเริ่มกิจกรรม Flashcards",
    tFirst:"1 นาทีแรกของคุณ", tSchedule:"ตารางเรียน", tVocab:"คำศัพท์", tPage:"หน้านี้", tSubtitles:"คำบรรยาย", tMilestones:"เป้าหมายสำคัญ", tFeedback:"ความคิดเห็น", tLinks:"ลิงก์", tWordCards:"การ์ดคำศัพท์", tLibrary:"คลัง", tFolder:"โฟลเดอร์", tFlash:"แฟลชการ์ด"
   }
  },
@@ -292,6 +301,7 @@ const GUIDE_I18N = {
    links:"Tekan pautan dalam bingkai ini untuk membuka laman belajar.", wordcards:"Cari perkataan dalam bingkai ini, kemudian tekan perkataan itu untuk membuat kad.",
    library:"Kad yang anda simpan ada dalam bingkai ini. Tekan folder untuk membukanya.", folderPg:"Kad dalam folder ini ada dalam bingkai ini. Tekan kad untuk melihatnya.",
    flash:"Kad imbas ada dalam bingkai ini. Tekan kad untuk memusingkannya.", pickWriting:"Pilih cara anda mahu berlatih dalam bingkai ini.",
+   goFlash:"Mahu ulang kaji dengan kad imbas? Tekan “Go Flashcard” untuk memulakan aktiviti Flashcards.",
    tFirst:"Minit pertama anda", tSchedule:"Jadual", tVocab:"Perbendaharaan kata", tPage:"Halaman ini", tSubtitles:"Sari kata", tMilestones:"Pencapaian", tFeedback:"Maklum balas", tLinks:"Pautan", tWordCards:"Kad perkataan", tLibrary:"Perpustakaan", tFolder:"Folder", tFlash:"Kad imbas"
   }
  },
@@ -317,6 +327,7 @@ const GUIDE_I18N = {
    links:"Ketuk tautan di bingkai ini untuk membuka situs belajar.", wordcards:"Cari kata di bingkai ini, lalu ketuk kata itu untuk membuat kartu.",
    library:"Kartu yang kamu simpan ada di bingkai ini. Ketuk folder untuk membukanya.", folderPg:"Kartu di folder ini ada di bingkai ini. Ketuk kartu untuk melihatnya.",
    flash:"Kartu kilat ada di bingkai ini. Ketuk kartu untuk membaliknya.", pickWriting:"Pilih cara berlatih di bingkai ini.",
+   goFlash:"Mau mengulang dengan kartu kilat? Ketuk “Go Flashcard” untuk memulai aktivitas Flashcards.",
    tFirst:"Menit pertamamu", tSchedule:"Jadwal", tVocab:"Kosakata", tPage:"Halaman ini", tSubtitles:"Subtitel", tMilestones:"Pencapaian", tFeedback:"Masukan", tLinks:"Tautan", tWordCards:"Kartu kata", tLibrary:"Pustaka", tFolder:"Folder", tFlash:"Kartu kilat"
   }
  },
@@ -342,6 +353,7 @@ const GUIDE_I18N = {
    links:"Chạm vào một liên kết trong khung này để mở trang học.", wordcards:"Tìm một từ trong khung này, rồi chạm vào từ đó để tạo thẻ.",
    library:"Các thẻ đã lưu của bạn nằm trong khung này. Chạm vào một thư mục để mở.", folderPg:"Các thẻ trong thư mục này nằm trong khung này. Chạm vào một thẻ để xem.",
    flash:"Thẻ ghi nhớ nằm trong khung này. Chạm vào thẻ để lật.", pickWriting:"Chọn cách bạn muốn luyện tập trong khung này.",
+   goFlash:"Muốn ôn tập bằng thẻ ghi nhớ? Chạm “Go Flashcard” để bắt đầu hoạt động Flashcards.",
    tFirst:"Phút đầu tiên của bạn", tSchedule:"Lịch học", tVocab:"Từ vựng", tPage:"Trang này", tSubtitles:"Phụ đề", tMilestones:"Cột mốc", tFeedback:"Phản hồi", tLinks:"Liên kết", tWordCards:"Thẻ từ", tLibrary:"Thư viện", tFolder:"Thư mục", tFlash:"Thẻ ghi nhớ"
   }
  },
@@ -367,6 +379,7 @@ const GUIDE_I18N = {
    links:"पढ़ाई की साइट खोलने के लिए इस फ़्रेम में किसी लिंक पर दबाएँ।", wordcards:"इस फ़्रेम में कोई शब्द खोजें, फिर कार्ड बनाने के लिए उस शब्द पर दबाएँ।",
    library:"आपके सेव किए कार्ड इस फ़्रेम में हैं। फ़ोल्डर खोलने के लिए उस पर दबाएँ।", folderPg:"इस फ़ोल्डर के कार्ड इस फ़्रेम में हैं। देखने के लिए किसी कार्ड पर दबाएँ।",
    flash:"फ़्लैशकार्ड इस फ़्रेम में हैं। पलटने के लिए कार्ड पर दबाएँ।", pickWriting:"इस फ़्रेम में चुनें कि आप कैसे अभ्यास करना चाहते हैं।",
+   goFlash:"फ़्लैशकार्ड से दोहराना चाहते हैं? Flashcards गतिविधि शुरू करने के लिए “Go Flashcard” दबाएँ।",
    tFirst:"आपका पहला मिनट", tSchedule:"शेड्यूल", tVocab:"शब्दावली", tPage:"यह पेज", tSubtitles:"सबटाइटल", tMilestones:"मील के पत्थर", tFeedback:"फ़ीडबैक", tLinks:"लिंक", tWordCards:"शब्द कार्ड", tLibrary:"लाइब्रेरी", tFolder:"फ़ोल्डर", tFlash:"फ़्लैशकार्ड"
   }
  },
@@ -392,6 +405,7 @@ const GUIDE_I18N = {
    links:"Bir çalışma sitesini açmak için bu çerçevedeki bir bağlantıya dokun.", wordcards:"Bu çerçevede bir kelime ara, sonra kart yapmak için kelimeye dokun.",
    library:"Kaydettiğin kartlar bu çerçevede. Açmak için bir klasöre dokun.", folderPg:"Bu klasördeki kartlar bu çerçevede. Görmek için bir karta dokun.",
    flash:"Bilgi kartları bu çerçevede. Çevirmek için karta dokun.", pickWriting:"Bu çerçevede nasıl çalışmak istediğini seç.",
+   goFlash:"Bilgi kartlarıyla tekrar yapmak ister misin? Flashcards etkinliğini başlatmak için “Go Flashcard” öğesine dokun.",
    tFirst:"İlk dakikan", tSchedule:"Program", tVocab:"Kelimeler", tPage:"Bu sayfa", tSubtitles:"Altyazılar", tMilestones:"Dönüm noktaları", tFeedback:"Geri bildirim", tLinks:"Bağlantılar", tWordCards:"Kelime kartları", tLibrary:"Kütüphane", tFolder:"Klasör", tFlash:"Bilgi kartları"
   }
  },
@@ -417,6 +431,7 @@ const GUIDE_I18N = {
    links:"अध्ययन साइट खोल्न यो फ्रेमको लिङ्कमा थिच्नुहोस्।", wordcards:"यो फ्रेममा शब्द खोज्नुहोस्, त्यसपछि कार्ड बनाउन शब्दमा थिच्नुहोस्।",
    library:"तपाईंले सेभ गरेका कार्डहरू यो फ्रेममा छन्। खोल्न फोल्डरमा थिच्नुहोस्।", folderPg:"यो फोल्डरका कार्डहरू यो फ्रेममा छन्। हेर्न कार्डमा थिच्नुहोस्।",
    flash:"फ्ल्यासकार्डहरू यो फ्रेममा छन्। पल्टाउन कार्डमा थिच्नुहोस्।", pickWriting:"यो फ्रेममा तपाईं कसरी अभ्यास गर्न चाहनुहुन्छ छान्नुहोस्।",
+   goFlash:"फ्ल्यासकार्डबाट दोहोर्याउन चाहनुहुन्छ? Flashcards गतिविधि सुरु गर्न “Go Flashcard” थिच्नुहोस्।",
    tFirst:"तपाईंको पहिलो मिनेट", tSchedule:"तालिका", tVocab:"शब्दावली", tPage:"यो पेज", tSubtitles:"सबटाइटल", tMilestones:"माइलस्टोन", tFeedback:"प्रतिक्रिया", tLinks:"लिङ्कहरू", tWordCards:"शब्द कार्ड", tLibrary:"लाइब्रेरी", tFolder:"फोल्डर", tFlash:"फ्ल्यासकार्ड"
   }
  },
@@ -442,6 +457,7 @@ const GUIDE_I18N = {
    links:"I-tap ang link sa frame na ito para magbukas ng study site.", wordcards:"Maghanap ng salita sa frame na ito, saka i-tap ang salita para gumawa ng card.",
    library:"Nasa frame na ito ang mga na-save mong card. I-tap ang folder para buksan.", folderPg:"Nasa frame na ito ang mga card sa folder na ito. I-tap ang card para makita.",
    flash:"Nasa frame na ito ang mga flashcard. I-tap ang card para baliktarin.", pickWriting:"Piliin sa frame na ito kung paano mo gustong mag-practice.",
+   goFlash:"Gusto mong mag-review gamit ang flashcard? I-tap ang “Go Flashcard” para simulan ang Flashcards activity.",
    tFirst:"Ang una mong minuto", tSchedule:"Iskedyul", tVocab:"Bokabularyo", tPage:"Pahinang ito", tSubtitles:"Mga subtitle", tMilestones:"Mga milestone", tFeedback:"Feedback", tLinks:"Mga link", tWordCards:"Mga word card", tLibrary:"Library", tFolder:"Folder", tFlash:"Mga flashcard"
   }
  }

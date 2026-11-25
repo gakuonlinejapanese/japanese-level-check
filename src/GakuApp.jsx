@@ -14674,7 +14674,7 @@ function FolderDetailView({ folderName, onBack, onViewCard, onRenamed, onReviewC
               <div style={{ display:"flex", gap:6, flexShrink:0 }}>
                 <button onClick={()=>speakVocabWord(c)} style={{ padding:"6px 10px", borderRadius:8, background:"rgba(6,182,212,0.1)", border:`1px solid rgba(6,182,212,0.2)`, color:C.teal, fontSize:14, cursor:"pointer" }}>🔊</button>
                 {onReviewCard && !selecting && (
-                  <button onClick={e=>{ e.stopPropagation(); onReviewCard(c); }} title="Go Flashcard" aria-label="Go Flashcard" style={{ padding:"6px 8px", borderRadius:8, background:"rgba(34,197,94,0.1)", border:"1px solid rgba(34,197,94,0.35)", color:"#4ade80", fontSize:11, fontWeight:700, cursor:"pointer", whiteSpace:"nowrap" }}>🎴 Go Flashcard</button>
+                  <button data-guide="folder-go-flash" onClick={e=>{ e.stopPropagation(); onReviewCard(c); }} title="Go Flashcard" aria-label="Go Flashcard" style={{ padding:"6px 8px", borderRadius:8, background:"rgba(34,197,94,0.1)", border:"1px solid rgba(34,197,94,0.35)", color:"#4ade80", fontSize:11, fontWeight:700, cursor:"pointer", whiteSpace:"nowrap" }}>🎴 Go Flashcard</button>
                 )}
                 <button onClick={()=>removeCard(c.id)} style={{ padding:"6px 10px", borderRadius:8, background:"rgba(239,68,68,0.08)", border:`1px solid rgba(239,68,68,0.2)`, color:"#ef4444", fontSize:14, cursor:"pointer" }}>🗑</button>
               </div>
@@ -18698,8 +18698,14 @@ const EASY_GUIDES = {
     ja: { title: "ライブラリ", steps: [ { sel: "@next", t: "ほぞんした カードは この わく の中です。フォルダを おすと ひらきます。", next: true } ] }
   },
   page_vocab_folder: {
-    en: { title: "Folder", steps: [ { sel: "@next", t: "The cards in this folder are in this frame. Tap a card to see it.", next: true } ] },
-    ja: { title: "フォルダ", steps: [ { sel: "@next", t: "この フォルダの カードは この わく の中です。おすと 見られます。", next: true } ] }
+    en: { title: "Folder", steps: [
+      { sel: "@next", t: "The cards in this folder are in this frame. Tap a card to see it.", next: true },
+      { sel: "folder-go-flash", t: "Want to review with flashcards? Tap “Go Flashcard” to start the Flashcards activity." },
+    ] },
+    ja: { title: "フォルダ", steps: [
+      { sel: "@next", t: "この フォルダの カードは この わく の中です。おすと 見られます。", next: true },
+      { sel: "folder-go-flash", t: "フラッシュカードで 復習したい ときは、「Go Flashcard」を おして、Flashcards Activities を はじめよう。" },
+    ] }
   },
   page_vocab_flashcard: {
     en: { title: "Flashcards", steps: [ { sel: "@next", t: "Flashcards are in this frame. Tap the card to flip it.", next: true } ] },
