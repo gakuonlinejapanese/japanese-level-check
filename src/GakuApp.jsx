@@ -17715,7 +17715,7 @@ Respond ONLY with valid JSON, no markdown, no backticks:
   const newQuestion = () => { setQuestion(""); setAnswer(""); setResult(null); setError(""); };
 
   const modeBtn = (id, label, disabled) => (
-    <button key={id} data-guide={"write-mode-"+id} disabled={disabled} onClick={() => !disabled && setMode(id)}
+    <button key={id} data-guide={(mode===id?"write-mode-active-":"write-mode-")+id} disabled={disabled} onClick={() => !disabled && setMode(id)}
       style={{ flex:1, padding:"10px 8px", borderRadius:10, fontSize:12, fontWeight:700, cursor:disabled?"not-allowed":"pointer",
         border:`1.5px solid ${mode===id?C.teal:C.border}`, background:mode===id?"rgba(6,182,212,0.12)":C.card,
         color:disabled?"#475569":(mode===id?C.teal:"#94a3b8"), opacity:disabled?0.7:1 }}>
@@ -18618,16 +18618,22 @@ const EASY_GUIDES = {
     en: { title: "Writing Practice", steps: [
       { sel: "tab-resources", at: { tab:"resources" }, t: "Tap here." },
       { sel: "sub-writing", at: { tab:"resources", sub:"writing" }, t: "Tap “Writing”." },
-      { sel: "write-mode-copy", t: "Pick a style. “Copying down” = copy a sentence by hand. “Questions” = write an answer.", next: true },
-      { alts: [ { sel: "write-text", t: "① PASTE HERE. Put a short Japanese sentence in this box." }, { sel: "write-question", t: "① PASTE THE QUESTION HERE." } ], next: true },
+      { alts: [
+        { sel: "write-mode-active-question", t: "You are in “Questions”. Paste a question, write your answer in Japanese, and GAKU checks it. (Tap “Copying down” to copy a sentence by hand instead.)" },
+        { sel: "write-mode-active-copy", t: "You are in “Copying down”: copy a sentence by hand. (Tap “Questions” to answer a question instead.)" },
+        { sel: "write-mode-copy", t: "Pick a style. “Copying down” = copy a sentence by hand. “Questions” = write an answer." } ], next: true },
+      { alts: [ { sel: "write-text", t: "① PASTE HERE. Put a short Japanese sentence in this box." }, { sel: "write-question", t: "① PASTE THE QUESTION HERE. Put a question from a test or website in this box." } ], next: true },
       { alts: [ { sel: "write-start", t: "② Tap here. Then draw with your finger!" }, { sel: "write-answer", t: "② TYPE YOUR ANSWER HERE, in Japanese." } ], next: true },
-      { sel: "write-check", opt: true, t: "③ Tap here to check your answer.", next: true },
+      { sel: "write-check", opt: true, t: "③ Tap here. GAKU checks your answer against the question.", next: true },
     ] },
     ja: { title: "Writing Practice", steps: [
       { sel: "tab-resources", at: { tab:"resources" }, t: "ここを おす。" },
       { sel: "sub-writing", at: { tab:"resources", sub:"writing" }, t: "「Writing」を おす。" },
-      { sel: "write-mode-copy", t: "やりかたを えらぶ。「Copying down」= 文を 書きうつす。「Questions」= 問題に 答えを 書く。", next: true },
-      { alts: [ { sel: "write-text", t: "① ここに はる。みじかい 日本語の文を、この わく の中に はります。" }, { sel: "write-question", t: "① ここに 問題を はる。" } ], next: true },
+      { alts: [
+        { sel: "write-mode-active-question", t: "いま「Questions」です。問題を はって、答えを 日本語で 書くと、GAKUが 答えあわせを します。(「Copying down」= 文を 書きうつす)" },
+        { sel: "write-mode-active-copy", t: "いま「Copying down」です。文を 書きうつします。(「Questions」= 問題に 答える)" },
+        { sel: "write-mode-copy", t: "やりかたを えらぶ。「Copying down」= 文を 書きうつす。「Questions」= 問題に 答えを 書く。" } ], next: true },
+      { alts: [ { sel: "write-text", t: "① ここに はる。みじかい 日本語の文を、この わく の中に はります。" }, { sel: "write-question", t: "① ここに 問題を はる。テストや サイトの 問題を、この わく の中に はります。" } ], next: true },
       { alts: [ { sel: "write-start", t: "② ここを おす。ゆびで かこう!" }, { sel: "write-answer", t: "② ここに 答えを 日本語で 書く。" } ], next: true },
       { sel: "write-check", opt: true, t: "③ ここを おすと 答えあわせ。", next: true },
     ] }
