@@ -1469,13 +1469,6 @@ const UI_TRANSLATIONS = {
     readerCardLater: "Not now",
     // How to use
     howToTitle: "How to use this app",
-    howToSchedule: "Your weekly study plan, broken into daily tasks. Tap a task to mark it done and track your weekly progress.",
-    howToPractice: "AI-generated exercises built from Japanese text you paste (articles, subtitles, captions) — covers vocabulary, kanji, grammar, reading, listening, conversation, and pronunciation. Tap 'Show answer' to check yourself.",
-    howToVocab: "Search any topic to get level-appropriate words with example sentences, a visual association, and a CLT usage tip. Save words you want to remember.",
-    howToResources: "Free (and some paid) tools matched to your selected skills — open them directly from here.",
-    howToMilestones: "Your roadmap toward your goal. Tap each milestone as you complete it.",
-    howToEditProfile: "Update your goals, level, schedule, or skills any time — your existing answers are kept so you only change what's needed.",
-    howToHelp: "Get a personalized plan for today based on your mood, time and energy — or come back here anytime for this guide.",
       vocabBuilderTitle: "📚 VOCABULARY BUILDER",
     vocabBuilderDesc: "Enter a topic to see related words from the Japanese dictionary (English or 日本語 OK)",
     vocabSearchPlaceholder: "e.g. food, travel, emotions...",
@@ -2146,13 +2139,6 @@ const UI_TRANSLATIONS = {
     readerCardCta: "Ajouter à Chrome (gratuit)",
     readerCardLater: "Plus tard",
     howToTitle: "Comment utiliser cette application",
-    howToSchedule: "Votre plan d'étude hebdomadaire, divisé en tâches quotidiennes. Appuyez sur une tâche pour la marquer comme faite.",
-    howToPractice: "Exercices générés par l'IA à partir du texte japonais que vous collez (articles, sous-titres, légendes) — vocabulaire, kanji, grammaire, lecture, écoute, conversation et prononciation. Appuyez sur « Voir la réponse » pour vous corriger.",
-    howToVocab: "Recherchez n'importe quel sujet pour obtenir des mots adaptés à votre niveau avec des phrases d'exemple. Sauvegardez les mots à retenir.",
-    howToResources: "Outils gratuits (et certains payants) correspondant à vos compétences sélectionnées.",
-    howToMilestones: "Votre feuille de route vers votre objectif. Cochez chaque étape franchie.",
-    howToEditProfile: "Mettez à jour vos objectifs, niveau, planning ou compétences à tout moment.",
-    howToHelp: "Obtenez un plan personnalisé pour aujourd'hui selon votre humeur, votre temps et votre énergie.",
       vocabBuilderTitle: "📚 CRÉATEUR DE VOCABULAIRE",
     vocabBuilderDesc: "Entrez un sujet pour voir les mots associés du dictionnaire japonais (English ou 日本語 OK)",
     vocabSearchPlaceholder: "ex. nourriture, voyage, émotions...",
@@ -2802,13 +2788,6 @@ const UI_TRANSLATIONS = {
     readerCardCta: "Añadir a Chrome (gratis)",
     readerCardLater: "Ahora no",
     howToTitle: "Cómo usar esta aplicación",
-    howToSchedule: "Tu plan de estudio semanal, dividido en tareas diarias. Toca una tarea para marcarla como completada.",
-    howToPractice: "Ejercicios generados por IA a partir del texto japonés que pegas (artículos, subtítulos, leyendas) — vocabulario, kanji, gramática, lectura, escucha, conversación y pronunciación. Toca 'Ver respuesta' para comprobar.",
-    howToVocab: "Busca cualquier tema para obtener palabras apropiadas para tu nivel con frases de ejemplo. Guarda las palabras que quieras recordar.",
-    howToResources: "Herramientas gratuitas (y algunas de pago) que coinciden con tus habilidades seleccionadas.",
-    howToMilestones: "Tu hoja de ruta hacia tu objetivo. Toca cada hito cuando lo completes.",
-    howToEditProfile: "Actualiza tus objetivos, nivel, horario o habilidades en cualquier momento.",
-    howToHelp: "Obtén un plan personalizado para hoy según tu estado de ánimo, tiempo y energía.",
       vocabBuilderTitle: "📚 CONSTRUCTOR DE VOCABULARIO",
     vocabBuilderDesc: "Introduce un tema para ver palabras relacionadas del diccionario japonés (English o 日本語 OK)",
     vocabSearchPlaceholder: "ej. comida, viajes, emociones...",
@@ -3458,13 +3437,6 @@ const UI_TRANSLATIONS = {
     readerCardCta: "Adicionar ao Chrome (grátis)",
     readerCardLater: "Agora não",
     howToTitle: "Como usar este aplicativo",
-    howToSchedule: "Seu plano de estudo semanal, dividido em tarefas diárias.",
-    howToPractice: "Exercícios gerados por IA a partir do texto japonês que você cola (artigos, legendas, descrições) — vocabulário, kanji, gramática, leitura, escuta, conversação e pronúncia. Toque em 'Ver resposta' para conferir.",
-    howToVocab: "Pesquise qualquer tema para obter palavras adequadas ao seu nível com frases de exemplo.",
-    howToResources: "Ferramentas gratuitas (e algumas pagas) que correspondem às suas habilidades selecionadas.",
-    howToMilestones: "Seu roteiro para seu objetivo. Toque em cada marco quando o completar.",
-    howToEditProfile: "Atualize seus objetivos, nível, agenda ou habilidades a qualquer momento.",
-    howToHelp: "Obtenha um plano personalizado para hoje com base no seu humor, tempo e energia.",
       vocabBuilderTitle: "📚 CONSTRUTOR DE VOCABULÁRIO",
     vocabBuilderDesc: "Digite um tópico para ver palavras relacionadas do dicionário japonês (English ou 日本語 OK)",
     vocabSearchPlaceholder: "ex. comida, viagem, emoções...",
@@ -4114,13 +4086,6 @@ const UI_TRANSLATIONS = {
     readerCardCta: "Zu Chrome hinzufügen (kostenlos)",
     readerCardLater: "Später",
     howToTitle: "Wie man diese App benutzt",
-    howToSchedule: "Ihr wöchentlicher Lernplan, aufgeteilt in tägliche Aufgaben.",
-    howToPractice: "KI-generierte Übungen aus dem japanischen Text, den Sie einfügen (Artikel, Untertitel, Bildunterschriften) — Wortschatz, Kanji, Grammatik, Lesen, Hören, Konversation und Aussprache. Tippen Sie auf 'Antwort anzeigen', um sich selbst zu überprüfen.",
-    howToVocab: "Suchen Sie nach beliebigen Themen, um niveaugerechte Wörter mit Beispielsätzen zu erhalten.",
-    howToResources: "Kostenlose (und einige kostenpflichtige) Tools, die Ihren ausgewählten Fähigkeiten entsprechen.",
-    howToMilestones: "Ihr Fahrplan zu Ihrem Ziel. Markieren Sie jeden Meilenstein, wenn Sie ihn erreichen.",
-    howToEditProfile: "Aktualisieren Sie Ihre Ziele, Ihr Niveau, Ihren Zeitplan oder Ihre Fähigkeiten jederzeit.",
-    howToHelp: "Erhalten Sie einen personalisierten Plan für heute basierend auf Ihrer Stimmung, Zeit und Energie.",
       vocabBuilderTitle: "📚 VOKABELTRAINER",
     vocabBuilderDesc: "Geben Sie ein Thema ein, um verwandte Wörter aus dem japanischen Wörterbuch zu sehen (English oder 日本語 OK)",
     vocabSearchPlaceholder: "z. B. Essen, Reisen, Emotionen...",
@@ -4770,13 +4735,6 @@ const UI_TRANSLATIONS = {
     readerCardCta: "Aggiungi a Chrome (gratis)",
     readerCardLater: "Non ora",
     howToTitle: "Come usare questa app",
-    howToSchedule: "Il tuo piano di studio settimanale, suddiviso in attività giornaliere. Tocca un'attività per contrassegnarla come completata.",
-    howToPractice: "Esercizi generati dall'IA a partire dal testo giapponese che incolli (articoli, sottotitoli, didascalie) — vocabolario, kanji, grammatica, lettura, ascolto, conversazione e pronuncia. Tocca 'Mostra risposta' per verificare.",
-    howToVocab: "Cerca qualsiasi argomento per ottenere parole appropriate al tuo livello con frasi di esempio. Salva le parole da ricordare.",
-    howToResources: "Strumenti gratuiti (e alcuni a pagamento) corrispondenti alle tue abilità selezionate.",
-    howToMilestones: "La tua roadmap verso il tuo obiettivo. Tocca ogni pietra miliare quando la completi.",
-    howToEditProfile: "Aggiorna i tuoi obiettivi, livello, programma o abilità in qualsiasi momento.",
-    howToHelp: "Ottieni un piano personalizzato per oggi basato sul tuo umore, tempo ed energia.",
       vocabBuilderTitle: "📚 COSTRUTTORE DI VOCABOLARIO",
     vocabBuilderDesc: "Inserisci un argomento per vedere le parole correlate dal dizionario giapponese (English o 日本語 OK)",
     vocabSearchPlaceholder: "es. cibo, viaggi, emozioni...",
@@ -5426,13 +5384,6 @@ const UI_TRANSLATIONS = {
     readerCardCta: "添加到 Chrome（免费）",
     readerCardLater: "以后再说",
     howToTitle: "如何使用此应用",
-    howToSchedule: "你的每周学习计划，分为每日任务。点击任务以标记完成并跟踪每周进度。",
-    howToPractice: "根据你粘贴的日语文本（文章、字幕、说明）由AI生成的练习——涵盖词汇、汉字、语法、阅读、听力、会话和发音。点击「显示答案」自我检查。",
-    howToVocab: "搜索任何话题，获取适合你级别的单词、例句和CLT使用技巧。保存你想记住的单词。",
-    howToResources: "与你选择技能匹配的免费（和部分付费）工具，可直接从这里打开。",
-    howToMilestones: "你实现目标的路线图。完成每个里程碑时点击它。",
-    howToEditProfile: "随时更新你的目标、级别、日程或技能。",
-    howToHelp: "根据你今天的心情、时间和精力获取个性化计划。",
       vocabBuilderTitle: "📚 词汇构建器",
     vocabBuilderDesc: "输入一个主题，查看日语词典中的相关单词（English 或 日本語 均可）",
     vocabSearchPlaceholder: "例如：食物、旅行、情感...",
@@ -6082,13 +6033,6 @@ const UI_TRANSLATIONS = {
     readerCardCta: "加入 Chrome（免費）",
     readerCardLater: "以後再說",
     howToTitle: "如何使用此應用",
-    howToSchedule: "你的每週學習計劃，分為每日任務。點擊任務以標記完成並跟踪每週進度。",
-    howToPractice: "根據你貼上的日語文本（文章、字幕、說明）由AI生成的練習——涵蓋詞彙、漢字、文法、閱讀、聽力、會話和發音。點擊「顯示答案」自我檢查。",
-    howToVocab: "搜索任何話題，獲取適合你級別的單字、例句和CLT使用技巧。儲存你想記住的單字。",
-    howToResources: "與你選擇技能匹配的免費（和部分付費）工具，可直接從這裡打開。",
-    howToMilestones: "你實現目標的路線圖。完成每個里程碑時點擊它。",
-    howToEditProfile: "隨時更新你的目標、級別、日程或技能。",
-    howToHelp: "根據你今天的心情、時間和精力獲取個性化計劃。",
       vocabBuilderTitle: "📚 詞彙建構器",
     vocabBuilderDesc: "輸入一個主題，查看日語詞典中的相關單字（English 或 日本語 均可）",
     vocabSearchPlaceholder: "例如：食物、旅行、情感...",
@@ -6738,13 +6682,6 @@ const UI_TRANSLATIONS = {
     readerCardCta: "Chrome에 추가 (무료)",
     readerCardLater: "나중에",
     howToTitle: "이 앱 사용 방법",
-    howToSchedule: "주간 학습 계획, 일별 과제로 나뉩니다. 과제를 눌러 완료 표시하고 주간 진도를 추적하세요.",
-    howToPractice: "붙여넣은 일본어 텍스트(기사, 자막, 캡션)를 기반으로 AI가 생성한 연습문제 — 어휘, 한자, 문법, 독해, 듣기, 회화, 발음을 다룹니다. '답 보기'를 눌러 확인하세요.",
-    howToVocab: "어떤 주제든 검색하여 레벨에 맞는 단어와 예문을 확인하세요. 기억하고 싶은 단어를 저장하세요.",
-    howToResources: "선택한 스킬과 일치하는 무료(및 일부 유료) 도구 — 여기서 바로 열어보세요.",
-    howToMilestones: "목표를 향한 로드맵. 각 마일스톤을 완료할 때 눌러주세요.",
-    howToEditProfile: "목표, 레벨, 일정 또는 스킬을 언제든지 업데이트하세요.",
-    howToHelp: "오늘의 기분, 시간, 에너지를 기반으로 개인화된 계획을 받으세요.",
       vocabBuilderTitle: "📚 어휘 빌더",
     vocabBuilderDesc: "주제를 입력하면 일본어 사전에서 관련 단어를 확인할 수 있습니다 (English 또는 日本語 가능)",
     vocabSearchPlaceholder: "예: 음식, 여행, 감정...",
@@ -7394,13 +7331,6 @@ const UI_TRANSLATIONS = {
     readerCardCta: "เพิ่มใน Chrome (ฟรี)",
     readerCardLater: "ไว้ก่อน",
     howToTitle: "วิธีใช้แอปนี้",
-    howToSchedule: "แผนการเรียนรายสัปดาห์ แบ่งเป็นงานรายวัน แตะงานเพื่อทำเครื่องหมายว่าเสร็จแล้วและติดตามความคืบหน้า",
-    howToPractice: "แบบฝึกหัดที่สร้างโดย AI จากข้อความภาษาญี่ปุ่นที่คุณวาง (บทความ คำบรรยาย แคปชั่น) — ครอบคลุมคำศัพท์ คันจิ ไวยากรณ์ การอ่าน การฟัง การสนทนา และการออกเสียง แตะ 'ดูคำตอบ' เพื่อตรวจสอบ",
-    howToVocab: "ค้นหาหัวข้อใดก็ได้เพื่อรับคำศัพท์ที่เหมาะกับระดับพร้อมประโยคตัวอย่าง บันทึกคำที่ต้องการจำ",
-    howToResources: "เครื่องมือฟรี (และบางส่วนเสียเงิน) ที่ตรงกับทักษะที่คุณเลือก",
-    howToMilestones: "แผนที่เส้นทางสู่เป้าหมายของคุณ แตะแต่ละหมุดเมื่อทำสำเร็จ",
-    howToEditProfile: "อัปเดตเป้าหมาย ระดับ ตาราง หรือทักษะได้ตลอดเวลา",
-    howToHelp: "รับแผนส่วนตัวสำหรับวันนี้ตามอารมณ์ เวลา และพลังงานของคุณ",
       vocabBuilderTitle: "📚 ตัวสร้างคำศัพท์",
     vocabBuilderDesc: "ป้อนหัวข้อเพื่อดูคำที่เกี่ยวข้องจากพจนานุกรมภาษาญี่ปุ่น (English หรือ 日本語 ได้)",
     vocabSearchPlaceholder: "เช่น อาหาร การเดินทาง อารมณ์...",
@@ -8050,13 +7980,6 @@ const UI_TRANSLATIONS = {
     readerCardCta: "Tambah ke Chrome (percuma)",
     readerCardLater: "Bukan sekarang",
     howToTitle: "Cara menggunakan apl ini",
-    howToSchedule: "Pelan belajar mingguan anda, dibahagikan kepada tugasan harian. Ketik tugasan untuk tandai selesai.",
-    howToPractice: "Latihan yang dijana AI daripada teks Jepun yang anda tampal (artikel, sari kata, kapsyen) — merangkumi kosa kata, kanji, tatabahasa, bacaan, pendengaran, perbualan dan sebutan. Ketik 'Tunjuk jawapan' untuk semak.",
-    howToVocab: "Cari mana-mana topik untuk mendapatkan perkataan yang sesuai dengan tahap anda. Simpan perkataan yang ingin diingat.",
-    howToResources: "Alat percuma (dan beberapa berbayar) yang sepadan dengan kemahiran terpilih anda.",
-    howToMilestones: "Peta jalan anda menuju matlamat. Ketik setiap pencapaian apabila selesai.",
-    howToEditProfile: "Kemaskini matlamat, tahap, jadual atau kemahiran bila-bila masa.",
-    howToHelp: "Dapatkan pelan peribadi untuk hari ini berdasarkan mood, masa dan tenaga anda.",
       vocabBuilderTitle: "📚 PEMBINA KOSA KATA",
     vocabBuilderDesc: "Masukkan topik untuk melihat perkataan berkaitan dari kamus Jepun (English atau 日本語 OK)",
     vocabSearchPlaceholder: "cth. makanan, perjalanan, emosi...",
@@ -8706,13 +8629,6 @@ const UI_TRANSLATIONS = {
     readerCardCta: "Tambahkan ke Chrome (gratis)",
     readerCardLater: "Nanti saja",
     howToTitle: "Cara menggunakan aplikasi ini",
-    howToSchedule: "Rencana belajar mingguan Anda, dibagi menjadi tugas harian. Ketuk tugas untuk menandainya selesai.",
-    howToPractice: "Latihan yang dihasilkan AI dari teks Jepang yang Anda tempel (artikel, subtitle, keterangan) — mencakup kosakata, kanji, tata bahasa, membaca, mendengarkan, percakapan, dan pengucapan. Ketuk 'Tampilkan jawaban' untuk memeriksa.",
-    howToVocab: "Cari topik apa saja untuk mendapatkan kata-kata sesuai level Anda dengan kalimat contoh. Simpan kata yang ingin diingat.",
-    howToResources: "Alat gratis (dan beberapa berbayar) yang sesuai dengan keterampilan pilihan Anda.",
-    howToMilestones: "Peta jalan Anda menuju tujuan. Ketuk setiap pencapaian saat Anda menyelesaikannya.",
-    howToEditProfile: "Perbarui tujuan, level, jadwal, atau keterampilan kapan saja.",
-    howToHelp: "Dapatkan rencana yang dipersonalisasi untuk hari ini berdasarkan suasana hati, waktu, dan energi Anda.",
       vocabBuilderTitle: "📚 PEMBANGUN KOSAKATA",
     vocabBuilderDesc: "Masukkan topik untuk melihat kata terkait dari kamus Jepang (English atau 日本語 OK)",
     vocabSearchPlaceholder: "misalnya makanan, perjalanan, emosi...",
@@ -9362,13 +9278,6 @@ const UI_TRANSLATIONS = {
     readerCardCta: "Thêm vào Chrome (miễn phí)",
     readerCardLater: "Để sau",
     howToTitle: "Cách sử dụng ứng dụng này",
-    howToSchedule: "Kế hoạch học hàng tuần của bạn, chia thành các nhiệm vụ hàng ngày. Nhấn nhiệm vụ để đánh dấu hoàn thành.",
-    howToPractice: "Bài tập do AI tạo từ văn bản tiếng Nhật bạn dán vào (bài viết, phụ đề, chú thích) — bao gồm từ vựng, kanji, ngữ pháp, đọc hiểu, nghe, hội thoại và phát âm. Nhấn 'Hiện đáp án' để kiểm tra.",
-    howToVocab: "Tìm kiếm bất kỳ chủ đề nào để nhận từ vựng phù hợp với cấp độ cùng câu ví dụ. Lưu từ muốn ghi nhớ.",
-    howToResources: "Công cụ miễn phí (và một số có phí) phù hợp với kỹ năng bạn chọn.",
-    howToMilestones: "Lộ trình hướng tới mục tiêu của bạn. Nhấn từng cột mốc khi hoàn thành.",
-    howToEditProfile: "Cập nhật mục tiêu, cấp độ, lịch học hoặc kỹ năng bất kỳ lúc nào.",
-    howToHelp: "Nhận kế hoạch cá nhân hóa cho hôm nay dựa trên tâm trạng, thời gian và năng lượng của bạn.",
       vocabBuilderTitle: "📚 TRÌNH XÂY DỰNG TỪ VỰNG",
     vocabBuilderDesc: "Nhập một chủ đề để xem các từ liên quan từ từ điển tiếng Nhật (English hoặc 日本語 đều được)",
     vocabSearchPlaceholder: "vd. thức ăn, du lịch, cảm xúc...",
@@ -10018,13 +9927,6 @@ const UI_TRANSLATIONS = {
     readerCardCta: "Chrome में जोड़ें (मुफ़्त)",
     readerCardLater: "अभी नहीं",
     howToTitle: "इस ऐप का उपयोग कैसे करें",
-    howToSchedule: "आपकी साप्ताहिक अध्ययन योजना, दैनिक कार्यों में विभाजित। साप्ताहिक प्रगति ट्रैक करने के लिए कार्य टैप करें।",
-    howToPractice: "आपके द्वारा पेस्ट किए गए जापानी टेक्स्ट (लेख, सबटाइटल, कैप्शन) से AI-जनित अभ्यास — शब्दावली, कांजी, व्याकरण, पठन, श्रवण, बातचीत और उच्चारण को कवर करता है। जांचने के लिए 'उत्तर दिखाएं' टैप करें।",
-    howToVocab: "किसी भी विषय के लिए खोजें और उदाहरण वाक्यों के साथ स्तर-उपयुक्त शब्द पाएं।",
-    howToResources: "आपके चुने हुए कौशल से मेल खाने वाले मुफ़्त (और कुछ सशुल्क) टूल।",
-    howToMilestones: "आपके लक्ष्य की ओर रोडमैप। पूरा होने पर प्रत्येक मील का पत्थर टैप करें।",
-    howToEditProfile: "कभी भी अपने लक्ष्य, स्तर, समय-सारणी या कौशल अपडेट करें।",
-    howToHelp: "आज अपने मूड, समय और ऊर्जा के आधार पर व्यक्तिगत योजना प्राप्त करें।",
       vocabBuilderTitle: "📚 शब्दावली निर्माता",
     vocabBuilderDesc: "जापानी शब्दकोश से संबंधित शब्द देखने के लिए एक विषय दर्ज करें (English या 日本語 ठीक है)",
     vocabSearchPlaceholder: "जैसे भोजन, यात्रा, भावनाएं...",
@@ -10674,13 +10576,6 @@ const UI_TRANSLATIONS = {
     readerCardCta: "Chromeに追加(無料)",
     readerCardLater: "あとで",
     howToTitle: "このアプリの使い方",
-    howToSchedule: "週間学習プランを日々のタスクに分割しています。タスクをタップして完了をマークし、週間進捗を追跡します。",
-    howToPractice: "貼り付けた日本語テキスト（記事・字幕・キャプション）から生成されるAI練習問題です。語彙・漢字・文法・読解・リスニング・会話・発音をカバーします。「答えを見る」をタップして確認できます。",
-    howToVocab: "任意のトピックを検索すると、あなたのレベルに合った単語と例文が表示されます。覚えたい単語を保存できます。",
-    howToResources: "選択したスキルに合った無料（一部有料）のツールを直接ここから開けます。",
-    howToMilestones: "目標へのロードマップです。達成するたびに各マイルストーンをタップしてください。",
-    howToEditProfile: "目標、レベル、スケジュール、スキルはいつでも更新できます。",
-    howToHelp: "今日の気分、時間、エネルギーに基づいてパーソナライズされたプランを取得できます。",
       vocabBuilderTitle: "📚 単語ビルダー",
     vocabBuilderDesc: "トピックを入力すると、日本語辞書から関連単語を表示します（English or 日本語OK）",
     vocabSearchPlaceholder: "例：食べ物、旅行、感情...",
@@ -11330,13 +11225,6 @@ const UI_TRANSLATIONS = {
     readerCardCta: "Chrome'a ekle (ücretsiz)",
     readerCardLater: "Şimdi değil",
     howToTitle: "Bu uygulama nasıl kullanılır",
-    howToSchedule: "Günlük görevlere bölünmüş haftalık çalışma planınız. Tamamlandı olarak işaretlemek için bir göreve dokunun.",
-    howToPractice: "Yapıştırdığınız Japonca metinden (makale, altyazı, açıklama) AI tarafından oluşturulan alıştırmalar — kelime, kanji, dilbilgisi, okuma, dinleme, konuşma ve telaffuzu kapsar. Kontrol etmek için 'Cevabı göster'e dokunun.",
-    howToVocab: "Seviyenize uygun kelimeleri örnek cümlelerle almak için herhangi bir konu arayın. Hatırlamak istediğiniz kelimeleri kaydedin.",
-    howToResources: "Seçtiğiniz becerilerle eşleşen ücretsiz (ve bazı ücretli) araçlar, doğrudan buradan açılır.",
-    howToMilestones: "Hedefinize giden yol haritanız. Her kilometre taşını tamamladığınızda dokunun.",
-    howToEditProfile: "Hedeflerinizi, seviyenizi, programınızı veya becerilerinizi istediğiniz zaman güncelleyin.",
-    howToHelp: "Bugünkü ruh haliniz, zamanınız ve enerjinize göre kişiselleştirilmiş bir plan alın.",
       vocabBuilderTitle: "📚 KELİME OLUŞTURUCU",
     vocabBuilderDesc: "Japonca sözlükten ilgili kelimeleri görmek için bir konu girin (English veya 日本語 olabilir)",
     vocabSearchPlaceholder: "örn. yemek, seyahat, duygular...",
@@ -11986,13 +11874,6 @@ const UI_TRANSLATIONS = {
     readerCardCta: "Chrome मा थप्नुहोस् (निःशुल्क)",
     readerCardLater: "अहिले होइन",
     howToTitle: "यो एप कसरी प्रयोग गर्ने",
-    howToSchedule: "तपाईंको साप्ताहिक अध्ययन योजना, दैनिक कार्यहरूमा विभाजित। साप्ताहिक प्रगति ट्र्याक गर्न कार्यलाई ट्याप गर्नुहोस्।",
-    howToPractice: "तपाईंले टाँस्नुभएको जापानी पाठ (लेख, उपशीर्षक, क्याप्शन) बाट AI-उत्पन्न अभ्यास — शब्दावली, कांजी, व्याकरण, पठन, सुनाइ, कुराकानी र उच्चारण समेट्छ। जाँच गर्न 'जवाफ देखाउनुहोस्' ट्याप गर्नुहोस्।",
-    howToVocab: "तपाईंको स्तरमा उपयुक्त शब्दहरू उदाहरण वाक्यहरूसहित प्राप्त गर्न कुनै पनि विषय खोज्नुहोस्। सम्झन चाहेका शब्दहरू सेभ गर्नुहोस्।",
-    howToResources: "तपाईंले चयन गरेका सीपहरूसँग मेल खाने नि:शुल्क (र केही भुक्तानी गरिएका) उपकरणहरू, सिधै यहाँबाट खोल्नुहोस्।",
-    howToMilestones: "तपाईंको लक्ष्यतर्फको रोडम्याप। पूरा गर्दा हरेक माइलस्टोन ट्याप गर्नुहोस्।",
-    howToEditProfile: "आफ्नो लक्ष्य, स्तर, तालिका वा सीपहरू जुनसुकै बेला अपडेट गर्नुहोस्।",
-    howToHelp: "आजको मनोदशा, समय र ऊर्जाको आधारमा व्यक्तिगत योजना प्राप्त गर्नुहोस्।",
       vocabBuilderTitle: "📚 शब्दावली निर्माता",
     vocabBuilderDesc: "जापानी शब्दकोशबाट सम्बन्धित शब्दहरू हेर्न एउटा विषय प्रविष्ट गर्नुहोस् (English वा 日本語 ठीक छ)",
     vocabSearchPlaceholder: "जस्तै खाना, यात्रा, भावनाहरू...",
@@ -12642,13 +12523,6 @@ const UI_TRANSLATIONS = {
     readerCardCta: "Idagdag sa Chrome (libre)",
     readerCardLater: "Huwag muna",
     howToTitle: "Paano gamitin ang app na ito",
-    howToSchedule: "Ang iyong lingguhang study plan, nahahati sa araw-araw na gawain. I-tap ang gawain upang markahan itong tapos na.",
-    howToPractice: "Mga pagsasanay na ginawa ng AI mula sa Japanese text na iyong idinikit (artikulo, subtitle, caption) — sinasaklaw ang bokabularyo, kanji, gramatika, pagbasa, pakikinig, pag-uusap, at pagbigkas. I-tap ang 'Ipakita ang sagot' upang suriin.",
-    howToVocab: "Maghanap ng anumang paksa upang makakuha ng mga salitang angkop sa iyong antas na may mga halimbawang pangungusap. I-save ang mga salitang gusto mong tandaan.",
-    howToResources: "Libreng (at ilang bayad) na mga tool na tumutugma sa iyong mga piniling kasanayan, direktang bukas dito.",
-    howToMilestones: "Ang iyong roadmap patungo sa iyong layunin. I-tap ang bawat milestone kapag natapos mo na.",
-    howToEditProfile: "I-update ang iyong mga layunin, antas, iskedyul, o kasanayan anumang oras.",
-    howToHelp: "Kumuha ng personalized na plano para ngayon batay sa iyong mood, oras, at enerhiya.",
       vocabBuilderTitle: "📚 VOCABULARY BUILDER",
     vocabBuilderDesc: "Maglagay ng paksa upang makita ang mga kaugnay na salita mula sa diksyunaryong Japanese (English o 日本語 OK)",
     vocabSearchPlaceholder: "hal. pagkain, paglalakbay, damdamin...",
@@ -18623,141 +18497,20 @@ async function translateMilestonesAI(milestones, lang) {
 }
 
 // ─── HELP MODAL ────────────────────────────────────────────────────────────────
-// ─── Per-section "How to use" help (the "?" button) ──────────────────────────
-// Self-contained English/Japanese text (not in UI_TRANSLATIONS). Other UI languages fall back to English.
-const SECTION_HELP = {
-  schedule: {
-    en: { title:"Schedule", what:"Your personal weekly study plan. It is made once for you and never changes unless you press \"Update my study guide\" in Edit Profile.", steps:["Open today's tasks and do them in order.","Tap a task's link or \"Go to…\" button to open the right tool.","Tick the box when you finish — your streak and progress go up."], example:"Example: \"Read a manga scene\" → tap the link → come back → tick it.", intensive:"At the top of this screen, Intensive Mode shows a daily goal (8 actions a day) and warns you if you are behind. It also looks at your last 14 days of study and suggests the areas where you make the most mistakes, so you know what to practice today." },
-    ja: { title:"スケジュール", what:"あなた専用の1週間の勉強プランです。一度作成されたら、Edit Profileで「Update my study guide」を押さない限り変わりません。", steps:["今日のタスクを上から順にやります。","タスクのリンクや「Go to…」ボタンで、必要なツールを開きます。","終わったらチェックを入れます。連続日数と進捗が増えます。"], example:"例:「マンガの1場面を読む」→ リンクを開く → 戻ってチェック。", intensive:"Intensive Modeでは、この画面の上に「今日のノルマ(1日8アクション)」が表示され、未達だと警告が出ます。さらに直近14日間の学習から、ミスが多い分野を見つけて「今日はここを中心に」と提案します。" }
-  },
-  vocabulary: {
-    en: { title:"Vocabulary", what:"Look up any word and save it to your own folders (Library) to review later.", steps:["Type a word in English or Japanese and search.","Tap Save and choose a folder.","Open the Library to review with flashcards or listen to the pronunciation."], example:"Example: search \"階段\" → Save → review in your \"Daily life\" folder." },
-    ja: { title:"単語", what:"好きな単語を調べて、自分のフォルダ(Library)に保存し、あとで復習できます。", steps:["英語か日本語で単語を入力して検索します。","Saveを押してフォルダを選びます。","Libraryでフラッシュカードや発音で復習します。"], example:"例:「階段」を検索 → Save →「Daily life」フォルダで復習。" }
-  },
-  subtitles: {
-    en: { title:"Subtitles", what:"Save words and lines from videos you watch, so you can study them later.", steps:["Paste a subtitle line or word from the video.","Save it to your list.","Come back to review the lines you saved."], example:"Example: paste a line from an anime episode → save → review it tomorrow." },
-    ja: { title:"字幕帳", what:"見た動画の単語やセリフを保存して、あとで勉強できます。", steps:["動画の字幕のセリフや単語を貼り付けます。","リストに保存します。","保存したセリフを後で見返します。"], example:"例:アニメのセリフを貼り付け → 保存 → 明日復習。" }
-  },
-  milestones: {
-    en: { title:"Milestones", what:"Your goal roadmap and progress check, so you can see how far you have come.", steps:["Read your roadmap steps for your goal.","Use the progress check to see where you stand.","Keep your streak going to move forward."], example:"Example: finish this week's tasks to reach the next milestone." },
-    ja: { title:"マイルストーン", what:"目標までの道のりと進捗チェックです。どこまで進んだかがわかります。", steps:["目標に向けたロードマップを読みます。","進捗チェックで今の位置を確認します。","連続学習を続けて前に進みます。"], example:"例: 今週のタスクを終えると、次のマイルストーンに近づきます。" }
-  },
-  jlpt: {
-    en: { title:"JLPT results", what:"Your JLPT diagnosis result sent by your teacher appears here.", steps:["Wait for your teacher to send your result.","Open this tab to see it.","Tap Download PDF to save it."], example:"Example: after your mock test, your result report shows up here." },
-    ja: { title:"JLPT結果", what:"先生から送られたJLPT診断結果がここに表示されます。", steps:["先生が結果を送るのを待ちます。","このタブを開いて確認します。","Download PDFで保存します。"], example:"例: 模擬試験のあと、結果レポートがここに届きます。" }
-  },
-  feedback: {
-    en: { title:"Feedback", what:"Tell us what to improve in GAKU Master.", steps:["Write your idea or problem.","Tap Send.","Please be kind — abusive messages are not accepted."], example:"Example: \"Please add more N4 grammar questions.\"" },
-    ja: { title:"フィードバック", what:"GAKU Masterの改善してほしい点を教えてください。", steps:["アイデアや困っていることを書きます。","送信を押します。","暴言・誹謗中傷は受け付けられません。"], example:"例:「N4の文法問題を増やしてください。」" }
-  },
-  vocab_wordcards: {
-    en: { title:"Word Cards", what:"Search any word and open its word card — meaning, reading and example sentences.", steps:["Type an English or Japanese word (or a topic) and tap Search.","Tap a result to open its card.","Save it to a folder so you can review it later."], example:"Example: search \"階段\" → open the card → Save to your \"Daily life\" folder." },
-    ja: { title:"単語カード", what:"好きな単語を検索して、単語カード(意味・読み方・例文)を開けます。", steps:["英語か日本語の単語(またはテーマ)を入力して検索します。","結果を押すと、その単語カードが開きます。","フォルダに保存すると、あとで復習できます。"], example:"例:「階段」を検索 → カードを開く →「Daily life」フォルダに保存。" }
-  },
-  vocab_library: {
-    en: { title:"Library", what:"All the words you saved, sorted into folders.", steps:["Tap a folder to see the word cards inside.","Tap 🔊 ▶ on a folder to hear all its words one after another.","Tap \"Quick review with Flashcards\" to practice your words."], example:"Tip: make your own folders with \"New folder\" (for example, one folder for each lesson)." },
-    ja: { title:"Library(単語帳)", what:"保存した単語が、フォルダごとに入っています。", steps:["フォルダを押すと、中の単語カードが開きます。","フォルダの🔊 ▶を押すと、その中の単語を順番に聞けます。","「Quick review with Flashcards」で単語を復習します。"], example:"ヒント:「New folder」で自分のフォルダを作れます(例: レッスンごとに1つ)。" }
-  },
-  vocab_folder: {
-    en: { title:"Word cards in this folder", what:"Each box below is one word card — a word you saved.", steps:["Tap a word card to open it: meaning, reading and example sentences.","Tap 🔊 to hear the word. Tap 🔊 ▶ All (top right) to hear every word in this folder.","Tap Go Flashcard to practice just that word. Tap the trash can to delete the card."], example:"Tip: \"📋 Copy to folder\" copies words into another folder (for example, your next lesson's folder)." },
-    ja: { title:"このフォルダの単語カード", what:"下の1つの箱が、保存した単語カード1枚です。", steps:["単語カードを押すと、意味・読み方・例文が開きます。","🔊で単語の音声、右上の「🔊 ▶ All」でこのフォルダの全単語を順番に聞けます。","「Go Flashcard」でその単語だけを復習します。ゴミ箱でカードを削除します。"], example:"ヒント:「📋 別のフォルダへコピー」で、単語を別のフォルダ(例: 次のレッスン用)にコピーできます。" }
-  },
-  vocab_flashcard: {
-    en: { title:"Flashcards", what:"Practice your saved words like paper flashcards. Tap the card to flip it and check the answer.", steps:["Look at the word and try to remember the meaning. Tap Hint if you need the reading, then tap the card to see the answer.","If you knew it, tap ✅ Understand. The word moves to the \"Understood\" folder, so you can review only the words you don't know yet. It is still saved in your Library — nothing is lost.","If you didn't know it, don't press anything. Just tap → for the next card; it stays in your deck."], example:"Intensive Mode records how fast you flip each card and how many times you press Understand, and uses it to show which words you really know and which you don't.", action:"Try Intensive Mode" },
-    ja: { title:"フラッシュカード", what:"保存した単語を、紙の単語カードのように復習します。カードを押すとめくれて、答えが見られます。", steps:["単語を見て、意味を思い出します。読み方が必要なら「Hint」を押し、カードを押して答えを見ます。","わかったら「✅ Understand」を押します。その単語は「Understood」フォルダに移り、まだわからない単語だけを復習できます。Libraryにも保存されたままなので、消えません。","わからなかったら、何も押さずに → で次のカードへ進みます。その単語はデッキに残ります。"], example:"Intensive Modeを使うと、カードをめくる速さやUnderstandを押した回数を記録して、本当にわかっている単語とそうでない単語を見分けられます。", action:"Intensive Modeを試す" }
-  },
-  res_writing_copy: {
-    en: { title:"Writing Practice — Copying down", what:"Copy Japanese one character at a time, drawing each stroke with your finger or mouse. GAKU checks your stroke order and shape.", steps:["Paste a Japanese sentence in the box, or tap \"Choose words from your Library\" to use words you saved.","Tap \"Start writing\".","Write each character, one stroke at a time."], example:"Tip: up to 30 characters are practiced at a time." },
-    ja: { title:"Writing Practice — 書き写し", what:"日本語を1文字ずつ、指やマウスで1画ずつ書き写します。GAKUが筆順と形をチェックします。", steps:["日本語の文を貼り付けるか、「単語帳から単語を選ぶ」で保存した単語を選びます。","「書き始める」を押します。","1文字ずつ、1画ずつ書きます。"], example:"ヒント: 1回に練習できるのは最大30文字です。" }
-  },
-  res_writing_copy_write: {
-    en: { title:"Writing one character at a time", what:"You write, one character at a time, the text you pasted or the words you picked from your Library.", steps:["Write the character one stroke at a time, in the right order. GAKU tells you when a stroke is wrong.","Not sure how to write it? Tap ▶ Watch stroke order. Want another go? Tap ↺ Try again.","When you finish a character, tap the blue Next ▶ button. On the last character it says Finish."], notes:["The guide is the faint gray outline of the character. With 👁 Show guide you can trace over it; with 🙈 Hide guide you write from memory.","New text takes you back to the previous screen, where you choose new words, characters or a sentence."], example:"Intensive Mode measures your writing more accurately and analyzes the characters, words and sentences you find difficult.", action:"Try Intensive Mode" },
-    ja: { title:"1文字ずつ書く", what:"先ほど貼り付けた文、または単語帳から選んだ単語を、1文字ずつ書きます。", steps:["1画ずつ、正しい順番で書きます。間違えるとGAKUが教えてくれます。","書き方がわからなければ「▶ 筆順を見る」を押します。もう一度書きたいときは「↺ もう一度」を押します。","1文字書き終わったら、青い「次へ ▶」を押します。最後の文字では「終了」と表示されます。"], notes:["「ガイド」とは、文字のうすい灰色の輪郭のことです。「👁 ガイドを表示」ではなぞって書け、「🙈 ガイドを隠す」では何も見ずに書きます。","「新しい文」を押すと前の画面に戻り、新しい単語・文字・文章を選び直せます。"], example:"Intensive Modeを使うと、書く力をより正確に測り、苦手な文章・単語・文字を分析してくれます。", action:"Intensive Modeを使う" }
-  },
-  res_links: {
-    en: { title:"Resources", what:"Hand-picked websites, videos and apps for your level and skills.", steps:["Look at the cards below (each card is a video or website). They are picked to match your level.","Tap the Open button on a card you like.","Use GAKU Reader on that page to look up words you don't know."], example:"Example: open a recommended reading site and read one short page." },
-    ja: { title:"リソース", what:"あなたのレベルとスキルに合わせて選んだサイト・動画・アプリです。", steps:["下に並んでいるカード(動画やサイトの紹介)を見ます。あなたのレベルに合うものが選ばれています。","気になるカードの「Open」ボタンを押して開きます。","そのページでGAKU Readerを使って、わからない単語を調べます。"], example:"例: おすすめの読み物サイトを開いて、短い1ページを読む。" }
-  },
-  res_content: {
-    en: { title:"Create From Content", what:"Paste any Japanese you are reading or watching, and GAKU turns it into practice questions.", steps:["Paste Japanese text (an article, subtitles, a message).","Tap Analyze to make questions.","Answer them, and turn furigana / romaji / translation on if you need help."], example:"Example: paste an apartment notice → get meaning, kanji and grammar questions from it." },
-    ja: { title:"Create From Content", what:"読んでいる・見ている日本語を貼り付けると、GAKUが練習問題を作ります。", steps:["日本語の文章(記事・字幕・メッセージなど)を貼り付けます。","Analyzeを押して問題を作ります。","答えて、必要ならふりがな・ローマ字・翻訳を使います。"], example:"例: マンションのお知らせを貼り付け → 意味・漢字・文法の問題ができます。" }
-  },
-  res_conversation: {
-    en: { title:"Conversation Practice", what:"Play a real video near your mic. GAKU listens, shows the real lines, and helps you reply.", steps:["Tap the listen button and play a Japanese video with sound.","Each line you hear becomes a card. If GAKU could not catch a line, it will ask you to listen again — please replay the video or audio you were listening to.","Tap \"How would you respond?\" to practice a natural reply."], example:"Example: play a YouTube conversation → pick the best reply from 4 choices.", intensive:"When you speak your reply, GAKU checks your Japanese. Intensive Mode records whether each spoken answer was correct and what kind of mistake you made (particles, verb forms, word choice, word order or spelling), and repeated wrong words. It then suggests what to focus on today." },
-    ja: { title:"Conversation Practice", what:"動画の音声をマイクで聞き取り、実際のセリフをカードにして、返し方の練習ができます。", steps:["聞き取りボタンを押して、日本語の動画を音を出して流します。","聞こえたセリフがカードになります。聞き取れない場合は、GAKUが「もう一度聴いてください」と指示します。そのときは、聴いていた動画や音声を再生し直してください。","「How would you respond?」で自然な返し方を練習します。"], example:"例: YouTubeの会話を流す → 4つの返事から一番自然なものを選ぶ。", intensive:"声に出して答えると、GAKUが日本語をチェックします。Intensive Modeでは、答えが合っていたかと、ミスの種類(助詞・活用・単語・語順・表記)、繰り返し間違える単語を記録します。そして「今日はここを中心に」と提案します。" }
-  },
-  res_pronunciation: {
-    en: { title:"Pronunciation Practice", what:"Read Japanese aloud (or listen and repeat) and see how close your speaking was.", steps:["Paste Japanese text to get phrases.","Listen, then record yourself saying it.","Check your result and try again."], example:"Example: paste a short song line → say it → see your score.", intensive:"Intensive Mode records the result of every pronunciation try (and your score), so it can find the phrases you keep getting wrong and suggest them for extra practice." },
-    ja: { title:"Pronunciation Practice", what:"日本語を声に出して読み(または聞いて繰り返し)、発音がどれだけ近いかを確認します。", steps:["日本語の文章を貼り付けてフレーズを作ります。","聞いてから、自分で声に出して録音します。","結果を見て、もう一度挑戦します。"], example:"例: 短い歌詞を貼り付け → 声に出す → 結果を見る。", intensive:"Intensive Modeでは、発音の結果(スコア)を毎回記録します。何度も間違えるフレーズを見つけて、追加の練習として提案します。" }
-  },
-  res_writing: {
-    en: { title:"Writing Practice", what:"Practice writing Japanese by copying text or answering questions.", steps:["Choose a mode (Copying down or Questions).","Pick text, or choose words from your Library.","Type your answer and check it."], example:"Example: copy 3 sentences from a manga scene, then check your typing.", intensive:"Intensive Mode measures your writing accuracy more carefully. In Copying down, it records every character and stroke. In Questions mode, GAKU checks your answer and records the kind of mistake (particles, verb forms, word choice, word order or spelling) and the wrong words. It then points out which mistakes you make most and what to practice today." },
-    ja: { title:"Writing Practice", what:"文章を書き写したり、質問に答えたりして、日本語を書く練習をします。", steps:["モード(Copying down か Questions)を選びます。","文章を選ぶか、Libraryの単語を選びます。","入力して答え合わせをします。"], example:"例: マンガの場面から3文を書き写して、入力を確認する。", intensive:"Intensive Modeでは、書く力をより正確に測ります。書き写しでは1文字・1画ごとに記録します。Questionsでは、答えをGAKUがチェックして、ミスの種類(助詞・活用・単語・語順・表記)と間違えた単語を記録します。そして、よくあるミスと「今日はここを中心に」を提案します。" }
-  }
-};
-
-function SectionHelp({ id, lang, autoOpen, onAction }) {
-  const isJa = lang === "Japanese";
-  const entry = SECTION_HELP[id];
-  const key = "gaku_help_hide_" + id;
-  const [open, setOpen] = useState(false);
-  useEffect(() => {
-    setOpen(false);
-    if (!autoOpen || !entry) return;
-    let hidden = false;
-    try { hidden = localStorage.getItem(scopedKey(key)) === "1"; } catch {}
-    if (!hidden) setOpen(true);
-  }, [id, autoOpen]);
-  if (!entry) return null;
-  const tr = (!isJa && HELP_I18N[lang]) || null;   // other UI languages (falls back to English)
-  const c = isJa ? entry.ja : ((tr && tr.sections && tr.sections[id]) || entry.en);
-  const L = isJa
-    ? { how:"使い方", what:"これは何?", steps:"使い方3ステップ", close:"閉じる", never:"次から表示しない", tryIntensive:"Intensive Modeを試す" }
-    : { how:"How to use", what:"What is this?", steps:"3 steps", close:"Close", never:"Don't show again", tryIntensive:"Try Intensive Mode", ...((tr && tr.labels) || {}) };
-  const dismiss = (forever) => {
-    if (forever) { try { localStorage.setItem(scopedKey(key), "1"); } catch {} }
-    setOpen(false);
-  };
+// ─── Per-section "How to use" button (the "?") ─────────────────────────────────
+// The written manuals (What is this / 3 steps / Example) were removed on 2026-11-25 so there is only ONE
+// explanation: the on-screen guided pointer (GuideCoach below). The button shows only where a guide exists.
+function SectionHelp({ id, lang }) {
+  const T = useUITranslations(lang || "English");
+  const g = EASY_GUIDE_FOR[id];
+  if (!g) return null;
   return (
     <div style={{ marginBottom:12 }}>
-      <button onClick={() => setOpen(o => !o)} aria-expanded={open}
+      <button onClick={() => startGuide(g)}
         style={{ display:"inline-flex", alignItems:"center", gap:6, padding:"5px 12px 5px 6px", borderRadius:99, background:"rgba(168,85,247,0.12)", border:`1px solid ${C.purpleLight}`, color:C.purpleLight, fontSize:12, fontWeight:700, cursor:"pointer" }}>
         <span style={{ width:20, height:20, borderRadius:"50%", background:C.purpleLight, color:"#1e1033", display:"inline-flex", alignItems:"center", justifyContent:"center", fontSize:12, fontWeight:900 }}>?</span>
-        {L.how}
+        {T.howToUse || (lang === "Japanese" ? "使い方" : "How to use")}
       </button>
-      {open && (
-        <div style={{ ...S.card, marginTop:8, borderLeft:`3px solid ${C.purpleLight}` }}>
-          <p style={{ color:"#f1f5f9", fontSize:14, fontWeight:800, margin:"0 0 8px" }}>{c.title}</p>
-          {EASY_GUIDE_FOR[id] && (
-            <button onClick={() => { setOpen(false); startGuide(EASY_GUIDE_FOR[id]); }} style={{ ...S.btn, width:"100%", marginBottom:12, padding:"12px 14px", fontSize:14, fontWeight:800, background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff" }}>👆 {isJa ? EASY_LABELS.ja.step : EASY_LABELS.en.step}</button>
-          )}
-          <p style={{ color:C.purpleLight, fontSize:11, fontWeight:700, letterSpacing:1, margin:"0 0 4px" }}>{L.what}</p>
-          <p style={{ color:"#e2e8f0", fontSize:13, lineHeight:1.7, margin:"0 0 10px" }}>{c.what}</p>
-          <p style={{ color:C.purpleLight, fontSize:11, fontWeight:700, letterSpacing:1, margin:"0 0 4px" }}>{L.steps}</p>
-          <ol style={{ color:"#e2e8f0", fontSize:13, lineHeight:1.7, margin:"0 0 10px", paddingLeft:20 }}>
-            {c.steps.map((t, i) => <li key={i}>{t}</li>)}
-          </ol>
-          {c.notes && c.notes.length > 0 && (
-            <ul style={{ color:"#e2e8f0", fontSize:13, lineHeight:1.7, margin:"0 0 10px", paddingLeft:20 }}>
-              {c.notes.map((t, i) => <li key={i}>{t}</li>)}
-            </ul>
-          )}
-          <p style={{ color:"#94a3b8", fontSize:12, lineHeight:1.6, margin:"0 0 12px" }}>{c.example}</p>
-          {c.intensive && (
-            <div style={{ margin:"0 0 12px", padding:"10px 12px", borderRadius:10, background:"rgba(168,85,247,0.10)", border:`1px solid ${C.purpleLight}` }}>
-              <p style={{ color:C.purpleLight, fontSize:11, fontWeight:800, letterSpacing:1, margin:"0 0 4px" }}>🔥 Intensive Mode</p>
-              <p style={{ color:"#e2e8f0", fontSize:13, lineHeight:1.7, margin:0 }}>{c.intensive}</p>
-            </div>
-          )}
-          {(c.action || c.intensive) && onAction && (
-            <button onClick={() => { dismiss(false); onAction(); }} style={{ ...S.btn, width:"100%", marginBottom:10, padding:"10px 14px", fontSize:13, background:"linear-gradient(135deg,rgba(168,85,247,0.35),rgba(124,58,237,0.3))", border:`1px solid ${C.purpleLight}`, color:"#f5f3ff", fontWeight:800 }}>🔥 {c.action || L.tryIntensive}</button>
-          )}
-          <div style={{ display:"flex", gap:8, flexWrap:"wrap" }}>
-            <button onClick={() => dismiss(false)} style={{ ...S.btn, padding:"7px 14px", fontSize:12, background:C.card, color:"#94a3b8", border:`1px solid ${C.border}` }}>{L.close}</button>
-            <button onClick={() => dismiss(true)} style={{ ...S.btn, padding:"7px 14px", fontSize:12, background:"transparent", color:"#94a3b8", border:`1px solid ${C.border}` }}>{L.never}</button>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
@@ -18771,124 +18524,129 @@ function SectionHelp({ id, lang, autoOpen, onAction }) {
 // window event "gaku_start_guide"; the Dashboard hosts <GuideCoach/>.
 // Copy is English + Japanese (Japanese only when the UI language is Japanese); other languages see English.
 const EASY_GUIDES = {
-  start: { go: "schedule",
+  start: {
     en: { title: "Your first minute", steps: [
-      { sel: "tab-resources", t: "Tap here." },
-      { sel: "sub-content", t: "Tap “From Content”." },
+      { sel: "tab-resources", at: { tab:"resources" }, t: "Tap here." },
+      { sel: "sub-content", at: { tab:"resources", sub:"content" }, t: "Tap “From Content”." },
       { sel: "content-text", t: "A sample text is ready. Or paste your own.", next: true },
       { sel: "content-analyze", t: "Tap this big button." },
       { t: "Answer the questions. Great job! 🎉" },
     ] },
     ja: { title: "最初の1分", steps: [
-      { sel: "tab-resources", t: "ここを おす。" },
-      { sel: "sub-content", t: "「From Content」を おす。" },
+      { sel: "tab-resources", at: { tab:"resources" }, t: "ここを おす。" },
+      { sel: "sub-content", at: { tab:"resources", sub:"content" }, t: "「From Content」を おす。" },
       { sel: "content-text", t: "見本の文が入っています。自分の文でもOK。", next: true },
       { sel: "content-analyze", t: "この おおきい ボタンを おす。" },
       { t: "問題に こたえる。できました! 🎉" },
     ] }
   },
-  schedule: { go: "schedule",
+  schedule: {
     en: { title: "Schedule", steps: [
-      { sel: "tab-schedule", t: "Tap here." },
+      { sel: "tab-schedule", at: { tab:"schedule" }, t: "Tap here." },
       { sel: "sched-task", t: "Do today's task. Tap here when you finish.", next: true },
     ] },
     ja: { title: "スケジュール", steps: [
-      { sel: "tab-schedule", t: "ここを おす。" },
+      { sel: "tab-schedule", at: { tab:"schedule" }, t: "ここを おす。" },
       { sel: "sched-task", t: "今日のタスクを やる。おわったら ここを おす。", next: true },
     ] }
   },
-  vocabulary: { go: "vocabulary",
+  vocabulary: {
     en: { title: "Vocabulary", steps: [
-      { sel: "tab-vocabulary", t: "Tap here." },
+      { sel: "tab-vocabulary", at: { tab:"vocabulary" }, t: "Tap here." },
       { sel: "vocab-search", t: "Type one word here.", next: true },
       { sel: "vocab-find", t: "Tap here to search." },
       { sel: "vocab-result", t: "Tap the word." },
       { sel: "vocab-save", t: "Tap here. Saved! 🎉" },
     ] },
     ja: { title: "単語", steps: [
-      { sel: "tab-vocabulary", t: "ここを おす。" },
+      { sel: "tab-vocabulary", at: { tab:"vocabulary" }, t: "ここを おす。" },
       { sel: "vocab-search", t: "ここに ことばを 1つ いれる。", next: true },
       { sel: "vocab-find", t: "ここを おして さがす。" },
       { sel: "vocab-result", t: "ことばを おす。" },
       { sel: "vocab-save", t: "ここを おす。ほぞん できた! 🎉" },
     ] }
   },
-  content: { go: "schedule",
+  content: {
     en: { title: "From Content", steps: [
-      { sel: "tab-resources", t: "Tap here." },
-      { sel: "sub-content", t: "Tap “From Content”." },
+      { sel: "tab-resources", at: { tab:"resources" }, t: "Tap here." },
+      { sel: "sub-content", at: { tab:"resources", sub:"content" }, t: "Tap “From Content”." },
       { sel: "content-text", t: "Paste Japanese here.", next: true },
       { sel: "content-analyze", t: "Tap this big button." },
     ] },
     ja: { title: "From Content", steps: [
-      { sel: "tab-resources", t: "ここを おす。" },
-      { sel: "sub-content", t: "「From Content」を おす。" },
+      { sel: "tab-resources", at: { tab:"resources" }, t: "ここを おす。" },
+      { sel: "sub-content", at: { tab:"resources", sub:"content" }, t: "「From Content」を おす。" },
       { sel: "content-text", t: "ここに 日本語を はる。", next: true },
       { sel: "content-analyze", t: "この おおきい ボタンを おす。" },
     ] }
   },
-  conversation: { go: "schedule",
+  conversation: {
     en: { title: "Conversation Practice", steps: [
-      { sel: "tab-resources", t: "Tap here." },
-      { sel: "sub-conversation", t: "Tap “Conversation”." },
+      { sel: "tab-resources", at: { tab:"resources" }, t: "Tap here." },
+      { sel: "sub-conversation", at: { tab:"resources", sub:"conversation" }, t: "Tap “Conversation”." },
       { sel: "conv-listen", t: "Tap here. Then play a Japanese video with sound." },
     ] },
     ja: { title: "Conversation Practice", steps: [
-      { sel: "tab-resources", t: "ここを おす。" },
-      { sel: "sub-conversation", t: "「Conversation」を おす。" },
+      { sel: "tab-resources", at: { tab:"resources" }, t: "ここを おす。" },
+      { sel: "sub-conversation", at: { tab:"resources", sub:"conversation" }, t: "「Conversation」を おす。" },
       { sel: "conv-listen", t: "ここを おす。そして 日本語の どうがを おとを だして ながす。" },
     ] }
   },
-  pronunciation: { go: "schedule",
+  pronunciation: {
     en: { title: "Pronunciation Practice", steps: [
-      { sel: "tab-resources", t: "Tap here." },
-      { sel: "sub-pronunciation", t: "Tap “Pronunciation”." },
+      { sel: "tab-resources", at: { tab:"resources" }, t: "Tap here." },
+      { sel: "sub-pronunciation", at: { tab:"resources", sub:"pronunciation" }, t: "Tap “Pronunciation”." },
       { sel: "pron-text", t: "Paste Japanese here.", next: true },
       { sel: "pron-generate", t: "Tap this big button." },
     ] },
     ja: { title: "Pronunciation Practice", steps: [
-      { sel: "tab-resources", t: "ここを おす。" },
-      { sel: "sub-pronunciation", t: "「Pronunciation」を おす。" },
+      { sel: "tab-resources", at: { tab:"resources" }, t: "ここを おす。" },
+      { sel: "sub-pronunciation", at: { tab:"resources", sub:"pronunciation" }, t: "「Pronunciation」を おす。" },
       { sel: "pron-text", t: "ここに 日本語を はる。", next: true },
       { sel: "pron-generate", t: "この おおきい ボタンを おす。" },
     ] }
   },
-  writing: { go: "schedule",
+  writing: {
     en: { title: "Writing Practice", steps: [
-      { sel: "tab-resources", t: "Tap here." },
-      { sel: "sub-writing", t: "Tap “Writing”." },
+      { sel: "tab-resources", at: { tab:"resources" }, t: "Tap here." },
+      { sel: "sub-writing", at: { tab:"resources", sub:"writing" }, t: "Tap “Writing”." },
       { sel: "write-text", t: "Paste a short sentence here.", next: true },
       { sel: "write-start", t: "Tap here. Draw with your finger!" },
     ] },
     ja: { title: "Writing Practice", steps: [
-      { sel: "tab-resources", t: "ここを おす。" },
-      { sel: "sub-writing", t: "「Writing」を おす。" },
+      { sel: "tab-resources", at: { tab:"resources" }, t: "ここを おす。" },
+      { sel: "sub-writing", at: { tab:"resources", sub:"writing" }, t: "「Writing」を おす。" },
       { sel: "write-text", t: "ここに みじかい 文を はる。", next: true },
       { sel: "write-start", t: "ここを おす。ゆびで かこう!" },
     ] }
   }
 };
 // Which section's "?" help opens which guide.
-const EASY_GUIDE_FOR = { schedule:"schedule", vocabulary:"vocabulary", vocab_wordcards:"vocabulary", res_content:"content", res_conversation:"conversation", res_pronunciation:"pronunciation", res_writing:"writing" };
+const EASY_GUIDE_FOR = { schedule:"schedule", vocabulary:"vocabulary", res_content:"content", res_conversation:"conversation", res_pronunciation:"pronunciation", res_writing:"writing" };
 const EASY_LABELS = {
-  en: { step:"Show me on the screen", next:"Next ▶", done:"Done 🎉", close:"Close", of:"{n} / {m}", show:"Show me how (1 min)", missing:"Can't see it here? Tap Next." },
-  ja: { step:"画面で教えて", next:"つぎへ ▶", done:"おわり 🎉", close:"とじる", of:"{n} / {m}", show:"やり方を見る(1分)", missing:"見えないときは「つぎへ」を おす。" }
+  en: { step:"Show me on the screen", next:"Next ▶", done:"Done 🎉", close:"Close", of:"{n} / {m}", show:"Show me how (1 min)", missing:"Can't see it here? Tap Next.", pick:"Pick one. I'll take you there and show you where to tap." },
+  ja: { step:"画面で教えて", next:"つぎへ ▶", done:"おわり 🎉", close:"とじる", of:"{n} / {m}", show:"やり方を見る(1分)", missing:"見えないときは「つぎへ」を おす。", pick:"えらんで ください。そのページへ いって、おす場所を おしえます。" }
 };
 function startGuide(id) { try { window.dispatchEvent(new CustomEvent("gaku_start_guide", { detail: { id } })); } catch {} }
 
-function GuideCoach({ guide, lang, onClose, onGo }) {
+function GuideCoach({ guide, lang, tab, sub, onClose }) {
   const isJa = lang === "Japanese";
   const g = EASY_GUIDES[guide];
   const L = isJa ? EASY_LABELS.ja : EASY_LABELS.en;
-  const [i, setI] = useState(0);
-  const [rect, setRect] = useState(null);
-  const scrolled = useRef(-1);
-  useEffect(() => { if (g && g.go && onGo) onGo(g.go); /* eslint-disable-next-line */ }, [guide]);
   const c = g ? (isJa ? g.ja : g.en) : null;
   const total = c ? c.steps.length : 0;
+  // Steps that only say "go to this tab/sub-tab" are skipped when the student is already there, so the
+  // guide always starts where they are (e.g. already in Conversation -> starts at the Listen button).
+  const atOk = (st) => !!(st && st.at && tab === st.at.tab && (!st.at.sub || sub === st.at.sub));
+  const [i0] = useState(() => { let k = 0; while (c && k < c.steps.length - 1 && atOk(c.steps[k])) k++; return k; });
+  const [i, setI] = useState(i0);
+  const [rect, setRect] = useState(null);
+  const scrolled = useRef(-1);
   const s = c ? c.steps[i] : null;
   const last = i >= total - 1;
   const advance = useCallback(() => setI(n => Math.min(n + 1, total - 1)), [total]);
+  // A navigation step finishes by itself as soon as the student is on that screen.
+  useEffect(() => { if (s && atOk(s) && i < total - 1) setI(n => Math.min(n + 1, total - 1)); /* eslint-disable-next-line */ }, [tab, sub, i]);
   // Keep the ring on the real element (it can move: scrolling, tabs changing, content loading).
   useEffect(() => {
     if (!s || !s.sel) { setRect(null); return; }
@@ -18906,7 +18664,7 @@ function GuideCoach({ guide, lang, onClose, onGo }) {
     const iv = setInterval(tick, 250);
     // Tapping the real element moves on (after the app has reacted to the tap). Typing steps use "Next".
     const onClick = (e) => {
-      if (s.next) return;
+      if (s.next || s.at) return;
       const el = find();
       if (el && e.target && el.contains(e.target)) setTimeout(() => { if (alive) advance(); }, 450);
     };
@@ -18929,7 +18687,7 @@ function GuideCoach({ guide, lang, onClose, onGo }) {
       )}
       <div style={{ position:"fixed", left:12, right:12, ...cardPos, maxWidth:440, margin:"0 auto", zIndex:1200, background:"#0f172a", border:`2px solid ${C.purpleLight}`, borderRadius:16, padding:"14px 16px", boxShadow:"0 8px 30px rgba(0,0,0,0.6)" }}>
         <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:6 }}>
-          <p style={{ color:C.purpleLight, fontSize:11, fontWeight:800, letterSpacing:1, margin:0 }}>{c.title} · {L.of.replace("{n}", i + 1).replace("{m}", total)}</p>
+          <p style={{ color:C.purpleLight, fontSize:11, fontWeight:800, letterSpacing:1, margin:0 }}>{c.title} · {L.of.replace("{n}", i - i0 + 1).replace("{m}", total - i0)}</p>
           <button onClick={onClose} aria-label={L.close} style={{ background:"none", border:"none", color:"#94a3b8", fontSize:12, fontWeight:700, cursor:"pointer", padding:"2px 4px" }}>{L.close} ✕</button>
         </div>
         <p style={{ color:"#f1f5f9", fontSize:19, fontWeight:800, lineHeight:1.45, margin:"0 0 8px" }}>{s.t}</p>
@@ -19095,7 +18853,7 @@ function FirstTapHint({ id, text, show = true }) {
   );
 }
 
-function HelpModal({ onClose, form }) {
+function HelpModal({ onClose, form, onPickGuide, guides }) {
   const T = useUITranslations(form?.preferredLang || "English");
   const [view, setView] = useState("menu"); // menu | lesson | howto
   const [mood, setMood] = useState(""); const [time, setTime] = useState(""); const [energy, setEnergy] = useState("");
@@ -19213,23 +18971,13 @@ CRITICAL: Write your ENTIRE response in ${lang}. Every word, including labels an
         {view==="howto" && (
           <>
             <button onClick={reset} style={{ background:"none", border:"none", color:"#64748b", fontSize:12, cursor:"pointer", padding:0, marginBottom:10 }}>{T.back}</button>
-            <h3 style={{ color:"#f1f5f9", fontSize:17, fontWeight:800, margin:"0 0 14px" }}>{T.howToTitle}</h3>
-            <div style={{ display:"flex", flexDirection:"column", gap:10 }}>
-              {[
-                [T.tabSchedule,   T.howToSchedule],
-                [T.tabPractice,   T.howToPractice],
-                [`🎙️ ${T.convTitle}`, T.convDesc],
-                [T.tabVocabulary, T.howToVocab],
-                [T.tabActivities || T.tabResources,  T.howToResources],
-                [T.tabMilestones, T.howToMilestones],
-                [T.editProfile,   T.howToEditProfile],
-                [T.help,          T.howToHelp],
-              ].map(([title, desc], i) => (
-                <div key={i} style={{ ...S.card }}>
-                  <p style={{ color:"#f1f5f9", fontSize:13, fontWeight:700, margin:"0 0 4px" }}>{title}</p>
-                  <p style={{ color:"#94a3b8", fontSize:12, margin:0, lineHeight:1.6 }}>{desc}</p>
-                </div>
-              ))}
+            <h3 style={{ color:"#f1f5f9", fontSize:17, fontWeight:800, margin:"0 0 6px" }}>{T.howToTitle}</h3>
+            <p style={{ color:"#94a3b8", fontSize:12, lineHeight:1.6, margin:"0 0 14px" }}>{(form?.preferredLang === "Japanese" ? EASY_LABELS.ja : EASY_LABELS.en).pick}</p>
+            <div style={{ display:"flex", flexDirection:"column", gap:8 }}>
+              {(guides || []).map(gid => {
+                const label = ({ start: "▶ " + (form?.preferredLang === "Japanese" ? EASY_GUIDES.start.ja.title : EASY_GUIDES.start.en.title), schedule: T.tabSchedule, vocabulary: T.tabVocabulary, content: T.tabPractice, conversation: "🎙️ " + T.convTitle, pronunciation: "🗣️ " + T.pronTitle, writing: "✍️ " + T.writeTitle })[gid];
+                return <button key={gid} onClick={() => onPickGuide && onPickGuide(gid)} style={{ ...S.btn, width:"100%", textAlign:"left", background:C.card, color:"#f1f5f9", border:`1px solid ${C.border}`, fontSize:14, fontWeight:700 }}>{label} <span style={{ float:"right", color:C.purpleLight }}>👆</span></button>;
+              })}
             </div>
           </>
         )}
@@ -20803,6 +20551,13 @@ function Dashboard({ form, onEdit, onLevelUp, onSetWeek, onLogout, onDeleteAccou
   const [tutorialStep, setTutorialStep] = useState(0);
   // Guided pointer (see GuideCoach): started by startGuide() from the "?" help / first-steps card.
   const [coachGuide, setCoachGuide] = useState(null);
+  // Help -> pick a section: jump straight to that page, then start its guide there.
+  const goToGuide = useCallback((id) => {
+    if (id === "schedule" || id === "vocabulary") setTab(id);
+    else if (["content", "conversation", "pronunciation", "writing"].includes(id)) { setTab("resources"); setResourceSubTab(id); }
+    setShowHelp(false);
+    setTimeout(() => startGuide(id), 300);
+  }, []);
   useEffect(() => {
     const h = (e) => { const id = e && e.detail && e.detail.id; if (id && EASY_GUIDES[id]) { setCoachGuide(null); setTimeout(() => setCoachGuide(id), 30); } };
     window.addEventListener("gaku_start_guide", h);
@@ -21224,7 +20979,7 @@ function Dashboard({ form, onEdit, onLevelUp, onSetWeek, onLogout, onDeleteAccou
 
   return (
     <div style={{ ...S.page, paddingBottom:60 }}>
-      {showHelp && <HelpModal onClose={()=>setShowHelp(false)} form={form} />}
+      {showHelp && <HelpModal onClose={()=>setShowHelp(false)} form={form} onPickGuide={goToGuide} guides={["start", ...(tabShown("schedule") ? ["schedule"] : []), ...(tabShown("vocabulary") ? ["vocabulary"] : []), ...["content","conversation","pronunciation","writing"].filter(featureShown)]} />}
       {showFounder && (() => { const F = FOUNDER_TEXT[form?.preferredLang] || FOUNDER_TEXT["English"]; return (
         <div onClick={()=>setShowFounder(false)} style={{ position:"fixed", inset:0, background:"rgba(0,0,0,0.75)", zIndex:1000, overflowY:"auto", padding:"24px 14px" }}>
           <div onClick={e=>e.stopPropagation()} style={{ maxWidth:560, margin:"0 auto", background:C.card, border:`1px solid ${C.border}`, borderRadius:16, padding:"24px 22px", position:"relative" }}>
@@ -21263,7 +21018,7 @@ function Dashboard({ form, onEdit, onLevelUp, onSetWeek, onLogout, onDeleteAccou
       {!modeGuideSeen && !showIntensiveGuide && !showModePicker && !showFeaturePicker && !tutorialActive && (() => { try { return localStorage.getItem(scopedKey("gaku_tutorial_done")) === "1"; } catch { return false; } })() && !T._loading && T.modeGuideTitle && <ModeGuide T={T} onClose={closeModeGuide} />}
       {(showIntensiveGuide || (isIntensive && !ivSeen && modeGuideSeen && !showModePicker && !showFeaturePicker && !tutorialActive && (() => { try { return localStorage.getItem(scopedKey("gaku_tutorial_done")) === "1"; } catch { return false; } })())) && !T._loading && <IntensiveGuide T={T} onClose={closeIntensiveGuide} />}
       {showModePicker && !showFeaturePicker && !tutorialActive && <ModePicker T={T} trialEnded={effMode === "trial_ended"} onPick={pickStudyMode} />}
-      {coachGuide && !tutorialActive && <GuideCoach key={coachGuide} guide={coachGuide} lang={form?.preferredLang} onClose={() => setCoachGuide(null)} onGo={(t) => setTab(t)} />}
+      {coachGuide && !tutorialActive && <GuideCoach key={coachGuide} guide={coachGuide} lang={form?.preferredLang} tab={tab} sub={resourceSubTab} onClose={() => setCoachGuide(null)} />}
       {tutorialActive && (
         <TutorialOverlay
           T={T}
