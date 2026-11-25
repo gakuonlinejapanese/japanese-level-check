@@ -17211,7 +17211,7 @@ function PronunciationSayIt({ target, T }) {
     <div style={{ marginTop:12, paddingTop:12, borderTop:`1px solid ${C.border}` }}>
       <p style={{ color:C.purpleLight, fontSize:12, fontWeight:700, margin:"0 0 4px" }}>🎤 {T.pronRecordPrompt || "Now say it out loud"}</p>
       <p style={{ color:"#64748b", fontSize:11, lineHeight:1.6, margin:"0 0 8px" }}>{T.pronPauseVideoHint || "Pause the video first so only your voice is picked up."}</p>
-      <button onClick={toggle} style={{ display:"flex", alignItems:"center", gap:6, padding:"8px 14px", borderRadius:8, background:recording?"rgba(239,68,68,0.15)":"rgba(168,85,247,0.12)", border:`1px solid ${recording?"rgba(239,68,68,0.4)":"rgba(168,85,247,0.3)"}`, color:recording?"#f87171":C.purpleLight, fontSize:13, fontWeight:700, cursor:"pointer" }}>
+      <button data-guide="pron-record" onClick={toggle} style={{ display:"flex", alignItems:"center", gap:6, padding:"8px 14px", borderRadius:8, background:recording?"rgba(239,68,68,0.15)":"rgba(168,85,247,0.12)", border:`1px solid ${recording?"rgba(239,68,68,0.4)":"rgba(168,85,247,0.3)"}`, color:recording?"#f87171":C.purpleLight, fontSize:13, fontWeight:700, cursor:"pointer" }}>
         {recording ? `⏺ ${T.recordingInProgress || "Recording..."}` : `🎤 ${T.recordVoice || "Record"}`}
       </button>
       {recording && transcript && <p style={{ color:"#94a3b8", fontSize:12, fontStyle:"italic", margin:"8px 0 0" }}>{transcript}</p>}
@@ -18602,18 +18602,16 @@ const EASY_GUIDES = {
     en: { title: "Pronunciation Practice", steps: [
       { sel: "tab-resources", at: { tab:"resources" }, t: "Tap here." },
       { sel: "sub-pronunciation", at: { tab:"resources", sub:"pronunciation" }, t: "Tap “Pronunciation”." },
-      { sel: "pron-text", t: "① PASTE HERE. Put the Japanese text you want to practice saying in this box.", next: true },
-      { sel: "pron-generate", t: "② Tap this big button. Practice cards will appear." },
-      { sel: "pron-listen", t: "③ LISTEN HERE first. Tap to hear the sentence.", next: true },
-      { sel: "pron-record", t: "④ RECORD HERE. Tap, then say the sentence out loud." },
+      { sel: "conv-tab-listen", opt: true, t: "① Easiest: tap here to listen to a video tab. (Not shown on this device? Tap Next.)", next: true },
+      { sel: "conv-listen", t: "② Tap this button, then play a Japanese video or talk. There is no box to paste into.", next: true },
+      { sel: "pron-record", opt: true, t: "③ When a line appears, tap here and say it out loud after the video.", next: true },
     ] },
     ja: { title: "Pronunciation Practice", steps: [
       { sel: "tab-resources", at: { tab:"resources" }, t: "ここを おす。" },
       { sel: "sub-pronunciation", at: { tab:"resources", sub:"pronunciation" }, t: "「Pronunciation」を おす。" },
-      { sel: "pron-text", t: "① ここに はる。言う れんしゅうを したい日本語の文を、この わく の中に はります。", next: true },
-      { sel: "pron-generate", t: "② この おおきい ボタンを おす。れんしゅうカードが 出ます。" },
-      { sel: "pron-listen", t: "③ まず ここで きく。おして おてほんを きく。", next: true },
-      { sel: "pron-record", t: "④ ここで ろくおん。おして、声に 出して 言う。" },
+      { sel: "conv-tab-listen", opt: true, t: "① かんたん: ここを おすと、ひらいている どうがの おとを きけます。(出ないときは「つぎへ」)", next: true },
+      { sel: "conv-listen", t: "② この ボタンを おして、日本語の どうがを ながす(または はなす)。はる わく は ありません。", next: true },
+      { sel: "pron-record", opt: true, t: "③ 文が 出たら、ここを おして、どうがの あとに 声に 出して 言う。", next: true },
     ] }
   },
   writing: {
