@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback, useMemo, useRef } from "react";
 import StorePlans from './StorePlans';
 import HELP_I18N from "./helpTranslations";
+import { guideLabels, localizeGuide } from "./guideTranslations";
 import { isAndroidApp, reminderCopy, scheduleDailyReminders, cancelDailyReminders } from "./dailyReminders";
 import { supabase, getDeviceId, getDeviceLabel, getSignupSource } from "./supabaseClient";
 import HanziWriter from "hanzi-writer";
@@ -18719,9 +18720,11 @@ function startGuide(id) { try { window.dispatchEvent(new CustomEvent("gaku_start
 
 function GuideCoach({ guide, lang, tab, sub, onClose }) {
   const isJa = lang === "Japanese";
+  const gT = useUITranslations(lang || "English");
   const g = EASY_GUIDES[guide];
-  const L = isJa ? EASY_LABELS.ja : EASY_LABELS.en;
-  const c = g ? (isJa ? g.ja : g.en) : null;
+  const L = isJa ? EASY_LABELS.ja : { ...EASY_LABELS.en, ...(guideLabels(lang) || {}) };
+  // English guide translated into the student's UI language (English/Japanese live here; the rest in guideTranslations.js)
+  const c = useMemo(() => (g ? (isJa ? g.ja : localizeGuide(g.en, lang, gT)) : null), [g, isJa, lang, gT]);
   const total = c ? c.steps.length : 0;
   // Steps that only say "go to this tab/sub-tab" are skipped when the student is already there, so the
   // guide always starts where they are (e.g. already in Conversation -> starts at the Listen button).
@@ -18911,7 +18914,7 @@ function FirstStepsChecklist({ lang, userId, profileDone, showContent, showVocab
       <div style={{ height:6, borderRadius:3, background:"rgba(255,255,255,0.08)", overflow:"hidden", marginBottom:10 }}>
         <div style={{ width:`${Math.round(doneCount / rows.length * 100)}%`, height:"100%", background:`linear-gradient(90deg,${C.purpleLight},${C.teal})`, transition:"width .4s" }} />
       </div>
-      <button onClick={() => startGuide("start")} style={{ ...S.btn, width:"100%", marginBottom:10, padding:"12px 14px", fontSize:14, fontWeight:800, background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff" }}>👆 {lang === "Japanese" ? EASY_LABELS.ja.show : EASY_LABELS.en.show}</button>
+      <button onClick={() => startGuide("start")} style={{ ...S.btn, width:"100%", marginBottom:10, padding:"12px 14px", fontSize:14, fontWeight:800, background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff" }}>👆 {lang === "Japanese" ? EASY_LABELS.ja.show : ((guideLabels(lang) || EASY_LABELS.en).show || EASY_LABELS.en.show)}</button>
       {rows.map(r => (
         <button key={r.id} onClick={r.done ? undefined : r.go} disabled={r.done || !r.go}
           style={{ width:"100%", display:"flex", alignItems:"center", gap:10, padding:"9px 10px", marginBottom:6, borderRadius:10, textAlign:"left", cursor:r.done ? "default" : "pointer",
@@ -19062,10 +19065,10 @@ CRITICAL: Write your ENTIRE response in ${lang}. Every word, including labels an
           <>
             <button onClick={reset} style={{ background:"none", border:"none", color:"#64748b", fontSize:12, cursor:"pointer", padding:0, marginBottom:10 }}>{T.back}</button>
             <h3 style={{ color:"#f1f5f9", fontSize:17, fontWeight:800, margin:"0 0 6px" }}>{T.howToTitle}</h3>
-            <p style={{ color:"#94a3b8", fontSize:12, lineHeight:1.6, margin:"0 0 14px" }}>{(form?.preferredLang === "Japanese" ? EASY_LABELS.ja : EASY_LABELS.en).pick}</p>
+            <p style={{ color:"#94a3b8", fontSize:12, lineHeight:1.6, margin:"0 0 14px" }}>{(form?.preferredLang === "Japanese" ? EASY_LABELS.ja : (guideLabels(form?.preferredLang) || EASY_LABELS.en)).pick}</p>
             <div style={{ display:"flex", flexDirection:"column", gap:8 }}>
               {(guides || []).map(gid => {
-                const label = ({ start: "▶ " + (form?.preferredLang === "Japanese" ? EASY_GUIDES.start.ja.title : EASY_GUIDES.start.en.title), schedule: T.tabSchedule, vocabulary: T.tabVocabulary, content: T.tabPractice, conversation: "🎙️ " + T.convTitle, pronunciation: "🗣️ " + T.pronTitle, writing: "✍️ " + T.writeTitle })[gid];
+                const label = ({ start: "▶ " + (form?.preferredLang === "Japanese" ? EASY_GUIDES.start.ja.title : localizeGuide(EASY_GUIDES.start.en, form?.preferredLang, T).title), schedule: T.tabSchedule, vocabulary: T.tabVocabulary, content: T.tabPractice, conversation: "🎙️ " + T.convTitle, pronunciation: "🗣️ " + T.pronTitle, writing: "✍️ " + T.writeTitle })[gid];
                 return <button key={gid} onClick={() => onPickGuide && onPickGuide(gid)} style={{ ...S.btn, width:"100%", textAlign:"left", background:C.card, color:"#f1f5f9", border:`1px solid ${C.border}`, fontSize:14, fontWeight:700 }}>{label} <span style={{ float:"right", color:C.purpleLight }}>👆</span></button>;
               })}
             </div>
