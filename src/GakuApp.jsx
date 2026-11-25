@@ -14066,7 +14066,7 @@ function WordDetailCard({ card: cardProp, onSave, onBack, form, prefLang, onRevi
       )}
 
       {/* ── SAVE BUTTON ── */}
-      <button onClick={()=>setSaveModal(true)} style={{ ...S.btn, width:"100%", background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff", fontSize:15, marginTop:4, marginBottom:32 }}>
+      <button data-guide="vocab-save" onClick={()=>setSaveModal(true)} style={{ ...S.btn, width:"100%", background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff", fontSize:15, marginTop:4, marginBottom:32 }}>
         💾 {T.saveWord || "Save Word"}
       </button>
 
@@ -15169,8 +15169,8 @@ function VocabBuilder({ form, helpAuto = true }) {
         <FirstTapHint id="vocab_search" show={!loading && !words.length && !isFirstWordDone()}
           text={form?.preferredLang === "Japanese" ? "単語を1つ入力して検索 → 出てきた単語を保存してみましょう。" : (HELP_I18N[form?.preferredLang]?.hints?.vocab_search || "Type one word and search — then save it to your Library.")} />
         <div style={{ display:"flex", gap:8 }}>
-          <input value={search} onChange={e=>setSearch(e.target.value)} onKeyDown={e=>e.key==="Enter"&&findWords()} placeholder={T.vocabSearchPlaceholder} style={{ ...S.input, flex:1 }} />
-          <button onClick={findWords} disabled={!search.trim()||loading} style={{ ...S.btn, background:search.trim()?`linear-gradient(135deg,${C.teal},#0891b2)`:"#1e293b", color:search.trim()?"#fff":"#ffffff", whiteSpace:"nowrap", padding:"12px 18px" }}>
+          <input data-guide="vocab-search" value={search} onChange={e=>setSearch(e.target.value)} onKeyDown={e=>e.key==="Enter"&&findWords()} placeholder={T.vocabSearchPlaceholder} style={{ ...S.input, flex:1 }} />
+          <button data-guide="vocab-find" onClick={findWords} disabled={!search.trim()||loading} style={{ ...S.btn, background:search.trim()?`linear-gradient(135deg,${C.teal},#0891b2)`:"#1e293b", color:search.trim()?"#fff":"#ffffff", whiteSpace:"nowrap", padding:"12px 18px" }}>
             {loading?"...":T.findWordsBtn}
           </button>
         </div>
@@ -15194,7 +15194,7 @@ function VocabBuilder({ form, helpAuto = true }) {
       {!loading && words.length > 0 && (
         <div style={{ display:"flex", flexDirection:"column", gap:12, marginBottom:16 }}>
           {words.map((w,i) => (
-            <div key={i} style={{ ...S.card, borderLeft:`3px solid ${C.teal}` }}>
+            <div key={i} data-guide={i===0?"vocab-result":undefined} style={{ ...S.card, borderLeft:`3px solid ${C.teal}` }}>
               {/* ── Word Header ── */}
               <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", marginBottom:8 }}>
                 <div style={{ flex:1, cursor:"pointer" }} onClick={()=>{setSelectedWord(w);setWordFrom("search");setVocabView("wordDetail");}}>
@@ -15916,6 +15916,7 @@ Respond ONLY with a valid JSON array, no markdown, no backticks:
           </p>
         )}
         <textarea
+          data-guide="content-text"
           value={source}
           onChange={e=>{ setSource(e.target.value.slice(0, 6000)); setSourceFurigana(""); setSourceFuriganaOn(false); setSamplePrefilled(false); }}
           placeholder={`日本語のテキストをここに貼り付けてください... (${T.contentPlaceholder || "paste Japanese text, subtitles, or a caption here"})`}
@@ -15926,7 +15927,7 @@ Respond ONLY with a valid JSON array, no markdown, no backticks:
         <p style={{ color: source.length >= 6000 ? C.red : "#64748b", fontSize:11, textAlign:"right", margin:"4px 0 12px" }}>{source.length}/6000</p>
         <FirstTapHint id="content_analyze" show={!loading && !items.length && !isFirstContentDone()}
           text={form?.preferredLang === "Japanese" ? "ここを押すと、1分以内に最初の練習問題ができます。" : (HELP_I18N[form?.preferredLang]?.hints?.content_analyze || "Tap here — your first activities will be ready in about a minute.")} />
-        <button onClick={() => { lsSetScoped("gaku_hint_content_analyze", "1"); analyze(); }} disabled={loading} style={{ ...S.btn, width:"100%", background:loading?"rgba(6,182,212,0.15)":`linear-gradient(135deg,${C.teal},#0891b2)`, color:loading?"#64748b":"#fff" }}>
+        <button data-guide="content-analyze" onClick={() => { lsSetScoped("gaku_hint_content_analyze", "1"); analyze(); }} disabled={loading} style={{ ...S.btn, width:"100%", background:loading?"rgba(6,182,212,0.15)":`linear-gradient(135deg,${C.teal},#0891b2)`, color:loading?"#64748b":"#fff" }}>
           {loading ? `⏳ ${T.contentAnalyzing || "Analyzing content..."}` : (items.length ? `🔄 ${T.contentAnalyzeAgain || "Analyze again"}` : `${T.contentAnalyzeButton || "Analyze & Generate Activities"} ✨`)}
         </button>
         <button onClick={toggleSourceFurigana} disabled={!source.trim() || sourceFuriganaLoading}
@@ -16847,7 +16848,7 @@ function ConversationPredictor({ form, onLevelUp }) {
           {T.convDescLive || "Play a YouTube/video with the sound on near your mic. GAKU listens to the real dialogue and, line by line, helps you understand it and hints at how you could respond."}
         </p>
         <TabAudioListenBlock tab={tab} T={T} onBeforeStart={() => { if (listening) toggleListening(); }} />
-        <button onClick={toggleListening} style={{ display:"flex", alignItems:"center", justifyContent:"center", gap:8, width:"100%", padding:"12px 12px", borderRadius:10, border:`1px solid ${listening?"rgba(239,68,68,0.4)":"rgba(6,182,212,0.35)"}`, background:listening?"rgba(239,68,68,0.12)":"rgba(6,182,212,0.1)", color:listening?"#f87171":C.teal, fontSize:14, fontWeight:700, cursor:"pointer" }}>
+        <button data-guide="conv-listen" onClick={toggleListening} style={{ display:"flex", alignItems:"center", justifyContent:"center", gap:8, width:"100%", padding:"12px 12px", borderRadius:10, border:`1px solid ${listening?"rgba(239,68,68,0.4)":"rgba(6,182,212,0.35)"}`, background:listening?"rgba(239,68,68,0.12)":"rgba(6,182,212,0.1)", color:listening?"#f87171":C.teal, fontSize:14, fontWeight:700, cursor:"pointer" }}>
           {listening ? `⏺ ${T.convListenStop || "Stop listening"}` : `🎤 ${T.convListenStart || "Start listening"}`}
         </button>
         {!recogSupported && <p style={{ color:C.red, fontSize:11, marginTop:8 }}>{T.convListenUnsupported || "Live listening isn't supported in this browser — try Chrome on desktop or Android."}</p>}
@@ -17485,11 +17486,11 @@ function CopyingDown({ T, injected, onStage }) {
           {T.copyDesc || "Paste a Japanese sentence and copy it one character at a time. Write each stroke with your finger or mouse — GAKU checks the stroke order and shape and shows you the correct way to write it."}
         </p>
         <label style={S.label}>{(T.copyLabel || "Text to copy").toUpperCase()}</label>
-        <textarea value={raw} onChange={e => { setRaw(e.target.value.slice(0, 600)); setError(""); }}
+        <textarea data-guide="write-text" value={raw} onChange={e => { setRaw(e.target.value.slice(0, 600)); setError(""); }}
           placeholder={T.copyPlaceholder || "Paste Japanese text here (up to 30 characters are practiced at a time)…"} rows={4}
           style={{ ...S.input, resize:"vertical", lineHeight:1.7, marginBottom:12, fontFamily:"inherit" }} />
         {error && <p style={{ color:"#f87171", fontSize:12, margin:"0 0 10px" }}>{error}</p>}
-        <button onClick={begin} style={{ ...S.btn, width:"100%", background:`linear-gradient(135deg,${C.teal},#0891b2)`, color:"#fff" }}>
+        <button data-guide="write-start" onClick={begin} style={{ ...S.btn, width:"100%", background:`linear-gradient(135deg,${C.teal},#0891b2)`, color:"#fff" }}>
           ✍️ {T.copyStartBtn || "Start writing"}
         </button>
       </div>
@@ -17942,7 +17943,7 @@ function PronunciationListenAlong({ form, onLevelUp }) {
           {T.pronListenDesc || "Play a YouTube or any video with the sound on near your mic. GAKU listens, writes down what it hears line by line, and helps you understand it with furigana, romaji and translation."}
         </p>
         <TabAudioListenBlock tab={tab} T={T} onBeforeStart={() => { if (listening) toggleListening(); }} />
-        <button onClick={toggleListening} style={{ display:"flex", alignItems:"center", justifyContent:"center", gap:8, width:"100%", padding:"12px 12px", borderRadius:10, border:`1px solid ${listening?"rgba(239,68,68,0.4)":"rgba(6,182,212,0.35)"}`, background:listening?"rgba(239,68,68,0.12)":"rgba(6,182,212,0.1)", color:listening?"#f87171":C.teal, fontSize:14, fontWeight:700, cursor:"pointer" }}>
+        <button data-guide="conv-listen" onClick={toggleListening} style={{ display:"flex", alignItems:"center", justifyContent:"center", gap:8, width:"100%", padding:"12px 12px", borderRadius:10, border:`1px solid ${listening?"rgba(239,68,68,0.4)":"rgba(6,182,212,0.35)"}`, background:listening?"rgba(239,68,68,0.12)":"rgba(6,182,212,0.1)", color:listening?"#f87171":C.teal, fontSize:14, fontWeight:700, cursor:"pointer" }}>
           {listening ? `⏺ ${T.convListenStop || "Stop listening"}` : `🎤 ${T.convListenStart || "Start listening"}`}
         </button>
         {!recogSupported && <p style={{ color:C.red, fontSize:11, marginTop:8 }}>{T.convListenUnsupported || "Live listening isn't supported in this browser — try Chrome on desktop or Android."}</p>}
@@ -18102,10 +18103,10 @@ Respond ONLY with a valid JSON array of strings, no markdown, no backticks:
           <label style={{ ...S.label, color:"#ffffff" }}>{T.subtitlesSourceLabel || "Video title / source (optional)"}</label>
           <input value={sourceTitle} onChange={e=>setSourceTitle(e.target.value)} placeholder={T.subtitlesSourcePlaceholder || "e.g. NHK news 7/2"} style={{ ...S.input, marginBottom:12 }} />
           <label style={{ ...S.label, color:"#ffffff" }}>{T.pronPasteLabel || "Paste Japanese text here"}</label>
-          <textarea value={raw} onChange={e=>setRaw(e.target.value)} rows={10}
+          <textarea data-guide="pron-text" value={raw} onChange={e=>setRaw(e.target.value)} rows={10}
             placeholder={T.subtitlesPastePlaceholder || "Paste plain text or an .srt file's contents — timestamps and cue numbers are removed automatically."}
             style={{ ...S.input, resize:"vertical", fontFamily:"inherit", lineHeight:1.7, marginBottom:14 }} />
-          <button onClick={generate} disabled={loading || !raw.trim()} style={{ ...S.btn, width:"100%", background:(loading||!raw.trim())?"rgba(6,182,212,0.15)":`linear-gradient(135deg,${C.teal},#0891b2)`, color:(loading||!raw.trim())?"#64748b":"#fff" }}>
+          <button data-guide="pron-generate" onClick={generate} disabled={loading || !raw.trim()} style={{ ...S.btn, width:"100%", background:(loading||!raw.trim())?"rgba(6,182,212,0.15)":`linear-gradient(135deg,${C.teal},#0891b2)`, color:(loading||!raw.trim())?"#64748b":"#fff" }}>
             {loading ? `⏳ ${T.pronGenerating || "Building pronunciation practice..."}` : (T.pronGenerateBtn || "Build Pronunciation Practice")} {!loading && "✨"}
           </button>
           {error && <p style={{ color:C.red, fontSize:12, marginTop:10 }}>{error}</p>}
@@ -18628,10 +18629,8 @@ function SectionHelp({ id, lang, autoOpen, onAction }) {
   const entry = SECTION_HELP[id];
   const key = "gaku_help_hide_" + id;
   const [open, setOpen] = useState(false);
-  const [easyOpen, setEasyOpen] = useState(false);
   useEffect(() => {
     setOpen(false);
-    setEasyOpen(false);
     if (!autoOpen || !entry) return;
     let hidden = false;
     try { hidden = localStorage.getItem(scopedKey(key)) === "1"; } catch {}
@@ -18658,7 +18657,7 @@ function SectionHelp({ id, lang, autoOpen, onAction }) {
         <div style={{ ...S.card, marginTop:8, borderLeft:`3px solid ${C.purpleLight}` }}>
           <p style={{ color:"#f1f5f9", fontSize:14, fontWeight:800, margin:"0 0 8px" }}>{c.title}</p>
           {EASY_GUIDE_FOR[id] && (
-            <button onClick={() => setEasyOpen(true)} style={{ ...S.btn, width:"100%", marginBottom:12, padding:"12px 14px", fontSize:14, fontWeight:800, background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff" }}>👆 {isJa ? EASY_LABELS.ja.step : EASY_LABELS.en.step}</button>
+            <button onClick={() => { setOpen(false); startGuide(EASY_GUIDE_FOR[id]); }} style={{ ...S.btn, width:"100%", marginBottom:12, padding:"12px 14px", fontSize:14, fontWeight:800, background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff" }}>👆 {isJa ? EASY_LABELS.ja.step : EASY_LABELS.en.step}</button>
           )}
           <p style={{ color:C.purpleLight, fontSize:11, fontWeight:700, letterSpacing:1, margin:"0 0 4px" }}>{L.what}</p>
           <p style={{ color:"#e2e8f0", fontSize:13, lineHeight:1.7, margin:"0 0 10px" }}>{c.what}</p>
@@ -18687,189 +18686,185 @@ function SectionHelp({ id, lang, autoOpen, onAction }) {
           </div>
         </div>
       )}
-      {easyOpen && EASY_GUIDE_FOR[id] && <EasyGuide guide={EASY_GUIDE_FOR[id]} lang={lang} onClose={() => setEasyOpen(false)} />}
     </div>
   );
 }
 
-// ---- Easy step-by-step guide (added 2026-11-25) -------------------------------------------------
-// One tiny screen = one action. Each step shows a drawn mock-up of the real screen with the thing to
-// press ringed in red and a pointing finger, plus ONE short sentence. Opened from the "▶ Step by step"
-// button inside a section's "?" help, and from the "Show me how" button on the first-steps card.
-// Copy is English + Japanese (Japanese only when the UI language is Japanese); other UI languages see English.
-const EASY_TABS = ["📅 Schedule", "📚 Vocabulary", "✨ From Content", "🔗 Resources"];
+// ---- Guided pointer (added 2026-11-25, rebuilt same day) -----------------------------------------
+// Points at the REAL buttons: the target gets a pulsing red ring and a pointing finger, and a small
+// card with ONE short sentence sits on the opposite side of the screen. Targets are found through
+// data-guide="..." markers on the real elements. Tapping the real button moves to the next step
+// (the tap itself still works normally); "Next" skips a step if the student is already past it or the
+// button is not on screen. Opened from the "?" help (👆 button) and the first-steps card through the
+// window event "gaku_start_guide"; the Dashboard hosts <GuideCoach/>.
+// Copy is English + Japanese (Japanese only when the UI language is Japanese); other languages see English.
 const EASY_GUIDES = {
-  start: {
+  start: { go: "schedule",
     en: { title: "Your first minute", steps: [
-      { mock: { k:"tabs", items: EASY_TABS, hi: 2 }, t: "Tap “From Content”." },
-      { mock: { k:"box", lines: ["私は毎朝コーヒーを飲みます。"] }, t: "A sample text is ready. Or paste your own." },
-      { mock: { k:"btn", label: "Analyze" }, t: "Tap “Analyze”." },
-      { mock: { k:"check", label: "Answer the questions" }, t: "Answer the questions. Great job!" },
-      { mock: { k:"tabs", items: EASY_TABS, hi: 1 }, t: "Next: tap “Vocabulary”." },
+      { sel: "tab-resources", t: "Tap here." },
+      { sel: "sub-content", t: "Tap “From Content”." },
+      { sel: "content-text", t: "A sample text is ready. Or paste your own.", next: true },
+      { sel: "content-analyze", t: "Tap this big button." },
+      { t: "Answer the questions. Great job! 🎉" },
     ] },
     ja: { title: "最初の1分", steps: [
-      { mock: { k:"tabs", items: EASY_TABS, hi: 2 }, t: "「From Content」を おす。" },
-      { mock: { k:"box", lines: ["私は毎朝コーヒーを飲みます。"] }, t: "見本の文が入っています。自分の文でもOK。" },
-      { mock: { k:"btn", label: "Analyze" }, t: "「Analyze」を おす。" },
-      { mock: { k:"check", label: "問題に こたえる" }, t: "問題に こたえる。できました!" },
-      { mock: { k:"tabs", items: EASY_TABS, hi: 1 }, t: "つぎは「Vocabulary」を おす。" },
+      { sel: "tab-resources", t: "ここを おす。" },
+      { sel: "sub-content", t: "「From Content」を おす。" },
+      { sel: "content-text", t: "見本の文が入っています。自分の文でもOK。", next: true },
+      { sel: "content-analyze", t: "この おおきい ボタンを おす。" },
+      { t: "問題に こたえる。できました! 🎉" },
     ] }
   },
-  schedule: {
+  schedule: { go: "schedule",
     en: { title: "Schedule", steps: [
-      { mock: { k:"task", label: "Read a short page (10 min)" }, t: "Look at today's task." },
-      { mock: { k:"btn", label: "Go to…" }, t: "Tap the button to open it." },
-      { mock: { k:"task", label: "Read a short page (10 min)", done: true }, t: "Come back. Tick the box." },
+      { sel: "tab-schedule", t: "Tap here." },
+      { sel: "sched-task", t: "Do today's task. Tap here when you finish.", next: true },
     ] },
     ja: { title: "スケジュール", steps: [
-      { mock: { k:"task", label: "短い文を読む (10分)" }, t: "今日のタスクを みる。" },
-      { mock: { k:"btn", label: "Go to…" }, t: "ボタンを おして ひらく。" },
-      { mock: { k:"task", label: "短い文を読む (10分)", done: true }, t: "もどって、チェックを いれる。" },
+      { sel: "tab-schedule", t: "ここを おす。" },
+      { sel: "sched-task", t: "今日のタスクを やる。おわったら ここを おす。", next: true },
     ] }
   },
-  vocabulary: {
+  vocabulary: { go: "vocabulary",
     en: { title: "Vocabulary", steps: [
-      { mock: { k:"box", lines: ["階段"], search: true }, t: "Type a word. Search." },
-      { mock: { k:"btn", label: "Save" }, t: "Tap “Save”." },
-      { mock: { k:"btn", label: "Daily life 📁" }, t: "Pick a folder." },
-      { mock: { k:"check", label: "Saved!" }, t: "Saved! Review it in the Library." },
+      { sel: "tab-vocabulary", t: "Tap here." },
+      { sel: "vocab-search", t: "Type one word here.", next: true },
+      { sel: "vocab-find", t: "Tap here to search." },
+      { sel: "vocab-result", t: "Tap the word." },
+      { sel: "vocab-save", t: "Tap here. Saved! 🎉" },
     ] },
     ja: { title: "単語", steps: [
-      { mock: { k:"box", lines: ["階段"], search: true }, t: "ことばを いれて さがす。" },
-      { mock: { k:"btn", label: "Save" }, t: "「Save」を おす。" },
-      { mock: { k:"btn", label: "Daily life 📁" }, t: "フォルダを えらぶ。" },
-      { mock: { k:"check", label: "Saved!" }, t: "ほぞん できました! Libraryで ふくしゅう。" },
+      { sel: "tab-vocabulary", t: "ここを おす。" },
+      { sel: "vocab-search", t: "ここに ことばを 1つ いれる。", next: true },
+      { sel: "vocab-find", t: "ここを おして さがす。" },
+      { sel: "vocab-result", t: "ことばを おす。" },
+      { sel: "vocab-save", t: "ここを おす。ほぞん できた! 🎉" },
     ] }
   },
-  content: {
+  content: { go: "schedule",
     en: { title: "From Content", steps: [
-      { mock: { k:"box", lines: ["Paste Japanese here"] }, t: "Paste Japanese here." },
-      { mock: { k:"btn", label: "Analyze" }, t: "Tap “Analyze”." },
-      { mock: { k:"check", label: "Questions are ready" }, t: "Answer the questions." },
+      { sel: "tab-resources", t: "Tap here." },
+      { sel: "sub-content", t: "Tap “From Content”." },
+      { sel: "content-text", t: "Paste Japanese here.", next: true },
+      { sel: "content-analyze", t: "Tap this big button." },
     ] },
     ja: { title: "From Content", steps: [
-      { mock: { k:"box", lines: ["ここに 日本語を はる"] }, t: "ここに 日本語を はる。" },
-      { mock: { k:"btn", label: "Analyze" }, t: "「Analyze」を おす。" },
-      { mock: { k:"check", label: "問題が できた" }, t: "問題に こたえる。" },
+      { sel: "tab-resources", t: "ここを おす。" },
+      { sel: "sub-content", t: "「From Content」を おす。" },
+      { sel: "content-text", t: "ここに 日本語を はる。", next: true },
+      { sel: "content-analyze", t: "この おおきい ボタンを おす。" },
     ] }
   },
-  conversation: {
+  conversation: { go: "schedule",
     en: { title: "Conversation Practice", steps: [
-      { mock: { k:"btn", label: "🎙️ Listen" }, t: "Tap the listen button." },
-      { mock: { k:"box", lines: ["🔊 Play a Japanese video"] }, t: "Play a Japanese video with sound." },
-      { mock: { k:"btn", label: "How would you respond?" }, t: "Tap it. Pick the best reply." },
+      { sel: "tab-resources", t: "Tap here." },
+      { sel: "sub-conversation", t: "Tap “Conversation”." },
+      { sel: "conv-listen", t: "Tap here. Then play a Japanese video with sound." },
     ] },
     ja: { title: "Conversation Practice", steps: [
-      { mock: { k:"btn", label: "🎙️ Listen" }, t: "きく ボタンを おす。" },
-      { mock: { k:"box", lines: ["🔊 日本語の どうがを ながす"] }, t: "日本語の どうがを おとを だして ながす。" },
-      { mock: { k:"btn", label: "How would you respond?" }, t: "おす。いちばん いい へんじを えらぶ。" },
+      { sel: "tab-resources", t: "ここを おす。" },
+      { sel: "sub-conversation", t: "「Conversation」を おす。" },
+      { sel: "conv-listen", t: "ここを おす。そして 日本語の どうがを おとを だして ながす。" },
     ] }
   },
-  pronunciation: {
+  pronunciation: { go: "schedule",
     en: { title: "Pronunciation Practice", steps: [
-      { mock: { k:"box", lines: ["Paste Japanese here"] }, t: "Paste a short Japanese text." },
-      { mock: { k:"btn", label: "🔊 Listen" }, t: "Tap and listen first." },
-      { mock: { k:"btn", label: "🎙️ Record" }, t: "Tap and say it. See your score!" },
+      { sel: "tab-resources", t: "Tap here." },
+      { sel: "sub-pronunciation", t: "Tap “Pronunciation”." },
+      { sel: "pron-text", t: "Paste Japanese here.", next: true },
+      { sel: "pron-generate", t: "Tap this big button." },
     ] },
     ja: { title: "Pronunciation Practice", steps: [
-      { mock: { k:"box", lines: ["ここに 日本語を はる"] }, t: "みじかい 日本語を はる。" },
-      { mock: { k:"btn", label: "🔊 Listen" }, t: "まず おして きく。" },
-      { mock: { k:"btn", label: "🎙️ Record" }, t: "おして 言う。てんすうが でます!" },
+      { sel: "tab-resources", t: "ここを おす。" },
+      { sel: "sub-pronunciation", t: "「Pronunciation」を おす。" },
+      { sel: "pron-text", t: "ここに 日本語を はる。", next: true },
+      { sel: "pron-generate", t: "この おおきい ボタンを おす。" },
     ] }
   },
-  writing: {
+  writing: { go: "schedule",
     en: { title: "Writing Practice", steps: [
-      { mock: { k:"box", lines: ["Paste Japanese here"] }, t: "Paste a short sentence." },
-      { mock: { k:"btn", label: "Start writing" }, t: "Tap “Start writing”." },
-      { mock: { k:"box", lines: ["あ"], big: true }, t: "Draw it with your finger. One stroke at a time." },
-      { mock: { k:"btn", label: "Next ▶" }, t: "Tap “Next”." },
+      { sel: "tab-resources", t: "Tap here." },
+      { sel: "sub-writing", t: "Tap “Writing”." },
+      { sel: "write-text", t: "Paste a short sentence here.", next: true },
+      { sel: "write-start", t: "Tap here. Draw with your finger!" },
     ] },
     ja: { title: "Writing Practice", steps: [
-      { mock: { k:"box", lines: ["ここに 日本語を はる"] }, t: "みじかい 文を はる。" },
-      { mock: { k:"btn", label: "書き始める" }, t: "「書き始める」を おす。" },
-      { mock: { k:"box", lines: ["あ"], big: true }, t: "ゆびで かく。1かくずつ。" },
-      { mock: { k:"btn", label: "次へ ▶" }, t: "「次へ」を おす。" },
+      { sel: "tab-resources", t: "ここを おす。" },
+      { sel: "sub-writing", t: "「Writing」を おす。" },
+      { sel: "write-text", t: "ここに みじかい 文を はる。", next: true },
+      { sel: "write-start", t: "ここを おす。ゆびで かこう!" },
     ] }
   }
 };
 // Which section's "?" help opens which guide.
 const EASY_GUIDE_FOR = { schedule:"schedule", vocabulary:"vocabulary", vocab_wordcards:"vocabulary", res_content:"content", res_conversation:"conversation", res_pronunciation:"pronunciation", res_writing:"writing" };
 const EASY_LABELS = {
-  en: { step:"Step by step", next:"Next ▶", back:"◀ Back", done:"Done 🎉", close:"Close", of:"{n} / {m}", show:"Show me how (1 min)" },
-  ja: { step:"1つずつ見る", next:"つぎへ ▶", back:"◀ もどる", done:"おわり 🎉", close:"とじる", of:"{n} / {m}", show:"やり方を見る(1分)" }
+  en: { step:"Show me on the screen", next:"Next ▶", done:"Done 🎉", close:"Close", of:"{n} / {m}", show:"Show me how (1 min)", missing:"Can't see it here? Tap Next." },
+  ja: { step:"画面で教えて", next:"つぎへ ▶", done:"おわり 🎉", close:"とじる", of:"{n} / {m}", show:"やり方を見る(1分)", missing:"見えないときは「つぎへ」を おす。" }
 };
+function startGuide(id) { try { window.dispatchEvent(new CustomEvent("gaku_start_guide", { detail: { id } })); } catch {} }
 
-function EasyMock({ mock }) {
-  const ring = { outline:"3px solid #ef4444", outlineOffset:3, animation:"gakuEasyPulse 1.2s ease-in-out infinite" };
-  const pill = { padding:"10px 16px", borderRadius:99, fontSize:14, fontWeight:800, background:"rgba(255,255,255,0.06)", border:`1px solid ${C.border}`, color:"#e2e8f0" };
-  const point = <div style={{ fontSize:34, textAlign:"center", marginTop:10, animation:"gakuEasyBounce 0.9s ease-in-out infinite" }} aria-hidden="true">👆</div>;
-  if (mock.k === "tabs") {
-    return (<>
-      <div style={{ display:"flex", gap:6, flexWrap:"wrap", justifyContent:"center" }}>
-        {mock.items.map((x, i) => <span key={i} style={{ ...pill, fontSize:12, padding:"8px 12px", ...(i === mock.hi ? { ...ring, background:"rgba(168,85,247,0.25)", borderColor:C.purpleLight } : { opacity:0.55 }) }}>{x}</span>)}
-      </div>{point}
-    </>);
-  }
-  if (mock.k === "box") {
-    return (<>
-      <div style={{ padding:"14px 16px", borderRadius:12, background:"rgba(255,255,255,0.05)", border:`1px solid ${C.border}`, textAlign:mock.big ? "center" : "left", ...ring }}>
-        {mock.search && <span style={{ marginRight:8 }}>🔍</span>}
-        {mock.lines.map((l, i) => <span key={i} style={{ color:"#f1f5f9", fontSize:mock.big ? 64 : 15, fontWeight:700, lineHeight:1.5 }}>{l}</span>)}
-      </div>{point}
-    </>);
-  }
-  if (mock.k === "btn") {
-    return (<>
-      <div style={{ textAlign:"center" }}><span style={{ ...pill, display:"inline-block", fontSize:16, padding:"14px 28px", background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff", border:"none", ...ring }}>{mock.label}</span></div>{point}
-    </>);
-  }
-  if (mock.k === "task") {
-    return (
-      <div style={{ display:"flex", alignItems:"center", gap:10, padding:"12px 14px", borderRadius:12, background:"rgba(255,255,255,0.05)", border:`1px solid ${C.border}`, ...(mock.done ? {} : {}) }}>
-        <span style={{ width:26, height:26, borderRadius:6, flexShrink:0, display:"inline-flex", alignItems:"center", justifyContent:"center", fontWeight:900, background:mock.done ? "#22c55e" : "transparent", color:"#052e16", border:mock.done ? "none" : "2px solid #94a3b8", ...(mock.done ? ring : {}) }}>{mock.done ? "✓" : ""}</span>
-        <span style={{ color:"#f1f5f9", fontSize:14, fontWeight:700 }}>{mock.label}</span>
-      </div>
-    );
-  }
-  // "check": a happy result
-  return (
-    <div style={{ textAlign:"center" }}>
-      <div style={{ fontSize:56 }}>✅</div>
-      <p style={{ color:"#86efac", fontSize:15, fontWeight:800, margin:"6px 0 0" }}>{mock.label}</p>
-    </div>
-  );
-}
-
-function EasyGuide({ guide, lang, onClose }) {
+function GuideCoach({ guide, lang, onClose, onGo }) {
   const isJa = lang === "Japanese";
   const g = EASY_GUIDES[guide];
   const L = isJa ? EASY_LABELS.ja : EASY_LABELS.en;
   const [i, setI] = useState(0);
+  const [rect, setRect] = useState(null);
+  const scrolled = useRef(-1);
+  useEffect(() => { if (g && g.go && onGo) onGo(g.go); /* eslint-disable-next-line */ }, [guide]);
+  const c = g ? (isJa ? g.ja : g.en) : null;
+  const total = c ? c.steps.length : 0;
+  const s = c ? c.steps[i] : null;
+  const last = i >= total - 1;
+  const advance = useCallback(() => setI(n => Math.min(n + 1, total - 1)), [total]);
+  // Keep the ring on the real element (it can move: scrolling, tabs changing, content loading).
+  useEffect(() => {
+    if (!s || !s.sel) { setRect(null); return; }
+    let alive = true;
+    const find = () => document.querySelector('[data-guide="' + s.sel + '"]');
+    const tick = () => {
+      if (!alive) return;
+      const el = find();
+      if (!el) { setRect(null); return; }
+      if (scrolled.current !== i) { scrolled.current = i; try { el.scrollIntoView({ block: "center", behavior: "smooth" }); } catch {} }
+      const r = el.getBoundingClientRect();
+      setRect(prev => (prev && Math.abs(prev.top - r.top) < 1 && Math.abs(prev.left - r.left) < 1 && Math.abs(prev.width - r.width) < 1 && Math.abs(prev.height - r.height) < 1) ? prev : { top: r.top, left: r.left, width: r.width, height: r.height });
+    };
+    tick();
+    const iv = setInterval(tick, 250);
+    // Tapping the real element moves on (after the app has reacted to the tap). Typing steps use "Next".
+    const onClick = (e) => {
+      if (s.next) return;
+      const el = find();
+      if (el && e.target && el.contains(e.target)) setTimeout(() => { if (alive) advance(); }, 450);
+    };
+    document.addEventListener("click", onClick, true);
+    return () => { alive = false; clearInterval(iv); document.removeEventListener("click", onClick, true); };
+  }, [i, s, advance]);
   if (!g) return null;
-  const c = isJa ? g.ja : g.en;
-  const last = i === c.steps.length - 1;
-  const s = c.steps[i];
+  const vh = typeof window !== "undefined" ? window.innerHeight : 800;
+  const targetLow = rect && (rect.top + rect.height / 2) > vh / 2;
+  const cardPos = targetLow ? { top: "calc(12px + env(safe-area-inset-top, 0px))" } : { bottom: "calc(12px + env(safe-area-inset-bottom, 0px))" };
+  const fingerBelow = rect && (rect.top + rect.height + 56 < vh);
   return (
-    <div style={{ position:"fixed", inset:0, background:"rgba(0,0,0,0.8)", display:"flex", alignItems:"center", justifyContent:"center", zIndex:1100, padding:16 }}>
-      <style>{"@keyframes gakuEasyPulse{0%,100%{outline-color:#ef4444}50%{outline-color:rgba(239,68,68,0.25)}}@keyframes gakuEasyBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}"}</style>
-      <div style={{ ...S.card, width:"100%", maxWidth:400, maxHeight:"92vh", overflowY:"auto" }}>
-        <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:10 }}>
-          <p style={{ color:C.purpleLight, fontSize:12, fontWeight:800, letterSpacing:1, margin:0 }}>{c.title} · {L.of.replace("{n}", i + 1).replace("{m}", c.steps.length)}</p>
-          <button onClick={onClose} aria-label={L.close} style={{ background:"none", border:"none", color:"#94a3b8", fontSize:13, fontWeight:700, cursor:"pointer", padding:"2px 4px" }}>{L.close} ✕</button>
+    <>
+      <style>{"@keyframes gakuEasyPulse{0%,100%{box-shadow:0 0 0 3px #ef4444,0 0 18px 4px rgba(239,68,68,.55)}50%{box-shadow:0 0 0 3px rgba(239,68,68,.35),0 0 6px 1px rgba(239,68,68,.2)}}@keyframes gakuEasyBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}@keyframes gakuEasyBounceDown{0%,100%{transform:translateY(0)}50%{transform:translateY(9px)}}"}</style>
+      {rect && (
+        <>
+          <div style={{ position:"fixed", top:rect.top - 4, left:rect.left - 4, width:rect.width + 8, height:rect.height + 8, borderRadius:14, pointerEvents:"none", zIndex:1190, animation:"gakuEasyPulse 1.2s ease-in-out infinite" }} />
+          <div aria-hidden="true" style={{ position:"fixed", left:Math.max(8, Math.min(rect.left + rect.width / 2 - 20, (typeof window !== "undefined" ? window.innerWidth : 400) - 48)), top:fingerBelow ? rect.top + rect.height + 8 : rect.top - 52, fontSize:38, lineHeight:1, pointerEvents:"none", zIndex:1191, animation:(fingerBelow ? "gakuEasyBounce" : "gakuEasyBounceDown") + " .9s ease-in-out infinite" }}>{fingerBelow ? "👆" : "👇"}</div>
+        </>
+      )}
+      <div style={{ position:"fixed", left:12, right:12, ...cardPos, maxWidth:440, margin:"0 auto", zIndex:1200, background:"#0f172a", border:`2px solid ${C.purpleLight}`, borderRadius:16, padding:"14px 16px", boxShadow:"0 8px 30px rgba(0,0,0,0.6)" }}>
+        <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:6 }}>
+          <p style={{ color:C.purpleLight, fontSize:11, fontWeight:800, letterSpacing:1, margin:0 }}>{c.title} · {L.of.replace("{n}", i + 1).replace("{m}", total)}</p>
+          <button onClick={onClose} aria-label={L.close} style={{ background:"none", border:"none", color:"#94a3b8", fontSize:12, fontWeight:700, cursor:"pointer", padding:"2px 4px" }}>{L.close} ✕</button>
         </div>
-        <div style={{ display:"flex", gap:5, marginBottom:16 }}>
-          {c.steps.map((_, k) => <span key={k} style={{ flex:1, height:5, borderRadius:3, background:k <= i ? C.purpleLight : "rgba(255,255,255,0.1)" }} />)}
-        </div>
-        <div style={{ minHeight:150, display:"flex", flexDirection:"column", justifyContent:"center", marginBottom:14 }}>
-          <EasyMock mock={s.mock} />
-        </div>
-        <p style={{ color:"#f1f5f9", fontSize:20, fontWeight:800, lineHeight:1.5, textAlign:"center", margin:"0 0 18px" }}>{s.t}</p>
-        <div style={{ display:"flex", gap:10 }}>
-          {i > 0 && <button onClick={() => setI(i - 1)} style={{ ...S.btn, flex:1, padding:"14px", background:C.card, color:"#94a3b8", border:`1px solid ${C.border}`, fontSize:14 }}>{L.back}</button>}
-          <button onClick={() => (last ? onClose() : setI(i + 1))} style={{ ...S.btn, flex:2, padding:"14px", fontSize:16, fontWeight:800, background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff" }}>{last ? L.done : L.next}</button>
-        </div>
+        <p style={{ color:"#f1f5f9", fontSize:19, fontWeight:800, lineHeight:1.45, margin:"0 0 8px" }}>{s.t}</p>
+        {s.sel && !rect && <p style={{ color:"#94a3b8", fontSize:12, margin:"0 0 8px" }}>{L.missing}</p>}
+        <button onClick={() => (last ? onClose() : advance())} style={{ ...S.btn, width:"100%", padding:"12px", fontSize:15, fontWeight:800, background: (s.sel && rect && !s.next) ? C.card : `linear-gradient(135deg,${C.purple},#9333ea)`, color: (s.sel && rect && !s.next) ? "#94a3b8" : "#fff", border: (s.sel && rect && !s.next) ? `1px solid ${C.border}` : "none" }}>{last ? L.done : L.next}</button>
       </div>
-    </div>
+    </>
   );
 }
 
@@ -18946,7 +18941,6 @@ function pickSampleText(jlpt) {
 function FirstStepsChecklist({ lang, userId, profileDone, showContent, showVocab, onGoProfile, onGoContent, onGoVocab }) {
   const L = lang === "Japanese" ? FIRST_STEPS_COPY.ja : ((HELP_I18N[lang] && HELP_I18N[lang].firstSteps) || FIRST_STEPS_COPY.en);
   const [, tick] = useState(0);
-  const [easyOpen, setEasyOpen] = useState(false);
   const [hidden, setHidden] = useState(() => {
     if (lsGetScoped(FIRST_STEPS_HIDE) === "1") return true;
     // Someone who has already done everything (an existing student) never sees the checklist.
@@ -18997,8 +18991,7 @@ function FirstStepsChecklist({ lang, userId, profileDone, showContent, showVocab
       <div style={{ height:6, borderRadius:3, background:"rgba(255,255,255,0.08)", overflow:"hidden", marginBottom:10 }}>
         <div style={{ width:`${Math.round(doneCount / rows.length * 100)}%`, height:"100%", background:`linear-gradient(90deg,${C.purpleLight},${C.teal})`, transition:"width .4s" }} />
       </div>
-      <button onClick={() => setEasyOpen(true)} style={{ ...S.btn, width:"100%", marginBottom:10, padding:"12px 14px", fontSize:14, fontWeight:800, background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff" }}>👆 {lang === "Japanese" ? EASY_LABELS.ja.show : EASY_LABELS.en.show}</button>
-      {easyOpen && <EasyGuide guide="start" lang={lang} onClose={() => setEasyOpen(false)} />}
+      <button onClick={() => startGuide("start")} style={{ ...S.btn, width:"100%", marginBottom:10, padding:"12px 14px", fontSize:14, fontWeight:800, background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff" }}>👆 {lang === "Japanese" ? EASY_LABELS.ja.show : EASY_LABELS.en.show}</button>
       {rows.map(r => (
         <button key={r.id} onClick={r.done ? undefined : r.go} disabled={r.done || !r.go}
           style={{ width:"100%", display:"flex", alignItems:"center", gap:10, padding:"9px 10px", marginBottom:6, borderRadius:10, textAlign:"left", cursor:r.done ? "default" : "pointer",
@@ -20705,6 +20698,13 @@ function Dashboard({ form, onEdit, onLevelUp, onSetWeek, onLogout, onDeleteAccou
   // already completed or skipped; always replayable via the header button.
   const [tutorialActive, setTutorialActive] = useState(false);
   const [tutorialStep, setTutorialStep] = useState(0);
+  // Guided pointer (see GuideCoach): started by startGuide() from the "?" help / first-steps card.
+  const [coachGuide, setCoachGuide] = useState(null);
+  useEffect(() => {
+    const h = (e) => { const id = e && e.detail && e.detail.id; if (id && EASY_GUIDES[id]) { setCoachGuide(null); setTimeout(() => setCoachGuide(id), 30); } };
+    window.addEventListener("gaku_start_guide", h);
+    return () => window.removeEventListener("gaku_start_guide", h);
+  }, []);
   // First-steps funnel: Create From Content / word saving announce themselves with a window event
   // (see markFirstStep); log them once per account so the first-session drop-off can be read in SQL.
   useEffect(() => {
@@ -21151,6 +21151,7 @@ function Dashboard({ form, onEdit, onLevelUp, onSetWeek, onLogout, onDeleteAccou
       {!modeGuideSeen && !showIntensiveGuide && !showModePicker && !showFeaturePicker && !tutorialActive && (() => { try { return localStorage.getItem(scopedKey("gaku_tutorial_done")) === "1"; } catch { return false; } })() && !T._loading && T.modeGuideTitle && <ModeGuide T={T} onClose={closeModeGuide} />}
       {(showIntensiveGuide || (isIntensive && !ivSeen && modeGuideSeen && !showModePicker && !showFeaturePicker && !tutorialActive && (() => { try { return localStorage.getItem(scopedKey("gaku_tutorial_done")) === "1"; } catch { return false; } })())) && !T._loading && <IntensiveGuide T={T} onClose={closeIntensiveGuide} />}
       {showModePicker && !showFeaturePicker && !tutorialActive && <ModePicker T={T} trialEnded={effMode === "trial_ended"} onPick={pickStudyMode} />}
+      {coachGuide && !tutorialActive && <GuideCoach key={coachGuide} guide={coachGuide} lang={form?.preferredLang} onClose={() => setCoachGuide(null)} onGo={(t) => setTab(t)} />}
       {tutorialActive && (
         <TutorialOverlay
           T={T}
@@ -21329,7 +21330,7 @@ function Dashboard({ form, onEdit, onLevelUp, onSetWeek, onLogout, onDeleteAccou
             const tutorialTarget = (tutorialActive && tutorialStep>=1 && tutorialStep<=TUTORIAL_STEPS.length) ? TUTORIAL_STEPS[tutorialStep-1] : null;
             const isTutorialTarget = tutorialTarget?.tab === t.id;
             return (
-              <button key={t.id} onClick={()=>{ if (quotaLocked && LOCKABLE_TABS.includes(t.id)) { setTab(lockHome); return; } setTab(t.id); logFunnel(userId, "tab_" + t.id); }} style={{ padding:"8px 14px", borderRadius:20, border:`1.5px solid ${isTutorialTarget?C.purpleLight:(tab===t.id?C.purpleLight:C.border)}`, background:tab===t.id?"rgba(168,85,247,0.15)":C.card, color:tab===t.id?C.purpleLight:"#64748b", fontSize:12, fontWeight:700, cursor:"pointer", whiteSpace:"nowrap", boxShadow:isTutorialTarget?"0 0 0 3px rgba(168,85,247,0.35)":"none", opacity:(quotaLocked && LOCKABLE_TABS.includes(t.id)) ? 0.45 : 1 }}>
+              <button key={t.id} data-guide={"tab-"+t.id} onClick={()=>{ if (quotaLocked && LOCKABLE_TABS.includes(t.id)) { setTab(lockHome); return; } setTab(t.id); logFunnel(userId, "tab_" + t.id); }} style={{ padding:"8px 14px", borderRadius:20, border:`1.5px solid ${isTutorialTarget?C.purpleLight:(tab===t.id?C.purpleLight:C.border)}`, background:tab===t.id?"rgba(168,85,247,0.15)":C.card, color:tab===t.id?C.purpleLight:"#64748b", fontSize:12, fontWeight:700, cursor:"pointer", whiteSpace:"nowrap", boxShadow:isTutorialTarget?"0 0 0 3px rgba(168,85,247,0.35)":"none", opacity:(quotaLocked && LOCKABLE_TABS.includes(t.id)) ? 0.45 : 1 }}>
                 {(quotaLocked && LOCKABLE_TABS.includes(t.id)) ? "🔒 " : ""}{t.label}
               </button>
             );
@@ -21456,7 +21457,7 @@ function Dashboard({ form, onEdit, onLevelUp, onSetWeek, onLogout, onDeleteAccou
                       {tasks.map((task, idx) => task.rest ? (
                         <p key={idx} style={{ color:"#334155", fontSize:13, fontStyle:"italic" }}>{T.restDay || "Rest day 🌸"}</p>
                       ) : (
-                        <div key={idx} onClick={()=>toggleTask(day,idx)} style={{ display:"flex", gap:10, padding:"10px 12px", borderRadius:10, background:task.done?"rgba(34,197,94,0.06)":C.card, border:`1px solid ${task.done?"rgba(34,197,94,0.2)":C.border}`, marginBottom:6, cursor:"pointer", alignItems:"flex-start" }}>
+                        <div key={idx} data-guide={idx===0?"sched-task":undefined} onClick={()=>toggleTask(day,idx)} style={{ display:"flex", gap:10, padding:"10px 12px", borderRadius:10, background:task.done?"rgba(34,197,94,0.06)":C.card, border:`1px solid ${task.done?"rgba(34,197,94,0.2)":C.border}`, marginBottom:6, cursor:"pointer", alignItems:"flex-start" }}>
                           <div style={{ width:20, height:20, borderRadius:6, border:`2px solid ${task.done?C.green:C.border}`, background:task.done?C.green:"transparent", display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0, marginTop:1 }}>
                             {task.done && <span style={{ color:"#fff", fontSize:11, fontWeight:900 }}>✓</span>}
                           </div>
@@ -21509,7 +21510,7 @@ function Dashboard({ form, onEdit, onLevelUp, onSetWeek, onLogout, onDeleteAccou
                 const tutorialTarget = (tutorialActive && tutorialStep>=1 && tutorialStep<=TUTORIAL_STEPS.length) ? TUTORIAL_STEPS[tutorialStep-1] : null;
                 const isTutorialTarget = tutorialTarget?.tab === "resources" && tutorialTarget?.subTab === st.id;
                 return (
-                  <button key={st.id} onClick={()=>setResourceSubTab(st.id)} style={{ padding:"7px 12px", borderRadius:20, border:`1.5px solid ${isTutorialTarget?C.purpleLight:(resourceSubTab===st.id?C.teal:C.border)}`, background:resourceSubTab===st.id?"rgba(6,182,212,0.12)":C.card, color:resourceSubTab===st.id?C.teal:"#64748b", fontSize:11, fontWeight:700, cursor:"pointer", whiteSpace:"nowrap", boxShadow:isTutorialTarget?"0 0 0 3px rgba(168,85,247,0.35)":"none" }}>
+                  <button key={st.id} data-guide={"sub-"+st.id} onClick={()=>setResourceSubTab(st.id)} style={{ padding:"7px 12px", borderRadius:20, border:`1.5px solid ${isTutorialTarget?C.purpleLight:(resourceSubTab===st.id?C.teal:C.border)}`, background:resourceSubTab===st.id?"rgba(6,182,212,0.12)":C.card, color:resourceSubTab===st.id?C.teal:"#64748b", fontSize:11, fontWeight:700, cursor:"pointer", whiteSpace:"nowrap", boxShadow:isTutorialTarget?"0 0 0 3px rgba(168,85,247,0.35)":"none" }}>
                     {st.label}
                   </button>
                 );
