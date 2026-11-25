@@ -17576,13 +17576,13 @@ function WritingVocabPicker({ T, onUse, mode }) {
   const small = { padding:"6px 10px", borderRadius:8, fontSize:11, fontWeight:700, cursor:"pointer", background:"transparent", border:`1px solid ${C.border}`, color:"#94a3b8" };
   return (
     <div style={{ marginBottom:14, border:`1px solid ${C.border}`, borderRadius:12, background:"rgba(6,182,212,0.04)" }}>
-      <button onClick={() => setOpen(o => !o)} style={{ width:"100%", display:"flex", justifyContent:"space-between", alignItems:"center", padding:"11px 14px", background:"none", border:"none", color:C.teal, fontSize:13, fontWeight:700, cursor:"pointer", textAlign:"left" }}>
+      <button data-guide="write-vocab-toggle" onClick={() => setOpen(o => !o)} style={{ width:"100%", display:"flex", justifyContent:"space-between", alignItems:"center", padding:"11px 14px", background:"none", border:"none", color:C.teal, fontSize:13, fontWeight:700, cursor:"pointer", textAlign:"left" }}>
         <span>📚 {T.writeVocabTitle || "Choose words from my Vocabulary"}</span><span>{open ? "▲" : "▼"}</span>
       </button>
       {open && (
         <div style={{ padding:"0 14px 14px" }}>
           <label style={S.label}>{(T.writeVocabFolder || "Folder").toUpperCase()}</label>
-          <select value={active} onChange={e => changeFolder(e.target.value)} style={{ ...S.input, marginBottom:10 }}>
+          <select data-guide="write-vocab-folder" value={active} onChange={e => changeFolder(e.target.value)} style={{ ...S.input, marginBottom:10 }}>
             {folderNames.map(n => <option key={n} value={n}>{(n === "Your Vocabulary" ? (T.yourVocabSaved || "Your Vocabulary") : n)} ({data.cards.filter(c => c.folder === n).length})</option>)}
           </select>
           {cards.length === 0 ? (
@@ -17594,7 +17594,7 @@ function WritingVocabPicker({ T, onUse, mode }) {
               <button onClick={copyWords} style={{ ...small, color:C.teal, borderColor:"rgba(6,182,212,0.4)" }}>{copied ? (T.writeVocabCopied || "✓ Copied!") : "📋 " + (T.writeVocabCopy || "Copy")}</button>
               <span style={{ color:"#94a3b8", fontSize:11 }}>{fill(T.writeVocabCount || "{n} selected", { n: chosen.length })}</span>
             </div>
-            <div style={{ maxHeight:200, overflowY:"auto", display:"flex", flexDirection:"column", gap:6, marginBottom:10 }}>
+            <div data-guide="write-vocab-words" style={{ maxHeight:200, overflowY:"auto", display:"flex", flexDirection:"column", gap:6, marginBottom:10 }}>
               {cards.map((c, i) => {
                 const k = keyOf(c, i); const on = !!picked[k];
                 return (
@@ -17610,7 +17610,7 @@ function WritingVocabPicker({ T, onUse, mode }) {
                 );
               })}
             </div>
-            <button onClick={useWords} disabled={!chosen.length}
+            <button data-guide="write-vocab-use" onClick={useWords} disabled={!chosen.length}
               style={{ ...S.btn, width:"100%", background:chosen.length ? `linear-gradient(135deg,${C.teal},#0891b2)` : "#1e293b", color:chosen.length ? "#fff" : "#475569" }}>
               {mode === "copy" ? (T.writeVocabUseCopy || "Use these words for Copying down") : (T.writeVocabUseQ || "Use these words in a writing question")}
             </button>
@@ -18614,6 +18614,32 @@ const EASY_GUIDES = {
       { sel: "pron-record", opt: true, t: "③ 文が 出たら、ここを おして、どうがの あとに 声に 出して 言う。", next: true },
     ] }
   },
+  writing_copy: {
+    en: { title: "Writing · Copying down", steps: [
+      { sel: "tab-resources", at: { tab:"resources" }, t: "Tap here." },
+      { sel: "sub-writing", at: { tab:"resources", sub:"writing" }, t: "Tap “Writing”." },
+      { alts: [ { sel: "write-mode-active-copy", t: "You are in “Copying down”. You copy a Japanese sentence by hand." }, { sel: "write-mode-copy", t: "Tap “Copying down”. (You copy a Japanese sentence by hand.)" } ], next: true },
+      { sel: "write-text", t: "① PASTE A JAPANESE SENTENCE HERE. Put a short Japanese sentence in this box.", next: true },
+      { sel: "write-vocab-toggle", t: "② OR use your own words. The words you saved in Vocabulary can be used too. Tap here to open them." },
+      { sel: "write-vocab-folder", t: "③ Pick the folder where you saved your words.", next: true },
+      { sel: "write-vocab-words", t: "④ Tap the words you want to practice. A ☑ means chosen.", next: true },
+      { sel: "write-vocab-use", t: "⑤ Tap this button. Your words go into the box." },
+      { sel: "write-text", t: "⑥ Your words are now in this box. You can still change them.", next: true },
+      { sel: "write-start", t: "⑦ Tap here. Then draw each letter with your finger!" },
+    ] },
+    ja: { title: "Writing · Copying down", steps: [
+      { sel: "tab-resources", at: { tab:"resources" }, t: "ここを おす。" },
+      { sel: "sub-writing", at: { tab:"resources", sub:"writing" }, t: "「Writing」を おす。" },
+      { alts: [ { sel: "write-mode-active-copy", t: "いま「Copying down」です。日本語の文を 手で 書きうつします。" }, { sel: "write-mode-copy", t: "「Copying down」を おす。(日本語の文を 手で 書きうつします)" } ], next: true },
+      { sel: "write-text", t: "① ここに 日本語の文を はる。みじかい 日本語の文を、この わく の中に はります。", next: true },
+      { sel: "write-vocab-toggle", t: "② または 自分の 単語を つかう。Vocabularyに ほぞんした 単語も つかえます。ここを おして ひらく。" },
+      { sel: "write-vocab-folder", t: "③ 単語を ほぞんした フォルダを えらぶ。", next: true },
+      { sel: "write-vocab-words", t: "④ れんしゅうしたい 単語を おす。☑ が ついたら えらべています。", next: true },
+      { sel: "write-vocab-use", t: "⑤ この ボタンを おす。単語が わく の中に 入ります。" },
+      { sel: "write-text", t: "⑥ 単語が この わく に 入りました。なおしても だいじょうぶ。", next: true },
+      { sel: "write-start", t: "⑦ ここを おす。ゆびで 1もじずつ かこう!" },
+    ] }
+  },
   writing: {
     en: { title: "Writing Practice", steps: [
       { sel: "tab-resources", at: { tab:"resources" }, t: "Tap here." },
@@ -18684,7 +18710,7 @@ const EASY_GUIDES = {
   },
 };
 // Which section's "?" help opens which guide.
-const EASY_GUIDE_FOR = { schedule:"schedule", vocabulary:"vocabulary", res_content:"content", res_conversation:"conversation", res_pronunciation:"pronunciation", res_writing:"writing" };
+const EASY_GUIDE_FOR = { schedule:"schedule", vocabulary:"vocabulary", res_content:"content", res_conversation:"conversation", res_pronunciation:"pronunciation", res_writing:"writing", res_writing_copy:"writing_copy" };
 const EASY_LABELS = {
   en: { step:"Show me on the screen", next:"Next ▶", done:"Done 🎉", close:"Close", of:"{n} / {m}", show:"Show me how (1 min)", missing:"Can't see it here? Tap Next.", pick:"Pick one. I'll take you there and show you where to tap." },
   ja: { step:"画面で教えて", next:"つぎへ ▶", done:"おわり 🎉", close:"とじる", of:"{n} / {m}", show:"やり方を見る(1分)", missing:"見えないときは「つぎへ」を おす。", pick:"えらんで ください。そのページへ いって、おす場所を おしえます。" }
