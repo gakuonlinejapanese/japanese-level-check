@@ -1245,6 +1245,8 @@ const UI_TRANSLATIONS = {
     pcStart: "Start the check",
     pcHide: "Hide",
     pcShowAgain: "Show the progress check again",
+    msHideTab: "Hide this tab",
+    msHideNote: "You can show it again anytime in {c}.",
     pcRetake: "Take it again",
     pcRetakeWait: "You can retake it in {n} day(s).",
     pcQ: "Question {n} / {total}",
@@ -1914,6 +1916,8 @@ const UI_TRANSLATIONS = {
     pcStart: "Commencer le test",
     pcHide: "Masquer",
     pcShowAgain: "Réafficher le test de progression",
+    msHideTab: "Masquer cet onglet",
+    msHideNote: "Vous pouvez le réafficher à tout moment dans {c}.",
     pcRetake: "Refaire le test",
     pcRetakeWait: "Vous pourrez le refaire dans {n} jour(s).",
     pcQ: "Question {n} / {total}",
@@ -2568,6 +2572,8 @@ const UI_TRANSLATIONS = {
     pcStart: "Empezar la prueba",
     pcHide: "Ocultar",
     pcShowAgain: "Mostrar de nuevo la prueba de progreso",
+    msHideTab: "Ocultar esta pestaña",
+    msHideNote: "Puedes mostrarla de nuevo cuando quieras en {c}.",
     pcRetake: "Repetir la prueba",
     pcRetakeWait: "Podrás repetirla en {n} día(s).",
     pcQ: "Pregunta {n} / {total}",
@@ -3222,6 +3228,8 @@ const UI_TRANSLATIONS = {
     pcStart: "Começar o teste",
     pcHide: "Ocultar",
     pcShowAgain: "Mostrar novamente o teste de progresso",
+    msHideTab: "Ocultar esta aba",
+    msHideNote: "Você pode mostrá-la novamente a qualquer momento em {c}.",
     pcRetake: "Refazer o teste",
     pcRetakeWait: "Você poderá refazer em {n} dia(s).",
     pcQ: "Pergunta {n} / {total}",
@@ -3876,6 +3884,8 @@ const UI_TRANSLATIONS = {
     pcStart: "Test starten",
     pcHide: "Ausblenden",
     pcShowAgain: "Fortschrittstest wieder anzeigen",
+    msHideTab: "Diesen Tab ausblenden",
+    msHideNote: "Du kannst ihn jederzeit unter {c} wieder einblenden.",
     pcRetake: "Test wiederholen",
     pcRetakeWait: "Sie können ihn in {n} Tag(en) wiederholen.",
     pcQ: "Frage {n} / {total}",
@@ -4530,6 +4540,8 @@ const UI_TRANSLATIONS = {
     pcStart: "Inizia il test",
     pcHide: "Nascondi",
     pcShowAgain: "Mostra di nuovo la verifica dei progressi",
+    msHideTab: "Nascondi questa scheda",
+    msHideNote: "Puoi mostrarla di nuovo in qualsiasi momento da {c}.",
     pcRetake: "Ripeti il test",
     pcRetakeWait: "Potrai ripeterlo tra {n} giorno/i.",
     pcQ: "Domanda {n} / {total}",
@@ -5184,6 +5196,8 @@ const UI_TRANSLATIONS = {
     pcStart: "开始测试",
     pcHide: "隐藏",
     pcShowAgain: "重新显示进度检测",
+    msHideTab: "隐藏此标签页",
+    msHideNote: "你可以随时在{c}中重新显示。",
     pcRetake: "再测一次",
     pcRetakeWait: "{n}天后可以再测一次。",
     pcQ: "第 {n} / {total} 题",
@@ -5838,6 +5852,8 @@ const UI_TRANSLATIONS = {
     pcStart: "開始測驗",
     pcHide: "隱藏",
     pcShowAgain: "重新顯示進度檢測",
+    msHideTab: "隱藏此分頁",
+    msHideNote: "你可以隨時在{c}中重新顯示。",
     pcRetake: "再測一次",
     pcRetakeWait: "{n}天後可以再測一次。",
     pcQ: "第 {n} / {total} 題",
@@ -6492,6 +6508,8 @@ const UI_TRANSLATIONS = {
     pcStart: "점검 시작",
     pcHide: "숨기기",
     pcShowAgain: "진도 체크 다시 보기",
+    msHideTab: "이 탭 숨기기",
+    msHideNote: "언제든지 {c}에서 다시 표시할 수 있어요.",
     pcRetake: "다시 풀기",
     pcRetakeWait: "{n}일 후에 다시 풀 수 있어요.",
     pcQ: "{n} / {total}번 문제",
@@ -7146,6 +7164,8 @@ const UI_TRANSLATIONS = {
     pcStart: "เริ่มทดสอบ",
     pcHide: "ซ่อน",
     pcShowAgain: "แสดงการตรวจความก้าวหน้าอีกครั้ง",
+    msHideTab: "ซ่อนแท็บนี้",
+    msHideNote: "คุณสามารถแสดงอีกครั้งได้ทุกเมื่อที่ {c}",
     pcRetake: "ทำอีกครั้ง",
     pcRetakeWait: "ทำซ้ำได้ในอีก {n} วัน",
     pcQ: "ข้อที่ {n} / {total}",
@@ -7800,6 +7820,8 @@ const UI_TRANSLATIONS = {
     pcStart: "Mulakan ujian",
     pcHide: "Sembunyikan",
     pcShowAgain: "Papar semula semakan kemajuan",
+    msHideTab: "Sembunyikan tab ini",
+    msHideNote: "Anda boleh memaparkannya semula pada bila-bila masa di {c}.",
     pcRetake: "Ambil semula",
     pcRetakeWait: "Anda boleh mengambilnya semula dalam {n} hari.",
     pcQ: "Soalan {n} / {total}",
@@ -8454,6 +8476,8 @@ const UI_TRANSLATIONS = {
     pcStart: "Mulai tes",
     pcHide: "Sembunyikan",
     pcShowAgain: "Tampilkan lagi cek kemajuan",
+    msHideTab: "Sembunyikan tab ini",
+    msHideNote: "Anda bisa menampilkannya lagi kapan saja di {c}.",
     pcRetake: "Ulangi tes",
     pcRetakeWait: "Anda bisa mengulanginya dalam {n} hari.",
     pcQ: "Soal {n} / {total}",
@@ -9108,6 +9132,8 @@ const UI_TRANSLATIONS = {
     pcStart: "Bắt đầu kiểm tra",
     pcHide: "Ẩn",
     pcShowAgain: "Hiện lại bài kiểm tra tiến độ",
+    msHideTab: "Ẩn tab này",
+    msHideNote: "Bạn có thể hiện lại bất cứ lúc nào trong {c}.",
     pcRetake: "Làm lại",
     pcRetakeWait: "Bạn có thể làm lại sau {n} ngày.",
     pcQ: "Câu {n} / {total}",
@@ -9762,6 +9788,8 @@ const UI_TRANSLATIONS = {
     pcStart: "जाँच शुरू करें",
     pcHide: "छिपाएँ",
     pcShowAgain: "प्रगति जाँच फिर से दिखाएँ",
+    msHideTab: "यह टैब छिपाएँ",
+    msHideNote: "आप इसे कभी भी {c} में दोबारा दिखा सकते हैं।",
     pcRetake: "दोबारा करें",
     pcRetakeWait: "आप इसे {n} दिन बाद दोबारा कर सकते हैं।",
     pcQ: "प्रश्न {n} / {total}",
@@ -10416,6 +10444,8 @@ const UI_TRANSLATIONS = {
     pcStart: "チェックを始める",
     pcHide: "非表示",
     pcShowAgain: "進捗チェックをもう一度表示",
+    msHideTab: "このタブを非表示にする",
+    msHideNote: "{c} からいつでも再表示できます。",
     pcRetake: "もう一度受ける",
     pcRetakeWait: "あと{n}日後に再受験できます。",
     pcQ: "{n} / {total} 問目",
@@ -11070,6 +11100,8 @@ const UI_TRANSLATIONS = {
     pcStart: "Testi başlat",
     pcHide: "Gizle",
     pcShowAgain: "İlerleme kontrolünü tekrar göster",
+    msHideTab: "Bu sekmeyi gizle",
+    msHideNote: "{c} bölümünden istediğiniz zaman tekrar gösterebilirsiniz.",
     pcRetake: "Tekrar çöz",
     pcRetakeWait: "{n} gün sonra tekrar çözebilirsiniz.",
     pcQ: "Soru {n} / {total}",
@@ -11724,6 +11756,8 @@ const UI_TRANSLATIONS = {
     pcStart: "जाँच सुरु गर्नुहोस्",
     pcHide: "लुकाउनुहोस्",
     pcShowAgain: "प्रगति जाँच फेरि देखाउनुहोस्",
+    msHideTab: "यो ट्याब लुकाउनुहोस्",
+    msHideNote: "तपाईं यसलाई जुनसुकै बेला {c} बाट फेरि देखाउन सक्नुहुन्छ।",
     pcRetake: "फेरि गर्नुहोस्",
     pcRetakeWait: "तपाईं {n} दिनपछि फेरि गर्न सक्नुहुन्छ।",
     pcQ: "प्रश्न {n} / {total}",
@@ -12378,6 +12412,8 @@ const UI_TRANSLATIONS = {
     pcStart: "Simulan ang pagsusulit",
     pcHide: "Itago",
     pcShowAgain: "Ipakita muli ang progress check",
+    msHideTab: "Itago ang tab na ito",
+    msHideNote: "Maaari mo itong ipakita muli anumang oras sa {c}.",
     pcRetake: "Ulitin ang pagsusulit",
     pcRetakeWait: "Maaari mo itong ulitin sa loob ng {n} araw.",
     pcQ: "Tanong {n} / {total}",
@@ -21101,6 +21137,15 @@ function Dashboard({ form, onEdit, onLevelUp, onSetWeek, onLogout, onDeleteAccou
     if (!loadStudyMode()) setShowModePicker(true);
   }, []);
 
+  // "Hide this tab" button inside Milestones: drops only Milestones from the kept-features list (same
+  // storage the Customize picker uses, so Customize can bring it back) and moves to another tab.
+  const hideMilestonesTab = useCallback(() => {
+    const list = (visibleFeatures === null ? OPTIONAL_FEATURES : visibleFeatures).filter(x => x !== "milestones");
+    setVisibleFeatures(list);
+    try { localStorage.setItem(scopedKey("gaku_visible_features"), JSON.stringify(list)); } catch {}
+    setTab(list.includes("schedule") ? "schedule" : "vocabulary");
+  }, [visibleFeatures]);
+
   const toggleTask = useCallback((day, idx) => {
     const nextDone = !(schedule[day] && schedule[day][idx] && schedule[day][idx].done);
     if (nextDone) logLearningEvent("task", true);
@@ -21699,6 +21744,10 @@ function Dashboard({ form, onEdit, onLevelUp, onSetWeek, onLogout, onDeleteAccou
         {tab==="milestones" && (
           <>
           <SectionHelp id="milestones" lang={form?.preferredLang} autoOpen={!tutorialActive} />
+          <div style={{ margin:"0 0 12px", display:"flex", alignItems:"center", gap:10, flexWrap:"wrap" }}>
+            <button type="button" onClick={hideMilestonesTab} style={{ padding:"7px 14px", borderRadius:8, background:C.card, border:`1px solid ${C.border}`, color:"#94a3b8", fontSize:12, cursor:"pointer" }}>🙈 {T.msHideTab || "Hide this tab"}</button>
+            <span style={{ color:"#64748b", fontSize:11 }}>{(T.msHideNote || "You can show it again anytime in {c}.").replace("{c}", "\u2699\uFE0F " + (T.featureCustomizeBtn || "Customize"))}</span>
+          </div>
           <ProgressCheck T={T} userId={userId} />
           <div style={{ ...S.card }}>
             <p style={{ color:C.red, fontSize:12, fontWeight:700, letterSpacing:1, marginBottom:16 }}>{T.yourGoalRoadmap}</p>
