@@ -158,7 +158,7 @@ async function callGroqWhisper(groqKeys, audioBuffer, mimeType) {
       const form = new FormData();
       const ext = (mimeType || "").includes("webm") ? "webm" : "wav";
       form.append("file", new Blob([audioBuffer], { type: mimeType || "audio/webm" }), `audio.${ext}`);
-      form.append("model", "whisper-large-v3");
+      form.append("model", "whisper-large-v3-turbo"); // faster: keeps live video subtitles closer to the audio
       form.append("language", "ja"); // JLPT listening audio is Japanese
       form.append("response_format", "json");
 
