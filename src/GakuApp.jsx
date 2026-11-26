@@ -7,6 +7,7 @@ import { supabase, getDeviceId, getDeviceLabel, getSignupSource } from "./supaba
 import HanziWriter from "hanzi-writer";
 import { reportClientCrash } from "./crashReport";
 import { isAndroidNative, nativeSpeak, nativeStop } from "./nativeTts";
+import { fz, TEXT_SIZES, getSavedTextSize, applyTextSize } from "./textSize";
 
 // True inside the iOS/Android store apps (Capacitor shell). Also forceable with ?store=1 for previews.
 // Store builds never show prices, purchase buttons, or links to outside purchase/lesson pages.
@@ -44,10 +45,10 @@ const C = {
 const S = {
   page: { minHeight:"100vh", background:C.bg, fontFamily:"'Noto Sans JP',sans-serif", color:"#f1f5f9" },
   card: { background:C.card, border:`1px solid ${C.border}`, borderRadius:16, padding:"20px 22px" },
-  select: { width:"100%", padding:"12px 14px", background:"#0f172a", border:`1.5px solid ${C.border}`, borderRadius:10, color:"#f1f5f9", fontSize:14, outline:"none", boxSizing:"border-box" },
-  btn: { padding:"13px 20px", border:"none", borderRadius:10, fontSize:14, fontWeight:700, cursor:"pointer" },
-  label: { display:"block", color:"#64748b", fontSize:11, fontWeight:700, marginBottom:5, letterSpacing:1 },
-  input: { width:"100%", padding:"12px 14px", background:"#0f172a", border:"1.5px solid rgba(255,255,255,0.08)", borderRadius:10, color:"#f1f5f9", fontSize:14, outline:"none", boxSizing:"border-box" },
+  select: { width:"100%", padding:"12px 14px", background:"#0f172a", border:`1.5px solid ${C.border}`, borderRadius:10, color:"#f1f5f9", fontSize:fz(14), outline:"none", boxSizing:"border-box" },
+  btn: { padding:"13px 20px", border:"none", borderRadius:10, fontSize:fz(14), fontWeight:700, cursor:"pointer" },
+  label: { display:"block", color:"#64748b", fontSize:fz(11), fontWeight:700, marginBottom:5, letterSpacing:1 },
+  input: { width:"100%", padding:"12px 14px", background:"#0f172a", border:"1.5px solid rgba(255,255,255,0.08)", borderRadius:10, color:"#f1f5f9", fontSize:fz(14), outline:"none", boxSizing:"border-box" },
 };
 
 // ─── CLT RESOURCES ─────────────────────────────────────────────────────────────
@@ -384,11 +385,11 @@ class ScreenErrorBoundary extends React.Component {
     return (
       <div style={{ minHeight:"100vh", background:"#0a0f1e", display:"flex", alignItems:"center", justifyContent:"center", padding:24 }}>
         <div style={{ maxWidth:380, width:"100%", textAlign:"center", color:"#e2e8f0", background:"#111827", border:"1px solid #1e293b", borderRadius:16, padding:"28px 22px" }}>
-          <p style={{ fontSize:30, margin:"0 0 8px" }}>⚠️</p>
-          <p style={{ fontSize:15, fontWeight:700, margin:"0 0 8px" }}>Something went wrong on this screen.</p>
-          <p style={{ fontSize:12, color:"#94a3b8", margin:"0 0 18px", lineHeight:1.6 }}>Your study data is safe. Please go back and try again.</p>
-          <button onClick={() => { this.setState({ failed:false }); if (this.props.onReset) this.props.onReset(); }} style={{ width:"100%", padding:"11px 14px", borderRadius:10, border:"none", background:"linear-gradient(135deg,#7c3aed,#9333ea)", color:"#fff", fontSize:13, fontWeight:700, cursor:"pointer", marginBottom:8 }}>Back to my plan</button>
-          <button onClick={() => window.location.reload()} style={{ width:"100%", padding:"10px 14px", borderRadius:10, border:"1px solid #334155", background:"transparent", color:"#94a3b8", fontSize:12, cursor:"pointer" }}>Reload</button>
+          <p style={{ fontSize:fz(30), margin:"0 0 8px" }}>⚠️</p>
+          <p style={{ fontSize:fz(15), fontWeight:700, margin:"0 0 8px" }}>Something went wrong on this screen.</p>
+          <p style={{ fontSize:fz(12), color:"#94a3b8", margin:"0 0 18px", lineHeight:1.6 }}>Your study data is safe. Please go back and try again.</p>
+          <button onClick={() => { this.setState({ failed:false }); if (this.props.onReset) this.props.onReset(); }} style={{ width:"100%", padding:"11px 14px", borderRadius:10, border:"none", background:"linear-gradient(135deg,#7c3aed,#9333ea)", color:"#fff", fontSize:fz(13), fontWeight:700, cursor:"pointer", marginBottom:8 }}>Back to my plan</button>
+          <button onClick={() => window.location.reload()} style={{ width:"100%", padding:"10px 14px", borderRadius:10, border:"1px solid #334155", background:"transparent", color:"#94a3b8", fontSize:fz(12), cursor:"pointer" }}>Reload</button>
         </div>
       </div>
     );
@@ -13226,9 +13227,9 @@ function JlptResultsPanel({ userId, T }) {
 
   return (
     <div style={{ ...S.card, borderLeft:"3px solid #a855f7" }}>
-      <p style={{ color:"#c4b5fd", fontSize:12, fontWeight:700, margin:"0 0 10px" }}>🎓 {T?.tabJlpt ? T.tabJlpt.replace(/^🎓\s*/, "") : "JLPT Diagnosis Results"}</p>
+      <p style={{ color:"#c4b5fd", fontSize:fz(12), fontWeight:700, margin:"0 0 10px" }}>🎓 {T?.tabJlpt ? T.tabJlpt.replace(/^🎓\s*/, "") : "JLPT Diagnosis Results"}</p>
       {!results.length ? (
-        <p style={{ color:"#64748b", fontSize:13, margin:0 }}>
+        <p style={{ color:"#64748b", fontSize:fz(13), margin:0 }}>
           {T?.jlptNoResults || "No JLPT results yet. Once your teacher sends one, it'll show up here."}
         </p>
       ) : (
@@ -13236,18 +13237,18 @@ function JlptResultsPanel({ userId, T }) {
           {results.map(r => (
             <div key={r.id} style={{ background:"rgba(168,85,247,0.06)", borderRadius:10, padding:"10px 12px", display:"flex", justifyContent:"space-between", alignItems:"center", gap:10, flexWrap:"wrap" }}>
               <div>
-                <p style={{ color:"#f1f5f9", fontSize:13, fontWeight:700, margin:"0 0 2px" }}>
+                <p style={{ color:"#f1f5f9", fontSize:fz(13), fontWeight:700, margin:"0 0 2px" }}>
                   {r.jlpt_level}{r.passed === true ? " — ✅ Pass" : r.passed === false ? " — ❌ Not pass" : ""}
                 </p>
-                <p style={{ color:"#94a3b8", fontSize:11, margin:0 }}>
+                <p style={{ color:"#94a3b8", fontSize:fz(11), margin:0 }}>
                   {r.score ? `Score: ${r.score} · ` : ""}{r.test_date ? `Tested: ${r.test_date}` : new Date(r.created_at).toLocaleDateString()}
                 </p>
               </div>
               <div style={{ display:"flex", gap:8 }}>
-                <button onClick={()=>downloadPdf(r)} style={{ ...S.btn, padding:"7px 14px", fontSize:12, background:"linear-gradient(135deg,#a855f7,#9333ea)", color:"#fff", whiteSpace:"nowrap" }}>
+                <button onClick={()=>downloadPdf(r)} style={{ ...S.btn, padding:"7px 14px", fontSize:fz(12), background:"linear-gradient(135deg,#a855f7,#9333ea)", color:"#fff", whiteSpace:"nowrap" }}>
                   📄 {T?.download || "Download PDF"}
                 </button>
-                <button onClick={()=>deleteResult(r)} disabled={deletingId===r.id} style={{ ...S.btn, padding:"7px 12px", fontSize:12, background:"rgba(248,113,113,0.08)", color:"#f87171", border:"1px solid rgba(248,113,113,0.3)", whiteSpace:"nowrap", opacity:deletingId===r.id?0.6:1 }}>
+                <button onClick={()=>deleteResult(r)} disabled={deletingId===r.id} style={{ ...S.btn, padding:"7px 12px", fontSize:fz(12), background:"rgba(248,113,113,0.08)", color:"#f87171", border:"1px solid rgba(248,113,113,0.3)", whiteSpace:"nowrap", opacity:deletingId===r.id?0.6:1 }}>
                   {deletingId===r.id ? "…" : "🗑️"}
                 </button>
               </div>
@@ -13416,9 +13417,9 @@ function TtsProblemToast({ T }) {
   }, []);
   if (!show) return null;
   return (
-    <div onClick={() => setShow(false)} style={{ background:"rgba(251,191,36,0.12)", border:"1px solid rgba(251,191,36,0.4)", borderRadius:10, padding:"10px 12px", margin:"0 0 12px", color:C.amber, fontSize:12, lineHeight:1.6, cursor:"pointer" }}>
+    <div onClick={() => setShow(false)} style={{ background:"rgba(251,191,36,0.12)", border:"1px solid rgba(251,191,36,0.4)", borderRadius:10, padding:"10px 12px", margin:"0 0 12px", color:C.amber, fontSize:fz(12), lineHeight:1.6, cursor:"pointer" }}>
       {T.ttsProblem || "🔇 No sound? Your phone may not have a Japanese voice. Open Settings → search “Text-to-speech output” → install the Japanese voice data (Google Text-to-speech), then try again."}
-      <div style={{ marginTop:6, fontSize:10, opacity:0.7, wordBreak:"break-all" }}>[{info}]</div>
+      <div style={{ marginTop:6, fontSize:fz(10), opacity:0.7, wordBreak:"break-all" }}>[{info}]</div>
     </div>
   );
 }
@@ -13485,9 +13486,9 @@ function buildRubySegments(word, reading) {
 }
 // A vocab word with furigana always shown above its kanji ("…" while a missing reading is being filled in).
 function FuriganaWord({ word, reading, size = 22, color = "#f1f5f9" }) {
-  const base = { fontSize: size, fontWeight: 900, color };
+  const base = { fontSize: fz(size), fontWeight: 900, color };
   if (!hasKanji(word)) return <span style={base}>{word}</span>;
-  const rtStyle = { fontSize: Math.max(9, Math.round(size * 0.48)), color: C.teal, fontWeight: 700, letterSpacing: 0 };
+  const rtStyle = { fontSize: fz(Math.max(9, Math.round(size * 0.48))), color: C.teal, fontWeight: 700, letterSpacing: 0 };
   const segs = buildRubySegments(word, reading) || [{ text: word, rt: "…" }];
   return (
     <span style={{ ...base, lineHeight: 1.9 }}>
@@ -13661,11 +13662,11 @@ function SpeedButtons({ text, T }) {
   return (
     <>
       <button onClick={()=>speakJapanese(text, 0.8)}
-        style={{ padding:"6px 10px", borderRadius:8, background:"rgba(148,163,184,0.1)", border:"1px solid rgba(148,163,184,0.25)", color:"#94a3b8", fontSize:11, fontWeight:700, cursor:"pointer" }}>
+        style={{ padding:"6px 10px", borderRadius:8, background:"rgba(148,163,184,0.1)", border:"1px solid rgba(148,163,184,0.25)", color:"#94a3b8", fontSize:fz(11), fontWeight:700, cursor:"pointer" }}>
         {T?.speed08 || "🐢 0.8x"}
       </button>
       <button onClick={()=>speakJapanese(text, 0.5)}
-        style={{ padding:"6px 10px", borderRadius:8, background:"rgba(148,163,184,0.1)", border:"1px solid rgba(148,163,184,0.25)", color:"#94a3b8", fontSize:11, fontWeight:700, cursor:"pointer" }}>
+        style={{ padding:"6px 10px", borderRadius:8, background:"rgba(148,163,184,0.1)", border:"1px solid rgba(148,163,184,0.25)", color:"#94a3b8", fontSize:fz(11), fontWeight:700, cursor:"pointer" }}>
         {T?.speed05 || "🐌 0.5x"}
       </button>
     </>
@@ -13872,12 +13873,12 @@ function WordDetailCard({ card: cardProp, onSave, onBack, form, prefLang, onRevi
   return (
     <div style={{ position:"relative" }}>
       {toast && (
-        <div style={{ position:"fixed", bottom:24, left:"50%", transform:"translateX(-50%)", background:"#22c55e", color:"#fff", padding:"10px 20px", borderRadius:12, fontSize:13, fontWeight:700, zIndex:2000, whiteSpace:"nowrap" }}>
+        <div style={{ position:"fixed", bottom:24, left:"50%", transform:"translateX(-50%)", background:"#22c55e", color:"#fff", padding:"10px 20px", borderRadius:12, fontSize:fz(13), fontWeight:700, zIndex:2000, whiteSpace:"nowrap" }}>
           {toast}
         </div>
       )}
 
-      <button onClick={onBack} style={{ background:"none", border:"none", color:"#64748b", fontSize:13, cursor:"pointer", padding:0, marginBottom:14, display:"flex", alignItems:"center", gap:4 }}>
+      <button onClick={onBack} style={{ background:"none", border:"none", color:"#64748b", fontSize:fz(13), cursor:"pointer", padding:0, marginBottom:14, display:"flex", alignItems:"center", gap:4 }}>
         {backLabel || "← Back to search"}
       </button>
 
@@ -13885,50 +13886,50 @@ function WordDetailCard({ card: cardProp, onSave, onBack, form, prefLang, onRevi
       <div style={{ ...S.card, borderLeft:`4px solid ${C.teal}`, marginBottom:12 }}>
         <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start" }}>
           <div>
-            <p style={{ color:"#f1f5f9", fontSize:32, fontWeight:900, margin:"0 0 4px", letterSpacing:2 }}>{card.word}</p>
-            <p style={{ color:C.teal, fontSize:16, margin:"0 0 4px" }}>{card.reading}</p>
+            <p style={{ color:"#f1f5f9", fontSize:fz(32), fontWeight:900, margin:"0 0 4px", letterSpacing:2 }}>{card.word}</p>
+            <p style={{ color:C.teal, fontSize:fz(16), margin:"0 0 4px" }}>{card.reading}</p>
             <div style={{ display:"flex", gap:6, flexWrap:"wrap" }}>
-              {card.jlpt && <span style={{ background:"rgba(168,85,247,0.2)", color:C.purpleLight, fontSize:11, fontWeight:700, padding:"2px 8px", borderRadius:99 }}>{card.jlpt}</span>}
-              {card.partOfSpeech && <span style={{ background:"rgba(6,182,212,0.15)", color:C.teal, fontSize:11, fontWeight:600, padding:"2px 8px", borderRadius:99 }}>{card.partOfSpeech}</span>}
+              {card.jlpt && <span style={{ background:"rgba(168,85,247,0.2)", color:C.purpleLight, fontSize:fz(11), fontWeight:700, padding:"2px 8px", borderRadius:99 }}>{card.jlpt}</span>}
+              {card.partOfSpeech && <span style={{ background:"rgba(6,182,212,0.15)", color:C.teal, fontSize:fz(11), fontWeight:600, padding:"2px 8px", borderRadius:99 }}>{card.partOfSpeech}</span>}
             </div>
           </div>
-          <button onClick={()=>speakVocabWord(card)} style={{ width:44, height:44, borderRadius:12, background:`rgba(6,182,212,0.15)`, border:`1px solid rgba(6,182,212,0.3)`, color:C.teal, fontSize:20, cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0 }}>
+          <button onClick={()=>speakVocabWord(card)} style={{ width:44, height:44, borderRadius:12, background:`rgba(6,182,212,0.15)`, border:`1px solid rgba(6,182,212,0.3)`, color:C.teal, fontSize:fz(20), cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0 }}>
             🔊
           </button>
         </div>
       </div>
 
       {onReviewFlashcard && (
-        <button onClick={()=>onReviewFlashcard(card)} style={{ width:"100%", ...S.btn, marginBottom:12, background:"linear-gradient(135deg,rgba(34,197,94,0.2),rgba(22,163,74,0.15))", border:"1.5px solid rgba(34,197,94,0.4)", color:"#f1f5f9", fontSize:13, fontWeight:700, padding:"11px 14px" }}>
+        <button onClick={()=>onReviewFlashcard(card)} style={{ width:"100%", ...S.btn, marginBottom:12, background:"linear-gradient(135deg,rgba(34,197,94,0.2),rgba(22,163,74,0.15))", border:"1.5px solid rgba(34,197,94,0.4)", color:"#f1f5f9", fontSize:fz(13), fontWeight:700, padding:"11px 14px" }}>
           {T.reviewThisFlashcard || "🎴 Review this word with Flashcards"}
         </button>
       )}
 
       {/* ── DEFINITION ── */}
       <div style={{ ...S.card, marginBottom:12 }}>
-        <p style={{ color:C.purpleLight, fontSize:11, fontWeight:700, letterSpacing:1, margin:"0 0 8px" }}>📖 DEFINITION</p>
+        <p style={{ color:C.purpleLight, fontSize:fz(11), fontWeight:700, letterSpacing:1, margin:"0 0 8px" }}>📖 DEFINITION</p>
         {filling && !card.meaning
-          ? <p style={{ color:"#475569", fontSize:13, fontStyle:"italic" }}>✨ AI generating...</p>
-          : <p style={{ color:"#f1f5f9", fontSize:14, lineHeight:1.8, margin:0 }}>{card.meaning}</p>
+          ? <p style={{ color:"#475569", fontSize:fz(13), fontStyle:"italic" }}>✨ AI generating...</p>
+          : <p style={{ color:"#f1f5f9", fontSize:fz(14), lineHeight:1.8, margin:0 }}>{card.meaning}</p>
         }
         {card.meaningNative && (
-          <p style={{ color:"#64748b", fontSize:13, lineHeight:1.7, margin:"8px 0 0", borderTop:`1px solid ${C.border}`, paddingTop:8 }}>{card.meaningNative}</p>
+          <p style={{ color:"#64748b", fontSize:fz(13), lineHeight:1.7, margin:"8px 0 0", borderTop:`1px solid ${C.border}`, paddingTop:8 }}>{card.meaningNative}</p>
         )}
       </div>
 
       {/* ── EXAMPLE SENTENCE ── */}
       <div style={{ ...S.card, marginBottom:12 }}>
         <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:8 }}>
-          <p style={{ color:C.amber, fontSize:11, fontWeight:700, letterSpacing:1, margin:0 }}>✏️ EXAMPLE SENTENCE</p>
-          <button onClick={()=>speakJapanese(card.example)} style={{ background:`rgba(245,158,11,0.1)`, border:`1px solid rgba(245,158,11,0.3)`, borderRadius:8, color:C.amber, fontSize:14, padding:"3px 10px", cursor:"pointer" }}>🔊</button>
+          <p style={{ color:C.amber, fontSize:fz(11), fontWeight:700, letterSpacing:1, margin:0 }}>✏️ EXAMPLE SENTENCE</p>
+          <button onClick={()=>speakJapanese(card.example)} style={{ background:`rgba(245,158,11,0.1)`, border:`1px solid rgba(245,158,11,0.3)`, borderRadius:8, color:C.amber, fontSize:fz(14), padding:"3px 10px", cursor:"pointer" }}>🔊</button>
         </div>
         {filling
-          ? <p style={{ color:"#475569", fontSize:13, fontStyle:"italic" }}>✨ AI generating...</p>
+          ? <p style={{ color:"#475569", fontSize:fz(13), fontStyle:"italic" }}>✨ AI generating...</p>
           : <>
-              <p style={{ color:"#f1f5f9", fontSize:14, lineHeight:1.9, margin:"0 0 4px" }}>{card.example}</p>
-              {card.reading_example && <p style={{ color:"#67e8f9", fontSize:12, margin:"0 0 4px", fontStyle:"italic" }}>{card.reading_example}</p>}
+              <p style={{ color:"#f1f5f9", fontSize:fz(14), lineHeight:1.9, margin:"0 0 4px" }}>{card.example}</p>
+              {card.reading_example && <p style={{ color:"#67e8f9", fontSize:fz(12), margin:"0 0 4px", fontStyle:"italic" }}>{card.reading_example}</p>}
               {card.example_translated
-                ? <p style={{ color:"#64748b", fontSize:13, margin:0, fontStyle:"italic" }}>{card.example_translated}</p>
+                ? <p style={{ color:"#64748b", fontSize:fz(13), margin:0, fontStyle:"italic" }}>{card.example_translated}</p>
                 : null
               }
             </>
@@ -13937,35 +13938,35 @@ function WordDetailCard({ card: cardProp, onSave, onBack, form, prefLang, onRevi
 
       {/* ── REAL EXAMPLES (Tatoeba) ── */}
       <div style={{ ...S.card, marginBottom:12 }}>
-        <p style={{ color:C.teal, fontSize:11, fontWeight:700, letterSpacing:1, margin:"0 0 8px" }}>🌐 {T.realExamplesTitle || "REAL EXAMPLES"}</p>
+        <p style={{ color:C.teal, fontSize:fz(11), fontWeight:700, letterSpacing:1, margin:"0 0 8px" }}>🌐 {T.realExamplesTitle || "REAL EXAMPLES"}</p>
         {tatoebaLoading ? (
-          <p style={{ color:"#475569", fontSize:13, fontStyle:"italic", margin:0 }}>{T.realExamplesLoading || "Searching real examples..."}</p>
+          <p style={{ color:"#475569", fontSize:fz(13), fontStyle:"italic", margin:0 }}>{T.realExamplesLoading || "Searching real examples..."}</p>
         ) : tatoebaExamples.length > 0 ? (
           <>
             <div style={{ display:"flex", flexDirection:"column", gap:12 }}>
               {tatoebaExamples.map(ex => (
                 <div key={ex.id} style={{ borderLeft:`2px solid ${C.border}`, paddingLeft:10 }}>
                   <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", gap:8 }}>
-                    <p style={{ color:"#f1f5f9", fontSize:14, lineHeight:1.8, margin:"0 0 3px", flex:1 }}>{ex.text}</p>
-                    <button onClick={()=>speakJapanese(ex.text)} style={{ background:"none", border:"none", color:C.teal, fontSize:13, cursor:"pointer", padding:0, flexShrink:0 }}>🔊</button>
+                    <p style={{ color:"#f1f5f9", fontSize:fz(14), lineHeight:1.8, margin:"0 0 3px", flex:1 }}>{ex.text}</p>
+                    <button onClick={()=>speakJapanese(ex.text)} style={{ background:"none", border:"none", color:C.teal, fontSize:fz(13), cursor:"pointer", padding:0, flexShrink:0 }}>🔊</button>
                   </div>
-                  {ex.translation && <p style={{ color:"#ff2d2d", fontWeight:600, fontSize:12, margin:0, fontStyle:"italic" }}>{ex.translation}</p>}
+                  {ex.translation && <p style={{ color:"#ff2d2d", fontWeight:600, fontSize:fz(12), margin:0, fontStyle:"italic" }}>{ex.translation}</p>}
                 </div>
               ))}
             </div>
-            <p style={{ color:"#475569", fontSize:11, margin:"10px 0 0" }}>
+            <p style={{ color:"#475569", fontSize:fz(11), margin:"10px 0 0" }}>
               <a href="https://tatoeba.org" target="_blank" rel="noopener noreferrer" style={{ color:"#ff2d2d", fontWeight:600 }}>{T.realExamplesAttribution || "Example sentences provided by Tatoeba.org"}</a>
             </p>
           </>
         ) : (
-          <p style={{ color:"#475569", fontSize:13, margin:0 }}>—</p>
+          <p style={{ color:"#475569", fontSize:fz(13), margin:0 }}>—</p>
         )}
       </div>
 
       {/* ── IMAGE ASSOCIATION ── */}
       <div style={{ ...S.card, marginBottom:12 }}>
         <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:10 }}>
-          <p style={{ color:"#64748b", fontSize:11, fontWeight:700, letterSpacing:1, margin:0 }}>🖼 {(T.imgAssocTitle || "IMAGE ASSOCIATION").toUpperCase()}</p>
+          <p style={{ color:"#64748b", fontSize:fz(11), fontWeight:700, letterSpacing:1, margin:0 }}>🖼 {(T.imgAssocTitle || "IMAGE ASSOCIATION").toUpperCase()}</p>
           <div style={{ display:"flex", gap:6 }}>
             {imgSrc && !imgError && (
               <button
@@ -13976,20 +13977,20 @@ function WordDetailCard({ card: cardProp, onSave, onBack, form, prefLang, onRevi
                   setCard(prev=>({...prev, imageUrl:imgSrc}));
                   showToast(T.imgSaved || "✓ Image saved");
                 }}
-                style={{ fontSize:11, color:"#22c55e", fontWeight:700, background:"rgba(34,197,94,0.1)", padding:"5px 10px", borderRadius:8, border:"1px solid rgba(34,197,94,0.3)", cursor:"pointer" }}
+                style={{ fontSize:fz(11), color:"#22c55e", fontWeight:700, background:"rgba(34,197,94,0.1)", padding:"5px 10px", borderRadius:8, border:"1px solid rgba(34,197,94,0.3)", cursor:"pointer" }}
               >💾 {T.imgSave || "Save"}</button>
             )}
             {imgSrc && !imgError && (
               <button
                 onClick={searchImage}
                 disabled={imgLoading}
-                style={{ fontSize:11, color:C.amber, fontWeight:700, background:"rgba(245,158,11,0.1)", padding:"5px 10px", borderRadius:8, border:"1px solid rgba(245,158,11,0.3)", cursor:"pointer" }}
+                style={{ fontSize:fz(11), color:C.amber, fontWeight:700, background:"rgba(245,158,11,0.1)", padding:"5px 10px", borderRadius:8, border:"1px solid rgba(245,158,11,0.3)", cursor:"pointer" }}
               >{T.imgNext || "Next image"} →</button>
             )}
             <button
               onClick={searchImage}
               disabled={imgLoading}
-              style={{ fontSize:11, color:C.teal, fontWeight:700, background:"rgba(6,182,212,0.1)", padding:"5px 12px", borderRadius:8, border:`1px solid rgba(6,182,212,0.2)`, cursor:"pointer" }}
+              style={{ fontSize:fz(11), color:C.teal, fontWeight:700, background:"rgba(6,182,212,0.1)", padding:"5px 12px", borderRadius:8, border:`1px solid rgba(6,182,212,0.2)`, cursor:"pointer" }}
             >{imgLoading ? "..." : imgSrc ? "🔍" : "🔍 " + (T.imgSearchBtn || "SEARCH")}</button>
           </div>
         </div>
@@ -14001,37 +14002,37 @@ function WordDetailCard({ card: cardProp, onSave, onBack, form, prefLang, onRevi
               onError={()=>setImgError(true)}
               style={{ width:"100%", borderRadius:10, objectFit:"cover", maxHeight:220, display:"block" }}
             />
-            <p style={{ color:"#475569", fontSize:10, margin:"4px 0 0", textAlign:"center" }}>{(T.imgHelp || "Image {n} · tap “Next image” for another · “Save” keeps it on the word card").split("{n}").join(imgIndex)}</p>
+            <p style={{ color:"#475569", fontSize:fz(10), margin:"4px 0 0", textAlign:"center" }}>{(T.imgHelp || "Image {n} · tap “Next image” for another · “Save” keeps it on the word card").split("{n}").join(imgIndex)}</p>
           </div>
         ) : card.imageUrl ? (
           <div>
             <img src={card.imageUrl} alt={card.word} style={{ width:"100%", borderRadius:10, objectFit:"cover", maxHeight:220, display:"block" }} />
-            <p style={{ color:"#22c55e", fontSize:10, margin:"4px 0 0", textAlign:"center" }}>{T.imgSavedLabel || "✓ Saved"}</p>
+            <p style={{ color:"#22c55e", fontSize:fz(10), margin:"4px 0 0", textAlign:"center" }}>{T.imgSavedLabel || "✓ Saved"}</p>
           </div>
         ) : (
           <div
             onClick={searchImage}
             style={{ width:"100%", height:160, borderRadius:10, background:"rgba(6,182,212,0.06)", display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", border:`1px dashed rgba(6,182,212,0.3)`, cursor:"pointer" }}
           >
-            <span style={{ color:C.teal, fontSize:32, marginBottom:8 }}>🔍</span>
-            <span style={{ color:C.teal, fontSize:13, fontWeight:700 }}>{(T.imgSearchFor || "Search an image for “{word}”").split("{word}").join(card.word)}</span>
-            <span style={{ color:"#475569", fontSize:11, marginTop:4 }}>{T.imgTapSearch || "Tap to search for an image"}</span>
+            <span style={{ color:C.teal, fontSize:fz(32), marginBottom:8 }}>🔍</span>
+            <span style={{ color:C.teal, fontSize:fz(13), fontWeight:700 }}>{(T.imgSearchFor || "Search an image for “{word}”").split("{word}").join(card.word)}</span>
+            <span style={{ color:"#475569", fontSize:fz(11), marginTop:4 }}>{T.imgTapSearch || "Tap to search for an image"}</span>
           </div>
         )}
-        {card.imageDesc && <p style={{ color:"#94a3b8", fontSize:12, margin:"8px 0 0", lineHeight:1.6 }}>{card.imageDesc}</p>}
+        {card.imageDesc && <p style={{ color:"#94a3b8", fontSize:fz(12), margin:"8px 0 0", lineHeight:1.6 }}>{card.imageDesc}</p>}
       </div>
 
 
       {/* ── CLT TIP ── */}
       {card.tip && (
         <div style={{ ...S.card, marginBottom:12, borderLeft:`3px solid ${C.green}` }}>
-          <p style={{ color:C.green, fontSize:11, fontWeight:700, letterSpacing:1, margin:"0 0 6px" }}>💬 CLT USAGE TIP</p>
-          <p style={{ color:"#cbd5e1", fontSize:13, margin:0, lineHeight:1.7 }}>{card.tip}</p>
+          <p style={{ color:C.green, fontSize:fz(11), fontWeight:700, letterSpacing:1, margin:"0 0 6px" }}>💬 CLT USAGE TIP</p>
+          <p style={{ color:"#cbd5e1", fontSize:fz(13), margin:0, lineHeight:1.7 }}>{card.tip}</p>
         </div>
       )}
 
       {/* ── SAVE BUTTON ── */}
-      <button data-guide="vocab-save" onClick={()=>setSaveModal(true)} style={{ ...S.btn, width:"100%", background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff", fontSize:15, marginTop:4, marginBottom:32 }}>
+      <button data-guide="vocab-save" onClick={()=>setSaveModal(true)} style={{ ...S.btn, width:"100%", background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff", fontSize:fz(15), marginTop:4, marginBottom:32 }}>
         💾 {T.saveWord || "Save Word"}
       </button>
 
@@ -14043,21 +14044,21 @@ function WordDetailCard({ card: cardProp, onSave, onBack, form, prefLang, onRevi
 
             {saveMode === "" && (
               <>
-                <p style={{ color:"#f1f5f9", fontSize:16, fontWeight:800, margin:"0 0 18px" }}>{T.saveTitle || "Save"} "{card.word}"</p>
+                <p style={{ color:"#f1f5f9", fontSize:fz(16), fontWeight:800, margin:"0 0 18px" }}>{T.saveTitle || "Save"} "{card.word}"</p>
                 {[
                   { id:"yourVocab", icon:"📚", label: T.saveToYourVocab || "Add to Your Vocabulary", sub: T.saveToYourVocabSub || "Your default vocabulary list" },
                   { id:"addFolder", icon:"📁", label: T.saveAddToFolder || "Add to Folder", sub: T.saveAddToFolderSub || "Choose an existing folder" },
                   { id:"newFolder", icon:"✨", label: T.saveCreateFolder || "Create New Folder", sub: T.saveCreateFolderSub || "Make a new folder for this word" },
                 ].map(opt => (
                   <button key={opt.id} onClick={()=>{ if(opt.id==="yourVocab"){doSave("Your Vocabulary");}else{setSaveMode(opt.id);} }} style={{ display:"flex", alignItems:"center", gap:14, width:"100%", padding:"14px 16px", borderRadius:12, background:C.card, border:`1px solid ${C.border}`, color:"#f1f5f9", textAlign:"left", cursor:"pointer", marginBottom:10 }}>
-                    <span style={{ fontSize:22 }}>{opt.icon}</span>
+                    <span style={{ fontSize:fz(22) }}>{opt.icon}</span>
                     <div>
-                      <p style={{ margin:0, fontWeight:700, fontSize:14 }}>{opt.label}</p>
-                      <p style={{ margin:0, fontSize:12, color:"#64748b" }}>{opt.sub}</p>
+                      <p style={{ margin:0, fontWeight:700, fontSize:fz(14) }}>{opt.label}</p>
+                      <p style={{ margin:0, fontSize:fz(12), color:"#64748b" }}>{opt.sub}</p>
                     </div>
                   </button>
                 ))}
-                <button onClick={()=>{setSaveModal(false);setSaveMode("");}} style={{ width:"100%", padding:"12px", borderRadius:10, background:"none", border:`1px solid ${C.border}`, color:"#64748b", fontSize:13, cursor:"pointer", marginTop:4 }}>{T.saveCancel || "Cancel"}</button>
+                <button onClick={()=>{setSaveModal(false);setSaveMode("");}} style={{ width:"100%", padding:"12px", borderRadius:10, background:"none", border:`1px solid ${C.border}`, color:"#64748b", fontSize:fz(13), cursor:"pointer", marginTop:4 }}>{T.saveCancel || "Cancel"}</button>
               </>
             )}
 
@@ -14066,15 +14067,15 @@ function WordDetailCard({ card: cardProp, onSave, onBack, form, prefLang, onRevi
               const folders = [{ key: "Your Vocabulary", label: T.yourVocabSaved || "Your Vocabulary" }, ...data.folders.map(f=>({ key: f.name, label: f.name }))];
               return (
                 <>
-                  <button onClick={()=>setSaveMode("")} style={{ background:"none", border:"none", color:"#64748b", fontSize:13, cursor:"pointer", padding:0, marginBottom:14 }}>{T.saveBack || "← Back"}</button>
-                  <p style={{ color:"#f1f5f9", fontSize:15, fontWeight:800, margin:"0 0 14px" }}>{T.saveChooseFolder || "Choose a folder"}</p>
+                  <button onClick={()=>setSaveMode("")} style={{ background:"none", border:"none", color:"#64748b", fontSize:fz(13), cursor:"pointer", padding:0, marginBottom:14 }}>{T.saveBack || "← Back"}</button>
+                  <p style={{ color:"#f1f5f9", fontSize:fz(15), fontWeight:800, margin:"0 0 14px" }}>{T.saveChooseFolder || "Choose a folder"}</p>
                   {folders.map(f => (
                     <button key={f.key} onClick={()=>setSelectedFolder(f.key)} style={{ display:"flex", alignItems:"center", justifyContent:"space-between", width:"100%", padding:"13px 16px", borderRadius:12, background:selectedFolder===f.key?"rgba(168,85,247,0.15)":C.card, border:`1.5px solid ${selectedFolder===f.key?C.purpleLight:C.border}`, color:"#f1f5f9", textAlign:"left", cursor:"pointer", marginBottom:8 }}>
-                      <span style={{ fontSize:14, fontWeight:selectedFolder===f.key?700:400 }}>📁 {f.label}</span>
-                      {selectedFolder===f.key && <span style={{ color:C.purpleLight, fontSize:16 }}>✓</span>}
+                      <span style={{ fontSize:fz(14), fontWeight:selectedFolder===f.key?700:400 }}>📁 {f.label}</span>
+                      {selectedFolder===f.key && <span style={{ color:C.purpleLight, fontSize:fz(16) }}>✓</span>}
                     </button>
                   ))}
-                  {folders.length === 1 && <p style={{ color:"#475569", fontSize:12, textAlign:"center", margin:"8px 0" }}>{T.saveNoFolders || "No custom folders yet — create one first!"}</p>}
+                  {folders.length === 1 && <p style={{ color:"#475569", fontSize:fz(12), textAlign:"center", margin:"8px 0" }}>{T.saveNoFolders || "No custom folders yet — create one first!"}</p>}
                   <button onClick={()=>{ if(selectedFolder) doSave(selectedFolder); }} disabled={!selectedFolder} style={{ ...S.btn, width:"100%", marginTop:8, background:selectedFolder?`linear-gradient(135deg,${C.purple},#9333ea)`:"#1e293b", color:selectedFolder?"#fff":"#475569" }}>
                     {T.saveTo || "Save to"} "{folders.find(f=>f.key===selectedFolder)?.label || "..."}"
                   </button>
@@ -14084,8 +14085,8 @@ function WordDetailCard({ card: cardProp, onSave, onBack, form, prefLang, onRevi
 
             {saveMode === "newFolder" && (
               <>
-                <button onClick={()=>setSaveMode("")} style={{ background:"none", border:"none", color:"#64748b", fontSize:13, cursor:"pointer", padding:0, marginBottom:14 }}>{T.saveBack || "← Back"}</button>
-                <p style={{ color:"#f1f5f9", fontSize:15, fontWeight:800, margin:"0 0 14px" }}>{T.saveCreateFolder || "Create New Folder"}</p>
+                <button onClick={()=>setSaveMode("")} style={{ background:"none", border:"none", color:"#64748b", fontSize:fz(13), cursor:"pointer", padding:0, marginBottom:14 }}>{T.saveBack || "← Back"}</button>
+                <p style={{ color:"#f1f5f9", fontSize:fz(15), fontWeight:800, margin:"0 0 14px" }}>{T.saveCreateFolder || "Create New Folder"}</p>
                 <input value={newFolderName} onChange={e=>setNewFolderName(e.target.value)} placeholder={T.saveFolderPlaceholder || "Folder name (e.g. かおりさん 授業)"} style={{ ...S.input, marginBottom:12 }} />
                 <button onClick={()=>{ if(newFolderName.trim()) doSave(newFolderName.trim()); }} disabled={!newFolderName.trim()} style={{ ...S.btn, width:"100%", background:newFolderName.trim()?`linear-gradient(135deg,${C.green},#16a34a)`:"#1e293b", color:newFolderName.trim()?"#fff":"#475569" }}>
                   {T.saveCreateAndSave || "Create & Save"}
@@ -14281,29 +14282,29 @@ Only output the JSON object.` }
 
   if (!cards.length) return (
     <div>
-      <button onClick={onBack} style={{ background:"none", border:"none", color:"#64748b", fontSize:13, cursor:"pointer", padding:0, marginBottom:14 }}>← Back</button>
+      <button onClick={onBack} style={{ background:"none", border:"none", color:"#64748b", fontSize:fz(13), cursor:"pointer", padding:0, marginBottom:14 }}>← Back</button>
       <div style={{ ...S.card, textAlign:"center", padding:"40px 20px" }}>
-        <p style={{ color:"#64748b", fontSize:32, margin:"0 0 12px" }}>📭</p>
-        <p style={{ color:"#94a3b8", fontSize:14 }}>{T.flashcardNoWords || "No saved words yet. Search and save words first!"}</p>
+        <p style={{ color:"#64748b", fontSize:fz(32), margin:"0 0 12px" }}>📭</p>
+        <p style={{ color:"#94a3b8", fontSize:fz(14) }}>{T.flashcardNoWords || "No saved words yet. Search and save words first!"}</p>
       </div>
     </div>
   );
 
   return (
     <div>
-      <button onClick={onBack} style={{ background:"none", border:"none", color:"#64748b", fontSize:13, cursor:"pointer", padding:0, marginBottom:14 }}>← Back</button>
+      <button onClick={onBack} style={{ background:"none", border:"none", color:"#64748b", fontSize:fz(13), cursor:"pointer", padding:0, marginBottom:14 }}>← Back</button>
       <TtsProblemToast T={T} />
       {/* Folder selector (hidden when reviewing a single word) */}
       <div style={{ display:"flex", gap:6, flexWrap:"wrap", marginBottom:12 }}>
         {!focusWord && allFolders.map(f => (
-          <button key={f.name} onClick={()=>handleFolderChange(f.name)} style={{ padding:"5px 12px", borderRadius:20, fontSize:11, fontWeight:700, cursor:"pointer", border:`1px solid ${selectedFolder===f.name ? C.teal : C.border}`, background: selectedFolder===f.name ? `rgba(6,182,212,0.15)` : C.card, color: selectedFolder===f.name ? C.teal : "#64748b" }}>
+          <button key={f.name} onClick={()=>handleFolderChange(f.name)} style={{ padding:"5px 12px", borderRadius:20, fontSize:fz(11), fontWeight:700, cursor:"pointer", border:`1px solid ${selectedFolder===f.name ? C.teal : C.border}`, background: selectedFolder===f.name ? `rgba(6,182,212,0.15)` : C.card, color: selectedFolder===f.name ? C.teal : "#64748b" }}>
             {f.name==="すべて" ? "📚 すべて" : f.name==="Your Vocabulary" ? "📚 Your Vocabulary" : "📁 "+f.name}
           </button>
         ))}
       </div>
       {resumeChoice === null ? (
         <div style={{ ...S.card, textAlign:"center", padding:"32px 20px" }}>
-          <p style={{ color:"#94a3b8", fontSize:13, marginBottom:18 }}>
+          <p style={{ color:"#94a3b8", fontSize:fz(13), marginBottom:18 }}>
             {(T.flashcardResumePrompt || "You stopped at {pos} / {total} last time. Continue?").replace("{pos}", getSavedPos(selectedFolder)+1).replace("{total}", filteredCards.length)}
           </p>
           <div style={{ display:"flex", gap:10, justifyContent:"center" }}>
@@ -14313,36 +14314,36 @@ Only output the JSON object.` }
         </div>
       ) : !card ? (
         <div style={{ ...S.card, textAlign:"center", padding:"40px 20px" }}>
-          <p style={{ color:"#94a3b8", fontSize:14 }}>{selectedFolder !== UNDERSTOOD && understoodWords.size > 0 && cards.some(c => c.folder !== UNDERSTOOD) ? (T.flashAllUnderstood || "🎉 You understood every card here! Check the “Understood” folder.") : (T.flashcardNoWordsInFolder || "No words in this folder")}</p>
+          <p style={{ color:"#94a3b8", fontSize:fz(14) }}>{selectedFolder !== UNDERSTOOD && understoodWords.size > 0 && cards.some(c => c.folder !== UNDERSTOOD) ? (T.flashAllUnderstood || "🎉 You understood every card here! Check the “Understood” folder.") : (T.flashcardNoWordsInFolder || "No words in this folder")}</p>
         </div>
       ) : (
         <>
-          <p style={{ color:"#64748b", fontSize:12, textAlign:"center", margin:"0 0 16px" }}>{idx+1} / {displayCards.length}</p>
+          <p style={{ color:"#64748b", fontSize:fz(12), textAlign:"center", margin:"0 0 16px" }}>{idx+1} / {displayCards.length}</p>
           <div onClick={handleFlip} style={{ ...S.card, minHeight:220, display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", cursor:"pointer", textAlign:"center", borderLeft:`4px solid ${C.teal}`, marginBottom:16 }}>
             {!flipped ? (
               <>
-                <p style={{ color:"#f1f5f9", fontSize:44, fontWeight:900, margin:"0 0 6px", letterSpacing:2 }}>{card.word}</p>
-                {showHint && card.reading && <p style={{ color:C.teal, fontSize:20, margin:"0 0 2px", fontWeight:700 }}>{card.reading}</p>}
-                {showHint && card.reading && <p style={{ color:"#67e8f9", fontSize:13, margin:"0 0 6px", fontStyle:"italic" }}>{card.reading.split("").map(c=>{const hMap={"あ":"a","い":"i","う":"u","え":"e","お":"o","か":"ka","き":"ki","く":"ku","け":"ke","こ":"ko","さ":"sa","し":"shi","す":"su","せ":"se","そ":"so","た":"ta","ち":"chi","つ":"tsu","て":"te","と":"to","な":"na","に":"ni","ぬ":"nu","ね":"ne","の":"no","は":"ha","ひ":"hi","ふ":"fu","へ":"he","ほ":"ho","ま":"ma","み":"mi","む":"mu","め":"me","も":"mo","や":"ya","ゆ":"yu","よ":"yo","ら":"ra","り":"ri","る":"ru","れ":"re","ろ":"ro","わ":"wa","を":"wo","ん":"n","が":"ga","ぎ":"gi","ぐ":"gu","げ":"ge","ご":"go","ざ":"za","じ":"ji","ず":"zu","ぜ":"ze","ぞ":"zo","だ":"da","ぢ":"di","づ":"du","で":"de","ど":"do","ば":"ba","び":"bi","ぶ":"bu","べ":"be","ぼ":"bo","ぱ":"pa","ぴ":"pi","ぷ":"pu","ぺ":"pe","ぽ":"po","きゃ":"kya","きゅ":"kyu","きょ":"kyo","しゃ":"sha","しゅ":"shu","しょ":"sho","ちゃ":"cha","ちゅ":"chu","ちょ":"cho","にゃ":"nya","にゅ":"nyu","にょ":"nyo","ひゃ":"hya","ひゅ":"hyu","ひょ":"hyo","みゃ":"mya","みゅ":"myu","みょ":"myo","りゃ":"rya","りゅ":"ryu","りょ":"ryo","ぎゃ":"gya","ぎゅ":"gyu","ぎょ":"gyo","じゃ":"ja","じゅ":"ju","じょ":"jo","びゃ":"bya","びゅ":"byu","びょ":"byo","ぴゃ":"pya","ぴゅ":"pyu","ぴょ":"pyo","っ":"(t)","ー":"-","、":""," ":"","　":""};return hMap[c]||c;}).join("")}</p>}
-                <p style={{ color:"#ff0844", fontSize:11, fontWeight:700 }}>{T.flashTapToCheck || "Tap to check"}</p>
+                <p style={{ color:"#f1f5f9", fontSize:fz(44), fontWeight:900, margin:"0 0 6px", letterSpacing:2 }}>{card.word}</p>
+                {showHint && card.reading && <p style={{ color:C.teal, fontSize:fz(20), margin:"0 0 2px", fontWeight:700 }}>{card.reading}</p>}
+                {showHint && card.reading && <p style={{ color:"#67e8f9", fontSize:fz(13), margin:"0 0 6px", fontStyle:"italic" }}>{card.reading.split("").map(c=>{const hMap={"あ":"a","い":"i","う":"u","え":"e","お":"o","か":"ka","き":"ki","く":"ku","け":"ke","こ":"ko","さ":"sa","し":"shi","す":"su","せ":"se","そ":"so","た":"ta","ち":"chi","つ":"tsu","て":"te","と":"to","な":"na","に":"ni","ぬ":"nu","ね":"ne","の":"no","は":"ha","ひ":"hi","ふ":"fu","へ":"he","ほ":"ho","ま":"ma","み":"mi","む":"mu","め":"me","も":"mo","や":"ya","ゆ":"yu","よ":"yo","ら":"ra","り":"ri","る":"ru","れ":"re","ろ":"ro","わ":"wa","を":"wo","ん":"n","が":"ga","ぎ":"gi","ぐ":"gu","げ":"ge","ご":"go","ざ":"za","じ":"ji","ず":"zu","ぜ":"ze","ぞ":"zo","だ":"da","ぢ":"di","づ":"du","で":"de","ど":"do","ば":"ba","び":"bi","ぶ":"bu","べ":"be","ぼ":"bo","ぱ":"pa","ぴ":"pi","ぷ":"pu","ぺ":"pe","ぽ":"po","きゃ":"kya","きゅ":"kyu","きょ":"kyo","しゃ":"sha","しゅ":"shu","しょ":"sho","ちゃ":"cha","ちゅ":"chu","ちょ":"cho","にゃ":"nya","にゅ":"nyu","にょ":"nyo","ひゃ":"hya","ひゅ":"hyu","ひょ":"hyo","みゃ":"mya","みゅ":"myu","みょ":"myo","りゃ":"rya","りゅ":"ryu","りょ":"ryo","ぎゃ":"gya","ぎゅ":"gyu","ぎょ":"gyo","じゃ":"ja","じゅ":"ju","じょ":"jo","びゃ":"bya","びゅ":"byu","びょ":"byo","ぴゃ":"pya","ぴゅ":"pyu","ぴょ":"pyo","っ":"(t)","ー":"-","、":""," ":"","　":""};return hMap[c]||c;}).join("")}</p>}
+                <p style={{ color:"#ff0844", fontSize:fz(11), fontWeight:700 }}>{T.flashTapToCheck || "Tap to check"}</p>
               </>
             ) : (
               <>
                 {(card.imageUrl || flipImages[card.word]) && (
                   <img src={card.imageUrl || flipImages[card.word]} alt={card.word} style={{ width:"100%", maxWidth:260, borderRadius:10, objectFit:"cover", maxHeight:150, display:"block", margin:"0 auto 12px" }} />
                 )}
-                <p style={{ color:"#f1f5f9", fontSize:28, fontWeight:900, margin:"0 0 4px", letterSpacing:1 }}>{card.word}</p>
-                {card.reading && <p style={{ color:C.teal, fontSize:18, margin:"0 0 4px", fontWeight:700 }}>{card.reading}</p>}
-                {card.meaning && <p style={{ color:"#94a3b8", fontSize:12, margin:"0 0 10px" }}>{card.meaning}</p>}
-                {card.meaningNative && <p style={{ color:"#475569", fontSize:11, margin:"0 0 8px", fontStyle:"italic" }}>{card.meaningNative}</p>}
-                {card.example && <p style={{ color:"#cbd5e1", fontSize:13, lineHeight:1.7, maxWidth:280, margin:"0 0 2px" }}>{card.example}</p>}
+                <p style={{ color:"#f1f5f9", fontSize:fz(28), fontWeight:900, margin:"0 0 4px", letterSpacing:1 }}>{card.word}</p>
+                {card.reading && <p style={{ color:C.teal, fontSize:fz(18), margin:"0 0 4px", fontWeight:700 }}>{card.reading}</p>}
+                {card.meaning && <p style={{ color:"#94a3b8", fontSize:fz(12), margin:"0 0 10px" }}>{card.meaning}</p>}
+                {card.meaningNative && <p style={{ color:"#475569", fontSize:fz(11), margin:"0 0 8px", fontStyle:"italic" }}>{card.meaningNative}</p>}
+                {card.example && <p style={{ color:"#cbd5e1", fontSize:fz(13), lineHeight:1.7, maxWidth:280, margin:"0 0 2px" }}>{card.example}</p>}
                 {card.reading_example
-                  ? <p style={{ color:"#67e8f9", fontSize:11, fontStyle:"italic", maxWidth:280, margin:"0 0 2px" }}>{card.reading_example}</p>
-                  : fillingCard ? <p style={{ color:"#475569", fontSize:11, margin:"0 0 2px" }}>✨ {T.flashGenRomaji || "Generating romaji…"}</p> : null}
+                  ? <p style={{ color:"#67e8f9", fontSize:fz(11), fontStyle:"italic", maxWidth:280, margin:"0 0 2px" }}>{card.reading_example}</p>
+                  : fillingCard ? <p style={{ color:"#475569", fontSize:fz(11), margin:"0 0 2px" }}>✨ {T.flashGenRomaji || "Generating romaji…"}</p> : null}
                 {card.example_translated
-                  ? <p style={{ color:"#64748b", fontSize:11, fontStyle:"italic", maxWidth:280, margin:"0 0 10px" }}>{card.example_translated}</p>
-                  : fillingCard ? <p style={{ color:"#475569", fontSize:11, margin:"0 0 10px" }}>✨ {T.flashGenTranslation || "Generating translation…"}</p> : null}
-                <button onClick={e=>{e.stopPropagation();speakJapanese(card.example);}} style={{ background:"rgba(245,158,11,0.1)", border:"1px solid rgba(245,158,11,0.3)", borderRadius:8, color:C.amber, fontSize:12, padding:"4px 12px", cursor:"pointer" }}>🔊 {T.flashListenExample || "Listen to the example"}</button>
+                  ? <p style={{ color:"#64748b", fontSize:fz(11), fontStyle:"italic", maxWidth:280, margin:"0 0 10px" }}>{card.example_translated}</p>
+                  : fillingCard ? <p style={{ color:"#475569", fontSize:fz(11), margin:"0 0 10px" }}>✨ {T.flashGenTranslation || "Generating translation…"}</p> : null}
+                <button onClick={e=>{e.stopPropagation();speakJapanese(card.example);}} style={{ background:"rgba(245,158,11,0.1)", border:"1px solid rgba(245,158,11,0.3)", borderRadius:8, color:C.amber, fontSize:fz(12), padding:"4px 12px", cursor:"pointer" }}>🔊 {T.flashListenExample || "Listen to the example"}</button>
               </>
             )}
           </div>
@@ -14357,7 +14358,7 @@ Only output the JSON object.` }
           ) : (
             <button onClick={markUnderstood} style={{ width:"100%", ...S.btn, background:"rgba(34,197,94,0.12)", border:"1.5px solid rgba(34,197,94,0.5)", color:C.green, fontWeight:800 }}>{T.flashUnderstand || "✅ Understand"}</button>
           )}
-          {understoodMsg && <p style={{ color:C.green, fontSize:12, textAlign:"center", margin:"10px 0 0" }}>{understoodMsg}</p>}
+          {understoodMsg && <p style={{ color:C.green, fontSize:fz(12), textAlign:"center", margin:"10px 0 0" }}>{understoodMsg}</p>}
         </>
       )}
     </div>
@@ -14389,7 +14390,7 @@ function VocabSearchBox({ value, onChange, placeholder }) {
         style={{ ...S.input, width:"100%", boxSizing:"border-box", paddingRight:36 }}
       />
       {value && (
-        <button onClick={()=>onChange("")} aria-label="Clear search" style={{ position:"absolute", right:8, top:"50%", transform:"translateY(-50%)", background:"none", border:"none", color:"#94a3b8", fontSize:16, cursor:"pointer" }}>✕</button>
+        <button onClick={()=>onChange("")} aria-label="Clear search" style={{ position:"absolute", right:8, top:"50%", transform:"translateY(-50%)", background:"none", border:"none", color:"#94a3b8", fontSize:fz(16), cursor:"pointer" }}>✕</button>
       )}
     </div>
   );
@@ -14445,23 +14446,23 @@ function LibraryView({ onBack, onSelectFolder, onCreateCard, onViewCard, onQuick
 
   return (
     <div>
-      <button onClick={onBack} style={{ background:"none", border:"none", color:"#64748b", fontSize:13, cursor:"pointer", padding:0, marginBottom:14 }}>← Back to Vocabulary</button>
+      <button onClick={onBack} style={{ background:"none", border:"none", color:"#64748b", fontSize:fz(13), cursor:"pointer", padding:0, marginBottom:14 }}>← Back to Vocabulary</button>
       <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:16 }}>
-        <p style={{ color:C.teal, fontSize:14, fontWeight:800, margin:0 }}>📚 Your Vocabulary Library</p>
-        <button onClick={()=>setShowNewFolder(s=>!s)} style={{ padding:"7px 14px", borderRadius:10, background:`rgba(6,182,212,0.1)`, border:`1px solid rgba(6,182,212,0.3)`, color:C.teal, fontSize:12, fontWeight:700, cursor:"pointer" }}>
+        <p style={{ color:C.teal, fontSize:fz(14), fontWeight:800, margin:0 }}>📚 Your Vocabulary Library</p>
+        <button onClick={()=>setShowNewFolder(s=>!s)} style={{ padding:"7px 14px", borderRadius:10, background:`rgba(6,182,212,0.1)`, border:`1px solid rgba(6,182,212,0.3)`, color:C.teal, fontSize:fz(12), fontWeight:700, cursor:"pointer" }}>
           + New Folder
         </button>
       </div>
 
       {onQuickReview && (
-        <button onClick={onQuickReview} style={{ width:"100%", ...S.btn, marginBottom:14, background:"linear-gradient(135deg,rgba(34,197,94,0.2),rgba(22,163,74,0.15))", border:"1.5px solid rgba(34,197,94,0.4)", color:"#f1f5f9", fontSize:14, fontWeight:700, padding:"12px 14px" }}>
+        <button onClick={onQuickReview} style={{ width:"100%", ...S.btn, marginBottom:14, background:"linear-gradient(135deg,rgba(34,197,94,0.2),rgba(22,163,74,0.15))", border:"1.5px solid rgba(34,197,94,0.4)", color:"#f1f5f9", fontSize:fz(14), fontWeight:700, padding:"12px 14px" }}>
           {(T && T.quickReviewFlashcards) || "🎴 Quick review with Flashcards"}
         </button>
       )}
 
       {showNewFolder && (
         <div style={{ ...S.card, marginBottom:14, borderLeft:`3px solid ${C.teal}` }}>
-          <p style={{ color:C.teal, fontSize:12, fontWeight:700, margin:"0 0 8px" }}>NEW FOLDER</p>
+          <p style={{ color:C.teal, fontSize:fz(12), fontWeight:700, margin:"0 0 8px" }}>NEW FOLDER</p>
           <div style={{ display:"flex", gap:8 }}>
             <input value={newFolderName} onChange={e=>setNewFolderName(e.target.value)} onKeyDown={e=>e.key==="Enter"&&createFolder()} placeholder="e.g. かおりさん 授業" style={{ ...S.input, flex:1 }} />
             <button onClick={createFolder} disabled={!newFolderName.trim()} style={{ ...S.btn, padding:"12px 16px", background:newFolderName.trim()?`linear-gradient(135deg,${C.teal},#0891b2)`:"#1e293b", color:newFolderName.trim()?"#fff":"#475569" }}>Create</button>
@@ -14475,10 +14476,10 @@ function LibraryView({ onBack, onSelectFolder, onCreateCard, onViewCard, onQuick
         const found = data.cards.filter(c => vocabCardMatches(c, librarySearch));
         return (
           <div style={{ display:"flex", flexDirection:"column", gap:10 }}>
-            <p style={{ color:"#64748b", fontSize:12, margin:"0 0 2px" }}>{found.length} {found.length===1?"word":"words"} found / 見つかった単語</p>
+            <p style={{ color:"#64748b", fontSize:fz(12), margin:"0 0 2px" }}>{found.length} {found.length===1?"word":"words"} found / 見つかった単語</p>
             {found.length === 0 && (
               <div style={{ ...S.card, textAlign:"center", padding:"30px 20px" }}>
-                <p style={{ color:"#94a3b8", fontSize:14, margin:0 }}>該当する単語がありません / No matching words.</p>
+                <p style={{ color:"#94a3b8", fontSize:fz(14), margin:0 }}>該当する単語がありません / No matching words.</p>
               </div>
             )}
             {found.map((c, idx) => (
@@ -14486,10 +14487,10 @@ function LibraryView({ onBack, onSelectFolder, onCreateCard, onViewCard, onQuick
                 <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", gap:10 }}>
                   <div style={{ cursor:onViewCard?"pointer":"default", flex:1 }} onClick={()=>onViewCard && onViewCard(c)}>
                     <p style={{ margin:"0 0 2px" }}><FuriganaWord word={c.word} reading={c.reading} size={22} /></p>
-                    <p style={{ color:"#94a3b8", fontSize:12, margin:0 }}>{c.meaning}</p>
-                    <p style={{ color:"#475569", fontSize:11, margin:"4px 0 0" }}>{c.folder==="Your Vocabulary"?"📚":"📁"} {c.folder}</p>
+                    <p style={{ color:"#94a3b8", fontSize:fz(12), margin:0 }}>{c.meaning}</p>
+                    <p style={{ color:"#475569", fontSize:fz(11), margin:"4px 0 0" }}>{c.folder==="Your Vocabulary"?"📚":"📁"} {c.folder}</p>
                   </div>
-                  <button onClick={()=>speakVocabWord(c)} style={{ padding:"6px 10px", borderRadius:8, background:"rgba(6,182,212,0.1)", border:`1px solid rgba(6,182,212,0.2)`, color:C.teal, fontSize:14, cursor:"pointer", flexShrink:0 }}>🔊</button>
+                  <button onClick={()=>speakVocabWord(c)} style={{ padding:"6px 10px", borderRadius:8, background:"rgba(6,182,212,0.1)", border:`1px solid rgba(6,182,212,0.2)`, color:C.teal, fontSize:fz(14), cursor:"pointer", flexShrink:0 }}>🔊</button>
                 </div>
               </div>
             ))}
@@ -14503,10 +14504,10 @@ function LibraryView({ onBack, onSelectFolder, onCreateCard, onViewCard, onQuick
           return (
             <div key={f.name} style={{ ...S.card, display:"flex", alignItems:"center", justifyContent:"space-between", cursor:"pointer" }} onClick={()=>onSelectFolder(f.name)}>
               <div style={{ display:"flex", alignItems:"center", gap:12 }}>
-                <span style={{ fontSize:26 }}>{f.name==="Your Vocabulary"?"📚":"📁"}</span>
+                <span style={{ fontSize:fz(26) }}>{f.name==="Your Vocabulary"?"📚":"📁"}</span>
                 <div>
-                  <p style={{ color:"#f1f5f9", fontSize:14, fontWeight:700, margin:"0 0 2px" }}>{f.name}</p>
-                  <p style={{ color:"#64748b", fontSize:12, margin:0 }}>{count} {count===1?"word":"words"}</p>
+                  <p style={{ color:"#f1f5f9", fontSize:fz(14), fontWeight:700, margin:"0 0 2px" }}>{f.name}</p>
+                  <p style={{ color:"#64748b", fontSize:fz(12), margin:0 }}>{count} {count===1?"word":"words"}</p>
                 </div>
               </div>
               <div style={{ display:"flex", alignItems:"center", gap:8 }}>
@@ -14516,16 +14517,16 @@ function LibraryView({ onBack, onSelectFolder, onCreateCard, onViewCard, onQuick
                   disabled={count===0}
                   title={playingFolder===f.name ? "Stop" : "Play all words in this folder"}
                   aria-label={playingFolder===f.name ? "Stop" : "Play all words in this folder"}
-                  style={{ width:36, height:36, borderRadius:10, background:playingFolder===f.name?"rgba(6,182,212,0.3)":"rgba(6,182,212,0.1)", border:`1px solid rgba(6,182,212,${playingFolder===f.name?0.6:0.25})`, color:C.teal, fontSize:16, cursor:count===0?"not-allowed":"pointer", opacity:count===0?0.4:1, display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0 }}>
+                  style={{ width:36, height:36, borderRadius:10, background:playingFolder===f.name?"rgba(6,182,212,0.3)":"rgba(6,182,212,0.1)", border:`1px solid rgba(6,182,212,${playingFolder===f.name?0.6:0.25})`, color:C.teal, fontSize:fz(16), cursor:count===0?"not-allowed":"pointer", opacity:count===0?0.4:1, display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0 }}>
                   {playingFolder===f.name ? "⏹" : "🔊"}
                 </button>
                 {f.name !== "Your Vocabulary" && (
-                  <button onClick={e=>{e.stopPropagation();setRenaming(f.name);setRenameValue(f.name);setRenameError("");}} title="Rename folder / フォルダ名を変更" aria-label="Rename folder" style={{ padding:"4px 10px", borderRadius:6, background:"rgba(6,182,212,0.1)", border:"1px solid rgba(6,182,212,0.25)", color:C.teal, fontSize:11, cursor:"pointer", fontWeight:600 }}>✏️ 名前</button>
+                  <button onClick={e=>{e.stopPropagation();setRenaming(f.name);setRenameValue(f.name);setRenameError("");}} title="Rename folder / フォルダ名を変更" aria-label="Rename folder" style={{ padding:"4px 10px", borderRadius:6, background:"rgba(6,182,212,0.1)", border:"1px solid rgba(6,182,212,0.25)", color:C.teal, fontSize:fz(11), cursor:"pointer", fontWeight:600 }}>✏️ 名前</button>
                 )}
                 {f.name !== "Your Vocabulary" && (
-                  <button onClick={e=>{e.stopPropagation();setConfirmDelete(f.name);}} style={{ padding:"4px 10px", borderRadius:6, background:"rgba(239,68,68,0.1)", border:`1px solid rgba(239,68,68,0.2)`, color:"#ef4444", fontSize:11, cursor:"pointer", fontWeight:600 }}>🗑 削除</button>
+                  <button onClick={e=>{e.stopPropagation();setConfirmDelete(f.name);}} style={{ padding:"4px 10px", borderRadius:6, background:"rgba(239,68,68,0.1)", border:`1px solid rgba(239,68,68,0.2)`, color:"#ef4444", fontSize:fz(11), cursor:"pointer", fontWeight:600 }}>🗑 削除</button>
                 )}
-                <span style={{ color:"#475569", fontSize:16 }}>→</span>
+                <span style={{ color:"#475569", fontSize:fz(16) }}>→</span>
               </div>
             </div>
           );
@@ -14536,13 +14537,13 @@ function LibraryView({ onBack, onSelectFolder, onCreateCard, onViewCard, onQuick
       {renaming && (
         <div style={{ position:"fixed", inset:0, background:"rgba(0,0,0,0.7)", display:"flex", alignItems:"center", justifyContent:"center", zIndex:1000 }}>
           <div style={{ ...S.card, maxWidth:340, width:"90%" }}>
-            <p style={{ color:"#f1f5f9", fontSize:15, fontWeight:700, margin:"0 0 4px", textAlign:"center" }}>✏️ フォルダ名を変更 / Rename folder</p>
-            <p style={{ color:"#64748b", fontSize:12, margin:"0 0 12px", textAlign:"center" }}>単語はそのまま残ります / Your words stay in the folder.</p>
+            <p style={{ color:"#f1f5f9", fontSize:fz(15), fontWeight:700, margin:"0 0 4px", textAlign:"center" }}>✏️ フォルダ名を変更 / Rename folder</p>
+            <p style={{ color:"#64748b", fontSize:fz(12), margin:"0 0 12px", textAlign:"center" }}>単語はそのまま残ります / Your words stay in the folder.</p>
             <input autoFocus value={renameValue} maxLength={60} onChange={e=>{setRenameValue(e.target.value);setRenameError("");}} onKeyDown={e=>e.key==="Enter"&&submitRename()} style={{ ...S.input, width:"100%", boxSizing:"border-box" }} />
-            {renameError && <p style={{ color:"#f87171", fontSize:12, margin:"8px 0 0" }}>{renameError}</p>}
+            {renameError && <p style={{ color:"#f87171", fontSize:fz(12), margin:"8px 0 0" }}>{renameError}</p>}
             <div style={{ display:"flex", gap:10, marginTop:14 }}>
-              <button onClick={()=>{setRenaming(null);setRenameError("");}} style={{ flex:1, ...S.btn, background:C.card, border:`1px solid ${C.border}`, color:"#94a3b8", fontSize:13 }}>キャンセル / Cancel</button>
-              <button onClick={submitRename} disabled={!renameValue.trim()} style={{ flex:1, ...S.btn, background:renameValue.trim()?`linear-gradient(135deg,${C.teal},#0891b2)`:"#1e293b", color:renameValue.trim()?"#fff":"#475569", fontSize:13, fontWeight:700 }}>保存 / Save</button>
+              <button onClick={()=>{setRenaming(null);setRenameError("");}} style={{ flex:1, ...S.btn, background:C.card, border:`1px solid ${C.border}`, color:"#94a3b8", fontSize:fz(13) }}>キャンセル / Cancel</button>
+              <button onClick={submitRename} disabled={!renameValue.trim()} style={{ flex:1, ...S.btn, background:renameValue.trim()?`linear-gradient(135deg,${C.teal},#0891b2)`:"#1e293b", color:renameValue.trim()?"#fff":"#475569", fontSize:fz(13), fontWeight:700 }}>保存 / Save</button>
             </div>
           </div>
         </div>
@@ -14552,13 +14553,13 @@ function LibraryView({ onBack, onSelectFolder, onCreateCard, onViewCard, onQuick
       {confirmDelete && (
         <div style={{ position:"fixed", inset:0, background:"rgba(0,0,0,0.7)", display:"flex", alignItems:"center", justifyContent:"center", zIndex:1000 }}>
           <div style={{ ...S.card, maxWidth:320, width:"90%", textAlign:"center" }}>
-            <p style={{ fontSize:28, margin:"0 0 10px" }}>🗑</p>
-            <p style={{ color:"#f1f5f9", fontSize:15, fontWeight:700, margin:"0 0 6px" }}>フォルダを削除しますか？</p>
-            <p style={{ color:"#94a3b8", fontSize:13, margin:"0 0 6px" }}>「{confirmDelete}」</p>
-            <p style={{ color:C.red, fontSize:12, margin:"0 0 18px" }}>このフォルダ内の単語もすべて削除されます。</p>
+            <p style={{ fontSize:fz(28), margin:"0 0 10px" }}>🗑</p>
+            <p style={{ color:"#f1f5f9", fontSize:fz(15), fontWeight:700, margin:"0 0 6px" }}>フォルダを削除しますか？</p>
+            <p style={{ color:"#94a3b8", fontSize:fz(13), margin:"0 0 6px" }}>「{confirmDelete}」</p>
+            <p style={{ color:C.red, fontSize:fz(12), margin:"0 0 18px" }}>このフォルダ内の単語もすべて削除されます。</p>
             <div style={{ display:"flex", gap:10 }}>
-              <button onClick={()=>setConfirmDelete(null)} style={{ flex:1, ...S.btn, background:C.card, border:`1px solid ${C.border}`, color:"#94a3b8", fontSize:13 }}>キャンセル</button>
-              <button onClick={()=>deleteFolder(confirmDelete)} style={{ flex:1, ...S.btn, background:"rgba(239,68,68,0.15)", border:`1px solid rgba(239,68,68,0.4)`, color:C.red, fontSize:13, fontWeight:700 }}>削除する</button>
+              <button onClick={()=>setConfirmDelete(null)} style={{ flex:1, ...S.btn, background:C.card, border:`1px solid ${C.border}`, color:"#94a3b8", fontSize:fz(13) }}>キャンセル</button>
+              <button onClick={()=>deleteFolder(confirmDelete)} style={{ flex:1, ...S.btn, background:"rgba(239,68,68,0.15)", border:`1px solid rgba(239,68,68,0.4)`, color:C.red, fontSize:fz(13), fontWeight:700 }}>削除する</button>
             </div>
           </div>
         </div>
@@ -14624,28 +14625,28 @@ function FolderDetailView({ folderName, onBack, onViewCard, onRenamed, onReviewC
 
   return (
     <div>
-      <button onClick={()=>{ stopFolderPlayback(); onBack(); }} style={{ background:"none", border:"none", color:"#64748b", fontSize:13, cursor:"pointer", padding:0, marginBottom:14 }}>← Library</button>
+      <button onClick={()=>{ stopFolderPlayback(); onBack(); }} style={{ background:"none", border:"none", color:"#64748b", fontSize:fz(13), cursor:"pointer", padding:0, marginBottom:14 }}>← Library</button>
       <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", gap:10, marginBottom:16 }}>
         <div>
           {renaming ? (
             <div>
               <div style={{ display:"flex", gap:6 }}>
                 <input autoFocus value={renameValue} maxLength={60} onChange={e=>{setRenameValue(e.target.value);setRenameError("");}} onKeyDown={e=>e.key==="Enter"&&submitRename()} style={{ ...S.input, flex:1, padding:"8px 10px" }} />
-                <button onClick={submitRename} disabled={!renameValue.trim()} style={{ ...S.btn, padding:"8px 12px", fontSize:12, background:`linear-gradient(135deg,${C.teal},#0891b2)`, color:"#fff" }}>保存</button>
-                <button onClick={()=>{setRenaming(false);setRenameError("");}} style={{ ...S.btn, padding:"8px 12px", fontSize:12, background:C.card, border:`1px solid ${C.border}`, color:"#94a3b8" }}>✕</button>
+                <button onClick={submitRename} disabled={!renameValue.trim()} style={{ ...S.btn, padding:"8px 12px", fontSize:fz(12), background:`linear-gradient(135deg,${C.teal},#0891b2)`, color:"#fff" }}>保存</button>
+                <button onClick={()=>{setRenaming(false);setRenameError("");}} style={{ ...S.btn, padding:"8px 12px", fontSize:fz(12), background:C.card, border:`1px solid ${C.border}`, color:"#94a3b8" }}>✕</button>
               </div>
-              {renameError && <p style={{ color:"#f87171", fontSize:12, margin:"6px 0 0" }}>{renameError}</p>}
+              {renameError && <p style={{ color:"#f87171", fontSize:fz(12), margin:"6px 0 0" }}>{renameError}</p>}
             </div>
           ) : (
-            <p style={{ color:"#f1f5f9", fontSize:15, fontWeight:800, margin:"0 0 4px" }}>📁 {folderName}
-              {folderName !== "Your Vocabulary" && <button onClick={()=>{setRenaming(true);setRenameValue(folderName);setRenameError("");}} title="Rename folder / フォルダ名を変更" aria-label="Rename folder" style={{ marginLeft:8, padding:"2px 8px", borderRadius:6, background:"rgba(6,182,212,0.1)", border:"1px solid rgba(6,182,212,0.25)", color:C.teal, fontSize:11, cursor:"pointer", fontWeight:600, verticalAlign:"middle" }}>✏️ 名前を変更</button>}
+            <p style={{ color:"#f1f5f9", fontSize:fz(15), fontWeight:800, margin:"0 0 4px" }}>📁 {folderName}
+              {folderName !== "Your Vocabulary" && <button onClick={()=>{setRenaming(true);setRenameValue(folderName);setRenameError("");}} title="Rename folder / フォルダ名を変更" aria-label="Rename folder" style={{ marginLeft:8, padding:"2px 8px", borderRadius:6, background:"rgba(6,182,212,0.1)", border:"1px solid rgba(6,182,212,0.25)", color:C.teal, fontSize:fz(11), cursor:"pointer", fontWeight:600, verticalAlign:"middle" }}>✏️ 名前を変更</button>}
             </p>
           )}
-          <p style={{ color:"#64748b", fontSize:12, margin:0 }}>{cards.length} {cards.length===1?"word":"words"}</p>
+          <p style={{ color:"#64748b", fontSize:fz(12), margin:0 }}>{cards.length} {cards.length===1?"word":"words"}</p>
         </div>
         {cards.length > 0 && (
           <button onClick={togglePlayAll} title={playingIdx>=0 ? "Stop" : "Play all words"} aria-label={playingIdx>=0 ? "Stop" : "Play all words"}
-            style={{ padding:"8px 14px", borderRadius:10, background:playingIdx>=0?"rgba(6,182,212,0.3)":"rgba(6,182,212,0.1)", border:`1px solid rgba(6,182,212,${playingIdx>=0?0.6:0.3})`, color:C.teal, fontSize:13, fontWeight:700, cursor:"pointer", whiteSpace:"nowrap", flexShrink:0 }}>
+            style={{ padding:"8px 14px", borderRadius:10, background:playingIdx>=0?"rgba(6,182,212,0.3)":"rgba(6,182,212,0.1)", border:`1px solid rgba(6,182,212,${playingIdx>=0?0.6:0.3})`, color:C.teal, fontSize:fz(13), fontWeight:700, cursor:"pointer", whiteSpace:"nowrap", flexShrink:0 }}>
             {playingIdx>=0 ? "⏹ Stop" : "🔊 ▶ All"}
           </button>
         )}
@@ -14655,25 +14656,25 @@ function FolderDetailView({ folderName, onBack, onViewCard, onRenamed, onReviewC
 
       {allFolderCards.length === 0 && (
         <div style={{ ...S.card, textAlign:"center", padding:"40px 20px" }}>
-          <p style={{ color:"#64748b", fontSize:32, margin:"0 0 12px" }}>📭</p>
-          <p style={{ color:"#94a3b8", fontSize:14 }}>This folder is empty. Search and save words!</p>
+          <p style={{ color:"#64748b", fontSize:fz(32), margin:"0 0 12px" }}>📭</p>
+          <p style={{ color:"#94a3b8", fontSize:fz(14) }}>This folder is empty. Search and save words!</p>
         </div>
       )}
       {allFolderCards.length > 0 && cards.length === 0 && (
         <div style={{ ...S.card, textAlign:"center", padding:"30px 20px" }}>
-          <p style={{ color:"#94a3b8", fontSize:14, margin:0 }}>該当する単語がありません / No matching words.</p>
+          <p style={{ color:"#94a3b8", fontSize:fz(14), margin:0 }}>該当する単語がありません / No matching words.</p>
         </div>
       )}
 
-      {copyMsg && <p style={{ color:C.green, fontSize:12, margin:"0 0 10px", lineHeight:1.6 }}>{copyMsg}</p>}
+      {copyMsg && <p style={{ color:C.green, fontSize:fz(12), margin:"0 0 10px", lineHeight:1.6 }}>{copyMsg}</p>}
       {cards.length > 0 && (
         <div style={{ display:"flex", gap:8, alignItems:"center", flexWrap:"wrap", marginBottom:12 }}>
-          <button onClick={()=>{ setSelecting(v=>!v); setSel({}); }} style={{ padding:"7px 12px", borderRadius:10, fontSize:12, fontWeight:700, cursor:"pointer", background:selecting?"rgba(168,85,247,0.15)":"transparent", border:`1px solid ${selecting?"rgba(168,85,247,0.5)":C.border}`, color:selecting?"#c084fc":"#94a3b8" }}>
+          <button onClick={()=>{ setSelecting(v=>!v); setSel({}); }} style={{ padding:"7px 12px", borderRadius:10, fontSize:fz(12), fontWeight:700, cursor:"pointer", background:selecting?"rgba(168,85,247,0.15)":"transparent", border:`1px solid ${selecting?"rgba(168,85,247,0.5)":C.border}`, color:selecting?"#c084fc":"#94a3b8" }}>
             {selecting ? "✕ 選択をやめる" : "📋 別のフォルダへコピー / Copy to folder"}
           </button>
           {selecting && (<>
-            <button onClick={()=>{ const all={}; cards.forEach((c,i)=>{all[String(c.id||`${c.word}-${i}`)]=true;}); setSel(all); }} style={{ padding:"7px 10px", borderRadius:10, fontSize:11, fontWeight:700, cursor:"pointer", background:"transparent", border:`1px solid ${C.border}`, color:"#94a3b8" }}>すべて選択</button>
-            <button onClick={()=>{ setCopyErr(""); setCopyOpen(true); }} disabled={!Object.values(sel).some(Boolean)} style={{ padding:"7px 12px", borderRadius:10, fontSize:12, fontWeight:700, cursor:"pointer", border:"none", background:Object.values(sel).some(Boolean)?`linear-gradient(135deg,${C.teal},#0891b2)`:"#1e293b", color:Object.values(sel).some(Boolean)?"#fff":"#475569" }}>
+            <button onClick={()=>{ const all={}; cards.forEach((c,i)=>{all[String(c.id||`${c.word}-${i}`)]=true;}); setSel(all); }} style={{ padding:"7px 10px", borderRadius:10, fontSize:fz(11), fontWeight:700, cursor:"pointer", background:"transparent", border:`1px solid ${C.border}`, color:"#94a3b8" }}>すべて選択</button>
+            <button onClick={()=>{ setCopyErr(""); setCopyOpen(true); }} disabled={!Object.values(sel).some(Boolean)} style={{ padding:"7px 12px", borderRadius:10, fontSize:fz(12), fontWeight:700, cursor:"pointer", border:"none", background:Object.values(sel).some(Boolean)?`linear-gradient(135deg,${C.teal},#0891b2)`:"#1e293b", color:Object.values(sel).some(Boolean)?"#fff":"#475569" }}>
               コピー先を選ぶ ({Object.values(sel).filter(Boolean).length})
             </button>
           </>)}
@@ -14684,17 +14685,17 @@ function FolderDetailView({ folderName, onBack, onViewCard, onRenamed, onReviewC
         {cards.map((c, idx) => (
           <div key={c.id || `${c.word}-${idx}`} onClick={selecting ? ()=>{ const k=String(c.id||`${c.word}-${idx}`); setSel(p=>({ ...p, [k]: !p[k] })); } : undefined} style={{ ...S.card, borderLeft:`3px solid ${C.teal}`, cursor:selecting?"pointer":"default", outline: selecting && sel[String(c.id||`${c.word}-${idx}`)] ? `2px solid ${C.teal}` : "none", background: playingIdx===idx ? "rgba(6,182,212,0.12)" : S.card.background }}>
             <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", gap:10 }}>
-              {selecting && <span style={{ color: sel[String(c.id||`${c.word}-${idx}`)] ? C.teal : "#475569", fontSize:20, lineHeight:1 }}>{sel[String(c.id||`${c.word}-${idx}`)] ? "☑" : "☐"}</span>}
+              {selecting && <span style={{ color: sel[String(c.id||`${c.word}-${idx}`)] ? C.teal : "#475569", fontSize:fz(20), lineHeight:1 }}>{sel[String(c.id||`${c.word}-${idx}`)] ? "☑" : "☐"}</span>}
               <div style={{ cursor:"pointer", flex:1 }} onClick={selecting ? undefined : ()=>onViewCard(c)}>
                 <p style={{ margin:"0 0 2px" }}><FuriganaWord word={c.word} reading={c.reading} size={22} /></p>
-                <p style={{ color:"#94a3b8", fontSize:12, margin:0 }}>{c.meaning}</p>
+                <p style={{ color:"#94a3b8", fontSize:fz(12), margin:0 }}>{c.meaning}</p>
               </div>
               <div style={{ display:"flex", gap:6, flexShrink:0 }}>
-                <button onClick={()=>speakVocabWord(c)} style={{ padding:"6px 10px", borderRadius:8, background:"rgba(6,182,212,0.1)", border:`1px solid rgba(6,182,212,0.2)`, color:C.teal, fontSize:14, cursor:"pointer" }}>🔊</button>
+                <button onClick={()=>speakVocabWord(c)} style={{ padding:"6px 10px", borderRadius:8, background:"rgba(6,182,212,0.1)", border:`1px solid rgba(6,182,212,0.2)`, color:C.teal, fontSize:fz(14), cursor:"pointer" }}>🔊</button>
                 {onReviewCard && !selecting && (
-                  <button data-guide="folder-go-flash" onClick={e=>{ e.stopPropagation(); onReviewCard(c); }} title="Go Flashcard" aria-label="Go Flashcard" style={{ padding:"6px 8px", borderRadius:8, background:"rgba(34,197,94,0.1)", border:"1px solid rgba(34,197,94,0.35)", color:"#4ade80", fontSize:11, fontWeight:700, cursor:"pointer", whiteSpace:"nowrap" }}>🎴 Go Flashcard</button>
+                  <button data-guide="folder-go-flash" onClick={e=>{ e.stopPropagation(); onReviewCard(c); }} title="Go Flashcard" aria-label="Go Flashcard" style={{ padding:"6px 8px", borderRadius:8, background:"rgba(34,197,94,0.1)", border:"1px solid rgba(34,197,94,0.35)", color:"#4ade80", fontSize:fz(11), fontWeight:700, cursor:"pointer", whiteSpace:"nowrap" }}>🎴 Go Flashcard</button>
                 )}
-                <button onClick={()=>removeCard(c.id)} style={{ padding:"6px 10px", borderRadius:8, background:"rgba(239,68,68,0.08)", border:`1px solid rgba(239,68,68,0.2)`, color:"#ef4444", fontSize:14, cursor:"pointer" }}>🗑</button>
+                <button onClick={()=>removeCard(c.id)} style={{ padding:"6px 10px", borderRadius:8, background:"rgba(239,68,68,0.08)", border:`1px solid rgba(239,68,68,0.2)`, color:"#ef4444", fontSize:fz(14), cursor:"pointer" }}>🗑</button>
               </div>
             </div>
           </div>
@@ -14708,20 +14709,20 @@ function FolderDetailView({ folderName, onBack, onViewCard, onRenamed, onReviewC
         return (
           <div style={{ position:"fixed", inset:0, background:"rgba(0,0,0,0.7)", display:"flex", alignItems:"center", justifyContent:"center", zIndex:1000 }}>
             <div style={{ ...S.card, maxWidth:360, width:"92%", maxHeight:"85vh", overflowY:"auto" }}>
-              <p style={{ color:"#f1f5f9", fontSize:15, fontWeight:700, margin:"0 0 4px", textAlign:"center" }}>📋 {n}語をコピー / Copy {n} word(s)</p>
-              <p style={{ color:"#64748b", fontSize:12, margin:"0 0 12px", textAlign:"center" }}>「{folderName}」の単語はそのまま残ります / Originals stay in this folder.</p>
-              <p style={{ color:"#94a3b8", fontSize:11, fontWeight:700, letterSpacing:1, margin:"0 0 6px" }}>既存のフォルダ / EXISTING FOLDER</p>
+              <p style={{ color:"#f1f5f9", fontSize:fz(15), fontWeight:700, margin:"0 0 4px", textAlign:"center" }}>📋 {n}語をコピー / Copy {n} word(s)</p>
+              <p style={{ color:"#64748b", fontSize:fz(12), margin:"0 0 12px", textAlign:"center" }}>「{folderName}」の単語はそのまま残ります / Originals stay in this folder.</p>
+              <p style={{ color:"#94a3b8", fontSize:fz(11), fontWeight:700, letterSpacing:1, margin:"0 0 6px" }}>既存のフォルダ / EXISTING FOLDER</p>
               {others.map(name => (
-                <button key={name} onClick={()=>{ setTargetFolder(name); setNewTarget(""); setCopyErr(""); }} style={{ display:"block", width:"100%", textAlign:"left", padding:"10px 12px", marginBottom:6, borderRadius:10, cursor:"pointer", fontSize:13, color:"#f1f5f9", border:`1.5px solid ${targetFolder===name&&!newTarget.trim()?C.teal:C.border}`, background:targetFolder===name&&!newTarget.trim()?"rgba(6,182,212,0.12)":C.card }}>
+                <button key={name} onClick={()=>{ setTargetFolder(name); setNewTarget(""); setCopyErr(""); }} style={{ display:"block", width:"100%", textAlign:"left", padding:"10px 12px", marginBottom:6, borderRadius:10, cursor:"pointer", fontSize:fz(13), color:"#f1f5f9", border:`1.5px solid ${targetFolder===name&&!newTarget.trim()?C.teal:C.border}`, background:targetFolder===name&&!newTarget.trim()?"rgba(6,182,212,0.12)":C.card }}>
                   {name==="Your Vocabulary"?"📚":"📁"} {name}
                 </button>
               ))}
-              <p style={{ color:"#94a3b8", fontSize:11, fontWeight:700, letterSpacing:1, margin:"10px 0 6px" }}>新しいフォルダ / NEW FOLDER</p>
+              <p style={{ color:"#94a3b8", fontSize:fz(11), fontWeight:700, letterSpacing:1, margin:"10px 0 6px" }}>新しいフォルダ / NEW FOLDER</p>
               <input value={newTarget} maxLength={60} onChange={e=>{ setNewTarget(e.target.value); setCopyErr(""); }} placeholder="e.g. かおりさん 授業" style={{ ...S.input, width:"100%", boxSizing:"border-box" }} />
-              {copyErr && <p style={{ color:"#f87171", fontSize:12, margin:"8px 0 0" }}>{copyErr}</p>}
+              {copyErr && <p style={{ color:"#f87171", fontSize:fz(12), margin:"8px 0 0" }}>{copyErr}</p>}
               <div style={{ display:"flex", gap:10, marginTop:14 }}>
-                <button onClick={()=>{ setCopyOpen(false); setCopyErr(""); }} style={{ flex:1, ...S.btn, background:C.card, border:`1px solid ${C.border}`, color:"#94a3b8", fontSize:13 }}>キャンセル</button>
-                <button onClick={doCopy} disabled={!newTarget.trim() && !targetFolder} style={{ flex:1, ...S.btn, background:(newTarget.trim()||targetFolder)?`linear-gradient(135deg,${C.teal},#0891b2)`:"#1e293b", color:(newTarget.trim()||targetFolder)?"#fff":"#475569", fontSize:13, fontWeight:700 }}>コピーする</button>
+                <button onClick={()=>{ setCopyOpen(false); setCopyErr(""); }} style={{ flex:1, ...S.btn, background:C.card, border:`1px solid ${C.border}`, color:"#94a3b8", fontSize:fz(13) }}>キャンセル</button>
+                <button onClick={doCopy} disabled={!newTarget.trim() && !targetFolder} style={{ flex:1, ...S.btn, background:(newTarget.trim()||targetFolder)?`linear-gradient(135deg,${C.teal},#0891b2)`:"#1e293b", color:(newTarget.trim()||targetFolder)?"#fff":"#475569", fontSize:fz(13), fontWeight:700 }}>コピーする</button>
               </div>
             </div>
           </div>
@@ -14780,11 +14781,11 @@ Respond ONLY in valid JSON array format (no markdown, no backticks, no preamble)
 
   return (
     <div>
-      <button onClick={onBack} style={{ background:"none", border:"none", color:"#ffffff", fontSize:13, cursor:"pointer", padding:0, marginBottom:14 }}>← Back</button>
+      <button onClick={onBack} style={{ background:"none", border:"none", color:"#ffffff", fontSize:fz(13), cursor:"pointer", padding:0, marginBottom:14 }}>← Back</button>
 
       <div style={{ ...S.card, marginBottom:16 }}>
-        <p style={{ color:C.teal, fontSize:12, fontWeight:700, letterSpacing:1, marginBottom:4 }}>🔍 WORD SEARCH</p>
-        <p style={{ color:"#ffffff", fontSize:12, marginBottom:12 }}>
+        <p style={{ color:C.teal, fontSize:fz(12), fontWeight:700, letterSpacing:1, marginBottom:4 }}>🔍 WORD SEARCH</p>
+        <p style={{ color:"#ffffff", fontSize:fz(12), marginBottom:12 }}>
           Search any Japanese word, kanji, or topic — N5 to N1 & native level
         </p>
         <div style={{ display:"flex", gap:8 }}>
@@ -14802,37 +14803,37 @@ Respond ONLY in valid JSON array format (no markdown, no backticks, no preamble)
         </div>
       </div>
 
-      {error && <p style={{ color:C.red, fontSize:13, textAlign:"center", margin:"12px 0" }}>{error}</p>}
+      {error && <p style={{ color:C.red, fontSize:fz(13), textAlign:"center", margin:"12px 0" }}>{error}</p>}
 
       {loading && (
         <div style={{ textAlign:"center", padding:"30px 0" }}>
-          <p style={{ color:C.teal, fontSize:28, margin:"0 0 10px", animation:"spin 1.2s linear infinite" }}>🔍</p>
-          <p style={{ color:"#64748b", fontSize:13 }}>Searching Japanese dictionary...</p>
+          <p style={{ color:C.teal, fontSize:fz(28), margin:"0 0 10px", animation:"spin 1.2s linear infinite" }}>🔍</p>
+          <p style={{ color:"#64748b", fontSize:fz(13) }}>Searching Japanese dictionary...</p>
         </div>
       )}
 
       {results.length > 0 && (
         <div style={{ display:"flex", flexDirection:"column", gap:10 }}>
-          <p style={{ color:"#64748b", fontSize:12, margin:"0 0 6px" }}>{results.length} result{results.length>1?"s":""} found</p>
+          <p style={{ color:"#64748b", fontSize:fz(12), margin:"0 0 6px" }}>{results.length} result{results.length>1?"s":""} found</p>
           {results.map((w,i) => (
             <div key={i} style={{ ...S.card, cursor:"pointer", borderLeft:`3px solid ${C.teal}`, transition:"all 0.15s" }} onClick={()=>onSelectWord(w)}>
               <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start" }}>
                 <div style={{ flex:1 }}>
                   <div style={{ display:"flex", alignItems:"baseline", gap:8, marginBottom:4 }}>
-                    <p style={{ color:"#f1f5f9", fontSize:22, fontWeight:900, margin:0 }}>{w.word}</p>
-                    <p style={{ color:C.teal, fontSize:14, margin:0 }}>{w.reading}</p>
+                    <p style={{ color:"#f1f5f9", fontSize:fz(22), fontWeight:900, margin:0 }}>{w.word}</p>
+                    <p style={{ color:C.teal, fontSize:fz(14), margin:0 }}>{w.reading}</p>
                   </div>
                   <div style={{ display:"flex", gap:6, marginBottom:6 }}>
-                    {w.jlpt && <span style={{ background:"rgba(168,85,247,0.2)", color:C.purpleLight, fontSize:10, fontWeight:700, padding:"1px 7px", borderRadius:99 }}>{w.jlpt}</span>}
-                    {w.partOfSpeech && <span style={{ background:"rgba(6,182,212,0.12)", color:C.teal, fontSize:10, fontWeight:600, padding:"1px 7px", borderRadius:99 }}>{w.partOfSpeech}</span>}
+                    {w.jlpt && <span style={{ background:"rgba(168,85,247,0.2)", color:C.purpleLight, fontSize:fz(10), fontWeight:700, padding:"1px 7px", borderRadius:99 }}>{w.jlpt}</span>}
+                    {w.partOfSpeech && <span style={{ background:"rgba(6,182,212,0.12)", color:C.teal, fontSize:fz(10), fontWeight:600, padding:"1px 7px", borderRadius:99 }}>{w.partOfSpeech}</span>}
                   </div>
-                  <p style={{ color:"#94a3b8", fontSize:13, margin:0, lineHeight:1.5 }}>{w.meaning}</p>
+                  <p style={{ color:"#94a3b8", fontSize:fz(13), margin:0, lineHeight:1.5 }}>{w.meaning}</p>
                 </div>
-                <button onClick={e=>{e.stopPropagation();speakVocabWord(w);}} style={{ width:36, height:36, borderRadius:10, background:`rgba(6,182,212,0.1)`, border:`1px solid rgba(6,182,212,0.2)`, color:C.teal, fontSize:16, cursor:"pointer", flexShrink:0, display:"flex", alignItems:"center", justifyContent:"center" }}>
+                <button onClick={e=>{e.stopPropagation();speakVocabWord(w);}} style={{ width:36, height:36, borderRadius:10, background:`rgba(6,182,212,0.1)`, border:`1px solid rgba(6,182,212,0.2)`, color:C.teal, fontSize:fz(16), cursor:"pointer", flexShrink:0, display:"flex", alignItems:"center", justifyContent:"center" }}>
                   🔊
                 </button>
               </div>
-              <p style={{ color:"#475569", fontSize:11, margin:"8px 0 0", textAlign:"right" }}>Tap for full details →</p>
+              <p style={{ color:"#475569", fontSize:fz(11), margin:"8px 0 0", textAlign:"right" }}>Tap for full details →</p>
             </div>
           ))}
         </div>
@@ -15114,23 +15115,23 @@ function VocabBuilder({ form, helpAuto = true }) {
       {/* ── TOP ACTION BAR ── */}
       <div style={{ display:"flex", gap:8, marginBottom:16, flexWrap:"wrap" }}>
         <button onClick={()=>setVocabView("library")} style={{ flex:1, ...S.btn, background:C.card, border:`1.5px solid ${C.border}`, color:"#f1f5f9", textAlign:"left", padding:"12px 14px" }}>
-          <p style={{ margin:0, fontSize:13, fontWeight:700 }}>{T.libraryLabel}</p>
-          <p style={{ margin:"2px 0 0", fontSize:11, color:"#ffffff" }}>{T.yourVocabSaved} · {totalSaved} {T.savedSuffix}</p>
+          <p style={{ margin:0, fontSize:fz(13), fontWeight:700 }}>{T.libraryLabel}</p>
+          <p style={{ margin:"2px 0 0", fontSize:fz(11), color:"#ffffff" }}>{T.yourVocabSaved} · {totalSaved} {T.savedSuffix}</p>
         </button>
         <button onClick={()=>setVocabView("wordSearch")} style={{ flex:1, ...S.btn, background:`linear-gradient(135deg,rgba(168,85,247,0.2),rgba(124,58,237,0.15))`, border:`1.5px solid rgba(168,85,247,0.3)`, color:"#f1f5f9", textAlign:"left", padding:"12px 14px" }}>
-          <p style={{ margin:0, fontSize:13, fontWeight:700 }}>{T.wordCardsLabel}</p>
-          <p style={{ margin:"2px 0 0", fontSize:11, color:C.purpleLight }}>{T.searchCreateCards}</p>
+          <p style={{ margin:0, fontSize:fz(13), fontWeight:700 }}>{T.wordCardsLabel}</p>
+          <p style={{ margin:"2px 0 0", fontSize:fz(11), color:C.purpleLight }}>{T.searchCreateCards}</p>
         </button>
         <button onClick={()=>{setFlashFocus(null);setFlashBack("main");setVocabView("flashcard");}} style={{ flex:1, ...S.btn, background:`linear-gradient(135deg,rgba(34,197,94,0.15),rgba(22,163,74,0.1))`, border:`1.5px solid rgba(34,197,94,0.3)`, color:"#f1f5f9", textAlign:"left", padding:"12px 14px" }}>
-          <p style={{ margin:0, fontSize:13, fontWeight:700 }}>{T.flashcardsLabel}</p>
-          <p style={{ margin:"2px 0 0", fontSize:11, color:C.green }}>{T.reviewSavedWords}</p>
+          <p style={{ margin:0, fontSize:fz(13), fontWeight:700 }}>{T.flashcardsLabel}</p>
+          <p style={{ margin:"2px 0 0", fontSize:fz(11), color:C.green }}>{T.reviewSavedWords}</p>
         </button>
       </div>
 
       {/* ── VOCABULARY BUILDER (quick find) ── */}
       <div style={{ ...S.card, marginBottom:16 }}>
-        <p style={{ color:C.teal, fontSize:12, fontWeight:700, letterSpacing:1, marginBottom:4 }}>{T.vocabBuilderTitle}</p>
-        <p style={{ color:"#ffffff", fontSize:12, marginBottom:14 }}>{T.vocabBuilderDesc}</p>
+        <p style={{ color:C.teal, fontSize:fz(12), fontWeight:700, letterSpacing:1, marginBottom:4 }}>{T.vocabBuilderTitle}</p>
+        <p style={{ color:"#ffffff", fontSize:fz(12), marginBottom:14 }}>{T.vocabBuilderDesc}</p>
         <FirstTapHint id="vocab_search" show={!loading && !words.length && !isFirstWordDone()}
           text={form?.preferredLang === "Japanese" ? "単語を1つ入力して検索 → 出てきた単語を保存してみましょう。" : (HELP_I18N[form?.preferredLang]?.hints?.vocab_search || "Type one word and search — then save it to your Library.")} />
         <div style={{ display:"flex", gap:8 }}>
@@ -15141,9 +15142,9 @@ function VocabBuilder({ form, helpAuto = true }) {
         </div>
         {findError && (
           <div style={{ display:"flex", alignItems:"center", gap:8, marginTop:8 }}>
-            <p style={{ color:C.red, fontSize:12, margin:0, flex:1 }}>{findError}</p>
+            <p style={{ color:C.red, fontSize:fz(12), margin:0, flex:1 }}>{findError}</p>
             {!findError.includes("⏳ Rate") && (
-              <button onClick={()=>findWords(0)} style={{ ...S.btn, padding:"6px 12px", fontSize:11, background:`linear-gradient(135deg,${C.teal},#0891b2)`, color:"#fff" }}>{T.retryBtn}</button>
+              <button onClick={()=>findWords(0)} style={{ ...S.btn, padding:"6px 12px", fontSize:fz(11), background:`linear-gradient(135deg,${C.teal},#0891b2)`, color:"#fff" }}>{T.retryBtn}</button>
             )}
           </div>
         )}
@@ -15151,8 +15152,8 @@ function VocabBuilder({ form, helpAuto = true }) {
 
       {loading && (
         <div style={{ textAlign:"center", padding:"24px 0" }}>
-          <p style={{ color:C.teal, fontSize:24, margin:"0 0 8px" }}>🔍</p>
-          <p style={{ color:"#64748b", fontSize:13 }}>{T.searchingDictionary}</p>
+          <p style={{ color:C.teal, fontSize:fz(24), margin:"0 0 8px" }}>🔍</p>
+          <p style={{ color:"#64748b", fontSize:fz(13) }}>{T.searchingDictionary}</p>
         </div>
       )}
 
@@ -15164,31 +15165,31 @@ function VocabBuilder({ form, helpAuto = true }) {
               <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", marginBottom:8 }}>
                 <div style={{ flex:1, cursor:"pointer" }} onClick={()=>{setSelectedWord(w);setWordFrom("search");setVocabView("wordDetail");}}>
                   <div style={{ display:"flex", alignItems:"baseline", gap:8, marginBottom:4 }}>
-                    <p style={{ color:"#f1f5f9", fontSize:22, fontWeight:900, margin:0 }}>{w.word}</p>
-                    <p style={{ color:C.teal, fontSize:14, margin:0 }}>{w.reading}</p>
-                    {w.jlpt && <span style={{ background:"rgba(168,85,247,0.2)", color:C.purpleLight, fontSize:10, fontWeight:700, padding:"1px 7px", borderRadius:99 }}>{w.jlpt}</span>}
-                    {w.partOfSpeech && <span style={{ background:"rgba(6,182,212,0.12)", color:C.teal, fontSize:10, fontWeight:600, padding:"1px 7px", borderRadius:99 }}>{w.partOfSpeech}</span>}
+                    <p style={{ color:"#f1f5f9", fontSize:fz(22), fontWeight:900, margin:0 }}>{w.word}</p>
+                    <p style={{ color:C.teal, fontSize:fz(14), margin:0 }}>{w.reading}</p>
+                    {w.jlpt && <span style={{ background:"rgba(168,85,247,0.2)", color:C.purpleLight, fontSize:fz(10), fontWeight:700, padding:"1px 7px", borderRadius:99 }}>{w.jlpt}</span>}
+                    {w.partOfSpeech && <span style={{ background:"rgba(6,182,212,0.12)", color:C.teal, fontSize:fz(10), fontWeight:600, padding:"1px 7px", borderRadius:99 }}>{w.partOfSpeech}</span>}
                   </div>
-                  <p style={{ color:"#94a3b8", fontSize:13, margin:0 }}>{w.meaning}</p>
+                  <p style={{ color:"#94a3b8", fontSize:fz(13), margin:0 }}>{w.meaning}</p>
                 </div>
                 {/* 単語音声ボタン */}
-                <button onClick={e=>{e.stopPropagation();speakVocabWord(w);}} title={T.speakWord} style={{ width:40, height:40, borderRadius:10, background:"rgba(6,182,212,0.1)", border:`1px solid rgba(6,182,212,0.2)`, color:C.teal, fontSize:18, cursor:"pointer", flexShrink:0, marginLeft:8, display:"flex", alignItems:"center", justifyContent:"center" }}>🔊</button>
+                <button onClick={e=>{e.stopPropagation();speakVocabWord(w);}} title={T.speakWord} style={{ width:40, height:40, borderRadius:10, background:"rgba(6,182,212,0.1)", border:`1px solid rgba(6,182,212,0.2)`, color:C.teal, fontSize:fz(18), cursor:"pointer", flexShrink:0, marginLeft:8, display:"flex", alignItems:"center", justifyContent:"center" }}>🔊</button>
               </div>
 
               {/* ── Japanese Definition ── */}
               {w.meaningNative && (
-                <p style={{ color:"#64748b", fontSize:12, lineHeight:1.7, margin:"0 0 8px", borderLeft:`2px solid ${C.border}`, paddingLeft:8 }}>{w.meaningNative}</p>
+                <p style={{ color:"#64748b", fontSize:fz(12), lineHeight:1.7, margin:"0 0 8px", borderLeft:`2px solid ${C.border}`, paddingLeft:8 }}>{w.meaningNative}</p>
               )}
 
               {/* ── Example Sentence with audio ── */}
               <div style={{ background:"rgba(6,182,212,0.06)", borderRadius:8, padding:"8px 10px", marginBottom:10 }}>
                 <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", gap:8 }}>
                   <div style={{ flex:1 }}>
-                    <p style={{ color:"#f1f5f9", fontSize:12, margin:"0 0 3px", lineHeight:1.8 }}>{w.example}</p>
-                    <p style={{ color:"#64748b", fontSize:11, margin:0, fontStyle:"italic" }}>{w.example_translated}</p>
+                    <p style={{ color:"#f1f5f9", fontSize:fz(12), margin:"0 0 3px", lineHeight:1.8 }}>{w.example}</p>
+                    <p style={{ color:"#64748b", fontSize:fz(11), margin:0, fontStyle:"italic" }}>{w.example_translated}</p>
                   </div>
                   {/* 例文音声ボタン */}
-                  <button onClick={e=>{e.stopPropagation();speakJapanese(w.example);}} title={T.speakExample} style={{ width:34, height:34, borderRadius:8, background:"rgba(245,158,11,0.1)", border:`1px solid rgba(245,158,11,0.25)`, color:C.amber, fontSize:15, cursor:"pointer", flexShrink:0, display:"flex", alignItems:"center", justifyContent:"center" }}>🔊</button>
+                  <button onClick={e=>{e.stopPropagation();speakJapanese(w.example);}} title={T.speakExample} style={{ width:34, height:34, borderRadius:8, background:"rgba(245,158,11,0.1)", border:`1px solid rgba(245,158,11,0.25)`, color:C.amber, fontSize:fz(15), cursor:"pointer", flexShrink:0, display:"flex", alignItems:"center", justifyContent:"center" }}>🔊</button>
                 </div>
               </div>
 
@@ -15198,7 +15199,7 @@ function VocabBuilder({ form, helpAuto = true }) {
                   href={`https://www.weblio.jp/content/${encodeURIComponent(w.word)}`}
                   target="_blank" rel="noopener noreferrer"
                   onClick={e=>e.stopPropagation()}
-                  style={{ flex:1, display:"flex", alignItems:"center", justifyContent:"center", gap:4, padding:"7px 10px", borderRadius:8, background:"rgba(232,93,4,0.1)", border:"1px solid rgba(232,93,4,0.25)", color:"#e85d04", fontSize:11, fontWeight:700, textDecoration:"none", whiteSpace:"nowrap" }}
+                  style={{ flex:1, display:"flex", alignItems:"center", justifyContent:"center", gap:4, padding:"7px 10px", borderRadius:8, background:"rgba(232,93,4,0.1)", border:"1px solid rgba(232,93,4,0.25)", color:"#e85d04", fontSize:fz(11), fontWeight:700, textDecoration:"none", whiteSpace:"nowrap" }}
                 >
                   {T.weblioDict}
                 </a>
@@ -15206,13 +15207,13 @@ function VocabBuilder({ form, helpAuto = true }) {
                   href={`https://www.bing.com/images/search?q=${encodeURIComponent(w.word + " " + (w.imageQuery || ""))}&FORM=IRSBH0`}
                   target="_blank" rel="noopener noreferrer"
                   onClick={e=>e.stopPropagation()}
-                  style={{ flex:1, display:"flex", alignItems:"center", justifyContent:"center", gap:4, padding:"7px 10px", borderRadius:8, background:"rgba(6,182,212,0.08)", border:`1px solid rgba(6,182,212,0.2)`, color:C.teal, fontSize:11, fontWeight:700, textDecoration:"none", whiteSpace:"nowrap" }}
+                  style={{ flex:1, display:"flex", alignItems:"center", justifyContent:"center", gap:4, padding:"7px 10px", borderRadius:8, background:"rgba(6,182,212,0.08)", border:`1px solid rgba(6,182,212,0.2)`, color:C.teal, fontSize:fz(11), fontWeight:700, textDecoration:"none", whiteSpace:"nowrap" }}
                 >
                   {T.googleImages}
                 </a>
                 <button
                   onClick={()=>{setSelectedWord(w);setWordFrom("search");setVocabView("wordDetail");}}
-                  style={{ flex:1, display:"flex", alignItems:"center", justifyContent:"center", gap:4, padding:"7px 10px", borderRadius:8, background:"rgba(168,85,247,0.1)", border:"1px solid rgba(168,85,247,0.25)", color:C.purpleLight, fontSize:11, fontWeight:700, cursor:"pointer", whiteSpace:"nowrap" }}
+                  style={{ flex:1, display:"flex", alignItems:"center", justifyContent:"center", gap:4, padding:"7px 10px", borderRadius:8, background:"rgba(168,85,247,0.1)", border:"1px solid rgba(168,85,247,0.25)", color:C.purpleLight, fontSize:fz(11), fontWeight:700, cursor:"pointer", whiteSpace:"nowrap" }}
                 >
                   {T.detailCard}
                 </button>
@@ -15392,7 +15393,7 @@ function SubtitleVocabBuilder({ form }) {
       <div>
         {savedSet && (
           <div style={{ ...S.card, marginBottom:16, borderLeft:`3px solid ${C.purpleLight}` }}>
-            <p style={{ color:C.purpleLight, fontSize:12, fontWeight:700, margin:"0 0 8px" }}>{T.savedSetFound || "You have a saved study set from before."}</p>
+            <p style={{ color:C.purpleLight, fontSize:fz(12), fontWeight:700, margin:"0 0 8px" }}>{T.savedSetFound || "You have a saved study set from before."}</p>
             <div style={{ display:"flex", gap:8 }}>
               <button onClick={handleResume} style={{ ...S.btn, flex:1, background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff" }}>
                 {T.resumeStudySet || "▶ Resume study set"}
@@ -15404,8 +15405,8 @@ function SubtitleVocabBuilder({ form }) {
           </div>
         )}
         <div style={{ ...S.card, marginBottom:16 }}>
-          <p style={{ color:C.purpleLight, fontSize:12, fontWeight:700, letterSpacing:1, marginBottom:6 }}>🎬 {T.subtitlesTitle || "Subtitles → Vocabulary"}</p>
-          <p style={{ color:"#39ff14", fontSize:12, lineHeight:1.7, marginBottom:14 }}>
+          <p style={{ color:C.purpleLight, fontSize:fz(12), fontWeight:700, letterSpacing:1, marginBottom:6 }}>🎬 {T.subtitlesTitle || "Subtitles → Vocabulary"}</p>
+          <p style={{ color:"#39ff14", fontSize:fz(12), lineHeight:1.7, marginBottom:14 }}>
             {T.subtitlesDesc || "Paste subtitles or a transcript from a video you're already watching (e.g. YouTube's own \"Show transcript\" panel). Double-click a word or drag to select a phrase, then look it up and save it straight to your Vocabulary Builder."}
           </p>
           <label style={{ ...S.label, color:"#ffffff" }}>{T.subtitlesSourceLabel || "Video title / source (optional — used as the folder name)"}</label>
@@ -15418,7 +15419,7 @@ function SubtitleVocabBuilder({ form }) {
             {T.subtitlesLoadBtn || "Load transcript"}
           </button>
         </div>
-        <p style={{ color:"#475569", fontSize:11, lineHeight:1.6 }}>
+        <p style={{ color:"#475569", fontSize:fz(11), lineHeight:1.6 }}>
           {T.subtitlesCopyrightNote || "🔒 Text you paste here is saved only in this browser's local storage, so you can resume later — it's never sent to a server. Only the specific words/phrases you choose to save are added to your Vocabulary Builder."}
         </p>
       </div>
@@ -15429,35 +15430,35 @@ function SubtitleVocabBuilder({ form }) {
   return (
     <div style={{ position:"relative" }}>
       {toast && (
-        <div style={{ position:"fixed", top:70, left:"50%", transform:"translateX(-50%)", background:C.green, color:"#fff", padding:"9px 18px", borderRadius:99, fontSize:12, fontWeight:700, zIndex:9999, boxShadow:"0 4px 16px rgba(34,197,94,0.4)" }}>
+        <div style={{ position:"fixed", top:70, left:"50%", transform:"translateX(-50%)", background:C.green, color:"#fff", padding:"9px 18px", borderRadius:99, fontSize:fz(12), fontWeight:700, zIndex:9999, boxShadow:"0 4px 16px rgba(34,197,94,0.4)" }}>
           {toast}
         </div>
       )}
       <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:12 }}>
-        <p style={{ color:C.purpleLight, fontSize:12, fontWeight:700, letterSpacing:1, margin:0 }}>
+        <p style={{ color:C.purpleLight, fontSize:fz(12), fontWeight:700, letterSpacing:1, margin:0 }}>
           🎬 {sourceTitle.trim() || (T.subtitlesDefaultFolder || "Subtitles")}
         </p>
-        <button onClick={handleReset} style={{ ...S.btn, padding:"6px 12px", fontSize:11, background:C.card, border:`1px solid ${C.border}`, color:"#94a3b8" }}>
+        <button onClick={handleReset} style={{ ...S.btn, padding:"6px 12px", fontSize:fz(11), background:C.card, border:`1px solid ${C.border}`, color:"#94a3b8" }}>
           {T.subtitlesLoadNew || "↺ Load a different transcript"}
         </button>
       </div>
 
       {sessionSaved.length > 0 && (
-        <p style={{ color:"#64748b", fontSize:11, marginBottom:10 }}>
+        <p style={{ color:"#64748b", fontSize:fz(11), marginBottom:10 }}>
           {T.subtitlesSavedCount || "Saved this session:"} {sessionSaved.map(c => c.word).join("、")}
         </p>
       )}
 
       {lookupError && !selection && (
         <div style={{ background:"rgba(239,68,68,0.1)", border:`1px solid rgba(239,68,68,0.3)`, borderRadius:10, padding:"9px 14px", marginBottom:12 }}>
-          <p style={{ color:C.red, fontSize:12, margin:0 }}>{lookupError}</p>
+          <p style={{ color:C.red, fontSize:fz(12), margin:0 }}>{lookupError}</p>
         </div>
       )}
 
       <div ref={containerRef} onMouseUp={handleMouseUp} style={{ ...S.card, marginBottom: selection ? 90 : 20 }}>
         {lines.map((line, i) => (
           <p key={i} data-subtitle-line
-            style={{ color:"#e2e8f0", fontSize:15, lineHeight:2.1, margin:"0 0 6px", cursor:"text", userSelect:"text" }}>
+            style={{ color:"#e2e8f0", fontSize:fz(15), lineHeight:2.1, margin:"0 0 6px", cursor:"text", userSelect:"text" }}>
             {line}
           </p>
         ))}
@@ -15465,13 +15466,13 @@ function SubtitleVocabBuilder({ form }) {
 
       {selection && (
         <div style={{ position:"fixed", left:"50%", bottom:16, transform:"translateX(-50%)", width:"92%", maxWidth:560, background:"linear-gradient(135deg,#1e1b4b,#0f172a)", border:`1.5px solid ${C.purpleLight}`, borderRadius:14, padding:"14px 16px", boxShadow:"0 8px 30px rgba(0,0,0,0.5)", zIndex:9998 }}>
-          <p style={{ color:"#f1f5f9", fontSize:13, margin:"0 0 4px" }}>「<b>{selection.text}</b>」</p>
-          {lookupError && <p style={{ color:C.red, fontSize:11, margin:"0 0 8px" }}>{lookupError}</p>}
+          <p style={{ color:"#f1f5f9", fontSize:fz(13), margin:"0 0 4px" }}>「<b>{selection.text}</b>」</p>
+          {lookupError && <p style={{ color:C.red, fontSize:fz(11), margin:"0 0 8px" }}>{lookupError}</p>}
           <div style={{ display:"flex", gap:8 }}>
-            <button onClick={() => setSelection(null)} style={{ ...S.btn, flex:1, padding:"9px 12px", fontSize:12, background:C.card, border:`1px solid ${C.border}`, color:"#94a3b8" }}>
+            <button onClick={() => setSelection(null)} style={{ ...S.btn, flex:1, padding:"9px 12px", fontSize:fz(12), background:C.card, border:`1px solid ${C.border}`, color:"#94a3b8" }}>
               {T.cancel || "Cancel"}
             </button>
-            <button onClick={lookupAndSave} disabled={lookupLoading} style={{ ...S.btn, flex:2, padding:"9px 12px", fontSize:12, background:lookupLoading?"rgba(139,92,246,0.15)":`linear-gradient(135deg,${C.purple},#9333ea)`, color:lookupLoading?"#64748b":"#fff" }}>
+            <button onClick={lookupAndSave} disabled={lookupLoading} style={{ ...S.btn, flex:2, padding:"9px 12px", fontSize:fz(12), background:lookupLoading?"rgba(139,92,246,0.15)":`linear-gradient(135deg,${C.purple},#9333ea)`, color:lookupLoading?"#64748b":"#fff" }}>
               {lookupLoading ? "⏳ …" : (T.subtitlesLookupSaveBtn || "🔍 Look up & save")}
             </button>
           </div>
@@ -15566,7 +15567,7 @@ function FuriganaRichText({ text }) {
   while ((m = re.exec(text)) !== null) {
     if (m.index > last) parts.push(text.slice(last, m.index));
     parts.push(
-      <ruby key={k++}>{m[1]}<rp>(</rp><rt style={{ fontSize:9, color:C.teal, fontWeight:700, letterSpacing:0 }}>{m[2]}</rt><rp>)</rp></ruby>
+      <ruby key={k++}>{m[1]}<rp>(</rp><rt style={{ fontSize:fz(9), color:C.teal, fontWeight:700, letterSpacing:0 }}>{m[2]}</rt><rp>)</rp></ruby>
     );
     last = m.index + m[0].length;
   }
@@ -15581,11 +15582,11 @@ function QuestionFuriganaToggle({ T }) {
       <button onClick={() => setOn(!on)} role="switch" aria-checked={on}
         style={{ width:"100%", display:"flex", alignItems:"center", gap:10, padding:"8px 10px", borderRadius:10, cursor:"pointer",
           background: on ? "rgba(103,232,249,0.15)" : C.card, border:`1px solid ${on ? "rgba(103,232,249,0.5)" : C.border}`,
-          color: on ? "#67e8f9" : "#94a3b8", fontSize:13, fontWeight:700, textAlign:"left" }}>
-        <span style={{ fontSize:16 }}>{on ? "✅" : "⬜"}</span>
+          color: on ? "#67e8f9" : "#94a3b8", fontSize:fz(13), fontWeight:700, textAlign:"left" }}>
+        <span style={{ fontSize:fz(16) }}>{on ? "✅" : "⬜"}</span>
         <span>ふりがな — {T?.questionFuriganaLabel || "Furigana on questions"}</span>
       </button>
-      <p style={{ color:"#94a3b8", fontSize:11, lineHeight:1.6, margin:"6px 2px 0" }}>
+      <p style={{ color:"#94a3b8", fontSize:fz(11), lineHeight:1.6, margin:"6px 2px 0" }}>
         {T?.questionFuriganaDesc || "Shows furigana above the kanji in the question text only. Answers stay without furigana, and kanji-reading questions keep their target word plain so the answer isn't given away."}
       </p>
     </div>
@@ -15634,19 +15635,19 @@ function ExerciseCard({ item, revealed, onReveal, T, lang }) {
   return (
     <div style={{ ...S.card, borderLeft:`3px solid ${color}` }}>
       <div style={{ display:"flex", justifyContent:"space-between", marginBottom:6 }}>
-        <span style={{ color, fontSize:11, fontWeight:700 }}>{SKILL_LABELS[item.skill] || item.skill}</span>
-        <span style={{ color:"#ffffff", fontSize:11 }}>{item.type}</span>
+        <span style={{ color, fontSize:fz(11), fontWeight:700 }}>{SKILL_LABELS[item.skill] || item.skill}</span>
+        <span style={{ color:"#ffffff", fontSize:fz(11) }}>{item.type}</span>
       </div>
       <div style={{ display:"flex", alignItems:"flex-start", gap:8, margin:"0 0 6px" }}>
-        <p style={{ color:"#f1f5f9", fontSize:14, lineHeight: qFuriOn ? 2.4 : 1.8, margin:0, whiteSpace:"pre-wrap", flex:1 }}>
+        <p style={{ color:"#f1f5f9", fontSize:fz(14), lineHeight: qFuriOn ? 2.4 : 1.8, margin:0, whiteSpace:"pre-wrap", flex:1 }}>
           {qFuriOn && qFuri ? <FuriganaRichText text={qFuri} /> : item.prompt}
-          {qFuriOn && !qFuri && hasKanji(item.prompt) && <span style={{ color:"#67e8f9", fontSize:11 }}> ⏳</span>}
+          {qFuriOn && !qFuri && hasKanji(item.prompt) && <span style={{ color:"#67e8f9", fontSize:fz(11) }}> ⏳</span>}
         </p>
       </div>
       {(item.skill === "listening" || item.skill === "pronunciation") && (
         <div style={{ display:"flex", gap:8, marginBottom:8, flexWrap:"wrap" }}>
           <button onClick={()=>speakJapanese(stripForSpeech(item.skill === "listening" ? getListeningAudioText(item) : item.prompt), 1)}
-            style={{ display:"flex", alignItems:"center", gap:6, padding:"6px 12px", borderRadius:8, background:"rgba(6,182,212,0.12)", border:`1px solid rgba(6,182,212,0.3)`, color:C.teal, fontSize:12, fontWeight:700, cursor:"pointer" }}>
+            style={{ display:"flex", alignItems:"center", gap:6, padding:"6px 12px", borderRadius:8, background:"rgba(6,182,212,0.12)", border:`1px solid rgba(6,182,212,0.3)`, color:C.teal, fontSize:fz(12), fontWeight:700, cursor:"pointer" }}>
             🔊 {T?.listenAudio || "Listen"}
           </button>
           <SpeedButtons text={stripForSpeech(item.skill === "listening" ? getListeningAudioText(item) : item.prompt)} T={T} />
@@ -15655,14 +15656,14 @@ function ExerciseCard({ item, revealed, onReveal, T, lang }) {
       {item.skill === "pronunciation" && (
         <div style={{ marginBottom:8 }}>
           <button onClick={toggleRecording}
-            style={{ display:"flex", alignItems:"center", gap:6, padding:"6px 12px", borderRadius:8, background:recording?"rgba(239,68,68,0.15)":"rgba(168,85,247,0.12)", border:`1px solid ${recording?"rgba(239,68,68,0.4)":"rgba(168,85,247,0.3)"}`, color:recording?"#f87171":C.purpleLight, fontSize:12, fontWeight:700, cursor:"pointer" }}>
+            style={{ display:"flex", alignItems:"center", gap:6, padding:"6px 12px", borderRadius:8, background:recording?"rgba(239,68,68,0.15)":"rgba(168,85,247,0.12)", border:`1px solid ${recording?"rgba(239,68,68,0.4)":"rgba(168,85,247,0.3)"}`, color:recording?"#f87171":C.purpleLight, fontSize:fz(12), fontWeight:700, cursor:"pointer" }}>
             {recording ? `⏺ ${T?.recordingInProgress || "Recording..."}` : `🎤 ${T?.recordVoice || "Record"}`}
           </button>
-          {!recogSupported && <p style={{ color:C.red, fontSize:11, marginTop:6 }}>Voice input isn't supported in this browser — try Chrome.</p>}
+          {!recogSupported && <p style={{ color:C.red, fontSize:fz(11), marginTop:6 }}>Voice input isn't supported in this browser — try Chrome.</p>}
           {transcript && (
             <div style={{ background:"rgba(168,85,247,0.06)", borderRadius:8, padding:"8px 10px", marginTop:6 }}>
-              <p style={{ color:C.purpleLight, fontSize:11, fontWeight:700, margin:"0 0 3px" }}>{T?.yourSpokenAnswer || "Your spoken answer:"}</p>
-              <p style={{ color:"#f1f5f9", fontSize:13, margin:0 }}>{transcript}</p>
+              <p style={{ color:C.purpleLight, fontSize:fz(11), fontWeight:700, margin:"0 0 3px" }}>{T?.yourSpokenAnswer || "Your spoken answer:"}</p>
+              <p style={{ color:"#f1f5f9", fontSize:fz(13), margin:0 }}>{transcript}</p>
             </div>
           )}
         </div>
@@ -15673,17 +15674,17 @@ function ExerciseCard({ item, revealed, onReveal, T, lang }) {
         </div>
       )}
       <JLineTools text={item.prompt} lang={lang} T={T} />
-      <button onClick={onReveal} style={{ padding:"6px 14px", borderRadius:8, background:C.card, border:`1px solid ${C.border}`, color:"#ff1a1a", fontSize:11, cursor:"pointer", marginBottom: revealed?10:0 }}>
+      <button onClick={onReveal} style={{ padding:"6px 14px", borderRadius:8, background:C.card, border:`1px solid ${C.border}`, color:"#ff1a1a", fontSize:fz(11), cursor:"pointer", marginBottom: revealed?10:0 }}>
         {revealed ? (T?.hideAnswerBtn || "Hide answer") : (T?.showAnswerBtn || "Show answer")}
       </button>
       {revealed && (
         <div style={{ background:"rgba(34,197,94,0.06)", borderRadius:10, padding:"10px 12px" }}>
-          <p style={{ color:C.green, fontSize:11, fontWeight:700, margin:"0 0 4px" }}>✅ ANSWER</p>
-          <p style={{ color:"#f1f5f9", fontSize:13, margin:"0 0 6px" }}>{item.answer}</p>
-          {item.tip && <p style={{ color:"#ffffff", fontSize:12, margin:"0 0 6px", fontStyle:"italic" }}>💬 {item.tip}</p>}
+          <p style={{ color:C.green, fontSize:fz(11), fontWeight:700, margin:"0 0 4px" }}>✅ ANSWER</p>
+          <p style={{ color:"#f1f5f9", fontSize:fz(13), margin:"0 0 6px" }}>{item.answer}</p>
+          {item.tip && <p style={{ color:"#ffffff", fontSize:fz(12), margin:"0 0 6px", fontStyle:"italic" }}>💬 {item.tip}</p>}
           {item.source_url && (
             <a href={item.source_url} target="_blank" rel="noopener noreferrer"
-              style={{ display:"inline-block", color:C.teal, fontSize:11, textDecoration:"none", background:"rgba(6,182,212,0.08)", border:"1px solid rgba(6,182,212,0.2)", padding:"3px 10px", borderRadius:6, fontWeight:600 }}>
+              style={{ display:"inline-block", color:C.teal, fontSize:fz(11), textDecoration:"none", background:"rgba(6,182,212,0.08)", border:"1px solid rgba(6,182,212,0.2)", padding:"3px 10px", borderRadius:6, fontWeight:600 }}>
               🔗 {item.source_url.replace(/https?:\/\/(www\.)?/,"").split("/")[0]}
             </a>
           )}
@@ -15859,7 +15860,7 @@ Respond ONLY with a valid JSON array, no markdown, no backticks:
     <div>
       {!items.length && savedSet && (
         <div style={{ ...S.card, marginBottom:16, borderLeft:`3px solid ${C.purpleLight}` }}>
-          <p style={{ color:C.purpleLight, fontSize:12, fontWeight:700, margin:"0 0 8px" }}>{T.savedSetFound || "You have a saved study set from before."}</p>
+          <p style={{ color:C.purpleLight, fontSize:fz(12), fontWeight:700, margin:"0 0 8px" }}>{T.savedSetFound || "You have a saved study set from before."}</p>
           <div style={{ display:"flex", gap:8 }}>
             <button onClick={handleResume} style={{ ...S.btn, flex:1, background:`linear-gradient(135deg,${C.teal},#0891b2)`, color:"#fff" }}>
               {T.resumeStudySet || "▶ Resume study set"}
@@ -15871,12 +15872,12 @@ Respond ONLY with a valid JSON array, no markdown, no backticks:
         </div>
       )}
       <div style={{ ...S.card, marginBottom:16 }}>
-        <p style={{ color:C.teal, fontSize:12, fontWeight:700, letterSpacing:1, marginBottom:4 }}>✨ {T.contentTitle || "CREATE FROM CONTENT"}</p>
-        <p style={{ color:"#ffffff", fontSize:12, marginBottom:12, lineHeight:1.7 }}>
+        <p style={{ color:C.teal, fontSize:fz(12), fontWeight:700, letterSpacing:1, marginBottom:4 }}>✨ {T.contentTitle || "CREATE FROM CONTENT"}</p>
+        <p style={{ color:"#ffffff", fontSize:fz(12), marginBottom:12, lineHeight:1.7 }}>
           {(T.contentDesc || "Paste Japanese text you're reading or watching — an article, video subtitles/description, a caption, a message — and GAKU will build {jlpt}-level activities from it, just like GAKU Reader does on the web.").replace("{jlpt}", form.jlpt)}
         </p>
         {samplePrefilled && (
-          <p style={{ color:"#67e8f9", fontSize:12, fontWeight:700, lineHeight:1.6, margin:"0 0 8px" }}>
+          <p style={{ color:"#67e8f9", fontSize:fz(12), fontWeight:700, lineHeight:1.6, margin:"0 0 8px" }}>
             ✨ {form?.preferredLang === "Japanese" ? "サンプルの文章を入れておきました。下のボタンを押すだけでOK。自分の文章に貼り替えてもOKです。" : (HELP_I18N[form?.preferredLang]?.hints?.content_sample || "We added a sample text for you. Just tap the button below — or paste your own.")}
           </p>
         )}
@@ -15887,9 +15888,9 @@ Respond ONLY with a valid JSON array, no markdown, no backticks:
           placeholder={`日本語のテキストをここに貼り付けてください... (${T.contentPlaceholder || "paste Japanese text, subtitles, or a caption here"})`}
           rows={6}
           maxLength={6000}
-          style={{ width:"100%", boxSizing:"border-box", background:"rgba(255,255,255,0.03)", border:`1px solid ${C.border}`, borderRadius:10, color:"#f1f5f9", fontSize:13, padding:"10px 12px", resize:"vertical", fontFamily:"inherit" }}
+          style={{ width:"100%", boxSizing:"border-box", background:"rgba(255,255,255,0.03)", border:`1px solid ${C.border}`, borderRadius:10, color:"#f1f5f9", fontSize:fz(13), padding:"10px 12px", resize:"vertical", fontFamily:"inherit" }}
         />
-        <p style={{ color: source.length >= 6000 ? C.red : "#64748b", fontSize:11, textAlign:"right", margin:"4px 0 12px" }}>{source.length}/6000</p>
+        <p style={{ color: source.length >= 6000 ? C.red : "#64748b", fontSize:fz(11), textAlign:"right", margin:"4px 0 12px" }}>{source.length}/6000</p>
         <FirstTapHint id="content_analyze" show={!loading && !items.length && !isFirstContentDone()}
           text={form?.preferredLang === "Japanese" ? "ここを押すと、1分以内に最初の練習問題ができます。" : (HELP_I18N[form?.preferredLang]?.hints?.content_analyze || "Tap here — your first activities will be ready in about a minute.")} />
         <button data-guide="content-analyze" onClick={() => { lsSetScoped("gaku_hint_content_analyze", "1"); analyze(); }} disabled={loading} style={{ ...S.btn, width:"100%", background:loading?"rgba(6,182,212,0.15)":`linear-gradient(135deg,${C.teal},#0891b2)`, color:loading?"#64748b":"#fff" }}>
@@ -15901,10 +15902,10 @@ Respond ONLY with a valid JSON array, no markdown, no backticks:
         </button>
         {sourceFuriganaOn && sourceFurigana && (
           <div style={{ background:"rgba(103,232,249,0.06)", borderRadius:10, padding:"10px 12px", marginTop:10 }}>
-            <p style={{ color:"#67e8f9", fontSize:13, lineHeight:1.9, margin:0, whiteSpace:"pre-wrap" }}>{sourceFurigana}</p>
+            <p style={{ color:"#67e8f9", fontSize:fz(13), lineHeight:1.9, margin:0, whiteSpace:"pre-wrap" }}>{sourceFurigana}</p>
           </div>
         )}
-        {error && <p style={{ color:C.red, fontSize:12, marginTop:10 }}>{error}</p>}
+        {error && <p style={{ color:C.red, fontSize:fz(12), marginTop:10 }}>{error}</p>}
       </div>
 
       {items.length > 0 && (
@@ -15912,11 +15913,11 @@ Respond ONLY with a valid JSON array, no markdown, no backticks:
           {contentCheck.eligible && <LevelUpOffer T={T} currentLevel={form.jlpt} onConfirm={onLevelUp} onDismiss={contentCheck.dismiss} />}
           <QuestionFuriganaToggle T={T} />
           <div style={{ display:"flex", gap:6, flexWrap:"wrap", marginBottom:12 }}>
-            <button onClick={()=>setActiveSkillFilter("all")} style={{ padding:"4px 10px", borderRadius:20, fontSize:11, fontWeight:700, cursor:"pointer", border:`1px solid ${activeSkillFilter==="all"?C.purpleLight:C.border}`, background:activeSkillFilter==="all"?"rgba(168,85,247,0.15)":C.card, color:activeSkillFilter==="all"?C.purpleLight:"#64748b" }}>
+            <button onClick={()=>setActiveSkillFilter("all")} style={{ padding:"4px 10px", borderRadius:20, fontSize:fz(11), fontWeight:700, cursor:"pointer", border:`1px solid ${activeSkillFilter==="all"?C.purpleLight:C.border}`, background:activeSkillFilter==="all"?"rgba(168,85,247,0.15)":C.card, color:activeSkillFilter==="all"?C.purpleLight:"#64748b" }}>
               すべて ({items.length})
             </button>
             {skillsInResult.map(s => (
-              <button key={s} onClick={()=>setActiveSkillFilter(s)} style={{ padding:"4px 10px", borderRadius:20, fontSize:11, fontWeight:700, cursor:"pointer", border:`1px solid ${activeSkillFilter===s?(SKILL_COLORS[s]||C.purpleLight):C.border}`, background:activeSkillFilter===s?"rgba(0,0,0,0.15)":C.card, color:activeSkillFilter===s?(SKILL_COLORS[s]||C.purpleLight):"#64748b" }}>
+              <button key={s} onClick={()=>setActiveSkillFilter(s)} style={{ padding:"4px 10px", borderRadius:20, fontSize:fz(11), fontWeight:700, cursor:"pointer", border:`1px solid ${activeSkillFilter===s?(SKILL_COLORS[s]||C.purpleLight):C.border}`, background:activeSkillFilter===s?"rgba(0,0,0,0.15)":C.card, color:activeSkillFilter===s?(SKILL_COLORS[s]||C.purpleLight):"#64748b" }}>
                 {SKILL_LABELS[s]||s} ({items.filter(it=>it.skill===s).length})
               </button>
             ))}
@@ -16329,19 +16330,19 @@ function JLineTools({ text, lang, T }) {
   return (
     <div style={{ marginTop:6, marginBottom:6 }}>
       <div style={{ display:"flex", gap:6, marginBottom:6 }}>
-        <button onClick={()=>toggleVariant("furigana")} disabled={loadingType!==null} style={{ fontSize:11, color:"#67e8f9", fontWeight:700, background:visible.furigana?"rgba(103,232,249,0.22)":"rgba(103,232,249,0.1)", padding:"4px 10px", borderRadius:8, border:"1px solid rgba(103,232,249,0.3)", cursor:"pointer" }}>
+        <button onClick={()=>toggleVariant("furigana")} disabled={loadingType!==null} style={{ fontSize:fz(11), color:"#67e8f9", fontWeight:700, background:visible.furigana?"rgba(103,232,249,0.22)":"rgba(103,232,249,0.1)", padding:"4px 10px", borderRadius:8, border:"1px solid rgba(103,232,249,0.3)", cursor:"pointer" }}>
           {loadingType==="furigana" ? "⏳" : (T?.furiganaBtn || "ふりがな")}
         </button>
-        <button onClick={()=>toggleVariant("romaji")} disabled={loadingType!==null} style={{ fontSize:11, color:"#c4b5fd", fontWeight:700, background:visible.romaji?"rgba(196,181,253,0.22)":"rgba(196,181,253,0.1)", padding:"4px 10px", borderRadius:8, border:"1px solid rgba(196,181,253,0.3)", cursor:"pointer" }}>
+        <button onClick={()=>toggleVariant("romaji")} disabled={loadingType!==null} style={{ fontSize:fz(11), color:"#c4b5fd", fontWeight:700, background:visible.romaji?"rgba(196,181,253,0.22)":"rgba(196,181,253,0.1)", padding:"4px 10px", borderRadius:8, border:"1px solid rgba(196,181,253,0.3)", cursor:"pointer" }}>
           {loadingType==="romaji" ? "⏳" : (T?.romajiBtn || "Romaji")}
         </button>
-        <button onClick={()=>toggleVariant("translate")} disabled={loadingType!==null} style={{ fontSize:11, color:"#fbbf24", fontWeight:700, background:visible.translate?"rgba(251,191,36,0.22)":"rgba(251,191,36,0.1)", padding:"4px 10px", borderRadius:8, border:"1px solid rgba(251,191,36,0.3)", cursor:"pointer" }}>
+        <button onClick={()=>toggleVariant("translate")} disabled={loadingType!==null} style={{ fontSize:fz(11), color:"#fbbf24", fontWeight:700, background:visible.translate?"rgba(251,191,36,0.22)":"rgba(251,191,36,0.1)", padding:"4px 10px", borderRadius:8, border:"1px solid rgba(251,191,36,0.3)", cursor:"pointer" }}>
           {loadingType==="translate" ? "⏳" : (T?.translateBtn || "Translate")}
         </button>
       </div>
-      {visible.furigana && furigana && <p style={{ color:"#67e8f9", fontSize:12, margin:"0 0 4px", fontStyle:"italic", whiteSpace:"pre-wrap" }}>{furigana}</p>}
-      {visible.romaji && romaji && <p style={{ color:"#c4b5fd", fontSize:12, margin:"0 0 4px", fontStyle:"italic", whiteSpace:"pre-wrap" }}>{romaji}</p>}
-      {visible.translate && translation && <p style={{ color:"#fbbf24", fontSize:12, margin:"0 0 4px", fontStyle:"italic", whiteSpace:"pre-wrap" }}>{translation}</p>}
+      {visible.furigana && furigana && <p style={{ color:"#67e8f9", fontSize:fz(12), margin:"0 0 4px", fontStyle:"italic", whiteSpace:"pre-wrap" }}>{furigana}</p>}
+      {visible.romaji && romaji && <p style={{ color:"#c4b5fd", fontSize:fz(12), margin:"0 0 4px", fontStyle:"italic", whiteSpace:"pre-wrap" }}>{romaji}</p>}
+      {visible.translate && translation && <p style={{ color:"#fbbf24", fontSize:fz(12), margin:"0 0 4px", fontStyle:"italic", whiteSpace:"pre-wrap" }}>{translation}</p>}
     </div>
   );
 }
@@ -16410,39 +16411,39 @@ Respond ONLY with valid JSON, no markdown, no backticks, nothing else.`;
   return (
     <div>
       <button onClick={toggleRecording}
-        style={{ display:"flex", alignItems:"center", gap:6, padding:"6px 12px", borderRadius:8, background:recording?"rgba(239,68,68,0.15)":"rgba(168,85,247,0.12)", border:`1px solid ${recording?"rgba(239,68,68,0.4)":"rgba(168,85,247,0.3)"}`, color:recording?"#f87171":C.purpleLight, fontSize:12, fontWeight:700, cursor:"pointer" }}>
+        style={{ display:"flex", alignItems:"center", gap:6, padding:"6px 12px", borderRadius:8, background:recording?"rgba(239,68,68,0.15)":"rgba(168,85,247,0.12)", border:`1px solid ${recording?"rgba(239,68,68,0.4)":"rgba(168,85,247,0.3)"}`, color:recording?"#f87171":C.purpleLight, fontSize:fz(12), fontWeight:700, cursor:"pointer" }}>
         {recording ? `⏺ ${T?.recordingInProgress || "Recording..."}` : `🎤 ${T?.recordVoice || "Record"}`}
       </button>
-      {!recogSupported && <p style={{ color:C.red, fontSize:11, marginTop:6 }}>Voice input isn't supported in this browser — try Chrome.</p>}
+      {!recogSupported && <p style={{ color:C.red, fontSize:fz(11), marginTop:6 }}>Voice input isn't supported in this browser — try Chrome.</p>}
       {transcript && (
         <div style={{ background:"rgba(168,85,247,0.06)", borderRadius:8, padding:"8px 10px", marginTop:8 }}>
-          <p style={{ color:C.purpleLight, fontSize:11, fontWeight:700, margin:"0 0 3px" }}>{T?.yourSpokenAnswer || "Your spoken answer:"}</p>
-          <p style={{ color:"#f1f5f9", fontSize:13, margin:0 }}>{transcript}</p>
+          <p style={{ color:C.purpleLight, fontSize:fz(11), fontWeight:700, margin:"0 0 3px" }}>{T?.yourSpokenAnswer || "Your spoken answer:"}</p>
+          <p style={{ color:"#f1f5f9", fontSize:fz(13), margin:0 }}>{transcript}</p>
         </div>
       )}
       {feedbackLoading && (
-        <p style={{ color:"#94a3b8", fontSize:11, marginTop:8 }}>⏳ {T?.convCheckingGrammar || "AIフィードバック / Checking your grammar..."}</p>
+        <p style={{ color:"#94a3b8", fontSize:fz(11), marginTop:8 }}>⏳ {T?.convCheckingGrammar || "AIフィードバック / Checking your grammar..."}</p>
       )}
       {!feedbackLoading && feedback && (
         feedback.hasError ? (
           <div style={{ background:"rgba(239,68,68,0.06)", borderRadius:8, padding:"10px 12px", marginTop:8, border:"1px solid rgba(239,68,68,0.2)" }}>
-            <p style={{ color:"#f87171", fontSize:13, margin:"0 0 4px" }}>⚠️ {feedback.incorrect}</p>
-            <p style={{ color:C.green, fontSize:13, margin:"0 0 4px" }}>✅ {feedback.corrected}</p>
-            {feedback.translation && <p style={{ color:"#94a3b8", fontSize:11, margin:"0 0 8px", fontStyle:"italic" }}>{feedback.translation}</p>}
-            <p style={{ color:C.amber, fontSize:11, fontWeight:700, margin:"0 0 3px" }}>ていせい / Correction</p>
-            {feedback.explanation && <p style={{ color:"#cbd5e1", fontSize:12, margin:"0 0 8px" }}>{feedback.explanation}</p>}
+            <p style={{ color:"#f87171", fontSize:fz(13), margin:"0 0 4px" }}>⚠️ {feedback.incorrect}</p>
+            <p style={{ color:C.green, fontSize:fz(13), margin:"0 0 4px" }}>✅ {feedback.corrected}</p>
+            {feedback.translation && <p style={{ color:"#94a3b8", fontSize:fz(11), margin:"0 0 8px", fontStyle:"italic" }}>{feedback.translation}</p>}
+            <p style={{ color:C.amber, fontSize:fz(11), fontWeight:700, margin:"0 0 3px" }}>ていせい / Correction</p>
+            {feedback.explanation && <p style={{ color:"#cbd5e1", fontSize:fz(12), margin:"0 0 8px" }}>{feedback.explanation}</p>}
             {feedback.example && (
               <>
-                <p style={{ color:C.amber, fontSize:11, fontWeight:700, margin:"0 0 3px" }}>れい / Example</p>
-                <p style={{ color:"#f1f5f9", fontSize:12, margin:"0 0 4px" }}>{feedback.example}</p>
-                {feedback.exampleTranslation && <p style={{ color:"#94a3b8", fontSize:11, margin:"0 0 4px" }}>{feedback.exampleTranslation}</p>}
+                <p style={{ color:C.amber, fontSize:fz(11), fontWeight:700, margin:"0 0 3px" }}>れい / Example</p>
+                <p style={{ color:"#f1f5f9", fontSize:fz(12), margin:"0 0 4px" }}>{feedback.example}</p>
+                {feedback.exampleTranslation && <p style={{ color:"#94a3b8", fontSize:fz(11), margin:"0 0 4px" }}>{feedback.exampleTranslation}</p>}
                 <JLineTools text={feedback.example} lang={lang} T={T} />
               </>
             )}
           </div>
         ) : (
           <div style={{ background:"rgba(34,197,94,0.06)", borderRadius:8, padding:"8px 10px", marginTop:8 }}>
-            <p style={{ color:C.green, fontSize:12, margin:0 }}>✅ {T?.convGrammarOk || "Great — no mistakes found!"}</p>
+            <p style={{ color:C.green, fontSize:fz(12), margin:0 }}>✅ {T?.convGrammarOk || "Great — no mistakes found!"}</p>
           </div>
         )
       )}
@@ -16595,21 +16596,21 @@ function TabAudioListenBlock({ tab, T, onBeforeStart }) {
   };
   return (
     <div style={{ marginBottom:12 }}>
-      <button data-guide="conv-tab-listen" onClick={handle} style={{ display:"flex", alignItems:"center", justifyContent:"center", gap:8, width:"100%", padding:"12px 12px", borderRadius:10, border:`1px solid ${tab.active?"rgba(239,68,68,0.4)":"rgba(34,197,94,0.45)"}`, background:tab.active?"rgba(239,68,68,0.12)":"rgba(34,197,94,0.12)", color:tab.active?"#f87171":C.green, fontSize:14, fontWeight:700, cursor:"pointer" }}>
+      <button data-guide="conv-tab-listen" onClick={handle} style={{ display:"flex", alignItems:"center", justifyContent:"center", gap:8, width:"100%", padding:"12px 12px", borderRadius:10, border:`1px solid ${tab.active?"rgba(239,68,68,0.4)":"rgba(34,197,94,0.45)"}`, background:tab.active?"rgba(239,68,68,0.12)":"rgba(34,197,94,0.12)", color:tab.active?"#f87171":C.green, fontSize:fz(14), fontWeight:700, cursor:"pointer" }}>
         {tab.active ? `⏺ ${T.tabListenStop || "Stop listening to the tab"}` : `🖥️ ${T.tabListenBtn || "Listen to a video tab (recommended)"}`}
       </button>
       {!tab.active && (
-        <p style={{ color:"#94a3b8", fontSize:11, lineHeight:1.6, margin:"8px 0 0" }}>
+        <p style={{ color:"#94a3b8", fontSize:fz(11), lineHeight:1.6, margin:"8px 0 0" }}>
           {T.tabListenHelp || "Choose the tab that is playing your video and tick “Share tab audio”. GAKU hears the video directly — no echo or background noise. (Chrome / Edge on a computer only)"}
         </p>
       )}
       {tab.active && (
-        <p style={{ color:"#94a3b8", fontSize:12, margin:"8px 0 0", fontStyle:"italic" }}>
+        <p style={{ color:"#94a3b8", fontSize:fz(12), margin:"8px 0 0", fontStyle:"italic" }}>
           {tab.pending > 0 ? (T.tabListenTranscribing || "Transcribing…") : (T.convListening || "Listening…")}
         </p>
       )}
-      {tab.status === "noaudio" && <p style={{ color:C.red, fontSize:11, lineHeight:1.6, margin:"8px 0 0" }}>{T.tabListenNoAudio || "No audio was shared. Choose the video's tab, tick “Share tab audio”, and try again."}</p>}
-      {tab.status === "busy" && <p style={{ color:C.amber, fontSize:11, lineHeight:1.6, margin:"8px 0 0" }}>{T.tabListenBusy || "The transcription service is busy right now. GAKU will try again with the next sentence."}</p>}
+      {tab.status === "noaudio" && <p style={{ color:C.red, fontSize:fz(11), lineHeight:1.6, margin:"8px 0 0" }}>{T.tabListenNoAudio || "No audio was shared. Choose the video's tab, tick “Share tab audio”, and try again."}</p>}
+      {tab.status === "busy" && <p style={{ color:C.amber, fontSize:fz(11), lineHeight:1.6, margin:"8px 0 0" }}>{T.tabListenBusy || "The transcription service is busy right now. GAKU will try again with the next sentence."}</p>}
     </div>
   );
 }
@@ -16646,12 +16647,12 @@ Respond ONLY with valid JSON, no markdown, no backticks:
   return (
     <div style={{ ...S.card, borderLeft:`3px solid ${C.purpleLight}` }}>
       <div style={{ display:"flex", alignItems:"flex-start", gap:8, marginBottom:10 }}>
-        <span style={{ color:C.teal, fontSize:13, flexShrink:0 }}>🎧</span>
-        <p style={{ color:"#f1f5f9", fontSize:14, lineHeight:1.8, margin:0, flex:1 }}>{line.text}</p>
+        <span style={{ color:C.teal, fontSize:fz(13), flexShrink:0 }}>🎧</span>
+        <p style={{ color:"#f1f5f9", fontSize:fz(14), lineHeight:1.8, margin:0, flex:1 }}>{line.text}</p>
       </div>
       <div style={{ display:"flex", gap:8, marginBottom:8, flexWrap:"wrap" }}>
         <button onClick={()=>speakJapanese(stripForSpeech(line.text), 1)}
-          style={{ display:"flex", alignItems:"center", gap:6, padding:"6px 12px", borderRadius:8, background:"rgba(6,182,212,0.12)", border:`1px solid rgba(6,182,212,0.3)`, color:C.teal, fontSize:12, fontWeight:700, cursor:"pointer" }}>
+          style={{ display:"flex", alignItems:"center", gap:6, padding:"6px 12px", borderRadius:8, background:"rgba(6,182,212,0.12)", border:`1px solid rgba(6,182,212,0.3)`, color:C.teal, fontSize:fz(12), fontWeight:700, cursor:"pointer" }}>
           🔊 {T?.listenAudio || "Listen"}
         </button>
         <SpeedButtons text={stripForSpeech(line.text)} T={T} />
@@ -16659,22 +16660,22 @@ Respond ONLY with valid JSON, no markdown, no backticks:
       <JLineTools text={line.text} lang={lang} T={T} />
 
       <div style={{ marginTop:12 }}>
-        <p style={{ color:C.purpleLight, fontSize:12, fontWeight:700, margin:"0 0 8px" }}>{T?.convYourTurn || "How would you respond?"}</p>
+        <p style={{ color:C.purpleLight, fontSize:fz(12), fontWeight:700, margin:"0 0 8px" }}>{T?.convYourTurn || "How would you respond?"}</p>
         <VoiceGrammarCheck promptContext={line.text} lang={lang} T={T} />
       </div>
 
       <div style={{ marginTop:14 }}>
         <div style={{ display:"flex", alignItems:"center", gap:10, margin:"0 0 12px" }}>
           <div style={{ flex:1, height:1, background:C.border }} />
-          <span style={{ color:"#64748b", fontSize:11, fontWeight:700 }}>{T?.convOrDivider || "OR"}</span>
+          <span style={{ color:"#64748b", fontSize:fz(11), fontWeight:700 }}>{T?.convOrDivider || "OR"}</span>
           <div style={{ flex:1, height:1, background:C.border }} />
         </div>
         {!hint && (
-          <button data-guide="conv-hint" onClick={getHint} disabled={loadingHint} style={{ ...S.btn, background:loadingHint?"rgba(168,85,247,0.15)":`linear-gradient(135deg,${C.purple},#9333ea)`, color:loadingHint?"#64748b":"#fff", fontSize:12, padding:"9px 14px", width:"100%" }}>
+          <button data-guide="conv-hint" onClick={getHint} disabled={loadingHint} style={{ ...S.btn, background:loadingHint?"rgba(168,85,247,0.15)":`linear-gradient(135deg,${C.purple},#9333ea)`, color:loadingHint?"#64748b":"#fff", fontSize:fz(12), padding:"9px 14px", width:"100%" }}>
             {loadingHint ? `⏳ ${T?.convHintLoading || "Thinking of response hints..."}` : `💡 ${T?.convHintBtn || "See 4 response ideas"}`}
           </button>
         )}
-        {hintError && <p style={{ color:C.red, fontSize:12, marginTop:8 }}>{hintError}</p>}
+        {hintError && <p style={{ color:C.red, fontSize:fz(12), marginTop:8 }}>{hintError}</p>}
         {hint && (
           <div style={{ marginTop:6 }}>
             <div style={{ display:"flex", flexDirection:"column", gap:8 }}>
@@ -16687,18 +16688,18 @@ Respond ONLY with valid JSON, no markdown, no backticks:
                     <button onClick={()=>setSelectedIdx(i)} disabled={showFeedback}
                       style={{ width:"100%", textAlign:"left", padding:"10px 12px", borderRadius:10,
                         background: showFeedback && opt.best ? "rgba(34,197,94,0.1)" : (showFeedback && isSelected ? "rgba(239,68,68,0.1)" : "rgba(255,255,255,0.03)"),
-                        border:`1px solid ${borderColor}`, color:"#f1f5f9", fontSize:13, cursor:showFeedback?"default":"pointer" }}>
+                        border:`1px solid ${borderColor}`, color:"#f1f5f9", fontSize:fz(13), cursor:showFeedback?"default":"pointer" }}>
                       {opt.text}{showFeedback && opt.best ? " ✅" : ""}{showFeedback && isSelected && !opt.best ? " ❌" : ""}
                     </button>
                     {showFeedback && (isSelected || opt.best) && opt.note && (
-                      <p style={{ color:"#94a3b8", fontSize:11, margin:"4px 0 0 12px", fontStyle:"italic" }}>{opt.note}</p>
+                      <p style={{ color:"#94a3b8", fontSize:fz(11), margin:"4px 0 0 12px", fontStyle:"italic" }}>{opt.note}</p>
                     )}
                   </div>
                 );
               })}
             </div>
             {selectedIdx !== null && (
-              <button onClick={()=>setSelectedIdx(null)} style={{ marginTop:10, padding:"6px 12px", borderRadius:8, background:C.card, border:`1px solid ${C.border}`, color:"#94a3b8", fontSize:11, cursor:"pointer" }}>
+              <button onClick={()=>setSelectedIdx(null)} style={{ marginTop:10, padding:"6px 12px", borderRadius:8, background:C.card, border:`1px solid ${C.border}`, color:"#94a3b8", fontSize:fz(11), cursor:"pointer" }}>
                 {T?.convTryAgain || "↺ Try again"}
               </button>
             )}
@@ -16808,17 +16809,17 @@ function ConversationPredictor({ form, onLevelUp }) {
   return (
     <div>
       <div style={{ ...S.card, marginBottom:16 }}>
-        <p style={{ color:C.purpleLight, fontSize:12, fontWeight:700, letterSpacing:1, marginBottom:6 }}>🎙️ {T.convTitle || "Conversation Practice"}</p>
-        <p style={{ color:"#39ff14", fontSize:12, lineHeight:1.7, marginBottom:14 }}>
+        <p style={{ color:C.purpleLight, fontSize:fz(12), fontWeight:700, letterSpacing:1, marginBottom:6 }}>🎙️ {T.convTitle || "Conversation Practice"}</p>
+        <p style={{ color:"#39ff14", fontSize:fz(12), lineHeight:1.7, marginBottom:14 }}>
           {T.convDescLive || "Play a YouTube/video with the sound on near your mic. GAKU listens to the real dialogue and, line by line, helps you understand it and hints at how you could respond."}
         </p>
         <TabAudioListenBlock tab={tab} T={T} onBeforeStart={() => { if (listening) toggleListening(); }} />
-        <button data-guide="conv-listen" onClick={toggleListening} style={{ display:"flex", alignItems:"center", justifyContent:"center", gap:8, width:"100%", padding:"12px 12px", borderRadius:10, border:`1px solid ${listening?"rgba(239,68,68,0.4)":"rgba(6,182,212,0.35)"}`, background:listening?"rgba(239,68,68,0.12)":"rgba(6,182,212,0.1)", color:listening?"#f87171":C.teal, fontSize:14, fontWeight:700, cursor:"pointer" }}>
+        <button data-guide="conv-listen" onClick={toggleListening} style={{ display:"flex", alignItems:"center", justifyContent:"center", gap:8, width:"100%", padding:"12px 12px", borderRadius:10, border:`1px solid ${listening?"rgba(239,68,68,0.4)":"rgba(6,182,212,0.35)"}`, background:listening?"rgba(239,68,68,0.12)":"rgba(6,182,212,0.1)", color:listening?"#f87171":C.teal, fontSize:fz(14), fontWeight:700, cursor:"pointer" }}>
           {listening ? `⏺ ${T.convListenStop || "Stop listening"}` : `🎤 ${T.convListenStart || "Start listening"}`}
         </button>
-        {!recogSupported && <p style={{ color:C.red, fontSize:11, marginTop:8 }}>{T.convListenUnsupported || "Live listening isn't supported in this browser — try Chrome on desktop or Android."}</p>}
+        {!recogSupported && <p style={{ color:C.red, fontSize:fz(11), marginTop:8 }}>{T.convListenUnsupported || "Live listening isn't supported in this browser — try Chrome on desktop or Android."}</p>}
         {listening && (
-          <p style={{ color:"#94a3b8", fontSize:12, marginTop:10, fontStyle:"italic", minHeight:16 }}>
+          <p style={{ color:"#94a3b8", fontSize:fz(12), marginTop:10, fontStyle:"italic", minHeight:16 }}>
             {interimText || (T.convListening || "Listening…")}
           </p>
         )}
@@ -16827,14 +16828,14 @@ function ConversationPredictor({ form, onLevelUp }) {
       {heardLines.length > 0 && (
         <>
           <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:12 }}>
-            <p style={{ color:C.purpleLight, fontSize:12, fontWeight:700, letterSpacing:1, margin:0 }}>
+            <p style={{ color:C.purpleLight, fontSize:fz(12), fontWeight:700, letterSpacing:1, margin:0 }}>
               {T.convHeardTitle || "What GAKU heard"}
             </p>
-            <button onClick={handleClear} style={{ ...S.btn, padding:"6px 12px", fontSize:11, background:C.card, border:`1px solid ${C.border}`, color:"#94a3b8" }}>
+            <button onClick={handleClear} style={{ ...S.btn, padding:"6px 12px", fontSize:fz(11), background:C.card, border:`1px solid ${C.border}`, color:"#94a3b8" }}>
               {T.convClearBtn || "🗑 Clear"}
             </button>
           </div>
-          <p style={{ color:C.amber, fontSize:12, lineHeight:1.7, margin:"0 0 12px" }}>
+          <p style={{ color:C.amber, fontSize:fz(12), lineHeight:1.7, margin:"0 0 12px" }}>
             🐢 {T.pronSlowTip || "Can't catch it? Slow the video down (for example YouTube speed 0.5× or 0.75×) and listen again. Your teacher is the video — GAKU just writes it down."}
           </p>
           {conversationCheck.eligible && <LevelUpOffer T={T} currentLevel={form.jlpt} onConfirm={onLevelUp} onDismiss={conversationCheck.dismiss} />}
@@ -16844,7 +16845,7 @@ function ConversationPredictor({ form, onLevelUp }) {
                 <LiveHeardLineCard line={line} T={T} lang={form?.preferredLang || "English"} jlpt={form?.jlpt} />
                 <ComprehensionCheck itemId={`heard-${line.id}`} checkins={conversationCheck.checkins} onRecord={(id, u) => { conversationCheck.record(id, u); }} T={T} />
                 {conversationCheck.checkins[`heard-${line.id}`] === false && (
-                  <p style={{ color:C.amber, fontSize:12, lineHeight:1.7, margin:"8px 0 0" }}>🐢 {T.pronSlowNo || "No problem. Slow the video down and listen to that part again — GAKU will write it down once more."}</p>
+                  <p style={{ color:C.amber, fontSize:fz(12), lineHeight:1.7, margin:"8px 0 0" }}>🐢 {T.pronSlowNo || "No problem. Slow the video down and listen to that part again — GAKU will write it down once more."}</p>
                 )}
               </div>
             ))}
@@ -16988,64 +16989,64 @@ function PronunciationTurnCard({ item, T, lang, onBreak }) {
   return (
     <div style={{ ...S.card, borderLeft:`3px solid ${C.teal}` }}>
       <div style={{ display:"flex", gap:6, marginBottom:12 }}>
-        <button onClick={()=>switchMode("read")} style={{ padding:"5px 12px", borderRadius:20, border:`1.5px solid ${mode==="read"?C.teal:C.border}`, background:mode==="read"?"rgba(6,182,212,0.12)":"transparent", color:mode==="read"?C.teal:"#64748b", fontSize:11, fontWeight:700, cursor:"pointer" }}>
+        <button onClick={()=>switchMode("read")} style={{ padding:"5px 12px", borderRadius:20, border:`1.5px solid ${mode==="read"?C.teal:C.border}`, background:mode==="read"?"rgba(6,182,212,0.12)":"transparent", color:mode==="read"?C.teal:"#64748b", fontSize:fz(11), fontWeight:700, cursor:"pointer" }}>
           {T?.pronReadMode || "👀 Read"}
         </button>
-        <button onClick={()=>switchMode("listen")} style={{ padding:"5px 12px", borderRadius:20, border:`1.5px solid ${mode==="listen"?C.teal:C.border}`, background:mode==="listen"?"rgba(6,182,212,0.12)":"transparent", color:mode==="listen"?C.teal:"#64748b", fontSize:11, fontWeight:700, cursor:"pointer" }}>
+        <button onClick={()=>switchMode("listen")} style={{ padding:"5px 12px", borderRadius:20, border:`1.5px solid ${mode==="listen"?C.teal:C.border}`, background:mode==="listen"?"rgba(6,182,212,0.12)":"transparent", color:mode==="listen"?C.teal:"#64748b", fontSize:fz(11), fontWeight:700, cursor:"pointer" }}>
           {T?.pronListenMode || "👂 Listen"}
         </button>
       </div>
 
       {(mode === "read" || textRevealed) ? (
-        <p style={{ color:"#f1f5f9", fontSize:15, lineHeight:1.8, margin:"0 0 10px" }}>{item.text}</p>
+        <p style={{ color:"#f1f5f9", fontSize:fz(15), lineHeight:1.8, margin:"0 0 10px" }}>{item.text}</p>
       ) : (
-        <p style={{ color:"#64748b", fontSize:12, fontStyle:"italic", margin:"0 0 10px" }}>{T?.pronListenFirst || "Tap Listen, then try repeating it back."}</p>
+        <p style={{ color:"#64748b", fontSize:fz(12), fontStyle:"italic", margin:"0 0 10px" }}>{T?.pronListenFirst || "Tap Listen, then try repeating it back."}</p>
       )}
 
       <div style={{ display:"flex", gap:8, marginBottom:10, flexWrap:"wrap" }}>
         <button data-guide="pron-listen" onClick={()=>speakJapanese(stripForSpeech(item.text), 1)}
-          style={{ display:"flex", alignItems:"center", gap:6, padding:"6px 12px", borderRadius:8, background:"rgba(6,182,212,0.12)", border:`1px solid rgba(6,182,212,0.3)`, color:C.teal, fontSize:12, fontWeight:700, cursor:"pointer" }}>
+          style={{ display:"flex", alignItems:"center", gap:6, padding:"6px 12px", borderRadius:8, background:"rgba(6,182,212,0.12)", border:`1px solid rgba(6,182,212,0.3)`, color:C.teal, fontSize:fz(12), fontWeight:700, cursor:"pointer" }}>
           🔊 {T?.listenAudio || "Listen"}
         </button>
         <SpeedButtons text={stripForSpeech(item.text)} T={T} />
         {mode === "listen" && (
           <button onClick={()=>setTextRevealed(r=>!r)}
-            style={{ padding:"6px 12px", borderRadius:8, background:C.card, border:`1px solid ${C.border}`, color:"#94a3b8", fontSize:12, cursor:"pointer" }}>
+            style={{ padding:"6px 12px", borderRadius:8, background:C.card, border:`1px solid ${C.border}`, color:"#94a3b8", fontSize:fz(12), cursor:"pointer" }}>
             {textRevealed ? (T?.pronHideTextBtn || "Hide text") : (T?.pronRevealText || "Show text")}
           </button>
         )}
         {showBreakBtn && (
           <button onClick={handleBreak} disabled={breaking}
-            style={{ padding:"6px 12px", borderRadius:8, background:breaking?"rgba(168,85,247,0.1)":"rgba(168,85,247,0.15)", border:`1px solid rgba(168,85,247,0.3)`, color:C.purpleLight, fontSize:12, fontWeight:700, cursor:"pointer" }}>
+            style={{ padding:"6px 12px", borderRadius:8, background:breaking?"rgba(168,85,247,0.1)":"rgba(168,85,247,0.15)", border:`1px solid rgba(168,85,247,0.3)`, color:C.purpleLight, fontSize:fz(12), fontWeight:700, cursor:"pointer" }}>
             {breaking ? `⏳ ${T?.pronBreaking || "Breaking down..."}` : (T?.pronBreakBtn || "🔍 Break into the phrase")}
           </button>
         )}
       </div>
-      {breakError && <p style={{ color:C.red, fontSize:11, marginTop:-4, marginBottom:8 }}>{breakError}</p>}
+      {breakError && <p style={{ color:C.red, fontSize:fz(11), marginTop:-4, marginBottom:8 }}>{breakError}</p>}
 
       {(mode === "read" || textRevealed) && <JLineTools text={item.text} lang={lang} T={T} />}
 
-      <p style={{ color:C.purpleLight, fontSize:12, fontWeight:700, margin:"10px 0 8px" }}>
+      <p style={{ color:C.purpleLight, fontSize:fz(12), fontWeight:700, margin:"10px 0 8px" }}>
         {T?.pronRecordPrompt || "Now say it out loud"}
       </p>
       <button data-guide="pron-record" onClick={toggleRecording}
-        style={{ display:"flex", alignItems:"center", gap:6, padding:"6px 12px", borderRadius:8, background:recording?"rgba(239,68,68,0.15)":"rgba(168,85,247,0.12)", border:`1px solid ${recording?"rgba(239,68,68,0.4)":"rgba(168,85,247,0.3)"}`, color:recording?"#f87171":C.purpleLight, fontSize:12, fontWeight:700, cursor:"pointer" }}>
+        style={{ display:"flex", alignItems:"center", gap:6, padding:"6px 12px", borderRadius:8, background:recording?"rgba(239,68,68,0.15)":"rgba(168,85,247,0.12)", border:`1px solid ${recording?"rgba(239,68,68,0.4)":"rgba(168,85,247,0.3)"}`, color:recording?"#f87171":C.purpleLight, fontSize:fz(12), fontWeight:700, cursor:"pointer" }}>
         {recording ? `⏺ ${T?.recordingInProgress || "Recording..."}` : `🎤 ${T?.recordVoice || "Record"}`}
       </button>
-      {!recogSupported && <p style={{ color:C.red, fontSize:11, marginTop:6 }}>Voice input isn't supported in this browser — try Chrome.</p>}
+      {!recogSupported && <p style={{ color:C.red, fontSize:fz(11), marginTop:6 }}>Voice input isn't supported in this browser — try Chrome.</p>}
 
       {result === "correct" && (
         <div style={{ background:"rgba(34,197,94,0.06)", borderRadius:8, padding:"10px 12px", marginTop:10 }}>
-          <p style={{ color:C.green, fontSize:13, fontWeight:700, margin:0 }}>✅ {T?.pronCorrect || "Correct! 🎉"}</p>
+          <p style={{ color:C.green, fontSize:fz(13), fontWeight:700, margin:0 }}>✅ {T?.pronCorrect || "Correct! 🎉"}</p>
         </div>
       )}
       {result === "incorrect" && (
         <div style={{ background:"rgba(239,68,68,0.06)", borderRadius:8, padding:"10px 12px", marginTop:10, border:"1px solid rgba(239,68,68,0.2)" }}>
-          <p style={{ color:C.amber, fontSize:11, fontWeight:700, margin:"0 0 3px" }}>{T?.pronYourAttempt || "You said:"}</p>
-          <p style={{ color:"#f87171", fontSize:13, margin:"0 0 8px" }}>⚠️ {transcript}</p>
-          <p style={{ color:C.amber, fontSize:11, fontWeight:700, margin:"0 0 3px" }}>{T?.pronTargetLabel || "Target:"}</p>
-          <p style={{ color:C.green, fontSize:13, margin:"0 0 8px" }}>✅ {item.text}</p>
-          <button onClick={toggleRecording} style={{ padding:"5px 12px", borderRadius:8, background:C.card, border:`1px solid ${C.border}`, color:"#94a3b8", fontSize:11, cursor:"pointer" }}>
+          <p style={{ color:C.amber, fontSize:fz(11), fontWeight:700, margin:"0 0 3px" }}>{T?.pronYourAttempt || "You said:"}</p>
+          <p style={{ color:"#f87171", fontSize:fz(13), margin:"0 0 8px" }}>⚠️ {transcript}</p>
+          <p style={{ color:C.amber, fontSize:fz(11), fontWeight:700, margin:"0 0 3px" }}>{T?.pronTargetLabel || "Target:"}</p>
+          <p style={{ color:C.green, fontSize:fz(13), margin:"0 0 8px" }}>✅ {item.text}</p>
+          <button onClick={toggleRecording} style={{ padding:"5px 12px", borderRadius:8, background:C.card, border:`1px solid ${C.border}`, color:"#94a3b8", fontSize:fz(11), cursor:"pointer" }}>
             {T?.pronTryAgain || "Try again"}
           </button>
         </div>
@@ -17090,23 +17091,23 @@ function AddPronunciationItem({ onAdd, T, jlpt }) {
 
   return (
     <div style={{ ...S.card, marginTop:4, border:`1px dashed ${C.border}` }}>
-      <p style={{ color:C.teal, fontSize:12, fontWeight:700, marginBottom:8 }}>➕ {T?.pronAddNewLabel || "単語、文章を追加 / Add a word or sentence"}</p>
+      <p style={{ color:C.teal, fontSize:fz(12), fontWeight:700, marginBottom:8 }}>➕ {T?.pronAddNewLabel || "単語、文章を追加 / Add a word or sentence"}</p>
       <textarea value={text} onChange={e=>setText(e.target.value)} rows={2}
         placeholder={T?.pronAddNewPlaceholder || "Type or paste a Japanese word or sentence..."}
         style={{ ...S.input, resize:"vertical", fontFamily:"inherit", marginBottom:10 }} />
       <div style={{ display:"flex", gap:8, flexWrap:"wrap" }}>
         <button onClick={handleAddPlain} disabled={!text.trim() || breaking}
-          style={{ ...S.btn, background:(!text.trim()||breaking)?"rgba(6,182,212,0.15)":`linear-gradient(135deg,${C.teal},#0891b2)`, color:(!text.trim()||breaking)?"#64748b":"#fff", padding:"7px 14px", fontSize:12 }}>
+          style={{ ...S.btn, background:(!text.trim()||breaking)?"rgba(6,182,212,0.15)":`linear-gradient(135deg,${C.teal},#0891b2)`, color:(!text.trim()||breaking)?"#64748b":"#fff", padding:"7px 14px", fontSize:fz(12) }}>
           ➕ {T?.pronAddBtn || "Add word/sentence"}
         </button>
         {showBreakBtn && (
           <button onClick={breakIntoPhrase} disabled={breaking}
-            style={{ ...S.btn, background:breaking?"rgba(168,85,247,0.1)":"rgba(168,85,247,0.15)", border:`1px solid rgba(168,85,247,0.3)`, color:C.purpleLight, padding:"7px 14px", fontSize:12 }}>
+            style={{ ...S.btn, background:breaking?"rgba(168,85,247,0.1)":"rgba(168,85,247,0.15)", border:`1px solid rgba(168,85,247,0.3)`, color:C.purpleLight, padding:"7px 14px", fontSize:fz(12) }}>
             {breaking ? `⏳ ${T?.pronBreaking || "Breaking down..."}` : (T?.pronBreakBtn || "🔍 Break into the phrase")}
           </button>
         )}
       </div>
-      {error && <p style={{ color:C.red, fontSize:11, marginTop:8 }}>{error}</p>}
+      {error && <p style={{ color:C.red, fontSize:fz(11), marginTop:8 }}>{error}</p>}
     </div>
   );
 }
@@ -17164,16 +17165,16 @@ function LessonBridgeCard({ T, issue }) {
   if (!ok) return null;
   return (
     <div style={{ background:"rgba(34,197,94,0.07)", border:"1px solid rgba(34,197,94,0.3)", borderRadius:10, padding:"10px 12px", marginTop:10 }}>
-      {issue && <p style={{ color:"#e2e8f0", fontSize:12, fontWeight:700, lineHeight:1.6, margin:"0 0 4px" }}>🎯 {issue}</p>}
-      <p style={{ color:"#bbf7d0", fontSize:12, lineHeight:1.6, margin:"0 0 8px" }}>{T.lessonBridgeAsk || "Want to practice this with a real teacher? Try a free trial lesson."}</p>
+      {issue && <p style={{ color:"#e2e8f0", fontSize:fz(12), fontWeight:700, lineHeight:1.6, margin:"0 0 4px" }}>🎯 {issue}</p>}
+      <p style={{ color:"#bbf7d0", fontSize:fz(12), lineHeight:1.6, margin:"0 0 8px" }}>{T.lessonBridgeAsk || "Want to practice this with a real teacher? Try a free trial lesson."}</p>
       <div style={{ display:"flex", alignItems:"center", gap:12, flexWrap:"wrap" }}>
         <a href="https://app.seitojapanese.online/trial-lesson.html" target="_blank" rel="noopener noreferrer"
           onClick={() => logFunnel(ACTIVE_USER_ID, "lesson_bridge_clicked")}
-          style={{ display:"inline-block", padding:"8px 16px", background:"linear-gradient(135deg,#22c55e,#16a34a)", color:"#fff", borderRadius:8, fontSize:12, fontWeight:800, textDecoration:"none" }}>
+          style={{ display:"inline-block", padding:"8px 16px", background:"linear-gradient(135deg,#22c55e,#16a34a)", color:"#fff", borderRadius:8, fontSize:fz(12), fontWeight:800, textDecoration:"none" }}>
           {T.lessonBridgeBtn || "Book a free trial lesson →"}
         </a>
         <button type="button" onClick={() => { try { localStorage.setItem(scopedKey(LESSON_BRIDGE_SNOOZE_KEY), String(Date.now())); } catch {} setHidden(true); }}
-          style={{ background:"none", border:"none", color:"#94a3b8", fontSize:11, cursor:"pointer", padding:0 }}>
+          style={{ background:"none", border:"none", color:"#94a3b8", fontSize:fz(11), cursor:"pointer", padding:0 }}>
           {T.skipForNow || "Skip for now"}
         </button>
       </div>
@@ -17228,31 +17229,31 @@ function PronunciationSayIt({ target, T }) {
 
   return (
     <div style={{ marginTop:12, paddingTop:12, borderTop:`1px solid ${C.border}` }}>
-      <p style={{ color:C.purpleLight, fontSize:12, fontWeight:700, margin:"0 0 4px" }}>🎤 {T.pronRecordPrompt || "Now say it out loud"}</p>
-      <p style={{ color:"#64748b", fontSize:11, lineHeight:1.6, margin:"0 0 8px" }}>{T.pronPauseVideoHint || "Pause the video first so only your voice is picked up."}</p>
-      <button data-guide="pron-record" onClick={toggle} style={{ display:"flex", alignItems:"center", gap:6, padding:"8px 14px", borderRadius:8, background:recording?"rgba(239,68,68,0.15)":"rgba(168,85,247,0.12)", border:`1px solid ${recording?"rgba(239,68,68,0.4)":"rgba(168,85,247,0.3)"}`, color:recording?"#f87171":C.purpleLight, fontSize:13, fontWeight:700, cursor:"pointer" }}>
+      <p style={{ color:C.purpleLight, fontSize:fz(12), fontWeight:700, margin:"0 0 4px" }}>🎤 {T.pronRecordPrompt || "Now say it out loud"}</p>
+      <p style={{ color:"#64748b", fontSize:fz(11), lineHeight:1.6, margin:"0 0 8px" }}>{T.pronPauseVideoHint || "Pause the video first so only your voice is picked up."}</p>
+      <button data-guide="pron-record" onClick={toggle} style={{ display:"flex", alignItems:"center", gap:6, padding:"8px 14px", borderRadius:8, background:recording?"rgba(239,68,68,0.15)":"rgba(168,85,247,0.12)", border:`1px solid ${recording?"rgba(239,68,68,0.4)":"rgba(168,85,247,0.3)"}`, color:recording?"#f87171":C.purpleLight, fontSize:fz(13), fontWeight:700, cursor:"pointer" }}>
         {recording ? `⏺ ${T.recordingInProgress || "Recording..."}` : `🎤 ${T.recordVoice || "Record"}`}
       </button>
-      {recording && transcript && <p style={{ color:"#94a3b8", fontSize:12, fontStyle:"italic", margin:"8px 0 0" }}>{transcript}</p>}
-      {!supported && <p style={{ color:C.red, fontSize:11, marginTop:6 }}>Voice input isn't supported in this browser — try Chrome.</p>}
+      {recording && transcript && <p style={{ color:"#94a3b8", fontSize:fz(12), fontStyle:"italic", margin:"8px 0 0" }}>{transcript}</p>}
+      {!supported && <p style={{ color:C.red, fontSize:fz(11), marginTop:6 }}>Voice input isn't supported in this browser — try Chrome.</p>}
 
       {match && !recording && (
         <div style={{ background:good?"rgba(34,197,94,0.06)":"rgba(239,68,68,0.06)", border:`1px solid ${good?"rgba(34,197,94,0.2)":"rgba(239,68,68,0.2)"}`, borderRadius:8, padding:"10px 12px", marginTop:10 }}>
           <div style={{ display:"flex", alignItems:"baseline", justifyContent:"space-between", gap:8, marginBottom:8 }}>
-            <p style={{ color:scoreColor, fontSize:20, fontWeight:800, margin:0 }}>{good ? "✅ " : ""}{match.score}%</p>
-            {best !== null && <p style={{ color:"#94a3b8", fontSize:11, margin:0 }}>{T.pronBestScore || "Best score"}: {best}%</p>}
+            <p style={{ color:scoreColor, fontSize:fz(20), fontWeight:800, margin:0 }}>{good ? "✅ " : ""}{match.score}%</p>
+            {best !== null && <p style={{ color:"#94a3b8", fontSize:fz(11), margin:0 }}>{T.pronBestScore || "Best score"}: {best}%</p>}
           </div>
-          {good && <p style={{ color:C.green, fontSize:13, fontWeight:700, margin:"0 0 8px" }}>{T.pronCorrect || "Correct! 🎉"}</p>}
-          <p style={{ color:C.amber, fontSize:11, fontWeight:700, margin:"0 0 3px" }}>{T.pronTargetLabel || "Target:"}</p>
-          <p style={{ fontSize:15, lineHeight:1.9, margin:"0 0 8px", letterSpacing:1 }}>
+          {good && <p style={{ color:C.green, fontSize:fz(13), fontWeight:700, margin:"0 0 8px" }}>{T.pronCorrect || "Correct! 🎉"}</p>}
+          <p style={{ color:C.amber, fontSize:fz(11), fontWeight:700, margin:"0 0 3px" }}>{T.pronTargetLabel || "Target:"}</p>
+          <p style={{ fontSize:fz(15), lineHeight:1.9, margin:"0 0 8px", letterSpacing:1 }}>
             {match.chars.map((ch, i) => (
               <span key={i} style={{ color:match.hit[i] ? C.green : "#f87171", textDecoration:match.hit[i] ? "none" : "underline" }}>{ch}</span>
             ))}
           </p>
-          <p style={{ color:C.amber, fontSize:11, fontWeight:700, margin:"0 0 3px" }}>{T.pronYourAttempt || "You said:"}</p>
-          <p style={{ color:"#e2e8f0", fontSize:13, margin:"0 0 8px" }}>{transcript}</p>
-          {!good && <p style={{ color:C.amber, fontSize:12, lineHeight:1.7, margin:"0 0 8px" }}>🐢 {T.pronSayAgainHint || "Slow the video down, listen to the model once more, then try saying it again."}</p>}
-          <button onClick={toggle} style={{ padding:"5px 12px", borderRadius:8, background:C.card, border:`1px solid ${C.border}`, color:"#94a3b8", fontSize:11, cursor:"pointer" }}>
+          <p style={{ color:C.amber, fontSize:fz(11), fontWeight:700, margin:"0 0 3px" }}>{T.pronYourAttempt || "You said:"}</p>
+          <p style={{ color:"#e2e8f0", fontSize:fz(13), margin:"0 0 8px" }}>{transcript}</p>
+          {!good && <p style={{ color:C.amber, fontSize:fz(12), lineHeight:1.7, margin:"0 0 8px" }}>🐢 {T.pronSayAgainHint || "Slow the video down, listen to the model once more, then try saying it again."}</p>}
+          <button onClick={toggle} style={{ padding:"5px 12px", borderRadius:8, background:C.card, border:`1px solid ${C.border}`, color:"#94a3b8", fontSize:fz(11), cursor:"pointer" }}>
             {T.pronTryAgain || "Try again"}
           </button>
         </div>
@@ -17267,14 +17268,14 @@ function PronunciationHeardLineCard({ line, T, lang, checkins, onRecord }) {
   return (
     <div style={{ ...S.card, borderLeft:`3px solid ${C.teal}` }}>
       <div style={{ display:"flex", alignItems:"flex-start", gap:8, marginBottom:10 }}>
-        <span style={{ color:C.teal, fontSize:13, flexShrink:0 }}>🎧</span>
-        <p style={{ color:"#f1f5f9", fontSize:14, lineHeight:1.8, margin:0, flex:1 }}>{line.text}</p>
+        <span style={{ color:C.teal, fontSize:fz(13), flexShrink:0 }}>🎧</span>
+        <p style={{ color:"#f1f5f9", fontSize:fz(14), lineHeight:1.8, margin:0, flex:1 }}>{line.text}</p>
       </div>
       <JLineTools text={line.text} lang={lang} T={T} />
       <PronunciationSayIt target={line.text} T={T} />
       <ComprehensionCheck itemId={itemId} checkins={checkins} onRecord={onRecord} T={T} />
       {notUnderstood && (
-        <p style={{ color:C.amber, fontSize:12, lineHeight:1.7, margin:"8px 0 0" }}>🐢 {T.pronSlowNo || "No problem. Slow the video down and listen to that part again — GAKU will write it down once more."}</p>
+        <p style={{ color:C.amber, fontSize:fz(12), lineHeight:1.7, margin:"8px 0 0" }}>🐢 {T.pronSlowNo || "No problem. Slow the video down and listen to that part again — GAKU will write it down once more."}</p>
       )}
     </div>
   );
@@ -17440,21 +17441,21 @@ function CopyingDown({ T, injected, onStage }) {
   };
   const goPrev = () => { if (idx > 0) setIdx(idx - 1); };
 
-  const btn = (extra) => ({ ...S.btn, padding:"10px 14px", fontSize:12, ...extra });
+  const btn = (extra) => ({ ...S.btn, padding:"10px 14px", fontSize:fz(12), ...extra });
   const ghost = { background:"transparent", border:`1px solid ${C.border}`, color:"#94a3b8" };
   const fill = (s, vars) => Object.keys(vars).reduce((acc, k) => acc.split("{" + k + "}").join(String(vars[k])), s);
 
   if (!session) {
     return (
       <div>
-        <p style={{ color:"#39ff14", fontSize:12, lineHeight:1.7, marginBottom:12 }}>
+        <p style={{ color:"#39ff14", fontSize:fz(12), lineHeight:1.7, marginBottom:12 }}>
           {T.copyDesc || "Paste a Japanese sentence and copy it one character at a time. Write each stroke with your finger or mouse — GAKU checks the stroke order and shape and shows you the correct way to write it."}
         </p>
         <label style={S.label}>{(T.copyLabel || "Text to copy").toUpperCase()}</label>
         <textarea data-guide="write-text" value={raw} onChange={e => { setRaw(e.target.value.slice(0, 600)); setError(""); }}
           placeholder={T.copyPlaceholder || "Paste Japanese text here (up to 30 characters are practiced at a time)…"} rows={4}
           style={{ ...S.input, resize:"vertical", lineHeight:1.7, marginBottom:12, fontFamily:"inherit" }} />
-        {error && <p style={{ color:"#f87171", fontSize:12, margin:"0 0 10px" }}>{error}</p>}
+        {error && <p style={{ color:"#f87171", fontSize:fz(12), margin:"0 0 10px" }}>{error}</p>}
         <button data-guide="write-start" onClick={begin} style={{ ...S.btn, width:"100%", background:`linear-gradient(135deg,${C.teal},#0891b2)`, color:"#fff" }}>
           ✍️ {T.copyStartBtn || "Start writing"}
         </button>
@@ -17468,15 +17469,15 @@ function CopyingDown({ T, injected, onStage }) {
     const weak = session.chars.map((ch, i) => ({ ch, i })).filter(x => typeof results[x.i] === "number" && results[x.i] > 0);
     return (
       <div style={{ textAlign:"center" }}>
-        <p style={{ color:"#f1f5f9", fontSize:18, fontWeight:800, margin:"4px 0 8px" }}>{T.copySummaryTitle || "🎉 Nice work!"}</p>
-        <p style={{ color:C.green, fontSize:14, fontWeight:700, margin:"0 0 14px" }}>{fill(T.copySummaryScore || "{ok} of {total} characters with no mistakes", { ok: okCount, total })}</p>
+        <p style={{ color:"#f1f5f9", fontSize:fz(18), fontWeight:800, margin:"4px 0 8px" }}>{T.copySummaryTitle || "🎉 Nice work!"}</p>
+        <p style={{ color:C.green, fontSize:fz(14), fontWeight:700, margin:"0 0 14px" }}>{fill(T.copySummaryScore || "{ok} of {total} characters with no mistakes", { ok: okCount, total })}</p>
         {weak.length > 0 && (
           <div style={{ marginBottom:14 }}>
-            <p style={{ color:"#64748b", fontSize:11, fontWeight:700, letterSpacing:1, margin:"0 0 8px" }}>{(T.copyWeak || "Practice these again").toUpperCase()}</p>
+            <p style={{ color:"#64748b", fontSize:fz(11), fontWeight:700, letterSpacing:1, margin:"0 0 8px" }}>{(T.copyWeak || "Practice these again").toUpperCase()}</p>
             <div style={{ display:"flex", gap:8, justifyContent:"center", flexWrap:"wrap" }}>
               {weak.map(x => (
                 <button key={x.i} onClick={() => { setIdx(x.i); setPhase("write"); }}
-                  style={{ width:48, height:48, fontSize:24, borderRadius:10, border:"1.5px solid rgba(251,191,36,0.6)", background:"rgba(251,191,36,0.1)", color:"#fbbf24", cursor:"pointer" }}>{x.ch}</button>
+                  style={{ width:48, height:48, fontSize:fz(24), borderRadius:10, border:"1.5px solid rgba(251,191,36,0.6)", background:"rgba(251,191,36,0.1)", color:"#fbbf24", cursor:"pointer" }}>{x.ch}</button>
               ))}
             </div>
           </div>
@@ -17496,19 +17497,19 @@ function CopyingDown({ T, injected, onStage }) {
     <div>
       <div style={{ background:"#0f172a", border:`1px solid ${C.border}`, borderRadius:12, padding:"10px 12px", marginBottom:10, lineHeight:2, wordBreak:"break-all" }}>
         {session.tokens.map((t, i) => (
-          <span key={i} style={t.w === null ? { color:"#64748b", fontSize:16 } :
-            { fontSize:20, padding:"0 1px", borderRadius:4,
+          <span key={i} style={t.w === null ? { color:"#64748b", fontSize:fz(16) } :
+            { fontSize:fz(20), padding:"0 1px", borderRadius:4,
               color: t.w === idx ? "#0f172a" : (results[t.w] === 0 ? C.green : (typeof results[t.w] === "number" ? "#fbbf24" : "#cbd5e1")),
               background: t.w === idx ? C.teal : "transparent", fontWeight: t.w === idx ? 800 : 400 }}>{t.ch}</span>
         ))}
       </div>
-      {session.truncated && <p style={{ color:"#94a3b8", fontSize:11, margin:"0 0 8px" }}>{fill(T.copyTooLong || "Only the first {n} characters are practiced at a time.", { n: COPY_MAX_CHARS })}</p>}
-      <p style={{ color:"#94a3b8", fontSize:12, fontWeight:700, margin:"0 0 8px", textAlign:"center" }}>{fill(T.copyCharOf || "Character {current} of {total}", { current: idx + 1, total: session.chars.length })}</p>
+      {session.truncated && <p style={{ color:"#94a3b8", fontSize:fz(11), margin:"0 0 8px" }}>{fill(T.copyTooLong || "Only the first {n} characters are practiced at a time.", { n: COPY_MAX_CHARS })}</p>}
+      <p style={{ color:"#94a3b8", fontSize:fz(12), fontWeight:700, margin:"0 0 8px", textAlign:"center" }}>{fill(T.copyCharOf || "Character {current} of {total}", { current: idx + 1, total: session.chars.length })}</p>
 
       <div style={{ display:"flex", justifyContent:"center", marginBottom:10 }}>
         <div style={{ position:"relative", width:size, height:size, borderRadius:12, border:`1.5px solid ${C.border}`, background:"#0f172a", backgroundImage:`${gridLine("to right")}, ${gridLine("to bottom")}`, touchAction:"none", userSelect:"none", WebkitUserSelect:"none" }}>
           <div ref={boxRef} style={{ width:size, height:size, display: status === "nodata" ? "none" : "block", touchAction:"none" }} />
-          {status === "loading" && <p style={{ position:"absolute", inset:0, display:"flex", alignItems:"center", justifyContent:"center", color:"#64748b", fontSize:12, margin:0, pointerEvents:"none" }}>{T.copyLoading || "Loading…"}</p>}
+          {status === "loading" && <p style={{ position:"absolute", inset:0, display:"flex", alignItems:"center", justifyContent:"center", color:"#64748b", fontSize:fz(12), margin:0, pointerEvents:"none" }}>{T.copyLoading || "Loading…"}</p>}
           {status === "nodata" && <div style={{ position:"absolute", inset:0, display:"flex", alignItems:"center", justifyContent:"center", fontSize:Math.round(size * 0.6), color:"#f1f5f9", fontFamily:"'Noto Serif JP','Noto Sans JP',serif" }}>{cur}</div>}
         </div>
       </div>
@@ -17516,24 +17517,24 @@ function CopyingDown({ T, injected, onStage }) {
       {kanjiInfo && kanjiInfo.ch === cur && (kanjiInfo.on.length > 0 || kanjiInfo.kun.length > 0) && (
         <div style={{ background:"rgba(6,182,212,0.07)", border:`1px solid ${C.border}`, borderRadius:12, padding:"10px 14px", marginBottom:10, textAlign:"left" }}>
           {kanjiInfo.on.length > 0 && (
-            <p style={{ margin:"0 0 4px", fontSize:13, lineHeight:1.7, color:"#e2e8f0" }}>
+            <p style={{ margin:"0 0 4px", fontSize:fz(13), lineHeight:1.7, color:"#e2e8f0" }}>
               <span style={{ color:C.teal, fontWeight:800 }}>音読み (On)</span>　{kanjiInfo.on.join("、")}
             </p>
           )}
           {kanjiInfo.kun.length > 0 && (
-            <p style={{ margin:0, fontSize:13, lineHeight:1.7, color:"#e2e8f0" }}>
+            <p style={{ margin:0, fontSize:fz(13), lineHeight:1.7, color:"#e2e8f0" }}>
               <span style={{ color:C.amber, fontWeight:800 }}>訓読み (Kun)</span>　{kanjiInfo.kun.join("、")}
             </p>
           )}
-          {kanjiInfo.meanings.length > 0 && <p style={{ margin:"4px 0 0", fontSize:11, color:"#64748b" }}>{kanjiInfo.meanings.join(", ")}</p>}
+          {kanjiInfo.meanings.length > 0 && <p style={{ margin:"4px 0 0", fontSize:fz(11), color:"#64748b" }}>{kanjiInfo.meanings.join(", ")}</p>}
         </div>
       )}
 
       <div style={{ minHeight:44, textAlign:"center", marginBottom:10 }}>
-        {status === "nodata" && <p style={{ color:"#fbbf24", fontSize:12, lineHeight:1.6, margin:0 }}>{T.copyNoData || "No stroke data for this character. Look at it carefully, copy it on paper, then tap Next."}</p>}
-        {status === "ready" && doneMistakes === 0 && <p style={{ color:C.green, fontSize:13, fontWeight:700, margin:0 }}>{T.copyPerfect || "✅ Perfect! Correct stroke order and shape."}</p>}
-        {status === "ready" && doneMistakes !== null && doneMistakes > 0 && <p style={{ color:"#fbbf24", fontSize:13, lineHeight:1.6, margin:0 }}>{fill(T.copyResultN || "Finished with {n} mistake(s). Try again for a perfect score!", { n: doneMistakes })}</p>}
-        {status === "ready" && doneMistakes === null && mistakeStroke && <p style={{ color:"#f87171", fontSize:12, lineHeight:1.6, margin:0 }}>{fill(T.copyMistake || "Stroke {n} wasn't right. Check the order and shape — tap “Watch stroke order” if you need help.", { n: mistakeStroke })}</p>}
+        {status === "nodata" && <p style={{ color:"#fbbf24", fontSize:fz(12), lineHeight:1.6, margin:0 }}>{T.copyNoData || "No stroke data for this character. Look at it carefully, copy it on paper, then tap Next."}</p>}
+        {status === "ready" && doneMistakes === 0 && <p style={{ color:C.green, fontSize:fz(13), fontWeight:700, margin:0 }}>{T.copyPerfect || "✅ Perfect! Correct stroke order and shape."}</p>}
+        {status === "ready" && doneMistakes !== null && doneMistakes > 0 && <p style={{ color:"#fbbf24", fontSize:fz(13), lineHeight:1.6, margin:0 }}>{fill(T.copyResultN || "Finished with {n} mistake(s). Try again for a perfect score!", { n: doneMistakes })}</p>}
+        {status === "ready" && doneMistakes === null && mistakeStroke && <p style={{ color:"#f87171", fontSize:fz(12), lineHeight:1.6, margin:0 }}>{fill(T.copyMistake || "Stroke {n} wasn't right. Check the order and shape — tap “Watch stroke order” if you need help.", { n: mistakeStroke })}</p>}
       </div>
 
       {status !== "nodata" && (
@@ -17548,7 +17549,7 @@ function CopyingDown({ T, injected, onStage }) {
         <button onClick={goNext} style={btn({ background:`linear-gradient(135deg,${C.teal},#0891b2)`, color:"#fff" })}>{isLast ? (T.copyFinish || "Finish") : (T.copyNext || "Next") + " ▶"}</button>
         <button onClick={reset} style={btn(ghost)}>{T.copyNewText || "New text"}</button>
       </div>
-      <p style={{ color:"#475569", fontSize:10, textAlign:"center", margin:"14px 0 0" }}>Stroke data: animCJK / Make Me a Hanzi (Arphic Public License, LGPL)</p>
+      <p style={{ color:"#475569", fontSize:fz(10), textAlign:"center", margin:"14px 0 0" }}>Stroke data: animCJK / Make Me a Hanzi (Arphic Public License, LGPL)</p>
     </div>
   );
 }
@@ -17592,10 +17593,10 @@ function WritingVocabPicker({ T, onUse, mode }) {
     if (ok) { setCopied(true); setTimeout(() => setCopied(false), 1800); }
   };
   const useWords = () => { if (chosen.length) onUse(chosen.map(c => c.word)); };
-  const small = { padding:"6px 10px", borderRadius:8, fontSize:11, fontWeight:700, cursor:"pointer", background:"transparent", border:`1px solid ${C.border}`, color:"#94a3b8" };
+  const small = { padding:"6px 10px", borderRadius:8, fontSize:fz(11), fontWeight:700, cursor:"pointer", background:"transparent", border:`1px solid ${C.border}`, color:"#94a3b8" };
   return (
     <div style={{ marginBottom:14, border:`1px solid ${C.border}`, borderRadius:12, background:"rgba(6,182,212,0.04)" }}>
-      <button data-guide="write-vocab-toggle" onClick={() => setOpen(o => !o)} style={{ width:"100%", display:"flex", justifyContent:"space-between", alignItems:"center", padding:"11px 14px", background:"none", border:"none", color:C.teal, fontSize:13, fontWeight:700, cursor:"pointer", textAlign:"left" }}>
+      <button data-guide="write-vocab-toggle" onClick={() => setOpen(o => !o)} style={{ width:"100%", display:"flex", justifyContent:"space-between", alignItems:"center", padding:"11px 14px", background:"none", border:"none", color:C.teal, fontSize:fz(13), fontWeight:700, cursor:"pointer", textAlign:"left" }}>
         <span>📚 {T.writeVocabTitle || "Choose words from my Vocabulary"}</span><span>{open ? "▲" : "▼"}</span>
       </button>
       {open && (
@@ -17605,13 +17606,13 @@ function WritingVocabPicker({ T, onUse, mode }) {
             {folderNames.map(n => <option key={n} value={n}>{(n === "Your Vocabulary" ? (T.yourVocabSaved || "Your Vocabulary") : n)} ({data.cards.filter(c => c.folder === n).length})</option>)}
           </select>
           {cards.length === 0 ? (
-            <p style={{ color:"#64748b", fontSize:12, margin:"4px 0 0" }}>{T.writeVocabEmpty || "No words in this folder yet. Save words to it from the Vocabulary tab first."}</p>
+            <p style={{ color:"#64748b", fontSize:fz(12), margin:"4px 0 0" }}>{T.writeVocabEmpty || "No words in this folder yet. Save words to it from the Vocabulary tab first."}</p>
           ) : (<>
             <div style={{ display:"flex", gap:8, alignItems:"center", marginBottom:8, flexWrap:"wrap" }}>
               <button onClick={() => { const all = {}; cards.forEach((c, i) => { all[keyOf(c, i)] = true; }); setPicked(all); }} style={small}>{T.writeVocabAll || "Select all"}</button>
               <button onClick={() => setPicked({})} style={small}>{T.writeVocabClear || "Clear"}</button>
               <button onClick={copyWords} style={{ ...small, color:C.teal, borderColor:"rgba(6,182,212,0.4)" }}>{copied ? (T.writeVocabCopied || "✓ Copied!") : "📋 " + (T.writeVocabCopy || "Copy")}</button>
-              <span style={{ color:"#94a3b8", fontSize:11 }}>{fill(T.writeVocabCount || "{n} selected", { n: chosen.length })}</span>
+              <span style={{ color:"#94a3b8", fontSize:fz(11) }}>{fill(T.writeVocabCount || "{n} selected", { n: chosen.length })}</span>
             </div>
             <div data-guide="write-vocab-words" style={{ maxHeight:200, overflowY:"auto", display:"flex", flexDirection:"column", gap:6, marginBottom:10 }}>
               {cards.map((c, i) => {
@@ -17620,11 +17621,11 @@ function WritingVocabPicker({ T, onUse, mode }) {
                   <div key={k} onClick={() => setPicked(p => ({ ...p, [k]: !p[k] }))}
                     style={{ display:"flex", alignItems:"center", gap:10, padding:"8px 10px", borderRadius:10, textAlign:"left", cursor:"pointer",
                       border:`1.5px solid ${on ? C.teal : C.border}`, background:on ? "rgba(6,182,212,0.12)" : C.card, color:"#f1f5f9" }}>
-                    <span style={{ color:on ? C.teal : "#475569", fontSize:15 }}>{on ? "☑" : "☐"}</span>
+                    <span style={{ color:on ? C.teal : "#475569", fontSize:fz(15) }}>{on ? "☑" : "☐"}</span>
                     {/* Words are plain selectable text: long-press / drag to copy a single word */}
-                    <span onClick={e => { if (String(window.getSelection && window.getSelection()).length) e.stopPropagation(); }} style={{ fontSize:15, fontWeight:700, userSelect:"text", WebkitUserSelect:"text", cursor:"text" }}>{c.word}</span>
-                    {c.reading && c.reading !== c.word && <span style={{ color:"#94a3b8", fontSize:12, userSelect:"text", WebkitUserSelect:"text" }}>{c.reading}</span>}
-                    {c.meaning && <span style={{ color:"#64748b", fontSize:11, marginLeft:"auto", maxWidth:"40%", overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>{c.meaning}</span>}
+                    <span onClick={e => { if (String(window.getSelection && window.getSelection()).length) e.stopPropagation(); }} style={{ fontSize:fz(15), fontWeight:700, userSelect:"text", WebkitUserSelect:"text", cursor:"text" }}>{c.word}</span>
+                    {c.reading && c.reading !== c.word && <span style={{ color:"#94a3b8", fontSize:fz(12), userSelect:"text", WebkitUserSelect:"text" }}>{c.reading}</span>}
+                    {c.meaning && <span style={{ color:"#64748b", fontSize:fz(11), marginLeft:"auto", maxWidth:"40%", overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>{c.meaning}</span>}
                   </div>
                 );
               })}
@@ -17735,7 +17736,7 @@ Respond ONLY with valid JSON, no markdown, no backticks:
 
   const modeBtn = (id, label, disabled) => (
     <button key={id} data-guide={(mode===id?"write-mode-active-":"write-mode-")+id} disabled={disabled} onClick={() => !disabled && setMode(id)}
-      style={{ flex:1, padding:"10px 8px", borderRadius:10, fontSize:12, fontWeight:700, cursor:disabled?"not-allowed":"pointer",
+      style={{ flex:1, padding:"10px 8px", borderRadius:10, fontSize:fz(12), fontWeight:700, cursor:disabled?"not-allowed":"pointer",
         border:`1.5px solid ${mode===id?C.teal:C.border}`, background:mode===id?"rgba(6,182,212,0.12)":C.card,
         color:disabled?"#475569":(mode===id?C.teal:"#94a3b8"), opacity:disabled?0.7:1 }}>
       {label}{disabled ? ` (${T.writeSoon || "Coming soon"})` : ""}
@@ -17748,7 +17749,7 @@ Respond ONLY with valid JSON, no markdown, no backticks:
       <SectionHelp id={helpId} lang={lang} autoOpen={helpAuto}
         onAction={(helpId === "res_writing_copy_write" || helpId === "res_writing") ? (() => { try { window.dispatchEvent(new CustomEvent("gaku_open_mode_picker")); } catch {} }) : undefined} />
       <div style={{ ...S.card, marginBottom:16 }}>
-        <p style={{ color:C.teal, fontSize:12, fontWeight:700, letterSpacing:1, marginBottom:10 }}>✍️ {T.writeTitle || "Writing Practice"}</p>
+        <p style={{ color:C.teal, fontSize:fz(12), fontWeight:700, letterSpacing:1, marginBottom:10 }}>✍️ {T.writeTitle || "Writing Practice"}</p>
         <div style={{ display:"flex", gap:8, marginBottom:12 }}>
           {modeBtn("copy", "📝 " + (T.writeModeCopy || "Copying down"), false)}
           {modeBtn("question", "❓ " + (T.writeModeQuestion || "Questions"), false)}
@@ -17756,7 +17757,7 @@ Respond ONLY with valid JSON, no markdown, no backticks:
         <WritingVocabPicker T={T} mode={mode} onUse={useVocabWords} />
         {mode === "copy" && <CopyingDown T={T} injected={injected} onStage={setCopyStage} />}
         {mode === "question" && (<>
-        <p style={{ color:"#39ff14", fontSize:12, lineHeight:1.7, marginBottom:12 }}>
+        <p style={{ color:"#39ff14", fontSize:fz(12), lineHeight:1.7, marginBottom:12 }}>
           {T.writeQDesc || "Paste a writing question you found online (an essay prompt, a JLPT-style question, an email task…). Write your answer in Japanese and GAKU checks it against the question."}
         </p>
 
@@ -17770,7 +17771,7 @@ Respond ONLY with valid JSON, no markdown, no backticks:
           placeholder={T.writeAPlaceholder || "Type your answer in Japanese…"} rows={6}
           style={{ ...S.input, resize:"vertical", lineHeight:1.7, marginBottom:12, fontFamily:"inherit" }} />
 
-        {error && <p style={{ color:"#f87171", fontSize:12, margin:"0 0 10px" }}>{error}</p>}
+        {error && <p style={{ color:"#f87171", fontSize:fz(12), margin:"0 0 10px" }}>{error}</p>}
         <div style={{ display:"flex", gap:8 }}>
           <button data-guide="write-check" onClick={check} disabled={loading}
             style={{ ...S.btn, flex:1, background:`linear-gradient(135deg,${C.teal},#0891b2)`, color:"#fff", opacity:loading?0.7:1 }}>
@@ -17788,20 +17789,20 @@ Respond ONLY with valid JSON, no markdown, no backticks:
 
       {mode === "question" && result && (
         <div style={{ ...S.card, marginBottom:16, border:`1.5px solid ${result.fits ? "rgba(34,197,94,0.5)" : "rgba(251,191,36,0.5)"}` }}>
-          <p style={{ color:result.fits ? C.green : "#fbbf24", fontSize:14, fontWeight:800, margin:"0 0 10px" }}>
+          <p style={{ color:result.fits ? C.green : "#fbbf24", fontSize:fz(14), fontWeight:800, margin:"0 0 10px" }}>
             {result.fits ? (T.writeCorrect || "✅ Your answer fits the question!") : (T.writeNotQuite || "Not quite — your answer doesn't match the question yet.")}
           </p>
-          <p style={{ color:"#64748b", fontSize:11, fontWeight:700, letterSpacing:1, margin:"0 0 4px" }}>{(T.writeFeedbackLabel || "Feedback").toUpperCase()}</p>
-          <p style={{ color:"#e2e8f0", fontSize:13, lineHeight:1.8, margin:"0 0 14px", whiteSpace:"pre-wrap" }}>{result.feedback}</p>
+          <p style={{ color:"#64748b", fontSize:fz(11), fontWeight:700, letterSpacing:1, margin:"0 0 4px" }}>{(T.writeFeedbackLabel || "Feedback").toUpperCase()}</p>
+          <p style={{ color:"#e2e8f0", fontSize:fz(13), lineHeight:1.8, margin:"0 0 14px", whiteSpace:"pre-wrap" }}>{result.feedback}</p>
           {!result.fits && result.model && (
             <div style={{ background:"rgba(6,182,212,0.08)", border:`1px solid ${C.border}`, borderRadius:12, padding:"12px 14px" }}>
-              <p style={{ color:C.teal, fontSize:11, fontWeight:700, letterSpacing:1, margin:"0 0 6px" }}>{(T.writeModelLabel || "Model answer").toUpperCase()}</p>
-              <p style={{ color:"#f1f5f9", fontSize:15, lineHeight:1.9, margin:0, whiteSpace:"pre-wrap" }}>{result.model}</p>
+              <p style={{ color:C.teal, fontSize:fz(11), fontWeight:700, letterSpacing:1, margin:"0 0 6px" }}>{(T.writeModelLabel || "Model answer").toUpperCase()}</p>
+              <p style={{ color:"#f1f5f9", fontSize:fz(15), lineHeight:1.9, margin:0, whiteSpace:"pre-wrap" }}>{result.model}</p>
               <JLineTools text={result.model} lang={lang} T={T} />
             </div>
           )}
           <button onClick={() => setResult(null)}
-            style={{ ...S.btn, marginTop:12, background:"transparent", border:`1px solid ${C.border}`, color:"#94a3b8", fontSize:12, padding:"9px 14px" }}>
+            style={{ ...S.btn, marginTop:12, background:"transparent", border:`1px solid ${C.border}`, color:"#94a3b8", fontSize:fz(12), padding:"9px 14px" }}>
             {T.writeTryAgain || "Edit and try again"}
           </button>
         </div>
@@ -17903,17 +17904,17 @@ function PronunciationListenAlong({ form, onLevelUp }) {
   return (
     <div>
       <div style={{ ...S.card, marginBottom:16 }}>
-        <p style={{ color:C.teal, fontSize:12, fontWeight:700, letterSpacing:1, marginBottom:6 }}>🗣️ {T.pronTitle || "Pronunciation Practice"}</p>
-        <p style={{ color:"#39ff14", fontSize:12, lineHeight:1.7, marginBottom:10 }}>
+        <p style={{ color:C.teal, fontSize:fz(12), fontWeight:700, letterSpacing:1, marginBottom:6 }}>🗣️ {T.pronTitle || "Pronunciation Practice"}</p>
+        <p style={{ color:"#39ff14", fontSize:fz(12), lineHeight:1.7, marginBottom:10 }}>
           {T.pronListenDesc || "Play a YouTube or any video with the sound on near your mic. GAKU listens, writes down what it hears line by line, and helps you understand it with furigana, romaji and translation."}
         </p>
         <TabAudioListenBlock tab={tab} T={T} onBeforeStart={() => { if (listening) toggleListening(); }} />
-        <button data-guide="conv-listen" onClick={toggleListening} style={{ display:"flex", alignItems:"center", justifyContent:"center", gap:8, width:"100%", padding:"12px 12px", borderRadius:10, border:`1px solid ${listening?"rgba(239,68,68,0.4)":"rgba(6,182,212,0.35)"}`, background:listening?"rgba(239,68,68,0.12)":"rgba(6,182,212,0.1)", color:listening?"#f87171":C.teal, fontSize:14, fontWeight:700, cursor:"pointer" }}>
+        <button data-guide="conv-listen" onClick={toggleListening} style={{ display:"flex", alignItems:"center", justifyContent:"center", gap:8, width:"100%", padding:"12px 12px", borderRadius:10, border:`1px solid ${listening?"rgba(239,68,68,0.4)":"rgba(6,182,212,0.35)"}`, background:listening?"rgba(239,68,68,0.12)":"rgba(6,182,212,0.1)", color:listening?"#f87171":C.teal, fontSize:fz(14), fontWeight:700, cursor:"pointer" }}>
           {listening ? `⏺ ${T.convListenStop || "Stop listening"}` : `🎤 ${T.convListenStart || "Start listening"}`}
         </button>
-        {!recogSupported && <p style={{ color:C.red, fontSize:11, marginTop:8 }}>{T.convListenUnsupported || "Live listening isn't supported in this browser — try Chrome on desktop or Android."}</p>}
+        {!recogSupported && <p style={{ color:C.red, fontSize:fz(11), marginTop:8 }}>{T.convListenUnsupported || "Live listening isn't supported in this browser — try Chrome on desktop or Android."}</p>}
         {listening && (
-          <p style={{ color:"#94a3b8", fontSize:12, marginTop:10, fontStyle:"italic", minHeight:16 }}>
+          <p style={{ color:"#94a3b8", fontSize:fz(12), marginTop:10, fontStyle:"italic", minHeight:16 }}>
             {interimText || (T.convListening || "Listening…")}
           </p>
         )}
@@ -17922,14 +17923,14 @@ function PronunciationListenAlong({ form, onLevelUp }) {
       {heardLines.length > 0 && (
         <>
           <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:12 }}>
-            <p style={{ color:C.teal, fontSize:12, fontWeight:700, letterSpacing:1, margin:0 }}>
+            <p style={{ color:C.teal, fontSize:fz(12), fontWeight:700, letterSpacing:1, margin:0 }}>
               {T.convHeardTitle || "What GAKU heard"}
             </p>
-            <button onClick={handleClear} style={{ ...S.btn, padding:"6px 12px", fontSize:11, background:C.card, border:`1px solid ${C.border}`, color:"#94a3b8" }}>
+            <button onClick={handleClear} style={{ ...S.btn, padding:"6px 12px", fontSize:fz(11), background:C.card, border:`1px solid ${C.border}`, color:"#94a3b8" }}>
               {T.convClearBtn || "🗑 Clear"}
             </button>
           </div>
-          <p style={{ color:C.amber, fontSize:12, lineHeight:1.7, margin:"0 0 12px" }}>
+          <p style={{ color:C.amber, fontSize:fz(12), lineHeight:1.7, margin:"0 0 12px" }}>
             🐢 {T.pronSlowTip || "Can't catch it? Slow the video down (for example YouTube speed 0.5× or 0.75×) and listen again. Your teacher is the video — GAKU just writes it down."}
           </p>
           {pronunciationCheck.eligible && <LevelUpOffer T={T} currentLevel={form.jlpt} onConfirm={onLevelUp} onDismiss={pronunciationCheck.dismiss} />}
@@ -18049,7 +18050,7 @@ Respond ONLY with a valid JSON array of strings, no markdown, no backticks:
       <div>
         {savedSet && (
           <div style={{ ...S.card, marginBottom:16, borderLeft:`3px solid ${C.teal}` }}>
-            <p style={{ color:C.teal, fontSize:12, fontWeight:700, margin:"0 0 8px" }}>{T.savedSetFound || "You have a saved study set from before."}</p>
+            <p style={{ color:C.teal, fontSize:fz(12), fontWeight:700, margin:"0 0 8px" }}>{T.savedSetFound || "You have a saved study set from before."}</p>
             <div style={{ display:"flex", gap:8 }}>
               <button onClick={handleResumeSaved} style={{ ...S.btn, flex:1, background:`linear-gradient(135deg,${C.teal},#0891b2)`, color:"#fff" }}>
                 {T.resumeStudySet || "▶ Resume study set"}
@@ -18061,8 +18062,8 @@ Respond ONLY with a valid JSON array of strings, no markdown, no backticks:
           </div>
         )}
         <div style={{ ...S.card, marginBottom:16 }}>
-          <p style={{ color:C.teal, fontSize:12, fontWeight:700, letterSpacing:1, marginBottom:6 }}>🗣️ {T.pronTitle || "Pronunciation Practice"}</p>
-          <p style={{ color:"#39ff14", fontSize:12, lineHeight:1.7, marginBottom:14 }}>
+          <p style={{ color:C.teal, fontSize:fz(12), fontWeight:700, letterSpacing:1, marginBottom:6 }}>🗣️ {T.pronTitle || "Pronunciation Practice"}</p>
+          <p style={{ color:"#39ff14", fontSize:fz(12), lineHeight:1.7, marginBottom:14 }}>
             {T.pronDesc || "Paste any Japanese text — an article, video subtitles, a song, your own notes — just like Create From Content. GAKU will pull out natural sentences and phrases for you to read aloud (or listen and repeat), then check how close your spoken attempt was."}
           </p>
           <label style={{ ...S.label, color:"#ffffff" }}>{T.subtitlesSourceLabel || "Video title / source (optional)"}</label>
@@ -18074,7 +18075,7 @@ Respond ONLY with a valid JSON array of strings, no markdown, no backticks:
           <button data-guide="pron-generate" onClick={generate} disabled={loading || !raw.trim()} style={{ ...S.btn, width:"100%", background:(loading||!raw.trim())?"rgba(6,182,212,0.15)":`linear-gradient(135deg,${C.teal},#0891b2)`, color:(loading||!raw.trim())?"#64748b":"#fff" }}>
             {loading ? `⏳ ${T.pronGenerating || "Building pronunciation practice..."}` : (T.pronGenerateBtn || "Build Pronunciation Practice")} {!loading && "✨"}
           </button>
-          {error && <p style={{ color:C.red, fontSize:12, marginTop:10 }}>{error}</p>}
+          {error && <p style={{ color:C.red, fontSize:fz(12), marginTop:10 }}>{error}</p>}
         </div>
       </div>
     );
@@ -18083,10 +18084,10 @@ Respond ONLY with a valid JSON array of strings, no markdown, no backticks:
   return (
     <div>
       <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:12 }}>
-        <p style={{ color:C.teal, fontSize:12, fontWeight:700, letterSpacing:1, margin:0 }}>
+        <p style={{ color:C.teal, fontSize:fz(12), fontWeight:700, letterSpacing:1, margin:0 }}>
           🗣️ {sourceTitle.trim() || (T.pronTitle || "Pronunciation Practice")}
         </p>
-        <button onClick={handleReset} style={{ ...S.btn, padding:"6px 12px", fontSize:11, background:C.card, border:`1px solid ${C.border}`, color:"#94a3b8" }}>
+        <button onClick={handleReset} style={{ ...S.btn, padding:"6px 12px", fontSize:fz(11), background:C.card, border:`1px solid ${C.border}`, color:"#94a3b8" }}>
           {T.subtitlesLoadNew || "↺ Load a different transcript"}
         </button>
       </div>
@@ -18528,8 +18529,8 @@ function SectionHelp({ id, lang }) {
   return (
     <div data-guide="help-btn" style={{ marginBottom:12 }}>
       <button onClick={() => startGuide(EASY_GUIDES[g] ? g : "page_generic")}
-        style={{ display:"inline-flex", alignItems:"center", gap:6, padding:"5px 12px 5px 6px", borderRadius:99, background:"rgba(168,85,247,0.12)", border:`1px solid ${C.purpleLight}`, color:C.purpleLight, fontSize:12, fontWeight:700, cursor:"pointer" }}>
-        <span style={{ width:20, height:20, borderRadius:"50%", background:C.purpleLight, color:"#1e1033", display:"inline-flex", alignItems:"center", justifyContent:"center", fontSize:12, fontWeight:900 }}>?</span>
+        style={{ display:"inline-flex", alignItems:"center", gap:6, padding:"5px 12px 5px 6px", borderRadius:99, background:"rgba(168,85,247,0.12)", border:`1px solid ${C.purpleLight}`, color:C.purpleLight, fontSize:fz(12), fontWeight:700, cursor:"pointer" }}>
+        <span style={{ width:20, height:20, borderRadius:"50%", background:C.purpleLight, color:"#1e1033", display:"inline-flex", alignItems:"center", justifyContent:"center", fontSize:fz(12), fontWeight:900 }}>?</span>
         {label}
       </button>
     </div>
@@ -18799,17 +18800,17 @@ function GuideCoach({ guide, lang, tab, sub, onClose }) {
       {rect && (
         <>
           <div style={{ position:"fixed", top:rect.top - 4, left:rect.left - 4, width:rect.width + 8, height:rect.height + 8, borderRadius:14, pointerEvents:"none", zIndex:1190, animation:"gakuEasyPulse 1.2s ease-in-out infinite" }} />
-          <div aria-hidden="true" style={{ position:"fixed", left:Math.max(8, Math.min(rect.left + rect.width / 2 - 20, (typeof window !== "undefined" ? window.innerWidth : 400) - 48)), top:fingerBelow ? rect.top + rect.height + 8 : rect.top - 52, fontSize:38, lineHeight:1, pointerEvents:"none", zIndex:1191, animation:(fingerBelow ? "gakuEasyBounce" : "gakuEasyBounceDown") + " .9s ease-in-out infinite" }}>{fingerBelow ? "👆" : "👇"}</div>
+          <div aria-hidden="true" style={{ position:"fixed", left:Math.max(8, Math.min(rect.left + rect.width / 2 - 20, (typeof window !== "undefined" ? window.innerWidth : 400) - 48)), top:fingerBelow ? rect.top + rect.height + 8 : rect.top - 52, fontSize:fz(38), lineHeight:1, pointerEvents:"none", zIndex:1191, animation:(fingerBelow ? "gakuEasyBounce" : "gakuEasyBounceDown") + " .9s ease-in-out infinite" }}>{fingerBelow ? "👆" : "👇"}</div>
         </>
       )}
       <div style={{ position:"fixed", left:12, right:12, ...cardPos, maxWidth:440, margin:"0 auto", zIndex:1200, background:"#0f172a", border:`2px solid ${C.purpleLight}`, borderRadius:16, padding:"14px 16px", boxShadow:"0 8px 30px rgba(0,0,0,0.6)" }}>
         <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:6 }}>
-          <p style={{ color:C.purpleLight, fontSize:11, fontWeight:800, letterSpacing:1, margin:0 }}>{c.title} · {L.of.replace("{n}", i - i0 + 1).replace("{m}", total - i0)}</p>
-          <button onClick={onClose} aria-label={L.close} style={{ background:"none", border:"none", color:"#94a3b8", fontSize:12, fontWeight:700, cursor:"pointer", padding:"2px 4px" }}>{L.close} ✕</button>
+          <p style={{ color:C.purpleLight, fontSize:fz(11), fontWeight:800, letterSpacing:1, margin:0 }}>{c.title} · {L.of.replace("{n}", i - i0 + 1).replace("{m}", total - i0)}</p>
+          <button onClick={onClose} aria-label={L.close} style={{ background:"none", border:"none", color:"#94a3b8", fontSize:fz(12), fontWeight:700, cursor:"pointer", padding:"2px 4px" }}>{L.close} ✕</button>
         </div>
-        <p style={{ color:"#f1f5f9", fontSize:19, fontWeight:800, lineHeight:1.45, margin:"0 0 8px" }}>{(s.alts && rect && altT) || s.t || (s.alts ? s.alts[0].t : "")}</p>
-        {(s.sel || s.alts) && !rect && <p style={{ color:"#94a3b8", fontSize:12, margin:"0 0 8px" }}>{L.missing}</p>}
-        <button onClick={() => (last ? onClose() : advance())} style={{ ...S.btn, width:"100%", padding:"12px", fontSize:15, fontWeight:800, background: ((s.sel || s.alts) && rect && !s.next) ? C.card : `linear-gradient(135deg,${C.purple},#9333ea)`, color: ((s.sel || s.alts) && rect && !s.next) ? "#94a3b8" : "#fff", border: ((s.sel || s.alts) && rect && !s.next) ? `1px solid ${C.border}` : "none" }}>{last ? L.done : L.next}</button>
+        <p style={{ color:"#f1f5f9", fontSize:fz(19), fontWeight:800, lineHeight:1.45, margin:"0 0 8px" }}>{(s.alts && rect && altT) || s.t || (s.alts ? s.alts[0].t : "")}</p>
+        {(s.sel || s.alts) && !rect && <p style={{ color:"#94a3b8", fontSize:fz(12), margin:"0 0 8px" }}>{L.missing}</p>}
+        <button onClick={() => (last ? onClose() : advance())} style={{ ...S.btn, width:"100%", padding:"12px", fontSize:fz(15), fontWeight:800, background: ((s.sel || s.alts) && rect && !s.next) ? C.card : `linear-gradient(135deg,${C.purple},#9333ea)`, color: ((s.sel || s.alts) && rect && !s.next) ? "#94a3b8" : "#fff", border: ((s.sel || s.alts) && rect && !s.next) ? `1px solid ${C.border}` : "none" }}>{last ? L.done : L.next}</button>
       </div>
     </>
   );
@@ -18830,12 +18831,12 @@ function ReminderPromptCard({ lang, onTurnOn, onNotNow }) {
   const [busy, setBusy] = useState(false);
   return (
     <div style={{ ...S.card, marginBottom:12, borderLeft:`3px solid ${C.purpleLight}` }}>
-      <p style={{ color:"#f1f5f9", fontSize:14, fontWeight:800, margin:"0 0 6px" }}>🔔 {rc.title}</p>
-      <p style={{ color:"#e2e8f0", fontSize:13, lineHeight:1.7, margin:"0 0 12px" }}>{rc.desc}</p>
+      <p style={{ color:"#f1f5f9", fontSize:fz(14), fontWeight:800, margin:"0 0 6px" }}>🔔 {rc.title}</p>
+      <p style={{ color:"#e2e8f0", fontSize:fz(13), lineHeight:1.7, margin:"0 0 12px" }}>{rc.desc}</p>
       <div style={{ display:"flex", gap:8, flexWrap:"wrap" }}>
         <button disabled={busy} onClick={async () => { setBusy(true); try { await onTurnOn(); } finally { setBusy(false); } }}
-          style={{ ...S.btn, padding:"9px 16px", fontSize:13, background:"linear-gradient(135deg,rgba(168,85,247,0.35),rgba(124,58,237,0.3))", border:`1px solid ${C.purpleLight}`, color:"#f5f3ff", fontWeight:800 }}>{rc.turnOn}</button>
-        <button onClick={onNotNow} style={{ ...S.btn, padding:"9px 16px", fontSize:13, background:C.card, color:"#94a3b8", border:`1px solid ${C.border}` }}>{rc.notNow}</button>
+          style={{ ...S.btn, padding:"9px 16px", fontSize:fz(13), background:"linear-gradient(135deg,rgba(168,85,247,0.35),rgba(124,58,237,0.3))", border:`1px solid ${C.purpleLight}`, color:"#f5f3ff", fontWeight:800 }}>{rc.turnOn}</button>
+        <button onClick={onNotNow} style={{ ...S.btn, padding:"9px 16px", fontSize:fz(13), background:C.card, color:"#94a3b8", border:`1px solid ${C.border}` }}>{rc.notNow}</button>
       </div>
     </div>
   );
@@ -18920,8 +18921,8 @@ function FirstStepsChecklist({ lang, userId, profileDone, showContent, showVocab
   if (allDone) {
     return (
       <div style={{ ...S.card, marginBottom:12, background:"rgba(34,197,94,0.1)", border:"1px solid rgba(34,197,94,0.4)", display:"flex", alignItems:"center", justifyContent:"space-between", gap:10 }}>
-        <p style={{ color:"#86efac", fontSize:13, fontWeight:800, margin:0 }}>{L.allDone}</p>
-        <button onClick={close} style={{ ...S.btn, padding:"6px 14px", fontSize:12, background:C.card, color:"#94a3b8", border:`1px solid ${C.border}` }}>{L.ok}</button>
+        <p style={{ color:"#86efac", fontSize:fz(13), fontWeight:800, margin:0 }}>{L.allDone}</p>
+        <button onClick={close} style={{ ...S.btn, padding:"6px 14px", fontSize:fz(12), background:C.card, color:"#94a3b8", border:`1px solid ${C.border}` }}>{L.ok}</button>
       </div>
     );
   }
@@ -18930,24 +18931,24 @@ function FirstStepsChecklist({ lang, userId, profileDone, showContent, showVocab
     <div style={{ ...S.card, marginBottom:12, background:"linear-gradient(135deg,rgba(168,85,247,0.14),rgba(6,182,212,0.08))", border:`1px solid ${C.purpleLight}` }}>
       <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", gap:8, marginBottom:8 }}>
         <div>
-          <p style={{ color:C.purpleLight, fontSize:11, fontWeight:800, letterSpacing:1, margin:0 }}>🚀 {L.title.toUpperCase()}</p>
-          <p style={{ color:"#94a3b8", fontSize:11, margin:"2px 0 0" }}>{L.sub} · {L.progress.replace("{n}", doneCount).replace("{m}", rows.length)}</p>
+          <p style={{ color:C.purpleLight, fontSize:fz(11), fontWeight:800, letterSpacing:1, margin:0 }}>🚀 {L.title.toUpperCase()}</p>
+          <p style={{ color:"#94a3b8", fontSize:fz(11), margin:"2px 0 0" }}>{L.sub} · {L.progress.replace("{n}", doneCount).replace("{m}", rows.length)}</p>
         </div>
-        <button onClick={close} aria-label={L.hide} style={{ background:"none", border:"none", color:"#64748b", fontSize:12, cursor:"pointer", padding:"2px 4px" }}>{L.hide} ✕</button>
+        <button onClick={close} aria-label={L.hide} style={{ background:"none", border:"none", color:"#64748b", fontSize:fz(12), cursor:"pointer", padding:"2px 4px" }}>{L.hide} ✕</button>
       </div>
       <div style={{ height:6, borderRadius:3, background:"rgba(255,255,255,0.08)", overflow:"hidden", marginBottom:10 }}>
         <div style={{ width:`${Math.round(doneCount / rows.length * 100)}%`, height:"100%", background:`linear-gradient(90deg,${C.purpleLight},${C.teal})`, transition:"width .4s" }} />
       </div>
-      <button onClick={() => startGuide("start")} style={{ ...S.btn, width:"100%", marginBottom:10, padding:"12px 14px", fontSize:14, fontWeight:800, background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff" }}>👆 {lang === "Japanese" ? EASY_LABELS.ja.show : ((guideLabels(lang) || EASY_LABELS.en).show || EASY_LABELS.en.show)}</button>
+      <button onClick={() => startGuide("start")} style={{ ...S.btn, width:"100%", marginBottom:10, padding:"12px 14px", fontSize:fz(14), fontWeight:800, background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff" }}>👆 {lang === "Japanese" ? EASY_LABELS.ja.show : ((guideLabels(lang) || EASY_LABELS.en).show || EASY_LABELS.en.show)}</button>
       {rows.map(r => (
         <button key={r.id} onClick={r.done ? undefined : r.go} disabled={r.done || !r.go}
           style={{ width:"100%", display:"flex", alignItems:"center", gap:10, padding:"9px 10px", marginBottom:6, borderRadius:10, textAlign:"left", cursor:r.done ? "default" : "pointer",
             background:r.done ? "rgba(34,197,94,0.08)" : (r.id === nextId ? "rgba(168,85,247,0.2)" : "rgba(255,255,255,0.04)"),
             border:`1px solid ${r.done ? "rgba(34,197,94,0.35)" : (r.id === nextId ? C.purpleLight : C.border)}` }}>
-          <span style={{ width:22, height:22, borderRadius:"50%", flexShrink:0, display:"inline-flex", alignItems:"center", justifyContent:"center", fontSize:12, fontWeight:900,
+          <span style={{ width:22, height:22, borderRadius:"50%", flexShrink:0, display:"inline-flex", alignItems:"center", justifyContent:"center", fontSize:fz(12), fontWeight:900,
             background:r.done ? "#22c55e" : "transparent", color:r.done ? "#052e16" : "#64748b", border:r.done ? "none" : "2px solid #475569" }}>{r.done ? "✓" : ""}</span>
-          <span style={{ flex:1, color:r.done ? "#86efac" : "#f1f5f9", fontSize:13, fontWeight:700, textDecoration:r.done ? "line-through" : "none" }}>{r.label}</span>
-          {!r.done && r.go && <span style={{ color:C.purpleLight, fontSize:12, fontWeight:800, whiteSpace:"nowrap" }}>{L.go}</span>}
+          <span style={{ flex:1, color:r.done ? "#86efac" : "#f1f5f9", fontSize:fz(13), fontWeight:700, textDecoration:r.done ? "line-through" : "none" }}>{r.label}</span>
+          {!r.done && r.go && <span style={{ color:C.purpleLight, fontSize:fz(12), fontWeight:800, whiteSpace:"nowrap" }}>{L.go}</span>}
         </button>
       ))}
     </div>
@@ -18961,10 +18962,10 @@ function FirstTapHint({ id, text, show = true }) {
   if (seen || !show) return null;
   const dismiss = () => { lsSetScoped(key, "1"); setSeen(true); };
   return (
-    <div onClick={dismiss} role="note" style={{ position:"relative", display:"flex", alignItems:"center", gap:8, margin:"0 0 12px", padding:"9px 12px", borderRadius:12, background:C.purpleLight, color:"#1e1033", fontSize:12, fontWeight:800, lineHeight:1.5, cursor:"pointer", boxShadow:"0 4px 14px rgba(168,85,247,0.35)" }}>
-      <span style={{ fontSize:16 }}>👇</span>
+    <div onClick={dismiss} role="note" style={{ position:"relative", display:"flex", alignItems:"center", gap:8, margin:"0 0 12px", padding:"9px 12px", borderRadius:12, background:C.purpleLight, color:"#1e1033", fontSize:fz(12), fontWeight:800, lineHeight:1.5, cursor:"pointer", boxShadow:"0 4px 14px rgba(168,85,247,0.35)" }}>
+      <span style={{ fontSize:fz(16) }}>👇</span>
       <span style={{ flex:1 }}>{text}</span>
-      <span style={{ fontSize:12, opacity:0.6 }}>✕</span>
+      <span style={{ fontSize:fz(12), opacity:0.6 }}>✕</span>
       <span style={{ position:"absolute", left:24, bottom:-6, width:12, height:12, background:C.purpleLight, transform:"rotate(45deg)" }} />
     </div>
   );
@@ -19014,27 +19015,27 @@ CRITICAL: Write your ENTIRE response in ${lang}. Every word, including labels an
   return (
     <div style={{ position:"fixed", inset:0, background:"rgba(0,0,0,0.75)", display:"flex", alignItems:"center", justifyContent:"center", zIndex:1000, padding:16 }}>
       <div style={{ ...S.card, width:"100%", maxWidth:420, position:"relative", maxHeight:"85vh", overflowY:"auto" }}>
-        <button onClick={onClose} style={{ position:"absolute", top:14, right:14, background:"none", border:"none", color:"#64748b", fontSize:20, cursor:"pointer" }}>×</button>
-        <p style={{ color:C.amber, fontSize:12, fontWeight:700, letterSpacing:1, marginBottom:4 }}>{T.helpTitle}</p>
+        <button onClick={onClose} style={{ position:"absolute", top:14, right:14, background:"none", border:"none", color:"#64748b", fontSize:fz(20), cursor:"pointer" }}>×</button>
+        <p style={{ color:C.amber, fontSize:fz(12), fontWeight:700, letterSpacing:1, marginBottom:4 }}>{T.helpTitle}</p>
 
         {view==="menu" && (
           <>
-            <h3 style={{ color:"#f1f5f9", fontSize:17, fontWeight:800, margin:"0 0 18px" }}>{T.whatWouldYouLike}</h3>
+            <h3 style={{ color:"#f1f5f9", fontSize:fz(17), fontWeight:800, margin:"0 0 18px" }}>{T.whatWouldYouLike}</h3>
             <button onClick={()=>setView("lesson")} style={{ ...S.btn, width:"100%", textAlign:"left", background:`linear-gradient(135deg,${C.amber},#d97706)`, color:"#fff", marginBottom:10 }}>
               {T.customizedLesson}
-              <div style={{ fontWeight:400, fontSize:11, marginTop:4, opacity:0.9 }}>今日のカスタマイズレッスン</div>
+              <div style={{ fontWeight:400, fontSize:fz(11), marginTop:4, opacity:0.9 }}>今日のカスタマイズレッスン</div>
             </button>
             <button onClick={()=>setView("howto")} style={{ ...S.btn, width:"100%", textAlign:"left", background:C.card, color:"#f1f5f9", border:`1px solid ${C.border}` }}>
               {T.howToUse}
-              <div style={{ fontWeight:400, fontSize:11, marginTop:4, color:"#64748b" }}>使い方</div>
+              <div style={{ fontWeight:400, fontSize:fz(11), marginTop:4, color:"#64748b" }}>使い方</div>
             </button>
           </>
         )}
 
         {view==="lesson" && (
           <>
-            <button onClick={reset} style={{ background:"none", border:"none", color:"#64748b", fontSize:12, cursor:"pointer", padding:0, marginBottom:10 }}>{T.back}</button>
-            <h3 style={{ color:"#f1f5f9", fontSize:17, fontWeight:800, margin:"0 0 18px" }}>{T.howAreYouFeeling}</h3>
+            <button onClick={reset} style={{ background:"none", border:"none", color:"#64748b", fontSize:fz(12), cursor:"pointer", padding:0, marginBottom:10 }}>{T.back}</button>
+            <h3 style={{ color:"#f1f5f9", fontSize:fz(17), fontWeight:800, margin:"0 0 18px" }}>{T.howAreYouFeeling}</h3>
             {!result ? (
               <>
                 <label style={S.label}>{T.mood}</label>
@@ -19063,7 +19064,7 @@ CRITICAL: Write your ENTIRE response in ${lang}. Every word, including labels an
                 <div style={{ background:"rgba(168,85,247,0.06)", border:`1px solid rgba(168,85,247,0.2)`, borderRadius:10, padding:"10px 12px", marginBottom:14 }}>
                   <label style={{ display:"flex", alignItems:"center", gap:8, cursor:"pointer", marginBottom: wantsDifferent ? 8 : 0 }}>
                     <input type="checkbox" checked={wantsDifferent} onChange={e=>setWantsDifferent(e.target.checked)} />
-                    <span style={{ color:"#f1f5f9", fontSize:13, fontWeight:600 }}>{T.wantsDifferent}</span>
+                    <span style={{ color:"#f1f5f9", fontSize:fz(13), fontWeight:600 }}>{T.wantsDifferent}</span>
                   </label>
                   {wantsDifferent && (
                     <textarea value={differentText} onChange={e=>setDifferentText(e.target.value)} placeholder={T.differentPlaceholder} rows={3} style={{ ...S.input, resize:"vertical", fontFamily:"inherit", lineHeight:1.7 }} />
@@ -19077,7 +19078,7 @@ CRITICAL: Write your ENTIRE response in ${lang}. Every word, including labels an
             ) : (
               <>
                 <div style={{ background:"rgba(245,158,11,0.08)", borderLeft:`3px solid ${C.amber}`, borderRadius:8, padding:"14px 16px", marginBottom:14 }}>
-                  <p style={{ color:"#f1f5f9", fontSize:13, lineHeight:1.8, margin:0 }}>{result}</p>
+                  <p style={{ color:"#f1f5f9", fontSize:fz(13), lineHeight:1.8, margin:0 }}>{result}</p>
                 </div>
                 <button onClick={()=>setResult("")} style={{ ...S.btn, width:"100%", background:C.card, color:"#94a3b8", border:`1px solid ${C.border}` }}>{T.tryAgain}</button>
               </>
@@ -19087,13 +19088,13 @@ CRITICAL: Write your ENTIRE response in ${lang}. Every word, including labels an
 
         {view==="howto" && (
           <>
-            <button onClick={reset} style={{ background:"none", border:"none", color:"#64748b", fontSize:12, cursor:"pointer", padding:0, marginBottom:10 }}>{T.back}</button>
-            <h3 style={{ color:"#f1f5f9", fontSize:17, fontWeight:800, margin:"0 0 6px" }}>{T.howToTitle}</h3>
-            <p style={{ color:"#94a3b8", fontSize:12, lineHeight:1.6, margin:"0 0 14px" }}>{(form?.preferredLang === "Japanese" ? EASY_LABELS.ja : (guideLabels(form?.preferredLang) || EASY_LABELS.en)).pick}</p>
+            <button onClick={reset} style={{ background:"none", border:"none", color:"#64748b", fontSize:fz(12), cursor:"pointer", padding:0, marginBottom:10 }}>{T.back}</button>
+            <h3 style={{ color:"#f1f5f9", fontSize:fz(17), fontWeight:800, margin:"0 0 6px" }}>{T.howToTitle}</h3>
+            <p style={{ color:"#94a3b8", fontSize:fz(12), lineHeight:1.6, margin:"0 0 14px" }}>{(form?.preferredLang === "Japanese" ? EASY_LABELS.ja : (guideLabels(form?.preferredLang) || EASY_LABELS.en)).pick}</p>
             <div style={{ display:"flex", flexDirection:"column", gap:8 }}>
               {(guides || []).map(gid => {
                 const label = ({ start: "▶ " + (form?.preferredLang === "Japanese" ? EASY_GUIDES.start.ja.title : localizeGuide(EASY_GUIDES.start.en, form?.preferredLang, T).title), schedule: T.tabSchedule, vocabulary: T.tabVocabulary, content: T.tabPractice, conversation: "🎙️ " + T.convTitle, pronunciation: "🗣️ " + T.pronTitle, writing: "✍️ " + T.writeTitle })[gid];
-                return <button key={gid} onClick={() => onPickGuide && onPickGuide(gid)} style={{ ...S.btn, width:"100%", textAlign:"left", background:C.card, color:"#f1f5f9", border:`1px solid ${C.border}`, fontSize:14, fontWeight:700 }}>{label} <span style={{ float:"right", color:C.purpleLight }}>👆</span></button>;
+                return <button key={gid} onClick={() => onPickGuide && onPickGuide(gid)} style={{ ...S.btn, width:"100%", textAlign:"left", background:C.card, color:"#f1f5f9", border:`1px solid ${C.border}`, fontSize:fz(14), fontWeight:700 }}>{label} <span style={{ float:"right", color:C.purpleLight }}>👆</span></button>;
               })}
             </div>
           </>
@@ -19139,22 +19140,22 @@ Warm, under 100 words, English.` }]
 
   return (
     <div style={{ ...S.card, marginBottom:16 }}>
-      <p style={{ color:C.amber, fontSize:12, fontWeight:700, letterSpacing:1, marginBottom:12 }}>✍️ WRITING PRACTICE (CLT)</p>
+      <p style={{ color:C.amber, fontSize:fz(12), fontWeight:700, letterSpacing:1, marginBottom:12 }}>✍️ WRITING PRACTICE (CLT)</p>
       <div style={{ display:"flex", gap:8, marginBottom:14, flexWrap:"wrap" }}>
         {Object.keys(WRITING_TOPICS).map(t => (
-          <button key={t} onClick={()=>{setTopic(t);setPromptIdx(0);setText("");setFeedback("");}} style={{ padding:"6px 14px", borderRadius:20, border:`1.5px solid ${topic===t?C.amber:C.border}`, background:topic===t?"rgba(245,158,11,0.12)":C.card, color:topic===t?C.amber:"#64748b", fontSize:12, fontWeight:600, cursor:"pointer" }}>
+          <button key={t} onClick={()=>{setTopic(t);setPromptIdx(0);setText("");setFeedback("");}} style={{ padding:"6px 14px", borderRadius:20, border:`1.5px solid ${topic===t?C.amber:C.border}`, background:topic===t?"rgba(245,158,11,0.12)":C.card, color:topic===t?C.amber:"#64748b", fontSize:fz(12), fontWeight:600, cursor:"pointer" }}>
             {t==="culture"?"🌸 文化":t==="work"?"💼 仕事":"📚 教育"}
           </button>
         ))}
       </div>
       <div style={{ background:"rgba(245,158,11,0.06)", borderLeft:`3px solid ${C.amber}`, borderRadius:8, padding:"12px 14px", marginBottom:12 }}>
-        <p style={{ color:"#f1f5f9", fontSize:14, margin:"0 0 4px", fontWeight:600 }}>{prompt}</p>
-        <p style={{ color:"#39ff14", fontSize:11, margin:0 }}>300〜800文字 · Communicative writing practice</p>
+        <p style={{ color:"#f1f5f9", fontSize:fz(14), margin:"0 0 4px", fontWeight:600 }}>{prompt}</p>
+        <p style={{ color:"#39ff14", fontSize:fz(11), margin:0 }}>300〜800文字 · Communicative writing practice</p>
       </div>
       <textarea value={text} onChange={e=>setText(e.target.value)} placeholder="ここに書いてください..." rows={5} style={{ ...S.input, resize:"vertical", fontFamily:"inherit", lineHeight:1.8, marginBottom:8 }} />
       <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:10 }}>
-        <p style={{ color:charCount<300?"#64748b":charCount>800?C.red:C.green, fontSize:12, margin:0 }}>{charCount}/300〜800文字</p>
-        <button onClick={()=>{setPromptIdx(p=>(p+1)%WRITING_TOPICS[topic].length);setText("");setFeedback("");}} style={{ padding:"5px 12px", borderRadius:8, background:C.card, border:`1px solid ${C.border}`, color:"#94a3b8", fontSize:11, cursor:"pointer" }}>
+        <p style={{ color:charCount<300?"#64748b":charCount>800?C.red:C.green, fontSize:fz(12), margin:0 }}>{charCount}/300〜800文字</p>
+        <button onClick={()=>{setPromptIdx(p=>(p+1)%WRITING_TOPICS[topic].length);setText("");setFeedback("");}} style={{ padding:"5px 12px", borderRadius:8, background:C.card, border:`1px solid ${C.border}`, color:"#94a3b8", fontSize:fz(11), cursor:"pointer" }}>
           Next prompt →
         </button>
       </div>
@@ -19164,8 +19165,8 @@ Warm, under 100 words, English.` }]
         </button>
       ) : (
         <div style={{ background:"rgba(34,197,94,0.06)", borderLeft:`3px solid ${C.green}`, borderRadius:8, padding:"12px 14px" }}>
-          <p style={{ color:"#f1f5f9", fontSize:13, lineHeight:1.8, margin:0 }}>{feedback}</p>
-          <button onClick={()=>setFeedback("")} style={{ marginTop:10, padding:"6px 14px", borderRadius:8, background:C.card, border:`1px solid ${C.border}`, color:"#64748b", fontSize:11, cursor:"pointer" }}>Try again</button>
+          <p style={{ color:"#f1f5f9", fontSize:fz(13), lineHeight:1.8, margin:0 }}>{feedback}</p>
+          <button onClick={()=>setFeedback("")} style={{ marginTop:10, padding:"6px 14px", borderRadius:8, background:C.card, border:`1px solid ${C.border}`, color:"#64748b", fontSize:fz(11), cursor:"pointer" }}>Try again</button>
         </div>
       )}
     </div>
@@ -19362,7 +19363,7 @@ function QuickStartForm({ onSubmit, initialJlpt, initialForm, onLoginClick }) {
       <div style={{ width:"100%", maxWidth:440 }}>
         {onLoginClick && (
           <div style={{ textAlign:"right", marginBottom:14 }}>
-            <button onClick={onLoginClick} style={{ background:"none", border:"none", color:"#94a3b8", fontSize:12, cursor:"pointer", textDecoration:"underline" }}>
+            <button onClick={onLoginClick} style={{ background:"none", border:"none", color:"#94a3b8", fontSize:fz(12), cursor:"pointer", textDecoration:"underline" }}>
               Already used GAKU Master before? Log in
             </button>
           </div>
@@ -19372,8 +19373,8 @@ function QuickStartForm({ onSubmit, initialJlpt, initialForm, onLoginClick }) {
             <div key={s.key} style={{ flex:1, height:4, borderRadius:2, background: i<=step ? `linear-gradient(135deg,${C.purple},#9333ea)` : "rgba(255,255,255,0.08)" }} />
           ))}
         </div>
-        <p style={{ color:C.purpleLight, fontSize:11, fontWeight:700, letterSpacing:2, marginBottom:4 }}>STEP {step+1} OF {total}</p>
-        <h1 style={{ fontSize:22, fontWeight:900, margin:"0 0 20px", color:"#f1f5f9" }}>{current.label}</h1>
+        <p style={{ color:C.purpleLight, fontSize:fz(11), fontWeight:700, letterSpacing:2, marginBottom:4 }}>STEP {step+1} OF {total}</p>
+        <h1 style={{ fontSize:fz(22), fontWeight:900, margin:"0 0 20px", color:"#f1f5f9" }}>{current.label}</h1>
         {current.key === "name" && (
           <input autoFocus value={name} onChange={e=>setName(e.target.value)} placeholder={T.namePlaceholder} style={S.input} onKeyDown={e=>{ if (e.key === "Enter") goNext(); }} />
         )}
@@ -19384,7 +19385,7 @@ function QuickStartForm({ onSubmit, initialJlpt, initialForm, onLoginClick }) {
           <>
             <div style={{ display:"flex", flexWrap:"wrap", gap:8 }}>
               {Object.keys(GOAL_KEY_MAP).map(g => (
-                <button key={g} onClick={()=>toggleGoal(g)} style={{ padding:"9px 16px", borderRadius:20, border:`1.5px solid ${goal.includes(g)?C.purpleLight:C.border}`, background:goal.includes(g)?"rgba(168,85,247,0.15)":C.card, color:goal.includes(g)?C.purpleLight:"#94a3b8", fontSize:13, fontWeight:600, cursor:"pointer" }}>
+                <button key={g} onClick={()=>toggleGoal(g)} style={{ padding:"9px 16px", borderRadius:20, border:`1.5px solid ${goal.includes(g)?C.purpleLight:C.border}`, background:goal.includes(g)?"rgba(168,85,247,0.15)":C.card, color:goal.includes(g)?C.purpleLight:"#94a3b8", fontSize:fz(13), fontWeight:600, cursor:"pointer" }}>
                   {T[GOAL_KEY_MAP[g]] || g}
                 </button>
               ))}
@@ -19397,13 +19398,13 @@ function QuickStartForm({ onSubmit, initialJlpt, initialForm, onLoginClick }) {
         {current.key === "jlpt" && (
           <div style={{ display:"flex", flexDirection:"column", gap:8 }}>
             {QUICK_JLPT_OPTIONS.map(([val,levelKey,approx]) => (
-              <button key={val} onClick={()=>{ setJlpt(val); goNext(val); }} style={{ textAlign:"left", padding:"12px 16px", borderRadius:10, border:`1.5px solid ${jlpt===val?C.purpleLight:C.border}`, background:jlpt===val?"rgba(168,85,247,0.15)":C.card, color:jlpt===val?C.purpleLight:"#e2e8f0", fontSize:13, fontWeight:600, cursor:"pointer" }}>
+              <button key={val} onClick={()=>{ setJlpt(val); goNext(val); }} style={{ textAlign:"left", padding:"12px 16px", borderRadius:10, border:`1.5px solid ${jlpt===val?C.purpleLight:C.border}`, background:jlpt===val?"rgba(168,85,247,0.15)":C.card, color:jlpt===val?C.purpleLight:"#e2e8f0", fontSize:fz(13), fontWeight:600, cursor:"pointer" }}>
                 {T[levelKey]} {approx ? `(${approx})` : T.quickNoJlptHint}
               </button>
             ))}
           </div>
         )}
-        {err && <p style={{ color:C.red, fontSize:12, margin:"12px 0 0" }}>{err}</p>}
+        {err && <p style={{ color:C.red, fontSize:fz(12), margin:"12px 0 0" }}>{err}</p>}
         <div style={{ display:"flex", gap:10, marginTop:22 }}>
           {step > 0 && (
             <button onClick={goBack} style={{ ...S.btn, flex:"0 0 auto", padding:"12px 18px", background:"transparent", border:`1px solid ${C.border}`, color:"#94a3b8" }}>{T.back}</button>
@@ -19463,47 +19464,47 @@ function CompleteProfileScreen({ initialForm, onFinish, onSkip }) {
             <div key={s.key} style={{ flex:1, height:4, borderRadius:2, background: i<=step ? `linear-gradient(135deg,${C.purple},#9333ea)` : "rgba(255,255,255,0.08)" }} />
           ))}
         </div>
-        <p style={{ color:C.purpleLight, fontSize:11, fontWeight:700, letterSpacing:2, marginBottom:4 }}>COMPLETE YOUR PROFILE · {step+1}/{total}</p>
-        <h1 style={{ fontSize:22, fontWeight:900, margin:"0 0 20px", color:"#f1f5f9" }}>{current.label}</h1>
+        <p style={{ color:C.purpleLight, fontSize:fz(11), fontWeight:700, letterSpacing:2, marginBottom:4 }}>COMPLETE YOUR PROFILE · {step+1}/{total}</p>
+        <h1 style={{ fontSize:fz(22), fontWeight:900, margin:"0 0 20px", color:"#f1f5f9" }}>{current.label}</h1>
         {current.key === "country" && (
           <input autoFocus value={country} onChange={e=>setCountry(e.target.value)} placeholder={T.countryPlaceholder} style={S.input} onKeyDown={e=>{ if (e.key==="Enter") goNext(); }} />
         )}
         {current.key === "preferredLang" && (
           <div style={{ display:"flex", flexDirection:"column", gap:8, maxHeight:320, overflowY:"auto" }}>
             {LANGUAGES.map(l => (
-              <button key={l} onClick={()=>{ setPreferredLang(l); goNext(l); }} style={{ textAlign:"left", padding:"10px 14px", borderRadius:10, border:`1.5px solid ${preferredLang===l?C.purpleLight:C.border}`, background:preferredLang===l?"rgba(168,85,247,0.15)":C.card, color:preferredLang===l?C.purpleLight:"#e2e8f0", fontSize:13, fontWeight:600, cursor:"pointer" }}>{l}</button>
+              <button key={l} onClick={()=>{ setPreferredLang(l); goNext(l); }} style={{ textAlign:"left", padding:"10px 14px", borderRadius:10, border:`1.5px solid ${preferredLang===l?C.purpleLight:C.border}`, background:preferredLang===l?"rgba(168,85,247,0.15)":C.card, color:preferredLang===l?C.purpleLight:"#e2e8f0", fontSize:fz(13), fontWeight:600, cursor:"pointer" }}>{l}</button>
             ))}
           </div>
         )}
         {current.key === "timeline" && (
           <div style={{ display:"flex", flexDirection:"column", gap:8 }}>
             {Object.keys(TIMELINE_KEY_MAP).map(v => (
-              <button key={v} onClick={()=>{ setTimeline(v); goNext(v); }} style={{ textAlign:"left", padding:"12px 16px", borderRadius:10, border:`1.5px solid ${timeline===v?C.purpleLight:C.border}`, background:timeline===v?"rgba(168,85,247,0.15)":C.card, color:timeline===v?C.purpleLight:"#e2e8f0", fontSize:13, fontWeight:600, cursor:"pointer" }}>{T[TIMELINE_KEY_MAP[v]]}</button>
+              <button key={v} onClick={()=>{ setTimeline(v); goNext(v); }} style={{ textAlign:"left", padding:"12px 16px", borderRadius:10, border:`1.5px solid ${timeline===v?C.purpleLight:C.border}`, background:timeline===v?"rgba(168,85,247,0.15)":C.card, color:timeline===v?C.purpleLight:"#e2e8f0", fontSize:fz(13), fontWeight:600, cursor:"pointer" }}>{T[TIMELINE_KEY_MAP[v]]}</button>
             ))}
           </div>
         )}
         {current.key === "hoursPerDay" && (
           <div style={{ display:"flex", flexDirection:"column", gap:8 }}>
             {Object.keys(HOURS_KEY_MAP).map(v => (
-              <button key={v} onClick={()=>{ setHoursPerDay(v); goNext(v); }} style={{ textAlign:"left", padding:"12px 16px", borderRadius:10, border:`1.5px solid ${hoursPerDay===v?C.purpleLight:C.border}`, background:hoursPerDay===v?"rgba(168,85,247,0.15)":C.card, color:hoursPerDay===v?C.purpleLight:"#e2e8f0", fontSize:13, fontWeight:600, cursor:"pointer" }}>{T[HOURS_KEY_MAP[v]]}</button>
+              <button key={v} onClick={()=>{ setHoursPerDay(v); goNext(v); }} style={{ textAlign:"left", padding:"12px 16px", borderRadius:10, border:`1.5px solid ${hoursPerDay===v?C.purpleLight:C.border}`, background:hoursPerDay===v?"rgba(168,85,247,0.15)":C.card, color:hoursPerDay===v?C.purpleLight:"#e2e8f0", fontSize:fz(13), fontWeight:600, cursor:"pointer" }}>{T[HOURS_KEY_MAP[v]]}</button>
             ))}
           </div>
         )}
         {current.key === "daysPerWeek" && (
           <div style={{ display:"flex", flexDirection:"column", gap:8 }}>
             {Object.keys(DAYS_KEY_MAP).map(v => (
-              <button key={v} onClick={()=>{ setDaysPerWeek(v); goNext(v); }} style={{ textAlign:"left", padding:"12px 16px", borderRadius:10, border:`1.5px solid ${daysPerWeek===v?C.purpleLight:C.border}`, background:daysPerWeek===v?"rgba(168,85,247,0.15)":C.card, color:daysPerWeek===v?C.purpleLight:"#e2e8f0", fontSize:13, fontWeight:600, cursor:"pointer" }}>{T[DAYS_KEY_MAP[v]]}</button>
+              <button key={v} onClick={()=>{ setDaysPerWeek(v); goNext(v); }} style={{ textAlign:"left", padding:"12px 16px", borderRadius:10, border:`1.5px solid ${daysPerWeek===v?C.purpleLight:C.border}`, background:daysPerWeek===v?"rgba(168,85,247,0.15)":C.card, color:daysPerWeek===v?C.purpleLight:"#e2e8f0", fontSize:fz(13), fontWeight:600, cursor:"pointer" }}>{T[DAYS_KEY_MAP[v]]}</button>
             ))}
           </div>
         )}
         {current.key === "skills" && (
           <div style={{ display:"flex", flexWrap:"wrap", gap:8 }}>
             {Object.keys(SKILL_LABELS).map(k => (
-              <button key={k} onClick={()=>toggleSkill(k)} style={{ padding:"9px 16px", borderRadius:20, border:`1.5px solid ${skills.includes(k)?C.purpleLight:C.border}`, background:skills.includes(k)?"rgba(168,85,247,0.15)":C.card, color:skills.includes(k)?C.purpleLight:"#94a3b8", fontSize:13, fontWeight:600, cursor:"pointer" }}>{T[SKILL_LABEL_KEY[k]] || SKILL_LABELS[k]}</button>
+              <button key={k} onClick={()=>toggleSkill(k)} style={{ padding:"9px 16px", borderRadius:20, border:`1.5px solid ${skills.includes(k)?C.purpleLight:C.border}`, background:skills.includes(k)?"rgba(168,85,247,0.15)":C.card, color:skills.includes(k)?C.purpleLight:"#94a3b8", fontSize:fz(13), fontWeight:600, cursor:"pointer" }}>{T[SKILL_LABEL_KEY[k]] || SKILL_LABELS[k]}</button>
             ))}
           </div>
         )}
-        {err && <p style={{ color:C.red, fontSize:12, margin:"12px 0 0" }}>{err}</p>}
+        {err && <p style={{ color:C.red, fontSize:fz(12), margin:"12px 0 0" }}>{err}</p>}
         <div style={{ display:"flex", gap:10, marginTop:22 }}>
           {step > 0 && (
             <button onClick={goBack} style={{ ...S.btn, flex:"0 0 auto", padding:"12px 18px", background:"transparent", border:`1px solid ${C.border}`, color:"#94a3b8" }}>{T.back}</button>
@@ -19512,7 +19513,7 @@ function CompleteProfileScreen({ initialForm, onFinish, onSkip }) {
             <button onClick={()=>goNext()} style={{ ...S.btn, flex:1, background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff" }}>{current.key === "skills" ? T.doneArrow : T.next}</button>
           )}
         </div>
-        <button onClick={onSkip} style={{ display:"block", margin:"14px auto 0", background:"none", border:"none", color:"#64748b", fontSize:12, cursor:"pointer", textDecoration:"underline" }}>
+        <button onClick={onSkip} style={{ display:"block", margin:"14px auto 0", background:"none", border:"none", color:"#64748b", fontSize:fz(12), cursor:"pointer", textDecoration:"underline" }}>
           {T.skipForNow}
         </button>
       </div>
@@ -19614,17 +19615,17 @@ function FormScreen({ onSubmit, onBack, onCancel, initialJlpt, initialForm, onLo
       <div style={{ width:"100%", maxWidth:520 }}>
         {T._loading && (
           <div style={{ background:"rgba(168,85,247,0.1)", border:`1px solid rgba(168,85,247,0.3)`, borderRadius:10, padding:"10px 16px", marginBottom:16, textAlign:"center" }}>
-            <p style={{ color:C.purpleLight, fontSize:12, fontWeight:700, margin:0 }}>🌐 Translating into {form.preferredLang}...</p>
+            <p style={{ color:C.purpleLight, fontSize:fz(12), fontWeight:700, margin:0 }}>🌐 Translating into {form.preferredLang}...</p>
           </div>
         )}
         {initialForm && onCancel ? (
-          <button onClick={onCancel} style={{ background:"none", border:"none", color:"#64748b", fontSize:13, cursor:"pointer", marginBottom:16, padding:0 }}>{T.backToMyPlan}</button>
+          <button onClick={onCancel} style={{ background:"none", border:"none", color:"#64748b", fontSize:fz(13), cursor:"pointer", marginBottom:16, padding:0 }}>{T.backToMyPlan}</button>
         ) : (
-          onBack && <button onClick={onBack} style={{ background:"none", border:"none", color:"#64748b", fontSize:13, cursor:"pointer", marginBottom:16, padding:0 }}>{T.back}</button>
+          onBack && <button onClick={onBack} style={{ background:"none", border:"none", color:"#64748b", fontSize:fz(13), cursor:"pointer", marginBottom:16, padding:0 }}>{T.back}</button>
         )}
-        <p style={{ color:C.purpleLight, fontSize:11, fontWeight:700, letterSpacing:2, marginBottom:4 }}>GAKU SELF-STUDY APP</p>
-        <h1 style={{ fontSize:24, fontWeight:900, margin:"0 0 4px" }}>{initialForm ? T.formEditTitle : T.formTitle}</h1>
-        <p style={{ color:"#64748b", fontSize:13, marginBottom:24 }}>{initialForm ? T.formEditSubtitle : T.formSubtitle}</p>
+        <p style={{ color:C.purpleLight, fontSize:fz(11), fontWeight:700, letterSpacing:2, marginBottom:4 }}>GAKU SELF-STUDY APP</p>
+        <h1 style={{ fontSize:fz(24), fontWeight:900, margin:"0 0 4px" }}>{initialForm ? T.formEditTitle : T.formTitle}</h1>
+        <p style={{ color:"#64748b", fontSize:fz(13), marginBottom:24 }}>{initialForm ? T.formEditSubtitle : T.formSubtitle}</p>
 
         {/* Shown whenever the visitor isn't logged in — landing on this blank
             form is often not a brand-new student but a returning one whose
@@ -19633,8 +19634,8 @@ function FormScreen({ onSubmit, onBack, onCancel, initialJlpt, initialForm, onLo
             their account; logging in pulls it back instead of starting over. */}
         {onLoginClick && (
           <div style={{ background:"rgba(139,92,246,0.08)", border:"1px solid rgba(139,92,246,0.3)", borderRadius:10, padding:"12px 14px", marginBottom:20, display:"flex", alignItems:"center", justifyContent:"space-between", gap:10, flexWrap:"wrap" }}>
-            <span style={{ color:"#c4b5fd", fontSize:12, fontWeight:600 }}>{T.alreadyUsedAppBefore || "Already used GAKU Master before?"}</span>
-            <button onClick={onLoginClick} style={{ background:"linear-gradient(135deg,#7c3aed,#a855f7)", border:"none", borderRadius:8, color:"#fff", fontSize:12, fontWeight:800, padding:"7px 16px", cursor:"pointer", whiteSpace:"nowrap" }}>
+            <span style={{ color:"#c4b5fd", fontSize:fz(12), fontWeight:600 }}>{T.alreadyUsedAppBefore || "Already used GAKU Master before?"}</span>
+            <button onClick={onLoginClick} style={{ background:"linear-gradient(135deg,#7c3aed,#a855f7)", border:"none", borderRadius:8, color:"#fff", fontSize:fz(12), fontWeight:800, padding:"7px 16px", cursor:"pointer", whiteSpace:"nowrap" }}>
               {T.logInToRestoreData || "Log in to restore my data"}
             </button>
           </div>
@@ -19658,7 +19659,7 @@ function FormScreen({ onSubmit, onBack, onCancel, initialJlpt, initialForm, onLo
             <label style={S.label}>{T.finalGoal}</label>
             <div style={{ display:"flex", flexWrap:"wrap", gap:8 }}>
               {Object.keys(GOAL_KEY_MAP).map(g => (
-                <button key={g} onClick={()=>toggleGoal(g)} style={{ padding:"8px 14px", borderRadius:20, border:`1.5px solid ${form.goal.includes(g)?C.purpleLight:C.border}`, background:form.goal.includes(g)?"rgba(168,85,247,0.15)":C.card, color:form.goal.includes(g)?C.purpleLight:"#94a3b8", fontSize:12, fontWeight:600, cursor:"pointer" }}>
+                <button key={g} onClick={()=>toggleGoal(g)} style={{ padding:"8px 14px", borderRadius:20, border:`1.5px solid ${form.goal.includes(g)?C.purpleLight:C.border}`, background:form.goal.includes(g)?"rgba(168,85,247,0.15)":C.card, color:form.goal.includes(g)?C.purpleLight:"#94a3b8", fontSize:fz(12), fontWeight:600, cursor:"pointer" }}>
                   {T[GOAL_KEY_MAP[g]] || g}
                 </button>
               ))}
@@ -19686,9 +19687,9 @@ function FormScreen({ onSubmit, onBack, onCancel, initialJlpt, initialForm, onLo
           <div>
             <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:5 }}>
               <label style={{ ...S.label, marginBottom:0 }}>{T.currentJlpt}</label>
-              {initialJlpt && <span style={{ color:"#64748b", fontSize:10 }}>{T.autoFilled}</span>}
+              {initialJlpt && <span style={{ color:"#64748b", fontSize:fz(10) }}>{T.autoFilled}</span>}
             </div>
-            {initialJlpt && <p style={{ color:"#64748b", fontSize:11, marginBottom:6 }}>{T.changeLevel}</p>}
+            {initialJlpt && <p style={{ color:"#64748b", fontSize:fz(11), marginBottom:6 }}>{T.changeLevel}</p>}
             <select value={form.jlpt} onChange={e=>set("jlpt",e.target.value)} style={S.select}>
               <option value="">{T.selectLevel}</option>
               <option value="Beginner">{T.beginner}</option>
@@ -19726,18 +19727,18 @@ function FormScreen({ onSubmit, onBack, onCancel, initialJlpt, initialForm, onLo
             <label style={S.label}>{T.whatStudySkills}</label>
             <div style={{ display:"flex", flexWrap:"wrap", gap:8 }}>
               {Object.keys(SKILL_LABELS).map(k => (
-                <button key={k} onClick={()=>toggleSkill(k)} style={{ padding:"8px 14px", borderRadius:20, border:`1.5px solid ${form.skills.includes(k)?C.purpleLight:C.border}`, background:form.skills.includes(k)?"rgba(168,85,247,0.15)":C.card, color:form.skills.includes(k)?C.purpleLight:"#94a3b8", fontSize:12, fontWeight:600, cursor:"pointer" }}>
+                <button key={k} onClick={()=>toggleSkill(k)} style={{ padding:"8px 14px", borderRadius:20, border:`1.5px solid ${form.skills.includes(k)?C.purpleLight:C.border}`, background:form.skills.includes(k)?"rgba(168,85,247,0.15)":C.card, color:form.skills.includes(k)?C.purpleLight:"#94a3b8", fontSize:fz(12), fontWeight:600, cursor:"pointer" }}>
                   {T[SKILL_LABEL_KEY[k]] || SKILL_LABELS[k]}
                 </button>
               ))}
             </div>
             {(form.skills.includes("onlyHiragana") || form.skills.includes("onlyKatakana") || form.jlpt === "Beginner") && (
               <div style={{ marginTop:10, background:"rgba(6,182,212,0.06)", border:`1px solid rgba(6,182,212,0.2)`, borderRadius:10, padding:"12px 14px" }}>
-                <p style={{ color:C.teal, fontSize:12, fontWeight:700, margin:"0 0 4px" }}>{T.kanaResourcesTitle}</p>
-                <p style={{ color:"#94a3b8", fontSize:11, margin:"0 0 10px" }}>{T.kanaResourcesDesc}</p>
+                <p style={{ color:C.teal, fontSize:fz(12), fontWeight:700, margin:"0 0 4px" }}>{T.kanaResourcesTitle}</p>
+                <p style={{ color:"#94a3b8", fontSize:fz(11), margin:"0 0 10px" }}>{T.kanaResourcesDesc}</p>
                 <div style={{ display:"flex", flexDirection:"column", gap:6 }}>
                   {KANA_PRACTICE_RESOURCES.map((r,i) => (
-                    <a key={i} href={r.url} target="_blank" rel="noopener noreferrer" style={{ color:C.teal, fontSize:12, fontWeight:600, textDecoration:"none" }}>
+                    <a key={i} href={r.url} target="_blank" rel="noopener noreferrer" style={{ color:C.teal, fontSize:fz(12), fontWeight:600, textDecoration:"none" }}>
                       → {r.name}
                     </a>
                   ))}
@@ -19746,18 +19747,18 @@ function FormScreen({ onSubmit, onBack, onCancel, initialJlpt, initialForm, onLo
             )}
             {showConvJlptWarning && (
               <div style={{ marginTop:10, background:"rgba(245,158,11,0.1)", border:`1px solid ${C.amber}`, borderRadius:10, padding:"12px 14px" }}>
-                <p style={{ color:C.amber, fontSize:12, fontWeight:700, margin:"0 0 4px" }}>JLPT doesn't have a conversation section</p>
-                <p style={{ color:"#cbd5e1", fontSize:12, margin:"0 0 10px" }}>Would you like to practice conversation with different sources?</p>
+                <p style={{ color:C.amber, fontSize:fz(12), fontWeight:700, margin:"0 0 4px" }}>JLPT doesn't have a conversation section</p>
+                <p style={{ color:"#cbd5e1", fontSize:fz(12), margin:"0 0 10px" }}>Would you like to practice conversation with different sources?</p>
                 <div style={{ display:"flex", gap:8 }}>
-                  <button onClick={()=>setConvWarningDismissed(true)} style={{ ...S.btn, padding:"7px 14px", fontSize:12, background:C.amber, color:"#1a1200" }}>Yes</button>
-                  <button onClick={()=>toggleSkill("conversation")} style={{ ...S.btn, padding:"7px 14px", fontSize:12, background:"transparent", border:`1px solid ${C.border}`, color:"#94a3b8" }}>Get rid of the conversation</button>
+                  <button onClick={()=>setConvWarningDismissed(true)} style={{ ...S.btn, padding:"7px 14px", fontSize:fz(12), background:C.amber, color:"#1a1200" }}>Yes</button>
+                  <button onClick={()=>toggleSkill("conversation")} style={{ ...S.btn, padding:"7px 14px", fontSize:fz(12), background:"transparent", border:`1px solid ${C.border}`, color:"#94a3b8" }}>Get rid of the conversation</button>
                 </div>
               </div>
             )}
           </div>
         </div>
 
-        {err && <p style={{ color:C.red, fontSize:12, margin:"12px 0 0", textAlign:"center" }}>{err}</p>}
+        {err && <p style={{ color:C.red, fontSize:fz(12), margin:"12px 0 0", textAlign:"center" }}>{err}</p>}
         <button onClick={attemptSubmit} style={{ ...S.btn, width:"100%", marginTop:20, background:valid?`linear-gradient(135deg,${C.purple},#9333ea)`:"#1e293b", color:valid?"#fff":"#475569" }}>
           {initialForm ? T.saveChanges : T.buildPlan}
         </button>
@@ -19766,15 +19767,15 @@ function FormScreen({ onSubmit, onBack, onCancel, initialJlpt, initialForm, onLo
             <button onClick={attemptUpdateGuide} style={{ ...S.btn, width:"100%", background:"transparent", border:`1.5px solid ${C.purpleLight}`, color:C.purpleLight }}>
               {T.updateStudyGuideBtn}
             </button>
-            <p style={{ color:"#64748b", fontSize:11, margin:"8px 0 0", textAlign:"center", lineHeight:1.5 }}>{T.updateStudyGuideNote}</p>
+            <p style={{ color:"#64748b", fontSize:fz(11), margin:"8px 0 0", textAlign:"center", lineHeight:1.5 }}>{T.updateStudyGuideNote}</p>
           </div>
         )}
       </div>
       {confirmGuideUpdate && (
         <div style={{ position:"fixed", inset:0, background:"rgba(0,0,0,0.6)", display:"flex", alignItems:"center", justifyContent:"center", padding:16, zIndex:1000 }}>
           <div style={{ background:C.card, border:`1px solid ${C.border}`, borderRadius:14, padding:24, maxWidth:420, width:"100%" }}>
-            <p style={{ color:"#fff", fontSize:16, fontWeight:700, margin:"0 0 10px" }}>{T.updateStudyGuideConfirmTitle}</p>
-            <p style={{ color:"#94a3b8", fontSize:13, margin:"0 0 20px", lineHeight:1.5 }}>{T.updateStudyGuideConfirmDesc}</p>
+            <p style={{ color:"#fff", fontSize:fz(16), fontWeight:700, margin:"0 0 10px" }}>{T.updateStudyGuideConfirmTitle}</p>
+            <p style={{ color:"#94a3b8", fontSize:fz(13), margin:"0 0 20px", lineHeight:1.5 }}>{T.updateStudyGuideConfirmDesc}</p>
             <div style={{ display:"flex", flexDirection:"column", gap:10 }}>
               <button onClick={confirmUpdateGuideYes} style={{ ...S.btn, width:"100%", background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff" }}>
                 {T.updateStudyGuideConfirmYes}
@@ -19789,8 +19790,8 @@ function FormScreen({ onSubmit, onBack, onCancel, initialJlpt, initialForm, onLo
       {pendingSubmitForm && (
         <div style={{ position:"fixed", inset:0, background:"rgba(0,0,0,0.6)", display:"flex", alignItems:"center", justifyContent:"center", padding:16, zIndex:1000 }}>
           <div style={{ background:C.card, border:`1px solid ${C.border}`, borderRadius:14, padding:24, maxWidth:420, width:"100%" }}>
-            <p style={{ color:"#fff", fontSize:16, fontWeight:700, margin:"0 0 10px" }}>{T.skillsChangeTitle}</p>
-            <p style={{ color:"#94a3b8", fontSize:13, margin:"0 0 20px", lineHeight:1.5 }}>{T.skillsChangeDesc}</p>
+            <p style={{ color:"#fff", fontSize:fz(16), fontWeight:700, margin:"0 0 10px" }}>{T.skillsChangeTitle}</p>
+            <p style={{ color:"#94a3b8", fontSize:fz(13), margin:"0 0 20px", lineHeight:1.5 }}>{T.skillsChangeDesc}</p>
             <div style={{ display:"flex", flexDirection:"column", gap:10 }}>
               <button onClick={confirmUpdateStudyContent} style={{ ...S.btn, width:"100%", background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff" }}>
                 {T.skillsChangeUpdateBtn}
@@ -19860,11 +19861,11 @@ function ComprehensionCheck({ itemId, checkins, onRecord, T }) {
   const answered = checkins[itemId];
   return (
     <div style={{ display:"flex", alignItems:"center", gap:8, marginTop:8 }} onClick={e=>e.stopPropagation()}>
-      <span style={{ color:"#ffffff", fontSize:11, fontWeight:600 }}>{T.didYouUnderstand || "Did you understand this?"}</span>
-      <button onClick={()=>onRecord(itemId, true)} style={{ fontSize:11, fontWeight:700, padding:"3px 10px", borderRadius:8, border:`1px solid ${answered===true?"rgba(34,197,94,0.5)":C.border}`, background:answered===true?"rgba(34,197,94,0.15)":"transparent", color:answered===true?C.green:"#94a3b8", cursor:"pointer" }}>
+      <span style={{ color:"#ffffff", fontSize:fz(11), fontWeight:600 }}>{T.didYouUnderstand || "Did you understand this?"}</span>
+      <button onClick={()=>onRecord(itemId, true)} style={{ fontSize:fz(11), fontWeight:700, padding:"3px 10px", borderRadius:8, border:`1px solid ${answered===true?"rgba(34,197,94,0.5)":C.border}`, background:answered===true?"rgba(34,197,94,0.15)":"transparent", color:answered===true?C.green:"#94a3b8", cursor:"pointer" }}>
         {T.yes || "Yes"}
       </button>
-      <button onClick={()=>onRecord(itemId, false)} style={{ fontSize:11, fontWeight:700, padding:"3px 10px", borderRadius:8, border:`1px solid ${answered===false?"rgba(239,68,68,0.5)":C.border}`, background:answered===false?"rgba(239,68,68,0.15)":"transparent", color:answered===false?C.red:"#94a3b8", cursor:"pointer" }}>
+      <button onClick={()=>onRecord(itemId, false)} style={{ fontSize:fz(11), fontWeight:700, padding:"3px 10px", borderRadius:8, border:`1px solid ${answered===false?"rgba(239,68,68,0.5)":C.border}`, background:answered===false?"rgba(239,68,68,0.15)":"transparent", color:answered===false?C.red:"#94a3b8", cursor:"pointer" }}>
         {T.no || "No"}
       </button>
     </div>
@@ -19884,23 +19885,23 @@ function LevelUpOffer({ T, currentLevel, onConfirm, onDismiss }) {
     <div style={{ ...S.card, marginBottom:12, background:"rgba(34,197,94,0.08)", border:"1px solid rgba(34,197,94,0.25)" }}>
       {!showPicker ? (
         <>
-          <p style={{ color:"#ffffff", fontSize:13, margin:"0 0 10px" }}>
+          <p style={{ color:"#ffffff", fontSize:fz(13), margin:"0 0 10px" }}>
             🎉 {T.levelUpPrompt || "You're understanding almost everything here! Would you like to update your level to a higher level?"}
           </p>
           <div style={{ display:"flex", gap:8 }}>
-            <button onClick={()=>setShowPicker(true)} style={{ ...S.btn, padding:"7px 14px", background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff", fontSize:12 }}>{T.yes || "Yes"}</button>
-            <button onClick={onDismiss} style={{ ...S.btn, padding:"7px 14px", background:C.card, color:"#94a3b8", border:`1px solid ${C.border}`, fontSize:12 }}>{T.no || "No"}</button>
+            <button onClick={()=>setShowPicker(true)} style={{ ...S.btn, padding:"7px 14px", background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff", fontSize:fz(12) }}>{T.yes || "Yes"}</button>
+            <button onClick={onDismiss} style={{ ...S.btn, padding:"7px 14px", background:C.card, color:"#94a3b8", border:`1px solid ${C.border}`, fontSize:fz(12) }}>{T.no || "No"}</button>
           </div>
         </>
       ) : (
         <>
-          <p style={{ color:"#ffffff", fontSize:12, marginBottom:8 }}>
+          <p style={{ color:"#ffffff", fontSize:fz(12), marginBottom:8 }}>
             {T.currentLevelLabel || "Current level:"} <strong>{currentLevel}</strong>
           </p>
-          <p style={{ color:"#94a3b8", fontSize:12, marginBottom:8 }}>{T.chooseNewLevel || "Choose your new level:"}</p>
+          <p style={{ color:"#94a3b8", fontSize:fz(12), marginBottom:8 }}>{T.chooseNewLevel || "Choose your new level:"}</p>
           <div style={{ display:"flex", flexWrap:"wrap", gap:8 }}>
             {remainingLevels.map(l => (
-              <button key={l} onClick={()=>onConfirm(l)} style={{ padding:"6px 12px", borderRadius:20, border:`1.5px solid ${l===next?C.purpleLight:C.border}`, background:l===next?"rgba(168,85,247,0.15)":C.card, color:"#e2e8f0", fontSize:12, cursor:"pointer" }}>
+              <button key={l} onClick={()=>onConfirm(l)} style={{ padding:"6px 12px", borderRadius:20, border:`1.5px solid ${l===next?C.purpleLight:C.border}`, background:l===next?"rgba(168,85,247,0.15)":C.card, color:"#e2e8f0", fontSize:fz(12), cursor:"pointer" }}>
                 {T[LEVEL_T_KEY[l]] || l}
               </button>
             ))}
@@ -19955,9 +19956,9 @@ function TutorialOverlay({ T, step, tab, resourceSubTab, tabsMeta, resourceSubTa
     return (
       <div style={{ position:"fixed", inset:0, background:"rgba(0,0,0,0.75)", display:"flex", alignItems:"center", justifyContent:"center", zIndex:1000, padding:16 }}>
         <div style={{ ...S.card, width:"100%", maxWidth:400, textAlign:"center" }}>
-          <div style={{ fontSize:40, marginBottom:10 }}>🎓</div>
-          <p style={{ color:"#f1f5f9", fontSize:16, fontWeight:800, margin:"0 0 10px" }}>{T.tutorialWelcomeTitle}</p>
-          <p style={{ color:"#94a3b8", fontSize:13, lineHeight:1.6, margin:"0 0 20px" }}>{T.tutorialWelcomeDesc}</p>
+          <div style={{ fontSize:fz(40), marginBottom:10 }}>🎓</div>
+          <p style={{ color:"#f1f5f9", fontSize:fz(16), fontWeight:800, margin:"0 0 10px" }}>{T.tutorialWelcomeTitle}</p>
+          <p style={{ color:"#94a3b8", fontSize:fz(13), lineHeight:1.6, margin:"0 0 20px" }}>{T.tutorialWelcomeDesc}</p>
           <div style={{ display:"flex", gap:10, justifyContent:"center" }}>
             <button onClick={onStart} style={{ ...S.btn, background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff" }}>{T.tutorialStartBtn}</button>
             <button onClick={onSkip} style={{ ...S.btn, background:"transparent", border:`1px solid ${C.border}`, color:"#64748b" }}>{T.tutorialSkipBtn}</button>
@@ -19979,19 +19980,19 @@ function TutorialOverlay({ T, step, tab, resourceSubTab, tabsMeta, resourceSubTa
     return (
       <div style={{ position:"fixed", left:16, right:16, bottom:16, maxWidth:480, margin:"0 auto", zIndex:150, background:"#0f172a", border:`1.5px solid ${C.purpleLight}`, borderRadius:16, padding:"16px 18px", boxShadow:"0 8px 30px rgba(0,0,0,0.5)" }}>
         <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:8 }}>
-          <p style={{ color:C.purpleLight, fontSize:10, fontWeight:800, letterSpacing:1, margin:0 }}>{stepOfText}</p>
-          <button onClick={onSkip} style={{ background:"none", border:"none", color:"#475569", fontSize:11, cursor:"pointer", fontWeight:700, padding:0 }}>{T.tutorialSkipBtn}</button>
+          <p style={{ color:C.purpleLight, fontSize:fz(10), fontWeight:800, letterSpacing:1, margin:0 }}>{stepOfText}</p>
+          <button onClick={onSkip} style={{ background:"none", border:"none", color:"#475569", fontSize:fz(11), cursor:"pointer", fontWeight:700, padding:0 }}>{T.tutorialSkipBtn}</button>
         </div>
-        <p style={{ color:"#f1f5f9", fontSize:14, fontWeight:800, margin:"0 0 6px" }}>{targetLabel}</p>
+        <p style={{ color:"#f1f5f9", fontSize:fz(14), fontWeight:800, margin:"0 0 6px" }}>{targetLabel}</p>
         {reached ? (
           <>
-            <p style={{ color:"#94a3b8", fontSize:13, lineHeight:1.6, margin:"0 0 14px" }}>{T[descKey]}</p>
+            <p style={{ color:"#94a3b8", fontSize:fz(13), lineHeight:1.6, margin:"0 0 14px" }}>{T[descKey]}</p>
             <button onClick={onAdvance} style={{ ...S.btn, width:"100%", background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff" }}>
               {step === TUTORIAL_STEPS.length ? T.tutorialCompleteBtn : T.tutorialNextBtn}
             </button>
           </>
         ) : (
-          <p style={{ color:C.purpleLight, fontSize:13, fontWeight:700, margin:0 }}>{T.tutorialClickPrompt}</p>
+          <p style={{ color:C.purpleLight, fontSize:fz(13), fontWeight:700, margin:0 }}>{T.tutorialClickPrompt}</p>
         )}
       </div>
     );
@@ -20001,10 +20002,10 @@ function TutorialOverlay({ T, step, tab, resourceSubTab, tabsMeta, resourceSubTa
     return (
       <div style={{ position:"fixed", inset:0, background:"rgba(0,0,0,0.75)", display:"flex", alignItems:"center", justifyContent:"center", zIndex:1000, padding:16 }}>
         <div style={{ ...S.card, width:"100%", maxWidth:400, textAlign:"center" }}>
-          <div style={{ fontSize:40, marginBottom:10 }}>🎉</div>
-          <p style={{ color:"#f1f5f9", fontSize:16, fontWeight:800, margin:"0 0 10px" }}>{T.tutorialCompleteTitle}</p>
-          <p style={{ color:"#94a3b8", fontSize:13, lineHeight:1.6, margin:"0 0 16px" }}>{T.tutorialCompleteDesc}</p>
-          <p style={{ color:C.purpleLight, fontSize:12, fontWeight:700, margin:"0 0 20px", padding:"10px 12px", background:"rgba(168,85,247,0.1)", border:`1px solid rgba(168,85,247,0.3)`, borderRadius:10 }}>{T.tutorialReaderCta}</p>
+          <div style={{ fontSize:fz(40), marginBottom:10 }}>🎉</div>
+          <p style={{ color:"#f1f5f9", fontSize:fz(16), fontWeight:800, margin:"0 0 10px" }}>{T.tutorialCompleteTitle}</p>
+          <p style={{ color:"#94a3b8", fontSize:fz(13), lineHeight:1.6, margin:"0 0 16px" }}>{T.tutorialCompleteDesc}</p>
+          <p style={{ color:C.purpleLight, fontSize:fz(12), fontWeight:700, margin:"0 0 20px", padding:"10px 12px", background:"rgba(168,85,247,0.1)", border:`1px solid rgba(168,85,247,0.3)`, borderRadius:10 }}>{T.tutorialReaderCta}</p>
           <button onClick={onFinish} style={{ ...S.btn, width:"100%", background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff" }}>{T.tutorialCompleteBtn}</button>
         </div>
       </div>
@@ -20205,8 +20206,8 @@ function CoachPanel({ T, allow, onGo, compact }) {
     if (!shown.length) return null;
     return (
       <div style={{ ...S.card, marginBottom:12, padding:"10px 12px", background:"rgba(168,85,247,0.08)", border:"1px solid rgba(168,85,247,0.25)", display:"flex", alignItems:"center", gap:10 }}>
-        <p style={{ color:"#e2e8f0", fontSize:12, lineHeight:1.6, margin:0, flex:1 }}>🎯 {line(shown[0])}</p>
-        <button onClick={() => { if (shown[0].type === "writeretry") startWritingRetry(shown[0].chars); onGo(target(shown[0])); }} style={{ ...S.btn, padding:"6px 12px", background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff", fontSize:11, flexShrink:0 }}>{T.coachGo || "Let's go"} →</button>
+        <p style={{ color:"#e2e8f0", fontSize:fz(12), lineHeight:1.6, margin:0, flex:1 }}>🎯 {line(shown[0])}</p>
+        <button onClick={() => { if (shown[0].type === "writeretry") startWritingRetry(shown[0].chars); onGo(target(shown[0])); }} style={{ ...S.btn, padding:"6px 12px", background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff", fontSize:fz(11), flexShrink:0 }}>{T.coachGo || "Let's go"} →</button>
       </div>
     );
   }
@@ -20219,7 +20220,7 @@ function CoachPanel({ T, allow, onGo, compact }) {
     [T.coachStatSpeak || "Speaking", stats.speak !== null ? stats.speak + "%" : "–"],
   ];
   const detailRow = (k, label, right, bad) => (
-    <div key={k} style={{ display:"flex", justifyContent:"space-between", gap:10, fontSize:12, padding:"3px 0", borderBottom:`1px solid ${C.border}` }}>
+    <div key={k} style={{ display:"flex", justifyContent:"space-between", gap:10, fontSize:fz(12), padding:"3px 0", borderBottom:`1px solid ${C.border}` }}>
       <span style={{ color:"#e2e8f0", wordBreak:"break-all" }}>{label}</span>
       <b style={{ color: bad ? "#fbbf24" : "#86efac", flexShrink:0 }}>{right}</b>
     </div>
@@ -20227,25 +20228,25 @@ function CoachPanel({ T, allow, onGo, compact }) {
   return (
     <div>
       <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", gap:8, margin:"0 0 6px" }}>
-        <p style={{ color:C.purpleLight, fontSize:11, fontWeight:700, margin:0 }}>{T.coachAdviceTitle || "🎯 Your study coach"}</p>
-        <button onClick={() => setShowGuide(true)} style={{ background:"none", border:`1px solid ${C.border}`, borderRadius:8, color:"#94a3b8", fontSize:11, padding:"3px 8px", cursor:"pointer" }}>{T.ivGuideBtn || "ℹ️ How to read this"}</button>
+        <p style={{ color:C.purpleLight, fontSize:fz(11), fontWeight:700, margin:0 }}>{T.coachAdviceTitle || "🎯 Your study coach"}</p>
+        <button onClick={() => setShowGuide(true)} style={{ background:"none", border:`1px solid ${C.border}`, borderRadius:8, color:"#94a3b8", fontSize:fz(11), padding:"3px 8px", cursor:"pointer" }}>{T.ivGuideBtn || "ℹ️ How to read this"}</button>
       </div>
       {showGuide && <IntensiveGuide T={T} onClose={() => setShowGuide(false)} />}
       <div style={{ display:"flex", gap:6, flexWrap:"wrap", marginBottom:10 }}>
         {chips.map(([label, val], i) => (
-          <span key={i} style={{ fontSize:11, color:"#cbd5e1", background:"rgba(255,255,255,0.06)", border:`1px solid ${C.border}`, borderRadius:8, padding:"3px 8px" }}>{label}: <b style={{ color:"#f1f5f9" }}>{val}</b></span>
+          <span key={i} style={{ fontSize:fz(11), color:"#cbd5e1", background:"rgba(255,255,255,0.06)", border:`1px solid ${C.border}`, borderRadius:8, padding:"3px 8px" }}>{label}: <b style={{ color:"#f1f5f9" }}>{val}</b></span>
         ))}
       </div>
-      {shown.length === 0 && <p style={{ color:"#e2e8f0", fontSize:13, lineHeight:1.65, margin:"0 0 6px" }}>{hasData ? (T.coachAllGood || "No weak spots right now. Keep up this pace!") : (T.coachNoData || "Practice a little more and I'll start giving you specific advice.")}</p>}
+      {shown.length === 0 && <p style={{ color:"#e2e8f0", fontSize:fz(13), lineHeight:1.65, margin:"0 0 6px" }}>{hasData ? (T.coachAllGood || "No weak spots right now. Keep up this pace!") : (T.coachNoData || "Practice a little more and I'll start giving you specific advice.")}</p>}
       {shown.map((a, i) => (
         <div key={i} style={{ marginBottom:10 }}>
-          <p style={{ color:"#e2e8f0", fontSize:13, lineHeight:1.65, margin:"0 0 6px" }}>{i + 1}. {line(a)}</p>
-          <button onClick={() => { if (a.type === "writeretry") startWritingRetry(a.chars); onGo(target(a)); }} style={{ ...S.btn, padding:"7px 14px", background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff", fontSize:12 }}>{T.coachGo || "Let's go"} →</button>
+          <p style={{ color:"#e2e8f0", fontSize:fz(13), lineHeight:1.65, margin:"0 0 6px" }}>{i + 1}. {line(a)}</p>
+          <button onClick={() => { if (a.type === "writeretry") startWritingRetry(a.chars); onGo(target(a)); }} style={{ ...S.btn, padding:"7px 14px", background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff", fontSize:fz(12) }}>{T.coachGo || "Let's go"} →</button>
         </div>
       ))}
       {flipWords.length > 0 && (
         <details style={{ marginTop:8 }}>
-          <summary style={{ color:C.purpleLight, fontSize:12, fontWeight:700, cursor:"pointer" }}>{T.coachDetailFlip || "Flip speed, word by word"} ({flipWords.length})</summary>
+          <summary style={{ color:C.purpleLight, fontSize:fz(12), fontWeight:700, cursor:"pointer" }}>{T.coachDetailFlip || "Flip speed, word by word"} ({flipWords.length})</summary>
           <div style={{ marginTop:6, maxHeight:180, overflowY:"auto" }}>
             {flipWords.slice(0, 40).map(x => detailRow("f" + x.w, x.w, x.sec.toFixed(1) + "s" + (x.n > 1 ? " ×" + x.n : ""), x.sec >= 6))}
           </div>
@@ -20253,7 +20254,7 @@ function CoachPanel({ T, allow, onGo, compact }) {
       )}
       {writeChars.length > 0 && (
         <details style={{ marginTop:8 }}>
-          <summary style={{ color:C.purpleLight, fontSize:12, fontWeight:700, cursor:"pointer" }}>{T.coachDetailWrite || "Writing, character by character"} ({writeChars.length})</summary>
+          <summary style={{ color:C.purpleLight, fontSize:fz(12), fontWeight:700, cursor:"pointer" }}>{T.coachDetailWrite || "Writing, character by character"} ({writeChars.length})</summary>
           <div style={{ marginTop:6, maxHeight:180, overflowY:"auto" }}>
             {writeChars.slice(0, 60).map(x => detailRow("w" + x.w, x.w, x.pct + "% · ×" + x.n, x.pct < 70))}
           </div>
@@ -20334,7 +20335,7 @@ function ProgressBands({ rec }) {
   return (
     <div style={{ display:"flex", gap:6, flexWrap:"wrap", marginTop:6 }}>
       {PROGRESS_LEVELS.map(lv => (
-        <span key={lv} style={{ fontSize:11, fontWeight:700, color:"#cbd5e1", background:"rgba(255,255,255,0.06)", border:`1px solid ${C.border}`, borderRadius:8, padding:"3px 8px" }}>{lv} {(rec.byLv && rec.byLv[lv]) || 0}/3</span>
+        <span key={lv} style={{ fontSize:fz(11), fontWeight:700, color:"#cbd5e1", background:"rgba(255,255,255,0.06)", border:`1px solid ${C.border}`, borderRadius:8, padding:"3px 8px" }}>{lv} {(rec.byLv && rec.byLv[lv]) || 0}/3</span>
       ))}
     </div>
   );
@@ -20349,33 +20350,33 @@ function ProgressSummary({ T, history }) {
     <div>
       {!compare && (
         <div style={{ marginBottom:10 }}>
-          <p style={{ color:C.amber, fontSize:11, fontWeight:700, margin:"0 0 2px" }}>{T.pcStartingPoint || "Your starting point"}</p>
-          <p style={{ color:"#f1f5f9", fontSize:22, fontWeight:800, margin:0 }}>{first.score} / {first.total}</p>
+          <p style={{ color:C.amber, fontSize:fz(11), fontWeight:700, margin:"0 0 2px" }}>{T.pcStartingPoint || "Your starting point"}</p>
+          <p style={{ color:"#f1f5f9", fontSize:fz(22), fontWeight:800, margin:0 }}>{first.score} / {first.total}</p>
           <ProgressBands rec={first} />
         </div>
       )}
       {compare && (
         <div style={{ marginBottom:10 }}>
-          <p style={{ color:C.amber, fontSize:11, fontWeight:700, margin:"0 0 6px" }}>{T.pcThenNow || "Then vs. now"}</p>
+          <p style={{ color:C.amber, fontSize:fz(11), fontWeight:700, margin:"0 0 6px" }}>{T.pcThenNow || "Then vs. now"}</p>
           <div style={{ display:"flex", gap:10 }}>
             {[[T.pcThen || "Then", first], [T.pcNow || "Now", last]].map(([label, rec], i) => (
               <div key={i} style={{ flex:1, background:i ? "rgba(34,197,94,0.08)" : "rgba(255,255,255,0.04)", border:`1px solid ${i ? "rgba(34,197,94,0.3)" : C.border}`, borderRadius:10, padding:"8px 10px" }}>
-                <p style={{ color:"#94a3b8", fontSize:11, margin:"0 0 2px" }}>{label}</p>
-                <p style={{ color:"#f1f5f9", fontSize:22, fontWeight:800, margin:0 }}>{rec.score} / {rec.total}</p>
+                <p style={{ color:"#94a3b8", fontSize:fz(11), margin:"0 0 2px" }}>{label}</p>
+                <p style={{ color:"#f1f5f9", fontSize:fz(22), fontWeight:800, margin:0 }}>{rec.score} / {rec.total}</p>
                 <ProgressBands rec={rec} />
               </div>
             ))}
           </div>
-          <p style={{ color:diff > 0 ? C.green : "#cbd5e1", fontSize:13, fontWeight:700, lineHeight:1.6, margin:"10px 0 0" }}>
+          <p style={{ color:diff > 0 ? C.green : "#cbd5e1", fontSize:fz(13), fontWeight:700, lineHeight:1.6, margin:"10px 0 0" }}>
             {diff > 0 ? progressFill(T.pcUp || "You went up {n} point(s)! 🎉", { n: diff }) : diff === 0 ? (T.pcSame || "Same score this time — keep practicing and try again later.") : (T.pcDown || "A little lower this time. One short quiz isn't the whole picture — keep practicing.")}
           </p>
         </div>
       )}
       {act.n > 0 && (
         <div style={{ paddingTop:10, borderTop:`1px solid ${C.border}` }}>
-          <p style={{ color:C.purpleLight, fontSize:11, fontWeight:700, margin:"0 0 4px" }}>{T.pcActivityTitle || "Your practice"}</p>
-          <p style={{ color:"#e2e8f0", fontSize:12, lineHeight:1.7, margin:0 }}>{progressFill(T.pcActLine || "{n} practice actions since your starting check", { n: act.n })}</p>
-          {act.acc && <p style={{ color:"#e2e8f0", fontSize:12, lineHeight:1.7, margin:0 }}>{progressFill(T.pcAccLine || "Accuracy in practice: {a}% → {b}%", act.acc)}</p>}
+          <p style={{ color:C.purpleLight, fontSize:fz(11), fontWeight:700, margin:"0 0 4px" }}>{T.pcActivityTitle || "Your practice"}</p>
+          <p style={{ color:"#e2e8f0", fontSize:fz(12), lineHeight:1.7, margin:0 }}>{progressFill(T.pcActLine || "{n} practice actions since your starting check", { n: act.n })}</p>
+          {act.acc && <p style={{ color:"#e2e8f0", fontSize:fz(12), lineHeight:1.7, margin:0 }}>{progressFill(T.pcAccLine || "Accuracy in practice: {a}% → {b}%", act.acc)}</p>}
         </div>
       )}
     </div>
@@ -20414,7 +20415,7 @@ function ProgressCheck({ T, userId }) {
   if (pcHidden && phase !== "quiz") {
     return (
       <div style={{ margin:"0 0 12px" }}>
-        <button type="button" onClick={() => setPcHidden(false)} style={{ background:"none", border:"none", color:"#64748b", fontSize:11, cursor:"pointer", padding:0, textDecoration:"underline" }}>{T.pcShowAgain || "Show the progress check again"}</button>
+        <button type="button" onClick={() => setPcHidden(false)} style={{ background:"none", border:"none", color:"#64748b", fontSize:fz(11), cursor:"pointer", padding:0, textDecoration:"underline" }}>{T.pcShowAgain || "Show the progress check again"}</button>
       </div>
     );
   }
@@ -20426,15 +20427,15 @@ function ProgressCheck({ T, userId }) {
         <div style={{ height:5, borderRadius:3, background:"rgba(255,255,255,0.08)", overflow:"hidden", marginBottom:10 }}>
           <div style={{ width:`${Math.round(idx / qs.length * 100)}%`, height:"100%", background:C.green }} />
         </div>
-        <p style={{ color:"#94a3b8", fontSize:11, margin:"0 0 6px" }}>{progressFill(T.pcQ || "Question {n} / {total}", { n: idx + 1, total: qs.length })}</p>
+        <p style={{ color:"#94a3b8", fontSize:fz(11), margin:"0 0 6px" }}>{progressFill(T.pcQ || "Question {n} / {total}", { n: idx + 1, total: qs.length })}</p>
         <QuestionFuriganaToggle T={T} />
-        <p style={{ color:"#f1f5f9", fontSize:16, fontWeight:700, lineHeight: qFuriOn ? 2.3 : 1.7, margin:"0 0 12px" }}>{qFuriOn && q.qf ? <FuriganaRichText text={q.qf} /> : q.q}</p>
+        <p style={{ color:"#f1f5f9", fontSize:fz(16), fontWeight:700, lineHeight: qFuriOn ? 2.3 : 1.7, margin:"0 0 12px" }}>{qFuriOn && q.qf ? <FuriganaRichText text={q.qf} /> : q.q}</p>
         <div style={{ display:"flex", flexDirection:"column", gap:8, marginBottom:12 }}>
           {q.order.map((ci, pos) => (
-            <button key={pos} onClick={() => setPicked(pos)} style={{ textAlign:"left", padding:"11px 14px", borderRadius:10, cursor:"pointer", fontSize:15, color:"#e2e8f0", background:picked === pos ? "rgba(168,85,247,0.18)" : C.card, border:`1.5px solid ${picked === pos ? C.purpleLight : C.border}` }}>{q.c[ci]}</button>
+            <button key={pos} onClick={() => setPicked(pos)} style={{ textAlign:"left", padding:"11px 14px", borderRadius:10, cursor:"pointer", fontSize:fz(15), color:"#e2e8f0", background:picked === pos ? "rgba(168,85,247,0.18)" : C.card, border:`1.5px solid ${picked === pos ? C.purpleLight : C.border}` }}>{q.c[ci]}</button>
           ))}
         </div>
-        <button onClick={next} disabled={picked === null} style={{ ...S.btn, padding:"10px 20px", background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff", fontSize:13, opacity:picked === null ? 0.45 : 1 }}>
+        <button onClick={next} disabled={picked === null} style={{ ...S.btn, padding:"10px 20px", background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff", fontSize:fz(13), opacity:picked === null ? 0.45 : 1 }}>
           {idx + 1 < qs.length ? (T.pcNext || "Next →") : (T.pcFinish || "See my result")}
         </button>
       </div>
@@ -20442,15 +20443,15 @@ function ProgressCheck({ T, userId }) {
   }
   return (
     <div style={wrap}>
-      <p style={{ color:"#86efac", fontSize:12, fontWeight:800, margin:"0 0 6px" }}>📈 {T.pcTitle || "Progress check"}</p>
-      {!history.length && <p style={{ color:"#e2e8f0", fontSize:13, lineHeight:1.7, margin:"0 0 12px" }}>{T.pcIntro || "A 3-minute starting check (12 questions). Take it again in a few days to see how much you've grown."}</p>}
+      <p style={{ color:"#86efac", fontSize:fz(12), fontWeight:800, margin:"0 0 6px" }}>📈 {T.pcTitle || "Progress check"}</p>
+      {!history.length && <p style={{ color:"#e2e8f0", fontSize:fz(13), lineHeight:1.7, margin:"0 0 12px" }}>{T.pcIntro || "A 3-minute starting check (12 questions). Take it again in a few days to see how much you've grown."}</p>}
       <ProgressSummary T={T} history={history} />
-      {history.length > 0 && <p style={{ color:"#64748b", fontSize:11, lineHeight:1.6, margin:"10px 0" }}>{T.pcNote || "Only your score is shown, so the check stays fair when you retake it."}</p>}
+      {history.length > 0 && <p style={{ color:"#64748b", fontSize:fz(11), lineHeight:1.6, margin:"10px 0" }}>{T.pcNote || "Only your score is shown, so the check stays fair when you retake it."}</p>}
       {waitDays > 0
-        ? <p style={{ color:"#94a3b8", fontSize:12, margin:0 }}>{progressFill(T.pcRetakeWait || "You can retake it in {n} day(s).", { n: waitDays })}</p>
-        : <button onClick={start} style={{ ...S.btn, padding:"10px 20px", background:"linear-gradient(135deg,#22c55e,#16a34a)", color:"#fff", fontSize:13 }}>{history.length ? (T.pcRetake || "Take it again") : (T.pcStart || "Start the check")}</button>}
+        ? <p style={{ color:"#94a3b8", fontSize:fz(12), margin:0 }}>{progressFill(T.pcRetakeWait || "You can retake it in {n} day(s).", { n: waitDays })}</p>
+        : <button onClick={start} style={{ ...S.btn, padding:"10px 20px", background:"linear-gradient(135deg,#22c55e,#16a34a)", color:"#fff", fontSize:fz(13) }}>{history.length ? (T.pcRetake || "Take it again") : (T.pcStart || "Start the check")}</button>}
       <div style={{ marginTop:10 }}>
-        <button type="button" onClick={() => setPcHidden(true)} style={{ padding:"6px 14px", borderRadius:8, background:C.card, border:`1px solid ${C.border}`, color:"#94a3b8", fontSize:12, cursor:"pointer" }}>🙈 {T.pcHide || "Hide"}</button>
+        <button type="button" onClick={() => setPcHidden(true)} style={{ padding:"6px 14px", borderRadius:8, background:C.card, border:`1px solid ${C.border}`, color:"#94a3b8", fontSize:fz(12), cursor:"pointer" }}>🙈 {T.pcHide || "Hide"}</button>
       </div>
     </div>
   );
@@ -20468,11 +20469,11 @@ function ProgressNudge({ T, onGo }) {
   if (pcHidden || hidden || !kind || snoozed) return null;
   return (
     <div style={{ ...S.card, marginBottom:12, background:"rgba(34,197,94,0.07)", border:"1px solid rgba(34,197,94,0.3)" }}>
-      <p style={{ color:"#bbf7d0", fontSize:12, lineHeight:1.6, margin:"0 0 8px" }}>📈 {kind === "start" ? (T.pcNudgeStart || "Want to see how much you grow? Take a 3-minute starting check.") : (T.pcNudgeRetake || "It's been a while — retake the check and see your growth!")}</p>
+      <p style={{ color:"#bbf7d0", fontSize:fz(12), lineHeight:1.6, margin:"0 0 8px" }}>📈 {kind === "start" ? (T.pcNudgeStart || "Want to see how much you grow? Take a 3-minute starting check.") : (T.pcNudgeRetake || "It's been a while — retake the check and see your growth!")}</p>
       <div style={{ display:"flex", alignItems:"center", gap:12 }}>
-        <button onClick={() => { logFunnel(ACTIVE_USER_ID, "progress_nudge_clicked"); onGo(); }} style={{ ...S.btn, padding:"8px 16px", background:"linear-gradient(135deg,#22c55e,#16a34a)", color:"#fff", fontSize:12 }}>{kind === "start" ? (T.pcStart || "Start the check") : (T.pcRetake || "Take it again")}</button>
-        <button type="button" onClick={() => { try { localStorage.setItem(scopedKey(PROGRESS_NUDGE_KEY), String(Date.now())); } catch {} setHidden(true); }} style={{ background:"none", border:"none", color:"#94a3b8", fontSize:11, cursor:"pointer", padding:0 }}>{T.pcLater || "Later"}</button>
-        <button type="button" onClick={() => setPcHidden(true)} style={{ padding:"5px 12px", borderRadius:8, background:C.card, border:`1px solid ${C.border}`, color:"#94a3b8", fontSize:11, cursor:"pointer" }}>🙈 {T.pcHide || "Hide"}</button>
+        <button onClick={() => { logFunnel(ACTIVE_USER_ID, "progress_nudge_clicked"); onGo(); }} style={{ ...S.btn, padding:"8px 16px", background:"linear-gradient(135deg,#22c55e,#16a34a)", color:"#fff", fontSize:fz(12) }}>{kind === "start" ? (T.pcStart || "Start the check") : (T.pcRetake || "Take it again")}</button>
+        <button type="button" onClick={() => { try { localStorage.setItem(scopedKey(PROGRESS_NUDGE_KEY), String(Date.now())); } catch {} setHidden(true); }} style={{ background:"none", border:"none", color:"#94a3b8", fontSize:fz(11), cursor:"pointer", padding:0 }}>{T.pcLater || "Later"}</button>
+        <button type="button" onClick={() => setPcHidden(true)} style={{ padding:"5px 12px", borderRadius:8, background:C.card, border:`1px solid ${C.border}`, color:"#94a3b8", fontSize:fz(11), cursor:"pointer" }}>🙈 {T.pcHide || "Hide"}</button>
       </div>
     </div>
   );
@@ -20482,8 +20483,8 @@ function IntensiveWarn({ T, onOk, onBack }) {
   return (
     <div style={{ position:"fixed", inset:0, background:"rgba(0,0,0,0.78)", display:"flex", alignItems:"center", justifyContent:"center", zIndex:1100, padding:16 }}>
       <div style={{ ...S.card, width:"100%", maxWidth:420, maxHeight:"92vh", overflowY:"auto" }}>
-        <p style={{ color:"#fca5a5", fontSize:16, fontWeight:800, margin:"0 0 12px", textAlign:"center" }}>{T.ivWarnTitle || "⚠️ Please read before choosing Intensive Mode"}</p>
-        <p style={{ color:"#e2e8f0", fontSize:13, lineHeight:1.8, margin:"0 0 16px", padding:"12px 14px", borderRadius:10, background:"rgba(239,68,68,0.08)", border:"1px solid rgba(239,68,68,0.3)" }}>{T.ivWarnBody || "Intensive Mode is only for people who are serious about learning Japanese, or who are aiming for an exam or qualification. Every day you must finish a quota of 8 study actions, and some tabs stay locked until you do. If you just want to enjoy learning, choose Enjoyable Mode."}</p>
+        <p style={{ color:"#fca5a5", fontSize:fz(16), fontWeight:800, margin:"0 0 12px", textAlign:"center" }}>{T.ivWarnTitle || "⚠️ Please read before choosing Intensive Mode"}</p>
+        <p style={{ color:"#e2e8f0", fontSize:fz(13), lineHeight:1.8, margin:"0 0 16px", padding:"12px 14px", borderRadius:10, background:"rgba(239,68,68,0.08)", border:"1px solid rgba(239,68,68,0.3)" }}>{T.ivWarnBody || "Intensive Mode is only for people who are serious about learning Japanese, or who are aiming for an exam or qualification. Every day you must finish a quota of 8 study actions, and some tabs stay locked until you do. If you just want to enjoy learning, choose Enjoyable Mode."}</p>
         <button onClick={onOk} style={{ ...S.btn, width:"100%", background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff", marginBottom:8 }}>{T.ivWarnOk || "OK, I'm serious"}</button>
         <button onClick={onBack} style={{ ...S.btn, width:"100%", background:"transparent", border:`1px solid ${C.border}`, color:"#94a3b8" }}>{T.ivWarnBack || "Choose another mode"}</button>
       </div>
@@ -20499,7 +20500,7 @@ function IntensiveGuide({ T, onClose }) {
   return (
     <div style={{ position:"fixed", inset:0, background:"rgba(0,0,0,0.78)", display:"flex", alignItems:"center", justifyContent:"center", zIndex:1100, padding:16 }}>
       <div style={{ ...S.card, width:"100%", maxWidth:440, maxHeight:"92vh", overflowY:"auto" }}>
-        <p style={{ color:"#f1f5f9", fontSize:17, fontWeight:800, margin:"0 0 14px", textAlign:"center" }}>{T.ivGuideTitle || "How to read your Intensive Mode data"}</p>
+        <p style={{ color:"#f1f5f9", fontSize:fz(17), fontWeight:800, margin:"0 0 14px", textAlign:"center" }}>{T.ivGuideTitle || "How to read your Intensive Mode data"}</p>
         <div style={{ display:"flex", flexDirection:"column", gap:8, marginBottom:14 }}>
           {items.map((txt, i) => {
             const k = txt.indexOf(" — ");
@@ -20507,8 +20508,8 @@ function IntensiveGuide({ T, onClose }) {
             const body = k > 0 ? txt.slice(k + 3) : txt;
             return (
               <div key={i} style={{ padding:"10px 12px", borderRadius:10, background:"rgba(168,85,247,0.10)", border:`1px solid ${C.border}` }}>
-                {head && <p style={{ color:C.purpleLight, fontSize:13, fontWeight:800, margin:"0 0 4px" }}>{head}</p>}
-                <p style={{ color:"#e2e8f0", fontSize:12, lineHeight:1.75, margin:0 }}>{body}</p>
+                {head && <p style={{ color:C.purpleLight, fontSize:fz(13), fontWeight:800, margin:"0 0 4px" }}>{head}</p>}
+                <p style={{ color:"#e2e8f0", fontSize:fz(12), lineHeight:1.75, margin:0 }}>{body}</p>
               </div>
             );
           })}
@@ -20530,12 +20531,12 @@ function ModePicker({ T, trialEnded, onPick }) {
   return (
     <div style={{ position:"fixed", inset:0, background:"rgba(0,0,0,0.78)", display:"flex", alignItems:"center", justifyContent:"center", zIndex:1100, padding:16 }}>
       <div style={{ ...S.card, width:"100%", maxWidth:420, maxHeight:"92vh", overflowY:"auto" }}>
-        <p style={{ color:"#f1f5f9", fontSize:17, fontWeight:800, margin:"0 0 14px", textAlign:"center" }}>{trialEnded ? (T.trialEndedTitle || "Your 3-day Intensive trial has ended. Which mode now?") : (T.modePickerTitle || "Which mode do you want to try?")}</p>
+        <p style={{ color:"#f1f5f9", fontSize:fz(17), fontWeight:800, margin:"0 0 14px", textAlign:"center" }}>{trialEnded ? (T.trialEndedTitle || "Your 3-day Intensive trial has ended. Which mode now?") : (T.modePickerTitle || "Which mode do you want to try?")}</p>
         <div style={{ display:"flex", flexDirection:"column", gap:10 }}>
           {opts.map(([id, title, desc]) => (
             <button key={id} onClick={() => choose(id)} style={{ textAlign:"left", padding:"12px 14px", borderRadius:12, cursor:"pointer", border:`1.5px solid ${id === "enjoyable" ? C.border : C.purpleLight}`, background:id === "enjoyable" ? C.card : "rgba(168,85,247,0.12)", color:"#e2e8f0" }}>
-              <span style={{ display:"block", fontSize:14, fontWeight:800, marginBottom:4 }}>{id === "enjoyable" ? "😊 " : "🔥 "}{title}</span>
-              <span style={{ display:"block", fontSize:12, color:"#94a3b8", lineHeight:1.6 }}>{desc}</span>
+              <span style={{ display:"block", fontSize:fz(14), fontWeight:800, marginBottom:4 }}>{id === "enjoyable" ? "😊 " : "🔥 "}{title}</span>
+              <span style={{ display:"block", fontSize:fz(12), color:"#94a3b8", lineHeight:1.6 }}>{desc}</span>
             </button>
           ))}
         </div>
@@ -20549,10 +20550,10 @@ function ModeGuide({ T, onClose }) {
   return (
     <div style={{ position:"fixed", inset:0, background:"rgba(0,0,0,0.78)", display:"flex", alignItems:"center", justifyContent:"center", zIndex:1100, padding:16 }}>
       <div style={{ ...S.card, width:"100%", maxWidth:420, maxHeight:"92vh", overflowY:"auto" }}>
-        <p style={{ color:"#f1f5f9", fontSize:17, fontWeight:800, margin:"0 0 14px", textAlign:"center" }}>{T.modeGuideTitle}</p>
+        <p style={{ color:"#f1f5f9", fontSize:fz(17), fontWeight:800, margin:"0 0 14px", textAlign:"center" }}>{T.modeGuideTitle}</p>
         <div style={{ display:"flex", flexDirection:"column", gap:10, marginBottom:14 }}>
           {items.map((txt, i) => (
-            <p key={i} style={{ color:"#e2e8f0", fontSize:13, lineHeight:1.7, margin:0, padding:"10px 12px", borderRadius:10, background:"rgba(168,85,247,0.10)", border:`1px solid ${C.border}` }}>{txt}</p>
+            <p key={i} style={{ color:"#e2e8f0", fontSize:fz(13), lineHeight:1.7, margin:0, padding:"10px 12px", borderRadius:10, background:"rgba(168,85,247,0.10)", border:`1px solid ${C.border}` }}>{txt}</p>
           ))}
         </div>
         <button onClick={onClose} style={{ ...S.btn, width:"100%", background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff" }}>{T.modeGuideOk}</button>
@@ -20572,25 +20573,41 @@ function FeaturePicker({ T, initial, onApply }) {
   return (
     <div style={{ position:"fixed", inset:0, background:"rgba(0,0,0,0.75)", display:"flex", alignItems:"center", justifyContent:"center", zIndex:1000, padding:16 }}>
       <div style={{ ...S.card, width:"100%", maxWidth:420, maxHeight:"92vh", overflowY:"auto" }}>
-        <p style={{ color:"#f1f5f9", fontSize:16, fontWeight:800, margin:"0 0 8px", textAlign:"center" }}>{T.featurePickerTitle || "Choose the features you want"}</p>
-        <p style={{ color:"#94a3b8", fontSize:13, lineHeight:1.6, margin:"0 0 14px", textAlign:"center" }}>{T.featurePickerDesc || "Pick only the features you'll use. The rest will be hidden so your screen stays simple. You can change this anytime."}</p>
+        <p style={{ color:"#f1f5f9", fontSize:fz(16), fontWeight:800, margin:"0 0 8px", textAlign:"center" }}>{T.featurePickerTitle || "Choose the features you want"}</p>
+        <p style={{ color:"#94a3b8", fontSize:fz(13), lineHeight:1.6, margin:"0 0 14px", textAlign:"center" }}>{T.featurePickerDesc || "Pick only the features you'll use. The rest will be hidden so your screen stays simple. You can change this anytime."}</p>
         <div style={{ display:"flex", flexDirection:"column", gap:8, marginBottom:12 }}>
           {OPTIONAL_FEATURES.map(id => {
             const on = checked.includes(id);
             return (
-              <button key={id} onClick={() => toggle(id)} style={{ display:"flex", alignItems:"center", gap:10, padding:"10px 12px", borderRadius:10, cursor:"pointer", textAlign:"left", border:`1.5px solid ${on ? C.purpleLight : C.border}`, background:on ? "rgba(168,85,247,0.15)" : C.card, color:"#e2e8f0", fontSize:13, fontWeight:700 }}>
-                <span style={{ width:18, height:18, borderRadius:5, border:`2px solid ${on ? C.purpleLight : "#64748b"}`, background:on ? C.purpleLight : "transparent", color:"#1e1033", fontSize:12, lineHeight:"14px", textAlign:"center", flexShrink:0 }}>{on ? "\u2713" : ""}</span>
+              <button key={id} onClick={() => toggle(id)} style={{ display:"flex", alignItems:"center", gap:10, padding:"10px 12px", borderRadius:10, cursor:"pointer", textAlign:"left", border:`1.5px solid ${on ? C.purpleLight : C.border}`, background:on ? "rgba(168,85,247,0.15)" : C.card, color:"#e2e8f0", fontSize:fz(13), fontWeight:700 }}>
+                <span style={{ width:18, height:18, borderRadius:5, border:`2px solid ${on ? C.purpleLight : "#64748b"}`, background:on ? C.purpleLight : "transparent", color:"#1e1033", fontSize:fz(12), lineHeight:"14px", textAlign:"center", flexShrink:0 }}>{on ? "\u2713" : ""}</span>
                 {labels[id]}
               </button>
             );
           })}
         </div>
-        <p style={{ color:"#64748b", fontSize:11, margin:"0 0 14px", textAlign:"center" }}>{T.featurePickerAlways || "Vocabulary and Feedback are always shown."}</p>
+        <p style={{ color:"#64748b", fontSize:fz(11), margin:"0 0 14px", textAlign:"center" }}>{T.featurePickerAlways || "Vocabulary and Feedback are always shown."}</p>
         <div style={{ display:"flex", flexDirection:"column", gap:8 }}>
           <button disabled={checked.length === 0} onClick={() => onApply(OPTIONAL_FEATURES.filter(x => checked.includes(x)))} style={{ ...S.btn, width:"100%", background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff", opacity:checked.length === 0 ? 0.4 : 1, cursor:checked.length === 0 ? "not-allowed" : "pointer" }}>{T.featureShowOnly || "Show only these"}</button>
           <button onClick={() => onApply(null)} style={{ ...S.btn, width:"100%", background:"transparent", border:`1px solid ${C.border}`, color:"#94a3b8" }}>{T.featureKeepAll || "Keep everything"}</button>
         </div>
       </div>
+    </div>
+  );
+}
+
+// A− / A+ buttons in the dashboard header (see textSize.js). Tapping the percentage resets to 100%.
+function TextSizeButtons() {
+  const [size, setSize] = useState(getSavedTextSize);
+  const i = TEXT_SIZES.indexOf(size);
+  const change = (next) => { applyTextSize(next); setSize(next); };
+  const btn = (disabled) => ({ ...S.btn, padding:"8px 12px", borderRadius:0, background:"transparent", color:"#f1f5f9", opacity:disabled?0.35:1, cursor:disabled?"default":"pointer" });
+  const atMin = i <= 0, atMax = i >= TEXT_SIZES.length - 1;
+  return (
+    <div role="group" aria-label="Text size" style={{ display:"inline-flex", alignItems:"stretch", background:C.card, border:`1px solid ${C.border}`, borderRadius:10, overflow:"hidden" }}>
+      <button onClick={()=>change(TEXT_SIZES[i - 1])} disabled={atMin} aria-label="Smaller text" title="Smaller text" style={{ ...btn(atMin), fontSize:fz(11) }}>A−</button>
+      <button onClick={()=>change(1)} aria-label="Reset text size" title="Reset text size" style={{ ...btn(false), padding:"8px 4px", minWidth:44, color:"#94a3b8", fontSize:fz(11) }}>{Math.round(size * 100)}%</button>
+      <button onClick={()=>change(TEXT_SIZES[i + 1])} disabled={atMax} aria-label="Larger text" title="Larger text" style={{ ...btn(atMax), fontSize:fz(15) }}>A+</button>
     </div>
   );
 }
@@ -21100,18 +21117,18 @@ function Dashboard({ form, onEdit, onLevelUp, onSetWeek, onLogout, onDeleteAccou
       {showFounder && (() => { const F = FOUNDER_TEXT[form?.preferredLang] || FOUNDER_TEXT["English"]; return (
         <div onClick={()=>setShowFounder(false)} style={{ position:"fixed", inset:0, background:"rgba(0,0,0,0.75)", zIndex:1000, overflowY:"auto", padding:"24px 14px" }}>
           <div onClick={e=>e.stopPropagation()} style={{ maxWidth:560, margin:"0 auto", background:C.card, border:`1px solid ${C.border}`, borderRadius:16, padding:"24px 22px", position:"relative" }}>
-            <button onClick={()=>setShowFounder(false)} aria-label="Close" style={{ position:"absolute", top:10, right:12, background:"transparent", border:"none", color:"#94a3b8", fontSize:22, cursor:"pointer" }}>{"\u00D7"}</button>
+            <button onClick={()=>setShowFounder(false)} aria-label="Close" style={{ position:"absolute", top:10, right:12, background:"transparent", border:"none", color:"#94a3b8", fontSize:fz(22), cursor:"pointer" }}>{"\u00D7"}</button>
             <div style={{ textAlign:"center" }}>
               <img src="/founder-seito.jpg" alt="Seito Sakamoto" style={{ width:130, height:130, borderRadius:"50%", objectFit:"cover", objectPosition:"center 30%", border:`2px solid ${C.purpleLight}` }} />
-              <p style={{ color:"#f1f5f9", fontSize:18, fontWeight:800, margin:"12px 0 2px" }}>Seito Sakamoto</p>
-              <p style={{ color:C.purpleLight, fontSize:13, fontWeight:700, margin:0 }}>{F[1]}</p>
+              <p style={{ color:"#f1f5f9", fontSize:fz(18), fontWeight:800, margin:"12px 0 2px" }}>Seito Sakamoto</p>
+              <p style={{ color:C.purpleLight, fontSize:fz(13), fontWeight:700, margin:0 }}>{F[1]}</p>
             </div>
-            <p style={{ color:"#f1f5f9", fontSize:14, fontWeight:800, margin:"18px 0 8px" }}>{F[2]}</p>
+            <p style={{ color:"#f1f5f9", fontSize:fz(14), fontWeight:800, margin:"18px 0 8px" }}>{F[2]}</p>
             {[F[3],F[4],F[5]].map((t,i)=>(
-              <p key={i} style={{ color:"#e2e8f0", fontSize:13, margin:"0 0 6px" }}>{"\u2705"} {t}</p>
+              <p key={i} style={{ color:"#e2e8f0", fontSize:fz(13), margin:"0 0 6px" }}>{"\u2705"} {t}</p>
             ))}
             <img src="/founder-chico.jpg" alt="California State University, Chico" style={{ display:"block", width:"100%", borderRadius:12, marginTop:12, border:`1px solid ${C.border}` }} />
-            <div style={{ color:"#cbd5e1", fontSize:13, lineHeight:1.75, marginTop:16 }}>
+            <div style={{ color:"#cbd5e1", fontSize:fz(13), lineHeight:1.75, marginTop:16 }}>
               <p style={{ margin:"0 0 12px" }}>{F[6]}</p>
               <div style={{ margin:"0 0 12px", paddingLeft:12, borderLeft:`3px solid ${C.purpleLight}` }}>
                 {F[7].map((t,i)=>(<p key={i} style={{ margin:"0 0 6px", fontStyle:"italic" }}>{"\u201C"}{t}{"\u201D"}</p>))}
@@ -21126,7 +21143,7 @@ function Dashboard({ form, onEdit, onLevelUp, onSetWeek, onLogout, onDeleteAccou
               <p style={{ margin:"0 0 12px" }}>{F[13]}</p>
               <p style={{ margin:"0 0 4px", color:"#f1f5f9", fontWeight:700 }}>Seito Sakamoto</p>
               <p style={{ margin:"0 0 8px" }}>{F[14]} <a href="mailto:seitojapanese.online@gmail.com" style={{ color:C.purpleLight }}>seitojapanese.online@gmail.com</a></p>
-              <p style={{ margin:0, fontSize:11, color:"#94a3b8" }}>{F[15]}</p>
+              <p style={{ margin:0, fontSize:fz(11), color:"#94a3b8" }}>{F[15]}</p>
             </div>
           </div>
         </div>
@@ -21151,40 +21168,41 @@ function Dashboard({ form, onEdit, onLevelUp, onSetWeek, onLogout, onDeleteAccou
         />
       )}
 
-      <div style={{ background:"rgba(10,15,30,0.95)", borderBottom:`1px solid ${C.border}`, padding:"calc(14px + env(safe-area-inset-top, 0px)) calc(20px + env(safe-area-inset-right, 0px)) 14px calc(20px + env(safe-area-inset-left, 0px))", position:"sticky", top:0, zIndex:100, display:"flex", justifyContent:"space-between", alignItems:"center" }}>
+      <div style={{ background:"rgba(10,15,30,0.95)", borderBottom:`1px solid ${C.border}`, padding:"calc(14px + env(safe-area-inset-top, 0px)) calc(20px + env(safe-area-inset-right, 0px)) 14px calc(20px + env(safe-area-inset-left, 0px))", position:"var(--gaku-header-pos, sticky)", top:0, zIndex:100, display:"flex", justifyContent:"space-between", alignItems:"center" }}>
         <div>
-          <p style={{ color:C.purpleLight, fontSize:10, fontWeight:700, letterSpacing:2, margin:0 }}>{T.gakuSelfStudy}</p>
+          <p style={{ color:C.purpleLight, fontSize:fz(10), fontWeight:700, letterSpacing:2, margin:0 }}>{T.gakuSelfStudy}</p>
           <div style={{ display:"flex", alignItems:"center", gap:8 }}>
-            <p style={{ color:"#f1f5f9", fontSize:14, fontWeight:800, margin:0 }}>{form.name}'s {T.studyPlan}</p>
+            <p style={{ color:"#f1f5f9", fontSize:fz(14), fontWeight:800, margin:0 }}>{form.name}'s {T.studyPlan}</p>
             {streakDays > 0 && (
-              <span style={{ display:"inline-flex", alignItems:"center", gap:3, padding:"2px 8px", borderRadius:99, background:streakDays>=3?"rgba(251,191,36,0.15)":"rgba(168,85,247,0.15)", border:`1px solid ${streakDays>=3?"rgba(251,191,36,0.4)":"rgba(168,85,247,0.3)"}`, color:streakDays>=3?"#fbbf24":C.purpleLight, fontSize:11, fontWeight:800 }}>
+              <span style={{ display:"inline-flex", alignItems:"center", gap:3, padding:"2px 8px", borderRadius:99, background:streakDays>=3?"rgba(251,191,36,0.15)":"rgba(168,85,247,0.15)", border:`1px solid ${streakDays>=3?"rgba(251,191,36,0.4)":"rgba(168,85,247,0.3)"}`, color:streakDays>=3?"#fbbf24":C.purpleLight, fontSize:fz(11), fontWeight:800 }}>
                 🔥 {streakDays} {T.streakUnit}
               </span>
             )}
           </div>
         </div>
         <div style={{ display:"flex", gap:8, flexWrap:"wrap" }}>
-          <button onClick={()=>{ const next = themeMode === "light" ? "dark" : "light"; applyTheme(next); setThemeMode(next); }} aria-label={themeMode === "light" ? "Dark mode" : "Light mode"} title={themeMode === "light" ? "Dark mode" : "Light mode"} style={{ ...S.btn, padding:"8px 14px", background:C.card, color:"#94a3b8", border:`1px solid ${C.border}`, fontSize:12 }}>{themeMode === "light" ? "\u{1F319}" : "\u2600\uFE0F"}</button>
-          <button onClick={()=>setShowFounder(true)} style={{ ...S.btn, padding:"8px 14px", background:C.card, color:"#94a3b8", border:`1px solid ${C.border}`, fontSize:12 }}>{"\u{1F464}"} {(FOUNDER_TEXT[form?.preferredLang] || FOUNDER_TEXT["English"])[0]}</button>
-          <button onClick={()=>{ setFeaturePickerInitial(visibleFeatures || OPTIONAL_FEATURES); setShowFeaturePicker(true); }} style={{ ...S.btn, padding:"8px 14px", background:C.card, color:"#94a3b8", border:`1px solid ${C.border}`, fontSize:12 }}>{"\u2699\uFE0F"} {T.featureCustomizeBtn || "Customize"}</button>
-          <button onClick={()=>setShowModePicker(true)} style={{ ...S.btn, padding:"8px 14px", background:isIntensive?"rgba(168,85,247,0.2)":C.card, color:isIntensive?C.purpleLight:"#94a3b8", border:`1px solid ${isIntensive?C.purpleLight:C.border}`, fontSize:12 }}>{isIntensive ? "🔥" : "😊"} {T.modeBtn || "Mode"}</button>
+          <TextSizeButtons />
+          <button onClick={()=>{ const next = themeMode === "light" ? "dark" : "light"; applyTheme(next); setThemeMode(next); }} aria-label={themeMode === "light" ? "Dark mode" : "Light mode"} title={themeMode === "light" ? "Dark mode" : "Light mode"} style={{ ...S.btn, padding:"8px 14px", background:C.card, color:"#94a3b8", border:`1px solid ${C.border}`, fontSize:fz(12) }}>{themeMode === "light" ? "\u{1F319}" : "\u2600\uFE0F"}</button>
+          <button onClick={()=>setShowFounder(true)} style={{ ...S.btn, padding:"8px 14px", background:C.card, color:"#94a3b8", border:`1px solid ${C.border}`, fontSize:fz(12) }}>{"\u{1F464}"} {(FOUNDER_TEXT[form?.preferredLang] || FOUNDER_TEXT["English"])[0]}</button>
+          <button onClick={()=>{ setFeaturePickerInitial(visibleFeatures || OPTIONAL_FEATURES); setShowFeaturePicker(true); }} style={{ ...S.btn, padding:"8px 14px", background:C.card, color:"#94a3b8", border:`1px solid ${C.border}`, fontSize:fz(12) }}>{"\u2699\uFE0F"} {T.featureCustomizeBtn || "Customize"}</button>
+          <button onClick={()=>setShowModePicker(true)} style={{ ...S.btn, padding:"8px 14px", background:isIntensive?"rgba(168,85,247,0.2)":C.card, color:isIntensive?C.purpleLight:"#94a3b8", border:`1px solid ${isIntensive?C.purpleLight:C.border}`, fontSize:fz(12) }}>{isIntensive ? "🔥" : "😊"} {T.modeBtn || "Mode"}</button>
           {isAndroidApp() && (() => {
             const rc = reminderCopy(form?.preferredLang);
             const on = remindersPref === "on";
             return (
-              <button onClick={toggleReminders} style={{ ...S.btn, padding:"8px 14px", background:on?"rgba(168,85,247,0.2)":C.card, color:on?C.purpleLight:"#94a3b8", border:`1px solid ${on?C.purpleLight:C.border}`, fontSize:12 }}>{on ? "🔔" : "🔕"} {on ? rc.on : rc.off}</button>
+              <button onClick={toggleReminders} style={{ ...S.btn, padding:"8px 14px", background:on?"rgba(168,85,247,0.2)":C.card, color:on?C.purpleLight:"#94a3b8", border:`1px solid ${on?C.purpleLight:C.border}`, fontSize:fz(12) }}>{on ? "🔔" : "🔕"} {on ? rc.on : rc.off}</button>
             );
           })()}
-          <button onClick={()=>{ setTutorialStep(0); setTutorialActive(true); }} style={{ ...S.btn, padding:"8px 14px", background:"transparent", border:`1px solid ${C.purpleLight}`, color:C.purpleLight, fontSize:12 }}>{T.tutorialBtn}</button>
-          <button onClick={()=>setShowHelp(true)} style={{ ...S.btn, padding:"8px 14px", background:`linear-gradient(135deg,${C.amber},#d97706)`, color:"#fff", fontSize:12 }}>{T.help}</button>
-          <button onClick={onEdit} style={{ ...S.btn, padding:"8px 14px", background:C.card, color:"#94a3b8", border:`1px solid ${C.border}`, fontSize:12 }}>{T.editProfile}</button>
+          <button onClick={()=>{ setTutorialStep(0); setTutorialActive(true); }} style={{ ...S.btn, padding:"8px 14px", background:"transparent", border:`1px solid ${C.purpleLight}`, color:C.purpleLight, fontSize:fz(12) }}>{T.tutorialBtn}</button>
+          <button onClick={()=>setShowHelp(true)} style={{ ...S.btn, padding:"8px 14px", background:`linear-gradient(135deg,${C.amber},#d97706)`, color:"#fff", fontSize:fz(12) }}>{T.help}</button>
+          <button onClick={onEdit} style={{ ...S.btn, padding:"8px 14px", background:C.card, color:"#94a3b8", border:`1px solid ${C.border}`, fontSize:fz(12) }}>{T.editProfile}</button>
           {onLogout && (
-            <button onClick={onLogout} style={{ ...S.btn, padding:"8px 14px", background:C.card, color:"#94a3b8", border:`1px solid ${C.border}`, fontSize:12 }}>
+            <button onClick={onLogout} style={{ ...S.btn, padding:"8px 14px", background:C.card, color:"#94a3b8", border:`1px solid ${C.border}`, fontSize:fz(12) }}>
               {T.logOut || "Log Out"}
             </button>
           )}
           {onDeleteAccount && (
-            <button onClick={onDeleteAccount} disabled={deleteAccountBusy} style={{ ...S.btn, padding:"8px 14px", background:"rgba(248,113,113,0.08)", color:"#f87171", border:"1px solid rgba(248,113,113,0.3)", fontSize:12, opacity:deleteAccountBusy?0.6:1 }}>
+            <button onClick={onDeleteAccount} disabled={deleteAccountBusy} style={{ ...S.btn, padding:"8px 14px", background:"rgba(248,113,113,0.08)", color:"#f87171", border:"1px solid rgba(248,113,113,0.3)", fontSize:fz(12), opacity:deleteAccountBusy?0.6:1 }}>
               {deleteAccountBusy ? "…" : (T.deleteAccount || "Delete Account")}
             </button>
           )}
@@ -21193,37 +21211,37 @@ function Dashboard({ form, onEdit, onLevelUp, onSetWeek, onLogout, onDeleteAccou
 
       {isTranslating && (
         <div style={{ background:"rgba(168,85,247,0.15)", borderBottom:`1px solid rgba(168,85,247,0.3)`, padding:"8px 20px", textAlign:"center" }}>
-          <p style={{ color:C.purpleLight, fontSize:12, fontWeight:700, margin:0 }}>
+          <p style={{ color:C.purpleLight, fontSize:fz(12), fontWeight:700, margin:0 }}>
             🌐 Translating UI into {form.preferredLang}...
           </p>
         </div>
       )}
       {isTrialAccount && (daysUntilTrialEnds === 0 || daysUntilTrialEnds === 1) && (
         <div style={{ background:"rgba(251,191,36,0.12)", borderBottom:"1px solid rgba(251,191,36,0.35)", padding:"10px 20px", display:"flex", alignItems:"center", justifyContent:"center", gap:12, flexWrap:"wrap" }}>
-          <p style={{ color:"#fbbf24", fontSize:12, fontWeight:700, margin:0 }}>
+          <p style={{ color:"#fbbf24", fontSize:fz(12), fontWeight:700, margin:0 }}>
             ⏰ {daysUntilTrialEnds === 0 ? T.trialEndsToday : T.trialEndsTomorrow}
           </p>
-          <a href="/app?preview=paywall" style={{ padding:"5px 12px", borderRadius:8, background:"#fbbf24", color:"#1e293b", fontSize:12, fontWeight:800, textDecoration:"none" }}>
+          <a href="/app?preview=paywall" style={{ padding:"5px 12px", borderRadius:8, background:"#fbbf24", color:"#1e293b", fontSize:fz(12), fontWeight:800, textDecoration:"none" }}>
             {T.viewPlansCta}
           </a>
         </div>
       )}
       {isTrialAccount && (tutorialGraceDaysLeft === 0 || tutorialGraceDaysLeft === 1) && (
         <div style={{ background:"rgba(168,85,247,0.12)", borderBottom:"1px solid rgba(168,85,247,0.35)", padding:"10px 20px", display:"flex", alignItems:"center", justifyContent:"center", gap:12, flexWrap:"wrap" }}>
-          <p style={{ color:C.purpleLight, fontSize:12, fontWeight:700, margin:0 }}>
+          <p style={{ color:C.purpleLight, fontSize:fz(12), fontWeight:700, margin:0 }}>
             ⏰ {tutorialGraceDaysLeft === 0 ? T.tutorialGraceEndsToday : T.tutorialGraceEndsTomorrow}
           </p>
-          <a href="/app?preview=paywall" style={{ padding:"5px 12px", borderRadius:8, background:C.purpleLight, color:"#1e1033", fontSize:12, fontWeight:800, textDecoration:"none" }}>
+          <a href="/app?preview=paywall" style={{ padding:"5px 12px", borderRadius:8, background:C.purpleLight, color:"#1e1033", fontSize:fz(12), fontWeight:800, textDecoration:"none" }}>
             {T.viewPlansCta}
           </a>
         </div>
       )}
       {onCompleteProfile && (
         <div style={{ background:"rgba(139,92,246,0.1)", borderBottom:"1px solid rgba(139,92,246,0.3)", padding:"10px 20px", display:"flex", alignItems:"center", justifyContent:"center", gap:12, flexWrap:"wrap" }}>
-          <p style={{ color:C.purpleLight, fontSize:12, fontWeight:700, margin:0 }}>
+          <p style={{ color:C.purpleLight, fontSize:fz(12), fontWeight:700, margin:0 }}>
             ✍️ {T.profileNudgeText}
           </p>
-          <button onClick={onCompleteProfile} style={{ padding:"5px 12px", borderRadius:8, background:C.purpleLight, border:"none", color:"#1e1033", fontSize:12, fontWeight:800, cursor:"pointer" }}>
+          <button onClick={onCompleteProfile} style={{ padding:"5px 12px", borderRadius:8, background:C.purpleLight, border:"none", color:"#1e1033", fontSize:fz(12), fontWeight:800, cursor:"pointer" }}>
             {T.profileNudgeCta}
           </button>
         </div>
@@ -21231,56 +21249,56 @@ function Dashboard({ form, onEdit, onLevelUp, onSetWeek, onLogout, onDeleteAccou
       <div style={{ maxWidth:600, margin:"0 auto", padding:"20px 16px" }}>
         {showReaderCard && (
           <div style={{ ...S.card, marginBottom:16, border:"1.5px solid rgba(139,92,246,0.45)", background:"linear-gradient(135deg,#1e1b4b,#0f172a)" }}>
-            <p style={{ color:"#f1f5f9", fontSize:14, fontWeight:800, margin:"0 0 6px" }}>🧩 {T.readerCardTitle}</p>
-            <p style={{ color:"#94a3b8", fontSize:12, lineHeight:1.6, margin:"0 0 12px" }}>{T.readerCardDesc}</p>
+            <p style={{ color:"#f1f5f9", fontSize:fz(14), fontWeight:800, margin:"0 0 6px" }}>🧩 {T.readerCardTitle}</p>
+            <p style={{ color:"#94a3b8", fontSize:fz(12), lineHeight:1.6, margin:"0 0 12px" }}>{T.readerCardDesc}</p>
             <div style={{ display:"flex", gap:10, alignItems:"center", flexWrap:"wrap" }}>
-              <a href="https://chromewebstore.google.com/detail/eambfoiipilfnedcofindninaachibge" target="_blank" rel="noopener noreferrer" style={{ padding:"8px 16px", borderRadius:10, background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff", fontSize:13, fontWeight:800, textDecoration:"none" }}>{T.readerCardCta}</a>
-              <button onClick={()=>{ const now=Date.now(); setReaderCardHiddenAt(now); try { localStorage.setItem(scopedKey("gaku_reader_card_hidden_at"), String(now)); } catch {} }} style={{ background:"none", border:"none", color:"#64748b", fontSize:12, cursor:"pointer" }}>{T.readerCardLater}</button>
+              <a href="https://chromewebstore.google.com/detail/eambfoiipilfnedcofindninaachibge" target="_blank" rel="noopener noreferrer" style={{ padding:"8px 16px", borderRadius:10, background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff", fontSize:fz(13), fontWeight:800, textDecoration:"none" }}>{T.readerCardCta}</a>
+              <button onClick={()=>{ const now=Date.now(); setReaderCardHiddenAt(now); try { localStorage.setItem(scopedKey("gaku_reader_card_hidden_at"), String(now)); } catch {} }} style={{ background:"none", border:"none", color:"#64748b", fontSize:fz(12), cursor:"pointer" }}>{T.readerCardLater}</button>
             </div>
           </div>
         )}
         <div style={{ ...S.card, marginBottom:16 }}>
           <div style={{ display:"flex", justifyContent:"space-between", marginBottom:8 }}>
-            <p style={{ color:"#f1f5f9", fontSize:13, fontWeight:700, margin:0 }}>{T.weeklyProgress}</p>
-            <p style={{ color:C.purpleLight, fontSize:13, fontWeight:800, margin:0 }}>{doneTasks}/{totalTasks} · {progress}%</p>
+            <p style={{ color:"#f1f5f9", fontSize:fz(13), fontWeight:700, margin:0 }}>{T.weeklyProgress}</p>
+            <p style={{ color:C.purpleLight, fontSize:fz(13), fontWeight:800, margin:0 }}>{doneTasks}/{totalTasks} · {progress}%</p>
           </div>
           <div style={{ background:C.border, borderRadius:99, height:8 }}>
             <div style={{ width:`${progress}%`, height:"100%", background:`linear-gradient(90deg,${C.purple},${C.purpleLight})`, borderRadius:99, transition:"width 0.4s" }} />
           </div>
           <div style={{ display:"flex", gap:12, marginTop:10, flexWrap:"wrap" }}>
-            <p style={{ color:"#39ff14", fontSize:11, margin:0 }}>🎯 {translateGoal(form.goal, form.customGoal, T)}</p>
-            <p style={{ color:"#39ff14", fontSize:11, margin:0 }}>📅 {translateTimeline(form.timeline, T)}</p>
-            <p style={{ color:"#39ff14", fontSize:11, margin:0 }}>📊 {form.jlpt}</p>
-            <p style={{ color:"#39ff14", fontSize:11, margin:0 }}>🌐 {NATIVE_LANG_NAMES[form.preferredLang] || form.preferredLang}</p>
+            <p style={{ color:"#39ff14", fontSize:fz(11), margin:0 }}>🎯 {translateGoal(form.goal, form.customGoal, T)}</p>
+            <p style={{ color:"#39ff14", fontSize:fz(11), margin:0 }}>📅 {translateTimeline(form.timeline, T)}</p>
+            <p style={{ color:"#39ff14", fontSize:fz(11), margin:0 }}>📊 {form.jlpt}</p>
+            <p style={{ color:"#39ff14", fontSize:fz(11), margin:0 }}>🌐 {NATIVE_LANG_NAMES[form.preferredLang] || form.preferredLang}</p>
           </div>
         </div>
 
         {showJlptMockOffer && jlptMockStep === "offer" && (
           <div style={{ ...S.card, marginBottom:16, background:"rgba(168,85,247,0.1)", border:`1px solid ${C.purpleLight}` }}>
-            <p style={{ color:C.purpleLight, fontSize:12, fontWeight:700, margin:"0 0 10px" }}>🎯 {T.jlptMockOfferTitle}</p>
+            <p style={{ color:C.purpleLight, fontSize:fz(12), fontWeight:700, margin:"0 0 10px" }}>🎯 {T.jlptMockOfferTitle}</p>
             <div style={{ display:"flex", gap:8 }}>
-              <button onClick={acceptJlptMockOffer} disabled={jlptMockCheckingApplied} style={{ ...S.btn, padding:"7px 14px", fontSize:12, background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff", opacity:jlptMockCheckingApplied?0.6:1 }}>{T.yes}</button>
-              <button onClick={declineJlptMockOffer} style={{ ...S.btn, padding:"7px 14px", fontSize:12, background:"transparent", border:`1px solid ${C.border}`, color:"#94a3b8" }}>{T.no}</button>
+              <button onClick={acceptJlptMockOffer} disabled={jlptMockCheckingApplied} style={{ ...S.btn, padding:"7px 14px", fontSize:fz(12), background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff", opacity:jlptMockCheckingApplied?0.6:1 }}>{T.yes}</button>
+              <button onClick={declineJlptMockOffer} style={{ ...S.btn, padding:"7px 14px", fontSize:fz(12), background:"transparent", border:`1px solid ${C.border}`, color:"#94a3b8" }}>{T.no}</button>
             </div>
           </div>
         )}
 
         {showJlptMockOffer && jlptMockStep === "form" && (
           <div style={{ ...S.card, marginBottom:16, background:"rgba(168,85,247,0.1)", border:`1px solid ${C.purpleLight}` }}>
-            <p style={{ color:C.purpleLight, fontSize:12, fontWeight:700, margin:"0 0 12px" }}>🎯 {T.jlptFormTitle}</p>
+            <p style={{ color:C.purpleLight, fontSize:fz(12), fontWeight:700, margin:"0 0 12px" }}>🎯 {T.jlptFormTitle}</p>
 
-            <label style={{ ...S.label, fontSize:11 }}>{T.jlptQuestionLevel}</label>
+            <label style={{ ...S.label, fontSize:fz(11) }}>{T.jlptQuestionLevel}</label>
             <select value={jlptMockAnswers.level} onChange={e=>setJlptMockAnswers(a=>({...a, level:e.target.value}))} style={{ ...S.input, marginBottom:10 }}>
               {["N5","N4","N3","N2","N1"].map(l => <option key={l} value={l}>{l}</option>)}
             </select>
 
-            <label style={{ ...S.label, fontSize:11 }}>{T.jlptQuestionMode}</label>
+            <label style={{ ...S.label, fontSize:fz(11) }}>{T.jlptQuestionMode}</label>
             <select value={jlptMockAnswers.mode} onChange={e=>setJlptMockAnswers(a=>({...a, mode:e.target.value}))} style={{ ...S.input, marginBottom:10 }}>
               <option value="self">{T.jlptModeSelf}</option>
               <option value="trial_lesson">{T.jlptModeTrial}</option>
             </select>
 
-            <label style={{ ...S.label, fontSize:11 }}>{T.jlptQuestionSection}</label>
+            <label style={{ ...S.label, fontSize:fz(11) }}>{T.jlptQuestionSection}</label>
             <select value={jlptMockAnswers.section} onChange={e=>setJlptMockAnswers(a=>({...a, section:e.target.value}))} style={{ ...S.input, marginBottom:12 }}>
               <option value="language_knowledge">{T.jlptSectionLanguage}</option>
               <option value="reading">{T.jlptSectionReading}</option>
@@ -21289,23 +21307,23 @@ function Dashboard({ form, onEdit, onLevelUp, onSetWeek, onLogout, onDeleteAccou
             </select>
 
             <div style={{ display:"flex", gap:8 }}>
-              <button onClick={submitJlptMockRequest} disabled={jlptMockSubmitting} style={{ ...S.btn, padding:"7px 14px", fontSize:12, background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff", opacity:jlptMockSubmitting?0.6:1 }}>
+              <button onClick={submitJlptMockRequest} disabled={jlptMockSubmitting} style={{ ...S.btn, padding:"7px 14px", fontSize:fz(12), background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff", opacity:jlptMockSubmitting?0.6:1 }}>
                 {jlptMockSubmitting ? T.jlptSubmitting : T.jlptSubmit}
               </button>
-              <button onClick={()=>setJlptMockStep("offer")} style={{ ...S.btn, padding:"7px 14px", fontSize:12, background:"transparent", border:`1px solid ${C.border}`, color:"#94a3b8" }}>{T.jlptBack}</button>
+              <button onClick={()=>setJlptMockStep("offer")} style={{ ...S.btn, padding:"7px 14px", fontSize:fz(12), background:"transparent", border:`1px solid ${C.border}`, color:"#94a3b8" }}>{T.jlptBack}</button>
             </div>
           </div>
         )}
 
         {jlptMockStep === "already_applied" && (
           <div style={{ ...S.card, marginBottom:16, background:"rgba(239,68,68,0.1)", border:"1px solid #ef4444" }}>
-            <p style={{ color:"#f87171", fontSize:12, margin:0 }}>ℹ️ {T.jlptAlreadyAppliedMessage}</p>
+            <p style={{ color:"#f87171", fontSize:fz(12), margin:0 }}>ℹ️ {T.jlptAlreadyAppliedMessage}</p>
           </div>
         )}
 
         {jlptMockStep === "done" && (
           <div style={{ ...S.card, marginBottom:16, background:"rgba(34,197,94,0.1)", border:"1px solid #22c55e" }}>
-            <p style={{ color:"#4ade80", fontSize:12, margin:0 }}>✅ {T.jlptDoneMessage}</p>
+            <p style={{ color:"#4ade80", fontSize:fz(12), margin:0 }}>✅ {T.jlptDoneMessage}</p>
           </div>
         )}
 
@@ -21314,7 +21332,7 @@ function Dashboard({ form, onEdit, onLevelUp, onSetWeek, onLogout, onDeleteAccou
             const tutorialTarget = (tutorialActive && tutorialStep>=1 && tutorialStep<=TUTORIAL_STEPS.length) ? TUTORIAL_STEPS[tutorialStep-1] : null;
             const isTutorialTarget = tutorialTarget?.tab === t.id;
             return (
-              <button key={t.id} data-guide={"tab-"+t.id} onClick={()=>{ if (quotaLocked && LOCKABLE_TABS.includes(t.id)) { setTab(lockHome); return; } setTab(t.id); logFunnel(userId, "tab_" + t.id); }} style={{ padding:"8px 14px", borderRadius:20, border:`1.5px solid ${isTutorialTarget?C.purpleLight:(tab===t.id?C.purpleLight:C.border)}`, background:tab===t.id?"rgba(168,85,247,0.15)":C.card, color:tab===t.id?C.purpleLight:"#64748b", fontSize:12, fontWeight:700, cursor:"pointer", whiteSpace:"nowrap", boxShadow:isTutorialTarget?"0 0 0 3px rgba(168,85,247,0.35)":"none", opacity:(quotaLocked && LOCKABLE_TABS.includes(t.id)) ? 0.45 : 1 }}>
+              <button key={t.id} data-guide={"tab-"+t.id} onClick={()=>{ if (quotaLocked && LOCKABLE_TABS.includes(t.id)) { setTab(lockHome); return; } setTab(t.id); logFunnel(userId, "tab_" + t.id); }} style={{ padding:"8px 14px", borderRadius:20, border:`1.5px solid ${isTutorialTarget?C.purpleLight:(tab===t.id?C.purpleLight:C.border)}`, background:tab===t.id?"rgba(168,85,247,0.15)":C.card, color:tab===t.id?C.purpleLight:"#64748b", fontSize:fz(12), fontWeight:700, cursor:"pointer", whiteSpace:"nowrap", boxShadow:isTutorialTarget?"0 0 0 3px rgba(168,85,247,0.35)":"none", opacity:(quotaLocked && LOCKABLE_TABS.includes(t.id)) ? 0.45 : 1 }}>
                 {(quotaLocked && LOCKABLE_TABS.includes(t.id)) ? "🔒 " : ""}{t.label}
               </button>
             );
@@ -21358,27 +21376,27 @@ function Dashboard({ form, onEdit, onLevelUp, onSetWeek, onLogout, onDeleteAccou
               if (!isIntensive && !weak && !enjoyAdv) return null;
               return (
                 <div style={{ ...S.card, marginBottom:12, background:isIntensive ? "linear-gradient(135deg,rgba(239,68,68,0.10),rgba(168,85,247,0.10))" : "rgba(168,85,247,0.08)", border:isIntensive ? "1px solid rgba(239,68,68,0.3)" : "1px solid rgba(168,85,247,0.25)" }}>
-                  {isIntensive && <p style={{ color:"#fca5a5", fontSize:12, fontWeight:800, margin:"0 0 6px" }}>🔥 {(T.quotaTitle || "Today's quota: {done}/{goal}").replace("{done}", Math.min(today, INTENSIVE_DAILY_GOAL)).replace("{goal}", INTENSIVE_DAILY_GOAL)}{doneQuota ? " ✅" : ""}</p>}
+                  {isIntensive && <p style={{ color:"#fca5a5", fontSize:fz(12), fontWeight:800, margin:"0 0 6px" }}>🔥 {(T.quotaTitle || "Today's quota: {done}/{goal}").replace("{done}", Math.min(today, INTENSIVE_DAILY_GOAL)).replace("{goal}", INTENSIVE_DAILY_GOAL)}{doneQuota ? " ✅" : ""}</p>}
                   {isIntensive && <div style={{ height:6, borderRadius:3, background:"rgba(255,255,255,0.08)", overflow:"hidden", marginBottom:8 }}>
                     <div style={{ width:`${Math.min(100, Math.round(today / INTENSIVE_DAILY_GOAL * 100))}%`, height:"100%", background:doneQuota ? C.green : "#f87171" }} />
                   </div>}
-                  {isIntensive && !doneQuota && <p style={{ color:"#fecaca", fontSize:11, lineHeight:1.6, margin:"0 0 8px" }}>🔒 {T.quotaLocked || "Finish today's quota to unlock the other tabs."}</p>}
-                  {isIntensive && missedYesterday && <p style={{ color:"#fecaca", fontSize:12, fontWeight:700, lineHeight:1.6, margin:"0 0 8px" }}>⚠️ {T.quotaMissed || "You missed yesterday's quota. Finish today's quota first — no skipping."}</p>}
+                  {isIntensive && !doneQuota && <p style={{ color:"#fecaca", fontSize:fz(11), lineHeight:1.6, margin:"0 0 8px" }}>🔒 {T.quotaLocked || "Finish today's quota to unlock the other tabs."}</p>}
+                  {isIntensive && missedYesterday && <p style={{ color:"#fecaca", fontSize:fz(12), fontWeight:700, lineHeight:1.6, margin:"0 0 8px" }}>⚠️ {T.quotaMissed || "You missed yesterday's quota. Finish today's quota first — no skipping."}</p>}
                   {isIntensive && <CoachPanel T={T} allow={coachAllow} onGo={coachGo} />}
                   {!isIntensive && weak && (
                     <div>
-                      <p style={{ color:C.purpleLight, fontSize:11, fontWeight:700, margin:"0 0 4px" }}>🎯 {T.coachTitle || "Today's suggestion"}</p>
-                      <p style={{ color:"#e2e8f0", fontSize:13, lineHeight:1.65, margin:"0 0 10px" }}>
+                      <p style={{ color:C.purpleLight, fontSize:fz(11), fontWeight:700, margin:"0 0 4px" }}>🎯 {T.coachTitle || "Today's suggestion"}</p>
+                      <p style={{ color:"#e2e8f0", fontSize:fz(13), lineHeight:1.65, margin:"0 0 10px" }}>
                         {(strong ? (T.coachBoth || "You usually do well in {strong}, and {weak} seems a little hard. How about {weak} today?") : (T.coachWeakOnly || "{weak} seems a little hard for you. How about practicing it today?")).split("{strong}").join(strong ? areaLabel(strong.a) : "").split("{weak}").join(areaLabel(weak.a))}
                       </p>
-                      <button onClick={() => goDrill(weak.a)} style={{ ...S.btn, padding:"8px 16px", background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff", fontSize:12 }}>{T.coachGo || "Let's go"} →</button>
+                      <button onClick={() => goDrill(weak.a)} style={{ ...S.btn, padding:"8px 16px", background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff", fontSize:fz(12) }}>{T.coachGo || "Let's go"} →</button>
                     </div>
                   )}
                   {!isIntensive && !weak && enjoyAdv && (
                     <div>
-                      <p style={{ color:C.purpleLight, fontSize:11, fontWeight:700, margin:"0 0 4px" }}>🎯 {T.coachTitle || "Today's suggestion"}</p>
-                      <p style={{ color:"#e2e8f0", fontSize:13, lineHeight:1.65, margin:"0 0 10px" }}>{coachAdviceLine(T, enjoyAdv)} {T.coachEnjoyAsk || "Would you like to work on this today?"}</p>
-                      <button onClick={() => { if (enjoyAdv.type === "writeretry") startWritingRetry(enjoyAdv.chars); goDrill(coachAdviceTarget(enjoyAdv)); }} style={{ ...S.btn, padding:"8px 16px", background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff", fontSize:12 }}>{T.coachGo || "Let's go"} →</button>
+                      <p style={{ color:C.purpleLight, fontSize:fz(11), fontWeight:700, margin:"0 0 4px" }}>🎯 {T.coachTitle || "Today's suggestion"}</p>
+                      <p style={{ color:"#e2e8f0", fontSize:fz(13), lineHeight:1.65, margin:"0 0 10px" }}>{coachAdviceLine(T, enjoyAdv)} {T.coachEnjoyAsk || "Would you like to work on this today?"}</p>
+                      <button onClick={() => { if (enjoyAdv.type === "writeretry") startWritingRetry(enjoyAdv.chars); goDrill(coachAdviceTarget(enjoyAdv)); }} style={{ ...S.btn, padding:"8px 16px", background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff", fontSize:fz(12) }}>{T.coachGo || "Let's go"} →</button>
                     </div>
                   )}
                 </div>
@@ -21390,27 +21408,27 @@ function Dashboard({ form, onEdit, onLevelUp, onSetWeek, onLogout, onDeleteAccou
             <div style={{ ...S.card, marginBottom:12, background:"linear-gradient(135deg,rgba(139,92,246,0.12),rgba(6,182,212,0.08))", border:`1px solid rgba(139,92,246,0.25)` }}>
               <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:8 }}>
                 <div>
-                  <p style={{ color:C.purpleLight, fontSize:11, fontWeight:700, letterSpacing:1, margin:0 }}>📅 WEEK {currentWeek} / {totalWeeks}</p>
-                  <p style={{ color:"#ffffff", fontSize:11, margin:"2px 0 0" }}>{totalWeeks - currentWeek} {T.weeksRemaining} · {Math.round((currentWeek/totalWeeks)*100)}{T.percentComplete}</p>
+                  <p style={{ color:C.purpleLight, fontSize:fz(11), fontWeight:700, letterSpacing:1, margin:0 }}>📅 WEEK {currentWeek} / {totalWeeks}</p>
+                  <p style={{ color:"#ffffff", fontSize:fz(11), margin:"2px 0 0" }}>{totalWeeks - currentWeek} {T.weeksRemaining} · {Math.round((currentWeek/totalWeeks)*100)}{T.percentComplete}</p>
                   <div style={{ display:"flex", gap:8, flexWrap:"wrap", alignItems:"center", marginTop:8 }}>
                     {reachedWeek > 1 && (
                       <select value={currentWeek} onChange={e => goToWeek(parseInt(e.target.value, 10), false)} aria-label={T.weekPickLabel || "Go to week"}
-                        style={{ padding:"4px 8px", borderRadius:8, border:"1px solid rgba(139,92,246,0.4)", background:"rgba(15,23,42,0.9)", color:C.purpleLight, fontSize:11, fontWeight:700, cursor:"pointer" }}>
+                        style={{ padding:"4px 8px", borderRadius:8, border:"1px solid rgba(139,92,246,0.4)", background:"rgba(15,23,42,0.9)", color:C.purpleLight, fontSize:fz(11), fontWeight:700, cursor:"pointer" }}>
                         {Array.from({ length: reachedWeek }, (_, i) => i + 1).map(n => (
                           <option key={n} value={n}>{(T.weekPickWeek || "Week {n}").replace("{n}", n)}{n === reachedWeek && reachedWeek > 1 ? " · " + (T.weekPickInProgress || "in progress") : ""}</option>
                         ))}
                       </select>
                     )}
                     {currentWeek < reachedWeek && (
-                      <button type="button" onClick={() => goToWeek(reachedWeek, false)} style={{ padding:"4px 10px", borderRadius:8, border:"1px solid rgba(34,197,94,0.45)", background:"rgba(34,197,94,0.1)", color:"#86efac", fontSize:11, fontWeight:700, cursor:"pointer" }}>→ {(T.weekBackToProgress || "Back to Week {n} (in progress)").replace("{n}", reachedWeek)}</button>
+                      <button type="button" onClick={() => goToWeek(reachedWeek, false)} style={{ padding:"4px 10px", borderRadius:8, border:"1px solid rgba(34,197,94,0.45)", background:"rgba(34,197,94,0.1)", color:"#86efac", fontSize:fz(11), fontWeight:700, cursor:"pointer" }}>→ {(T.weekBackToProgress || "Back to Week {n} (in progress)").replace("{n}", reachedWeek)}</button>
                     )}
-                    <button type="button" onClick={restartWeek1} style={{ padding:"4px 10px", borderRadius:8, border:"1px solid rgba(139,92,246,0.4)", background:"rgba(139,92,246,0.1)", color:C.purpleLight, fontSize:11, fontWeight:700, cursor:"pointer" }}>↺ {T.restartWeek1Btn || "Start over from Week 1"}</button>
+                    <button type="button" onClick={restartWeek1} style={{ padding:"4px 10px", borderRadius:8, border:"1px solid rgba(139,92,246,0.4)", background:"rgba(139,92,246,0.1)", color:C.purpleLight, fontSize:fz(11), fontWeight:700, cursor:"pointer" }}>↺ {T.restartWeek1Btn || "Start over from Week 1"}</button>
                   </div>
                 </div>
                 {/* The old one-tap "Refresh" button that rebuilt the whole guide was removed on purpose:
                     the guide changes ONLY when the student presses "Update my study guide" in Edit Profile. */}
                 {aiScheduleLoading && (
-                  <span style={{ color:"#64748b", fontSize:11, fontWeight:700 }}>{"⏳ " + (T.generating || "Generating...")}</span>
+                  <span style={{ color:"#64748b", fontSize:fz(11), fontWeight:700 }}>{"⏳ " + (T.generating || "Generating...")}</span>
                 )}
               </div>
               {/* Progress bar */}
@@ -21418,18 +21436,18 @@ function Dashboard({ form, onEdit, onLevelUp, onSetWeek, onLogout, onDeleteAccou
                 <div style={{ height:"100%", width:`${Math.round((currentWeek/totalWeeks)*100)}%`, background:`linear-gradient(90deg,${C.purple},${C.teal})`, borderRadius:99, transition:"width 0.6s ease" }} />
               </div>
               {weekTheme && !aiScheduleLoading && (
-                <p style={{ color:"#94a3b8", fontSize:12, margin:"10px 0 0", fontStyle:"italic", lineHeight:1.5 }}>🎯 {weekTheme}</p>
+                <p style={{ color:"#94a3b8", fontSize:fz(12), margin:"10px 0 0", fontStyle:"italic", lineHeight:1.5 }}>🎯 {weekTheme}</p>
               )}
             </div>
 
             <div style={{ ...S.card }}>
-              <p style={{ color:C.purpleLight, fontSize:12, fontWeight:700, letterSpacing:1, marginBottom:16 }}>
+              <p style={{ color:C.purpleLight, fontSize:fz(12), fontWeight:700, letterSpacing:1, marginBottom:16 }}>
                 {aiScheduleLoading ? T.aiBuilding : T.yourWeeklySchedule}
               </p>
               {aiScheduleLoading ? (
                 <div style={{ textAlign:"center", padding:"32px 0" }}>
-                  <div style={{ fontSize:32, marginBottom:12 }}>🤖</div>
-                  <p style={{ color:"#64748b", fontSize:13 }}>{T.personalizing}</p>
+                  <div style={{ fontSize:fz(32), marginBottom:12 }}>🤖</div>
+                  <p style={{ color:"#64748b", fontSize:fz(13) }}>{T.personalizing}</p>
                 </div>
               ) : (
                 WEEKDAY_EN.map((day, di) => {
@@ -21437,16 +21455,16 @@ function Dashboard({ form, onEdit, onLevelUp, onSetWeek, onLogout, onDeleteAccou
                   const dayLabel = (T[DAY_KEYS[di]] || day.toUpperCase()) + " · " + WEEKDAY_JA[di];
                   return (
                     <div key={day} style={{ marginBottom:16 }}>
-                      <p style={{ color:"#94a3b8", fontSize:11, fontWeight:700, letterSpacing:1, borderBottom:`1px solid ${C.border}`, paddingBottom:6, marginBottom:8 }}>{dayLabel}</p>
+                      <p style={{ color:"#94a3b8", fontSize:fz(11), fontWeight:700, letterSpacing:1, borderBottom:`1px solid ${C.border}`, paddingBottom:6, marginBottom:8 }}>{dayLabel}</p>
                       {tasks.map((task, idx) => task.rest ? (
-                        <p key={idx} style={{ color:"#334155", fontSize:13, fontStyle:"italic" }}>{T.restDay || "Rest day 🌸"}</p>
+                        <p key={idx} style={{ color:"#334155", fontSize:fz(13), fontStyle:"italic" }}>{T.restDay || "Rest day 🌸"}</p>
                       ) : (
                         <div key={idx} data-guide={idx===0?"sched-task":undefined} onClick={()=>toggleTask(day,idx)} style={{ display:"flex", gap:10, padding:"10px 12px", borderRadius:10, background:task.done?"rgba(34,197,94,0.06)":C.card, border:`1px solid ${task.done?"rgba(34,197,94,0.2)":C.border}`, marginBottom:6, cursor:"pointer", alignItems:"flex-start" }}>
                           <div style={{ width:20, height:20, borderRadius:6, border:`2px solid ${task.done?C.green:C.border}`, background:task.done?C.green:"transparent", display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0, marginTop:1 }}>
-                            {task.done && <span style={{ color:"#fff", fontSize:11, fontWeight:900 }}>✓</span>}
+                            {task.done && <span style={{ color:"#fff", fontSize:fz(11), fontWeight:900 }}>✓</span>}
                           </div>
                           <div style={{ flex:1, minWidth:0 }}>
-                            <p style={{ color:task.done?"#64748b":"#cbd5e1", fontSize:13, margin:0, lineHeight:1.6, textDecoration:task.done?"line-through":"none" }}>{task.task}</p>
+                            <p style={{ color:task.done?"#64748b":"#cbd5e1", fontSize:fz(13), margin:0, lineHeight:1.6, textDecoration:task.done?"line-through":"none" }}>{task.task}</p>
                             {(() => {
                               const res = findTaskResourceLink(task.task, task.skill);
                               const nav = findTaskAppNav(task.task, task.skill);
@@ -21455,13 +21473,13 @@ function Dashboard({ form, onEdit, onLevelUp, onSetWeek, onLogout, onDeleteAccou
                                 <div style={{ display:"flex", gap:8, flexWrap:"wrap", marginTop:8 }}>
                                   {res && (
                                     <a href={res.url} target="_blank" rel="noopener noreferrer" onClick={e=>e.stopPropagation()}
-                                       style={{ fontSize:11, color:C.teal, textDecoration:"none", border:"1px solid rgba(6,182,212,0.3)", borderRadius:8, padding:"3px 8px", background:"rgba(6,182,212,0.06)" }}>
+                                       style={{ fontSize:fz(11), color:C.teal, textDecoration:"none", border:"1px solid rgba(6,182,212,0.3)", borderRadius:8, padding:"3px 8px", background:"rgba(6,182,212,0.06)" }}>
                                       🔗 {res.name}
                                     </a>
                                   )}
                                   {nav && (nav.alwaysShow || (tabShown(nav.tab) && (nav.tab !== "resources" || featureShown(nav.resourceSubTab || "links")))) && (
                                     <button onClick={e=>{ e.stopPropagation(); setTab(nav.tab); if (nav.resourceSubTab) setResourceSubTab(nav.resourceSubTab); }}
-                                       style={{ fontSize:11, color:C.purpleLight, border:"1px solid rgba(139,92,246,0.3)", borderRadius:8, padding:"3px 8px", background:"rgba(139,92,246,0.06)", cursor:"pointer" }}>
+                                       style={{ fontSize:fz(11), color:C.purpleLight, border:"1px solid rgba(139,92,246,0.3)", borderRadius:8, padding:"3px 8px", background:"rgba(139,92,246,0.06)", cursor:"pointer" }}>
                                       ▶ {T[nav.labelKey]}
                                     </button>
                                   )}
@@ -21488,13 +21506,13 @@ function Dashboard({ form, onEdit, onLevelUp, onSetWeek, onLogout, onDeleteAccou
 
         {tab==="resources" && (
           <div>
-            <p style={{ color:"#64748b", fontSize:10.5, lineHeight:1.6, margin:"0 0 10px" }}>{T?.resExternalNote || "Links in Resources lead to independent outside websites and official channels. GAKU is not affiliated with them and does not host or copy their content."}</p>
+            <p style={{ color:"#64748b", fontSize:fz(10.5), lineHeight:1.6, margin:"0 0 10px" }}>{T?.resExternalNote || "Links in Resources lead to independent outside websites and official channels. GAKU is not affiliated with them and does not host or copy their content."}</p>
             <div style={{ display:"flex", gap:6, marginBottom:16, overflowX:"auto", paddingBottom:4 }}>
               {RESOURCE_SUBTABS.filter(st => featureShown(st.id)).map(st => {
                 const tutorialTarget = (tutorialActive && tutorialStep>=1 && tutorialStep<=TUTORIAL_STEPS.length) ? TUTORIAL_STEPS[tutorialStep-1] : null;
                 const isTutorialTarget = tutorialTarget?.tab === "resources" && tutorialTarget?.subTab === st.id;
                 return (
-                  <button key={st.id} data-guide={"sub-"+st.id} onClick={()=>setResourceSubTab(st.id)} style={{ padding:"7px 12px", borderRadius:20, border:`1.5px solid ${isTutorialTarget?C.purpleLight:(resourceSubTab===st.id?C.teal:C.border)}`, background:resourceSubTab===st.id?"rgba(6,182,212,0.12)":C.card, color:resourceSubTab===st.id?C.teal:"#64748b", fontSize:11, fontWeight:700, cursor:"pointer", whiteSpace:"nowrap", boxShadow:isTutorialTarget?"0 0 0 3px rgba(168,85,247,0.35)":"none" }}>
+                  <button key={st.id} data-guide={"sub-"+st.id} onClick={()=>setResourceSubTab(st.id)} style={{ padding:"7px 12px", borderRadius:20, border:`1.5px solid ${isTutorialTarget?C.purpleLight:(resourceSubTab===st.id?C.teal:C.border)}`, background:resourceSubTab===st.id?"rgba(6,182,212,0.12)":C.card, color:resourceSubTab===st.id?C.teal:"#64748b", fontSize:fz(11), fontWeight:700, cursor:"pointer", whiteSpace:"nowrap", boxShadow:isTutorialTarget?"0 0 0 3px rgba(168,85,247,0.35)":"none" }}>
                     {st.label}
                   </button>
                 );
@@ -21526,14 +21544,14 @@ function Dashboard({ form, onEdit, onLevelUp, onSetWeek, onLogout, onDeleteAccou
             <div>
             {showTravelResources && (
               <div style={{ ...S.card, marginBottom:16, borderLeft:`3px solid ${C.teal}` }}>
-                <p style={{ color:C.teal, fontSize:12, fontWeight:700, letterSpacing:1, marginBottom:4 }}>{T.travelResourcesTitle}</p>
-                <p style={{ color:"#ffffff", fontSize:12, marginBottom:14 }}>{T.travelResourcesDesc}</p>
+                <p style={{ color:C.teal, fontSize:fz(12), fontWeight:700, letterSpacing:1, marginBottom:4 }}>{T.travelResourcesTitle}</p>
+                <p style={{ color:"#ffffff", fontSize:fz(12), marginBottom:14 }}>{T.travelResourcesDesc}</p>
                 <div style={{ display:"flex", flexDirection:"column", gap:12 }}>
                   {TRAVEL_JAPAN_RESOURCES.map((r,i) => (
                     <div key={i} style={{ background:"rgba(6,182,212,0.04)", borderRadius:12, border:`1px solid rgba(6,182,212,0.15)`, padding:"14px 16px" }}>
-                      <p style={{ color:"#f1f5f9", fontSize:14, fontWeight:700, margin:"0 0 6px" }}>{r.name}</p>
-                      <p style={{ color:"#94a3b8", fontSize:12, margin:"0 0 10px", lineHeight:1.6 }}>{r.desc}</p>
-                      <a href={r.url} target="_blank" rel="noopener noreferrer" style={{ display:"block", textAlign:"center", padding:"9px", background:`linear-gradient(135deg,${C.teal},#0891b2)`, color:"#fff", borderRadius:8, fontSize:12, fontWeight:700, textDecoration:"none" }}>
+                      <p style={{ color:"#f1f5f9", fontSize:fz(14), fontWeight:700, margin:"0 0 6px" }}>{r.name}</p>
+                      <p style={{ color:"#94a3b8", fontSize:fz(12), margin:"0 0 10px", lineHeight:1.6 }}>{r.desc}</p>
+                      <a href={r.url} target="_blank" rel="noopener noreferrer" style={{ display:"block", textAlign:"center", padding:"9px", background:`linear-gradient(135deg,${C.teal},#0891b2)`, color:"#fff", borderRadius:8, fontSize:fz(12), fontWeight:700, textDecoration:"none" }}>
                         → {T.openResource} {r.name}
                       </a>
                     </div>
@@ -21543,14 +21561,14 @@ function Dashboard({ form, onEdit, onLevelUp, onSetWeek, onLogout, onDeleteAccou
             )}
             {((form.skills||[]).includes("onlyHiragana") || (form.skills||[]).includes("onlyKatakana") || form.jlpt === "Beginner") && (
               <div style={{ ...S.card, marginBottom:16, borderLeft:`3px solid ${C.teal}` }}>
-                <p style={{ color:C.teal, fontSize:12, fontWeight:700, letterSpacing:1, marginBottom:4 }}>{T.kanaResourcesTitle}</p>
-                <p style={{ color:"#ffffff", fontSize:12, marginBottom:14 }}>{T.kanaResourcesDesc}</p>
+                <p style={{ color:C.teal, fontSize:fz(12), fontWeight:700, letterSpacing:1, marginBottom:4 }}>{T.kanaResourcesTitle}</p>
+                <p style={{ color:"#ffffff", fontSize:fz(12), marginBottom:14 }}>{T.kanaResourcesDesc}</p>
                 <div style={{ display:"flex", flexDirection:"column", gap:12 }}>
                   {KANA_PRACTICE_RESOURCES.map((r,i) => (
                     <div key={i} style={{ background:"rgba(6,182,212,0.04)", borderRadius:12, border:`1px solid rgba(6,182,212,0.15)`, padding:"14px 16px" }}>
-                      <p style={{ color:"#f1f5f9", fontSize:14, fontWeight:700, margin:"0 0 6px" }}>{r.name}</p>
-                      <p style={{ color:"#94a3b8", fontSize:12, margin:"0 0 10px", lineHeight:1.6 }}>{r.desc}</p>
-                      <a href={r.url} target="_blank" rel="noopener noreferrer" style={{ display:"block", textAlign:"center", padding:"9px", background:`linear-gradient(135deg,${C.teal},#0891b2)`, color:"#fff", borderRadius:8, fontSize:12, fontWeight:700, textDecoration:"none" }}>
+                      <p style={{ color:"#f1f5f9", fontSize:fz(14), fontWeight:700, margin:"0 0 6px" }}>{r.name}</p>
+                      <p style={{ color:"#94a3b8", fontSize:fz(12), margin:"0 0 10px", lineHeight:1.6 }}>{r.desc}</p>
+                      <a href={r.url} target="_blank" rel="noopener noreferrer" style={{ display:"block", textAlign:"center", padding:"9px", background:`linear-gradient(135deg,${C.teal},#0891b2)`, color:"#fff", borderRadius:8, fontSize:fz(12), fontWeight:700, textDecoration:"none" }}>
                         → {T.openResource} {r.name}
                       </a>
                     </div>
@@ -21560,25 +21578,25 @@ function Dashboard({ form, onEdit, onLevelUp, onSetWeek, onLogout, onDeleteAccou
             )}
             {resList.length > 0 && (
               <div style={{ ...S.card, marginBottom:16, borderLeft:`3px solid ${C.teal}` }}>
-                <p style={{ color:C.teal, fontSize:12, fontWeight:700, letterSpacing:1, marginBottom:4 }}>{T.recommendedForLevel}</p>
-                <p style={{ color:"#ffffff", fontSize:12, marginBottom:14 }}>{T.curatedFor} {form.jlpt}</p>
+                <p style={{ color:C.teal, fontSize:fz(12), fontWeight:700, letterSpacing:1, marginBottom:4 }}>{T.recommendedForLevel}</p>
+                <p style={{ color:"#ffffff", fontSize:fz(12), marginBottom:14 }}>{T.curatedFor} {form.jlpt}</p>
                 <div style={{ display:"flex", flexDirection:"column", gap:12 }}>
                   {resList.map((r,i) => (
                     <div key={i} style={{ background:"rgba(6,182,212,0.04)", borderRadius:12, border:`1px solid rgba(6,182,212,0.15)`, padding:"14px 16px" }}>
                       <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", marginBottom:6 }}>
-                        <p style={{ color:"#f1f5f9", fontSize:14, fontWeight:700, margin:0 }}>{r.name}</p>
-                        <span style={{ color:C.teal, fontSize:10, fontWeight:700, background:"rgba(6,182,212,0.1)", padding:"2px 8px", borderRadius:99, whiteSpace:"nowrap", marginLeft:8 }}>{T[r.levelKey]}</span>
+                        <p style={{ color:"#f1f5f9", fontSize:fz(14), fontWeight:700, margin:0 }}>{r.name}</p>
+                        <span style={{ color:C.teal, fontSize:fz(10), fontWeight:700, background:"rgba(6,182,212,0.1)", padding:"2px 8px", borderRadius:99, whiteSpace:"nowrap", marginLeft:8 }}>{T[r.levelKey]}</span>
                       </div>
-                      <p style={{ color:"#94a3b8", fontSize:12, margin:"0 0 10px", lineHeight:1.6 }}>{(r.descKey && T[r.descKey]) || r.desc}</p>
+                      <p style={{ color:"#94a3b8", fontSize:fz(12), margin:"0 0 10px", lineHeight:1.6 }}>{(r.descKey && T[r.descKey]) || r.desc}</p>
                       <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:"3px 12px", marginBottom:10 }}>
                         {[[T.vocab,r.skills.vocab],[T.grammar,r.skills.grammar],[T.reading,r.skills.reading],[T.speaking,r.skills.speaking],[T.listening,r.skills.listening]].map(([label,val])=>(
                           <div key={label} style={{ display:"flex", alignItems:"center", gap:4 }}>
-                            <span style={{ color:"#ffffff", fontSize:10, minWidth:60 }}>{label}</span>
-                            <span style={{ fontSize:10, letterSpacing:1 }}>{"★".repeat(val)}{"☆".repeat(5-val)}</span>
+                            <span style={{ color:"#ffffff", fontSize:fz(10), minWidth:60 }}>{label}</span>
+                            <span style={{ fontSize:fz(10), letterSpacing:1 }}>{"★".repeat(val)}{"☆".repeat(5-val)}</span>
                           </div>
                         ))}
                       </div>
-                      <a href={r.url} target="_blank" rel="noopener noreferrer" style={{ display:"block", textAlign:"center", padding:"9px", background:`linear-gradient(135deg,${C.teal},#0891b2)`, color:"#fff", borderRadius:8, fontSize:12, fontWeight:700, textDecoration:"none" }}>
+                      <a href={r.url} target="_blank" rel="noopener noreferrer" style={{ display:"block", textAlign:"center", padding:"9px", background:`linear-gradient(135deg,${C.teal},#0891b2)`, color:"#fff", borderRadius:8, fontSize:fz(12), fontWeight:700, textDecoration:"none" }}>
                         → {T.openResource} {r.name}
                       </a>
                     </div>
@@ -21588,19 +21606,19 @@ function Dashboard({ form, onEdit, onLevelUp, onSetWeek, onLogout, onDeleteAccou
             )}
 
             <div style={{ ...S.card }}>
-              <p style={{ color:C.amber, fontSize:12, fontWeight:700, letterSpacing:1, marginBottom:4 }}>{T.yourResources}</p>
-              <p style={{ color:"#ffffff", fontSize:12, marginBottom:16 }}>{T.curatedForLevel} {form.jlpt}, {T.skills} {(form.skills||[]).map(s=>T[SKILL_LABEL_KEY[s]]||SKILL_LABELS[s]).join(", ")}</p>
-              {selectedResources.length === 0 && <p style={{ color:"#64748b", fontSize:13 }}>{T.noResources}</p>}
+              <p style={{ color:C.amber, fontSize:fz(12), fontWeight:700, letterSpacing:1, marginBottom:4 }}>{T.yourResources}</p>
+              <p style={{ color:"#ffffff", fontSize:fz(12), marginBottom:16 }}>{T.curatedForLevel} {form.jlpt}, {T.skills} {(form.skills||[]).map(s=>T[SKILL_LABEL_KEY[s]]||SKILL_LABELS[s]).join(", ")}</p>
+              {selectedResources.length === 0 && <p style={{ color:"#64748b", fontSize:fz(13) }}>{T.noResources}</p>}
               <div style={{ display:"flex", flexDirection:"column", gap:12 }}>
                 {selectedResources.map((r,i) => (
                   <div key={i} style={{ background:"rgba(255,255,255,0.03)", borderRadius:12, border:`1px solid ${C.border}`, padding:"14px 16px" }}>
                     <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", marginBottom:4 }}>
-                      <p style={{ color:"#f1f5f9", fontSize:14, fontWeight:700, margin:0 }}>{r.name}</p>
-                      <span style={{ color:r.free?C.green:C.amber, fontSize:10, fontWeight:700, background:r.free?"rgba(34,197,94,0.1)":"rgba(245,158,11,0.1)", padding:"2px 8px", borderRadius:99 }}>{r.free ? T.free : T.paid}</span>
+                      <p style={{ color:"#f1f5f9", fontSize:fz(14), fontWeight:700, margin:0 }}>{r.name}</p>
+                      <span style={{ color:r.free?C.green:C.amber, fontSize:fz(10), fontWeight:700, background:r.free?"rgba(34,197,94,0.1)":"rgba(245,158,11,0.1)", padding:"2px 8px", borderRadius:99 }}>{r.free ? T.free : T.paid}</span>
                     </div>
-                    <p style={{ color:C.purpleLight, fontSize:11, fontWeight:700, margin:"0 0 4px" }}>{T[SKILL_LABEL_KEY[r.skill]]||SKILL_LABELS[r.skill]}</p>
-                    <p style={{ color:"#ffffff", fontSize:12, margin:"0 0 10px", lineHeight:1.6 }}>{(r.descKey && T[r.descKey]) || r.desc}</p>
-                    <a href={r.url} target="_blank" rel="noopener noreferrer" style={{ display:"block", textAlign:"center", padding:"9px", background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff", borderRadius:8, fontSize:12, fontWeight:700, textDecoration:"none" }}>
+                    <p style={{ color:C.purpleLight, fontSize:fz(11), fontWeight:700, margin:"0 0 4px" }}>{T[SKILL_LABEL_KEY[r.skill]]||SKILL_LABELS[r.skill]}</p>
+                    <p style={{ color:"#ffffff", fontSize:fz(12), margin:"0 0 10px", lineHeight:1.6 }}>{(r.descKey && T[r.descKey]) || r.desc}</p>
+                    <a href={r.url} target="_blank" rel="noopener noreferrer" style={{ display:"block", textAlign:"center", padding:"9px", background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff", borderRadius:8, fontSize:fz(12), fontWeight:700, textDecoration:"none" }}>
                       → {T.openResource} {r.name}
                     </a>
                   </div>
@@ -21617,28 +21635,28 @@ function Dashboard({ form, onEdit, onLevelUp, onSetWeek, onLogout, onDeleteAccou
           <>
           <SectionHelp id="milestones" lang={form?.preferredLang} autoOpen={!tutorialActive} />
           <div style={{ margin:"0 0 12px", display:"flex", alignItems:"center", gap:10, flexWrap:"wrap" }}>
-            <button type="button" onClick={hideMilestonesTab} style={{ padding:"7px 14px", borderRadius:8, background:C.card, border:`1px solid ${C.border}`, color:"#94a3b8", fontSize:12, cursor:"pointer" }}>🙈 {T.msHideTab || "Hide this tab"}</button>
-            <span style={{ color:"#64748b", fontSize:11 }}>{(T.msHideNote || "You can show it again anytime in {c}.").replace("{c}", "\u2699\uFE0F " + (T.featureCustomizeBtn || "Customize"))}</span>
+            <button type="button" onClick={hideMilestonesTab} style={{ padding:"7px 14px", borderRadius:8, background:C.card, border:`1px solid ${C.border}`, color:"#94a3b8", fontSize:fz(12), cursor:"pointer" }}>🙈 {T.msHideTab || "Hide this tab"}</button>
+            <span style={{ color:"#64748b", fontSize:fz(11) }}>{(T.msHideNote || "You can show it again anytime in {c}.").replace("{c}", "\u2699\uFE0F " + (T.featureCustomizeBtn || "Customize"))}</span>
           </div>
           <ProgressCheck T={T} userId={userId} />
           <div style={{ ...S.card }}>
-            <p style={{ color:C.red, fontSize:12, fontWeight:700, letterSpacing:1, marginBottom:16 }}>{T.yourGoalRoadmap}</p>
-            <p style={{ color:"#ffffff", fontSize:13, marginBottom:16 }}>{T.levelToGoal}: {form.jlpt} → {T.goal}: {translateGoal(form.goal, form.customGoal, T)}</p>
+            <p style={{ color:C.red, fontSize:fz(12), fontWeight:700, letterSpacing:1, marginBottom:16 }}>{T.yourGoalRoadmap}</p>
+            <p style={{ color:"#ffffff", fontSize:fz(13), marginBottom:16 }}>{T.levelToGoal}: {form.jlpt} → {T.goal}: {translateGoal(form.goal, form.customGoal, T)}</p>
             {milestones.map((m,i) => (
               <div key={i} onClick={()=>setMsDone(p=>p.includes(i)?p.filter(x=>x!==i):[...p,i])} style={{ display:"flex", gap:12, padding:"12px 14px", borderRadius:12, background:msDone.includes(i)?"rgba(34,197,94,0.06)":C.card, border:`1px solid ${msDone.includes(i)?"rgba(34,197,94,0.2)":C.border}`, marginBottom:8, cursor:"pointer", alignItems:"flex-start" }}>
                 <div style={{ width:24, height:24, borderRadius:8, border:`2px solid ${msDone.includes(i)?C.green:C.border}`, background:msDone.includes(i)?C.green:"transparent", display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0 }}>
-                  {msDone.includes(i)?<span style={{ color:"#fff", fontWeight:900, fontSize:12 }}>✓</span>:<span style={{ color:"#ffffff", fontWeight:700, fontSize:11 }}>{i+1}</span>}
+                  {msDone.includes(i)?<span style={{ color:"#fff", fontWeight:900, fontSize:fz(12) }}>✓</span>:<span style={{ color:"#ffffff", fontWeight:700, fontSize:fz(11) }}>{i+1}</span>}
                 </div>
-                <p style={{ color:msDone.includes(i)?"#ffffff":"#7fffd4", fontSize:13, margin:0, lineHeight:1.6, textDecoration:msDone.includes(i)?"line-through":"none" }}>{m}</p>
+                <p style={{ color:msDone.includes(i)?"#ffffff":"#7fffd4", fontSize:fz(13), margin:0, lineHeight:1.6, textDecoration:msDone.includes(i)?"line-through":"none" }}>{m}</p>
               </div>
             ))}
             <div style={{ marginTop:20, padding:"16px", background:"rgba(168,85,247,0.06)", borderRadius:12, textAlign:"center", border:`1px solid rgba(168,85,247,0.2)` }}>
-              <p style={{ fontSize:20, margin:"0 0 8px" }}>🌸</p>
-              <p style={{ color:"#ffffff", fontSize:13, fontWeight:700, margin:"0 0 6px" }}>{T.youveGotThis}</p>
-              <p style={{ color:"#ffb3d9", fontSize:12, lineHeight:1.7, margin:0 }}>{T.motivationText}</p>
+              <p style={{ fontSize:fz(20), margin:"0 0 8px" }}>🌸</p>
+              <p style={{ color:"#ffffff", fontSize:fz(13), fontWeight:700, margin:"0 0 6px" }}>{T.youveGotThis}</p>
+              <p style={{ color:"#ffb3d9", fontSize:fz(12), lineHeight:1.7, margin:0 }}>{T.motivationText}</p>
             </div>
             {!IS_STORE_APP && (
-            <a href="https://www.seitojapanese.online/" target="_blank" rel="noopener noreferrer" style={{ display:"block", textAlign:"center", padding:"13px", background:`linear-gradient(135deg,${C.amber},#d97706)`, color:"#fff", borderRadius:10, fontSize:14, fontWeight:700, textDecoration:"none", marginTop:16 }}>
+            <a href="https://www.seitojapanese.online/" target="_blank" rel="noopener noreferrer" style={{ display:"block", textAlign:"center", padding:"13px", background:`linear-gradient(135deg,${C.amber},#d97706)`, color:"#fff", borderRadius:10, fontSize:fz(14), fontWeight:700, textDecoration:"none", marginTop:16 }}>
               {T.bookLesson}
             </a>
             )}
@@ -21652,32 +21670,32 @@ function Dashboard({ form, onEdit, onLevelUp, onSetWeek, onLogout, onDeleteAccou
           <div>
           <SectionHelp id="feedback" lang={form?.preferredLang} autoOpen={!tutorialActive} />
           <div style={{ ...S.card }}>
-            <p style={{ color:C.purpleLight, fontSize:13, fontWeight:700, marginBottom:6 }}>
+            <p style={{ color:C.purpleLight, fontSize:fz(13), fontWeight:700, marginBottom:6 }}>
               {T.feedbackTitle || "💬 Feedback & Opinion"}
             </p>
-            <p style={{ color:"#94a3b8", fontSize:12, marginBottom:14, lineHeight:1.5 }}>
+            <p style={{ color:"#94a3b8", fontSize:fz(12), marginBottom:14, lineHeight:1.5 }}>
               {T.feedbackSubtitle || "Tell us what you'd like improved or anything that's bothering you about the app. We read every message."}
             </p>
             <div style={{ marginTop:-6, marginBottom:14, textAlign:"left" }}><SupportEmailLine T={T} /></div>
 
             <div style={{ background:"rgba(239,68,68,0.1)", border:"1px solid rgba(239,68,68,0.4)", borderRadius:10, padding:"10px 12px", marginBottom:14 }}>
-              <p style={{ color:"#f87171", fontSize:11, margin:0, lineHeight:1.5, fontWeight:600 }}>
+              <p style={{ color:"#f87171", fontSize:fz(11), margin:0, lineHeight:1.5, fontWeight:600 }}>
                 ⚠️ {T.feedbackWarning || "万が一誹謗中傷、暴言、差別用語などを書いた場合は直ちにアカウント停止。訴訟が起こっても一切の責任は負いません。"}
               </p>
             </div>
 
             {feedbackStatus === "checking" && (
-              <p style={{ color:"#64748b", fontSize:12 }}>{T.feedbackChecking || "Checking..."}</p>
+              <p style={{ color:"#64748b", fontSize:fz(12) }}>{T.feedbackChecking || "Checking..."}</p>
             )}
 
             {feedbackStatus === "already_submitted" && (
-              <p style={{ color:"#fbbf24", fontSize:12, margin:0 }}>
+              <p style={{ color:"#fbbf24", fontSize:fz(12), margin:0 }}>
                 ℹ️ {T.feedbackAlreadySubmitted || "You've already submitted your one-time feedback. Thank you! (GAKU-invited students can submit as many times as they like.)"}
               </p>
             )}
 
             {feedbackStatus === "success" && (
-              <p style={{ color:"#4ade80", fontSize:12, margin:0 }}>
+              <p style={{ color:"#4ade80", fontSize:fz(12), margin:0 }}>
                 ✅ {T.feedbackSuccess || "Thank you — your feedback was sent."}
               </p>
             )}
@@ -21691,15 +21709,15 @@ function Dashboard({ form, onEdit, onLevelUp, onSetWeek, onLogout, onDeleteAccou
                   rows={6}
                   style={{ ...S.input, resize:"vertical", lineHeight:1.5 }}
                 />
-                <p style={{ color:"#64748b", fontSize:10, textAlign:"right", margin:"4px 0 10px" }}>{feedbackText.length}/3000</p>
+                <p style={{ color:"#64748b", fontSize:fz(10), textAlign:"right", margin:"4px 0 10px" }}>{feedbackText.length}/3000</p>
 
                 {feedbackStatus === "rejected" && (
-                  <p style={{ color:"#f87171", fontSize:12, marginBottom:10 }}>
+                  <p style={{ color:"#f87171", fontSize:fz(12), marginBottom:10 }}>
                     ⚠️ {T.feedbackRejected || "This message couldn't be accepted. Please rephrase without personal insults, harassment, or discriminatory language."}
                   </p>
                 )}
                 {feedbackStatus === "error" && (
-                  <p style={{ color:"#f87171", fontSize:12, marginBottom:10 }}>
+                  <p style={{ color:"#f87171", fontSize:fz(12), marginBottom:10 }}>
                     ⚠️ {T.feedbackError || "Something went wrong sending your feedback. Please try again."}
                   </p>
                 )}
@@ -21827,21 +21845,21 @@ function PolicyGate({ T, name, email, plan, userId, onAgreed, onCancel }) {
   return (
     <div style={{ minHeight:"100vh", background:"linear-gradient(160deg,#0a0f1e 0%,#0f172a 60%,#0a0f1e 100%)", display:"flex", alignItems:"center", justifyContent:"center", padding:24 }}>
       <div style={{ maxWidth:480, width:"100%", background:"rgba(15,23,42,0.9)", border:"1px solid rgba(148,163,184,0.2)", borderRadius:16, padding:"24px 22px" }}>
-        <h2 style={{ color:"#f1f5f9", fontSize:17, fontWeight:900, margin:"0 0 14px" }}>{T?.policyTitle || "GAKU Master Policy"}</h2>
+        <h2 style={{ color:"#f1f5f9", fontSize:fz(17), fontWeight:900, margin:"0 0 14px" }}>{T?.policyTitle || "GAKU Master Policy"}</h2>
         <div style={{ maxHeight:280, overflowY:"auto", background:"rgba(2,6,23,0.5)", border:"1px solid rgba(148,163,184,0.15)", borderRadius:10, padding:14, marginBottom:16 }}>
-          <p style={{ color:"#94a3b8", fontSize:12.5, lineHeight:1.7, whiteSpace:"pre-wrap", margin:0 }}>{PLACEHOLDER_POLICY_TEXT}</p>
+          <p style={{ color:"#94a3b8", fontSize:fz(12.5), lineHeight:1.7, whiteSpace:"pre-wrap", margin:0 }}>{PLACEHOLDER_POLICY_TEXT}</p>
         </div>
         <label style={{ display:"flex", alignItems:"flex-start", gap:8, marginBottom:12, cursor:"pointer" }}>
           <input type="checkbox" checked={agreed} onChange={(e)=>setAgreed(e.target.checked)} style={{ marginTop:2 }} />
-          <span style={{ color:"#e2e8f0", fontSize:12.5, fontWeight:600 }}>{T?.policyAgreeLabel || "I agree to all terms"}</span>
+          <span style={{ color:"#e2e8f0", fontSize:fz(12.5), fontWeight:600 }}>{T?.policyAgreeLabel || "I agree to all terms"}</span>
         </label>
-        <p style={{ color:"#fca5a5", fontSize:11, fontWeight:600, margin:"0 0 16px", lineHeight:1.6 }}>
+        <p style={{ color:"#fca5a5", fontSize:fz(11), fontWeight:600, margin:"0 0 16px", lineHeight:1.6 }}>
           ⚠️ {T?.dataResetWarningShort || "Reminder: if you don't finish payment within 1 week, your saved data will be reset."}
         </p>
-        {error && <p style={{ color:"#f87171", fontSize:11.5, margin:"0 0 12px" }}>{error}</p>}
+        {error && <p style={{ color:"#f87171", fontSize:fz(11.5), margin:"0 0 12px" }}>{error}</p>}
         <div style={{ display:"flex", gap:10 }}>
-          <button onClick={onCancel} style={{ flex:1, padding:"11px 14px", background:"transparent", border:"1px solid rgba(148,163,184,0.3)", borderRadius:10, color:"#94a3b8", fontSize:12.5, fontWeight:700, cursor:"pointer" }}>{T?.cancel || "Cancel"}</button>
-          <button onClick={handleContinue} disabled={!agreed || submitting} style={{ flex:2, padding:"11px 14px", background: agreed ? "linear-gradient(135deg,#7c3aed,#a855f7)" : "rgba(148,163,184,0.15)", border:"none", borderRadius:10, color:"#fff", fontSize:12.5, fontWeight:800, cursor: agreed ? "pointer":"not-allowed", opacity: submitting?0.7:1 }}>
+          <button onClick={onCancel} style={{ flex:1, padding:"11px 14px", background:"transparent", border:"1px solid rgba(148,163,184,0.3)", borderRadius:10, color:"#94a3b8", fontSize:fz(12.5), fontWeight:700, cursor:"pointer" }}>{T?.cancel || "Cancel"}</button>
+          <button onClick={handleContinue} disabled={!agreed || submitting} style={{ flex:2, padding:"11px 14px", background: agreed ? "linear-gradient(135deg,#7c3aed,#a855f7)" : "rgba(148,163,184,0.15)", border:"none", borderRadius:10, color:"#fff", fontSize:fz(12.5), fontWeight:800, cursor: agreed ? "pointer":"not-allowed", opacity: submitting?0.7:1 }}>
             {submitting ? "…" : (T?.continueLabel || "Continue")}
           </button>
         </div>
@@ -21875,24 +21893,24 @@ function SetNewPasswordScreen({ hasSession, onDone }) {
       setErr(e2.message || "Could not update the password.");
     } finally { setBusy(false); }
   };
-  const box = { width:"100%", boxSizing:"border-box", padding:"11px 14px", marginBottom:10, background:"#0f172a", border:"1.5px solid rgba(255,255,255,0.1)", borderRadius:10, color:"#f1f5f9", fontSize:14 };
+  const box = { width:"100%", boxSizing:"border-box", padding:"11px 14px", marginBottom:10, background:"#0f172a", border:"1.5px solid rgba(255,255,255,0.1)", borderRadius:10, color:"#f1f5f9", fontSize:fz(14) };
   return (
     <div style={{ minHeight:"100vh", background:"linear-gradient(160deg,#0a0f1e 0%,#0f172a 60%,#0a0f1e 100%)", display:"flex", alignItems:"center", justifyContent:"center", padding:24 }}>
       <form onSubmit={submit} style={{ width:"100%", maxWidth:380, background:"rgba(255,255,255,0.03)", border:"1.5px solid rgba(255,255,255,0.1)", borderRadius:20, padding:28 }}>
-        <h2 style={{ color:"#f1f5f9", fontSize:20, fontWeight:900, margin:"0 0 18px", textAlign:"center" }}>Set a new password</h2>
+        <h2 style={{ color:"#f1f5f9", fontSize:fz(20), fontWeight:900, margin:"0 0 18px", textAlign:"center" }}>Set a new password</h2>
         {hasSession ? (
           <>
             <input type="password" required minLength={6} placeholder="New password" value={pw} onChange={e=>setPw(e.target.value)} style={box} />
             <input type="password" required minLength={6} placeholder="Confirm new password" value={pw2} onChange={e=>setPw2(e.target.value)} style={box} />
-            {err && <p style={{ color:"#f87171", fontSize:12, margin:"0 0 10px" }}>{err}</p>}
-            <button type="submit" disabled={busy} style={{ width:"100%", padding:"12px", background:"linear-gradient(135deg,#7c3aed,#a855f7)", border:"none", borderRadius:10, color:"#fff", fontSize:14, fontWeight:800, cursor:"pointer", opacity:busy?0.6:1 }}>
+            {err && <p style={{ color:"#f87171", fontSize:fz(12), margin:"0 0 10px" }}>{err}</p>}
+            <button type="submit" disabled={busy} style={{ width:"100%", padding:"12px", background:"linear-gradient(135deg,#7c3aed,#a855f7)", border:"none", borderRadius:10, color:"#fff", fontSize:fz(14), fontWeight:800, cursor:"pointer", opacity:busy?0.6:1 }}>
               {busy ? "…" : "Save new password"}
             </button>
           </>
         ) : (
           <>
-            <p style={{ color:"#f87171", fontSize:13, margin:"0 0 14px", textAlign:"center" }}>This reset link has expired or was already used. Please ask your teacher to send a new one.</p>
-            <button type="button" onClick={onDone} style={{ width:"100%", padding:"12px", background:"linear-gradient(135deg,#7c3aed,#a855f7)", border:"none", borderRadius:10, color:"#fff", fontSize:14, fontWeight:800, cursor:"pointer" }}>Go to GAKU Master</button>
+            <p style={{ color:"#f87171", fontSize:fz(13), margin:"0 0 14px", textAlign:"center" }}>This reset link has expired or was already used. Please ask your teacher to send a new one.</p>
+            <button type="button" onClick={onDone} style={{ width:"100%", padding:"12px", background:"linear-gradient(135deg,#7c3aed,#a855f7)", border:"none", borderRadius:10, color:"#fff", fontSize:fz(14), fontWeight:800, cursor:"pointer" }}>Go to GAKU Master</button>
           </>
         )}
       </form>
@@ -21914,7 +21932,7 @@ function AuthScreen({ onAuthed, T, prefillEmail, initialMode, quickStartStep, li
   const fillEmail = (str, email) => String(str).split("{email}").join(email);
 
   if (!supabase) {
-    return <p style={{ color:"#f87171", fontSize:13 }}>Account features are not configured yet.</p>;
+    return <p style={{ color:"#f87171", fontSize:fz(13) }}>Account features are not configured yet.</p>;
   }
 
   const resendConfirmation = async (emailArg) => {
@@ -22014,22 +22032,22 @@ function AuthScreen({ onAuthed, T, prefillEmail, initialMode, quickStartStep, li
     return (
       <div style={{ minHeight:"100vh", background:"linear-gradient(160deg,#0a0f1e 0%,#0f172a 60%,#0a0f1e 100%)", display:"flex", alignItems:"center", justifyContent:"center", padding:24 }}>
         <div style={{ width:"100%", maxWidth:380, background:"rgba(255,255,255,0.03)", border:"1.5px solid rgba(255,255,255,0.1)", borderRadius:20, padding:28, textAlign:"center" }}>
-          <p style={{ fontSize:34, margin:"0 0 8px" }}>📧</p>
-          <h2 style={{ color:"#f1f5f9", fontSize:20, fontWeight:900, margin:"0 0 12px" }}>{T?.confirmEmailTitle || "Check your email"}</h2>
-          <p style={{ color:"#cbd5e1", fontSize:13, lineHeight:1.7, margin:"0 0 8px" }}>
+          <p style={{ fontSize:fz(34), margin:"0 0 8px" }}>📧</p>
+          <h2 style={{ color:"#f1f5f9", fontSize:fz(20), fontWeight:900, margin:"0 0 12px" }}>{T?.confirmEmailTitle || "Check your email"}</h2>
+          <p style={{ color:"#cbd5e1", fontSize:fz(13), lineHeight:1.7, margin:"0 0 8px" }}>
             {fillEmail(T?.confirmEmailDesc || "We sent a confirmation email to {email}. Open it and tap “Confirm my email”, then come back here.", confirmEmail)}
           </p>
-          <p style={{ color:"#94a3b8", fontSize:12, lineHeight:1.6, margin:"0 0 18px" }}>{T?.confirmEmailSpam || "Can't find it? Check your spam or promotions folder."}</p>
-          {confirmNote && <p style={{ color:"#fbbf24", fontSize:12, lineHeight:1.6, margin:"0 0 12px" }}>{confirmNote}</p>}
+          <p style={{ color:"#94a3b8", fontSize:fz(12), lineHeight:1.6, margin:"0 0 18px" }}>{T?.confirmEmailSpam || "Can't find it? Check your spam or promotions folder."}</p>
+          {confirmNote && <p style={{ color:"#fbbf24", fontSize:fz(12), lineHeight:1.6, margin:"0 0 12px" }}>{confirmNote}</p>}
           {password ? (
-            <button onClick={loginAfterConfirm} disabled={busy} style={{ width:"100%", padding:"12px", background:"linear-gradient(135deg,#7c3aed,#a855f7)", border:"none", borderRadius:10, color:"#fff", fontSize:14, fontWeight:800, cursor:"pointer", marginBottom:10 }}>
+            <button onClick={loginAfterConfirm} disabled={busy} style={{ width:"100%", padding:"12px", background:"linear-gradient(135deg,#7c3aed,#a855f7)", border:"none", borderRadius:10, color:"#fff", fontSize:fz(14), fontWeight:800, cursor:"pointer", marginBottom:10 }}>
               {busy ? "…" : (T?.confirmEmailDone || "I've confirmed — log in")}
             </button>
           ) : null}
-          <button onClick={() => resendConfirmation()} disabled={busy} style={{ width:"100%", padding:"11px", background:"transparent", border:"1px solid rgba(255,255,255,0.15)", borderRadius:10, color:"#cbd5e1", fontSize:13, fontWeight:700, cursor:"pointer", marginBottom:10 }}>
+          <button onClick={() => resendConfirmation()} disabled={busy} style={{ width:"100%", padding:"11px", background:"transparent", border:"1px solid rgba(255,255,255,0.15)", borderRadius:10, color:"#cbd5e1", fontSize:fz(13), fontWeight:700, cursor:"pointer", marginBottom:10 }}>
             {T?.confirmEmailResend || "Resend confirmation email"}
           </button>
-          <button onClick={()=>{ setConfirmEmail(""); setConfirmNote(""); setMode("login"); }} style={{ background:"none", border:"none", color:"#94a3b8", fontSize:12, cursor:"pointer" }}>
+          <button onClick={()=>{ setConfirmEmail(""); setConfirmNote(""); setMode("login"); }} style={{ background:"none", border:"none", color:"#94a3b8", fontSize:fz(12), cursor:"pointer" }}>
             {T?.confirmEmailBack || "← Back to log in"}
           </button>
         </div>
@@ -22048,11 +22066,11 @@ function AuthScreen({ onAuthed, T, prefillEmail, initialMode, quickStartStep, li
             entirely rather than realizing one more field would finish signup. */}
         {linkError && (
           <div style={{ background:"rgba(251,191,36,0.1)", border:"1px solid rgba(251,191,36,0.4)", borderRadius:10, padding:"10px 12px", marginBottom:14 }}>
-            <p style={{ color:"#fbbf24", fontSize:12, lineHeight:1.6, margin:"0 0 8px" }}>{T?.confirmLinkExpired || "That confirmation link is invalid or has expired. Enter your email below and tap the button to get a new one, then open it right away."}</p>
-            <button type="button" disabled={busy || !rawEmail.trim()} onClick={() => resendConfirmation(rawEmail.trim().toLowerCase())} style={{ padding:"8px 12px", borderRadius:8, border:"1px solid rgba(251,191,36,0.5)", background:"transparent", color:"#fbbf24", fontSize:12, fontWeight:700, cursor:"pointer" }}>
+            <p style={{ color:"#fbbf24", fontSize:fz(12), lineHeight:1.6, margin:"0 0 8px" }}>{T?.confirmLinkExpired || "That confirmation link is invalid or has expired. Enter your email below and tap the button to get a new one, then open it right away."}</p>
+            <button type="button" disabled={busy || !rawEmail.trim()} onClick={() => resendConfirmation(rawEmail.trim().toLowerCase())} style={{ padding:"8px 12px", borderRadius:8, border:"1px solid rgba(251,191,36,0.5)", background:"transparent", color:"#fbbf24", fontSize:fz(12), fontWeight:700, cursor:"pointer" }}>
               {T?.confirmEmailResend || "Resend confirmation email"}
             </button>
-            {confirmNote && <p style={{ color:"#cbd5e1", fontSize:12, margin:"8px 0 0" }}>{confirmNote}</p>}
+            {confirmNote && <p style={{ color:"#cbd5e1", fontSize:fz(12), margin:"8px 0 0" }}>{confirmNote}</p>}
           </div>
         )}
         {quickStartStep && mode === "signup" && (
@@ -22062,25 +22080,25 @@ function AuthScreen({ onAuthed, T, prefillEmail, initialMode, quickStartStep, li
                 <div key={i} style={{ flex:1, height:4, borderRadius:2, background:`linear-gradient(135deg,${C.purple},#9333ea)` }} />
               ))}
             </div>
-            <p style={{ color:C.purpleLight, fontSize:11, fontWeight:700, letterSpacing:2, marginBottom:4, textAlign:"center" }}>LAST STEP</p>
+            <p style={{ color:C.purpleLight, fontSize:fz(11), fontWeight:700, letterSpacing:2, marginBottom:4, textAlign:"center" }}>LAST STEP</p>
           </>
         )}
-        <h2 style={{ color:"#f1f5f9", fontSize:20, fontWeight:900, margin:"0 0 18px", textAlign:"center" }}>
+        <h2 style={{ color:"#f1f5f9", fontSize:fz(20), fontWeight:900, margin:"0 0 18px", textAlign:"center" }}>
           {mode === "login" ? (T?.loginTitle || "Log In") : (quickStartStep ? "Create a password to save your plan" : (T?.signupTitle || "Create Your Account"))}
         </h2>
         <input type="email" required placeholder={T?.emailPlaceholder || "Email"} value={rawEmail} onChange={e=>setRawEmail(e.target.value)}
-          style={{ width:"100%", boxSizing:"border-box", padding:"11px 14px", marginBottom:10, background:"#0f172a", border:"1.5px solid rgba(255,255,255,0.1)", borderRadius:10, color:"#f1f5f9", fontSize:14 }} />
+          style={{ width:"100%", boxSizing:"border-box", padding:"11px 14px", marginBottom:10, background:"#0f172a", border:"1.5px solid rgba(255,255,255,0.1)", borderRadius:10, color:"#f1f5f9", fontSize:fz(14) }} />
         <input type="password" required minLength={6} placeholder={T?.passwordPlaceholder || "Password"} value={password} onChange={e=>setPassword(e.target.value)}
-          style={{ width:"100%", boxSizing:"border-box", padding:"11px 14px", marginBottom:10, background:"#0f172a", border:"1.5px solid rgba(255,255,255,0.1)", borderRadius:10, color:"#f1f5f9", fontSize:14 }} />
+          style={{ width:"100%", boxSizing:"border-box", padding:"11px 14px", marginBottom:10, background:"#0f172a", border:"1.5px solid rgba(255,255,255,0.1)", borderRadius:10, color:"#f1f5f9", fontSize:fz(14) }} />
         {mode === "signup" && (
           <input placeholder={T?.invitationCodeOptional || "GAKU invite code (optional)"} value={inviteCode} onChange={e=>setInviteCode(e.target.value)}
-            style={{ width:"100%", boxSizing:"border-box", padding:"11px 14px", marginBottom:10, background:"#0f172a", border:"1.5px solid rgba(255,255,255,0.1)", borderRadius:10, color:"#f1f5f9", fontSize:14 }} />
+            style={{ width:"100%", boxSizing:"border-box", padding:"11px 14px", marginBottom:10, background:"#0f172a", border:"1.5px solid rgba(255,255,255,0.1)", borderRadius:10, color:"#f1f5f9", fontSize:fz(14) }} />
         )}
-        {err && <p style={{ color:"#f87171", fontSize:12, margin:"0 0 10px" }}>{err}</p>}
-        <button type="submit" disabled={busy} style={{ width:"100%", padding:"12px", background:"linear-gradient(135deg,#7c3aed,#a855f7)", border:"none", borderRadius:10, color:"#fff", fontSize:14, fontWeight:800, cursor:"pointer", opacity:busy?0.6:1 }}>
+        {err && <p style={{ color:"#f87171", fontSize:fz(12), margin:"0 0 10px" }}>{err}</p>}
+        <button type="submit" disabled={busy} style={{ width:"100%", padding:"12px", background:"linear-gradient(135deg,#7c3aed,#a855f7)", border:"none", borderRadius:10, color:"#fff", fontSize:fz(14), fontWeight:800, cursor:"pointer", opacity:busy?0.6:1 }}>
           {busy ? "…" : (mode === "login" ? (T?.loginButton || "Log In") : (T?.signupButton || "Sign Up"))}
         </button>
-        <button type="button" onClick={()=>{setMode(m=>m==="login"?"signup":"login"); setErr("");}} style={{ display:"block", width:"100%", marginTop:14, background:"none", border:"none", color:"#94a3b8", fontSize:12, cursor:"pointer" }}>
+        <button type="button" onClick={()=>{setMode(m=>m==="login"?"signup":"login"); setErr("");}} style={{ display:"block", width:"100%", marginTop:14, background:"none", border:"none", color:"#94a3b8", fontSize:fz(12), cursor:"pointer" }}>
           {mode === "login" ? (T?.needAccount || "Need an account? Sign up") : (T?.haveAccount || "Already have an account? Log in")}
         </button>
         <SupportEmailLine T={T} />
@@ -22094,7 +22112,7 @@ function AuthScreen({ onAuthed, T, prefillEmail, initialMode, quickStartStep, li
 const SUPPORT_EMAIL = "support@reply.seitojapanese.online";
 function SupportEmailLine({ T }) {
   return (
-    <p style={{ color:"#94a3b8", fontSize:12, lineHeight:1.6, margin:"14px 0 0", textAlign:"center" }}>
+    <p style={{ color:"#94a3b8", fontSize:fz(12), lineHeight:1.6, margin:"14px 0 0", textAlign:"center" }}>
       {T?.supportEmailNote || "Can't log in or having trouble with the app? Email us:"}{" "}
       <a href={"mailto:" + SUPPORT_EMAIL} style={{ color:"#a78bfa", fontWeight:700, wordBreak:"break-all" }}>{SUPPORT_EMAIL}</a>
     </p>
@@ -22106,9 +22124,9 @@ function DeviceApprovalGate({ T }) {
   return (
     <div style={{ minHeight:"100vh", background:"linear-gradient(160deg,#0a0f1e 0%,#0f172a 60%,#0a0f1e 100%)", display:"flex", alignItems:"center", justifyContent:"center", padding:24, textAlign:"center" }}>
       <div style={{ maxWidth:380 }}>
-        <p style={{ fontSize:36, margin:"0 0 12px" }}>📩</p>
-        <h2 style={{ color:"#f1f5f9", fontSize:18, fontWeight:900, margin:"0 0 10px" }}>{T?.deviceApprovalTitle || "New Device Detected"}</h2>
-        <p style={{ color:"#94a3b8", fontSize:13, lineHeight:1.6 }}>{T?.deviceApprovalDesc || "We've sent an approval email to you and to GAKU. Once both approve, this device will be unlocked — please check your inbox."}</p>
+        <p style={{ fontSize:fz(36), margin:"0 0 12px" }}>📩</p>
+        <h2 style={{ color:"#f1f5f9", fontSize:fz(18), fontWeight:900, margin:"0 0 10px" }}>{T?.deviceApprovalTitle || "New Device Detected"}</h2>
+        <p style={{ color:"#94a3b8", fontSize:fz(13), lineHeight:1.6 }}>{T?.deviceApprovalDesc || "We've sent an approval email to you and to GAKU. Once both approve, this device will be unlocked — please check your inbox."}</p>
         <SupportEmailLine T={T} />
       </div>
     </div>
@@ -22120,10 +22138,10 @@ function DeviceCheckErrorGate({ onRetry }) {
   return (
     <div style={{ minHeight:"100vh", background:"linear-gradient(160deg,#0a0f1e 0%,#0f172a 60%,#0a0f1e 100%)", display:"flex", alignItems:"center", justifyContent:"center", padding:24, textAlign:"center" }}>
       <div style={{ maxWidth:380 }}>
-        <p style={{ fontSize:36, margin:"0 0 12px" }}>📡</p>
-        <h2 style={{ color:"#f1f5f9", fontSize:18, fontWeight:900, margin:"0 0 10px" }}>Connection problem</h2>
-        <p style={{ color:"#94a3b8", fontSize:13, lineHeight:1.6, margin:"0 0 16px" }}>We couldn't reach the GAKU server to check your device. Please check your internet connection (try switching between Wi-Fi and mobile data) and try again.</p>
-        <button type="button" onClick={onRetry} style={{ padding:"12px 28px", background:"linear-gradient(135deg,#7c3aed,#a855f7)", border:"none", borderRadius:10, color:"#fff", fontSize:14, fontWeight:800, cursor:"pointer" }}>Try again</button>
+        <p style={{ fontSize:fz(36), margin:"0 0 12px" }}>📡</p>
+        <h2 style={{ color:"#f1f5f9", fontSize:fz(18), fontWeight:900, margin:"0 0 10px" }}>Connection problem</h2>
+        <p style={{ color:"#94a3b8", fontSize:fz(13), lineHeight:1.6, margin:"0 0 16px" }}>We couldn't reach the GAKU server to check your device. Please check your internet connection (try switching between Wi-Fi and mobile data) and try again.</p>
+        <button type="button" onClick={onRetry} style={{ padding:"12px 28px", background:"linear-gradient(135deg,#7c3aed,#a855f7)", border:"none", borderRadius:10, color:"#fff", fontSize:fz(14), fontWeight:800, cursor:"pointer" }}>Try again</button>
       </div>
     </div>
   );
@@ -22135,9 +22153,9 @@ function DeviceSuspendedGate({ T, suspendedUntil }) {
   return (
     <div style={{ minHeight:"100vh", background:"linear-gradient(160deg,#0a0f1e 0%,#0f172a 60%,#0a0f1e 100%)", display:"flex", alignItems:"center", justifyContent:"center", padding:24, textAlign:"center" }}>
       <div style={{ maxWidth:380 }}>
-        <p style={{ fontSize:36, margin:"0 0 12px" }}>⏸️</p>
-        <h2 style={{ color:"#f1f5f9", fontSize:18, fontWeight:900, margin:"0 0 10px" }}>{T?.deviceSuspendedTitle || "Account Temporarily Suspended"}</h2>
-        <p style={{ color:"#94a3b8", fontSize:13, lineHeight:1.6 }}>
+        <p style={{ fontSize:fz(36), margin:"0 0 12px" }}>⏸️</p>
+        <h2 style={{ color:"#f1f5f9", fontSize:fz(18), fontWeight:900, margin:"0 0 10px" }}>{T?.deviceSuspendedTitle || "Account Temporarily Suspended"}</h2>
+        <p style={{ color:"#94a3b8", fontSize:fz(13), lineHeight:1.6 }}>
           {(T?.deviceSuspendedDesc || "A 3rd device logged into this account, beyond the 2 devices already approved. As a precaution against account sharing, access is suspended until {date}.").replace("{date}", untilLabel)}
         </p>
       </div>
@@ -22886,7 +22904,7 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
   // per-student data.
   if (!authChecked) {
     return (
-      <div style={{ minHeight:"60vh", display:"flex", alignItems:"center", justifyContent:"center", color:"#94a3b8", fontSize:13 }}>
+      <div style={{ minHeight:"60vh", display:"flex", alignItems:"center", justifyContent:"center", color:"#94a3b8", fontSize:fz(13) }}>
         {T.loading || "Loading..."}
       </div>
     );
@@ -22970,29 +22988,29 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
     return (
       <div style={{ minHeight:"100vh", background:"linear-gradient(160deg,#0a0f1e 0%,#0f172a 60%,#0a0f1e 100%)", display:"flex", alignItems:"flex-start", justifyContent:"center", padding:24, boxSizing:"border-box" }}>
         <div style={{ background:"linear-gradient(135deg,#1e1b4b,#0f172a)", border:"1.5px solid rgba(139,92,246,0.4)", borderRadius:20, padding:"32px 26px", maxWidth:420, width:"92%", margin:"auto", textAlign:"center" }}>
-          <h2 style={{ color:"#f1f5f9", fontSize:20, fontWeight:900, margin:"0 0 10px" }}>{absenceSuspended ? (T?.storeSuspendedTitle || "GAKU Master is temporarily suspended") : (T?.trialEndedTitle || "Your free trial has ended")}</h2>
+          <h2 style={{ color:"#f1f5f9", fontSize:fz(20), fontWeight:900, margin:"0 0 10px" }}>{absenceSuspended ? (T?.storeSuspendedTitle || "GAKU Master is temporarily suspended") : (T?.trialEndedTitle || "Your free trial has ended")}</h2>
           {!absenceSuspended && <StorePlans T={T} userId={authUser.id} onPurchased={() => setIsPaid(true)} />}
-          <p style={{ color:"#94a3b8", fontSize:13, margin:"0 0 16px", lineHeight:1.6 }}>{T?.storeInviteHint || "If you have an invitation code, enter it below to continue."}</p>
+          <p style={{ color:"#94a3b8", fontSize:fz(13), margin:"0 0 16px", lineHeight:1.6 }}>{T?.storeInviteHint || "If you have an invitation code, enter it below to continue."}</p>
           <div style={{ display:"flex", gap:6, marginBottom:8 }}>
-            <input value={lockedInviteCode} onChange={e=>setLockedInviteCode(e.target.value)} placeholder={T?.inviteCodePlaceholder || "Enter invite code..."} style={{ flex:1, minWidth:0, padding:"9px 10px", borderRadius:8, border:"1px solid rgba(148,163,184,0.3)", background:"rgba(2,6,23,0.5)", color:"#f1f5f9", fontSize:13 }} />
-            <button onClick={handleLockedInviteRedeem} disabled={lockedInviteBusy || !lockedInviteCode.trim()} style={{ padding:"9px 14px", borderRadius:8, border:"none", background:"linear-gradient(135deg,#7c3aed,#a855f7)", color:"#fff", fontWeight:800, fontSize:12.5, cursor:"pointer" }}>{lockedInviteBusy ? "\u2026" : (T?.unlockBtn || "Unlock")}</button>
+            <input value={lockedInviteCode} onChange={e=>setLockedInviteCode(e.target.value)} placeholder={T?.inviteCodePlaceholder || "Enter invite code..."} style={{ flex:1, minWidth:0, padding:"9px 10px", borderRadius:8, border:"1px solid rgba(148,163,184,0.3)", background:"rgba(2,6,23,0.5)", color:"#f1f5f9", fontSize:fz(13) }} />
+            <button onClick={handleLockedInviteRedeem} disabled={lockedInviteBusy || !lockedInviteCode.trim()} style={{ padding:"9px 14px", borderRadius:8, border:"none", background:"linear-gradient(135deg,#7c3aed,#a855f7)", color:"#fff", fontWeight:800, fontSize:fz(12.5), cursor:"pointer" }}>{lockedInviteBusy ? "\u2026" : (T?.unlockBtn || "Unlock")}</button>
           </div>
-          {lockedInviteErr && <p style={{ color:"#f87171", fontSize:11, margin:"0 0 8px" }}>{lockedInviteErr}</p>}
+          {lockedInviteErr && <p style={{ color:"#f87171", fontSize:fz(11), margin:"0 0 8px" }}>{lockedInviteErr}</p>}
           {!reqOpen && !reqDone && (
-            <button onClick={()=>setReqOpen(true)} style={{ background:"none", border:"none", color:"#a78bfa", fontSize:12.5, textDecoration:"underline", cursor:"pointer", margin:"6px 0 12px" }}>{T?.storeRequestCode || "Request an invitation code"}</button>
+            <button onClick={()=>setReqOpen(true)} style={{ background:"none", border:"none", color:"#a78bfa", fontSize:fz(12.5), textDecoration:"underline", cursor:"pointer", margin:"6px 0 12px" }}>{T?.storeRequestCode || "Request an invitation code"}</button>
           )}
           {reqOpen && !reqDone && (
             <div style={{ textAlign:"left", margin:"8px 0 12px" }}>
-              <p style={{ color:"#94a3b8", fontSize:12, margin:"0 0 6px" }}>{(T?.storeReplyTo || "We will reply to {email}.").replace("{email}", authUser.email)}</p>
-              <textarea value={reqMsg} onChange={e=>setReqMsg(e.target.value.slice(0,1000))} placeholder={T?.storeMessagePh || "Message (optional)"} rows={3} style={{ width:"100%", boxSizing:"border-box", padding:"8px 10px", borderRadius:8, border:"1px solid rgba(148,163,184,0.3)", background:"rgba(2,6,23,0.5)", color:"#f1f5f9", fontSize:13 }} />
-              {reqErr && <p style={{ color:"#f87171", fontSize:11, margin:"6px 0 0" }}>{reqErr}</p>}
-              <button onClick={submitInviteRequest} disabled={reqBusy} style={{ marginTop:8, width:"100%", padding:"10px", borderRadius:8, border:"none", background:"linear-gradient(135deg,#7c3aed,#a855f7)", color:"#fff", fontWeight:800, fontSize:13, cursor:"pointer" }}>{reqBusy ? "\u2026" : (T?.storeSendRequest || "Send request")}</button>
+              <p style={{ color:"#94a3b8", fontSize:fz(12), margin:"0 0 6px" }}>{(T?.storeReplyTo || "We will reply to {email}.").replace("{email}", authUser.email)}</p>
+              <textarea value={reqMsg} onChange={e=>setReqMsg(e.target.value.slice(0,1000))} placeholder={T?.storeMessagePh || "Message (optional)"} rows={3} style={{ width:"100%", boxSizing:"border-box", padding:"8px 10px", borderRadius:8, border:"1px solid rgba(148,163,184,0.3)", background:"rgba(2,6,23,0.5)", color:"#f1f5f9", fontSize:fz(13) }} />
+              {reqErr && <p style={{ color:"#f87171", fontSize:fz(11), margin:"6px 0 0" }}>{reqErr}</p>}
+              <button onClick={submitInviteRequest} disabled={reqBusy} style={{ marginTop:8, width:"100%", padding:"10px", borderRadius:8, border:"none", background:"linear-gradient(135deg,#7c3aed,#a855f7)", color:"#fff", fontWeight:800, fontSize:fz(13), cursor:"pointer" }}>{reqBusy ? "\u2026" : (T?.storeSendRequest || "Send request")}</button>
             </div>
           )}
-          {reqDone && <p style={{ color:"#86efac", fontSize:12.5, margin:"8px 0 12px" }}>{T?.storeThanks || "Thank you. We will reply by email."}</p>}
-          <p style={{ color:"#64748b", fontSize:11, margin:"4px 0 12px", lineHeight:1.6 }}>{T?.storeDataKept || "Your saved study data is kept for a limited time."}</p>
-          <button onClick={authUser ? handleDeleteAccount : undefined} disabled={deleteAccountBusy} style={{ background:"none", border:"none", color:"#64748b", fontSize:11, textDecoration:"underline", cursor:"pointer" }}>{T?.deleteAccountLink || "Delete my account instead"}</button>
-          <p style={{ color:"#64748b", fontSize:11, margin:"12px 0 0" }}>
+          {reqDone && <p style={{ color:"#86efac", fontSize:fz(12.5), margin:"8px 0 12px" }}>{T?.storeThanks || "Thank you. We will reply by email."}</p>}
+          <p style={{ color:"#64748b", fontSize:fz(11), margin:"4px 0 12px", lineHeight:1.6 }}>{T?.storeDataKept || "Your saved study data is kept for a limited time."}</p>
+          <button onClick={authUser ? handleDeleteAccount : undefined} disabled={deleteAccountBusy} style={{ background:"none", border:"none", color:"#64748b", fontSize:fz(11), textDecoration:"underline", cursor:"pointer" }}>{T?.deleteAccountLink || "Delete my account instead"}</button>
+          <p style={{ color:"#64748b", fontSize:fz(11), margin:"12px 0 0" }}>
             <a href="/terms.html" target="_blank" rel="noopener noreferrer" style={{ color:"#a78bfa" }}>{T?.termsOfUseLabel || "Terms of Use"}</a>{" \u00b7 "}<a href="/privacy.html" target="_blank" rel="noopener noreferrer" style={{ color:"#a78bfa" }}>{T?.privacyPolicyLabel || "Privacy Policy"}</a>
           </p>
         </div>
@@ -23003,9 +23021,9 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
     return (
       <div style={{ minHeight:"100vh", background:"linear-gradient(160deg,#0a0f1e 0%,#0f172a 60%,#0a0f1e 100%)", display:"flex", alignItems:"flex-start", justifyContent:"center", padding:24, boxSizing:"border-box" }}>
         <div style={{ background:"linear-gradient(135deg,#1e1b4b,#0f172a)", border:"1.5px solid rgba(139,92,246,0.4)", borderRadius:20, padding:"36px 32px", maxWidth:420, width:"90%", margin:"auto", textAlign:"center", boxShadow:"0 8px 40px rgba(139,92,246,0.25)" }}>
-          <p style={{ fontSize:28, margin:"0 0 6px" }}>⏳</p>
-          <h2 style={{ color:"#f1f5f9", fontSize:20, fontWeight:900, margin:"0 0 8px" }}>{absenceSuspended ? "GAKU Master is temporarily suspended" : (T?.trialEndedTitle || "Your 7-day free trial has ended")}</h2>
-          <p style={{ color:"#94a3b8", fontSize:13, margin:"0 0 14px", lineHeight:1.6 }}>
+          <p style={{ fontSize:fz(28), margin:"0 0 6px" }}>⏳</p>
+          <h2 style={{ color:"#f1f5f9", fontSize:fz(20), fontWeight:900, margin:"0 0 8px" }}>{absenceSuspended ? "GAKU Master is temporarily suspended" : (T?.trialEndedTitle || "Your 7-day free trial has ended")}</h2>
+          <p style={{ color:"#94a3b8", fontSize:fz(13), margin:"0 0 14px", lineHeight:1.6 }}>
             {absenceSuspended ? "Your GAKU Master is temporarily suspended because you have been absent from lessons for longer than the requirements allow. Please reopen your account by taking a lesson or by paying the normal fee for the app." : (T?.trialEndedDesc || "Choose a plan below to keep your progress.")}
           </p>
 
@@ -23015,7 +23033,7 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
               Shown unconditionally on this screen, regardless of whether the
               student goes on to agree to the policy or just closes the tab. */}
           <div style={{ background:"rgba(239,68,68,0.08)", border:"1px solid rgba(239,68,68,0.35)", borderRadius:10, padding:"10px 12px", marginBottom:18, textAlign:"left" }}>
-            <p style={{ color:"#fca5a5", fontSize:12, fontWeight:700, margin:0, lineHeight:1.6 }}>
+            <p style={{ color:"#fca5a5", fontSize:fz(12), fontWeight:700, margin:0, lineHeight:1.6 }}>
               ⚠️ {T?.dataResetWarning || "If payment isn't completed within 1 week, or you don't become an official student of GAKU, all your saved study data (vocabulary, progress, and settings) will be permanently reset. Subscribe now to keep everything you've built so far."}
             </p>
           </div>
@@ -23023,83 +23041,83 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
           </>)}
 
           <div style={{ background:"rgba(255,255,255,0.03)", border:"1px solid rgba(255,255,255,0.08)", borderRadius:10, padding:"10px 12px", marginBottom:18, textAlign:"left" }}>
-            <p style={{ color:"#94a3b8", fontSize:10, fontWeight:800, letterSpacing:1, margin:"0 0 8px" }}>💱 {T?.convertCurrencyLabel || "SEE PRICES IN YOUR CURRENCY"}</p>
+            <p style={{ color:"#94a3b8", fontSize:fz(10), fontWeight:800, letterSpacing:1, margin:"0 0 8px" }}>💱 {T?.convertCurrencyLabel || "SEE PRICES IN YOUR CURRENCY"}</p>
             <div style={{ display:"flex", gap:6 }}>
-              <select value={paywallCurrency} onChange={e=>{ setPaywallCurrency(e.target.value); setPaywallRate(null); }} style={{ flex:1, background:"rgba(255,255,255,0.05)", border:`1px solid ${C.border}`, borderRadius:8, color:"#f1f5f9", fontSize:12, padding:"6px 8px" }}>
+              <select value={paywallCurrency} onChange={e=>{ setPaywallCurrency(e.target.value); setPaywallRate(null); }} style={{ flex:1, background:"rgba(255,255,255,0.05)", border:`1px solid ${C.border}`, borderRadius:8, color:"#f1f5f9", fontSize:fz(12), padding:"6px 8px" }}>
                 {CURRENCY_OPTIONS.map(c => <option key={c.code} value={c.code} style={{ color:"#000" }}>{c.label}</option>)}
               </select>
-              <button onClick={fetchPaywallRate} disabled={paywallRateLoading} style={{ padding:"6px 14px", borderRadius:8, background:"linear-gradient(135deg,#06b6d4,#0891b2)", border:"none", color:"#fff", fontSize:12, fontWeight:700, cursor:"pointer", whiteSpace:"nowrap" }}>
+              <button onClick={fetchPaywallRate} disabled={paywallRateLoading} style={{ padding:"6px 14px", borderRadius:8, background:"linear-gradient(135deg,#06b6d4,#0891b2)", border:"none", color:"#fff", fontSize:fz(12), fontWeight:700, cursor:"pointer", whiteSpace:"nowrap" }}>
                 {paywallRateLoading ? "⏳" : (T?.convertBtn || "Convert")}
               </button>
             </div>
             {paywallRate && (
-              <p style={{ color:"#67e8f9", fontSize:11, margin:"8px 0 0" }}>
+              <p style={{ color:"#67e8f9", fontSize:fz(11), margin:"8px 0 0" }}>
                 1 USD = {paywallRate.toLocaleString(undefined,{maximumFractionDigits:4})} {paywallCurrency} · {paywallRateTime?.toLocaleTimeString()}
               </p>
             )}
-            {paywallRateError && <p style={{ color:C.red, fontSize:11, margin:"8px 0 0" }}>{paywallRateError}</p>}
+            {paywallRateError && <p style={{ color:C.red, fontSize:fz(11), margin:"8px 0 0" }}>{paywallRateError}</p>}
           </div>
 
           {!absenceSuspended && (<>
           <div style={{ background:"rgba(74,222,128,0.06)", border:"1px solid rgba(74,222,128,0.3)", borderRadius:10, padding:"12px 14px", marginBottom:18, textAlign:"left" }}>
-            <p style={{ color:"#4ade80", fontSize:11, fontWeight:800, letterSpacing:0.5, margin:"0 0 8px" }}>🎓 {T?.freePlanGakuStudent || "FREE Plan (Only GAKU students)"}</p>
+            <p style={{ color:"#4ade80", fontSize:fz(11), fontWeight:800, letterSpacing:0.5, margin:"0 0 8px" }}>🎓 {T?.freePlanGakuStudent || "FREE Plan (Only GAKU students)"}</p>
             <div style={{ display:"flex", gap:6 }}>
-              <input value={lockedInviteCode} onChange={e=>setLockedInviteCode(e.target.value)} placeholder={T?.inviteCodePlaceholder || "Enter invite code..."} style={{ flex:1, background:"rgba(255,255,255,0.05)", border:`1px solid ${C.border}`, borderRadius:8, color:"#f1f5f9", fontSize:12, padding:"8px 10px" }} />
-              <button onClick={handleLockedInviteRedeem} disabled={lockedInviteBusy || !lockedInviteCode.trim()} style={{ padding:"8px 14px", borderRadius:8, background:"linear-gradient(135deg,#22c55e,#16a34a)", border:"none", color:"#fff", fontSize:12, fontWeight:700, cursor:"pointer", whiteSpace:"nowrap" }}>
+              <input value={lockedInviteCode} onChange={e=>setLockedInviteCode(e.target.value)} placeholder={T?.inviteCodePlaceholder || "Enter invite code..."} style={{ flex:1, background:"rgba(255,255,255,0.05)", border:`1px solid ${C.border}`, borderRadius:8, color:"#f1f5f9", fontSize:fz(12), padding:"8px 10px" }} />
+              <button onClick={handleLockedInviteRedeem} disabled={lockedInviteBusy || !lockedInviteCode.trim()} style={{ padding:"8px 14px", borderRadius:8, background:"linear-gradient(135deg,#22c55e,#16a34a)", border:"none", color:"#fff", fontSize:fz(12), fontWeight:700, cursor:"pointer", whiteSpace:"nowrap" }}>
                 {lockedInviteBusy ? "⏳" : (T?.unlockBtn || "Unlock")}
               </button>
             </div>
-            {lockedInviteErr && <p style={{ color:C.red, fontSize:11, margin:"8px 0 0" }}>{lockedInviteErr}</p>}
-            <a href="https://app.seitojapanese.online/trial-lesson.html" target="_blank" rel="noopener noreferrer" style={{ display:"block", color:"#86efac", fontSize:11, fontWeight:600, margin:"8px 0 0", textDecoration:"underline" }}>
+            {lockedInviteErr && <p style={{ color:C.red, fontSize:fz(11), margin:"8px 0 0" }}>{lockedInviteErr}</p>}
+            <a href="https://app.seitojapanese.online/trial-lesson.html" target="_blank" rel="noopener noreferrer" style={{ display:"block", color:"#86efac", fontSize:fz(11), fontWeight:600, margin:"8px 0 0", textDecoration:"underline" }}>
               {T?.freePlanGakuStudentHint || "GAKU lesson students get the app included free. No code? Book a lesson to become one →"}
             </a>
           </div>
           </>)}
 
-          <p style={{ color:"#a855f7", fontSize:10, fontWeight:800, margin:"0 0 6px", textAlign:"left", letterSpacing:1 }}>{T?.appOnlyLabel}</p>
+          <p style={{ color:"#a855f7", fontSize:fz(10), fontWeight:800, margin:"0 0 6px", textAlign:"left", letterSpacing:1 }}>{T?.appOnlyLabel}</p>
           <div style={{ display:"flex", flexDirection:"column", gap:8, marginBottom:14 }}>
-            <button onClick={()=>handlePayClick("https://buy.stripe.com/6oU7sL7qWg7C7wV1OqbMQ00", "App Only - Monthly ($14.99)")} style={{ display:"block", width:"100%", padding:"11px 14px", background:"linear-gradient(135deg,rgba(124,58,237,0.2),rgba(168,85,247,0.1))", border:"1.5px solid rgba(139,92,246,0.5)", borderRadius:10, color:"#f1f5f9", fontSize:12, fontWeight:700, cursor:"pointer", textAlign:"left" }}>
-              <span style={{ color:"#a855f7", fontSize:10, fontWeight:800, display:"block", marginBottom:1 }}>{T?.monthlyLabel}</span>
+            <button onClick={()=>handlePayClick("https://buy.stripe.com/6oU7sL7qWg7C7wV1OqbMQ00", "App Only - Monthly ($14.99)")} style={{ display:"block", width:"100%", padding:"11px 14px", background:"linear-gradient(135deg,rgba(124,58,237,0.2),rgba(168,85,247,0.1))", border:"1.5px solid rgba(139,92,246,0.5)", borderRadius:10, color:"#f1f5f9", fontSize:fz(12), fontWeight:700, cursor:"pointer", textAlign:"left" }}>
+              <span style={{ color:"#a855f7", fontSize:fz(10), fontWeight:800, display:"block", marginBottom:1 }}>{T?.monthlyLabel}</span>
               💳 $14.99 {T?.perMonth} {formatConverted(14.99) && <span style={{ color:"#67e8f9", fontWeight:400 }}>(≈ {formatConverted(14.99)} {paywallCurrency})</span>}
             </button>
-            <button onClick={()=>handlePayClick("https://buy.stripe.com/28E28r9z46x2dVj0KmbMQ02", "App Only - 3 Months ($42.70)")} style={{ display:"block", width:"100%", padding:"11px 14px", background:"linear-gradient(135deg,rgba(6,182,212,0.2),rgba(6,182,212,0.1))", border:"1.5px solid rgba(6,182,212,0.5)", borderRadius:10, color:"#f1f5f9", fontSize:12, fontWeight:700, cursor:"pointer", textAlign:"left" }}>
-              <span style={{ color:"#06b6d4", fontSize:10, fontWeight:800, display:"block", marginBottom:1 }}>{T?.threeMonthsSave5}</span>
-              💳 $42.70 <span style={{ color:"#64748b", fontSize:10, fontWeight:400 }}>($14.23/mo)</span> {formatConverted(42.70) && <span style={{ color:"#67e8f9", fontWeight:400 }}>(≈ {formatConverted(42.70)} {paywallCurrency})</span>}
+            <button onClick={()=>handlePayClick("https://buy.stripe.com/28E28r9z46x2dVj0KmbMQ02", "App Only - 3 Months ($42.70)")} style={{ display:"block", width:"100%", padding:"11px 14px", background:"linear-gradient(135deg,rgba(6,182,212,0.2),rgba(6,182,212,0.1))", border:"1.5px solid rgba(6,182,212,0.5)", borderRadius:10, color:"#f1f5f9", fontSize:fz(12), fontWeight:700, cursor:"pointer", textAlign:"left" }}>
+              <span style={{ color:"#06b6d4", fontSize:fz(10), fontWeight:800, display:"block", marginBottom:1 }}>{T?.threeMonthsSave5}</span>
+              💳 $42.70 <span style={{ color:"#64748b", fontSize:fz(10), fontWeight:400 }}>($14.23/mo)</span> {formatConverted(42.70) && <span style={{ color:"#67e8f9", fontWeight:400 }}>(≈ {formatConverted(42.70)} {paywallCurrency})</span>}
             </button>
-            <button onClick={()=>handlePayClick("https://buy.stripe.com/28E5kD8v07B6bNbct4bMQ03", "App Only - 6 Months ($80.95)")} style={{ display:"block", width:"100%", padding:"11px 14px", background:"linear-gradient(135deg,rgba(34,197,94,0.2),rgba(34,197,94,0.1))", border:"1.5px solid rgba(34,197,94,0.5)", borderRadius:10, color:"#f1f5f9", fontSize:12, fontWeight:700, cursor:"pointer", textAlign:"left" }}>
-              <span style={{ color:"#22c55e", fontSize:10, fontWeight:800, display:"block", marginBottom:1 }}>{T?.sixMonthsSave10}</span>
-              💳 $80.95 <span style={{ color:"#64748b", fontSize:10, fontWeight:400 }}>($13.49/mo)</span> {formatConverted(80.95) && <span style={{ color:"#67e8f9", fontWeight:400 }}>(≈ {formatConverted(80.95)} {paywallCurrency})</span>}
+            <button onClick={()=>handlePayClick("https://buy.stripe.com/28E5kD8v07B6bNbct4bMQ03", "App Only - 6 Months ($80.95)")} style={{ display:"block", width:"100%", padding:"11px 14px", background:"linear-gradient(135deg,rgba(34,197,94,0.2),rgba(34,197,94,0.1))", border:"1.5px solid rgba(34,197,94,0.5)", borderRadius:10, color:"#f1f5f9", fontSize:fz(12), fontWeight:700, cursor:"pointer", textAlign:"left" }}>
+              <span style={{ color:"#22c55e", fontSize:fz(10), fontWeight:800, display:"block", marginBottom:1 }}>{T?.sixMonthsSave10}</span>
+              💳 $80.95 <span style={{ color:"#64748b", fontSize:fz(10), fontWeight:400 }}>($13.49/mo)</span> {formatConverted(80.95) && <span style={{ color:"#67e8f9", fontWeight:400 }}>(≈ {formatConverted(80.95)} {paywallCurrency})</span>}
             </button>
           </div>
-          <p style={{ color:"#f59e0b", fontSize:10, fontWeight:800, margin:"0 0 6px", textAlign:"left", letterSpacing:1 }}>{T?.appLessonsLabel}</p>
+          <p style={{ color:"#f59e0b", fontSize:fz(10), fontWeight:800, margin:"0 0 6px", textAlign:"left", letterSpacing:1 }}>{T?.appLessonsLabel}</p>
           <div style={{ display:"flex", flexDirection:"column", gap:8, marginBottom:14 }}>
-            <button onClick={()=>handleLessonPlanClick("/book-lesson.html?plan=3mo_30min", "App + Lessons - 3 Months, 30min/mo ($68.95)")} style={{ display:"block", width:"100%", padding:"11px 14px", background:"linear-gradient(135deg,rgba(245,158,11,0.15),rgba(245,158,11,0.05))", border:"1.5px solid rgba(245,158,11,0.4)", borderRadius:10, color:"#f1f5f9", fontSize:12, fontWeight:700, cursor:"pointer", textAlign:"left" }}>
-              <span style={{ color:"#f59e0b", fontSize:10, fontWeight:800, display:"block", marginBottom:1 }}>{T?.threeMonthsSave5_30min}</span>
-              💳 $68.95 <span style={{ color:"#64748b", fontSize:10, fontWeight:400 }}>($22.98/mo)</span> {formatConverted(68.95) && <span style={{ color:"#67e8f9", fontWeight:400 }}>(≈ {formatConverted(68.95)} {paywallCurrency})</span>}
+            <button onClick={()=>handleLessonPlanClick("/book-lesson.html?plan=3mo_30min", "App + Lessons - 3 Months, 30min/mo ($68.95)")} style={{ display:"block", width:"100%", padding:"11px 14px", background:"linear-gradient(135deg,rgba(245,158,11,0.15),rgba(245,158,11,0.05))", border:"1.5px solid rgba(245,158,11,0.4)", borderRadius:10, color:"#f1f5f9", fontSize:fz(12), fontWeight:700, cursor:"pointer", textAlign:"left" }}>
+              <span style={{ color:"#f59e0b", fontSize:fz(10), fontWeight:800, display:"block", marginBottom:1 }}>{T?.threeMonthsSave5_30min}</span>
+              💳 $68.95 <span style={{ color:"#64748b", fontSize:fz(10), fontWeight:400 }}>($22.98/mo)</span> {formatConverted(68.95) && <span style={{ color:"#67e8f9", fontWeight:400 }}>(≈ {formatConverted(68.95)} {paywallCurrency})</span>}
             </button>
-            <button onClick={()=>handleLessonPlanClick("/book-lesson.html?plan=3mo_1hr", "App + Lessons - 3 Months, 1hr/mo ($95.20)")} style={{ display:"block", width:"100%", padding:"11px 14px", background:"linear-gradient(135deg,rgba(245,158,11,0.15),rgba(245,158,11,0.05))", border:"1.5px solid rgba(245,158,11,0.4)", borderRadius:10, color:"#f1f5f9", fontSize:12, fontWeight:700, cursor:"pointer", textAlign:"left" }}>
-              <span style={{ color:"#f59e0b", fontSize:10, fontWeight:800, display:"block", marginBottom:1 }}>{T?.threeMonthsSave5_1hr}</span>
-              💳 $95.20 <span style={{ color:"#64748b", fontSize:10, fontWeight:400 }}>($31.73/mo)</span> {formatConverted(95.20) && <span style={{ color:"#67e8f9", fontWeight:400 }}>(≈ {formatConverted(95.20)} {paywallCurrency})</span>}
+            <button onClick={()=>handleLessonPlanClick("/book-lesson.html?plan=3mo_1hr", "App + Lessons - 3 Months, 1hr/mo ($95.20)")} style={{ display:"block", width:"100%", padding:"11px 14px", background:"linear-gradient(135deg,rgba(245,158,11,0.15),rgba(245,158,11,0.05))", border:"1.5px solid rgba(245,158,11,0.4)", borderRadius:10, color:"#f1f5f9", fontSize:fz(12), fontWeight:700, cursor:"pointer", textAlign:"left" }}>
+              <span style={{ color:"#f59e0b", fontSize:fz(10), fontWeight:800, display:"block", marginBottom:1 }}>{T?.threeMonthsSave5_1hr}</span>
+              💳 $95.20 <span style={{ color:"#64748b", fontSize:fz(10), fontWeight:400 }}>($31.73/mo)</span> {formatConverted(95.20) && <span style={{ color:"#67e8f9", fontWeight:400 }}>(≈ {formatConverted(95.20)} {paywallCurrency})</span>}
             </button>
-            <button onClick={()=>handleLessonPlanClick("/book-lesson.html?plan=6mo_30min", "App + Lessons - 6 Months, 30min/mo ($133.45)")} style={{ display:"block", width:"100%", padding:"11px 14px", background:"linear-gradient(135deg,rgba(251,191,36,0.2),rgba(251,191,36,0.08))", border:"1.5px solid rgba(251,191,36,0.5)", borderRadius:10, color:"#f1f5f9", fontSize:12, fontWeight:700, cursor:"pointer", textAlign:"left" }}>
-              <span style={{ color:"#fbbf24", fontSize:10, fontWeight:800, display:"block", marginBottom:1 }}>{T?.sixMonthsSave5_30min}</span>
-              💳 $133.45 <span style={{ color:"#64748b", fontSize:10, fontWeight:400 }}>($22.24/mo)</span> {formatConverted(133.45) && <span style={{ color:"#67e8f9", fontWeight:400 }}>(≈ {formatConverted(133.45)} {paywallCurrency})</span>}
+            <button onClick={()=>handleLessonPlanClick("/book-lesson.html?plan=6mo_30min", "App + Lessons - 6 Months, 30min/mo ($133.45)")} style={{ display:"block", width:"100%", padding:"11px 14px", background:"linear-gradient(135deg,rgba(251,191,36,0.2),rgba(251,191,36,0.08))", border:"1.5px solid rgba(251,191,36,0.5)", borderRadius:10, color:"#f1f5f9", fontSize:fz(12), fontWeight:700, cursor:"pointer", textAlign:"left" }}>
+              <span style={{ color:"#fbbf24", fontSize:fz(10), fontWeight:800, display:"block", marginBottom:1 }}>{T?.sixMonthsSave5_30min}</span>
+              💳 $133.45 <span style={{ color:"#64748b", fontSize:fz(10), fontWeight:400 }}>($22.24/mo)</span> {formatConverted(133.45) && <span style={{ color:"#67e8f9", fontWeight:400 }}>(≈ {formatConverted(133.45)} {paywallCurrency})</span>}
             </button>
-            <button onClick={()=>handleLessonPlanClick("/book-lesson.html?plan=6mo_1hr", "App + Lessons - 6 Months, 1hr/mo ($185.95)")} style={{ display:"block", width:"100%", padding:"11px 14px", background:"linear-gradient(135deg,rgba(251,191,36,0.2),rgba(251,191,36,0.08))", border:"1.5px solid rgba(251,191,36,0.5)", borderRadius:10, color:"#f1f5f9", fontSize:12, fontWeight:700, cursor:"pointer", textAlign:"left" }}>
-              <span style={{ color:"#fbbf24", fontSize:10, fontWeight:800, display:"block", marginBottom:1 }}>{T?.sixMonthsSave10_1hr}</span>
-              💳 $185.95 <span style={{ color:"#64748b", fontSize:10, fontWeight:400 }}>($30.99/mo)</span> {formatConverted(185.95) && <span style={{ color:"#67e8f9", fontWeight:400 }}>(≈ {formatConverted(185.95)} {paywallCurrency})</span>}
+            <button onClick={()=>handleLessonPlanClick("/book-lesson.html?plan=6mo_1hr", "App + Lessons - 6 Months, 1hr/mo ($185.95)")} style={{ display:"block", width:"100%", padding:"11px 14px", background:"linear-gradient(135deg,rgba(251,191,36,0.2),rgba(251,191,36,0.08))", border:"1.5px solid rgba(251,191,36,0.5)", borderRadius:10, color:"#f1f5f9", fontSize:fz(12), fontWeight:700, cursor:"pointer", textAlign:"left" }}>
+              <span style={{ color:"#fbbf24", fontSize:fz(10), fontWeight:800, display:"block", marginBottom:1 }}>{T?.sixMonthsSave10_1hr}</span>
+              💳 $185.95 <span style={{ color:"#64748b", fontSize:fz(10), fontWeight:400 }}>($30.99/mo)</span> {formatConverted(185.95) && <span style={{ color:"#67e8f9", fontWeight:400 }}>(≈ {formatConverted(185.95)} {paywallCurrency})</span>}
             </button>
           </div>
 
-          <button onClick={authUser ? handleDeleteAccount : undefined} disabled={deleteAccountBusy} style={{ background:"none", border:"none", color:"#475569", fontSize:11, cursor:"pointer", textDecoration:"underline" }}>
+          <button onClick={authUser ? handleDeleteAccount : undefined} disabled={deleteAccountBusy} style={{ background:"none", border:"none", color:"#475569", fontSize:fz(11), cursor:"pointer", textDecoration:"underline" }}>
             {T?.deleteAccountLink || "Delete my account instead"}
           </button>
 
           <div style={{ marginTop:18, paddingTop:14, borderTop:"1px solid rgba(148,163,184,0.15)", textAlign:"center" }}>
-            <p style={{ color:"#94a3b8", fontSize:10.5, lineHeight:1.7, margin:"0 0 8px" }}>
+            <p style={{ color:"#94a3b8", fontSize:fz(10.5), lineHeight:1.7, margin:"0 0 8px" }}>
               {T?.paywallRenewNote || "Plans renew automatically at the price shown until cancelled. Payments on the web are processed securely by Stripe. Links to outside websites open in a new tab; those sites are independent and not affiliated with GAKU."}
             </p>
-            <p style={{ color:"#94a3b8", fontSize:11, margin:0 }}>
+            <p style={{ color:"#94a3b8", fontSize:fz(11), margin:0 }}>
               <a href="/terms.html" target="_blank" rel="noopener noreferrer" style={{ color:"#a78bfa" }}>{T?.termsOfUseLabel || "Terms of Use"}</a>
               {" \u00b7 "}
               <a href="/privacy.html" target="_blank" rel="noopener noreferrer" style={{ color:"#a78bfa" }}>{T?.privacyPolicyLabel || "Privacy Policy"}</a>
@@ -23154,17 +23172,17 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
     return (
       <div style={{ minHeight:"100vh", background:C.bg, display:"flex", alignItems:"center", justifyContent:"center", padding:24 }}>
         <div style={{ background:"linear-gradient(135deg,#1e1b4b,#0f172a)", border:"1.5px solid rgba(139,92,246,0.4)", borderRadius:20, padding:"36px 32px", maxWidth:420, width:"90%", textAlign:"center", boxShadow:"0 8px 40px rgba(139,92,246,0.25)" }}>
-          <p style={{ color:C.purpleLight, fontSize:11, fontWeight:800, letterSpacing:1, margin:"0 0 8px" }}>{T.firstWinKicker}</p>
-          <h2 style={{ color:"#f1f5f9", fontSize:20, fontWeight:900, margin:"0 0 20px" }}>{T.firstWinTitle}</h2>
+          <p style={{ color:C.purpleLight, fontSize:fz(11), fontWeight:800, letterSpacing:1, margin:"0 0 8px" }}>{T.firstWinKicker}</p>
+          <h2 style={{ color:"#f1f5f9", fontSize:fz(20), fontWeight:900, margin:"0 0 20px" }}>{T.firstWinTitle}</h2>
           <div onClick={()=>{ setFirstWinRevealed(true); logFunnel(authUser?.id, "first_win_revealed"); }} style={{ background:"rgba(255,255,255,0.04)", border:`1.5px solid ${C.border}`, borderRadius:14, padding:"30px 16px", marginBottom:20, cursor:"pointer" }}>
-            <p style={{ color:"#f1f5f9", fontSize:34, fontWeight:900, margin:"0 0 10px" }}>{item.word}</p>
+            <p style={{ color:"#f1f5f9", fontSize:fz(34), fontWeight:900, margin:"0 0 10px" }}>{item.word}</p>
             {firstWinRevealed ? (
               <>
-                <p style={{ color:C.purpleLight, fontSize:15, margin:"0 0 4px" }}>{item.reading}</p>
-                <p style={{ color:"#94a3b8", fontSize:13, margin:0 }}>{item.meaning}</p>
+                <p style={{ color:C.purpleLight, fontSize:fz(15), margin:"0 0 4px" }}>{item.reading}</p>
+                <p style={{ color:"#94a3b8", fontSize:fz(13), margin:0 }}>{item.meaning}</p>
               </>
             ) : (
-              <p style={{ color:"#64748b", fontSize:12, margin:0 }}>{T.firstWinTapToReveal}</p>
+              <p style={{ color:"#64748b", fontSize:fz(12), margin:0 }}>{T.firstWinTapToReveal}</p>
             )}
           </div>
           {firstWinRevealed ? (
@@ -23189,7 +23207,7 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
               🎉 {T.firstWinDoneBtn}
             </button>
           ) : (
-            <p style={{ color:"#64748b", fontSize:11, margin:0 }}>{T.firstWinHint}</p>
+            <p style={{ color:"#64748b", fontSize:fz(11), margin:0 }}>{T.firstWinHint}</p>
           )}
         </div>
       </div>
@@ -23200,12 +23218,12 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
     return (
       <div style={{ minHeight:"100vh", background:C.bg, display:"flex", alignItems:"center", justifyContent:"center", padding:24 }}>
         <div style={{ background:"linear-gradient(135deg,#1e1b4b,#0f172a)", border:"1.5px solid rgba(139,92,246,0.4)", borderRadius:20, padding:"34px 28px", maxWidth:420, width:"90%", textAlign:"center", boxShadow:"0 8px 40px rgba(139,92,246,0.25)" }}>
-          <p style={{ fontSize:32, margin:"0 0 6px" }}>📖</p>
-          <h2 style={{ color:"#f1f5f9", fontSize:19, fontWeight:900, margin:"0 0 8px" }}>{T.readerCardTitle}</h2>
-          <p style={{ color:"#94a3b8", fontSize:13, margin:"0 0 20px", lineHeight:1.6 }}>{T.readerCardDesc}</p>
+          <p style={{ fontSize:fz(32), margin:"0 0 6px" }}>📖</p>
+          <h2 style={{ color:"#f1f5f9", fontSize:fz(19), fontWeight:900, margin:"0 0 8px" }}>{T.readerCardTitle}</h2>
+          <p style={{ color:"#94a3b8", fontSize:fz(13), margin:"0 0 20px", lineHeight:1.6 }}>{T.readerCardDesc}</p>
           <a href="https://chromewebstore.google.com/detail/eambfoiipilfnedcofindninaachibge" target="_blank" rel="noopener noreferrer"
             onClick={()=>{ logFunnel(authUser?.id, "reader_clicked"); hideCard(); setOnboardingStep("remind"); }}
-            style={{ display:"block", padding:"13px 16px", borderRadius:12, background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff", fontSize:14, fontWeight:800, textDecoration:"none", marginBottom:10 }}>{T.readerCardCta}</a>
+            style={{ display:"block", padding:"13px 16px", borderRadius:12, background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff", fontSize:fz(14), fontWeight:800, textDecoration:"none", marginBottom:10 }}>{T.readerCardCta}</a>
           <button onClick={()=>{ logFunnel(authUser?.id, "reader_later"); hideCard(); setOnboardingStep("remind"); }} style={{ ...S.btn, width:"100%", background:"none", border:"none", color:"#64748b" }}>{T.readerCardLater}</button>
         </div>
       </div>
@@ -23226,9 +23244,9 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
       return (
         <div style={{ minHeight:"100vh", background:C.bg, display:"flex", alignItems:"center", justifyContent:"center", padding:24 }}>
           <div style={{ background:"linear-gradient(135deg,#1e1b4b,#0f172a)", border:"1.5px solid rgba(139,92,246,0.4)", borderRadius:20, padding:"36px 32px", maxWidth:420, width:"90%", textAlign:"center", boxShadow:"0 8px 40px rgba(139,92,246,0.25)" }}>
-            <p style={{ fontSize:32, margin:"0 0 6px" }}>🔔</p>
-            <h2 style={{ color:"#f1f5f9", fontSize:19, fontWeight:900, margin:"0 0 8px" }}>{rc.title}</h2>
-            <p style={{ color:"#94a3b8", fontSize:13, margin:"0 0 20px", lineHeight:1.6 }}>{rc.desc}</p>
+            <p style={{ fontSize:fz(32), margin:"0 0 6px" }}>🔔</p>
+            <h2 style={{ color:"#f1f5f9", fontSize:fz(19), fontWeight:900, margin:"0 0 8px" }}>{rc.title}</h2>
+            <p style={{ color:"#94a3b8", fontSize:fz(13), margin:"0 0 20px", lineHeight:1.6 }}>{rc.desc}</p>
             <button onClick={async () => { logFunnel(authUser?.id, "remind_set"); await enableDailyReminders(form?.preferredLang); afterRemind(); }} style={{ ...S.btn, width:"100%", marginBottom:10, background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff" }}>{rc.turnOn}</button>
             <button onClick={() => { logFunnel(authUser?.id, "remind_skipped"); lsSetScoped(DAILY_REMINDER_PREF, "off"); afterRemind(); }} style={{ ...S.btn, width:"100%", background:"none", border:"none", color:"#64748b" }}>{rc.notNow}</button>
           </div>
@@ -23241,9 +23259,9 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
     return (
       <div style={{ minHeight:"100vh", background:C.bg, display:"flex", alignItems:"center", justifyContent:"center", padding:24 }}>
         <div style={{ background:"linear-gradient(135deg,#1e1b4b,#0f172a)", border:"1.5px solid rgba(139,92,246,0.4)", borderRadius:20, padding:"36px 32px", maxWidth:420, width:"90%", textAlign:"center", boxShadow:"0 8px 40px rgba(139,92,246,0.25)" }}>
-          <p style={{ fontSize:32, margin:"0 0 6px" }}>⏰</p>
-          <h2 style={{ color:"#f1f5f9", fontSize:19, fontWeight:900, margin:"0 0 8px" }}>{T.remindTitle}</h2>
-          <p style={{ color:"#94a3b8", fontSize:13, margin:"0 0 20px", lineHeight:1.6 }}>{T.remindDesc}</p>
+          <p style={{ fontSize:fz(32), margin:"0 0 6px" }}>⏰</p>
+          <h2 style={{ color:"#f1f5f9", fontSize:fz(19), fontWeight:900, margin:"0 0 8px" }}>{T.remindTitle}</h2>
+          <p style={{ color:"#94a3b8", fontSize:fz(13), margin:"0 0 20px", lineHeight:1.6 }}>{T.remindDesc}</p>
           {slots.map(([label, h, m]) => (
             <button key={label} onClick={() => { logFunnel(authUser?.id, "remind_set"); addReviewToCalendar(h, m); afterRemind(); }} style={{ ...S.btn, width:"100%", marginBottom:10, background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff" }}>{label}</button>
           ))}
@@ -23267,18 +23285,18 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
     return (
       <div style={{ minHeight:"100vh", background:C.bg, display:"flex", alignItems:"center", justifyContent:"center", padding:24 }}>
         <div style={{ background:"linear-gradient(135deg,#1e1b4b,#0f172a)", border:"1.5px solid rgba(139,92,246,0.4)", borderRadius:20, padding:"36px 32px", maxWidth:420, width:"90%", textAlign:"center", boxShadow:"0 8px 40px rgba(139,92,246,0.25)" }}>
-          <p style={{ fontSize:32, margin:"0 0 6px" }}>📲</p>
-          <h2 style={{ color:"#f1f5f9", fontSize:19, fontWeight:900, margin:"0 0 8px" }}>{T.installPromptTitle}</h2>
-          <p style={{ color:"#94a3b8", fontSize:13, margin:"0 0 22px", lineHeight:1.6 }}>{T.installPromptDesc}</p>
+          <p style={{ fontSize:fz(32), margin:"0 0 6px" }}>📲</p>
+          <h2 style={{ color:"#f1f5f9", fontSize:fz(19), fontWeight:900, margin:"0 0 8px" }}>{T.installPromptTitle}</h2>
+          <p style={{ color:"#94a3b8", fontSize:fz(13), margin:"0 0 22px", lineHeight:1.6 }}>{T.installPromptDesc}</p>
           {isIOS ? (
             <>
-              <p style={{ color:"#cbd5e1", fontSize:12, margin:"0 0 18px", lineHeight:1.6 }}>{T.installPromptIosSteps}</p>
+              <p style={{ color:"#cbd5e1", fontSize:fz(12), margin:"0 0 18px", lineHeight:1.6 }}>{T.installPromptIosSteps}</p>
               <button onClick={()=>{ logFunnel(authUser?.id, "install_skipped"); setOnboardingStep(nextStepAfterOnboarding); }} style={{ ...S.btn, width:"100%", background:C.card, color:"#94a3b8", border:`1px solid ${C.border}` }}>{T.installPromptSkip}</button>
             </>
           ) : (
             <>
               <button onClick={handleInstallClick} style={{ ...S.btn, width:"100%", marginBottom:10, background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff" }}>{T.installPromptCta}</button>
-              <p style={{ color:"#94a3b8", fontSize:11, margin:"0 0 12px", lineHeight:1.6 }}>{T.installPromptHaveApp}</p>
+              <p style={{ color:"#94a3b8", fontSize:fz(11), margin:"0 0 12px", lineHeight:1.6 }}>{T.installPromptHaveApp}</p>
               <button onClick={()=>{ logFunnel(authUser?.id, "install_skipped"); setOnboardingStep(nextStepAfterOnboarding); }} style={{ ...S.btn, width:"100%", background:"none", border:"none", color:"#64748b" }}>{T.installPromptSkip}</button>
             </>
           )}
@@ -23308,78 +23326,78 @@ export default function GakuApp({ onBack, initialJlpt, initialName, initialEmail
       {showPaywall && !IS_STORE_APP && !(authUser && (isGakuStudent || isPaid)) && (
         <div style={{ position:"fixed", inset:0, zIndex:9999, display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"flex-start", overflowY:"auto", WebkitOverflowScrolling:"touch", padding:"16px 0", boxSizing:"border-box", background:"rgba(10,15,30,0.85)", backdropFilter:"blur(12px)" }}>
           <div style={{ background:"linear-gradient(135deg,#1e1b4b,#0f172a)", border:"1.5px solid rgba(139,92,246,0.4)", borderRadius:20, padding:"36px 32px", maxWidth:420, width:"90%", margin:"auto", textAlign:"center", boxShadow:"0 8px 40px rgba(139,92,246,0.25)" }}>
-            <p style={{ fontSize:28, margin:"0 0 6px" }}>🎌</p>
-            <h2 style={{ color:"#f1f5f9", fontSize:20, fontWeight:900, margin:"0 0 8px" }}>{T.studyPlanReadyTitle}</h2>
-            <p style={{ color:"#94a3b8", fontSize:13, margin:"0 0 20px", lineHeight:1.6 }}>{T.studyPlanReadyDesc}</p>
+            <p style={{ fontSize:fz(28), margin:"0 0 6px" }}>🎌</p>
+            <h2 style={{ color:"#f1f5f9", fontSize:fz(20), fontWeight:900, margin:"0 0 8px" }}>{T.studyPlanReadyTitle}</h2>
+            <p style={{ color:"#94a3b8", fontSize:fz(13), margin:"0 0 20px", lineHeight:1.6 }}>{T.studyPlanReadyDesc}</p>
 
-            <button onClick={()=>{ setAuthInitialMode("signup"); setShowAuthScreen(true); }} style={{ display:"block", width:"100%", padding:"11px 14px", background:"linear-gradient(135deg,rgba(34,197,94,0.15),rgba(34,197,94,0.05))", border:"1.5px solid rgba(34,197,94,0.45)", borderRadius:10, color:"#4ade80", fontSize:12, fontWeight:800, cursor:"pointer", textAlign:"center", marginBottom:8 }}>
+            <button onClick={()=>{ setAuthInitialMode("signup"); setShowAuthScreen(true); }} style={{ display:"block", width:"100%", padding:"11px 14px", background:"linear-gradient(135deg,rgba(34,197,94,0.15),rgba(34,197,94,0.05))", border:"1.5px solid rgba(34,197,94,0.45)", borderRadius:10, color:"#4ade80", fontSize:fz(12), fontWeight:800, cursor:"pointer", textAlign:"center", marginBottom:8 }}>
               🎓 {T.freePlanGakuStudent}
             </button>
-            <button onClick={()=>{ setAuthInitialMode("login"); setShowAuthScreen(true); }} style={{ display:"block", width:"100%", background:"none", border:"none", color:"#64748b", fontSize:11, cursor:"pointer", marginBottom:18 }}>
+            <button onClick={()=>{ setAuthInitialMode("login"); setShowAuthScreen(true); }} style={{ display:"block", width:"100%", background:"none", border:"none", color:"#64748b", fontSize:fz(11), cursor:"pointer", marginBottom:18 }}>
               {T.haveAccount || "Already have an account? Log in"}
             </button>
 
             {(plansUnlocked || (previewPaywall && previewPlans)) && (
             <>
             <div style={{ background:"rgba(255,255,255,0.03)", border:"1px solid rgba(255,255,255,0.08)", borderRadius:10, padding:"10px 12px", marginBottom:18, textAlign:"left" }}>
-              <p style={{ color:"#94a3b8", fontSize:10, fontWeight:800, letterSpacing:1, margin:"0 0 8px" }}>💱 {T.convertCurrencyLabel || "SEE PRICES IN YOUR CURRENCY"}</p>
+              <p style={{ color:"#94a3b8", fontSize:fz(10), fontWeight:800, letterSpacing:1, margin:"0 0 8px" }}>💱 {T.convertCurrencyLabel || "SEE PRICES IN YOUR CURRENCY"}</p>
               <div style={{ display:"flex", gap:6 }}>
-                <select value={paywallCurrency} onChange={e=>{ setPaywallCurrency(e.target.value); setPaywallRate(null); }} style={{ flex:1, background:"rgba(255,255,255,0.05)", border:`1px solid ${C.border}`, borderRadius:8, color:"#f1f5f9", fontSize:12, padding:"6px 8px" }}>
+                <select value={paywallCurrency} onChange={e=>{ setPaywallCurrency(e.target.value); setPaywallRate(null); }} style={{ flex:1, background:"rgba(255,255,255,0.05)", border:`1px solid ${C.border}`, borderRadius:8, color:"#f1f5f9", fontSize:fz(12), padding:"6px 8px" }}>
                   {CURRENCY_OPTIONS.map(c => <option key={c.code} value={c.code} style={{ color:"#000" }}>{c.label}</option>)}
                 </select>
-                <button onClick={fetchPaywallRate} disabled={paywallRateLoading} style={{ padding:"6px 14px", borderRadius:8, background:"linear-gradient(135deg,#06b6d4,#0891b2)", border:"none", color:"#fff", fontSize:12, fontWeight:700, cursor:"pointer", whiteSpace:"nowrap" }}>
+                <button onClick={fetchPaywallRate} disabled={paywallRateLoading} style={{ padding:"6px 14px", borderRadius:8, background:"linear-gradient(135deg,#06b6d4,#0891b2)", border:"none", color:"#fff", fontSize:fz(12), fontWeight:700, cursor:"pointer", whiteSpace:"nowrap" }}>
                   {paywallRateLoading ? "⏳" : (T.convertBtn || "Convert")}
                 </button>
               </div>
               {paywallRate && (
-                <p style={{ color:"#67e8f9", fontSize:11, margin:"8px 0 0" }}>
+                <p style={{ color:"#67e8f9", fontSize:fz(11), margin:"8px 0 0" }}>
                   1 USD = {paywallRate.toLocaleString(undefined,{maximumFractionDigits:4})} {paywallCurrency} · {paywallRateTime?.toLocaleTimeString()}
                 </p>
               )}
-              {paywallRateError && <p style={{ color:C.red, fontSize:11, margin:"8px 0 0" }}>{paywallRateError}</p>}
+              {paywallRateError && <p style={{ color:C.red, fontSize:fz(11), margin:"8px 0 0" }}>{paywallRateError}</p>}
             </div>
 
-            <p style={{ color:"#a855f7", fontSize:10, fontWeight:800, margin:"0 0 6px", textAlign:"left", letterSpacing:1 }}>{T.appOnlyLabel}</p>
+            <p style={{ color:"#a855f7", fontSize:fz(10), fontWeight:800, margin:"0 0 6px", textAlign:"left", letterSpacing:1 }}>{T.appOnlyLabel}</p>
             <div style={{ display:"flex", flexDirection:"column", gap:8, marginBottom:14 }}>
-              <button onClick={()=>handlePayClick("https://buy.stripe.com/6oU7sL7qWg7C7wV1OqbMQ00", "App Only - Monthly ($14.99)")} style={{ display:"block", width:"100%", padding:"11px 14px", background:"linear-gradient(135deg,rgba(124,58,237,0.2),rgba(168,85,247,0.1))", border:"1.5px solid rgba(139,92,246,0.5)", borderRadius:10, color:"#f1f5f9", fontSize:12, fontWeight:700, cursor:"pointer", textAlign:"left" }}>
-                <span style={{ color:"#a855f7", fontSize:10, fontWeight:800, display:"block", marginBottom:1 }}>{T.monthlyLabel}</span>
+              <button onClick={()=>handlePayClick("https://buy.stripe.com/6oU7sL7qWg7C7wV1OqbMQ00", "App Only - Monthly ($14.99)")} style={{ display:"block", width:"100%", padding:"11px 14px", background:"linear-gradient(135deg,rgba(124,58,237,0.2),rgba(168,85,247,0.1))", border:"1.5px solid rgba(139,92,246,0.5)", borderRadius:10, color:"#f1f5f9", fontSize:fz(12), fontWeight:700, cursor:"pointer", textAlign:"left" }}>
+                <span style={{ color:"#a855f7", fontSize:fz(10), fontWeight:800, display:"block", marginBottom:1 }}>{T.monthlyLabel}</span>
                 💳 $14.99 {T.perMonth} {formatConverted(14.99) && <span style={{ color:"#67e8f9", fontWeight:400 }}>(≈ {formatConverted(14.99)} {paywallCurrency})</span>}
               </button>
-              <button onClick={()=>handlePayClick("https://buy.stripe.com/28E28r9z46x2dVj0KmbMQ02", "App Only - 3 Months ($42.70)")} style={{ display:"block", width:"100%", padding:"11px 14px", background:"linear-gradient(135deg,rgba(6,182,212,0.2),rgba(6,182,212,0.1))", border:"1.5px solid rgba(6,182,212,0.5)", borderRadius:10, color:"#f1f5f9", fontSize:12, fontWeight:700, cursor:"pointer", textAlign:"left" }}>
-                <span style={{ color:"#06b6d4", fontSize:10, fontWeight:800, display:"block", marginBottom:1 }}>{T.threeMonthsSave5}</span>
-                💳 $42.70 <span style={{ color:"#64748b", fontSize:10, fontWeight:400 }}>($14.23/mo)</span> {formatConverted(42.70) && <span style={{ color:"#67e8f9", fontWeight:400 }}>(≈ {formatConverted(42.70)} {paywallCurrency})</span>}
+              <button onClick={()=>handlePayClick("https://buy.stripe.com/28E28r9z46x2dVj0KmbMQ02", "App Only - 3 Months ($42.70)")} style={{ display:"block", width:"100%", padding:"11px 14px", background:"linear-gradient(135deg,rgba(6,182,212,0.2),rgba(6,182,212,0.1))", border:"1.5px solid rgba(6,182,212,0.5)", borderRadius:10, color:"#f1f5f9", fontSize:fz(12), fontWeight:700, cursor:"pointer", textAlign:"left" }}>
+                <span style={{ color:"#06b6d4", fontSize:fz(10), fontWeight:800, display:"block", marginBottom:1 }}>{T.threeMonthsSave5}</span>
+                💳 $42.70 <span style={{ color:"#64748b", fontSize:fz(10), fontWeight:400 }}>($14.23/mo)</span> {formatConverted(42.70) && <span style={{ color:"#67e8f9", fontWeight:400 }}>(≈ {formatConverted(42.70)} {paywallCurrency})</span>}
               </button>
-              <button onClick={()=>handlePayClick("https://buy.stripe.com/28E5kD8v07B6bNbct4bMQ03", "App Only - 6 Months ($80.95)")} style={{ display:"block", width:"100%", padding:"11px 14px", background:"linear-gradient(135deg,rgba(34,197,94,0.2),rgba(34,197,94,0.1))", border:"1.5px solid rgba(34,197,94,0.5)", borderRadius:10, color:"#f1f5f9", fontSize:12, fontWeight:700, cursor:"pointer", textAlign:"left" }}>
-                <span style={{ color:"#22c55e", fontSize:10, fontWeight:800, display:"block", marginBottom:1 }}>{T.sixMonthsSave10}</span>
-                💳 $80.95 <span style={{ color:"#64748b", fontSize:10, fontWeight:400 }}>($13.49/mo)</span> {formatConverted(80.95) && <span style={{ color:"#67e8f9", fontWeight:400 }}>(≈ {formatConverted(80.95)} {paywallCurrency})</span>}
+              <button onClick={()=>handlePayClick("https://buy.stripe.com/28E5kD8v07B6bNbct4bMQ03", "App Only - 6 Months ($80.95)")} style={{ display:"block", width:"100%", padding:"11px 14px", background:"linear-gradient(135deg,rgba(34,197,94,0.2),rgba(34,197,94,0.1))", border:"1.5px solid rgba(34,197,94,0.5)", borderRadius:10, color:"#f1f5f9", fontSize:fz(12), fontWeight:700, cursor:"pointer", textAlign:"left" }}>
+                <span style={{ color:"#22c55e", fontSize:fz(10), fontWeight:800, display:"block", marginBottom:1 }}>{T.sixMonthsSave10}</span>
+                💳 $80.95 <span style={{ color:"#64748b", fontSize:fz(10), fontWeight:400 }}>($13.49/mo)</span> {formatConverted(80.95) && <span style={{ color:"#67e8f9", fontWeight:400 }}>(≈ {formatConverted(80.95)} {paywallCurrency})</span>}
               </button>
             </div>
-            <p style={{ color:"#f59e0b", fontSize:10, fontWeight:800, margin:"0 0 6px", textAlign:"left", letterSpacing:1 }}>{T.appLessonsLabel}</p>
+            <p style={{ color:"#f59e0b", fontSize:fz(10), fontWeight:800, margin:"0 0 6px", textAlign:"left", letterSpacing:1 }}>{T.appLessonsLabel}</p>
             <div style={{ display:"flex", flexDirection:"column", gap:8, marginBottom:12 }}>
-              <button onClick={()=>handleLessonPlanClick("/book-lesson.html?plan=3mo_30min", "App + Lessons - 3 Months, 30min/mo ($68.95)")} style={{ display:"block", width:"100%", padding:"11px 14px", background:"linear-gradient(135deg,rgba(245,158,11,0.15),rgba(245,158,11,0.05))", border:"1.5px solid rgba(245,158,11,0.4)", borderRadius:10, color:"#f1f5f9", fontSize:12, fontWeight:700, cursor:"pointer", textAlign:"left" }}>
-                <span style={{ color:"#f59e0b", fontSize:10, fontWeight:800, display:"block", marginBottom:1 }}>{T.threeMonthsSave5_30min}</span>
-                💳 $68.95 <span style={{ color:"#64748b", fontSize:10, fontWeight:400 }}>($22.98/mo)</span> {formatConverted(68.95) && <span style={{ color:"#67e8f9", fontWeight:400 }}>(≈ {formatConverted(68.95)} {paywallCurrency})</span>}
+              <button onClick={()=>handleLessonPlanClick("/book-lesson.html?plan=3mo_30min", "App + Lessons - 3 Months, 30min/mo ($68.95)")} style={{ display:"block", width:"100%", padding:"11px 14px", background:"linear-gradient(135deg,rgba(245,158,11,0.15),rgba(245,158,11,0.05))", border:"1.5px solid rgba(245,158,11,0.4)", borderRadius:10, color:"#f1f5f9", fontSize:fz(12), fontWeight:700, cursor:"pointer", textAlign:"left" }}>
+                <span style={{ color:"#f59e0b", fontSize:fz(10), fontWeight:800, display:"block", marginBottom:1 }}>{T.threeMonthsSave5_30min}</span>
+                💳 $68.95 <span style={{ color:"#64748b", fontSize:fz(10), fontWeight:400 }}>($22.98/mo)</span> {formatConverted(68.95) && <span style={{ color:"#67e8f9", fontWeight:400 }}>(≈ {formatConverted(68.95)} {paywallCurrency})</span>}
               </button>
-              <button onClick={()=>handleLessonPlanClick("/book-lesson.html?plan=3mo_1hr", "App + Lessons - 3 Months, 1hr/mo ($95.20)")} style={{ display:"block", width:"100%", padding:"11px 14px", background:"linear-gradient(135deg,rgba(245,158,11,0.15),rgba(245,158,11,0.05))", border:"1.5px solid rgba(245,158,11,0.4)", borderRadius:10, color:"#f1f5f9", fontSize:12, fontWeight:700, cursor:"pointer", textAlign:"left" }}>
-                <span style={{ color:"#f59e0b", fontSize:10, fontWeight:800, display:"block", marginBottom:1 }}>{T.threeMonthsSave5_1hr}</span>
-                💳 $95.20 <span style={{ color:"#64748b", fontSize:10, fontWeight:400 }}>($31.73/mo)</span> {formatConverted(95.20) && <span style={{ color:"#67e8f9", fontWeight:400 }}>(≈ {formatConverted(95.20)} {paywallCurrency})</span>}
+              <button onClick={()=>handleLessonPlanClick("/book-lesson.html?plan=3mo_1hr", "App + Lessons - 3 Months, 1hr/mo ($95.20)")} style={{ display:"block", width:"100%", padding:"11px 14px", background:"linear-gradient(135deg,rgba(245,158,11,0.15),rgba(245,158,11,0.05))", border:"1.5px solid rgba(245,158,11,0.4)", borderRadius:10, color:"#f1f5f9", fontSize:fz(12), fontWeight:700, cursor:"pointer", textAlign:"left" }}>
+                <span style={{ color:"#f59e0b", fontSize:fz(10), fontWeight:800, display:"block", marginBottom:1 }}>{T.threeMonthsSave5_1hr}</span>
+                💳 $95.20 <span style={{ color:"#64748b", fontSize:fz(10), fontWeight:400 }}>($31.73/mo)</span> {formatConverted(95.20) && <span style={{ color:"#67e8f9", fontWeight:400 }}>(≈ {formatConverted(95.20)} {paywallCurrency})</span>}
               </button>
-              <button onClick={()=>handleLessonPlanClick("/book-lesson.html?plan=6mo_30min", "App + Lessons - 6 Months, 30min/mo ($133.45)")} style={{ display:"block", width:"100%", padding:"11px 14px", background:"linear-gradient(135deg,rgba(251,191,36,0.2),rgba(251,191,36,0.08))", border:"1.5px solid rgba(251,191,36,0.5)", borderRadius:10, color:"#f1f5f9", fontSize:12, fontWeight:700, cursor:"pointer", textAlign:"left" }}>
-                <span style={{ color:"#fbbf24", fontSize:10, fontWeight:800, display:"block", marginBottom:1 }}>{T.sixMonthsSave5_30min}</span>
-                💳 $133.45 <span style={{ color:"#64748b", fontSize:10, fontWeight:400 }}>($22.24/mo)</span> {formatConverted(133.45) && <span style={{ color:"#67e8f9", fontWeight:400 }}>(≈ {formatConverted(133.45)} {paywallCurrency})</span>}
+              <button onClick={()=>handleLessonPlanClick("/book-lesson.html?plan=6mo_30min", "App + Lessons - 6 Months, 30min/mo ($133.45)")} style={{ display:"block", width:"100%", padding:"11px 14px", background:"linear-gradient(135deg,rgba(251,191,36,0.2),rgba(251,191,36,0.08))", border:"1.5px solid rgba(251,191,36,0.5)", borderRadius:10, color:"#f1f5f9", fontSize:fz(12), fontWeight:700, cursor:"pointer", textAlign:"left" }}>
+                <span style={{ color:"#fbbf24", fontSize:fz(10), fontWeight:800, display:"block", marginBottom:1 }}>{T.sixMonthsSave5_30min}</span>
+                💳 $133.45 <span style={{ color:"#64748b", fontSize:fz(10), fontWeight:400 }}>($22.24/mo)</span> {formatConverted(133.45) && <span style={{ color:"#67e8f9", fontWeight:400 }}>(≈ {formatConverted(133.45)} {paywallCurrency})</span>}
               </button>
-              <button onClick={()=>handleLessonPlanClick("/book-lesson.html?plan=6mo_1hr", "App + Lessons - 6 Months, 1hr/mo ($185.95)")} style={{ display:"block", width:"100%", padding:"11px 14px", background:"linear-gradient(135deg,rgba(251,191,36,0.2),rgba(251,191,36,0.08))", border:"1.5px solid rgba(251,191,36,0.5)", borderRadius:10, color:"#f1f5f9", fontSize:12, fontWeight:700, cursor:"pointer", textAlign:"left" }}>
-                <span style={{ color:"#fbbf24", fontSize:10, fontWeight:800, display:"block", marginBottom:1 }}>{T.sixMonthsSave10_1hr}</span>
-                💳 $185.95 <span style={{ color:"#64748b", fontSize:10, fontWeight:400 }}>($30.99/mo)</span> {formatConverted(185.95) && <span style={{ color:"#67e8f9", fontWeight:400 }}>(≈ {formatConverted(185.95)} {paywallCurrency})</span>}
+              <button onClick={()=>handleLessonPlanClick("/book-lesson.html?plan=6mo_1hr", "App + Lessons - 6 Months, 1hr/mo ($185.95)")} style={{ display:"block", width:"100%", padding:"11px 14px", background:"linear-gradient(135deg,rgba(251,191,36,0.2),rgba(251,191,36,0.08))", border:"1.5px solid rgba(251,191,36,0.5)", borderRadius:10, color:"#f1f5f9", fontSize:fz(12), fontWeight:700, cursor:"pointer", textAlign:"left" }}>
+                <span style={{ color:"#fbbf24", fontSize:fz(10), fontWeight:800, display:"block", marginBottom:1 }}>{T.sixMonthsSave10_1hr}</span>
+                💳 $185.95 <span style={{ color:"#64748b", fontSize:fz(10), fontWeight:400 }}>($30.99/mo)</span> {formatConverted(185.95) && <span style={{ color:"#67e8f9", fontWeight:400 }}>(≈ {formatConverted(185.95)} {paywallCurrency})</span>}
               </button>
             </div>
             </>
             )}
             <div style={{ marginBottom:14, textAlign:"center" }}>
-              <p style={{ color:"#64748b", fontSize:11, margin:"0 0 8px" }}>{T.wantToJoinGaku}</p>
-              <a href="https://app.seitojapanese.online/trial-lesson.html" target="_blank" rel="noopener noreferrer" style={{ display:"inline-block", padding:"9px 28px", background:"linear-gradient(135deg,#22c55e,#16a34a)", color:"#fff", borderRadius:10, fontSize:13, fontWeight:800, textDecoration:"none" }}>{T.yes}</a>
+              <p style={{ color:"#64748b", fontSize:fz(11), margin:"0 0 8px" }}>{T.wantToJoinGaku}</p>
+              <a href="https://app.seitojapanese.online/trial-lesson.html" target="_blank" rel="noopener noreferrer" style={{ display:"inline-block", padding:"9px 28px", background:"linear-gradient(135deg,#22c55e,#16a34a)", color:"#fff", borderRadius:10, fontSize:fz(13), fontWeight:800, textDecoration:"none" }}>{T.yes}</a>
             </div>
-            <button onClick={()=>setShowPaywall(false)} style={{ background:"none", border:"none", color:"#475569", fontSize:11, cursor:"pointer" }}>{T.checkLater}</button>
+            <button onClick={()=>setShowPaywall(false)} style={{ background:"none", border:"none", color:"#475569", fontSize:fz(11), cursor:"pointer" }}>{T.checkLater}</button>
           </div>
         </div>
       )}

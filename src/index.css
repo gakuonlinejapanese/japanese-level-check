@@ -29,3 +29,11 @@ html.gaku-light canvas,
 html.gaku-light iframe {
   filter: invert(1) hue-rotate(180deg);
 }
+
+/* Text size (2026-11-26): scales text that has no explicit size of its own (see textSize.js). */
+body {
+  font-size: calc(16px * var(--gaku-fs, 1));
+}
+:where(button, input, select, textarea) {
+  font-size: calc(13.333px * var(--gaku-fs, 1));
+}

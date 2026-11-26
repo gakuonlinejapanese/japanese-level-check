@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { isStoreBillingAvailable, initBilling, loadPackages, buyPackage, restorePurchases, debugOfferings } from './storeBilling';
+import { fz } from './textSize';
 
 // Subscription plans shown on the store-app "trial ended" screen.
 // Renders nothing until RevenueCat is configured, so the screen safely falls back to invitation-code only.
@@ -22,7 +23,7 @@ export default function StorePlans({ T, userId, onPurchased }) {
     return () => { alive = false; };
   }, [userId]);
 
-  if (!pkgs || pkgs.length === 0) return diag ? <p style={{ color: '#fbbf24', fontSize: 10, lineHeight: 1.5, margin: '0 0 14px', wordBreak: 'break-word' }}>Plans unavailable ({diag})</p> : null;
+  if (!pkgs || pkgs.length === 0) return diag ? <p style={{ color: '#fbbf24', fontSize: fz(10), lineHeight: 1.5, margin: '0 0 14px', wordBreak: 'break-word' }}>Plans unavailable ({diag})</p> : null;
 
   const label = (type) => (
     type === 'MONTHLY' ? (T?.storeMonthly || 'Monthly')
@@ -52,26 +53,26 @@ export default function StorePlans({ T, userId, onPurchased }) {
 
   return (
     <div style={{ margin: '0 0 18px' }}>
-      <p style={{ color: '#f1f5f9', fontSize: 14, fontWeight: 800, margin: '0 0 10px' }}>{T?.storePlansTitle || 'Choose a plan to keep learning'}</p>
+      <p style={{ color: '#f1f5f9', fontSize: fz(14), fontWeight: 800, margin: '0 0 10px' }}>{T?.storePlansTitle || 'Choose a plan to keep learning'}</p>
       <div style={{ margin: '0 0 12px', padding: '10px 12px', borderRadius: 10, background: 'rgba(148,163,184,0.12)' }}>
-        <p style={{ color: '#e2e8f0', fontSize: 12.5, fontWeight: 800, margin: '0 0 6px' }}>{T?.storeIncludesTitle || 'Included with your subscription'}</p>
+        <p style={{ color: '#e2e8f0', fontSize: fz(12.5), fontWeight: 800, margin: '0 0 6px' }}>{T?.storeIncludesTitle || 'Included with your subscription'}</p>
         {(T?.storeIncludesList || 'Personalized weekly study plan\nVocabulary lists with real example sentences\nConversation Practice with speech recognition\nPronunciation Practice\nWriting practice and JLPT study materials').split('\n').map((line, i) => (
-          <p key={i} style={{ color: '#cbd5e1', fontSize: 12, lineHeight: 1.6, margin: '0 0 2px' }}>{'✓ '}{line}</p>
+          <p key={i} style={{ color: '#cbd5e1', fontSize: fz(12), lineHeight: 1.6, margin: '0 0 2px' }}>{'✓ '}{line}</p>
         ))}
       </div>
       {pkgs.map((p) => (
         <button key={p.id} onClick={() => buy(p)} disabled={!!busy}
-          style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%', padding: '12px 14px', margin: '0 0 8px', borderRadius: 10, border: 'none', background: 'linear-gradient(135deg,#7c3aed,#a855f7)', color: '#fff', fontWeight: 800, fontSize: 14, cursor: 'pointer', opacity: busy && busy !== p.id ? 0.6 : 1 }}>
+          style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%', padding: '12px 14px', margin: '0 0 8px', borderRadius: 10, border: 'none', background: 'linear-gradient(135deg,#7c3aed,#a855f7)', color: '#fff', fontWeight: 800, fontSize: fz(14), cursor: 'pointer', opacity: busy && busy !== p.id ? 0.6 : 1 }}>
           <span>{busy === p.id ? '\u2026' : label(p.type)}</span>
           <span>{p.priceString}</span>
         </button>
       ))}
       <button onClick={restore} disabled={!!busy}
-        style={{ background: 'none', border: 'none', color: '#a78bfa', fontSize: 12.5, textDecoration: 'underline', cursor: 'pointer', margin: '4px 0 6px' }}>
+        style={{ background: 'none', border: 'none', color: '#a78bfa', fontSize: fz(12.5), textDecoration: 'underline', cursor: 'pointer', margin: '4px 0 6px' }}>
         {busy === 'restore' ? '\u2026' : (T?.storeRestore || 'Restore purchases')}
       </button>
-      {msg && <p style={{ color: '#f87171', fontSize: 11.5, margin: '4px 0 6px' }}>{msg}</p>}
-      <p style={{ color: '#94a3b8', fontSize: 10.5, lineHeight: 1.6, margin: '6px 0 0' }}>
+      {msg && <p style={{ color: '#f87171', fontSize: fz(11.5), margin: '4px 0 6px' }}>{msg}</p>}
+      <p style={{ color: '#94a3b8', fontSize: fz(10.5), lineHeight: 1.6, margin: '6px 0 0' }}>
         {T?.storeAutoRenewNote || 'Subscriptions renew automatically at the price shown unless cancelled at least 24 hours before the end of the current period. You can manage or cancel in your App Store or Google Play account settings.'}
       </p>
     </div>
