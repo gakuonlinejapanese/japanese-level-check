@@ -18,11 +18,11 @@ export const GUIDE_KEYS = {
   "Tap here. Saved! 🎉": "saved",
   "① PASTE HERE. Put the Japanese text you want to study in this box. (A sample is already inside.)": "pasteFc",
   "② Then tap this big button.": "thenBig",
-  "Tap “Conversation”.": "tapConv",
+  "Tap “Listening & Conversation”.": "tapConv",
   "① Easiest: tap here to listen to a video tab. (Not shown on this device? Tap Next.)": "listenTab",
   "② RECORD HERE. Tap this microphone button, then play a Japanese video or talk. There is no box to paste into.": "record",
   "③ When a line appears, tap here to see how to answer.": "hint",
-  "Tap “Pronunciation”.": "tapPron",
+  "Tap “Listening & Pronunciation”.": "tapPron",
   "② Tap this button, then play a Japanese video or talk. There is no box to paste into.": "pronBtn",
   "③ When a line appears, tap here and say it out loud after the video.": "pronRec",
   "Tap “Writing”.": "tapWr",
@@ -55,7 +55,7 @@ export const GUIDE_KEYS = {
   "Flashcards are in this frame. Tap the card to flip it.": "flash",
   "Want to review with flashcards? Tap “Go Flashcard” to start the Flashcards activity.": "goFlash",
   "Pick how you want to practice in this frame.": "pickWriting",
-  // titles (feature names such as From Content / Conversation Practice stay in English)
+  // titles (feature names such as From Content / Listening & Conversation stay in English)
   "Your first minute": "tFirst",
   "Schedule": "tSchedule",
   "Vocabulary": "tVocab",
@@ -477,8 +477,8 @@ export function localizeGuide(enGuide, lang, T) {
   if (!d || !enGuide) return enGuide;
   const tok = {
     fc: stripEmoji(T && T.tabPractice) || "From Content",
-    conv: stripEmoji(T && T.convTitle) || "Conversation",
-    pron: stripEmoji(T && T.pronTitle) || "Pronunciation",
+    conv: stripEmoji(T && T.convTitle) || "Listening & Conversation",
+    pron: stripEmoji(T && T.pronTitle) || "Listening & Pronunciation",
     wr: stripEmoji(T && T.writeTitle) || "Writing",
     copy: stripEmoji(T && T.writeModeCopy) || "Copying down",
     q: stripEmoji(T && T.writeModeQuestion) || "Questions",
