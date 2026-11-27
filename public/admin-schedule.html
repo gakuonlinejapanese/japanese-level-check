@@ -110,8 +110,14 @@
 
   <section id="reschedule-section">
     <h2>🔁 予約の日時変更（Free Trial・Official Student共通）</h2>
-    <p style="font-size:12px;color:#64748b;margin:0 0 8px;">今後の確定済み予約すべてが対象です。新しい日付・時間を選んで「変更」を押してください。Zoomリンクはそのまま引き継がれます。</p>
-    <div id="reschedule-list"><p>読み込み中…</p></div>
+    <p style="font-size:12px;color:#64748b;margin:0 0 8px;">今後の確定済み予約すべてが対象です。「検索」か「全て表示」を押すと予約が表示されます。新しい日付・時間を選んで「変更」を押してください。Zoomリンクはそのまま引き継がれます。</p>
+    <div class="row" style="margin:0 0 10px;">
+      <input type="text" id="rs-search" placeholder="生徒の名前かメールアドレス" style="flex:1;min-width:220px;"
+        onkeydown="if (event.key === 'Enter' && !event.isComposing) searchRescheduleList()" />
+      <button class="btn confirm" onclick="searchRescheduleList()">🔍 検索</button>
+      <button class="btn" onclick="showAllRescheduleList()">📄 全て表示</button>
+    </div>
+    <div id="reschedule-list"></div>
   </section>
 
   <section>
@@ -552,7 +558,7 @@ async function toggleSlot(date, time, status) {
       row.style.outline = "2px solid #2563eb";
       setTimeout(() => { row.style.outline = ""; }, 2500);
     } else {
-      alert("予約済みの枠です。「予約の日時変更」欄から日時を変更できます。");
+      alert(`予約済みの枠です${slot && slot.student_name ? "（" + slot.student_name + "）" : ""}。\n日時を変更するには「予約の日時変更」欄で「検索」か「全て表示」を押してください。`);
     }
     return;
   }
@@ -714,16 +720,52 @@ async function loadOfficialStudents() {
 // ---------- 予約の日時変更（予約の種類を問わない） ----------
 const RS_SOURCE_LABEL = { trial_lesson: "🆓 Free Trial", official: "⭐ Official", waitlist: "📝 Waitlist" };
 
+// null = まだ表示しない（「検索」「全て表示」のどちらかが押されるまで）
+let rsMode = null;
+let rsQuery = "";
+let rsRequestSeq = 0;
+
+// 大文字小文字・全角半角の違いは無視して検索する
+const rsNormalize = (v) => String(v || "").normalize("NFKC").toLowerCase().trim();
+
+function searchRescheduleList() {
+  const query = document.getElementById("rs-search").value.trim();
+  if (!query) return alert("生徒の名前かメールアドレスを入力してください");
+  rsMode = "search";
+  rsQuery = query;
+  document.getElementById("reschedule-list").innerHTML = "<p>読み込み中…</p>";
+  loadRescheduleList();
+}
+
+function showAllRescheduleList() {
+  rsMode = "all";
+  rsQuery = "";
+  document.getElementById("rs-search").value = "";
+  document.getElementById("reschedule-list").innerHTML = "<p>読み込み中…</p>";
+  loadRescheduleList();
+}
+
+// 予約の変更・追加の後にも呼ばれる。今の表示状態（非表示／検索中／全て表示）を保つ
 async function loadRescheduleList() {
+  if (!rsMode) return;
+  const seq = ++rsRequestSeq;
   const el = document.getElementById("reschedule-list");
   const todayStr = new Date().toISOString().slice(0, 10);
   const data = await api("list-availability", { fromDate: todayStr });
+  if (seq !== rsRequestSeq) return; // 後から押したボタンの結果を優先する
+  const q = rsMode === "search" ? rsNormalize(rsQuery) : "";
   const booked = (data.slots || []).filter(s => s.status === "booked")
+    .filter(s => !q || [s.student_name, s.student_email, s.label].some(v => rsNormalize(v).includes(q)))
     .sort((a, b) => (a.lesson_date + a.start_time).localeCompare(b.lesson_date + b.start_time));
 
-  if (booked.length === 0) { el.innerHTML = "<p>今後の確定済み予約はありません。</p>"; return; }
+  if (booked.length === 0) {
+    el.innerHTML = "<p></p>";
+    el.firstChild.textContent = q ? `「${rsQuery}」に一致する今後の予約はありません。` : "今後の確定済み予約はありません。";
+    return;
+  }
 
-  el.innerHTML = booked.map(s => {
+  const countLine = `<p style="font-size:12px;color:#64748b;margin:0 0 8px;">${booked.length}件の予約</p>`;
+  el.innerHTML = countLine + booked.map(s => {
     const src = RS_SOURCE_LABEL[s.source] || "";
     const name = s.student_name || s.label || "(名前なし)";
     return `<div class="req-card" id="rs-row-${s.id}" style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;">

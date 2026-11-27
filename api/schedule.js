@@ -149,19 +149,22 @@ async function handleListAvailability(supabase, body, res) {
 
   const officialMap = {};
   const officialWhatsappMap = {};
+  const officialEmailMap = {};
   if (officialIds.length > 0) {
-    const { data: rows } = await supabase.from("official_students").select("id, name, whatsapp").in("id", officialIds);
-    (rows || []).forEach((r) => { officialMap[r.id] = r.name; officialWhatsappMap[r.id] = r.whatsapp || null; });
+    const { data: rows } = await supabase.from("official_students").select("id, name, email, whatsapp").in("id", officialIds);
+    (rows || []).forEach((r) => { officialMap[r.id] = r.name; officialEmailMap[r.id] = r.email || null; officialWhatsappMap[r.id] = r.whatsapp || null; });
   }
   const waitlistMap = {};
+  const waitlistEmailMap = {};
   if (waitlistIds.length > 0) {
-    const { data: rows } = await supabase.from("waitlist_requests").select("id, student_name").in("id", waitlistIds);
-    (rows || []).forEach((r) => { waitlistMap[r.id] = r.student_name; });
+    const { data: rows } = await supabase.from("waitlist_requests").select("id, student_name, student_email").in("id", waitlistIds);
+    (rows || []).forEach((r) => { waitlistMap[r.id] = r.student_name; waitlistEmailMap[r.id] = r.student_email || null; });
   }
   const trialMap = {};
+  const trialEmailMap = {};
   if (trialIds.length > 0) {
-    const { data: rows } = await supabase.from("trial_lesson_requests").select("id, full_name").in("id", trialIds);
-    (rows || []).forEach((r) => { trialMap[r.id] = r.full_name; });
+    const { data: rows } = await supabase.from("trial_lesson_requests").select("id, full_name, email").in("id", trialIds);
+    (rows || []).forEach((r) => { trialMap[r.id] = r.full_name; trialEmailMap[r.id] = r.email || null; });
   }
 
   const withNames = slots.map((s) => ({
@@ -170,6 +173,11 @@ async function handleListAvailability(supabase, body, res) {
       (s.official_student_id && officialMap[s.official_student_id]) ||
       (s.waitlist_request_id && waitlistMap[s.waitlist_request_id]) ||
       (s.trial_lesson_request_id && trialMap[s.trial_lesson_request_id]) ||
+      null,
+    student_email:
+      (s.official_student_id && officialEmailMap[s.official_student_id]) ||
+      (s.waitlist_request_id && waitlistEmailMap[s.waitlist_request_id]) ||
+      (s.trial_lesson_request_id && trialEmailMap[s.trial_lesson_request_id]) ||
       null,
     student_whatsapp: (s.official_student_id && officialWhatsappMap[s.official_student_id]) || null,
   }));
