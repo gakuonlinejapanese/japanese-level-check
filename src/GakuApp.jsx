@@ -1167,6 +1167,24 @@ const UI_TRANSLATIONS = {
     writeErrNotJa: "Please write your answer in Japanese.",
     writeErrFail: "Couldn't check your answer. Please try again.",
     tutorialWritingDesc: "Try it now: pick “Copying down”, paste a Japanese sentence and write each character stroke by stroke — GAKU checks the stroke order. Or pick “Questions”, paste a writing question, type your answer, and GAKU tells you if it fits (with a model answer if not).",
+    readTitle: "Reading",
+    readDesc: "Choose your level and open a reading site. On a computer, GAKU Reader shows you the meaning of words you don't know.",
+    readYourLevel: "Your level",
+    readTagQuiz: "Questions",
+    readTagStory: "Stories",
+    readTagArticle: "Articles",
+    readTagNews: "News",
+    readDescTadoku: "Free story books sorted by level. Choose level {lv}.",
+    readDescJNihongo: "Short passages with furigana and comprehension questions.",
+    readDescJrp: "Short articles for your level. Click a word to see its meaning.",
+    readDescJlptRead: "Articles written for JLPT levels. Reading is free; some extra features are paid.",
+    readDescWatanoc: "A free web magazine about Japan, written in easy Japanese.",
+    readDescMatchaEasy: "Travel and culture articles in easy Japanese, with furigana.",
+    readDescMatchaJp: "Travel and culture articles in natural Japanese.",
+    readDescNhkEasy: "News written in easy Japanese. NHK may show a notice about its terms first.",
+    readDescNhk: "Real Japanese news. NHK may show a notice about its terms first.",
+    readDescAozora: "Free classic Japanese stories and essays. Challenging and rich.",
+    tutorialReadingDesc: "Choose your level, then open one reading site and read one short text.",
     copyDesc: "Paste a Japanese sentence and copy it one character at a time. Write each stroke with your finger or mouse — GAKU checks the stroke order and shape and shows you the correct way to write it.",
     copyLabel: "Text to copy",
     copyPlaceholder: "Paste Japanese text here (up to 30 characters are practiced at a time)…",
@@ -1818,6 +1836,24 @@ const UI_TRANSLATIONS = {
     writeErrNotJa: "Veuillez écrire votre réponse en japonais.",
     writeErrFail: "Impossible de vérifier votre réponse. Veuillez réessayer.",
     tutorialWritingDesc: "Essayez maintenant : choisissez « Copie », collez une phrase japonaise et écrivez chaque caractère trait par trait — GAKU vérifie l'ordre des traits. Ou choisissez « Questions », collez une question d'écriture, tapez votre réponse, et GAKU vous dit si elle convient (avec une réponse modèle sinon).",
+    readTitle: "Lecture",
+    readDesc: "Choisissez votre niveau et ouvrez un site de lecture. Sur ordinateur, GAKU Reader vous donne le sens des mots inconnus.",
+    readYourLevel: "Votre niveau",
+    readTagQuiz: "Questions",
+    readTagStory: "Histoires",
+    readTagArticle: "Articles",
+    readTagNews: "Actualités",
+    readDescTadoku: "Livres d'histoires gratuits classés par niveau. Choisissez le niveau {lv}.",
+    readDescJNihongo: "Textes courts avec furigana et questions de compréhension.",
+    readDescJrp: "Articles courts à votre niveau. Cliquez sur un mot pour voir son sens.",
+    readDescJlptRead: "Articles rédigés pour les niveaux du JLPT. La lecture est gratuite ; certaines options sont payantes.",
+    readDescWatanoc: "Un webzine gratuit sur le Japon, en japonais facile.",
+    readDescMatchaEasy: "Articles sur le voyage et la culture en japonais facile, avec furigana.",
+    readDescMatchaJp: "Articles sur le voyage et la culture en japonais naturel.",
+    readDescNhkEasy: "Actualités en japonais facile. La NHK peut d'abord afficher un avis sur ses conditions.",
+    readDescNhk: "De vraies actualités en japonais. La NHK peut d'abord afficher un avis sur ses conditions.",
+    readDescAozora: "Romans et essais japonais classiques gratuits. Exigeant et riche.",
+    tutorialReadingDesc: "Choisissez votre niveau, ouvrez un site de lecture et lisez un texte court.",
     copyDesc: "Collez une phrase japonaise et recopiez-la caractère par caractère. Tracez chaque trait avec le doigt ou la souris — GAKU vérifie l'ordre et la forme des traits et vous montre la bonne façon de l'écrire.",
     copyLabel: "Texte à copier",
     copyPlaceholder: "Collez le texte japonais ici (30 caractères maximum par séance)…",
@@ -2454,6 +2490,24 @@ const UI_TRANSLATIONS = {
     writeErrNotJa: "Por favor, escribe tu respuesta en japonés.",
     writeErrFail: "No se pudo revisar tu respuesta. Inténtalo de nuevo.",
     tutorialWritingDesc: "Pruébalo ahora: elige «Copiar», pega una frase en japonés y escribe cada carácter trazo a trazo — GAKU comprueba el orden de los trazos. O elige «Preguntas», pega una pregunta de escritura, escribe tu respuesta y GAKU te dice si se ajusta (con una respuesta modelo si no).",
+    readTitle: "Lectura",
+    readDesc: "Elige tu nivel y abre un sitio de lectura. En la computadora, GAKU Reader te muestra el significado de las palabras que no conoces.",
+    readYourLevel: "Tu nivel",
+    readTagQuiz: "Preguntas",
+    readTagStory: "Cuentos",
+    readTagArticle: "Artículos",
+    readTagNews: "Noticias",
+    readDescTadoku: "Libros de cuentos gratuitos por nivel. Elige el nivel {lv}.",
+    readDescJNihongo: "Textos cortos con furigana y preguntas de comprensión.",
+    readDescJrp: "Artículos cortos para tu nivel. Haz clic en una palabra para ver su significado.",
+    readDescJlptRead: "Artículos escritos para los niveles del JLPT. Leer es gratis; algunas funciones extra son de pago.",
+    readDescWatanoc: "Una revista web gratuita sobre Japón en japonés fácil.",
+    readDescMatchaEasy: "Artículos de viajes y cultura en japonés fácil, con furigana.",
+    readDescMatchaJp: "Artículos de viajes y cultura en japonés natural.",
+    readDescNhkEasy: "Noticias en japonés fácil. Es posible que NHK muestre primero un aviso sobre sus condiciones.",
+    readDescNhk: "Noticias reales en japonés. Es posible que NHK muestre primero un aviso sobre sus condiciones.",
+    readDescAozora: "Cuentos y ensayos clásicos japoneses gratuitos. Exigente y enriquecedor.",
+    tutorialReadingDesc: "Elige tu nivel, abre un sitio de lectura y lee un texto corto.",
     copyDesc: "Pega una frase en japonés y cópiala carácter por carácter. Escribe cada trazo con el dedo o el ratón — GAKU comprueba el orden y la forma de los trazos y te muestra la manera correcta de escribirlo.",
     copyLabel: "Texto para copiar",
     copyPlaceholder: "Pega aquí el texto en japonés (se practican hasta 30 caracteres cada vez)…",
@@ -3090,6 +3144,24 @@ const UI_TRANSLATIONS = {
     writeErrNotJa: "Por favor, escreva sua resposta em japonês.",
     writeErrFail: "Não foi possível verificar sua resposta. Tente novamente.",
     tutorialWritingDesc: "Experimente agora: escolha “Copiar”, cole uma frase em japonês e escreva cada caractere traço a traço — o GAKU confere a ordem dos traços. Ou escolha “Perguntas”, cole uma pergunta de escrita, digite sua resposta e o GAKU diz se ela combina (com uma resposta modelo se não combinar).",
+    readTitle: "Leitura",
+    readDesc: "Escolha seu nível e abra um site de leitura. No computador, o GAKU Reader mostra o significado das palavras que você não conhece.",
+    readYourLevel: "Seu nível",
+    readTagQuiz: "Perguntas",
+    readTagStory: "Histórias",
+    readTagArticle: "Artigos",
+    readTagNews: "Notícias",
+    readDescTadoku: "Livros de histórias gratuitos por nível. Escolha o nível {lv}.",
+    readDescJNihongo: "Textos curtos com furigana e perguntas de compreensão.",
+    readDescJrp: "Artigos curtos para o seu nível. Clique em uma palavra para ver o significado.",
+    readDescJlptRead: "Artigos escritos para os níveis do JLPT. A leitura é gratuita; alguns recursos extras são pagos.",
+    readDescWatanoc: "Uma revista online gratuita sobre o Japão, em japonês fácil.",
+    readDescMatchaEasy: "Artigos de viagem e cultura em japonês fácil, com furigana.",
+    readDescMatchaJp: "Artigos de viagem e cultura em japonês natural.",
+    readDescNhkEasy: "Notícias em japonês fácil. A NHK pode mostrar antes um aviso sobre as condições de uso.",
+    readDescNhk: "Notícias reais em japonês. A NHK pode mostrar antes um aviso sobre as condições de uso.",
+    readDescAozora: "Contos e ensaios clássicos japoneses gratuitos. Desafiador e rico.",
+    tutorialReadingDesc: "Escolha seu nível, abra um site de leitura e leia um texto curto.",
     copyDesc: "Cole uma frase em japonês e copie-a caractere por caractere. Escreva cada traço com o dedo ou o mouse — o GAKU confere a ordem e a forma dos traços e mostra a maneira correta de escrever.",
     copyLabel: "Texto para copiar",
     copyPlaceholder: "Cole o texto em japonês aqui (até 30 caracteres são praticados por vez)…",
@@ -3726,6 +3798,24 @@ const UI_TRANSLATIONS = {
     writeErrNotJa: "Bitte schreibe deine Antwort auf Japanisch.",
     writeErrFail: "Deine Antwort konnte nicht geprüft werden. Bitte versuche es erneut.",
     tutorialWritingDesc: "Probier's gleich aus: Wähle „Abschreiben“, füge einen japanischen Satz ein und schreibe jedes Zeichen Strich für Strich – GAKU prüft die Strichreihenfolge. Oder wähle „Fragen“, füge eine Schreibaufgabe ein, tippe deine Antwort, und GAKU sagt dir, ob sie passt (mit Musterantwort, falls nicht).",
+    readTitle: "Lesen",
+    readDesc: "Wähle dein Niveau und öffne eine Leseseite. Am Computer zeigt dir GAKU Reader die Bedeutung unbekannter Wörter.",
+    readYourLevel: "Dein Niveau",
+    readTagQuiz: "Mit Fragen",
+    readTagStory: "Geschichten",
+    readTagArticle: "Artikel",
+    readTagNews: "Nachrichten",
+    readDescTadoku: "Kostenlose Geschichtenbücher nach Niveau. Wähle Stufe {lv}.",
+    readDescJNihongo: "Kurze Texte mit Furigana und Verständnisfragen.",
+    readDescJrp: "Kurze Artikel für dein Niveau. Klicke auf ein Wort, um die Bedeutung zu sehen.",
+    readDescJlptRead: "Artikel für die JLPT-Niveaus. Lesen ist kostenlos; manche Zusatzfunktionen kosten Geld.",
+    readDescWatanoc: "Ein kostenloses Webmagazin über Japan in einfachem Japanisch.",
+    readDescMatchaEasy: "Artikel über Reisen und Kultur in einfachem Japanisch mit Furigana.",
+    readDescMatchaJp: "Artikel über Reisen und Kultur in natürlichem Japanisch.",
+    readDescNhkEasy: "Nachrichten in einfachem Japanisch. NHK zeigt eventuell zuerst einen Hinweis zu den Nutzungsbedingungen.",
+    readDescNhk: "Echte japanische Nachrichten. NHK zeigt eventuell zuerst einen Hinweis zu den Nutzungsbedingungen.",
+    readDescAozora: "Kostenlose klassische japanische Erzählungen und Essays. Anspruchsvoll und lohnend.",
+    tutorialReadingDesc: "Wähle dein Niveau, öffne eine Leseseite und lies einen kurzen Text.",
     copyDesc: "Füge einen japanischen Satz ein und schreibe ihn Zeichen für Zeichen ab. Schreibe jeden Strich mit dem Finger oder der Maus – GAKU prüft Reihenfolge und Form der Striche und zeigt dir die richtige Schreibweise.",
     copyLabel: "Text zum Abschreiben",
     copyPlaceholder: "Japanischen Text hier einfügen (pro Durchgang werden bis zu 30 Zeichen geübt) …",
@@ -4362,6 +4452,24 @@ const UI_TRANSLATIONS = {
     writeErrNotJa: "Scrivi la tua risposta in giapponese.",
     writeErrFail: "Impossibile controllare la tua risposta. Riprova.",
     tutorialWritingDesc: "Provalo subito: scegli «Copiatura», incolla una frase giapponese e scrivi ogni carattere tratto per tratto — GAKU controlla l'ordine dei tratti. Oppure scegli «Domande», incolla una domanda di scrittura, scrivi la risposta e GAKU ti dice se è in linea (con una risposta modello se non lo è).",
+    readTitle: "Lettura",
+    readDesc: "Scegli il tuo livello e apri un sito di lettura. Al computer, GAKU Reader ti mostra il significato delle parole che non conosci.",
+    readYourLevel: "Il tuo livello",
+    readTagQuiz: "Con domande",
+    readTagStory: "Storie",
+    readTagArticle: "Articoli",
+    readTagNews: "Notizie",
+    readDescTadoku: "Libri di storie gratuiti divisi per livello. Scegli il livello {lv}.",
+    readDescJNihongo: "Brevi testi con furigana e domande di comprensione.",
+    readDescJrp: "Brevi articoli per il tuo livello. Clicca su una parola per vederne il significato.",
+    readDescJlptRead: "Articoli scritti per i livelli JLPT. La lettura è gratuita; alcune funzioni extra sono a pagamento.",
+    readDescWatanoc: "Una rivista web gratuita sul Giappone, in giapponese facile.",
+    readDescMatchaEasy: "Articoli di viaggi e cultura in giapponese facile, con furigana.",
+    readDescMatchaJp: "Articoli di viaggi e cultura in giapponese naturale.",
+    readDescNhkEasy: "Notizie in giapponese facile. NHK potrebbe mostrare prima un avviso sulle condizioni d'uso.",
+    readDescNhk: "Vere notizie in giapponese. NHK potrebbe mostrare prima un avviso sulle condizioni d'uso.",
+    readDescAozora: "Racconti e saggi classici giapponesi gratuiti. Impegnativo e ricco.",
+    tutorialReadingDesc: "Scegli il tuo livello, apri un sito di lettura e leggi un testo breve.",
     copyDesc: "Incolla una frase giapponese e copiala un carattere alla volta. Scrivi ogni tratto con il dito o con il mouse — GAKU controlla ordine e forma dei tratti e ti mostra il modo corretto di scriverlo.",
     copyLabel: "Testo da copiare",
     copyPlaceholder: "Incolla qui il testo giapponese (si esercitano fino a 30 caratteri alla volta)…",
@@ -4998,6 +5106,24 @@ const UI_TRANSLATIONS = {
     writeErrNotJa: "请用日语写出你的答案。",
     writeErrFail: "无法检查你的答案，请重试。",
     tutorialWritingDesc: "现在就试试：选择“抄写”，粘贴一句日语，逐笔写出每个字——GAKU会检查笔顺。或者选择“提问”，粘贴一道写作题，输入你的答案，GAKU会告诉你是否符合题目（不符合时会给出参考答案）。",
+    readTitle: "阅读",
+    readDesc: "选择你的级别，打开一个阅读网站。在电脑上，GAKU Reader 可以显示生词的意思。",
+    readYourLevel: "你的级别",
+    readTagQuiz: "附问题",
+    readTagStory: "故事",
+    readTagArticle: "文章",
+    readTagNews: "新闻",
+    readDescTadoku: "按级别分类的免费故事书。请选择 {lv} 级。",
+    readDescJNihongo: "带假名注音和理解题的短文。",
+    readDescJrp: "适合你级别的短文章。点击单词即可查看意思。",
+    readDescJlptRead: "按 JLPT 级别编写的文章。阅读免费，部分附加功能收费。",
+    readDescWatanoc: "用简单日语写的、介绍日本的免费网络杂志。",
+    readDescMatchaEasy: "用简单日语写的旅行和文化文章，附假名注音。",
+    readDescMatchaJp: "用自然日语写的旅行和文化文章。",
+    readDescNhkEasy: "用简单日语写的新闻。NHK 可能会先显示使用须知。",
+    readDescNhk: "真实的日语新闻。NHK 可能会先显示使用须知。",
+    readDescAozora: "免费的日本经典小说和随笔。有难度，内容丰富。",
+    tutorialReadingDesc: "选择你的级别，打开一个阅读网站，读一篇短文。",
     copyDesc: "粘贴一句日语，逐字抄写。用手指或鼠标写出每一笔——GAKU会检查笔顺和笔画形状，并告诉你正确的写法。",
     copyLabel: "要抄写的文字",
     copyPlaceholder: "在此粘贴日语文字（每次练习最多30个字）……",
@@ -5634,6 +5760,24 @@ const UI_TRANSLATIONS = {
     writeErrNotJa: "請用日語寫出你的答案。",
     writeErrFail: "無法檢查你的答案，請重試。",
     tutorialWritingDesc: "現在就試試：選擇「抄寫」，貼上一句日語，逐筆寫出每個字——GAKU會檢查筆順。或者選擇「提問」，貼上一道寫作題，輸入你的答案，GAKU會告訴你是否符合題目（不符合時會給出參考答案）。",
+    readTitle: "閱讀",
+    readDesc: "選擇你的級別，開啟一個閱讀網站。在電腦上，GAKU Reader 可以顯示生詞的意思。",
+    readYourLevel: "你的級別",
+    readTagQuiz: "附問題",
+    readTagStory: "故事",
+    readTagArticle: "文章",
+    readTagNews: "新聞",
+    readDescTadoku: "依級別分類的免費故事書。請選擇 {lv} 級。",
+    readDescJNihongo: "附假名注音和理解題的短文。",
+    readDescJrp: "適合你級別的短文章。點選單字即可查看意思。",
+    readDescJlptRead: "依 JLPT 級別編寫的文章。閱讀免費，部分附加功能收費。",
+    readDescWatanoc: "用簡單日語寫的、介紹日本的免費網路雜誌。",
+    readDescMatchaEasy: "用簡單日語寫的旅行和文化文章，附假名注音。",
+    readDescMatchaJp: "用自然日語寫的旅行和文化文章。",
+    readDescNhkEasy: "用簡單日語寫的新聞。NHK 可能會先顯示使用須知。",
+    readDescNhk: "真實的日語新聞。NHK 可能會先顯示使用須知。",
+    readDescAozora: "免費的日本經典小說和隨筆。有難度，內容豐富。",
+    tutorialReadingDesc: "選擇你的級別，開啟一個閱讀網站，讀一篇短文。",
     copyDesc: "貼上一句日語，逐字抄寫。用手指或滑鼠寫出每一筆——GAKU會檢查筆順和筆畫形狀，並告訴你正確的寫法。",
     copyLabel: "要抄寫的文字",
     copyPlaceholder: "在此貼上日語文字（每次練習最多30個字）……",
@@ -6270,6 +6414,24 @@ const UI_TRANSLATIONS = {
     writeErrNotJa: "답안을 일본어로 작성해 주세요.",
     writeErrFail: "답안을 확인하지 못했습니다. 다시 시도해 주세요.",
     tutorialWritingDesc: "지금 해보세요: '따라 쓰기'를 고르고 일본어 문장을 붙여넣은 뒤 글자를 한 획씩 쓰세요. GAKU가 획순을 확인합니다. 또는 '질문'을 고르고 쓰기 문제를 붙여넣어 답을 입력하면, GAKU가 문제에 맞는지 알려 주고 맞지 않으면 모범 답안을 보여 줍니다.",
+    readTitle: "읽기",
+    readDesc: "레벨을 고르고 읽기 사이트를 열어 보세요. 컴퓨터에서는 GAKU Reader로 모르는 단어의 뜻을 볼 수 있어요.",
+    readYourLevel: "내 레벨",
+    readTagQuiz: "문제 포함",
+    readTagStory: "이야기",
+    readTagArticle: "기사",
+    readTagNews: "뉴스",
+    readDescTadoku: "레벨별 무료 이야기책입니다. 레벨 {lv}을(를) 고르세요.",
+    readDescJNihongo: "후리가나와 독해 문제가 있는 짧은 글입니다.",
+    readDescJrp: "레벨에 맞는 짧은 기사입니다. 단어를 클릭하면 뜻이 보입니다.",
+    readDescJlptRead: "JLPT 레벨에 맞춰 쓴 기사입니다. 읽기는 무료이고 일부 추가 기능은 유료입니다.",
+    readDescWatanoc: "쉬운 일본어로 쓴 일본 관련 무료 웹 매거진입니다.",
+    readDescMatchaEasy: "여행과 문화 기사를 후리가나가 있는 쉬운 일본어로 읽을 수 있어요.",
+    readDescMatchaJp: "여행과 문화 기사를 자연스러운 일본어로 읽을 수 있어요.",
+    readDescNhkEasy: "쉬운 일본어로 쓴 뉴스입니다. 처음에 NHK 이용 안내가 나올 수 있어요.",
+    readDescNhk: "실제 일본어 뉴스입니다. 처음에 NHK 이용 안내가 나올 수 있어요.",
+    readDescAozora: "무료로 읽는 일본 고전 소설과 수필입니다. 어렵지만 내용이 풍부해요.",
+    tutorialReadingDesc: "레벨을 고른 다음 읽기 사이트를 하나 열고 짧은 글을 하나 읽어 보세요.",
     copyDesc: "일본어 문장을 붙여넣고 한 글자씩 따라 쓰세요. 손가락이나 마우스로 한 획씩 쓰면 GAKU가 획순과 모양을 확인하고 올바른 쓰는 법을 알려 줍니다.",
     copyLabel: "따라 쓸 글",
     copyPlaceholder: "여기에 일본어 글을 붙여넣으세요 (한 번에 최대 30자 연습)…",
@@ -6906,6 +7068,24 @@ const UI_TRANSLATIONS = {
     writeErrNotJa: "กรุณาเขียนคำตอบเป็นภาษาญี่ปุ่น",
     writeErrFail: "ตรวจคำตอบไม่สำเร็จ กรุณาลองอีกครั้ง",
     tutorialWritingDesc: "ลองเลย: เลือก “คัดลอกเขียน” วางประโยคภาษาญี่ปุ่น แล้วเขียนทีละตัวอักษรทีละขีด GAKU จะตรวจลำดับขีดให้ หรือเลือก “คำถาม” วางโจทย์การเขียน พิมพ์คำตอบ แล้ว GAKU จะบอกว่าตรงกับโจทย์หรือไม่ (ถ้าไม่ตรงจะแสดงคำตอบตัวอย่าง)",
+    readTitle: "การอ่าน",
+    readDesc: "เลือกระดับของคุณแล้วเปิดเว็บไซต์สำหรับอ่าน บนคอมพิวเตอร์ GAKU Reader จะแสดงความหมายของคำที่คุณไม่รู้",
+    readYourLevel: "ระดับของคุณ",
+    readTagQuiz: "มีคำถาม",
+    readTagStory: "นิทาน",
+    readTagArticle: "บทความ",
+    readTagNews: "ข่าว",
+    readDescTadoku: "หนังสือเรื่องสั้นฟรีแบ่งตามระดับ เลือกระดับ {lv}",
+    readDescJNihongo: "บทความสั้นพร้อมฟุริงานะและคำถามวัดความเข้าใจ",
+    readDescJrp: "บทความสั้นตามระดับของคุณ คลิกที่คำเพื่อดูความหมาย",
+    readDescJlptRead: "บทความที่เขียนตามระดับ JLPT อ่านฟรี ฟีเจอร์เสริมบางอย่างต้องเสียเงิน",
+    readDescWatanoc: "เว็บแมกกาซีนฟรีเกี่ยวกับญี่ปุ่น เขียนด้วยภาษาญี่ปุ่นง่าย ๆ",
+    readDescMatchaEasy: "บทความท่องเที่ยวและวัฒนธรรมภาษาญี่ปุ่นง่าย ๆ พร้อมฟุริงานะ",
+    readDescMatchaJp: "บทความท่องเที่ยวและวัฒนธรรมด้วยภาษาญี่ปุ่นแบบธรรมชาติ",
+    readDescNhkEasy: "ข่าวภาษาญี่ปุ่นแบบง่าย NHK อาจแสดงข้อความแจ้งเงื่อนไขการใช้งานก่อน",
+    readDescNhk: "ข่าวภาษาญี่ปุ่นของจริง NHK อาจแสดงข้อความแจ้งเงื่อนไขการใช้งานก่อน",
+    readDescAozora: "นิยายและความเรียงคลาสสิกของญี่ปุ่นอ่านฟรี ท้าทายและเนื้อหาเข้มข้น",
+    tutorialReadingDesc: "เลือกระดับของคุณ เปิดเว็บไซต์สำหรับอ่านหนึ่งแห่ง แล้วอ่านข้อความสั้น ๆ หนึ่งเรื่อง",
     copyDesc: "วางประโยคภาษาญี่ปุ่นแล้วคัดลอกทีละตัวอักษร เขียนแต่ละขีดด้วยนิ้วหรือเมาส์ GAKU จะตรวจลำดับขีดและรูปทรง และแสดงวิธีเขียนที่ถูกต้อง",
     copyLabel: "ข้อความที่จะคัดลอก",
     copyPlaceholder: "วางข้อความภาษาญี่ปุ่นที่นี่ (ฝึกครั้งละไม่เกิน 30 ตัวอักษร)…",
@@ -7542,6 +7722,24 @@ const UI_TRANSLATIONS = {
     writeErrNotJa: "Sila tulis jawapan anda dalam bahasa Jepun.",
     writeErrFail: "Tidak dapat menyemak jawapan anda. Sila cuba lagi.",
     tutorialWritingDesc: "Cuba sekarang: pilih “Menyalin”, tampal ayat bahasa Jepun dan tulis setiap aksara goresan demi goresan — GAKU menyemak susunan goresan. Atau pilih “Soalan”, tampal soalan menulis, taip jawapan anda, dan GAKU akan memberitahu sama ada ia sesuai (dengan jawapan contoh jika tidak).",
+    readTitle: "Bacaan",
+    readDesc: "Pilih tahap anda dan buka laman bacaan. Pada komputer, GAKU Reader menunjukkan maksud perkataan yang anda tidak tahu.",
+    readYourLevel: "Tahap anda",
+    readTagQuiz: "Ada soalan",
+    readTagStory: "Cerita",
+    readTagArticle: "Artikel",
+    readTagNews: "Berita",
+    readDescTadoku: "Buku cerita percuma mengikut tahap. Pilih tahap {lv}.",
+    readDescJNihongo: "Petikan pendek dengan furigana dan soalan pemahaman.",
+    readDescJrp: "Artikel pendek untuk tahap anda. Klik perkataan untuk melihat maksudnya.",
+    readDescJlptRead: "Artikel ditulis mengikut tahap JLPT. Membaca adalah percuma; sebahagian ciri tambahan berbayar.",
+    readDescWatanoc: "Majalah web percuma tentang Jepun dalam bahasa Jepun mudah.",
+    readDescMatchaEasy: "Artikel pelancongan dan budaya dalam bahasa Jepun mudah, dengan furigana.",
+    readDescMatchaJp: "Artikel pelancongan dan budaya dalam bahasa Jepun semula jadi.",
+    readDescNhkEasy: "Berita dalam bahasa Jepun mudah. NHK mungkin memaparkan notis syarat penggunaan dahulu.",
+    readDescNhk: "Berita Jepun sebenar. NHK mungkin memaparkan notis syarat penggunaan dahulu.",
+    readDescAozora: "Cerita dan esei klasik Jepun percuma. Mencabar dan kaya.",
+    tutorialReadingDesc: "Pilih tahap anda, buka satu laman bacaan dan baca satu teks pendek.",
     copyDesc: "Tampal ayat bahasa Jepun dan salin satu aksara pada satu masa. Tulis setiap goresan dengan jari atau tetikus — GAKU menyemak susunan dan bentuk goresan serta menunjukkan cara penulisan yang betul.",
     copyLabel: "Teks untuk disalin",
     copyPlaceholder: "Tampal teks bahasa Jepun di sini (sehingga 30 aksara dilatih pada satu masa)…",
@@ -8178,6 +8376,24 @@ const UI_TRANSLATIONS = {
     writeErrNotJa: "Tulis jawabanmu dalam bahasa Jepang.",
     writeErrFail: "Jawabanmu tidak dapat diperiksa. Silakan coba lagi.",
     tutorialWritingDesc: "Coba sekarang: pilih “Menyalin”, tempel kalimat bahasa Jepang, dan tulis setiap karakter goresan demi goresan — GAKU memeriksa urutan goresan. Atau pilih “Pertanyaan”, tempel soal menulis, ketik jawabanmu, dan GAKU memberi tahu apakah sesuai (dengan jawaban contoh jika tidak).",
+    readTitle: "Membaca",
+    readDesc: "Pilih level Anda dan buka situs bacaan. Di komputer, GAKU Reader menampilkan arti kata yang belum Anda ketahui.",
+    readYourLevel: "Level Anda",
+    readTagQuiz: "Ada soal",
+    readTagStory: "Cerita",
+    readTagArticle: "Artikel",
+    readTagNews: "Berita",
+    readDescTadoku: "Buku cerita gratis berdasarkan level. Pilih level {lv}.",
+    readDescJNihongo: "Bacaan pendek dengan furigana dan soal pemahaman.",
+    readDescJrp: "Artikel pendek sesuai level Anda. Klik kata untuk melihat artinya.",
+    readDescJlptRead: "Artikel yang ditulis sesuai level JLPT. Membaca gratis; sebagian fitur tambahan berbayar.",
+    readDescWatanoc: "Majalah web gratis tentang Jepang dalam bahasa Jepang yang mudah.",
+    readDescMatchaEasy: "Artikel wisata dan budaya dalam bahasa Jepang mudah, dengan furigana.",
+    readDescMatchaJp: "Artikel wisata dan budaya dalam bahasa Jepang alami.",
+    readDescNhkEasy: "Berita dalam bahasa Jepang mudah. NHK mungkin menampilkan pemberitahuan ketentuan terlebih dahulu.",
+    readDescNhk: "Berita Jepang asli. NHK mungkin menampilkan pemberitahuan ketentuan terlebih dahulu.",
+    readDescAozora: "Cerita dan esai klasik Jepang gratis. Menantang dan kaya.",
+    tutorialReadingDesc: "Pilih level Anda, buka satu situs bacaan, lalu baca satu teks pendek.",
     copyDesc: "Tempel kalimat bahasa Jepang dan salin satu karakter demi satu. Tulis setiap goresan dengan jari atau mouse — GAKU memeriksa urutan dan bentuk goresan serta menunjukkan cara menulis yang benar.",
     copyLabel: "Teks yang disalin",
     copyPlaceholder: "Tempel teks bahasa Jepang di sini (maksimal 30 karakter dilatih sekaligus)…",
@@ -8814,6 +9030,24 @@ const UI_TRANSLATIONS = {
     writeErrNotJa: "Vui lòng viết câu trả lời bằng tiếng Nhật.",
     writeErrFail: "Không thể kiểm tra câu trả lời. Vui lòng thử lại.",
     tutorialWritingDesc: "Hãy thử ngay: chọn “Chép lại”, dán một câu tiếng Nhật và viết từng chữ theo từng nét — GAKU kiểm tra thứ tự nét. Hoặc chọn “Câu hỏi”, dán một đề bài viết, nhập câu trả lời và GAKU cho bạn biết có phù hợp không (kèm đáp án mẫu nếu không).",
+    readTitle: "Đọc hiểu",
+    readDesc: "Chọn trình độ và mở một trang đọc. Trên máy tính, GAKU Reader hiển thị nghĩa của những từ bạn chưa biết.",
+    readYourLevel: "Trình độ của bạn",
+    readTagQuiz: "Có câu hỏi",
+    readTagStory: "Truyện",
+    readTagArticle: "Bài viết",
+    readTagNews: "Tin tức",
+    readDescTadoku: "Sách truyện miễn phí chia theo cấp độ. Hãy chọn cấp {lv}.",
+    readDescJNihongo: "Bài đọc ngắn có furigana và câu hỏi đọc hiểu.",
+    readDescJrp: "Bài viết ngắn theo trình độ. Nhấp vào từ để xem nghĩa.",
+    readDescJlptRead: "Bài viết theo cấp độ JLPT. Đọc miễn phí; một số tính năng thêm phải trả phí.",
+    readDescWatanoc: "Tạp chí web miễn phí về Nhật Bản bằng tiếng Nhật dễ hiểu.",
+    readDescMatchaEasy: "Bài viết du lịch và văn hóa bằng tiếng Nhật dễ, có furigana.",
+    readDescMatchaJp: "Bài viết du lịch và văn hóa bằng tiếng Nhật tự nhiên.",
+    readDescNhkEasy: "Tin tức bằng tiếng Nhật dễ. NHK có thể hiển thị thông báo về điều khoản trước.",
+    readDescNhk: "Tin tức tiếng Nhật thật. NHK có thể hiển thị thông báo về điều khoản trước.",
+    readDescAozora: "Truyện và tản văn kinh điển Nhật Bản miễn phí. Khó nhưng phong phú.",
+    tutorialReadingDesc: "Chọn trình độ, mở một trang đọc và đọc một đoạn văn ngắn.",
     copyDesc: "Dán một câu tiếng Nhật và chép từng chữ một. Viết từng nét bằng ngón tay hoặc chuột — GAKU kiểm tra thứ tự và hình dạng nét, đồng thời chỉ cho bạn cách viết đúng.",
     copyLabel: "Văn bản cần chép",
     copyPlaceholder: "Dán văn bản tiếng Nhật vào đây (mỗi lần luyện tối đa 30 chữ)…",
@@ -9450,6 +9684,24 @@ const UI_TRANSLATIONS = {
     writeErrNotJa: "कृपया अपना उत्तर जापानी में लिखें।",
     writeErrFail: "आपका उत्तर जाँचा नहीं जा सका। कृपया फिर कोशिश करें।",
     tutorialWritingDesc: "अभी आज़माएँ: “नकल करके लिखना” चुनें, जापानी वाक्य पेस्ट करें और हर अक्षर को स्ट्रोक-दर-स्ट्रोक लिखें — GAKU स्ट्रोक का क्रम जाँचेगा। या “प्रश्न” चुनें, कोई लेखन प्रश्न पेस्ट करें, अपना उत्तर लिखें, और GAKU बताएगा कि वह मेल खाता है या नहीं (न खाने पर आदर्श उत्तर के साथ)।",
+    readTitle: "पठन",
+    readDesc: "अपना स्तर चुनें और पढ़ने की कोई साइट खोलें। कंप्यूटर पर GAKU Reader अनजान शब्दों का अर्थ दिखाता है।",
+    readYourLevel: "आपका स्तर",
+    readTagQuiz: "प्रश्न सहित",
+    readTagStory: "कहानियाँ",
+    readTagArticle: "लेख",
+    readTagNews: "समाचार",
+    readDescTadoku: "स्तर के अनुसार मुफ़्त कहानी की किताबें। स्तर {lv} चुनें।",
+    readDescJNihongo: "फुरिगाना और समझ के प्रश्नों वाले छोटे पाठ।",
+    readDescJrp: "आपके स्तर के छोटे लेख। अर्थ देखने के लिए शब्द पर क्लिक करें।",
+    readDescJlptRead: "JLPT स्तरों के लिए लिखे लेख। पढ़ना मुफ़्त है; कुछ अतिरिक्त सुविधाएँ सशुल्क हैं।",
+    readDescWatanoc: "आसान जापानी में जापान के बारे में एक मुफ़्त वेब पत्रिका।",
+    readDescMatchaEasy: "आसान जापानी में यात्रा और संस्कृति के लेख, फुरिगाना सहित।",
+    readDescMatchaJp: "स्वाभाविक जापानी में यात्रा और संस्कृति के लेख।",
+    readDescNhkEasy: "आसान जापानी में समाचार। NHK पहले उपयोग की शर्तों की सूचना दिखा सकता है।",
+    readDescNhk: "असली जापानी समाचार। NHK पहले उपयोग की शर्तों की सूचना दिखा सकता है।",
+    readDescAozora: "मुफ़्त क्लासिक जापानी कहानियाँ और निबंध। चुनौतीपूर्ण और समृद्ध।",
+    tutorialReadingDesc: "अपना स्तर चुनें, पढ़ने की एक साइट खोलें और एक छोटा पाठ पढ़ें।",
     copyDesc: "जापानी वाक्य पेस्ट करें और उसे एक-एक अक्षर करके नकल करें। उँगली या माउस से हर स्ट्रोक लिखें — GAKU स्ट्रोक का क्रम और आकार जाँचता है और लिखने का सही तरीका दिखाता है।",
     copyLabel: "नकल करने का पाठ",
     copyPlaceholder: "जापानी पाठ यहाँ पेस्ट करें (एक बार में अधिकतम 30 अक्षरों का अभ्यास)…",
@@ -10086,6 +10338,24 @@ const UI_TRANSLATIONS = {
     writeErrNotJa: "答えは日本語で書いてください。",
     writeErrFail: "答えをチェックできませんでした。もう一度お試しください。",
     tutorialWritingDesc: "今すぐ試してみましょう：「書き写し」を選び、日本語の文を貼り付けて、1文字ずつ筆順どおりに書いてみてください。GAKUが筆順をチェックします。または「質問」を選び、作文の問題を貼り付けて答えを入力すると、問題に合っているかを教え、合っていない場合は模範解答も表示します。",
+    readTitle: "読解",
+    readDesc: "レベルを選んで、読みもののサイトを開きましょう。パソコンでは、GAKU Readerでわからない単語の意味を確認できます。",
+    readYourLevel: "あなたのレベル",
+    readTagQuiz: "問題つき",
+    readTagStory: "物語",
+    readTagArticle: "記事",
+    readTagNews: "ニュース",
+    readDescTadoku: "レベル別の無料の物語です。レベル{lv}を選んでください。",
+    readDescJNihongo: "ふりがなと読解問題がついた短い文章です。",
+    readDescJrp: "レベル別の短い記事です。単語をクリックすると意味が見られます。",
+    readDescJlptRead: "JLPTのレベルに合わせた記事です。読むのは無料で、一部の追加機能は有料です。",
+    readDescWatanoc: "日本についての、やさしい日本語の無料ウェブマガジンです。",
+    readDescMatchaEasy: "旅行や文化の記事を、ふりがなつきのやさしい日本語で読めます。",
+    readDescMatchaJp: "旅行や文化の記事を、自然な日本語で読めます。",
+    readDescNhkEasy: "やさしい日本語で書かれたニュースです。最初にNHKの利用についての案内が出ることがあります。",
+    readDescNhk: "本物の日本語ニュースです。最初にNHKの利用についての案内が出ることがあります。",
+    readDescAozora: "日本の昔の小説やエッセイが無料で読めます。難しいですが読みごたえがあります。",
+    tutorialReadingDesc: "レベルを選んで、読みもののサイトを1つ開き、短い文章を1つ読んでみましょう。",
     copyDesc: "日本語の文を貼り付けて、1文字ずつ書き写しましょう。指またはマウスで1画ずつ書くと、GAKUが筆順と形をチェックし、正しい書き方を教えます。",
     copyLabel: "書き写す文",
     copyPlaceholder: "ここに日本語の文を貼り付け（1回に最大30文字まで練習できます）…",
@@ -10722,6 +10992,24 @@ const UI_TRANSLATIONS = {
     writeErrNotJa: "Lütfen cevabınızı Japonca yazın.",
     writeErrFail: "Cevabınız kontrol edilemedi. Lütfen tekrar deneyin.",
     tutorialWritingDesc: "Hemen deneyin: “Kopyalayarak yazma”yı seçin, bir Japonca cümle yapıştırın ve her karakteri vuruş vuruş yazın — GAKU vuruş sırasını kontrol eder. Ya da “Sorular”ı seçin, bir yazma sorusu yapıştırın, cevabınızı yazın; GAKU uygun olup olmadığını söyler (değilse örnek cevap gösterir).",
+    readTitle: "Okuma",
+    readDesc: "Seviyeni seç ve bir okuma sitesi aç. Bilgisayarda GAKU Reader bilmediğin kelimelerin anlamını gösterir.",
+    readYourLevel: "Senin seviyen",
+    readTagQuiz: "Sorulu",
+    readTagStory: "Hikâyeler",
+    readTagArticle: "Makaleler",
+    readTagNews: "Haberler",
+    readDescTadoku: "Seviyeye göre ücretsiz hikâye kitapları. {lv} seviyesini seç.",
+    readDescJNihongo: "Furigana ve anlama soruları içeren kısa metinler.",
+    readDescJrp: "Seviyene uygun kısa makaleler. Anlamını görmek için kelimeye tıkla.",
+    readDescJlptRead: "JLPT seviyelerine göre yazılmış makaleler. Okumak ücretsiz; bazı ek özellikler ücretli.",
+    readDescWatanoc: "Kolay Japonca ile Japonya hakkında ücretsiz bir web dergisi.",
+    readDescMatchaEasy: "Furiganalı, kolay Japonca ile gezi ve kültür yazıları.",
+    readDescMatchaJp: "Doğal Japonca ile gezi ve kültür yazıları.",
+    readDescNhkEasy: "Kolay Japonca haberler. NHK önce kullanım koşullarıyla ilgili bir bildirim gösterebilir.",
+    readDescNhk: "Gerçek Japonca haberler. NHK önce kullanım koşullarıyla ilgili bir bildirim gösterebilir.",
+    readDescAozora: "Ücretsiz klasik Japon hikâyeleri ve denemeleri. Zorlayıcı ve zengin.",
+    tutorialReadingDesc: "Seviyeni seç, bir okuma sitesi aç ve kısa bir metin oku.",
     copyDesc: "Bir Japonca cümle yapıştırın ve karakter karakter kopyalayın. Her vuruşu parmağınız veya fareyle yazın — GAKU vuruş sırasını ve şeklini kontrol eder ve doğru yazım şeklini gösterir.",
     copyLabel: "Kopyalanacak metin",
     copyPlaceholder: "Japonca metni buraya yapıştırın (her seferde en fazla 30 karakter çalışılır)…",
@@ -11358,6 +11646,24 @@ const UI_TRANSLATIONS = {
     writeErrNotJa: "कृपया आफ्नो उत्तर जापानीमा लेख्नुहोस्।",
     writeErrFail: "तपाईंको उत्तर जाँच्न सकिएन। कृपया फेरि प्रयास गर्नुहोस्।",
     tutorialWritingDesc: "अहिले प्रयास गर्नुहोस्: “नक्कल गरेर लेख्ने” छान्नुहोस्, जापानी वाक्य पेस्ट गर्नुहोस् र हरेक अक्षर स्ट्रोक-स्ट्रोक गरेर लेख्नुहोस् — GAKUले स्ट्रोकको क्रम जाँच्नेछ। वा “प्रश्नहरू” छान्नुहोस्, लेखन प्रश्न पेस्ट गर्नुहोस्, उत्तर लेख्नुहोस्, र GAKUले मिल्छ कि मिल्दैन भन्नेछ (नमिले नमूना उत्तर सहित)।",
+    readTitle: "पढाइ",
+    readDesc: "आफ्नो स्तर छान्नुहोस् र पढ्ने साइट खोल्नुहोस्। कम्प्युटरमा GAKU Reader ले नजानेका शब्दको अर्थ देखाउँछ।",
+    readYourLevel: "तपाईंको स्तर",
+    readTagQuiz: "प्रश्नसहित",
+    readTagStory: "कथाहरू",
+    readTagArticle: "लेखहरू",
+    readTagNews: "समाचार",
+    readDescTadoku: "स्तर अनुसारका निःशुल्क कथा पुस्तकहरू। स्तर {lv} छान्नुहोस्।",
+    readDescJNihongo: "फुरिगाना र बोध प्रश्न भएका छोटा पाठहरू।",
+    readDescJrp: "तपाईंको स्तरका छोटा लेखहरू। अर्थ हेर्न शब्दमा क्लिक गर्नुहोस्।",
+    readDescJlptRead: "JLPT स्तर अनुसार लेखिएका लेखहरू। पढ्न निःशुल्क; केही थप सुविधा सशुल्क छन्।",
+    readDescWatanoc: "सजिलो जापानी भाषामा जापानबारे निःशुल्क वेब पत्रिका।",
+    readDescMatchaEasy: "फुरिगानासहित सजिलो जापानीमा यात्रा र संस्कृतिका लेखहरू।",
+    readDescMatchaJp: "स्वाभाविक जापानीमा यात्रा र संस्कृतिका लेखहरू।",
+    readDescNhkEasy: "सजिलो जापानीमा समाचार। NHK ले पहिले प्रयोगका सर्तबारे सूचना देखाउन सक्छ।",
+    readDescNhk: "वास्तविक जापानी समाचार। NHK ले पहिले प्रयोगका सर्तबारे सूचना देखाउन सक्छ।",
+    readDescAozora: "निःशुल्क क्लासिक जापानी कथा र निबन्धहरू। चुनौतीपूर्ण र समृद्ध।",
+    tutorialReadingDesc: "आफ्नो स्तर छान्नुहोस्, एउटा पढ्ने साइट खोल्नुहोस् र एउटा छोटो पाठ पढ्नुहोस्।",
     copyDesc: "जापानी वाक्य पेस्ट गर्नुहोस् र एक-एक अक्षर गरेर नक्कल गर्नुहोस्। औँला वा माउसले हरेक स्ट्रोक लेख्नुहोस् — GAKUले स्ट्रोकको क्रम र आकार जाँच्छ र लेख्ने सही तरिका देखाउँछ।",
     copyLabel: "नक्कल गर्ने पाठ",
     copyPlaceholder: "जापानी पाठ यहाँ पेस्ट गर्नुहोस् (एक पटकमा बढीमा ३० अक्षरको अभ्यास)…",
@@ -11994,6 +12300,24 @@ const UI_TRANSLATIONS = {
     writeErrNotJa: "Pakisulat ang sagot mo sa Japanese.",
     writeErrFail: "Hindi masuri ang sagot mo. Pakisubukan muli.",
     tutorialWritingDesc: "Subukan ngayon: piliin ang “Pagkopya”, mag-paste ng pangungusap sa Japanese at isulat ang bawat karakter guhit-por-guhit — susuriin ng GAKU ang pagkakasunod-sunod ng mga guhit. O piliin ang “Mga Tanong”, mag-paste ng tanong sa pagsulat, i-type ang sagot mo, at sasabihin ng GAKU kung angkop ito (may halimbawang sagot kung hindi).",
+    readTitle: "Pagbasa",
+    readDesc: "Piliin ang level mo at magbukas ng reading site. Sa computer, ipinapakita ng GAKU Reader ang kahulugan ng mga salitang hindi mo alam.",
+    readYourLevel: "Level mo",
+    readTagQuiz: "May tanong",
+    readTagStory: "Mga kuwento",
+    readTagArticle: "Mga artikulo",
+    readTagNews: "Balita",
+    readDescTadoku: "Libreng mga aklat ng kuwento ayon sa level. Piliin ang level {lv}.",
+    readDescJNihongo: "Maiikling babasahin na may furigana at mga tanong sa pag-unawa.",
+    readDescJrp: "Maiikling artikulo para sa level mo. I-click ang salita para makita ang kahulugan.",
+    readDescJlptRead: "Mga artikulong isinulat para sa mga level ng JLPT. Libre ang pagbasa; may bayad ang ilang dagdag na feature.",
+    readDescWatanoc: "Libreng web magazine tungkol sa Japan na nasa madaling Japanese.",
+    readDescMatchaEasy: "Mga artikulo sa paglalakbay at kultura sa madaling Japanese, may furigana.",
+    readDescMatchaJp: "Mga artikulo sa paglalakbay at kultura sa natural na Japanese.",
+    readDescNhkEasy: "Balita sa madaling Japanese. Maaaring magpakita muna ang NHK ng paalala tungkol sa mga tuntunin.",
+    readDescNhk: "Totoong balitang Japanese. Maaaring magpakita muna ang NHK ng paalala tungkol sa mga tuntunin.",
+    readDescAozora: "Libreng klasikong kuwento at sanaysay ng Japan. Mahirap pero sulit.",
+    tutorialReadingDesc: "Piliin ang level mo, magbukas ng isang reading site at basahin ang isang maikling teksto.",
     copyDesc: "Mag-paste ng pangungusap sa Japanese at kopyahin ito isa-isang karakter. Isulat ang bawat guhit gamit ang daliri o mouse — susuriin ng GAKU ang pagkakasunod-sunod at hugis ng mga guhit at ipapakita ang tamang paraan ng pagsulat.",
     copyLabel: "Tekstong kokopyahin",
     copyPlaceholder: "I-paste dito ang tekstong Japanese (hanggang 30 karakter ang sinasanay bawat beses)…",
@@ -18175,6 +18499,18 @@ const EASY_GUIDES = {
       { sel: "write-check", opt: true, t: "③ ここを おすと 答えあわせ。", next: true },
     ] }
   },
+  reading: {
+    en: { title: "Reading", steps: [
+      { sel: "sub-reading", at: { tab:"resources", sub:"reading" }, t: "Tap “Reading”." },
+      { sel: "read-levels", t: "① Choose your level here.", next: true },
+      { sel: "read-open", t: "② Tap this button to open a reading site." },
+    ] },
+    ja: { title: "読解", steps: [
+      { sel: "sub-reading", at: { tab:"resources", sub:"reading" }, t: "「読解」を おす。" },
+      { sel: "read-levels", t: "① ここで レベルを えらぶ。", next: true },
+      { sel: "read-open", t: "② この ボタンを おして、読みものを ひらく。" },
+    ] }
+  },
   page_generic: {
     en: { title: "This page", steps: [ { sel: "@next", t: "You are here. Start from the top of this frame and go down.", next: true } ] },
     ja: { title: "このページ", steps: [ { sel: "@next", t: "ここが いまの ページです。この わく の 上から 下へ すすみます。", next: true } ] }
@@ -18223,7 +18559,7 @@ const EASY_GUIDES = {
   },
 };
 // Which section's "?" help opens which guide.
-const EASY_GUIDE_FOR = { schedule:"schedule", vocabulary:"vocabulary", res_content:"content", res_conversation:"conversation", res_pronunciation:"pronunciation", res_writing:"writing", res_writing_copy:"writing_copy" };
+const EASY_GUIDE_FOR = { schedule:"schedule", vocabulary:"vocabulary", res_reading:"reading", res_content:"content", res_conversation:"conversation", res_pronunciation:"pronunciation", res_writing:"writing", res_writing_copy:"writing_copy" };
 const EASY_LABELS = {
   en: { step:"Show me on the screen", next:"Next ▶", done:"Done 🎉", close:"Close", of:"{n} / {m}", show:"Show me how (1 min)", missing:"Can't see it here? Tap Next.", pick:"Pick one. I'll take you there and show you where to tap." },
   ja: { step:"画面で教えて", next:"つぎへ ▶", done:"おわり 🎉", close:"とじる", of:"{n} / {m}", show:"やり方を見る(1分)", missing:"見えないときは「つぎへ」を おす。", pick:"えらんで ください。そのページへ いって、おす場所を おしえます。" }
@@ -18580,7 +18916,7 @@ CRITICAL: Write your ENTIRE response in ${lang}. Every word, including labels an
             <p style={{ color:"#94a3b8", fontSize:fz(12), lineHeight:1.6, margin:"0 0 14px" }}>{(form?.preferredLang === "Japanese" ? EASY_LABELS.ja : (guideLabels(form?.preferredLang) || EASY_LABELS.en)).pick}</p>
             <div style={{ display:"flex", flexDirection:"column", gap:8 }}>
               {(guides || []).map(gid => {
-                const label = ({ start: "▶ " + (form?.preferredLang === "Japanese" ? EASY_GUIDES.start.ja.title : localizeGuide(EASY_GUIDES.start.en, form?.preferredLang, T).title), schedule: T.tabSchedule, vocabulary: T.tabVocabulary, content: T.tabPractice, conversation: "🎙️ " + T.convTitle, pronunciation: "🗣️ " + T.pronTitle, writing: "✍️ " + T.writeTitle })[gid];
+                const label = ({ start: "▶ " + (form?.preferredLang === "Japanese" ? EASY_GUIDES.start.ja.title : localizeGuide(EASY_GUIDES.start.en, form?.preferredLang, T).title), schedule: T.tabSchedule, vocabulary: T.tabVocabulary, reading: "📖 " + T.readTitle, content: T.tabPractice, conversation: "🎙️ " + T.convTitle, pronunciation: "🗣️ " + T.pronTitle, writing: "✍️ " + T.writeTitle })[gid];
                 return <button key={gid} onClick={() => onPickGuide && onPickGuide(gid)} style={{ ...S.btn, width:"100%", textAlign:"left", background:C.card, color:"#f1f5f9", border:`1px solid ${C.border}`, fontSize:fz(14), fontWeight:700 }}>{label} <span style={{ float:"right", color:C.purpleLight }}>👆</span></button>;
               })}
             </div>
@@ -19418,6 +19754,7 @@ const TUTORIAL_STEPS = [
   { tab: "vocabulary" },
   { tab: "vocabulary", labelKey: "tutLibraryTitle", descKey: "tutorialLibraryDesc" },
   { tab: "resources", subTab: "links" },
+  { tab: "resources", subTab: "reading" },
   { tab: "resources", subTab: "content" },
   { tab: "resources", subTab: "conversation" },
   { tab: "resources", subTab: "pronunciation" },
@@ -19429,6 +19766,7 @@ const TUTORIAL_DESC_KEYS = {
   "schedule:": "tutorialScheduleDesc",
   "vocabulary:": "tutorialVocabularyDesc",
   "resources:links": "tutorialResourcesDesc",
+  "resources:reading": "tutorialReadingDesc",
   "resources:content": "tutorialContentDesc",
   "resources:conversation": "tutorialConversationDesc",
   "resources:pronunciation": "tutorialPronunciationDesc",
@@ -19500,15 +19838,81 @@ function TutorialOverlay({ T, step, tab, resourceSubTab, tabsMeta, resourceSubTa
   return null;
 }
 
+// ─── READING (Resources → 📖 Reading) ────────────────────────────────────────────
+// Outside reading sites by JLPT level (links only — nothing is copied into GAKU). Checked 2026-11-28.
+// tadoku level ↔ JLPT follows https://tadoku.org/japanese/levels/ (1=N5, 2=N4, 3=N3, 4=N3–N2, 5=N2–N1).
+const READING_LEVELS = ["N5","N4","N3","N2","N1"];
+function readingLevelFor(jlpt) {
+  return ({ "Beginner":"N5", "Elementary":"N5", "Intermediate":"N4", "Upper Intermediate":"N3", "Advanced":"N2", "Mastery":"N1" })[jlpt]
+    || (READING_LEVELS.includes(jlpt) ? jlpt : "N5");
+}
+const readTadoku = (lv) => ({ name:"NPO多言語多読 (Tadoku) — 無料の読みもの", url:"https://tadoku.org/japanese/free-books/", tagKey:"readTagStory", descKey:"readDescTadoku", lv });
+const readJNihongo = (n) => ({ name:`J-nihongo — ${n.toUpperCase()} 読解`, url:`https://j-nihongo.com/reading/${n}/`, tagKey:"readTagQuiz", descKey:"readDescJNihongo" });
+const readJrp = (n) => ({ name:`Japanese Reading Practice — ${n.toUpperCase()}`, url:`https://japanesereadingpractice.com/jlpt/${n}`, tagKey:"readTagArticle", descKey:"readDescJrp" });
+const readWatanoc = (n) => ({ name:`Watanoc — ${n.toUpperCase()}`, url:`https://watanoc.com/tag/${n}`, tagKey:"readTagArticle", descKey:"readDescWatanoc" });
+const READ_MATCHA_EASY = { name:"MATCHA — やさしい日本語", url:"https://matcha-jp.com/easy", tagKey:"readTagArticle", descKey:"readDescMatchaEasy" };
+const READ_MATCHA_JP = { name:"MATCHA — 日本語", url:"https://matcha-jp.com/jp", tagKey:"readTagArticle", descKey:"readDescMatchaJp" };
+const READ_NHK_EASY = { name:"NHK やさしいことばニュース (NEWS WEB EASY)", url:"https://news.web.nhk/news/easy/", tagKey:"readTagNews", descKey:"readDescNhkEasy" };
+const READ_NHK = { name:"NHK ニュース", url:"https://news.web.nhk/newsweb", tagKey:"readTagNews", descKey:"readDescNhk" };
+const READ_AOZORA = { name:"青空文庫 (Aozora Bunko)", url:"https://www.aozora.gr.jp/index.html", tagKey:"readTagStory", descKey:"readDescAozora" };
+const readJlptRead = (n, path) => ({ name:`JLPT Read — ${n}`, url:`https://jlptread.com/articles/${path}`, tagKey:"readTagArticle", descKey:"readDescJlptRead" });
+const READING_SITES = {
+  N5: [ readJNihongo("n5"), readTadoku("Start – 1"), readJrp("n5"), readWatanoc("n5") ],
+  N4: [ readJNihongo("n4"), readTadoku("2"), READ_NHK_EASY, READ_MATCHA_EASY, readJrp("n4"), readWatanoc("n4") ],
+  N3: [ readJNihongo("n3"), readTadoku("3 – 4"), READ_NHK_EASY, READ_MATCHA_EASY, readJrp("n3"), readWatanoc("n3") ],
+  N2: [ readJNihongo("n2"), readJlptRead("N2","advanced/n2"), readTadoku("4 – 5"), READ_MATCHA_JP, READ_NHK ],
+  N1: [ readJNihongo("n1"), readJlptRead("N1","expert/n1"), readTadoku("5"), READ_NHK, READ_AOZORA ],
+};
+
+function ReadingSection({ form }) {
+  const T = useUITranslations(form?.preferredLang || "English");
+  const mine = readingLevelFor(form?.jlpt);
+  const [level, setLevel] = useState(mine);
+  useEffect(() => { setLevel(mine); }, [mine]);
+  return (
+    <div style={{ ...S.card, marginBottom:16, borderLeft:`3px solid ${C.teal}` }}>
+      <p style={{ color:C.teal, fontSize:fz(12), fontWeight:700, letterSpacing:1, marginBottom:4 }}>📖 {T.readTitle}</p>
+      <p style={{ color:"#ffffff", fontSize:fz(12), lineHeight:1.7, marginBottom:14 }}>{T.readDesc}</p>
+      <div data-guide="read-levels" style={{ display:"flex", gap:6, flexWrap:"wrap", marginBottom:8 }}>
+        {READING_LEVELS.map(l => (
+          <button key={l} onClick={()=>setLevel(l)} aria-pressed={level===l} style={{ ...S.btn, flex:1, minWidth:52, padding:"9px 6px", fontSize:fz(13), background:level===l?`linear-gradient(135deg,${C.teal},#0891b2)`:C.card, color:level===l?"#fff":"#94a3b8", border:`1.5px solid ${level===l?C.teal:C.border}` }}>
+            {l}{l===mine ? " ⭐" : ""}
+          </button>
+        ))}
+      </div>
+      <p style={{ color:"#94a3b8", fontSize:fz(11), margin:"0 0 14px" }}>⭐ {T.readYourLevel}</p>
+      <div style={{ display:"flex", flexDirection:"column", gap:12 }}>
+        {READING_SITES[level].map((r,i) => (
+          <div key={level + r.url} style={{ background:"rgba(6,182,212,0.04)", borderRadius:12, border:`1px solid rgba(6,182,212,0.15)`, padding:"14px 16px" }}>
+            <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", gap:8, marginBottom:6 }}>
+              <p style={{ color:"#f1f5f9", fontSize:fz(14), fontWeight:700, margin:0 }}>{r.name}</p>
+              <span style={{ color:C.teal, fontSize:fz(10), fontWeight:700, background:"rgba(6,182,212,0.1)", padding:"2px 8px", borderRadius:99, whiteSpace:"nowrap" }}>{T[r.tagKey]}</span>
+            </div>
+            <p style={{ color:"#94a3b8", fontSize:fz(12), margin:"0 0 10px", lineHeight:1.6 }}>{String(T[r.descKey] || "").replace("{lv}", r.lv || "")}</p>
+            <a data-guide={i===0 ? "read-open" : undefined} href={r.url} target="_blank" rel="noopener noreferrer" style={{ display:"block", textAlign:"center", padding:"9px", background:`linear-gradient(135deg,${C.teal},#0891b2)`, color:"#fff", borderRadius:8, fontSize:fz(12), fontWeight:700, textDecoration:"none" }}>
+              → {T.openResource} {r.name}
+            </a>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 // ---- Feature picker (after the tutorial): the student chooses which optional
 // tabs stay on their dashboard. Vocabulary + Feedback are always shown.
 // Stored per account in localStorage: JSON array of kept feature ids, or absent = show everything.
-const OPTIONAL_FEATURES = ["schedule","links","content","conversation","pronunciation","writing","milestones","jlpt"];
-const RESOURCE_FEATURES = ["links","content","conversation","pronunciation","writing"];
+const OPTIONAL_FEATURES = ["schedule","links","reading","content","conversation","pronunciation","writing","milestones","jlpt"];
+const RESOURCE_FEATURES = ["links","reading","content","conversation","pronunciation","writing"];
 function readVisibleFeatures() {
   try {
     const v = JSON.parse(localStorage.getItem(scopedKey("gaku_visible_features")) || "null");
-    return Array.isArray(v) ? v.filter(x => OPTIONAL_FEATURES.includes(x)) : null;
+    if (!Array.isArray(v)) return null;
+    const list = v.filter(x => OPTIONAL_FEATURES.includes(x));
+    // Reading was added 2026-11-28: a choice saved before then couldn't include it, so show it to students
+    // who kept any Activities feature, until they make a new choice in Customize.
+    if (!localStorage.getItem(scopedKey("gaku_reading_choice_made")) && !list.includes("reading") && list.some(x => RESOURCE_FEATURES.includes(x))) list.push("reading");
+    return list;
   } catch { return null; }
 }
 // ─── STUDY MODE (Enjoyable / Intensive) + LEARNING COACH ──────────────────────────
@@ -20051,7 +20455,7 @@ function FeaturePicker({ T, initial, onApply }) {
   const [checked, setChecked] = useState(initial || []);
   const labels = {
     schedule: T.tabSchedule, links: T.tabResources,
-    content: T.tabPractice || "From Content", conversation: T.convTitle || "Listening & Conversation",
+    reading: "📖 " + (T.readTitle || "Reading"), content: T.tabPractice || "From Content", conversation: T.convTitle || "Listening & Conversation",
     pronunciation: T.pronTitle || "Listening & Pronunciation", writing: T.writeTitle || "Writing", milestones: T.tabMilestones, jlpt: T.tabJlpt || "JLPT",
   };
   const toggle = id => setChecked(c => c.includes(id) ? c.filter(x => x !== id) : [...c, id]);
@@ -20173,7 +20577,7 @@ function Dashboard({ form, onEdit, onLevelUp, onSetWeek, onLogout, onDeleteAccou
   // Help -> pick a section: jump straight to that page, then start its guide there.
   const goToGuide = useCallback((id) => {
     if (id === "schedule" || id === "vocabulary") setTab(id);
-    else if (["content", "conversation", "pronunciation", "writing"].includes(id)) { setTab("resources"); setResourceSubTab(id); }
+    else if (["reading", "content", "conversation", "pronunciation", "writing"].includes(id)) { setTab("resources"); setResourceSubTab(id); }
     setShowHelp(false);
     setTimeout(() => startGuide(id), 300);
   }, []);
@@ -20505,6 +20909,7 @@ function Dashboard({ form, onEdit, onLevelUp, onSetWeek, onLogout, onDeleteAccou
     try {
       if (list === null) localStorage.removeItem(scopedKey("gaku_visible_features"));
       else localStorage.setItem(scopedKey("gaku_visible_features"), JSON.stringify(list));
+      localStorage.setItem(scopedKey("gaku_reading_choice_made"), "1");
     } catch {}
     setShowFeaturePicker(false);
     // Right after the Tutorial + feature choice: ask which study mode to try (only if never chosen).
@@ -20589,6 +20994,7 @@ function Dashboard({ form, onEdit, onLevelUp, onSetWeek, onLogout, onDeleteAccou
   ];
   const RESOURCE_SUBTABS = [
     { id:"links",    label: "🔗 " + (T.tabResources || "Resources") },
+    { id:"reading",  label: "📖 " + (T.readTitle || "Reading") },
     { id:"content",  label: T.tabPractice || "✨ From Content" },
     { id:"conversation", label: "🎙️ " + (T.convTitle || "Listening & Conversation") },
     { id:"pronunciation", label: "🗣️ " + (T.pronTitle || "Listening & Pronunciation") },
@@ -20597,7 +21003,7 @@ function Dashboard({ form, onEdit, onLevelUp, onSetWeek, onLogout, onDeleteAccou
 
   return (
     <div style={{ ...S.page, paddingBottom:60 }}>
-      {showHelp && <HelpModal onClose={()=>setShowHelp(false)} form={form} onPickGuide={goToGuide} guides={["start", ...(tabShown("schedule") ? ["schedule"] : []), ...(tabShown("vocabulary") ? ["vocabulary"] : []), ...["content","conversation","pronunciation","writing"].filter(featureShown)]} />}
+      {showHelp && <HelpModal onClose={()=>setShowHelp(false)} form={form} onPickGuide={goToGuide} guides={["start", ...(tabShown("schedule") ? ["schedule"] : []), ...(tabShown("vocabulary") ? ["vocabulary"] : []), ...["reading","content","conversation","pronunciation","writing"].filter(featureShown)]} />}
       {showFounder && (() => { const F = FOUNDER_TEXT[form?.preferredLang] || FOUNDER_TEXT["English"]; return (
         <div onClick={()=>setShowFounder(false)} style={{ position:"fixed", inset:0, background:"rgba(0,0,0,0.75)", zIndex:1000, overflowY:"auto", padding:"24px 14px" }}>
           <div onClick={e=>e.stopPropagation()} style={{ maxWidth:560, margin:"0 auto", background:C.card, border:`1px solid ${C.border}`, borderRadius:16, padding:"24px 22px", position:"relative" }}>
@@ -21004,6 +21410,8 @@ function Dashboard({ form, onEdit, onLevelUp, onSetWeek, onLogout, onDeleteAccou
 
             {resourceSubTab !== "writing" && <SectionHelp id={"res_" + resourceSubTab} lang={form?.preferredLang} autoOpen={!tutorialActive}
               onAction={(resourceSubTab === "conversation" || resourceSubTab === "pronunciation") ? (() => { try { window.dispatchEvent(new CustomEvent("gaku_open_mode_picker")); } catch {} }) : undefined} />}
+
+            {resourceSubTab==="reading" && <ReadingSection form={form} />}
 
             {resourceSubTab==="content" && <ContentAnalyzer form={form} onLevelUp={onLevelUp} />}
 

@@ -4,7 +4,7 @@
 // GUIDE_KEYS maps each English guide sentence to a short key. Tokens inside a translation are replaced with the
 // real (already translated) on-screen button names, shown in quotes:
 //   {fc} From Content tab   {conv} Conversation tab   {pron} Pronunciation tab   {wr} Writing tab
-//   {copy} "Copying down" button   {q} "Questions" button
+//   {rd} Reading tab   {copy} "Copying down" button   {q} "Questions" button
 export const GUIDE_KEYS = {
   "Tap here.": "tap",
   "Tap “From Content”.": "tapFc",
@@ -66,12 +66,17 @@ export const GUIDE_KEYS = {
   "Library": "tLibrary",
   "Folder": "tFolder",
   "Flashcards": "tFlash",
+  "Tap “Reading”.": "tapRead",
+  "① Choose your level here.": "readLv",
+  "② Tap this button to open a reading site.": "readOpen",
+  "Reading": "tReading",
 };
 
 const GUIDE_I18N = {
  "Spanish": {
   labels: { next:"Siguiente ▶", done:"Listo 🎉", close:"Cerrar", show:"Mira cómo (1 min)", missing:"¿No lo ves aquí? Toca Siguiente.", pick:"Elige uno. Te llevo allí y te muestro dónde tocar." },
   s: {
+   tapRead:"Toca {rd}.", readLv:"① Elige tu nivel aquí.", readOpen:"② Toca este botón para abrir un sitio de lectura.", tReading:"Lectura",
    tap:"Toca aquí.", tapFc:"Toca {fc}.", sample:"Ya hay un texto de ejemplo. O pega el tuyo.", big:"Toca este botón grande.", great:"Responde las preguntas. ¡Muy bien! 🎉",
    task:"Haz la tarea de hoy. Toca aquí cuando termines.", typeWord:"Escribe una palabra aquí.", search:"Toca aquí para buscar.", tapWord:"Toca la palabra.", saved:"Toca aquí. ¡Guardada! 🎉",
    pasteFc:"① PEGA AQUÍ. Pon en esta caja el texto en japonés que quieres estudiar. (Ya hay un ejemplo dentro.)", thenBig:"② Luego toca este botón grande.",
@@ -98,6 +103,7 @@ const GUIDE_I18N = {
  "French": {
   labels: { next:"Suivant ▶", done:"Terminé 🎉", close:"Fermer", show:"Voir comment (1 min)", missing:"Tu ne le vois pas ici ? Touche Suivant.", pick:"Choisis-en un. Je t'y emmène et je te montre où toucher." },
   s: {
+   tapRead:"Touche {rd}.", readLv:"① Choisis ton niveau ici.", readOpen:"② Touche ce bouton pour ouvrir un site de lecture.", tReading:"Lecture",
    tap:"Touche ici.", tapFc:"Touche {fc}.", sample:"Un texte d'exemple est prêt. Ou colle le tien.", big:"Touche ce grand bouton.", great:"Réponds aux questions. Bravo ! 🎉",
    task:"Fais la tâche du jour. Touche ici quand tu as fini.", typeWord:"Écris un mot ici.", search:"Touche ici pour chercher.", tapWord:"Touche le mot.", saved:"Touche ici. Enregistré ! 🎉",
    pasteFc:"① COLLE ICI. Mets dans cette zone le texte japonais que tu veux étudier. (Un exemple s'y trouve déjà.)", thenBig:"② Puis touche ce grand bouton.",
@@ -124,6 +130,7 @@ const GUIDE_I18N = {
  "German": {
   labels: { next:"Weiter ▶", done:"Fertig 🎉", close:"Schließen", show:"So geht's (1 Min.)", missing:"Hier nicht zu sehen? Tippe auf Weiter.", pick:"Wähle eins. Ich bringe dich hin und zeige dir, wo du tippen musst." },
   s: {
+   tapRead:"Tippe auf {rd}.", readLv:"① Wähle hier dein Niveau.", readOpen:"② Tippe auf diesen Button, um eine Leseseite zu öffnen.", tReading:"Lesen",
    tap:"Tippe hier.", tapFc:"Tippe auf {fc}.", sample:"Ein Beispieltext ist bereit. Oder füge deinen eigenen ein.", big:"Tippe auf diesen großen Button.", great:"Beantworte die Fragen. Super gemacht! 🎉",
    task:"Erledige die heutige Aufgabe. Tippe hier, wenn du fertig bist.", typeWord:"Tippe hier ein Wort ein.", search:"Tippe hier, um zu suchen.", tapWord:"Tippe auf das Wort.", saved:"Tippe hier. Gespeichert! 🎉",
    pasteFc:"① HIER EINFÜGEN. Füge den japanischen Text, den du lernen möchtest, in dieses Feld ein. (Ein Beispiel steht schon drin.)", thenBig:"② Tippe dann auf diesen großen Button.",
@@ -150,6 +157,7 @@ const GUIDE_I18N = {
  "Chinese (Simplified)": {
   labels: { next:"下一步 ▶", done:"完成 🎉", close:"关闭", show:"看看怎么用（1分钟）", missing:"这里看不到吗？点“下一步”。", pick:"选一个。我会带你过去，并告诉你点哪里。" },
   s: {
+   tapRead:"点 {rd}。", readLv:"① 在这里选择你的级别。", readOpen:"② 点这个按钮打开阅读网站。", tReading:"阅读",
    tap:"点这里。", tapFc:"点 {fc}。", sample:"已经准备好示例文本。也可以粘贴你自己的。", big:"点这个大按钮。", great:"回答问题。做得好！🎉",
    task:"完成今天的任务。做完后点这里。", typeWord:"在这里输入一个单词。", search:"点这里搜索。", tapWord:"点这个单词。", saved:"点这里。已保存！🎉",
    pasteFc:"① 粘贴到这里。把你想学习的日语文本放进这个框里。（里面已有示例。）", thenBig:"② 然后点这个大按钮。",
@@ -176,6 +184,7 @@ const GUIDE_I18N = {
  "Chinese (Traditional)": {
   labels: { next:"下一步 ▶", done:"完成 🎉", close:"關閉", show:"看看怎麼用(1分鐘)", missing:"這裡看不到嗎?點「下一步」。", pick:"選一個。我會帶你過去,並告訴你點哪裡。" },
   s: {
+   tapRead:"點 {rd}。", readLv:"① 在這裡選擇你的級別。", readOpen:"② 點這個按鈕開啟閱讀網站。", tReading:"閱讀",
    tap:"點這裡。", tapFc:"點 {fc}。", sample:"已經準備好範例文字。也可以貼上你自己的。", big:"點這個大按鈕。", great:"回答問題。做得好!🎉",
    task:"完成今天的任務。做完後點這裡。", typeWord:"在這裡輸入一個單字。", search:"點這裡搜尋。", tapWord:"點這個單字。", saved:"點這裡。已儲存!🎉",
    pasteFc:"① 貼到這裡。把你想學習的日文文字放進這個框裡。(裡面已有範例。)", thenBig:"② 然後點這個大按鈕。",
@@ -202,6 +211,7 @@ const GUIDE_I18N = {
  "Italian": {
   labels: { next:"Avanti ▶", done:"Fatto 🎉", close:"Chiudi", show:"Guarda come si fa (1 min)", missing:"Non lo vedi qui? Tocca Avanti.", pick:"Scegline uno. Ti porto lì e ti mostro dove toccare." },
   s: {
+   tapRead:"Tocca {rd}.", readLv:"① Scegli qui il tuo livello.", readOpen:"② Tocca questo pulsante per aprire un sito di lettura.", tReading:"Lettura",
    tap:"Tocca qui.", tapFc:"Tocca {fc}.", sample:"Un testo di esempio è pronto. Oppure incolla il tuo.", big:"Tocca questo grande pulsante.", great:"Rispondi alle domande. Ottimo lavoro! 🎉",
    task:"Fai il compito di oggi. Tocca qui quando hai finito.", typeWord:"Scrivi una parola qui.", search:"Tocca qui per cercare.", tapWord:"Tocca la parola.", saved:"Tocca qui. Salvata! 🎉",
    pasteFc:"① INCOLLA QUI. Metti in questa casella il testo giapponese che vuoi studiare. (Dentro c'è già un esempio.)", thenBig:"② Poi tocca questo grande pulsante.",
@@ -228,6 +238,7 @@ const GUIDE_I18N = {
  "Korean": {
   labels: { next:"다음 ▶", done:"완료 🎉", close:"닫기", show:"사용법 보기 (1분)", missing:"여기에 안 보이나요? 다음을 누르세요.", pick:"하나를 고르세요. 그 화면으로 가서 어디를 누를지 알려 드릴게요." },
   s: {
+   tapRead:"{rd}을(를) 누르세요.", readLv:"① 여기에서 레벨을 고르세요.", readOpen:"② 이 버튼을 눌러 읽기 사이트를 여세요.", tReading:"읽기",
    tap:"여기를 누르세요.", tapFc:"{fc}을(를) 누르세요.", sample:"예시 글이 준비되어 있어요. 직접 붙여 넣어도 돼요.", big:"이 큰 버튼을 누르세요.", great:"질문에 답하세요. 잘했어요! 🎉",
    task:"오늘의 과제를 하세요. 끝나면 여기를 누르세요.", typeWord:"여기에 단어 하나를 입력하세요.", search:"검색하려면 여기를 누르세요.", tapWord:"단어를 누르세요.", saved:"여기를 누르세요. 저장됐어요! 🎉",
    pasteFc:"① 여기에 붙여 넣기. 공부하고 싶은 일본어 글을 이 칸에 넣으세요. (예시가 이미 들어 있어요.)", thenBig:"② 그런 다음 이 큰 버튼을 누르세요.",
@@ -254,6 +265,7 @@ const GUIDE_I18N = {
  "Thai": {
   labels: { next:"ถัดไป ▶", done:"เสร็จแล้ว 🎉", close:"ปิด", show:"ดูวิธีใช้ (1 นาที)", missing:"มองไม่เห็นตรงนี้ใช่ไหม? แตะ ถัดไป", pick:"เลือกหนึ่งอย่าง ฉันจะพาไปที่นั่นและบอกว่าต้องแตะตรงไหน" },
   s: {
+   tapRead:"แตะ {rd}", readLv:"① เลือกระดับของคุณตรงนี้", readOpen:"② แตะปุ่มนี้เพื่อเปิดเว็บไซต์สำหรับอ่าน", tReading:"การอ่าน",
    tap:"แตะตรงนี้", tapFc:"แตะ {fc}", sample:"มีข้อความตัวอย่างพร้อมแล้ว หรือวางข้อความของคุณเองก็ได้", big:"แตะปุ่มใหญ่นี้", great:"ตอบคำถาม เก่งมาก! 🎉",
    task:"ทำงานของวันนี้ เสร็จแล้วแตะตรงนี้", typeWord:"พิมพ์คำศัพท์หนึ่งคำตรงนี้", search:"แตะตรงนี้เพื่อค้นหา", tapWord:"แตะที่คำศัพท์", saved:"แตะตรงนี้ บันทึกแล้ว! 🎉",
    pasteFc:"① วางตรงนี้ ใส่ข้อความภาษาญี่ปุ่นที่อยากเรียนลงในช่องนี้ (มีตัวอย่างอยู่ในช่องแล้ว)", thenBig:"② จากนั้นแตะปุ่มใหญ่นี้",
@@ -280,6 +292,7 @@ const GUIDE_I18N = {
  "Malay": {
   labels: { next:"Seterusnya ▶", done:"Selesai 🎉", close:"Tutup", show:"Tunjuk cara (1 minit)", missing:"Tak nampak di sini? Tekan Seterusnya.", pick:"Pilih satu. Saya bawa anda ke sana dan tunjukkan di mana hendak menekan." },
   s: {
+   tapRead:"Tekan {rd}.", readLv:"① Pilih tahap anda di sini.", readOpen:"② Tekan butang ini untuk membuka laman bacaan.", tReading:"Bacaan",
    tap:"Tekan di sini.", tapFc:"Tekan {fc}.", sample:"Teks contoh sudah sedia. Atau tampal teks anda sendiri.", big:"Tekan butang besar ini.", great:"Jawab soalan. Syabas! 🎉",
    task:"Buat tugasan hari ini. Tekan di sini apabila selesai.", typeWord:"Taip satu perkataan di sini.", search:"Tekan di sini untuk mencari.", tapWord:"Tekan perkataan itu.", saved:"Tekan di sini. Disimpan! 🎉",
    pasteFc:"① TAMPAL DI SINI. Letakkan teks Jepun yang ingin anda pelajari dalam kotak ini. (Contoh sudah ada di dalamnya.)", thenBig:"② Kemudian tekan butang besar ini.",
@@ -306,6 +319,7 @@ const GUIDE_I18N = {
  "Indonesian": {
   labels: { next:"Berikutnya ▶", done:"Selesai 🎉", close:"Tutup", show:"Lihat caranya (1 menit)", missing:"Tidak terlihat di sini? Ketuk Berikutnya.", pick:"Pilih satu. Saya antar ke sana dan tunjukkan di mana harus mengetuk." },
   s: {
+   tapRead:"Ketuk {rd}.", readLv:"① Pilih level Anda di sini.", readOpen:"② Ketuk tombol ini untuk membuka situs bacaan.", tReading:"Membaca",
    tap:"Ketuk di sini.", tapFc:"Ketuk {fc}.", sample:"Teks contoh sudah siap. Atau tempel teksmu sendiri.", big:"Ketuk tombol besar ini.", great:"Jawab pertanyaannya. Kerja bagus! 🎉",
    task:"Kerjakan tugas hari ini. Ketuk di sini kalau sudah selesai.", typeWord:"Ketik satu kata di sini.", search:"Ketuk di sini untuk mencari.", tapWord:"Ketuk katanya.", saved:"Ketuk di sini. Tersimpan! 🎉",
    pasteFc:"① TEMPEL DI SINI. Masukkan teks bahasa Jepang yang ingin kamu pelajari ke kotak ini. (Contohnya sudah ada di dalam.)", thenBig:"② Lalu ketuk tombol besar ini.",
@@ -332,6 +346,7 @@ const GUIDE_I18N = {
  "Vietnamese": {
   labels: { next:"Tiếp ▶", done:"Xong 🎉", close:"Đóng", show:"Xem cách dùng (1 phút)", missing:"Không thấy ở đây? Chạm Tiếp.", pick:"Chọn một mục. Mình sẽ đưa bạn đến đó và chỉ chỗ cần chạm." },
   s: {
+   tapRead:"Chạm vào {rd}.", readLv:"① Chọn trình độ của bạn ở đây.", readOpen:"② Chạm vào nút này để mở trang đọc.", tReading:"Đọc hiểu",
    tap:"Chạm vào đây.", tapFc:"Chạm {fc}.", sample:"Đã có sẵn một văn bản mẫu. Hoặc dán văn bản của bạn.", big:"Chạm vào nút lớn này.", great:"Trả lời các câu hỏi. Giỏi lắm! 🎉",
    task:"Làm nhiệm vụ hôm nay. Xong thì chạm vào đây.", typeWord:"Gõ một từ vào đây.", search:"Chạm vào đây để tìm.", tapWord:"Chạm vào từ đó.", saved:"Chạm vào đây. Đã lưu! 🎉",
    pasteFc:"① DÁN VÀO ĐÂY. Đặt đoạn văn tiếng Nhật bạn muốn học vào ô này. (Bên trong đã có bài mẫu.)", thenBig:"② Sau đó chạm vào nút lớn này.",
@@ -358,6 +373,7 @@ const GUIDE_I18N = {
  "Hindi": {
   labels: { next:"आगे ▶", done:"हो गया 🎉", close:"बंद करें", show:"तरीका देखें (1 मिनट)", missing:"यहाँ नहीं दिख रहा? आगे दबाएँ।", pick:"एक चुनें। मैं आपको वहाँ ले जाऊँगा और दिखाऊँगा कि कहाँ दबाना है।" },
   s: {
+   tapRead:"{rd} पर टैप करें।", readLv:"① यहाँ अपना स्तर चुनें।", readOpen:"② पढ़ने की साइट खोलने के लिए इस बटन पर टैप करें।", tReading:"पठन",
    tap:"यहाँ दबाएँ।", tapFc:"{fc} दबाएँ।", sample:"एक नमूना पाठ तैयार है। या अपना पाठ चिपकाएँ।", big:"इस बड़े बटन को दबाएँ।", great:"सवालों के जवाब दें। बहुत बढ़िया! 🎉",
    task:"आज का काम करें। पूरा होने पर यहाँ दबाएँ।", typeWord:"यहाँ एक शब्द लिखें।", search:"खोजने के लिए यहाँ दबाएँ।", tapWord:"शब्द पर दबाएँ।", saved:"यहाँ दबाएँ। सेव हो गया! 🎉",
    pasteFc:"① यहाँ चिपकाएँ। जो जापानी पाठ आप पढ़ना चाहते हैं, उसे इस बॉक्स में डालें। (अंदर एक नमूना पहले से है।)", thenBig:"② फिर इस बड़े बटन को दबाएँ।",
@@ -384,6 +400,7 @@ const GUIDE_I18N = {
  "Turkish": {
   labels: { next:"İleri ▶", done:"Bitti 🎉", close:"Kapat", show:"Nasıl yapılır göster (1 dk)", missing:"Burada görünmüyor mu? İleri'ye dokun.", pick:"Birini seç. Seni oraya götürüp nereye dokunacağını göstereyim." },
   s: {
+   tapRead:"{rd} öğesine dokun.", readLv:"① Seviyeni buradan seç.", readOpen:"② Bir okuma sitesi açmak için bu düğmeye dokun.", tReading:"Okuma",
    tap:"Buraya dokun.", tapFc:"{fc} öğesine dokun.", sample:"Örnek bir metin hazır. Ya da kendi metnini yapıştır.", big:"Bu büyük düğmeye dokun.", great:"Soruları yanıtla. Harika! 🎉",
    task:"Bugünün görevini yap. Bitirince buraya dokun.", typeWord:"Buraya bir kelime yaz.", search:"Aramak için buraya dokun.", tapWord:"Kelimeye dokun.", saved:"Buraya dokun. Kaydedildi! 🎉",
    pasteFc:"① BURAYA YAPIŞTIR. Çalışmak istediğin Japonca metni bu kutuya koy. (İçinde zaten bir örnek var.)", thenBig:"② Sonra bu büyük düğmeye dokun.",
@@ -410,6 +427,7 @@ const GUIDE_I18N = {
  "Nepali": {
   labels: { next:"अर्को ▶", done:"भयो 🎉", close:"बन्द गर्नुहोस्", show:"कसरी गर्ने हेर्नुहोस् (१ मिनेट)", missing:"यहाँ देखिएन? अर्को थिच्नुहोस्।", pick:"एउटा छान्नुहोस्। म तपाईंलाई त्यहाँ लैजान्छु र कहाँ थिच्ने देखाउँछु।" },
   s: {
+   tapRead:"{rd} थिच्नुहोस्।", readLv:"① यहाँ आफ्नो स्तर छान्नुहोस्।", readOpen:"② पढ्ने साइट खोल्न यो बटन थिच्नुहोस्।", tReading:"पढाइ",
    tap:"यहाँ थिच्नुहोस्।", tapFc:"{fc} थिच्नुहोस्।", sample:"नमुना पाठ तयार छ। वा आफ्नै पाठ टाँस्नुहोस्।", big:"यो ठूलो बटन थिच्नुहोस्।", great:"प्रश्नहरूको जवाफ दिनुहोस्। धेरै राम्रो! 🎉",
    task:"आजको काम गर्नुहोस्। सकिएपछि यहाँ थिच्नुहोस्।", typeWord:"यहाँ एउटा शब्द लेख्नुहोस्।", search:"खोज्न यहाँ थिच्नुहोस्।", tapWord:"शब्दमा थिच्नुहोस्।", saved:"यहाँ थिच्नुहोस्। सेभ भयो! 🎉",
    pasteFc:"① यहाँ टाँस्नुहोस्। तपाईंले पढ्न चाहेको जापानी पाठ यो बक्समा राख्नुहोस्। (भित्र नमुना पहिल्यै छ।)", thenBig:"② त्यसपछि यो ठूलो बटन थिच्नुहोस्।",
@@ -436,6 +454,7 @@ const GUIDE_I18N = {
  "Filipino": {
   labels: { next:"Susunod ▶", done:"Tapos na 🎉", close:"Isara", show:"Ipakita kung paano (1 min)", missing:"Hindi makita rito? I-tap ang Susunod.", pick:"Pumili ng isa. Dadalhin kita roon at ipapakita kung saan mag-tap." },
   s: {
+   tapRead:"I-tap ang {rd}.", readLv:"① Piliin dito ang level mo.", readOpen:"② I-tap ang button na ito para magbukas ng reading site.", tReading:"Pagbasa",
    tap:"I-tap dito.", tapFc:"I-tap ang {fc}.", sample:"May sample na teksto na. O i-paste ang sarili mong teksto.", big:"I-tap ang malaking button na ito.", great:"Sagutin ang mga tanong. Magaling! 🎉",
    task:"Gawin ang gawain ngayong araw. I-tap dito kapag tapos ka na.", typeWord:"Mag-type ng isang salita rito.", search:"I-tap dito para maghanap.", tapWord:"I-tap ang salita.", saved:"I-tap dito. Na-save na! 🎉",
    pasteFc:"① I-PASTE DITO. Ilagay sa kahong ito ang tekstong Japanese na gusto mong pag-aralan. (May sample na sa loob.)", thenBig:"② Pagkatapos, i-tap ang malaking button na ito.",
@@ -478,6 +497,7 @@ export function localizeGuide(enGuide, lang, T) {
     conv: stripEmoji(T && T.convTitle) || "Listening & Conversation",
     pron: stripEmoji(T && T.pronTitle) || "Listening & Pronunciation",
     wr: stripEmoji(T && T.writeTitle) || "Writing",
+    rd: stripEmoji(T && T.readTitle) || "Reading",
     copy: stripEmoji(T && T.writeModeCopy) || "Copying down",
     q: stripEmoji(T && T.writeModeQuestion) || "Questions",
   };
