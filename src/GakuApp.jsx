@@ -1204,7 +1204,7 @@ const UI_TRANSLATIONS = {
     copyWeak: "Practice these again",
     copyNewText: "New text",
     tutorialCompleteTitle: "All done! 🎉",
-    tutorialCompleteDesc: "You've seen all 4 main features of GAKU Master. You can replay this tour anytime from the 🎓 Tutorial button.",
+    tutorialCompleteDesc: "You've seen all 4 main features of GAKU Master.",
     tutorialCompleteBtn: "Start Studying",
     tutorialReaderCta: "📬 Get the GAKU Reader from your email!",
     featurePickerTitle: "Choose the features you want",
@@ -1291,6 +1291,7 @@ const UI_TRANSLATIONS = {
     modeGuideEscape: "The Feedback tab and the Mode button are never locked. Want it easier? Switch to Enjoyable mode anytime from the Mode button.",
     modeGuideOk: "Got it",
     featureCustomizeBtn: "Customize",
+    menuBtn: "Menu",
     feedbackTitle: "💬 Feedback & Opinion",
     feedbackSubtitle: "Tell us what you'd like improved or anything that's bothering you about the app. We read every message.",
     feedbackWarning: "If you post slander, abusive language, or discriminatory terms, your account will be suspended immediately. We accept no responsibility even if legal action results.",
@@ -1868,7 +1869,7 @@ const UI_TRANSLATIONS = {
     copyWeak: "À retravailler",
     copyNewText: "Nouveau texte",
     tutorialCompleteTitle: "Terminé ! 🎉",
-    tutorialCompleteDesc: "Vous avez découvert les 4 fonctionnalités principales de GAKU Master. Vous pouvez revoir cette visite à tout moment via le bouton 🎓 Tutoriel.",
+    tutorialCompleteDesc: "Vous avez découvert les 4 fonctionnalités principales de GAKU Master.",
     tutorialCompleteBtn: "Commencer à étudier",
     tutorialReaderCta: "📬 Recevez GAKU Reader par e-mail !",
     featurePickerTitle: "Choisissez les fonctionnalités que vous voulez",
@@ -1955,6 +1956,7 @@ const UI_TRANSLATIONS = {
     modeGuideEscape: "L'onglet Feedback et le bouton Mode ne sont jamais verrouillés. Envie de plus léger ? Passez en mode Enjoyable à tout moment avec le bouton Mode.",
     modeGuideOk: "Compris",
     featureCustomizeBtn: "Personnaliser",
+    menuBtn: "Menu",
     feedbackTitle: "💬 Retour & Avis",
     feedbackSubtitle: "Dites-nous ce que vous aimeriez voir amélioré ou ce qui vous dérange dans l'application. Nous lisons chaque message.",
     feedbackWarning: "En cas de diffamation, propos injurieux ou termes discriminatoires, votre compte sera immédiatement suspendu. Nous déclinons toute responsabilité, même en cas de poursuites judiciaires.",
@@ -2517,7 +2519,7 @@ const UI_TRANSLATIONS = {
     copyWeak: "Practica estos de nuevo",
     copyNewText: "Texto nuevo",
     tutorialCompleteTitle: "¡Listo! 🎉",
-    tutorialCompleteDesc: "Has visto las 4 funciones principales de GAKU Master. Puedes repetir este recorrido cuando quieras desde el botón 🎓 Tutorial.",
+    tutorialCompleteDesc: "Has visto las 4 funciones principales de GAKU Master.",
     tutorialCompleteBtn: "Empezar a estudiar",
     tutorialReaderCta: "📬 ¡Recibe GAKU Reader por correo!",
     featurePickerTitle: "Elige las funciones que quieres",
@@ -2604,6 +2606,7 @@ const UI_TRANSLATIONS = {
     modeGuideEscape: "La pestaña Feedback y el botón Mode nunca se bloquean. ¿Prefieres algo más suave? Cambia a Enjoyable cuando quieras con el botón Mode.",
     modeGuideOk: "Entendido",
     featureCustomizeBtn: "Personalizar",
+    menuBtn: "Menú",
     feedbackTitle: "💬 Comentarios y Opinión",
     feedbackSubtitle: "Cuéntanos qué te gustaría que mejoráramos o qué te molesta de la app. Leemos todos los mensajes.",
     feedbackWarning: "Si publicas difamación, lenguaje abusivo o términos discriminatorios, tu cuenta será suspendida de inmediato. No asumimos ninguna responsabilidad aunque se inicien acciones legales.",
@@ -3166,7 +3169,7 @@ const UI_TRANSLATIONS = {
     copyWeak: "Pratique estes de novo",
     copyNewText: "Novo texto",
     tutorialCompleteTitle: "Tudo pronto! 🎉",
-    tutorialCompleteDesc: "Você conheceu as 4 principais funções do GAKU Master. Você pode rever este tour a qualquer momento pelo botão 🎓 Tutorial.",
+    tutorialCompleteDesc: "Você conheceu as 4 principais funções do GAKU Master.",
     tutorialCompleteBtn: "Começar a estudar",
     tutorialReaderCta: "📬 Receba o GAKU Reader pelo e-mail!",
     featurePickerTitle: "Escolha os recursos que você quer",
@@ -3253,6 +3256,7 @@ const UI_TRANSLATIONS = {
     modeGuideEscape: "A aba Feedback e o botão Mode nunca são bloqueados. Quer algo mais leve? Mude para Enjoyable quando quiser pelo botão Mode.",
     modeGuideOk: "Entendi",
     featureCustomizeBtn: "Personalizar",
+    menuBtn: "Menu",
     feedbackTitle: "💬 Feedback e Opinião",
     feedbackSubtitle: "Conte-nos o que você gostaria que melhorássemos ou o que está incomodando você no app. Lemos todas as mensagens.",
     feedbackWarning: "Se você publicar difamação, linguagem abusiva ou termos discriminatórios, sua conta será suspensa imediatamente. Não assumimos nenhuma responsabilidade mesmo que haja ação judicial.",
@@ -3815,7 +3819,7 @@ const UI_TRANSLATIONS = {
     copyWeak: "Diese nochmal üben",
     copyNewText: "Neuer Text",
     tutorialCompleteTitle: "Fertig! 🎉",
-    tutorialCompleteDesc: "Du hast alle 4 Hauptfunktionen von GAKU Master kennengelernt. Du kannst diese Tour jederzeit über den 🎓 Tutorial-Button wiederholen.",
+    tutorialCompleteDesc: "Du hast alle 4 Hauptfunktionen von GAKU Master kennengelernt.",
     tutorialCompleteBtn: "Mit dem Lernen beginnen",
     tutorialReaderCta: "📬 Hol dir GAKU Reader per E-Mail!",
     featurePickerTitle: "Wähle die Funktionen, die du willst",
@@ -3902,6 +3906,7 @@ const UI_TRANSLATIONS = {
     modeGuideEscape: "Der Feedback-Tab und die Mode-Taste sind nie gesperrt. Lieber entspannter? Wechseln Sie jederzeit über die Mode-Taste zu Enjoyable.",
     modeGuideOk: "Verstanden",
     featureCustomizeBtn: "Anpassen",
+    menuBtn: "Menü",
     feedbackTitle: "💬 Feedback & Meinung",
     feedbackSubtitle: "Sag uns, was wir verbessern sollen oder was dich an der App stört. Wir lesen jede Nachricht.",
     feedbackWarning: "Bei Verleumdung, beleidigender Sprache oder diskriminierenden Begriffen wird dein Konto sofort gesperrt. Wir übernehmen keine Verantwortung, selbst wenn rechtliche Schritte eingeleitet werden.",
@@ -4464,7 +4469,7 @@ const UI_TRANSLATIONS = {
     copyWeak: "Esercitati di nuovo su questi",
     copyNewText: "Nuovo testo",
     tutorialCompleteTitle: "Fatto! 🎉",
-    tutorialCompleteDesc: "Hai visto tutte le 4 funzioni principali di GAKU Master. Puoi rivedere questo tour in qualsiasi momento dal pulsante 🎓 Tutorial.",
+    tutorialCompleteDesc: "Hai visto tutte le 4 funzioni principali di GAKU Master.",
     tutorialCompleteBtn: "Inizia a studiare",
     tutorialReaderCta: "📬 Ricevi GAKU Reader via e-mail!",
     featurePickerTitle: "Scegli le funzioni che vuoi",
@@ -4551,6 +4556,7 @@ const UI_TRANSLATIONS = {
     modeGuideEscape: "La scheda Feedback e il pulsante Mode non sono mai bloccati. Vuoi qualcosa di più leggero? Passa a Enjoyable quando vuoi dal pulsante Mode.",
     modeGuideOk: "Capito",
     featureCustomizeBtn: "Personalizza",
+    menuBtn: "Menu",
     feedbackTitle: "💬 Feedback e Opinioni",
     feedbackSubtitle: "Dicci cosa vorresti che migliorassimo o cosa ti disturba dell'app. Leggiamo ogni messaggio.",
     feedbackWarning: "In caso di diffamazione, linguaggio offensivo o termini discriminatori, il tuo account verrà sospeso immediatamente. Non ci assumiamo alcuna responsabilità anche in caso di azioni legali.",
@@ -5113,7 +5119,7 @@ const UI_TRANSLATIONS = {
     copyWeak: "再练习这些字",
     copyNewText: "新文字",
     tutorialCompleteTitle: "全部完成！🎉",
-    tutorialCompleteDesc: "你已经了解了GAKU Master的全部4个主要功能。随时可以通过🎓教程按钮重新观看导览。",
+    tutorialCompleteDesc: "你已经了解了GAKU Master的全部4个主要功能。",
     tutorialCompleteBtn: "开始学习",
     tutorialReaderCta: "📬 通过邮件领取GAKU Reader！",
     featurePickerTitle: "选择你想要的功能",
@@ -5200,6 +5206,7 @@ const UI_TRANSLATIONS = {
     modeGuideEscape: "Feedback 标签和 Mode 按钮永远不会被锁定。想轻松一点？随时可通过 Mode 按钮切换到 Enjoyable 模式。",
     modeGuideOk: "知道了",
     featureCustomizeBtn: "自定义",
+    menuBtn: "菜单",
     feedbackTitle: "💬 反馈与意见",
     feedbackSubtitle: "告诉我们你希望我们改进什么，或者对这个应用有什么不满意的地方。我们会阅读每一条留言。",
     feedbackWarning: "万一发布诽谤、辱骂或歧视性言论，账号将立即被停用。即使因此产生诉讼，我们也概不负责。",
@@ -5762,7 +5769,7 @@ const UI_TRANSLATIONS = {
     copyWeak: "再練習這些字",
     copyNewText: "新文字",
     tutorialCompleteTitle: "全部完成！🎉",
-    tutorialCompleteDesc: "你已經了解了GAKU Master的全部4個主要功能。隨時可以透過🎓教學按鈕重新觀看導覽。",
+    tutorialCompleteDesc: "你已經了解了GAKU Master的全部4個主要功能。",
     tutorialCompleteBtn: "開始學習",
     tutorialReaderCta: "📬 透過電子郵件領取GAKU Reader！",
     featurePickerTitle: "選擇你想要的功能",
@@ -5849,6 +5856,7 @@ const UI_TRANSLATIONS = {
     modeGuideEscape: "Feedback 分頁和 Mode 按鈕永遠不會被鎖定。想輕鬆一點？隨時可透過 Mode 按鈕切換到 Enjoyable 模式。",
     modeGuideOk: "知道了",
     featureCustomizeBtn: "自訂",
+    menuBtn: "選單",
     feedbackTitle: "💬 意見回饋與想法",
     feedbackSubtitle: "告訴我們你希望我們改進什麼，或是對這個應用程式有什麼不滿意的地方。我們會閱讀每一則留言。",
     feedbackWarning: "萬一發布誹謗、辱罵或歧視性言論，帳號將立即被停用。即使因此產生訴訟，我們也概不負責。",
@@ -6411,7 +6419,7 @@ const UI_TRANSLATIONS = {
     copyWeak: "다시 연습하기",
     copyNewText: "새 글",
     tutorialCompleteTitle: "완료! 🎉",
-    tutorialCompleteDesc: "GAKU Master의 4가지 주요 기능을 모두 살펴보셨습니다. 🎓 튜토리얼 버튼을 통해 언제든 다시 볼 수 있어요.",
+    tutorialCompleteDesc: "GAKU Master의 4가지 주요 기능을 모두 살펴보셨습니다.",
     tutorialCompleteBtn: "학습 시작하기",
     tutorialReaderCta: "📬 이메일에서 GAKU Reader를 받아보세요!",
     featurePickerTitle: "원하는 기능을 선택하세요",
@@ -6498,6 +6506,7 @@ const UI_TRANSLATIONS = {
     modeGuideEscape: "Feedback 탭과 Mode 버튼은 절대 잠기지 않습니다. 더 편하게 하고 싶다면 Mode 버튼에서 언제든 Enjoyable 모드로 바꿀 수 있어요.",
     modeGuideOk: "확인",
     featureCustomizeBtn: "맞춤 설정",
+    menuBtn: "메뉴",
     feedbackTitle: "💬 피드백 및 의견",
     feedbackSubtitle: "개선했으면 하는 점이나 앱에서 불편한 점을 알려주세요. 모든 메시지를 읽습니다.",
     feedbackWarning: "만약 명예훼손, 욕설, 차별적 표현을 작성할 경우 계정이 즉시 정지됩니다. 소송이 발생하더라도 일체의 책임을 지지 않습니다.",
@@ -7060,7 +7069,7 @@ const UI_TRANSLATIONS = {
     copyWeak: "ฝึกตัวเหล่านี้อีกครั้ง",
     copyNewText: "ข้อความใหม่",
     tutorialCompleteTitle: "เสร็จเรียบร้อย! 🎉",
-    tutorialCompleteDesc: "คุณได้ชมฟีเจอร์หลักทั้ง 4 ของ GAKU Master แล้ว สามารถดูทัวร์นี้ซ้ำได้ทุกเมื่อผ่านปุ่ม 🎓 บทแนะนำ",
+    tutorialCompleteDesc: "คุณได้ชมฟีเจอร์หลักทั้ง 4 ของ GAKU Master แล้ว",
     tutorialCompleteBtn: "เริ่มเรียนเลย",
     tutorialReaderCta: "📬 รับ GAKU Reader ทางอีเมล!",
     featurePickerTitle: "เลือกฟีเจอร์ที่คุณต้องการ",
@@ -7147,6 +7156,7 @@ const UI_TRANSLATIONS = {
     modeGuideEscape: "แท็บ Feedback และปุ่ม Mode จะไม่ถูกล็อกเลย อยากเรียนสบาย ๆ ขึ้น? สลับเป็นโหมด Enjoyable ได้ทุกเมื่อจากปุ่ม Mode",
     modeGuideOk: "เข้าใจแล้ว",
     featureCustomizeBtn: "ปรับแต่ง",
+    menuBtn: "เมนู",
     feedbackTitle: "💬 ความคิดเห็นและข้อเสนอแนะ",
     feedbackSubtitle: "บอกเราว่าคุณอยากให้ปรับปรุงอะไร หรือมีอะไรที่กวนใจคุณเกี่ยวกับแอปนี้ เราจะอ่านทุกข้อความ",
     feedbackWarning: "หากคุณโพสต์ข้อความหมิ่นประมาท คำหยาบคาย หรือถ้อยคำเลือกปฏิบัติ บัญชีของคุณจะถูกระงับทันที เราจะไม่รับผิดชอบใด ๆ แม้จะเกิดการฟ้องร้อง",
@@ -7709,7 +7719,7 @@ const UI_TRANSLATIONS = {
     copyWeak: "Latih semula ini",
     copyNewText: "Teks baharu",
     tutorialCompleteTitle: "Selesai! 🎉",
-    tutorialCompleteDesc: "Anda telah melihat kesemua 4 ciri utama GAKU Master. Anda boleh ulang tayang lawatan ini bila-bila masa melalui butang 🎓 Tutorial.",
+    tutorialCompleteDesc: "Anda telah melihat kesemua 4 ciri utama GAKU Master.",
     tutorialCompleteBtn: "Mula Belajar",
     tutorialReaderCta: "📬 Dapatkan GAKU Reader melalui e-mel anda!",
     featurePickerTitle: "Pilih ciri yang anda mahu",
@@ -7796,6 +7806,7 @@ const UI_TRANSLATIONS = {
     modeGuideEscape: "Tab Feedback dan butang Mode tidak pernah dikunci. Mahu lebih santai? Tukar ke mod Enjoyable bila-bila masa melalui butang Mode.",
     modeGuideOk: "Faham",
     featureCustomizeBtn: "Suaikan",
+    menuBtn: "Menu",
     feedbackTitle: "💬 Maklum Balas & Pendapat",
     feedbackSubtitle: "Beritahu kami apa yang anda mahu diperbaiki atau apa-apa yang mengganggu anda tentang aplikasi ini. Kami membaca setiap mesej.",
     feedbackWarning: "Sekiranya anda menulis fitnah, bahasa kesat, atau istilah diskriminasi, akaun anda akan digantung serta-merta. Kami tidak bertanggungjawab walaupun tindakan undang-undang diambil.",
@@ -8358,7 +8369,7 @@ const UI_TRANSLATIONS = {
     copyWeak: "Latih lagi yang ini",
     copyNewText: "Teks baru",
     tutorialCompleteTitle: "Selesai! 🎉",
-    tutorialCompleteDesc: "Anda telah melihat semua 4 fitur utama GAKU Master. Anda bisa memutar ulang tur ini kapan saja lewat tombol 🎓 Tutorial.",
+    tutorialCompleteDesc: "Anda telah melihat semua 4 fitur utama GAKU Master.",
     tutorialCompleteBtn: "Mulai Belajar",
     tutorialReaderCta: "📬 Dapatkan GAKU Reader lewat email Anda!",
     featurePickerTitle: "Pilih fitur yang kamu inginkan",
@@ -8445,6 +8456,7 @@ const UI_TRANSLATIONS = {
     modeGuideEscape: "Tab Feedback dan tombol Mode tidak pernah terkunci. Ingin lebih santai? Ganti ke mode Enjoyable kapan saja lewat tombol Mode.",
     modeGuideOk: "Mengerti",
     featureCustomizeBtn: "Sesuaikan",
+    menuBtn: "Menu",
     feedbackTitle: "💬 Masukan & Pendapat",
     feedbackSubtitle: "Beri tahu kami apa yang ingin Anda tingkatkan atau apa yang mengganggu Anda tentang aplikasi ini. Kami membaca setiap pesan.",
     feedbackWarning: "Jika Anda menulis fitnah, bahasa kasar, atau istilah diskriminatif, akun Anda akan langsung ditangguhkan. Kami tidak bertanggung jawab meskipun terjadi tuntutan hukum.",
@@ -9007,7 +9019,7 @@ const UI_TRANSLATIONS = {
     copyWeak: "Luyện lại những chữ này",
     copyNewText: "Văn bản mới",
     tutorialCompleteTitle: "Xong rồi! 🎉",
-    tutorialCompleteDesc: "Bạn đã xem qua cả 4 tính năng chính của GAKU Master. Bạn có thể xem lại chuyến tham quan này bất cứ lúc nào qua nút 🎓 Hướng dẫn.",
+    tutorialCompleteDesc: "Bạn đã xem qua cả 4 tính năng chính của GAKU Master.",
     tutorialCompleteBtn: "Bắt đầu học",
     tutorialReaderCta: "📬 Nhận GAKU Reader qua email của bạn!",
     featurePickerTitle: "Chọn các tính năng bạn muốn",
@@ -9094,6 +9106,7 @@ const UI_TRANSLATIONS = {
     modeGuideEscape: "Tab Feedback và nút Mode không bao giờ bị khoá. Muốn nhẹ nhàng hơn? Bạn có thể đổi sang chế độ Enjoyable bất cứ lúc nào bằng nút Mode.",
     modeGuideOk: "Đã hiểu",
     featureCustomizeBtn: "Tùy chỉnh",
+    menuBtn: "Menu",
     feedbackTitle: "💬 Phản hồi & Ý kiến",
     feedbackSubtitle: "Hãy cho chúng tôi biết bạn muốn cải thiện điều gì hoặc điều gì đang làm bạn khó chịu về ứng dụng. Chúng tôi đọc mọi tin nhắn.",
     feedbackWarning: "Nếu bạn viết nội dung phỉ báng, ngôn từ lăng mạ hoặc phân biệt đối xử, tài khoản của bạn sẽ bị đình chỉ ngay lập tức. Chúng tôi không chịu bất kỳ trách nhiệm nào kể cả khi có kiện tụng xảy ra.",
@@ -9656,7 +9669,7 @@ const UI_TRANSLATIONS = {
     copyWeak: "इन्हें फिर से अभ्यास करें",
     copyNewText: "नया पाठ",
     tutorialCompleteTitle: "सब हो गया! 🎉",
-    tutorialCompleteDesc: "आपने GAKU Master के सभी 4 मुख्य फीचर्स देख लिए हैं। आप 🎓 ट्यूटोरियल बटन से कभी भी यह टूर दोबारा देख सकते हैं।",
+    tutorialCompleteDesc: "आपने GAKU Master के सभी 4 मुख्य फीचर्स देख लिए हैं।",
     tutorialCompleteBtn: "पढ़ाई शुरू करें",
     tutorialReaderCta: "📬 ईमेल से GAKU Reader प्राप्त करें!",
     featurePickerTitle: "अपनी पसंद की सुविधाएँ चुनें",
@@ -9743,6 +9756,7 @@ const UI_TRANSLATIONS = {
     modeGuideEscape: "Feedback टैब और Mode बटन कभी लॉक नहीं होते। आसान चाहिए? Mode बटन से कभी भी Enjoyable मोड में बदलें।",
     modeGuideOk: "समझ गया",
     featureCustomizeBtn: "अनुकूलित करें",
+    menuBtn: "मेनू",
     feedbackTitle: "💬 प्रतिक्रिया और राय",
     feedbackSubtitle: "हमें बताएं कि आप ऐप में क्या सुधार चाहते हैं या आपको क्या परेशान कर रहा है। हम हर संदेश पढ़ते हैं।",
     feedbackWarning: "यदि आप मानहानि, अपमानजनक भाषा या भेदभावपूर्ण शब्दों का उपयोग करते हैं, तो आपका खाता तुरंत निलंबित कर दिया जाएगा। कानूनी कार्रवाई होने पर भी हम कोई ज़िम्मेदारी नहीं लेंगे।",
@@ -10305,7 +10319,7 @@ const UI_TRANSLATIONS = {
     copyWeak: "もう一度練習する文字",
     copyNewText: "新しい文",
     tutorialCompleteTitle: "完了しました！🎉",
-    tutorialCompleteDesc: "GAKU Masterの4つの主な機能をすべて見てもらいました。🎓チュートリアルボタンからいつでもこのツアーをもう一度見られます。",
+    tutorialCompleteDesc: "GAKU Masterの4つの主な機能をすべて見てもらいました。",
     tutorialCompleteBtn: "勉強を始める",
     tutorialReaderCta: "📬 メールからGAKU Master Readerを受け取ろう！",
     featurePickerTitle: "使いたい機能を選んでください",
@@ -10392,6 +10406,7 @@ const UI_TRANSLATIONS = {
     modeGuideEscape: "FeedbackタブとModeボタンはロックされません。もっとゆるくしたいときは、Modeボタンからいつでも Enjoyable mode に変えられます。",
     modeGuideOk: "わかりました",
     featureCustomizeBtn: "カスタマイズ",
+    menuBtn: "メニュー",
     feedbackTitle: "💬 フィードバック・ご意見",
     feedbackSubtitle: "アプリで改善してほしい点や気になる点を教えてください。すべてのメッセージに目を通しています。",
     feedbackWarning: "万が一誹謗中傷、暴言、差別用語などを書いた場合は直ちにアカウント停止。訴訟が起こっても一切の責任は負いません。",
@@ -10954,7 +10969,7 @@ const UI_TRANSLATIONS = {
     copyWeak: "Bunları tekrar çalışın",
     copyNewText: "Yeni metin",
     tutorialCompleteTitle: "Tamamlandı! 🎉",
-    tutorialCompleteDesc: "GAKU Master'ın 4 ana özelliğinin tamamını gördünüz. Bu turu istediğiniz zaman 🎓 Eğitim düğmesinden tekrar izleyebilirsiniz.",
+    tutorialCompleteDesc: "GAKU Master'ın 4 ana özelliğinin tamamını gördünüz.",
     tutorialCompleteBtn: "Çalışmaya Başla",
     tutorialReaderCta: "📬 GAKU Reader'ı e-postanızdan alın!",
     featurePickerTitle: "İstediğin özellikleri seç",
@@ -11041,6 +11056,7 @@ const UI_TRANSLATIONS = {
     modeGuideEscape: "Feedback sekmesi ve Mode düğmesi asla kilitlenmez. Daha rahat mı istiyorsunuz? Mode düğmesinden istediğiniz zaman Enjoyable moduna geçebilirsiniz.",
     modeGuideOk: "Anladım",
     featureCustomizeBtn: "Özelleştir",
+    menuBtn: "Menü",
     feedbackTitle: "💬 Geri Bildirim ve Görüş",
     feedbackSubtitle: "Neyi iyileştirmemizi istediğinizi veya uygulamayla ilgili sizi rahatsız eden bir şeyi bize bildirin. Her mesajı okuyoruz.",
     feedbackWarning: "İftira, hakaret içeren dil veya ayrımcı ifadeler yazmanız durumunda hesabınız derhal askıya alınacaktır. Dava açılsa dahi hiçbir sorumluluk kabul etmiyoruz.",
@@ -11603,7 +11619,7 @@ const UI_TRANSLATIONS = {
     copyWeak: "यी फेरि अभ्यास गर्नुहोस्",
     copyNewText: "नयाँ पाठ",
     tutorialCompleteTitle: "सबै पूरा भयो! 🎉",
-    tutorialCompleteDesc: "तपाईंले GAKU Master का सबै ४ मुख्य सुविधाहरू हेर्नुभयो। तपाईं जुनसुकै बेला 🎓 ट्युटोरियल बटनबाट यो भ्रमण फेरि हेर्न सक्नुहुन्छ।",
+    tutorialCompleteDesc: "तपाईंले GAKU Master का सबै ४ मुख्य सुविधाहरू हेर्नुभयो।",
     tutorialCompleteBtn: "अध्ययन सुरु गर्नुहोस्",
     tutorialReaderCta: "📬 इमेलबाट GAKU Reader प्राप्त गर्नुहोस्!",
     featurePickerTitle: "आफूलाई चाहिने सुविधाहरू छान्नुहोस्",
@@ -11690,6 +11706,7 @@ const UI_TRANSLATIONS = {
     modeGuideEscape: "Feedback ट्याब र Mode बटन कहिल्यै लक हुँदैनन्। सजिलो चाहनुहुन्छ? Mode बटनबाट जुनसुकै बेला Enjoyable मोडमा बदल्नुहोस्।",
     modeGuideOk: "बुझें",
     featureCustomizeBtn: "अनुकूलन गर्नुहोस्",
+    menuBtn: "मेनु",
     feedbackTitle: "💬 प्रतिक्रिया र विचार",
     feedbackSubtitle: "एपमा के सुधार गरिदिए हुन्थ्यो वा के कुराले तपाईंलाई अप्ठ्यारो पारिरहेको छ भनी हामीलाई बताउनुहोस्। हामी हरेक सन्देश पढ्छौं।",
     feedbackWarning: "यदि तपाईंले मानहानि, अपमानजनक भाषा वा भेदभावपूर्ण शब्द लेख्नुभयो भने तपाईंको खाता तुरुन्तै निलम्बन गरिनेछ। मुद्दा परे पनि हामी कुनै जिम्मेवारी लिने छैनौं।",
@@ -12252,7 +12269,7 @@ const UI_TRANSLATIONS = {
     copyWeak: "Sanayin muli ang mga ito",
     copyNewText: "Bagong teksto",
     tutorialCompleteTitle: "Tapos na! 🎉",
-    tutorialCompleteDesc: "Nakita mo na ang lahat ng 4 pangunahing feature ng GAKU Master. Puwede mong ulitin ang tour na ito anumang oras gamit ang 🎓 Tutorial button.",
+    tutorialCompleteDesc: "Nakita mo na ang lahat ng 4 pangunahing feature ng GAKU Master.",
     tutorialCompleteBtn: "Simulan ang Pag-aaral",
     tutorialReaderCta: "📬 Kunin ang GAKU Reader mula sa iyong email!",
     featurePickerTitle: "Piliin ang mga feature na gusto mo",
@@ -12339,6 +12356,7 @@ const UI_TRANSLATIONS = {
     modeGuideEscape: "Hindi kailanman nilo-lock ang Feedback tab at ang Mode button. Gusto ng mas magaan? Lumipat sa Enjoyable mode anumang oras gamit ang Mode button.",
     modeGuideOk: "Sige",
     featureCustomizeBtn: "I-customize",
+    menuBtn: "Menu",
     feedbackTitle: "💬 Puna at Opinyon",
     feedbackSubtitle: "Sabihin sa amin kung ano ang gusto mong pagbutihin o anumang bagay na nakakaabala sa iyo tungkol sa app. Binabasa namin ang bawat mensahe.",
     feedbackWarning: "Kung magsulat ka ng paninirang-puri, mapanlait na wika, o mga diskriminasyong termino, agad na sususpindihin ang iyong account. Wala kaming pananagutan kahit magkaroon ng legal na aksyon.",
@@ -20444,6 +20462,9 @@ function Dashboard({ form, onEdit, onLevelUp, onSetWeek, onLogout, onDeleteAccou
   const [milestones, setMilestones] = useState(() => buildMilestones(form));
   const [msDone, setMsDone] = useState([]);
   const [showHelp, setShowHelp] = useState(false);
+  // Top menu (header buttons) can be shown / hidden with one button; the choice is remembered on this device.
+  const [menuOpen, setMenuOpen] = useState(() => { try { return localStorage.getItem("gaku_menu_hidden") !== "1"; } catch { return true; } });
+  const toggleMenu = () => { const next = !menuOpen; setMenuOpen(next); try { localStorage.setItem("gaku_menu_hidden", next ? "0" : "1"); } catch {} };
   const [visibleFeatures, setVisibleFeatures] = useState(readVisibleFeatures);
   const [showFeaturePicker, setShowFeaturePicker] = useState(false);
   // Study mode (Enjoyable / Intensive / Intensive trial) — chosen after the Tutorial, changeable via the Mode button.
@@ -20982,8 +21003,9 @@ function Dashboard({ form, onEdit, onLevelUp, onSetWeek, onLogout, onDeleteAccou
         />
       )}
 
-      <div style={{ background:"rgba(10,15,30,0.95)", borderBottom:`1px solid ${C.border}`, padding:"calc(14px + env(safe-area-inset-top, 0px)) calc(20px + env(safe-area-inset-right, 0px)) 14px calc(20px + env(safe-area-inset-left, 0px))", position:"var(--gaku-header-pos, sticky)", top:0, zIndex:100, display:"flex", justifyContent:"space-between", alignItems:"center" }}>
-        <div>
+      <div style={{ background:"rgba(10,15,30,0.95)", borderBottom:`1px solid ${C.border}`, padding:"calc(14px + env(safe-area-inset-top, 0px)) calc(20px + env(safe-area-inset-right, 0px)) 14px calc(20px + env(safe-area-inset-left, 0px))", position:"var(--gaku-header-pos, sticky)", top:0, zIndex:100 }}>
+        <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", gap:12 }}>
+        <div style={{ minWidth:0 }}>
           <p style={{ color:C.purpleLight, fontSize:fz(10), fontWeight:700, letterSpacing:2, margin:0 }}>{T.gakuSelfStudy}</p>
           <div style={{ display:"flex", alignItems:"center", gap:8 }}>
             <p style={{ color:"#f1f5f9", fontSize:fz(14), fontWeight:800, margin:0 }}>{form.name}'s {T.studyPlan}</p>
@@ -20994,7 +21016,10 @@ function Dashboard({ form, onEdit, onLevelUp, onSetWeek, onLogout, onDeleteAccou
             )}
           </div>
         </div>
-        <div style={{ display:"flex", gap:8, flexWrap:"wrap" }}>
+          <button onClick={toggleMenu} aria-expanded={menuOpen} aria-controls="gaku-top-menu" style={{ ...S.btn, flexShrink:0, whiteSpace:"nowrap", padding:"8px 14px", background:menuOpen?"rgba(168,85,247,0.2)":C.card, color:menuOpen?C.purpleLight:"#94a3b8", border:`1px solid ${menuOpen?C.purpleLight:C.border}`, fontSize:fz(12) }}>{"\u2630"} {T.menuBtn || "Menu"} {menuOpen ? "\u25B2" : "\u25BC"}</button>
+        </div>
+        {menuOpen && (
+        <div id="gaku-top-menu" style={{ display:"flex", gap:8, flexWrap:"wrap", marginTop:12 }}>
           <TextSizeButtons />
           <button onClick={()=>{ const next = themeMode === "light" ? "dark" : "light"; applyTheme(next); setThemeMode(next); }} aria-label={themeMode === "light" ? "Dark mode" : "Light mode"} title={themeMode === "light" ? "Dark mode" : "Light mode"} style={{ ...S.btn, padding:"8px 14px", background:C.card, color:"#94a3b8", border:`1px solid ${C.border}`, fontSize:fz(12) }}>{themeMode === "light" ? "\u{1F319}" : "\u2600\uFE0F"}</button>
           <button onClick={()=>setShowFounder(true)} style={{ ...S.btn, padding:"8px 14px", background:C.card, color:"#94a3b8", border:`1px solid ${C.border}`, fontSize:fz(12) }}>{"\u{1F464}"} {(FOUNDER_TEXT[form?.preferredLang] || FOUNDER_TEXT["English"])[0]}</button>
@@ -21007,8 +21032,6 @@ function Dashboard({ form, onEdit, onLevelUp, onSetWeek, onLogout, onDeleteAccou
               <button onClick={toggleReminders} style={{ ...S.btn, padding:"8px 14px", background:on?"rgba(168,85,247,0.2)":C.card, color:on?C.purpleLight:"#94a3b8", border:`1px solid ${on?C.purpleLight:C.border}`, fontSize:fz(12) }}>{on ? "🔔" : "🔕"} {on ? rc.on : rc.off}</button>
             );
           })()}
-          <button onClick={()=>{ setTutorialStep(0); setTutorialActive(true); }} style={{ ...S.btn, padding:"8px 14px", background:"transparent", border:`1px solid ${C.purpleLight}`, color:C.purpleLight, fontSize:fz(12) }}>{T.tutorialBtn}</button>
-          <button onClick={()=>setShowHelp(true)} style={{ ...S.btn, padding:"8px 14px", background:`linear-gradient(135deg,${C.amber},#d97706)`, color:"#fff", fontSize:fz(12) }}>{T.help}</button>
           <button onClick={onEdit} style={{ ...S.btn, padding:"8px 14px", background:C.card, color:"#94a3b8", border:`1px solid ${C.border}`, fontSize:fz(12) }}>{T.editProfile}</button>
           {onLogout && (
             <button onClick={onLogout} style={{ ...S.btn, padding:"8px 14px", background:C.card, color:"#94a3b8", border:`1px solid ${C.border}`, fontSize:fz(12) }}>
@@ -21021,6 +21044,7 @@ function Dashboard({ form, onEdit, onLevelUp, onSetWeek, onLogout, onDeleteAccou
             </button>
           )}
         </div>
+        )}
       </div>
 
       {isTranslating && (
