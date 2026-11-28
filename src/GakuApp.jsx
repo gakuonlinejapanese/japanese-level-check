@@ -19770,26 +19770,43 @@ const READING_SITES = {
   N2: [ readJNihongo("n2"), readTadoku("4 – 5"), READ_MATCHA_JP ],
   N1: [ readJNihongo("n1"), readTadoku("5"), READ_AOZORA ],
 };
+// Only students with a "Pass JLPT N1–N5" goal see N5–N1. Everyone else sees the app's own six levels
+// (the same names as the profile's level choice). Beginner starts below N5 (Tadoku Start–0).
+const READING_SITES_GENERAL = {
+  "Beginner": [ readTadoku("Start – 0"), readJNihongo("n5"), readWatanoc("n5") ],
+  "Elementary": [ readJNihongo("n5"), readTadoku("1"), readWatanoc("n5") ],
+  "Intermediate": READING_SITES.N4,
+  "Upper Intermediate": READING_SITES.N3,
+  "Advanced": READING_SITES.N2,
+  "Mastery": READING_SITES.N1,
+};
+// Site names without the JLPT code, for students who see the six general levels.
+const readingNameNoJlpt = (name) => name.replace(/ — N[1-5]( 読解)?$/, (m, kind) => kind ? " —" + kind : "");
 
 function ReadingSection({ form }) {
   const T = useUITranslations(form?.preferredLang || "English");
-  const mine = readingLevelFor(form?.jlpt);
-  const [level, setLevel] = useState(mine);
-  useEffect(() => { setLevel(mine); }, [mine]);
+  const jlptStudent = isJlptTargetGoal(form?.goal);
+  const sites = jlptStudent ? READING_SITES : READING_SITES_GENERAL;
+  const levels = Object.keys(sites);
+  const own = toEstimationLevel(form?.jlpt);
+  const mine = jlptStudent ? readingLevelFor(form?.jlpt) : (levels.includes(own) ? own : "Beginner");
+  const [picked, setPicked] = useState(mine);
+  useEffect(() => { setPicked(mine); }, [mine]);
+  const level = levels.includes(picked) ? picked : mine;
   return (
     <div style={{ ...S.card, marginBottom:16, borderLeft:`3px solid ${C.teal}` }}>
       <p style={{ color:C.teal, fontSize:fz(12), fontWeight:700, letterSpacing:1, marginBottom:4 }}>📖 {T.readTitle}</p>
       <p style={{ color:"#ffffff", fontSize:fz(12), lineHeight:1.7, marginBottom:14 }}>{T.readDesc}</p>
-      <div data-guide="read-levels" style={{ display:"flex", gap:6, flexWrap:"wrap", marginBottom:8 }}>
-        {READING_LEVELS.map(l => (
-          <button key={l} onClick={()=>setLevel(l)} aria-pressed={level===l} style={{ ...S.btn, flex:1, minWidth:52, padding:"9px 6px", fontSize:fz(13), background:level===l?`linear-gradient(135deg,${C.teal},#0891b2)`:C.card, color:level===l?"#fff":"#94a3b8", border:`1.5px solid ${level===l?C.teal:C.border}` }}>
+      <div data-guide="read-levels" style={{ display:"grid", gridTemplateColumns:`repeat(auto-fit, minmax(${jlptStudent ? 52 : 130}px, 1fr))`, gap:6, marginBottom:8 }}>
+        {levels.map(l => (
+          <button key={l} onClick={()=>setPicked(l)} aria-pressed={level===l} style={{ ...S.btn, minWidth:0, padding:"9px 6px", fontSize:fz(13), background:level===l?`linear-gradient(135deg,${C.teal},#0891b2)`:C.card, color:level===l?"#fff":"#94a3b8", border:`1.5px solid ${level===l?C.teal:C.border}` }}>
             {l}{l===mine ? " ⭐" : ""}
           </button>
         ))}
       </div>
       <p style={{ color:"#94a3b8", fontSize:fz(11), margin:"0 0 14px" }}>⭐ {T.readYourLevel}</p>
       <div style={{ display:"flex", flexDirection:"column", gap:12 }}>
-        {READING_SITES[level].map((r,i) => (
+        {sites[level].map(site => jlptStudent ? site : { ...site, name: readingNameNoJlpt(site.name) }).map((r,i) => (
           <div key={level + r.url} style={{ background:"rgba(6,182,212,0.04)", borderRadius:12, border:`1px solid rgba(6,182,212,0.15)`, padding:"14px 16px" }}>
             <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", gap:8, marginBottom:6 }}>
               <p style={{ color:"#f1f5f9", fontSize:fz(14), fontWeight:700, margin:0 }}>{r.name}</p>
