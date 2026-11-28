@@ -44,7 +44,6 @@ export const GUIDE_KEYS = {
   "② TYPE YOUR ANSWER HERE, in Japanese.": "typeAns",
   "③ Tap here. GAKU checks your answer against the question.": "check",
   "You are here. Start from the top of this frame and go down.": "generic",
-  "Use the box inside this frame to paste subtitles, then follow the buttons.": "subtitles",
   "Your progress checks are in this frame. Tap a card to open it.": "milestones",
   "Your JLPT results are in this frame.": "jlpt",
   "Write your message in this frame and send it.": "feedback",
@@ -60,7 +59,6 @@ export const GUIDE_KEYS = {
   "Schedule": "tSchedule",
   "Vocabulary": "tVocab",
   "This page": "tPage",
-  "Subtitles": "tSubtitles",
   "Milestones": "tMilestones",
   "Feedback": "tFeedback",
   "Links": "tLinks",
@@ -88,13 +86,13 @@ const GUIDE_I18N = {
    inCopy2:"Estás en {copy}: copia una frase a mano. (Toca {q} para responder una pregunta.)", pickStyle:"Elige un estilo. {copy} = copiar una frase a mano. {q} = escribir una respuesta.",
    pasteHere:"① PEGA AQUÍ. Pon una frase corta en japonés en esta caja.", pasteQ:"① PEGA AQUÍ LA PREGUNTA. Pon en esta caja una pregunta de un examen o de un sitio web.",
    draw:"② Toca aquí. ¡Luego dibuja con el dedo!", typeAns:"② ESCRIBE AQUÍ TU RESPUESTA, en japonés.", check:"③ Toca aquí. GAKU revisa tu respuesta según la pregunta.",
-   generic:"Estás aquí. Empieza por arriba de este recuadro y ve hacia abajo.", subtitles:"Usa la caja de este recuadro para pegar subtítulos y sigue los botones.",
+   generic:"Estás aquí. Empieza por arriba de este recuadro y ve hacia abajo.",
    milestones:"Tus revisiones de progreso están en este recuadro. Toca una tarjeta para abrirla.", jlpt:"Tus resultados del JLPT están en este recuadro.", feedback:"Escribe tu mensaje en este recuadro y envíalo.",
    links:"Toca un enlace de este recuadro para abrir un sitio de estudio.", wordcards:"Busca una palabra en este recuadro y tócala para crear una tarjeta.",
    library:"Tus tarjetas guardadas están en este recuadro. Toca una carpeta para abrirla.", folderPg:"Las tarjetas de esta carpeta están en este recuadro. Toca una para verla.",
    flash:"Las tarjetas de estudio están en este recuadro. Toca la tarjeta para darle la vuelta.", pickWriting:"Elige cómo quieres practicar en este recuadro.",
    goFlash:"¿Quieres repasar con tarjetas de estudio? Toca “Go Flashcard” para empezar la actividad de Flashcards.",
-   tFirst:"Tu primer minuto", tSchedule:"Horario", tVocab:"Vocabulario", tPage:"Esta página", tSubtitles:"Subtítulos", tMilestones:"Hitos", tFeedback:"Comentarios", tLinks:"Enlaces", tWordCards:"Tarjetas de palabras", tLibrary:"Biblioteca", tFolder:"Carpeta", tFlash:"Tarjetas de estudio"
+   tFirst:"Tu primer minuto", tSchedule:"Horario", tVocab:"Vocabulario", tPage:"Esta página", tMilestones:"Hitos", tFeedback:"Comentarios", tLinks:"Enlaces", tWordCards:"Tarjetas de palabras", tLibrary:"Biblioteca", tFolder:"Carpeta", tFlash:"Tarjetas de estudio"
   }
  },
  "French": {
@@ -114,13 +112,13 @@ const GUIDE_I18N = {
    inCopy2:"Tu es dans {copy} : recopie une phrase à la main. (Touche {q} pour répondre à une question.)", pickStyle:"Choisis un style. {copy} = recopier une phrase à la main. {q} = écrire une réponse.",
    pasteHere:"① COLLE ICI. Mets une courte phrase japonaise dans cette zone.", pasteQ:"① COLLE ICI LA QUESTION. Mets dans cette zone une question d'un test ou d'un site web.",
    draw:"② Touche ici. Puis dessine avec ton doigt !", typeAns:"② ÉCRIS ICI TA RÉPONSE, en japonais.", check:"③ Touche ici. GAKU vérifie ta réponse par rapport à la question.",
-   generic:"Tu es ici. Commence en haut de ce cadre et descends.", subtitles:"Utilise la zone de ce cadre pour coller des sous-titres, puis suis les boutons.",
+   generic:"Tu es ici. Commence en haut de ce cadre et descends.",
    milestones:"Tes bilans de progression sont dans ce cadre. Touche une carte pour l'ouvrir.", jlpt:"Tes résultats JLPT sont dans ce cadre.", feedback:"Écris ton message dans ce cadre et envoie-le.",
    links:"Touche un lien dans ce cadre pour ouvrir un site d'étude.", wordcards:"Cherche un mot dans ce cadre, puis touche-le pour créer une carte.",
    library:"Tes cartes enregistrées sont dans ce cadre. Touche un dossier pour l'ouvrir.", folderPg:"Les cartes de ce dossier sont dans ce cadre. Touche une carte pour la voir.",
    flash:"Les cartes mémoire sont dans ce cadre. Touche la carte pour la retourner.", pickWriting:"Choisis comment t'entraîner dans ce cadre.",
    goFlash:"Tu veux réviser avec des cartes mémoire ? Touche « Go Flashcard » pour lancer l'activité Flashcards.",
-   tFirst:"Ta première minute", tSchedule:"Planning", tVocab:"Vocabulaire", tPage:"Cette page", tSubtitles:"Sous-titres", tMilestones:"Étapes", tFeedback:"Avis", tLinks:"Liens", tWordCards:"Cartes de mots", tLibrary:"Bibliothèque", tFolder:"Dossier", tFlash:"Cartes mémoire"
+   tFirst:"Ta première minute", tSchedule:"Planning", tVocab:"Vocabulaire", tPage:"Cette page", tMilestones:"Étapes", tFeedback:"Avis", tLinks:"Liens", tWordCards:"Cartes de mots", tLibrary:"Bibliothèque", tFolder:"Dossier", tFlash:"Cartes mémoire"
   }
  },
  "German": {
@@ -140,13 +138,13 @@ const GUIDE_I18N = {
    inCopy2:"Du bist bei {copy}: Schreibe einen Satz von Hand ab. (Tippe auf {q}, um stattdessen eine Frage zu beantworten.)", pickStyle:"Wähle eine Art. {copy} = einen Satz von Hand abschreiben. {q} = eine Antwort schreiben.",
    pasteHere:"① HIER EINFÜGEN. Füge einen kurzen japanischen Satz in dieses Feld ein.", pasteQ:"① HIER DIE FRAGE EINFÜGEN. Füge eine Frage aus einem Test oder von einer Website in dieses Feld ein.",
    draw:"② Tippe hier. Zeichne dann mit dem Finger!", typeAns:"② SCHREIBE HIER DEINE ANTWORT, auf Japanisch.", check:"③ Tippe hier. GAKU prüft deine Antwort anhand der Frage.",
-   generic:"Hier bist du. Fang oben in diesem Rahmen an und gehe nach unten.", subtitles:"Füge im Feld in diesem Rahmen Untertitel ein und folge dann den Buttons.",
+   generic:"Hier bist du. Fang oben in diesem Rahmen an und gehe nach unten.",
    milestones:"Deine Fortschrittschecks sind in diesem Rahmen. Tippe auf eine Karte, um sie zu öffnen.", jlpt:"Deine JLPT-Ergebnisse sind in diesem Rahmen.", feedback:"Schreibe deine Nachricht in diesem Rahmen und sende sie ab.",
    links:"Tippe in diesem Rahmen auf einen Link, um eine Lernseite zu öffnen.", wordcards:"Suche in diesem Rahmen ein Wort und tippe darauf, um eine Karte zu erstellen.",
    library:"Deine gespeicherten Karten sind in diesem Rahmen. Tippe auf einen Ordner, um ihn zu öffnen.", folderPg:"Die Karten dieses Ordners sind in diesem Rahmen. Tippe auf eine Karte, um sie zu sehen.",
    flash:"Die Lernkarten sind in diesem Rahmen. Tippe auf die Karte, um sie umzudrehen.", pickWriting:"Wähle in diesem Rahmen, wie du üben möchtest.",
    goFlash:"Du möchtest mit Lernkarten wiederholen? Tippe auf „Go Flashcard“, um die Flashcards-Aktivität zu starten.",
-   tFirst:"Deine erste Minute", tSchedule:"Zeitplan", tVocab:"Vokabeln", tPage:"Diese Seite", tSubtitles:"Untertitel", tMilestones:"Meilensteine", tFeedback:"Feedback", tLinks:"Links", tWordCards:"Wortkarten", tLibrary:"Bibliothek", tFolder:"Ordner", tFlash:"Lernkarten"
+   tFirst:"Deine erste Minute", tSchedule:"Zeitplan", tVocab:"Vokabeln", tPage:"Diese Seite", tMilestones:"Meilensteine", tFeedback:"Feedback", tLinks:"Links", tWordCards:"Wortkarten", tLibrary:"Bibliothek", tFolder:"Ordner", tFlash:"Lernkarten"
   }
  },
  "Chinese (Simplified)": {
@@ -166,13 +164,13 @@ const GUIDE_I18N = {
    inCopy2:"你现在在 {copy}：亲手抄写一句话。（想改为回答问题，请点 {q}。）", pickStyle:"选一种方式。{copy} = 亲手抄写一句话。{q} = 写出答案。",
    pasteHere:"① 粘贴到这里。把一句简短的日语放进这个框里。", pasteQ:"① 在这里粘贴题目。把考试或网站上的一道题放进这个框里。",
    draw:"② 点这里。然后用手指书写！", typeAns:"② 在这里用日语输入你的答案。", check:"③ 点这里。GAKU 会根据题目检查你的答案。",
-   generic:"你在这里。从这个框的上面开始，往下进行。", subtitles:"在这个框里粘贴字幕，然后按照按钮操作。",
+   generic:"你在这里。从这个框的上面开始，往下进行。",
    milestones:"你的进度检查在这个框里。点一张卡片即可打开。", jlpt:"你的 JLPT 结果在这个框里。", feedback:"在这个框里写下你的留言并发送。",
    links:"点这个框里的链接，打开学习网站。", wordcards:"在这个框里搜索单词，然后点这个单词制作卡片。",
    library:"你保存的卡片在这个框里。点文件夹即可打开。", folderPg:"这个文件夹里的卡片在这个框里。点一张卡片查看。",
    flash:"闪卡在这个框里。点卡片即可翻面。", pickWriting:"在这个框里选择你想怎么练习。",
    goFlash:"想用闪卡复习吗？点“Go Flashcard”，开始闪卡练习。",
-   tFirst:"你的第一分钟", tSchedule:"日程", tVocab:"词汇", tPage:"本页", tSubtitles:"字幕", tMilestones:"里程碑", tFeedback:"反馈", tLinks:"链接", tWordCards:"单词卡片", tLibrary:"资料库", tFolder:"文件夹", tFlash:"闪卡"
+   tFirst:"你的第一分钟", tSchedule:"日程", tVocab:"词汇", tPage:"本页", tMilestones:"里程碑", tFeedback:"反馈", tLinks:"链接", tWordCards:"单词卡片", tLibrary:"资料库", tFolder:"文件夹", tFlash:"闪卡"
   }
  },
  "Chinese (Traditional)": {
@@ -192,13 +190,13 @@ const GUIDE_I18N = {
    inCopy2:"你現在在 {copy}:親手抄寫一句話。(想改為回答問題,請點 {q}。)", pickStyle:"選一種方式。{copy} = 親手抄寫一句話。{q} = 寫出答案。",
    pasteHere:"① 貼到這裡。把一句簡短的日文放進這個框裡。", pasteQ:"① 在這裡貼上題目。把考試或網站上的一道題放進這個框裡。",
    draw:"② 點這裡。然後用手指書寫!", typeAns:"② 在這裡用日文輸入你的答案。", check:"③ 點這裡。GAKU 會根據題目檢查你的答案。",
-   generic:"你在這裡。從這個框的上面開始,往下進行。", subtitles:"在這個框裡貼上字幕,然後依照按鈕操作。",
+   generic:"你在這裡。從這個框的上面開始,往下進行。",
    milestones:"你的進度檢查在這個框裡。點一張卡片即可打開。", jlpt:"你的 JLPT 結果在這個框裡。", feedback:"在這個框裡寫下你的留言並送出。",
    links:"點這個框裡的連結,打開學習網站。", wordcards:"在這個框裡搜尋單字,然後點這個單字製作卡片。",
    library:"你儲存的卡片在這個框裡。點資料夾即可打開。", folderPg:"這個資料夾裡的卡片在這個框裡。點一張卡片查看。",
    flash:"閃卡在這個框裡。點卡片即可翻面。", pickWriting:"在這個框裡選擇你想怎麼練習。",
    goFlash:"想用閃卡複習嗎?點「Go Flashcard」,開始閃卡練習。",
-   tFirst:"你的第一分鐘", tSchedule:"行程", tVocab:"詞彙", tPage:"本頁", tSubtitles:"字幕", tMilestones:"里程碑", tFeedback:"意見回饋", tLinks:"連結", tWordCards:"單字卡片", tLibrary:"資料庫", tFolder:"資料夾", tFlash:"閃卡"
+   tFirst:"你的第一分鐘", tSchedule:"行程", tVocab:"詞彙", tPage:"本頁", tMilestones:"里程碑", tFeedback:"意見回饋", tLinks:"連結", tWordCards:"單字卡片", tLibrary:"資料庫", tFolder:"資料夾", tFlash:"閃卡"
   }
  },
  "Italian": {
@@ -218,13 +216,13 @@ const GUIDE_I18N = {
    inCopy2:"Sei in {copy}: copia una frase a mano. (Tocca {q} per rispondere invece a una domanda.)", pickStyle:"Scegli uno stile. {copy} = copiare una frase a mano. {q} = scrivere una risposta.",
    pasteHere:"① INCOLLA QUI. Metti una breve frase giapponese in questa casella.", pasteQ:"① INCOLLA QUI LA DOMANDA. Metti in questa casella una domanda di un test o di un sito web.",
    draw:"② Tocca qui. Poi disegna con il dito!", typeAns:"② SCRIVI QUI LA TUA RISPOSTA, in giapponese.", check:"③ Tocca qui. GAKU controlla la tua risposta rispetto alla domanda.",
-   generic:"Sei qui. Parti dall'alto di questo riquadro e scendi.", subtitles:"Usa la casella in questo riquadro per incollare i sottotitoli, poi segui i pulsanti.",
+   generic:"Sei qui. Parti dall'alto di questo riquadro e scendi.",
    milestones:"I tuoi controlli dei progressi sono in questo riquadro. Tocca una scheda per aprirla.", jlpt:"I tuoi risultati JLPT sono in questo riquadro.", feedback:"Scrivi il tuo messaggio in questo riquadro e invialo.",
    links:"Tocca un link in questo riquadro per aprire un sito di studio.", wordcards:"Cerca una parola in questo riquadro, poi toccala per creare una scheda.",
    library:"Le tue schede salvate sono in questo riquadro. Tocca una cartella per aprirla.", folderPg:"Le schede di questa cartella sono in questo riquadro. Tocca una scheda per vederla.",
    flash:"Le flashcard sono in questo riquadro. Tocca la scheda per girarla.", pickWriting:"Scegli come vuoi esercitarti in questo riquadro.",
    goFlash:"Vuoi ripassare con le flashcard? Tocca “Go Flashcard” per iniziare l'attività Flashcards.",
-   tFirst:"Il tuo primo minuto", tSchedule:"Programma", tVocab:"Vocabolario", tPage:"Questa pagina", tSubtitles:"Sottotitoli", tMilestones:"Traguardi", tFeedback:"Feedback", tLinks:"Link", tWordCards:"Schede di parole", tLibrary:"Libreria", tFolder:"Cartella", tFlash:"Flashcard"
+   tFirst:"Il tuo primo minuto", tSchedule:"Programma", tVocab:"Vocabolario", tPage:"Questa pagina", tMilestones:"Traguardi", tFeedback:"Feedback", tLinks:"Link", tWordCards:"Schede di parole", tLibrary:"Libreria", tFolder:"Cartella", tFlash:"Flashcard"
   }
  },
  "Korean": {
@@ -244,13 +242,13 @@ const GUIDE_I18N = {
    inCopy2:"지금 {copy}입니다: 문장을 손으로 따라 써요. (문제에 답하려면 {q}을(를) 누르세요.)", pickStyle:"방식을 고르세요. {copy} = 문장을 손으로 따라 쓰기. {q} = 답 쓰기.",
    pasteHere:"① 여기에 붙여 넣기. 짧은 일본어 문장을 이 칸에 넣으세요.", pasteQ:"① 여기에 문제를 붙여 넣기. 시험이나 웹사이트의 문제를 이 칸에 넣으세요.",
    draw:"② 여기를 누르세요. 그런 다음 손가락으로 쓰세요!", typeAns:"② 여기에 일본어로 답을 입력하세요.", check:"③ 여기를 누르세요. GAKU가 문제에 맞는지 답을 확인해 줘요.",
-   generic:"여기가 현재 페이지예요. 이 틀의 위에서부터 아래로 진행하세요.", subtitles:"이 틀 안의 칸에 자막을 붙여 넣고, 버튼을 따라가세요.",
+   generic:"여기가 현재 페이지예요. 이 틀의 위에서부터 아래로 진행하세요.",
    milestones:"진행 확인이 이 틀 안에 있어요. 카드를 눌러 여세요.", jlpt:"JLPT 결과가 이 틀 안에 있어요.", feedback:"이 틀 안에 메시지를 쓰고 보내세요.",
    links:"이 틀 안의 링크를 눌러 학습 사이트를 여세요.", wordcards:"이 틀 안에서 단어를 검색한 뒤, 단어를 눌러 카드를 만드세요.",
    library:"저장한 카드가 이 틀 안에 있어요. 폴더를 눌러 여세요.", folderPg:"이 폴더의 카드가 이 틀 안에 있어요. 카드를 눌러 보세요.",
    flash:"플래시카드가 이 틀 안에 있어요. 카드를 눌러 뒤집으세요.", pickWriting:"이 틀 안에서 연습 방식을 고르세요.",
    goFlash:"플래시카드로 복습하고 싶나요? “Go Flashcard”를 눌러 Flashcards 활동을 시작하세요.",
-   tFirst:"첫 1분", tSchedule:"일정", tVocab:"단어", tPage:"이 페이지", tSubtitles:"자막", tMilestones:"마일스톤", tFeedback:"의견", tLinks:"링크", tWordCards:"단어 카드", tLibrary:"라이브러리", tFolder:"폴더", tFlash:"플래시카드"
+   tFirst:"첫 1분", tSchedule:"일정", tVocab:"단어", tPage:"이 페이지", tMilestones:"마일스톤", tFeedback:"의견", tLinks:"링크", tWordCards:"단어 카드", tLibrary:"라이브러리", tFolder:"폴더", tFlash:"플래시카드"
   }
  },
  "Thai": {
@@ -270,13 +268,13 @@ const GUIDE_I18N = {
    inCopy2:"ตอนนี้คุณอยู่ที่ {copy}: คัดประโยคด้วยมือ (แตะ {q} หากต้องการตอบโจทย์แทน)", pickStyle:"เลือกรูปแบบ {copy} = คัดประโยคด้วยมือ {q} = เขียนคำตอบ",
    pasteHere:"① วางตรงนี้ ใส่ประโยคภาษาญี่ปุ่นสั้นๆ ลงในช่องนี้", pasteQ:"① วางโจทย์ตรงนี้ ใส่โจทย์จากข้อสอบหรือเว็บไซต์ลงในช่องนี้",
    draw:"② แตะตรงนี้ แล้วใช้นิ้วเขียนได้เลย!", typeAns:"② พิมพ์คำตอบของคุณตรงนี้ เป็นภาษาญี่ปุ่น", check:"③ แตะตรงนี้ GAKU จะตรวจคำตอบของคุณเทียบกับโจทย์",
-   generic:"คุณอยู่ตรงนี้ เริ่มจากด้านบนของกรอบนี้แล้วไล่ลงมา", subtitles:"ใช้ช่องในกรอบนี้วางคำบรรยาย แล้วทำตามปุ่ม",
+   generic:"คุณอยู่ตรงนี้ เริ่มจากด้านบนของกรอบนี้แล้วไล่ลงมา",
    milestones:"การตรวจความก้าวหน้าของคุณอยู่ในกรอบนี้ แตะการ์ดเพื่อเปิด", jlpt:"ผล JLPT ของคุณอยู่ในกรอบนี้", feedback:"เขียนข้อความของคุณในกรอบนี้แล้วส่ง",
    links:"แตะลิงก์ในกรอบนี้เพื่อเปิดเว็บไซต์เรียน", wordcards:"ค้นหาคำศัพท์ในกรอบนี้ แล้วแตะคำนั้นเพื่อสร้างการ์ด",
    library:"การ์ดที่บันทึกไว้อยู่ในกรอบนี้ แตะโฟลเดอร์เพื่อเปิด", folderPg:"การ์ดในโฟลเดอร์นี้อยู่ในกรอบนี้ แตะการ์ดเพื่อดู",
    flash:"แฟลชการ์ดอยู่ในกรอบนี้ แตะการ์ดเพื่อพลิก", pickWriting:"เลือกวิธีที่อยากฝึกในกรอบนี้",
    goFlash:"อยากทบทวนด้วยแฟลชการ์ดใช่ไหม? แตะ “Go Flashcard” เพื่อเริ่มกิจกรรม Flashcards",
-   tFirst:"1 นาทีแรกของคุณ", tSchedule:"ตารางเรียน", tVocab:"คำศัพท์", tPage:"หน้านี้", tSubtitles:"คำบรรยาย", tMilestones:"เป้าหมายสำคัญ", tFeedback:"ความคิดเห็น", tLinks:"ลิงก์", tWordCards:"การ์ดคำศัพท์", tLibrary:"คลัง", tFolder:"โฟลเดอร์", tFlash:"แฟลชการ์ด"
+   tFirst:"1 นาทีแรกของคุณ", tSchedule:"ตารางเรียน", tVocab:"คำศัพท์", tPage:"หน้านี้", tMilestones:"เป้าหมายสำคัญ", tFeedback:"ความคิดเห็น", tLinks:"ลิงก์", tWordCards:"การ์ดคำศัพท์", tLibrary:"คลัง", tFolder:"โฟลเดอร์", tFlash:"แฟลชการ์ด"
   }
  },
  "Malay": {
@@ -296,13 +294,13 @@ const GUIDE_I18N = {
    inCopy2:"Anda berada di {copy}: salin satu ayat dengan tangan. (Tekan {q} untuk menjawab soalan.)", pickStyle:"Pilih gaya. {copy} = salin ayat dengan tangan. {q} = tulis jawapan.",
    pasteHere:"① TAMPAL DI SINI. Letakkan ayat Jepun yang pendek dalam kotak ini.", pasteQ:"① TAMPAL SOALAN DI SINI. Letakkan soalan daripada ujian atau laman web dalam kotak ini.",
    draw:"② Tekan di sini. Kemudian lukis dengan jari anda!", typeAns:"② TAIP JAWAPAN ANDA DI SINI, dalam bahasa Jepun.", check:"③ Tekan di sini. GAKU menyemak jawapan anda berdasarkan soalan.",
-   generic:"Anda berada di sini. Mula dari atas bingkai ini dan turun ke bawah.", subtitles:"Gunakan kotak dalam bingkai ini untuk menampal sari kata, kemudian ikut butang.",
+   generic:"Anda berada di sini. Mula dari atas bingkai ini dan turun ke bawah.",
    milestones:"Semakan kemajuan anda ada dalam bingkai ini. Tekan kad untuk membukanya.", jlpt:"Keputusan JLPT anda ada dalam bingkai ini.", feedback:"Tulis mesej anda dalam bingkai ini dan hantar.",
    links:"Tekan pautan dalam bingkai ini untuk membuka laman belajar.", wordcards:"Cari perkataan dalam bingkai ini, kemudian tekan perkataan itu untuk membuat kad.",
    library:"Kad yang anda simpan ada dalam bingkai ini. Tekan folder untuk membukanya.", folderPg:"Kad dalam folder ini ada dalam bingkai ini. Tekan kad untuk melihatnya.",
    flash:"Kad imbas ada dalam bingkai ini. Tekan kad untuk memusingkannya.", pickWriting:"Pilih cara anda mahu berlatih dalam bingkai ini.",
    goFlash:"Mahu ulang kaji dengan kad imbas? Tekan “Go Flashcard” untuk memulakan aktiviti Flashcards.",
-   tFirst:"Minit pertama anda", tSchedule:"Jadual", tVocab:"Perbendaharaan kata", tPage:"Halaman ini", tSubtitles:"Sari kata", tMilestones:"Pencapaian", tFeedback:"Maklum balas", tLinks:"Pautan", tWordCards:"Kad perkataan", tLibrary:"Perpustakaan", tFolder:"Folder", tFlash:"Kad imbas"
+   tFirst:"Minit pertama anda", tSchedule:"Jadual", tVocab:"Perbendaharaan kata", tPage:"Halaman ini", tMilestones:"Pencapaian", tFeedback:"Maklum balas", tLinks:"Pautan", tWordCards:"Kad perkataan", tLibrary:"Perpustakaan", tFolder:"Folder", tFlash:"Kad imbas"
   }
  },
  "Indonesian": {
@@ -322,13 +320,13 @@ const GUIDE_I18N = {
    inCopy2:"Kamu berada di {copy}: salin satu kalimat dengan tangan. (Ketuk {q} untuk menjawab pertanyaan.)", pickStyle:"Pilih gaya. {copy} = salin kalimat dengan tangan. {q} = tulis jawaban.",
    pasteHere:"① TEMPEL DI SINI. Masukkan kalimat bahasa Jepang yang pendek ke kotak ini.", pasteQ:"① TEMPEL PERTANYAANNYA DI SINI. Masukkan pertanyaan dari tes atau situs web ke kotak ini.",
    draw:"② Ketuk di sini. Lalu tulis dengan jarimu!", typeAns:"② KETIK JAWABANMU DI SINI, dalam bahasa Jepang.", check:"③ Ketuk di sini. GAKU memeriksa jawabanmu terhadap pertanyaannya.",
-   generic:"Kamu di sini. Mulai dari atas bingkai ini lalu turun ke bawah.", subtitles:"Pakai kotak di dalam bingkai ini untuk menempel subtitel, lalu ikuti tombolnya.",
+   generic:"Kamu di sini. Mulai dari atas bingkai ini lalu turun ke bawah.",
    milestones:"Pemeriksaan kemajuanmu ada di bingkai ini. Ketuk kartu untuk membukanya.", jlpt:"Hasil JLPT-mu ada di bingkai ini.", feedback:"Tulis pesanmu di bingkai ini lalu kirim.",
    links:"Ketuk tautan di bingkai ini untuk membuka situs belajar.", wordcards:"Cari kata di bingkai ini, lalu ketuk kata itu untuk membuat kartu.",
    library:"Kartu yang kamu simpan ada di bingkai ini. Ketuk folder untuk membukanya.", folderPg:"Kartu di folder ini ada di bingkai ini. Ketuk kartu untuk melihatnya.",
    flash:"Kartu kilat ada di bingkai ini. Ketuk kartu untuk membaliknya.", pickWriting:"Pilih cara berlatih di bingkai ini.",
    goFlash:"Mau mengulang dengan kartu kilat? Ketuk “Go Flashcard” untuk memulai aktivitas Flashcards.",
-   tFirst:"Menit pertamamu", tSchedule:"Jadwal", tVocab:"Kosakata", tPage:"Halaman ini", tSubtitles:"Subtitel", tMilestones:"Pencapaian", tFeedback:"Masukan", tLinks:"Tautan", tWordCards:"Kartu kata", tLibrary:"Pustaka", tFolder:"Folder", tFlash:"Kartu kilat"
+   tFirst:"Menit pertamamu", tSchedule:"Jadwal", tVocab:"Kosakata", tPage:"Halaman ini", tMilestones:"Pencapaian", tFeedback:"Masukan", tLinks:"Tautan", tWordCards:"Kartu kata", tLibrary:"Pustaka", tFolder:"Folder", tFlash:"Kartu kilat"
   }
  },
  "Vietnamese": {
@@ -348,13 +346,13 @@ const GUIDE_I18N = {
    inCopy2:"Bạn đang ở {copy}: chép tay một câu. (Chạm {q} để trả lời câu hỏi.)", pickStyle:"Chọn cách luyện. {copy} = chép tay một câu. {q} = viết câu trả lời.",
    pasteHere:"① DÁN VÀO ĐÂY. Đặt một câu tiếng Nhật ngắn vào ô này.", pasteQ:"① DÁN CÂU HỎI VÀO ĐÂY. Đặt một câu hỏi từ bài kiểm tra hoặc trang web vào ô này.",
    draw:"② Chạm vào đây. Rồi dùng ngón tay viết!", typeAns:"② GÕ CÂU TRẢ LỜI CỦA BẠN VÀO ĐÂY, bằng tiếng Nhật.", check:"③ Chạm vào đây. GAKU kiểm tra câu trả lời của bạn so với câu hỏi.",
-   generic:"Bạn đang ở đây. Bắt đầu từ trên cùng của khung này rồi đi xuống.", subtitles:"Dùng ô trong khung này để dán phụ đề, rồi làm theo các nút.",
+   generic:"Bạn đang ở đây. Bắt đầu từ trên cùng của khung này rồi đi xuống.",
    milestones:"Phần kiểm tra tiến độ của bạn nằm trong khung này. Chạm vào một thẻ để mở.", jlpt:"Kết quả JLPT của bạn nằm trong khung này.", feedback:"Viết tin nhắn của bạn trong khung này rồi gửi.",
    links:"Chạm vào một liên kết trong khung này để mở trang học.", wordcards:"Tìm một từ trong khung này, rồi chạm vào từ đó để tạo thẻ.",
    library:"Các thẻ đã lưu của bạn nằm trong khung này. Chạm vào một thư mục để mở.", folderPg:"Các thẻ trong thư mục này nằm trong khung này. Chạm vào một thẻ để xem.",
    flash:"Thẻ ghi nhớ nằm trong khung này. Chạm vào thẻ để lật.", pickWriting:"Chọn cách bạn muốn luyện tập trong khung này.",
    goFlash:"Muốn ôn tập bằng thẻ ghi nhớ? Chạm “Go Flashcard” để bắt đầu hoạt động Flashcards.",
-   tFirst:"Phút đầu tiên của bạn", tSchedule:"Lịch học", tVocab:"Từ vựng", tPage:"Trang này", tSubtitles:"Phụ đề", tMilestones:"Cột mốc", tFeedback:"Phản hồi", tLinks:"Liên kết", tWordCards:"Thẻ từ", tLibrary:"Thư viện", tFolder:"Thư mục", tFlash:"Thẻ ghi nhớ"
+   tFirst:"Phút đầu tiên của bạn", tSchedule:"Lịch học", tVocab:"Từ vựng", tPage:"Trang này", tMilestones:"Cột mốc", tFeedback:"Phản hồi", tLinks:"Liên kết", tWordCards:"Thẻ từ", tLibrary:"Thư viện", tFolder:"Thư mục", tFlash:"Thẻ ghi nhớ"
   }
  },
  "Hindi": {
@@ -374,13 +372,13 @@ const GUIDE_I18N = {
    inCopy2:"आप अभी {copy} में हैं: एक वाक्य हाथ से नकल करें। (सवाल का जवाब देने के लिए {q} दबाएँ।)", pickStyle:"एक तरीका चुनें। {copy} = वाक्य हाथ से नकल करना। {q} = जवाब लिखना।",
    pasteHere:"① यहाँ चिपकाएँ। इस बॉक्स में एक छोटा जापानी वाक्य डालें।", pasteQ:"① यहाँ सवाल चिपकाएँ। किसी टेस्ट या वेबसाइट का सवाल इस बॉक्स में डालें।",
    draw:"② यहाँ दबाएँ। फिर उंगली से लिखें!", typeAns:"② यहाँ अपना जवाब जापानी में लिखें।", check:"③ यहाँ दबाएँ। GAKU सवाल के हिसाब से आपका जवाब जाँचता है।",
-   generic:"आप यहाँ हैं। इस फ़्रेम के ऊपर से शुरू करें और नीचे जाएँ।", subtitles:"इस फ़्रेम के बॉक्स में सबटाइटल चिपकाएँ, फिर बटनों का पालन करें।",
+   generic:"आप यहाँ हैं। इस फ़्रेम के ऊपर से शुरू करें और नीचे जाएँ।",
    milestones:"आपकी प्रगति की जाँच इस फ़्रेम में है। कार्ड खोलने के लिए उस पर दबाएँ।", jlpt:"आपके JLPT के नतीजे इस फ़्रेम में हैं।", feedback:"इस फ़्रेम में अपना संदेश लिखें और भेजें।",
    links:"पढ़ाई की साइट खोलने के लिए इस फ़्रेम में किसी लिंक पर दबाएँ।", wordcards:"इस फ़्रेम में कोई शब्द खोजें, फिर कार्ड बनाने के लिए उस शब्द पर दबाएँ।",
    library:"आपके सेव किए कार्ड इस फ़्रेम में हैं। फ़ोल्डर खोलने के लिए उस पर दबाएँ।", folderPg:"इस फ़ोल्डर के कार्ड इस फ़्रेम में हैं। देखने के लिए किसी कार्ड पर दबाएँ।",
    flash:"फ़्लैशकार्ड इस फ़्रेम में हैं। पलटने के लिए कार्ड पर दबाएँ।", pickWriting:"इस फ़्रेम में चुनें कि आप कैसे अभ्यास करना चाहते हैं।",
    goFlash:"फ़्लैशकार्ड से दोहराना चाहते हैं? Flashcards गतिविधि शुरू करने के लिए “Go Flashcard” दबाएँ।",
-   tFirst:"आपका पहला मिनट", tSchedule:"शेड्यूल", tVocab:"शब्दावली", tPage:"यह पेज", tSubtitles:"सबटाइटल", tMilestones:"मील के पत्थर", tFeedback:"फ़ीडबैक", tLinks:"लिंक", tWordCards:"शब्द कार्ड", tLibrary:"लाइब्रेरी", tFolder:"फ़ोल्डर", tFlash:"फ़्लैशकार्ड"
+   tFirst:"आपका पहला मिनट", tSchedule:"शेड्यूल", tVocab:"शब्दावली", tPage:"यह पेज", tMilestones:"मील के पत्थर", tFeedback:"फ़ीडबैक", tLinks:"लिंक", tWordCards:"शब्द कार्ड", tLibrary:"लाइब्रेरी", tFolder:"फ़ोल्डर", tFlash:"फ़्लैशकार्ड"
   }
  },
  "Turkish": {
@@ -400,13 +398,13 @@ const GUIDE_I18N = {
    inCopy2:"Şu an {copy} bölümündesin: bir cümleyi elle kopyala. (Bir soruyu yanıtlamak için {q} öğesine dokun.)", pickStyle:"Bir stil seç. {copy} = bir cümleyi elle kopyalamak. {q} = cevap yazmak.",
    pasteHere:"① BURAYA YAPIŞTIR. Bu kutuya kısa bir Japonca cümle koy.", pasteQ:"① SORUYU BURAYA YAPIŞTIR. Bir testten veya web sitesinden bir soruyu bu kutuya koy.",
    draw:"② Buraya dokun. Sonra parmağınla yaz!", typeAns:"② CEVABINI BURAYA YAZ, Japonca olarak.", check:"③ Buraya dokun. GAKU cevabını soruya göre kontrol eder.",
-   generic:"Buradasın. Bu çerçevenin en üstünden başla ve aşağı doğru ilerle.", subtitles:"Altyazıları yapıştırmak için bu çerçevedeki kutuyu kullan, sonra düğmeleri takip et.",
+   generic:"Buradasın. Bu çerçevenin en üstünden başla ve aşağı doğru ilerle.",
    milestones:"İlerleme kontrollerin bu çerçevede. Açmak için bir karta dokun.", jlpt:"JLPT sonuçların bu çerçevede.", feedback:"Mesajını bu çerçeveye yaz ve gönder.",
    links:"Bir çalışma sitesini açmak için bu çerçevedeki bir bağlantıya dokun.", wordcards:"Bu çerçevede bir kelime ara, sonra kart yapmak için kelimeye dokun.",
    library:"Kaydettiğin kartlar bu çerçevede. Açmak için bir klasöre dokun.", folderPg:"Bu klasördeki kartlar bu çerçevede. Görmek için bir karta dokun.",
    flash:"Bilgi kartları bu çerçevede. Çevirmek için karta dokun.", pickWriting:"Bu çerçevede nasıl çalışmak istediğini seç.",
    goFlash:"Bilgi kartlarıyla tekrar yapmak ister misin? Flashcards etkinliğini başlatmak için “Go Flashcard” öğesine dokun.",
-   tFirst:"İlk dakikan", tSchedule:"Program", tVocab:"Kelimeler", tPage:"Bu sayfa", tSubtitles:"Altyazılar", tMilestones:"Dönüm noktaları", tFeedback:"Geri bildirim", tLinks:"Bağlantılar", tWordCards:"Kelime kartları", tLibrary:"Kütüphane", tFolder:"Klasör", tFlash:"Bilgi kartları"
+   tFirst:"İlk dakikan", tSchedule:"Program", tVocab:"Kelimeler", tPage:"Bu sayfa", tMilestones:"Dönüm noktaları", tFeedback:"Geri bildirim", tLinks:"Bağlantılar", tWordCards:"Kelime kartları", tLibrary:"Kütüphane", tFolder:"Klasör", tFlash:"Bilgi kartları"
   }
  },
  "Nepali": {
@@ -426,13 +424,13 @@ const GUIDE_I18N = {
    inCopy2:"तपाईं अहिले {copy} मा हुनुहुन्छ: वाक्य हातले सारेर लेख्नुहोस्। (प्रश्नको जवाफ दिन {q} थिच्नुहोस्।)", pickStyle:"तरिका छान्नुहोस्। {copy} = वाक्य हातले सारेर लेख्ने। {q} = जवाफ लेख्ने।",
    pasteHere:"① यहाँ टाँस्नुहोस्। यो बक्समा छोटो जापानी वाक्य राख्नुहोस्।", pasteQ:"① यहाँ प्रश्न टाँस्नुहोस्। परीक्षा वा वेबसाइटको प्रश्न यो बक्समा राख्नुहोस्।",
    draw:"② यहाँ थिच्नुहोस्। त्यसपछि औंलाले लेख्नुहोस्!", typeAns:"② यहाँ आफ्नो जवाफ जापानीमा लेख्नुहोस्।", check:"③ यहाँ थिच्नुहोस्। GAKU ले प्रश्नअनुसार तपाईंको जवाफ जाँच्छ।",
-   generic:"तपाईं यहाँ हुनुहुन्छ। यो फ्रेमको माथिबाट सुरु गरेर तल जानुहोस्।", subtitles:"यो फ्रेमभित्रको बक्समा सबटाइटल टाँस्नुहोस्, त्यसपछि बटनहरू पछ्याउनुहोस्।",
+   generic:"तपाईं यहाँ हुनुहुन्छ। यो फ्रेमको माथिबाट सुरु गरेर तल जानुहोस्।",
    milestones:"तपाईंको प्रगति जाँच यो फ्रेममा छ। खोल्न कार्डमा थिच्नुहोस्।", jlpt:"तपाईंको JLPT नतिजा यो फ्रेममा छ।", feedback:"यो फ्रेममा आफ्नो सन्देश लेखेर पठाउनुहोस्।",
    links:"अध्ययन साइट खोल्न यो फ्रेमको लिङ्कमा थिच्नुहोस्।", wordcards:"यो फ्रेममा शब्द खोज्नुहोस्, त्यसपछि कार्ड बनाउन शब्दमा थिच्नुहोस्।",
    library:"तपाईंले सेभ गरेका कार्डहरू यो फ्रेममा छन्। खोल्न फोल्डरमा थिच्नुहोस्।", folderPg:"यो फोल्डरका कार्डहरू यो फ्रेममा छन्। हेर्न कार्डमा थिच्नुहोस्।",
    flash:"फ्ल्यासकार्डहरू यो फ्रेममा छन्। पल्टाउन कार्डमा थिच्नुहोस्।", pickWriting:"यो फ्रेममा तपाईं कसरी अभ्यास गर्न चाहनुहुन्छ छान्नुहोस्।",
    goFlash:"फ्ल्यासकार्डबाट दोहोर्याउन चाहनुहुन्छ? Flashcards गतिविधि सुरु गर्न “Go Flashcard” थिच्नुहोस्।",
-   tFirst:"तपाईंको पहिलो मिनेट", tSchedule:"तालिका", tVocab:"शब्दावली", tPage:"यो पेज", tSubtitles:"सबटाइटल", tMilestones:"माइलस्टोन", tFeedback:"प्रतिक्रिया", tLinks:"लिङ्कहरू", tWordCards:"शब्द कार्ड", tLibrary:"लाइब्रेरी", tFolder:"फोल्डर", tFlash:"फ्ल्यासकार्ड"
+   tFirst:"तपाईंको पहिलो मिनेट", tSchedule:"तालिका", tVocab:"शब्दावली", tPage:"यो पेज", tMilestones:"माइलस्टोन", tFeedback:"प्रतिक्रिया", tLinks:"लिङ्कहरू", tWordCards:"शब्द कार्ड", tLibrary:"लाइब्रेरी", tFolder:"फोल्डर", tFlash:"फ्ल्यासकार्ड"
   }
  },
  "Filipino": {
@@ -452,13 +450,13 @@ const GUIDE_I18N = {
    inCopy2:"Nasa {copy} ka: kopyahin nang kamay ang isang pangungusap. (I-tap ang {q} para sumagot na lang ng tanong.)", pickStyle:"Pumili ng istilo. {copy} = kopyahin nang kamay ang pangungusap. {q} = magsulat ng sagot.",
    pasteHere:"① I-PASTE DITO. Maglagay ng maikling pangungusap na Japanese sa kahong ito.", pasteQ:"① I-PASTE DITO ANG TANONG. Maglagay ng tanong mula sa test o website sa kahong ito.",
    draw:"② I-tap dito. Pagkatapos, sumulat gamit ang daliri mo!", typeAns:"② I-TYPE DITO ANG SAGOT MO, sa Japanese.", check:"③ I-tap dito. Susuriin ng GAKU ang sagot mo ayon sa tanong.",
-   generic:"Nandito ka. Magsimula sa itaas ng frame na ito at pumunta pababa.", subtitles:"Gamitin ang kahon sa loob ng frame na ito para mag-paste ng subtitle, saka sundan ang mga button.",
+   generic:"Nandito ka. Magsimula sa itaas ng frame na ito at pumunta pababa.",
    milestones:"Nasa frame na ito ang mga progress check mo. I-tap ang card para buksan.", jlpt:"Nasa frame na ito ang mga resulta mo sa JLPT.", feedback:"Isulat ang mensahe mo sa frame na ito at ipadala.",
    links:"I-tap ang link sa frame na ito para magbukas ng study site.", wordcards:"Maghanap ng salita sa frame na ito, saka i-tap ang salita para gumawa ng card.",
    library:"Nasa frame na ito ang mga na-save mong card. I-tap ang folder para buksan.", folderPg:"Nasa frame na ito ang mga card sa folder na ito. I-tap ang card para makita.",
    flash:"Nasa frame na ito ang mga flashcard. I-tap ang card para baliktarin.", pickWriting:"Piliin sa frame na ito kung paano mo gustong mag-practice.",
    goFlash:"Gusto mong mag-review gamit ang flashcard? I-tap ang “Go Flashcard” para simulan ang Flashcards activity.",
-   tFirst:"Ang una mong minuto", tSchedule:"Iskedyul", tVocab:"Bokabularyo", tPage:"Pahinang ito", tSubtitles:"Mga subtitle", tMilestones:"Mga milestone", tFeedback:"Feedback", tLinks:"Mga link", tWordCards:"Mga word card", tLibrary:"Library", tFolder:"Folder", tFlash:"Mga flashcard"
+   tFirst:"Ang una mong minuto", tSchedule:"Iskedyul", tVocab:"Bokabularyo", tPage:"Pahinang ito", tMilestones:"Mga milestone", tFeedback:"Feedback", tLinks:"Mga link", tWordCards:"Mga word card", tLibrary:"Library", tFolder:"Folder", tFlash:"Mga flashcard"
   }
  }
 };

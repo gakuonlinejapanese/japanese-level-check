@@ -1030,7 +1030,7 @@ async function handleSendTutorialAnnouncement(req, res) {
     for (const t of targets) {
       const html = `
         <p>Hi ${escapeHtml(t.name) || "there"},</p>
-        <p>We just added a <strong>Tutorial</strong> to GAKU Master — a quick guided tour of the 5 main features (Schedule, Vocabulary, Subtitles, Resources, and Milestones) so it's easier to see how everything fits together.</p>
+        <p>We just added a <strong>Tutorial</strong> to GAKU Master — a quick guided tour of the 4 main features (Schedule, Vocabulary, Resources, and Milestones) so it's easier to see how everything fits together.</p>
         <p>To make sure you get to try it, we've unlocked your account for <strong>one more week</strong>, starting the next time you log in. During that week you'll have full access again, no restrictions.</p>
         <p><a href="https://app.seitojapanese.online/app">Log back in here to get started</a>.</p>
         <p>At the end of that week, you'll be asked how you'd like to continue. Not sure which way is best for you? The easiest way to decide is to try a free trial lesson first: <a href="https://app.seitojapanese.online/trial-lesson.html">book your free trial lesson here</a>. If it's a good fit, becoming an official GAKU student means GAKU Master is included at no extra cost. If lessons don't fit your budget or schedule, you can also keep just the app on its own — you'll see the plans after you log in.</p>

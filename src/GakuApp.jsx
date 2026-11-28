@@ -152,13 +152,12 @@ function findTaskResourceLink(taskText, taskMode) {
 
 // Maps schedule-task keywords to the in-app tab (and resources sub-tab, if any) that already
 // covers that kind of practice, so a task like "単語復習" can link straight into GAKU's own
-// Vocabulary/Subtitles/Create-From-Content/Conversation-Practice screens.
+// Vocabulary/Create-From-Content/Conversation-Practice screens.
 const TASK_APP_NAV = [
   // Any task that mentions writing/typing (e.g. "Write your name", "Writing practice", 書く, 作文) jumps to Writing.
   { test: /GAKU Writing|\bwrit(e|ing|ten)\b|\btyp(e|ing)\b|copying down|ライティング|書き写し|書き取り|書く|書き|書いて|作文|タイピング|入力練習/i, tab: "resources", resourceSubTab: "writing", labelKey: "navGoWriting", alwaysShow: true },
   { test: /発音|pronunciation/i, tab: "resources", resourceSubTab: "pronunciation", labelKey: "navGoPronunciation" },
   { test: /会話|conversation|speak/i, tab: "resources", resourceSubTab: "conversation", labelKey: "navGoConversation" },
-  { test: /字幕|subtitle/i, tab: "subtitles", labelKey: "navGoSubtitles" },
   { test: /音読|要約|shadowing|シャドーイング|read aloud|summarize/i, tab: "resources", resourceSubTab: "content", labelKey: "navGoContent" },
   { test: /単語|vocab|anki|flashcard/i, tab: "vocabulary", labelKey: "navGoVocabulary" },
 ];
@@ -1097,7 +1096,7 @@ const UI_TRANSLATIONS = {
     // Tutorial feature
     tutorialBtn: "🎓 Tutorial",
     tutorialWelcomeTitle: "Welcome to GAKU Master! 👋",
-    tutorialWelcomeDesc: "Let's take a quick tour of the 5 main features together. It only takes about a minute — tap through with me!",
+    tutorialWelcomeDesc: "Let's take a quick tour of the 4 main features together. It only takes about a minute — tap through with me!",
     tutorialStartBtn: "Start Tour",
     tutorialSkipBtn: "Skip",
     tutorialStepOf: "Step {current} of {total}",
@@ -1105,7 +1104,6 @@ const UI_TRANSLATIONS = {
     tutorialNextBtn: "Next →",
     tutorialScheduleDesc: "This is your personalized weekly study plan. Try checking off one task below — then watch your progress bar fill up.",
     tutorialVocabularyDesc: "Try it now: search for a word (e.g. 食べる) and save it to your own deck. You can review saved words anytime with flashcards.",
-    tutorialSubtitlesDesc: "Paste a video link below and turn its subtitles or audio into your own listening and vocabulary practice.",
     tutorialResourcesDesc: "Browse the resources picked for your level below, or paste some content to build your own practice set.",
     tutorialMilestonesDesc: "This is your roadmap to your Japanese goal. Take a look at what's coming next on your journey.",
     tutModesTitle: "Study modes & coach",
@@ -1193,7 +1191,7 @@ const UI_TRANSLATIONS = {
     copyWeak: "Practice these again",
     copyNewText: "New text",
     tutorialCompleteTitle: "All done! 🎉",
-    tutorialCompleteDesc: "You've seen all 5 main features of GAKU Master. You can replay this tour anytime from the 🎓 Tutorial button.",
+    tutorialCompleteDesc: "You've seen all 4 main features of GAKU Master. You can replay this tour anytime from the 🎓 Tutorial button.",
     tutorialCompleteBtn: "Start Studying",
     tutorialReaderCta: "📬 Get the GAKU Reader from your email!",
     featurePickerTitle: "Choose the features you want",
@@ -1275,7 +1273,7 @@ const UI_TRANSLATIONS = {
     trialEndedTitle: "Your 3-day Intensive trial has ended. Which mode now?",
     modeGuideTitle: "How the study modes work",
     modeGuideIntensive: "🔥 Intensive mode: finish today's quota of 8 actions (checking a task, answering a check, practicing, saving words, etc.).",
-    modeGuideLock: "🔒 Until the quota is done, Subtitles, Milestones and JLPT are locked. Tap a locked tab and you'll come back to your Schedule. When you reach 8, everything unlocks.",
+    modeGuideLock: "🔒 Until the quota is done, Milestones and JLPT are locked. Tap a locked tab and you'll come back to your Schedule. When you reach 8, everything unlocks.",
     modeGuideEnjoyable: "😊 Enjoyable mode: no quota, no warnings. You only see a gentle suggestion like \"You're usually good at X, and Y seems a little hard. How about Y today?\" (after you have 3+ records).",
     modeGuideEscape: "The Feedback tab and the Mode button are never locked. Want it easier? Switch to Enjoyable mode anytime from the Mode button.",
     modeGuideOk: "Got it",
@@ -1292,11 +1290,9 @@ const UI_TRANSLATIONS = {
     feedbackError: "Something went wrong sending your feedback. Please try again.",
     feedbackSubmitting: "Sending...",
     feedbackSubmit: "Submit Feedback",
-    tabSubtitles: "🎬 Subtitles",
     // In-app navigation shortcuts shown under schedule tasks (link straight to the matching tab)
     navGoConversation: "💬 Go to Listening & Conversation",
     navGoPronunciation: "🗣️ Go to Listening & Pronunciation",
-    navGoSubtitles: "📺 Go to Subtitles",
     navGoContent: "✨ Go to Create From Content",
     navGoVocabulary: "📚 Go to Vocabulary",
     savedSetFound: "You have a saved study set from before.",
@@ -1651,21 +1647,10 @@ const UI_TRANSLATIONS = {
     speed08: "🐢 0.8x",
     speed05: "🐌 0.5x",
     translateBtn: "Translate",
-    subtitlesTitle: "Subtitles → Vocabulary",
-    subtitlesDesc: "Paste subtitles or a transcript from a video you're already watching (e.g. YouTube's own \"Show transcript\" panel). Double-click a word or drag to select a phrase, then look it up and save it straight to your Vocabulary Builder.",
     subtitlesSourceLabel: "Video title / source (optional — used as the folder name)",
     subtitlesSourcePlaceholder: "e.g. NHK news 7/2",
-    subtitlesPasteLabel: "Paste subtitles / transcript here",
     subtitlesPastePlaceholder: "Paste plain text or an .srt file's contents — timestamps and cue numbers are removed automatically.",
-    subtitlesLoadBtn: "Load transcript",
-    subtitlesCopyrightNote: "🔒 Text you paste here is saved only in this browser's local storage, so you can resume later — it's never sent to a server. Only the specific words/phrases you choose to save are added to your Vocabulary Builder.",
-    subtitlesDefaultFolder: "Subtitles",
     subtitlesLoadNew: "↺ Load a different transcript",
-    subtitlesSavedCount: "Saved this session:",
-    subtitlesLookupSaveBtn: "🔍 Look up & save",
-    subtitlesTooLong: "That selection is too long — please select a shorter word or phrase (under ~60 characters).",
-    subtitlesSavedTo: "saved to",
-    subtitlesLookupError: "Lookup failed. Please try again.",
     resAnkiPronDesc: "Build phonetic recognition with audio flashcards. CLT: hear and repeat.",
     resMisaPronDesc: "Practical example sentences and pronunciation drills. CLT-focused.",
     resOnomappuPronDesc: "Japanese-only explanations. Comprehensible Input — CLT compatibility very high.",
@@ -1762,7 +1747,7 @@ const UI_TRANSLATIONS = {
     // Tutorial feature
     tutorialBtn: "🎓 Tutoriel",
     tutorialWelcomeTitle: "Bienvenue sur GAKU Master ! 👋",
-    tutorialWelcomeDesc: "Faisons ensemble un rapide tour des 5 fonctionnalités principales. Cela ne prend qu'une minute — suivez le guide !",
+    tutorialWelcomeDesc: "Faisons ensemble un rapide tour des 4 fonctionnalités principales. Cela ne prend qu'une minute — suivez le guide !",
     tutorialStartBtn: "Commencer la visite",
     tutorialSkipBtn: "Passer",
     tutorialStepOf: "Étape {current} sur {total}",
@@ -1770,7 +1755,6 @@ const UI_TRANSLATIONS = {
     tutorialNextBtn: "Suivant →",
     tutorialScheduleDesc: "Voici votre planning d'étude hebdomadaire personnalisé. Essayez de cocher une tâche ci-dessous — puis regardez votre barre de progression avancer.",
     tutorialVocabularyDesc: "Essayez maintenant : recherchez un mot (par ex. 食べる) et enregistrez-le dans votre propre deck. Vous pourrez réviser les mots enregistrés à tout moment avec des flashcards.",
-    tutorialSubtitlesDesc: "Collez un lien de vidéo ci-dessous et transformez ses sous-titres ou son audio en exercice d'écoute et de vocabulaire personnalisé.",
     tutorialResourcesDesc: "Parcourez les ressources sélectionnées pour votre niveau ci-dessous, ou collez du contenu pour créer votre propre exercice.",
     tutorialMilestonesDesc: "Voici votre feuille de route vers votre objectif en japonais. Jetez un œil à ce qui vous attend ensuite.",
     tutModesTitle: "Modes d'étude et coach",
@@ -1858,7 +1842,7 @@ const UI_TRANSLATIONS = {
     copyWeak: "À retravailler",
     copyNewText: "Nouveau texte",
     tutorialCompleteTitle: "Terminé ! 🎉",
-    tutorialCompleteDesc: "Vous avez découvert les 5 fonctionnalités principales de GAKU Master. Vous pouvez revoir cette visite à tout moment via le bouton 🎓 Tutoriel.",
+    tutorialCompleteDesc: "Vous avez découvert les 4 fonctionnalités principales de GAKU Master. Vous pouvez revoir cette visite à tout moment via le bouton 🎓 Tutoriel.",
     tutorialCompleteBtn: "Commencer à étudier",
     tutorialReaderCta: "📬 Recevez GAKU Reader par e-mail !",
     featurePickerTitle: "Choisissez les fonctionnalités que vous voulez",
@@ -1940,7 +1924,7 @@ const UI_TRANSLATIONS = {
     trialEndedTitle: "Votre essai de 3 jours du mode Intensive est terminé. Quel mode choisir maintenant ?",
     modeGuideTitle: "Comment fonctionnent les modes",
     modeGuideIntensive: "🔥 Mode Intensive : terminez le quota du jour de 8 actions (cocher une tâche, répondre à une vérification, s'entraîner, enregistrer des mots, etc.).",
-    modeGuideLock: "🔒 Tant que le quota n'est pas atteint, Sous-titres, Milestones et JLPT sont verrouillés. Touchez un onglet verrouillé pour revenir au Planning. À 8 actions, tout se débloque.",
+    modeGuideLock: "🔒 Tant que le quota n'est pas atteint, Milestones et JLPT sont verrouillés. Touchez un onglet verrouillé pour revenir au Planning. À 8 actions, tout se débloque.",
     modeGuideEnjoyable: "😊 Mode Enjoyable : ni quota ni avertissement. Seulement une suggestion douce, par ex. « Vous réussissez bien X, et Y semble un peu difficile. Et si on travaillait Y aujourd'hui ? » (à partir de 3 résultats enregistrés).",
     modeGuideEscape: "L'onglet Feedback et le bouton Mode ne sont jamais verrouillés. Envie de plus léger ? Passez en mode Enjoyable à tout moment avec le bouton Mode.",
     modeGuideOk: "Compris",
@@ -1957,10 +1941,8 @@ const UI_TRANSLATIONS = {
     feedbackError: "Une erreur s'est produite lors de l'envoi de votre retour. Veuillez réessayer.",
     feedbackSubmitting: "Envoi...",
     feedbackSubmit: "Envoyer le retour",
-    tabSubtitles: "🎬 Sous-titres",
     navGoConversation: "💬 Aller à : Écoute et conversation",
     navGoPronunciation: "🗣️ Aller à : Écoute et prononciation",
-    navGoSubtitles: "📺 Aller aux sous-titres",
     navGoContent: "✨ Aller à partir du contenu",
     navGoVocabulary: "📚 Aller au vocabulaire",
     savedSetFound: "Vous avez un ensemble d'étude enregistré précédemment.",
@@ -2257,21 +2239,10 @@ const UI_TRANSLATIONS = {
     speed08: "🐢 0,8x",
     speed05: "🐌 0,5x",
     translateBtn: "Traduire",
-    subtitlesTitle: "Sous-titres → Vocabulaire",
-    subtitlesDesc: "Collez des sous-titres ou une transcription d'une vidéo que vous regardez (par ex. le panneau \"Afficher la transcription\" de YouTube). Double-cliquez sur un mot ou faites glisser pour sélectionner une phrase, puis recherchez-la et enregistrez-la directement dans votre Générateur de vocabulaire.",
     subtitlesSourceLabel: "Titre / source de la vidéo (facultatif — utilisé comme nom de dossier)",
     subtitlesSourcePlaceholder: "ex. NHK news 7/2",
-    subtitlesPasteLabel: "Collez les sous-titres / la transcription ici",
     subtitlesPastePlaceholder: "Collez du texte brut ou le contenu d'un fichier .srt — les horodatages et numéros de repère sont supprimés automatiquement.",
-    subtitlesLoadBtn: "Charger la transcription",
-    subtitlesCopyrightNote: "🔒 Le texte que vous collez ici est enregistré uniquement dans le stockage local de ce navigateur, afin que vous puissiez reprendre plus tard — il n'est jamais envoyé à un serveur. Seuls les mots/phrases que vous choisissez d'enregistrer sont ajoutés à votre Générateur de vocabulaire.",
-    subtitlesDefaultFolder: "Sous-titres",
     subtitlesLoadNew: "↺ Charger une autre transcription",
-    subtitlesSavedCount: "Enregistrés cette session :",
-    subtitlesLookupSaveBtn: "🔍 Rechercher et enregistrer",
-    subtitlesTooLong: "Cette sélection est trop longue — veuillez choisir un mot ou une phrase plus courte (moins de ~60 caractères).",
-    subtitlesSavedTo: "enregistré dans",
-    subtitlesLookupError: "Échec de la recherche. Veuillez réessayer.",
     resAnkiPronDesc: "Développez la reconnaissance phonétique avec des cartes audio. CLT : écouter et répéter.",
     resMisaPronDesc: "Phrases d'exemple pratiques et exercices de prononciation. Axé sur la CLT.",
     resOnomappuPronDesc: "Explications entièrement en japonais. Input compréhensible — compatibilité CLT très élevée.",
@@ -2412,7 +2383,7 @@ const UI_TRANSLATIONS = {
     // Tutorial feature
     tutorialBtn: "🎓 Tutorial",
     tutorialWelcomeTitle: "¡Bienvenido a GAKU Master! 👋",
-    tutorialWelcomeDesc: "Hagamos juntos un recorrido rápido por las 5 funciones principales. Solo toma un minuto — ¡sígueme!",
+    tutorialWelcomeDesc: "Hagamos juntos un recorrido rápido por las 4 funciones principales. Solo toma un minuto — ¡sígueme!",
     tutorialStartBtn: "Comenzar el recorrido",
     tutorialSkipBtn: "Omitir",
     tutorialStepOf: "Paso {current} de {total}",
@@ -2420,7 +2391,6 @@ const UI_TRANSLATIONS = {
     tutorialNextBtn: "Siguiente →",
     tutorialScheduleDesc: "Este es tu plan de estudio semanal personalizado. Marca una tarea de abajo y observa cómo avanza tu barra de progreso.",
     tutorialVocabularyDesc: "Pruébalo ahora: busca una palabra (por ejemplo, 食べる) y guárdala en tu propio mazo. Podrás repasar las palabras guardadas cuando quieras con tarjetas de memoria.",
-    tutorialSubtitlesDesc: "Pega el enlace de un video abajo y convierte sus subtítulos o audio en tu propia práctica de escucha y vocabulario.",
     tutorialResourcesDesc: "Explora los recursos elegidos para tu nivel abajo, o pega contenido para crear tu propio ejercicio.",
     tutorialMilestonesDesc: "Esta es tu hoja de ruta hacia tu objetivo en japonés. Echa un vistazo a lo que viene a continuación.",
     tutModesTitle: "Modos de estudio y entrenador",
@@ -2508,7 +2478,7 @@ const UI_TRANSLATIONS = {
     copyWeak: "Practica estos de nuevo",
     copyNewText: "Texto nuevo",
     tutorialCompleteTitle: "¡Listo! 🎉",
-    tutorialCompleteDesc: "Has visto las 5 funciones principales de GAKU Master. Puedes repetir este recorrido cuando quieras desde el botón 🎓 Tutorial.",
+    tutorialCompleteDesc: "Has visto las 4 funciones principales de GAKU Master. Puedes repetir este recorrido cuando quieras desde el botón 🎓 Tutorial.",
     tutorialCompleteBtn: "Empezar a estudiar",
     tutorialReaderCta: "📬 ¡Recibe GAKU Reader por correo!",
     featurePickerTitle: "Elige las funciones que quieres",
@@ -2590,7 +2560,7 @@ const UI_TRANSLATIONS = {
     trialEndedTitle: "Terminó tu prueba de 3 días del modo Intensive. ¿Qué modo eliges ahora?",
     modeGuideTitle: "Cómo funcionan los modos",
     modeGuideIntensive: "🔥 Modo Intensive: completa la cuota de hoy de 8 acciones (marcar una tarea, responder una comprobación, practicar, guardar palabras, etc.).",
-    modeGuideLock: "🔒 Hasta cumplir la cuota, Subtítulos, Milestones y JLPT están bloqueados. Toca una pestaña bloqueada y volverás al Horario. Al llegar a 8, todo se desbloquea.",
+    modeGuideLock: "🔒 Hasta cumplir la cuota, Milestones y JLPT están bloqueados. Toca una pestaña bloqueada y volverás al Horario. Al llegar a 8, todo se desbloquea.",
     modeGuideEnjoyable: "😊 Modo Enjoyable: sin cuota ni avisos. Solo verás una sugerencia amable como «Sueles ir bien en X, y Y parece un poco difícil. ¿Y si practicas Y hoy?» (cuando tengas 3 o más registros).",
     modeGuideEscape: "La pestaña Feedback y el botón Mode nunca se bloquean. ¿Prefieres algo más suave? Cambia a Enjoyable cuando quieras con el botón Mode.",
     modeGuideOk: "Entendido",
@@ -2607,10 +2577,8 @@ const UI_TRANSLATIONS = {
     feedbackError: "Ocurrió un error al enviar tu comentario. Por favor, inténtalo de nuevo.",
     feedbackSubmitting: "Enviando...",
     feedbackSubmit: "Enviar Comentario",
-    tabSubtitles: "🎬 Subtítulos",
     navGoConversation: "💬 Ir a Escucha y conversación",
     navGoPronunciation: "🗣️ Ir a Escucha y pronunciación",
-    navGoSubtitles: "📺 Ir a subtítulos",
     navGoContent: "✨ Ir a partir del contenido",
     navGoVocabulary: "📚 Ir al vocabulario",
     savedSetFound: "Tienes un conjunto de estudio guardado de antes.",
@@ -2907,21 +2875,10 @@ const UI_TRANSLATIONS = {
     speed08: "🐢 0.8x",
     speed05: "🐌 0.5x",
     translateBtn: "Traducir",
-    subtitlesTitle: "Subtítulos → Vocabulario",
-    subtitlesDesc: "Pega subtítulos o una transcripción de un video que ya estás viendo (por ejemplo, el panel \"Mostrar transcripción\" de YouTube). Haz doble clic en una palabra o arrastra para seleccionar una frase, luego búscala y guárdala directamente en tu Generador de vocabulario.",
     subtitlesSourceLabel: "Título / fuente del video (opcional — se usa como nombre de la carpeta)",
     subtitlesSourcePlaceholder: "ej. NHK news 7/2",
-    subtitlesPasteLabel: "Pega los subtítulos / la transcripción aquí",
     subtitlesPastePlaceholder: "Pega texto plano o el contenido de un archivo .srt — las marcas de tiempo y números de escena se eliminan automáticamente.",
-    subtitlesLoadBtn: "Cargar transcripción",
-    subtitlesCopyrightNote: "🔒 El texto que pegas aquí se guarda solo en el almacenamiento local de este navegador, para que puedas continuar más tarde — nunca se envía a un servidor. Solo las palabras/frases que elijas guardar se añaden a tu Generador de vocabulario.",
-    subtitlesDefaultFolder: "Subtítulos",
     subtitlesLoadNew: "↺ Cargar otra transcripción",
-    subtitlesSavedCount: "Guardados en esta sesión:",
-    subtitlesLookupSaveBtn: "🔍 Buscar y guardar",
-    subtitlesTooLong: "Esa selección es demasiado larga — elige una palabra o frase más corta (menos de ~60 caracteres).",
-    subtitlesSavedTo: "guardado en",
-    subtitlesLookupError: "Error en la búsqueda. Inténtalo de nuevo.",
     resAnkiPronDesc: "Desarrolla el reconocimiento fonético con tarjetas de audio. CLT: escuchar y repetir.",
     resMisaPronDesc: "Frases de ejemplo prácticas y ejercicios de pronunciación. Enfocado en CLT.",
     resOnomappuPronDesc: "Explicaciones solo en japonés. Input comprensible — compatibilidad CLT muy alta.",
@@ -3062,7 +3019,7 @@ const UI_TRANSLATIONS = {
     // Tutorial feature
     tutorialBtn: "🎓 Tutorial",
     tutorialWelcomeTitle: "Bem-vindo ao GAKU Master! 👋",
-    tutorialWelcomeDesc: "Vamos fazer juntos um tour rápido pelas 5 principais funções. Leva só um minuto — vem comigo!",
+    tutorialWelcomeDesc: "Vamos fazer juntos um tour rápido pelas 4 principais funções. Leva só um minuto — vem comigo!",
     tutorialStartBtn: "Iniciar tour",
     tutorialSkipBtn: "Pular",
     tutorialStepOf: "Passo {current} de {total}",
@@ -3070,7 +3027,6 @@ const UI_TRANSLATIONS = {
     tutorialNextBtn: "Próximo →",
     tutorialScheduleDesc: "Este é o seu plano de estudos semanal personalizado. Marque uma tarefa abaixo e veja sua barra de progresso avançar.",
     tutorialVocabularyDesc: "Experimente agora: pesquise uma palavra (por exemplo, 食べる) e salve-a no seu próprio baralho. Você poderá revisar as palavras salvas a qualquer momento com flashcards.",
-    tutorialSubtitlesDesc: "Cole o link de um vídeo abaixo e transforme as legendas ou o áudio em sua própria prática de escuta e vocabulário.",
     tutorialResourcesDesc: "Explore os recursos selecionados para o seu nível abaixo, ou cole um conteúdo para criar seu próprio exercício.",
     tutorialMilestonesDesc: "Este é o seu roteiro rumo ao seu objetivo em japonês. Dê uma olhada no que vem a seguir.",
     tutModesTitle: "Modos de estudo e treinador",
@@ -3158,7 +3114,7 @@ const UI_TRANSLATIONS = {
     copyWeak: "Pratique estes de novo",
     copyNewText: "Novo texto",
     tutorialCompleteTitle: "Tudo pronto! 🎉",
-    tutorialCompleteDesc: "Você conheceu as 5 principais funções do GAKU Master. Você pode rever este tour a qualquer momento pelo botão 🎓 Tutorial.",
+    tutorialCompleteDesc: "Você conheceu as 4 principais funções do GAKU Master. Você pode rever este tour a qualquer momento pelo botão 🎓 Tutorial.",
     tutorialCompleteBtn: "Começar a estudar",
     tutorialReaderCta: "📬 Receba o GAKU Reader pelo e-mail!",
     featurePickerTitle: "Escolha os recursos que você quer",
@@ -3240,7 +3196,7 @@ const UI_TRANSLATIONS = {
     trialEndedTitle: "Seu teste de 3 dias do modo Intensive acabou. Qual modo agora?",
     modeGuideTitle: "Como funcionam os modos",
     modeGuideIntensive: "🔥 Modo Intensive: cumpra a meta de hoje de 8 ações (marcar uma tarefa, responder uma verificação, praticar, salvar palavras etc.).",
-    modeGuideLock: "🔒 Até cumprir a meta, Legendas, Milestones e JLPT ficam bloqueados. Toque numa aba bloqueada e você volta ao Cronograma. Ao chegar a 8, tudo é liberado.",
+    modeGuideLock: "🔒 Até cumprir a meta, Milestones e JLPT ficam bloqueados. Toque numa aba bloqueada e você volta ao Cronograma. Ao chegar a 8, tudo é liberado.",
     modeGuideEnjoyable: "😊 Modo Enjoyable: sem meta e sem avisos. Você só vê uma sugestão gentil, como \"Você costuma ir bem em X, e Y parece um pouco difícil. Que tal Y hoje?\" (com 3 ou mais registros).",
     modeGuideEscape: "A aba Feedback e o botão Mode nunca são bloqueados. Quer algo mais leve? Mude para Enjoyable quando quiser pelo botão Mode.",
     modeGuideOk: "Entendi",
@@ -3257,10 +3213,8 @@ const UI_TRANSLATIONS = {
     feedbackError: "Algo deu errado ao enviar seu feedback. Por favor, tente novamente.",
     feedbackSubmitting: "Enviando...",
     feedbackSubmit: "Enviar Feedback",
-    tabSubtitles: "🎬 Legendas",
     navGoConversation: "💬 Ir para Escuta e conversação",
     navGoPronunciation: "🗣️ Ir para Escuta e pronúncia",
-    navGoSubtitles: "📺 Ir para legendas",
     navGoContent: "✨ Ir a partir do conteúdo",
     navGoVocabulary: "📚 Ir para o vocabulário",
     savedSetFound: "Você tem um conjunto de estudo salvo de antes.",
@@ -3557,21 +3511,10 @@ const UI_TRANSLATIONS = {
     speed08: "🐢 0,8x",
     speed05: "🐌 0,5x",
     translateBtn: "Traduzir",
-    subtitlesTitle: "Legendas → Vocabulário",
-    subtitlesDesc: "Cole legendas ou uma transcrição de um vídeo que você já está assistindo (por exemplo, o painel \"Mostrar transcrição\" do YouTube). Clique duas vezes em uma palavra ou arraste para selecionar uma frase, depois pesquise e salve diretamente no seu Criador de Vocabulário.",
     subtitlesSourceLabel: "Título / fonte do vídeo (opcional — usado como nome da pasta)",
     subtitlesSourcePlaceholder: "ex. NHK news 7/2",
-    subtitlesPasteLabel: "Cole as legendas / transcrição aqui",
     subtitlesPastePlaceholder: "Cole texto simples ou o conteúdo de um arquivo .srt — carimbos de data/hora e números de sequência são removidos automaticamente.",
-    subtitlesLoadBtn: "Carregar transcrição",
-    subtitlesCopyrightNote: "🔒 O texto que você cola aqui é salvo apenas no armazenamento local deste navegador, para que você possa continuar depois — nunca é enviado a um servidor. Somente as palavras/frases que você escolher salvar são adicionadas ao seu Criador de Vocabulário.",
-    subtitlesDefaultFolder: "Legendas",
     subtitlesLoadNew: "↺ Carregar outra transcrição",
-    subtitlesSavedCount: "Salvos nesta sessão:",
-    subtitlesLookupSaveBtn: "🔍 Pesquisar e salvar",
-    subtitlesTooLong: "Essa seleção é muito longa — escolha uma palavra ou frase mais curta (menos de ~60 caracteres).",
-    subtitlesSavedTo: "salvo em",
-    subtitlesLookupError: "Falha na pesquisa. Tente novamente.",
     resAnkiPronDesc: "Desenvolva o reconhecimento fonético com flashcards de áudio. CLT: ouvir e repetir.",
     resMisaPronDesc: "Frases de exemplo práticas e exercícios de pronúncia. Focado em CLT.",
     resOnomappuPronDesc: "Explicações somente em japonês. Input compreensível — compatibilidade CLT muito alta.",
@@ -3712,7 +3655,7 @@ const UI_TRANSLATIONS = {
     // Tutorial feature
     tutorialBtn: "🎓 Tutorial",
     tutorialWelcomeTitle: "Willkommen bei GAKU Master! 👋",
-    tutorialWelcomeDesc: "Machen wir gemeinsam eine kurze Tour durch die 5 Hauptfunktionen. Es dauert nur eine Minute — komm mit!",
+    tutorialWelcomeDesc: "Machen wir gemeinsam eine kurze Tour durch die 4 Hauptfunktionen. Es dauert nur eine Minute — komm mit!",
     tutorialStartBtn: "Tour starten",
     tutorialSkipBtn: "Überspringen",
     tutorialStepOf: "Schritt {current} von {total}",
@@ -3720,7 +3663,6 @@ const UI_TRANSLATIONS = {
     tutorialNextBtn: "Weiter →",
     tutorialScheduleDesc: "Das ist dein persönlicher wöchentlicher Lernplan. Hake unten eine Aufgabe ab — und beobachte, wie dein Fortschrittsbalken wächst.",
     tutorialVocabularyDesc: "Probier's gleich aus: Suche nach einem Wort (z. B. 食べる) und speichere es in deinem eigenen Stapel. Gespeicherte Wörter kannst du jederzeit mit Karteikarten wiederholen.",
-    tutorialSubtitlesDesc: "Füge unten einen Video-Link ein und verwandle dessen Untertitel oder Ton in dein eigenes Hör- und Vokabeltraining.",
     tutorialResourcesDesc: "Stöbere unten in den für dein Niveau ausgewählten Ressourcen oder füge einen Text ein, um eine eigene Übung zu erstellen.",
     tutorialMilestonesDesc: "Das ist deine Roadmap zu deinem Japanisch-Ziel. Wirf einen Blick darauf, was als Nächstes kommt.",
     tutModesTitle: "Lernmodi & Coach",
@@ -3808,7 +3750,7 @@ const UI_TRANSLATIONS = {
     copyWeak: "Diese nochmal üben",
     copyNewText: "Neuer Text",
     tutorialCompleteTitle: "Fertig! 🎉",
-    tutorialCompleteDesc: "Du hast alle 5 Hauptfunktionen von GAKU Master kennengelernt. Du kannst diese Tour jederzeit über den 🎓 Tutorial-Button wiederholen.",
+    tutorialCompleteDesc: "Du hast alle 4 Hauptfunktionen von GAKU Master kennengelernt. Du kannst diese Tour jederzeit über den 🎓 Tutorial-Button wiederholen.",
     tutorialCompleteBtn: "Mit dem Lernen beginnen",
     tutorialReaderCta: "📬 Hol dir GAKU Reader per E-Mail!",
     featurePickerTitle: "Wähle die Funktionen, die du willst",
@@ -3890,7 +3832,7 @@ const UI_TRANSLATIONS = {
     trialEndedTitle: "Ihre 3-tägige Intensive-Testphase ist vorbei. Welcher Modus jetzt?",
     modeGuideTitle: "So funktionieren die Modi",
     modeGuideIntensive: "🔥 Intensive-Modus: Erreichen Sie das heutige Tagesziel von 8 Aktionen (Aufgabe abhaken, Verständnisfrage beantworten, üben, Wörter speichern usw.).",
-    modeGuideLock: "🔒 Bis das Ziel erreicht ist, sind Untertitel, Milestones und JLPT gesperrt. Tippen Sie auf einen gesperrten Tab, kehren Sie zum Zeitplan zurück. Bei 8 wird alles freigeschaltet.",
+    modeGuideLock: "🔒 Bis das Ziel erreicht ist, sind Milestones und JLPT gesperrt. Tippen Sie auf einen gesperrten Tab, kehren Sie zum Zeitplan zurück. Bei 8 wird alles freigeschaltet.",
     modeGuideEnjoyable: "😊 Enjoyable-Modus: kein Ziel, keine Warnungen. Nur ein sanfter Vorschlag wie „Sie sind meist gut in X, und Y scheint etwas schwer. Wie wäre es heute mit Y?“ (ab 3 Einträgen).",
     modeGuideEscape: "Der Feedback-Tab und die Mode-Taste sind nie gesperrt. Lieber entspannter? Wechseln Sie jederzeit über die Mode-Taste zu Enjoyable.",
     modeGuideOk: "Verstanden",
@@ -3907,10 +3849,8 @@ const UI_TRANSLATIONS = {
     feedbackError: "Beim Senden deines Feedbacks ist ein Fehler aufgetreten. Bitte versuche es erneut.",
     feedbackSubmitting: "Wird gesendet...",
     feedbackSubmit: "Feedback senden",
-    tabSubtitles: "🎬 Untertitel",
     navGoConversation: "💬 Zu „Hören & Konversation“",
     navGoPronunciation: "🗣️ Zu „Hören & Aussprache“",
-    navGoSubtitles: "📺 Zu den Untertiteln",
     navGoContent: "✨ Zur Übung mit Inhalten",
     navGoVocabulary: "📚 Zum Vokabular",
     savedSetFound: "Du hast ein gespeichertes Lernset von vorher.",
@@ -4207,21 +4147,10 @@ const UI_TRANSLATIONS = {
     speed08: "🐢 0,8x",
     speed05: "🐌 0,5x",
     translateBtn: "Übersetzen",
-    subtitlesTitle: "Untertitel → Vokabular",
-    subtitlesDesc: "Füge Untertitel oder ein Transkript eines Videos ein, das du bereits ansiehst (z. B. YouTubes eigenes \"Transkript anzeigen\"-Feld). Doppelklicke auf ein Wort oder ziehe, um eine Phrase auszuwählen, schlage sie dann nach und speichere sie direkt in deinem Vokabel-Builder.",
     subtitlesSourceLabel: "Videotitel / Quelle (optional — wird als Ordnername verwendet)",
     subtitlesSourcePlaceholder: "z. B. NHK news 7/2",
-    subtitlesPasteLabel: "Untertitel / Transkript hier einfügen",
     subtitlesPastePlaceholder: "Füge reinen Text oder den Inhalt einer .srt-Datei ein — Zeitstempel und Nummerierungen werden automatisch entfernt.",
-    subtitlesLoadBtn: "Transkript laden",
-    subtitlesCopyrightNote: "🔒 Der hier eingefügte Text wird nur im lokalen Speicher dieses Browsers gespeichert, damit du später fortfahren kannst — er wird nie an einen Server gesendet. Nur die Wörter/Phrasen, die du zum Speichern auswählst, werden zu deinem Vokabel-Builder hinzugefügt.",
-    subtitlesDefaultFolder: "Untertitel",
     subtitlesLoadNew: "↺ Ein anderes Transkript laden",
-    subtitlesSavedCount: "In dieser Sitzung gespeichert:",
-    subtitlesLookupSaveBtn: "🔍 Nachschlagen & speichern",
-    subtitlesTooLong: "Diese Auswahl ist zu lang — bitte wähle ein kürzeres Wort oder eine kürzere Phrase (unter ~60 Zeichen).",
-    subtitlesSavedTo: "gespeichert in",
-    subtitlesLookupError: "Nachschlagen fehlgeschlagen. Bitte versuche es erneut.",
     resAnkiPronDesc: "Baue phonetische Erkennung mit Audio-Karteikarten auf. CLT: hören und wiederholen.",
     resMisaPronDesc: "Praktische Beispielsätze und Ausspracheübungen. CLT-fokussiert.",
     resOnomappuPronDesc: "Erklärungen nur auf Japanisch. Comprehensible Input — sehr hohe CLT-Kompatibilität.",
@@ -4362,7 +4291,7 @@ const UI_TRANSLATIONS = {
     // Tutorial feature
     tutorialBtn: "🎓 Tutorial",
     tutorialWelcomeTitle: "Benvenuto su GAKU Master! 👋",
-    tutorialWelcomeDesc: "Facciamo insieme un rapido tour delle 5 funzioni principali. Basta un minuto — seguimi!",
+    tutorialWelcomeDesc: "Facciamo insieme un rapido tour delle 4 funzioni principali. Basta un minuto — seguimi!",
     tutorialStartBtn: "Inizia il tour",
     tutorialSkipBtn: "Salta",
     tutorialStepOf: "Passaggio {current} di {total}",
@@ -4370,7 +4299,6 @@ const UI_TRANSLATIONS = {
     tutorialNextBtn: "Avanti →",
     tutorialScheduleDesc: "Questo è il tuo piano di studio settimanale personalizzato. Prova a spuntare un'attività qui sotto — poi guarda la tua barra di progresso avanzare.",
     tutorialVocabularyDesc: "Provalo subito: cerca una parola (ad es. 食べる) e salvala nel tuo mazzo personale. Potrai ripassare le parole salvate quando vuoi con le flashcard.",
-    tutorialSubtitlesDesc: "Incolla il link di un video qui sotto e trasforma i suoi sottotitoli o l'audio in un esercizio personale di ascolto e vocabolario.",
     tutorialResourcesDesc: "Sfoglia le risorse selezionate per il tuo livello qui sotto, oppure incolla un contenuto per creare il tuo esercizio.",
     tutorialMilestonesDesc: "Questa è la tua roadmap verso il tuo obiettivo in giapponese. Dai un'occhiata a cosa ti aspetta.",
     tutModesTitle: "Modalità di studio e coach",
@@ -4458,7 +4386,7 @@ const UI_TRANSLATIONS = {
     copyWeak: "Esercitati di nuovo su questi",
     copyNewText: "Nuovo testo",
     tutorialCompleteTitle: "Fatto! 🎉",
-    tutorialCompleteDesc: "Hai visto tutte le 5 funzioni principali di GAKU Master. Puoi rivedere questo tour in qualsiasi momento dal pulsante 🎓 Tutorial.",
+    tutorialCompleteDesc: "Hai visto tutte le 4 funzioni principali di GAKU Master. Puoi rivedere questo tour in qualsiasi momento dal pulsante 🎓 Tutorial.",
     tutorialCompleteBtn: "Inizia a studiare",
     tutorialReaderCta: "📬 Ricevi GAKU Reader via e-mail!",
     featurePickerTitle: "Scegli le funzioni che vuoi",
@@ -4540,7 +4468,7 @@ const UI_TRANSLATIONS = {
     trialEndedTitle: "La tua prova di 3 giorni della modalità Intensive è finita. Quale modalità ora?",
     modeGuideTitle: "Come funzionano le modalità",
     modeGuideIntensive: "🔥 Modalità Intensive: completa l'obiettivo di oggi di 8 azioni (spuntare un compito, rispondere a una verifica, esercitarti, salvare parole, ecc.).",
-    modeGuideLock: "🔒 Finché non raggiungi l'obiettivo, Sottotitoli, Milestones e JLPT sono bloccati. Tocca una scheda bloccata e tornerai al Programma. Arrivato a 8, tutto si sblocca.",
+    modeGuideLock: "🔒 Finché non raggiungi l'obiettivo, Milestones e JLPT sono bloccati. Tocca una scheda bloccata e tornerai al Programma. Arrivato a 8, tutto si sblocca.",
     modeGuideEnjoyable: "😊 Modalità Enjoyable: nessun obiettivo, nessun avviso. Vedi solo un suggerimento gentile come «Di solito vai bene in X, e Y sembra un po' difficile. Che ne dici di Y oggi?» (con 3 o più registrazioni).",
     modeGuideEscape: "La scheda Feedback e il pulsante Mode non sono mai bloccati. Vuoi qualcosa di più leggero? Passa a Enjoyable quando vuoi dal pulsante Mode.",
     modeGuideOk: "Capito",
@@ -4557,10 +4485,8 @@ const UI_TRANSLATIONS = {
     feedbackError: "Si è verificato un errore durante l'invio del tuo feedback. Riprova.",
     feedbackSubmitting: "Invio in corso...",
     feedbackSubmit: "Invia Feedback",
-    tabSubtitles: "🎬 Sottotitoli",
     navGoConversation: "💬 Vai a Ascolto e conversazione",
     navGoPronunciation: "🗣️ Vai a Ascolto e pronuncia",
-    navGoSubtitles: "📺 Vai ai sottotitoli",
     navGoContent: "✨ Vai alla pratica dai contenuti",
     navGoVocabulary: "📚 Vai al vocabolario",
     savedSetFound: "Hai un set di studio salvato da prima.",
@@ -4857,21 +4783,10 @@ const UI_TRANSLATIONS = {
     speed08: "🐢 0,8x",
     speed05: "🐌 0,5x",
     translateBtn: "Traduci",
-    subtitlesTitle: "Sottotitoli → Vocabolario",
-    subtitlesDesc: "Incolla sottotitoli o una trascrizione di un video che stai già guardando (ad es. il pannello \"Mostra trascrizione\" di YouTube). Fai doppio clic su una parola o trascina per selezionare una frase, poi cercala e salvala direttamente nel tuo Costruttore di vocabolario.",
     subtitlesSourceLabel: "Titolo / fonte del video (facoltativo — usato come nome della cartella)",
     subtitlesSourcePlaceholder: "es. NHK news 7/2",
-    subtitlesPasteLabel: "Incolla qui i sottotitoli / la trascrizione",
     subtitlesPastePlaceholder: "Incolla testo semplice o il contenuto di un file .srt — timestamp e numeri di sequenza vengono rimossi automaticamente.",
-    subtitlesLoadBtn: "Carica trascrizione",
-    subtitlesCopyrightNote: "🔒 Il testo che incolli qui viene salvato solo nella memoria locale di questo browser, così puoi riprendere più tardi — non viene mai inviato a un server. Solo le parole/frasi che scegli di salvare vengono aggiunte al tuo Costruttore di vocabolario.",
-    subtitlesDefaultFolder: "Sottotitoli",
     subtitlesLoadNew: "↺ Carica un'altra trascrizione",
-    subtitlesSavedCount: "Salvati in questa sessione:",
-    subtitlesLookupSaveBtn: "🔍 Cerca e salva",
-    subtitlesTooLong: "Questa selezione è troppo lunga — scegli una parola o frase più breve (meno di ~60 caratteri).",
-    subtitlesSavedTo: "salvato in",
-    subtitlesLookupError: "Ricerca non riuscita. Riprova.",
     resAnkiPronDesc: "Sviluppa il riconoscimento fonetico con flashcard audio. CLT: ascolta e ripeti.",
     resMisaPronDesc: "Frasi di esempio pratiche ed esercizi di pronuncia. Focalizzato sulla CLT.",
     resOnomappuPronDesc: "Spiegazioni solo in giapponese. Input comprensibile — compatibilità CLT molto alta.",
@@ -5012,7 +4927,7 @@ const UI_TRANSLATIONS = {
     // Tutorial feature
     tutorialBtn: "🎓 教程",
     tutorialWelcomeTitle: "欢迎使用GAKU Master！👋",
-    tutorialWelcomeDesc: "让我们快速浏览一下5个主要功能吧，只需一分钟——跟我点一点！",
+    tutorialWelcomeDesc: "让我们快速浏览一下4个主要功能吧，只需一分钟——跟我点一点！",
     tutorialStartBtn: "开始导览",
     tutorialSkipBtn: "跳过",
     tutorialStepOf: "第 {current} 步，共 {total} 步",
@@ -5020,7 +4935,6 @@ const UI_TRANSLATIONS = {
     tutorialNextBtn: "下一步 →",
     tutorialScheduleDesc: "这是你的个性化每周学习计划。试着勾选下面的一项任务——然后看着进度条不断增长。",
     tutorialVocabularyDesc: "现在就试试：搜索一个单词(比如食べる)并保存到你自己的单词本。保存的单词可以随时用抽认卡复习。",
-    tutorialSubtitlesDesc: "在下面粘贴一个视频链接，把它的字幕或语音变成属于你自己的听力和词汇练习。",
     tutorialResourcesDesc: "浏览下面为你的水平精选的学习资源，或者粘贴一段内容来制作你自己的练习。",
     tutorialMilestonesDesc: "这是通往你日语目标的路线图。看看接下来会遇到什么。",
     tutModesTitle: "学习模式与教练",
@@ -5108,7 +5022,7 @@ const UI_TRANSLATIONS = {
     copyWeak: "再练习这些字",
     copyNewText: "新文字",
     tutorialCompleteTitle: "全部完成！🎉",
-    tutorialCompleteDesc: "你已经了解了GAKU Master的全部5个主要功能。随时可以通过🎓教程按钮重新观看导览。",
+    tutorialCompleteDesc: "你已经了解了GAKU Master的全部4个主要功能。随时可以通过🎓教程按钮重新观看导览。",
     tutorialCompleteBtn: "开始学习",
     tutorialReaderCta: "📬 通过邮件领取GAKU Reader！",
     featurePickerTitle: "选择你想要的功能",
@@ -5190,7 +5104,7 @@ const UI_TRANSLATIONS = {
     trialEndedTitle: "你的 3 天 Intensive 试用已结束。现在选择哪种模式？",
     modeGuideTitle: "学习模式的说明",
     modeGuideIntensive: "🔥 Intensive 模式：完成今天 8 个动作的目标（勾选任务、回答理解检查、练习、保存单词等）。",
-    modeGuideLock: "🔒 完成目标之前，Subtitles、Milestones 和 JLPT 会被锁定。点击被锁定的标签会回到日程页面。达到 8 个后全部解锁。",
+    modeGuideLock: "🔒 完成目标之前，Milestones 和 JLPT 会被锁定。点击被锁定的标签会回到日程页面。达到 8 个后全部解锁。",
     modeGuideEnjoyable: "😊 Enjoyable 模式：没有目标，也没有警告。只会显示温和的建议，例如“你通常擅长 X，Y 似乎有点难。今天练习 Y 怎么样？”（有 3 条以上记录时）。",
     modeGuideEscape: "Feedback 标签和 Mode 按钮永远不会被锁定。想轻松一点？随时可通过 Mode 按钮切换到 Enjoyable 模式。",
     modeGuideOk: "知道了",
@@ -5207,10 +5121,8 @@ const UI_TRANSLATIONS = {
     feedbackError: "发送反馈时出现问题，请重试。",
     feedbackSubmitting: "发送中...",
     feedbackSubmit: "提交反馈",
-    tabSubtitles: "🎬 字幕",
     navGoConversation: "💬 前往听力与会话",
     navGoPronunciation: "🗣️ 前往听力与发音",
-    navGoSubtitles: "📺 前往字幕",
     navGoContent: "✨ 前往内容练习",
     navGoVocabulary: "📚 前往词汇",
     savedSetFound: "你有一个之前保存的学习内容。",
@@ -5507,21 +5419,10 @@ const UI_TRANSLATIONS = {
     speed08: "🐢 0.8倍速",
     speed05: "🐌 0.5倍速",
     translateBtn: "翻译",
-    subtitlesTitle: "字幕 → 词汇",
-    subtitlesDesc: "粘贴你正在观看的视频的字幕或文字记录（例如YouTube自带的“显示字幕稿”面板）。双击一个词或拖动选择一个短语，然后查询并直接保存到你的词汇构建器。",
     subtitlesSourceLabel: "视频标题/来源（可选——用作文件夹名称）",
     subtitlesSourcePlaceholder: "例如 NHK news 7/2",
-    subtitlesPasteLabel: "在此粘贴字幕/文字记录",
     subtitlesPastePlaceholder: "粘贴纯文本或 .srt 文件内容——时间戳和序号会自动移除。",
-    subtitlesLoadBtn: "加载文字记录",
-    subtitlesCopyrightNote: "🔒 你粘贴的文本仅保存在此浏览器的本地存储中，以便稍后继续——绝不会发送到服务器。只有你选择保存的单词/短语会被添加到你的词汇构建器。",
-    subtitlesDefaultFolder: "字幕",
     subtitlesLoadNew: "↺ 加载其他文字记录",
-    subtitlesSavedCount: "本次已保存：",
-    subtitlesLookupSaveBtn: "🔍 查询并保存",
-    subtitlesTooLong: "所选内容太长——请选择更短的单词或短语（60个字符以内）。",
-    subtitlesSavedTo: "已保存到",
-    subtitlesLookupError: "查询失败，请重试。",
     resAnkiPronDesc: "通过音频卡片建立语音辨识能力。CLT：听并跟读。",
     resMisaPronDesc: "实用例句和发音练习。专注于CLT。",
     resOnomappuPronDesc: "全日语讲解。可理解输入——CLT兼容性非常高。",
@@ -5662,7 +5563,7 @@ const UI_TRANSLATIONS = {
     // Tutorial feature
     tutorialBtn: "🎓 教學",
     tutorialWelcomeTitle: "歡迎使用GAKU Master！👋",
-    tutorialWelcomeDesc: "讓我們快速瀏覽一下5個主要功能吧，只需一分鐘——跟我點一點！",
+    tutorialWelcomeDesc: "讓我們快速瀏覽一下4個主要功能吧，只需一分鐘——跟我點一點！",
     tutorialStartBtn: "開始導覽",
     tutorialSkipBtn: "跳過",
     tutorialStepOf: "第 {current} 步，共 {total} 步",
@@ -5670,7 +5571,6 @@ const UI_TRANSLATIONS = {
     tutorialNextBtn: "下一步 →",
     tutorialScheduleDesc: "這是你的個人化每週學習計畫。試著勾選下面的一項任務——然後看著進度條不斷增長。",
     tutorialVocabularyDesc: "現在就試試：搜尋一個單字(例如食べる)並儲存到你自己的單字本。儲存的單字可以隨時用抽認卡複習。",
-    tutorialSubtitlesDesc: "在下面貼上一個影片連結，把它的字幕或語音變成屬於你自己的聽力和詞彙練習。",
     tutorialResourcesDesc: "瀏覽下面為你的程度精選的學習資源，或貼上一段內容來製作你自己的練習。",
     tutorialMilestonesDesc: "這是通往你日文目標的路線圖。看看接下來會遇到什麼。",
     tutModesTitle: "學習模式與教練",
@@ -5758,7 +5658,7 @@ const UI_TRANSLATIONS = {
     copyWeak: "再練習這些字",
     copyNewText: "新文字",
     tutorialCompleteTitle: "全部完成！🎉",
-    tutorialCompleteDesc: "你已經了解了GAKU Master的全部5個主要功能。隨時可以透過🎓教學按鈕重新觀看導覽。",
+    tutorialCompleteDesc: "你已經了解了GAKU Master的全部4個主要功能。隨時可以透過🎓教學按鈕重新觀看導覽。",
     tutorialCompleteBtn: "開始學習",
     tutorialReaderCta: "📬 透過電子郵件領取GAKU Reader！",
     featurePickerTitle: "選擇你想要的功能",
@@ -5840,7 +5740,7 @@ const UI_TRANSLATIONS = {
     trialEndedTitle: "你的 3 天 Intensive 試用已結束。現在選擇哪種模式？",
     modeGuideTitle: "學習模式的說明",
     modeGuideIntensive: "🔥 Intensive 模式：完成今天 8 個動作的目標（勾選任務、回答理解檢查、練習、儲存單字等）。",
-    modeGuideLock: "🔒 完成目標之前，Subtitles、Milestones 和 JLPT 會被鎖定。點選被鎖定的分頁會回到行程頁面。達到 8 個後全部解鎖。",
+    modeGuideLock: "🔒 完成目標之前，Milestones 和 JLPT 會被鎖定。點選被鎖定的分頁會回到行程頁面。達到 8 個後全部解鎖。",
     modeGuideEnjoyable: "😊 Enjoyable 模式：沒有目標，也沒有警告。只會顯示溫和的建議，例如「你通常擅長 X，Y 似乎有點難。今天練習 Y 如何？」（有 3 筆以上紀錄時）。",
     modeGuideEscape: "Feedback 分頁和 Mode 按鈕永遠不會被鎖定。想輕鬆一點？隨時可透過 Mode 按鈕切換到 Enjoyable 模式。",
     modeGuideOk: "知道了",
@@ -5857,10 +5757,8 @@ const UI_TRANSLATIONS = {
     feedbackError: "傳送意見回饋時發生問題，請再試一次。",
     feedbackSubmitting: "傳送中...",
     feedbackSubmit: "送出意見回饋",
-    tabSubtitles: "🎬 字幕",
     navGoConversation: "💬 前往聽力與會話",
     navGoPronunciation: "🗣️ 前往聽力與發音",
-    navGoSubtitles: "📺 前往字幕",
     navGoContent: "✨ 前往內容練習",
     navGoVocabulary: "📚 前往詞彙",
     savedSetFound: "你有一個之前保存的學習內容。",
@@ -6157,21 +6055,10 @@ const UI_TRANSLATIONS = {
     speed08: "🐢 0.8倍速",
     speed05: "🐌 0.5倍速",
     translateBtn: "翻譯",
-    subtitlesTitle: "字幕 → 詞彙",
-    subtitlesDesc: "貼上你正在觀看的影片的字幕或逐字稿（例如YouTube自帶的「顯示逐字稿」面板）。雙擊一個詞或拖曳選取一個片語，然後查詢並直接儲存到你的詞彙建構器。",
     subtitlesSourceLabel: "影片標題/來源（可選——用作資料夾名稱）",
     subtitlesSourcePlaceholder: "例如 NHK news 7/2",
-    subtitlesPasteLabel: "在此貼上字幕/逐字稿",
     subtitlesPastePlaceholder: "貼上純文字或 .srt 檔案內容——時間戳記與序號會自動移除。",
-    subtitlesLoadBtn: "載入逐字稿",
-    subtitlesCopyrightNote: "🔒 你貼上的文字僅保存在此瀏覽器的本機儲存空間中，以便稍後繼續——絕不會傳送到伺服器。只有你選擇儲存的特定單詞/片語會被加入你的詞彙建構器。",
-    subtitlesDefaultFolder: "字幕",
     subtitlesLoadNew: "↺ 載入其他逐字稿",
-    subtitlesSavedCount: "本次已儲存：",
-    subtitlesLookupSaveBtn: "🔍 查詢並儲存",
-    subtitlesTooLong: "所選內容太長——請選擇較短的單詞或片語（60個字元以內）。",
-    subtitlesSavedTo: "已儲存到",
-    subtitlesLookupError: "查詢失敗，請再試一次。",
     resAnkiPronDesc: "透過音訊卡片建立語音辨識能力。CLT：聆聽並跟讀。",
     resMisaPronDesc: "實用例句和發音練習。專注於CLT。",
     resOnomappuPronDesc: "全日語講解。可理解輸入——CLT相容性非常高。",
@@ -6312,7 +6199,7 @@ const UI_TRANSLATIONS = {
     // Tutorial feature
     tutorialBtn: "🎓 튜토리얼",
     tutorialWelcomeTitle: "GAKU Master에 오신 것을 환영합니다! 👋",
-    tutorialWelcomeDesc: "5가지 주요 기능을 함께 빠르게 둘러볼까요? 1분이면 충분해요 — 저와 함께 눌러보세요!",
+    tutorialWelcomeDesc: "4가지 주요 기능을 함께 빠르게 둘러볼까요? 1분이면 충분해요 — 저와 함께 눌러보세요!",
     tutorialStartBtn: "투어 시작",
     tutorialSkipBtn: "건너뛰기",
     tutorialStepOf: "{total}단계 중 {current}단계",
@@ -6320,7 +6207,6 @@ const UI_TRANSLATIONS = {
     tutorialNextBtn: "다음 →",
     tutorialScheduleDesc: "이것은 당신만의 맞춤 주간 학습 계획입니다. 아래에서 작업 하나에 체크해 보세요 — 그리고 진행률 바가 채워지는 것을 지켜보세요.",
     tutorialVocabularyDesc: "지금 해보세요: 단어를 하나 검색해서(예: 食べる) 나만의 단어장에 저장해 보세요. 저장한 단어는 언제든지 플래시카드로 복습할 수 있어요.",
-    tutorialSubtitlesDesc: "아래에 영상 링크를 붙여넣어 자막이나 음성을 나만의 듣기·어휘 학습 자료로 만들어 보세요.",
     tutorialResourcesDesc: "아래에서 당신의 레벨에 맞춰 엄선된 자료를 둘러보거나, 콘텐츠를 붙여넣어 나만의 연습 문제를 만들어 보세요.",
     tutorialMilestonesDesc: "이것은 당신의 일본어 목표까지의 로드맵입니다. 다음에 무엇이 있는지 살펴보세요.",
     tutModesTitle: "학습 모드 & 코치",
@@ -6408,7 +6294,7 @@ const UI_TRANSLATIONS = {
     copyWeak: "다시 연습하기",
     copyNewText: "새 글",
     tutorialCompleteTitle: "완료! 🎉",
-    tutorialCompleteDesc: "GAKU Master의 5가지 주요 기능을 모두 살펴보셨습니다. 🎓 튜토리얼 버튼을 통해 언제든 다시 볼 수 있어요.",
+    tutorialCompleteDesc: "GAKU Master의 4가지 주요 기능을 모두 살펴보셨습니다. 🎓 튜토리얼 버튼을 통해 언제든 다시 볼 수 있어요.",
     tutorialCompleteBtn: "학습 시작하기",
     tutorialReaderCta: "📬 이메일에서 GAKU Reader를 받아보세요!",
     featurePickerTitle: "원하는 기능을 선택하세요",
@@ -6490,7 +6376,7 @@ const UI_TRANSLATIONS = {
     trialEndedTitle: "Intensive 모드 3일 체험이 끝났어요. 이제 어떤 모드로 할까요?",
     modeGuideTitle: "학습 모드 안내",
     modeGuideIntensive: "🔥 Intensive 모드: 오늘의 목표 8회 활동(과제 체크, 이해 확인 답하기, 연습, 단어 저장 등)을 끝내세요.",
-    modeGuideLock: "🔒 목표를 달성할 때까지 Subtitles, Milestones, JLPT 탭은 잠깁니다. 잠긴 탭을 누르면 스케줄 화면으로 돌아갑니다. 8회를 채우면 모두 열립니다.",
+    modeGuideLock: "🔒 목표를 달성할 때까지 Milestones, JLPT 탭은 잠깁니다. 잠긴 탭을 누르면 스케줄 화면으로 돌아갑니다. 8회를 채우면 모두 열립니다.",
     modeGuideEnjoyable: "😊 Enjoyable 모드: 목표도 경고도 없습니다. \"보통 X는 잘하지만 Y는 조금 어려워 보여요. 오늘은 Y는 어때요?\" 같은 부드러운 제안만 보입니다(기록이 3회 이상일 때).",
     modeGuideEscape: "Feedback 탭과 Mode 버튼은 절대 잠기지 않습니다. 더 편하게 하고 싶다면 Mode 버튼에서 언제든 Enjoyable 모드로 바꿀 수 있어요.",
     modeGuideOk: "확인",
@@ -6507,10 +6393,8 @@ const UI_TRANSLATIONS = {
     feedbackError: "피드백 전송 중 문제가 발생했습니다. 다시 시도해 주세요.",
     feedbackSubmitting: "전송 중...",
     feedbackSubmit: "피드백 제출",
-    tabSubtitles: "🎬 자막",
     navGoConversation: "💬 듣기 & 회화로 이동",
     navGoPronunciation: "🗣️ 듣기 & 발음으로 이동",
-    navGoSubtitles: "📺 자막으로 이동",
     navGoContent: "✨ 콘텐츠 학습으로 이동",
     navGoVocabulary: "📚 단어장으로 이동",
     savedSetFound: "이전에 저장된 학습 세트가 있습니다.",
@@ -6807,21 +6691,10 @@ const UI_TRANSLATIONS = {
     speed08: "🐢 0.8배속",
     speed05: "🐌 0.5배속",
     translateBtn: "번역",
-    subtitlesTitle: "자막 → 단어",
-    subtitlesDesc: "이미 보고 있는 영상의 자막이나 스크립트를 붙여넣으세요 (예: YouTube 자체의 \"스크립트 표시\" 패널). 단어를 더블클릭하거나 드래그하여 구문을 선택한 다음 검색하여 단어장에 바로 저장하세요.",
     subtitlesSourceLabel: "영상 제목/출처 (선택 사항 — 폴더 이름으로 사용됨)",
     subtitlesSourcePlaceholder: "예: NHK news 7/2",
-    subtitlesPasteLabel: "여기에 자막/스크립트를 붙여넣으세요",
     subtitlesPastePlaceholder: "일반 텍스트나 .srt 파일 내용을 붙여넣으세요 — 타임스탬프와 큐 번호는 자동으로 제거됩니다.",
-    subtitlesLoadBtn: "스크립트 불러오기",
-    subtitlesCopyrightNote: "🔒 여기에 붙여넣은 텍스트는 나중에 이어서 학습할 수 있도록 이 브라우저의 로컬 저장소에만 저장되며 — 서버로 전송되지 않습니다. 저장하기로 선택한 특정 단어/구문만 단어장에 추가됩니다.",
-    subtitlesDefaultFolder: "자막",
     subtitlesLoadNew: "↺ 다른 스크립트 불러오기",
-    subtitlesSavedCount: "이번 세션에 저장됨:",
-    subtitlesLookupSaveBtn: "🔍 검색 후 저장",
-    subtitlesTooLong: "선택한 내용이 너무 깁니다 — 더 짧은 단어나 구문을 선택하세요 (약 60자 이내).",
-    subtitlesSavedTo: "저장됨:",
-    subtitlesLookupError: "검색에 실패했습니다. 다시 시도해 주세요.",
     resAnkiPronDesc: "오디오 플래시카드로 발음 인식력을 기르세요. CLT: 듣고 따라 말하기.",
     resMisaPronDesc: "실용적인 예문과 발음 연습. CLT 중심.",
     resOnomappuPronDesc: "일본어로만 설명. 이해 가능한 입력 — CLT 호환성 매우 높음.",
@@ -6962,7 +6835,7 @@ const UI_TRANSLATIONS = {
     // Tutorial feature
     tutorialBtn: "🎓 บทแนะนำ",
     tutorialWelcomeTitle: "ยินดีต้อนรับสู่ GAKU Master! 👋",
-    tutorialWelcomeDesc: "มาชมฟีเจอร์หลักทั้ง 5 อย่างรวดเร็วไปด้วยกันนะ ใช้เวลาแค่นาทีเดียว — กดตามมาได้เลย!",
+    tutorialWelcomeDesc: "มาชมฟีเจอร์หลักทั้ง 4 อย่างรวดเร็วไปด้วยกันนะ ใช้เวลาแค่นาทีเดียว — กดตามมาได้เลย!",
     tutorialStartBtn: "เริ่มทัวร์",
     tutorialSkipBtn: "ข้าม",
     tutorialStepOf: "ขั้นตอนที่ {current} จาก {total}",
@@ -6970,7 +6843,6 @@ const UI_TRANSLATIONS = {
     tutorialNextBtn: "ถัดไป →",
     tutorialScheduleDesc: "นี่คือแผนการเรียนรายสัปดาห์ที่ปรับให้เหมาะกับคุณ ลองทำเครื่องหมายงานด้านล่างสักหนึ่งอย่าง แล้วดูแถบความคืบหน้าค่อย ๆ เต็มขึ้น",
     tutorialVocabularyDesc: "ลองเลย: ค้นหาคำศัพท์หนึ่งคำ (เช่น 食べる) แล้วบันทึกลงในชุดคำศัพท์ของคุณ คุณสามารถทบทวนคำที่บันทึกไว้ได้ทุกเมื่อด้วยแฟลชการ์ด",
-    tutorialSubtitlesDesc: "วางลิงก์วิดีโอด้านล่าง แล้วเปลี่ยนคำบรรยายหรือเสียงพูดให้กลายเป็นแบบฝึกฟังและคำศัพท์ของคุณเอง",
     tutorialResourcesDesc: "ลองดูแหล่งเรียนรู้ที่คัดสรรมาให้เหมาะกับระดับของคุณด้านล่าง หรือวางเนื้อหาเพื่อสร้างแบบฝึกหัดของคุณเอง",
     tutorialMilestonesDesc: "นี่คือแผนที่นำทางสู่เป้าหมายภาษาญี่ปุ่นของคุณ ลองดูว่าอะไรจะตามมาต่อไป",
     tutModesTitle: "โหมดการเรียนและโค้ช",
@@ -7058,7 +6930,7 @@ const UI_TRANSLATIONS = {
     copyWeak: "ฝึกตัวเหล่านี้อีกครั้ง",
     copyNewText: "ข้อความใหม่",
     tutorialCompleteTitle: "เสร็จเรียบร้อย! 🎉",
-    tutorialCompleteDesc: "คุณได้ชมฟีเจอร์หลักทั้ง 5 ของ GAKU Master แล้ว สามารถดูทัวร์นี้ซ้ำได้ทุกเมื่อผ่านปุ่ม 🎓 บทแนะนำ",
+    tutorialCompleteDesc: "คุณได้ชมฟีเจอร์หลักทั้ง 4 ของ GAKU Master แล้ว สามารถดูทัวร์นี้ซ้ำได้ทุกเมื่อผ่านปุ่ม 🎓 บทแนะนำ",
     tutorialCompleteBtn: "เริ่มเรียนเลย",
     tutorialReaderCta: "📬 รับ GAKU Reader ทางอีเมล!",
     featurePickerTitle: "เลือกฟีเจอร์ที่คุณต้องการ",
@@ -7140,7 +7012,7 @@ const UI_TRANSLATIONS = {
     trialEndedTitle: "การทดลองโหมด Intensive 3 วันสิ้นสุดแล้ว ตอนนี้จะเลือกโหมดไหน?",
     modeGuideTitle: "โหมดการเรียนทำงานอย่างไร",
     modeGuideIntensive: "🔥 โหมด Intensive: ทำเป้าหมายวันนี้ให้ครบ 8 กิจกรรม (ติ๊กงาน ตอบแบบตรวจความเข้าใจ ฝึก บันทึกคำศัพท์ ฯลฯ)",
-    modeGuideLock: "🔒 จนกว่าจะทำเป้าหมายครบ แท็บ Subtitles, Milestones และ JLPT จะถูกล็อก แตะแท็บที่ล็อกแล้วจะกลับไปที่ตารางเรียน เมื่อครบ 8 ทุกอย่างจะปลดล็อก",
+    modeGuideLock: "🔒 จนกว่าจะทำเป้าหมายครบ แท็บ Milestones และ JLPT จะถูกล็อก แตะแท็บที่ล็อกแล้วจะกลับไปที่ตารางเรียน เมื่อครบ 8 ทุกอย่างจะปลดล็อก",
     modeGuideEnjoyable: "😊 โหมด Enjoyable: ไม่มีเป้าหมายและไม่มีคำเตือน จะเห็นเพียงคำแนะนำเบา ๆ เช่น \"ปกติคุณเก่ง X แต่ Y ดูจะยากไปหน่อย วันนี้ลอง Y ไหม?\" (เมื่อมีบันทึกตั้งแต่ 3 ครั้งขึ้นไป)",
     modeGuideEscape: "แท็บ Feedback และปุ่ม Mode จะไม่ถูกล็อกเลย อยากเรียนสบาย ๆ ขึ้น? สลับเป็นโหมด Enjoyable ได้ทุกเมื่อจากปุ่ม Mode",
     modeGuideOk: "เข้าใจแล้ว",
@@ -7157,10 +7029,8 @@ const UI_TRANSLATIONS = {
     feedbackError: "เกิดข้อผิดพลาดในการส่งความคิดเห็น กรุณาลองใหม่อีกครั้ง",
     feedbackSubmitting: "กำลังส่ง...",
     feedbackSubmit: "ส่งความคิดเห็น",
-    tabSubtitles: "🎬 คำบรรยาย",
     navGoConversation: "💬 ไปที่การฟังและการสนทนา",
     navGoPronunciation: "🗣️ ไปที่การฟังและการออกเสียง",
-    navGoSubtitles: "📺 ไปที่คำบรรยาย",
     navGoContent: "✨ ไปที่การฝึกจากเนื้อหา",
     navGoVocabulary: "📚 ไปที่คำศัพท์",
     savedSetFound: "คุณมีชุดการเรียนที่บันทึกไว้ก่อนหน้านี้",
@@ -7457,21 +7327,10 @@ const UI_TRANSLATIONS = {
     speed08: "🐢 0.8เท่า",
     speed05: "🐌 0.5เท่า",
     translateBtn: "แปล",
-    subtitlesTitle: "คำบรรยาย → คำศัพท์",
-    subtitlesDesc: "วางคำบรรยายหรือบทถอดความจากวิดีโอที่คุณกำลังดูอยู่ (เช่น แผง \"Show transcript\" ของ YouTube เอง) ดับเบิลคลิกที่คำหรือลากเพื่อเลือกวลี จากนั้นค้นหาและบันทึกลงในตัวสร้างคำศัพท์ของคุณโดยตรง",
     subtitlesSourceLabel: "ชื่อ/แหล่งที่มาของวิดีโอ (ไม่บังคับ — ใช้เป็นชื่อโฟลเดอร์)",
     subtitlesSourcePlaceholder: "เช่น NHK news 7/2",
-    subtitlesPasteLabel: "วางคำบรรยาย/บทถอดความที่นี่",
     subtitlesPastePlaceholder: "วางข้อความธรรมดาหรือเนื้อหาไฟล์ .srt — การประทับเวลาและหมายเลขคิวจะถูกลบออกโดยอัตโนมัติ",
-    subtitlesLoadBtn: "โหลดบทถอดความ",
-    subtitlesCopyrightNote: "🔒 ข้อความที่คุณวางที่นี่จะถูกบันทึกไว้ในที่จัดเก็บข้อมูลท้องถิ่นของเบราว์เซอร์นี้เท่านั้น เพื่อให้คุณกลับมาเรียนต่อได้ — จะไม่ถูกส่งไปยังเซิร์ฟเวอร์ใดๆ เฉพาะคำ/วลีที่คุณเลือกบันทึกเท่านั้นที่จะถูกเพิ่มลงในตัวสร้างคำศัพท์ของคุณ",
-    subtitlesDefaultFolder: "คำบรรยาย",
     subtitlesLoadNew: "↺ โหลดบทถอดความอื่น",
-    subtitlesSavedCount: "บันทึกแล้วในเซสชันนี้:",
-    subtitlesLookupSaveBtn: "🔍 ค้นหาและบันทึก",
-    subtitlesTooLong: "ส่วนที่เลือกยาวเกินไป — โปรดเลือกคำหรือวลีที่สั้นกว่านี้ (ไม่เกิน ~60 ตัวอักษร)",
-    subtitlesSavedTo: "บันทึกลงใน",
-    subtitlesLookupError: "การค้นหาล้มเหลว โปรดลองอีกครั้ง",
     resAnkiPronDesc: "สร้างการจดจำเสียงด้วยแฟลชการ์ดเสียง CLT: ฟังและพูดตาม",
     resMisaPronDesc: "ประโยคตัวอย่างที่ใช้งานได้จริงและแบบฝึกออกเสียง เน้น CLT",
     resOnomappuPronDesc: "อธิบายเป็นภาษาญี่ปุ่นล้วน Comprehensible Input — ความเข้ากันได้กับ CLT สูงมาก",
@@ -7612,7 +7471,7 @@ const UI_TRANSLATIONS = {
     // Tutorial feature
     tutorialBtn: "🎓 Tutorial",
     tutorialWelcomeTitle: "Selamat datang ke GAKU Master! 👋",
-    tutorialWelcomeDesc: "Jom kita lihat sepintas lalu 5 ciri utama bersama-sama. Cuma ambil masa seminit sahaja — ikut saya!",
+    tutorialWelcomeDesc: "Jom kita lihat sepintas lalu 4 ciri utama bersama-sama. Cuma ambil masa seminit sahaja — ikut saya!",
     tutorialStartBtn: "Mula Lawatan",
     tutorialSkipBtn: "Langkau",
     tutorialStepOf: "Langkah {current} daripada {total}",
@@ -7620,7 +7479,6 @@ const UI_TRANSLATIONS = {
     tutorialNextBtn: "Seterusnya →",
     tutorialScheduleDesc: "Ini ialah jadual belajar mingguan yang diperibadikan untuk anda. Cuba tandakan satu tugasan di bawah — kemudian lihat bar kemajuan anda bertambah.",
     tutorialVocabularyDesc: "Cubalah sekarang: cari satu perkataan (contohnya 食べる) dan simpan ke dalam set kad anda sendiri. Anda boleh mengulang kaji perkataan yang disimpan bila-bila masa dengan kad imbas.",
-    tutorialSubtitlesDesc: "Tampal pautan video di bawah dan tukar sari kata atau audionya kepada latihan pendengaran dan kosa kata anda sendiri.",
     tutorialResourcesDesc: "Lihat sumber pembelajaran pilihan untuk tahap anda di bawah, atau tampal kandungan untuk membina latihan anda sendiri.",
     tutorialMilestonesDesc: "Ini ialah pelan hala tuju anda ke arah matlamat bahasa Jepun anda. Lihat apa yang akan datang seterusnya.",
     tutModesTitle: "Mod belajar & jurulatih",
@@ -7708,7 +7566,7 @@ const UI_TRANSLATIONS = {
     copyWeak: "Latih semula ini",
     copyNewText: "Teks baharu",
     tutorialCompleteTitle: "Selesai! 🎉",
-    tutorialCompleteDesc: "Anda telah melihat kesemua 5 ciri utama GAKU Master. Anda boleh ulang tayang lawatan ini bila-bila masa melalui butang 🎓 Tutorial.",
+    tutorialCompleteDesc: "Anda telah melihat kesemua 4 ciri utama GAKU Master. Anda boleh ulang tayang lawatan ini bila-bila masa melalui butang 🎓 Tutorial.",
     tutorialCompleteBtn: "Mula Belajar",
     tutorialReaderCta: "📬 Dapatkan GAKU Reader melalui e-mel anda!",
     featurePickerTitle: "Pilih ciri yang anda mahu",
@@ -7790,7 +7648,7 @@ const UI_TRANSLATIONS = {
     trialEndedTitle: "Percubaan 3 hari mod Intensive anda telah tamat. Mod mana sekarang?",
     modeGuideTitle: "Cara mod pembelajaran berfungsi",
     modeGuideIntensive: "🔥 Mod Intensive: selesaikan kuota hari ini sebanyak 8 tindakan (tandakan tugasan, jawab semakan, berlatih, simpan perkataan, dll.).",
-    modeGuideLock: "🔒 Selagi kuota belum siap, tab Subtitles, Milestones dan JLPT dikunci. Tekan tab yang dikunci dan anda akan kembali ke Jadual. Apabila mencapai 8, semuanya dibuka.",
+    modeGuideLock: "🔒 Selagi kuota belum siap, tab Milestones dan JLPT dikunci. Tekan tab yang dikunci dan anda akan kembali ke Jadual. Apabila mencapai 8, semuanya dibuka.",
     modeGuideEnjoyable: "😊 Mod Enjoyable: tiada kuota, tiada amaran. Hanya cadangan lembut seperti \"Anda biasanya bagus dalam X, dan Y nampak agak sukar. Bagaimana kalau Y hari ini?\" (apabila ada 3 rekod atau lebih).",
     modeGuideEscape: "Tab Feedback dan butang Mode tidak pernah dikunci. Mahu lebih santai? Tukar ke mod Enjoyable bila-bila masa melalui butang Mode.",
     modeGuideOk: "Faham",
@@ -7807,10 +7665,8 @@ const UI_TRANSLATIONS = {
     feedbackError: "Berlaku ralat semasa menghantar maklum balas anda. Sila cuba lagi.",
     feedbackSubmitting: "Menghantar...",
     feedbackSubmit: "Hantar Maklum Balas",
-    tabSubtitles: "🎬 Sari Kata",
     navGoConversation: "💬 Pergi ke Mendengar & Perbualan",
     navGoPronunciation: "🗣️ Pergi ke Mendengar & Sebutan",
-    navGoSubtitles: "📺 Pergi ke Sari Kata",
     navGoContent: "✨ Pergi ke Latihan daripada Kandungan",
     navGoVocabulary: "📚 Pergi ke Kosa Kata",
     savedSetFound: "Anda mempunyai set pembelajaran yang disimpan sebelum ini.",
@@ -8107,21 +7963,10 @@ const UI_TRANSLATIONS = {
     speed08: "🐢 0.8x",
     speed05: "🐌 0.5x",
     translateBtn: "Terjemah",
-    subtitlesTitle: "Sari Kata → Kosa Kata",
-    subtitlesDesc: "Tampal sari kata atau transkrip daripada video yang sedang anda tonton (cth. panel \"Show transcript\" YouTube sendiri). Dwiklik satu perkataan atau seret untuk memilih frasa, kemudian cari dan simpan terus ke Pembina Kosa Kata anda.",
     subtitlesSourceLabel: "Tajuk / sumber video (pilihan — digunakan sebagai nama folder)",
     subtitlesSourcePlaceholder: "cth. NHK news 7/2",
-    subtitlesPasteLabel: "Tampal sari kata / transkrip di sini",
     subtitlesPastePlaceholder: "Tampal teks biasa atau kandungan fail .srt — cap masa dan nombor isyarat akan dibuang secara automatik.",
-    subtitlesLoadBtn: "Muatkan transkrip",
-    subtitlesCopyrightNote: "🔒 Teks yang anda tampal di sini hanya disimpan dalam storan tempatan pelayar ini, supaya anda boleh menyambung semula kemudian — ia tidak pernah dihantar ke pelayan. Hanya perkataan/frasa tertentu yang anda pilih untuk disimpan akan ditambah ke Pembina Kosa Kata anda.",
-    subtitlesDefaultFolder: "Sari Kata",
     subtitlesLoadNew: "↺ Muatkan transkrip lain",
-    subtitlesSavedCount: "Disimpan dalam sesi ini:",
-    subtitlesLookupSaveBtn: "🔍 Cari & simpan",
-    subtitlesTooLong: "Pilihan itu terlalu panjang — sila pilih perkataan atau frasa yang lebih pendek (bawah ~60 aksara).",
-    subtitlesSavedTo: "disimpan ke",
-    subtitlesLookupError: "Carian gagal. Sila cuba lagi.",
     resAnkiPronDesc: "Bina pengecaman fonetik dengan kad imbas audio. CLT: dengar dan ulang.",
     resMisaPronDesc: "Ayat contoh praktikal dan latihan sebutan. Berfokuskan CLT.",
     resOnomappuPronDesc: "Penerangan dalam bahasa Jepun sahaja. Input Boleh Difahami — keserasian CLT sangat tinggi.",
@@ -8262,7 +8107,7 @@ const UI_TRANSLATIONS = {
     // Tutorial feature
     tutorialBtn: "🎓 Tutorial",
     tutorialWelcomeTitle: "Selamat datang di GAKU Master! 👋",
-    tutorialWelcomeDesc: "Yuk, kita jelajahi 5 fitur utama bersama-sama. Hanya butuh waktu satu menit — ikuti saya!",
+    tutorialWelcomeDesc: "Yuk, kita jelajahi 4 fitur utama bersama-sama. Hanya butuh waktu satu menit — ikuti saya!",
     tutorialStartBtn: "Mulai Tur",
     tutorialSkipBtn: "Lewati",
     tutorialStepOf: "Langkah {current} dari {total}",
@@ -8270,7 +8115,6 @@ const UI_TRANSLATIONS = {
     tutorialNextBtn: "Berikutnya →",
     tutorialScheduleDesc: "Ini adalah rencana belajar mingguan yang dipersonalisasi untuk Anda. Coba centang satu tugas di bawah — lalu lihat bilah kemajuan Anda terisi.",
     tutorialVocabularyDesc: "Coba sekarang: cari satu kata (misalnya 食べる) dan simpan ke dek Anda sendiri. Anda bisa meninjau kata yang disimpan kapan saja dengan kartu flash.",
-    tutorialSubtitlesDesc: "Tempel tautan video di bawah dan ubah subtitle atau audionya menjadi latihan mendengarkan dan kosakata Anda sendiri.",
     tutorialResourcesDesc: "Jelajahi sumber belajar pilihan sesuai level Anda di bawah, atau tempel konten untuk membuat latihan Anda sendiri.",
     tutorialMilestonesDesc: "Ini adalah peta jalan menuju tujuan bahasa Jepang Anda. Lihat apa yang akan datang berikutnya.",
     tutModesTitle: "Mode belajar & pelatih",
@@ -8358,7 +8202,7 @@ const UI_TRANSLATIONS = {
     copyWeak: "Latih lagi yang ini",
     copyNewText: "Teks baru",
     tutorialCompleteTitle: "Selesai! 🎉",
-    tutorialCompleteDesc: "Anda telah melihat semua 5 fitur utama GAKU Master. Anda bisa memutar ulang tur ini kapan saja lewat tombol 🎓 Tutorial.",
+    tutorialCompleteDesc: "Anda telah melihat semua 4 fitur utama GAKU Master. Anda bisa memutar ulang tur ini kapan saja lewat tombol 🎓 Tutorial.",
     tutorialCompleteBtn: "Mulai Belajar",
     tutorialReaderCta: "📬 Dapatkan GAKU Reader lewat email Anda!",
     featurePickerTitle: "Pilih fitur yang kamu inginkan",
@@ -8440,7 +8284,7 @@ const UI_TRANSLATIONS = {
     trialEndedTitle: "Uji coba mode Intensive 3 hari Anda telah berakhir. Mode mana sekarang?",
     modeGuideTitle: "Cara kerja mode belajar",
     modeGuideIntensive: "🔥 Mode Intensive: selesaikan kuota hari ini sebanyak 8 aksi (mencentang tugas, menjawab pengecekan, berlatih, menyimpan kata, dll.).",
-    modeGuideLock: "🔒 Sebelum kuota selesai, tab Subtitles, Milestones, dan JLPT terkunci. Ketuk tab yang terkunci dan Anda kembali ke Jadwal. Setelah mencapai 8, semuanya terbuka.",
+    modeGuideLock: "🔒 Sebelum kuota selesai, tab Milestones dan JLPT terkunci. Ketuk tab yang terkunci dan Anda kembali ke Jadwal. Setelah mencapai 8, semuanya terbuka.",
     modeGuideEnjoyable: "😊 Mode Enjoyable: tanpa kuota dan tanpa peringatan. Hanya saran lembut seperti \"Anda biasanya bagus di X, dan Y tampak agak sulit. Bagaimana kalau Y hari ini?\" (jika ada 3 catatan atau lebih).",
     modeGuideEscape: "Tab Feedback dan tombol Mode tidak pernah terkunci. Ingin lebih santai? Ganti ke mode Enjoyable kapan saja lewat tombol Mode.",
     modeGuideOk: "Mengerti",
@@ -8457,10 +8301,8 @@ const UI_TRANSLATIONS = {
     feedbackError: "Terjadi kesalahan saat mengirim masukan Anda. Silakan coba lagi.",
     feedbackSubmitting: "Mengirim...",
     feedbackSubmit: "Kirim Masukan",
-    tabSubtitles: "🎬 Subtitle",
     navGoConversation: "💬 Menuju Menyimak & Percakapan",
     navGoPronunciation: "🗣️ Menuju Menyimak & Pengucapan",
-    navGoSubtitles: "📺 Menuju Subtitle",
     navGoContent: "✨ Menuju Latihan dari Konten",
     navGoVocabulary: "📚 Menuju Kosakata",
     savedSetFound: "Anda memiliki set belajar yang tersimpan sebelumnya.",
@@ -8757,21 +8599,10 @@ const UI_TRANSLATIONS = {
     speed08: "🐢 0,8x",
     speed05: "🐌 0,5x",
     translateBtn: "Terjemahkan",
-    subtitlesTitle: "Subtitle → Kosakata",
-    subtitlesDesc: "Tempel subtitle atau transkrip dari video yang sedang Anda tonton (mis. panel \"Show transcript\" bawaan YouTube). Klik dua kali pada sebuah kata atau seret untuk memilih frasa, lalu cari dan simpan langsung ke Pembangun Kosakata Anda.",
     subtitlesSourceLabel: "Judul / sumber video (opsional — digunakan sebagai nama folder)",
     subtitlesSourcePlaceholder: "mis. NHK news 7/2",
-    subtitlesPasteLabel: "Tempel subtitle / transkrip di sini",
     subtitlesPastePlaceholder: "Tempel teks biasa atau isi file .srt — stempel waktu dan nomor urut akan dihapus otomatis.",
-    subtitlesLoadBtn: "Muat transkrip",
-    subtitlesCopyrightNote: "🔒 Teks yang Anda tempel di sini hanya disimpan di penyimpanan lokal browser ini, agar Anda bisa melanjutkan nanti — tidak pernah dikirim ke server. Hanya kata/frasa tertentu yang Anda pilih untuk disimpan yang akan ditambahkan ke Pembangun Kosakata Anda.",
-    subtitlesDefaultFolder: "Subtitle",
     subtitlesLoadNew: "↺ Muat transkrip lain",
-    subtitlesSavedCount: "Disimpan dalam sesi ini:",
-    subtitlesLookupSaveBtn: "🔍 Cari & simpan",
-    subtitlesTooLong: "Pilihan itu terlalu panjang — silakan pilih kata atau frasa yang lebih pendek (di bawah ~60 karakter).",
-    subtitlesSavedTo: "disimpan ke",
-    subtitlesLookupError: "Pencarian gagal. Silakan coba lagi.",
     resAnkiPronDesc: "Bangun pengenalan fonetik dengan flashcard audio. CLT: dengarkan dan ulangi.",
     resMisaPronDesc: "Kalimat contoh praktis dan latihan pengucapan. Berfokus pada CLT.",
     resOnomappuPronDesc: "Penjelasan hanya dalam bahasa Jepang. Input yang Dapat Dipahami — kompatibilitas CLT sangat tinggi.",
@@ -8912,7 +8743,7 @@ const UI_TRANSLATIONS = {
     // Tutorial feature
     tutorialBtn: "🎓 Hướng dẫn",
     tutorialWelcomeTitle: "Chào mừng đến với GAKU Master! 👋",
-    tutorialWelcomeDesc: "Hãy cùng khám phá nhanh 5 tính năng chính nhé. Chỉ mất khoảng một phút thôi — bấm theo mình nào!",
+    tutorialWelcomeDesc: "Hãy cùng khám phá nhanh 4 tính năng chính nhé. Chỉ mất khoảng một phút thôi — bấm theo mình nào!",
     tutorialStartBtn: "Bắt đầu tham quan",
     tutorialSkipBtn: "Bỏ qua",
     tutorialStepOf: "Bước {current} trên {total}",
@@ -8920,7 +8751,6 @@ const UI_TRANSLATIONS = {
     tutorialNextBtn: "Tiếp theo →",
     tutorialScheduleDesc: "Đây là kế hoạch học tập hàng tuần được cá nhân hóa cho bạn. Hãy thử đánh dấu hoàn thành một nhiệm vụ bên dưới — rồi xem thanh tiến trình đầy dần.",
     tutorialVocabularyDesc: "Thử ngay bây giờ: tìm một từ (ví dụ 食べる) và lưu vào bộ thẻ của riêng bạn. Bạn có thể ôn tập các từ đã lưu bất cứ lúc nào bằng thẻ ghi nhớ.",
-    tutorialSubtitlesDesc: "Dán liên kết video bên dưới và biến phụ đề hoặc âm thanh của nó thành bài luyện nghe và từ vựng của riêng bạn.",
     tutorialResourcesDesc: "Xem qua các tài nguyên được chọn lọc phù hợp với trình độ của bạn bên dưới, hoặc dán nội dung để tạo bài luyện tập của riêng bạn.",
     tutorialMilestonesDesc: "Đây là lộ trình đến mục tiêu tiếng Nhật của bạn. Hãy xem điều gì sẽ đến tiếp theo.",
     tutModesTitle: "Chế độ học & huấn luyện viên",
@@ -9008,7 +8838,7 @@ const UI_TRANSLATIONS = {
     copyWeak: "Luyện lại những chữ này",
     copyNewText: "Văn bản mới",
     tutorialCompleteTitle: "Xong rồi! 🎉",
-    tutorialCompleteDesc: "Bạn đã xem qua cả 5 tính năng chính của GAKU Master. Bạn có thể xem lại chuyến tham quan này bất cứ lúc nào qua nút 🎓 Hướng dẫn.",
+    tutorialCompleteDesc: "Bạn đã xem qua cả 4 tính năng chính của GAKU Master. Bạn có thể xem lại chuyến tham quan này bất cứ lúc nào qua nút 🎓 Hướng dẫn.",
     tutorialCompleteBtn: "Bắt đầu học",
     tutorialReaderCta: "📬 Nhận GAKU Reader qua email của bạn!",
     featurePickerTitle: "Chọn các tính năng bạn muốn",
@@ -9090,7 +8920,7 @@ const UI_TRANSLATIONS = {
     trialEndedTitle: "Thời gian dùng thử Intensive 3 ngày đã kết thúc. Bạn chọn chế độ nào?",
     modeGuideTitle: "Các chế độ học hoạt động thế nào",
     modeGuideIntensive: "🔥 Chế độ Intensive: hoàn thành chỉ tiêu hôm nay gồm 8 hoạt động (tick nhiệm vụ, trả lời kiểm tra hiểu bài, luyện tập, lưu từ, v.v.).",
-    modeGuideLock: "🔒 Cho đến khi đạt chỉ tiêu, các tab Subtitles, Milestones và JLPT bị khoá. Chạm vào tab bị khoá sẽ quay về Lịch học. Đạt 8 là mở khoá tất cả.",
+    modeGuideLock: "🔒 Cho đến khi đạt chỉ tiêu, các tab Milestones và JLPT bị khoá. Chạm vào tab bị khoá sẽ quay về Lịch học. Đạt 8 là mở khoá tất cả.",
     modeGuideEnjoyable: "😊 Chế độ Enjoyable: không chỉ tiêu, không cảnh báo. Chỉ có gợi ý nhẹ nhàng như \"Bạn thường làm tốt X, còn Y có vẻ hơi khó. Hôm nay thử Y nhé?\" (khi có từ 3 bản ghi trở lên).",
     modeGuideEscape: "Tab Feedback và nút Mode không bao giờ bị khoá. Muốn nhẹ nhàng hơn? Bạn có thể đổi sang chế độ Enjoyable bất cứ lúc nào bằng nút Mode.",
     modeGuideOk: "Đã hiểu",
@@ -9107,10 +8937,8 @@ const UI_TRANSLATIONS = {
     feedbackError: "Đã xảy ra lỗi khi gửi phản hồi của bạn. Vui lòng thử lại.",
     feedbackSubmitting: "Đang gửi...",
     feedbackSubmit: "Gửi Phản hồi",
-    tabSubtitles: "🎬 Phụ đề",
     navGoConversation: "💬 Đến phần Nghe & Hội thoại",
     navGoPronunciation: "🗣️ Đến phần Nghe & Phát âm",
-    navGoSubtitles: "📺 Đến phần Phụ đề",
     navGoContent: "✨ Đến phần Luyện từ nội dung",
     navGoVocabulary: "📚 Đến phần Từ vựng",
     savedSetFound: "Bạn có một bộ học đã lưu từ trước.",
@@ -9407,21 +9235,10 @@ const UI_TRANSLATIONS = {
     speed08: "🐢 Tốc độ 0,8x",
     speed05: "🐌 Tốc độ 0,5x",
     translateBtn: "Dịch",
-    subtitlesTitle: "Phụ đề → Từ vựng",
-    subtitlesDesc: "Dán phụ đề hoặc bản ghi lời thoại từ video bạn đang xem (ví dụ: bảng \"Show transcript\" có sẵn của YouTube). Nhấp đúp vào một từ hoặc kéo để chọn cụm từ, sau đó tra cứu và lưu trực tiếp vào Trình xây dựng từ vựng của bạn.",
     subtitlesSourceLabel: "Tiêu đề / nguồn video (tùy chọn — dùng làm tên thư mục)",
     subtitlesSourcePlaceholder: "vd. NHK news 7/2",
-    subtitlesPasteLabel: "Dán phụ đề / bản ghi lời thoại vào đây",
     subtitlesPastePlaceholder: "Dán văn bản thuần túy hoặc nội dung tệp .srt — dấu thời gian và số thứ tự sẽ tự động bị xóa.",
-    subtitlesLoadBtn: "Tải bản ghi lời thoại",
-    subtitlesCopyrightNote: "🔒 Văn bản bạn dán ở đây chỉ được lưu trong bộ nhớ cục bộ của trình duyệt này để bạn có thể tiếp tục sau — không bao giờ được gửi đến máy chủ. Chỉ những từ/cụm từ cụ thể bạn chọn lưu mới được thêm vào Trình xây dựng từ vựng của bạn.",
-    subtitlesDefaultFolder: "Phụ đề",
     subtitlesLoadNew: "↺ Tải bản ghi lời thoại khác",
-    subtitlesSavedCount: "Đã lưu trong phiên này:",
-    subtitlesLookupSaveBtn: "🔍 Tra cứu & lưu",
-    subtitlesTooLong: "Lựa chọn này quá dài — vui lòng chọn từ hoặc cụm từ ngắn hơn (dưới ~60 ký tự).",
-    subtitlesSavedTo: "đã lưu vào",
-    subtitlesLookupError: "Tra cứu thất bại. Vui lòng thử lại.",
     resAnkiPronDesc: "Xây dựng khả năng nhận diện ngữ âm bằng thẻ ghi nhớ có âm thanh. CLT: nghe và lặp lại.",
     resMisaPronDesc: "Câu ví dụ thực tế và bài luyện phát âm. Tập trung vào CLT.",
     resOnomappuPronDesc: "Giải thích hoàn toàn bằng tiếng Nhật. Đầu vào dễ hiểu — độ tương thích CLT rất cao.",
@@ -9562,7 +9379,7 @@ const UI_TRANSLATIONS = {
     // Tutorial feature
     tutorialBtn: "🎓 ट्यूटोरियल",
     tutorialWelcomeTitle: "GAKU Master में आपका स्वागत है! 👋",
-    tutorialWelcomeDesc: "आइए मिलकर 5 मुख्य फीचर्स का एक छोटा दौरा करें। इसमें बस एक मिनट लगेगा — मेरे साथ टैप करते चलिए!",
+    tutorialWelcomeDesc: "आइए मिलकर 4 मुख्य फीचर्स का एक छोटा दौरा करें। इसमें बस एक मिनट लगेगा — मेरे साथ टैप करते चलिए!",
     tutorialStartBtn: "टूर शुरू करें",
     tutorialSkipBtn: "छोड़ें",
     tutorialStepOf: "चरण {current} / {total}",
@@ -9570,7 +9387,6 @@ const UI_TRANSLATIONS = {
     tutorialNextBtn: "अगला →",
     tutorialScheduleDesc: "यह आपकी व्यक्तिगत साप्ताहिक अध्ययन योजना है। नीचे किसी एक कार्य को चेक करके देखें — फिर अपनी प्रगति पट्टी को भरते हुए देखें।",
     tutorialVocabularyDesc: "अभी आज़माएं: कोई शब्द खोजें (जैसे 食べる) और उसे अपने खुद के डेक में सेव करें। सेव किए गए शब्दों को आप कभी भी फ्लैशकार्ड से रिवीजन कर सकते हैं।",
-    tutorialSubtitlesDesc: "नीचे किसी वीडियो का लिंक पेस्ट करें और उसकी सबटाइटल या ऑडियो को अपनी खुद की लिसनिंग और वोकैबुलरी प्रैक्टिस में बदलें।",
     tutorialResourcesDesc: "नीचे अपने स्तर के लिए चुने गए संसाधन देखें, या अभ्यास बनाने के लिए कोई कंटेंट पेस्ट करें।",
     tutorialMilestonesDesc: "यह आपके जापानी लक्ष्य तक का रोडमैप है। देखें आगे क्या आने वाला है।",
     tutModesTitle: "स्टडी मोड और कोच",
@@ -9658,7 +9474,7 @@ const UI_TRANSLATIONS = {
     copyWeak: "इन्हें फिर से अभ्यास करें",
     copyNewText: "नया पाठ",
     tutorialCompleteTitle: "सब हो गया! 🎉",
-    tutorialCompleteDesc: "आपने GAKU Master के सभी 5 मुख्य फीचर्स देख लिए हैं। आप 🎓 ट्यूटोरियल बटन से कभी भी यह टूर दोबारा देख सकते हैं।",
+    tutorialCompleteDesc: "आपने GAKU Master के सभी 4 मुख्य फीचर्स देख लिए हैं। आप 🎓 ट्यूटोरियल बटन से कभी भी यह टूर दोबारा देख सकते हैं।",
     tutorialCompleteBtn: "पढ़ाई शुरू करें",
     tutorialReaderCta: "📬 ईमेल से GAKU Reader प्राप्त करें!",
     featurePickerTitle: "अपनी पसंद की सुविधाएँ चुनें",
@@ -9740,7 +9556,7 @@ const UI_TRANSLATIONS = {
     trialEndedTitle: "आपका 3 दिन का Intensive ट्रायल ख़त्म हो गया। अब कौन-सा मोड चुनेंगे?",
     modeGuideTitle: "स्टडी मोड कैसे काम करते हैं",
     modeGuideIntensive: "🔥 Intensive मोड: आज के 8 कामों का लक्ष्य पूरा करें (टास्क टिक करना, समझ की जाँच का जवाब देना, अभ्यास, शब्द सेव करना आदि)।",
-    modeGuideLock: "🔒 लक्ष्य पूरा होने तक Subtitles, Milestones और JLPT टैब लॉक रहते हैं। लॉक टैब दबाने पर आप शेड्यूल पर लौट आएँगे। 8 पूरे होते ही सब खुल जाता है।",
+    modeGuideLock: "🔒 लक्ष्य पूरा होने तक Milestones और JLPT टैब लॉक रहते हैं। लॉक टैब दबाने पर आप शेड्यूल पर लौट आएँगे। 8 पूरे होते ही सब खुल जाता है।",
     modeGuideEnjoyable: "😊 Enjoyable मोड: कोई लक्ष्य या चेतावनी नहीं। बस एक नरम सुझाव दिखता है, जैसे \"आप आम तौर पर X में अच्छे हैं, और Y थोड़ा कठिन लगता है। आज Y कैसा रहेगा?\" (3 या अधिक रिकॉर्ड होने पर)।",
     modeGuideEscape: "Feedback टैब और Mode बटन कभी लॉक नहीं होते। आसान चाहिए? Mode बटन से कभी भी Enjoyable मोड में बदलें।",
     modeGuideOk: "समझ गया",
@@ -9757,10 +9573,8 @@ const UI_TRANSLATIONS = {
     feedbackError: "आपकी प्रतिक्रिया भेजने में कुछ गलत हुआ। कृपया पुनः प्रयास करें।",
     feedbackSubmitting: "भेजा जा रहा है...",
     feedbackSubmit: "प्रतिक्रिया भेजें",
-    tabSubtitles: "🎬 सबटाइटल",
     navGoConversation: "💬 सुनना और बातचीत पर जाएं",
     navGoPronunciation: "🗣️ सुनना और उच्चारण पर जाएं",
-    navGoSubtitles: "📺 सबटाइटल पर जाएं",
     navGoContent: "✨ सामग्री अभ्यास पर जाएं",
     navGoVocabulary: "📚 शब्दावली पर जाएं",
     savedSetFound: "आपके पास पहले से सहेजा गया अध्ययन सेट है।",
@@ -10057,21 +9871,10 @@ const UI_TRANSLATIONS = {
     speed08: "🐢 0.8x गति",
     speed05: "🐌 0.5x गति",
     translateBtn: "अनुवाद करें",
-    subtitlesTitle: "सबटाइटल → शब्दावली",
-    subtitlesDesc: "आप जो वीडियो पहले से देख रहे हैं उसके सबटाइटल या ट्रांसक्रिप्ट पेस्ट करें (जैसे YouTube का अपना \"Show transcript\" पैनल)। किसी शब्द पर डबल-क्लिक करें या वाक्यांश चुनने के लिए खींचें, फिर उसे खोजें और सीधे अपने वोकैबुलरी बिल्डर में सहेजें।",
     subtitlesSourceLabel: "वीडियो शीर्षक / स्रोत (वैकल्पिक — फ़ोल्डर नाम के रूप में उपयोग किया जाता है)",
     subtitlesSourcePlaceholder: "जैसे NHK news 7/2",
-    subtitlesPasteLabel: "यहाँ सबटाइटल / ट्रांसक्रिप्ट पेस्ट करें",
     subtitlesPastePlaceholder: "सादा टेक्स्ट या .srt फ़ाइल की सामग्री पेस्ट करें — टाइमस्टैम्प और क्यू नंबर स्वचालित रूप से हटा दिए जाते हैं।",
-    subtitlesLoadBtn: "ट्रांसक्रिप्ट लोड करें",
-    subtitlesCopyrightNote: "🔒 आप यहाँ जो टेक्स्ट पेस्ट करते हैं वह केवल इस ब्राउज़र के लोकल स्टोरेज में सहेजा जाता है, ताकि आप बाद में जारी रख सकें — यह कभी भी सर्वर पर नहीं भेजा जाता। केवल वे विशिष्ट शब्द/वाक्यांश जिन्हें आप सहेजना चुनते हैं, आपके वोकैबुलरी बिल्डर में जोड़े जाते हैं।",
-    subtitlesDefaultFolder: "सबटाइटल",
     subtitlesLoadNew: "↺ कोई अन्य ट्रांसक्रिप्ट लोड करें",
-    subtitlesSavedCount: "इस सत्र में सहेजे गए:",
-    subtitlesLookupSaveBtn: "🔍 खोजें और सहेजें",
-    subtitlesTooLong: "यह चयन बहुत लंबा है — कृपया एक छोटा शब्द या वाक्यांश चुनें (~60 अक्षरों से कम)।",
-    subtitlesSavedTo: "में सहेजा गया",
-    subtitlesLookupError: "खोज विफल रही। कृपया पुनः प्रयास करें।",
     resAnkiPronDesc: "ऑडियो फ्लैशकार्ड से ध्वन्यात्मक पहचान विकसित करें। CLT: सुनें और दोहराएं।",
     resMisaPronDesc: "व्यावहारिक उदाहरण वाक्य और उच्चारण अभ्यास। CLT-केंद्रित।",
     resOnomappuPronDesc: "केवल जापानी में स्पष्टीकरण। समझने योग्य इनपुट — CLT अनुकूलता बहुत अधिक।",
@@ -10212,7 +10015,7 @@ const UI_TRANSLATIONS = {
     // Tutorial feature
     tutorialBtn: "🎓 チュートリアル",
     tutorialWelcomeTitle: "GAKU Masterへようこそ！👋",
-    tutorialWelcomeDesc: "5つの主な機能を一緒にサクッと見てみましょう。1分だけです — 一緒にタップしていきましょう！",
+    tutorialWelcomeDesc: "4つの主な機能を一緒にサクッと見てみましょう。1分だけです — 一緒にタップしていきましょう！",
     tutorialStartBtn: "ツアーを始める",
     tutorialSkipBtn: "スキップ",
     tutorialStepOf: "ステップ {current} / {total}",
@@ -10220,7 +10023,6 @@ const UI_TRANSLATIONS = {
     tutorialNextBtn: "次へ →",
     tutorialScheduleDesc: "これはあなた専用の週間学習プランです。下のタスクを1つチェックしてみましょう — 進捗バーが伸びていくのが見られます。",
     tutorialVocabularyDesc: "早速試してみましょう: 単語を1つ検索して(例: 食べる)自分の単語帳に保存してみましょう。保存した単語はフラッシュカードでいつでも復習できます。",
-    tutorialSubtitlesDesc: "下に動画のリンクを貼り付けて、その字幕や音声を自分だけのリスニング・単語練習に変えてみましょう。",
     tutorialResourcesDesc: "下のあなたのレベルに合わせて厳選されたリソースを見てみるか、内容を貼り付けて自分の練習問題を作ってみましょう。",
     tutorialMilestonesDesc: "これは日本語の目標までのロードマップです。この先どんな道のりが待っているか見てみましょう。",
     tutModesTitle: "学習モードとコーチ",
@@ -10308,7 +10110,7 @@ const UI_TRANSLATIONS = {
     copyWeak: "もう一度練習する文字",
     copyNewText: "新しい文",
     tutorialCompleteTitle: "完了しました！🎉",
-    tutorialCompleteDesc: "GAKU Masterの5つの主な機能をすべて見てもらいました。🎓チュートリアルボタンからいつでもこのツアーをもう一度見られます。",
+    tutorialCompleteDesc: "GAKU Masterの4つの主な機能をすべて見てもらいました。🎓チュートリアルボタンからいつでもこのツアーをもう一度見られます。",
     tutorialCompleteBtn: "勉強を始める",
     tutorialReaderCta: "📬 メールからGAKU Master Readerを受け取ろう！",
     featurePickerTitle: "使いたい機能を選んでください",
@@ -10390,7 +10192,7 @@ const UI_TRANSLATIONS = {
     trialEndedTitle: "Intensive modeの3日間のお試しが終わりました。どちらのモードにしますか？",
     modeGuideTitle: "学習モードの説明",
     modeGuideIntensive: "🔥 Intensive mode: 今日のノルマ(1日8アクション)を終わらせましょう。タスクのチェック、理解チェックへの回答、練習、単語の保存などが数えられます。",
-    modeGuideLock: "🔒 ノルマが終わるまでは、字幕帳・Milestones・JLPTのタブがロックされます。ロックされたタブを押すと、スケジュール画面に戻ります。8回に達するとロックは外れます。",
+    modeGuideLock: "🔒 ノルマが終わるまでは、Milestones・JLPTのタブがロックされます。ロックされたタブを押すと、スケジュール画面に戻ります。8回に達するとロックは外れます。",
     modeGuideEnjoyable: "😊 Enjoyable mode: ノルマも警告もありません。記録が3回以上たまると、「普段は○○が得意ですが、△△は少し苦手そうですね。今日は△△はいかがですか？」というやさしい提案だけが表示されます。",
     modeGuideEscape: "FeedbackタブとModeボタンはロックされません。もっとゆるくしたいときは、Modeボタンからいつでも Enjoyable mode に変えられます。",
     modeGuideOk: "わかりました",
@@ -10407,10 +10209,8 @@ const UI_TRANSLATIONS = {
     feedbackError: "フィードバックの送信中に問題が発生しました。もう一度お試しください。",
     feedbackSubmitting: "送信中...",
     feedbackSubmit: "フィードバックを送信",
-    tabSubtitles: "🎬 字幕帳",
     navGoConversation: "💬 リスニング＆会話へ",
     navGoPronunciation: "🗣️ リスニング＆発音へ",
-    navGoSubtitles: "📺 字幕帳へ",
     navGoContent: "✨ コンテンツからへ",
     navGoVocabulary: "📚 単語帳へ",
     savedSetFound: "前回保存した学習セットがあります。",
@@ -10707,21 +10507,10 @@ const UI_TRANSLATIONS = {
     speed08: "🐢 0.8倍速",
     speed05: "🐌 0.5倍速",
     translateBtn: "翻訳",
-    subtitlesTitle: "字幕→単語帳",
-    subtitlesDesc: "すでに視聴している動画の字幕やトランスクリプトを貼り付けてください（例：YouTube自体の「トランスクリプトを表示」パネル）。単語をダブルクリックするか、ドラッグしてフレーズを選択し、調べてそのまま単語ビルダーに保存できます。",
     subtitlesSourceLabel: "動画タイトル／出典（任意 — フォルダ名として使用されます）",
     subtitlesSourcePlaceholder: "例：NHK news 7/2",
-    subtitlesPasteLabel: "ここに字幕／トランスクリプトを貼り付けてください",
     subtitlesPastePlaceholder: "プレーンテキストまたは.srtファイルの内容を貼り付けてください — タイムスタンプと通し番号は自動的に削除されます。",
-    subtitlesLoadBtn: "トランスクリプトを読み込む",
-    subtitlesCopyrightNote: "🔒 ここに貼り付けたテキストは、後で再開できるようこのブラウザのローカルストレージにのみ保存され、サーバーに送信されることはありません。保存を選択した特定の単語／フレーズのみが単語ビルダーに追加されます。",
-    subtitlesDefaultFolder: "字幕",
     subtitlesLoadNew: "↺ 別のトランスクリプトを読み込む",
-    subtitlesSavedCount: "今回のセッションで保存済み：",
-    subtitlesLookupSaveBtn: "🔍 調べて保存",
-    subtitlesTooLong: "選択範囲が長すぎます — もっと短い単語やフレーズを選んでください（約60文字以内）。",
-    subtitlesSavedTo: "保存先：",
-    subtitlesLookupError: "検索に失敗しました。もう一度お試しください。",
     resAnkiPronDesc: "音声フラッシュカードで音の聞き分け力を鍛えます。CLT：聞いて繰り返す。",
     resMisaPronDesc: "実用的な例文と発音練習。CLT重視。",
     resOnomappuPronDesc: "日本語のみでの解説。理解可能なインプット — CLT適合性が非常に高い。",
@@ -10862,7 +10651,7 @@ const UI_TRANSLATIONS = {
     // Tutorial feature
     tutorialBtn: "🎓 Eğitim",
     tutorialWelcomeTitle: "GAKU Master'a hoş geldiniz! 👋",
-    tutorialWelcomeDesc: "5 ana özelliği birlikte hızlıca gezelim. Sadece bir dakika sürer — benimle dokunun!",
+    tutorialWelcomeDesc: "4 ana özelliği birlikte hızlıca gezelim. Sadece bir dakika sürer — benimle dokunun!",
     tutorialStartBtn: "Turu Başlat",
     tutorialSkipBtn: "Atla",
     tutorialStepOf: "{total} adımdan {current}.",
@@ -10870,7 +10659,6 @@ const UI_TRANSLATIONS = {
     tutorialNextBtn: "İleri →",
     tutorialScheduleDesc: "Bu, size özel haftalık çalışma planınız. Aşağıdan bir görevi işaretlemeyi deneyin — sonra ilerleme çubuğunuzun dolduğunu izleyin.",
     tutorialVocabularyDesc: "Hemen deneyin: bir kelime arayın (örneğin 食べる) ve kendi destenize kaydedin. Kaydettiğiniz kelimeleri dilediğiniz zaman kartlarla tekrar edebilirsiniz.",
-    tutorialSubtitlesDesc: "Aşağıya bir video bağlantısı yapıştırın ve altyazısını veya sesini kendi dinleme ve kelime alıştırmanıza dönüştürün.",
     tutorialResourcesDesc: "Aşağıda seviyenize özel seçilmiş kaynaklara göz atın veya kendi alıştırmanızı oluşturmak için bir içerik yapıştırın.",
     tutorialMilestonesDesc: "Bu, Japonca hedefinize giden yol haritanız. Sırada ne olduğuna bir göz atın.",
     tutModesTitle: "Çalışma modları ve koç",
@@ -10958,7 +10746,7 @@ const UI_TRANSLATIONS = {
     copyWeak: "Bunları tekrar çalışın",
     copyNewText: "Yeni metin",
     tutorialCompleteTitle: "Tamamlandı! 🎉",
-    tutorialCompleteDesc: "GAKU Master'ın 5 ana özelliğinin tamamını gördünüz. Bu turu istediğiniz zaman 🎓 Eğitim düğmesinden tekrar izleyebilirsiniz.",
+    tutorialCompleteDesc: "GAKU Master'ın 4 ana özelliğinin tamamını gördünüz. Bu turu istediğiniz zaman 🎓 Eğitim düğmesinden tekrar izleyebilirsiniz.",
     tutorialCompleteBtn: "Çalışmaya Başla",
     tutorialReaderCta: "📬 GAKU Reader'ı e-postanızdan alın!",
     featurePickerTitle: "İstediğin özellikleri seç",
@@ -11040,7 +10828,7 @@ const UI_TRANSLATIONS = {
     trialEndedTitle: "3 günlük Intensive denemeniz sona erdi. Şimdi hangi mod?",
     modeGuideTitle: "Çalışma modları nasıl işler",
     modeGuideIntensive: "🔥 Intensive modu: bugünün 8 eylemlik hedefini tamamlayın (görevi işaretlemek, anlama kontrolünü yanıtlamak, pratik yapmak, kelime kaydetmek vb.).",
-    modeGuideLock: "🔒 Hedef tamamlanana kadar Subtitles, Milestones ve JLPT sekmeleri kilitlidir. Kilitli sekmeye dokunursanız Program ekranına dönersiniz. 8'e ulaşınca hepsi açılır.",
+    modeGuideLock: "🔒 Hedef tamamlanana kadar Milestones ve JLPT sekmeleri kilitlidir. Kilitli sekmeye dokunursanız Program ekranına dönersiniz. 8'e ulaşınca hepsi açılır.",
     modeGuideEnjoyable: "😊 Enjoyable modu: hedef de uyarı da yok. Yalnızca \"Genelde X'te iyisiniz, Y biraz zor görünüyor. Bugün Y'ye ne dersiniz?\" gibi nazik bir öneri görürsünüz (3 veya daha fazla kayıt olunca).",
     modeGuideEscape: "Feedback sekmesi ve Mode düğmesi asla kilitlenmez. Daha rahat mı istiyorsunuz? Mode düğmesinden istediğiniz zaman Enjoyable moduna geçebilirsiniz.",
     modeGuideOk: "Anladım",
@@ -11057,10 +10845,8 @@ const UI_TRANSLATIONS = {
     feedbackError: "Geri bildiriminiz gönderilirken bir sorun oluştu. Lütfen tekrar deneyin.",
     feedbackSubmitting: "Gönderiliyor...",
     feedbackSubmit: "Geri Bildirim Gönder",
-    tabSubtitles: "🎬 Altyazı",
     navGoConversation: "💬 Dinleme ve Konuşma Bölümüne Git",
     navGoPronunciation: "🗣️ Dinleme ve Telaffuz Bölümüne Git",
-    navGoSubtitles: "📺 Altyazılara Git",
     navGoContent: "✨ İçerikten Pratiğe Git",
     navGoVocabulary: "📚 Kelime Dağarcığına Git",
     savedSetFound: "Daha önce kaydedilmiş bir çalışma setiniz var.",
@@ -11357,21 +11143,10 @@ const UI_TRANSLATIONS = {
     speed08: "🐢 0,8x",
     speed05: "🐌 0,5x",
     translateBtn: "Çevir",
-    subtitlesTitle: "Altyazı → Kelime Bilgisi",
-    subtitlesDesc: "Zaten izlemekte olduğunuz bir videonun altyazılarını veya metnini yapıştırın (ör. YouTube'un kendi \"Transkripti göster\" panosu). Bir kelimeye çift tıklayın veya bir ifadeyi seçmek için sürükleyin, ardından arayın ve doğrudan Kelime Oluşturucunuza kaydedin.",
     subtitlesSourceLabel: "Video başlığı / kaynağı (isteğe bağlı — klasör adı olarak kullanılır)",
     subtitlesSourcePlaceholder: "ör. NHK news 7/2",
-    subtitlesPasteLabel: "Altyazıyı / metni buraya yapıştırın",
     subtitlesPastePlaceholder: "Düz metin veya bir .srt dosyasının içeriğini yapıştırın — zaman damgaları ve sıra numaraları otomatik olarak kaldırılır.",
-    subtitlesLoadBtn: "Metni yükle",
-    subtitlesCopyrightNote: "🔒 Buraya yapıştırdığınız metin, daha sonra devam edebilmeniz için yalnızca bu tarayıcının yerel deposunda saklanır — asla bir sunucuya gönderilmez. Yalnızca kaydetmeyi seçtiğiniz belirli kelimeler/ifadeler Kelime Oluşturucunuza eklenir.",
-    subtitlesDefaultFolder: "Altyazı",
     subtitlesLoadNew: "↺ Başka bir metin yükle",
-    subtitlesSavedCount: "Bu oturumda kaydedilenler:",
-    subtitlesLookupSaveBtn: "🔍 Ara ve kaydet",
-    subtitlesTooLong: "Bu seçim çok uzun — lütfen daha kısa bir kelime veya ifade seçin (~60 karakterden az).",
-    subtitlesSavedTo: "şuraya kaydedildi:",
-    subtitlesLookupError: "Arama başarısız oldu. Lütfen tekrar deneyin.",
     resAnkiPronDesc: "Sesli kartlarla fonetik tanımayı geliştirin. CLT: dinle ve tekrar et.",
     resMisaPronDesc: "Pratik örnek cümleler ve telaffuz alıştırmaları. CLT odaklı.",
     resOnomappuPronDesc: "Yalnızca Japonca açıklamalar. Anlaşılabilir Girdi — CLT uyumluluğu çok yüksek.",
@@ -11512,7 +11287,7 @@ const UI_TRANSLATIONS = {
     // Tutorial feature
     tutorialBtn: "🎓 ट्युटोरियल",
     tutorialWelcomeTitle: "GAKU Master मा स्वागत छ! 👋",
-    tutorialWelcomeDesc: "आउनुहोस् सँगै ५ वटा मुख्य सुविधाहरूको छोटो भ्रमण गरौं। यसले जम्मा एक मिनेट मात्र लिन्छ — मसँगै ट्याप गर्नुहोस्!",
+    tutorialWelcomeDesc: "आउनुहोस् सँगै ४ वटा मुख्य सुविधाहरूको छोटो भ्रमण गरौं। यसले जम्मा एक मिनेट मात्र लिन्छ — मसँगै ट्याप गर्नुहोस्!",
     tutorialStartBtn: "भ्रमण सुरु गर्नुहोस्",
     tutorialSkipBtn: "छोड्नुहोस्",
     tutorialStepOf: "चरण {current} / {total}",
@@ -11520,7 +11295,6 @@ const UI_TRANSLATIONS = {
     tutorialNextBtn: "अर्को →",
     tutorialScheduleDesc: "यो तपाईंको व्यक्तिगत साप्ताहिक अध्ययन योजना हो। तल कुनै एक कार्यमा चेक गरेर हेर्नुहोस् — त्यसपछि आफ्नो प्रगति बार भरिँदै जाने हेर्नुहोस्।",
     tutorialVocabularyDesc: "अहिले नै प्रयास गर्नुहोस्: कुनै शब्द खोज्नुहोस् (जस्तै 食べる) र आफ्नै डेकमा सेभ गर्नुहोस्। सेभ गरिएका शब्दहरू तपाईं जहिले पनि फ्ल्यासकार्डको साथ पुनरावलोकन गर्न सक्नुहुन्छ।",
-    tutorialSubtitlesDesc: "तल कुनै भिडियोको लिंक टाँस्नुहोस् र यसको सबटाइटल वा अडियोलाई आफ्नै सुनाइ र शब्दावली अभ्यासमा बदल्नुहोस्।",
     tutorialResourcesDesc: "तल तपाईंको स्तरका लागि छानिएका स्रोतहरू हेर्नुहोस्, वा आफ्नै अभ्यास बनाउन कुनै सामग्री टाँस्नुहोस्।",
     tutorialMilestonesDesc: "यो तपाईंको जापानी लक्ष्यसम्मको रोडम्याप हो। अब के आउँदैछ हेर्नुहोस्।",
     tutModesTitle: "अध्ययन मोड र प्रशिक्षक",
@@ -11608,7 +11382,7 @@ const UI_TRANSLATIONS = {
     copyWeak: "यी फेरि अभ्यास गर्नुहोस्",
     copyNewText: "नयाँ पाठ",
     tutorialCompleteTitle: "सबै पूरा भयो! 🎉",
-    tutorialCompleteDesc: "तपाईंले GAKU Master का सबै ५ मुख्य सुविधाहरू हेर्नुभयो। तपाईं जुनसुकै बेला 🎓 ट्युटोरियल बटनबाट यो भ्रमण फेरि हेर्न सक्नुहुन्छ।",
+    tutorialCompleteDesc: "तपाईंले GAKU Master का सबै ४ मुख्य सुविधाहरू हेर्नुभयो। तपाईं जुनसुकै बेला 🎓 ट्युटोरियल बटनबाट यो भ्रमण फेरि हेर्न सक्नुहुन्छ।",
     tutorialCompleteBtn: "अध्ययन सुरु गर्नुहोस्",
     tutorialReaderCta: "📬 इमेलबाट GAKU Reader प्राप्त गर्नुहोस्!",
     featurePickerTitle: "आफूलाई चाहिने सुविधाहरू छान्नुहोस्",
@@ -11690,7 +11464,7 @@ const UI_TRANSLATIONS = {
     trialEndedTitle: "तपाईंको ३ दिने Intensive परीक्षण सकियो। अब कुन मोड?",
     modeGuideTitle: "अध्ययन मोडले कसरी काम गर्छन्",
     modeGuideIntensive: "🔥 Intensive मोड: आजको ८ कार्यको लक्ष्य पूरा गर्नुहोस् (टास्क टिक गर्ने, बुझाइ जाँचको उत्तर दिने, अभ्यास, शब्द सेभ गर्ने आदि)।",
-    modeGuideLock: "🔒 लक्ष्य पूरा नभएसम्म Subtitles, Milestones र JLPT ट्याब लक हुन्छन्। लक ट्याब थिच्दा तपाईं तालिकामा फर्कनुहुन्छ। ८ पुगेपछि सबै खुल्छ।",
+    modeGuideLock: "🔒 लक्ष्य पूरा नभएसम्म Milestones र JLPT ट्याब लक हुन्छन्। लक ट्याब थिच्दा तपाईं तालिकामा फर्कनुहुन्छ। ८ पुगेपछि सबै खुल्छ।",
     modeGuideEnjoyable: "😊 Enjoyable मोड: कुनै लक्ष्य वा चेतावनी छैन। केवल नरम सुझाव देखिन्छ, जस्तै \"तपाईं सामान्यतया X मा राम्रो हुनुहुन्छ, Y अलि गाह्रो देखिन्छ। आज Y कस्तो होला?\" (३ वा बढी रेकर्ड भएपछि)।",
     modeGuideEscape: "Feedback ट्याब र Mode बटन कहिल्यै लक हुँदैनन्। सजिलो चाहनुहुन्छ? Mode बटनबाट जुनसुकै बेला Enjoyable मोडमा बदल्नुहोस्।",
     modeGuideOk: "बुझें",
@@ -11707,10 +11481,8 @@ const UI_TRANSLATIONS = {
     feedbackError: "तपाईंको प्रतिक्रिया पठाउँदा समस्या भयो। कृपया फेरि प्रयास गर्नुहोस्।",
     feedbackSubmitting: "पठाउँदै...",
     feedbackSubmit: "प्रतिक्रिया पठाउनुहोस्",
-    tabSubtitles: "🎬 सबटाइटल",
     navGoConversation: "💬 सुनाइ र कुराकानी मा जानुहोस्",
     navGoPronunciation: "🗣️ सुनाइ र उच्चारण मा जानुहोस्",
-    navGoSubtitles: "📺 सबटाइटलमा जानुहोस्",
     navGoContent: "✨ सामग्री अभ्यासमा जानुहोस्",
     navGoVocabulary: "📚 शब्दावलीमा जानुहोस्",
     savedSetFound: "तपाईंसँग पहिलेको सुरक्षित अध्ययन सेट छ।",
@@ -12007,21 +11779,10 @@ const UI_TRANSLATIONS = {
     speed08: "🐢 0.8x गति",
     speed05: "🐌 0.5x गति",
     translateBtn: "अनुवाद गर्नुहोस्",
-    subtitlesTitle: "सबटाइटल → शब्दावली",
-    subtitlesDesc: "तपाईंले पहिले नै हेरिरहनुभएको भिडियोको सबटाइटल वा ट्रान्सक्रिप्ट टाँस्नुहोस् (जस्तै YouTube को आफ्नै \"Show transcript\" प्यानल)। कुनै शब्दमा डबल-क्लिक गर्नुहोस् वा वाक्यांश छनोट गर्न तान्नुहोस्, त्यसपछि यसलाई खोज्नुहोस् र सिधै आफ्नो शब्दावली निर्माता मा सुरक्षित गर्नुहोस्।",
     subtitlesSourceLabel: "भिडियो शीर्षक / स्रोत (वैकल्पिक — फोल्डर नामको रूपमा प्रयोग हुन्छ)",
     subtitlesSourcePlaceholder: "जस्तै NHK news 7/2",
-    subtitlesPasteLabel: "यहाँ सबटाइटल / ट्रान्सक्रिप्ट टाँस्नुहोस्",
     subtitlesPastePlaceholder: "सादा पाठ वा .srt फाइलको सामग्री टाँस्नुहोस् — समय-मुद्रा र क्यू नम्बरहरू स्वतः हटाइनेछन्।",
-    subtitlesLoadBtn: "ट्रान्सक्रिप्ट लोड गर्नुहोस्",
-    subtitlesCopyrightNote: "🔒 तपाईंले यहाँ टाँसेको पाठ पछि जारी राख्न सकिने गरी यो ब्राउजरको लोकल स्टोरेजमा मात्र सुरक्षित हुन्छ — यो कहिल्यै सर्भरमा पठाइँदैन। तपाईंले सुरक्षित गर्न रोजेका विशिष्ट शब्द/वाक्यांशहरू मात्र तपाईंको शब्दावली निर्माता मा थपिन्छन्।",
-    subtitlesDefaultFolder: "सबटाइटल",
     subtitlesLoadNew: "↺ फरक ट्रान्सक्रिप्ट लोड गर्नुहोस्",
-    subtitlesSavedCount: "यस सत्रमा सुरक्षित गरिएको:",
-    subtitlesLookupSaveBtn: "🔍 खोज्नुहोस् र सुरक्षित गर्नुहोस्",
-    subtitlesTooLong: "यो छनोट धेरै लामो छ — कृपया छोटो शब्द वा वाक्यांश छनोट गर्नुहोस् (~६० अक्षरभन्दा कम)।",
-    subtitlesSavedTo: "मा सुरक्षित गरियो",
-    subtitlesLookupError: "खोजी असफल भयो। कृपया फेरि प्रयास गर्नुहोस्।",
     resAnkiPronDesc: "अडियो फ्ल्यासकार्डको साथ ध्वन्यात्मक पहिचान विकास गर्नुहोस्। CLT: सुन्नुहोस् र दोहोर्याउनुहोस्।",
     resMisaPronDesc: "व्यावहारिक उदाहरण वाक्यहरू र उच्चारण अभ्यास। CLT-केन्द्रित।",
     resOnomappuPronDesc: "केवल जापानी भाषामा व्याख्या। बुझ्न सकिने इनपुट — CLT अनुकूलता धेरै उच्च।",
@@ -12162,7 +11923,7 @@ const UI_TRANSLATIONS = {
     // Tutorial feature
     tutorialBtn: "🎓 Tutorial",
     tutorialWelcomeTitle: "Maligayang pagdating sa GAKU Master! 👋",
-    tutorialWelcomeDesc: "Mabilisan lang nating tignan ang 5 pangunahing feature. Isang minuto lang ito — sabay-sabay tayong mag-tap!",
+    tutorialWelcomeDesc: "Mabilisan lang nating tignan ang 4 pangunahing feature. Isang minuto lang ito — sabay-sabay tayong mag-tap!",
     tutorialStartBtn: "Simulan ang Tour",
     tutorialSkipBtn: "Laktawan",
     tutorialStepOf: "Hakbang {current} sa {total}",
@@ -12170,7 +11931,6 @@ const UI_TRANSLATIONS = {
     tutorialNextBtn: "Susunod →",
     tutorialScheduleDesc: "Ito ang iyong personalized na lingguhang study plan. Subukang i-check ang isang gawain sa ibaba — pagkatapos ay panoorin ang iyong progress bar habang tumataas.",
     tutorialVocabularyDesc: "Subukan na ngayon: maghanap ng isang salita (hal. 食べる) at i-save ito sa sarili mong deck. Puwede mong balikan ang mga naka-save na salita anumang oras gamit ang flashcards.",
-    tutorialSubtitlesDesc: "I-paste ang link ng isang video sa ibaba at gawing sarili mong listening at vocabulary practice ang subtitle o audio nito.",
     tutorialResourcesDesc: "Tingnan ang mga hand-picked na resource para sa iyong level sa ibaba, o mag-paste ng content para gumawa ng sarili mong practice.",
     tutorialMilestonesDesc: "Ito ang iyong roadmap patungo sa iyong layunin sa Nihongo. Tingnan kung ano ang susunod.",
     tutModesTitle: "Mga study mode at coach",
@@ -12258,7 +12018,7 @@ const UI_TRANSLATIONS = {
     copyWeak: "Sanayin muli ang mga ito",
     copyNewText: "Bagong teksto",
     tutorialCompleteTitle: "Tapos na! 🎉",
-    tutorialCompleteDesc: "Nakita mo na ang lahat ng 5 pangunahing feature ng GAKU Master. Puwede mong ulitin ang tour na ito anumang oras gamit ang 🎓 Tutorial button.",
+    tutorialCompleteDesc: "Nakita mo na ang lahat ng 4 pangunahing feature ng GAKU Master. Puwede mong ulitin ang tour na ito anumang oras gamit ang 🎓 Tutorial button.",
     tutorialCompleteBtn: "Simulan ang Pag-aaral",
     tutorialReaderCta: "📬 Kunin ang GAKU Reader mula sa iyong email!",
     featurePickerTitle: "Piliin ang mga feature na gusto mo",
@@ -12340,7 +12100,7 @@ const UI_TRANSLATIONS = {
     trialEndedTitle: "Tapos na ang 3-araw mong Intensive trial. Aling mode na ngayon?",
     modeGuideTitle: "Paano gumagana ang mga study mode",
     modeGuideIntensive: "🔥 Intensive mode: tapusin ang quota ngayong araw na 8 aksyon (pag-check ng task, pagsagot sa comprehension check, pagsasanay, pag-save ng salita, atbp.).",
-    modeGuideLock: "🔒 Hangga't hindi tapos ang quota, naka-lock ang Subtitles, Milestones at JLPT. Pindutin ang naka-lock na tab at babalik ka sa Schedule. Pag umabot ng 8, mabubuksan ang lahat.",
+    modeGuideLock: "🔒 Hangga't hindi tapos ang quota, naka-lock ang Milestones at JLPT. Pindutin ang naka-lock na tab at babalik ka sa Schedule. Pag umabot ng 8, mabubuksan ang lahat.",
     modeGuideEnjoyable: "😊 Enjoyable mode: walang quota, walang babala. Banayad na mungkahi lang ang makikita, tulad ng \"Karaniwan kang magaling sa X, at medyo mahirap ang Y. Subukan ang Y ngayon?\" (kapag may 3 o higit pang tala).",
     modeGuideEscape: "Hindi kailanman nilo-lock ang Feedback tab at ang Mode button. Gusto ng mas magaan? Lumipat sa Enjoyable mode anumang oras gamit ang Mode button.",
     modeGuideOk: "Sige",
@@ -12357,10 +12117,8 @@ const UI_TRANSLATIONS = {
     feedbackError: "May naganap na problema sa pagpapadala ng iyong puna. Pakisubukang muli.",
     feedbackSubmitting: "Ipinapadala...",
     feedbackSubmit: "Isumite ang Puna",
-    tabSubtitles: "🎬 Subtitle",
     navGoConversation: "💬 Pumunta sa Pakikinig at Pag-uusap",
     navGoPronunciation: "🗣️ Pumunta sa Pakikinig at Pagbigkas",
-    navGoSubtitles: "📺 Pumunta sa Subtitle",
     navGoContent: "✨ Pumunta sa Pagsasanay Mula sa Nilalaman",
     navGoVocabulary: "📚 Pumunta sa Bokabularyo",
     savedSetFound: "Mayroon kang naka-save na study set mula noon.",
@@ -12657,21 +12415,10 @@ const UI_TRANSLATIONS = {
     speed08: "🐢 0.8x",
     speed05: "🐌 0.5x",
     translateBtn: "Isalin",
-    subtitlesTitle: "Subtitle → Bokabularyo",
-    subtitlesDesc: "I-paste ang subtitle o transcript mula sa video na pinapanood mo na (hal. ang sariling \"Show transcript\" panel ng YouTube). I-double-click ang isang salita o i-drag para pumili ng parirala, pagkatapos ay hanapin ito at i-save nang direkta sa iyong Vocabulary Builder.",
     subtitlesSourceLabel: "Pamagat / pinagmulan ng video (opsyonal — ginagamit bilang pangalan ng folder)",
     subtitlesSourcePlaceholder: "hal. NHK news 7/2",
-    subtitlesPasteLabel: "I-paste ang subtitle / transcript dito",
     subtitlesPastePlaceholder: "I-paste ang plain text o ang laman ng isang .srt file — awtomatikong aalisin ang mga timestamp at cue number.",
-    subtitlesLoadBtn: "I-load ang transcript",
-    subtitlesCopyrightNote: "🔒 Ang tekstong ini-paste mo dito ay naka-save lamang sa local storage ng browser na ito, para magpatuloy ka sa susunod — hindi ito ipinapadala sa anumang server. Ang mga partikular na salita/parirala lamang na pinili mong i-save ang idadagdag sa iyong Vocabulary Builder.",
-    subtitlesDefaultFolder: "Subtitle",
     subtitlesLoadNew: "↺ Mag-load ng ibang transcript",
-    subtitlesSavedCount: "Na-save sa session na ito:",
-    subtitlesLookupSaveBtn: "🔍 Hanapin at i-save",
-    subtitlesTooLong: "Masyadong mahaba ang napiling bahagi — mangyaring pumili ng mas maikling salita o parirala (mas mababa sa ~60 characters).",
-    subtitlesSavedTo: "na-save sa",
-    subtitlesLookupError: "Nabigo ang paghahanap. Pakisubukang muli.",
     resAnkiPronDesc: "Bumuo ng phonetic recognition gamit ang audio flashcards. CLT: makinig at ulitin.",
     resMisaPronDesc: "Praktikal na halimbawang pangungusap at ehersisyo sa pagbigkas. Nakatuon sa CLT.",
     resOnomappuPronDesc: "Paliwanag sa Hapon lamang. Comprehensible Input — napakataas ng CLT compatibility.",
@@ -15220,262 +14967,6 @@ function VocabBuilder({ form, helpAuto = true }) {
               </div>
             </div>
           ))}
-        </div>
-      )}
-    </div>
-  );
-}
-
-// ─── SUBTITLE VOCAB BUILDER (student pastes subtitles THEY already
-// have access to — we never fetch/scrape captions ourselves — then selects a
-// word/phrase to look up and save. The full pasted transcript is never written to
-// localStorage or any server; only the short word/phrase the student explicitly
-// selects gets saved, exactly like a normal Vocabulary Builder card). ──────────
-function parseSubtitleText(raw) {
-  const rawLines = (raw || "").split(/\r?\n/);
-  const timeRe = /\d{1,2}:\d{2}:\d{2}[,.]\d{3}\s*-->\s*\d{1,2}:\d{2}:\d{2}[,.]\d{3}/;
-  const idxRe = /^\d+$/;
-  const cues = [];
-  let buffer = [];
-  for (const line of rawLines) {
-    const trimmed = line.trim();
-    if (!trimmed) {
-      if (buffer.length) { cues.push(buffer.join(" ")); buffer = []; }
-      continue;
-    }
-    if (idxRe.test(trimmed) || timeRe.test(trimmed)) continue;
-    buffer.push(trimmed);
-  }
-  if (buffer.length) cues.push(buffer.join(" "));
-  const deduped = [];
-  for (const c of cues) { if (deduped[deduped.length - 1] !== c) deduped.push(c); }
-  return deduped.filter(Boolean);
-}
-
-function SubtitleVocabBuilder({ form }) {
-  const T = useUITranslations(form?.preferredLang || "English");
-  const lang = form?.preferredLang || "English";
-  const [raw, setRaw] = useState("");
-  const [sourceTitle, setSourceTitle] = useState("");
-  const [lines, setLines] = useState(null); // null = not loaded yet
-  const [selection, setSelection] = useState(null); // { text, contextLine }
-  const [lookupLoading, setLookupLoading] = useState(false);
-  const [lookupError, setLookupError] = useState("");
-  const [sessionSaved, setSessionSaved] = useState([]);
-  const [toast, setToast] = useState("");
-  const [savedSet, setSavedSet] = useState(null); // a previously-loaded transcript found in this browser, offered via Resume/Reset
-  const containerRef = useRef(null);
-
-  const SUBTITLES_STORAGE_KEY = "gaku_subtitles_study_set";
-
-  // On first mount, check for a transcript left over from before navigating away — but don't
-  // auto-load it; let the student choose Resume or Reset so nothing appears unexpectedly.
-  useEffect(() => {
-    try {
-      const raw = localStorage.getItem(scopedKey(SUBTITLES_STORAGE_KEY));
-      if (raw) {
-        const parsed = JSON.parse(raw);
-        if (parsed && Array.isArray(parsed.lines) && parsed.lines.length) setSavedSet(parsed);
-      }
-    } catch {}
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  // Persist whenever a transcript is loaded, so it survives navigating to another tab and back.
-  useEffect(() => {
-    if (lines && lines.length) {
-      try { localStorage.setItem(scopedKey(SUBTITLES_STORAGE_KEY), JSON.stringify({ raw, sourceTitle, lines })); } catch {}
-    }
-  }, [lines, raw, sourceTitle]);
-
-  const showToast = (msg) => { setToast(msg); setTimeout(() => setToast(""), 2200); };
-
-  const handleLoad = () => {
-    const parsed = parseSubtitleText(raw);
-    setLines(parsed);
-    setSelection(null);
-  };
-
-  const handleResume = () => {
-    if (savedSet) {
-      setRaw(savedSet.raw || "");
-      setSourceTitle(savedSet.sourceTitle || "");
-      setLines(savedSet.lines || null);
-    }
-    setSavedSet(null);
-  };
-  const handleResetSaved = () => {
-    try { localStorage.removeItem(scopedKey(SUBTITLES_STORAGE_KEY)); } catch {}
-    setSavedSet(null);
-  };
-
-  const handleReset = () => {
-    setLines(null); setRaw(""); setSelection(null); setLookupError("");
-    try { localStorage.removeItem(scopedKey(SUBTITLES_STORAGE_KEY)); } catch {}
-  };
-
-  const handleMouseUp = () => {
-    const sel = window.getSelection ? window.getSelection() : null;
-    const text = sel ? sel.toString().trim() : "";
-    if (!text) return;
-    if (text.length > 60) {
-      setSelection(null);
-      setLookupError(T.subtitlesTooLong || "That selection is too long — please select a shorter word or phrase (under ~60 characters).");
-      return;
-    }
-    let contextLine = text;
-    try {
-      let node = sel.anchorNode;
-      while (node && node.nodeType !== 1) node = node.parentNode;
-      const p = node && node.closest ? node.closest("p[data-subtitle-line]") : null;
-      if (p) contextLine = p.textContent;
-    } catch {}
-    setSelection({ text, contextLine });
-    setLookupError("");
-  };
-
-  const lookupAndSave = async () => {
-    if (!selection) return;
-    setLookupLoading(true); setLookupError("");
-    try {
-      const res = await fetch("/api/claude", {
-        method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          max_tokens: 700,
-          messages: [
-            { role: "system", content: `You are a multilingual Japanese dictionary expert. You MUST write the "meaning", "example_translated", and "tip" fields EXCLUSIVELY in ${lang}. Never use English for these fields unless the student's native language IS English. Respond ONLY with a raw JSON object, no markdown, no backticks.` },
-            { role: "user", content: `A student watching a Japanese video selected this text from the subtitles: "${selection.text}"\nThe full subtitle line it came from (for context only): "${selection.contextLine}"\n\nDecide whether the selection is a single dictionary word or a multi-word phrase/expression, then return a JSON object with these exact keys:\n- word: the selection in its natural dictionary/citation form (kanji/kana). If it's an inflected verb/adjective, convert to dictionary form. If it's a phrase, keep it as a natural chunk.\n- reading: hiragana reading of "word"\n- jlpt: JLPT level (N5/N4/N3/N2/N1) or "" if unclear\n- partOfSpeech: part of speech in English, or "phrase" / "expression" for multi-word selections\n- meaning: translation in ${lang}\n- meaningNative: simple Japanese definition\n- example: "${selection.contextLine}"\n- example_translated: translation of that exact line into ${lang}\n- tip: a short usage note in ${lang}, mentioning it was picked up from a video's subtitles\n- imageQuery: 2-3 English words suitable for an image search\nOutput ONLY the JSON object.` }
-          ]
-        })
-      });
-      const data = await res.json();
-      const text = data?.content?.[0]?.text || data?.content?.map(c => c.text || "").join("") || "";
-      const clean = text.replace(/```json|```/g, "").trim();
-      const parsed = JSON.parse(clean);
-      const folder = sourceTitle.trim() || (T.subtitlesDefaultFolder || "Subtitles");
-      const card = {
-        word: parsed.word || selection.text,
-        reading: parsed.reading || "",
-        jlpt: parsed.jlpt || "",
-        partOfSpeech: parsed.partOfSpeech || "",
-        meaning: parsed.meaning || "",
-        meaningNative: parsed.meaningNative || "",
-        example: parsed.example || selection.contextLine,
-        example_translated: parsed.example_translated || "",
-        tip: parsed.tip || "",
-        imageQuery: parsed.imageQuery || parsed.word || selection.text,
-        imageDesc: "",
-        folder, addedAt: Date.now(), id: Date.now(), savedAt: new Date().toISOString(),
-      };
-      const vocabData = loadVocabData();
-      if (folder !== "Your Vocabulary" && !vocabData.folders.find(f => (typeof f === "string" ? f : f.name) === folder)) {
-        vocabData.folders.push({ name: folder, createdAt: new Date().toISOString() });
-      }
-      if (!vocabData.cards.find(c => c.word === card.word && c.folder === folder)) {
-        vocabData.cards.push(card);
-        saveVocabData(vocabData);
-        window.dispatchEvent(new CustomEvent("gaku_vocab_updated"));
-      }
-      setSessionSaved(prev => [card, ...prev]);
-      showToast(`✓ "${card.word}" ${T.subtitlesSavedTo || "saved to"} "${folder}"`);
-      setSelection(null);
-      try { window.getSelection()?.removeAllRanges(); } catch {}
-    } catch (e) {
-      console.error("subtitle lookup error:", e);
-      setLookupError(T.subtitlesLookupError || "Lookup failed. Please try again.");
-    }
-    setLookupLoading(false);
-  };
-
-  // ── STEP 1: paste screen ──
-  if (!lines) {
-    return (
-      <div>
-        {savedSet && (
-          <div style={{ ...S.card, marginBottom:16, borderLeft:`3px solid ${C.purpleLight}` }}>
-            <p style={{ color:C.purpleLight, fontSize:fz(12), fontWeight:700, margin:"0 0 8px" }}>{T.savedSetFound || "You have a saved study set from before."}</p>
-            <div style={{ display:"flex", gap:8 }}>
-              <button onClick={handleResume} style={{ ...S.btn, flex:1, background:`linear-gradient(135deg,${C.purple},#9333ea)`, color:"#fff" }}>
-                {T.resumeStudySet || "▶ Resume study set"}
-              </button>
-              <button onClick={handleResetSaved} style={{ ...S.btn, flex:1, background:C.card, border:`1px solid ${C.border}`, color:"#94a3b8" }}>
-                {T.resetStudySet || "Reset"}
-              </button>
-            </div>
-          </div>
-        )}
-        <div style={{ ...S.card, marginBottom:16 }}>
-          <p style={{ color:C.purpleLight, fontSize:fz(12), fontWeight:700, letterSpacing:1, marginBottom:6 }}>🎬 {T.subtitlesTitle || "Subtitles → Vocabulary"}</p>
-          <p style={{ color:"#39ff14", fontSize:fz(12), lineHeight:1.7, marginBottom:14 }}>
-            {T.subtitlesDesc || "Paste subtitles or a transcript from a video you're already watching (e.g. YouTube's own \"Show transcript\" panel). Double-click a word or drag to select a phrase, then look it up and save it straight to your Vocabulary Builder."}
-          </p>
-          <label style={{ ...S.label, color:"#ffffff" }}>{T.subtitlesSourceLabel || "Video title / source (optional — used as the folder name)"}</label>
-          <input value={sourceTitle} onChange={e => setSourceTitle(e.target.value)} placeholder={T.subtitlesSourcePlaceholder || "e.g. NHK news 7/2"} style={{ ...S.input, marginBottom:12 }} />
-          <label style={{ ...S.label, color:"#ffffff" }}>{T.subtitlesPasteLabel || "Paste subtitles / transcript here"}</label>
-          <textarea data-guide="sub-text" value={raw} onChange={e => setRaw(e.target.value)} rows={10}
-            placeholder={T.subtitlesPastePlaceholder || "Paste plain text or an .srt file's contents — timestamps and cue numbers are removed automatically."}
-            style={{ ...S.input, resize:"vertical", fontFamily:"inherit", lineHeight:1.7, marginBottom:14 }} />
-          <button data-guide="sub-load" onClick={handleLoad} disabled={!raw.trim()} style={{ ...S.btn, width:"100%", background: raw.trim() ? `linear-gradient(135deg,${C.purple},#9333ea)` : "#1e293b", color: raw.trim() ? "#fff" : "#ffffff" }}>
-            {T.subtitlesLoadBtn || "Load transcript"}
-          </button>
-        </div>
-        <p style={{ color:"#475569", fontSize:fz(11), lineHeight:1.6 }}>
-          {T.subtitlesCopyrightNote || "🔒 Text you paste here is saved only in this browser's local storage, so you can resume later — it's never sent to a server. Only the specific words/phrases you choose to save are added to your Vocabulary Builder."}
-        </p>
-      </div>
-    );
-  }
-
-  // ── STEP 2: interactive transcript ──
-  return (
-    <div style={{ position:"relative" }}>
-      {toast && (
-        <div style={{ position:"fixed", top:70, left:"50%", transform:"translateX(-50%)", background:C.green, color:"#fff", padding:"9px 18px", borderRadius:99, fontSize:fz(12), fontWeight:700, zIndex:9999, boxShadow:"0 4px 16px rgba(34,197,94,0.4)" }}>
-          {toast}
-        </div>
-      )}
-      <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:12 }}>
-        <p style={{ color:C.purpleLight, fontSize:fz(12), fontWeight:700, letterSpacing:1, margin:0 }}>
-          🎬 {sourceTitle.trim() || (T.subtitlesDefaultFolder || "Subtitles")}
-        </p>
-        <button onClick={handleReset} style={{ ...S.btn, padding:"6px 12px", fontSize:fz(11), background:C.card, border:`1px solid ${C.border}`, color:"#94a3b8" }}>
-          {T.subtitlesLoadNew || "↺ Load a different transcript"}
-        </button>
-      </div>
-
-      {sessionSaved.length > 0 && (
-        <p style={{ color:"#64748b", fontSize:fz(11), marginBottom:10 }}>
-          {T.subtitlesSavedCount || "Saved this session:"} {sessionSaved.map(c => c.word).join("、")}
-        </p>
-      )}
-
-      {lookupError && !selection && (
-        <div style={{ background:"rgba(239,68,68,0.1)", border:`1px solid rgba(239,68,68,0.3)`, borderRadius:10, padding:"9px 14px", marginBottom:12 }}>
-          <p style={{ color:C.red, fontSize:fz(12), margin:0 }}>{lookupError}</p>
-        </div>
-      )}
-
-      <div ref={containerRef} onMouseUp={handleMouseUp} style={{ ...S.card, marginBottom: selection ? 90 : 20 }}>
-        {lines.map((line, i) => (
-          <p key={i} data-subtitle-line
-            style={{ color:"#e2e8f0", fontSize:fz(15), lineHeight:2.1, margin:"0 0 6px", cursor:"text", userSelect:"text" }}>
-            {line}
-          </p>
-        ))}
-      </div>
-
-      {selection && (
-        <div style={{ position:"fixed", left:"50%", bottom:16, transform:"translateX(-50%)", width:"92%", maxWidth:560, background:"linear-gradient(135deg,#1e1b4b,#0f172a)", border:`1.5px solid ${C.purpleLight}`, borderRadius:14, padding:"14px 16px", boxShadow:"0 8px 30px rgba(0,0,0,0.5)", zIndex:9998 }}>
-          <p style={{ color:"#f1f5f9", fontSize:fz(13), margin:"0 0 4px" }}>「<b>{selection.text}</b>」</p>
-          {lookupError && <p style={{ color:C.red, fontSize:fz(11), margin:"0 0 8px" }}>{lookupError}</p>}
-          <div style={{ display:"flex", gap:8 }}>
-            <button onClick={() => setSelection(null)} style={{ ...S.btn, flex:1, padding:"9px 12px", fontSize:fz(12), background:C.card, border:`1px solid ${C.border}`, color:"#94a3b8" }}>
-              {T.cancel || "Cancel"}
-            </button>
-            <button onClick={lookupAndSave} disabled={lookupLoading} style={{ ...S.btn, flex:2, padding:"9px 12px", fontSize:fz(12), background:lookupLoading?"rgba(139,92,246,0.15)":`linear-gradient(135deg,${C.purple},#9333ea)`, color:lookupLoading?"#64748b":"#fff" }}>
-              {lookupLoading ? "⏳ …" : (T.subtitlesLookupSaveBtn || "🔍 Look up & save")}
-            </button>
-          </div>
         </div>
       )}
     </div>
@@ -18688,10 +18179,6 @@ const EASY_GUIDES = {
     en: { title: "This page", steps: [ { sel: "@next", t: "You are here. Start from the top of this frame and go down.", next: true } ] },
     ja: { title: "このページ", steps: [ { sel: "@next", t: "ここが いまの ページです。この わく の 上から 下へ すすみます。", next: true } ] }
   },
-  page_subtitles: {
-    en: { title: "Subtitles", steps: [ { sel: "@next", t: "Use the box inside this frame to paste subtitles, then follow the buttons.", next: true } ] },
-    ja: { title: "字幕", steps: [ { sel: "@next", t: "この わく の中に 字幕を はって、ボタンを おします。", next: true } ] }
-  },
   page_milestones: {
     en: { title: "Milestones", steps: [ { sel: "@next", t: "Your progress checks are in this frame. Tap a card to open it.", next: true } ] },
     ja: { title: "マイルストーン", steps: [ { sel: "@next", t: "しんちょくチェックは この わく の中です。カードを おすと ひらきます。", next: true } ] }
@@ -19930,7 +19417,6 @@ const TUTORIAL_STEPS = [
   { tab: "schedule", labelKey: "tutGuideTitle", descKey: "tutorialGuideDesc" },
   { tab: "vocabulary" },
   { tab: "vocabulary", labelKey: "tutLibraryTitle", descKey: "tutorialLibraryDesc" },
-  { tab: "subtitles" },
   { tab: "resources", subTab: "links" },
   { tab: "resources", subTab: "content" },
   { tab: "resources", subTab: "conversation" },
@@ -19942,7 +19428,6 @@ const TUTORIAL_STEPS = [
 const TUTORIAL_DESC_KEYS = {
   "schedule:": "tutorialScheduleDesc",
   "vocabulary:": "tutorialVocabularyDesc",
-  "subtitles:": "tutorialSubtitlesDesc",
   "resources:links": "tutorialResourcesDesc",
   "resources:content": "tutorialContentDesc",
   "resources:conversation": "tutorialConversationDesc",
@@ -20018,7 +19503,7 @@ function TutorialOverlay({ T, step, tab, resourceSubTab, tabsMeta, resourceSubTa
 // ---- Feature picker (after the tutorial): the student chooses which optional
 // tabs stay on their dashboard. Vocabulary + Feedback are always shown.
 // Stored per account in localStorage: JSON array of kept feature ids, or absent = show everything.
-const OPTIONAL_FEATURES = ["schedule","subtitles","links","content","conversation","pronunciation","writing","milestones","jlpt"];
+const OPTIONAL_FEATURES = ["schedule","links","content","conversation","pronunciation","writing","milestones","jlpt"];
 const RESOURCE_FEATURES = ["links","content","conversation","pronunciation","writing"];
 function readVisibleFeatures() {
   try {
@@ -20565,7 +20050,7 @@ function ModeGuide({ T, onClose }) {
 function FeaturePicker({ T, initial, onApply }) {
   const [checked, setChecked] = useState(initial || []);
   const labels = {
-    schedule: T.tabSchedule, subtitles: T.tabSubtitles || "Subtitles", links: T.tabResources,
+    schedule: T.tabSchedule, links: T.tabResources,
     content: T.tabPractice || "From Content", conversation: T.convTitle || "Listening & Conversation",
     pronunciation: T.pronTitle || "Listening & Pronunciation", writing: T.writeTitle || "Writing", milestones: T.tabMilestones, jlpt: T.tabJlpt || "JLPT",
   };
@@ -21082,7 +20567,7 @@ function Dashboard({ form, onEdit, onLevelUp, onSetWeek, onLogout, onDeleteAccou
   // Feedback and the Mode button always stay available as an escape hatch.
   const lockHome = tabShown("schedule") ? "schedule" : (tabShown("resources") ? "resources" : null);
   const quotaLocked = isIntensive && !tutorialActive && !!lockHome && countEventsOnDay(loadLearningLog(), 0) < INTENSIVE_DAILY_GOAL;
-  const LOCKABLE_TABS = ["subtitles", "milestones", "jlpt"]; // Vocabulary stays open: its use counts toward the quota
+  const LOCKABLE_TABS = ["milestones", "jlpt"]; // Vocabulary stays open: its use counts toward the quota
   // Coach (Intensive modes): only judges features the student keeps visible; the button jumps to the practice.
   const coachAllow = (a) => a === "vocab" || featureShown(a);
   const coachGo = (a) => { if (a === "schedule" || a === "vocab") { setTab(a === "vocab" ? "vocabulary" : "schedule"); return; } setTab("resources"); setResourceSubTab(a); };
@@ -21097,7 +20582,6 @@ function Dashboard({ form, onEdit, onLevelUp, onSetWeek, onLogout, onDeleteAccou
   const TABS = [
     { id:"schedule",   label: T.tabSchedule },
     { id:"vocabulary", label: T.tabVocabulary },
-    { id:"subtitles",  label: T.tabSubtitles || "🎬 字幕帳" },
     { id:"resources",  label: T.tabActivities || T.tabResources },
     { id:"milestones", label: T.tabMilestones },
     { id:"jlpt",       label: T.tabJlpt || "🎓 JLPT結果" },
@@ -21502,7 +20986,6 @@ function Dashboard({ form, onEdit, onLevelUp, onSetWeek, onLogout, onDeleteAccou
 
         {tab==="vocabulary" && <VocabBuilder form={form} helpAuto={!tutorialActive} />}
 
-        {tab==="subtitles" && <><SectionHelp id="subtitles" lang={form?.preferredLang} autoOpen={!tutorialActive} /><SubtitleVocabBuilder form={form} /></>}
 
         {tab==="resources" && (
           <div>
